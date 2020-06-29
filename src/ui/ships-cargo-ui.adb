@@ -65,6 +65,8 @@ package body Ships.Cargo.UI is
       CargoFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ItemsView: Ttk_Tree_View;
+      ItemDurability, ItemType, ProtoIndex: Unbounded_String;
+      ItemsTypes: Unbounded_String := To_Unbounded_String("All");
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -92,13 +94,30 @@ package body Ships.Cargo.UI is
       -- Fill UI with data
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
       ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(Widget_Image(CargoFrame) & ".cargo");
+      ItemsView.Name := New_String(Widget_Image(CargoFrame) & ".cargo.view");
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       for I in PlayerShip.Cargo.Iterate loop
+         if PlayerShip.Cargo(I).Durability = 100 then
+            ItemDurability := Null_Unbounded_String;
+         else
+            ItemDurability :=
+              To_Unbounded_String
+                (GetItemDamage(PlayerShip.Cargo(I).Durability));
+         end if;
+         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+         if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+            ItemType := Items_List(ProtoIndex).ShowType;
+         else
+            ItemType := Items_List(ProtoIndex).IType;
+         end if;
+         Append(ItemsTypes, " " & To_String(ItemType));
          Insert
            (ItemsView,
             "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -values [list {" & To_String(PlayerShip.Cargo(I).Name) & "}]");
+            " -values [list {" &
+            GetItemName(PlayerShip.Cargo(I), False, False) & "} {" &
+            To_String(ItemDurability) & "} {" & To_String(ItemType) &
+            "} 0 0]");
       end loop;
       Selection_Set(ItemsView, "[list 1]");
       -- End of fill UI with data
