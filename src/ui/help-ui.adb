@@ -60,7 +60,7 @@ package body Help.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       NewText, TagText: Unbounded_String;
-      StartIndex, EndIndex, OldIndex, TopicIndex: Natural;
+      StartIndex, EndIndex, OldIndex: Natural;
       type Variables_Data is record
          Name: Unbounded_String;
          Value: Unbounded_String;
@@ -129,7 +129,6 @@ package body Help.UI is
          To_Unbounded_String("blackmarket"), To_Unbounded_String("barracks"));
       BasesWithFlag: Unbounded_String;
       TopicsView: Ttk_Tree_View;
-      SelectedIndex: Positive;
       HelpView: Tk_Text;
    begin
       TopicsView.Interp := Interp;
@@ -138,16 +137,12 @@ package body Help.UI is
       HelpView.Name := New_String(".help.paned.content.view");
       configure(HelpView, "-state normal");
       Delete(HelpView, "1.0", "end");
-      SelectedIndex := Positive'Value(Selection(TopicsView));
-      TopicIndex := 1;
       for Help of Help_List loop
-         if TopicIndex = SelectedIndex then
+         if Help.Index = To_Unbounded_String(Selection(TopicsView)) then
             NewText := Help.Text;
             exit;
          end if;
-         TopicIndex := TopicIndex + 1;
       end loop;
-      TopicIndex := 0;
       OldIndex := 1;
       loop
          StartIndex := Index(NewText, "{", OldIndex);
@@ -267,7 +262,6 @@ package body Help.UI is
       X, Y: Integer;
       Paned: Ttk_PanedWindow;
       TopicsView: Ttk_Tree_View;
-      TopicIndex: Positive := 1;
    begin
       Tcl_EvalFile
         (Interp, To_String(DataDirectory) & "ui" & Dir_Separator & "help.tcl");
@@ -301,9 +295,8 @@ package body Help.UI is
       for I in Help_List.Iterate loop
          Insert
            (TopicsView,
-            "{} end -id" & Positive'Image(TopicIndex) & " -text {" &
+            "{} end -id {" & To_String(Help_List(I).Index) & "} -text {" &
             To_String(Help_Container.Key(I)) & "}");
-         TopicIndex := TopicIndex + 1;
       end loop;
       Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
       Selection_Set(TopicsView, CArgv.Arg(Argv, 1));

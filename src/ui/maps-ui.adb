@@ -92,7 +92,8 @@ package body Maps.UI is
       Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add
         (GameMenu, "command", "-label {Game statistics} -command ShowStats");
-      Menu.Add(GameMenu, "command", "-label {Help} -command {ShowHelp 1}");
+      Menu.Add
+        (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
       Menu.Add(GameMenu, "command", "-label {Game options}");
       Menu.Add
         (GameMenu, "command", "-label {Quit from game} -command QuitGame");
