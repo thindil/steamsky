@@ -25,6 +25,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -67,6 +69,8 @@ package body Ships.Cargo.UI is
       ItemsView: Ttk_Tree_View;
       ItemDurability, ItemType, ProtoIndex: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
+      ItemWeight: Positive;
+      ComboBox: Ttk_ComboBox;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -91,8 +95,9 @@ package body Ships.Cargo.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      -- Fill UI with data
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(Widget_Image(CargoFrame) & ".type.combo");
       ItemsView.Interp := Interp;
       ItemsView.Name := New_String(Widget_Image(CargoFrame) & ".cargo.view");
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
@@ -110,17 +115,23 @@ package body Ships.Cargo.UI is
          else
             ItemType := Items_List(ProtoIndex).IType;
          end if;
-         Append(ItemsTypes, " " & To_String(ItemType));
+         if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
+            Append(ItemsTypes, " {" & To_String(ItemType) & "}");
+         end if;
+         ItemWeight :=
+           PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight;
          Insert
            (ItemsView,
             "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
             " -values [list {" &
             GetItemName(PlayerShip.Cargo(I), False, False) & "} {" &
-            To_String(ItemDurability) & "} {" & To_String(ItemType) &
-            "} 0 0]");
+            To_String(ItemDurability) & "} {" & To_String(ItemType) & "}" &
+            Positive'Image(PlayerShip.Cargo(I).Amount) & " " &
+            Positive'Image(ItemWeight) & "]");
       end loop;
       Selection_Set(ItemsView, "[list 1]");
-      -- End of fill UI with data
+      configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
+      Current(ComboBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
       configure
