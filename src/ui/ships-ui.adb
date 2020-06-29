@@ -110,11 +110,11 @@ package body Ships.UI is
          Bind(ShipInfoFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp 1}");
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp 8}");
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipInfoFrame.Name :=
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
