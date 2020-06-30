@@ -18,6 +18,7 @@ $cargoview heading type -text {Type}
 $cargoview heading amount -text {Amount}
 $cargoview heading weight -text {Weight (in kg)}
 grid $cargoview -sticky nwes
+bind $cargoview <<TreeviewSelect>> ShowCargoItemInfo
 grid [ttk::scrollbar $cargoframe.cargo.scrolly -orient vertical -command [list $cargoview yview]] -row 0 -column 1 -sticky ns
 # Item info
 set itemframe [ttk::frame $cargoframe.item]

@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Tcl.Ada;
+with Ships; use Ships;
 
 -- ****h* Utils/UUI
 -- FUNCTION
@@ -100,4 +101,17 @@ package Utils.UI is
    procedure ShowScreen(NewScreenName: String);
    -- ****
 
+   -- ****f* UUI/ShowInventoryItemInfo
+   -- FUNCTION
+   -- Show info about selected item in ship cargo or crew member inventory
+   -- PARAMETERS
+   -- Widget      - The name of Tk_Text which text will be set
+   -- ItemIndex   - Index of item (can be inventory or ship cargo)
+   -- MemberIndex - If item is in crew member inventory, crew index of member,
+   --               otherwise 0
+   -- SOURCE
+   procedure ShowInventoryItemInfo
+     (WidgetName: String; ItemIndex: Positive; MemberIndex: Natural) with
+      Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
+      -- ****
 end Utils.UI;
