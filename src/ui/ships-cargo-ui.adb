@@ -157,6 +157,12 @@ package body Ships.Cargo.UI is
          end loop;
          configure(ComboBox, "-values [list" & To_String(MembersNames) & "]");
          Current(ComboBox, "0");
+         Label.Name :=
+           New_String(Widget_Image(CargoFrame) & ".dropframe.error");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Label.Name :=
+           New_String(Widget_Image(CargoFrame) & ".giveframe.error");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(CargoFrame);
       end if;
