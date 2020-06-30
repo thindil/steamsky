@@ -8,6 +8,7 @@ set cargoframe [ttk::frame $cargocanvas.cargo]
 grid [ttk::frame $cargoframe.type]
 grid [ttk::label $cargoframe.type.label -text {Type:}]
 grid [ttk::combobox $cargoframe.type.combo -state readonly] -row 0 -column 1
+bind $cargoframe.type.combo <<ComboboxSelected>> {ShowCargoInfo [$cargoframe.type.combo get]}
 # Cargo list
 grid [ttk::frame $cargoframe.cargo] -sticky nwes
 set cargoview [ttk::treeview $cargoframe.cargo.view -columns [list name durability type amount weight] -show headings -yscrollcommand [list $cargoframe.cargo.scrolly set]]
