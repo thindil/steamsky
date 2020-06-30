@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Update header crew information when assigned crew to new module in ship info
   screen
 - Assigning crew member to cabin when the cabin is full
+- Showing help in ship info
 
 ## [5.0.1] - 2020-05-20
 
