@@ -40,7 +40,6 @@ with Config; use Config;
 with Crew; use Crew;
 with Items; use Items;
 with Messages; use Messages;
-with Ships; use Ships;
 with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
@@ -400,4 +399,86 @@ package body Utils.UI is
       end if;
    end ShowScreen;
 
+   procedure ShowInventoryItemInfo
+     (WidgetName: String; ItemIndex: Positive; MemberIndex: Natural) is
+      ProtoIndex: Unbounded_String;
+      ItemInfo: Unbounded_String;
+      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
+      Widget: Tk_Text;
+   begin
+      if MemberIndex > 0 then
+         ProtoIndex :=
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
+      else
+         ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+      end if;
+      Append
+        (ItemInfo,
+         "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
+      if Items_List(ProtoIndex).IType = WeaponType then
+         Append
+           (ItemInfo,
+            LF & "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
+            Attributes_List
+              (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+              .Name);
+         if Items_List(ProtoIndex).Value(4) = 1 then
+            Append(ItemInfo, LF & "Can be used with shield.");
+         else
+            Append
+              (ItemInfo,
+               LF & "Can't be used with shield (two-handed weapon).");
+         end if;
+         Append(ItemInfo, LF & "Damage type: ");
+         case Items_List(ProtoIndex).Value(5) is
+            when 1 =>
+               Append(ItemInfo, "cutting");
+            when 2 =>
+               Append(ItemInfo, "impaling");
+            when 3 =>
+               Append(ItemInfo, "blunt");
+            when others =>
+               null;
+         end case;
+      end if;
+      for ItemType of ItemTypes loop
+         if Items_List(ProtoIndex).IType = ItemType then
+            Append
+              (ItemInfo,
+               LF & "Damage chance: " &
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            Append
+              (ItemInfo,
+               LF & "Strength:" &
+               Integer'Image(Items_List(ProtoIndex).Value(2)));
+            exit;
+         end if;
+      end loop;
+      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         Append
+           (ItemInfo,
+            LF & "Damage chance: " &
+            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+      end if;
+      if Length(Items_List(ProtoIndex).IType) > 4
+        and then
+        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
+         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+         Append
+           (ItemInfo,
+            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
+      Widget.Interp := Get_Context;
+      Widget.Name := New_String(WidgetName);
+      Widgets.configure(Widget, "-state normal");
+      Delete(Widget, "1.0", "end");
+      Insert(Widget, "end", "{" & To_String(ItemInfo) & "}");
+      Widgets.configure(Widget, "-state disabled");
+   end ShowInventoryItemInfo;
 end Utils.UI;

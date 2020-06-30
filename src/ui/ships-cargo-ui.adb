@@ -43,7 +43,7 @@ package body Ships.Cargo.UI is
 
    -- ****f* CUI2/Show_Cargo_Info_Command
    -- FUNCTION
-   -- Show information about the player's ship
+   -- Show information about the player's ship cargo
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
@@ -169,9 +169,49 @@ package body Ships.Cargo.UI is
       return TCL_OK;
    end Show_Cargo_Info_Command;
 
+   -- ****if* CUI2/ItemIndex
+   -- FUNCTION
+   -- Index of the currently selected item
+   -- SOURCE
+   ItemIndex: Positive;
+   -- ****
+
+   -- ****f* CUI2/Show_Cargo_Item_Info_Command
+   -- FUNCTION
+   -- Show information about the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Cargo_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Cargo_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CargoView: Ttk_Tree_View;
+   begin
+      CargoView.Interp := Interp;
+      CargoView.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.cargo.view");
+      ItemIndex := Positive'Value(Selection(CargoView));
+      ShowInventoryItemInfo
+        (".paned.cargoframe.canvas.cargo.item.info.text", ItemIndex, 0);
+      return TCL_OK;
+   end Show_Cargo_Item_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCargoInfo", Show_Cargo_Info_Command'Access);
+      AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
    end AddCommands;
 
 end Ships.Cargo.UI;
