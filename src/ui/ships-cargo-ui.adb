@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -142,6 +143,12 @@ package body Ships.Cargo.UI is
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
       if Argc = 1 then
          Current(ComboBox, "0");
+      end if;
+      CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo.item");
+      if GameSettings.ShowCargoInfo then
+         Tcl.Tk.Ada.Grid.Grid(CargoFrame);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(CargoFrame);
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
