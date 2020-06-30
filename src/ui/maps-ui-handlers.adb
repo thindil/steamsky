@@ -612,7 +612,7 @@ package body Maps.UI.Handlers is
       elsif VisibleChildName = "crew" then
          ShowHelpUI(To_Unbounded_String("crew"));
       elsif VisibleChildName = "ship" then
-         ShowHelpUI(To_Unbounded_String("ship"));
+         ShowHelpUI(To_Unbounded_String("repair"));
       elsif VisibleChildName = "trade" then
          ShowHelpUI(To_Unbounded_String("trade"));
       elsif VisibleChildName = "availablemissions" or
