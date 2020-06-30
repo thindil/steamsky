@@ -75,6 +75,7 @@ package body Ships.Cargo.UI is
       ItemWeight: Positive;
       ComboBox: Ttk_ComboBox;
       FirstIndex: Natural := 0;
+      MembersNames: Unbounded_String;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -149,6 +150,13 @@ package body Ships.Cargo.UI is
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo.item");
       if GameSettings.ShowCargoInfo then
          Tcl.Tk.Ada.Grid.Grid(CargoFrame);
+         ComboBox.Name :=
+           New_String(Widget_Image(CargoFrame) & ".giveframe.member");
+         for Member of PlayerShip.Crew loop
+            Append(MembersNames, " " & Member.Name);
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(MembersNames) & "]");
+         Current(ComboBox, "0");
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(CargoFrame);
       end if;
@@ -220,8 +228,6 @@ package body Ships.Cargo.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(GiveFrame);
       else
          Tcl.Tk.Ada.Grid.Grid(GiveFrame);
---         CheckAmount(Get_Object(Object, "spincargodrop"));
---         CheckAmount(Get_Object(Object, "spincargogive"));
       end if;
       SpinBox.Interp := Interp;
       SpinBox.Name :=
