@@ -27,6 +27,8 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -198,13 +200,39 @@ package body Ships.Cargo.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CargoView: Ttk_Tree_View;
+      GiveFrame: Ttk_Frame;
+      SpinBox: Ttk_SpinBox;
    begin
+      if not GameSettings.ShowCargoInfo then
+         return TCL_OK;
+      end if;
       CargoView.Interp := Interp;
       CargoView.Name :=
         New_String(".paned.cargoframe.canvas.cargo.cargo.view");
       ItemIndex := Positive'Value(Selection(CargoView));
       ShowInventoryItemInfo
         (".paned.cargoframe.canvas.cargo.item.info.text", ItemIndex, 0);
+      GiveFrame.Interp := Interp;
+      GiveFrame.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.item.giveframe");
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
+        MissionItemsType then
+         Tcl.Tk.Ada.Grid.Grid_Remove(GiveFrame);
+      else
+         Tcl.Tk.Ada.Grid.Grid(GiveFrame);
+--         CheckAmount(Get_Object(Object, "spincargodrop"));
+--         CheckAmount(Get_Object(Object, "spincargogive"));
+      end if;
+      SpinBox.Interp := Interp;
+      SpinBox.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.item.dropframe.amount");
+      Set(SpinBox, "1");
+      configure
+        (SpinBox, "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
+      SpinBox.Name := New_String(Widget_Image(GiveFrame) & ".amount");
+      Set(SpinBox, "1");
+      configure
+        (SpinBox, "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
