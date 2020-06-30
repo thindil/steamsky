@@ -180,10 +180,114 @@ package body Utils.UI is
       return TCL_OK;
    end Resize_Canvas_Command;
 
+   -- ****if* UUI/Check_Amount_Command
+   -- PARAMETERS
+   -- Check amount of the item, if it is not below low level warning or if
+   -- entered amount is a proper number
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Check_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Check_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      CargoIndex: Natural;
+      LabelName, WarningText: Unbounded_String;
+      Amount: Integer;
+      Label: Ttk_Label;
+   begin
+      -- TODO add checking during selling
+      if CArgv.Arg(Argv, 1) = "trade" then
+         LabelName := To_Unbounded_String("trade");
+         WarningText :=
+           To_Unbounded_String("You will sell amount below low level of ");
+      elsif CArgv.Arg(Argv, 1) =
+        ".paned.cargoframe.canvas.cargo.item.dropframe.amount" then
+         LabelName :=
+           To_Unbounded_String
+             (".paned.cargoframe.canvas.cargo.item.dropframe.error");
+         WarningText :=
+           To_Unbounded_String("You will drop amount below low level of ");
+      else
+         LabelName :=
+           To_Unbounded_String
+             (".paned.cargoframe.canvas.cargo.item.giveframe.error");
+         WarningText :=
+           To_Unbounded_String("You will give amount below low level of ");
+      end if;
+      CargoIndex := Natural'Value(CArgv.Arg(Argv, 2));
+      if CArgv.Arg(Argv, 1) /= "trade"
+        and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
+          FuelType then
+          null;
+--         Amount :=
+--           GetItemAmount(FuelType) -
+--           Natural
+--             (Get_Value
+--                (Gtk_Adjustment
+--                   (Get_Object(Builder, To_String(AdjustmentName)))));
+--         if Amount <= GameSettings.LowFuel then
+--            Set_Label
+--              (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+--               To_String(WarningText) & "fuel.");
+--            Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+--            return TCL_OK;
+--         end if;
+      end if;
+--      for Member of PlayerShip.Crew loop
+--         if Factions_List(Member.Faction).DrinksTypes.Contains
+--             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+--            Amount :=
+--              GetItemsAmount("Drinks") -
+--              Natural
+--                (Get_Value
+--                   (Gtk_Adjustment
+--                      (Get_Object(Builder, To_String(AdjustmentName)))));
+--            if Amount <= GameSettings.LowDrinks then
+--               Set_Label
+--                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+--                  To_String(WarningText) & "drinks.");
+--               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+--               return TCL_OK;
+--            end if;
+--            exit;
+--         elsif Factions_List(Member.Faction).FoodTypes.Contains
+--             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+--            Amount :=
+--              GetItemsAmount("Food") -
+--              Natural
+--                (Get_Value
+--                   (Gtk_Adjustment
+--                      (Get_Object(Builder, To_String(AdjustmentName)))));
+--            if Amount <= GameSettings.LowFood then
+--               Set_Label
+--                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
+--                  To_String(WarningText) & "food.");
+--               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+--               return TCL_OK;
+--            end if;
+--            exit;
+--         end if;
+--      end loop;
+--      Hide(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+      return TCL_OK;
+   end Check_Amount_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
+      AddCommand("CheckAmount", Check_Amount_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
@@ -481,4 +585,5 @@ package body Utils.UI is
       Insert(Widget, "end", "{" & To_String(ItemInfo) & "}");
       Widgets.configure(Widget, "-state disabled");
    end ShowInventoryItemInfo;
+
 end Utils.UI;
