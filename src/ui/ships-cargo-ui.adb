@@ -60,7 +60,7 @@ package body Ships.Cargo.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       CargoCanvas: Tk_Canvas;
@@ -71,6 +71,7 @@ package body Ships.Cargo.UI is
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ItemWeight: Positive;
       ComboBox: Ttk_ComboBox;
+      FirstIndex: Natural := 0;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -118,6 +119,13 @@ package body Ships.Cargo.UI is
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
+         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Loop;
+         end if;
+         if FirstIndex = 0 then
+            FirstIndex := Inventory_Container.To_Index(I);
+         end if;
          ItemWeight :=
            PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight;
          Insert
@@ -128,10 +136,13 @@ package body Ships.Cargo.UI is
             To_String(ItemDurability) & "} {" & To_String(ItemType) & "}" &
             Positive'Image(PlayerShip.Cargo(I).Amount) & " " &
             Positive'Image(ItemWeight) & "]");
+         <<End_Of_Loop>>
       end loop;
-      Selection_Set(ItemsView, "[list 1]");
+      Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
-      Current(ComboBox, "0");
+      if Argc = 1 then
+         Current(ComboBox, "0");
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CargoFrame.Name := New_String(Widget_Image(CargoCanvas) & ".cargo");
       configure
