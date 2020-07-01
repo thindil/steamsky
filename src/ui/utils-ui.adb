@@ -577,7 +577,7 @@ package body Utils.UI is
          AdjustmentName := To_Unbounded_String("amountadj1");
          LabelName := To_Unbounded_String("lblgivewarning");
          WarningText :=
-           To_Unbounded_String("You will drop amount below low level of ");
+           To_Unbounded_String("You will give amount below low level of ");
       end if;
       declare
          ItemsIter: Gtk_Tree_Iter;
