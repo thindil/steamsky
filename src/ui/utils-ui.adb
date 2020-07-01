@@ -38,8 +38,10 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
 with Crew; use Crew;
+with Factions; use Factions;
 with Items; use Items;
 with Messages; use Messages;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
@@ -202,7 +204,7 @@ package body Utils.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CargoIndex: Natural;
-      LabelName, WarningText: Unbounded_String;
+      LabelName, WarningText, Value: Unbounded_String;
       Amount: Integer;
       Label: Ttk_Label;
    begin
@@ -226,61 +228,60 @@ package body Utils.UI is
            To_Unbounded_String("You will give amount below low level of ");
       end if;
       CargoIndex := Natural'Value(CArgv.Arg(Argv, 2));
+      Value := To_Unbounded_String(CArgv.Arg(Argv, 3));
+      if Integer'Value(To_String(Value)) < 1 or
+        Integer'Value(To_String(Value)) >
+          PlayerShip.Cargo(CargoIndex).Amount then
+         Tcl_SetResult(Interp, "0");
+         return TCL_OK;
+      end if;
+      Label.Interp := Interp;
+      Label.Name := New_String(To_String(LabelName));
       if CArgv.Arg(Argv, 1) /= "trade"
         and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
           FuelType then
-          null;
---         Amount :=
---           GetItemAmount(FuelType) -
---           Natural
---             (Get_Value
---                (Gtk_Adjustment
---                   (Get_Object(Builder, To_String(AdjustmentName)))));
---         if Amount <= GameSettings.LowFuel then
---            Set_Label
---              (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
---               To_String(WarningText) & "fuel.");
---            Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
---            return TCL_OK;
---         end if;
+         Amount := GetItemAmount(FuelType) - Natural'Value(To_String(Value));
+         if Amount <= GameSettings.LowFuel then
+            Widgets.configure
+              (Label, "-text {" & To_String(WarningText) & "fuel.}");
+            Tcl.Tk.Ada.Grid.Grid(Label);
+            Tcl_SetResult(Interp, "1");
+            return TCL_OK;
+         end if;
       end if;
---      for Member of PlayerShip.Crew loop
---         if Factions_List(Member.Faction).DrinksTypes.Contains
---             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
---            Amount :=
---              GetItemsAmount("Drinks") -
---              Natural
---                (Get_Value
---                   (Gtk_Adjustment
---                      (Get_Object(Builder, To_String(AdjustmentName)))));
---            if Amount <= GameSettings.LowDrinks then
---               Set_Label
---                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
---                  To_String(WarningText) & "drinks.");
---               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
---               return TCL_OK;
---            end if;
---            exit;
---         elsif Factions_List(Member.Faction).FoodTypes.Contains
---             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
---            Amount :=
---              GetItemsAmount("Food") -
---              Natural
---                (Get_Value
---                   (Gtk_Adjustment
---                      (Get_Object(Builder, To_String(AdjustmentName)))));
---            if Amount <= GameSettings.LowFood then
---               Set_Label
---                 (Gtk_Label(Get_Object(Builder, To_String(LabelName))),
---                  To_String(WarningText) & "food.");
---               Show_All(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
---               return TCL_OK;
---            end if;
---            exit;
---         end if;
---      end loop;
---      Hide(Gtk_Widget(Get_Object(Builder, To_String(LabelName))));
+      for Member of PlayerShip.Crew loop
+         if Factions_List(Member.Faction).DrinksTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount :=
+              GetItemsAmount("Drinks") - Natural'Value(To_String(Value));
+            if Amount <= GameSettings.LowDrinks then
+               Widgets.configure
+                 (Label, "-text {" & To_String(WarningText) & "drinks.}");
+               Tcl.Tk.Ada.Grid.Grid(Label);
+               Tcl_SetResult(Interp, "1");
+               return TCL_OK;
+            end if;
+            exit;
+         elsif Factions_List(Member.Faction).FoodTypes.Contains
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+            Amount := GetItemsAmount("Food") - Natural'Value(To_String(Value));
+            if Amount <= GameSettings.LowFood then
+               Widgets.configure
+                 (Label, "-text {" & To_String(WarningText) & "food.}");
+               Tcl.Tk.Ada.Grid.Grid(Label);
+               Tcl_SetResult(Interp, "1");
+               return TCL_OK;
+            end if;
+            exit;
+         end if;
+      end loop;
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
+   exception
+      when Constraint_Error =>
+         Tcl_SetResult(Interp, "0");
+         return TCL_OK;
    end Check_Amount_Command;
 
    procedure AddCommands is
