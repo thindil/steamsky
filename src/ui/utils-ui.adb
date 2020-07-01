@@ -18,7 +18,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -31,6 +31,8 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -289,11 +291,43 @@ package body Utils.UI is
          return TCL_OK;
    end Check_Amount_Command;
 
+   -- ****if* UUI/Validate_Amount_Command
+   -- PARAMETERS
+   -- Validate amount of the item when button to increase or decrease the
+   -- amount was pressed
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Validate_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Validate_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      SpinBox: Ttk_SpinBox;
+      NewArgv: CArgv.Chars_Ptr_Ptr := Argv;
+   begin
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(CArgv.Arg(Argv, 1));
+      NewArgv := NewArgv & Get(SpinBox);
+      return Check_Amount_Command
+          (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
+   end Validate_Amount_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
       AddCommand("CheckAmount", Check_Amount_Command'Access);
+      AddCommand("ValidateAmount", Validate_Amount_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
