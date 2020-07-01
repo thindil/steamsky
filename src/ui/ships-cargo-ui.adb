@@ -38,7 +38,9 @@ with Config; use Config;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Missions; use Missions;
+with Stories; use Stories;
 with Utils.UI; use Utils.UI;
 
 package body Ships.Cargo.UI is
@@ -256,10 +258,78 @@ package body Ships.Cargo.UI is
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
+   -- ****f* CUI2/Drop_Item_Command
+   -- FUNCTION
+   -- Drop selected amount of the selected item from the ship's cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Drop_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Drop_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      DropAmount, DropAmount2: Natural;
+      SpinBox: Ttk_SpinBox;
+   begin
+      SpinBox.Interp := Interp;
+      SpinBox.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.item.dropframe.amount");
+      DropAmount := Natural'Value(Get(SpinBox));
+      DropAmount2 := DropAmount;
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
+        MissionItemsType then
+         for J in 1 .. DropAmount2 loop
+            for I in
+              AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+               if AcceptedMissions(I).MType = Deliver and
+                 AcceptedMissions(I).ItemIndex =
+                   PlayerShip.Cargo(ItemIndex).ProtoIndex then
+                  DeleteMission(I);
+                  DropAmount := DropAmount - 1;
+                  exit;
+               end if;
+            end loop;
+         end loop;
+      elsif CurrentStory.Index /= Null_Unbounded_String then
+         if Stories_List(CurrentStory.Index).StartData(1) =
+           PlayerShip.Cargo(ItemIndex).ProtoIndex then
+            FinishedStories.Delete(FinishedStories.Last_Index);
+            ClearCurrentStory;
+         end if;
+      end if;
+      if DropAmount > 0 then
+         AddMessage
+           ("You dropped" & Positive'Image(DropAmount) & " " &
+            GetItemName(PlayerShip.Cargo(ItemIndex)) & ".",
+            OtherMessage);
+         UpdateCargo
+           (Ship => PlayerShip,
+            ProtoIndex => PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            Amount => (0 - DropAmount),
+            Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
+            Price => PlayerShip.Cargo.Element(ItemIndex).Price);
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Cargo_Info_Command(ClientData, Interp, 2, Argv);
+   end Drop_Item_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCargoInfo", Show_Cargo_Info_Command'Access);
       AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
+      AddCommand("DropItem", Drop_Item_Command'Access);
    end AddCommands;
 
 end Ships.Cargo.UI;

@@ -26,7 +26,7 @@ grid [ttk::labelframe $itemframe.info -text {Item Info:}]
 grid [text $itemframe.info.text -wrap char -height 10 -width 40]
 # Item actions
 grid [ttk::frame $itemframe.dropframe]
-grid [ttk::button $itemframe.dropframe.button -text {Drop}]
+grid [ttk::button $itemframe.dropframe.button -text {Drop} -command {DropItem [$cargoframe.type.combo get]}]
 grid [ttk::spinbox $itemframe.dropframe.amount -from 1 -increment 1 -validate key] -row 0 -column 1
 grid [ttk::label $itemframe.dropframe.error -style Headerred.TLabel] -columnspan 2
 grid [ttk::frame $itemframe.giveframe]
