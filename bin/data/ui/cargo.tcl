@@ -27,11 +27,11 @@ grid [text $itemframe.info.text -wrap char -height 10 -width 40]
 # Item actions
 grid [ttk::frame $itemframe.dropframe]
 grid [ttk::button $itemframe.dropframe.button -text {Drop}]
-grid [ttk::spinbox $itemframe.dropframe.amount -from 1 -increment 1] -row 0 -column 1
+grid [ttk::spinbox $itemframe.dropframe.amount -from 1 -increment 1 -validate key] -row 0 -column 1
 grid [ttk::label $itemframe.dropframe.error -style Headerred.TLabel] -columnspan 2
 grid [ttk::frame $itemframe.giveframe]
 grid [ttk::button $itemframe.giveframe.button -text {Give}]
-grid [ttk::spinbox $itemframe.giveframe.amount -from 1 -increment 1] -row 0 -column 1
+grid [ttk::spinbox $itemframe.giveframe.amount -from 1 -increment 1 -validate key] -row 0 -column 1
 grid [ttk::label $itemframe.giveframe.to -text {To:}] -row 0 -column 2
 grid [ttk::combobox $itemframe.giveframe.member -state readonly] -row 0 -column 3
 grid [ttk::label $itemframe.giveframe.error -style Headerred.TLabel] -columnspan 4
