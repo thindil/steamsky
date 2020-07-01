@@ -248,7 +248,11 @@ package body Ships.Cargo.UI is
       SpinBox.Name := New_String(Widget_Image(GiveFrame) & ".amount");
       Set(SpinBox, "1");
       configure
-        (SpinBox, "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
+        (SpinBox,
+         "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+         " -validatecommand {CheckAmount %W" & Positive'Image(ItemIndex) &
+         " %P} -command {ValidateAmount " & Widget_Image(SpinBox) &
+         Positive'Image(ItemIndex) & "}");
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
