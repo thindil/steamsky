@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
   screen
 - Assigning crew member to cabin when the cabin is full
 - Showing help in ship info
+- Typo in info about low level of item when giving it to a crew member
 
 ## [5.0.1] - 2020-05-20
 
