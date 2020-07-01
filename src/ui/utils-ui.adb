@@ -213,6 +213,11 @@ package body Utils.UI is
          LabelName := To_Unbounded_String("trade");
          WarningText :=
            To_Unbounded_String("You will sell amount below low level of ");
+      -- TODO add checking during droping in abandoned bases
+      elsif CArgv.Arg(Argv, 1) = "loot" then
+         LabelName := To_Unbounded_String("loot");
+         WarningText :=
+           To_Unbounded_String("You will drop amount below low level of ");
       elsif CArgv.Arg(Argv, 1) =
         ".paned.cargoframe.canvas.cargo.item.dropframe.amount" then
          LabelName :=
