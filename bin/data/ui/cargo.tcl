@@ -30,7 +30,7 @@ grid [ttk::button $itemframe.dropframe.button -text {Drop} -command {DropItem [$
 grid [ttk::spinbox $itemframe.dropframe.amount -from 1 -increment 1 -validate key] -row 0 -column 1
 grid [ttk::label $itemframe.dropframe.error -style Headerred.TLabel] -columnspan 2
 grid [ttk::frame $itemframe.giveframe]
-grid [ttk::button $itemframe.giveframe.button -text {Give}]
+grid [ttk::button $itemframe.giveframe.button -text {Give} -command {GiveItem [$cargoframe.type.combo get]}]
 grid [ttk::spinbox $itemframe.giveframe.amount -from 1 -increment 1 -validate key] -row 0 -column 1
 grid [ttk::label $itemframe.giveframe.to -text {To:}] -row 0 -column 2
 grid [ttk::combobox $itemframe.giveframe.member -state readonly] -row 0 -column 3

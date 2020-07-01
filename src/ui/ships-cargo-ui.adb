@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
+with Crew.Inventory; use Crew.Inventory;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -262,10 +263,10 @@ package body Ships.Cargo.UI is
    -- FUNCTION
    -- Drop selected amount of the selected item from the ship's cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
    -- SOURCE
    function Drop_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -278,7 +279,6 @@ package body Ships.Cargo.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(Argc);
       DropAmount, DropAmount2: Natural;
       SpinBox: Ttk_SpinBox;
    begin
@@ -322,14 +322,75 @@ package body Ships.Cargo.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Cargo_Info_Command(ClientData, Interp, 2, Argv);
+      return Show_Cargo_Info_Command(ClientData, Interp, Argc, Argv);
    end Drop_Item_Command;
+
+   -- ****f* CUI2/Give_Item_Command
+   -- FUNCTION
+   -- Give selected amount of the selected item from the ship's cargo to the
+   -- selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      MemberIndex, Amount: Positive;
+      Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
+      SpinBox: Ttk_SpinBox;
+      ComboBox: Ttk_ComboBox;
+   begin
+      SpinBox.Interp := Interp;
+      SpinBox.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.item.giveframe.amount");
+      Amount := Natural'Value(Get(SpinBox));
+      ComboBox.Interp := Interp;
+      ComboBox.Name :=
+        New_String(".paned.cargoframe.canvas.cargo.item.giveframe.member");
+      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      if FreeInventory
+          (MemberIndex, 0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+        0 then
+         ShowMessage
+           ("No free space in " &
+            To_String(PlayerShip.Crew(MemberIndex).Name) &
+            "'s inventory for that amount of " & GetItemName(Item));
+         return TCL_OK;
+      end if;
+      AddMessage
+        ("You gave" & Positive'Image(Amount) & " " &
+         GetItemName(PlayerShip.Cargo(ItemIndex)) & " to " &
+         To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+         OtherMessage);
+      UpdateInventory
+        (MemberIndex => MemberIndex, Amount => Amount,
+         ProtoIndex => Item.ProtoIndex, Durability => Item.Durability,
+         Price => Item.Price);
+      UpdateCargo
+        (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
+         Price => Item.Price);
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Cargo_Info_Command(ClientData, Interp, Argc, Argv);
+   end Give_Item_Command;
 
    procedure AddCommands is
    begin
       AddCommand("ShowCargoInfo", Show_Cargo_Info_Command'Access);
       AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
       AddCommand("DropItem", Drop_Item_Command'Access);
+      AddCommand("GiveItem", Give_Item_Command'Access);
    end AddCommands;
 
 end Ships.Cargo.UI;
