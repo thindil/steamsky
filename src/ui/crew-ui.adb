@@ -39,6 +39,7 @@ with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
+with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
@@ -162,7 +163,10 @@ package body Crew.UI is
             PlayerShip.Crew(I).Order /= Rest) or
            (PlayerShip.Crew(I).Skills.Length = 0 or
             PlayerShip.Crew(I).ContractLength = 0) then
-            Add(OrdersMenu, "command", "-label {Go on break}");
+            Add
+              (OrdersMenu, "command",
+               "-label {Go on break} -command {SetCrewOrder Rest" &
+               Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
          else
             if PlayerShip.Crew(I).Order /= Pilot then
                Add(OrdersMenu, "command", "-label {Piloting}");
@@ -230,7 +234,10 @@ package body Crew.UI is
                Add(OrdersMenu, "command", "-label {Talking in bases}");
             end if;
             if PlayerShip.Crew(I).Order /= Rest then
-               Add(OrdersMenu, "command", "-label {Go on break}");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Go on break} -command {SetCrewOrder Rest" &
+                  Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
          end if;
          Row := Row + 1;
@@ -255,9 +262,39 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Crew_Info_Command;
 
+   -- ****f* CUI2/Set_Crew_Order_Command
+   -- FUNCTION
+   -- Set order for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Crew_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Crew_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Order: Crew_Orders := Crew_Orders'Value(CArgv.Arg(Argv, 1));
+      MemberIndex: Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      UpdateHeader;
+      UpdateMessages;
+      return TCL_OK;
+   end Set_Crew_Order_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
+      AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
    end AddCommands;
 
 end Crew.UI;
