@@ -572,6 +572,12 @@ package body Utils.UI is
          LabelName := To_Unbounded_String("lbldropwarning");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
+      elsif User_Data = Get_Object(Builder, "spinlootdrop") then
+         TreeName := To_Unbounded_String("treeitems");
+         AdjustmentName := To_Unbounded_String("amountadj1");
+         LabelName := To_Unbounded_String("lbllootwarning");
+         WarningText :=
+           To_Unbounded_String("You will drop amount below low level of ");
       else
          TreeName := To_Unbounded_String("treecargo");
          AdjustmentName := To_Unbounded_String("amountadj1");
