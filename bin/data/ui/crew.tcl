@@ -11,6 +11,7 @@ grid [ttk::label $crewframe.crew.order -text {Order}] -row 0 -column 1
 # Crew member info
 grid [ttk::frame $crewframe.info] -sticky nwes -row 0 -column 1
 grid [ttk::labelframe $crewframe.info.info -text {Member Info}]
+grid [ttk::label $crewframe.info.info.label]
 grid [ttk::progressbar $crewframe.info.info.health]
 grid [ttk::progressbar $crewframe.info.info.tired]
 grid [ttk::progressbar $crewframe.info.info.thirst]
