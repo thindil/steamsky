@@ -28,6 +28,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -71,8 +73,11 @@ package body Crew.UI is
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       Orders: Unbounded_String;
-      NeedClean: Boolean;
-      function IsWorking(Owners: Natural_Container.Vector; MemberIndex: Positive) return Boolean is
+      NeedClean, NeedRepair: Boolean;
+      ComboBox: Ttk_ComboBox;
+      function IsWorking
+        (Owners: Natural_Container.Vector; MemberIndex: Positive)
+         return Boolean is
       begin
          for Owner of Owners loop
             if Owner = MemberIndex then
@@ -91,8 +96,7 @@ package body Crew.UI is
       CrewCanvas.Interp := Interp;
       CrewCanvas.Name := New_String(Widget_Image(CrewFrame) & ".canvas");
       Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(CrewCanvas) & ".crew.crew.name");
+      Label.Name := New_String(Widget_Image(CrewCanvas) & ".crew.crew.name");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -105,15 +109,13 @@ package body Crew.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      CrewFrame.Name :=
-        New_String(Widget_Image(CrewCanvas) & ".crew.crew");
+      CrewFrame.Name := New_String(Widget_Image(CrewCanvas) & ".crew.crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
          Create
            (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (CrewFrame, "-row" & Positive'Image(I)),
+            Tcl.Tk.Ada.Grid.Grid_Slaves(CrewFrame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
             Item.Interp := Get_Context;
@@ -124,6 +126,7 @@ package body Crew.UI is
       Row := 1;
       for I in PlayerShip.Crew.Iterate loop
          NeedClean := False;
+         NeedRepair := False;
          Label :=
            Create
              (Widget_Image(CrewFrame) & ".name" &
@@ -132,16 +135,16 @@ package body Crew.UI is
          Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
          Orders := Null_Unbounded_String;
          if
-            ((PlayerShip.Crew(I).Tired = 100 or
-            PlayerShip.Crew(I).Hunger = 100 or
-            PlayerShip.Crew(I).Thirst = 100) and
+           ((PlayerShip.Crew(I).Tired = 100 or
+             PlayerShip.Crew(I).Hunger = 100 or
+             PlayerShip.Crew(I).Thirst = 100) and
             PlayerShip.Crew(I).Order /= Rest) or
-               (PlayerShip.Crew(I).Skills.Length = 0 or
-               PlayerShip.Crew(I).ContractLength = 0) then
-               Append(Orders, "{Go on break}");
+           (PlayerShip.Crew(I).Skills.Length = 0 or
+            PlayerShip.Crew(I).ContractLength = 0) then
+            Append(Orders, " {Go on break}");
          else
             if PlayerShip.Crew(I).Order /= Pilot then
-               Append(Orders, "{Piloting}");
+               Append(Orders, " {Piloting}");
             end if;
             if PlayerShip.Crew(I).Order /= Engineer then
                Append(Orders, " {Engineering}");
@@ -152,58 +155,66 @@ package body Crew.UI is
                      when GUN | HARPOON_GUN =>
                         if Module.Owner(1) /= Crew_Container.To_Index(I) then
                            Append
-                              (Orders, "Operate " & To_String(Module.Name));
+                             (Orders,
+                              " {Operate " & To_String(Module.Name) & "}");
                         end if;
                      when ALCHEMY_LAB .. GREENHOUSE =>
-                        if not IsWorking(Module.Owner, Crew_Container.To_Index(I)) then
-                           Append(Orders,
-                              "Work in " & To_String(Module.Name));
+                        if not IsWorking
+                            (Module.Owner, Crew_Container.To_Index(I)) then
+                           Append
+                             (Orders,
+                              " {Work in " & To_String(Module.Name) & "}");
                         end if;
                      when CABIN =>
-                        if Module.Cleanliness <
-                           Module.Quality and
-                           PlayerShip.Crew(I).Order /= Clean and
-                           NeedClean then
-                           Append(Orders, "Clean ship");
+                        if Module.Cleanliness < Module.Quality and
+                          PlayerShip.Crew(I).Order /= Clean and NeedClean then
+                           Append(Orders, " {Clean ship}");
                            NeedClean := False;
                         end if;
                      when TRAINING_ROOM =>
-                        if not IsWorking(PlayerShip.Modules(I).Owner) then
-                           AddOrder
-                              ("Go on training in " &
-                              To_String(PlayerShip.Modules(I).Name),
-                              12, Modules_Container.To_Index(I));
+                        if not IsWorking
+                            (Module.Owner, Crew_Container.To_Index(I)) then
+                           Append
+                             (Orders,
+                              " {Go on training in " & To_String(Module.Name) &
+                              "}");
                         end if;
                      when others =>
                         null;
                   end case;
-                  if PlayerShip.Modules(I).Durability <
-                     PlayerShip.Modules(I).MaxDurability and
-                     NeedRepair then
-                     AddOrder("Repair ship", 3, 0);
+                  if Module.Durability < Module.MaxDurability and
+                    NeedRepair then
+                     Append(Orders, " {Repair ship}");
                      NeedRepair := False;
                   end if;
                end if;
             end loop;
-            for I in PlayerShip.Crew.Iterate loop
-               if PlayerShip.Crew(I).Health < 100 and
-                  Crew_Container.To_Index(I) /= MemberIndex and
-                  PlayerShip.Crew(I).Order /= Heal then
-                  AddOrder("Heal wounded crew members", 7, 0);
+            for J in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(J).Health < 100 and
+                 Crew_Container.To_Index(J) /= Crew_Container.To_Index(I) and
+                 PlayerShip.Crew(J).Order /= Heal then
+                  Append(Orders, " {Heal wounded crew members}");
                   exit;
                end if;
             end loop;
             if PlayerShip.UpgradeModule > 0 and
-               PlayerShip.Crew(I).Order /= Upgrading then
-               AddOrder("Upgrade module", 5, 0);
+              PlayerShip.Crew(I).Order /= Upgrading then
+               Append(Orders, " {Upgrade module}");
             end if;
             if PlayerShip.Crew(I).Order /= Talk then
-               AddOrder("Talking in bases", 6, 0);
+               Append(Orders, " {Talking in bases}");
             end if;
             if PlayerShip.Crew(I).Order /= Rest then
-               Append(Orders, "{Go on break}");
+               Append(Orders, " {Go on break}");
             end if;
          end if;
+         ComboBox :=
+           Create
+             (Widget_Image(CrewFrame) & ".orders" &
+              Trim(Natural'Image(Row), Left),
+              "-values [list" & To_String(Orders) & "] -state readonly");
+         Tcl.Tk.Ada.Grid.Grid
+           (ComboBox, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
       end loop;
       -- End of fill
