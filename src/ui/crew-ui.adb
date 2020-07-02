@@ -75,6 +75,16 @@ package body Crew.UI is
       Orders: Unbounded_String;
       NeedClean, NeedRepair: Boolean;
       ComboBox: Ttk_ComboBox;
+      OrdersNames: constant array(Positive range <>) of Unbounded_String :=
+        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
+         To_Unbounded_String("Gunner"), To_Unbounded_String("Repair ship"),
+         To_Unbounded_String("Manufacturing"),
+         To_Unbounded_String("Upgrading module"),
+         To_Unbounded_String("Talking in bases"),
+         To_Unbounded_String("Healing wounded"),
+         To_Unbounded_String("Cleans ship"), To_Unbounded_String("On break"),
+         To_Unbounded_String("Defends ship"), To_Unbounded_String("Boarding"),
+         To_Unbounded_String("Trains"));
       function IsWorking
         (Owners: Natural_Container.Vector; MemberIndex: Positive)
          return Boolean is
@@ -213,6 +223,12 @@ package body Crew.UI is
              (Widget_Image(CrewFrame) & ".orders" &
               Trim(Natural'Image(Row), Left),
               "-values [list" & To_String(Orders) & "] -state readonly");
+         Set
+           (ComboBox,
+            "{" &
+            To_String
+              (OrdersNames(Crew_Orders'Pos(PlayerShip.Crew(I).Order) + 1)) &
+            "}");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
