@@ -27,9 +27,8 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.MenuButton; use Tcl.Tk.Ada.Widgets.MenuButton;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -72,9 +71,9 @@ package body Crew.UI is
       CloseButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
-      Orders: Unbounded_String;
       NeedClean, NeedRepair: Boolean;
-      ComboBox: Ttk_ComboBox;
+      OrdersButton: Tk_MenuButton;
+      OrdersMenu: Tk_Menu;
       OrdersNames: constant array(Positive range <>) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Gunner"), To_Unbounded_String("Repair ship"),
@@ -143,7 +142,19 @@ package body Crew.UI is
               Trim(Natural'Image(Row), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
-         Orders := Null_Unbounded_String;
+         OrdersButton :=
+           Create
+             (Widget_Image(CrewFrame) & ".orders" &
+              Trim(Natural'Image(Row), Left),
+              "-text {" &
+              To_String
+                (OrdersNames(Crew_Orders'Pos(PlayerShip.Crew(I).Order) + 1)) &
+              "} -menu " & Widget_Image(CrewFrame) & ".orders" &
+              Trim(Natural'Image(Row), Left) & ".menu");
+         Tcl.Tk.Ada.Grid.Grid
+           (OrdersButton, "-row" & Natural'Image(Row) & " -column 1");
+         OrdersMenu.Create
+           (Widget_Image(OrdersButton) & ".menu", "-tearoff false");
          if
            ((PlayerShip.Crew(I).Tired = 100 or
              PlayerShip.Crew(I).Hunger = 100 or
@@ -151,50 +162,52 @@ package body Crew.UI is
             PlayerShip.Crew(I).Order /= Rest) or
            (PlayerShip.Crew(I).Skills.Length = 0 or
             PlayerShip.Crew(I).ContractLength = 0) then
-            Append(Orders, " {Go on break}");
+            Add(OrdersMenu, "command", "-label {Go on break}");
          else
             if PlayerShip.Crew(I).Order /= Pilot then
-               Append(Orders, " {Piloting}");
+               Add(OrdersMenu, "command", "-label {Piloting}");
             end if;
             if PlayerShip.Crew(I).Order /= Engineer then
-               Append(Orders, " {Engineering}");
+               Add(OrdersMenu, "command", "-label {Engineering}");
             end if;
             for Module of PlayerShip.Modules loop
                if Module.Durability > 0 then
                   case Modules_List(Module.ProtoIndex).MType is
                      when GUN | HARPOON_GUN =>
                         if Module.Owner(1) /= Crew_Container.To_Index(I) then
-                           Append
-                             (Orders,
-                              " {Operate " & To_String(Module.Name) & "}");
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Operate " & To_String(Module.Name) &
+                              "}");
                         end if;
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         if not IsWorking
                             (Module.Owner, Crew_Container.To_Index(I)) then
-                           Append
-                             (Orders,
-                              " {Work in " & To_String(Module.Name) & "}");
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Work in " & To_String(Module.Name) &
+                              "}");
                         end if;
                      when CABIN =>
                         if Module.Cleanliness < Module.Quality and
                           PlayerShip.Crew(I).Order /= Clean and NeedClean then
-                           Append(Orders, " {Clean ship}");
+                           Add(OrdersMenu, "command", "-label {Clean ship}");
                            NeedClean := False;
                         end if;
                      when TRAINING_ROOM =>
                         if not IsWorking
                             (Module.Owner, Crew_Container.To_Index(I)) then
-                           Append
-                             (Orders,
-                              " {Go on training in " & To_String(Module.Name) &
-                              "}");
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Go on training in " &
+                              To_String(Module.Name) & "}");
                         end if;
                      when others =>
                         null;
                   end case;
                   if Module.Durability < Module.MaxDurability and
                     NeedRepair then
-                     Append(Orders, " {Repair ship}");
+                     Add(OrdersMenu, "command", "-label {Repair ship}");
                      NeedRepair := False;
                   end if;
                end if;
@@ -203,34 +216,23 @@ package body Crew.UI is
                if PlayerShip.Crew(J).Health < 100 and
                  Crew_Container.To_Index(J) /= Crew_Container.To_Index(I) and
                  PlayerShip.Crew(J).Order /= Heal then
-                  Append(Orders, " {Heal wounded crew members}");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label {Heal wounded crew members}");
                   exit;
                end if;
             end loop;
             if PlayerShip.UpgradeModule > 0 and
               PlayerShip.Crew(I).Order /= Upgrading then
-               Append(Orders, " {Upgrade module}");
+               Add(OrdersMenu, "command", "-label {Upgrade module}");
             end if;
             if PlayerShip.Crew(I).Order /= Talk then
-               Append(Orders, " {Talking in bases}");
+               Add(OrdersMenu, "command", "-label {Talking in bases}");
             end if;
             if PlayerShip.Crew(I).Order /= Rest then
-               Append(Orders, " {Go on break}");
+               Add(OrdersMenu, "command", "-label {Go on break}");
             end if;
          end if;
-         ComboBox :=
-           Create
-             (Widget_Image(CrewFrame) & ".orders" &
-              Trim(Natural'Image(Row), Left),
-              "-values [list" & To_String(Orders) & "] -state readonly");
-         Set
-           (ComboBox,
-            "{" &
-            To_String
-              (OrdersNames(Crew_Orders'Pos(PlayerShip.Crew(I).Order) + 1)) &
-            "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (ComboBox, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
       end loop;
       -- End of fill
