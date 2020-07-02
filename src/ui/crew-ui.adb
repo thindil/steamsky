@@ -13,9 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -33,6 +36,8 @@ with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
+with ShipModules; use ShipModules;
+with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
@@ -61,8 +66,21 @@ package body Crew.UI is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       CrewCanvas: Tk_Canvas;
-      CrewFrame: Ttk_Frame;
+      CrewFrame, Item: Ttk_Frame;
       CloseButton: Ttk_Button;
+      Tokens: Slice_Set;
+      Rows, Row: Natural := 0;
+      Orders: Unbounded_String;
+      NeedClean: Boolean;
+      function IsWorking(Owners: Natural_Container.Vector; MemberIndex: Positive) return Boolean is
+      begin
+         for Owner of Owners loop
+            if Owner = MemberIndex then
+               return True;
+            end if;
+         end loop;
+         return False;
+      end IsWorking;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -87,7 +105,107 @@ package body Crew.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      -- Fill crew info UI
+      CrewFrame.Name :=
+        New_String(Widget_Image(CrewCanvas) & ".crew.crew");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (CrewFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      Row := 1;
+      for I in PlayerShip.Crew.Iterate loop
+         NeedClean := False;
+         Label :=
+           Create
+             (Widget_Image(CrewFrame) & ".name" &
+              Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+         Orders := Null_Unbounded_String;
+         if
+            ((PlayerShip.Crew(I).Tired = 100 or
+            PlayerShip.Crew(I).Hunger = 100 or
+            PlayerShip.Crew(I).Thirst = 100) and
+            PlayerShip.Crew(I).Order /= Rest) or
+               (PlayerShip.Crew(I).Skills.Length = 0 or
+               PlayerShip.Crew(I).ContractLength = 0) then
+               Append(Orders, "{Go on break}");
+         else
+            if PlayerShip.Crew(I).Order /= Pilot then
+               Append(Orders, "{Piloting}");
+            end if;
+            if PlayerShip.Crew(I).Order /= Engineer then
+               Append(Orders, " {Engineering}");
+            end if;
+            for Module of PlayerShip.Modules loop
+               if Module.Durability > 0 then
+                  case Modules_List(Module.ProtoIndex).MType is
+                     when GUN | HARPOON_GUN =>
+                        if Module.Owner(1) /= Crew_Container.To_Index(I) then
+                           Append
+                              (Orders, "Operate " & To_String(Module.Name));
+                        end if;
+                     when ALCHEMY_LAB .. GREENHOUSE =>
+                        if not IsWorking(Module.Owner, Crew_Container.To_Index(I)) then
+                           Append(Orders,
+                              "Work in " & To_String(Module.Name));
+                        end if;
+                     when CABIN =>
+                        if Module.Cleanliness <
+                           Module.Quality and
+                           PlayerShip.Crew(I).Order /= Clean and
+                           NeedClean then
+                           Append(Orders, "Clean ship");
+                           NeedClean := False;
+                        end if;
+                     when TRAINING_ROOM =>
+                        if not IsWorking(PlayerShip.Modules(I).Owner) then
+                           AddOrder
+                              ("Go on training in " &
+                              To_String(PlayerShip.Modules(I).Name),
+                              12, Modules_Container.To_Index(I));
+                        end if;
+                     when others =>
+                        null;
+                  end case;
+                  if PlayerShip.Modules(I).Durability <
+                     PlayerShip.Modules(I).MaxDurability and
+                     NeedRepair then
+                     AddOrder("Repair ship", 3, 0);
+                     NeedRepair := False;
+                  end if;
+               end if;
+            end loop;
+            for I in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(I).Health < 100 and
+                  Crew_Container.To_Index(I) /= MemberIndex and
+                  PlayerShip.Crew(I).Order /= Heal then
+                  AddOrder("Heal wounded crew members", 7, 0);
+                  exit;
+               end if;
+            end loop;
+            if PlayerShip.UpgradeModule > 0 and
+               PlayerShip.Crew(I).Order /= Upgrading then
+               AddOrder("Upgrade module", 5, 0);
+            end if;
+            if PlayerShip.Crew(I).Order /= Talk then
+               AddOrder("Talking in bases", 6, 0);
+            end if;
+            if PlayerShip.Crew(I).Order /= Rest then
+               Append(Orders, "{Go on break}");
+            end if;
+         end if;
+         Row := Row + 1;
+      end loop;
       -- End of fill
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CrewFrame.Name := New_String(Widget_Image(CrewCanvas) & ".crew");
