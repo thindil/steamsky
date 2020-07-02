@@ -69,7 +69,7 @@ package body Crew.UI is
       Paned: Ttk_PanedWindow;
       CrewCanvas: Tk_Canvas;
       CrewFrame, Item: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      CloseButton, CrewButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       NeedClean, NeedRepair: Boolean;
@@ -137,12 +137,12 @@ package body Crew.UI is
       for I in PlayerShip.Crew.Iterate loop
          NeedClean := False;
          NeedRepair := False;
-         Label :=
+         CrewButton :=
            Create
              (Widget_Image(CrewFrame) & ".name" &
               Trim(Natural'Image(Row), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+         Tcl.Tk.Ada.Grid.Grid(CrewButton, "-row" & Natural'Image(Row));
          OrdersButton :=
            Create
              (Widget_Image(CrewFrame) & ".orders" &
@@ -169,49 +169,87 @@ package body Crew.UI is
                Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
          else
             if PlayerShip.Crew(I).Order /= Pilot then
-               Add(OrdersMenu, "command", "-label {Piloting}");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Piloting} -command {SetCrewOrder Pilot" &
+                  Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Engineer then
-               Add(OrdersMenu, "command", "-label {Engineering}");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Engineering} -command {SetCrewOrder Engineer" &
+                  Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
-            for Module of PlayerShip.Modules loop
-               if Module.Durability > 0 then
-                  case Modules_List(Module.ProtoIndex).MType is
+            for J in PlayerShip.Modules.Iterate loop
+               if PlayerShip.Modules(J).Durability > 0 then
+                  case Modules_List(PlayerShip.Modules(J).ProtoIndex).MType is
                      when GUN | HARPOON_GUN =>
-                        if Module.Owner(1) /= Crew_Container.To_Index(I) then
+                        if PlayerShip.Modules(J).Owner(1) /=
+                          Crew_Container.To_Index(I) then
                            Add
                              (OrdersMenu, "command",
-                              "-label {Operate " & To_String(Module.Name) &
+                              "-label {Operate " &
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Gunner" &
+                              Positive'Image
+                                (Positive(Crew_Container.To_Index(I))) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
                               "}");
                         end if;
                      when ALCHEMY_LAB .. GREENHOUSE =>
                         if not IsWorking
-                            (Module.Owner, Crew_Container.To_Index(I)) then
+                            (PlayerShip.Modules(J).Owner,
+                             Crew_Container.To_Index(I)) then
                            Add
                              (OrdersMenu, "command",
-                              "-label {Work in " & To_String(Module.Name) &
+                              "-label {Work in " &
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Craft" &
+                              Positive'Image
+                                (Positive(Crew_Container.To_Index(I))) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
                               "}");
                         end if;
                      when CABIN =>
-                        if Module.Cleanliness < Module.Quality and
+                        if PlayerShip.Modules(J).Cleanliness <
+                          PlayerShip.Modules(J).Quality and
                           PlayerShip.Crew(I).Order /= Clean and NeedClean then
-                           Add(OrdersMenu, "command", "-label {Clean ship}");
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Clean ship} -command {SetCrewOrder Clean" &
+                              Positive'Image
+                                (Positive(Crew_Container.To_Index(I))) &
+                              "}");
                            NeedClean := False;
                         end if;
                      when TRAINING_ROOM =>
                         if not IsWorking
-                            (Module.Owner, Crew_Container.To_Index(I)) then
+                            (PlayerShip.Modules(J).Owner,
+                             Crew_Container.To_Index(I)) then
                            Add
                              (OrdersMenu, "command",
                               "-label {Go on training in " &
-                              To_String(Module.Name) & "}");
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Train" &
+                              Positive'Image
+                                (Positive(Crew_Container.To_Index(I))) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
+                              "}");
                         end if;
                      when others =>
                         null;
                   end case;
-                  if Module.Durability < Module.MaxDurability and
+                  if PlayerShip.Modules(J).Durability <
+                    PlayerShip.Modules(J).MaxDurability and
                     NeedRepair then
-                     Add(OrdersMenu, "command", "-label {Repair ship}");
+                     Add
+                       (OrdersMenu, "command",
+                        "-label {Repair ship} -command {SetCrewOrder Repair" &
+                        Positive'Image(Positive(Crew_Container.To_Index(I))) &
+                        "}");
                      NeedRepair := False;
                   end if;
                end if;
@@ -222,16 +260,24 @@ package body Crew.UI is
                  PlayerShip.Crew(J).Order /= Heal then
                   Add
                     (OrdersMenu, "command",
-                     "-label {Heal wounded crew members}");
+                     "-label {Heal wounded crew members} -command {SetCrewOrder Heal" &
+                     Positive'Image(Positive(Crew_Container.To_Index(I))) &
+                     "}");
                   exit;
                end if;
             end loop;
             if PlayerShip.UpgradeModule > 0 and
               PlayerShip.Crew(I).Order /= Upgrading then
-               Add(OrdersMenu, "command", "-label {Upgrade module}");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Upgrade module} -command {SetCrewOrder Upgrading" &
+                  Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Talk then
-               Add(OrdersMenu, "command", "-label {Talking in bases}");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Talking in bases} -command {SetCrewOrder Talk" &
+                  Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Rest then
                Add
@@ -266,9 +312,9 @@ package body Crew.UI is
    -- FUNCTION
    -- Set order for the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- SOURCE
    function Set_Crew_Order_Command
@@ -282,13 +328,17 @@ package body Crew.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      Order: Crew_Orders := Crew_Orders'Value(CArgv.Arg(Argv, 1));
-      MemberIndex: Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ModuleIndex: Natural := 0;
    begin
+      if Argc = 4 then
+         ModuleIndex := Natural'Value(CArgv.Arg(Argv, 3));
+      end if;
+      GiveOrders
+        (PlayerShip, Positive'Value(CArgv.Arg(Argv, 2)),
+         Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
       UpdateHeader;
       UpdateMessages;
-      return TCL_OK;
+      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Crew_Order_Command;
 
    procedure AddCommands is
