@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -256,6 +256,11 @@ package body Ships.Cargo.UI is
             "'s inventory for that amount of " & GetItemName(Item));
          return;
       end if;
+      AddMessage
+        ("You gave" & Positive'Image(Amount) & " " &
+         GetItemName(PlayerShip.Cargo(ItemIndex)) & " to " &
+         To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+         OtherMessage);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => Amount,
          ProtoIndex => Item.ProtoIndex, Durability => Item.Durability,
