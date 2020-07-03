@@ -30,6 +30,8 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.MenuButton; use Tcl.Tk.Ada.Widgets.MenuButton;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -302,13 +304,15 @@ package body Crew.UI is
          end if;
          Row := Row + 1;
       end loop;
-      CrewButton.Name := New_String(Widget_Image(CrewCanvas) & ".crew.info.clean");
+      CrewButton.Name :=
+        New_String(Widget_Image(CrewCanvas) & ".crew.info.clean");
       if NeedClean then
          Tcl.Tk.Ada.Grid.Grid(CrewButton);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(CrewButton);
       end if;
-      CrewButton.Name := New_String(Widget_Image(CrewCanvas) & ".crew.info.repair");
+      CrewButton.Name :=
+        New_String(Widget_Image(CrewCanvas) & ".crew.info.repair");
       if NeedRepair then
          Tcl.Tk.Ada.Grid.Grid(CrewButton);
       else
@@ -366,6 +370,13 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Crew_Order_Command;
 
+   -- ****iv* CUI2/MemberIndex
+   -- FUNCTION
+   -- The index of the currently selected crew member
+   -- SOURCE
+   MemberIndex: Positive;
+   -- ****
+
    -- ****f* CUI2/Show_Member_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected crew member
@@ -387,14 +398,15 @@ package body Crew.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
+      Member: Member_Data;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
       MemberFrame, Frame: Ttk_Frame;
       ProgressBar: Ttk_ProgressBar;
       TiredPoints: Integer;
    begin
+      MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
+      Member := PlayerShip.Crew(MemberIndex);
       MemberFrame.Interp := Interp;
       MemberFrame.Name := New_String(".paned.crewframe.canvas.crew.info");
       Frame.Interp := Interp;
@@ -624,6 +636,7 @@ package body Crew.UI is
          ItemIndex, TooltipText: Unbounded_String;
          Quality: Natural;
          Index: Positive := 1;
+         ComboBox: Ttk_ComboBox;
       begin
          Frame.Name := New_String(Widget_Image(MemberFrame) & ".info.stats");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
@@ -741,19 +754,68 @@ package body Crew.UI is
                Tcl.Tk.Ada.Grid.Grid(ProgressBar);
                Index := Index + 1;
             end loop;
+            Frame.Name :=
+              New_String(Widget_Image(MemberFrame) & ".priorities");
+            ComboBox.Interp := Interp;
+            for I in Member.Orders'Range loop
+               ComboBox.Name :=
+                 New_String
+                   (Widget_Image(Frame) & ".level" &
+                    Trim(Positive'Image(I), Left));
+               Current(ComboBox, Natural'Image(Member.Orders(I)));
+            end loop;
+            Tcl.Tk.Ada.Grid.Grid(Frame);
+         else
+            Frame.Name :=
+              New_String(Widget_Image(MemberFrame) & ".priorities");
+            Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
          end if;
       end;
---      Foreach
---        (Gtk_List_Store(Get_Object(Builder, "prioritieslist")),
---         UpdatePriorities'Access);
       return TCL_OK;
    end Show_Member_Info_Command;
+
+   -- ****f* CUI2/Set_Priority_Command
+   -- FUNCTION
+   -- Set the selected priority of the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Priority_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Priority_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+   begin
+      if CArgv.Arg(Argv, 2) = "2" then
+         for Order of PlayerShip.Crew(MemberIndex).Orders loop
+            if Order = 2 then
+               Order := 1;
+               exit;
+            end if;
+         end loop;
+      end if;
+      PlayerShip.Crew(MemberIndex).Orders
+        (Positive'Value(CArgv.Arg(Argv, 1))) :=
+        Natural'Value(CArgv.Arg(Argv, 2));
+      return TCL_OK;
+   end Set_Priority_Command;
 
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
+      AddCommand("SetPriority", Set_Priority_Command'Access);
    end AddCommands;
 
 end Crew.UI;
