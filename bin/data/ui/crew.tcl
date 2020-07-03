@@ -12,15 +12,18 @@ grid [ttk::label $crewframe.crew.order -text {Order}] -row 0 -column 1
 grid [ttk::frame $crewframe.info] -sticky nwes -row 0 -column 1
 grid [ttk::labelframe $crewframe.info.info -text {Member Info}]
 grid [ttk::label $crewframe.info.info.label]
-grid [ttk::progressbar $crewframe.info.info.health]
-grid [ttk::progressbar $crewframe.info.info.tired]
-grid [ttk::progressbar $crewframe.info.info.thirst]
-grid [ttk::progressbar $crewframe.info.info.hunger]
-grid [ttk::progressbar $crewframe.info.info.morale]
-grid [ttk::label $crewframe.info.info.statslbl -text Statistics]
-grid [ttk::frame $crewframe.info.info.stats]
-grid [ttk::label $crewframe.info.info.skillslbl -text Skills]
-grid [ttk::frame $crewframe.info.info.skills]
+grid [ttk::label $crewframe.info.info.healthlbl]
+grid [ttk::progressbar $crewframe.info.info.health] -row 1 -column 1
+grid [ttk::label $crewframe.info.info.tiredlbl]
+grid [ttk::progressbar $crewframe.info.info.tired] -row 2 -column 1
+grid [ttk::label $crewframe.info.info.thirstlbl]
+grid [ttk::progressbar $crewframe.info.info.thirst] -row 3 -column 1
+grid [ttk::label $crewframe.info.info.hungerlbl]
+grid [ttk::progressbar $crewframe.info.info.hunger] -row 4 -column 1
+grid [ttk::label $crewframe.info.info.moralelbl]
+grid [ttk::progressbar $crewframe.info.info.morale] -row 5 -column 1
+grid [ttk::labelframe $crewframe.info.info.stats -text Statistics]
+grid [ttk::labelframe $crewframe.info.info.skills -text Skills]
 # Crew member priorities
 grid [ttk::labelframe $crewframe.info.priorities -text {Orders priorities}]
 grid [ttk::label $crewframe.info.priorities.name -text {Priority}]
