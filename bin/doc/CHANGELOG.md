@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Missing message after give an item from ship cargo to a crew member
+
 ### Fixed
 - Update header crew information when assigned crew to new module in ship info
   screen
