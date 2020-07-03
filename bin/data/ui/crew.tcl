@@ -67,5 +67,5 @@ bind $crewframe.info.priorities.level12 <<ComboboxSelected>> {SetPriority 12 [$c
 # Options
 grid [ttk::button $crewframe.info.inventory -text {Inventory}]
 grid [ttk::button $crewframe.info.dismiss -text {Dismiss}]
-grid [ttk::button $crewframe.info.clean -text {Clean ship everyone}]
-grid [ttk::button $crewframe.info.repair -text {Repair ship everyone}]
+grid [ttk::button $crewframe.info.clean -text {Clean ship everyone} -command {OrderForAll Clean}]
+grid [ttk::button $crewframe.info.repair -text {Repair ship everyone} -command {OrderForAll Repair}]
