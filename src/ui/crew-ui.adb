@@ -302,7 +302,18 @@ package body Crew.UI is
          end if;
          Row := Row + 1;
       end loop;
-      -- TODO orders for the whole crew
+      CrewButton.Name := New_String(Widget_Image(CrewCanvas) & ".crew.info.clean");
+      if NeedClean then
+         Tcl.Tk.Ada.Grid.Grid(CrewButton);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(CrewButton);
+      end if;
+      CrewButton.Name := New_String(Widget_Image(CrewCanvas) & ".crew.info.repair");
+      if NeedRepair then
+         Tcl.Tk.Ada.Grid.Grid(CrewButton);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(CrewButton);
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CrewFrame.Name := New_String(Widget_Image(CrewCanvas) & ".crew");
       configure
