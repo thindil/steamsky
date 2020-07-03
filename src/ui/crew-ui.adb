@@ -794,7 +794,6 @@ package body Crew.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
    begin
       if CArgv.Arg(Argv, 2) = "2" then
          for Order of PlayerShip.Crew(MemberIndex).Orders loop
@@ -807,7 +806,10 @@ package body Crew.UI is
       PlayerShip.Crew(MemberIndex).Orders
         (Positive'Value(CArgv.Arg(Argv, 1))) :=
         Natural'Value(CArgv.Arg(Argv, 2));
-      return TCL_OK;
+      UpdateOrders(PlayerShip);
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
    procedure AddCommands is
