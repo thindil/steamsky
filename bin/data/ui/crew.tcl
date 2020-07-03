@@ -28,6 +28,30 @@ grid [ttk::labelframe $crewframe.info.info.skills -text Skills]
 grid [ttk::labelframe $crewframe.info.priorities -text {Orders priorities}]
 grid [ttk::label $crewframe.info.priorities.name -text {Priority}]
 grid [ttk::label $crewframe.info.priorities.level -text {Level}] -row 0 -column 1
+grid [ttk::label $crewframe.info.priorities.name1 -text {Piloting}]
+grid [ttk::combobox $crewframe.info.priorities.level1 -values [list None Normal Highest] -state readonly] -row 1 -column 1
+grid [ttk::label $crewframe.info.priorities.name2 -text {Engineering}]
+grid [ttk::combobox $crewframe.info.priorities.level2 -values [list None Normal Highest] -state readonly] -row 2 -column 1
+grid [ttk::label $crewframe.info.priorities.name3 -text {Operating guns}]
+grid [ttk::combobox $crewframe.info.priorities.level3 -values [list None Normal Highest] -state readonly] -row 3 -column 1
+grid [ttk::label $crewframe.info.priorities.name4 -text {Repair ship}]
+grid [ttk::combobox $crewframe.info.priorities.level4 -values [list None Normal Highest] -state readonly] -row 4 -column 1
+grid [ttk::label $crewframe.info.priorities.name5 -text {Manufacturing}]
+grid [ttk::combobox $crewframe.info.priorities.level5 -values [list None Normal Highest] -state readonly] -row 5 -column 1
+grid [ttk::label $crewframe.info.priorities.name6 -text {Upgrading ship}]
+grid [ttk::combobox $crewframe.info.priorities.level6 -values [list None Normal Highest] -state readonly] -row 6 -column 1
+grid [ttk::label $crewframe.info.priorities.name7 -text {Talking in bases}]
+grid [ttk::combobox $crewframe.info.priorities.level7 -values [list None Normal Highest] -state readonly] -row 7 -column 1
+grid [ttk::label $crewframe.info.priorities.name8 -text {Healing wounded}]
+grid [ttk::combobox $crewframe.info.priorities.level8 -values [list None Normal Highest] -state readonly] -row 8 -column 1
+grid [ttk::label $crewframe.info.priorities.name9 -text {Cleaning ship}]
+grid [ttk::combobox $crewframe.info.priorities.level9 -values [list None Normal Highest] -state readonly] -row 9 -column 1
+grid [ttk::label $crewframe.info.priorities.name10 -text {Defend ship}]
+grid [ttk::combobox $crewframe.info.priorities.level10 -values [list None Normal Highest] -state readonly] -row 10 -column 1
+grid [ttk::label $crewframe.info.priorities.name11 -text {Board enemy ship}]
+grid [ttk::combobox $crewframe.info.priorities.level11 -values [list None Normal Highest] -state readonly] -row 11 -column 1
+grid [ttk::label $crewframe.info.priorities.name12 -text {Train skill}]
+grid [ttk::combobox $crewframe.info.priorities.level12 -values [list None Normal Highest] -state readonly] -row 12 -column 1
 # Options
 grid [ttk::button $crewframe.info.inventory -text {Inventory}]
 grid [ttk::button $crewframe.info.dismiss -text {Dismiss}]
