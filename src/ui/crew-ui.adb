@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -43,6 +44,7 @@ with Config; use Config;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
@@ -812,12 +814,50 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
+   -- ****f* CUI2/Order_For_All_Command
+   -- FUNCTION
+   -- Set the selected order for the whole crew
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Order_For_All_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Order_For_All_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         GiveOrders
+           (PlayerShip, Crew_Container.To_Index(I),
+            Crew_Orders'Value(CArgv.Arg(Argv, 1)));
+      end loop;
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
+   exception
+      when An_Exception : Crew_Order_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage);
+         UpdateHeader;
+         UpdateMessages;
+         return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
+   end Order_For_All_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
+      AddCommand("OrderForAll", Order_For_All_Command'Access);
    end AddCommands;
 
 end Crew.UI;
