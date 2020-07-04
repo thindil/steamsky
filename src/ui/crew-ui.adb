@@ -25,6 +25,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -49,11 +50,12 @@ with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
 
-   -- ****f* CUI2/Show_Crew_Info_Command
+   -- ****f* CUI3/Show_Crew_Info_Command
    -- FUNCTION
    -- Show information about the player's ship crew
    -- PARAMETERS
@@ -339,7 +341,7 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Crew_Info_Command;
 
-   -- ****f* CUI2/Set_Crew_Order_Command
+   -- ****f* CUI3/Set_Crew_Order_Command
    -- FUNCTION
    -- Set order for the selected crew member
    -- PARAMETERS
@@ -372,14 +374,14 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Crew_Order_Command;
 
-   -- ****iv* CUI2/MemberIndex
+   -- ****iv* CUI3/MemberIndex
    -- FUNCTION
    -- The index of the currently selected crew member
    -- SOURCE
    MemberIndex: Positive;
    -- ****
 
-   -- ****f* CUI2/Show_Member_Info_Command
+   -- ****f* CUI3/Show_Member_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected crew member
    -- PARAMETERS
@@ -776,7 +778,7 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Member_Info_Command;
 
-   -- ****f* CUI2/Set_Priority_Command
+   -- ****f* CUI3/Set_Priority_Command
    -- FUNCTION
    -- Set the selected priority of the selected crew member
    -- PARAMETERS
@@ -814,7 +816,7 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
-   -- ****f* CUI2/Order_For_All_Command
+   -- ****f* CUI3/Order_For_All_Command
    -- FUNCTION
    -- Set the selected order for the whole crew
    -- PARAMETERS
@@ -851,6 +853,49 @@ package body Crew.UI is
          return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Order_For_All_Command;
 
+   -- ****f* CUI3/Dismiss_Command
+   -- FUNCTION
+   -- Dismiss the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Dismiss_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Dismiss_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if MessageBox
+          ("-message {Are you sure want to dismiss this crew member?} -icon question -type yesno") /=
+        "yes" then
+         return TCL_OK;
+      end if;
+      AddMessage
+        ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+         OrderMessage);
+      DeleteMember(MemberIndex, PlayerShip);
+      SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+      for I in PlayerShip.Crew.Iterate loop
+         UpdateMorale
+           (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
+      end loop;
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Crew_Info_Command(ClientData, Interp, 2, Argv);
+   end Dismiss_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
@@ -858,6 +903,7 @@ package body Crew.UI is
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
       AddCommand("OrderForAll", Order_For_All_Command'Access);
+      AddCommand("Dismiss", Dismiss_Command'Access);
    end AddCommands;
 
 end Crew.UI;
