@@ -13,10 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -66,7 +68,7 @@ package body Crew.UI.Inventory is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(ClientData, Argc);
       Paned: Ttk_PanedWindow;
       InventoryCanvas: Tk_Canvas;
       InventoryFrame: Ttk_Frame;
@@ -92,11 +94,6 @@ package body Crew.UI.Inventory is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "inventory.tcl");
          Bind(InventoryFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(InventoryCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         ShowSkyMap(True);
-         return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       ItemsView.Interp := Interp;
@@ -231,11 +228,89 @@ package body Crew.UI.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
+   -- ****f* Inventory/Set_Use_Item_Command
+   -- FUNCTION
+   -- Set if item is used by a crew member or not
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Use_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Use_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
+      ItemType: constant Unbounded_String :=
+        Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .IType;
+   begin
+      if Tcl_GetVar(Interp, "useitem") = "1" then
+         if ItemType = WeaponType then
+            if Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                .Value
+                (4) =
+              2 and
+              PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
+               ShowMessage
+                 (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                  " can't use this weapon because have shield equiped. Take off shield first.");
+               return TCL_OK;
+            end if;
+            PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+         elsif ItemType = ShieldType then
+            if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
+               if Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory
+                      (PlayerShip.Crew(MemberIndex).Equipment(1))
+                      .ProtoIndex)
+                   .Value
+                   (4) =
+                 2 then
+                  ShowMessage
+                    (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                     " can't use shield because have equiped two-hand weapon. Take off weapon first.");
+                  return TCL_OK;
+               end if;
+            end if;
+            PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+         elsif ItemType = HeadArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+         elsif ItemType = ChestArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+         elsif ItemType = ArmsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+         elsif ItemType = LegsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+         elsif Tools_List.Find_Index(Item => ItemType) /=
+           UnboundedString_Container.No_Index then
+            PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
+         end if;
+      else
+         TakeOffItem(MemberIndex, ItemIndex);
+      end if;
+      return Show_Inventory_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "ShowInventory" &
+           Trim(Positive'Image(MemberIndex), Left));
+   end Set_Use_Item_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowInventory", Show_Inventory_Command'Access);
       AddCommand
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
+      AddCommand("SetUseItem", Set_Use_Item_Command'Access);
    end AddCommands;
 
 end Crew.UI.Inventory;
