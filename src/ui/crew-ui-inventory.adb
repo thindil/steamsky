@@ -25,6 +25,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -196,6 +198,7 @@ package body Crew.UI.Inventory is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       InventoryView: Ttk_Tree_View;
+      AmountBox: Ttk_SpinBox;
    begin
       if not GameSettings.ShowInventoryInfo then
          return TCL_OK;
@@ -207,6 +210,24 @@ package body Crew.UI.Inventory is
       ShowInventoryItemInfo
         (".paned.inventoryframe.canvas.inventory.item.info.text", ItemIndex,
          MemberIndex);
+      if ItemIsUsed(MemberIndex, ItemIndex) then
+         Tcl_SetVar(Interp, "useitem", "1");
+      else
+         Tcl_SetVar(Interp, "useitem", "0");
+      end if;
+      AmountBox.Interp := Interp;
+      AmountBox.Name :=
+        New_String(".paned.inventoryframe.canvas.inventory.item.amount");
+      configure
+        (AmountBox,
+         "-from 1 -to" &
+         Positive'Image
+           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
+         " -validatecommand {ValidateSpinbox %S %s" &
+         Positive'Image
+           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
+         "}");
+      Set(AmountBox, "1");
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
