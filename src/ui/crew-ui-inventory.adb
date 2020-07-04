@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -138,6 +139,13 @@ package body Crew.UI.Inventory is
             " " & Positive'Image(ItemWeight) & "]");
       end loop;
       Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
+      InventoryFrame.Name :=
+        New_String(Widget_Image(InventoryCanvas) & ".inventory.item");
+      if GameSettings.ShowInventoryInfo then
+         Tcl.Tk.Ada.Grid.Grid(InventoryFrame, "-row 0 -column 1");
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(InventoryFrame);
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       InventoryFrame.Name :=
         New_String(Widget_Image(InventoryCanvas) & ".inventory");
@@ -159,9 +167,54 @@ package body Crew.UI.Inventory is
       return TCL_OK;
    end Show_Inventory_Command;
 
+   -- ****if* Inventory/ItemIndex
+   -- FUNCTION
+   -- Index of the currently selected item
+   -- SOURCE
+   ItemIndex: Positive;
+   -- ****
+
+   -- ****f* Inventory/Show_Inventory_Item_Info_Command
+   -- FUNCTION
+   -- Show information about the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Inventory_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Inventory_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      InventoryView: Ttk_Tree_View;
+   begin
+      if not GameSettings.ShowInventoryInfo then
+         return TCL_OK;
+      end if;
+      InventoryView.Interp := Interp;
+      InventoryView.Name :=
+        New_String(".paned.inventoryframe.canvas.inventory.list.view");
+      ItemIndex := Positive'Value(Selection(InventoryView));
+      ShowInventoryItemInfo
+        (".paned.inventoryframe.canvas.inventory.item.info.text", ItemIndex,
+         MemberIndex);
+      return TCL_OK;
+   end Show_Inventory_Item_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowInventory", Show_Inventory_Command'Access);
+      AddCommand
+        ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
    end AddCommands;
 
 end Crew.UI.Inventory;

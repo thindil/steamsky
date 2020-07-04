@@ -14,6 +14,7 @@ $inventoryview heading type -text {Type}
 $inventoryview heading amount -text {Amount}
 $inventoryview heading weight -text {Weight (in kg)}
 grid $inventoryview -sticky nwes
+bind $inventoryview <<TreeviewSelect>> ShowInventoryItemInfo
 grid [ttk::scrollbar $inventoryframe.list.scrolly -orient vertical -command [list $inventoryview yview]] -row 0 -column 1 -sticky ns
 # Item info
 set itemframe [ttk::frame $inventoryframe.item]
