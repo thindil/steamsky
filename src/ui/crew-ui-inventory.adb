@@ -27,8 +27,11 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
+with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Inventory is
@@ -65,6 +68,10 @@ package body Crew.UI.Inventory is
       InventoryCanvas: Tk_Canvas;
       InventoryFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      ItemsView: Ttk_Tree_View;
+      ItemDurability, ItemType, ProtoIndex, Used: Unbounded_String;
+      ItemWeight: Positive;
+      FirstIndex: Natural := 0;
    begin
       MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
       Paned.Interp := Interp;
@@ -89,8 +96,48 @@ package body Crew.UI.Inventory is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      -- Fill UI
-      -- End of fill UI
+      ItemsView.Interp := Interp;
+      ItemsView.Name :=
+        New_String(Widget_Image(InventoryCanvas) & ".inventory.list.view");
+      Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
+      for I in PlayerShip.Crew(MemberIndex).Inventory.Iterate loop
+         if PlayerShip.Crew(MemberIndex).Inventory(I).Durability = 100 then
+            ItemDurability := Null_Unbounded_String;
+         else
+            ItemDurability :=
+              To_Unbounded_String
+                (GetItemDamage
+                   (PlayerShip.Crew(MemberIndex).Inventory(I).Durability));
+         end if;
+         ProtoIndex := PlayerShip.Crew(MemberIndex).Inventory(I).ProtoIndex;
+         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+            Used := To_Unbounded_String("Yes");
+         else
+            Used := To_Unbounded_String("No");
+         end if;
+         if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+            ItemType := Items_List(ProtoIndex).ShowType;
+         else
+            ItemType := Items_List(ProtoIndex).IType;
+         end if;
+         if FirstIndex = 0 then
+            FirstIndex := Inventory_Container.To_Index(I);
+         end if;
+         ItemWeight :=
+           PlayerShip.Crew(MemberIndex).Inventory(I).Amount *
+           Items_List(ProtoIndex).Weight;
+         Insert
+           (ItemsView,
+            "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -values [list {" &
+            GetItemName
+              (PlayerShip.Crew(MemberIndex).Inventory(I), False, False) &
+            "} {" & To_String(Used) & "} {" & To_String(ItemType) & "} {" &
+            To_String(ItemDurability) & "}" &
+            Positive'Image(PlayerShip.Crew(MemberIndex).Inventory(I).Amount) &
+            " " & Positive'Image(ItemWeight) & "]");
+      end loop;
+      Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       InventoryFrame.Name :=
         New_String(Widget_Image(InventoryCanvas) & ".inventory");
