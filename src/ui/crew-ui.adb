@@ -41,6 +41,7 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
+with Crew.UI.Inventory;
 with Config; use Config;
 with Factions; use Factions;
 with Maps; use Maps;
@@ -641,7 +642,11 @@ package body Crew.UI is
          Quality: Natural;
          Index: Positive := 1;
          ComboBox: Ttk_ComboBox;
+         InventoryButton: Ttk_Button;
       begin
+         InventoryButton.Interp := Interp;
+         InventoryButton.Name :=
+           New_String(Widget_Image(MemberFrame) & ".inventory");
          Frame.Name := New_String(Widget_Image(MemberFrame) & ".info.stats");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
@@ -769,10 +774,15 @@ package body Crew.UI is
                Current(ComboBox, Natural'Image(Member.Orders(I)));
             end loop;
             Tcl.Tk.Ada.Grid.Grid(Frame);
+            configure
+              (InventoryButton,
+               "-command {ShowInventory" & Positive'Image(MemberIndex) & "}");
+            Tcl.Tk.Ada.Grid.Grid(InventoryButton);
          else
             Frame.Name :=
               New_String(Widget_Image(MemberFrame) & ".priorities");
             Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+            Tcl.Tk.Ada.Grid.Grid_Remove(InventoryButton);
          end if;
       end;
       return TCL_OK;
@@ -904,6 +914,7 @@ package body Crew.UI is
       AddCommand("SetPriority", Set_Priority_Command'Access);
       AddCommand("OrderForAll", Order_For_All_Command'Access);
       AddCommand("Dismiss", Dismiss_Command'Access);
+      Crew.UI.Inventory.AddCommands;
    end AddCommands;
 
 end Crew.UI;
