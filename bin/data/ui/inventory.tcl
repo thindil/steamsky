@@ -18,10 +18,10 @@ bind $inventoryview <<TreeviewSelect>> ShowInventoryItemInfo
 grid [ttk::scrollbar $inventoryframe.list.scrolly -orient vertical -command [list $inventoryview yview]] -row 0 -column 1 -sticky ns
 # Item info
 set itemframe [ttk::frame $inventoryframe.item]
-grid [ttk::labelframe $itemframe.info -text {Item Info:}]
+grid [ttk::labelframe $itemframe.info -text {Item Info:}] -columnspan 3
 grid [text $itemframe.info.text -wrap char -height 10 -width 40]
 # Item actions
-grid [ttk::checkbutton $itemframe.use -variable useitem -text {Used}]
+grid [ttk::checkbutton $itemframe.use -variable useitem -text {Used}] -columnspan 3
 grid [ttk::button $itemframe.button -text {Move}]
 grid [ttk::spinbox $itemframe.amount -from 1 -increment 1 -validate key] -row 2 -column 1
 grid [ttk::label $itemframe.label -text {to ship cargo.}] -row 2 -column 2
