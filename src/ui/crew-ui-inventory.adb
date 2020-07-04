@@ -37,6 +37,8 @@ with Config; use Config;
 with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
 package body Crew.UI.Inventory is
@@ -305,12 +307,84 @@ package body Crew.UI.Inventory is
            Trim(Positive'Image(MemberIndex), Left));
    end Set_Use_Item_Command;
 
+   -- ****f* Inventory/Move_Item_Command
+   -- FUNCTION
+   -- Move the selected item to the ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
+      Amount: Positive;
+      AmountBox: Ttk_SpinBox;
+   begin
+      AmountBox.Interp := Interp;
+      AmountBox.Name :=
+        New_String(".paned.inventoryframe.canvas.inventory.item.amount");
+      Amount := Positive'Value(Get(AmountBox));
+      if FreeCargo
+          (0 -
+           (Items_List
+              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+              .Weight *
+            Amount)) <
+        0 then
+         ShowMessage
+           ("No free space in ship cargo for that amount of " &
+            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)));
+         return TCL_OK;
+      end if;
+      UpdateCargo
+        (Ship => PlayerShip,
+         ProtoIndex =>
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex,
+         Amount => Amount,
+         Durability =>
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
+         Price => PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Price);
+      UpdateInventory
+        (MemberIndex => MemberIndex, Amount => (0 - Amount),
+         InventoryIndex => ItemIndex);
+      if
+        (PlayerShip.Crew(MemberIndex).Order = Clean and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => CleaningTools) =
+           0) or
+        ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
+          PlayerShip.Crew(MemberIndex).Order = Repair) and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => RepairTools) =
+           0) then
+         GiveOrders(PlayerShip, MemberIndex, Rest);
+      end if;
+      return Show_Inventory_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "ShowInventory" &
+           Trim(Positive'Image(MemberIndex), Left));
+   end Move_Item_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowInventory", Show_Inventory_Command'Access);
       AddCommand
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
       AddCommand("SetUseItem", Set_Use_Item_Command'Access);
+      AddCommand("MoveItem", Move_Item_Command'Access);
    end AddCommands;
 
 end Crew.UI.Inventory;
