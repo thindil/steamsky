@@ -42,8 +42,9 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
+with Crafts.UI;
 with Crew; use Crew;
-with Crew.UI; use Crew.UI;
+with Crew.UI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
@@ -84,7 +85,7 @@ package body Maps.UI is
          "-label {Crew information} -command ShowCrewInfo");
       Menu.Add
         (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
-      Menu.Add(GameMenu, "command", "-label {Crafting}");
+      Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
       Menu.Add(GameMenu, "command", "-label {Last messages}");
       Menu.Add(GameMenu, "command", "-label {List of known bases}");
       Menu.Add
@@ -854,6 +855,7 @@ package body Maps.UI is
          Ships.Cargo.UI.AddCommands;
          Ships.UI.AddCommands;
          Crew.UI.AddCommands;
+         Crafts.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
