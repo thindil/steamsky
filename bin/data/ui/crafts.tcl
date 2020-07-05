@@ -10,6 +10,7 @@ set craftview [ttk::treeview $craftframe.list.view -yscrollcommand [list $craftf
 $craftview heading #0 -text {Name}
 $craftview tag configure gray -foreground gray
 grid $craftview -sticky nwes
+bind $craftview <<TreeviewSelect>> ShowRecipeInfo
 grid [ttk::scrollbar $craftframe.list.scrolly -orient vertical -command [list $craftview yview]] -row 0 -column 1 -sticky ns
 # Recipe info
 set recipeframe [ttk::frame $craftframe.item]
