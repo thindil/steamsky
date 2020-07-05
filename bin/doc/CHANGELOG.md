@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.2] - 2020-07-05
 
 ### Added
 - Missing message after give an item from ship cargo to a crew member
