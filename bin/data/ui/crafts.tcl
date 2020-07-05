@@ -8,6 +8,7 @@ set craftframe [ttk::frame $craftcanvas.craft]
 grid [ttk::frame $craftframe.list] -sticky nwes
 set craftview [ttk::treeview $craftframe.list.view -yscrollcommand [list $craftframe.list.scrolly set]]
 $craftview heading #0 -text {Name}
+$craftview tag configure gray -foreground gray
 grid $craftview -sticky nwes
 grid [ttk::scrollbar $craftframe.list.scrolly -orient vertical -command [list $craftview yview]] -row 0 -column 1 -sticky ns
 # Recipe info

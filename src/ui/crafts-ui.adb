@@ -57,8 +57,8 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: Ttk_PanedWindow;
-      RecipesCanvas: Tk_Canvas;
-      RecipesFrame: Ttk_Frame;
+      CraftsCanvas: Tk_Canvas;
+      CraftsFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       Studies, Deconstructs: UnboundedString_Container.Vector;
       CanCraft: Boolean;
@@ -86,16 +86,16 @@ package body Crafts.UI is
       Paned.Name := New_String(".paned");
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
-      RecipesFrame.Interp := Interp;
-      RecipesFrame.Name := New_String(Widget_Image(Paned) & ".craftframe");
-      RecipesCanvas.Interp := Interp;
-      RecipesCanvas.Name := New_String(Widget_Image(RecipesFrame) & ".canvas");
-      if Winfo_Get(RecipesCanvas, "exists") = "0" then
+      CraftsFrame.Interp := Interp;
+      CraftsFrame.Name := New_String(Widget_Image(Paned) & ".craftframe");
+      CraftsCanvas.Interp := Interp;
+      CraftsCanvas.Name := New_String(Widget_Image(CraftsFrame) & ".canvas");
+      if Winfo_Get(CraftsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "crafts.tcl");
-         Bind(RecipesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(RecipesCanvas, "ismapped") = "1" and Argc = 1 then
+         Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -119,6 +119,10 @@ package body Crafts.UI is
             end if;
          end loop;
       end loop;
+      RecipesView.Interp := Interp;
+      RecipesView.Name :=
+        New_String(Widget_Image(CraftsCanvas) & ".craft.list.view");
+      Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          CanCraft := False;
          Recipe := Recipes_List(Known_Recipes(I));
@@ -163,69 +167,73 @@ package body Crafts.UI is
                end loop;
             end;
          end if;
---         if CanCraft then
---            Set
---              (RecipesList, RecipesIter, 0,
---               To_String
---                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
---                    .Name));
---         else
---            Set
---              (RecipesList, RecipesIter, 0,
---               "<span foreground=""gray"">" &
---               To_String
---                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
---                    .Name) &
---               "</span>");
---         end if;
---         Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
+         if CanCraft then
+            Insert
+              (RecipesView,
+               "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
+               To_String
+                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                    .Name) &
+               "}");
+         else
+            Insert
+              (RecipesView,
+               "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
+               To_String
+                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                    .Name) &
+               "} -tags [list gray]");
+         end if;
       end loop;
       CheckTool(AlchemyTools);
---      for I in Studies.First_Index .. Studies.Last_Index loop
---         if CanCraft then
---            Set
---              (RecipesList, RecipesIter, 0,
---               "Study " & To_String(Items_List(Studies(I)).Name));
---         else
---            Set
---              (RecipesList, RecipesIter, 0,
---               "<span foreground=""gray"">Study " &
---               To_String(Items_List(Studies(I)).Name) & "</span>");
---         end if;
---         Set(RecipesList, RecipesIter, 1, "Study " & To_String(Studies(I)));
---      end loop;
---      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
---         Append(RecipesList, RecipesIter);
---         if CanCraft then
---            Set
---              (RecipesList, RecipesIter, 0,
---               "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
---         else
---            Set
---              (RecipesList, RecipesIter, 0,
---               "<span foreground=""gray"">Deconstruct " &
---               To_String(Items_List(Deconstructs(I)).Name) & "</span>");
---         end if;
---         Set
---           (RecipesList, RecipesIter, 1,
---            "Deconstruct " & To_String(Deconstructs(I)));
---      end loop;
+      for I in Studies.First_Index .. Studies.Last_Index loop
+         if CanCraft then
+            Insert
+              (RecipesView,
+               "{} end -id {Study " & To_String(Studies(I)) &
+               "} -text {Study " & To_String(Items_List(Studies(I)).Name) &
+               "}");
+         else
+            Insert
+              (RecipesView,
+               "{} end -id {Study " & To_String(Studies(I)) &
+               "} -text {Study " & To_String(Items_List(Studies(I)).Name) &
+               "} -tag [list gray]");
+         end if;
+      end loop;
+      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
+         if CanCraft then
+            Insert
+              (RecipesView,
+               "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
+               "} -text {Decontruct " &
+               To_String(Items_List(Deconstructs(I)).Name) & "}");
+         else
+            Insert
+              (RecipesView,
+               "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
+               "} -text {Decontruct " &
+               To_String(Items_List(Deconstructs(I)).Name) &
+               "} -tag [list gray]");
+         end if;
+      end loop;
       -- End of fill crafting UI
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      RecipesFrame.Name := New_String(Widget_Image(RecipesCanvas) & ".craft");
+      CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
-        (RecipesCanvas,
+        (CraftsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (RecipesCanvas, "window",
-         "[expr " & Winfo_Get(RecipesFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(RecipesFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(RecipesFrame));
+        (CraftsCanvas, "window",
+         "[expr " & Winfo_Get(CraftsFrame, "reqwidth") & " / 2] [expr " &
+         Winfo_Get(CraftsFrame, "reqheight") & " / 2] -window " &
+         Widget_Image(CraftsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (RecipesCanvas, "-scrollregion [list " & BBox(RecipesCanvas, "all") & "]");
+        (CraftsCanvas,
+         "-scrollregion [list " & BBox(CraftsCanvas, "all") & "]");
       ShowScreen("craftframe");
       return TCL_OK;
    end Show_Crafting_Command;
