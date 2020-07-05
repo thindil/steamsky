@@ -267,7 +267,8 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: Ttk_Tree_View;
-      RecipeInfo, WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
+      RecipeInfo, WorkplaceName, RecipeIndex: Unbounded_String :=
+        Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
@@ -281,7 +282,7 @@ package body Crafts.UI is
       RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       RecipeText.Interp := Interp;
       RecipeText.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.info.info.text");
+        New_String(".paned.craftframe.canvas.craft.item.info.text");
       configure(RecipeText, "-state normal");
       Delete(RecipeText, "1.0", "end");
       if Length(RecipeIndex) > 6
@@ -334,7 +335,9 @@ package body Crafts.UI is
          Recipe.ToolQuality := 100;
       else
          Recipe := Recipes_List(RecipeIndex);
-         Insert(RecipeText, "end", "{Amount:" & Integer'Image(Recipe.ResultAmount) & LF & "}");
+         Insert
+           (RecipeText, "end",
+            "{Amount:" & Integer'Image(Recipe.ResultAmount) & LF & "}");
       end if;
       Insert(RecipeText, "end", "{Materials needed: }");
       declare
@@ -346,7 +349,7 @@ package body Crafts.UI is
          for I in
            Recipe.MaterialTypes.First_Index ..
              Recipe.MaterialTypes.Last_Index loop
-            Append(RecipeInfo, LF & "-");
+            Insert(RecipeText, "end", "{" & LF & "-}");
             MAmount := 0;
             for J in Items_List.Iterate loop
                IsMaterial := False;
@@ -369,36 +372,33 @@ package body Crafts.UI is
                end if;
                if IsMaterial then
                   if MAmount > 0 then
-                     Append(RecipeInfo, " or");
+                     Insert(RecipeText, "end", "{ or}");
                   end if;
                   CargoIndex :=
                     FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
-                  if CargoIndex = 0 or
-                    (CargoIndex > 0
-                     and then PlayerShip.Cargo(CargoIndex).Amount <
-                       Recipe.MaterialAmounts(I)) then
-                     Append(RecipeInfo, "<span foreground=""red"">");
-                  else
+                  if CargoIndex > 0
+                    and then PlayerShip.Cargo(CargoIndex).Amount >=
+                      Recipe.MaterialAmounts(I) then
                      Materials(I) := True;
                   end if;
-                  Append
-                    (RecipeInfo,
-                     Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
-                     To_String(Items_List(J).Name));
                   if CargoIndex > 0
                     and then PlayerShip.Cargo(CargoIndex).Amount >=
                       Recipe.MaterialAmounts(I) then
                      TextLength :=
                        Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'
                          Length;
-                     Append
-                       (RecipeInfo,
-                        "(owned: " &
+                     Insert
+                       (RecipeText, "end",
+                        "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                        To_String(Items_List(J).Name) & "(owned: " &
                         Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
                           (2 .. TextLength) &
-                        ")");
+                        ")}");
                   else
-                     Append(RecipeInfo, "</span>");
+                     Insert
+                       (RecipeText, "end",
+                        "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                        To_String(Items_List(J).Name) & "} [list red]");
                   end if;
                   MAmount := MAmount + 1;
                end if;
@@ -413,7 +413,7 @@ package body Crafts.UI is
          end loop;
       end;
       if Recipe.Tool /= To_Unbounded_String("None") then
-         Append(RecipeInfo, LF & "Tool: ");
+         Insert(RecipeText, "end", "{" & LF & "Tool: }");
          MAmount := 0;
          for I in Items_List.Iterate loop
             if Items_List(I).IType = Recipe.Tool
@@ -421,21 +421,22 @@ package body Crafts.UI is
               (Items_List(I).Value.Length > 0
                and then Items_List(I).Value(1) <= Recipe.ToolQuality) then
                if MAmount > 0 then
-                  Append(RecipeInfo, " or ");
+                  Insert(RecipeText, "end", "{ or }");
                end if;
                CargoIndex :=
                  FindItem
                    (Inventory => PlayerShip.Cargo,
                     ProtoIndex => Objects_Container.Key(I),
                     Quality => Recipe.ToolQuality);
-               if CargoIndex = 0 then
-                  Append(RecipeInfo, "<span foreground=""red"">");
-               else
+               if CargoIndex > 0 then
                   HaveTool := True;
-               end if;
-               Append(RecipeInfo, To_String(Items_List(I).Name));
-               if CargoIndex = 0 then
-                  Append(RecipeInfo, "</span>");
+                  Insert
+                    (RecipeText, "end",
+                     "{" & To_String(Items_List(I).Name) & "}");
+               else
+                  Insert
+                    (RecipeText, "end",
+                     "{" & To_String(Items_List(I).Name) & "} [list red]");
                end if;
                MAmount := MAmount + 1;
             end if;
