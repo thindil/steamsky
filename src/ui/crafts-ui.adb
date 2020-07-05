@@ -27,7 +27,9 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
@@ -55,47 +57,175 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: Ttk_PanedWindow;
-      CrewCanvas: Tk_Canvas;
-      CrewFrame: Ttk_Frame;
+      RecipesCanvas: Tk_Canvas;
+      RecipesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      Studies, Deconstructs: UnboundedString_Container.Vector;
+      CanCraft: Boolean;
+      Recipe: Craft_Data;
+      CargoIndex: Natural;
+      RecipesView: Ttk_Tree_View;
+      procedure CheckTool(ToolNeeded: Unbounded_String) is
+      begin
+         if ToolNeeded /= To_Unbounded_String("None") then
+            CanCraft := False;
+            for I in Items_List.Iterate loop
+               if Items_List(I).IType = ToolNeeded then
+                  CargoIndex :=
+                    FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
+                  if CargoIndex > 0 then
+                     CanCraft := True;
+                     exit;
+                  end if;
+               end if;
+            end loop;
+         end if;
+      end CheckTool;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
-      CrewFrame.Interp := Interp;
-      CrewFrame.Name := New_String(Widget_Image(Paned) & ".craftframe");
-      CrewCanvas.Interp := Interp;
-      CrewCanvas.Name := New_String(Widget_Image(CrewFrame) & ".canvas");
-      if Winfo_Get(CrewCanvas, "exists") = "0" then
+      RecipesFrame.Interp := Interp;
+      RecipesFrame.Name := New_String(Widget_Image(Paned) & ".craftframe");
+      RecipesCanvas.Interp := Interp;
+      RecipesCanvas.Name := New_String(Widget_Image(RecipesFrame) & ".canvas");
+      if Winfo_Get(RecipesCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "crafts.tcl");
-         Bind(CrewFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(CrewCanvas, "ismapped") = "1" and Argc = 1 then
+         Bind(RecipesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+      elsif Winfo_Get(RecipesCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
-      -- Fill crafting UI
+      for Item of PlayerShip.Cargo loop
+         for J in Recipes_List.Iterate loop
+            if Recipes_List(J).ResultIndex = Item.ProtoIndex then
+               if
+                 (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
+                  Positive_Container.No_Index and
+                  Studies.Find_Index(Item => Item.ProtoIndex) =
+                    Positive_Container.No_Index) then
+                  Studies.Append(New_Item => Item.ProtoIndex);
+               end if;
+               if Recipes_List(J).MaterialAmounts(1) > 1 and
+                 Recipes_List(J).ResultAmount = 1 then
+                  Deconstructs.Append(New_Item => Item.ProtoIndex);
+               end if;
+            end if;
+         end loop;
+      end loop;
+      for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
+         CanCraft := False;
+         Recipe := Recipes_List(Known_Recipes(I));
+         for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
+              and then Module.Durability > 0 then
+               CanCraft := True;
+               exit;
+            end if;
+         end loop;
+         if CanCraft then
+            CheckTool(Recipe.Tool);
+         end if;
+         if CanCraft then
+            declare
+               Materials: array
+                 (Recipe.MaterialTypes.First_Index ..
+                      Recipe.MaterialTypes.Last_Index) of Boolean :=
+                 (others => False);
+            begin
+               for K in
+                 Recipe.MaterialTypes.First_Index ..
+                   Recipe.MaterialTypes.Last_Index loop
+                  for J in Items_List.Iterate loop
+                     if Items_List(J).IType = Recipe.MaterialTypes(K) then
+                        CargoIndex :=
+                          FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                        if CargoIndex > 0
+                          and then PlayerShip.Cargo(CargoIndex).Amount >=
+                            Recipe.MaterialAmounts(K) then
+                           Materials(K) := True;
+                        end if;
+                     end if;
+                  end loop;
+               end loop;
+               CanCraft := True;
+               for I in Materials'Range loop
+                  if not Materials(I) then
+                     CanCraft := False;
+                     exit;
+                  end if;
+               end loop;
+            end;
+         end if;
+--         if CanCraft then
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               To_String
+--                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+--                    .Name));
+--         else
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               "<span foreground=""gray"">" &
+--               To_String
+--                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+--                    .Name) &
+--               "</span>");
+--         end if;
+--         Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
+      end loop;
+      CheckTool(AlchemyTools);
+--      for I in Studies.First_Index .. Studies.Last_Index loop
+--         if CanCraft then
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               "Study " & To_String(Items_List(Studies(I)).Name));
+--         else
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               "<span foreground=""gray"">Study " &
+--               To_String(Items_List(Studies(I)).Name) & "</span>");
+--         end if;
+--         Set(RecipesList, RecipesIter, 1, "Study " & To_String(Studies(I)));
+--      end loop;
+--      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
+--         Append(RecipesList, RecipesIter);
+--         if CanCraft then
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               "Deconstruct " & To_String(Items_List(Deconstructs(I)).Name));
+--         else
+--            Set
+--              (RecipesList, RecipesIter, 0,
+--               "<span foreground=""gray"">Deconstruct " &
+--               To_String(Items_List(Deconstructs(I)).Name) & "</span>");
+--         end if;
+--         Set
+--           (RecipesList, RecipesIter, 1,
+--            "Deconstruct " & To_String(Deconstructs(I)));
+--      end loop;
       -- End of fill crafting UI
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      CrewFrame.Name := New_String(Widget_Image(CrewCanvas) & ".craft");
+      RecipesFrame.Name := New_String(Widget_Image(RecipesCanvas) & ".craft");
       configure
-        (CrewCanvas,
+        (RecipesCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (CrewCanvas, "window",
-         "[expr " & Winfo_Get(CrewFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(CrewFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(CrewFrame));
+        (RecipesCanvas, "window",
+         "[expr " & Winfo_Get(RecipesFrame, "reqwidth") & " / 2] [expr " &
+         Winfo_Get(RecipesFrame, "reqheight") & " / 2] -window " &
+         Widget_Image(RecipesFrame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (CrewCanvas, "-scrollregion [list " & BBox(CrewCanvas, "all") & "]");
+        (RecipesCanvas, "-scrollregion [list " & BBox(RecipesCanvas, "all") & "]");
       ShowScreen("craftframe");
       return TCL_OK;
    end Show_Crafting_Command;
