@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -24,6 +26,7 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -242,9 +245,276 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Crafting_Command;
 
+   -- ****f* CUI4/Show_Recipe_Info_Command
+   -- FUNCTION
+   -- Show information about the selected recipe
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Recipe_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Recipe_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RecipesView: Ttk_Tree_View;
+      RecipeInfo, WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
+      Recipe: Craft_Data;
+      MAmount, CargoIndex: Natural := 0;
+      HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
+      HaveTool: Boolean := False;
+      TextLength: Positive;
+      RecipeText: Tk_Text;
+   begin
+      RecipesView.Interp := Interp;
+      RecipesView.Name :=
+        New_String(".paned.craftframe.canvas.craft.list.view");
+      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
+      RecipeText.Interp := Interp;
+      RecipeText.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.info.info.text");
+      configure(RecipeText, "-state normal");
+      Delete(RecipeText, "1.0", "end");
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
+         Recipe.MaterialTypes.Append
+           (New_Item =>
+              Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
+                .IType);
+         Recipe.ResultIndex :=
+           Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
+         Recipe.MaterialAmounts.Append(New_Item => 1);
+         Recipe.ResultAmount := 0;
+         Recipe.Workplace := ALCHEMY_LAB;
+         for ProtoRecipe of Recipes_List loop
+            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+               Recipe.Skill := ProtoRecipe.Skill;
+               Recipe.Time := ProtoRecipe.Difficulty * 15;
+               exit;
+            end if;
+         end loop;
+         Recipe.Difficulty := 1;
+         Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
+      elsif Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         Recipe.MaterialTypes.Append
+           (New_Item =>
+              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+                .IType);
+         Recipe.ResultIndex :=
+           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
+         Recipe.MaterialAmounts.Append(New_Item => 1);
+         Recipe.ResultAmount := 0;
+         Recipe.Workplace := ALCHEMY_LAB;
+         for ProtoRecipe of Recipes_List loop
+            if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
+               Recipe.Skill := ProtoRecipe.Skill;
+               Recipe.Time := ProtoRecipe.Difficulty * 15;
+               Recipe.Difficulty := ProtoRecipe.Difficulty;
+               Recipe.ResultIndex :=
+                 FindProtoItem(ProtoRecipe.MaterialTypes(1));
+               Recipe.ResultAmount :=
+                 Positive
+                   (Float'Ceiling
+                      (Float(ProtoRecipe.MaterialAmounts.Element(1)) * 0.8));
+               exit;
+            end if;
+         end loop;
+         Recipe.Tool := AlchemyTools;
+         Recipe.ToolQuality := 100;
+      else
+         Recipe := Recipes_List(RecipeIndex);
+         Insert(RecipeText, "end", "{Amount:" & Integer'Image(Recipe.ResultAmount) & LF & "}");
+      end if;
+      Insert(RecipeText, "end", "{Materials needed: }");
+      declare
+         Materials: array
+           (Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index) of Boolean :=
+           (others => False);
+      begin
+         for I in
+           Recipe.MaterialTypes.First_Index ..
+             Recipe.MaterialTypes.Last_Index loop
+            Append(RecipeInfo, LF & "-");
+            MAmount := 0;
+            for J in Items_List.Iterate loop
+               IsMaterial := False;
+               if Length(RecipeIndex) > 6
+                 and then Slice(RecipeIndex, 1, 5) = "Study" then
+                  if Items_List(J).Name =
+                    Items_List(Recipe.ResultIndex).Name then
+                     IsMaterial := True;
+                  end if;
+               elsif Length(RecipeIndex) > 12
+                 and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+                  if Objects_Container.Key(J) =
+                    Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
+                     IsMaterial := True;
+                  end if;
+               else
+                  if Items_List(J).IType = Recipe.MaterialTypes(I) then
+                     IsMaterial := True;
+                  end if;
+               end if;
+               if IsMaterial then
+                  if MAmount > 0 then
+                     Append(RecipeInfo, " or");
+                  end if;
+                  CargoIndex :=
+                    FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                  if CargoIndex = 0 or
+                    (CargoIndex > 0
+                     and then PlayerShip.Cargo(CargoIndex).Amount <
+                       Recipe.MaterialAmounts(I)) then
+                     Append(RecipeInfo, "<span foreground=""red"">");
+                  else
+                     Materials(I) := True;
+                  end if;
+                  Append
+                    (RecipeInfo,
+                     Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                     To_String(Items_List(J).Name));
+                  if CargoIndex > 0
+                    and then PlayerShip.Cargo(CargoIndex).Amount >=
+                      Recipe.MaterialAmounts(I) then
+                     TextLength :=
+                       Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'
+                         Length;
+                     Append
+                       (RecipeInfo,
+                        "(owned: " &
+                        Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
+                          (2 .. TextLength) &
+                        ")");
+                  else
+                     Append(RecipeInfo, "</span>");
+                  end if;
+                  MAmount := MAmount + 1;
+               end if;
+            end loop;
+         end loop;
+         HaveMaterials := True;
+         for I in Materials'Range loop
+            if not Materials(I) then
+               HaveMaterials := False;
+               exit;
+            end if;
+         end loop;
+      end;
+      if Recipe.Tool /= To_Unbounded_String("None") then
+         Append(RecipeInfo, LF & "Tool: ");
+         MAmount := 0;
+         for I in Items_List.Iterate loop
+            if Items_List(I).IType = Recipe.Tool
+              and then
+              (Items_List(I).Value.Length > 0
+               and then Items_List(I).Value(1) <= Recipe.ToolQuality) then
+               if MAmount > 0 then
+                  Append(RecipeInfo, " or ");
+               end if;
+               CargoIndex :=
+                 FindItem
+                   (Inventory => PlayerShip.Cargo,
+                    ProtoIndex => Objects_Container.Key(I),
+                    Quality => Recipe.ToolQuality);
+               if CargoIndex = 0 then
+                  Append(RecipeInfo, "<span foreground=""red"">");
+               else
+                  HaveTool := True;
+               end if;
+               Append(RecipeInfo, To_String(Items_List(I).Name));
+               if CargoIndex = 0 then
+                  Append(RecipeInfo, "</span>");
+               end if;
+               MAmount := MAmount + 1;
+            end if;
+         end loop;
+      else
+         HaveTool := True;
+      end if;
+      Append(RecipeInfo, LF & "Workplace: ");
+      HaveWorkplace := False;
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
+            WorkplaceName := Module.Name;
+            if Module.Durability > 0 then
+               HaveWorkplace := True;
+               exit;
+            end if;
+         end if;
+      end loop;
+      if WorkplaceName = Null_Unbounded_String then
+         for Module of Modules_List loop
+            if Module.MType = Recipe.Workplace then
+               WorkplaceName :=
+                 To_Unbounded_String(To_Lower(ModuleType'Image(Module.MType)));
+               while Index(WorkplaceName, "_", 1) > 0 loop
+                  Replace_Element
+                    (WorkplaceName, Index(WorkplaceName, "_", 1), ' ');
+               end loop;
+               exit;
+            end if;
+         end loop;
+      end if;
+      if not HaveWorkplace then
+         Append(RecipeInfo, "<span foreground=""red"">Any ");
+      end if;
+      Append(RecipeInfo, WorkplaceName);
+      if not HaveWorkplace then
+         Append(RecipeInfo, "</span>");
+      end if;
+      Append
+        (RecipeInfo,
+         LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) & "/" &
+         To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
+      Append
+        (RecipeInfo,
+         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
+--      Set_Markup
+--        (Gtk_Label(Get_Object(Object, "lblrecipeinfo")),
+--         To_String(RecipeInfo));
+--      if HaveMaterials and HaveTool and HaveWorkplace then
+--         Show_All(Gtk_Widget(Get_Object(Object, "setcraftbox")));
+--         Hide(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
+--         ShowSetRecipe(Object);
+--      else
+--         Hide(Gtk_Widget(Get_Object(Object, "setcraftbox")));
+--         Show_All(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
+--         if not HaveMaterials then
+--            Set_Label
+--              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
+--               "You can't craft this recipe because you don't have the proper materials.");
+--         end if;
+--         if not HaveTool then
+--            Set_Label
+--              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
+--               "You can't craft this recipe because you don't have the proper tool.");
+--         end if;
+--         if not HaveWorkplace then
+--            Set_Label
+--              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
+--               "You can't craft this recipe because you don't have the proper workshop.");
+--         end if;
+--      end if;
+      configure(RecipeText, "-state disabled");
+      return TCL_OK;
+   end Show_Recipe_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrafting", Show_Crafting_Command'Access);
+      AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
    end AddCommands;
 
 end Crafts.UI;

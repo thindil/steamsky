@@ -15,11 +15,12 @@ grid [ttk::scrollbar $craftframe.list.scrolly -orient vertical -command [list $c
 # Recipe info
 set recipeframe [ttk::frame $craftframe.item]
 grid $recipeframe -row 0 -column 1
-grid [ttk::labelframe $recipeframe.info -text {Recipe Info:}] -columnspan 4
+grid [ttk::labelframe $recipeframe.info -text {Recipe Info:}]
 grid [text $recipeframe.info.text -wrap char -height 10 -width 40]
 $recipeframe.info.text tag configure red -foreground red
 # Recipe actions
-grid [ttk::button $recipeframe.button -text Craft]
-grid [ttk::spinbox $recipeframe.amount -from 1 -increment 1 -validate key] -column 1 -row 1
-grid [ttk::label $recipeframe.label -text in] -column 2 -row 1
-grid [ttk::combobox $recipeframe.workshop -state readonly] -column 3 -row 1
+grid [ttk::frame $recipeframe.set]
+grid [ttk::button $recipeframe.set.button -text Craft]
+grid [ttk::spinbox $recipeframe.set.amount -from 1 -increment 1 -validate key] -column 1 -row 0
+grid [ttk::label $recipeframe.set.label -text in] -column 2 -row 0
+grid [ttk::combobox $recipeframe.set.workshop -state readonly] -column 3 -row 0
