@@ -65,6 +65,7 @@ package body Crafts.UI is
       Recipe: Craft_Data;
       CargoIndex: Natural;
       RecipesView: Ttk_Tree_View;
+      FirstIndex: Unbounded_String;
       procedure CheckTool(ToolNeeded: Unbounded_String) is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
@@ -184,6 +185,9 @@ package body Crafts.UI is
                     .Name) &
                "} -tags [list gray]");
          end if;
+         if FirstIndex = Null_Unbounded_String then
+            FirstIndex := Known_Recipes(I);
+         end if;
       end loop;
       CheckTool(AlchemyTools);
       for I in Studies.First_Index .. Studies.Last_Index loop
@@ -217,7 +221,7 @@ package body Crafts.UI is
                "} -tag [list gray]");
          end if;
       end loop;
-      -- End of fill crafting UI
+      Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
