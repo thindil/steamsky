@@ -24,3 +24,4 @@ grid [ttk::button $recipeframe.set.button -text Craft]
 grid [ttk::spinbox $recipeframe.set.amount -from 1 -increment 1 -validate key] -column 1 -row 0
 grid [ttk::label $recipeframe.set.label -text in] -column 2 -row 0
 grid [ttk::combobox $recipeframe.set.workshop -state readonly] -column 3 -row 0
+grid [ttk::label $recipeframe.error -style Headerred.TLabel]

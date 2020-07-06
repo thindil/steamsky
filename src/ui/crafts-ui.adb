@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -29,11 +30,13 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
+with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
@@ -245,6 +248,67 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Crafting_Command;
 
+   -- ****if* CUI4/ShowSetRecipe
+   -- FUNCTION
+   -- Show UI to set selected recipe as crafting order
+   -- SOURCE
+   procedure ShowSetRecipe(Index: Unbounded_String) is
+      -- ****
+      MaxAmount: Positive;
+      MType: ModuleType;
+      RecipeIndex: Unbounded_String;
+   begin
+      if Element(Index, 1) = '{' then
+         RecipeIndex := Unbounded_Slice(Index, 2, Length(Index) - 1);
+      else
+         RecipeIndex := Index;
+      end if;
+      MaxAmount := CheckRecipe(RecipeIndex);
+--      Set_Value(AmountAdj, 1.0);
+--      Set_Upper(AmountAdj, Gdouble(MaxAmount));
+--      Set_Label(LabelTimes, "(max" & Positive'Image(MaxAmount) & "):");
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
+         MType := ALCHEMY_LAB;
+      elsif Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         MType := ALCHEMY_LAB;
+      else
+         MType := Recipes_List(RecipeIndex).Workplace;
+      end if;
+--      Remove_All(CmbModules);
+--      for Module of PlayerShip.Modules loop
+--         if Modules_List(Module.ProtoIndex).MType = MType then
+--            Append_Text(CmbModules, To_String(Module.Name));
+--         end if;
+--      end loop;
+--      if Length(RecipeIndex) > 6
+--        and then Slice(RecipeIndex, 1, 5) = "Study" then
+--         Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
+--         Hide(Gtk_Widget(LabelTimes));
+--      else
+--         Show_All(Gtk_Widget(Get_Object(Object, "spincraftamount")));
+--         Show_All(Gtk_Widget(LabelTimes));
+--      end if;
+--      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
+   exception
+      when An_Exception : Crafting_No_Materials =>
+         ShowMessage
+           ("You don't have enough materials to start " &
+            Exception_Message(An_Exception) & ".");
+      when An_Exception : Crafting_No_Tools =>
+         ShowMessage
+           ("You don't have the proper tool to start " &
+            Exception_Message(An_Exception) & ".");
+      when Trade_No_Free_Cargo =>
+         ShowMessage
+           ("You don't have that much free space in your ship's cargo.");
+      when An_Exception : Crafting_No_Workshop =>
+         ShowMessage
+           ("You don't have proper a workplace to start " &
+            Exception_Message(An_Exception) & ".");
+   end ShowSetRecipe;
+
    -- ****f* CUI4/Show_Recipe_Info_Command
    -- FUNCTION
    -- Show information about the selected recipe
@@ -267,14 +331,15 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: Ttk_Tree_View;
-      RecipeInfo, WorkplaceName, RecipeIndex: Unbounded_String :=
-        Null_Unbounded_String;
+      WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
       HaveTool: Boolean := False;
       TextLength: Positive;
       RecipeText: Tk_Text;
+      CraftFrame: Ttk_Frame;
+      ErrorLabel: Ttk_Label;
    begin
       RecipesView.Interp := Interp;
       RecipesView.Name :=
@@ -286,13 +351,14 @@ package body Crafts.UI is
       configure(RecipeText, "-state normal");
       Delete(RecipeText, "1.0", "end");
       if Length(RecipeIndex) > 6
-        and then Slice(RecipeIndex, 1, 5) = "Study" then
+        and then Slice(RecipeIndex, 1, 5) = "{Stud" then
          Recipe.MaterialTypes.Append
            (New_Item =>
-              Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
+              Items_List
+                (Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1))
                 .IType);
          Recipe.ResultIndex :=
-           Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
+           Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -307,13 +373,14 @@ package body Crafts.UI is
          Recipe.Tool := AlchemyTools;
          Recipe.ToolQuality := 100;
       elsif Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+        and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
          Recipe.MaterialTypes.Append
            (New_Item =>
-              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
+              Items_List
+                (Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1))
                 .IType);
          Recipe.ResultIndex :=
-           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
+           Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -354,13 +421,13 @@ package body Crafts.UI is
             for J in Items_List.Iterate loop
                IsMaterial := False;
                if Length(RecipeIndex) > 6
-                 and then Slice(RecipeIndex, 1, 5) = "Study" then
+                 and then Slice(RecipeIndex, 1, 5) = "{Stud" then
                   if Items_List(J).Name =
                     Items_List(Recipe.ResultIndex).Name then
                      IsMaterial := True;
                   end if;
                elsif Length(RecipeIndex) > 12
-                 and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+                 and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
                   if Objects_Container.Key(J) =
                     Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
                      IsMaterial := True;
@@ -444,7 +511,7 @@ package body Crafts.UI is
       else
          HaveTool := True;
       end if;
-      Append(RecipeInfo, LF & "Workplace: ");
+      Insert(RecipeText, "end", "{" & LF & "Workplace: }");
       HaveWorkplace := False;
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
@@ -469,45 +536,50 @@ package body Crafts.UI is
          end loop;
       end if;
       if not HaveWorkplace then
-         Append(RecipeInfo, "<span foreground=""red"">Any ");
+         Insert
+           (RecipeText, "end",
+            "{" & To_String(WorkplaceName) & "} [list red]");
+      else
+         Insert(RecipeText, "end", "{" & To_String(WorkplaceName) & "}");
       end if;
-      Append(RecipeInfo, WorkplaceName);
-      if not HaveWorkplace then
-         Append(RecipeInfo, "</span>");
+      Insert
+        (RecipeText, "end",
+         "{" & LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
+         "/" &
+         To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name) &
+         "}");
+      Insert
+        (RecipeText, "end",
+         "{" & LF & "Time needed:" & Positive'Image(Recipe.Time) &
+         " minutes}");
+      CraftFrame.Interp := Interp;
+      CraftFrame.Name := New_String(".paned.craftframe.canvas.craft.item.set");
+      ErrorLabel.Interp := Interp;
+      ErrorLabel.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.error");
+      if HaveMaterials and HaveTool and HaveWorkplace then
+         ShowSetRecipe(RecipeIndex);
+         Tcl.Tk.Ada.Grid.Grid(CraftFrame);
+         Tcl.Tk.Ada.Grid.Grid_Remove(ErrorLabel);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(CraftFrame);
+         Tcl.Tk.Ada.Grid.Grid(ErrorLabel);
+         if not HaveMaterials then
+            configure
+              (ErrorLabel,
+               "-text {You can't craft this recipe because you don't have the proper materials.}");
+         end if;
+         if not HaveTool then
+            configure
+              (ErrorLabel,
+               "-text {You can't craft this recipe because you don't have the proper tool.}");
+         end if;
+         if not HaveWorkplace then
+            configure
+              (ErrorLabel,
+               "-text {You can't craft this recipe because you don't have the proper workshop.}");
+         end if;
       end if;
-      Append
-        (RecipeInfo,
-         LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) & "/" &
-         To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name));
-      Append
-        (RecipeInfo,
-         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes");
---      Set_Markup
---        (Gtk_Label(Get_Object(Object, "lblrecipeinfo")),
---         To_String(RecipeInfo));
---      if HaveMaterials and HaveTool and HaveWorkplace then
---         Show_All(Gtk_Widget(Get_Object(Object, "setcraftbox")));
---         Hide(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
---         ShowSetRecipe(Object);
---      else
---         Hide(Gtk_Widget(Get_Object(Object, "setcraftbox")));
---         Show_All(Gtk_Widget(Get_Object(Object, "lblcrafterror")));
---         if not HaveMaterials then
---            Set_Label
---              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
---               "You can't craft this recipe because you don't have the proper materials.");
---         end if;
---         if not HaveTool then
---            Set_Label
---              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
---               "You can't craft this recipe because you don't have the proper tool.");
---         end if;
---         if not HaveWorkplace then
---            Set_Label
---              (Gtk_Label(Get_Object(Object, "lblcrafterror")),
---               "You can't craft this recipe because you don't have the proper workshop.");
---         end if;
---      end if;
       configure(RecipeText, "-state disabled");
       return TCL_OK;
    end Show_Recipe_Info_Command;
