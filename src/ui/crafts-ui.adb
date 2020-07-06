@@ -29,6 +29,10 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -256,7 +260,10 @@ package body Crafts.UI is
       -- ****
       MaxAmount: Positive;
       MType: ModuleType;
-      RecipeIndex: Unbounded_String;
+      RecipeIndex, ModulesList: Unbounded_String;
+      AmountBox: Ttk_SpinBox;
+      MaxLabel: Ttk_Label;
+      ModulesBox: Ttk_ComboBox;
    begin
       if Element(Index, 1) = '{' then
          RecipeIndex := Unbounded_Slice(Index, 2, Length(Index) - 1);
@@ -264,9 +271,31 @@ package body Crafts.UI is
          RecipeIndex := Index;
       end if;
       MaxAmount := CheckRecipe(RecipeIndex);
---      Set_Value(AmountAdj, 1.0);
---      Set_Upper(AmountAdj, Gdouble(MaxAmount));
---      Set_Label(LabelTimes, "(max" & Positive'Image(MaxAmount) & "):");
+      AmountBox.Interp := Get_Context;
+      AmountBox.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.set.amount");
+      Set(AmountBox, "1");
+      configure
+        (AmountBox,
+         "-to" & Positive'Image(MaxAmount) &
+         " -validatecommand {ValidateSpinbox %S %s" &
+         Positive'Image(MaxAmount) & "}");
+      MaxLabel.Interp := Get_Context;
+      MaxLabel.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.set.maxamount");
+      if MaxAmount > 1 then
+         configure
+           (MaxLabel, "-text {max (" & Positive'Image(MaxAmount) & ")}");
+         Tcl.Tk.Ada.Grid.Grid(MaxLabel);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(MaxLabel);
+      end if;
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(AmountBox);
+      else
+         Tcl.Tk.Ada.Grid.Grid(AmountBox);
+      end if;
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "Study" then
          MType := ALCHEMY_LAB;
@@ -276,21 +305,16 @@ package body Crafts.UI is
       else
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
---      Remove_All(CmbModules);
---      for Module of PlayerShip.Modules loop
---         if Modules_List(Module.ProtoIndex).MType = MType then
---            Append_Text(CmbModules, To_String(Module.Name));
---         end if;
---      end loop;
---      if Length(RecipeIndex) > 6
---        and then Slice(RecipeIndex, 1, 5) = "Study" then
---         Hide(Gtk_Widget(Get_Object(Object, "spincraftamount")));
---         Hide(Gtk_Widget(LabelTimes));
---      else
---         Show_All(Gtk_Widget(Get_Object(Object, "spincraftamount")));
---         Show_All(Gtk_Widget(LabelTimes));
---      end if;
---      Set_Active(Gtk_Combo_Box(Get_Object(Object, "cmbmodules")), 0);
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType then
+            Append(ModulesList, " {" & Module.Name & "}");
+         end if;
+      end loop;
+      ModulesBox.Interp := Get_Context;
+      ModulesBox.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.set.workshop");
+      configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
+      Current(ModulesBox, "0");
    exception
       when An_Exception : Crafting_No_Materials =>
          ShowMessage
