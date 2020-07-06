@@ -453,7 +453,8 @@ package body Crafts.UI is
                elsif Length(RecipeIndex) > 12
                  and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
                   if Objects_Container.Key(J) =
-                    Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
+                    Unbounded_Slice
+                      (RecipeIndex, 14, Length(RecipeIndex) - 1) then
                      IsMaterial := True;
                   end if;
                else
