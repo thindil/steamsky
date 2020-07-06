@@ -44,7 +44,7 @@ package Maps.UI is
    -- Array with default map keyboard accelerators
    -- SOURCE
    MapAccelerators: constant array(1 .. 14) of Unbounded_String :=
-     (To_Unbounded_String("m"), To_Unbounded_String("v"),
+     (To_Unbounded_String("e"), To_Unbounded_String("v"),
       To_Unbounded_String("plus"), To_Unbounded_String("minus"),
       To_Unbounded_String("KP_7"), To_Unbounded_String("KP_8"),
       To_Unbounded_String("KP_9"), To_Unbounded_String("KP_4"),
