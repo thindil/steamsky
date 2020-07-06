@@ -53,6 +53,7 @@ with Items; use Items;
 with MainMenu; use MainMenu;
 with Maps.UI.Commands;
 with Messages; use Messages;
+with Messages.UI; use Messages.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with OrdersMenu;
@@ -86,7 +87,7 @@ package body Maps.UI is
       Menu.Add
         (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
       Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
-      Menu.Add(GameMenu, "command", "-label {Last messages}");
+      Menu.Add(GameMenu, "command", "-label {Last messages} -command ShowLastMessages");
       Menu.Add(GameMenu, "command", "-label {List of known bases}");
       Menu.Add
         (GameMenu, "command",
@@ -856,6 +857,7 @@ package body Maps.UI is
          Ships.UI.AddCommands;
          Crew.UI.AddCommands;
          Crafts.UI.AddCommands;
+         Messages.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
