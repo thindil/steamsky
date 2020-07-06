@@ -20,7 +20,7 @@ grid [text $recipeframe.info.text -wrap char -height 10 -width 40]
 $recipeframe.info.text tag configure red -foreground red
 # Recipe actions
 grid [ttk::frame $recipeframe.set]
-grid [ttk::button $recipeframe.set.button -text Craft]
+grid [ttk::button $recipeframe.set.button -text Craft -command SetCrafting]
 grid [ttk::label $recipeframe.set.maxamount] -column 1 -row 0
 grid [ttk::spinbox $recipeframe.set.amount -from 1 -increment 1 -validate key] -column 2 -row 0
 grid [ttk::label $recipeframe.set.label -text in] -column 3 -row 0

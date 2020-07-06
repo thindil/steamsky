@@ -608,10 +608,64 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Recipe_Info_Command;
 
+   -- ****f* CUI4/Set_Crafting_Command
+   -- FUNCTION
+   -- Set the selected recipe as a crafting order in the selected workshop
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Crafting_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Crafting_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RecipesView: Ttk_Tree_View;
+      RecipeIndex: Unbounded_String;
+      ModulesBox: Ttk_ComboBox;
+      AmountBox: Ttk_SpinBox;
+   begin
+      RecipesView.Interp := Interp;
+      RecipesView.Name :=
+        New_String(".paned.craftframe.canvas.craft.list.view");
+      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
+      if Element(RecipeIndex, 1) = '{' then
+         RecipeIndex :=
+           Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
+      end if;
+      AmountBox.Interp := Interp;
+      AmountBox.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.set.amount");
+      ModulesBox.Interp := Interp;
+      ModulesBox.Name :=
+        New_String(".paned.craftframe.canvas.craft.item.set.workshop");
+      for I in PlayerShip.Modules.Iterate loop
+         if PlayerShip.Modules(I).Name =
+           To_Unbounded_String(Get(ModulesBox)) then
+            SetRecipe
+              (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
+               RecipeIndex);
+            UpdateMessages;
+            exit;
+         end if;
+      end loop;
+      return TCL_OK;
+   end Set_Crafting_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrafting", Show_Crafting_Command'Access);
       AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
+      AddCommand("SetCrafting", Set_Crafting_Command'Access);
    end AddCommands;
 
 end Crafts.UI;
