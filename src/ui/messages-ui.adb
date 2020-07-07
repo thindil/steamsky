@@ -26,6 +26,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -54,6 +55,33 @@ package body Messages.UI is
       Convention => C;
       -- ****
 
+   procedure ShowMessage
+     (Message: Message_Data; MessagesView: Ttk_Tree_View;
+      MessagesType: Message_Type) is
+      MessageTag: Unbounded_String;
+   begin
+      if Message.MType = MessagesType or MessagesType = Default then
+         case Message.Color is
+            when YELLOW =>
+               MessageTag := To_Unbounded_String(" [list yellow]");
+            when GREEN =>
+               MessageTag := To_Unbounded_String(" [list green]");
+            when RED =>
+               MessageTag := To_Unbounded_String(" [list red]");
+            when BLUE =>
+               MessageTag := To_Unbounded_String(" [list blue]");
+            when CYAN =>
+               MessageTag := To_Unbounded_String(" [list cyan]");
+            when others =>
+               MessageTag := Null_Unbounded_String;
+         end case;
+         Insert
+           (MessagesView,
+            "{} end -text {" & To_String(Message.Message) &
+            To_String(MessageTag) & "}");
+      end if;
+   end ShowMessage;
+
    function Show_Last_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
@@ -66,30 +94,7 @@ package body Messages.UI is
       MessagesType: Message_Type := Default;
       MessagesView: Ttk_Tree_View;
       TypeBox: Ttk_ComboBox;
-      procedure ShowMessage(Message: Message_Data) is
-         MessageTag: Unbounded_String;
-      begin
-         if Message.MType = MessagesType or MessagesType = Default then
-            case Message.Color is
-               when YELLOW =>
-                  MessageTag := To_Unbounded_String(" [list yellow]");
-               when GREEN =>
-                  MessageTag := To_Unbounded_String(" [list green]");
-               when RED =>
-                  MessageTag := To_Unbounded_String(" [list red]");
-               when BLUE =>
-                  MessageTag := To_Unbounded_String(" [list blue]");
-               when CYAN =>
-                  MessageTag := To_Unbounded_String(" [list cyan]");
-               when others =>
-                  MessageTag := Null_Unbounded_String;
-            end case;
-            Insert
-              (MessagesView,
-               "{} end -text {" & To_String(Message.Message) &
-               To_String(MessageTag) & "}");
-         end if;
-      end ShowMessage;
+      SearchEntry: Ttk_Entry;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -121,6 +126,10 @@ package body Messages.UI is
              (Widget_Image(MessagesCanvas) & ".messages.options.types");
          Current(TypeBox, "0");
       end if;
+      SearchEntry.Interp := Interp;
+      SearchEntry.Name :=
+        New_String(Widget_Image(MessagesCanvas) & ".messages.options.search");
+      Delete(SearchEntry, "0", "end");
       MessagesView.Interp := Interp;
       MessagesView.Name :=
         New_String(Widget_Image(MessagesCanvas) & ".messages.list.view");
@@ -132,11 +141,11 @@ package body Messages.UI is
       else
          if GameSettings.MessagesOrder = OLDER_FIRST then
             for Message of Messages_List loop
-               ShowMessage(Message);
+               ShowMessage(Message, MessagesView, MessagesType);
             end loop;
          else
             for Message of reverse Messages_List loop
-               ShowMessage(Message);
+               ShowMessage(Message, MessagesView, MessagesType);
             end loop;
          end if;
       end if;
@@ -227,11 +236,76 @@ package body Messages.UI is
       return TCL_OK;
    end Delete_Messages_Command;
 
+   -- ****if* MUI2/Search_Messages_Command
+   -- FUNCTION
+   -- Show only this messages which contains the selected sequence
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Search_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Search_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      TypeBox: Ttk_ComboBox;
+      MessagesType: Message_Type;
+      MessagesView: Ttk_Tree_View;
+      SearchText: constant String := CArgv.Arg(Argv, 1);
+   begin
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String(".paned.messagesframe.canvas.messages.options.types");
+      MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));
+      MessagesView.Interp := Interp;
+      MessagesView.Name :=
+        New_String(".paned.messagesframe.canvas.messages.list.view");
+      Delete(MessagesView, "[list " & Children(MessagesView, "{}") & "]");
+      if SearchText'Length = 0 then
+         if GameSettings.MessagesOrder = OLDER_FIRST then
+            for Message of Messages_List loop
+               ShowMessage(Message, MessagesView, MessagesType);
+            end loop;
+         else
+            for Message of reverse Messages_List loop
+               ShowMessage(Message, MessagesView, MessagesType);
+            end loop;
+         end if;
+         Tcl_SetResult(Interp, "1");
+         return TCL_OK;
+      end if;
+      if GameSettings.MessagesOrder = OLDER_FIRST then
+         for Message of Messages_List loop
+            if Index(Message.Message, SearchText, 1) > 0 then
+               ShowMessage(Message, MessagesView, MessagesType);
+            end if;
+         end loop;
+      else
+         for Message of reverse Messages_List loop
+            if Index(Message.Message, SearchText, 1) > 0 then
+               ShowMessage(Message, MessagesView, MessagesType);
+            end if;
+         end loop;
+      end if;
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   end Search_Messages_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLastMessages", Show_Last_Messages_Command'Access);
       AddCommand("SelectMessages", Select_Messages_Command'Access);
       AddCommand("DeleteMessages", Delete_Messages_Command'Access);
+      AddCommand("SearchMessages", Search_Messages_Command'Access);
    end AddCommands;
 
 end Messages.UI;
