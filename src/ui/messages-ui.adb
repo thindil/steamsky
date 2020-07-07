@@ -27,7 +27,9 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
@@ -53,11 +55,37 @@ package body Messages.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Paned: Ttk_PanedWindow;
       MessagesCanvas: Tk_Canvas;
       MessagesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      MessagesType: Message_Type := Default;
+      MessagesView: Ttk_Tree_View;
+      procedure ShowMessage(Message: Message_Data) is
+         MessageTag: Unbounded_String;
+      begin
+         if Message.MType = MessagesType or MessagesType = Default then
+            case Message.Color is
+               when YELLOW =>
+                  MessageTag := To_Unbounded_String(" [list yellow]");
+               when GREEN =>
+                  MessageTag := To_Unbounded_String(" [list green]");
+               when RED =>
+                  MessageTag := To_Unbounded_String(" [list red]");
+               when BLUE =>
+                  MessageTag := To_Unbounded_String(" [list blue]");
+               when CYAN =>
+                  MessageTag := To_Unbounded_String(" [list cyan]");
+               when others =>
+                  MessageTag := Null_Unbounded_String;
+            end case;
+            Insert
+              (MessagesView,
+               "{} end -text {" & To_String(Message.Message) &
+               To_String(MessageTag) & "}");
+         end if;
+      end ShowMessage;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -80,8 +108,28 @@ package body Messages.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      -- Fill messages UI
-      -- End of fill messages UI
+      if Argc > 1 then
+         MessagesType := Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1)));
+      end if;
+      MessagesView.Interp := Interp;
+      MessagesView.Name :=
+        New_String(Widget_Image(MessagesCanvas) & ".messages.list.view");
+      Delete(MessagesView, "[list " & Children(MessagesView, "{}") & "]");
+      if MessagesAmount(MessagesType) = 0 then
+         Insert
+           (MessagesView,
+            "{} end -text {There are no messages of that type.}");
+      else
+         if GameSettings.MessagesOrder = OLDER_FIRST then
+            for Message of Messages_List loop
+               ShowMessage(Message);
+            end loop;
+         else
+            for Message of reverse Messages_List loop
+               ShowMessage(Message);
+            end loop;
+         end if;
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       MessagesFrame.Name :=
         New_String(Widget_Image(MessagesCanvas) & ".messages");

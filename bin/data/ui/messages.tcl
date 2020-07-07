@@ -12,6 +12,11 @@ grid [ttk::entry $messagesframe.options.search -validate key] -row 0 -column 1
 grid [ttk::button $messagesframe.options.delete -text {Delete all messages}] -row 0 -column 2
 # Messages list
 grid [ttk::frame $messagesframe.list] -sticky nwes
-set messagesview [ttk::treeview $messagesframe.list.view -yscrollcommand [list $messagesframe.list.scrolly set] -show tree]
+set messagesview [ttk::treeview $messagesframe.list.view -yscrollcommand [list $messagesframe.list.scrolly set] -show tree -selectmode none]
+$messagesview tag configure yellow -foreground yellow
+$messagesview tag configure green -foreground green
+$messagesview tag configure red -foreground red
+$messagesview tag configure blue -foreground blue
+$messagesview tag configure cyan -foreground cyan
 grid $messagesview -sticky nwes
 grid [ttk::scrollbar $messagesframe.list.scrolly -orient vertical -command [list $messagesview yview]] -row 0 -column 1 -sticky ns
