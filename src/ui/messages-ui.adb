@@ -39,25 +39,18 @@ with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
-   -- ****f* MUI2/Show_Last_Messages_Command
+   -- ****if* Messages.UI/ShowMessage
    -- FUNCTION
-   -- Show the list of last messages to a player
+   -- Show the selected message to a player
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Message      - The message to show
+   -- MessagesView - The treeview in which the message will be shown
+   -- MessagesType - The selected type of messages to show
    -- SOURCE
-   function Show_Last_Messages_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
    procedure ShowMessage
      (Message: Message_Data; MessagesView: Ttk_Tree_View;
       MessagesType: Message_Type) is
+      -- ****
       MessageTag: Unbounded_String;
    begin
       if Message.MType = MessagesType or MessagesType = Default then
@@ -81,6 +74,22 @@ package body Messages.UI is
             To_String(MessageTag) & "}");
       end if;
    end ShowMessage;
+
+   -- ****f* MUI2/Show_Last_Messages_Command
+   -- FUNCTION
+   -- Show the list of last messages to a player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Last_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    function Show_Last_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
