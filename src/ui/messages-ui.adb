@@ -20,6 +20,7 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -190,10 +191,47 @@ package body Messages.UI is
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
 
+   -- ****if* Messages.UI/Delete_Messages_Command
+   -- FUNCTION
+   -- Delete all messages
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Delete_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Delete_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      TypeBox: Ttk_ComboBox;
+   begin
+      if MessageBox
+          ("-message {Are you sure you want to clear all messages?} -icon question -type yesno") /=
+        "yes" then
+         return TCL_OK;
+      end if;
+      ClearMessages;
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String(".paned.messagesframe.canvas.messages.options.types");
+      Current(TypeBox, "0");
+      return TCL_OK;
+   end Delete_Messages_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLastMessages", Show_Last_Messages_Command'Access);
       AddCommand("SelectMessages", Select_Messages_Command'Access);
+      AddCommand("DeleteMessages", Delete_Messages_Command'Access);
    end AddCommands;
 
 end Messages.UI;
