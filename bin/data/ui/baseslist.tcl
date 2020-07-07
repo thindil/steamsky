@@ -1,19 +1,16 @@
-# test code
-ttk::frame .paned
-set basesframe [ttk::frame .paned.bases]
-# normal code
-#ttk::frame .paned.basesframe
-#set basescanvas [canvas .paned.basesframe.canvas -yscrollcommand [list .paned.basesframe.scrolly set] -xscrollcommand [list .paned.basesframe.scrollx set]]
-#grid $basescanvas -sticky nwes
-#grid [ttk::scrollbar .paned.basesframe.scrollx -orient horizontal -command [list $basescanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-#grid [ttk::scrollbar .paned.basesframe.scrolly -orient vertical -command [list $basescanvas yview]] -row 0 -column 1 -sticky ns
-#set basesframe [ttk::frame $basescanvas.bases]
+ttk::frame .paned.basesframe
+set basescanvas [canvas .paned.basesframe.canvas -yscrollcommand [list .paned.basesframe.scrolly set] -xscrollcommand [list .paned.basesframe.scrollx set]]
+grid $basescanvas -sticky nwes
+grid [ttk::scrollbar .paned.basesframe.scrollx -orient horizontal -command [list $basescanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
+grid [ttk::scrollbar .paned.basesframe.scrolly -orient vertical -command [list $basescanvas yview]] -row 0 -column 1 -sticky ns
+set basesframe [ttk::frame $basescanvas.bases]
 # List of bases options
 grid [ttk::frame $basesframe.options]
 grid [ttk::label $basesframe.options.typeslbl -text {Type:}]
 grid [ttk::combobox $basesframe.options.types -state readonly] -row 0 -column 1
 grid [ttk::label $basesframe.options.statuslbl -text {Status:}] -row 0 -column 2
-grid [ttk::combobox $basesframe.options.status -state readonly] -row 0 -column 3
+grid [ttk::combobox $basesframe.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}]] -row 0 -column 3
+$basesframe.options.status current 0
 grid [ttk::label $basesframe.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $basesframe.options.owner -state readonly] -row 0 -column 5
 grid [ttk::entry $basesframe.options.search -validate key] -row 0 -column 6
@@ -35,7 +32,6 @@ grid [text $baseframe.info.text -wrap char -height 10 -width 40] -columnspan 3
 grid [ttk::label $baseframe.info.reputationlbl -text {Reputation:}]
 grid [ttk::progressbar $baseframe.info.minusreputation] -row 1 -column 1
 grid [ttk::progressbar $baseframe.info.plusreputation] -row 1 -column 2
-# test code
-grid $baseframe
-pack $basesframe -fill both -expand true
-pack .paned -fill both -expand true
+# Base options
+grid [ttk::button $baseframe.show -text {Show base on map}]
+grid [ttk::button $baseframe.set -text {Set base as destination for ship}]
