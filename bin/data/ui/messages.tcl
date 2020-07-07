@@ -7,6 +7,7 @@ set messagesframe [ttk::frame $messagescanvas.messages]
 # Messages options
 grid [ttk::frame $messagesframe.options]
 grid [ttk::combobox $messagesframe.options.types -values [list All Combat Trade Orders Craft Others Missions] -state readonly]
+bind $messagesframe.options.types <<ComboboxSelected>> SelectMessages
 $messagesframe.options.types current 0
 grid [ttk::entry $messagesframe.options.search -validate key] -row 0 -column 1
 grid [ttk::button $messagesframe.options.delete -text {Delete all messages}] -row 0 -column 2
