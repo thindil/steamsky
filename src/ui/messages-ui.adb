@@ -16,7 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -25,6 +25,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -62,6 +64,7 @@ package body Messages.UI is
       CloseButton: Ttk_Button;
       MessagesType: Message_Type := Default;
       MessagesView: Ttk_Tree_View;
+      TypeBox: Ttk_ComboBox;
       procedure ShowMessage(Message: Message_Data) is
          MessageTag: Unbounded_String;
       begin
@@ -110,6 +113,12 @@ package body Messages.UI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       if Argc > 1 then
          MessagesType := Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1)));
+      else
+         TypeBox.Interp := Interp;
+         TypeBox.Name :=
+           New_String
+             (Widget_Image(MessagesCanvas) & ".messages.options.types");
+         Current(TypeBox, "0");
       end if;
       MessagesView.Interp := Interp;
       MessagesView.Name :=
@@ -151,9 +160,40 @@ package body Messages.UI is
       return TCL_OK;
    end Show_Last_Messages_Command;
 
+   -- ****if* MUI2/Select_Messages_Command
+   -- FUNCTION
+   -- Show only messages of the selected type
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Select_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Select_Messages_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      TypeBox: Ttk_ComboBox;
+   begin
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String(".paned.messagesframe.canvas.messages.options.types");
+      return Show_Last_Messages_Command
+          (ClientData, Interp, 2, Argv & Current(TypeBox));
+   end Select_Messages_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLastMessages", Show_Last_Messages_Command'Access);
+      AddCommand("SelectMessages", Select_Messages_Command'Access);
    end AddCommands;
 
 end Messages.UI;
