@@ -72,7 +72,7 @@ package body BasesList is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Paned: Ttk_PanedWindow;
       BasesCanvas: Tk_Canvas;
       BasesFrame: Ttk_Frame;
@@ -120,9 +120,11 @@ package body BasesList is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      SearchEntry.Interp := Interp;
-      SearchEntry.Name :=
-        New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
+      if Argc = 1 or else CArgv.Arg(Argv, 1) /= "search" then
+         SearchEntry.Interp := Interp;
+         SearchEntry.Name :=
+           New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
+      end if;
       Delete(SearchEntry, "0", "end");
       BasesView.Interp := Interp;
       BasesView.Name :=
@@ -130,6 +132,14 @@ package body BasesList is
       Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
+            if CArgv.Arg(Argv, 1) = "type"
+              and then
+              (CArgv.Arg(Argv, 2) /= "All"
+               and then
+                 To_String(BasesTypes_List(SkyBases(I).BaseType).Name) /=
+                 CArgv.Arg(Argv, 2)) then
+               goto End_Of_Loop;
+            end if;
             if FirstIndex = 0 then
                FirstIndex := I;
             end if;
@@ -168,6 +178,7 @@ package body BasesList is
                "{} end -id" & Positive'Image(I) & " -values [list" &
                To_String(BaseValues) & "]");
          end if;
+         <<End_Of_Loop>>
       end loop;
       Selection_Set(BasesView, "[list" & Natural'Image(FirstIndex) & "]");
       BasesFrame.Name := New_String(Widget_Image(BasesCanvas) & ".bases.base");
