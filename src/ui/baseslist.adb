@@ -132,13 +132,22 @@ package body BasesList is
       Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
-            if Argc > 1 and then CArgv.Arg(Argv, 1) = "types"
-              and then
-              (CArgv.Arg(Argv, 2) /= "All"
-               and then
-                 To_String(BasesTypes_List(SkyBases(I).BaseType).Name) /=
-                 CArgv.Arg(Argv, 2)) then
-               goto End_Of_Loop;
+            if Argc > 1 then
+               if CArgv.Arg(Argv, 1) = "types"
+                 and then
+                 (CArgv.Arg(Argv, 2) /= "All"
+                  and then
+                    To_String(BasesTypes_List(SkyBases(I).BaseType).Name) /=
+                    CArgv.Arg(Argv, 2)) then
+                  goto End_Of_Loop;
+               end if;
+               if CArgv.Arg(Argv, 1) = "owner"
+                 and then
+                 (CArgv.Arg(Argv, 2) /= "All"
+                  and then To_String(Factions_List(SkyBases(I).Owner).Name) /=
+                    CArgv.Arg(Argv, 2)) then
+                  goto End_Of_Loop;
+               end if;
             end if;
             if FirstIndex = 0 then
                FirstIndex := I;

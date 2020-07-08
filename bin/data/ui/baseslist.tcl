@@ -14,6 +14,7 @@ grid [ttk::combobox $basesframe.options.status -state readonly -values [list {An
 $basesframe.options.status current 0
 grid [ttk::label $basesframe.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $basesframe.options.owner -state readonly] -row 0 -column 5
+bind $basesframe.options.owner <<ComboboxSelected>> {SelectBases owner}
 grid [ttk::entry $basesframe.options.search -validate key] -row 0 -column 6
 # Bases list
 grid [ttk::frame $basesframe.list] -sticky nwes
