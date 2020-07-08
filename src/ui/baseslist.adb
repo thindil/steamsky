@@ -133,6 +133,15 @@ package body BasesList is
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
             if Argc > 1 then
+               if CArgv.Arg(Argv, 1) = "status" then
+                  if
+                    (SkyBases(I).Visited.Year /= 0 and
+                     CArgv.Arg(Argv, 2) = "Only not visited") or
+                    (SkyBases(I).Visited.Year = 0 and
+                     CArgv.Arg(Argv, 2) = "Only visited") then
+                     goto End_Of_Loop;
+                  end if;
+               end if;
                if CArgv.Arg(Argv, 1) = "types"
                  and then
                  (CArgv.Arg(Argv, 2) /= "All"

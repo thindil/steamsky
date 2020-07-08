@@ -11,6 +11,7 @@ grid [ttk::combobox $basesframe.options.types -state readonly] -row 0 -column 1
 bind $basesframe.options.types <<ComboboxSelected>> {SelectBases types}
 grid [ttk::label $basesframe.options.statuslbl -text {Status:}] -row 0 -column 2
 grid [ttk::combobox $basesframe.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}]] -row 0 -column 3
+bind $basesframe.options.status <<ComboboxSelected>> {SelectBases status}
 $basesframe.options.status current 0
 grid [ttk::label $basesframe.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $basesframe.options.owner -state readonly] -row 0 -column 5
