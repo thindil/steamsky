@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -26,10 +27,19 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
+with BasesTypes; use BasesTypes;
+with Config; use Config;
+with Factions; use Factions;
 with Game; use Game;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
@@ -41,7 +51,7 @@ package body BasesList is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Bases_Command
@@ -60,6 +70,11 @@ package body BasesList is
       BasesCanvas: Tk_Canvas;
       BasesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      ComboBox: Ttk_ComboBox;
+      ComboValues, BaseValues: Unbounded_String;
+      BasesView: Ttk_Tree_View;
+      SearchEntry: Ttk_Entry;
+      FirstIndex: Natural := 0;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -69,11 +84,28 @@ package body BasesList is
       BasesFrame.Name := New_String(Widget_Image(Paned) & ".basesframe");
       BasesCanvas.Interp := Interp;
       BasesCanvas.Name := New_String(Widget_Image(BasesFrame) & ".canvas");
+      ComboBox.Interp := Interp;
       if Winfo_Get(BasesCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "baseslist.tcl");
          Bind(BasesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         ComboBox.Name :=
+           New_String(Widget_Image(BasesCanvas) & ".bases.options.types");
+         Append(ComboValues, " {Any}");
+         for BaseType of BasesTypes_List loop
+            Append(ComboValues, " {" & BaseType.Name & "}");
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
+         Current(ComboBox, "0");
+         ComboValues := To_Unbounded_String(" {Any}");
+         ComboBox.Name :=
+           New_String(Widget_Image(BasesCanvas) & ".bases.options.owner");
+         for I in Factions_List.Iterate loop
+            Append(ComboValues, " {" & Factions_List(I).Name & "}");
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
+         Current(ComboBox, "0");
       elsif Winfo_Get(BasesCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -81,8 +113,62 @@ package body BasesList is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      -- Fill UI with data
-      -- End of fill
+      SearchEntry.Interp := Interp;
+      SearchEntry.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
+      Delete(SearchEntry, "0", "end");
+      BasesView.Interp := Interp;
+      BasesView.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.list.view");
+      Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
+      for I in SkyBases'Range loop
+         if SkyBases(I).Known then
+            if FirstIndex = 0 then
+               FirstIndex := I;
+            end if;
+            BaseValues := " {" & SkyBases(I).Name & "}";
+            Append
+              (BaseValues,
+               " " &
+               Natural'Image
+                 (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
+            if SkyBases(I).Visited.Year /= 0 then
+               if SkyBases(I).Population = 0 then
+                  Append(BaseValues, " empty");
+               elsif SkyBases(I).Population < 150 then
+                  Append(BaseValues, " small");
+               elsif SkyBases(I).Population < 300 then
+                  Append(BaseValues, " medium");
+               else
+                  Append(BaseValues, " large");
+               end if;
+               Append
+                 (BaseValues,
+                  " {" & To_Lower(Bases_Size'Image(SkyBases(I).Size)) & "}");
+               Append
+                 (BaseValues,
+                  " {" & Factions_List(SkyBases(I).Owner).Name & "}");
+               Append
+                 (BaseValues,
+                  " {" & BasesTypes_List(SkyBases(I).BaseType).Name & "}");
+            else
+               Append
+                 (BaseValues,
+                  " {not visited} {not visited} {not visited} {not visited}");
+            end if;
+            Insert
+              (BasesView,
+               "{} end -id" & Positive'Image(I) & " -values [list" &
+               To_String(BaseValues) & "]");
+         end if;
+      end loop;
+      Selection_Set(BasesView, "[list" & Natural'Image(FirstIndex) & "]");
+      BasesFrame.Name := New_String(Widget_Image(BasesCanvas) & ".bases.base");
+      if GameSettings.ShowCargoInfo then
+         Tcl.Tk.Ada.Grid.Grid(BasesFrame);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(BasesFrame);
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       BasesFrame.Name := New_String(Widget_Image(BasesCanvas) & ".bases");
       configure

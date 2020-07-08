@@ -27,6 +27,7 @@ grid $basesview -sticky nwes
 grid [ttk::scrollbar $basesframe.list.scrolly -orient vertical -command [list $basesview yview]] -row 0 -column 1 -sticky ns
 # Base info
 set baseframe [ttk::frame $basesframe.base]
+grid $baseframe -row 0 -column 1 -sticky nwes -rowspan 2
 grid [ttk::labelframe $baseframe.info -text {Base Info:}]
 grid [text $baseframe.info.text -wrap char -height 10 -width 40] -columnspan 3
 grid [ttk::label $baseframe.info.reputationlbl -text {Reputation:}]
