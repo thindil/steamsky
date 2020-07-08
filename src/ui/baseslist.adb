@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv; use CArgv;
+with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -78,7 +78,8 @@ package body BasesList is
       BasesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ComboBox: Ttk_ComboBox;
-      ComboValues, BaseValues: Unbounded_String;
+      ComboValues, BaseValues, BasesType, BasesOwner,
+      BasesStatus: Unbounded_String;
       BasesView: Ttk_Tree_View;
       SearchEntry: Ttk_Entry;
       FirstIndex: Natural := 0;
@@ -130,31 +131,34 @@ package body BasesList is
       BasesView.Name :=
         New_String(Widget_Image(BasesCanvas) & ".bases.list.view");
       Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
+      ComboBox.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.options.types");
+      BasesType := To_Unbounded_String(Get(ComboBox));
+      ComboBox.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.options.status");
+      BasesStatus := To_Unbounded_String(Get(ComboBox));
+      ComboBox.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.options.owner");
+      BasesOwner := To_Unbounded_String(Get(ComboBox));
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
-            if Argc > 1 then
-               if CArgv.Arg(Argv, 1) = "status" then
-                  if
-                    (SkyBases(I).Visited.Year /= 0 and
-                     CArgv.Arg(Argv, 2) = "Only not visited") or
-                    (SkyBases(I).Visited.Year = 0 and
-                     CArgv.Arg(Argv, 2) = "Only visited") then
-                     goto End_Of_Loop;
-                  end if;
-               end if;
-               if CArgv.Arg(Argv, 1) = "types"
-                 and then
-                 (CArgv.Arg(Argv, 2) /= "All"
-                  and then
-                    To_String(BasesTypes_List(SkyBases(I).BaseType).Name) /=
-                    CArgv.Arg(Argv, 2)) then
+            if BasesStatus = To_Unbounded_String("Only not visited") and
+              SkyBases(I).Visited.Year /= 0 then
+               goto End_Of_Loop;
+            end if;
+            if BasesStatus = To_Unbounded_String("Only visited") and
+              SkyBases(I).Visited.Year = 0 then
+               goto End_Of_Loop;
+            end if;
+            if BasesStatus /= To_Unbounded_String("Only not visited") then
+               if BasesType /= To_Unbounded_String("Any")
+                 and then BasesTypes_List(SkyBases(I).BaseType).Name /=
+                   BasesType then
                   goto End_Of_Loop;
                end if;
-               if CArgv.Arg(Argv, 1) = "owner"
-                 and then
-                 (CArgv.Arg(Argv, 2) /= "All"
-                  and then To_String(Factions_List(SkyBases(I).Owner).Name) /=
-                    CArgv.Arg(Argv, 2)) then
+               if BasesOwner /= To_Unbounded_String("Any")
+                 and then Factions_List(SkyBases(I).Owner).Name /=
+                   BasesOwner then
                   goto End_Of_Loop;
                end if;
             end if;
@@ -404,41 +408,10 @@ package body BasesList is
       return TCL_OK;
    end Show_Base_Info_Command;
 
-   -- ****if* BasesList/Select_Bases_Command
-   -- FUNCTION
-   -- Show only bases with selected criteria
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Select_Bases_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Select_Bases_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      CriteriaBox: Ttk_ComboBox;
-   begin
-      CriteriaBox.Interp := Interp;
-      CriteriaBox.Name :=
-        New_String
-          (".paned.basesframe.canvas.bases.options." & CArgv.Arg(Argv, 1));
-      return Show_Bases_Command
-          (ClientData, Interp, Argc + 1, Argv & Get(CriteriaBox));
-   end Select_Bases_Command;
-
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
-      AddCommand("SelectBases", Select_Bases_Command'Access);
    end AddCommands;
 
 end BasesList;
