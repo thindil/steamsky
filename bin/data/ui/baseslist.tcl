@@ -24,12 +24,13 @@ $basesview heading size -text {Size}
 $basesview heading owner -text {Owner}
 $basesview heading type -text {Type}
 grid $basesview -sticky nwes
+bind $basesview <<TreeviewSelect>> ShowBaseInfo
 grid [ttk::scrollbar $basesframe.list.scrolly -orient vertical -command [list $basesview yview]] -row 0 -column 1 -sticky ns
 # Base info
 set baseframe [ttk::frame $basesframe.base]
 grid $baseframe -row 0 -column 1 -sticky nwes -rowspan 2
 grid [ttk::labelframe $baseframe.info -text {Base Info:}]
-grid [text $baseframe.info.text -wrap char -height 10 -width 40] -columnspan 3
+grid [ttk::label $baseframe.info.text] -columnspan 3
 grid [ttk::label $baseframe.info.reputationlbl -text {Reputation:}]
 grid [ttk::progressbar $baseframe.info.minusreputation] -row 1 -column 1
 grid [ttk::progressbar $baseframe.info.plusreputation] -row 1 -column 2

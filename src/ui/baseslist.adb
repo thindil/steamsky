@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -31,9 +32,12 @@ with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
@@ -41,6 +45,9 @@ with Factions; use Factions;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
+with Ships; use Ships;
+with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body BasesList is
@@ -188,9 +195,165 @@ package body BasesList is
       return TCL_OK;
    end Show_Bases_Command;
 
+   -- ****f* BasesList/Show_Base_Info_Command
+   -- FUNCTION
+   -- Show the information about the selected base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Base_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Base_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      BaseInfo: Unbounded_String;
+      BaseIndex: Positive;
+      BasesView: Ttk_Tree_View;
+      BaseLabel: Ttk_Label;
+      procedure SetReputationText(ReputationText: String) is
+         ReputationBar: Ttk_ProgressBar;
+      begin
+         ReputationBar.Interp := Interp;
+         ReputationBar.Name :=
+           New_String
+             (".paned.basesframe.canvas.bases.base.info.minusreputation");
+         if SkyBases(BaseIndex).Reputation(1) < 0 then
+            configure
+              (ReputationBar,
+               "-value" &
+               Positive'Image(abs (SkyBases(BaseIndex).Reputation(1))));
+            Tcl.Tk.Ada.Grid.Grid(ReputationBar);
+         else
+            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
+         end if;
+         Add(ReputationBar, ReputationText);
+         ReputationBar.Name :=
+           New_String
+             (".paned.basesframe.canvas.bases.base.info.plusreputation");
+         if SkyBases(BaseIndex).Reputation(1) > 0 then
+            configure
+              (ReputationBar,
+               "-value" & Positive'Image(SkyBases(BaseIndex).Reputation(1)));
+            Tcl.Tk.Ada.Grid.Grid(ReputationBar);
+         else
+            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
+         end if;
+         Add(ReputationBar, ReputationText);
+      end SetReputationText;
+   begin
+      if not GameSettings.ShowBaseInfo then
+         return TCL_OK;
+      end if;
+      BasesView.Interp := Interp;
+      BasesView.Name := New_String(".paned.basesframe.canvas.bases.list.view");
+      BaseIndex := Positive'Value(Selection(BasesView));
+      if SkyBases(BaseIndex).Visited.Year > 0 then
+         BaseInfo :=
+           To_Unbounded_String
+             ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
+              Positive'Image(SkyBases(BaseIndex).SkyY));
+         Append
+           (BaseInfo,
+            LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
+         declare
+            TimeDiff: Integer;
+         begin
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -25 then
+               TimeDiff :=
+                 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
+               if TimeDiff > 0 then
+                  Append
+                    (BaseInfo,
+                     LF & "New recruits available in" &
+                     Natural'Image(TimeDiff) & " days.");
+               else
+                  Append(BaseInfo, LF & "New recruits available now.");
+               end if;
+            else
+               Append
+                 (BaseInfo,
+                  LF & "You can't recruit crew members at this base.");
+            end if;
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -25 then
+               TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
+               if TimeDiff < 7 then
+                  Append
+                    (BaseInfo,
+                     LF & "You asked for events" & Natural'Image(TimeDiff) &
+                     " days ago.");
+               else
+                  Append(BaseInfo, LF & "You can ask for events again.");
+               end if;
+            else
+               Append(BaseInfo, LF & "You can't ask for events at this base.");
+            end if;
+            if SkyBases(BaseIndex).Population > 0 and
+              SkyBases(BaseIndex).Reputation(1) > -1 then
+               TimeDiff :=
+                 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
+               if TimeDiff > 0 then
+                  Append
+                    (BaseInfo,
+                     LF & "New missions available in" &
+                     Natural'Image(TimeDiff) & " days.");
+               else
+                  Append(BaseInfo, LF & "New missions available now.");
+               end if;
+            else
+               Append(BaseInfo, LF & "You can't take missions at this base.");
+            end if;
+         end;
+         case SkyBases(BaseIndex).Reputation(1) is
+            when -100 .. -75 =>
+               SetReputationText("Hated");
+            when -74 .. -50 =>
+               SetReputationText("Outlaw");
+            when -49 .. -25 =>
+               SetReputationText("Hostile");
+            when -24 .. -1 =>
+               SetReputationText("Unfriendly");
+            when 0 =>
+               SetReputationText("Unknown");
+            when 1 .. 25 =>
+               SetReputationText("Visitor");
+            when 26 .. 50 =>
+               SetReputationText("Trader");
+            when 51 .. 75 =>
+               SetReputationText("Friend");
+            when 76 .. 100 =>
+               SetReputationText("Well known");
+            when others =>
+               null;
+         end case;
+         if BaseIndex = PlayerShip.HomeBase then
+            Append(BaseInfo, LF & "It is your home base.");
+         end if;
+      else
+         BaseInfo := To_Unbounded_String("Not visited yet.");
+      end if;
+      BaseLabel.Interp := Interp;
+      BaseLabel.Name :=
+        New_String(".paned.basesframe.canvas.bases.base.info.text");
+      configure(BaseLabel, "-text {" & To_String(BaseInfo) & "}");
+      return TCL_OK;
+   end Show_Base_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
+      AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
    end AddCommands;
 
 end BasesList;
