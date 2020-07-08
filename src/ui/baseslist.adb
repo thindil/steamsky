@@ -222,6 +222,7 @@ package body BasesList is
       BaseLabel: Ttk_Label;
       procedure SetReputationText(ReputationText: String) is
          ReputationBar: Ttk_ProgressBar;
+         ReputationLabel: Ttk_Label;
       begin
          ReputationBar.Interp := Interp;
          ReputationBar.Name :=
@@ -249,6 +250,25 @@ package body BasesList is
             Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
          end if;
          Add(ReputationBar, ReputationText);
+         ReputationLabel.Interp := Interp;
+         ReputationLabel.Name :=
+           New_String
+             (".paned.basesframe.canvas.bases.base.info.reputationlbl");
+         if SkyBases(BaseIndex).Reputation(1) = 0 then
+            configure(ReputationLabel, "-text {Reputation: Unknown}");
+         else
+            configure(ReputationLabel, "-text {Reputation:}");
+         end if;
+         if SkyBases(BaseIndex).Visited.Year > 0 then
+            Tcl.Tk.Ada.Grid.Grid(ReputationLabel);
+         else
+            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationLabel);
+            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
+            ReputationBar.Name :=
+              New_String
+                (".paned.basesframe.canvas.bases.base.info.minusreputation");
+            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationLabel);
+         end if;
       end SetReputationText;
    begin
       if not GameSettings.ShowBaseInfo then
@@ -342,6 +362,7 @@ package body BasesList is
          end if;
       else
          BaseInfo := To_Unbounded_String("Not visited yet.");
+         SetReputationText("Unknown");
       end if;
       BaseLabel.Interp := Interp;
       BaseLabel.Name :=
