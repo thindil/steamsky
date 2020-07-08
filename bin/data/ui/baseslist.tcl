@@ -8,14 +8,14 @@ set basesframe [ttk::frame $basescanvas.bases]
 grid [ttk::frame $basesframe.options]
 grid [ttk::label $basesframe.options.typeslbl -text {Type:}]
 grid [ttk::combobox $basesframe.options.types -state readonly] -row 0 -column 1
-bind $basesframe.options.types <<ComboboxSelected>> {SelectBases types}
+bind $basesframe.options.types <<ComboboxSelected>> {ShowBases types}
 grid [ttk::label $basesframe.options.statuslbl -text {Status:}] -row 0 -column 2
 grid [ttk::combobox $basesframe.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}]] -row 0 -column 3
-bind $basesframe.options.status <<ComboboxSelected>> {SelectBases status}
+bind $basesframe.options.status <<ComboboxSelected>> {ShowBases status}
 $basesframe.options.status current 0
 grid [ttk::label $basesframe.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $basesframe.options.owner -state readonly] -row 0 -column 5
-bind $basesframe.options.owner <<ComboboxSelected>> {SelectBases owner}
+bind $basesframe.options.owner <<ComboboxSelected>> {ShowBases owner}
 grid [ttk::entry $basesframe.options.search -validate key] -row 0 -column 6
 # Bases list
 grid [ttk::frame $basesframe.list] -sticky nwes
