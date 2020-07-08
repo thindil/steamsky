@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -132,7 +132,7 @@ package body BasesList is
       Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
-            if CArgv.Arg(Argv, 1) = "type"
+            if Argc > 1 and then CArgv.Arg(Argv, 1) = "types"
               and then
               (CArgv.Arg(Argv, 2) /= "All"
                and then
@@ -180,7 +180,9 @@ package body BasesList is
          end if;
          <<End_Of_Loop>>
       end loop;
-      Selection_Set(BasesView, "[list" & Natural'Image(FirstIndex) & "]");
+      if FirstIndex > 0 then
+         Selection_Set(BasesView, "[list" & Natural'Image(FirstIndex) & "]");
+      end if;
       BasesFrame.Name := New_String(Widget_Image(BasesCanvas) & ".bases.base");
       if GameSettings.ShowCargoInfo then
          Tcl.Tk.Ada.Grid.Grid(BasesFrame);
@@ -282,11 +284,16 @@ package body BasesList is
          end if;
       end SetReputationText;
    begin
-      if not GameSettings.ShowBaseInfo then
-         return TCL_OK;
-      end if;
       BasesView.Interp := Interp;
       BasesView.Name := New_String(".paned.basesframe.canvas.bases.list.view");
+      BaseLabel.Interp := Interp;
+      BaseLabel.Name :=
+        New_String(".paned.basesframe.canvas.bases.base.info.text");
+      if not GameSettings.ShowBaseInfo or Selection(BasesView)'Length = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(BaseLabel);
+         return TCL_OK;
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(BaseLabel);
       BaseIndex := Positive'Value(Selection(BasesView));
       if SkyBases(BaseIndex).Visited.Year > 0 then
          BaseInfo :=
@@ -375,17 +382,45 @@ package body BasesList is
          BaseInfo := To_Unbounded_String("Not visited yet.");
          SetReputationText("Unknown");
       end if;
-      BaseLabel.Interp := Interp;
-      BaseLabel.Name :=
-        New_String(".paned.basesframe.canvas.bases.base.info.text");
       configure(BaseLabel, "-text {" & To_String(BaseInfo) & "}");
       return TCL_OK;
    end Show_Base_Info_Command;
+
+   -- ****if* BasesList/Select_Bases_Command
+   -- FUNCTION
+   -- Show only bases with selected criteria
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Select_Bases_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Select_Bases_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      CriteriaBox: Ttk_ComboBox;
+   begin
+      CriteriaBox.Interp := Interp;
+      CriteriaBox.Name :=
+        New_String
+          (".paned.basesframe.canvas.bases.options." & CArgv.Arg(Argv, 1));
+      return Show_Bases_Command
+          (ClientData, Interp, Argc + 1, Argv & Get(CriteriaBox));
+   end Select_Bases_Command;
 
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
+      AddCommand("SelectBases", Select_Bases_Command'Access);
    end AddCommands;
 
 end BasesList;

@@ -8,6 +8,7 @@ set basesframe [ttk::frame $basescanvas.bases]
 grid [ttk::frame $basesframe.options]
 grid [ttk::label $basesframe.options.typeslbl -text {Type:}]
 grid [ttk::combobox $basesframe.options.types -state readonly] -row 0 -column 1
+bind $basesframe.options.types <<ComboboxSelected>> {SelectBases types}
 grid [ttk::label $basesframe.options.statuslbl -text {Status:}] -row 0 -column 2
 grid [ttk::combobox $basesframe.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}]] -row 0 -column 3
 $basesframe.options.status current 0
