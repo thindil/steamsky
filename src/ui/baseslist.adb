@@ -78,8 +78,8 @@ package body BasesList is
       BasesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ComboBox: Ttk_ComboBox;
-      ComboValues, BaseValues, BasesType, BasesOwner,
-      BasesStatus: Unbounded_String;
+      ComboValues, BaseValues, BasesType, BasesOwner, BasesStatus,
+      BasesName: Unbounded_String;
       BasesView: Ttk_Tree_View;
       SearchEntry: Ttk_Entry;
       FirstIndex: Natural := 0;
@@ -121,12 +121,14 @@ package body BasesList is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      SearchEntry.Interp := Interp;
+      SearchEntry.Name :=
+        New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
       if Argc = 1 or else CArgv.Arg(Argv, 1) /= "search" then
-         SearchEntry.Interp := Interp;
-         SearchEntry.Name :=
-           New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
+         Delete(SearchEntry, "0", "end");
+      elsif CArgv.Arg(Argv, 1) = "search" then
+         BasesName := To_Unbounded_String(CArgv.Arg(Argv, 2));
       end if;
-      Delete(SearchEntry, "0", "end");
       BasesView.Interp := Interp;
       BasesView.Name :=
         New_String(Widget_Image(BasesCanvas) & ".bases.list.view");
@@ -142,6 +144,11 @@ package body BasesList is
       BasesOwner := To_Unbounded_String(Get(ComboBox));
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
+            if BasesName /= Null_Unbounded_String
+              and then Index(SkyBases(I).Name, To_String(BasesName), 1) =
+                0 then
+               goto End_Of_Loop;
+            end if;
             if BasesStatus = To_Unbounded_String("Only not visited") and
               SkyBases(I).Visited.Year /= 0 then
                goto End_Of_Loop;
@@ -227,6 +234,7 @@ package body BasesList is
       configure
         (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
       ShowScreen("basesframe");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Bases_Command;
 
