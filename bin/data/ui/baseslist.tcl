@@ -16,7 +16,7 @@ $basesframe.options.status current 0
 grid [ttk::label $basesframe.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $basesframe.options.owner -state readonly] -row 0 -column 5
 bind $basesframe.options.owner <<ComboboxSelected>> {ShowBases owner}
-grid [ttk::entry $basesframe.options.search -validate key] -row 0 -column 6
+grid [ttk::entry $basesframe.options.search -validate key -validatecommand {ShowBases search %P}] -row 0 -column 6
 # Bases list
 grid [ttk::frame $basesframe.list] -sticky nwes
 set basesview [ttk::treeview $basesframe.list.view -yscrollcommand [list $basesframe.list.scrolly set] -show headings -columns [list name distance population size owner type]]
