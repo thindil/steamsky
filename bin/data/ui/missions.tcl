@@ -7,10 +7,10 @@ set missionsframe [ttk::frame $missionscanvas.missions]
 grid [ttk::treeview $missionsframe.missionsview -show headings -columns [list name distance]]
 $missionsframe.missionsview heading name -text {Name}
 $missionsframe.missionsview heading distance -text {Distance}
-bind $missionsframe.missionsview <<TreeviewSelect>> ShowAcceptedMissionInfo
+bind $missionsframe.missionsview <<TreeviewSelect>> ShowMissionInfo
 grid [ttk::frame $missionsframe.info] -column 1 -row 0
 grid [ttk::labelframe $missionsframe.info.info -text {Mission Info:}]
 grid [ttk::label $missionsframe.info.info.label]
 grid [ttk::label $missionsframe.info.info.ready -text {The mission is ready to return}]
-grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowAcceptedMission}]
-grid [ttk::button $missionsframe.info.set -text {Set mission as destination for ship} -command {SetAcceptedMission}]
+grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowMission}]
+grid [ttk::button $missionsframe.info.set -text {Set mission as destination for ship} -command {SetMission}]
