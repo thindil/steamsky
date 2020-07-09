@@ -23,8 +23,11 @@ package Missions.UI is
    -- ****f* MUI/ShowMissionsList
    -- FUNCTION
    -- Show the list of accepted missions to a player
+   -- PARAMETERS
+   -- Accepted - If true, show list of accepted missions. Otherwise show list
+   -- of available missions in the selected base
    -- SOURCE
-   procedure ShowMissionsList;
+   procedure ShowMissionsList(Accepted: Boolean := True);
    -- ****
 
 end Missions.UI;

@@ -38,6 +38,13 @@ with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
+   -- ****iv* MUI3/BaseIndex
+   -- FUNCTION
+   -- Index of the base in which available missions will be show
+   -- SOURCE
+   BaseIndex: Natural;
+   -- ****
+
    -- ****if* MUI3/Show_Mission_Info_Command
    -- FUNCTION
    -- Show information about the selected mission
@@ -204,12 +211,13 @@ package body Missions.UI is
       return TCL_OK;
    end Set_Mission_Command;
 
-   procedure ShowMissionsList is
+   procedure ShowMissionsList(Accepted: Boolean := True) is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       MissionsCanvas: Tk_Canvas;
       MissionsFrame: Ttk_Frame;
       MissionsView: Ttk_Tree_View;
+      List: Mission_Container.Vector;
    begin
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
@@ -224,8 +232,7 @@ package body Missions.UI is
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator &
-            "missions.tcl");
+            To_String(DataDirectory) & "ui" & Dir_Separator & "missions.tcl");
          Bind(MissionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          AddCommand("ShowMissionInfo", Show_Mission_Info_Command'Access);
          AddCommand("ShowMission", Show_Mission_Command'Access);
@@ -234,21 +241,23 @@ package body Missions.UI is
          ShowSkyMap(True);
          return;
       end if;
+      if Accepted then
+         List := AcceptedMissions;
+         BaseIndex := 0;
+      end if;
       MissionsView.Interp := Get_Context;
       MissionsView.Name :=
         New_String(Widget_Image(MissionsCanvas) & ".missions.missionsview");
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
-      for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
-         case AcceptedMissions(I).MType is
+      for I in List.First_Index .. List.Last_Index loop
+         case List(I).MType is
             when Deliver =>
                Insert
                  (MissionsView,
                   "{} end -id" & Positive'Image(I) &
                   " -values [list {Deliver item to base}" &
                   Positive'Image
-                    (CountDistance
-                       (AcceptedMissions(I).TargetX,
-                        AcceptedMissions(I).TargetY)) &
+                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
             when Patrol =>
                Insert
@@ -256,9 +265,7 @@ package body Missions.UI is
                   "{} end -id" & Positive'Image(I) &
                   " -values [list {Patrol area}" &
                   Positive'Image
-                    (CountDistance
-                       (AcceptedMissions(I).TargetX,
-                        AcceptedMissions(I).TargetY)) &
+                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
             when Destroy =>
                Insert
@@ -266,9 +273,7 @@ package body Missions.UI is
                   "{} end -id" & Positive'Image(I) &
                   " -values [list {Destroy ship}" &
                   Positive'Image
-                    (CountDistance
-                       (AcceptedMissions(I).TargetX,
-                        AcceptedMissions(I).TargetY)) &
+                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
             when Explore =>
                Insert
@@ -276,9 +281,7 @@ package body Missions.UI is
                   "{} end -id" & Positive'Image(I) &
                   " -values [list {Explore area}" &
                   Positive'Image
-                    (CountDistance
-                       (AcceptedMissions(I).TargetX,
-                        AcceptedMissions(I).TargetY)) &
+                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
             when Passenger =>
                Insert
@@ -286,9 +289,7 @@ package body Missions.UI is
                   "{} end -id" & Positive'Image(I) &
                   " -values [list {Transport passenger to base}" &
                   Positive'Image
-                    (CountDistance
-                       (AcceptedMissions(I).TargetX,
-                        AcceptedMissions(I).TargetY)) &
+                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
          end case;
       end loop;
