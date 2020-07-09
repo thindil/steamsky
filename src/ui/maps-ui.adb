@@ -96,8 +96,10 @@ package body Maps.UI is
          "-label {List of known bases} -command ShowBases");
       Menu.Add
         (GameMenu, "command",
-         "-label {List of known events} -command {ShowEvents}");
-      Menu.Add(GameMenu, "command", "-label {Accepted missions}");
+         "-label {List of known events} -command ShowEvents");
+      Menu.Add
+        (GameMenu, "command",
+         "-label {Accepted missions} -command ShowAcceptedMissions");
       Menu.Add(GameMenu, "command", "-label {Stories}");
       Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add

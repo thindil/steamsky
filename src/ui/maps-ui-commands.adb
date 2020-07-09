@@ -42,6 +42,7 @@ with Game; use Game;
 with MainMenu; use MainMenu;
 with Messages; use Messages;
 with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 with OrdersMenu; use OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -931,6 +932,41 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Events_Command;
 
+   -- ****if* MapCommands/Show_Accepted_Missions_Command
+   -- FUNCTION
+   -- Show the list of accepted missions
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Accepted_Missions_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Accepted_Missions_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+   begin
+      if AcceptedMissions.Length = 0 then
+         ShowMessage
+            ("You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.");
+         return TCL_OK;
+      end if;
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      ShowMissionsList;
+      return TCL_OK;
+   end Show_Accepted_Missions_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -949,6 +985,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowStats", Show_Stats_Command'Access);
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
       AddCommand("ShowEvents", Show_Events_Command'Access);
+      AddCommand("ShowAcceptedMissions", Show_Accepted_Missions_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
