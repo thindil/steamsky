@@ -38,5 +38,5 @@ grid [ttk::label $baseframe.info.reputationlbl -text {Reputation:}]
 grid [ttk::progressbar $baseframe.info.minusreputation] -row 1 -column 1
 grid [ttk::progressbar $baseframe.info.plusreputation] -row 1 -column 2
 # Base options
-grid [ttk::button $baseframe.show -text {Show base on map}]
+grid [ttk::button $baseframe.show -text {Show base on map} -command ShowBase]
 grid [ttk::button $baseframe.set -text {Set base as destination for ship}]
