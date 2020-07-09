@@ -39,7 +39,7 @@ with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
-   -- ****if* Messages.UI/ShowMessage
+   -- ****if* MUI2/ShowMessage
    -- FUNCTION
    -- Show the selected message to a player
    -- PARAMETERS
@@ -209,7 +209,7 @@ package body Messages.UI is
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
 
-   -- ****if* Messages.UI/Delete_Messages_Command
+   -- ****if* MUI2/Delete_Messages_Command
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
