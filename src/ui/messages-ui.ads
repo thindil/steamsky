@@ -20,7 +20,7 @@
 package Messages.UI is
 -- ****
 
-   -- ****f* MUI/AddCommands
+   -- ****f* MUI2/AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the messages list
    -- SOURCE
