@@ -146,12 +146,12 @@ package body OrdersMenu is
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Add
                  (OrdersMenu, "command",
-                  "-label {Ask for events} -underline 8 -command {AskForEvents}");
+                  "-label {Ask for events} -underline 8 -command AskForEvents");
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
                Add
                  (OrdersMenu, "command",
-                  "-label {Ask for bases} -underline 8 -command {AskForBases}");
+                  "-label {Ask for bases} -underline 8 -command AskForBases");
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("temple")) then
@@ -248,7 +248,7 @@ package body OrdersMenu is
                   end if;
                end loop;
                if MissionsLimit > 0 then
-                  Add(OrdersMenu, "command", "-label {Missions} -underline 0");
+                  Add(OrdersMenu, "command", "-label Missions -underline 0 -command {ShowMissions available}");
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
