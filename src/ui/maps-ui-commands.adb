@@ -48,6 +48,8 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Statistics.UI; use Statistics.UI;
+with Stories; use Stories;
+with Stories.UI; use Stories.UI;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
@@ -971,6 +973,40 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Missions_Command;
 
+   -- ****if* MapCommands/Show_Stories_Command
+   -- FUNCTION
+   -- Show the list of know stories
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Stories_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Stories_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+   begin
+      if FinishedStories.Length = 0 then
+         ShowMessage("You didn't discovered any story yet.");
+         return TCL_OK;
+      end if;
+      ShowStories;
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      return TCL_OK;
+   end Show_Stories_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -990,6 +1026,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
       AddCommand("ShowEvents", Show_Events_Command'Access);
       AddCommand("ShowMissions", Show_Missions_Command'Access);
+      AddCommand("ShowStories", Show_Stories_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

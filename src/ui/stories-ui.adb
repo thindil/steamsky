@@ -13,20 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox; use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
+with Factions; use Factions;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -56,12 +63,122 @@ package body Stories.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced (ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       StoryView: Tk_Text;
+      TargetText: Unbounded_String;
+      Tokens: Slice_Set;
+      Step: Step_Data;
+      StoryIndex: Positive;
+      StoriesBox: Ttk_ComboBox;
+      Button: Ttk_Button;
    begin
+      StoriesBox.Interp := Interp;
+      StoriesBox.Name :=
+        New_String(".paned.storiesframe.canvas.stories.options.titles");
+      StoryIndex := Natural'Value(Current(StoriesBox));
       StoryView.Interp := Interp;
       StoryView.Name :=
         New_String(".paned.storiesframe.canvas.stories.list.view");
+      configure(StoryView, "-state normal");
+      Delete(StoryView, "1.0", "end");
+      for StepText of FinishedStories(StoryIndex).StepsTexts loop
+         Insert(StoryView, "end", To_String(StepText) & LF & LF);
+      end loop;
+      Button.Interp := Interp;
+      Button.Name :=
+        New_String(".paned.storiesframe.canvas.stories.options.show");
+      if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
+        FinishedStories(StoryIndex).StepsAmount then
+         Insert(StoryView, "end", To_String(GetCurrentStoryText) & LF);
+         if CurrentStory.Data /= Null_Unbounded_String then
+            if CurrentStory.CurrentStep = 0 then
+               Step := Stories_List(CurrentStory.Index).StartingStep;
+            elsif CurrentStory.CurrentStep > 0 then
+               Step :=
+                 Stories_List(CurrentStory.Index).Steps
+                   (CurrentStory.CurrentStep);
+            else
+               Step := Stories_List(CurrentStory.Index).FinalStep;
+            end if;
+            Create(Tokens, To_String(CurrentStory.Data), ";");
+            case Step.FinishCondition is
+               when ASKINBASE =>
+                  if Slice_Count(Tokens) < 2 then
+                     TargetText :=
+                       To_Unbounded_String(" You must travel to base ") &
+                       CurrentStory.Data & To_Unbounded_String(" at X:");
+                     for I in SkyBases'Range loop
+                        if SkyBases(I).Name = CurrentStory.Data then
+                           Append
+                             (TargetText, Positive'Image(SkyBases(I).SkyX));
+                           Append(TargetText, " Y:");
+                           Append
+                             (TargetText, Positive'Image(SkyBases(I).SkyY));
+                           exit;
+                        end if;
+                     end loop;
+                  else
+                     TargetText :=
+                       To_Unbounded_String(" You can ask in any base. ");
+                  end if;
+               when DESTROYSHIP =>
+                  TargetText :=
+                    To_Unbounded_String(" You must find ") &
+                    ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
+                      .Name &
+                    To_Unbounded_String(" at X:") &
+                    To_Unbounded_String(Slice(Tokens, 1)) &
+                    To_Unbounded_String(" Y:") &
+                    To_Unbounded_String(Slice(Tokens, 2));
+               when EXPLORE =>
+                  TargetText :=
+                    To_Unbounded_String(" You must travel to X:") &
+                    To_Unbounded_String(Slice(Tokens, 1)) &
+                    To_Unbounded_String(" Y:") &
+                    To_Unbounded_String(Slice(Tokens, 2));
+               when LOOT =>
+                  TargetText :=
+                    To_Unbounded_String(" You must loot: ") &
+                    Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
+                    To_Unbounded_String(" from ");
+                  if Slice(Tokens, 2) = "any" then
+                     Append(TargetText, "any ");
+                     if Factions_Container.Contains
+                         (Factions_List,
+                          GetStepData(Step.FinishData, "faction")) then
+                        Append
+                          (TargetText,
+                           Factions_List
+                             (GetStepData(Step.FinishData, "faction"))
+                             .Name);
+                        Append(TargetText, " ship.");
+                     end if;
+                  else
+                     for I in ProtoShips_List.Iterate loop
+                        if ProtoShips_Container.Key(I) =
+                          To_Unbounded_String(Slice(Tokens, 2)) then
+                           Append(TargetText, ProtoShips_List(I).Name);
+                           Append(TargetText, ".");
+                           exit;
+                        end if;
+                     end loop;
+                  end if;
+               when ANY =>
+                  null;
+            end case;
+         end if;
+         Insert(StoryView, "end", To_String(TargetText) & LF);
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         Button.Name :=
+           New_String(".paned.storiesframe.canvas.stories.options.set");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         Button.Name :=
+           New_String(".paned.storiesframe.canvas.stories.options.set");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      end if;
+      configure(StoryView, "-state disabled");
       return TCL_OK;
    end Show_Story_Command;
 
@@ -161,9 +278,11 @@ package body Stories.UI is
          return;
       end if;
       StoriesBox.Interp := Get_Context;
-      StoriesBox.Name := New_String(Widget_Image(StoriesCanvas) & ".options.titles");
+      StoriesBox.Name :=
+        New_String(Widget_Image(StoriesCanvas) & ".stories.options.titles");
       for FinishedStory of FinishedStories loop
-         Append(StoriesList, " {" & Stories_List(FinishedStory.Index).Name & "}");
+         Append
+           (StoriesList, " {" & Stories_List(FinishedStory.Index).Name & "}");
       end loop;
       configure(StoriesBox, "-values [list " & To_String(StoriesList) & "]");
       Current(StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
@@ -172,7 +291,8 @@ package body Stories.UI is
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      StoriesFrame.Name := New_String(Widget_Image(StoriesCanvas) & ".stories");
+      StoriesFrame.Name :=
+        New_String(Widget_Image(StoriesCanvas) & ".stories");
       Canvas_Create
         (StoriesCanvas, "window",
          "[expr " & Winfo_Get(StoriesFrame, "reqwidth") & " / 2] [expr " &

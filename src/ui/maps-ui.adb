@@ -100,7 +100,7 @@ package body Maps.UI is
       Menu.Add
         (GameMenu, "command",
          "-label {Accepted missions} -command {ShowMissions accepted}");
-      Menu.Add(GameMenu, "command", "-label {Stories}");
+      Menu.Add(GameMenu, "command", "-label {Stories} -command ShowStories");
       Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add
         (GameMenu, "command", "-label {Game statistics} -command ShowStats");
