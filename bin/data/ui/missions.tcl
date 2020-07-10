@@ -10,7 +10,12 @@ $missionsframe.missionsview heading distance -text {Distance}
 bind $missionsframe.missionsview <<TreeviewSelect>> ShowMissionInfo
 grid [ttk::frame $missionsframe.info] -column 1 -row 0
 grid [ttk::labelframe $missionsframe.info.info -text {Mission Info:}]
-grid [ttk::label $missionsframe.info.info.label]
-grid [ttk::label $missionsframe.info.info.ready -text {The mission is ready to return}]
+grid [text $missionsframe.info.info.text -wrap char -height 10 -width 40]
+$missionsframe.info.info.text tag configure red -foreground red
+$missionsframe.info.info.text tag configure yellow -foreground yellow
+set reward 1.0
+grid [ttk::scale $missionsframe.info.reward -from 0.0 -to 2.0 -variable reward]
+tooltip::tooltip $missionsframe.info.reward "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation."
+grid [ttk::label $missionsframe.info.missioninfo]
 grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowMission}]
-grid [ttk::button $missionsframe.info.set -text {Set mission as destination for ship} -command {SetMission}]
+grid [ttk::button $missionsframe.info.set -command {SetMission}]
