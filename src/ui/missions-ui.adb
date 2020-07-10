@@ -162,6 +162,8 @@ package body Missions.UI is
       end case;
       Append(MissionInfo, LF & "Time limit:");
       MinutesToDate(Mission.Time, MissionInfo);
+      Mission.Multiplier :=
+        RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       Append
         (MissionInfo,
          LF & "Base reward:" &
