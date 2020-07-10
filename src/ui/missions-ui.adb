@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -79,6 +80,7 @@ package body Missions.UI is
       Button: Ttk_Button;
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
+      MissionScale: Ttk_Scale;
    begin
       MissionsView.Interp := Interp;
       MissionsView.Name :=
@@ -170,6 +172,9 @@ package body Missions.UI is
       Button.Name :=
         New_String(".paned.missionsframe.canvas.missions.info.set");
       State(Button, "!disabled");
+      MissionScale.Interp := Interp;
+      MissionScale.Name :=
+        New_String(".paned.missionsframe.canvas.missions.info.reward");
       if BaseIndex > 0 then
          declare
             Distance: Positive;
@@ -187,8 +192,10 @@ package body Missions.UI is
             TravelInfo(MissionInfo, Distance, True);
          end;
          configure(Button, "-text {Accept mission}");
+         Tcl.Tk.Ada.Grid.Grid(MissionScale);
       else
          configure(Button, "-text {Set mission as destination for ship}");
+         Tcl.Tk.Ada.Grid.Grid_Remove(MissionScale);
       end if;
       Insert(MissionText, "end", "{" & To_String(MissionInfo) & "}");
       configure(MissionText, "-state disabled");
@@ -421,6 +428,10 @@ package body Missions.UI is
          RefreshMissionsList(AcceptedMissions);
       else
          BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+         if SkyBases(BaseIndex).Missions.Length = 0 then
+            ShowSkyMap(True);
+            return;
+         end if;
          RefreshMissionsList(SkyBases(BaseIndex).Missions);
       end if;
       configure
