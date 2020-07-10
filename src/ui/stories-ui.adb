@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
@@ -22,12 +21,12 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox; use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases; use Bases;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -39,7 +38,7 @@ package body Stories.UI is
 
    -- ****if* SUI3/Show_Story_Command
    -- FUNCTION
-   -- Show the current story event on map
+   -- Show the current story information
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
@@ -57,19 +56,44 @@ package body Stories.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      StoriesView: Ttk_Tree_View;
-      EventIndex: Positive;
+      pragma Unreferenced (ClientData, Argc, Argv);
+      StoryView: Tk_Text;
    begin
-      StoriesView.Interp := Interp;
-      StoriesView.Name :=
-        New_String(".paned.storiesframe.canvas.stories.storiesview");
-      StoryIndex := Positive'Value(Selection(StoriesView));
-      CenterX := Stories_List(StoryIndex).SkyX;
-      CenterY := Stories_List(StoryIndex).SkyY;
-      ShowSkyMap(True);
+      StoryView.Interp := Interp;
+      StoryView.Name :=
+        New_String(".paned.storiesframe.canvas.stories.list.view");
       return TCL_OK;
    end Show_Story_Command;
+
+   -- ****if* SUI3/Show_Story_Location_Command
+   -- FUNCTION
+   -- Show the current story event on map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Story_Location_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Story_Location_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      NewX, NewY: Positive := 1;
+   begin
+      GetStoryLocation(NewX, NewY);
+      CenterX := NewX;
+      CenterY := NewY;
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Show_Story_Location_Command;
 
    -- ****if* SUI3/Set_Story_Command
    -- FUNCTION
@@ -91,21 +115,16 @@ package body Stories.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      StoriesView: Ttk_Tree_View;
-      StoryIndex: Positive;
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      NewX, NewY: Positive := 1;
    begin
-      StoriesView.Interp := Interp;
-      StoriesView.Name :=
-        New_String(".paned.storiesframe.canvas.stories.storiesview");
-      StoryIndex := Positive'Value(Selection(StoriesView));
-      if Stories_List(StoryIndex).SkyX = PlayerShip.SkyX and
-        Stories_List(StoryIndex).SkyY = PlayerShip.SkyY then
-         ShowMessage("You are at this story event now.");
+      GetStoryLocation(NewX, NewY);
+      if NewX = PlayerShip.SkyX and NewY = PlayerShip.SkyY then
+         ShowMessage("You are at this story location now.");
          return TCL_OK;
       end if;
-      PlayerShip.DestinationX := Stories_List(StoryIndex).SkyX;
-      PlayerShip.DestinationY := Stories_List(StoryIndex).SkyY;
+      PlayerShip.DestinationX := NewX;
+      PlayerShip.DestinationY := NewY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       ShowSkyMap(True);
@@ -117,7 +136,8 @@ package body Stories.UI is
       Paned: Ttk_PanedWindow;
       StoriesCanvas: Tk_Canvas;
       StoriesFrame: Ttk_Frame;
-      StoriesView: Ttk_Tree_View;
+      StoriesBox: Ttk_ComboBox;
+      StoriesList: Unbounded_String;
    begin
       Paned.Interp := Get_Context;
       Paned.Name := New_String(".paned");
@@ -133,17 +153,20 @@ package body Stories.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "stories.tcl");
          Bind(StoriesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         AddCommand("ShowEvent", Show_Story_Command'Access);
-         AddCommand("SetEvent", Set_Story_Command'Access);
+         AddCommand("ShowStory", Show_Story_Command'Access);
+         AddCommand("ShowStoryLocation", Show_Story_Location_Command'Access);
+         AddCommand("SetStory", Set_Story_Command'Access);
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return;
       end if;
-      StoriesView.Interp := Get_Context;
-      StoriesView.Name :=
-        New_String(Widget_Image(StoriesCanvas) & ".stories.storiesview");
-      Delete(StoriesView, "[list " & Children(StoriesView, "{}") & "]");
-      Selection_Set(StoriesView, "[list 1]");
+      StoriesBox.Interp := Get_Context;
+      StoriesBox.Name := New_String(Widget_Image(StoriesCanvas) & ".options.titles");
+      for FinishedStory of FinishedStories loop
+         Append(StoriesList, " {" & Stories_List(FinishedStory.Index).Name & "}");
+      end loop;
+      configure(StoriesBox, "-values [list " & To_String(StoriesList) & "]");
+      Current(StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
       configure
         (StoriesCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &

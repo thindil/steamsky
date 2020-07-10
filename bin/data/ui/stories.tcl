@@ -7,10 +7,11 @@ set storiesframe [ttk::frame $storiescanvas.stories]
 # List of stories options
 grid [ttk::frame $storiesframe.options]
 grid [ttk::combobox $storiesframe.options.titles -state readonly]
-grid [ttk::button $storiesframe.options.show -text {Show on map}] -row 0 -column 1
-grid [ttk::button $storiesframe.options.set -text {Set as destintion for ship}] -row 0 -column 2
+bind $storiesframe.options.titles <<ComboboxSelected>> ShowStory
+grid [ttk::button $storiesframe.options.show -text {Show on map} -command ShowStoryLocation] -row 0 -column 1
+grid [ttk::button $storiesframe.options.set -text {Set as destintion for ship} -command SetStory] -row 0 -column 2
 # stories list
 grid [ttk::frame $storiesframe.list] -sticky nwes
-set storiesview [ttk::treeview $storiesframe.list.view -yscrollcommand [list $storiesframe.list.scrolly set] -show tree -selectmode none]
+set storiesview [text $storiesframe.list.view -yscrollcommand [list $storiesframe.list.scrolly set]]
 grid $storiesview -sticky nwes
 grid [ttk::scrollbar $storiesframe.list.scrolly -orient vertical -command [list $storiesview yview]] -row 0 -column 1 -sticky ns
