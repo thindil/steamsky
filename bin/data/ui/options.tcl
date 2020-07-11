@@ -270,6 +270,14 @@ grid [ttk::button $ioptions.setdefault -text {Set default size for fonts}] -colu
 $optionsframe.notebook add $ioptions -text {Interface}
 # Info options
 set infooptions [ttk::frame $optionsframe.notebook.info]
+grid [ttk::label $infooptions.lbl1 -text {Data directory path:}]
+grid [ttk::label $infooptions.data] -row 0 -column 1
+grid [ttk::label $infooptions.lbl2 -text {Save directory path:}]
+grid [ttk::label $infooptions.save] -row 1 -column 1
+grid [ttk::label $infooptions.lbl3 -text {Documentation directory path:}]
+grid [ttk::label $infooptions.docs] -row 2 -column 1
+grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}]
+grid [ttk::label $infooptions.mods] -row 3 -column 1
 $optionsframe.notebook add $infooptions -text {Info}
 # test code
 pack $optionsframe -fill both -expand true
