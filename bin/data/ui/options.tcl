@@ -118,6 +118,57 @@ bind $moveoptions.fullspeed <KeyPress> {SetShortcut %W %K}
 $optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
 set menuoptions [ttk::frame $optionsframe.notebook.menu]
+grid [ttk::label $menuoptions.lbl1 -text {Ship information:}]
+grid [ttk::entry $menuoptions.shipinfo] -row 0 -column 1
+bind $menuoptions.shipinfo <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl2 -text {Ship cargo information:}]
+grid [ttk::entry $menuoptions.cargo] -row 1 -column 1
+bind $menuoptions.cargo <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl3 -text {Crew information:}]
+grid [ttk::entry $menuoptions.crew] -row 2 -column 1
+bind $menuoptions.crew <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl4 -text {Ship orders:}]
+grid [ttk::entry $menuoptions.orders] -row 3 -column 1
+bind $menuoptions.orders <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl5 -text {Crafting orders:}]
+grid [ttk::entry $menuoptions.crafts] -row 4 -column 1
+bind $menuoptions.crafts <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl6 -text {Last messages:}]
+grid [ttk::entry $menuoptions.messages] -row 5 -column 1
+bind $menuoptions.messages <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl7 -text {List of known bases:}]
+grid [ttk::entry $menuoptions.bases] -row 6 -column 1
+bind $menuoptions.bases <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl8 -text {List of known events:}]
+grid [ttk::entry $menuoptions.events] -row 7 -column 1
+bind $menuoptions.events <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl9 -text {List of accepted missions:}]
+grid [ttk::entry $menuoptions.missions] -row 8 -column 1
+bind $menuoptions.missions <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl10 -text {Stories:}]
+grid [ttk::entry $menuoptions.stories] -row 9 -column 1
+bind $menuoptions.stories <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}]
+grid [ttk::entry $menuoptions.waitorders] -row 10 -column 1
+bind $menuoptions.waitorders <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}]
+grid [ttk::entry $menuoptions.gamestats] -row 11 -column 1
+bind $menuoptions.gamestats <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl13 -text {Help:}]
+grid [ttk::entry $menuoptions.help] -row 12 -column 1
+bind $menuoptions.help <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl14 -text {Game options:}]
+grid [ttk::entry $menuoptions.gameoptions] -row 13 -column 1
+bind $menuoptions.gameoptions <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}]
+grid [ttk::entry $menuoptions.quit] -row 14 -column 1
+bind $menuoptions.quit <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}]
+grid [ttk::entry $menuoptions.resign] -row 15 -column 1
+bind $menuoptions.resign <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $menuoptions.lbl17 -text {Show menu:}]
+grid [ttk::entry $menuoptions.menu] -row 16 -column 1
+bind $menuoptions.menu <KeyPress> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
 set mapoptions [ttk::frame $optionsframe.notebook.map]
