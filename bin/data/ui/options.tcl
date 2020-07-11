@@ -241,6 +241,32 @@ bind $mapoptions.mapoptions <KeyPress> {SetShortcut %W %K}
 $optionsframe.notebook add $mapoptions -text {Map keys}
 # Interface options
 set ioptions [ttk::frame $optionsframe.notebook.interface]
+grid [ttk::label $ioptions.lbl1 -text {Animations enabled:}]
+grid [ttk::checkbutton $ioptions.animations] -row 0 -column 1
+grid [ttk::label $ioptions.lbl2 -text {Type of animations:}]
+grid [ttk::combobox $ioptions.speed -state readonly -values [list {Crossfade} {Slide right} {Slide left}] -width 10] -row 1 -column 1
+grid [ttk::label $ioptions.lbl3 -text {Interface theme:}]
+grid [ttk::combobox $ioptions.theme -state readonly -width 10] -row 2 -column 1
+grid [ttk::label $ioptions.lbl4 -text {Show tooltips:}]
+grid [ttk::checkbutton $ioptions.showtooltips] -row 3 -column 1
+grid [ttk::label $ioptions.lbl5 -text {Show last messages:}]
+grid [ttk::checkbutton $ioptions.showmessages] -row 4 -column 1
+grid [ttk::label $ioptions.lbl6 -text {Full screen mode:}]
+grid [ttk::checkbutton $ioptions.fullscreen] -row 5 -column 1
+grid [ttk::label $ioptions.lbl7 -text {Full screen shortcut:}]
+grid [ttk::entry $ioptions.fullscreenkey] -row 6 -column 1
+bind $ioptions.fullscreenkey <KeyPress> {SetShortcut %W %K}
+grid [ttk::label $ioptions.lbl8 -text {Close messages after:}]
+grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %S %s 60}] -row 7 -column 1
+grid [ttk::label $ioptions.lbl9 -text {Show numeric values:}]
+grid [ttk::checkbutton $ioptions.shownumbers] -row 8 -column 1
+grid [ttk::label $ioptions.lbl10 -text {Size of map font:}]
+grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 9 -column 1
+grid [ttk::label $ioptions.lbl11 -text {Size of help font:}]
+grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 10 -column 1
+grid [ttk::label $ioptions.lbl12 -text {Size of interface font:}]
+grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 11 -column 1
+grid [ttk::button $ioptions.setdefault -text {Set default size for fonts}] -columnspan 2
 $optionsframe.notebook add $ioptions -text {Interface}
 # Info options
 set infooptions [ttk::frame $optionsframe.notebook.info]
