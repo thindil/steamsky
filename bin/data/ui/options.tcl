@@ -26,17 +26,17 @@ grid [ttk::checkbutton $goptions.autoaskforbases] -row 5 -column 1
 grid [ttk::label $goptions.lbl7 -text {Auto ask for events:}]
 grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1
 grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}]
-grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key] -row 7 -column 1
+grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 7 -column 1
 grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}]
-grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key] -row 8 -column 1
+grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 8 -column 1
 grid [ttk::label $goptions.lbl10 -text {Low level of food:}]
-grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key] -row 9 -column 1
+grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 9 -column 1
 grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}]
 grid [ttk::combobox $goptions.automovestop -state readonly -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10] -row 10 -column 1
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}]
-grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key] -row 11 -column 1
+grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %S %s 5000}] -row 11 -column 1
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}]
-grid [ttk::spinbox $goptions.savedmessages -from 5 -to 20 -validate key] -row 12 -column 1
+grid [ttk::spinbox $goptions.savedmessages -from 5 -to 20 -validate key -validatecommand {ValidateSpinbox %S %s 20}] -row 12 -column 1
 grid [ttk::label $goptions.lbl14 -text {Messages order:}]
 grid [ttk::combobox $goptions.messagesorder -state readonly -values [list {Older messages first} {Newer messages first}] -width 16] -row 13 -column 1
 grid [ttk::label $goptions.lbl15 -text {Autosave game:}]
