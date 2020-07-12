@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -78,6 +79,8 @@ package body GameOptions is
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Add(Paned, ControlsFrame);
+         SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+         Tcl_Eval(Interp, "update");
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -86,7 +89,6 @@ package body GameOptions is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       -- Fill UI with data
       -- End of fill
-      Forget(Paned, ControlsFrame);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
@@ -104,7 +106,11 @@ package body GameOptions is
       configure
         (OptionsCanvas,
          "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
-      ShowScreen("optionsframe");
+      OptionsFrame.Name := New_String(Widget_Image(Paned) & ".optionsframe");
+      Add(Paned, OptionsFrame);
+      OptionsFrame.Name := New_String(Widget_Image(Paned) & ".mapframe");
+      Forget(Paned, OptionsFrame);
+      Forget(Paned, ControlsFrame);
       return TCL_OK;
    end Show_Options_Command;
 
