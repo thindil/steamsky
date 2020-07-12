@@ -1,14 +1,9 @@
-# test code
-package require tooltip
-ttk::frame .paned
-set optionsframe [ttk::frame .paned.options]
-# normal code
-#ttk::frame .paned.optionsframe
-#set optionscanvas [canvas .paned.optionsframe.canvas -yscrollcommand [list .paned.optionsframe.scrolly set] -xscrollcommand [list .paned.optionsframe.scrollx set]]
-#grid $optionscanvas -sticky nwes
-#grid [ttk::scrollbar .paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-#grid [ttk::scrollbar .paned.optionsframe.scrolly -orient vertical -command [list $optionscanvas yview]] -row 0 -column 1 -sticky ns
-#set optionsframe [ttk::frame $optionscanvas.options]
+ttk::frame .paned.optionsframe
+set optionscanvas [canvas .paned.optionsframe.canvas -yscrollcommand [list .paned.optionsframe.scrolly set] -xscrollcommand [list .paned.optionsframe.scrollx set]]
+grid $optionscanvas -sticky nwes
+grid [ttk::scrollbar .paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
+grid [ttk::scrollbar .paned.optionsframe.scrolly -orient vertical -command [list $optionscanvas yview]] -row 0 -column 1 -sticky ns
+set optionsframe [ttk::frame $optionscanvas.options]
 grid [ttk::notebook $optionsframe.notebook] -sticky nwes
 # General options
 set goptions [ttk::frame $optionsframe.notebook.general]
@@ -340,6 +335,3 @@ tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications
 grid [ttk::label $infooptions.mods] -row 3 -column 1
 tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
 $optionsframe.notebook add $infooptions -text {Info}
-# test code
-pack $optionsframe -fill both -expand true
-pack .paned -fill both -expand true
