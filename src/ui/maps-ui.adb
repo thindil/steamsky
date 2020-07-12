@@ -49,6 +49,7 @@ with Crew.UI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with GameOptions;
 with Help.UI; use Help.UI;
 with Items; use Items;
 with MainMenu; use MainMenu;
@@ -106,7 +107,8 @@ package body Maps.UI is
         (GameMenu, "command", "-label {Game statistics} -command ShowStats");
       Menu.Add
         (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
-      Menu.Add(GameMenu, "command", "-label {Game options}");
+      Menu.Add
+        (GameMenu, "command", "-label {Game options} -command ShowOptions");
       Menu.Add
         (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
@@ -866,6 +868,7 @@ package body Maps.UI is
          Crafts.UI.AddCommands;
          Messages.UI.AddCommands;
          BasesList.AddCommands;
+         GameOptions.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
