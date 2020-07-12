@@ -324,13 +324,21 @@ $optionsframe.notebook add $ioptions -text {Interface}
 # Info options
 set infooptions [ttk::frame $optionsframe.notebook.info]
 grid [ttk::label $infooptions.lbl1 -text {Data directory path:}]
+tooltip::tooltip $infooptions.lbl1 {Place where all standard game data are.}
 grid [ttk::label $infooptions.data] -row 0 -column 1
+tooltip::tooltip $infooptions.data {Place where all standard game data are.}
 grid [ttk::label $infooptions.lbl2 -text {Save directory path:}]
+tooltip::tooltip $infooptions.lbl2 {Place where all game saves and configuration files are.}
 grid [ttk::label $infooptions.save] -row 1 -column 1
+tooltip::tooltip $infooptions.save {Place where all game saves and configuration files are.}
 grid [ttk::label $infooptions.lbl3 -text {Documentation directory path:}]
+tooltip::tooltip $infooptions.lbl3 {Place where are game documentation files.}
 grid [ttk::label $infooptions.docs] -row 2 -column 1
+tooltip::tooltip $infooptions.docs {Place where are game documentation files.}
 grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}]
+tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications files.}
 grid [ttk::label $infooptions.mods] -row 3 -column 1
+tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
 $optionsframe.notebook add $infooptions -text {Info}
 # test code
 pack $optionsframe -fill both -expand true
