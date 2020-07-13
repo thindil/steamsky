@@ -27,8 +27,10 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -60,6 +62,7 @@ package body GameOptions is
       OptionsCanvas: Tk_Canvas;
       OptionsFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      Label: Ttk_Label;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -69,11 +72,28 @@ package body GameOptions is
       OptionsFrame.Name := New_String(Widget_Image(Paned) & ".optionsframe");
       OptionsCanvas.Interp := Interp;
       OptionsCanvas.Name := New_String(Widget_Image(OptionsFrame) & ".canvas");
+      Label.Interp := Interp;
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         Label.Name :=
+           New_String
+             (Widget_Image(OptionsCanvas) & ".options.notebook.info.data");
+         configure(Label, "-text {" & To_String(DataDirectory) & "}");
+         Label.Name :=
+           New_String
+             (Widget_Image(OptionsCanvas) & ".options.notebook.info.save");
+         configure(Label, "-text {" & To_String(SaveDirectory) & "}");
+         Label.Name :=
+           New_String
+             (Widget_Image(OptionsCanvas) & ".options.notebook.info.docs");
+         configure(Label, "-text {" & To_String(DocDirectory) & "}");
+         Label.Name :=
+           New_String
+             (Widget_Image(OptionsCanvas) & ".options.notebook.info.mods");
+         configure(Label, "-text {" & To_String(ModsDirectory) & "}");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -81,6 +101,8 @@ package body GameOptions is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      OptionsFrame.Name :=
+        New_String(Widget_Image(OptionsCanvas) & ".options.notebook.general");
       -- Fill UI with data
       -- End of fill
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
