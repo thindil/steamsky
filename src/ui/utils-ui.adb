@@ -518,7 +518,7 @@ package body Utils.UI is
 
    procedure ShowScreen(NewScreenName: String) is
       Paned: Ttk_PanedWindow;
-      SubWindow: Ttk_Frame;
+      SubWindow, MessagesFrame: Ttk_Frame;
       SubWindows: Unbounded_String;
    begin
       Paned.Interp := Get_Context;
@@ -535,6 +535,14 @@ package body Utils.UI is
       SubWindow.Name := New_String(".paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      MessagesFrame.Interp := Get_Context;
+      MessagesFrame.Name := New_String(".paned.controls.messages");
+      if NewScreenName = "optionsframe" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
+         SashPos(Paned, "0", Winfo_Get(Paned, "height"));
+      else
+         Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
+      end if;
       Paned.Name := New_String(".paned.controls.buttons");
       if NewScreenName = "mapframe" then
          Tcl.Tk.Ada.Grid.Grid(Paned);
