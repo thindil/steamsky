@@ -161,6 +161,40 @@ package body GameOptions is
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".autosave");
       Current
         (ComboBox, Natural'Image(AutoSaveType'Pos(GameSettings.AutoSave)));
+      OptionsFrame.Name :=
+        New_String
+          (Widget_Image(OptionsCanvas) & ".options.notebook.interface");
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".animations",
+         Trim(Natural'Image(GameSettings.AnimationsEnabled), Left));
+      ComboBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".animationtype");
+      Current(ComboBox, Natural'Image(GameSettings.AnimationType - 1));
+      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
+      Set(ComboBox, To_String(GameSettings.InterfaceTheme));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.ShowTooltips)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".showmessages",
+         Trim
+           (Natural'Image(Boolean'Pos(GameSettings.ShowLastMessages)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".fullscreen",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.FullScreen)), Left));
+      SpinBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".closemessages");
+      Set(SpinBox, Natural'Image(GameSettings.AutoCloseMessagesTime));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".shownumbers",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.ShowNumbers)), Left));
+      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".mapfont");
+      Set(SpinBox, Natural'Image(GameSettings.MapFontSize));
+      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".helpfont");
+      Set(SpinBox, Natural'Image(GameSettings.HelpFontSize));
+      SpinBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".interfacefont");
+      Set(SpinBox, Natural'Image(GameSettings.InterfaceFontSize));
       -- End of fill
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       OptionsFrame.Name :=
