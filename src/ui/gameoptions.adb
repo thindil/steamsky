@@ -29,7 +29,6 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -59,7 +58,7 @@ package body GameOptions is
       pragma Unreferenced(ClientData, Argc, Argv);
       Paned: Ttk_PanedWindow;
       OptionsCanvas: Tk_Canvas;
-      OptionsFrame, ControlsFrame: Ttk_Frame;
+      OptionsFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
    begin
       Paned.Interp := Interp;
@@ -70,17 +69,12 @@ package body GameOptions is
       OptionsFrame.Name := New_String(Widget_Image(Paned) & ".optionsframe");
       OptionsCanvas.Interp := Interp;
       OptionsCanvas.Name := New_String(Widget_Image(OptionsFrame) & ".canvas");
-      ControlsFrame.Interp := Interp;
-      ControlsFrame.Name := New_String(Widget_Image(Paned) & ".controls");
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
-         Add(Paned, ControlsFrame);
-         SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
-         Tcl_Eval(Interp, "update");
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -106,11 +100,7 @@ package body GameOptions is
       configure
         (OptionsCanvas,
          "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
-      OptionsFrame.Name := New_String(Widget_Image(Paned) & ".optionsframe");
-      Add(Paned, OptionsFrame);
-      OptionsFrame.Name := New_String(Widget_Image(Paned) & ".mapframe");
-      Forget(Paned, OptionsFrame);
-      Forget(Paned, ControlsFrame);
+      ShowScreen("optionsframe");
       return TCL_OK;
    end Show_Options_Command;
 
