@@ -2,7 +2,7 @@
 # the next line restarts using tclsh \
 exec tclsh "$0" ${1+"$@"}
 
-# Copyright (c) 2019 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2019-2020 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,20 @@ proc fixdocs {dir} {
             set check false
          }
          if $check {
+            # Remove first comment sign from the line (mostly in EXAMPLE section)
+            set comment [string first "<span class=\"sign\">-</span><span class=\"sign\">-</span>" $line]
+            if {$comment > -1 } {
+               set line [string replace $line $comment [expr $comment + 54]]
+            }
+            # If there are still any comment sign, treat line as a comment (mostly in EXAMPLE section)
+            set comment [string first "<span class=\"sign\">-</span><span class=\"sign\">-</span>" $line]
+            if {$comment > -1} {
+               set line [string replace $line $comment [expr $comment + 54] "<span class=\"comment\">-- "]
+               regsub -all {<span class="(keyword|sign|quote|squote)">} $line "" line
+               regsub -all {</span>} $line "" line
+               set line "$line</span>"
+            }
+            # Normal code line
             if [regexp {<span class="squote">'\w+'*} $line result] {
                if {[string equal [string index $result end] "'"] == 0} {
                   set keyword [string range $result 21 end]
