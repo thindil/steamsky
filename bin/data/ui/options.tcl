@@ -273,11 +273,11 @@ grid [ttk::checkbutton $ioptions.animations] -row 0 -column 1
 tooltip::tooltip $ioptions.animations {Did user interface should be animated or not.}
 grid [ttk::label $ioptions.lbl2 -text {Type of animations:}]
 tooltip::tooltip $ioptions.lbl2 {Which animation should be used to move between screens.}
-grid [ttk::combobox $ioptions.speed -state readonly -values [list {Crossfade} {Slide right} {Slide left}] -width 10] -row 1 -column 1
-tooltip::tooltip $ioptions.speed {Which animation should be used to move between screens.}
+grid [ttk::combobox $ioptions.animationtype -state readonly -values [list {Crossfade} {Slide right} {Slide left}] -width 10] -row 1 -column 1
+tooltip::tooltip $ioptions.animationtype {Which animation should be used to move between screens.}
 grid [ttk::label $ioptions.lbl3 -text {Interface theme:}]
 tooltip::tooltip $ioptions.lbl3 {Select UI theme.}
-grid [ttk::combobox $ioptions.theme -state readonly -width 10] -row 2 -column 1
+grid [ttk::combobox $ioptions.theme -state readonly -values [list {default}] -width 10] -row 2 -column 1
 tooltip::tooltip $ioptions.theme {Select UI theme.}
 grid [ttk::label $ioptions.lbl4 -text {Show tooltips:}]
 tooltip::tooltip $ioptions.lbl4 {Show help tooltips for various game elements.}
