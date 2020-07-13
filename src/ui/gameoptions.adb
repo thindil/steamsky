@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -26,6 +28,10 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -33,6 +39,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
+with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
 package body GameOptions is
@@ -63,6 +70,8 @@ package body GameOptions is
       OptionsFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       Label: Ttk_Label;
+      ComboBox: Ttk_ComboBox;
+      SpinBox: Ttk_SpinBox;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -103,7 +112,55 @@ package body GameOptions is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook.general");
-      -- Fill UI with data
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autorest",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.AutoRest)), Left));
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
+      Current
+        (ComboBox, Natural'Image(ShipSpeed'Pos(GameSettings.UndockSpeed) - 1));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autocenter",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.AutoCenter)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autoreturn",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.AutoReturn)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autofinish",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.AutoFinish)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autoaskforbases",
+         Trim(Natural'Image(Boolean'Pos(GameSettings.AutoAskForBases)), Left));
+      Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".autoaskforevents",
+         Trim
+           (Natural'Image(Boolean'Pos(GameSettings.AutoAskForEvents)), Left));
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".fuel");
+      Set(SpinBox, Natural'Image(GameSettings.LowFuel));
+      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".drinks");
+      Set(SpinBox, Natural'Image(GameSettings.LowDrinks));
+      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".food");
+      Set(SpinBox, Natural'Image(GameSettings.LowFood));
+      ComboBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".automovestop");
+      Current
+        (ComboBox,
+         Natural'Image(AutoMoveBreak'Pos(GameSettings.AutoMoveStop)));
+      SpinBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".messageslimit");
+      Set(SpinBox, Natural'Image(GameSettings.MessagesLimit));
+      SpinBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".savedmessages");
+      Set(SpinBox, Natural'Image(GameSettings.SavedMessages));
+      ComboBox.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".messagesorder");
+      Current
+        (ComboBox,
+         Natural'Image(MessagesOrderType'Pos(GameSettings.MessagesOrder)));
+      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".autosave");
+      Current
+        (ComboBox, Natural'Image(AutoSaveType'Pos(GameSettings.AutoSave)));
       -- End of fill
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       OptionsFrame.Name :=
