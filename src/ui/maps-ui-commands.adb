@@ -524,17 +524,21 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      FontSize: Positive;
    begin
-      Tcl_Eval(Interp, "font configure MapFont -size");
-      FontSize := Positive'Value(Tcl_GetResult(Interp));
       if CArgv.Arg(Argv, 1) = "raise" then
-         FontSize := FontSize + 1;
+         GameSettings.MapFontSize := GameSettings.MapFontSize + 1;
       else
-         FontSize := FontSize - 1;
+         GameSettings.MapFontSize := GameSettings.MapFontSize - 1;
+      end if;
+      if GameSettings.MapFontSize < 3 then
+         GameSettings.MapFontSize := 3;
+      elsif GameSettings.MapFontSize > 50 then
+         GameSettings.MapFontSize := 50;
       end if;
       Tcl_Eval
-        (Interp, "font configure MapFont -size" & Positive'Image(FontSize));
+        (Interp,
+         "font configure MapFont -size" &
+         Positive'Image(GameSettings.MapFontSize));
       return Draw_Map_Command(ClientData, Interp, Argc, Argv);
    end Zoom_Map_Command;
 
