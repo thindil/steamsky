@@ -81,7 +81,9 @@ package body GameOptions is
       17 => (MapAccelerators(1), To_Unbounded_String(".menu.menu")),
       18 => (MapAccelerators(2), To_Unbounded_String(".map.mapoptions")),
       19 => (MapAccelerators(3), To_Unbounded_String(".map.zoomin")),
-      20 => (MapAccelerators(4), To_Unbounded_String(".map.zoomout")));
+      20 => (MapAccelerators(4), To_Unbounded_String(".map.zoomout")),
+      21 => (MapAccelerators(15), To_Unbounded_String(".map.center")),
+      22 => (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase")));
 
    -- ****f* GameOptions/Show_Options_Command
    -- FUNCTION
