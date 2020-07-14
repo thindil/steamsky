@@ -955,6 +955,12 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(14)) & ">",
          "{InvokeButton $bframe.moveto}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(15)) & ">",
+         "{MoveMap centeronship}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(16)) & ">",
+         "{MoveMap centeronhome}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
