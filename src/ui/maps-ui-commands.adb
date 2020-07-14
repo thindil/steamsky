@@ -417,6 +417,9 @@ package body Maps.UI.Commands is
    begin
       MapView.Interp := Interp;
       MapView.Name := New_String(".paned.mapframe.map");
+      if Winfo_Get(MapView, "ismapped") = "0" then
+         return TCL_OK;
+      end if;
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       if CArgv.Arg(Argv, 1) = "centeronship" then
