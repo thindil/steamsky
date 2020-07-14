@@ -43,14 +43,15 @@ package Maps.UI is
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
-   MapAccelerators: constant array(1 .. 14) of Unbounded_String :=
+   MapAccelerators: constant array(1 .. 16) of Unbounded_String :=
      (To_Unbounded_String("e"), To_Unbounded_String("v"),
       To_Unbounded_String("plus"), To_Unbounded_String("minus"),
       To_Unbounded_String("KP_7"), To_Unbounded_String("KP_8"),
       To_Unbounded_String("KP_9"), To_Unbounded_String("KP_4"),
       To_Unbounded_String("KP_5"), To_Unbounded_String("KP_6"),
       To_Unbounded_String("KP_1"), To_Unbounded_String("KP_2"),
-      To_Unbounded_String("KP_3"), To_Unbounded_String("KP_Divide"));
+      To_Unbounded_String("KP_3"), To_Unbounded_String("KP_Divide"),
+      To_Unbounded_String("Shift-Return"), To_Unbounded_String("H"));
    -- ****
 
    -- ****iv* MUI/CenterX
