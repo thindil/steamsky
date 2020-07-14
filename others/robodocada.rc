@@ -19,9 +19,11 @@ options:
   --sourceindex "Source files,sources"
   --css others/robodoc.css
 headertypes:
-  h Packages robo_packages 5
-  a Tasks robo_tasks 4
-  t Types robo_types 3
+  h Packages robo_packages 7
+  a Tasks robo_tasks 6
+  t Types robo_types 5
+  s Records robo_records 4
+  d Constants robo_constants 3
   v Variables robo_variables 2
   e Exceptions robo_exceptions 1
   f Subprograms robo_subprograms 0
