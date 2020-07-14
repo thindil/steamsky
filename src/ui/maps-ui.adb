@@ -961,6 +961,30 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(16)) & ">",
          "{MoveMap centeronhome}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(17)) & ">",
+         "{MoveMap nw}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(18)) & ">",
+         "{MoveMap n}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(19)) & ">",
+         "{MoveMap ne}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(20)) & ">",
+         "{MoveMap w}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(21)) & ">",
+         "{MoveMap e}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(22)) & ">",
+         "{MoveMap sw}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(23)) & ">",
+         "{MoveMap s}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(24)) & ">",
+         "{MoveMap se}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
