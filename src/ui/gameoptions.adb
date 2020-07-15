@@ -100,7 +100,17 @@ package body GameOptions is
       36 => (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft")),
       37 => (MapAccelerators(31), To_Unbounded_String(".map.cursordown")),
       38 => (MapAccelerators(32), To_Unbounded_String(".map.cursordownright")),
-      39 => (MapAccelerators(33), To_Unbounded_String(".map.clickmouse")));
+      39 => (MapAccelerators(33), To_Unbounded_String(".map.clickmouse")),
+      40 => (MapAccelerators(5), To_Unbounded_String(".movement.upleft")),
+      41 => (MapAccelerators(6), To_Unbounded_String(".movement.up")),
+      42 => (MapAccelerators(7), To_Unbounded_String(".movement.upright")),
+      43 => (MapAccelerators(8), To_Unbounded_String(".movement.left")),
+      44 => (MapAccelerators(9), To_Unbounded_String(".movement.right")),
+      45 => (MapAccelerators(10), To_Unbounded_String(".movement.wait")),
+      46 => (MapAccelerators(11), To_Unbounded_String(".movement.downleft")),
+      47 => (MapAccelerators(12), To_Unbounded_String(".movement.down")),
+      48 => (MapAccelerators(13), To_Unbounded_String(".movement.downright")),
+      49 => (MapAccelerators(14), To_Unbounded_String(".movement.moveto")));
 
    -- ****f* GameOptions/Show_Options_Command
    -- FUNCTION
