@@ -75,14 +75,14 @@ proc SetShortcut {field key} {
    global specialkey moveoptions menuoptions mapoptions ioptions
    set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright $moveoptions.left $moveoptions.wait $moveoptions.right $moveoptions.downleft $moveoptions.down $moveoptions.downright $moveoptions.moveto $moveoptions.fullstop $moveoptions.quarterspeed $moveoptions.halfspeed $moveoptions.fullspeed $menuoptions.shipinfo $menuoptions.cargo $menuoptions.crew $menuoptions.orders $menuoptions.crafts $menuoptions.messages $menuoptions.bases $menuoptions.events $menuoptions.missions  $menuoptions.stories $menuoptions.waitorders $menuoptions.gamestats $menuoptions.help $menuoptions.gameoptions $menuoptions.quit $menuoptions.resign $menuoptions.menu $mapoptions.center $mapoptions.centerhomebase $mapoptions.mapleft $mapoptions.mapright $mapoptions.mapup $mapoptions.mapdown $mapoptions.mapupleft $mapoptions.mapupright $mapoptions.mapdownleft $mapoptions.mapdownright $mapoptions.cursorupleft $mapoptions.cursorup $mapoptions.cursorupright $mapoptions.cursorleft $mapoptions.cursorright $mapoptions.cursordownleft $mapoptions.cursordown $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
    if {$key == "Control_L" || $key == "Control_R" || $key == "Alt_L" || $key == "Alt_R" || $key == "Shift_L" || $key == "Shift_R"} {
-      set specialkey "$key"
+      set specialkey [string range $key 0 [expr [string length $key] - 3]]
       return
    }
-   if {($specialkey == "Shift_L" || $specialkey == "Shift_R") && [string length $key] == 1} {
+   if {$specialkey == "Shift" && [string length $key] == 1} {
       set key "[string tolower $key]"
    }
    if {$specialkey != {}} {
-      set value "$specialkey+$key"
+      set value "$specialkey-$key"
    } else {
       set value "$key"
    }
@@ -94,7 +94,7 @@ proc SetShortcut {field key} {
    $field delete 0 end
    if {$specialkey != {}} {
       $field insert end $specialkey
-      $field insert end +
+      $field insert end -
       $field insert end $key
    } else {
       $field insert end $key
