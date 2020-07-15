@@ -21,6 +21,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -1014,6 +1015,79 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Stories_Command;
 
+   -- ****if* MapCommands/Move_Cursor_Command
+   -- FUNCTION
+   -- Move mouse cursor with keyboard
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Move_Mouse_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Mouse_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      MapView: Tk_Text;
+   begin
+      MapView.Interp := Interp;
+      MapView.Name := New_String(".paned.mapframe.map");
+      if CArgv.Arg(Argv, 1) = "click" then
+         Generate
+           (MapView, "<1>",
+            "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
+      elsif CArgv.Arg(Argv, 1) = "nw" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
+      elsif CArgv.Arg(Argv, 1) = "n" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
+      elsif CArgv.Arg(Argv, 1) = "ne" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
+      elsif CArgv.Arg(Argv, 1) = "w" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y " &
+            CArgv.Arg(Argv, 3));
+      elsif CArgv.Arg(Argv, 1) = "e" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y " &
+            CArgv.Arg(Argv, 3));
+      elsif CArgv.Arg(Argv, 1) = "sw" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
+      elsif CArgv.Arg(Argv, 1) = "s" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
+      elsif CArgv.Arg(Argv, 1) = "se" then
+         Generate
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
+      end if;
+      return TCL_OK;
+   end Move_Mouse_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -1034,6 +1108,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowEvents", Show_Events_Command'Access);
       AddCommand("ShowMissions", Show_Missions_Command'Access);
       AddCommand("ShowStories", Show_Stories_Command'Access);
+      AddCommand("MoveCursor", Move_Mouse_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;
