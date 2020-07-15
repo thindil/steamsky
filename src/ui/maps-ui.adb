@@ -1012,6 +1012,18 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(33)) & ">",
          "{MoveCursor click %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(34)) & ">",
+         "{.paned.controls.buttons.speed current 0}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(35)) & ">",
+         "{.paned.controls.buttons.speed current 1}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(36)) & ">",
+         "{.paned.controls.buttons.speed current 2}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
+         "{.paned.controls.buttons.speed current 3}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
