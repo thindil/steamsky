@@ -43,7 +43,7 @@ package Maps.UI is
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
-   MapAccelerators: constant array(1 .. 24) of Unbounded_String :=
+   MapAccelerators: constant array(1 .. 33) of Unbounded_String :=
      (To_Unbounded_String("e"), To_Unbounded_String("v"),
       To_Unbounded_String("plus"), To_Unbounded_String("minus"),
       To_Unbounded_String("KP_7"), To_Unbounded_String("KP_8"),
@@ -55,7 +55,12 @@ package Maps.UI is
       To_Unbounded_String("Shift-KP_Home"), To_Unbounded_String("Shift-KP_Up"),
       To_Unbounded_String("Shift-KP_Prior"), To_Unbounded_String("Shift-KP_Left"),
       To_Unbounded_String("Shift-KP_Right"), To_Unbounded_String("Shift-KP_End"),
-      To_Unbounded_String("Shift-KP_Down"), To_Unbounded_String("Shift-KP_Next"));
+      To_Unbounded_String("Control-KP_Down"), To_Unbounded_String("Control-KP_Next"),
+      To_Unbounded_String("Control-KP_Home"), To_Unbounded_String("Control-KP_Up"),
+      To_Unbounded_String("Control-KP_Prior"), To_Unbounded_String("Control-KP_Left"),
+      To_Unbounded_String("Control-KP_Right"), To_Unbounded_String("Control-KP_End"),
+      To_Unbounded_String("Control-KP_Down"), To_Unbounded_String("Control-KP_Next"),
+      To_Unbounded_String("Control-KP_Begin"));
    -- ****
 
    -- ****iv* MUI/CenterX

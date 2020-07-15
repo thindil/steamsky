@@ -985,6 +985,33 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(24)) & ">",
          "{MoveMap se}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(25)) & ">",
+         "{MoveCursor nw %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(26)) & ">",
+         "{MoveCursor n %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(27)) & ">",
+         "{MoveCursor ne %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(28)) & ">",
+         "{MoveCursor w %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(29)) & ">",
+         "{MoveCursor e %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(30)) & ">",
+         "{MoveCursor sw %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(31)) & ">",
+         "{MoveCursor s %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(32)) & ">",
+         "{MoveCursor se %x %y}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(MapAccelerators(33)) & ">",
+         "{MoveCursor click %x %y}");
       UpdateMessages;
       UpdateMoveButtons;
    end CreateGameUI;
