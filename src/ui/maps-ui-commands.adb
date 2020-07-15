@@ -386,6 +386,10 @@ package body Maps.UI.Commands is
       PlayerShip.DestinationY := MapY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
+      if GameSettings.AutoCenter then
+         CenterX := PlayerShip.SkyX;
+         CenterY := PlayerShip.SkyY;
+      end if;
       DrawMap;
       UpdateMoveButtons;
       return TCL_OK;
