@@ -210,12 +210,10 @@ package body Utils.UI is
       Amount: Integer;
       Label: Ttk_Label;
    begin
-      -- TODO add checking during selling
       if CArgv.Arg(Argv, 1) = "trade" then
          LabelName := To_Unbounded_String("trade");
          WarningText :=
            To_Unbounded_String("You will sell amount below low level of ");
-      -- TODO add checking during droping in abandoned bases
       elsif CArgv.Arg(Argv, 1) = "loot" then
          LabelName := To_Unbounded_String("loot");
          WarningText :=
