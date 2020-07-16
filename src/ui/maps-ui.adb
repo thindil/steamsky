@@ -1024,6 +1024,9 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
          "{.paned.controls.buttons.speed current 3}");
+      Bind_To_Main_Window
+        (Get_Context, "<" & To_String(FullScreenAccel) & ">",
+         "{ToggleFullScreen}");
       UpdateMessages;
       UpdateMoveButtons;
       if not GameSettings.ShowLastMessages then
