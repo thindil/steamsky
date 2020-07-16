@@ -23,6 +23,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -851,10 +852,13 @@ package body Maps.UI is
       MapView.Interp := Get_Context;
       MapView.Name := New_String(".paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
-         Tcl_Eval
-           (Get_Context,
-            "font create MapFont -family {Hack NF} -size " &
-            Positive'Image(GameSettings.MapFontSize));
+         Font.Configure
+           ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
+         Font.Configure
+           ("InterfaceFont",
+            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         Font.Configure
+           ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
