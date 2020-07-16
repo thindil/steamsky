@@ -844,7 +844,7 @@ package body Maps.UI is
       Paned: Ttk_PanedWindow;
       Button: Ttk_Button;
       SteamSky_Map_Error: exception;
-      Header: Ttk_Frame;
+      Header, MessagesFrame: Ttk_Frame;
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
@@ -1026,6 +1026,11 @@ package body Maps.UI is
          "{.paned.controls.buttons.speed current 3}");
       UpdateMessages;
       UpdateMoveButtons;
+      if not GameSettings.ShowLastMessages then
+         MessagesFrame.Interp := Get_Context;
+         MessagesFrame.Name := New_String(".paned.controls.messages");
+         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
+      end if;
    end CreateGameUI;
 
    procedure ShowSkyMap(Clear: Boolean := False) is
