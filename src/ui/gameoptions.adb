@@ -116,7 +116,8 @@ package body GameOptions is
         (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed")),
       52 => (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed")),
       53 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
-      54 => (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
+      54 =>
+        (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
 
    -- ****f* GameOptions/Show_Options_Command
    -- FUNCTION
@@ -300,9 +301,46 @@ package body GameOptions is
       return TCL_OK;
    end Show_Options_Command;
 
+   -- ****f* GameOptions/Set_Fonts_Command
+   -- FUNCTION
+   -- Set the selected font
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Set_Fonts_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Fonts_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+   begin
+      Tcl_Eval
+        (Interp,
+         "ValidateSpinbox " & CArgv.Arg(Argv, 1) & " " & CArgv.Arg(Argv, 2) &
+         " 50");
+      if Tcl_GetResult(Interp) = "0" then
+         return TCL_OK;
+      end if;
+      Tcl_Eval
+        (Interp,
+         "font configure MapFont -size" &
+         Positive'Image(GameSettings.MapFontSize));
+      return TCL_OK;
+   end Set_Fonts_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOptions", Show_Options_Command'Access);
+      AddCommand("SetFonts", Set_Fonts_Command'Access);
    end AddCommands;
 
 end GameOptions;
