@@ -26,12 +26,15 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
 with Config; use Config;
@@ -1092,6 +1095,37 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Mouse_Command;
 
+   -- ****if* MapCommands/Toggle_Full_Screen_Command
+   -- FUNCTION
+   -- Toggle the game full screen mode
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Toggle_Full_Screen_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_Full_Screen_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+   begin
+      Tcl_Eval(Interp, "wm attributes . -fullscreen");
+      if Tcl_GetResult(Interp) = "0" then
+         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
+      else
+         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
+      end if;
+      return TCL_OK;
+   end Toggle_Full_Screen_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -1113,6 +1147,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowMissions", Show_Missions_Command'Access);
       AddCommand("ShowStories", Show_Stories_Command'Access);
       AddCommand("MoveCursor", Move_Mouse_Command'Access);
+      AddCommand("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

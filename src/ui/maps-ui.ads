@@ -65,6 +65,13 @@ package Maps.UI is
       To_Unbounded_String("Control-4"));
    -- ****
 
+   -- ****v* Maps.UI/FullScreenAccel
+   -- FUNCTION
+   -- Keyboard shortcut for switching full screen mode
+   -- SOURCE
+   FullScreenAccel: Unbounded_String := To_Unbounded_String("Control-f");
+   -- ****
+
    -- ****iv* MUI/CenterX
    -- FUNCTION
    -- Coordinates of the center point of the map
