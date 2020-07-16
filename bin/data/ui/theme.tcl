@@ -21,6 +21,10 @@ namespace eval ttk::theme::steamsky {
       -checklight     "#ffdf00"
    }
 
+   font create MapFont -family {Hack NF} -size 16
+   font create InterfaceFont -family {Amarante} -size 14
+   font create HelpFont -family {Roboto} -size 14
+
    ttk::style theme create steamsky -parent default -settings {
       ttk::style configure . \
          -background $colors(-bg) \
@@ -29,7 +33,7 @@ namespace eval ttk::theme::steamsky {
          -selectbackground $colors(-selectbg) \
          -selectforeground $colors(-selectfg) \
          -fieldbackground $colors(-window) \
-         -font {-family Amarante -size 14} \
+         -font InterfaceFont \
          -borderwidth 1 \
          -focuscolor $colors(-focuscolor)
 
