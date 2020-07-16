@@ -322,18 +322,31 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      SpinBox: Ttk_SpinBox;
    begin
-      Tcl_Eval
-        (Interp,
-         "ValidateSpinbox " & CArgv.Arg(Argv, 1) & " " & CArgv.Arg(Argv, 2) &
-         " 50");
-      if Tcl_GetResult(Interp) = "0" then
-         return TCL_OK;
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(CArgv.Arg(Argv, 1));
+      if CArgv.Arg(Argv, 1) =
+        ".paned.optionsframe.canvas.options.notebook.interface.mapfont" then
+         GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
+         Tcl_Eval
+           (Interp,
+            "font configure MapFont -size" &
+            Positive'Image(GameSettings.MapFontSize));
+      elsif CArgv.Arg(Argv, 1) =
+        ".paned.optionsframe.canvas.options.notebook.interface.helpfont" then
+         GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
+         Tcl_Eval
+           (Interp,
+            "font configure HelpFont -size" &
+            Positive'Image(GameSettings.HelpFontSize));
+      else
+         GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
+         Tcl_Eval
+           (Interp,
+            "font configure InterfaceFont -size" &
+            Positive'Image(GameSettings.InterfaceFontSize));
       end if;
-      Tcl_Eval
-        (Interp,
-         "font configure MapFont -size" &
-         Positive'Image(GameSettings.MapFontSize));
       return TCL_OK;
    end Set_Fonts_Command;
 

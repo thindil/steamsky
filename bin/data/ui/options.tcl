@@ -308,14 +308,17 @@ tooltip::tooltip $ioptions.shownumbers {Show numeric values of many statistics, 
 grid [ttk::label $ioptions.lbl10 -text {Size of map font:}]
 tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used to draw game map.}
 grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 9 -column 1
+bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont {Size (in pixels) of font used to draw game map.}
 grid [ttk::label $ioptions.lbl11 -text {Size of help font:}]
 tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used mainly in help.}
 grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 10 -column 1
+bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont {Size (in pixels) of font used mainly in help.}
 grid [ttk::label $ioptions.lbl12 -text {Size of interface font:}]
 tooltip::tooltip $ioptions.lbl12 {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 11 -column 1
+bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts}] -columnspan 2
 $optionsframe.notebook add $ioptions -text {Interface}
