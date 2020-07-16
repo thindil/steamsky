@@ -61,7 +61,7 @@ package body GameOptions is
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
    -- SOURCE
-   Accels: constant array(1 .. 53) of Accel_Data :=
+   Accels: constant array(1 .. 54) of Accel_Data :=
      (1 => (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo")),
       2 => (MenuAccelerators(2), To_Unbounded_String(".menu.cargo")),
       3 => (MenuAccelerators(3), To_Unbounded_String(".menu.crew")),
@@ -115,7 +115,8 @@ package body GameOptions is
       51 =>
         (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed")),
       52 => (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed")),
-      53 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")));
+      53 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
+      54 => (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
 
    -- ****f* GameOptions/Show_Options_Command
    -- FUNCTION
