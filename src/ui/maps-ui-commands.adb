@@ -1120,8 +1120,10 @@ package body Maps.UI.Commands is
       Tcl_Eval(Interp, "wm attributes . -fullscreen");
       if Tcl_GetResult(Interp) = "0" then
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
+         GameSettings.FullScreen := True;
       else
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
+         GameSettings.FullScreen := False;
       end if;
       return TCL_OK;
    end Toggle_Full_Screen_Command;
