@@ -25,9 +25,12 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -38,6 +41,8 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -415,6 +420,7 @@ package body GameOptions is
       RootName: constant String :=
         ".paned.optionsframe.canvas.options.notebook";
       ComboBox: Ttk_ComboBox;
+      SpinBox: Ttk_SpinBox;
    begin
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
@@ -429,6 +435,81 @@ package body GameOptions is
       ComboBox.Name := New_String(RootName & ".general.speed");
       GameSettings.UndockSpeed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
+      if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
+         GameSettings.AutoCenter := True;
+      else
+         GameSettings.AutoCenter := False;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".general.autoreturn") = "1" then
+         GameSettings.AutoReturn := True;
+      else
+         GameSettings.AutoReturn := False;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".general.autofinish") = "1" then
+         GameSettings.AutoFinish := True;
+      else
+         GameSettings.AutoFinish := False;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".general.autoaskforbases") = "1" then
+         GameSettings.AutoAskForBases := True;
+      else
+         GameSettings.AutoAskForBases := False;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1" then
+         GameSettings.AutoAskForEvents := True;
+      else
+         GameSettings.AutoAskForEvents := False;
+      end if;
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(RootName & ".general.fuel");
+      GameSettings.LowFuel := Positive'Value(Get(SpinBox));
+      SpinBox.Name := New_String(RootName & ".general.drinks");
+      GameSettings.LowDrinks := Positive'Value(Get(SpinBox));
+      SpinBox.Name := New_String(RootName & ".general.food");
+      GameSettings.LowFood := Positive'Value(Get(SpinBox));
+      ComboBox.Name := New_String(RootName & ".general.automovestop");
+      GameSettings.AutoMoveStop :=
+        AutoMoveBreak'Val(Natural'Value(Current(ComboBox)));
+      SpinBox.Name := New_String(RootName & ".general.messageslimit");
+      GameSettings.MessagesLimit := Positive'Value(Get(SpinBox));
+      SpinBox.Name := New_String(RootName & ".general.savedmessages");
+      GameSettings.SavedMessages := Positive'Value(Get(SpinBox));
+      ComboBox.Name := New_String(RootName & ".general.messagesorder");
+      GameSettings.MessagesOrder :=
+        MessagesOrderType'Val(Natural'Value(Current(ComboBox)));
+      ComboBox.Name := New_String(RootName & ".general.autosave");
+      GameSettings.AutoSave :=
+        AutoSaveType'Val(Natural'Value(Current(ComboBox)));
+      if Tcl_GetVar(Interp, RootName & ".interface.animations") = "1" then
+         GameSettings.AnimationsEnabled := 1;
+      else
+         GameSettings.AnimationsEnabled := 0;
+      end if;
+      ComboBox.Name := New_String(RootName & ".interface.animationtype");
+      GameSettings.AnimationType :=
+        Natural'Value(Current(ComboBox)) + 1;
+      ComboBox.Name := New_String(RootName & ".interface.theme");
+      GameSettings.InterfaceTheme := To_Unbounded_String(Get(ComboBox));
+      Theme_Use(To_String(GameSettings.InterfaceTheme));
+      if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
+         GameSettings.ShowTooltips := True;
+         Enable;
+      else
+         GameSettings.ShowTooltips := False;
+         Disable;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
+         GameSettings.ShowLastMessages := True;
+      else
+         GameSettings.ShowLastMessages := False;
+      end if;
+      if Tcl_GetVar(Interp, RootName & ".interface.fullscreen") = "1" then
+         GameSettings.FullScreen := True;
+         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
+      else
+         GameSettings.FullScreen := False;
+         Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
+      end if;
       SaveConfig;
       ShowSkyMap(True);
       return TCL_OK;
