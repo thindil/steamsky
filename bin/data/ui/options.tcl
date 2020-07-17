@@ -320,7 +320,7 @@ tooltip::tooltip $ioptions.lbl12 {Size (in pixels) of font used in interface (fo
 grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 11 -column 1
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
-grid [ttk::button $ioptions.setdefault -text {Set default size for fonts}] -columnspan 2
+grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
 $optionsframe.notebook add $ioptions -text {Interface}
 # Info options
 set infooptions [ttk::frame $optionsframe.notebook.info]

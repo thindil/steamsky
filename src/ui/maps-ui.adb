@@ -852,6 +852,10 @@ package body Maps.UI is
       MapView.Interp := Get_Context;
       MapView.Name := New_String(".paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
+         DefaultFontsSizes :=
+           (Positive'Value(Font.Configure("MapFont", "-size")),
+            Positive'Value(Font.Configure("InterfaceFont", "-size")),
+            Positive'Value(Font.Configure("HelpFont", "-size")));
          Font.Configure
            ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
          Font.Configure
