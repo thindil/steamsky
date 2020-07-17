@@ -281,6 +281,7 @@ package body GameOptions is
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.ShortCut));
       end loop;
+      configure(CloseButton, "-command CloseOptions");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
@@ -389,11 +390,56 @@ package body GameOptions is
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
+   -- ****f* GameOptions/Close_Options_Command
+   -- FUNCTION
+   -- Save all options and back to the map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Close_Options_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Close_Options_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CloseButton: Ttk_Button;
+      RootName: constant String :=
+        ".paned.optionsframe.canvas.options.notebook";
+      ComboBox: Ttk_ComboBox;
+   begin
+      CloseButton.Interp := Interp;
+      CloseButton.Name := New_String(".header.closebutton");
+      configure(CloseButton, "-command ShowSkyMap");
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+      if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then
+         GameSettings.AutoRest := True;
+      else
+         GameSettings.AutoRest := False;
+      end if;
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(RootName & ".general.speed");
+      GameSettings.UndockSpeed :=
+        ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
+      SaveConfig;
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Close_Options_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOptions", Show_Options_Command'Access);
       AddCommand("SetFonts", Set_Fonts_Command'Access);
       AddCommand("SetDefaultFonts", Set_Default_Fonts_Command'Access);
+      AddCommand("CloseOptions", Close_Options_Command'Access);
    end AddCommands;
 
 end GameOptions;
