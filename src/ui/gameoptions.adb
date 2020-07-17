@@ -330,23 +330,18 @@ package body GameOptions is
       if CArgv.Arg(Argv, 1) =
         ".paned.optionsframe.canvas.options.notebook.interface.mapfont" then
          GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
-         Tcl_Eval
-           (Interp,
-            "font configure MapFont -size" &
-            Positive'Image(GameSettings.MapFontSize));
+         Font.Configure
+           ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
       elsif CArgv.Arg(Argv, 1) =
         ".paned.optionsframe.canvas.options.notebook.interface.helpfont" then
          GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
-         Tcl_Eval
-           (Interp,
-            "font configure HelpFont -size" &
-            Positive'Image(GameSettings.HelpFontSize));
+         Font.Configure
+           ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
       else
          GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
-         Tcl_Eval
-           (Interp,
-            "font configure InterfaceFont -size" &
-            Positive'Image(GameSettings.InterfaceFontSize));
+         Font.Configure
+           ("InterfaceFont",
+            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
       end if;
       return TCL_OK;
    end Set_Fonts_Command;
