@@ -486,8 +486,7 @@ package body GameOptions is
          GameSettings.AnimationsEnabled := 0;
       end if;
       ComboBox.Name := New_String(RootName & ".interface.animationtype");
-      GameSettings.AnimationType :=
-        Natural'Value(Current(ComboBox)) + 1;
+      GameSettings.AnimationType := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(RootName & ".interface.theme");
       GameSettings.InterfaceTheme := To_Unbounded_String(Get(ComboBox));
       Theme_Use(To_String(GameSettings.InterfaceTheme));
@@ -510,6 +509,19 @@ package body GameOptions is
          GameSettings.FullScreen := False;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
       end if;
+      SpinBox.Name := New_String(RootName & ".interface.closemessages");
+      GameSettings.AutoCloseMessagesTime := Positive'Value(Get(SpinBox));
+      if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
+         GameSettings.ShowNumbers := True;
+      else
+         GameSettings.ShowNumbers := False;
+      end if;
+      SpinBox.Name := New_String(RootName & ".interface.mapfont");
+      GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
+      SpinBox.Name := New_String(RootName & ".interface.helpfont");
+      GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
+      SpinBox.Name := New_String(RootName & ".interface.interfacefont");
+      GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
       SaveConfig;
       ShowSkyMap(True);
       return TCL_OK;
