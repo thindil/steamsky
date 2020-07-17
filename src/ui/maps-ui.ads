@@ -86,6 +86,13 @@ package Maps.UI is
    GameMenu: Tk_Menu;
    -- ****
 
+   -- ****v* Maps.UI/DefaultFontsSizes
+   -- FUNCTION
+   -- Default sizes of the game fonts
+   -- SOURCE
+   DefaultFontsSizes: array(1 .. 3) of Positive;
+   -- ****
+
    -- ****f* MUI/CreateGameMenu
    -- FUNCTION
    -- Create the main game menu. Clear old elements and add all default

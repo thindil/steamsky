@@ -23,6 +23,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -350,10 +351,54 @@ package body GameOptions is
       return TCL_OK;
    end Set_Fonts_Command;
 
+   -- ****f* GameOptions/Set_Default_Fonts_Command
+   -- FUNCTION
+   -- Set the default values for fonts
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_Default_Fonts_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Default_Fonts_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      SpinBox: Ttk_SpinBox;
+      SpinBoxNames: constant array(1 .. 3) of Unbounded_String :=
+        (To_Unbounded_String("map"), To_Unbounded_String("interface"),
+         To_Unbounded_String("help"));
+      FontNames: constant array(1 .. 3) of Unbounded_String :=
+        (To_Unbounded_String("MapFont"), To_Unbounded_String("InterfaceFont"),
+         To_Unbounded_String("HelpFont"));
+   begin
+      SpinBox.Interp := Interp;
+      for I in SpinBoxNames'Range loop
+         SpinBox.Name :=
+           New_String
+             (".paned.optionsframe.canvas.options.notebook.interface." &
+              To_String(SpinBoxNames(I)) & "font");
+         Set(SpinBox, Positive'Image(DefaultFontsSizes(I)));
+         Font.Configure
+           (To_String(FontNames(I)),
+            "-size" & Positive'Image(DefaultFontsSizes(I)));
+      end loop;
+      return TCL_OK;
+   end Set_Default_Fonts_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOptions", Show_Options_Command'Access);
       AddCommand("SetFonts", Set_Fonts_Command'Access);
+      AddCommand("SetDefaultFonts", Set_Default_Fonts_Command'Access);
    end AddCommands;
 
 end GameOptions;
