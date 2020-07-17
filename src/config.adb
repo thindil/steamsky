@@ -50,12 +50,12 @@ package body Config is
          WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
          AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
          HelpFontSize => 14, MapFontSize => 16, InterfaceFontSize => 14,
-         InterfaceTheme => To_Unbounded_String("default"),
+         InterfaceTheme => To_Unbounded_String("steamsky"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
-         ShowLastMessages => True, MessagesPosition => 400, FullScreen => False,
-         AutoCloseMessagesTime => 6, AutoSave => NONE, TopicsPosition => 200,
-         ShowBaseInfo => True, ShowCargoInfo => True,
+         ShowLastMessages => True, MessagesPosition => 400,
+         FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
+         TopicsPosition => 200, ShowBaseInfo => True, ShowCargoInfo => True,
          ShowInventoryInfo => True, ShowNumbers => False);
       if not Exists(To_String(SaveDirectory) & "game.cfg") then
          return;
