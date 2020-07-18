@@ -68,7 +68,7 @@ package body GameOptions is
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
    -- SOURCE
-   Accels: constant array(1 .. 54) of Accel_Data :=
+   Accels: array(1 .. 54) of Accel_Data :=
      (1 => (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo")),
       2 => (MenuAccelerators(2), To_Unbounded_String(".menu.cargo")),
       3 => (MenuAccelerators(3), To_Unbounded_String(".menu.crew")),
@@ -281,6 +281,13 @@ package body GameOptions is
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook");
+      for I in MenuAccelerators'Range loop
+         Accels(I).ShortCut := MenuAccelerators(I);
+      end loop;
+      for I in MapAccelerators'Range loop
+         Accels(I + 16).ShortCut := MapAccelerators(I);
+      end loop;
+      Accels(Accels'Last).ShortCut := FullScreenAccel;
       for Accel of Accels loop
          KeyEntry.Name :=
            New_String(Widget_Image(OptionsFrame) & To_String(Accel.EntryName));
