@@ -18,6 +18,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
+with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
@@ -851,6 +852,22 @@ package body Maps.UI is
       MapView.Interp := Get_Context;
       MapView.Name := New_String(".paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
+         declare
+            KeysFile: File_Type;
+         begin
+            Open(KeysFile, In_File, To_String(SaveDirectory) & "keys.cfg");
+            for Key of MenuAccelerators loop
+               Key := To_Unbounded_String(Get_Line(KeysFile));
+            end loop;
+            for Key of MapAccelerators loop
+               Key := To_Unbounded_String(Get_Line(KeysFile));
+            end loop;
+            FullScreenAccel := To_Unbounded_String(Get_Line(KeysFile));
+            Close(KeysFile);
+         exception
+            when others =>
+               null;
+         end;
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
@@ -868,6 +885,7 @@ package body Maps.UI is
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
+         SetKeys;
       end if;
       Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
       if GameSettings.FullScreen then
