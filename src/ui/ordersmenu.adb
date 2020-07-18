@@ -248,7 +248,9 @@ package body OrdersMenu is
                   end if;
                end loop;
                if MissionsLimit > 0 then
-                  Add(OrdersMenu, "command", "-label Missions -underline 0 -command {ShowMissions available}");
+                  Add
+                    (OrdersMenu, "command",
+                     "-label Missions -underline 0 -command {ShowMissions available}");
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
@@ -266,13 +268,17 @@ package body OrdersMenu is
          end if;
          case Event is
             when EnemyShip | EnemyPatrol =>
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Attack} -underline 0 -command Attack");
             when FullDocks =>
                Add
                  (OrdersMenu, "command",
                   "-label {Wait (full docks} -underline 0");
             when AttackOnBase =>
-               Add(OrdersMenu, "command", "-label {Defend} -underline 0 -command Attack");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Defend} -underline 0 -command Attack");
             when Disease =>
                if HaveTrader then
                   ItemIndex :=
@@ -390,7 +396,9 @@ package body OrdersMenu is
                     (OrdersMenu, "command",
                      "-label {Ask for bases} -underline 8");
                end if;
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Attack} -underline 0 -command Attack");
             when FriendlyShip =>
                if HaveTrader then
                   if Index
@@ -411,7 +419,9 @@ package body OrdersMenu is
                     (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8");
                end if;
-               Add(OrdersMenu, "command", "-label {Attack} -underline 0 -command Attack");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Attack} -underline 0 -command Attack");
          end case;
       end if;
       Add(OrdersMenu, "command", "-label {Close} -underline 0");

@@ -28,7 +28,7 @@ package Maps.UI is
    -- FUNCTION
    -- Array with the game menu default accelerators
    -- SOURCE
-   MenuAccelerators: constant array(1 .. 16) of Unbounded_String :=
+   MenuAccelerators: array(1 .. 16) of Unbounded_String :=
      (To_Unbounded_String("s"), To_Unbounded_String("a"),
       To_Unbounded_String("c"), To_Unbounded_String("o"),
       To_Unbounded_String("r"), To_Unbounded_String("m"),
@@ -43,7 +43,7 @@ package Maps.UI is
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
-   MapAccelerators: constant array(1 .. 37) of Unbounded_String :=
+   MapAccelerators: array(1 .. 37) of Unbounded_String :=
      (To_Unbounded_String("e"), To_Unbounded_String("v"),
       To_Unbounded_String("plus"), To_Unbounded_String("minus"),
       To_Unbounded_String("KP_7"), To_Unbounded_String("KP_8"),
@@ -53,16 +53,23 @@ package Maps.UI is
       To_Unbounded_String("KP_3"), To_Unbounded_String("KP_Divide"),
       To_Unbounded_String("Shift-Return"), To_Unbounded_String("H"),
       To_Unbounded_String("Shift-KP_Home"), To_Unbounded_String("Shift-KP_Up"),
-      To_Unbounded_String("Shift-KP_Prior"), To_Unbounded_String("Shift-KP_Left"),
-      To_Unbounded_String("Shift-KP_Right"), To_Unbounded_String("Shift-KP_End"),
-      To_Unbounded_String("Control-KP_Down"), To_Unbounded_String("Control-KP_Next"),
-      To_Unbounded_String("Control-KP_Home"), To_Unbounded_String("Control-KP_Up"),
-      To_Unbounded_String("Control-KP_Prior"), To_Unbounded_String("Control-KP_Left"),
-      To_Unbounded_String("Control-KP_Right"), To_Unbounded_String("Control-KP_End"),
-      To_Unbounded_String("Control-KP_Down"), To_Unbounded_String("Control-KP_Next"),
-      To_Unbounded_String("Control-KP_Begin"), To_Unbounded_String("Control-1"),
-      To_Unbounded_String("Control-2"), To_Unbounded_String("Control-3"),
-      To_Unbounded_String("Control-4"));
+      To_Unbounded_String("Shift-KP_Prior"),
+      To_Unbounded_String("Shift-KP_Left"),
+      To_Unbounded_String("Shift-KP_Right"),
+      To_Unbounded_String("Shift-KP_End"),
+      To_Unbounded_String("Control-KP_Down"),
+      To_Unbounded_String("Control-KP_Next"),
+      To_Unbounded_String("Control-KP_Home"),
+      To_Unbounded_String("Control-KP_Up"),
+      To_Unbounded_String("Control-KP_Prior"),
+      To_Unbounded_String("Control-KP_Left"),
+      To_Unbounded_String("Control-KP_Right"),
+      To_Unbounded_String("Control-KP_End"),
+      To_Unbounded_String("Control-KP_Down"),
+      To_Unbounded_String("Control-KP_Next"),
+      To_Unbounded_String("Control-KP_Begin"),
+      To_Unbounded_String("Control-1"), To_Unbounded_String("Control-2"),
+      To_Unbounded_String("Control-3"), To_Unbounded_String("Control-4"));
    -- ****
 
    -- ****v* Maps.UI/FullScreenAccel
