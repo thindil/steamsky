@@ -16,6 +16,7 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -422,6 +423,7 @@ package body GameOptions is
       ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
+      KeysFile: File_Type;
    begin
       CloseButton.Interp := Interp;
       CloseButton.Name := New_String(".header.closebutton");
@@ -544,6 +546,15 @@ package body GameOptions is
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
+      Create(KeysFile, Append_File, To_String(SaveDirectory) & "keys.cfg");
+      for Key of MenuAccelerators loop
+         Put_Line(KeysFile, To_String(Key));
+      end loop;
+      for Key of MapAccelerators loop
+         Put_Line(KeysFile, To_String(Key));
+      end loop;
+      Put_Line(KeysFile, To_String(FullScreenAccel));
+      Close(KeysFile);
       SetKeys;
       CreateGameMenu;
       ShowSkyMap(True);
