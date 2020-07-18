@@ -22,6 +22,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
@@ -38,6 +39,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Careers; use Careers;
 with Config; use Config;
@@ -45,6 +47,7 @@ with Factions; use Factions;
 with Game; use Game;
 with Goals.UI;
 with MainMenu.Commands;
+with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu is
@@ -81,10 +84,24 @@ package body MainMenu is
       Goals.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
       Tcl_EvalFile(Get_Context, UI_Directory & "theme.tcl");
-      Theme_Use("steamsky");
+      Theme_Use(To_String(GameSettings.InterfaceTheme));
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
+      if not GameSettings.ShowTooltips then
+         Disable;
+      end if;
+      DefaultFontsSizes :=
+        (Positive'Value(Font.Configure("MapFont", "-size")),
+         Positive'Value(Font.Configure("InterfaceFont", "-size")),
+         Positive'Value(Font.Configure("HelpFont", "-size")));
+      Font.Configure
+        ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
+      Font.Configure
+        ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
+      Font.Configure
+        ("InterfaceFont",
+         "-size" & Positive'Image(GameSettings.InterfaceFontSize));
       DataError := To_Unbounded_String(LoadGameData);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
@@ -185,6 +202,9 @@ package body MainMenu is
       Y := (Positive'Value(Winfo_Get(MainWindow, "vrootheight")) - 400) / 2;
       if Y < 0 then
          Y := 0;
+      end if;
+      if GameSettings.FullScreen then
+         Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 0");
       end if;
       Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
       Wm_Set
