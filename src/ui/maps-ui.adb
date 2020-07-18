@@ -912,6 +912,28 @@ package body Maps.UI is
       end if;
       Bind_To_Main_Window
         (Get_Context, "<Escape>", "{InvokeButton .header.closebutton}");
+      UpdateMessages;
+      UpdateMoveButtons;
+      if not GameSettings.ShowLastMessages then
+         MessagesFrame.Interp := Get_Context;
+         MessagesFrame.Name := New_String(".paned.controls.messages");
+         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
+      end if;
+   end CreateGameUI;
+
+   procedure ShowSkyMap(Clear: Boolean := False) is
+   begin
+      if Clear then
+         ShowScreen("mapframe");
+      end if;
+      UpdateHeader;
+      DrawMap;
+      UpdateMessages;
+      UpdateMoveButtons;
+   end ShowSkyMap;
+
+   procedure SetKeys is
+   begin
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
          "{tk_popup " & Widget_Image(GameMenu) & " %X %Y}");
@@ -1026,24 +1048,6 @@ package body Maps.UI is
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(FullScreenAccel) & ">",
          "{ToggleFullScreen}");
-      UpdateMessages;
-      UpdateMoveButtons;
-      if not GameSettings.ShowLastMessages then
-         MessagesFrame.Interp := Get_Context;
-         MessagesFrame.Name := New_String(".paned.controls.messages");
-         Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
-      end if;
-   end CreateGameUI;
-
-   procedure ShowSkyMap(Clear: Boolean := False) is
-   begin
-      if Clear then
-         ShowScreen("mapframe");
-      end if;
-      UpdateHeader;
-      DrawMap;
-      UpdateMessages;
-      UpdateMoveButtons;
-   end ShowSkyMap;
+   end SetKeys;
 
 end Maps.UI;
