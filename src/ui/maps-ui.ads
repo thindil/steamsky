@@ -138,6 +138,13 @@ package Maps.UI is
    procedure ShowSkyMap(Clear: Boolean := False);
    -- ****
 
+   -- ****f* MUI/SetKeys
+   -- FUNCTION
+   -- Set keyboard shortcuts
+   -- SOURCE
+   procedure SetKeys;
+   -- ****
+
 private
 
    -- ****v* Maps.UI/StartX

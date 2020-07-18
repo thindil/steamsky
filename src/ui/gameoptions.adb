@@ -525,7 +525,7 @@ package body GameOptions is
       GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
       SaveConfig;
       KeyEntry.Interp := Interp;
-      for I in Accels'Range loop
+      for I in 1 .. (Accels'Last - 1) loop
          Unbind_From_Main_Window
            (Interp, "<" & To_String(Accels(I).ShortCut) & ">");
          KeyEntry.Name :=
@@ -539,6 +539,12 @@ package body GameOptions is
             MapAccelerators(I - 16) := To_Unbounded_String(Get(KeyEntry));
          end if;
       end loop;
+      Unbind_From_Main_Window
+        (Interp, "<" & To_String(Accels(Accels'Last).ShortCut) & ">");
+      KeyEntry.Name :=
+        New_String(RootName & To_String(Accels(Accels'Last).EntryName));
+      FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
+      SetKeys;
       CreateGameMenu;
       ShowSkyMap(True);
       return TCL_OK;
