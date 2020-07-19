@@ -34,6 +34,9 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases.Cargo; use Bases.Cargo;
+with BasesTypes; use BasesTypes;
+with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
@@ -71,11 +74,37 @@ package body Trades.UI is
       TradeFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ItemsView: Ttk_Tree_View;
-      ItemDurability, ItemType, ProtoIndex: Unbounded_String;
+      ItemDurability, ItemType, ProtoIndex, BaseType: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      ItemWeight: Positive;
+      ItemWeight, Price: Positive;
       ComboBox: Ttk_ComboBox;
       FirstIndex: Natural := 0;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseCargo: BaseCargo_Container.Vector;
+      BaseCargoIndex: Natural;
+      IndexesList: Positive_Container.Vector;
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      Profit: Integer;
+      procedure AddType is
+      begin
+         if Index
+             (ItemsTypes,
+              To_String("{" & Items_List(ProtoIndex).IType & "}")) =
+           0 and
+           Index
+               (ItemsTypes,
+                To_String("{" & Items_List(ProtoIndex).ShowType & "}")) =
+             0 then
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               Append(ItemsTypes, " {" & Items_List(ProtoIndex).IType & "}");
+            else
+               Append
+                 (ItemsTypes, " {" & Items_List(ProtoIndex).ShowType & "}");
+            end if;
+         end if;
+      end AddType;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -106,42 +135,71 @@ package body Trades.UI is
       ItemsView.Interp := Interp;
       ItemsView.Name := New_String(Widget_Image(TradeFrame) & ".trade.view");
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
+      if BaseIndex > 0 then
+         BaseType := SkyBases(BaseIndex).BaseType;
+         BaseCargo := SkyBases(BaseIndex).Cargo;
+      else
+         BaseType := To_Unbounded_String("0");
+         BaseCargo := TraderCargo;
+      end if;
       for I in PlayerShip.Cargo.Iterate loop
-         null;
---         if PlayerShip.Cargo(I).Durability = 100 then
---            ItemDurability := Null_Unbounded_String;
---         else
---            ItemDurability :=
---              To_Unbounded_String
---                (GetItemDamage(PlayerShip.Cargo(I).Durability));
---         end if;
---         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
---         if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
---            ItemType := Items_List(ProtoIndex).ShowType;
---         else
---            ItemType := Items_List(ProtoIndex).IType;
---         end if;
---         if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
---            Append(ItemsTypes, " {" & To_String(ItemType) & "}");
---         end if;
---         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
---           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
---            goto End_Of_Loop;
---         end if;
---         if FirstIndex = 0 then
---            FirstIndex := Inventory_Container.To_Index(I);
---         end if;
---         ItemWeight :=
---           PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight;
---         Insert
---           (ItemsView,
---            "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
---            " -values [list {" &
---            GetItemName(PlayerShip.Cargo(I), False, False) & "} {" &
---            To_String(ItemDurability) & "} {" & To_String(ItemType) & "}" &
---            Positive'Image(PlayerShip.Cargo(I).Amount) & " " &
---            Positive'Image(ItemWeight) & "]");
---         <<End_Of_Loop>>
+         if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) > 0 then
+            ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+            BaseCargoIndex :=
+              FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
+            if BaseCargoIndex > 0 then
+               IndexesList.Append(New_Item => BaseCargoIndex);
+            end if;
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+                  ItemType := Items_List(ProtoIndex).IType;
+            else
+               ItemType := Items_List(ProtoIndex).ShowType;
+            end if;
+            AddType;
+            if PlayerShip.Cargo(I).Durability < 100 then
+               ItemDurability := 
+                  To_Unbounded_String(GetItemDamage(PlayerShip.Cargo(I).Durability));
+            else
+               ItemDurability := Null_Unbounded_String;
+            end if;
+            if BaseCargoIndex = 0 then
+               Price := Get_Price(BaseType, ProtoIndex);
+            else
+               if BaseIndex > 0 then
+                  Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
+               else
+                  Price := TraderCargo(BaseCargoIndex).Price;
+               end if;
+            end if;
+            if EventIndex > 0 then
+               if Events_List(EventIndex).EType = DoublePrice
+                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+                  Price := Price * 2;
+               end if;
+            end if;
+            Profit := Price - PlayerShip.Cargo(I).Price;
+            if Profit < 0 then
+               Set(ItemsList, ItemsIter, 11, "red");
+            elsif Profit > 0 then
+               Set(ItemsList, ItemsIter, 11, "green");
+            end if;
+            Set(ItemsList, ItemsIter, 7, Gint(PlayerShip.Cargo(I).Amount));
+            if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
+               if BaseIndex = 0 then
+                  Set
+                    (ItemsList, ItemsIter, 8,
+                     Gint(TraderCargo(BaseCargoIndex).Amount));
+               else
+                  Set
+                    (ItemsList, ItemsIter, 8,
+                     Gint(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
+               end if;
+            end if;
+            Insert(ItemsView, "{} end -id"  & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -values [list {" &
+            GetItemName(PlayerShip.Cargo(I), False, False) & "} {" & To_String(ItemType) & "} {" &
+            To_String(ItemDurability) & "} {" & Positve'Image(Price) & "} {");
+         end if;
       end loop;
       Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
