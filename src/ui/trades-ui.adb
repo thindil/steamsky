@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -200,6 +202,50 @@ package body Trades.UI is
                "} {" & Positive'Image(Price) & "} {" & Integer'Image(Profit) &
                "} {" & Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
                Natural'Image(BaseAmount) & "}]");
+         end if;
+      end loop;
+      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+         if IndexesList.Find_Index(Item => I) = 0 and
+           Is_Buyable
+             (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
+              BaseIndex => BaseIndex) then
+            ProtoIndex := BaseCargo(I).ProtoIndex;
+            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+               ItemType := Items_List(ProtoIndex).IType;
+            else
+               ItemType := Items_List(ProtoIndex).ShowType;
+            end if;
+            AddType;
+            if BaseCargo(I).Durability < 100 then
+               ItemDurability :=
+                 To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability));
+            else
+               ItemDurability := Null_Unbounded_String;
+            end if;
+            if BaseIndex > 0 then
+               Price := SkyBases(BaseIndex).Cargo(I).Price;
+            else
+               Price := TraderCargo(I).Price;
+            end if;
+            if EventIndex > 0 then
+               if Events_List(EventIndex).EType = DoublePrice
+                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+                  Price := Price * 2;
+               end if;
+            end if;
+            if BaseIndex = 0 then
+               BaseAmount := TraderCargo(I).Amount;
+            else
+               BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
+            end if;
+            Insert
+              (ItemsView,
+               "{} end -id b" & Trim(Positive'Image(I), Left) & " -values [list {" &
+               To_String(Items_List(ProtoIndex).Name) & "} {" &
+               To_String(ItemType) & "} {" & To_String(ItemDurability) &
+               "} {" & Positive'Image(Price) & "} {" &
+               Integer'Image(-(Price)) & "} {0} {" &
+               Positive'Image(BaseAmount) & "}]");
          end if;
       end loop;
       Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
