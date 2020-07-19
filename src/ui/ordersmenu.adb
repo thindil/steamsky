@@ -138,7 +138,7 @@ package body OrdersMenu is
            (OrdersMenu, "command",
             "-label {Escape} -underline 3 -command {Docking escape}");
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
-            Add(OrdersMenu, "command", "-label {Trade} -underline 0");
+            Add(OrdersMenu, "command", "-label {Trade} -underline 0 -command ShowTrade");
             Add(OrdersMenu, "command", "-label {School} -underline 0");
             if SkyBases(BaseIndex).Recruits.Length > 0 then
                Add(OrdersMenu, "command", "-label {Recruit} -underline 0");
@@ -388,7 +388,7 @@ package body OrdersMenu is
                end if;
             when Trader =>
                if HaveTrader then
-                  Add(OrdersMenu, "command", "-label {Trade} -underline 0");
+                  Add(OrdersMenu, "command", "-label {Trade} -underline 0 -command ShowTrade");
                   Add
                     (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8");
@@ -410,7 +410,7 @@ package body OrdersMenu is
                          .Name,
                        To_String(TradersName)) >
                     0 then
-                     Add(OrdersMenu, "command", "-label {Trade} -underline 0");
+                     Add(OrdersMenu, "command", "-label {Trade} -underline 0 -command ShowTrade");
                      Add
                        (OrdersMenu, "command",
                         "-label {Ask for bases} -underline 8");
