@@ -20,6 +20,7 @@ $tradeview heading profit -text {Profit}
 $tradeview heading owned -text {Owned}
 $tradeview heading available -text {Available}
 grid $tradeview -sticky nwes
+bind $tradeview <<TreeviewSelect>> ShowTradeItemInfo
 grid [ttk::scrollbar $tradeframe.trade.scrolly -orient vertical -command [list $tradeview yview]] -row 0 -column 1 -sticky ns
 # Item info
 set itemframe [ttk::frame $tradeframe.item]
