@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -26,6 +27,7 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -240,11 +242,11 @@ package body Trades.UI is
             end if;
             Insert
               (ItemsView,
-               "{} end -id b" & Trim(Positive'Image(I), Left) & " -values [list {" &
-               To_String(Items_List(ProtoIndex).Name) & "} {" &
-               To_String(ItemType) & "} {" & To_String(ItemDurability) &
-               "} {" & Positive'Image(Price) & "} {" &
-               Integer'Image(-(Price)) & "} {0} {" &
+               "{} end -id b" & Trim(Positive'Image(I), Left) &
+               " -values [list {" & To_String(Items_List(ProtoIndex).Name) &
+               "} {" & To_String(ItemType) & "} {" &
+               To_String(ItemDurability) & "} {" & Positive'Image(Price) &
+               "} {" & Integer'Image(-(Price)) & "} {0} {" &
                Positive'Image(BaseAmount) & "}]");
          end if;
       end loop;
@@ -280,7 +282,7 @@ package body Trades.UI is
    -- FUNCTION
    -- Index of the currently selected item
    -- SOURCE
-   ItemIndex: Positive;
+   ItemIndex: Integer;
    -- ****
 
    -- ****f* TUI/Show_Trade_Item_Info_Command
@@ -305,15 +307,153 @@ package body Trades.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       TradeView: Ttk_Tree_View;
---      GiveFrame: Ttk_Frame;
---      SpinBox: Ttk_SpinBox;
+      ItemInfo, ProtoIndex: Unbounded_String;
+      CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseType, SelectedItem: Unbounded_String;
+      Price, MoneyIndex2: Natural;
+      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
+      ItemText: Tk_Text;
    begin
       TradeView.Interp := Interp;
       TradeView.Name :=
         New_String(".paned.tradeframe.canvas.trade.trade.view");
-      ItemIndex := Positive'Value(Selection(TradeView));
---      ShowInventoryItemInfo
---        (".paned.tradeframe.canvas.trade.item.info.text", ItemIndex, 0);
+      SelectedItem := To_Unbounded_String(Selection(TradeView));
+      if Element(SelectedItem, 1) = 'b' then
+         ItemIndex :=
+           -(Positive'Value(Slice(SelectedItem, 2, Length(SelectedItem))));
+         BaseCargoIndex := abs (ItemIndex);
+      else
+         ItemIndex := Positive'Value(To_String(SelectedItem));
+         CargoIndex := ItemIndex;
+      end if;
+      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
+         return TCL_OK;
+      end if;
+      if BaseIndex > 0 then
+         BaseType := SkyBases(BaseIndex).BaseType;
+      else
+         BaseType := To_Unbounded_String("0");
+      end if;
+      if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
+         return TCL_OK;
+      elsif BaseIndex > 0
+        and then BaseCargoIndex >
+          Natural(SkyBases(BaseIndex).Cargo.Length) then
+         return TCL_OK;
+      end if;
+      if CargoIndex > 0 then
+         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+         if BaseCargoIndex = 0 then
+            BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
+         end if;
+      else
+         if BaseIndex = 0 then
+            ProtoIndex := TraderCargo(BaseCargoIndex).ProtoIndex;
+         else
+            ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+         end if;
+      end if;
+      if BaseCargoIndex = 0 then
+         if BaseCargoIndex2 > 0 then
+            if BaseIndex > 0 then
+               Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Price;
+            else
+               Price := TraderCargo(BaseCargoIndex2).Price;
+            end if;
+         else
+            Price := Get_Price(BaseType, ProtoIndex);
+         end if;
+      else
+         if BaseIndex > 0 then
+            Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
+         else
+            Price := TraderCargo(BaseCargoIndex).Price;
+         end if;
+      end if;
+      declare
+         EventIndex: constant Natural :=
+           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      begin
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               Price := Price * 2;
+            end if;
+         end if;
+      end;
+      Append
+        (ItemInfo,
+         "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
+      if Items_List(ProtoIndex).IType = WeaponType then
+         Append
+           (ItemInfo,
+            LF & "Skill: " &
+            To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
+            "/" &
+            To_String
+              (Attributes_List
+                 (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
+                 .Name));
+         if Items_List(ProtoIndex).Value(4) = 1 then
+            Append(ItemInfo, LF & "Can be used with shield.");
+         else
+            Append
+              (ItemInfo,
+               LF & "Can't be used with shield (two-handed weapon).");
+         end if;
+         Append(ItemInfo, LF & "Damage type: ");
+         case Items_List(ProtoIndex).Value(5) is
+            when 1 =>
+               Append(ItemInfo, "cutting");
+            when 2 =>
+               Append(ItemInfo, "impaling");
+            when 3 =>
+               Append(ItemInfo, "blunt");
+            when others =>
+               null;
+         end case;
+      end if;
+      for ItemType of ItemTypes loop
+         if Items_List(ProtoIndex).IType = ItemType then
+            Append
+              (ItemInfo,
+               LF & "Damage chance: " &
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+            Append
+              (ItemInfo,
+               LF & "Strength:" &
+               Integer'Image(Items_List(ProtoIndex).Value(2)));
+            exit;
+         end if;
+      end loop;
+      if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         Append
+           (ItemInfo,
+            LF & "Damage chance: " &
+            GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
+      end if;
+      if Length(Items_List(ProtoIndex).IType) > 4
+        and then
+        (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
+         Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+         Append
+           (ItemInfo,
+            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+      end if;
+      if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
+         Append
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+      end if;
+      ItemText.Interp := Interp;
+      ItemText.Name :=
+        New_String(".paned.tradeframe.canvas.trade.item.info.text");
+      configure(ItemText, "-state normal");
+      Delete(ItemText, "1.0", "end");
+      Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
+      configure(ItemText, "-state disabled");
 --      GiveFrame.Interp := Interp;
 --      GiveFrame.Name :=
 --        New_String(".paned.tradeframe.canvas.trade.item.giveframe");
