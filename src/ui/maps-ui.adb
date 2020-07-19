@@ -66,6 +66,7 @@ with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
 with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
+with Trades.UI;
 with Utils.UI; use Utils.UI;
 with WaitMenu;
 
@@ -882,6 +883,7 @@ package body Maps.UI is
          Messages.UI.AddCommands;
          BasesList.AddCommands;
          GameOptions.AddCommands;
+         Trades.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
