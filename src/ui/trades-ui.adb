@@ -67,7 +67,7 @@ package body Trades.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(ClientData, Argv);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       TradeCanvas: Tk_Canvas;
@@ -76,13 +76,13 @@ package body Trades.UI is
       ItemsView: Ttk_Tree_View;
       ItemDurability, ItemType, ProtoIndex, BaseType: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      ItemWeight, Price: Positive;
+      Price: Positive;
       ComboBox: Ttk_ComboBox;
       FirstIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargo: BaseCargo_Container.Vector;
-      BaseCargoIndex: Natural;
+      BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
@@ -151,14 +151,15 @@ package body Trades.UI is
                IndexesList.Append(New_Item => BaseCargoIndex);
             end if;
             if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-                  ItemType := Items_List(ProtoIndex).IType;
+               ItemType := Items_List(ProtoIndex).IType;
             else
                ItemType := Items_List(ProtoIndex).ShowType;
             end if;
             AddType;
             if PlayerShip.Cargo(I).Durability < 100 then
-               ItemDurability := 
-                  To_Unbounded_String(GetItemDamage(PlayerShip.Cargo(I).Durability));
+               ItemDurability :=
+                 To_Unbounded_String
+                   (GetItemDamage(PlayerShip.Cargo(I).Durability));
             else
                ItemDurability := Null_Unbounded_String;
             end if;
@@ -178,27 +179,27 @@ package body Trades.UI is
                end if;
             end if;
             Profit := Price - PlayerShip.Cargo(I).Price;
-            if Profit < 0 then
-               Set(ItemsList, ItemsIter, 11, "red");
-            elsif Profit > 0 then
-               Set(ItemsList, ItemsIter, 11, "green");
-            end if;
-            Set(ItemsList, ItemsIter, 7, Gint(PlayerShip.Cargo(I).Amount));
+            BaseAmount := 0;
             if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
                if BaseIndex = 0 then
-                  Set
-                    (ItemsList, ItemsIter, 8,
-                     Gint(TraderCargo(BaseCargoIndex).Amount));
+                  BaseAmount := TraderCargo(BaseCargoIndex).Amount;
                else
-                  Set
-                    (ItemsList, ItemsIter, 8,
-                     Gint(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
+                  BaseAmount :=
+                    SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
                end if;
             end if;
-            Insert(ItemsView, "{} end -id"  & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -values [list {" &
-            GetItemName(PlayerShip.Cargo(I), False, False) & "} {" & To_String(ItemType) & "} {" &
-            To_String(ItemDurability) & "} {" & Positve'Image(Price) & "} {");
+            if FirstIndex = 0 then
+               FirstIndex := Inventory_Container.To_Index(I);
+            end if;
+            Insert
+              (ItemsView,
+               "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
+               " -values [list {" &
+               GetItemName(PlayerShip.Cargo(I), False, False) & "} {" &
+               To_String(ItemType) & "} {" & To_String(ItemDurability) &
+               "} {" & Positive'Image(Price) & "} {" & Integer'Image(Profit) &
+               "} {" & Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
+               Natural'Image(BaseAmount) & "}]");
          end if;
       end loop;
       Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
