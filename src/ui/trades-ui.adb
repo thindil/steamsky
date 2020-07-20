@@ -565,88 +565,85 @@ package body Trades.UI is
            and then TraderCargo(BaseCargoIndex).Amount > 0 then
             Tcl.Tk.Ada.Grid.Grid(Frame);
          end if;
-         if Winfo_Get(Frame, "ismapped") = "1" then
-            declare
-               MaxBuyAmount: Integer :=
-                 PlayerShip.Cargo(MoneyIndex2).Amount / Price;
-               MaxPrice: Natural := MaxBuyAmount * Price;
-               Weight: Integer;
-               AmountBox: Ttk_SpinBox;
-               AmountLabel: Ttk_Label;
-            begin
-               AmountBox.Interp := Interp;
-               AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
-               if MaxBuyAmount > 0 then
-                  Set(AmountBox, "1");
-                  CountPrice(MaxPrice, FindMember(Talk));
-                  if MaxPrice < (MaxBuyAmount * Price) then
-                     MaxBuyAmount :=
-                       Natural
-                         (Float'Floor
-                            (Float(MaxBuyAmount) *
-                             ((Float(MaxBuyAmount) * Float(Price)) /
-                              Float(MaxPrice))));
+         declare
+            MaxBuyAmount: Integer :=
+              PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+            MaxPrice: Natural := MaxBuyAmount * Price;
+            Weight: Integer;
+            AmountBox: Ttk_SpinBox;
+            AmountLabel: Ttk_Label;
+         begin
+            AmountBox.Interp := Interp;
+            AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
+            if MaxBuyAmount > 0 then
+               Set(AmountBox, "1");
+               CountPrice(MaxPrice, FindMember(Talk));
+               if MaxPrice < (MaxBuyAmount * Price) then
+                  MaxBuyAmount :=
+                    Natural
+                      (Float'Floor
+                         (Float(MaxBuyAmount) *
+                          ((Float(MaxBuyAmount) * Float(Price)) /
+                           Float(MaxPrice))));
+               end if;
+               if BaseIndex > 0
+                 and then MaxBuyAmount >
+                   SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
+                  MaxBuyAmount :=
+                    SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+               elsif BaseIndex = 0
+                 and then MaxBuyAmount >
+                   TraderCargo(BaseCargoIndex).Amount then
+                  MaxBuyAmount := TraderCargo(BaseCargoIndex).Amount;
+               end if;
+               MaxPrice := MaxBuyAmount * Price;
+               CountPrice(MaxPrice, FindMember(Talk));
+               Weight :=
+                 FreeCargo
+                   (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+               while Weight < 0 loop
+                  MaxBuyAmount :=
+                    MaxBuyAmount + (Weight / Items_List(ProtoIndex).Weight) -
+                    1;
+                  if MaxBuyAmount < 0 then
+                     MaxBuyAmount := 0;
                   end if;
-                  if BaseIndex > 0
-                    and then MaxBuyAmount >
-                      SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount then
-                     MaxBuyAmount :=
-                       SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-                  elsif BaseIndex = 0
-                    and then MaxBuyAmount >
-                      TraderCargo(BaseCargoIndex).Amount then
-                     MaxBuyAmount := TraderCargo(BaseCargoIndex).Amount;
-                  end if;
+                  exit when MaxBuyAmount = 0;
                   MaxPrice := MaxBuyAmount * Price;
                   CountPrice(MaxPrice, FindMember(Talk));
                   Weight :=
                     FreeCargo
                       (MaxPrice -
                        (Items_List(ProtoIndex).Weight * MaxBuyAmount));
-                  while Weight < 0 loop
-                     MaxBuyAmount :=
-                       MaxBuyAmount +
-                       (Weight / Items_List(ProtoIndex).Weight) - 1;
-                     if MaxBuyAmount < 0 then
-                        MaxBuyAmount := 0;
-                     end if;
-                     exit when MaxBuyAmount = 0;
-                     MaxPrice := MaxBuyAmount * Price;
-                     CountPrice(MaxPrice, FindMember(Talk));
-                     Weight :=
-                       FreeCargo
-                         (MaxPrice -
-                          (Items_List(ProtoIndex).Weight * MaxBuyAmount));
-                  end loop;
-                  if MaxBuyAmount > 0 then
-                     configure(AmountBox, "-to" & Natural'Image(MaxBuyAmount));
-                     configure
-                       (AmountBox,
-                        "-to" & Natural'Image(MaxBuyAmount) &
-                        " -validatecommand {ValidateSpinbox %S %s" &
-                        Positive'Image(MaxBuyAmount) & "}");
-                     AmountLabel.Interp := Interp;
+               end loop;
+               if MaxBuyAmount > 0 then
+                  configure(AmountBox, "-to" & Natural'Image(MaxBuyAmount));
+                  configure
+                    (AmountBox,
+                     "-to" & Natural'Image(MaxBuyAmount) &
+                     " -validatecommand {ValidateSpinbox %S %s" &
+                     Positive'Image(MaxBuyAmount) & "}");
+                  AmountLabel.Interp := Interp;
+                  AmountLabel.Name :=
+                    New_String(Widget_Image(Frame) & ".amountlbl");
+                  configure
+                    (AmountLabel,
+                     "-text {(max" & Natural'Image(MaxBuyAmount) & "):}");
+                  if MaxBuyAmount = 1 then
                      AmountLabel.Name :=
-                       New_String(Widget_Image(Frame) & ".amountlbl");
-                     configure
-                       (AmountLabel,
-                        "-text {(max" & Natural'Image(MaxBuyAmount) & "):}");
-                     if MaxBuyAmount = 1 then
-                        AmountLabel.Name :=
-                          New_String(Widget_Image(Frame) & ".orlbl");
-                        Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-                        AmountLabel.Name :=
-                          New_String(Widget_Image(Frame) & ".buymax");
-                        Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-                     end if;
-                  else
-                     Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+                       New_String(Widget_Image(Frame) & ".orlbl");
+                     Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
+                     AmountLabel.Name :=
+                       New_String(Widget_Image(Frame) & ".buymax");
+                     Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
                   end if;
                else
                   Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
                end if;
-            end;
-         end if;
+            else
+               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+            end if;
+         end;
       end if;
 --      if MoneyIndex2 > 0 then
 --         Set_Label
