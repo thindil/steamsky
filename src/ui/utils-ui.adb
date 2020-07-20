@@ -210,8 +210,11 @@ package body Utils.UI is
       Amount: Integer;
       Label: Ttk_Label;
    begin
-      if CArgv.Arg(Argv, 1) = "trade" then
-         LabelName := To_Unbounded_String("trade");
+      if CArgv.Arg(Argv, 1) =
+        ".paned.tradeframe.canvas.trade.item.sellframe.amount" then
+         LabelName :=
+           To_Unbounded_String
+             (".paned.tradeframe.canvas.trade.item.sellframe.error");
          WarningText :=
            To_Unbounded_String("You will sell amount below low level of ");
       elsif CArgv.Arg(Argv, 1) = "loot" then
