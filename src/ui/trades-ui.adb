@@ -706,10 +706,145 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
+   -- ****f* TUI/Trade_Item_Command
+   -- FUNCTION
+   -- Buy or sell the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Trade_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Trade_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseCargoIndex, CargoIndex: Natural := 0;
+      Trader: String(1 .. 4);
+      Amount: Natural;
+      ProtoIndex: Unbounded_String;
+      SpinBox: Ttk_SpinBox;
+      Label: Ttk_Label;
+   begin
+      if ItemIndex < 0 then
+         BaseCargoIndex := abs (ItemIndex);
+      else
+         CargoIndex := ItemIndex;
+      end if;
+      if CargoIndex > 0 then
+         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+         if BaseCargoIndex = 0 then
+            BaseCargoIndex := FindBaseCargo(ProtoIndex);
+         end if;
+      else
+         if BaseIndex = 0 then
+            ProtoIndex := TraderCargo(BaseCargoIndex).ProtoIndex;
+         else
+            ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
+         end if;
+      end if;
+      if BaseIndex > 0 then
+         Trader := "base";
+      else
+         Trader := "ship";
+      end if;
+      SpinBox.Interp := Interp;
+      Label.Interp := Interp;
+      if CArgv.Arg(Argv, 1) in "buy" | "buymax" then
+         SpinBox.Name :=
+           New_String(".paned.tradeframe.canvas.trade.item.buyframe.amount");
+         Label.Name :=
+           New_String
+             (".paned.tradeframe.canvas.trade.item.buyframe.amountlbl");
+         if CArgv.Arg(Argv, 1) = "buymax" then
+            Amount := Positive'Value(Get(SpinBox));
+         else
+            Amount :=
+              Natural'Value
+                (cget(Label, "-text")(5 .. cget(Label, "-text")'Length - 2));
+         end if;
+         BuyItems(BaseCargoIndex, Natural'Image(Amount));
+      else
+         SpinBox.Name :=
+           New_String(".paned.tradeframe.canvas.trade.item.sellframe.amount");
+         Amount := Positive'Value(Get(SpinBox));
+         if CArgv.Arg(Argv, 1) = "sell" then
+            SellItems(CargoIndex, Natural'Image(Amount));
+         else
+            SellItems
+              (CargoIndex,
+               Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
+         end if;
+      end if;
+      UpdateHeader;
+      return Show_Trade_Command(ClientData, Interp, Argc, Argv);
+--   exception
+--      when An_Exception : Trade_Cant_Buy =>
+--         ShowDialog
+--           ("You can't buy " & Exception_Message(An_Exception) & " in this " &
+--            Trader & ".");
+--         return TCL_OK;
+--      when An_Exception : Trade_Not_For_Sale_Now =>
+--         ShowDialog
+--           ("You can't buy " & Exception_Message(An_Exception) &
+--            " in this base at this moment.");
+--         return TCL_OK;
+--      when An_Exception : Trade_Buying_Too_Much =>
+--         ShowDialog
+--           (Trader & " don't have that much " &
+--            Exception_Message(An_Exception) & " for sale.");
+--         return TCL_OK;
+--      when Trade_No_Free_Cargo =>
+--         ShowDialog("You don't have that much free space in your ship cargo.");
+--         return TCL_OK;
+--      when An_Exception : Trade_No_Money =>
+--         ShowDialog
+--           ("You don't have any " & To_String(MoneyName) & " to buy " &
+--            Exception_Message(An_Exception) & ".");
+--         return TCL_OK;
+--      when An_Exception : Trade_Not_Enough_Money =>
+--         ShowDialog
+--           ("You don't have enough " & To_String(MoneyName) &
+--            " to buy so much " & Exception_Message(An_Exception) & ".");
+--         return TCL_OK;
+--      when Trade_Invalid_Amount =>
+--         if User_Data = Get_Object(Builder, "btnbuyitem") then
+--            ShowDialog("You entered invalid amount to buy.");
+--         else
+--            ShowDialog("You entered invalid amount to sell.");
+--         end if;
+--         return TCL_OK;
+--      when An_Exception : Trade_Too_Much_For_Sale =>
+--         ShowDialog
+--           ("You dont have that much " & Exception_Message(An_Exception) &
+--            " in ship cargo.");
+--         return TCL_OK;
+--      when An_Exception : Trade_No_Money_In_Base =>
+--         ShowDialog
+--           ("You can't sell so much " & Exception_Message(An_Exception) &
+--            " because " & Trader & " don't have that much " &
+--            To_String(MoneyName) & " to buy it.");
+--         return TCL_OK;
+--      when Trade_No_Trader =>
+--         ShowDialog
+--           ("You don't have assigned anyone in crew to talk in bases duty.");
+--         return TCL_OK;
+   end Trade_Item_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowTrade", Show_Trade_Command'Access);
       AddCommand("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
+      AddCommand("TradeItem", Trade_Item_Command'Access);
    end AddCommands;
 
 end Trades.UI;

@@ -31,16 +31,16 @@ grid [ttk::label $itemframe.shipmoney]
 grid [ttk::label $itemframe.shipspace]
 grid [ttk::label $itemframe.basemoney]
 grid [ttk::frame $itemframe.buyframe]
-grid [ttk::button $itemframe.buyframe.buy -text {Buy}]
+grid [ttk::button $itemframe.buyframe.buy -text {Buy} -command {TradeItem buy}]
 grid [ttk::label $itemframe.buyframe.amountlbl] -column 1 -row 0
 grid [ttk::spinbox $itemframe.buyframe.amount -from 1 -validate key] -column 2 -row 0
 grid [ttk::label $itemframe.buyframe.orlbl -text {or}] -column 3 -row 0
-grid [ttk::button $itemframe.buyframe.buymax -text {Buy max}] -column 4 -row 0
+grid [ttk::button $itemframe.buyframe.buymax -text {Buy max} -command {TradeItem buymax}] -column 4 -row 0
 grid [ttk::frame $itemframe.sellframe]
-grid [ttk::button $itemframe.sellframe.sell -text {Sell}]
+grid [ttk::button $itemframe.sellframe.sell -text {Sell} -command {TradeItem sell}]
 grid [ttk::label $itemframe.sellframe.amountlbl] -column 1 -row 0
 grid [ttk::spinbox $itemframe.sellframe.amount -from 1 -validate key] -column 2 -row 0
 grid [ttk::label $itemframe.sellframe.orlbl -text {or}] -column 3 -row 0
-grid [ttk::button $itemframe.sellframe.sellmax -text {Sell all}] -column 4 -row 0
+grid [ttk::button $itemframe.sellframe.sellmax -text {Sell all} -command {TradeItem sellall}] -column 4 -row 0
 grid [ttk::label $itemframe.sellframe.error -style Headerred.TLabel] -columnspan 4
 grid $itemframe -row 1 -column 1 -sticky nwes
