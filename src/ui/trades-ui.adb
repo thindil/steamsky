@@ -644,6 +644,8 @@ package body Trades.UI is
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             end if;
          end;
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
 --      if MoneyIndex2 > 0 then
 --         Set_Label
@@ -692,33 +694,6 @@ package body Trades.UI is
 --               To_String(MoneyName) & ".");
 --         end if;
 --      end if;
---      GiveFrame.Interp := Interp;
---      GiveFrame.Name :=
---        New_String(".paned.tradeframe.canvas.trade.item.giveframe");
---      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
---        MissionItemsType then
---         Tcl.Tk.Ada.Grid.Grid_Remove(GiveFrame);
---      else
---         Tcl.Tk.Ada.Grid.Grid(GiveFrame);
---      end if;
---      SpinBox.Interp := Interp;
---      SpinBox.Name :=
---        New_String(".paned.tradeframe.canvas.trade.item.dropframe.amount");
---      Set(SpinBox, "1");
---      configure
---        (SpinBox,
---         "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
---         " -validatecommand {CheckAmount %W" & Positive'Image(ItemIndex) &
---         " %P} -command {ValidateAmount " & Widget_Image(SpinBox) &
---         Positive'Image(ItemIndex) & "}");
---      SpinBox.Name := New_String(Widget_Image(GiveFrame) & ".amount");
---      Set(SpinBox, "1");
---      configure
---        (SpinBox,
---         "-to" & Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
---         " -validatecommand {CheckAmount %W" & Positive'Image(ItemIndex) &
---         " %P} -command {ValidateAmount " & Widget_Image(SpinBox) &
---         Positive'Image(ItemIndex) & "}");
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
