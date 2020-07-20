@@ -41,6 +41,6 @@ grid [ttk::button $itemframe.sellframe.sell -text {Sell}]
 grid [ttk::label $itemframe.sellframe.amountlbl] -column 1 -row 0
 grid [ttk::spinbox $itemframe.sellframe.amount -from 1 -validate key] -column 2 -row 0
 grid [ttk::label $itemframe.sellframe.orlbl -text {or}] -column 3 -row 0
-grid [ttk::button $itemframe.sellframe.buymax -text {Sell all}] -column 4 -row 0
+grid [ttk::button $itemframe.sellframe.sellmax -text {Sell all}] -column 4 -row 0
 grid [ttk::label $itemframe.sellframe.error -style Headerred.TLabel] -columnspan 4
 grid $itemframe -row 1 -column 1 -sticky nwes
