@@ -787,6 +787,7 @@ package body Trades.UI is
          end if;
       end if;
       UpdateHeader;
+      UpdateMessages;
       return Show_Trade_Command(ClientData, Interp, Argc, Argv);
    exception
       when An_Exception : Trade_Cant_Buy =>
