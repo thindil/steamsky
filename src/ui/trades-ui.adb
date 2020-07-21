@@ -82,11 +82,11 @@ package body Trades.UI is
       TradeFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ItemsView: Ttk_Tree_View;
-      ItemDurability, ItemType, ProtoIndex, BaseType: Unbounded_String;
+      ItemDurability, ItemType, ProtoIndex, BaseType,
+      FirstIndex: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
-      FirstIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargo: BaseCargo_Container.Vector;
@@ -184,8 +184,10 @@ package body Trades.UI is
                     SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
                end if;
             end if;
-            if FirstIndex = 0 then
-               FirstIndex := Inventory_Container.To_Index(I);
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex :=
+                 To_Unbounded_String
+                   (Positive'Image(Inventory_Container.To_Index(I)));
             end if;
             Insert
               (ItemsView,
@@ -239,6 +241,10 @@ package body Trades.UI is
             else
                BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
             end if;
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex :=
+                 To_Unbounded_String(" b" & Trim(Positive'Image(I), Left));
+            end if;
             Insert
               (ItemsView,
                "{} end -id b" & Trim(Positive'Image(I), Left) &
@@ -250,7 +256,7 @@ package body Trades.UI is
          end if;
          <<End_Of_Trader_Loop>>
       end loop;
-      Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
+      Selection_Set(ItemsView, "[list" & To_String(FirstIndex) & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
       if Argc = 1 then
          Current(ComboBox, "0");
