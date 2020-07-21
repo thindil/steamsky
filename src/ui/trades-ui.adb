@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -787,57 +788,58 @@ package body Trades.UI is
       end if;
       UpdateHeader;
       return Show_Trade_Command(ClientData, Interp, Argc, Argv);
---   exception
---      when An_Exception : Trade_Cant_Buy =>
---         ShowDialog
---           ("You can't buy " & Exception_Message(An_Exception) & " in this " &
---            Trader & ".");
---         return TCL_OK;
---      when An_Exception : Trade_Not_For_Sale_Now =>
---         ShowDialog
---           ("You can't buy " & Exception_Message(An_Exception) &
---            " in this base at this moment.");
---         return TCL_OK;
---      when An_Exception : Trade_Buying_Too_Much =>
---         ShowDialog
---           (Trader & " don't have that much " &
---            Exception_Message(An_Exception) & " for sale.");
---         return TCL_OK;
---      when Trade_No_Free_Cargo =>
---         ShowDialog("You don't have that much free space in your ship cargo.");
---         return TCL_OK;
---      when An_Exception : Trade_No_Money =>
---         ShowDialog
---           ("You don't have any " & To_String(MoneyName) & " to buy " &
---            Exception_Message(An_Exception) & ".");
---         return TCL_OK;
---      when An_Exception : Trade_Not_Enough_Money =>
---         ShowDialog
---           ("You don't have enough " & To_String(MoneyName) &
---            " to buy so much " & Exception_Message(An_Exception) & ".");
---         return TCL_OK;
---      when Trade_Invalid_Amount =>
---         if User_Data = Get_Object(Builder, "btnbuyitem") then
---            ShowDialog("You entered invalid amount to buy.");
---         else
---            ShowDialog("You entered invalid amount to sell.");
---         end if;
---         return TCL_OK;
---      when An_Exception : Trade_Too_Much_For_Sale =>
---         ShowDialog
---           ("You dont have that much " & Exception_Message(An_Exception) &
---            " in ship cargo.");
---         return TCL_OK;
---      when An_Exception : Trade_No_Money_In_Base =>
---         ShowDialog
---           ("You can't sell so much " & Exception_Message(An_Exception) &
---            " because " & Trader & " don't have that much " &
---            To_String(MoneyName) & " to buy it.");
---         return TCL_OK;
---      when Trade_No_Trader =>
---         ShowDialog
---           ("You don't have assigned anyone in crew to talk in bases duty.");
---         return TCL_OK;
+   exception
+      when An_Exception : Trade_Cant_Buy =>
+         ShowMessage
+           ("You can't buy " & Exception_Message(An_Exception) & " in this " &
+            Trader & ".");
+         return TCL_OK;
+      when An_Exception : Trade_Not_For_Sale_Now =>
+         ShowMessage
+           ("You can't buy " & Exception_Message(An_Exception) &
+            " in this base at this moment.");
+         return TCL_OK;
+      when An_Exception : Trade_Buying_Too_Much =>
+         ShowMessage
+           (Trader & " don't have that much " &
+            Exception_Message(An_Exception) & " for sale.");
+         return TCL_OK;
+      when Trade_No_Free_Cargo =>
+         ShowMessage
+           ("You don't have that much free space in your ship cargo.");
+         return TCL_OK;
+      when An_Exception : Trade_No_Money =>
+         ShowMessage
+           ("You don't have any " & To_String(MoneyName) & " to buy " &
+            Exception_Message(An_Exception) & ".");
+         return TCL_OK;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowMessage
+           ("You don't have enough " & To_String(MoneyName) &
+            " to buy so much " & Exception_Message(An_Exception) & ".");
+         return TCL_OK;
+      when Trade_Invalid_Amount =>
+         if CArgv.Arg(Argv, 1) = "buy" then
+            ShowMessage("You entered invalid amount to buy.");
+         else
+            ShowMessage("You entered invalid amount to sell.");
+         end if;
+         return TCL_OK;
+      when An_Exception : Trade_Too_Much_For_Sale =>
+         ShowMessage
+           ("You dont have that much " & Exception_Message(An_Exception) &
+            " in ship cargo.");
+         return TCL_OK;
+      when An_Exception : Trade_No_Money_In_Base =>
+         ShowMessage
+           ("You can't sell so much " & Exception_Message(An_Exception) &
+            " because " & Trader & " don't have that much " &
+            To_String(MoneyName) & " to buy it.");
+         return TCL_OK;
+      when Trade_No_Trader =>
+         ShowMessage
+           ("You don't have assigned anyone in crew to talk in bases duty.");
+         return TCL_OK;
    end Trade_Item_Command;
 
    procedure AddCommands is
