@@ -75,7 +75,7 @@ package body Trades.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       TradeCanvas: Tk_Canvas;
@@ -164,6 +164,10 @@ package body Trades.UI is
                ItemType := Items_List(ProtoIndex).ShowType;
             end if;
             AddType;
+            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+               and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+               goto End_Of_Cargo_Loop;
+            end if;
             if PlayerShip.Cargo(I).Durability < 100 then
                ItemDurability :=
                  To_Unbounded_String
@@ -209,6 +213,7 @@ package body Trades.UI is
                "} {" & Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
                Natural'Image(BaseAmount) & "}]");
          end if;
+         <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 and
@@ -222,6 +227,10 @@ package body Trades.UI is
                ItemType := Items_List(ProtoIndex).ShowType;
             end if;
             AddType;
+            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+               and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+               goto End_Of_Trader_Loop;
+            end if;
             if BaseCargo(I).Durability < 100 then
                ItemDurability :=
                  To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability));
@@ -253,6 +262,7 @@ package body Trades.UI is
                "} {" & Integer'Image(-(Price)) & "} {0} {" &
                Positive'Image(BaseAmount) & "}]");
          end if;
+         <<End_Of_Trader_Loop>>
       end loop;
       Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
