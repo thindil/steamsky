@@ -766,7 +766,7 @@ package body Trades.UI is
          Label.Name :=
            New_String
              (".paned.tradeframe.canvas.trade.item.buyframe.amountlbl");
-         if CArgv.Arg(Argv, 1) = "buymax" then
+         if CArgv.Arg(Argv, 1) = "buy" then
             Amount := Positive'Value(Get(SpinBox));
          else
             Amount :=
