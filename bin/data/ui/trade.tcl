@@ -8,6 +8,7 @@ set tradeframe [ttk::frame $tradecanvas.trade]
 grid [ttk::frame $tradeframe.options]
 grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
 grid [ttk::combobox $tradeframe.options.type -state readonly] -column 1 -row 0
+bind $tradeframe.options.type <<ComboboxSelected>> {ShowTrade [$tradeframe.options.type get]}
 grid [ttk::entry $tradeframe.options.search -validate key] -column 2 -row 0
 # Trade list
 grid [ttk::frame $tradeframe.trade] -sticky nwes
