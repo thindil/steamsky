@@ -124,7 +124,7 @@ package body Trades.UI is
       TradeCanvas.Name := New_String(Widget_Image(TradeFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String(Widget_Image(TradeCanvas) & ".trade.type.label");
+        New_String(Widget_Image(TradeCanvas) & ".trade.options.typelabel");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
