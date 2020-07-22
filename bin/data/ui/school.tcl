@@ -21,5 +21,5 @@ grid $schoolskillsview -sticky nwes
 grid [ttk::scrollbar $schoolskillsframe.scrolly -orient vertical -command [list $schoolskillsview yview]] -row 0 -column 1 -sticky ns
 # Skills options
 grid [ttk::label $schoolskillsframe.money]
-grid [ttk::button $schoolskillsframe.train -text {Train selected skill}]
+grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command TrainSkill]
 grid $schoolskillsframe -row 0 -column 1 -sticky nwes
