@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -61,6 +62,7 @@ package body Bases.SchoolUI is
       SchoolCanvas: Tk_Canvas;
       SchoolFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      CrewView: Ttk_Tree_View;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -85,8 +87,17 @@ package body Bases.SchoolUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      -- Fill UI
-      -- End of fill UI
+      SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
+      CrewView.Interp := Interp;
+      CrewView.Name := New_String(Widget_Image(SchoolFrame) & ".crew.view");
+      Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
+      for I in PlayerShip.Crew.Iterate loop
+         Insert
+           (CrewView,
+            "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+      end loop;
+      Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
       configure
@@ -101,7 +112,8 @@ package body Bases.SchoolUI is
          Widget_Image(SchoolFrame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (SchoolCanvas, "-scrollregion [list " & BBox(SchoolCanvas, "all") & "]");
+        (SchoolCanvas,
+         "-scrollregion [list " & BBox(SchoolCanvas, "all") & "]");
       ShowScreen("schoolframe");
       return TCL_OK;
    end Show_School_Command;
