@@ -30,6 +30,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -118,9 +119,93 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_School_Command;
 
+   -- ****f* SchoolUI/Show_Training_Info_Command
+   -- FUNCTION
+   -- Show training costs for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Training_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+      -- ****iv* SchoolUI/MemberIndex
+      -- FUNCTION
+      -- The currently selected crew member index
+      -- SOURCE
+   MemberIndex: Positive;
+   -- ****
+
+   function Show_Training_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CrewView, SkillsView: Ttk_Tree_View;
+      Cost, MoneyIndex2, FirstIndex: Natural := 0;
+      MoneyLabel: Ttk_Label;
+      TrainButton: Ttk_Button;
+   begin
+      CrewView.Interp := Interp;
+      CrewView.Name :=
+        New_String(".paned.schoolframe.canvas.school.crew.view");
+      MemberIndex := Positive'Value(Selection(CrewView));
+      SkillsView.Interp := Interp;
+      SkillsView.Name :=
+        New_String(".paned.schoolframe.canvas.school.skills.view");
+      Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
+      for I in Skills_List.Iterate loop
+         Cost := TrainCost(MemberIndex, SkillsData_Container.To_Index(I));
+         if Cost > 0 then
+            if FirstIndex = 0 then
+               FirstIndex := SkillsData_Container.To_Index(I);
+            end if;
+            Insert
+              (SkillsView,
+               "{} end -id" &
+               Positive'Image(SkillsData_Container.To_Index(I)) &
+               " -values [list {" & To_String(Skills_List(I).Name) & "}" &
+               Natural'Image(Cost) & "]");
+         end if;
+      end loop;
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyLabel.Interp := Interp;
+      MoneyLabel.Name :=
+        New_String(".paned.schoolframe.canvas.school.skills.money");
+      if MoneyIndex2 > 0 then
+         configure
+           (MoneyLabel,
+            "-text {You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(MoneyName) & ".}");
+      else
+         configure
+           (MoneyLabel,
+            "-text {You don't have any " & To_String(MoneyName) &
+            " to pay for learning.}");
+      end if;
+      TrainButton.Interp := Interp;
+      TrainButton.Name :=
+        New_String(".paned.schoolframe.canvas.school.skills.train");
+      if Children(SkillsView, "{}") /= "{}" then
+         Selection_Set(SkillsView, "[list" & Positive'Image(FirstIndex) & "]");
+         configure(TrainButton, "-state normal");
+      else
+         configure(TrainButton, "-state disabled");
+      end if;
+      return TCL_OK;
+   end Show_Training_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowSchool", Show_School_Command'Access);
+      AddCommand("ShowTrainingInfo", Show_Training_Info_Command'Access);
    end AddCommands;
 
 end Bases.SchoolUI;
