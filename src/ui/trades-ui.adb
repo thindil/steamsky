@@ -20,7 +20,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -82,8 +82,8 @@ package body Trades.UI is
       TradeFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ItemsView: Ttk_Tree_View;
-      ItemDurability, ItemType, ProtoIndex, BaseType,
-      FirstIndex: Unbounded_String;
+      ItemDurability, ItemType, ProtoIndex, BaseType, FirstIndex,
+      ItemName: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -148,8 +148,14 @@ package body Trades.UI is
             if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
                Append(ItemsTypes, " {" & ItemType & "}");
             end if;
-            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+            if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
               and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+               goto End_Of_Cargo_Loop;
+            end if;
+            ItemName :=
+              To_Unbounded_String
+                (GetItemName(PlayerShip.Cargo(I), False, False));
+            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
                goto End_Of_Cargo_Loop;
             end if;
             if PlayerShip.Cargo(I).Durability < 100 then
@@ -192,8 +198,7 @@ package body Trades.UI is
             Insert
               (ItemsView,
                "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
-               " -values [list {" &
-               GetItemName(PlayerShip.Cargo(I), False, False) & "} {" &
+               " -values [list {" & To_String(ItemName) & "} {" &
                To_String(ItemType) & "} {" & To_String(ItemDurability) &
                "} {" & Positive'Image(Price) & "} {" & Integer'Image(Profit) &
                "} {" & Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
@@ -217,6 +222,10 @@ package body Trades.UI is
             end if;
             if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
               and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+               goto End_Of_Trader_Loop;
+            end if;
+            ItemName := Items_List(ProtoIndex).Name;
+            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
                goto End_Of_Trader_Loop;
             end if;
             if BaseCargo(I).Durability < 100 then
@@ -248,10 +257,10 @@ package body Trades.UI is
             Insert
               (ItemsView,
                "{} end -id b" & Trim(Positive'Image(I), Left) &
-               " -values [list {" & To_String(Items_List(ProtoIndex).Name) &
-               "} {" & To_String(ItemType) & "} {" &
-               To_String(ItemDurability) & "} {" & Positive'Image(Price) &
-               "} {" & Integer'Image(-(Price)) & "} {0} {" &
+               " -values [list {" & To_String(ItemName) & "} {" &
+               To_String(ItemType) & "} {" & To_String(ItemDurability) &
+               "} {" & Positive'Image(Price) & "} {" &
+               Integer'Image(-(Price)) & "} {0} {" &
                Positive'Image(BaseAmount) & "}]");
          end if;
          <<End_Of_Trader_Loop>>
@@ -281,6 +290,7 @@ package body Trades.UI is
       configure
         (TradeCanvas, "-scrollregion [list " & BBox(TradeCanvas, "all") & "]");
       ShowScreen("tradeframe");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Trade_Command;
 
@@ -329,6 +339,9 @@ package body Trades.UI is
       TradeView.Name :=
         New_String(".paned.tradeframe.canvas.trade.trade.view");
       SelectedItem := To_Unbounded_String(Selection(TradeView));
+      if SelectedItem = Null_Unbounded_String then
+         return TCL_OK;
+      end if;
       if Element(SelectedItem, 1) = 'b' then
          ItemIndex :=
            -(Positive'Value(Slice(SelectedItem, 2, Length(SelectedItem))));
@@ -845,11 +858,48 @@ package body Trades.UI is
          return TCL_OK;
    end Trade_Item_Command;
 
+   -- ****if* TUI/Search_Trade_Command
+   -- FUNCTION
+   -- Show only this items which contains the selected sequence
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Search_Trade_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Search_Trade_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      TypeBox: Ttk_ComboBox;
+      SearchText: constant String := CArgv.Arg(Argv, 1);
+   begin
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String(".paned.tradeframe.canvas.trade.options.type");
+      if SearchText'Length = 0 then
+         return Show_Trade_Command
+             (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
+      end if;
+      return Show_Trade_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & "ShowTrade" & Get(TypeBox) & SearchText);
+   end Search_Trade_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowTrade", Show_Trade_Command'Access);
       AddCommand("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
       AddCommand("TradeItem", Trade_Item_Command'Access);
+      AddCommand("SearchTrade", Search_Trade_Command'Access);
    end AddCommands;
 
 end Trades.UI;
