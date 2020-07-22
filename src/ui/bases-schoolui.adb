@@ -33,6 +33,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
@@ -119,6 +120,13 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_School_Command;
 
+      -- ****iv* SchoolUI/MemberIndex
+      -- FUNCTION
+      -- The currently selected crew member index
+      -- SOURCE
+   MemberIndex: Positive;
+   -- ****
+
    -- ****f* SchoolUI/Show_Training_Info_Command
    -- FUNCTION
    -- Show training costs for the selected crew member
@@ -134,13 +142,6 @@ package body Bases.SchoolUI is
       return Interfaces.C.int with
       Convention => C;
       -- ****
-
-      -- ****iv* SchoolUI/MemberIndex
-      -- FUNCTION
-      -- The currently selected crew member index
-      -- SOURCE
-   MemberIndex: Positive;
-   -- ****
 
    function Show_Training_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -202,10 +203,57 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_Training_Info_Command;
 
+   -- ****f* SchoolUI/Train_Skill_Command
+   -- FUNCTION
+   -- Train the selected skill
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Train_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Train_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      SkillsView: Ttk_Tree_View;
+      SkillIndex: Positive;
+   begin
+      SkillsView.Interp := Interp;
+      SkillsView.Name :=
+        New_String(".paned.schoolframe.canvas.school.skills.view");
+      SkillIndex := Positive'Value(Selection(SkillsView));
+      TrainSkill(MemberIndex, SkillIndex);
+      UpdateMessages;
+      return Show_Training_Info_Command(ClientData, Interp, Argc, Argv);
+   exception
+      when Trade_No_Money =>
+         ShowMessage
+           ("You don't have any " & To_String(MoneyName) &
+            " to pay for learning.");
+         return TCL_OK;
+      when Trade_Not_Enough_Money =>
+         ShowMessage
+           ("You don't have enough " & To_String(MoneyName) &
+            " to pay for learning this skill.");
+         return TCL_OK;
+      when Trade_Cant_Train =>
+         ShowMessage("You can't train this skill any more.");
+         return TCL_OK;
+   end Train_Skill_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowSchool", Show_School_Command'Access);
       AddCommand("ShowTrainingInfo", Show_Training_Info_Command'Access);
+      AddCommand("TrainSkill", Train_Skill_Command'Access);
    end AddCommands;
 
 end Bases.SchoolUI;
