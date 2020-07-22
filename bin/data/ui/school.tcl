@@ -10,6 +10,7 @@ grid [ttk::frame $schoolframe.crew] -sticky nwes
 set schoolview [ttk::treeview $schoolframe.crew.view -yscrollcommand [list $schoolframe.crew.scrolly set]]
 $schoolview heading #0 -text {Name}
 grid $schoolview -sticky nwes
+bind $schoolview <<TreeviewSelect>> ShowTrainingInfo
 grid [ttk::scrollbar $schoolframe.crew.scrolly -orient vertical -command [list $schoolview yview]] -row 0 -column 1 -sticky ns
 # Skills list
 set schoolskillsframe [ttk::frame $schoolframe.skills]
