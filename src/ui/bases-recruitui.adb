@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -61,6 +62,9 @@ package body Bases.RecruitUI is
       RecruitCanvas: Tk_Canvas;
       RecruitFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      RecruitsView: Ttk_Tree_View;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -72,7 +76,8 @@ package body Bases.RecruitUI is
       RecruitCanvas.Name := New_String(Widget_Image(RecruitFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String(Widget_Image(RecruitCanvas) & ".recruit.recruit.info.label");
+        New_String
+          (Widget_Image(RecruitCanvas) & ".recruit.recruit.info.label");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -85,10 +90,21 @@ package body Bases.RecruitUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      -- Fill UI
-      -- End of fill UI
+      RecruitsView.Interp := Interp;
+      RecruitsView.Name :=
+        New_String(Widget_Image(RecruitCanvas) & ".recruit.recruits.view");
+      Delete(RecruitsView, "[list " & Children(RecruitsView, "{}") & "]");
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         Insert
+           (RecruitsView,
+            "{} end -id" & Positive'Image(Recruit_Container.To_Index(I)) &
+            " -text {" & To_String(SkyBases(BaseIndex).Recruits(I).Name) &
+            "}");
+      end loop;
+      Selection_Set(RecruitsView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      RecruitFrame.Name := New_String(Widget_Image(RecruitCanvas) & ".recruit");
+      RecruitFrame.Name :=
+        New_String(Widget_Image(RecruitCanvas) & ".recruit");
       configure
         (RecruitCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
