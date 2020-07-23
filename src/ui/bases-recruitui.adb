@@ -168,6 +168,7 @@ package body Bases.RecruitUI is
       Tokens: Slice_Set;
       Item: Ttk_Frame;
       ProgressBar: Ttk_ProgressBar;
+      Row: Natural := 0;
    begin
       RecruitsView.Interp := Interp;
       RecruitsView.Name :=
@@ -227,27 +228,40 @@ package body Bases.RecruitUI is
             To_String
               (Attributes_List(Attributes_Container.To_Index(I)).Description));
       end loop;
---      declare
---         SkillsIter: Gtk_Tree_Iter;
---         SkillsList: constant Gtk_List_Store :=
---           Gtk_List_Store(Get_Object(Object, "skillslist"));
---      begin
---         Clear(SkillsList);
---         for Skill of Recruit.Skills loop
---            Append(SkillsList, SkillsIter);
---            Set
---              (SkillsList, SkillsIter, 0,
---               To_String(Skills_List(Skill(1)).Name) & ": " &
---               GetSkillLevelName(Skill(2)));
---            Set(SkillsList, SkillsIter, 1, Gint(Skill(2)));
---            Set
---              (SkillsList, SkillsIter, 2,
---               "Related statistic: " &
---               To_String
---                 (Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
---               ". " & To_String(Skills_List(Skill(1)).Description));
---         end loop;
---      end;
+      LabelFrame.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.info.skills");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
+      for I in 1 .. Slice_Count(Tokens) loop
+         Item.Name := New_String(Slice(Tokens, I));
+         Destroy(Item);
+      end loop;
+      for Skill of Recruit.Skills loop
+         Label :=
+           Create
+             (".paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
+              Trim(Positive'Image(Skill(1)), Left),
+              "-text {" & To_String(Skills_List(Skill(1)).Name) & ": " &
+              GetSkillLevelName(Skill(2)) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Add
+           (Label,
+            "Related statistic: " &
+            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+            ". " & To_String(Skills_List(Skill(1)).Description));
+         ProgressBar :=
+           Create
+             (".paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
+              Trim(Positive'Image(Skill(1)), Left),
+              "-value" & Positive'Image(Skill(2)));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar, "-column 1 -row" & Natural'Image(Row));
+         Row := Row + 1;
+         Add
+           (ProgressBar,
+            "Related statistic: " &
+            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+            ". " & To_String(Skills_List(Skill(1)).Description));
+      end loop;
 --      declare
 --         EquipmentIter: Gtk_Tree_Iter;
 --         EquipmentList: constant Gtk_List_Store :=
