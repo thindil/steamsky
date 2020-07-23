@@ -18,7 +18,7 @@ grid [ttk::label $infoframe.info.info]
 grid [ttk::labelframe $infoframe.info.stats -text {Statistics:}]
 grid [ttk::labelframe $infoframe.info.skills -text {Skills:}]
 grid [ttk::labelframe $infoframe.info.equipment -text {Equipment:}]
-grid [ttk::treeview $infoframe.info.equipment.view -yscrollcommand [list $infoframe.info.equipment.scrolly set] -show tree] -sticky nwes
+grid [ttk::treeview $infoframe.info.equipment.view -yscrollcommand [list $infoframe.info.equipment.scrolly set] -show tree -selectmode none] -sticky nwes
 grid [ttk::scrollbar $infoframe.info.equipment.scrolly -orient vertical -command [list $infoframe.info.equipment.view yview]] -row 0 -column 1 -sticky ns
 grid [ttk::label $infoframe.info.initialcost]
 # Recruit actions
