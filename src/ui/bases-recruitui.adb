@@ -33,8 +33,10 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkLabelFrame; use Tcl.Tk.Ada.Widgets.TtkLabelFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -165,6 +167,7 @@ package body Bases.RecruitUI is
       LabelFrame: Ttk_LabelFrame;
       Tokens: Slice_Set;
       Item: Ttk_Frame;
+      ProgressBar: Ttk_ProgressBar;
    begin
       RecruitsView.Interp := Interp;
       RecruitsView.Name :=
@@ -206,12 +209,23 @@ package body Bases.RecruitUI is
                 (Attributes_List(Attributes_Container.To_Index(I)).Name) &
               ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
---            Set(StatsList, StatsIter, 1, Gint(Recruit.Attributes(I)(1) * 2));
---            Set
---              (StatsList, StatsIter, 2,
---               To_String
---                 (Attributes_List(Attributes_Container.To_Index(I))
---                    .Description));
+         Add
+           (Label,
+            To_String
+              (Attributes_List(Attributes_Container.To_Index(I)).Description));
+         ProgressBar :=
+           Create
+             (".paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar,
+            "-column 1 -row" &
+            Natural'Image(Attributes_Container.To_Index(I) - 1));
+         Add
+           (ProgressBar,
+            To_String
+              (Attributes_List(Attributes_Container.To_Index(I)).Description));
       end loop;
 --      declare
 --         SkillsIter: Gtk_Tree_Iter;
