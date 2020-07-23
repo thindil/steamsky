@@ -13,9 +13,13 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -27,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabelFrame; use Tcl.Tk.Ada.Widgets.TtkLabelFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -123,9 +128,148 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Command;
 
+   -- ****iv* RecruitUI/RecruitIndex
+   -- FUNCTION
+   -- The index of currently selected recruit
+   -- SOURCE
+   RecruitIndex: Positive;
+   -- ****
+
+   -- ****f* RecruitUI/Show_Recruit_Info_Command
+   -- FUNCTION
+   -- Show information about the selected recruit
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Recruit_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Recruit_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RecruitsView: Ttk_Tree_View;
+      Recruit: Recruit_Data;
+      RecruitInfo: Unbounded_String;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Label: Ttk_Label;
+      LabelFrame: Ttk_LabelFrame;
+      Tokens: Slice_Set;
+      Item: Ttk_Frame;
+   begin
+      RecruitsView.Interp := Interp;
+      RecruitsView.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruits.view");
+      RecruitIndex := Positive'Value(Selection(RecruitsView));
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      if not Factions_List(Recruit.Faction).Flags.Contains
+          (To_Unbounded_String("nogender")) then
+         if Recruit.Gender = 'M' then
+            RecruitInfo := To_Unbounded_String("Gender: Male");
+         else
+            RecruitInfo := To_Unbounded_String("Gender: Female");
+         end if;
+      end if;
+      Append(RecruitInfo, LF & "Faction: ");
+      Append(RecruitInfo, Factions_List(Recruit.Faction).Name);
+      Append(RecruitInfo, LF & "Home base: ");
+      Append(RecruitInfo, SkyBases(Recruit.HomeBase).Name);
+      Label.Interp := Interp;
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.info.info");
+      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
+      LabelFrame.Interp := Interp;
+      LabelFrame.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.info.stats");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
+      Item.Interp := Interp;
+      for I in 1 .. Slice_Count(Tokens) loop
+         Item.Name := New_String(Slice(Tokens, I));
+         Destroy(Item);
+      end loop;
+      for I in Recruit.Attributes.Iterate loop
+         Label :=
+           Create
+             (".paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              "-text {" &
+              To_String
+                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+--            Set(StatsList, StatsIter, 1, Gint(Recruit.Attributes(I)(1) * 2));
+--            Set
+--              (StatsList, StatsIter, 2,
+--               To_String
+--                 (Attributes_List(Attributes_Container.To_Index(I))
+--                    .Description));
+      end loop;
+--      declare
+--         SkillsIter: Gtk_Tree_Iter;
+--         SkillsList: constant Gtk_List_Store :=
+--           Gtk_List_Store(Get_Object(Object, "skillslist"));
+--      begin
+--         Clear(SkillsList);
+--         for Skill of Recruit.Skills loop
+--            Append(SkillsList, SkillsIter);
+--            Set
+--              (SkillsList, SkillsIter, 0,
+--               To_String(Skills_List(Skill(1)).Name) & ": " &
+--               GetSkillLevelName(Skill(2)));
+--            Set(SkillsList, SkillsIter, 1, Gint(Skill(2)));
+--            Set
+--              (SkillsList, SkillsIter, 2,
+--               "Related statistic: " &
+--               To_String
+--                 (Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+--               ". " & To_String(Skills_List(Skill(1)).Description));
+--         end loop;
+--      end;
+--      declare
+--         EquipmentIter: Gtk_Tree_Iter;
+--         EquipmentList: constant Gtk_List_Store :=
+--           Gtk_List_Store(Get_Object(Object, "equipmentlist"));
+--      begin
+--         Clear(EquipmentList);
+--         for Item of Recruit.Inventory loop
+--            Append(EquipmentList, EquipmentIter);
+--            Set
+--              (EquipmentList, EquipmentIter, 0,
+--               To_String(Items_List(Item).Name));
+--         end loop;
+--      end;
+--      RecruitInfo := To_Unbounded_String("Starting offer:");
+--      Append
+--        (RecruitInfo,
+--         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
+--         To_String(MoneyName) & " each day.");
+--      declare
+--         Cost: Positive := Recruit.Price;
+--      begin
+--         CountPrice(Cost, FindMember(Talk));
+--         Append
+--           (RecruitInfo,
+--            LF & "One time fee:" & Positive'Image(Cost) & " " &
+--            To_String(MoneyName) & ".");
+--      end;
+--      Set_Label
+--        (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
+      return TCL_OK;
+   end Show_Recruit_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
+      AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;
