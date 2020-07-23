@@ -169,6 +169,7 @@ package body Bases.RecruitUI is
       Item: Ttk_Frame;
       ProgressBar: Ttk_ProgressBar;
       Row: Natural := 0;
+      EquipmentView: Ttk_Tree_View;
    begin
       RecruitsView.Interp := Interp;
       RecruitsView.Name :=
@@ -262,19 +263,16 @@ package body Bases.RecruitUI is
             To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
             ". " & To_String(Skills_List(Skill(1)).Description));
       end loop;
---      declare
---         EquipmentIter: Gtk_Tree_Iter;
---         EquipmentList: constant Gtk_List_Store :=
---           Gtk_List_Store(Get_Object(Object, "equipmentlist"));
---      begin
---         Clear(EquipmentList);
---         for Item of Recruit.Inventory loop
---            Append(EquipmentList, EquipmentIter);
---            Set
---              (EquipmentList, EquipmentIter, 0,
---               To_String(Items_List(Item).Name));
---         end loop;
---      end;
+      EquipmentView.Interp := Interp;
+      EquipmentView.Name :=
+        New_String
+          (".paned.recruitframe.canvas.recruit.recruit.info.equipment.view");
+      Delete(EquipmentView, "[list " & Children(EquipmentView, "{}") & "]");
+      for Item of Recruit.Inventory loop
+         Insert
+           (EquipmentView,
+            "{} end -text {" & To_String(Items_List(Item).Name) & "}");
+      end loop;
 --      RecruitInfo := To_Unbounded_String("Starting offer:");
 --      Append
 --        (RecruitInfo,
