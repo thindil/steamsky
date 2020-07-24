@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -87,14 +88,14 @@ package body Bases.RecruitUI is
       RecruitCanvas.Name := New_String(Widget_Image(RecruitFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String
-          (Widget_Image(RecruitCanvas) & ".recruit.recruit.info.label");
+        New_String(Widget_Image(RecruitCanvas) & ".recruit.recruit.info.info");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "recruit.tcl");
          Bind(RecruitFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(Label, "ismapped") = "1" and
+        (Argc = 1 or SkyBases(BaseIndex).Recruits.Length = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -439,11 +440,81 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Negotiate_Hire_Command;
 
+   -- ****f* RecruitUI/Hire_Command
+   -- FUNCTION
+   -- Hire the selected recruit
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Hire_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Hire_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Cost, ContractLength2: Integer;
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Scale: Ttk_Scale;
+      ContractBox: Ttk_ComboBox;
+      DailyPayment, TradePayment, ContractLength: Natural;
+   begin
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Scale.Interp := Interp;
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
+      DailyPayment := Natural(Float'Value(cget(Scale, "-value")));
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+      TradePayment := Natural(Float'Value(cget(Scale, "-value")));
+      Cost :=
+        Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
+        (TradePayment * 5000);
+      ContractBox.Interp := Interp;
+      ContractBox.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.contract");
+      ContractLength := Natural'Value(Current(ContractBox));
+      case ContractLength is
+         when 1 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
+            ContractLength2 := 100;
+         when 2 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
+            ContractLength2 := 30;
+         when 3 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
+            ContractLength2 := 20;
+         when 4 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
+            ContractLength2 := 10;
+         when others =>
+            ContractLength2 := -1;
+      end case;
+      if Cost < 1 then
+         Cost := 1;
+      end if;
+      HireRecruit
+        (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
+      UpdateMessages;
+      return Show_Recruit_Command(ClientData, Interp, 2, Argv);
+   end Hire_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
       AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
       AddCommand("NegotiateHire", Negotiate_Hire_Command'Access);
+      AddCommand("Hire", Hire_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;

@@ -32,5 +32,5 @@ bind $infoframe.contract <<ComboboxSelected>> NegotiateHire
 $infoframe.contract current 0
 grid [ttk::label $infoframe.money]
 grid [ttk::label $infoframe.cost]
-grid [ttk::button $infoframe.hire -text {Hire}]
+grid [ttk::button $infoframe.hire -text {Hire} -command Hire]
 grid $infoframe -column 1 -row 0
