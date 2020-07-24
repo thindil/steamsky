@@ -296,7 +296,11 @@ package body Bases.RecruitUI is
          LF & "One time fee:" & Positive'Image(Cost) & " " &
          To_String(MoneyName) & ".");
       configure(Label, "-text {" & To_String(RecruitInfo) & "}");
-      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.dailylbl");
+      configure
+        (Label,
+         "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
       Scale.Interp := Interp;
       Scale.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
@@ -304,6 +308,9 @@ package body Bases.RecruitUI is
         (Scale,
          "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
          Natural'Image(Recruit.Payment));
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.percentlbl");
+      configure(Label, "-text {Percent of profit from trades: 0}");
       Scale.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
       configure(Scale, "-value 0");
@@ -368,7 +375,7 @@ package body Bases.RecruitUI is
       Scale: Ttk_Scale;
       ContractBox: Ttk_ComboBox;
       DailyPayment, TradePayment, ContractLength: Natural;
-      CostLabel: Ttk_Label;
+      Label: Ttk_Label;
       HireButton: Ttk_Button;
    begin
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
@@ -402,13 +409,23 @@ package body Bases.RecruitUI is
          Cost := 1;
       end if;
       CountPrice(Cost, FindMember(Talk));
-      CostLabel.Interp := Interp;
-      CostLabel.Name :=
+      Label.Interp := Interp;
+      Label.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.cost");
       configure
-        (CostLabel,
+        (Label,
          "-text {Hire for" & Natural'Image(Cost) & " " & To_String(MoneyName) &
          "}");
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.dailylbl");
+      configure
+        (Label, "-text {Daily payment:" & Natural'Image(DailyPayment) & "}");
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.percentlbl");
+      configure
+        (Label,
+         "-text {Percent of profit from trades: " &
+         Natural'Image(TradePayment) & "}");
       HireButton.Interp := Interp;
       HireButton.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.hire");
