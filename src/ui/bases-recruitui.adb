@@ -337,10 +337,41 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
+   -- ****f* RecruitUI/Negotiate_Hire_Command
+   -- FUNCTION
+   -- Show information about the selected recruit
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Negotiate_Hire_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Negotiate_Hire_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      Recruit: Recruit_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Cost: Integer;
+   begin
+      return TCL_OK;
+   end Negotiate_Hire_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
       AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
+      AddCommand("NegotiateHire", Negotiate_Hire_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;
