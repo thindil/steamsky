@@ -24,7 +24,7 @@ grid [ttk::label $infoframe.info.initialcost]
 # Recruit actions
 grid [ttk::label $infoframe.dailylbl -text {Daily payment: }]
 grid [ttk::scale $infoframe.daily -from 0 -command NegotiateHire]
-grid [ttk::label $infoframe.percentlbl -text {Percent of profix from trades: 0%}]
+grid [ttk::label $infoframe.percentlbl -text {Percent of profit from trades: 0%}]
 grid [ttk::scale $infoframe.percent -from 0 -to 10 -command NegotiateHire]
 grid [ttk::label $infoframe.contractlbl -text {Contract time:}]
 grid [ttk::combobox $infoframe.contract -state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]]
