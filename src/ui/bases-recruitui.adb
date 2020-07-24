@@ -39,6 +39,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
@@ -273,22 +274,24 @@ package body Bases.RecruitUI is
            (EquipmentView,
             "{} end -text {" & To_String(Items_List(Item).Name) & "}");
       end loop;
---      RecruitInfo := To_Unbounded_String("Starting offer:");
---      Append
---        (RecruitInfo,
---         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
---         To_String(MoneyName) & " each day.");
---      declare
---         Cost: Positive := Recruit.Price;
---      begin
---         CountPrice(Cost, FindMember(Talk));
---         Append
---           (RecruitInfo,
---            LF & "One time fee:" & Positive'Image(Cost) & " " &
---            To_String(MoneyName) & ".");
---      end;
---      Set_Label
---        (Gtk_Label(Get_Object(Object, "lblpayment")), To_String(RecruitInfo));
+      Label.Name :=
+        New_String
+          (".paned.recruitframe.canvas.recruit.recruit.info.initialcost");
+      RecruitInfo := To_Unbounded_String("Starting offer:");
+      Append
+        (RecruitInfo,
+         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
+         To_String(MoneyName) & " each day.");
+      declare
+         Cost: Positive := Recruit.Price;
+      begin
+         CountPrice(Cost, FindMember(Talk));
+         Append
+           (RecruitInfo,
+            LF & "One time fee:" & Positive'Image(Cost) & " " &
+            To_String(MoneyName) & ".");
+      end;
+      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
