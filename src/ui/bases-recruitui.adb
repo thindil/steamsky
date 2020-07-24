@@ -29,6 +29,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkLabelFrame; use Tcl.Tk.Ada.Widgets.TtkLabelFrame;
@@ -363,7 +365,60 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost: Integer;
+      Scale: Ttk_Scale;
+      ContractBox: Ttk_ComboBox;
+      DailyPayment, TradePayment, ContractLength: Natural;
+      CostLabel: Ttk_Label;
+      HireButton: Ttk_Button;
    begin
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Scale.Interp := Interp;
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
+      DailyPayment := Natural'Value(cget(Scale, "-value"));
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+      TradePayment := Natural'Value(cget(Scale, "-value"));
+      Cost :=
+        Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
+        (TradePayment * 5000);
+      ContractBox.Interp := Interp;
+      ContractBox.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.contract");
+      ContractLength := Natural'Value(Current(ContractBox));
+      case ContractLength is
+         when 1 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
+         when 2 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
+         when 3 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
+         when 4 =>
+            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
+         when others =>
+            null;
+      end case;
+      if Cost < 1 then
+         Cost := 1;
+      end if;
+      CountPrice(Cost, FindMember(Talk));
+      CostLabel.Interp := Interp;
+      CostLabel.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.cost");
+      configure
+        (CostLabel,
+         "-text {Hire for" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & "}");
+      HireButton.Interp := Interp;
+      HireButton.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.hire");
+      if MoneyIndex2 > 0 then
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            configure(HireButton, "-state disabled");
+         else
+            configure(HireButton, "-state !disabled");
+         end if;
+      end if;
       return TCL_OK;
    end Negotiate_Hire_Command;
 
