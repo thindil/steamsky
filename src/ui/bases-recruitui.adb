@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkLabelFrame; use Tcl.Tk.Ada.Widgets.TtkLabelFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -171,6 +172,10 @@ package body Bases.RecruitUI is
       ProgressBar: Ttk_ProgressBar;
       Row: Natural := 0;
       EquipmentView: Ttk_Tree_View;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      Cost: Positive;
+      Scale: Ttk_Scale;
+      HireButton: Ttk_Button;
    begin
       RecruitsView.Interp := Interp;
       RecruitsView.Name :=
@@ -282,16 +287,53 @@ package body Bases.RecruitUI is
         (RecruitInfo,
          LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
          To_String(MoneyName) & " each day.");
-      declare
-         Cost: Positive := Recruit.Price;
-      begin
-         CountPrice(Cost, FindMember(Talk));
-         Append
-           (RecruitInfo,
-            LF & "One time fee:" & Positive'Image(Cost) & " " &
-            To_String(MoneyName) & ".");
-      end;
+      Cost := Recruit.Price;
+      CountPrice(Cost, FindMember(Talk));
+      Append
+        (RecruitInfo,
+         LF & "One time fee:" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & ".");
       configure(Label, "-text {" & To_String(RecruitInfo) & "}");
+      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Scale.Interp := Interp;
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
+      configure
+        (Scale,
+         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
+         Natural'Image(Recruit.Payment));
+      Scale.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+      configure(Scale, "-value 0");
+      Cost := Recruit.Price;
+      CountPrice(Cost, FindMember(Talk));
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.cost");
+      configure
+        (Label,
+         "-text {Hire for" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & "}");
+      Label.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.money");
+      HireButton.Interp := Interp;
+      HireButton.Name :=
+        New_String(".paned.recruitframe.canvas.recruit.recruit.hire");
+      if MoneyIndex2 > 0 then
+         configure
+           (Label,
+            "-text {You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(MoneyName) & ".}");
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            configure(HireButton, "-state disabled");
+         else
+            configure(HireButton, "-state !disabled");
+         end if;
+      else
+         configure
+           (Label, "-text {You don't have enough money to recruit anyone}");
+         configure(HireButton, "-state disabled");
+      end if;
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
