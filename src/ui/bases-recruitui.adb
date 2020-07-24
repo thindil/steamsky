@@ -375,10 +375,10 @@ package body Bases.RecruitUI is
       Scale.Interp := Interp;
       Scale.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
-      DailyPayment := Natural'Value(cget(Scale, "-value"));
+      DailyPayment := Natural(Float'Value(cget(Scale, "-value")));
       Scale.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
-      TradePayment := Natural'Value(cget(Scale, "-value"));
+      TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
@@ -407,8 +407,8 @@ package body Bases.RecruitUI is
         New_String(".paned.recruitframe.canvas.recruit.recruit.cost");
       configure
         (CostLabel,
-         "-text {Hire for" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & "}");
+         "-text {Hire for" & Natural'Image(Cost) & " " & To_String(MoneyName) &
+         "}");
       HireButton.Interp := Interp;
       HireButton.Name :=
         New_String(".paned.recruitframe.canvas.recruit.recruit.hire");
