@@ -33,6 +33,7 @@ with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
 with Ships.Crew; use Ships.Crew;
@@ -161,7 +162,7 @@ package body OrdersMenu is
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("temple")) then
-               Add(OrdersMenu, "command", "-label {Pray}");
+               Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
@@ -579,6 +580,39 @@ package body OrdersMenu is
       return TCL_OK;
    end Attack_Command;
 
+   -- ****f* OrdersMenu/Pray_Command
+   -- FUNCTION
+   -- Pray in the selected base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Pray_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Pray_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
+      end loop;
+      AddMessage
+        ("You and your crew were praying for some time. Now you all feel a bit better.",
+         OrderMessage);
+      UpdateGame(30);
+      ShowSkyMap;
+      return TCL_OK;
+   end Pray_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -586,6 +620,7 @@ package body OrdersMenu is
       AddCommand("AskForBases", Ask_For_Bases_Command'Access);
       AddCommand("AskForEvents", Ask_For_Events_Command'Access);
       AddCommand("Attack", Attack_Command'Access);
+      AddCommand("Pray", Pray_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
