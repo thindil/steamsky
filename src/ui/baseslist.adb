@@ -494,7 +494,7 @@ package body BasesList is
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
       AddCommand("ShowBase", Show_Base_Command'Access);
-      AddCommand("SetBase", Set_Base_Command'Access);
+      AddCommand("SetBase2", Set_Base_Command'Access);
    end AddCommands;
 
 end BasesList;
