@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -31,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -117,6 +119,8 @@ package body Bases.UI is
          end loop;
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
+         Unbind(ItemsView, "<<TreeviewSelect>>");
+         Bind(ItemsView, "<<TreeviewSelect>>", "ShowWoundedInfo");
          configure(ActionButton, "-text {Buy healing}");
       end if;
       if FirstIndex = 0 then
@@ -145,9 +149,72 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Base_UI_Command;
 
+   -- ****f* BUI/Show_Wounded_Info_Command
+   -- FUNCTION
+   -- Show the information about healing action
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Wounded_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Wounded_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      WoundedView: Ttk_Tree_View;
+      MemberIndex: Natural;
+      FormattedTime: Unbounded_String;
+      Cost, Time: Natural := 0;
+      InfoLabel: Ttk_Label;
+   begin
+      WoundedView.Interp := Interp;
+      WoundedView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      MemberIndex := Natural'Value(Selection(WoundedView));
+      HealCost(Cost, Time, MemberIndex);
+      if Time < 60 then
+         FormattedTime := To_Unbounded_String(Natural'Image(Time) & " minute");
+         if Time > 1 then
+            Append(FormattedTime, "s");
+         end if;
+      else
+         FormattedTime :=
+           To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+         if (Time / 60) > 1 then
+            Append(FormattedTime, "s");
+         end if;
+         if (Time mod 60) > 0 then
+            Append
+              (FormattedTime,
+               " and" & Positive'Image(Time mod 60) & " minute");
+            if (Time mod 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         end if;
+      end if;
+      InfoLabel.Interp := Interp;
+      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
+      configure
+        (InfoLabel,
+         "-text {Heal cost:" & Natural'Image(Cost) & " " &
+         To_String(MoneyName) & LF & "Heal time:" & To_String(FormattedTime) &
+         "}");
+      return TCL_OK;
+   end Show_Wounded_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
+      AddCommand("ShowWoundedInfo", Show_Wounded_Info_Command'Access);
    end AddCommands;
 
 end Bases.UI;
