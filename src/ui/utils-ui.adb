@@ -145,6 +145,11 @@ package body Utils.UI is
       Command: Tcl.Tcl_Command;
       SteamSky_Add_Command_Error: exception;
    begin
+      Tcl_Eval(Get_Context, "info commands " & Name);
+      if Tcl_GetResult(Get_Context) /= "" then
+         raise SteamSky_Add_Command_Error
+           with "Command with name " & Name & " exists";
+      end if;
       Command :=
         CreateCommands.Tcl_CreateCommand
           (Get_Context, Name, AdaCommand, 0, null);
