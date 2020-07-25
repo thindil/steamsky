@@ -17,7 +17,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -60,7 +60,6 @@ package body Bases.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       BaseCanvas: Tk_Canvas;
       BaseFrame: Ttk_Frame;
@@ -77,14 +76,12 @@ package body Bases.UI is
       BaseFrame.Name := New_String(Widget_Image(Paned) & ".baseframe");
       BaseCanvas.Interp := Interp;
       BaseCanvas.Name := New_String(Widget_Image(BaseFrame) & ".canvas");
-      Label.Interp := Interp;
-      Label.Name := New_String(Widget_Image(BaseCanvas) & ".cargo.type.label");
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(BaseCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "base.tcl");
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -121,7 +118,7 @@ package body Bases.UI is
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          Unbind(ItemsView, "<<TreeviewSelect>>");
          Bind(ItemsView, "<<TreeviewSelect>>", "ShowWoundedInfo");
-         configure(ActionButton, "-text {Buy healing}");
+         configure(ActionButton, "-text {Buy healing} -command HealWounded");
       end if;
       if FirstIndex = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -179,6 +176,9 @@ package body Bases.UI is
       WoundedView.Interp := Interp;
       WoundedView.Name :=
         New_String(".paned.baseframe.canvas.base.items.view");
+      if Selection(WoundedView) = "" then
+         return TCL_OK;
+      end if;
       MemberIndex := Natural'Value(Selection(WoundedView));
       HealCost(Cost, Time, MemberIndex);
       if Time < 60 then
@@ -211,10 +211,44 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Wounded_Info_Command;
 
+   -- ****f* BUI/Heal_Wounded_Command
+   -- FUNCTION
+   -- Heal selected crew member or the whole crew
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Heal_Wounded_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Heal_Wounded_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
+      WoundedView: Ttk_Tree_View;
+      MemberIndex: Natural;
+   begin
+      WoundedView.Interp := Interp;
+      WoundedView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      MemberIndex := Natural'Value(Selection(WoundedView));
+      HealWounded(MemberIndex);
+      return Show_Base_UI_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "heal");
+   end Heal_Wounded_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("ShowWoundedInfo", Show_Wounded_Info_Command'Access);
+      AddCommand("HealWounded", Heal_Wounded_Command'Access);
    end AddCommands;
 
 end Bases.UI;
