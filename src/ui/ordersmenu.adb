@@ -168,7 +168,7 @@ package body OrdersMenu is
                if Member.Health < 100 then
                   Add
                     (OrdersMenu, "command",
-                     "-label {Heal wounded} -underline 5");
+                     "-label {Heal wounded} -underline 5 -command {ShowBaseUI heal}");
                   exit;
                end if;
             end loop;
