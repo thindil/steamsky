@@ -25,9 +25,11 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -55,12 +57,15 @@ package body Bases.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       BaseCanvas: Tk_Canvas;
       BaseFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      CloseButton, ActionButton: Ttk_Button;
+      SearchEntry: Ttk_Entry;
+      ItemsView: Ttk_Tree_View;
+      FirstIndex: Natural := 0;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -71,12 +76,11 @@ package body Bases.UI is
       BaseCanvas.Interp := Interp;
       BaseCanvas.Name := New_String(Widget_Image(BaseFrame) & ".canvas");
       Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(BaseCanvas) & ".cargo.type.label");
+      Label.Name := New_String(Widget_Image(BaseCanvas) & ".cargo.type.label");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "bases.tcl");
+            To_String(DataDirectory) & "ui" & Dir_Separator & "base.tcl");
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -84,12 +88,46 @@ package body Bases.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".school");
-      -- Fill UI
-      -- End of fill UI
+      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
+      SearchEntry.Interp := Interp;
+      SearchEntry.Name := New_String(Widget_Image(BaseFrame) & ".search");
+      if CArgv.Arg(Argv, 1) /= "recipes" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
+      else
+         Tcl.Tk.Ada.Grid.Grid(SearchEntry);
+      end if;
+      ItemsView.Interp := Interp;
+      ItemsView.Name := New_String(Widget_Image(BaseFrame) & ".items.view");
+      Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
+      ActionButton.Interp := Interp;
+      ActionButton.Name :=
+        New_String(Widget_Image(BaseFrame) & ".info.accept");
+      if CArgv.Arg(Argv, 1) = "heal" then
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
+         for I in PlayerShip.Crew.Iterate loop
+            if PlayerShip.Crew(I).Health < 100 then
+               if FirstIndex = 0 then
+                  FirstIndex := Crew_Container.To_Index(I);
+               end if;
+               Insert
+                 (ItemsView,
+                  "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
+                  " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+            end if;
+         end loop;
+         Insert
+           (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
+         configure(ActionButton, "-text {Buy healing}");
+      end if;
+      if FirstIndex = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+         ShowSkyMap(True);
+         return TCL_OK;
+      end if;
+      Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".school");
+      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
       configure
         (BaseCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
@@ -102,8 +140,7 @@ package body Bases.UI is
          Widget_Image(BaseFrame));
       Tcl_Eval(Get_Context, "update");
       configure
-        (BaseCanvas,
-         "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
+        (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
       ShowScreen("baseframe");
       return TCL_OK;
    end Show_Base_UI_Command;
