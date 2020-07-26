@@ -236,6 +236,8 @@ package body Bases.UI is
       InfoLabel: Ttk_Label;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      MoneyIndex2: Natural;
+      ActionButton: Ttk_Button;
    begin
       ItemsView.Interp := Interp;
       ItemsView.Name := New_String(".paned.baseframe.canvas.base.items.view");
@@ -297,9 +299,6 @@ package body Bases.UI is
                end if;
             end if;
          end if;
-         InfoLabel.Interp := Interp;
-         InfoLabel.Name :=
-           New_String(".paned.baseframe.canvas.base.info.info");
          configure
            (InfoLabel,
             "-text {Repair cost:" & Natural'Image(Cost) & " " &
@@ -323,13 +322,30 @@ package body Bases.UI is
             Cost := 1;
          end if;
          CountPrice(Cost, FindMember(Talk));
-         InfoLabel.Interp := Interp;
-         InfoLabel.Name :=
-           New_String(".paned.baseframe.canvas.base.info.info");
          configure
            (InfoLabel,
             "-text {Base price:" & Positive'Image(Cost) & " " &
             To_String(MoneyName) & "}");
+      end if;
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.money");
+      ActionButton.Interp := Interp;
+      ActionButton.Name :=
+        New_String(".paned.baseframe.canvas.base.info.accept");
+      if MoneyIndex2 > 0 then
+         configure
+           (InfoLabel,
+            "-text {You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(MoneyName) & ".}");
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            configure(ActionButton, "-state disabled");
+         else
+            configure(ActionButton, "-state !disabled");
+         end if;
+      else
+         configure(ActionButton, "-state disabled");
+         configure(InfoLabel, "-text {You don't have any money.}");
       end if;
       return TCL_OK;
    end Show_Item_Info_Command;
