@@ -34,6 +34,8 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
+with BasesTypes; use BasesTypes;
+with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -68,9 +70,10 @@ package body Bases.UI is
       CloseButton, ActionButton: Ttk_Button;
       SearchEntry: Ttk_Entry;
       ItemsView: Ttk_Tree_View;
-      FirstIndex: Natural := 0;
+      FirstIndex: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -109,8 +112,10 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 then
-               if FirstIndex = 0 then
-                  FirstIndex := Crew_Container.To_Index(I);
+               if FirstIndex = Null_Unbounded_String then
+                  FirstIndex :=
+                    To_Unbounded_String
+                      (Natural'Image(Crew_Container.To_Index(I)));
                end if;
                Insert
                  (ItemsView,
@@ -128,8 +133,10 @@ package body Bases.UI is
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).Durability <
               PlayerShip.Modules(I).MaxDurability then
-               if FirstIndex = 0 then
-                  FirstIndex := Modules_Container.To_Index(I);
+               if FirstIndex = Null_Unbounded_String then
+                  FirstIndex :=
+                    To_Unbounded_String
+                      (Natural'Image(Modules_Container.To_Index(I)));
                end if;
                Insert
                  (ItemsView,
@@ -151,14 +158,37 @@ package body Bases.UI is
          Unbind(ItemsView, "<<TreeviewSelect>>");
          Bind(ItemsView, "<<TreeviewSelect>>", "ShowRepairInfo");
          configure(ActionButton, "-text {Buy repairs} -command RepairShip");
+      elsif CArgv.Arg(Argv, 1) = "recipes" then
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
+         for I in Recipes_List.Iterate loop
+            if BasesTypes_List(BaseType).Recipes.Contains
+                (Recipes_Container.Key(I)) and
+              Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
+                Positive_Container.No_Index and
+              Recipes_List(I).Reputation <=
+                SkyBases(BaseIndex).Reputation(1) then
+               if FirstIndex = Null_Unbounded_String then
+                  FirstIndex := Recipes_Container.Key(I);
+               end if;
+               Insert
+                 (ItemsView,
+                  "{} end -id " & To_String(Recipes_Container.Key(I)) &
+                  " -text {" &
+                  To_String
+                    (Items_List(Recipes_List(I).ResultIndex).Name & "}"));
+            end if;
+         end loop;
+         Unbind(ItemsView, "<<TreeviewSelect>>");
+         Bind(ItemsView, "<<TreeviewSelect>>", "ShowBuyRecipeInfo");
+         configure(ActionButton, "-text {Buy recipe} -command BuyRecipe");
       end if;
-      if FirstIndex = 0 then
+      if FirstIndex = Null_Unbounded_String then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Selection_Set(ItemsView, "[list" & Natural'Image(FirstIndex) & "]");
+      Selection_Set(ItemsView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
       configure
