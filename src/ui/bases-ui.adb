@@ -32,9 +32,11 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
@@ -67,6 +69,8 @@ package body Bases.UI is
       SearchEntry: Ttk_Entry;
       ItemsView: Ttk_Tree_View;
       FirstIndex: Natural := 0;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -119,6 +123,34 @@ package body Bases.UI is
          Unbind(ItemsView, "<<TreeviewSelect>>");
          Bind(ItemsView, "<<TreeviewSelect>>", "ShowWoundedInfo");
          configure(ActionButton, "-text {Buy healing} -command HealWounded");
+      elsif CArgv.Arg(Argv, 1) = "repair" then
+         Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
+         for I in PlayerShip.Modules.Iterate loop
+            if PlayerShip.Modules(I).Durability <
+              PlayerShip.Modules(I).MaxDurability then
+               if FirstIndex = 0 then
+                  FirstIndex := Modules_Container.To_Index(I);
+               end if;
+               Insert
+                 (ItemsView,
+                  "{} end -id" &
+                  Positive'Image(Modules_Container.To_Index(I)) & " -text {" &
+                  To_String(PlayerShip.Modules(I).Name) & "}");
+            end if;
+         end loop;
+         Insert
+           (ItemsView, "{} end -id 0 -text {Slowly repair the whole ship}");
+         if SkyBases(BaseIndex).Population > 149 then
+            Insert(ItemsView, "{} end -id {-1} -text {Repair the whole ship}");
+         end if;
+         if SkyBases(BaseIndex).Population > 299 then
+            Insert
+              (ItemsView,
+               "{} end -id {-2} -text {Quickly repair the whole ship}");
+         end if;
+         Unbind(ItemsView, "<<TreeviewSelect>>");
+         Bind(ItemsView, "<<TreeviewSelect>>", "ShowRepairInfo");
+         configure(ActionButton, "-text {Buy repairs} -command RepairShip");
       end if;
       if FirstIndex = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -244,11 +276,112 @@ package body Bases.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "heal");
    end Heal_Wounded_Command;
 
+   -- ****f* BUI/Show_Repair_Info_Command
+   -- FUNCTION
+   -- Show the information about repair action
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Repair_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Repair_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RepairsView: Ttk_Tree_View;
+      ModuleIndex: Integer;
+      FormattedTime: Unbounded_String;
+      Cost, Time: Natural := 0;
+      InfoLabel: Ttk_Label;
+   begin
+      RepairsView.Interp := Interp;
+      RepairsView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      if Selection(RepairsView) = "" then
+         return TCL_OK;
+      end if;
+      ModuleIndex := Integer'Value(Selection(RepairsView));
+      RepairCost(Cost, Time, ModuleIndex);
+      CountPrice(Cost, FindMember(Talk));
+      if Time < 60 then
+         FormattedTime := To_Unbounded_String(Natural'Image(Time) & " minute");
+         if Time > 1 then
+            Append(FormattedTime, "s");
+         end if;
+      else
+         FormattedTime :=
+           To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+         if (Time / 60) > 1 then
+            Append(FormattedTime, "s");
+         end if;
+         if (Time mod 60) > 0 then
+            Append
+              (FormattedTime,
+               " and" & Positive'Image(Time mod 60) & " minute");
+            if (Time mod 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         end if;
+      end if;
+      InfoLabel.Interp := Interp;
+      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
+      configure
+        (InfoLabel,
+         "-text {Repair cost:" & Natural'Image(Cost) & " " &
+         To_String(MoneyName) & LF & "Repair time:" &
+         To_String(FormattedTime) & "}");
+      return TCL_OK;
+   end Show_Repair_Info_Command;
+
+   -- ****f* BUI/Repair_Ship_Command
+   -- FUNCTION
+   -- Repair selected module or the whole ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Repair_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Repair_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
+      RepairsView: Ttk_Tree_View;
+      ModuleIndex: Integer;
+   begin
+      RepairsView.Interp := Interp;
+      RepairsView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      ModuleIndex := Integer'Value(Selection(RepairsView));
+      Bases.Ship.RepairShip(ModuleIndex);
+      return Show_Base_UI_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "repair");
+   end Repair_Ship_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("ShowWoundedInfo", Show_Wounded_Info_Command'Access);
       AddCommand("HealWounded", Heal_Wounded_Command'Access);
+      AddCommand("ShowRepairInfo", Show_Repair_Info_Command'Access);
+      AddCommand("RepairShip", Repair_Ship_Command'Access);
    end AddCommands;
 
 end Bases.UI;

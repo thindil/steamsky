@@ -176,7 +176,7 @@ package body OrdersMenu is
                if Module.Durability < Module.MaxDurability then
                   Add
                     (OrdersMenu, "command",
-                     "-label {Repair ship} -underline 2");
+                     "-label {Repair ship} -underline 2 -command {ShowBaseUI repair}");
                   exit;
                end if;
             end loop;
