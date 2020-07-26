@@ -193,7 +193,7 @@ package body OrdersMenu is
                    SkyBases(BaseIndex).Reputation(1) then
                   Add
                     (OrdersMenu, "command",
-                     "-label {Buy recipes} -underline 2");
+                     "-label {Buy recipes} -underline 2 -command {ShowBaseUI recipes}");
                   exit;
                end if;
             end loop;
