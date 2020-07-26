@@ -467,6 +467,39 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Buy_Recipe_Info_Command;
 
+   -- ****f* BUI/Buy_Recipe_Command
+   -- FUNCTION
+   -- Buy the selected recipe
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Buy_Recipe_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Buy_Recipe_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
+      RecipesView: Ttk_Tree_View;
+      RecipeIndex: Unbounded_String;
+   begin
+      RecipesView.Interp := Interp;
+      RecipesView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
+      BuyRecipe(RecipeIndex);
+      return Show_Base_UI_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
+   end Buy_Recipe_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
@@ -475,6 +508,7 @@ package body Bases.UI is
       AddCommand("ShowRepairInfo", Show_Repair_Info_Command'Access);
       AddCommand("RepairShip", Repair_Ship_Command'Access);
       AddCommand("ShowBuyRecipeInfo", Show_Buy_Recipe_Info_Command'Access);
+      AddCommand("BuyRecipe", Buy_Recipe_Command'Access);
    end AddCommands;
 
 end Bases.UI;
