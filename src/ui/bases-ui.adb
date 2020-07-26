@@ -127,7 +127,7 @@ package body Bases.UI is
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "ShowWoundedInfo");
+         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo heal}");
          configure(ActionButton, "-text {Buy healing} -command HealWounded");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
@@ -157,7 +157,7 @@ package body Bases.UI is
                "{} end -id {-2} -text {Quickly repair the whole ship}");
          end if;
          Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "ShowRepairInfo");
+         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo repair}");
          configure(ActionButton, "-text {Buy repairs} -command RepairShip");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
@@ -180,7 +180,7 @@ package body Bases.UI is
             end if;
          end loop;
          Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "ShowBuyRecipeInfo");
+         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo recipes}");
          configure(ActionButton, "-text {Buy recipe} -command BuyRecipe");
       end if;
       if FirstIndex = Null_Unbounded_String then
@@ -211,68 +211,128 @@ package body Bases.UI is
 
    -- ****f* BUI/Show_Wounded_Info_Command
    -- FUNCTION
-   -- Show the information about healing action
+   -- Show the information about the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- SOURCE
-   function Show_Wounded_Info_Command
+   function Show_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Show_Wounded_Info_Command
+   function Show_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      WoundedView: Ttk_Tree_View;
-      MemberIndex: Natural;
-      FormattedTime: Unbounded_String;
+      pragma Unreferenced(ClientData, Argc);
+      ItemsView: Ttk_Tree_View;
+      FormattedTime, ItemIndex: Unbounded_String;
       Cost, Time: Natural := 0;
       InfoLabel: Ttk_Label;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
-      WoundedView.Interp := Interp;
-      WoundedView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      if Selection(WoundedView) = "" then
+      ItemsView.Interp := Interp;
+      ItemsView.Name := New_String(".paned.baseframe.canvas.base.items.view");
+      if Selection(ItemsView) = "" then
          return TCL_OK;
       end if;
-      MemberIndex := Natural'Value(Selection(WoundedView));
-      HealCost(Cost, Time, MemberIndex);
-      if Time < 60 then
-         FormattedTime := To_Unbounded_String(Natural'Image(Time) & " minute");
-         if Time > 1 then
-            Append(FormattedTime, "s");
-         end if;
-      else
-         FormattedTime :=
-           To_Unbounded_String(Positive'Image(Time / 60) & " hour");
-         if (Time / 60) > 1 then
-            Append(FormattedTime, "s");
-         end if;
-         if (Time mod 60) > 0 then
-            Append
-              (FormattedTime,
-               " and" & Positive'Image(Time mod 60) & " minute");
-            if (Time mod 60) > 1 then
-               Append(FormattedTime, "s");
-            end if;
-         end if;
-      end if;
+      ItemIndex := To_Unbounded_String(Selection(ItemsView));
       InfoLabel.Interp := Interp;
       InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
-      configure
-        (InfoLabel,
-         "-text {Heal cost:" & Natural'Image(Cost) & " " &
-         To_String(MoneyName) & LF & "Heal time:" & To_String(FormattedTime) &
-         "}");
+      if CArgv.Arg(Argv, 1) = "heal" then
+         HealCost(Cost, Time, Natural'Value(To_String(ItemIndex)));
+         if Time < 60 then
+            FormattedTime :=
+              To_Unbounded_String(Natural'Image(Time) & " minute");
+            if Time > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         else
+            FormattedTime :=
+              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+            if (Time / 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+            if (Time mod 60) > 0 then
+               Append
+                 (FormattedTime,
+                  " and" & Positive'Image(Time mod 60) & " minute");
+               if (Time mod 60) > 1 then
+                  Append(FormattedTime, "s");
+               end if;
+            end if;
+         end if;
+         configure
+           (InfoLabel,
+            "-text {Heal cost:" & Natural'Image(Cost) & " " &
+            To_String(MoneyName) & LF & "Heal time:" &
+            To_String(FormattedTime) & "}");
+      elsif CArgv.Arg(Argv, 1) = "repair" then
+         RepairCost(Cost, Time, Integer'Value(To_String(ItemIndex)));
+         CountPrice(Cost, FindMember(Talk));
+         if Time < 60 then
+            FormattedTime :=
+              To_Unbounded_String(Natural'Image(Time) & " minute");
+            if Time > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         else
+            FormattedTime :=
+              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+            if (Time / 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+            if (Time mod 60) > 0 then
+               Append
+                 (FormattedTime,
+                  " and" & Positive'Image(Time mod 60) & " minute");
+               if (Time mod 60) > 1 then
+                  Append(FormattedTime, "s");
+               end if;
+            end if;
+         end if;
+         InfoLabel.Interp := Interp;
+         InfoLabel.Name :=
+           New_String(".paned.baseframe.canvas.base.info.info");
+         configure
+           (InfoLabel,
+            "-text {Repair cost:" & Natural'Image(Cost) & " " &
+            To_String(MoneyName) & LF & "Repair time:" &
+            To_String(FormattedTime) & "}");
+      elsif CArgv.Arg(Argv, 1) = "recipes" then
+         if Get_Price
+             (SkyBases(BaseIndex).BaseType,
+              Recipes_List(ItemIndex).ResultIndex) >
+           0 then
+            Cost :=
+              Get_Price
+                (SkyBases(BaseIndex).BaseType,
+                 Recipes_List(ItemIndex).ResultIndex) *
+              Recipes_List(ItemIndex).Difficulty * 10;
+         else
+            Cost := Recipes_List(ItemIndex).Difficulty * 10;
+         end if;
+         Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+         if Cost = 0 then
+            Cost := 1;
+         end if;
+         CountPrice(Cost, FindMember(Talk));
+         InfoLabel.Interp := Interp;
+         InfoLabel.Name :=
+           New_String(".paned.baseframe.canvas.base.info.info");
+         configure
+           (InfoLabel,
+            "-text {Base price:" & Positive'Image(Cost) & " " &
+            To_String(MoneyName) & "}");
+      end if;
       return TCL_OK;
-   end Show_Wounded_Info_Command;
+   end Show_Item_Info_Command;
 
    -- ****f* BUI/Heal_Wounded_Command
    -- FUNCTION
@@ -307,72 +367,6 @@ package body Bases.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "heal");
    end Heal_Wounded_Command;
 
-   -- ****f* BUI/Show_Repair_Info_Command
-   -- FUNCTION
-   -- Show the information about repair action
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Show_Repair_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Repair_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      RepairsView: Ttk_Tree_View;
-      ModuleIndex: Integer;
-      FormattedTime: Unbounded_String;
-      Cost, Time: Natural := 0;
-      InfoLabel: Ttk_Label;
-   begin
-      RepairsView.Interp := Interp;
-      RepairsView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      if Selection(RepairsView) = "" then
-         return TCL_OK;
-      end if;
-      ModuleIndex := Integer'Value(Selection(RepairsView));
-      RepairCost(Cost, Time, ModuleIndex);
-      CountPrice(Cost, FindMember(Talk));
-      if Time < 60 then
-         FormattedTime := To_Unbounded_String(Natural'Image(Time) & " minute");
-         if Time > 1 then
-            Append(FormattedTime, "s");
-         end if;
-      else
-         FormattedTime :=
-           To_Unbounded_String(Positive'Image(Time / 60) & " hour");
-         if (Time / 60) > 1 then
-            Append(FormattedTime, "s");
-         end if;
-         if (Time mod 60) > 0 then
-            Append
-              (FormattedTime,
-               " and" & Positive'Image(Time mod 60) & " minute");
-            if (Time mod 60) > 1 then
-               Append(FormattedTime, "s");
-            end if;
-         end if;
-      end if;
-      InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
-      configure
-        (InfoLabel,
-         "-text {Repair cost:" & Natural'Image(Cost) & " " &
-         To_String(MoneyName) & LF & "Repair time:" &
-         To_String(FormattedTime) & "}");
-      return TCL_OK;
-   end Show_Repair_Info_Command;
-
    -- ****f* BUI/Repair_Ship_Command
    -- FUNCTION
    -- Repair selected module or the whole ship
@@ -405,67 +399,6 @@ package body Bases.UI is
       return Show_Base_UI_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "repair");
    end Repair_Ship_Command;
-
-   -- ****f* BUI/Show_Buy_Recipe_Info_Command
-   -- FUNCTION
-   -- Show the information about the selected recipe
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Show_Buy_Recipe_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Buy_Recipe_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      RecipesView: Ttk_Tree_View;
-      RecipeIndex: Unbounded_String;
-      Cost: Natural := 0;
-      InfoLabel: Ttk_Label;
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-   begin
-      RecipesView.Interp := Interp;
-      RecipesView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      if Selection(RecipesView) = "" then
-         return TCL_OK;
-      end if;
-      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
-      if Get_Price
-          (SkyBases(BaseIndex).BaseType,
-           Recipes_List(RecipeIndex).ResultIndex) >
-        0 then
-         Cost :=
-           Get_Price
-             (SkyBases(BaseIndex).BaseType,
-              Recipes_List(RecipeIndex).ResultIndex) *
-           Recipes_List(RecipeIndex).Difficulty * 10;
-      else
-         Cost := Recipes_List(RecipeIndex).Difficulty * 10;
-      end if;
-      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
-      if Cost = 0 then
-         Cost := 1;
-      end if;
-      CountPrice(Cost, FindMember(Talk));
-      InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
-      configure
-        (InfoLabel,
-         "-text {Base price:" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & "}");
-      return TCL_OK;
-   end Show_Buy_Recipe_Info_Command;
 
    -- ****f* BUI/Buy_Recipe_Command
    -- FUNCTION
@@ -503,11 +436,9 @@ package body Bases.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
-      AddCommand("ShowWoundedInfo", Show_Wounded_Info_Command'Access);
+      AddCommand("ShowItemInfo", Show_Item_Info_Command'Access);
       AddCommand("HealWounded", Heal_Wounded_Command'Access);
-      AddCommand("ShowRepairInfo", Show_Repair_Info_Command'Access);
       AddCommand("RepairShip", Repair_Ship_Command'Access);
-      AddCommand("ShowBuyRecipeInfo", Show_Buy_Recipe_Info_Command'Access);
       AddCommand("BuyRecipe", Buy_Recipe_Command'Access);
    end AddCommands;
 
