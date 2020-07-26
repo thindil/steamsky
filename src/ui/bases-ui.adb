@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with BasesTypes; use BasesTypes;
+with Config; use Config;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -405,6 +406,67 @@ package body Bases.UI is
           (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "repair");
    end Repair_Ship_Command;
 
+   -- ****f* BUI/Show_Buy_Recipe_Info_Command
+   -- FUNCTION
+   -- Show the information about the selected recipe
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Show_Buy_Recipe_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Buy_Recipe_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RecipesView: Ttk_Tree_View;
+      RecipeIndex: Unbounded_String;
+      Cost: Natural := 0;
+      InfoLabel: Ttk_Label;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      RecipesView.Interp := Interp;
+      RecipesView.Name :=
+        New_String(".paned.baseframe.canvas.base.items.view");
+      if Selection(RecipesView) = "" then
+         return TCL_OK;
+      end if;
+      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
+      if Get_Price
+          (SkyBases(BaseIndex).BaseType,
+           Recipes_List(RecipeIndex).ResultIndex) >
+        0 then
+         Cost :=
+           Get_Price
+             (SkyBases(BaseIndex).BaseType,
+              Recipes_List(RecipeIndex).ResultIndex) *
+           Recipes_List(RecipeIndex).Difficulty * 10;
+      else
+         Cost := Recipes_List(RecipeIndex).Difficulty * 10;
+      end if;
+      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      if Cost = 0 then
+         Cost := 1;
+      end if;
+      CountPrice(Cost, FindMember(Talk));
+      InfoLabel.Interp := Interp;
+      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
+      configure
+        (InfoLabel,
+         "-text {Base price:" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & "}");
+      return TCL_OK;
+   end Show_Buy_Recipe_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
@@ -412,6 +474,7 @@ package body Bases.UI is
       AddCommand("HealWounded", Heal_Wounded_Command'Access);
       AddCommand("ShowRepairInfo", Show_Repair_Info_Command'Access);
       AddCommand("RepairShip", Repair_Ship_Command'Access);
+      AddCommand("ShowBuyRecipeInfo", Show_Buy_Recipe_Info_Command'Access);
    end AddCommands;
 
 end Bases.UI;
