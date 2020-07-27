@@ -126,9 +126,6 @@ package body Bases.UI is
          end loop;
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
-         Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo heal}");
-         configure(ActionButton, "-text {Buy healing} -command HealWounded");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          for I in PlayerShip.Modules.Iterate loop
@@ -156,9 +153,6 @@ package body Bases.UI is
               (ItemsView,
                "{} end -id {-2} -text {Quickly repair the whole ship}");
          end if;
-         Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo repair}");
-         configure(ActionButton, "-text {Buy repairs} -command RepairShip");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          for I in Recipes_List.Iterate loop
@@ -179,10 +173,15 @@ package body Bases.UI is
                     (Items_List(Recipes_List(I).ResultIndex).Name & "}"));
             end if;
          end loop;
-         Unbind(ItemsView, "<<TreeviewSelect>>");
-         Bind(ItemsView, "<<TreeviewSelect>>", "{ShowItemInfo recipes}");
-         configure(ActionButton, "-text {Buy recipe} -command BuyRecipe");
       end if;
+      Unbind(ItemsView, "<<TreeviewSelect>>");
+      Bind
+        (ItemsView, "<<TreeviewSelect>>",
+         "{ShowItemInfo " & CArgv.Arg(Argv, 1) & "}");
+      configure
+        (ActionButton,
+         "-text {Buy healing} -command {BaseAction " & CArgv.Arg(Argv, 1) &
+         "}");
       if FirstIndex = Null_Unbounded_String then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -350,112 +349,52 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Item_Info_Command;
 
-   -- ****f* BUI/Heal_Wounded_Command
+   -- ****f* BUI/Base_Action_Command
    -- FUNCTION
-   -- Heal selected crew member or the whole crew
+   -- Execute the selected action
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- SOURCE
-   function Heal_Wounded_Command
+   function Base_Action_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Heal_Wounded_Command
+   function Base_Action_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(Argc, Argv);
-      WoundedView: Ttk_Tree_View;
-      MemberIndex: Natural;
+      pragma Unreferenced(Argc);
+      ItemsView: Ttk_Tree_View;
+      ItemIndex: Unbounded_String;
    begin
-      WoundedView.Interp := Interp;
-      WoundedView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      MemberIndex := Natural'Value(Selection(WoundedView));
-      HealWounded(MemberIndex);
+      ItemsView.Interp := Interp;
+      ItemsView.Name := New_String(".paned.baseframe.canvas.base.items.view");
+      ItemIndex := To_Unbounded_String(Selection(ItemsView));
+      if CArgv.Arg(Argv, 1) = "heal" then
+         HealWounded(Natural'Value(To_String(ItemIndex)));
+      elsif CArgv.Arg(Argv, 1) = "repair" then
+         Bases.Ship.RepairShip(Integer'Value(To_String(ItemIndex)));
+      elsif CArgv.Arg(Argv, 1) = "recipes" then
+         BuyRecipe(ItemIndex);
+      end if;
+      UpdateHeader;
+      UpdateMessages;
       return Show_Base_UI_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "heal");
-   end Heal_Wounded_Command;
-
-   -- ****f* BUI/Repair_Ship_Command
-   -- FUNCTION
-   -- Repair selected module or the whole ship
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Repair_Ship_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Repair_Ship_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(Argc, Argv);
-      RepairsView: Ttk_Tree_View;
-      ModuleIndex: Integer;
-   begin
-      RepairsView.Interp := Interp;
-      RepairsView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      ModuleIndex := Integer'Value(Selection(RepairsView));
-      Bases.Ship.RepairShip(ModuleIndex);
-      return Show_Base_UI_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "repair");
-   end Repair_Ship_Command;
-
-   -- ****f* BUI/Buy_Recipe_Command
-   -- FUNCTION
-   -- Buy the selected recipe
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Buy_Recipe_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Buy_Recipe_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(Argc, Argv);
-      RecipesView: Ttk_Tree_View;
-      RecipeIndex: Unbounded_String;
-   begin
-      RecipesView.Interp := Interp;
-      RecipesView.Name :=
-        New_String(".paned.baseframe.canvas.base.items.view");
-      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
-      BuyRecipe(RecipeIndex);
-      return Show_Base_UI_Command
-          (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
-   end Buy_Recipe_Command;
+          (ClientData, Interp, 2,
+           CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
+   end Base_Action_Command;
 
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("ShowItemInfo", Show_Item_Info_Command'Access);
-      AddCommand("HealWounded", Heal_Wounded_Command'Access);
-      AddCommand("RepairShip", Repair_Ship_Command'Access);
-      AddCommand("BuyRecipe", Buy_Recipe_Command'Access);
+      AddCommand("BaseAction", Base_Action_Command'Access);
    end AddCommands;
 
 end Bases.UI;
