@@ -1,13 +1,9 @@
-# test code
-ttk::frame .paned
-set shipyardframe [ttk::frame .paned.shipyard]
-# normal code
-#ttk::frame .paned.shipyardframe
-#set shipyardcanvas [canvas .paned.shipyardframe.canvas -yscrollcommand [list .paned.shipyardframe.scrolly set] -xscrollcommand [list .paned.shipyardframe.scrollx set]]
-#grid $shipyardcanvas -sticky nwes
-#grid [ttk::scrollbar .paned.shipyardframe.scrollx -orient horizontal -command [list $shipyardcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-#grid [ttk::scrollbar .paned.shipyardframe.scrolly -orient vertical -command [list $shipyardcanvas yview]] -row 0 -column 1 -sticky ns
-#set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
+ttk::frame .paned.shipyardframe
+set shipyardcanvas [canvas .paned.shipyardframe.canvas -yscrollcommand [list .paned.shipyardframe.scrolly set] -xscrollcommand [list .paned.shipyardframe.scrollx set]]
+grid $shipyardcanvas -sticky nwes
+grid [ttk::scrollbar .paned.shipyardframe.scrollx -orient horizontal -command [list $shipyardcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
+grid [ttk::scrollbar .paned.shipyardframe.scrolly -orient vertical -command [list $shipyardcanvas yview]] -row 0 -column 1 -sticky ns
+set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
 grid [ttk::notebook $shipyardframe.notebook] -sticky nwes
 # Install modules
 set sinstall [ttk::frame $shipyardframe.notebook.install]
@@ -56,6 +52,3 @@ grid [ttk::label $infoframe.money]
 grid [ttk::button $infoframe.install -text {Remove module}]
 grid $infoframe -column 1 -row 0
 $shipyardframe.notebook add $sremove -text {Remove}
-# test code
-pack $shipyardframe -fill both -expand true
-pack .paned -fill both -expand true
