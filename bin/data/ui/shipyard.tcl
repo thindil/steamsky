@@ -34,6 +34,28 @@ grid [ttk::label $infoframe.money]
 grid [ttk::button $infoframe.install -text {Install module}]
 grid $infoframe -column 1 -row 1
 $shipyardframe.notebook add $sinstall -text {Install}
+# Remove modules
+set sremove [ttk::frame $shipyardframe.notebook.remove]
+grid [ttk::frame $sremove.modules] -sticky nwes
+set shipyardview [ttk::treeview $sremove.modules.view -show headings -columns [list name type size material] -yscrollcommand [list $sremove.modules.scrolly set]]
+$shipyardview heading name -text {Name}
+$shipyardview heading type -text {Type}
+$shipyardview heading size -text {Size}
+$shipyardview heading material -text {Material}
+grid $shipyardview -sticky nwes
+grid [ttk::scrollbar $sremove.modules.scrolly -orient vertical -command [list $shipyardview yview]] -row 0 -column 1 -sticky ns
+# Module info
+set infoframe [ttk::frame $sremove.info]
+grid [ttk::labelframe $infoframe.info -text {Module info:}]
+set moduleinfo [text $infoframe.info.info -wrap char -height 10 -width 40]
+$moduleinfo tag configure red -foreground red
+grid $moduleinfo -sticky nwes
+grid [ttk::progressbar $infoframe.info.damage]
+grid [ttk::label $infoframe.info.description]
+grid [ttk::label $infoframe.money]
+grid [ttk::button $infoframe.install -text {Remove module}]
+grid $infoframe -column 1 -row 0
+$shipyardframe.notebook add $sremove -text {Remove}
 # test code
 pack $shipyardframe -fill both -expand true
 pack .paned -fill both -expand true
