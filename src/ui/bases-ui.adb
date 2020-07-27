@@ -162,6 +162,14 @@ package body Bases.UI is
                 Positive_Container.No_Index and
               Recipes_List(I).Reputation <=
                 SkyBases(BaseIndex).Reputation(1) then
+               if Argc = 3
+                 and then
+                   Index
+                     (Items_List(Recipes_List(I).ResultIndex).Name,
+                      CArgv.Arg(Argv, 2)) =
+                   0 then
+                  goto End_Of_Recipes_Loop;
+               end if;
                if FirstIndex = Null_Unbounded_String then
                   FirstIndex := Recipes_Container.Key(I);
                end if;
@@ -171,6 +179,7 @@ package body Bases.UI is
                   " -text {" &
                   To_String
                     (Items_List(Recipes_List(I).ResultIndex).Name & "}"));
+               <<End_Of_Recipes_Loop>>
             end if;
          end loop;
       end if;
@@ -205,6 +214,7 @@ package body Bases.UI is
       configure
         (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
       ShowScreen("baseframe");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Base_UI_Command;
 
@@ -390,11 +400,44 @@ package body Bases.UI is
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Base_Action_Command;
 
+   -- ****if* BUI/Search_Recipes_Command
+   -- FUNCTION
+   -- Show only this recipes which contains the selected sequence
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Search_Recipes_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Search_Recipes_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      SearchText: constant String := CArgv.Arg(Argv, 1);
+   begin
+      if SearchText'Length = 0 then
+         return Show_Base_UI_Command
+             (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
+      end if;
+      return Show_Base_UI_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & "ShowBaseUI" & "recipes" & SearchText);
+   end Search_Recipes_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("ShowItemInfo", Show_Item_Info_Command'Access);
       AddCommand("BaseAction", Base_Action_Command'Access);
+      AddCommand("SearchRecipes", Search_Recipes_Command'Access);
    end AddCommands;
 
 end Bases.UI;

@@ -4,7 +4,7 @@ grid $basecanvas -sticky nwes
 grid [ttk::scrollbar .paned.baseframe.scrollx -orient horizontal -command [list $basecanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
 grid [ttk::scrollbar .paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -row 0 -column 1 -sticky ns
 set baseframe [ttk::frame $basecanvas.base]
-grid [ttk::entry $baseframe.search] -columnspan 2
+grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2
 # Items list
 grid [ttk::frame $baseframe.items] -sticky nwes
 set baseview [ttk::treeview $baseframe.items.view -yscrollcommand [list $baseframe.items.scrolly set]]
