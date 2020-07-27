@@ -11,9 +11,17 @@ set shipyardframe [ttk::frame .paned.shipyard]
 grid [ttk::notebook $shipyardframe.notebook] -sticky nwes
 # Install modules
 set sinstall [ttk::frame $shipyardframe.notebook.install]
+grid [ttk::frame $sinstall.options] -sticky we -columnspan 2
+grid [ttk::label $sinstall.options.label -text "Show modules:"]
+grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors}]] -row 0 -column 1
+$sinstall.options.modules current 0
+grid [ttk::entry $sinstall.options.search] -row 0 -column 2
 grid [ttk::frame $sinstall.modules] -sticky nwes
-set shipyardview [ttk::treeview $sinstall.modules.view -yscrollcommand [list $sinstall.modules.scrolly set]]
-$shipyardview heading #0 -text {Name}
+set shipyardview [ttk::treeview $sinstall.modules.view -show headings -columns [list name type size material] -yscrollcommand [list $sinstall.modules.scrolly set]]
+$shipyardview heading name -text {Name}
+$shipyardview heading type -text {Type}
+$shipyardview heading size -text {Size}
+$shipyardview heading material -text {Material}
 grid $shipyardview -sticky nwes
 grid [ttk::scrollbar $sinstall.modules.scrolly -orient vertical -command [list $shipyardview yview]] -row 0 -column 1 -sticky ns
 # Module info
@@ -21,6 +29,7 @@ set infoframe [ttk::frame $sinstall.info]
 grid [ttk::labelframe $infoframe.info -text {Module info:}]
 set moduleinfo [text $infoframe.info.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
+grid $moduleinfo -sticky nwes
 grid [ttk::label $infoframe.money]
 grid [ttk::button $infoframe.install -text {Install module}]
 grid $infoframe -column 1 -row 1
