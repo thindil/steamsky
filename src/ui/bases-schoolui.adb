@@ -59,7 +59,6 @@ package body Bases.SchoolUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       SchoolCanvas: Tk_Canvas;
       SchoolFrame: Ttk_Frame;
@@ -74,15 +73,12 @@ package body Bases.SchoolUI is
       SchoolFrame.Name := New_String(Widget_Image(Paned) & ".schoolframe");
       SchoolCanvas.Interp := Interp;
       SchoolCanvas.Name := New_String(Widget_Image(SchoolFrame) & ".canvas");
-      Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(SchoolCanvas) & ".cargo.type.label");
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "school.tcl");
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
