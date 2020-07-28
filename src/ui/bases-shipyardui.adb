@@ -28,8 +28,10 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -189,23 +191,22 @@ package body Bases.ShipyardUI is
    ModuleIndex: Unbounded_String;
    -- ****
 
-   -- ****if* ShipyardUI/GetModuleInfo
+   -- ****if* ShipyardUI/SetModuleInfo
    -- FUNCTION
    -- Show information about selected module
    -- PARAMETERS
-   -- ModuleInfo - String which contains whole info about the module
    -- Installing - If true, player looking at installing modules list
-   -- RESULT
-   -- Parameter ModuleInfo
    -- SOURCE
-   procedure GetModuleInfo
-     (ModuleInfo: in out Unbounded_String; Installing: Boolean) is
+   procedure SetModuleInfo(Installing: Boolean) is
       -- ****
       MType: ModuleType;
       MAmount, Weight, MaxValue, Value, MaxOwners: Natural;
       ShipModuleIndex, Size: Positive;
       Speed: Integer;
+      ModuleText: Tk_Text;
+      ModuleInfo: Unbounded_String;
    begin
+      ModuleText.Interp := Get_Context;
       if Installing then
          MType := Modules_List(ModuleIndex).MType;
          MaxValue := Modules_List(ModuleIndex).MaxValue;
@@ -214,6 +215,9 @@ package body Bases.ShipyardUI is
          Weight := Modules_List(ModuleIndex).Weight;
          MaxOwners := Modules_List(ModuleIndex).MaxOwners;
          Speed := Modules_List(ModuleIndex).Speed;
+         ModuleText.Name :=
+           New_String
+             (".paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info");
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
@@ -263,6 +267,9 @@ package body Bases.ShipyardUI is
              .MaxOwners;
          Speed :=
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Speed;
+         ModuleText.Name :=
+           New_String
+             (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info");
       end if;
       case MType is
          when HULL =>
@@ -370,7 +377,7 @@ package body Bases.ShipyardUI is
               (ModuleInfo, LF & LF & Modules_List(ModuleIndex).Description);
          end if;
       end if;
-   end GetModuleInfo;
+   end SetModuleInfo;
 
    -- ****f* ShipyardUI/Show_Install_Info_Command
    -- FUNCTION
@@ -397,32 +404,41 @@ package body Bases.ShipyardUI is
       ModuleInfo, InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
+      ModuleText: Tk_Text;
+      MoneyLabel: Ttk_Label;
+      InstallButton: Ttk_Button;
    begin
       ModulesView.Interp := Interp;
       ModulesView.Name :=
-        New_String(".paned.shipyardframe.canvas.notebook.install.modules.view");
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.install.modules.view");
       ModuleIndex := To_Unbounded_String(Selection(ModulesView));
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      ModuleInfo := To_Unbounded_String("Install cost:");
+      ModuleText.Interp := Interp;
+      ModuleText.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info");
+      configure(ModuleText, "-state normal");
+      Delete(ModuleText, "1.0", "end");
+      Insert(ModuleText, "end", "{Install cost:}");
       if MoneyIndex2 = 0
         or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         Append
-           (ModuleInfo,
-            "<span foreground=""red"">" & Positive'Image(Cost) & " " &
-            To_String(MoneyName) & "</span> ");
+         Insert
+           (ModuleText, "end",
+            "{" & Positive'Image(Cost) & " " & To_String(MoneyName) &
+            "} [list red]");
       else
-         Append(ModuleInfo, Positive'Image(Cost) & " " & To_String(MoneyName));
+         Insert
+           (ModuleText, "end",
+            "{" & Positive'Image(Cost) & " " & To_String(MoneyName) & "}");
       end if;
-      Append
-        (ModuleInfo,
-         LF & "Installation time:" &
-         Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes");
-      GetModuleInfo(ModuleInfo, True);
---      Set_Label
---        (Gtk_Label(Get_Object(Object, "lblinstallinfo")),
---         To_String(ModuleInfo));
+      Insert
+        (ModuleText, "end",
+         "{" & LF & "Installation time:" &
+         Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes}");
+      SetModuleInfo(True);
       if MoneyIndex2 > 0 then
          InstallInfo :=
            To_Unbounded_String
@@ -448,24 +464,31 @@ package body Bases.ShipyardUI is
             exit;
          end if;
       end loop;
---      Set_Label
---        (Gtk_Label(Get_Object(Object, "lblmoneyinstall")),
---         To_String(InstallInfo));
---      if MoneyIndex2 = 0 then
---         Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
---      else
---         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost or
---           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN |
---                 HULL) and
---            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
---             Modules_List(ModuleIndex).Size > MaxSize)) or
---           (Modules_List(ModuleIndex).MType = HULL and
---            Modules_List(ModuleIndex).MaxValue < UsedSpace) then
---            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), False);
---         else
---            Set_Sensitive(Gtk_Widget(Get_Object(Object, "btninstall")), True);
---         end if;
---      end if;
+      MoneyLabel.Interp := Interp;
+      MoneyLabel.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.money");
+      configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
+      InstallButton.Interp := Interp;
+      InstallButton.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.install");
+      if MoneyIndex2 = 0 then
+         configure(InstallButton, "-state disabled");
+      else
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost or
+           ((Modules_List(ModuleIndex).MType not in GUN | HARPOON_GUN |
+                 HULL) and
+            ((AllSpace - UsedSpace) < Modules_List(ModuleIndex).Size or
+             Modules_List(ModuleIndex).Size > MaxSize)) or
+           (Modules_List(ModuleIndex).MType = HULL and
+            Modules_List(ModuleIndex).MaxValue < UsedSpace) then
+            configure(InstallButton, "-state disabled");
+         else
+            configure(InstallButton, "-state !disabled");
+         end if;
+      end if;
+      configure(ModuleText, "-state disabled");
       return TCL_OK;
    end Show_Install_Info_Command;
 
