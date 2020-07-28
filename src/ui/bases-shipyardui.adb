@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -27,12 +28,35 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
 
 package body Bases.ShipyardUI is
+
+   -- ****if* ShipyardUI/GetModuleType
+   -- FUNCTION
+   -- Get type of selected module
+   -- PARAMETERS
+   -- ModuleIndex - Index of module in prototypes list
+   -- RETURNS
+   -- Formatted type of module
+   -- SOURCE
+   function GetModuleType(ModuleIndex: Unbounded_String) return String is
+      -- ****
+      ModuleTypeName: Unbounded_String :=
+        To_Unbounded_String
+          (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
+   begin
+      Replace_Element(ModuleTypeName, 1, To_Upper(Element(ModuleTypeName, 1)));
+      while Index(ModuleTypeName, "_", 1) > 0 loop
+         Replace_Element(ModuleTypeName, Index(ModuleTypeName, "_", 1), ' ');
+      end loop;
+      return To_String(ModuleTypeName);
+   end GetModuleType;
 
    -- ****f* ShipyardUI/Show_Shipyard_Command
    -- FUNCTION
@@ -59,6 +83,10 @@ package body Bases.ShipyardUI is
       ShipyardCanvas: Tk_Canvas;
       ShipyardFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
+      ModulesView: Ttk_Tree_View;
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      ModuleSize: Integer;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -67,7 +95,8 @@ package body Bases.ShipyardUI is
       ShipyardFrame.Interp := Interp;
       ShipyardFrame.Name := New_String(Widget_Image(Paned) & ".shipyardframe");
       ShipyardCanvas.Interp := Interp;
-      ShipyardCanvas.Name := New_String(Widget_Image(ShipyardFrame) & ".canvas");
+      ShipyardCanvas.Name :=
+        New_String(Widget_Image(ShipyardFrame) & ".canvas");
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -80,10 +109,35 @@ package body Bases.ShipyardUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
-      -- Fill UI
-      -- End of fill UI
+      ShipyardFrame.Name :=
+        New_String
+          (Widget_Image(ShipyardCanvas) & ".shipyard.notebook.install");
+      ModulesView.Interp := Interp;
+      ModulesView.Name :=
+        New_String(Widget_Image(ShipyardFrame) & ".modules.view");
+      Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).Price > 0 and
+           SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
+            case Modules_List(I).MType is
+               when HULL =>
+                  ModuleSize := Modules_List(I).MaxValue;
+               when others =>
+                  ModuleSize := Modules_List(I).Size;
+            end case;
+            Insert
+              (ModulesView,
+               "{} end -id {" & To_String(BaseModules_Container.Key(I)) &
+               "} -values [list {" & To_String(Modules_List(I).Name) & "} {" &
+               GetModuleType(BaseModules_Container.Key(I)) & "} {" &
+               Integer'Image(ModuleSize) & "} {" &
+               To_String(Modules_List(I).RepairMaterial) & "}]");
+         end if;
+      end loop;
+      Selection_Set(ModulesView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      ShipyardFrame.Name := New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
+      ShipyardFrame.Name :=
+        New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
       configure
         (ShipyardCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
