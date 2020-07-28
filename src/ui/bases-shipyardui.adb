@@ -34,7 +34,6 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
-with ada.Text_IO;
 
 package body Bases.ShipyardUI is
 
@@ -144,11 +143,10 @@ package body Bases.ShipyardUI is
       Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
-            Ada.Text_IO.Put_Line(Positive'Image(Modules_Container.To_Index(I)));
             Insert
               (ModulesView,
                "{} end -id" & Positive'Image(Modules_Container.To_Index(I)) &
-               "} -values [list {" & To_String(PlayerShip.Modules(I).Name) &
+               " -values [list {" & To_String(PlayerShip.Modules(I).Name) &
                "} {" & GetModuleType(PlayerShip.Modules(I).ProtoIndex) &
                "} {" &
                Integer'Image
