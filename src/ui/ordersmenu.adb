@@ -182,7 +182,9 @@ package body OrdersMenu is
             end loop;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
-               Add(OrdersMenu, "command", "-label {Shipyard} -underline 2");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Shipyard} -underline 2 -command ShowShipyard");
             end if;
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
