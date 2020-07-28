@@ -19,6 +19,7 @@ $shipyardview heading type -text {Type}
 $shipyardview heading size -text {Size}
 $shipyardview heading material -text {Material}
 grid $shipyardview -sticky nwes
+bind $shipyardview <<TreeviewSelect>> ShowInstallInfo
 grid [ttk::scrollbar $sinstall.modules.scrolly -orient vertical -command [list $shipyardview yview]] -row 0 -column 1 -sticky ns
 # Module info
 set infoframe [ttk::frame $sinstall.info]
