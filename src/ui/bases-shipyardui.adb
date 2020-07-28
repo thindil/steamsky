@@ -34,6 +34,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Utils.UI; use Utils.UI;
+with ada.Text_IO;
 
 package body Bases.ShipyardUI is
 
@@ -87,6 +88,7 @@ package body Bases.ShipyardUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ModuleSize: Integer;
+      FirstIndex: Unbounded_String;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -110,11 +112,10 @@ package body Bases.ShipyardUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       ShipyardFrame.Name :=
-        New_String
-          (Widget_Image(ShipyardCanvas) & ".shipyard.notebook.install");
+        New_String(Widget_Image(ShipyardCanvas) & ".shipyard.notebook");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
-        New_String(Widget_Image(ShipyardFrame) & ".modules.view");
+        New_String(Widget_Image(ShipyardFrame) & ".install.modules.view");
       Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
@@ -125,6 +126,9 @@ package body Bases.ShipyardUI is
                when others =>
                   ModuleSize := Modules_List(I).Size;
             end case;
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex := BaseModules_Container.Key(I);
+            end if;
             Insert
               (ModulesView,
                "{} end -id {" & To_String(BaseModules_Container.Key(I)) &
@@ -134,7 +138,29 @@ package body Bases.ShipyardUI is
                To_String(Modules_List(I).RepairMaterial) & "}]");
          end if;
       end loop;
-      Selection_Set(ModulesView, "[list 1]");
+      Selection_Set(ModulesView, "[list {" & To_String(FirstIndex) & "}]");
+      ModulesView.Name :=
+        New_String(Widget_Image(ShipyardFrame) & ".remove.modules.view");
+      Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
+      for I in PlayerShip.Modules.Iterate loop
+         if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
+            Ada.Text_IO.Put_Line(Positive'Image(Modules_Container.To_Index(I)));
+            Insert
+              (ModulesView,
+               "{} end -id" & Positive'Image(Modules_Container.To_Index(I)) &
+               "} -values [list {" & To_String(PlayerShip.Modules(I).Name) &
+               "} {" & GetModuleType(PlayerShip.Modules(I).ProtoIndex) &
+               "} {" &
+               Integer'Image
+                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Size) &
+               "} {" &
+               To_String
+                 (Modules_List(PlayerShip.Modules(I).ProtoIndex)
+                    .RepairMaterial) &
+               "}]");
+         end if;
+      end loop;
+      Selection_Set(ModulesView, "[list 2]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipyardFrame.Name :=
         New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
