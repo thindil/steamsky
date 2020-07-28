@@ -204,7 +204,6 @@ package body Bases.ShipyardUI is
       ShipModuleIndex, Size: Positive;
       Speed: Integer;
       ModuleText: Tk_Text;
-      ModuleInfo: Unbounded_String;
    begin
       ModuleText.Interp := Get_Context;
       if Installing then
@@ -274,107 +273,129 @@ package body Bases.ShipyardUI is
       case MType is
          when HULL =>
             if Installing then
-               Append(ModuleInfo, LF & "Ship hull can be only replaced.");
-               Append
-                 (ModuleInfo,
-                  LF & "Modules space:" & Positive'Image(MaxValue));
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Ship hull can be only replaced.}");
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Modules space:" & Positive'Image(MaxValue) &
+                  "}");
             end if;
-            Append(ModuleInfo, LF & "Max module size:" & Integer'Image(Value));
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max module size:" & Integer'Image(Value) & "}");
          when ENGINE =>
-            Append(ModuleInfo, LF & "Max power:" & Positive'Image(MaxValue));
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max power:" & Positive'Image(MaxValue) & "}");
             if Installing then
-               Append(ModuleInfo, LF & "Fuel usage:" & Positive'Image(Value));
+               Insert
+                 (ModuleText, "end",
+                  "{" & LF & "Fuel usage:" & Positive'Image(Value) & "}");
             end if;
          when ShipModules.CARGO =>
-            Append
-              (ModuleInfo,
-               LF & "Max cargo:" & Positive'Image(MaxValue) & " kg");
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max cargo:" & Positive'Image(MaxValue) & " kg}");
          when CABIN =>
-            Append(ModuleInfo, LF & "Quality: ");
+            Insert(ModuleText, "end", "{" & LF & "Quality: }");
             if MaxValue < 30 then
-               Append(ModuleInfo, "minimal");
+               Insert(ModuleText, "end", "{minimal}");
             elsif MaxValue < 60 then
-               Append(ModuleInfo, "basic");
+               Insert(ModuleText, "end", "{basic}");
             elsif MaxValue < 80 then
-               Append(ModuleInfo, "extended");
+               Insert(ModuleText, "end", "{extended}");
             else
-               Append(ModuleInfo, "luxury");
+               Insert(ModuleText, "end", "{luxury}");
             end if;
-            Append(ModuleInfo, LF & "Max owners:" & Natural'Image(MaxOwners));
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max owners:" & Natural'Image(MaxOwners) & "}");
          when ALCHEMY_LAB .. GREENHOUSE =>
-            Append(ModuleInfo, LF & "Max workers:" & Natural'Image(MaxOwners));
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Max workers:" & Natural'Image(MaxOwners) & "}");
          when GUN | HARPOON_GUN =>
-            Append(ModuleInfo, LF & "Strength:" & Natural'Image(MaxValue));
-            Append(ModuleInfo, LF & "Ammunition: ");
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
+            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
             MAmount := 0;
             for Item of Items_List loop
                if Item.IType = Items_Types(Value) then
                   if MAmount > 0 then
-                     Append(ModuleInfo, " or ");
+                     Insert(ModuleText, "end", "{ or }");
                   end if;
-                  Append(ModuleInfo, Item.Name);
+                  Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
                   MAmount := MAmount + 1;
                end if;
             end loop;
             if MType = GUN then
-               Append(ModuleInfo, LF);
+               Insert(ModuleText, "end", "{" & LF);
                if Speed > 0 then
-                  Append
-                    (ModuleInfo,
-                     "Max fire rate:" & Positive'Image(Speed) & "/round");
+                  Insert
+                    (ModuleText, "end",
+                     "{Max fire rate:" & Positive'Image(Speed) & "/round}");
                else
-                  Append
-                    (ModuleInfo,
-                     "Max fire rate: 1/" &
-                     Trim(Integer'Image(abs (Speed)), Both) & " rounds");
+                  Insert
+                    (ModuleText, "end",
+                     "{Max fire rate: 1/" &
+                     Trim(Integer'Image(abs (Speed)), Both) & " rounds}");
                end if;
             end if;
          when BATTERING_RAM =>
-            Append(ModuleInfo, LF & "Strength:" & Natural'Image(MaxValue));
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
          when others =>
             null;
       end case;
       if MType not in HULL | ARMOR then
-         Append(ModuleInfo, LF & "Size:" & Natural'Image(Size));
+         Insert
+           (ModuleText, "end", "{" & LF & "Size:" & Natural'Image(Size) & "}");
          if Installing then
             for Module of PlayerShip.Modules loop
                if Module.MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
-                  Append
-                    (ModuleInfo, " <span foreground=""red"">(too big)</span>");
+                  Insert(ModuleText, "end", "{ (too big)} [list red]");
                   exit;
                end if;
             end loop;
          end if;
       end if;
       if Weight > 0 then
-         Append(ModuleInfo, LF & "Weight:" & Natural'Image(Weight) & " kg");
+         Insert
+           (ModuleText, "end",
+            "{" & LF & "Weight:" & Natural'Image(Weight) & " kg}");
       end if;
       if Installing then
-         Append(ModuleInfo, LF & "Repair/Upgrade material: ");
+         Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
          MAmount := 0;
          for Item of Items_List loop
             if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
                if MAmount > 0 then
-                  Append(ModuleInfo, " or ");
+                  Insert(ModuleText, "end", "{ or }");
                end if;
-               Append(ModuleInfo, Item.Name);
+               Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
                MAmount := MAmount + 1;
             end if;
          end loop;
-         Append
-           (ModuleInfo,
-            LF & "Repair/Upgrade skill: " &
+         Insert
+           (ModuleText, "end",
+            "{" & LF & "Repair/Upgrade skill: " &
             To_String
               (Skills_List(Modules_List(ModuleIndex).RepairSkill).Name) &
             "/" &
             To_String
               (Attributes_List
                  (Skills_List(Modules_List(ModuleIndex).RepairSkill).Attribute)
-                 .Name));
+                 .Name) &
+            "}");
          if Modules_List(ModuleIndex).Description /= Null_Unbounded_String then
-            Append
-              (ModuleInfo, LF & LF & Modules_List(ModuleIndex).Description);
+            Insert
+              (ModuleText, "end",
+               "{" & LF & LF &
+               To_String(Modules_List(ModuleIndex).Description) & "}");
          end if;
       end if;
    end SetModuleInfo;
@@ -401,7 +422,7 @@ package body Bases.ShipyardUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       ModulesView: Ttk_Tree_View;
-      ModuleInfo, InstallInfo: Unbounded_String;
+      InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleText: Tk_Text;
