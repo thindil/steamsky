@@ -28,7 +28,7 @@ set moduleinfo [text $infoframe.info.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
 grid $moduleinfo -sticky nwes
 grid [ttk::label $infoframe.money]
-grid [ttk::button $infoframe.install -text {Install module}]
+grid [ttk::button $infoframe.install -text {Install module} -command {ManipulateModule install}]
 grid $infoframe -column 1 -row 1
 $shipyardframe.notebook add $sinstall -text {Install}
 # Remove modules

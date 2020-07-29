@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -35,10 +36,12 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases.Ship; use Bases.Ship;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
+with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Bases.ShipyardUI is
@@ -331,7 +334,7 @@ package body Bases.ShipyardUI is
                end if;
             end loop;
             if MType = GUN then
-               Insert(ModuleText, "end", "{" & LF);
+               Insert(ModuleText, "end", "{" & LF & "}");
                if Speed > 0 then
                   Insert
                     (ModuleText, "end",
@@ -513,10 +516,71 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Install_Info_Command;
 
+   -- ****f* ShipyardUI/Manipulate_Module_Command
+   -- FUNCTION
+   -- Install or remove the selected module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Manipulate_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Manipulate_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+   begin
+      if CArgv.Arg(Argv, 1) = "install" then
+         Bases.Ship.UpgradeShip(True, ModuleIndex);
+      else
+         Bases.Ship.UpgradeShip(False, ModuleIndex);
+      end if;
+      UpdateMessages;
+      return Show_Shipyard_Command(ClientData, Interp, 2, CArgv.Empty);
+   exception
+      when Trade_No_Money =>
+         ShowMessage
+           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
+         return TCL_OK;
+      when An_Exception : Trade_Not_Enough_Money =>
+         ShowMessage
+           ("You don't have enough " & To_String(MoneyName) & " to pay for " &
+            Exception_Message(An_Exception) & ".");
+         return TCL_OK;
+      when An_Exception : BasesShip_Unique_Module =>
+         ShowMessage
+           ("You can't install another " & Exception_Message(An_Exception) &
+            " because you have installed one module that type. Remove old first.");
+         return TCL_OK;
+      when An_Exception : BasesShip_Installation_Error |
+        BasesShip_Removing_Error =>
+         ShowMessage(Exception_Message(An_Exception));
+         return TCL_OK;
+      when Trade_No_Free_Cargo =>
+         ShowMessage
+           ("You don't have enough free space for " & To_String(MoneyName) &
+            " in ship cargo.");
+         return TCL_OK;
+      when Trade_No_Money_In_Base =>
+         ShowMessage
+           ("Base don't have enough " & To_String(MoneyName) &
+            " for buy this module.");
+         return TCL_OK;
+   end Manipulate_Module_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
       AddCommand("ShowInstallInfo", Show_Install_Info_Command'Access);
+      AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;
