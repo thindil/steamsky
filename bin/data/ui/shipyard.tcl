@@ -52,6 +52,6 @@ grid [ttk::label $infoframe.info.damagelbl]
 grid [ttk::progressbar $infoframe.info.damage -orient horizontal -maximum 1.0] -row 1 -column 1
 grid [ttk::label $infoframe.info.description]
 grid [ttk::label $infoframe.money]
-grid [ttk::button $infoframe.remove -text {Remove module}]
+grid [ttk::button $infoframe.remove -text {Remove module} -command {ManipulateModule remove}]
 grid $infoframe -column 1 -row 0
 $shipyardframe.notebook add $sremove -text {Remove}
