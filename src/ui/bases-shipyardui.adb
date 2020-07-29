@@ -88,7 +88,7 @@ package body Bases.ShipyardUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Paned: Ttk_PanedWindow;
       ShipyardCanvas: Tk_Canvas;
       ShipyardFrame: Ttk_Frame;
@@ -129,6 +129,11 @@ package body Bases.ShipyardUI is
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
            SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
+            if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
+              and then Natural'Value(CArgv.Arg(Argv, 1)) /=
+                ModuleType'Pos(Modules_List(I).MType) then
+               goto End_Of_Loop;
+            end if;
             case Modules_List(I).MType is
                when HULL =>
                   ModuleSize := Modules_List(I).MaxValue;
@@ -146,6 +151,7 @@ package body Bases.ShipyardUI is
                Integer'Image(ModuleSize) & "} {" &
                To_String(Modules_List(I).RepairMaterial) & "}]");
          end if;
+         <<End_Of_Loop>>
       end loop;
       Selection_Set(ModulesView, "[list {" & To_String(FirstIndex) & "}]");
       ModulesView.Name :=
