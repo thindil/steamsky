@@ -615,8 +615,8 @@ package body Bases.ShipyardUI is
       ModuleIndex := To_Unbounded_String(Selection(ModulesView));
       Damage :=
         1.0 -
-          Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
-           Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability);
+        Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
+          Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability);
       Cost :=
         Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Price -
         Integer
@@ -635,8 +635,9 @@ package body Bases.ShipyardUI is
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Remove gain:" & Positive'Image(Cost) & "}");
-      Insert(ModuleText, "end", "{" &
-         LF & "Removing time:" &
+      Insert
+        (ModuleText, "end",
+         "{" & LF & "Removing time:" &
          Positive'Image
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime) &
@@ -672,12 +673,16 @@ package body Bases.ShipyardUI is
       if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
           .Description /=
         Null_Unbounded_String then
-         Set_Label
-           (Gtk_Label(Get_Object(Object, "lblremovedescription")),
-            LF &
+         Label.Name :=
+           New_String
+             (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.description");
+         configure
+           (Label,
+            "-text {" & LF &
             To_String
               (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
-                 .Description));
+                 .Description) &
+            "}");
       end if;
       declare
          MoneyIndex2: constant Natural :=
@@ -706,9 +711,11 @@ package body Bases.ShipyardUI is
             exit;
          end if;
       end loop;
-      Set_Label
-        (Gtk_Label(Get_Object(Object, "lblmoneyremove")),
-         To_String(RemoveInfo));
+      Label.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.money");
+      configure(Label, "-text {" & To_String(RemoveInfo) & "}");
+      configure(ModuleText, "-state disabled");
       return TCL_OK;
    end Show_Remove_Info_Command;
 
