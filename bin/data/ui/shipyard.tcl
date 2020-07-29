@@ -48,10 +48,10 @@ grid [ttk::labelframe $infoframe.info -text {Module info:}]
 set moduleinfo [text $infoframe.info.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
 grid $moduleinfo -sticky nwes
-grid [ttk::label $inforframe.info.damagelbl]
+grid [ttk::label $infoframe.info.damagelbl]
 grid [ttk::progressbar $infoframe.info.damage -orient horizontal -maximum 1.0] -row 1 -column 1
 grid [ttk::label $infoframe.info.description]
 grid [ttk::label $infoframe.money]
-grid [ttk::button $infoframe.install -text {Remove module}]
+grid [ttk::button $infoframe.remove -text {Remove module}]
 grid $infoframe -column 1 -row 0
 $shipyardframe.notebook add $sremove -text {Remove}
