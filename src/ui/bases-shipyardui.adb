@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
@@ -576,11 +577,147 @@ package body Bases.ShipyardUI is
          return TCL_OK;
    end Manipulate_Module_Command;
 
+   -- ****f* ShipyardUI/Show_Remove_Info_Command
+   -- FUNCTION
+   -- Show information about the selected module to remove
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Show_Remove_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Remove_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RemoveInfo: Unbounded_String;
+      Cost: Natural;
+      Damage: Float;
+      ShipModuleIndex: Natural;
+      DamageBar: Ttk_ProgressBar;
+      ModulesView: Ttk_Tree_View;
+      ModuleText: Tk_Text;
+      Label: Ttk_Label;
+   begin
+      ModulesView.Interp := Interp;
+      ModulesView.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.remove.modules.view");
+      ShipModuleIndex := Natural'Value(Selection(ModulesView));
+      ModuleIndex := To_Unbounded_String(Selection(ModulesView));
+      Damage :=
+        1.0 -
+          Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
+           Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability);
+      Cost :=
+        Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Price -
+        Integer
+          (Float
+             (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                .Price) *
+           Damage);
+      if Cost = 0 then
+         Cost := 1;
+      end if;
+      CountPrice(Cost, FindMember(Talk), False);
+      ModuleText.Interp := Interp;
+      ModuleText.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info");
+      configure(ModuleText, "-state normal");
+      Delete(ModuleText, "1.0", "end");
+      Insert(ModuleText, "end", "{Remove gain:" & Positive'Image(Cost) & "}");
+      Insert(ModuleText, "end", "{" &
+         LF & "Removing time:" &
+         Positive'Image
+           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+              .InstallTime) &
+         " minutes}");
+      SetModuleInfo(False);
+      DamageBar.Interp := Interp;
+      DamageBar.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damage");
+      Label.Interp := Interp;
+      Label.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damagelbl");
+      if Damage = 0.0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(DamageBar);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      else
+         configure(DamageBar, "-value" & Float'Image(Damage));
+         if Damage < 0.2 then
+            configure(Label, "-text {Damage: Slightly damaged}");
+         elsif Damage < 0.5 then
+            configure(Label, "-text {Damage: Damaged}");
+         elsif Damage < 0.8 then
+            configure(Label, "-text {Damage: Heavily damaged}");
+         elsif Damage < 1.0 then
+            configure(Label, "-text {Damage: Almost destroyed}");
+         else
+            configure(Label, "-text {Damage: Destroyed}");
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(DamageBar);
+      end if;
+      if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+          .Description /=
+        Null_Unbounded_String then
+         Set_Label
+           (Gtk_Label(Get_Object(Object, "lblremovedescription")),
+            LF &
+            To_String
+              (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 .Description));
+      end if;
+      declare
+         MoneyIndex2: constant Natural :=
+           FindItem(PlayerShip.Cargo, MoneyIndex);
+      begin
+         if MoneyIndex2 > 0 then
+            RemoveInfo :=
+              To_Unbounded_String
+                (LF & "You have" &
+                 Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+                 To_String(MoneyName) & ".");
+         else
+            RemoveInfo :=
+              To_Unbounded_String
+                (LF & "You don't have any " & To_String(MoneyName) &
+                 " to install anything.");
+         end if;
+      end;
+      for Module of PlayerShip.Modules loop
+         if Module.MType = HULL then
+            Append
+              (RemoveInfo,
+               LF & "You have used" & Natural'Image(Module.InstalledModules) &
+               " modules space from max" & Natural'Image(Module.MaxModules) &
+               " allowed.");
+            exit;
+         end if;
+      end loop;
+      Set_Label
+        (Gtk_Label(Get_Object(Object, "lblmoneyremove")),
+         To_String(RemoveInfo));
+      return TCL_OK;
+   end Show_Remove_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
       AddCommand("ShowInstallInfo", Show_Install_Info_Command'Access);
       AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
+      AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;
