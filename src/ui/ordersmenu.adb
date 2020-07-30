@@ -137,9 +137,11 @@ package body OrdersMenu is
          Add
            (OrdersMenu, "command",
             "-label {Undock} -underline 0 -command {Docking}");
-         Add
-           (OrdersMenu, "command",
-            "-label {Escape} -underline 3 -command {Docking escape}");
+         if SkyBases(BaseIndex).Population > 0 then
+            Add
+              (OrdersMenu, "command",
+               "-label {Escape} -underline 3 -command {Docking escape}");
+         end if;
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Add
               (OrdersMenu, "command",
