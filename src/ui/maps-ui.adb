@@ -41,6 +41,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
+with Bases.LootUI;
 with Bases.RecruitUI;
 with Bases.SchoolUI;
 with Bases.ShipyardUI;
@@ -892,6 +893,7 @@ package body Maps.UI is
          RecruitUI.AddCommands;
          Bases.UI.AddCommands;
          ShipyardUI.AddCommands;
+         LootUI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
