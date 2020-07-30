@@ -76,19 +76,15 @@ package body Bases.LootUI is
       LootFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       ItemsView: Ttk_Tree_View;
-      ItemDurability, ItemType, ProtoIndex, BaseType, FirstIndex,
+      ItemDurability, ItemType, ProtoIndex, FirstIndex,
       ItemName: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      Price: Positive;
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
-      EventIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      Profit: Integer;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -119,78 +115,58 @@ package body Bases.LootUI is
       ItemsView.Interp := Interp;
       ItemsView.Name := New_String(Widget_Image(LootFrame) & ".loot.view");
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
-      BaseType := SkyBases(BaseIndex).BaseType;
       BaseCargo := SkyBases(BaseIndex).Cargo;
       for I in PlayerShip.Cargo.Iterate loop
-         if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) > 0 then
-            ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
-            BaseCargoIndex :=
-              FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
-            if BaseCargoIndex > 0 then
-               IndexesList.Append(New_Item => BaseCargoIndex);
-            end if;
-            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-               ItemType := Items_List(ProtoIndex).IType;
-            else
-               ItemType := Items_List(ProtoIndex).ShowType;
-            end if;
-            if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-               Append(ItemsTypes, " {" & ItemType & "}");
-            end if;
-            if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
-              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-               goto End_Of_Cargo_Loop;
-            end if;
-            ItemName :=
-              To_Unbounded_String
-                (GetItemName(PlayerShip.Cargo(I), False, False));
-            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
-               goto End_Of_Cargo_Loop;
-            end if;
-            if PlayerShip.Cargo(I).Durability < 100 then
-               ItemDurability :=
-                 To_Unbounded_String
-                   (GetItemDamage(PlayerShip.Cargo(I).Durability));
-            else
-               ItemDurability := Null_Unbounded_String;
-            end if;
-            if BaseCargoIndex = 0 then
-               Price := Get_Price(BaseType, ProtoIndex);
-            else
-               Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
-            end if;
-            if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice
-                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-                  Price := Price * 2;
-               end if;
-            end if;
-            Profit := Price - PlayerShip.Cargo(I).Price;
-            BaseAmount := 0;
-            if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
-               BaseAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-            end if;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String
-                   (Positive'Image(Inventory_Container.To_Index(I)));
-            end if;
-            Insert
-              (ItemsView,
-               "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
-               " -values [list {" & To_String(ItemName) & "} {" &
-               To_String(ItemType) & "} {" & To_String(ItemDurability) &
-               "} {" & Positive'Image(Price) & "} {" & Integer'Image(Profit) &
-               "} {" & Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
-               Natural'Image(BaseAmount) & "}]");
+         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+         BaseCargoIndex :=
+           FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
+         if BaseCargoIndex > 0 then
+            IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
+         if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+            ItemType := Items_List(ProtoIndex).IType;
+         else
+            ItemType := Items_List(ProtoIndex).ShowType;
+         end if;
+         if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
+            Append(ItemsTypes, " {" & ItemType & "}");
+         end if;
+         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Cargo_Loop;
+         end if;
+         ItemName :=
+           To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
+         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
+            goto End_Of_Cargo_Loop;
+         end if;
+         if PlayerShip.Cargo(I).Durability < 100 then
+            ItemDurability :=
+              To_Unbounded_String
+                (GetItemDamage(PlayerShip.Cargo(I).Durability));
+         else
+            ItemDurability := Null_Unbounded_String;
+         end if;
+         BaseAmount := 0;
+         if BaseCargoIndex > 0 then
+            BaseAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
+         end if;
+         if FirstIndex = Null_Unbounded_String then
+            FirstIndex :=
+              To_Unbounded_String
+                (Positive'Image(Inventory_Container.To_Index(I)));
+         end if;
+         Insert
+           (ItemsView,
+            "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -values [list {" & To_String(ItemName) & "} {" &
+            To_String(ItemType) & "} {" & To_String(ItemDurability) & "} {" &
+            Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
+            Natural'Image(BaseAmount) & "}]");
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
-         if IndexesList.Find_Index(Item => I) = 0 and
-           Is_Buyable
-             (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
-              BaseIndex => BaseIndex) then
+         if IndexesList.Find_Index(Item => I) = 0 then
             ProtoIndex := BaseCargo(I).ProtoIndex;
             if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
                ItemType := Items_List(ProtoIndex).IType;
@@ -214,13 +190,6 @@ package body Bases.LootUI is
             else
                ItemDurability := Null_Unbounded_String;
             end if;
-            Price := SkyBases(BaseIndex).Cargo(I).Price;
-            if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice
-                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-                  Price := Price * 2;
-               end if;
-            end if;
             BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
             if FirstIndex = Null_Unbounded_String then
                FirstIndex :=
@@ -231,9 +200,7 @@ package body Bases.LootUI is
                "{} end -id b" & Trim(Positive'Image(I), Left) &
                " -values [list {" & To_String(ItemName) & "} {" &
                To_String(ItemType) & "} {" & To_String(ItemDurability) &
-               "} {" & Positive'Image(Price) & "} {" &
-               Integer'Image(-(Price)) & "} {0} {" &
-               Positive'Image(BaseAmount) & "}]");
+               "} {0} {" & Positive'Image(BaseAmount) & "}]");
          end if;
          <<End_Of_Trader_Loop>>
       end loop;
@@ -299,8 +266,7 @@ package body Bases.LootUI is
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType, SelectedItem: Unbounded_String;
-      Price: Natural;
+      SelectedItem: Unbounded_String;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
       ItemText: Tk_Text;
@@ -324,11 +290,6 @@ package body Bases.LootUI is
       if CargoIndex > Natural(PlayerShip.Cargo.Length) then
          return TCL_OK;
       end if;
-      if BaseIndex > 0 then
-         BaseType := SkyBases(BaseIndex).BaseType;
-      else
-         BaseType := To_Unbounded_String("0");
-      end if;
       if BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
@@ -340,26 +301,6 @@ package body Bases.LootUI is
       else
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
-      if BaseCargoIndex = 0 then
-         if BaseCargoIndex2 > 0 then
-            Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Price;
-         else
-            Price := Get_Price(BaseType, ProtoIndex);
-         end if;
-      else
-         Price := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price;
-      end if;
-      declare
-         EventIndex: constant Natural :=
-           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      begin
-         if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-               Price := Price * 2;
-            end if;
-         end if;
-      end;
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -430,10 +371,6 @@ package body Bases.LootUI is
       Delete(ItemText, "1.0", "end");
       Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
       configure(ItemText, "-state disabled");
-      if Price = 0 then
-         CargoIndex := 0;
-         BaseCargoIndex := 0;
-      end if;
       Frame.Interp := Interp;
       Frame.Name := New_String(".paned.lootframe.canvas.loot.item.dropframe");
       if CargoIndex > 0 then
