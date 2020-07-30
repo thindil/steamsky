@@ -222,8 +222,11 @@ package body Utils.UI is
              (".paned.tradeframe.canvas.trade.item.sellframe.error");
          WarningText :=
            To_Unbounded_String("You will sell amount below low level of ");
-      elsif CArgv.Arg(Argv, 1) = "loot" then
-         LabelName := To_Unbounded_String("loot");
+      elsif CArgv.Arg(Argv, 1) =
+        ".paned.lootframe.canvas.loot.item.dropframe.amount" then
+         LabelName :=
+           To_Unbounded_String
+             (".paned.lootframe.canvas.loot.item.dropframe.error");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
       elsif CArgv.Arg(Argv, 1) =
