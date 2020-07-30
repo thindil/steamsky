@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
@@ -36,6 +37,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
@@ -263,11 +265,15 @@ package body OrdersMenu is
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
-               Add(OrdersMenu, "command", "-label {Set as home} -underline 7");
+               Add
+                 (OrdersMenu, "command",
+                  "-label {Set as home} -underline 7 -command SetAsHome");
             end if;
          end if;
          if SkyBases(BaseIndex).Population = 0 then
-            Add(OrdersMenu, "command", "-label {Loot} -underline 0");
+            Add
+              (OrdersMenu, "command",
+               "-label {Loot} -underline 0 -command ShowLoot");
          end if;
       else
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
@@ -615,6 +621,66 @@ package body OrdersMenu is
       return TCL_OK;
    end Pray_Command;
 
+   -- ****f* OrdersMenu/Set_As_Home_Command
+   -- FUNCTION
+   -- Set the selected base as a home base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- SOURCE
+   function Set_As_Home_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_As_Home_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      TraderIndex: constant Natural := FindMember(Talk);
+      Price: Positive := 1000;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+   begin
+      CountPrice(Price, TraderIndex);
+      if MessageBox
+          ("-message {Are you sure want to change your home base (it cost" &
+           Positive'Image(Price) & " " & To_String(MoneyName) &
+           ")?} -icon question -type yesno") /=
+        "yes" then
+         return TCL_OK;
+      end if;
+      if MoneyIndex2 = 0 then
+         ShowMessage
+           ("You don't have any " & To_String(MoneyName) &
+            " for change ship home base.");
+         return TCL_OK;
+      end if;
+      CountPrice(Price, TraderIndex);
+      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+         ShowMessage
+           ("You don't have enough " & To_String(MoneyName) &
+            " for change ship home base.");
+         return TCL_OK;
+      end if;
+      PlayerShip.HomeBase :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      UpdateCargo
+        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Price));
+      AddMessage
+        ("You changed your ship home base to: " &
+         To_String(SkyBases(PlayerShip.HomeBase).Name),
+         OtherMessage);
+      GainExp(1, TalkingSkill, TraderIndex);
+      UpdateGame(10);
+      ShowSkyMap;
+      return TCL_OK;
+   end Set_As_Home_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -623,6 +689,7 @@ package body OrdersMenu is
       AddCommand("AskForEvents", Ask_For_Events_Command'Access);
       AddCommand("Attack", Attack_Command'Access);
       AddCommand("Pray", Pray_Command'Access);
+      AddCommand("SetAsHome", Set_As_Home_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
