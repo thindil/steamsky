@@ -21,7 +21,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -31,6 +31,8 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -134,6 +136,10 @@ package body Bases.ShipyardUI is
                 ModuleType'Pos(Modules_List(I).MType) then
                goto End_Of_Loop;
             end if;
+            if Argc = 3
+              and then Index(Modules_List(I).Name, CArgv.Arg(Argv, 2)) = 0 then
+               goto End_Of_Loop;
+            end if;
             case Modules_List(I).MType is
                when HULL =>
                   ModuleSize := Modules_List(I).MaxValue;
@@ -193,6 +199,7 @@ package body Bases.ShipyardUI is
         (ShipyardCanvas,
          "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
       ShowScreen("shipyardframe");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Shipyard_Command;
 
@@ -443,6 +450,9 @@ package body Bases.ShipyardUI is
       ModulesView.Name :=
         New_String
           (".paned.shipyardframe.canvas.shipyard.notebook.install.modules.view");
+      if Selection(ModulesView) = "" then
+         return TCL_OK;
+      end if;
       ModuleIndex := To_Unbounded_String(Selection(ModulesView));
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
@@ -725,12 +735,51 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Remove_Info_Command;
 
+   -- ****if* ShipyardUI/Search_Shipyard_Command
+   -- FUNCTION
+   -- Show only this items which contains the selected sequence
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Search_Shipyard_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Search_Shipyard_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      TypeBox: Ttk_ComboBox;
+      SearchText: constant String := CArgv.Arg(Argv, 1);
+   begin
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String
+          (".paned.shipyardframe.canvas.shipyard.notebook.install.options.modules");
+      if SearchText'Length = 0 then
+         return Show_Shipyard_Command
+             (ClientData, Interp, 2,
+              CArgv.Empty & "ShowShipyard" & Current(TypeBox));
+      end if;
+      return Show_Shipyard_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & "ShowShipyard" & Current(TypeBox) & SearchText);
+   end Search_Shipyard_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
       AddCommand("ShowInstallInfo", Show_Install_Info_Command'Access);
       AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
       AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
+      AddCommand("SearchShipyard", Search_Shipyard_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;

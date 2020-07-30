@@ -12,7 +12,7 @@ grid [ttk::label $sinstall.options.label -text "Show modules:"]
 grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1
 $sinstall.options.modules current 0
 bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current]}
-grid [ttk::entry $sinstall.options.search] -row 0 -column 2
+grid [ttk::entry $sinstall.options.search -validate key -validatecommand {SearchShipyard %P}] -row 0 -column 2
 grid [ttk::frame $sinstall.modules] -sticky nwes
 set shipyardview [ttk::treeview $sinstall.modules.view -show headings -columns [list name type size material] -yscrollcommand [list $sinstall.modules.scrolly set]]
 $shipyardview heading name -text {Name}
