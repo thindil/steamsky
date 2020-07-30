@@ -529,6 +529,7 @@ package body Bases.LootUI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
+      Label.Interp := Interp;
       Label.Name := New_String(".paned.lootframe.canvas.loot.item.shipspace");
       declare
          FreeSpace: Integer := FreeCargo(0);
