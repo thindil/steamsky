@@ -69,7 +69,7 @@ package body Bases.LootUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(ClientData, Argv);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       LootCanvas: Tk_Canvas;
@@ -131,15 +131,8 @@ package body Bases.LootUI is
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
-         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
-           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-            goto End_Of_Cargo_Loop;
-         end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
-         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
-            goto End_Of_Cargo_Loop;
-         end if;
          if PlayerShip.Cargo(I).Durability < 100 then
             ItemDurability :=
               To_Unbounded_String
@@ -163,7 +156,6 @@ package body Bases.LootUI is
             To_String(ItemType) & "} {" & To_String(ItemDurability) & "} {" &
             Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
             Natural'Image(BaseAmount) & "}]");
-         <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
@@ -176,14 +168,7 @@ package body Bases.LootUI is
             if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
                Append(ItemsTypes, " {" & ItemType & "}");
             end if;
-            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
-              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-               goto End_Of_Trader_Loop;
-            end if;
             ItemName := Items_List(ProtoIndex).Name;
-            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
-               goto End_Of_Trader_Loop;
-            end if;
             if BaseCargo(I).Durability < 100 then
                ItemDurability :=
                  To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability));
@@ -202,7 +187,6 @@ package body Bases.LootUI is
                To_String(ItemType) & "} {" & To_String(ItemDurability) &
                "} {0} {" & Positive'Image(BaseAmount) & "}]");
          end if;
-         <<End_Of_Trader_Loop>>
       end loop;
       Selection_Set(ItemsView, "[list" & To_String(FirstIndex) & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
@@ -524,12 +508,12 @@ package body Bases.LootUI is
       end if;
       SpinBox.Interp := Interp;
       Label.Interp := Interp;
-      if CArgv.Arg(Argv, 1) in "take" | "takeall" then
+      if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          SpinBox.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.takeframe.amount");
+           New_String(".paned.lootframe.canvas.loot.item.dropframe.amount");
          Label.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.takeframe.amountlbl");
-         if CArgv.Arg(Argv, 1) = "take" then
+           New_String(".paned.lootframe.canvas.loot.item.dropframe.amountlbl");
+         if CArgv.Arg(Argv, 1) = "drop" then
             Amount := Positive'Value(Get(SpinBox));
          else
             Amount :=
@@ -555,8 +539,8 @@ package body Bases.LootUI is
             OrderMessage);
       else
          SpinBox.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.dropframe.amount");
-         if CArgv.Arg(Argv, 1) = "drop" then
+           New_String(".paned.lootframe.canvas.loot.item.takeframe.amount");
+         if CArgv.Arg(Argv, 1) = "take" then
             Amount := Positive'Value(Get(SpinBox));
          else
             Amount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
