@@ -90,5 +90,24 @@ grid [ttk::spinbox $basesframe.reputation -from -100 -to 100] -column 1 -row 5
 grid [ttk::label $basesframe.lbl7 -text {Money:}]
 grid [ttk::spinbox $basesframe.money -from 1 -to 1000000] -column 1 -row 6
 # World options
+set worldframe [ttk::frame .debugdialog.main.world]
+grid [ttk::label $worldframe.shiplbl -text {Ship:}]
+grid [ttk::entry $worldframe.ship] -column 1 -row 0
+grid [ttk::label $worldframe.xlbl -text {X:}]
+grid [ttk::spinbox $worldframe.x -from 1 -to 1024] -column 1 -row 1
+grid [ttk::label $worldframe.ylbl -text {Y:}]
+grid [ttk::spinbox $worldframe.y -from 1 -to 1024] -column 1 -row 2
+grid [ttk::label $worldframe.durationlbl -text {Duration:}]
+grid [ttk::spinbox $worldframe.durtion -from 30 -to 45] -column 1 -row 3
+grid [ttk::button $worldframe.addship -text {Add ship}]
+grid [ttk::label $worldframe.baselbl -text {Base:}] -column 2 -row 0
+grid [ttk::entry $worldframe.base] -column 3 -row 0
+grid [ttk::label $worldframe.eventlbl -text {Event:}] -column 2 -row 1
+grid [ttk::combobox $worldframe.event -state readonly -values [list Disease {Double price} {Full docks}]] -column 3 -row 1
+grid [ttk::label $worldframe.itembl -text {Item:}] -column 2 -row 2
+grid [ttk::entry $worldframe.item] -column 3 -row 2
+grid [ttk::label $worldframe.duration2lbl -text {Duration:}] -column 2 -row 3
+grid [ttk::spinbox $worldframe.basedurtion -from 15 -to 12000] -column 3 -row 3
+grid [ttk::button $worldframe.addevent -text {Add event}] -column 2 -row 4
 grid $shipframe
 wm geometry .debugdialog +[expr ([winfo vrootwidth .debugdialog] / 2) - 200]+[expr [winfo vrootheight .debugdialog] / 3]
