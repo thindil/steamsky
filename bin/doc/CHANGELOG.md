@@ -8,3 +8,4 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash during resting when crew member have very high tired level
+- Showing escape option from empty bases
