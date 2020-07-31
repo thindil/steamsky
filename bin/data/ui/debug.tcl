@@ -74,6 +74,21 @@ grid [ttk::combobox $cargoframe.update -state readonly] -column 1 -row 1
 grid [ttk::label $cargoframe.amount2lbl -text {Amount:}] -column 2 -row 1
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000] -column 3 -row 1
 # Bases options
+set basesframe [ttk::frame .debugdialog.main.bases]
+grid [ttk::label $basesframe.lbl1 -text {Base:}]
+grid [ttk::entry $basesframe.name] -column 1 -row 0
+grid [ttk::label $basesframe.lbl2 -text {Type:}]
+grid [ttk::combobox $basesframe.type -state readonly] -column 1 -row 1
+grid [ttk::label $basesframe.lbl3 -text {Owner:}]
+grid [ttk::combobox $basesframe.owner -state readonly] -column 1 -row 2
+grid [ttk::label $basesframe.lbl4 -text {Size:}]
+grid [ttk::combobox $basesframe.size -state readonly -values [list Small Medium Big]] -column 1 -row 3
+grid [ttk::label $basesframe.lbl5 -text {Population:}]
+grid [ttk::spinbox $basesframe.population -from 0 -to 10000] -column 1 -row 4
+grid [ttk::label $basesframe.lbl6 -text {Reputation:}]
+grid [ttk::spinbox $basesframe.reputation -from -100 -to 100] -column 1 -row 5
+grid [ttk::label $basesframe.lbl7 -text {Money:}]
+grid [ttk::spinbox $basesframe.money -from 1 -to 1000000] -column 1 -row 6
 # World options
 grid $shipframe
 wm geometry .debugdialog +[expr ([winfo vrootwidth .debugdialog] / 2) - 200]+[expr [winfo vrootheight .debugdialog] / 3]
