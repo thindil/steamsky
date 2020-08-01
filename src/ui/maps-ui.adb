@@ -52,12 +52,14 @@ with Config; use Config;
 with Crafts.UI;
 with Crew; use Crew;
 with Crew.UI;
+with DebugUI; use DebugUI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with GameOptions;
 with Help.UI; use Help.UI;
 with Items; use Items;
+with Log;
 with MainMenu; use MainMenu;
 with Maps.UI.Commands;
 with Messages; use Messages;
@@ -852,6 +854,7 @@ package body Maps.UI is
       Button: Ttk_Button;
       SteamSky_Map_Error: exception;
       Header, MessagesFrame: Ttk_Frame;
+      use Log;
    begin
       GameMenu.Interp := Get_Context;
       GameMenu.Name := New_String(".gamemenu");
@@ -898,6 +901,9 @@ package body Maps.UI is
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
          SetKeys;
+         if Log.DebugMode = Log.Menu then
+            ShowDebugUI;
+         end if;
       end if;
       Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
       if GameSettings.FullScreen then
