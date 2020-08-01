@@ -264,7 +264,7 @@ package body Maps.UI.OrdersMenu is
             end if;
          end if;
          if SkyBases(BaseIndex).Population = 0 then
-            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnloot")), False);
+            Set_No_Show_All(Get_Child(OrdersBox, 19), False);
          end if;
       else
          Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnescape")), True);
