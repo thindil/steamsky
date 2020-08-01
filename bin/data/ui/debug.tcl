@@ -15,7 +15,7 @@ grid [ttk::button .debugdialog.buttons.crew -text Crew -command {ShowFrame .debu
 grid [ttk::button .debugdialog.buttons.cargo -text Cargo -command {ShowFrame .debugdialog.main.cargo}]
 grid [ttk::button .debugdialog.buttons.bases -text Bases -command {ShowFrame .debugdialog.main.bases}]
 grid [ttk::button .debugdialog.buttons.world -text World -command {ShowFrame .debugdialog.main.world}]
-grid [ttk::button .debugdialog.buttons.refresh -text Refresh]
+grid [ttk::button .debugdialog.buttons.refresh -text Refresh -command Refresh]
 grid [ttk::button .debugdialog.buttons.save -text {Save game}]
 # Ship options
 set shipframe [ttk::frame .debugdialog.main.ship]
@@ -26,6 +26,7 @@ grid [ttk::label $shipframe.lbly -text {Y:}] -column 3 -row 0
 grid [ttk::spinbox $shipframe.y -from 1 -to 1024 -validate key -validatecommand {ValidateSpinbox %S %s 1024}] -column 4 -row 0
 grid [ttk::label $shipframe.modulelbl -text {Module:}]
 grid [ttk::combobox $shipframe.module -state readonly] -column 1 -row 1 -columnspan 3
+bind $shipframe.module <<ComboboxSelected>> RefreshModule
 grid [ttk::label $shipframe.protolbl -text {Prototype:}]
 grid [ttk::entry $shipframe.proto]  -column 1 -row 2 -columnspan 3
 grid [ttk::label $shipframe.weightlbl -text {Weight:}]
