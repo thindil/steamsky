@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing escape option from empty bases
 - Taking dock payment in empty bases
+- Crash on showing orders in empty bases
 
 ## [5.0.2] - 2020-07-05
 
