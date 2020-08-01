@@ -7,6 +7,7 @@ if {$tcl_platform(os) == "Linux"} {
 grid [ttk::frame .debugdialog.buttons]
 grid [ttk::frame .debugdialog.main] -column 1 -row 0
 proc ShowFrame {framename} {
+   Refresh
    grid remove [grid slaves .debugdialog.main]
    grid $framename
 }
