@@ -1,12 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.3] - 2020-08-02
 
 ### Fixed
 - Showing escape option from empty bases
 - Taking dock payment in empty bases
 - Crash on showing orders in empty bases
+- Don't show drop warning by default when looting empty bases
 
 ## [5.0.2] - 2020-07-05
 
