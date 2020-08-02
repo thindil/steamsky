@@ -72,7 +72,9 @@ package body MainMenu is
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       Icon: constant Tk_Photo :=
         Create
-          ("logo", "-file " & UI_Directory & "[file join images icon.png]");
+          ("logo",
+           "-file {" & UI_Directory & Dir_Separator & "images" &
+           Dir_Separator & "icon.png}");
       pragma Unreferenced(Icon);
       TextEntry: Ttk_Entry;
       ComboBox: Ttk_ComboBox;
