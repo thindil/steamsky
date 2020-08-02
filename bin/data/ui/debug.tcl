@@ -76,6 +76,7 @@ grid [ttk::button $cargoframe.updatebutton -text Update]
 grid [ttk::combobox $cargoframe.update -state readonly] -column 1 -row 1
 grid [ttk::label $cargoframe.amount2lbl -text {Amount:}] -column 2 -row 1
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 3 -row 1
+bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 # Bases options
 set basesframe [ttk::frame .debugdialog.main.bases]
 grid [ttk::label $basesframe.lbl1 -text {Base:}]

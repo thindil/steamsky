@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Crew; use Crew;
 with Game; use Game;
+with Items; use Items;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
@@ -222,6 +223,40 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Member_Command;
 
+   -- ****f* DebugUI/Refresh_Cargo_Command
+   -- FUNCTION
+   -- Refresh the information about the player ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Refresh_Cargo_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Refresh_Cargo_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CargoCombo: Ttk_ComboBox;
+      ItemIndex: Positive;
+      AmountBox: Ttk_SpinBox;
+   begin
+      CargoCombo.Interp := Interp;
+      CargoCombo.Name := New_String(".debugdialog.main.cargo.update");
+      ItemIndex := Natural'Value(Current(CargoCombo)) + 1;
+      AmountBox.Interp := Interp;
+      AmountBox.Name := New_String(".debugdialog.main.cargo.updateamount");
+      Set(AmountBox, Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
+      return TCL_OK;
+   end Refresh_Cargo_Command;
+
    -- ****f* DebugUI/Refresh_Command
    -- FUNCTION
    -- Refresh the whole game information
@@ -268,6 +303,14 @@ package body DebugUI is
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshMember");
+      ComboBox.Name := New_String(".debugdialog.main.cargo.update");
+      ValuesList := Null_Unbounded_String;
+      for Item of PlayerShip.Cargo loop
+         Append(ValuesList, " {" & GetItemName(Item, False, False) & "}");
+      end loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      Current(ComboBox, "0");
+      Tcl_Eval(Get_Context, "RefreshCargo");
       return TCL_OK;
    end Refresh_Command;
 
@@ -279,6 +322,7 @@ package body DebugUI is
       AddCommand("Refresh", Refresh_Command'Access);
       AddCommand("RefreshModule", Refresh_Module_Command'Access);
       AddCommand("RefreshMember", Refresh_Member_Command'Access);
+      AddCommand("RefreshCargo", Refresh_Cargo_Command'Access);
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
