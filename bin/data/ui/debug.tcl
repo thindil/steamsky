@@ -43,6 +43,7 @@ grid [ttk::button $shipframe.change -text Change] -columnspan 4
 set crewframe [ttk::frame .debugdialog.main.crew]
 grid [ttk::label $crewframe.memberlbl -text Member]
 grid [ttk::combobox $crewframe.member -state readonly] -column 1 -row 0
+bind $crewframe.member <<ComboboxSelected>> RefreshMember
 grid [ttk::label $crewframe.healthlbl -text Health]
 grid [ttk::spinbox $crewframe.health -from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}] -column 1 -row 1
 grid [ttk::label $crewframe.thirstlbl -text Thirst]
