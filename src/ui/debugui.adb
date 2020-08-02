@@ -14,20 +14,26 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Crew; use Crew;
 with Game; use Game;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
@@ -87,6 +93,91 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Module_Command;
 
+   -- ****f* DebugUI/Refresh_Member_Command
+   -- FUNCTION
+   -- Refresh the information about selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Refresh_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Refresh_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CrewCombo: Ttk_ComboBox;
+      SpinBox: Ttk_SpinBox;
+      MemberFrame, Item: Ttk_Frame;
+      Rows: Natural := 0;
+      Tokens: Slice_Set;
+      Label: Ttk_Label;
+      Member: Member_Data;
+   begin
+      CrewCombo.Interp := Interp;
+      CrewCombo.Name := New_String(".debugdialog.main.crew.member");
+      Member := PlayerShip.Crew(Natural'Value(Current(CrewCombo)) + 1);
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(".debugdialog.main.crew.health");
+      Set(SpinBox, Positive'Image(Member.Health));
+      SpinBox.Name := New_String(".debugdialog.main.crew.thirst");
+      Set(SpinBox, Positive'Image(Member.Thirst));
+      SpinBox.Name := New_String(".debugdialog.main.crew.hunger");
+      Set(SpinBox, Positive'Image(Member.Hunger));
+      SpinBox.Name := New_String(".debugdialog.main.crew.tired");
+      Set(SpinBox, Positive'Image(Member.Tired));
+      SpinBox.Name := New_String(".debugdialog.main.crew.morale");
+      Set(SpinBox, Positive'Image(Member.Morale(1)));
+      SpinBox.Name := New_String(".debugdialog.main.crew.loyalty");
+      Set(SpinBox, Positive'Image(Member.Loyalty));
+      MemberFrame.Interp := Interp;
+      MemberFrame.Name := New_String(".debugdialog.main.crew.stats");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (MemberFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Interp;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      for I in Member.Attributes.Iterate loop
+         Label :=
+           Create
+             (".debugdialog.main.crew.stats.label" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              "-text {" &
+              To_String
+                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+              "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         SpinBox :=
+           Create
+             (".debugdialog.main.crew.stats.value" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}");
+         Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
+         Tcl.Tk.Ada.Grid.Grid
+           (SpinBox,
+            "-column 1 -row" &
+            Positive'Image(Attributes_Container.To_Index(I)));
+      end loop;
+      return TCL_OK;
+   end Refresh_Member_Command;
+
    -- ****f* DebugUI/Refresh_Command
    -- FUNCTION
    -- Refresh the whole game information
@@ -125,6 +216,14 @@ package body DebugUI is
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshModule");
+      ComboBox.Name := New_String(".debugdialog.main.crew.member");
+      ValuesList := Null_Unbounded_String;
+      for Member of PlayerShip.Crew loop
+         Append(ValuesList, " {" & Member.Name & "}");
+      end loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      Current(ComboBox, "0");
+      Tcl_Eval(Get_Context, "RefreshMember");
       return TCL_OK;
    end Refresh_Command;
 
@@ -135,6 +234,7 @@ package body DebugUI is
          To_String(DataDirectory) & "ui" & Dir_Separator & "debug.tcl");
       AddCommand("Refresh", Refresh_Command'Access);
       AddCommand("RefreshModule", Refresh_Module_Command'Access);
+      AddCommand("RefreshMember", Refresh_Member_Command'Access);
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
