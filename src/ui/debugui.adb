@@ -114,17 +114,19 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CrewCombo: Ttk_ComboBox;
+      ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
       MemberFrame, Item: Ttk_Frame;
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
       Member: Member_Data;
+      SkillsIndexes: Positive_Container.Vector;
+      SkillsList: Unbounded_String;
    begin
-      CrewCombo.Interp := Interp;
-      CrewCombo.Name := New_String(".debugdialog.main.crew.member");
-      Member := PlayerShip.Crew(Natural'Value(Current(CrewCombo)) + 1);
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".debugdialog.main.crew.member");
+      Member := PlayerShip.Crew(Natural'Value(Current(ComboBox)) + 1);
       SpinBox.Interp := Interp;
       SpinBox.Name := New_String(".debugdialog.main.crew.health");
       Set(SpinBox, Positive'Image(Member.Health));
@@ -207,7 +209,16 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
             "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
+         SkillsIndexes.Append(Member.Skills(I)(1));
       end loop;
+      for I in Skills_List.Iterate loop
+         if not SkillsIndexes.Contains(SkillsData_Container.To_Index(I)) then
+            Append(SkillsList, " " & Skills_List(I).Name);
+         end if;
+      end loop;
+      ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
+      configure(ComboBox, "-values [list" & To_String(SkillsList) & "]");
+      Current(ComboBox, "0");
       return TCL_OK;
    end Refresh_Member_Command;
 
