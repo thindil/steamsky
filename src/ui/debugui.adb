@@ -168,12 +168,45 @@ package body DebugUI is
            Create
              (".debugdialog.main.crew.stats.value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}");
+              "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}");
          Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
             "-column 1 -row" &
             Positive'Image(Attributes_Container.To_Index(I)));
+      end loop;
+      MemberFrame.Name := New_String(".debugdialog.main.crew.skills");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (MemberFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Interp;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      for I in Member.Skills.Iterate loop
+         Label :=
+           Create
+             (".debugdialog.main.crew.skills.label" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
+              "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         SpinBox :=
+           Create
+             (".debugdialog.main.crew.skills.value" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}");
+         Set(SpinBox, Positive'Image(Member.Skills(I)(2)));
+         Tcl.Tk.Ada.Grid.Grid
+           (SpinBox,
+            "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
       end loop;
       return TCL_OK;
    end Refresh_Member_Command;
