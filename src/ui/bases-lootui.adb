@@ -171,6 +171,7 @@ package body Bases.LootUI is
            (Gtk_Adjustment(Get_Object(Object, "amountadj1")),
             Gdouble(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount));
       end if;
+      Set_Visible(Gtk_Widget(Get_Object(Object, "lbllootwarning")), False);
       declare
          FreeSpace: Integer := FreeCargo(0);
       begin
