@@ -19,7 +19,7 @@ grid [ttk::button .debugdialog.buttons.refresh -text Refresh -command Refresh]
 grid [ttk::button .debugdialog.buttons.save -text {Save game} -command DebugSaveGame]
 # Ship options
 set shipframe [ttk::frame .debugdialog.main.ship]
-grid [ttk::button $shipframe.move -text {Move ship}]
+grid [ttk::button $shipframe.move -text {Move ship} -command DebugMoveShip]
 grid [ttk::label $shipframe.lblx -text {X:}] -column 1 -row 0
 grid [ttk::spinbox $shipframe.x -from 1 -to 1024 -validate key -validatecommand {ValidateSpinbox %S %s 1024}] -column 2 -row 0
 grid [ttk::label $shipframe.lbly -text {Y:}] -column 3 -row 0
