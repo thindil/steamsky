@@ -93,6 +93,7 @@ grid [ttk::label $basesframe.lbl6 -text {Reputation:}]
 grid [ttk::spinbox $basesframe.reputation -from -100 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}] -column 1 -row 5
 grid [ttk::label $basesframe.lbl7 -text {Money:}]
 grid [ttk::spinbox $basesframe.money -from 1 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 1 -row 6
+grid [ttk::button $basesframe.update -text {Update}] -columnspan 2
 # World options
 set worldframe [ttk::frame .debugdialog.main.world]
 grid [ttk::label $worldframe.shiplbl -text {Ship:}]
