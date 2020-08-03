@@ -37,7 +37,7 @@ grid [ttk::label $shipframe.maxdurlbl -text {Max durability:}]
 grid [ttk::spinbox $shipframe.maxdur -from 0 -to 1000 -validate key -validatecommand {ValidateSpinbox %S %s 1000}] -column 1 -row 5 -columnspan 3
 grid [ttk::label $shipframe.upgradelbl -text {Upgrade progress:}]
 grid [ttk::spinbox $shipframe.upgrade -from 0 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 1 -row 6 -columnspan 3
-grid [ttk::button $shipframe.change -text Change] -columnspan 4
+grid [ttk::button $shipframe.change -text Change -command DebugUpdateModule] -columnspan 4
 # Crew options
 set crewframe [ttk::frame .debugdialog.main.crew]
 grid [ttk::label $crewframe.memberlbl -text Member]

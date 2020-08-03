@@ -539,6 +539,62 @@ package body DebugUI is
       return TCL_OK;
    end Move_Ship_Command;
 
+   -- ****f* DebugUI/Update_Module_Command
+   -- FUNCTION
+   -- Update the selected module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Update_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Module_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      ModuleBox: Ttk_ComboBox;
+      ModuleIndex: Positive;
+      ModuleEntry: Ttk_Entry;
+      Value: Unbounded_String;
+      SpinBox: Ttk_SpinBox;
+   begin
+      ModuleBox.Interp := Interp;
+      ModuleBox.Name := New_String(".debugdialog.main.ship.module");
+      ModuleIndex := Natural'Value(Current(ModuleBox)) + 1;
+      ModuleEntry.Interp := Interp;
+      ModuleEntry.Name := New_String(".debugdialog.main.ship.proto");
+      Value := To_Unbounded_String(Get(ModuleEntry));
+      for I in Modules_List.Iterate loop
+         if Modules_List(I).Name = Value then
+            Value := Null_Unbounded_String;
+            PlayerShip.Modules(ModuleIndex).ProtoIndex :=
+              BaseModules_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(".debugdialog.main.ship.weight");
+      PlayerShip.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.ship.dur");
+      PlayerShip.Modules(ModuleIndex).Durability :=
+        Natural'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.ship.maxdur");
+      PlayerShip.Modules(ModuleIndex).MaxDurability :=
+        Natural'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.ship.upgrade");
+      PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
+        Natural'Value(Get(SpinBox));
+      return TCL_OK;
+   end Update_Module_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -554,6 +610,7 @@ package body DebugUI is
       AddCommand("RefreshEvents", Refresh_Events_Command'Access);
       AddCommand("DebugSaveGame", Save_Game_Command'Access);
       AddCommand("DebugMoveShip", Move_Ship_Command'Access);
+      AddCommand("DebugUpdateModule", Update_Module_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
