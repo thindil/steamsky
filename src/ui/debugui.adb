@@ -27,6 +27,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -37,9 +38,11 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Crew; use Crew;
+with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
+with Maps; use Maps;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
@@ -315,6 +318,7 @@ package body DebugUI is
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshCargo");
+      Tcl_Eval(Get_Context, "RefreshEvents");
       return TCL_OK;
    end Refresh_Command;
 
@@ -381,6 +385,100 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Base_Command;
 
+   -- ****f* DebugUI/Refresh_Events_Command
+   -- FUNCTION
+   -- Refresh the list of events
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Refresh_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Refresh_Events_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      EventsBox: Ttk_ComboBox;
+      ValuesList: Unbounded_String;
+      EventsButton: Ttk_Button;
+   begin
+      EventsBox.Interp := Interp;
+      EventsBox.Name := New_String(".debugdialog.main.world.delete");
+      EventsButton.Interp := Interp;
+      EventsButton.Name := New_String(".debugdialog.main.world.deleteevent");
+      if Events_List.Length = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(EventsButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(EventsBox);
+         return TCL_OK;
+      else
+         Tcl.Tk.Ada.Grid.Grid(EventsButton);
+         Tcl.Tk.Ada.Grid.Grid(EventsBox);
+      end if;
+      for Event of Events_List loop
+         case Event.EType is
+            when EnemyShip =>
+               Append
+                 (ValuesList,
+                  "{Enemy ship: " &
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+            when AttackOnBase =>
+               Append
+                 (ValuesList,
+                  "{Attack on base: " &
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+            when Disease =>
+               Append
+                 (ValuesList,
+                  "{Disease in base: " &
+                  To_String
+                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                  "}");
+            when DoublePrice =>
+               Append
+                 (ValuesList,
+                  "{Double price in base: " &
+                  To_String
+                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                  "}");
+            when FullDocks =>
+               Append
+                 (ValuesList,
+                  "{Full docks in base: " &
+                  To_String
+                    (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
+                  "}");
+            when EnemyPatrol =>
+               Append
+                 (ValuesList,
+                  "{Enemy patrol: " &
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+            when Trader =>
+               Append
+                 (ValuesList,
+                  "{Trader: " &
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+            when FriendlyShip =>
+               Append
+                 (ValuesList,
+                  "{Friendly ship: " &
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+            when others =>
+               null;
+         end case;
+      end loop;
+      configure(EventsBox, "-values [list" & To_String(ValuesList) & "]");
+      Current(EventsBox, "0");
+      return TCL_OK;
+   end Refresh_Events_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -393,6 +491,7 @@ package body DebugUI is
       AddCommand("RefreshMember", Refresh_Member_Command'Access);
       AddCommand("RefreshCargo", Refresh_Cargo_Command'Access);
       AddCommand("RefreshBase", Refresh_Base_Command'Access);
+      AddCommand("RefreshEvents", Refresh_Events_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
