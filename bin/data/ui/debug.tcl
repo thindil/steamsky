@@ -62,7 +62,7 @@ grid [ttk::frame $crewframe.skills] -column 3 -row 1
 grid [ttk::label $crewframe.skills.name -text Name]
 grid [ttk::label $crewframe.skills.level -text Level] -column 1 -row 0
 grid [ttk::frame $crewframe.addskill] -column 3 -row 6
-grid [ttk::button $crewframe.addskill.add -text Add]
+grid [ttk::button $crewframe.addskill.add -text Add -command DebugAddSkill]
 grid [ttk::combobox $crewframe.addskill.skills -state readonly] -column 1 -row 0
 grid [ttk::button $crewframe.change -text Change] -columnspan 4
 # Cargo options

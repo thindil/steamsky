@@ -595,6 +595,47 @@ package body DebugUI is
       return TCL_OK;
    end Update_Module_Command;
 
+   -- ****f* DebugUI/Add_Skill_Command
+   -- FUNCTION
+   -- Add a new skill to the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Add_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Add_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      ComboBox: Ttk_ComboBox;
+      MemberIndex: Positive;
+      SkillName: Unbounded_String;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".debugdialog.main.crew.member");
+      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
+      SkillName := To_Unbounded_String(Get(ComboBox));
+      for I in Skills_List.Iterate loop
+         if Skills_List(I).Name = SkillName then
+            PlayerShip.Crew(MemberIndex).Skills.Append
+              ((SkillsData_Container.To_Index(I), 1, 0));
+            Tcl_Eval(Interp, "RefreshMember");
+            exit;
+         end if;
+      end loop;
+      return TCL_OK;
+   end Add_Skill_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -611,6 +652,7 @@ package body DebugUI is
       AddCommand("DebugSaveGame", Save_Game_Command'Access);
       AddCommand("DebugMoveShip", Move_Ship_Command'Access);
       AddCommand("DebugUpdateModule", Update_Module_Command'Access);
+      AddCommand("DebugAddSkill", Add_Skill_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
