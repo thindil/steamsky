@@ -41,6 +41,7 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Game.SaveLoad; use Game.SaveLoad;
 with Items; use Items;
 with Maps; use Maps;
 with ShipModules; use ShipModules;
@@ -479,6 +480,32 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Events_Command;
 
+   -- ****f* DebugUI/Save_Game_Command
+   -- FUNCTION
+   -- Save the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Save_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Save_Game_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      SaveGame(True);
+      return TCL_OK;
+   end Save_Game_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -492,6 +519,7 @@ package body DebugUI is
       AddCommand("RefreshCargo", Refresh_Cargo_Command'Access);
       AddCommand("RefreshBase", Refresh_Base_Command'Access);
       AddCommand("RefreshEvents", Refresh_Events_Command'Access);
+      AddCommand("DebugSaveGame", Save_Game_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
