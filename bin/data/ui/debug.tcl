@@ -16,7 +16,7 @@ grid [ttk::button .debugdialog.buttons.cargo -text Cargo -command {ShowFrame .de
 grid [ttk::button .debugdialog.buttons.bases -text Bases -command {ShowFrame .debugdialog.main.bases}]
 grid [ttk::button .debugdialog.buttons.world -text World -command {ShowFrame .debugdialog.main.world}]
 grid [ttk::button .debugdialog.buttons.refresh -text Refresh -command Refresh]
-grid [ttk::button .debugdialog.buttons.save -text {Save game}]
+grid [ttk::button .debugdialog.buttons.save -text {Save game} -command DebugSaveGame]
 # Ship options
 set shipframe [ttk::frame .debugdialog.main.ship]
 grid [ttk::button $shipframe.move -text {Move ship}]
