@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -33,7 +34,10 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Bases; use Bases;
+with BasesTypes; use BasesTypes;
 with Crew; use Crew;
+with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with ShipModules; use ShipModules;
@@ -314,7 +318,72 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Command;
 
+   -- ****f* DebugUI/Refresh_Base_Command
+   -- FUNCTION
+   -- Refresh the information about the selected base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Refresh_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Refresh_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      NameEntry: Ttk_Entry;
+      BaseIndex: Natural := 0;
+      BaseName: Unbounded_String;
+      ComboBox: Ttk_ComboBox;
+      SpinBox: Ttk_SpinBox;
+   begin
+      NameEntry.Interp := Interp;
+      NameEntry.Name := New_String(".debugdialog.main.bases.name");
+      BaseName := To_Unbounded_String(Get(NameEntry));
+      for I in SkyBases'Range loop
+         if SkyBases(I).Name = BaseName then
+            BaseIndex := I;
+            exit;
+         end if;
+      end loop;
+      if BaseIndex = 0 then
+         return TCL_OK;
+      end if;
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".debugdialog.main.bases.type");
+      Set
+        (ComboBox,
+         To_String(BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
+      ComboBox.Name := New_String(".debugdialog.main.bases.owner");
+      Set(ComboBox, To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
+      ComboBox.Name := New_String(".debugdialog.main.bases.size");
+      Current
+        (ComboBox, Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(".debugdialog.main.bases.population");
+      Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Population));
+      SpinBox.Name := New_String(".debugdialog.main.bases.reputation");
+      Set(SpinBox, Integer'Image(SkyBases(BaseIndex).Reputation(1)));
+      SpinBox.Name := New_String(".debugdialog.main.bases.money");
+      if SkyBases(BaseIndex).Cargo.Length > 0 then
+         Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Cargo(1).Amount));
+      else
+         Set(SpinBox, "0");
+      end if;
+      return TCL_OK;
+   end Refresh_Base_Command;
+
    procedure ShowDebugUI is
+      ComboBox: Ttk_ComboBox;
+      ValuesList: Unbounded_String;
    begin
       Tcl_EvalFile
         (Get_Context,
@@ -323,6 +392,19 @@ package body DebugUI is
       AddCommand("RefreshModule", Refresh_Module_Command'Access);
       AddCommand("RefreshMember", Refresh_Member_Command'Access);
       AddCommand("RefreshCargo", Refresh_Cargo_Command'Access);
+      AddCommand("RefreshBase", Refresh_Base_Command'Access);
+      ComboBox.Interp := Get_Context;
+      ComboBox.Name := New_String(".debugdialog.main.bases.type");
+      for BaseType of BasesTypes_List loop
+         Append(ValuesList, " " & BaseType.Name);
+      end loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ValuesList := Null_Unbounded_String;
+      ComboBox.Name := New_String(".debugdialog.main.bases.owner");
+      for Faction of Factions_List loop
+         Append(ValuesList, " " & Faction.Name);
+      end loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
