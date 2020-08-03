@@ -81,6 +81,7 @@ bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 set basesframe [ttk::frame .debugdialog.main.bases]
 grid [ttk::label $basesframe.lbl1 -text {Base:}]
 grid [ttk::entry $basesframe.name] -column 1 -row 0
+bind $basesframe.name <Return> RefreshBase
 grid [ttk::label $basesframe.lbl2 -text {Type:}]
 grid [ttk::combobox $basesframe.type -state readonly] -column 1 -row 1
 grid [ttk::label $basesframe.lbl3 -text {Owner:}]
