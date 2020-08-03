@@ -1,6 +1,5 @@
 toplevel .debugdialog -class Dialog
 wm title .debugdialog {Steam Sky - Debug menu}
-wm transient .debugdialog .
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .debugdialog -type dialog
 }
