@@ -800,6 +800,7 @@ package body DebugUI is
       BaseEntry: Ttk_Entry;
       BaseName: Unbounded_String;
       BaseCombo: Ttk_ComboBox;
+      BaseBox: Ttk_SpinBox;
    begin
       BaseEntry.Interp := Interp;
       BaseEntry.Name := New_String(".debugdialog.main.bases.name");
@@ -830,6 +831,13 @@ package body DebugUI is
       end loop;
       BaseCombo.Name := New_String(".debugdialog.main.bases.size");
       SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
+      BaseBox.Interp := Interp;
+      BaseBox.Name := New_String(".debugdialog.main.bases.population");
+      SkyBases(BaseIndex).Population := Natural'Value(Get(BaseBox));
+      BaseBox.Name := New_String(".debugdialog.main.bases.reputation");
+      SkyBases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
+      BaseBox.Name := New_String(".debugdialog.main.bases.money");
+      SkyBases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
       return TCL_OK;
    end Update_Base_Command;
 
