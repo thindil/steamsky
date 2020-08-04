@@ -430,48 +430,48 @@ package body DebugUI is
             when EnemyShip =>
                Append
                  (ValuesList,
-                  "{Enemy ship: " &
+                  " {Enemy ship: " &
                   To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when AttackOnBase =>
                Append
                  (ValuesList,
-                  "{Attack on base: " &
+                  " {Attack on base: " &
                   To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when Disease =>
                Append
                  (ValuesList,
-                  "{Disease in base: " &
+                  " {Disease in base: " &
                   To_String
                     (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when DoublePrice =>
                Append
                  (ValuesList,
-                  "{Double price in base: " &
+                  " {Double price in base: " &
                   To_String
                     (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when FullDocks =>
                Append
                  (ValuesList,
-                  "{Full docks in base: " &
+                  " {Full docks in base: " &
                   To_String
                     (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex).Name) &
                   "}");
             when EnemyPatrol =>
                Append
                  (ValuesList,
-                  "{Enemy patrol: " &
+                  " {Enemy patrol: " &
                   To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when Trader =>
                Append
                  (ValuesList,
-                  "{Trader: " &
+                  " {Trader: " &
                   To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when FriendlyShip =>
                Append
                  (ValuesList,
-                  "{Friendly ship: " &
+                  " {Friendly ship: " &
                   To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when others =>
                null;
