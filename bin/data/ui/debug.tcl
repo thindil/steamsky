@@ -71,7 +71,7 @@ grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
 grid [ttk::entry $cargoframe.add] -column 1 -row 0
 grid [ttk::label $cargoframe.amountlbl -text {Amount:}] -column 2 -row 0
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 3 -row 0
-grid [ttk::button $cargoframe.updatebutton -text Update]
+grid [ttk::button $cargoframe.updatebutton -text Update -command DebugUpdateItem]
 grid [ttk::combobox $cargoframe.update -state readonly] -column 1 -row 1
 grid [ttk::label $cargoframe.amount2lbl -text {Amount:}] -column 2 -row 1
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 3 -row 1

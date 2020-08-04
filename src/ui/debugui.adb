@@ -740,6 +740,41 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
 
+   -- ****f* DebugUI/Update_Item_Command
+   -- FUNCTION
+   -- Update the amount of an item in the player ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Update_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      ItemCombo: Ttk_ComboBox;
+      ItemBox: Ttk_SpinBox;
+      ItemIndex: Positive;
+   begin
+      ItemCombo.Interp := Interp;
+      ItemCombo.Name := New_String(".debugdialog.main.cargo.update");
+      ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
+      ItemBox.Interp := Interp;
+      ItemBox.Name := New_String(".debugdialog.main.cargo.updateamount");
+      UpdateCargo
+        (Ship => PlayerShip, Amount => Positive'Value(Get(ItemBox)),
+         CargoIndex => ItemIndex);
+      return Refresh_Command(ClientData, Interp, Argc, Argv);
+   end Update_Item_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -759,6 +794,7 @@ package body DebugUI is
       AddCommand("DebugAddSkill", Add_Skill_Command'Access);
       AddCommand("DebugUpdateMember", Update_Member_Command'Access);
       AddCommand("DebugAddItem", Add_Item_Command'Access);
+      AddCommand("DebugUpdateItem", Update_Item_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
