@@ -67,7 +67,7 @@ grid [ttk::combobox $crewframe.addskill.skills -state readonly] -column 1 -row 0
 grid [ttk::button $crewframe.change -text Change -command DebugUpdateMember] -columnspan 4
 # Cargo options
 set cargoframe [ttk::frame .debugdialog.main.cargo]
-grid [ttk::button $cargoframe.addbutton -text Add]
+grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
 grid [ttk::entry $cargoframe.add] -column 1 -row 0
 grid [ttk::label $cargoframe.amountlbl -text {Amount:}] -column 2 -row 0
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key -validatecommand {ValidateSpinbox %S %s 1000000}] -column 3 -row 0
