@@ -775,6 +775,64 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
 
+   -- ****f* DebugUI/Update_Base_Command
+   -- FUNCTION
+   -- Update the selected base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Update_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      BaseIndex: Natural := 0;
+      BaseEntry: Ttk_Entry;
+      BaseName: Unbounded_String;
+      BaseCombo: Ttk_ComboBox;
+   begin
+      BaseEntry.Interp := Interp;
+      BaseEntry.Name := New_String(".debugdialog.main.bases.name");
+      BaseName := To_Unbounded_String(Get(BaseEntry));
+      for I in SkyBases'Range loop
+         if SkyBases(I).Name = BaseName then
+            BaseIndex := I;
+            exit;
+         end if;
+      end loop;
+      if BaseIndex = 0 then
+         return TCL_OK;
+      end if;
+      BaseCombo.Interp := Interp;
+      BaseCombo.Name := New_String(".debugdialog.main.bases.type");
+      for I in BasesTypes_List.Iterate loop
+         if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
+            SkyBases(BaseIndex).BaseType := BasesTypes_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      BaseCombo.Name := New_String(".debugdialog.main.bases.owner");
+      for I in Factions_List.Iterate loop
+         if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
+            SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      BaseCombo.Name := New_String(".debugdialog.main.bases.size");
+      SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
+      return TCL_OK;
+   end Update_Base_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -795,6 +853,7 @@ package body DebugUI is
       AddCommand("DebugUpdateMember", Update_Member_Command'Access);
       AddCommand("DebugAddItem", Add_Item_Command'Access);
       AddCommand("DebugUpdateItem", Update_Item_Command'Access);
+      AddCommand("DebugUpdateBase", Update_Base_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
