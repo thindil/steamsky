@@ -47,6 +47,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Utils.UI; use Utils.UI;
 
 package body DebugUI is
@@ -697,6 +698,48 @@ package body DebugUI is
       return TCL_OK;
    end Update_Member_Command;
 
+   -- ****f* DebugUI/Add_Item_Command
+   -- FUNCTION
+   -- Add a new item to the player ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Add_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Add_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      ItemEntry: Ttk_Entry;
+      ItemBox: Ttk_SpinBox;
+      ItemIndex, ItemName: Unbounded_String;
+   begin
+      ItemEntry.Interp := Interp;
+      ItemEntry.Name := New_String(".debugdialog.main.cargo.add");
+      ItemName := To_Unbounded_String(Get(ItemEntry));
+      for I in Items_List.Iterate loop
+         if Items_List(I).Name = ItemName then
+            ItemIndex := Objects_Container.Key(I);
+            exit;
+         end if;
+      end loop;
+      if ItemIndex = Null_Unbounded_String then
+         return TCL_OK;
+      end if;
+      ItemBox.Interp := Interp;
+      ItemBox.Name := New_String(".debugdialog.main.cargo.amount");
+      UpdateCargo(PlayerShip, ItemIndex, Positive'Value(Get(ItemBox)));
+      return Refresh_Command(ClientData, Interp, Argc, Argv);
+   end Add_Item_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -715,6 +758,7 @@ package body DebugUI is
       AddCommand("DebugUpdateModule", Update_Module_Command'Access);
       AddCommand("DebugAddSkill", Add_Skill_Command'Access);
       AddCommand("DebugUpdateMember", Update_Member_Command'Access);
+      AddCommand("DebugAddItem", Add_Item_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
