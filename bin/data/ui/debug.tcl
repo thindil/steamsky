@@ -103,8 +103,8 @@ grid [ttk::spinbox $worldframe.x -from 1 -to 1024 -validate key -validatecommand
 grid [ttk::label $worldframe.ylbl -text {Y:}]
 grid [ttk::spinbox $worldframe.y -from 1 -to 1024 -validate key -validatecommand {ValidateSpinbox %S %s 1024}] -column 1 -row 2
 grid [ttk::label $worldframe.durationlbl -text {Duration:}]
-grid [ttk::spinbox $worldframe.durtion -from 30 -to 45 -validate key -validatecommand {ValidateSpinbox %S %s 45}] -column 1 -row 3
-grid [ttk::button $worldframe.addship -text {Add ship}]
+grid [ttk::spinbox $worldframe.duration -from 30 -to 45 -validate key -validatecommand {ValidateSpinbox %S %s 45}] -column 1 -row 3
+grid [ttk::button $worldframe.addship -text {Add ship} -command DebugAddShip]
 grid [ttk::label $worldframe.baselbl -text {Base:}] -column 2 -row 0
 grid [ttk::entry $worldframe.base] -column 3 -row 0
 grid [ttk::label $worldframe.eventlbl -text {Event:}] -column 2 -row 1
@@ -112,7 +112,7 @@ grid [ttk::combobox $worldframe.event -state readonly -values [list Disease {Dou
 grid [ttk::label $worldframe.itembl -text {Item:}] -column 2 -row 2
 grid [ttk::entry $worldframe.item] -column 3 -row 2
 grid [ttk::label $worldframe.duration2lbl -text {Duration:}] -column 2 -row 3
-grid [ttk::spinbox $worldframe.basedurtion -from 15 -to 12000 -validate key -validatecommand {ValidateSpinbox %S %s 12000}] -column 3 -row 3
+grid [ttk::spinbox $worldframe.baseduration -from 15 -to 12000 -validate key -validatecommand {ValidateSpinbox %S %s 12000}] -column 3 -row 3
 grid [ttk::button $worldframe.addevent -text {Add event}] -column 2 -row 4
 grid [ttk::button $worldframe.deleteevent -text {Delete event}]
 grid [ttk::combobox $worldframe.delete -state readonly] -column 1 -row 5

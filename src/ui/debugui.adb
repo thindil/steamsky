@@ -841,6 +841,66 @@ package body DebugUI is
       return TCL_OK;
    end Update_Base_Command;
 
+   -- ****f* DebugUI/Add_Ship_Command
+   -- FUNCTION
+   -- Add a new ship based event to the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Add_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Add_Ship_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      ShipEntry: Ttk_Entry;
+      ShipName: Unbounded_String;
+      NpcShipX, NpcShipY, Duration: Positive;
+      ShipBox: Ttk_SpinBox;
+   begin
+      ShipEntry.Interp := Interp;
+      ShipEntry.Name := New_String(".debugdialog.main.world.ship");
+      ShipName := To_Unbounded_String(Get(ShipEntry));
+      ShipBox.Interp := Interp;
+      ShipBox.Name := New_String(".debugdialog.main.world.x");
+      NpcShipX := Positive'Value(Get(ShipBox));
+      ShipBox.Name := New_String(".debugdialog.main.world.y");
+      NpcShipY := Positive'Value(Get(ShipBox));
+      ShipBox.Name := New_String(".debugdialog.main.world.duration");
+      Duration := Positive'Value(Get(ShipBox));
+      for I in ProtoShips_List.Iterate loop
+         if ProtoShips_List(I).Name = ShipName then
+            if Traders.Contains(ProtoShips_Container.Key(I)) then
+               Events_List.Append
+                 (New_Item =>
+                    (Trader, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
+            elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
+               Events_List.Append
+                 (New_Item =>
+                    (FriendlyShip, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
+            else
+               Events_List.Append
+                 (New_Item =>
+                    (EnemyShip, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
+            end if;
+            SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
+            return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+         end if;
+      end loop;
+      return TCL_OK;
+   end Add_Ship_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -862,6 +922,7 @@ package body DebugUI is
       AddCommand("DebugAddItem", Add_Item_Command'Access);
       AddCommand("DebugUpdateItem", Update_Item_Command'Access);
       AddCommand("DebugUpdateBase", Update_Base_Command'Access);
+      AddCommand("DebugAddShip", Add_Ship_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
