@@ -636,6 +636,67 @@ package body DebugUI is
       return TCL_OK;
    end Add_Skill_Command;
 
+   -- ****f* DebugUI/Update_Member_Command
+   -- FUNCTION
+   -- Update the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Update_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      ComboBox: Ttk_ComboBox;
+      MemberIndex: Positive;
+      SpinBox: Ttk_SpinBox;
+   begin
+      ComboBox.Interp := Interp;
+      ComboBox.Name := New_String(".debugdialog.main.crew.member");
+      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      SpinBox.Interp := Interp;
+      SpinBox.Name := New_String(".debugdialog.main.crew.health");
+      PlayerShip.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.crew.thirst");
+      PlayerShip.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.crew.hunger");
+      PlayerShip.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.crew.tired");
+      PlayerShip.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.crew.morale");
+      PlayerShip.Crew(MemberIndex).Morale(1) :=
+        Skill_Range'Value(Get(SpinBox));
+      SpinBox.Name := New_String(".debugdialog.main.crew.loyalty");
+      PlayerShip.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
+      for I in PlayerShip.Crew(MemberIndex).Attributes.Iterate loop
+         SpinBox.Name :=
+           New_String
+             (".debugdialog.main.crew.stats.value" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
+         PlayerShip.Crew(MemberIndex).Attributes(I)(1) :=
+           Positive'Value(Get(SpinBox));
+      end loop;
+      for I in PlayerShip.Crew(MemberIndex).Skills.Iterate loop
+         SpinBox.Name :=
+           New_String
+             (".debugdialog.main.crew.skills.value" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+         PlayerShip.Crew(MemberIndex).Skills(I)(2) :=
+           Positive'Value(Get(SpinBox));
+      end loop;
+      return TCL_OK;
+   end Update_Member_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -653,6 +714,7 @@ package body DebugUI is
       AddCommand("DebugMoveShip", Move_Ship_Command'Access);
       AddCommand("DebugUpdateModule", Update_Module_Command'Access);
       AddCommand("DebugAddSkill", Add_Skill_Command'Access);
+      AddCommand("DebugUpdateMember", Update_Member_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
