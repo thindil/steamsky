@@ -109,7 +109,8 @@ grid [ttk::label $worldframe.baselbl -text {Base:}] -column 2 -row 0
 grid [ttk::entry $worldframe.base] -column 3 -row 0
 grid [ttk::label $worldframe.eventlbl -text {Event:}] -column 2 -row 1
 grid [ttk::combobox $worldframe.event -state readonly -values [list Disease {Double price} {Full docks}]] -column 3 -row 1
-grid [ttk::label $worldframe.itembl -text {Item:}] -column 2 -row 2
+bind $worldframe.event <<ComboboxSelected>> ToggleItemEntry
+grid [ttk::label $worldframe.itemlbl -text {Item:}] -column 2 -row 2
 grid [ttk::entry $worldframe.item] -column 3 -row 2
 grid [ttk::label $worldframe.duration2lbl -text {Duration:}] -column 2 -row 3
 grid [ttk::spinbox $worldframe.baseduration -from 15 -to 12000 -validate key -validatecommand {ValidateSpinbox %S %s 12000}] -column 3 -row 3
