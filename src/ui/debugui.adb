@@ -901,6 +901,47 @@ package body DebugUI is
       return TCL_OK;
    end Add_Ship_Command;
 
+   -- ****f* DebugUI/Toggle_Item_Entry_Command
+   -- FUNCTION
+   -- Show or hide item entry for bases events
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Toggle_Item_Entry_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Toggle_Item_Entry_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      EventCombo: Ttk_ComboBox;
+      ItemEntry: Ttk_Entry;
+      ItemLabel: Ttk_Label;
+   begin
+      EventCombo.Interp := Interp;
+      EventCombo.Name := New_String(".debugdialog.main.world.event");
+      ItemEntry.Interp := Interp;
+      ItemEntry.Name := New_String(".debugdialog.main.world.item");
+      ItemLabel.Interp := Interp;
+      ItemLabel.Name := New_String(".debugdialog.main.world.itemlbl");
+      if Current(EventCombo) = "1" then
+         Tcl.Tk.Ada.Grid.Grid(ItemLabel);
+         Tcl.Tk.Ada.Grid.Grid(ItemEntry);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(ItemLabel);
+         Tcl.Tk.Ada.Grid.Grid_Remove(ItemEntry);
+      end if;
+      return TCL_OK;
+   end Toggle_Item_Entry_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -923,6 +964,7 @@ package body DebugUI is
       AddCommand("DebugUpdateItem", Update_Item_Command'Access);
       AddCommand("DebugUpdateBase", Update_Base_Command'Access);
       AddCommand("DebugAddShip", Add_Ship_Command'Access);
+      AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
