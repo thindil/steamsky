@@ -1026,6 +1026,34 @@ package body DebugUI is
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;
 
+   -- ****f* DebugUI/Delete_Event_Command
+   -- FUNCTION
+   -- Remove the selected event from the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Delete_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Delete_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      EventBox: Ttk_ComboBox;
+   begin
+      EventBox.Interp := Interp;
+      EventBox.Name := New_String(".debugdialog.main.world.delete");
+      DeleteEvent(Natural'Value(Current(EventBox)) + 1);
+      return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+   end Delete_Event_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -1050,6 +1078,7 @@ package body DebugUI is
       AddCommand("DebugAddShip", Add_Ship_Command'Access);
       AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
       AddCommand("DebugAddEvent", Add_Event_Command'Access);
+      AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
