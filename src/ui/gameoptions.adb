@@ -48,6 +48,7 @@ with Config; use Config;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
 package body GameOptions is
@@ -155,6 +156,7 @@ package body GameOptions is
       ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
+      ThemesList: Unbounded_String;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -165,6 +167,7 @@ package body GameOptions is
       OptionsCanvas.Interp := Interp;
       OptionsCanvas.Name := New_String(Widget_Image(OptionsFrame) & ".canvas");
       Label.Interp := Interp;
+      ComboBox.Interp := Interp;
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -186,6 +189,13 @@ package body GameOptions is
            New_String
              (Widget_Image(OptionsCanvas) & ".options.notebook.info.mods");
          configure(Label, "-text {" & To_String(ModsDirectory) & "}");
+         for Theme of Themes_List loop
+            Append(ThemesList, " {" & Theme.Name & "}");
+         end loop;
+         ComboBox.Name :=
+           New_String
+             (".paned.optionsframe.canvas.options.notebook.interface.theme");
+         configure(ComboBox, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -198,7 +208,6 @@ package body GameOptions is
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autorest",
          Trim(Natural'Image(Boolean'Pos(GameSettings.AutoRest)), Left));
-      ComboBox.Interp := Interp;
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
       Current
         (ComboBox, Natural'Image(ShipSpeed'Pos(GameSettings.UndockSpeed) - 1));
@@ -254,7 +263,11 @@ package body GameOptions is
         New_String(Widget_Image(OptionsFrame) & ".animationtype");
       Current(ComboBox, Natural'Image(GameSettings.AnimationType - 1));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
-      Set(ComboBox, To_String(GameSettings.InterfaceTheme));
+      Set
+        (ComboBox,
+         "{" &
+         To_String(Themes_List(To_String(GameSettings.InterfaceTheme)).Name) &
+         "}");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
          Trim(Natural'Image(Boolean'Pos(GameSettings.ShowTooltips)), Left));
@@ -498,7 +511,13 @@ package body GameOptions is
       ComboBox.Name := New_String(RootName & ".interface.animationtype");
       GameSettings.AnimationType := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(RootName & ".interface.theme");
-      GameSettings.InterfaceTheme := To_Unbounded_String(Get(ComboBox));
+      for I in Themes_List.Iterate loop
+         if Themes_List(I).Name = Get(ComboBox) then
+            GameSettings.InterfaceTheme :=
+              To_Unbounded_String(Themes_Container.Key(I));
+            exit;
+         end if;
+      end loop;
       Theme_Use(To_String(GameSettings.InterfaceTheme));
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
          GameSettings.ShowTooltips := True;
