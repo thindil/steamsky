@@ -942,6 +942,90 @@ package body DebugUI is
       return TCL_OK;
    end Toggle_Item_Entry_Command;
 
+   -- ****f* DebugUI/Add_Event_Command
+   -- FUNCTION
+   -- Add a new base event to the game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- SOURCE
+   function Add_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Add_Event_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      EventEntry: Ttk_Entry;
+      EventName: Unbounded_String;
+      BaseIndex: Natural := 0;
+      EventType: Events_Types;
+      EventBox: Ttk_ComboBox;
+      DurationBox: Ttk_SpinBox;
+      Added: Boolean := True;
+   begin
+      EventEntry.Interp := Interp;
+      EventEntry.Name := New_String(".debugdialog.main.world.base");
+      EventName := To_Unbounded_String(Get(EventEntry));
+      for I in SkyBases'Range loop
+         if SkyBases(I).Name = EventName then
+            BaseIndex := I;
+            exit;
+         end if;
+      end loop;
+      if BaseIndex = 0 then
+         return TCL_OK;
+      end if;
+      EventBox.Interp := Interp;
+      EventBox.Name := New_String(".debugdialog.main.world.event");
+      EventType := Events_Types'Value(Get(EventBox));
+      DurationBox.Interp := Interp;
+      DurationBox.Name := New_String(".debugdialog.main.world.baseduration");
+      case EventType is
+         when Disease =>
+            Events_List.Append
+              (New_Item =>
+                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                  Positive'Value(Get(DurationBox)), 1));
+         when DoublePrice =>
+            EventBox.Name := New_String(".debugdialog.main.world.item");
+            EventName := To_Unbounded_String(Get(EventBox));
+            Added := False;
+            for I in Items_List.Iterate loop
+               if Items_List(I).Name = EventName then
+                  Events_List.Append
+                    (New_Item =>
+                       (DoublePrice, SkyBases(BaseIndex).SkyX,
+                        SkyBases(BaseIndex).SkyY,
+                        Positive'Value(Get(DurationBox)),
+                        Objects_Container.Key(I)));
+                  Added := True;
+                  exit;
+               end if;
+            end loop;
+         when FullDocks =>
+            Events_List.Append
+              (New_Item =>
+                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                  Positive'Value(Get(DurationBox)), 1));
+         when others =>
+            null;
+            null;
+      end case;
+      if not Added then
+         return TCL_OK;
+      end if;
+      SkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY).EventIndex :=
+        Events_List.Last_Index;
+      return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
+   end Add_Event_Command;
+
    procedure ShowDebugUI is
       ComboBox: Ttk_ComboBox;
       ValuesList: Unbounded_String;
@@ -965,6 +1049,7 @@ package body DebugUI is
       AddCommand("DebugUpdateBase", Update_Base_Command'Access);
       AddCommand("DebugAddShip", Add_Ship_Command'Access);
       AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
+      AddCommand("DebugAddEvent", Add_Event_Command'Access);
       ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
