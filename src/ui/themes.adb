@@ -72,24 +72,6 @@ package body Themes is
               DataDirectory &
               To_Unbounded_String("/ui/images/checkbox-checked.svg"));
       end SetDefaultValues;
-      function ToUri(Path: String) return Unbounded_String is
-         Uri: Unbounded_String := To_Unbounded_String(Path);
-      begin
-         for I in 1 .. Length(Uri) loop
-            if Element(Uri, I) = ' ' then
-               Replace_Slice(Uri, I, I, "%20");
-            end if;
-         end loop;
-         if Dir_Separator = '/' then
-            return Uri & To_Unbounded_String("/");
-         end if;
-         for I in 1 .. Length(Uri) loop
-            if Element(Uri, I) = '\' then
-               Replace_Element(Uri, I, '/');
-            end if;
-         end loop;
-         return Uri & To_Unbounded_String("/");
-      end ToUri;
    begin
       SetDefaultValues;
       TempRecord.Name := To_Unbounded_String("Default theme");
@@ -273,11 +255,11 @@ package body Themes is
                      elsif FieldName =
                        To_Unbounded_String("CheckButtonUnchecked") then
                         TempRecord.CheckButtonUnchecked :=
-                          ToUri(Full_Name(FoundDirectory)) & Value;
+                          Full_Name(FoundDirectory) & Value;
                      elsif FieldName =
                        To_Unbounded_String("CheckButtonChecked") then
                         TempRecord.CheckButtonChecked :=
-                          ToUri(Full_Name(FoundDirectory)) & Value;
+                          Full_Name(FoundDirectory) & Value;
                      end if;
                   end if;
                end loop;
