@@ -48,6 +48,7 @@ with Game; use Game;
 with Goals.UI;
 with MainMenu.Commands;
 with Maps.UI; use Maps.UI;
+with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu is
@@ -85,7 +86,12 @@ package body MainMenu is
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default logo");
-      Tcl_EvalFile(Get_Context, UI_Directory & "theme.tcl");
+      for I in Themes_List.Iterate loop
+         if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
+            Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
+            exit;
+         end if;
+      end loop;
       Theme_Use(To_String(GameSettings.InterfaceTheme));
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;

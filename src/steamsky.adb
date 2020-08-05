@@ -33,6 +33,7 @@ with Config; use Config;
 with Log; use Log;
 with HallOfFame; use HallOfFame;
 with MainMenu; use MainMenu;
+with Themes; use Themes;
 
 procedure SteamSky is
 
@@ -122,6 +123,7 @@ begin
 
    LoadConfig;
    LoadHallOfFame;
+   LoadThemes;
 
    -- Start Tk
 
