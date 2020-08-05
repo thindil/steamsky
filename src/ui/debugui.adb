@@ -964,8 +964,7 @@ package body DebugUI is
       return Interfaces.C.int is
       EventEntry: Ttk_Entry;
       EventName: Unbounded_String;
-      BaseIndex: Natural := 0;
-      EventType: Events_Types;
+      BaseIndex, EventType: Natural := 0;
       EventBox: Ttk_ComboBox;
       DurationBox: Ttk_SpinBox;
       Added: Boolean := True;
@@ -984,16 +983,16 @@ package body DebugUI is
       end if;
       EventBox.Interp := Interp;
       EventBox.Name := New_String(".debugdialog.main.world.event");
-      EventType := Events_Types'Value(Get(EventBox));
+      EventType := Natural'Value(Current(EventBox));
       DurationBox.Interp := Interp;
       DurationBox.Name := New_String(".debugdialog.main.world.baseduration");
       case EventType is
-         when Disease =>
+         when 0 =>
             Events_List.Append
               (New_Item =>
                  (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
                   Positive'Value(Get(DurationBox)), 1));
-         when DoublePrice =>
+         when 1 =>
             EventBox.Name := New_String(".debugdialog.main.world.item");
             EventName := To_Unbounded_String(Get(EventBox));
             Added := False;
@@ -1009,7 +1008,7 @@ package body DebugUI is
                   exit;
                end if;
             end loop;
-         when FullDocks =>
+         when 2 =>
             Events_List.Append
               (New_Item =>
                  (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
