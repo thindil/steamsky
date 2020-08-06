@@ -429,6 +429,8 @@ package body Maps.UI is
       MapHeight, MapWidth: Positive;
       MapTag: Unbounded_String;
       StoryX, StoryY: Integer := 0;
+      CurrentTheme: constant ThemeRecord :=
+        Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
       configure(MapView, "-state normal");
       Delete(MapView, "1.0", "end");
@@ -469,9 +471,9 @@ package body Maps.UI is
          for X in StartX .. EndX loop
             MapTag := Null_Unbounded_String;
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
-               MapChar := Wide_Character'Val(16#f135#);
+               MapChar := CurrentTheme.PlayerShipIcon;
             else
-               MapChar := Wide_Character'Val(16#f0c8#);
+               MapChar := CurrentTheme.EmptyMapIcon;
                if SkyMap(X, Y).Visited then
                   MapTag := To_Unbounded_String("black");
                else
@@ -479,31 +481,31 @@ package body Maps.UI is
                end if;
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
-                  MapChar := Wide_Character'Val(16#f05b#);
+                  MapChar := CurrentTheme.TargetIcon;
                   if SkyMap(X, Y).Visited then
                      MapTag := Null_Unbounded_String;
                   else
                      MapTag := To_Unbounded_String("unvisited");
                   end if;
                elsif X = StoryX and Y = StoryY then
-                  MapChar := Wide_Character'Val(16#f059#);
+                  MapChar := CurrentTheme.StoryIcon;
                   MapTag := To_Unbounded_String("green");
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
                      when Deliver =>
-                        MapChar := Wide_Character'Val(16#f53b#);
+                        MapChar := CurrentTheme.DeliverIcon;
                         MapTag := To_Unbounded_String("yellow");
                      when Destroy =>
-                        MapChar := Wide_Character'Val(16#fc6a#);
+                        MapChar := CurrentTheme.DestroyIcon;
                         MapTag := To_Unbounded_String("red");
                      when Patrol =>
-                        MapChar := Wide_Character'Val(16#f540#);
+                        MapChar := CurrentTheme.PatrolIcon;
                         MapTag := To_Unbounded_String("lime");
                      when Explore =>
-                        MapChar := Wide_Character'Val(16#f707#);
+                        MapChar := CurrentTheme.ExploreIcon;
                         MapTag := To_Unbounded_String("green");
                      when Passenger =>
-                        MapChar := Wide_Character'Val(16#f183#);
+                        MapChar := CurrentTheme.PassengerIcon;
                         MapTag := To_Unbounded_String("cyan");
                   end case;
                   if not SkyMap(X, Y).Visited then
@@ -515,28 +517,28 @@ package body Maps.UI is
                   else
                      case Events_List(SkyMap(X, Y).EventIndex).EType is
                         when EnemyShip =>
-                           MapChar := Wide_Character'Val(16#f51c#);
+                           MapChar := CurrentTheme.EnemyShipIcon;
                            MapTag := To_Unbounded_String("red");
                         when AttackOnBase =>
-                           MapChar := Wide_Character'Val(16#f543#);
+                           MapChar := CurrentTheme.AttackOnBaseIcon;
                            MapTag := To_Unbounded_String("red2");
                         when EnemyPatrol =>
-                           MapChar := Wide_Character'Val(16#f51b#);
+                           MapChar := CurrentTheme.EnemyPatrolIcon;
                            MapTag := To_Unbounded_String("red3");
                         when Disease =>
-                           MapChar := Wide_Character'Val(16#f5a6#);
+                           MapChar := CurrentTheme.DiseaseIcon;
                            MapTag := To_Unbounded_String("yellow");
                         when FullDocks =>
-                           MapChar := Wide_Character'Val(16#f057#);
+                           MapChar := CurrentTheme.FullDocksIcon;
                            MapTag := To_Unbounded_String("cyan");
                         when DoublePrice =>
-                           MapChar := Wide_Character'Val(16#f0d6#);
+                           MapChar := CurrentTheme.DoublePriceIcon;
                            MapTag := To_Unbounded_String("lime");
                         when Trader =>
-                           MapChar := Wide_Character'Val(16#f197#);
+                           MapChar := CurrentTheme.TraderIcon;
                            MapTag := To_Unbounded_String("green");
                         when FriendlyShip =>
-                           MapChar := Wide_Character'Val(16#f197#);
+                           MapChar := CurrentTheme.FriendlyShipIcon;
                            MapTag := To_Unbounded_String("green2");
                         when others =>
                            null;
@@ -546,7 +548,7 @@ package body Maps.UI is
                      Append(MapTag, " unvisited");
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
-                  MapChar := Wide_Character'Val(16#229b#);
+                  MapChar := CurrentTheme.NotVisitedBaseIcon;
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=
