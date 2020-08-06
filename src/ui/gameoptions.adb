@@ -519,6 +519,7 @@ package body GameOptions is
          end if;
       end loop;
       Theme_Use(To_String(GameSettings.InterfaceTheme));
+      SetTheme;
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
          GameSettings.ShowTooltips := True;
          Enable;

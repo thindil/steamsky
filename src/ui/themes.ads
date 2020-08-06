@@ -140,4 +140,11 @@ package Themes is
    procedure LoadThemes;
    -- ****
 
+   -- ****f* Themes/SetTheme
+   -- FUNCTION
+   -- Set values for the current theme
+   -- SOURCE
+   procedure SetTheme;
+   -- ****
+
 end Themes;

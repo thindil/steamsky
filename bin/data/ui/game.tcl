@@ -11,18 +11,18 @@ ttk::button .header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .header.time {The game time}
 grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel -text "[format %c 0xf2c9]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 3 -sticky e
-grid [ttk::label .header.nofood -text "[format %c 0xf787]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 4 -sticky e
-grid [ttk::label .header.nodrink -text "[format %c 0xf72f]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 5 -sticky e
-grid [ttk::label .header.overloaded -text "[format %c 0xf55b]" -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 6 -sticky e
-grid [ttk::button .header.pilot -text "[format %c 0xf655]" -style Header.Toolbutton] -row 0 -column 7 -sticky e
-grid [ttk::button .header.engineer -text "[format %c 0xf013]" -style Header.Toolbutton] -row 0 -column 8 -sticky e
-grid [ttk::button .header.gunner -text "[format %c 0xf4fb]" -style Header.Toolbutton] -row 0 -column 9 -sticky e
-grid [ttk::button .header.talk -text "[format %c 0xf651]" -style Header.Toolbutton] -row 0 -column 10 -sticky e
-grid [ttk::button .header.repairs -text "[format %c 0xf54a]" -style Header.Toolbutton] -row 0 -column 11 -sticky e
-grid [ttk::button .header.upgrade -text "[format %c 0xf6e3]" -style Header.Toolbutton] -row 0 -column 12 -sticky e
-grid [ttk::button .header.clean -text "[format %c 0xf458]" -style Header.Toolbutton] -row 0 -column 13 -sticky e
-grid [ttk::button .header.crafting -text "[format %c 0xf0e3]" -style Header.Toolbutton] -row 0 -column 14 -sticky e
+grid [ttk::label .header.nofuel -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 3 -sticky e
+grid [ttk::label .header.nofood -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 4 -sticky e
+grid [ttk::label .header.nodrink -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 5 -sticky e
+grid [ttk::label .header.overloaded -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 6 -sticky e
+grid [ttk::button .header.pilot -style Header.Toolbutton] -row 0 -column 7 -sticky e
+grid [ttk::button .header.engineer -style Header.Toolbutton] -row 0 -column 8 -sticky e
+grid [ttk::button .header.gunner -style Header.Toolbutton] -row 0 -column 9 -sticky e
+grid [ttk::button .header.talk -style Header.Toolbutton] -row 0 -column 10 -sticky e
+grid [ttk::button .header.repairs -style Header.Toolbutton] -row 0 -column 11 -sticky e
+grid [ttk::button .header.upgrade -style Header.Toolbutton] -row 0 -column 12 -sticky e
+grid [ttk::button .header.clean -style Header.Toolbutton] -row 0 -column 13 -sticky e
+grid [ttk::button .header.crafting -style Header.Toolbutton] -row 0 -column 14 -sticky e
 pack .header -fill x
 ttk::panedwindow .paned
 # Game map
@@ -50,12 +50,12 @@ proc ValidateSpinbox {value currentvalue max} {
 }
 # Move map buttons
 set mframe [ttk::frame .paned.mapframe.buttons]
-grid [ttk::button $mframe.show -text "[format %c 0x2b9d]" -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
-grid [ttk::button $mframe.left -text "[format %c 0x2b9c]" -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
+grid [ttk::button $mframe.show -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
+grid [ttk::button $mframe.left -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
 grid [ttk::button $mframe.nw -text {NW} -style Toolbutton -command {MoveMap nw}] -row 1 -column 1
 grid [ttk::button $mframe.n -text {N} -style Toolbutton -command {MoveMap n}] -column 2 -row 1
 grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}] -column 3 -row 1
-grid [ttk::button $mframe.right -text "[format %c 0x2b9e]" -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
+grid [ttk::button $mframe.right -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    toplevel .movemapdialog -class Dialog
@@ -83,7 +83,7 @@ grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -c
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
 grid [ttk::button $mframe.s -text {S} -style Toolbutton -command {MoveMap s}] -column 2 -row 3
 grid [ttk::button $mframe.se -text {SE} -style Toolbutton -command {MoveMap se}] -column 3 -row 3
-grid [ttk::button $mframe.hide -text "[format %c 0x2b9f]" -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
+grid [ttk::button $mframe.hide -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
 bind .paned.mapframe.info <Enter> MoveMapInfo
