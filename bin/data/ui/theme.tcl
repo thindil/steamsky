@@ -5,26 +5,51 @@ namespace eval ttk::theme::steamsky {
    variable version 0.1
    package provide ttk::theme::steamsky $version
 
+   #
+   # Colors
+   #
+
    variable colors
    array set colors {
+      # Background color
       -bg             "#1a130c"
+      # Foreground color
       -fg             "#eee8aa"
 
+      # Disabled elements background color
       -disabledbg     "#4d4d4d"
+      # Disabled element foreground color
       -disabledfg     "#7f8c8d"
 
+      # Selected element background color
       -selectbg       "#800000"
+      # Selected element foreground color
       -selectfg       "#eee8aa"
 
+      # Color used as background for entries, comboboxes and spinboxes
       -window         "#1a130c"
+      # Color of the focused (mouse, keyboard) element
       -focuscolor     "#ffdf00"
+      # Color of the currently focused paned window part
       -checklight     "#ffdf00"
    }
 
+   #
+   # Fonts
+   #
+
+   # Font used in drawing the game map
    font create MapFont -family {Hack NF} -size 16
+   # Font used to show all text in game
    font create InterfaceFont -family {Amarante} -size 14
+   # Font used to show the game help
    font create HelpFont -family {Roboto} -size 14
+   # Font used as icons for buttons/labels
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
+
+   #
+   # Create theme
+   #
 
    ttk::style theme create steamsky -parent default -settings {
       ttk::style configure . \
@@ -44,12 +69,14 @@ namespace eval ttk::theme::steamsky {
       # Layouts:
       #
 
+      # Vertical scrollbars
       ttk::style layout Vertical.TScrollbar {
          Vertical.Scrollbar.trough -sticky ns -children {
             Vertical.Scrollbar.thumb -expand true
          }
       }
 
+      # Horizontal scrollbars
       ttk::style layout Horizontal.TScrollbar {
          Horizontal.Scrollbar.trough -sticky ew -children {
             Horizontal.Scrollbar.thumb -expand true
@@ -60,19 +87,30 @@ namespace eval ttk::theme::steamsky {
       # Settings:
       #
 
+      # Button setting
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised
+      # Menu button setting
       ttk::style configure TMenubutton -padding {8 4 4 4}
+      # Flat button setting
       ttk::style configure Toolbutton -padding {6 2} -anchor center
-      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
+      # Radio button setting
       ttk::style configure TRadiobutton -padding 4
+      # Separator setting
       ttk::style configure TSeparator -background $colors(-bg)
+      # Not needed state header button (ship info in right top corner)
       ttk::style configure Header.Toolbutton -font InterfaceIcons
+      # Alarm state header button (ship info in right top corner)
       ttk::style configure Headerred.Toolbutton -font InterfaceIcons -foreground red
+      # Normal state header button (ship info in right top corner)
       ttk::style configure Headergreen.Toolbutton -font InterfaceIcons -foreground green
+      # Labels with red text
       ttk::style configure Headerred.TLabel -foreground red
+      # Labels with green text
       ttk::style configure Headergreen.TLabel -foreground green
+      # Progress bar setting
       ttk::style configure TProgressbar -background red
 
+      # Paned window
       ttk::style map TPanedwindow -background [list hover $colors(-checklight)]
 
       ttk::style map TCombobox -selectbackground [list \
@@ -81,21 +119,26 @@ namespace eval ttk::theme::steamsky {
          {readonly focus} $colors(-selectbg) \
          ]
 
+      # Combo box setting
       ttk::style map TCombobox -selectforeground [list \
          !focus $colors(-fg) \
          {readonly hover} $colors(-fg) \
          {readonly focus} $colors(-selectfg) \
          ]
 
+      # Tree view (like cargo, trading) setting
       ttk::style configure Treeview -background $colors(-bg)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style map Treeview \
          -background [list selected $colors(-selectbg)] \
          -foreground [list selected $colors(-selectfg)]
 
+      # Check button setting
+      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
       ttk::style map TCheckbutton -indicatorcolor \
          [list selected $colors(-selectfg)]
 
+      # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
          highlightColor [ttk::style lookup . -focuscolor] \
