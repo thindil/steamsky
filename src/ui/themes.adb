@@ -15,7 +15,15 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
+with Ada.Strings.UTF_Encoding.Wide_Strings;
+use Ada.Strings.UTF_Encoding.Wide_Strings;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Config; use Config;
 with Game; use Game;
 
 package body Themes is
@@ -273,4 +281,79 @@ package body Themes is
       end loop;
       End_Search(Directories);
    end LoadThemes;
+
+   procedure SetTheme is
+      Label: Ttk_Label;
+      Button: Ttk_Button;
+   begin
+      Label.Interp := Get_Context;
+      Button.Interp := Get_Context;
+      for I in Themes_List.Iterate loop
+         if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
+            Label.Name := New_String(".header.nofuel");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).NoFuelIcon) & "}");
+            Label.Name := New_String(".header.nofood");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).NoFoodIcon) & "}");
+            Label.Name := New_String(".header.nodrink");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).NoDrinksIcon) & "}");
+            Label.Name := New_String(".header.overloaded");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
+            Label.Name := New_String(".header.pilot");
+            configure
+              (Label, "-text {" & Encode("" & Themes_List(I).PilotIcon) & "}");
+            Label.Name := New_String(".header.engineer");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).EngineerIcon) & "}");
+            Label.Name := New_String(".header.gunner");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).GunnerIcon) & "}");
+            Label.Name := New_String(".header.talk");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).CrewTraderIcon) & "}");
+            Label.Name := New_String(".header.repairs");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).RepairIcon) & "}");
+            Label.Name := New_String(".header.upgrade");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).UpgradeIcon) & "}");
+            Label.Name := New_String(".header.clean");
+            configure
+              (Label, "-text {" & Encode("" & Themes_List(I).CleanIcon) & "}");
+            Label.Name := New_String(".header.crafting");
+            configure
+              (Label,
+               "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
+            Button.Name := New_String(".paned.mapframe.buttons.show");
+            configure
+              (Button,
+               "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
+            Button.Name := New_String(".paned.mapframe.buttons.hide");
+            configure
+              (Button,
+               "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
+            Button.Name := New_String(".paned.mapframe.buttons.left");
+            configure
+              (Button,
+               "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
+            Button.Name := New_String(".paned.mapframe.buttons.right");
+            configure
+              (Button,
+               "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
+         end if;
+      end loop;
+   end SetTheme;
+
 end Themes;

@@ -74,6 +74,7 @@ with Ships.UI; use Ships.UI;
 with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
 with Trades.UI;
+with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 with WaitMenu;
 
@@ -880,6 +881,7 @@ package body Maps.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
+         SetTheme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
