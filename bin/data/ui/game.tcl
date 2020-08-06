@@ -11,10 +11,10 @@ ttk::button .header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .header.time {The game time}
 grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 3 -sticky e
-grid [ttk::label .header.nofood -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 4 -sticky e
-grid [ttk::label .header.nodrink -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 5 -sticky e
-grid [ttk::label .header.overloaded -font {-family "Font Awesome 5 Free Solid" -size 14}] -row 0 -column 6 -sticky e
+grid [ttk::label .header.nofuel -style Headerred.TLabel] -row 0 -column 3 -sticky e
+grid [ttk::label .header.nofood -style Headerred.TLabel] -row 0 -column 4 -sticky e
+grid [ttk::label .header.nodrink -style Headerred.TLabel] -row 0 -column 5 -sticky e
+grid [ttk::label .header.overloaded -style Headerred.TLabel] -row 0 -column 6 -sticky e
 grid [ttk::button .header.pilot -style Header.Toolbutton] -row 0 -column 7 -sticky e
 grid [ttk::button .header.engineer -style Header.Toolbutton] -row 0 -column 8 -sticky e
 grid [ttk::button .header.gunner -style Header.Toolbutton] -row 0 -column 9 -sticky e
