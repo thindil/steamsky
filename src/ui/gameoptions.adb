@@ -369,6 +369,9 @@ package body GameOptions is
          Font.Configure
            ("InterfaceFont",
             "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         Font.Configure
+           ("InterfaceIcons",
+            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
       end if;
       return TCL_OK;
    end Set_Fonts_Command;
@@ -413,6 +416,8 @@ package body GameOptions is
            (To_String(FontNames(I)),
             "-size" & Positive'Image(DefaultFontsSizes(I)));
       end loop;
+      Font.Configure
+        ("InterfaceIcons", "-size" & Positive'Image(DefaultFontsSizes(2)));
       return TCL_OK;
    end Set_Default_Fonts_Command;
 

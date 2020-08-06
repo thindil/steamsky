@@ -24,6 +24,7 @@ namespace eval ttk::theme::steamsky {
    font create MapFont -family {Hack NF} -size 16
    font create InterfaceFont -family {Amarante} -size 14
    font create HelpFont -family {Roboto} -size 14
+   font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
 
    ttk::style theme create steamsky -parent default -settings {
       ttk::style configure . \
@@ -65,9 +66,9 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
       ttk::style configure TRadiobutton -padding 4
       ttk::style configure TSeparator -background $colors(-bg)
-      ttk::style configure Header.Toolbutton -font "-family \"Font Awesome 5 Free Solid\" -size [font actual InterfaceFont -size]"
-      ttk::style configure Headerred.Toolbutton -font "-family \"Font Awesome 5 Free Solid\" -size [font actual InterfaceFont -size]" -foreground red
-      ttk::style configure Headergreen.Toolbutton -font "-family \"Font Awesome 5 Free Solid\" -size [font actual InterfaceFont -size]" -foreground green
+      ttk::style configure Header.Toolbutton -font InterfaceIcons
+      ttk::style configure Headerred.Toolbutton -font InterfaceIcons -foreground red
+      ttk::style configure Headergreen.Toolbutton -font InterfaceIcons -foreground green
       ttk::style configure Headerred.TLabel -foreground red
       ttk::style configure Headergreen.TLabel -foreground green
       ttk::style configure TProgressbar -background red
