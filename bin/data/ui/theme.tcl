@@ -11,26 +11,17 @@ namespace eval ttk::theme::steamsky {
 
    variable colors
    array set colors {
-      # Background color
       -bg             "#1a130c"
-      # Foreground color
       -fg             "#eee8aa"
 
-      # Disabled elements background color
       -disabledbg     "#4d4d4d"
-      # Disabled element foreground color
       -disabledfg     "#7f8c8d"
 
-      # Selected element background color
       -selectbg       "#800000"
-      # Selected element foreground color
       -selectfg       "#eee8aa"
 
-      # Color used as background for entries, comboboxes and spinboxes
       -window         "#1a130c"
-      # Color of the focused (mouse, keyboard) element
       -focuscolor     "#ffdf00"
-      # Color of the currently focused paned window part
       -checklight     "#ffdf00"
    }
 
