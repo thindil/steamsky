@@ -199,12 +199,14 @@ package body Maps.UI is
          Add
            (Label,
             "You don't have any drinks in ship but your crew needs them to live.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       elsif ItemAmount <= GameSettings.LowDrinks then
          configure(Label, "-style TLabel");
          Add
            (Label,
             "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
             " left.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       Label.Name := New_String(".header.nofood");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -214,12 +216,14 @@ package body Maps.UI is
          Add
            (Label,
             "You don't have any food in ship but your crew needs it to live.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       elsif ItemAmount <= GameSettings.LowFood then
          configure(Label, "-style TLabel");
          Add
            (Label,
             "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
             " left.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
       for Member of PlayerShip.Crew loop
          case Member.Order is
