@@ -352,8 +352,12 @@ package body Maps.UI.Commands is
         (DestinationMenu, "command",
          "-label {Set destination} -command SetDestination");
       if PlayerShip.Speed /= DOCKED then
-         Add(DestinationMenu, "command", "-label {Set destination and move}");
-         Add(DestinationMenu, "command", "-label {Move to}");
+         Add
+           (DestinationMenu, "command",
+            "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
+         Add
+           (DestinationMenu, "command",
+            "-label {Move to} -command {MoveShip moveto}");
       end if;
       Add(DestinationMenu, "command", "-label {Close}");
       Tcl_Eval
