@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Updated MODDING.md
+- Rewritten to use Tk library instead of GTK
 
 ### Fixed
 - Crash during resting when crew member have very high tired level
