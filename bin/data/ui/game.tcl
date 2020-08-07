@@ -15,14 +15,14 @@ grid [ttk::label .header.nofuel -style Headerred.TLabel] -row 0 -column 3 -stick
 grid [ttk::label .header.nofood -style Headerred.TLabel] -row 0 -column 4 -sticky e
 grid [ttk::label .header.nodrink -style Headerred.TLabel] -row 0 -column 5 -sticky e
 grid [ttk::label .header.overloaded -style Headerred.TLabel] -row 0 -column 6 -sticky e
-grid [ttk::button .header.pilot -style Header.Toolbutton] -row 0 -column 7 -sticky e
-grid [ttk::button .header.engineer -style Header.Toolbutton] -row 0 -column 8 -sticky e
-grid [ttk::button .header.gunner -style Header.Toolbutton] -row 0 -column 9 -sticky e
-grid [ttk::button .header.talk -style Header.Toolbutton] -row 0 -column 10 -sticky e
-grid [ttk::button .header.repairs -style Header.Toolbutton] -row 0 -column 11 -sticky e
-grid [ttk::button .header.upgrade -style Header.Toolbutton] -row 0 -column 12 -sticky e
-grid [ttk::button .header.clean -style Header.Toolbutton] -row 0 -column 13 -sticky e
-grid [ttk::button .header.crafting -style Header.Toolbutton] -row 0 -column 14 -sticky e
+grid [ttk::button .header.pilot -style Header.Toolbutton -command ShowCrewInfo] -row 0 -column 7 -sticky e
+grid [ttk::button .header.engineer -style Header.Toolbutton -command ShowCrewInfo] -row 0 -column 8 -sticky e
+grid [ttk::button .header.gunner -style Header.Toolbutton -command ShowCrewInfo] -row 0 -column 9 -sticky e
+grid [ttk::button .header.talk -style Header.Toolbutton -command ShowCrewInfo] -row 0 -column 10 -sticky e
+grid [ttk::button .header.repairs -style Header.Toolbutton -command ShowShipInfo] -row 0 -column 11 -sticky e
+grid [ttk::button .header.upgrade -style Header.Toolbutton -command ShowShipInfo] -row 0 -column 12 -sticky e
+grid [ttk::button .header.clean -style Header.Toolbutton -command ShowShipInfo] -row 0 -column 13 -sticky e
+grid [ttk::button .header.crafting -style Header.Toolbutton -command ShowCrafting] -row 0 -column 14 -sticky e
 pack .header -fill x
 ttk::panedwindow .paned
 # Game map
