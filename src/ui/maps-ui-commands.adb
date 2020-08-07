@@ -355,9 +355,11 @@ package body Maps.UI.Commands is
          Add
            (DestinationMenu, "command",
             "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
-         Add
-           (DestinationMenu, "command",
-            "-label {Move to} -command {MoveShip moveto}");
+         if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
+            Add
+              (DestinationMenu, "command",
+               "-label {Move to} -command {MoveShip moveto}");
+         end if;
       end if;
       Add(DestinationMenu, "command", "-label {Close}");
       Tcl_Eval
