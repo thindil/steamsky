@@ -1,8 +1,8 @@
 ttk::frame .paned.combatframe
 set combatcanvas [canvas .paned.combatframe.canvas -yscrollcommand [list .paned.combatframe.scrolly set] -xscrollcommand [list .paned.combatframe.scrollx set]]
-grid $combatcanvas -sticky nwes
-grid [ttk::scrollbar .paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
+pack $combatcanvas -side top -fill both
+pack [ttk::scrollbar .paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x
 
 # Ship to ship combat
 set combatframe [ttk::frame $combatcanvas.combat]

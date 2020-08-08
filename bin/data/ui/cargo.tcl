@@ -1,8 +1,8 @@
 ttk::frame .paned.cargoframe
 set cargocanvas [canvas .paned.cargoframe.canvas -yscrollcommand [list .paned.cargoframe.scrolly set] -xscrollcommand [list .paned.cargoframe.scrollx set]]
-grid $cargocanvas -sticky nwes
-grid [ttk::scrollbar .paned.cargoframe.scrollx -orient horizontal -command [list $cargocanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.cargoframe.scrolly -orient vertical -command [list $cargocanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.cargoframe.scrolly -orient vertical -command [list $cargocanvas yview]] -side right -fill y
+pack $cargocanvas -side top -fill both
+pack [ttk::scrollbar .paned.cargoframe.scrollx -orient horizontal -command [list $cargocanvas xview]] -fill x
 set cargoframe [ttk::frame $cargocanvas.cargo]
 # Type of items to show
 grid [ttk::frame $cargoframe.type]
