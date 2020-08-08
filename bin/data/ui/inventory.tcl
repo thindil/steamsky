@@ -1,8 +1,8 @@
 ttk::frame .paned.inventoryframe
 set inventorycanvas [canvas .paned.inventoryframe.canvas -yscrollcommand [list .paned.inventoryframe.scrolly set] -xscrollcommand [list .paned.inventoryframe.scrollx set]]
-grid $inventorycanvas -sticky nwes
-grid [ttk::scrollbar .paned.inventoryframe.scrollx -orient horizontal -command [list $inventorycanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.inventoryframe.scrolly -orient vertical -command [list $inventorycanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.inventoryframe.scrolly -orient vertical -command [list $inventorycanvas yview]] -side right -fill y
+pack $inventorycanvas -side top -fill both
+pack [ttk::scrollbar .paned.inventoryframe.scrollx -orient horizontal -command [list $inventorycanvas xview]] -fill x
 set inventoryframe [ttk::frame $inventorycanvas.inventory]
 # Items list
 grid [ttk::frame $inventoryframe.list] -sticky nwes
