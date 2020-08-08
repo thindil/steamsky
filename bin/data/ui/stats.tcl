@@ -1,8 +1,8 @@
 ttk::frame .paned.statsframe
 set statscanvas [canvas .paned.statsframe.canvas -yscrollcommand [list .paned.statsframe.scrolly set] -xscrollcommand [list .paned.statsframe.scrollx set]]
-grid $statscanvas -sticky nwes
-grid [ttk::scrollbar .paned.statsframe.scrollx -orient horizontal -command [list $statscanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.statsframe.scrolly -orient vertical -command [list $statscanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.statsframe.scrolly -orient vertical -command [list $statscanvas yview]] -side right -fill y
+pack $statscanvas -side top -fill both
+pack [ttk::scrollbar .paned.statsframe.scrollx -orient horizontal -command [list $statscanvas xview]] -fill x
 set statsframe [ttk::frame $statscanvas.stats]
 grid [ttk::frame $statsframe.left] -sticky nwes
 grid [ttk::label $statsframe.left.stats]

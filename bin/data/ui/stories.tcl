@@ -1,8 +1,8 @@
 ttk::frame .paned.storiesframe
 set storiescanvas [canvas .paned.storiesframe.canvas -yscrollcommand [list .paned.storiesframe.scrolly set] -xscrollcommand [list .paned.storiesframe.scrollx set]]
-grid $storiescanvas -sticky nwes
-grid [ttk::scrollbar .paned.storiesframe.scrollx -orient horizontal -command [list $storiescanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.storiesframe.scrolly -orient vertical -command [list $storiescanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.storiesframe.scrolly -orient vertical -command [list $storiescanvas yview]] -side right -fill y
+pack $storiescanvas -side top -fill both
+pack [ttk::scrollbar .paned.storiesframe.scrollx -orient horizontal -command [list $storiescanvas xview]] -fill x
 set storiesframe [ttk::frame $storiescanvas.stories]
 # List of stories options
 grid [ttk::frame $storiesframe.options]
