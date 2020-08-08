@@ -100,17 +100,19 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Headergreen.TLabel -foreground green
       # Progress bar setting
       ttk::style configure TProgressbar -background red
+      # Entry setting
+      ttk::style configure TEntry -insertcolor $colors(-fg)
 
       # Paned window
       ttk::style map TPanedwindow -background [list hover $colors(-checklight)]
 
+      # Combo box setting
       ttk::style map TCombobox -selectbackground [list \
          !focus         $colors(-window) \
          {readonly hover} $colors(-bg) \
          {readonly focus} $colors(-selectbg) \
          ]
 
-      # Combo box setting
       ttk::style map TCombobox -selectforeground [list \
          !focus $colors(-fg) \
          {readonly hover} $colors(-fg) \
@@ -136,7 +138,8 @@ namespace eval ttk::theme::steamsky {
          selectBackground [ttk::style lookup . -selectbackground] \
          selectForeground [ttk::style lookup . -selectforeground] \
          activeBackground [ttk::style lookup . -selectbackground] \
-         activeForeground [ttk::style lookup . -selectforeground]
+         activeForeground [ttk::style lookup . -selectforeground] \
+         insertbackground [ttk::style lookup . -foreground]
       option add *font [ttk::style lookup . -font]
    }
 
