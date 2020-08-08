@@ -1,8 +1,8 @@
 ttk::frame .paned.basesframe
 set basescanvas [canvas .paned.basesframe.canvas -yscrollcommand [list .paned.basesframe.scrolly set] -xscrollcommand [list .paned.basesframe.scrollx set]]
-grid $basescanvas -sticky nwes
-grid [ttk::scrollbar .paned.basesframe.scrollx -orient horizontal -command [list $basescanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.basesframe.scrolly -orient vertical -command [list $basescanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.basesframe.scrolly -orient vertical -command [list $basescanvas yview]] -side right -fill y
+pack $basescanvas -side top -fill both
+pack [ttk::scrollbar .paned.basesframe.scrollx -orient horizontal -command [list $basescanvas xview]] -fill x
 set basesframe [ttk::frame $basescanvas.bases]
 # List of bases options
 grid [ttk::frame $basesframe.options]

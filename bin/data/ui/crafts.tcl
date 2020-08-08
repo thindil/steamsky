@@ -1,8 +1,8 @@
 ttk::frame .paned.craftframe
 set craftcanvas [canvas .paned.craftframe.canvas -yscrollcommand [list .paned.craftframe.scrolly set] -xscrollcommand [list .paned.craftframe.scrollx set]]
-grid $craftcanvas -sticky nwes
-grid [ttk::scrollbar .paned.craftframe.scrollx -orient horizontal -command [list $craftcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.craftframe.scrolly -orient vertical -command [list $craftcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.craftframe.scrolly -orient vertical -command [list $craftcanvas yview]] -side right -fill y
+pack $craftcanvas -side top -fill both
+pack [ttk::scrollbar .paned.craftframe.scrollx -orient horizontal -command [list $craftcanvas xview]] -fill x
 set craftframe [ttk::frame $craftcanvas.craft]
 # Recipes list
 grid [ttk::frame $craftframe.list] -sticky nwes
