@@ -1,8 +1,8 @@
 ttk::frame .paned.recruitframe
 set recruitcanvas [canvas .paned.recruitframe.canvas -yscrollcommand [list .paned.recruitframe.scrolly set] -xscrollcommand [list .paned.recruitframe.scrollx set]]
-grid $recruitcanvas -sticky nwes
-grid [ttk::scrollbar .paned.recruitframe.scrollx -orient horizontal -command [list $recruitcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.recruitframe.scrolly -orient vertical -command [list $recruitcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.recruitframe.scrolly -orient vertical -command [list $recruitcanvas yview]] -side right -fill y
+pack $recruitcanvas -side top -fill both
+pack [ttk::scrollbar .paned.recruitframe.scrollx -orient horizontal -command [list $recruitcanvas xview]] -fill x
 set recruitframe [ttk::frame $recruitcanvas.recruit]
 # Recruits list
 grid [ttk::frame $recruitframe.recruits] -sticky nwes

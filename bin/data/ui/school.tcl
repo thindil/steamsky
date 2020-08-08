@@ -1,9 +1,9 @@
 # normal code
 ttk::frame .paned.schoolframe
 set schoolcanvas [canvas .paned.schoolframe.canvas -yscrollcommand [list .paned.schoolframe.scrolly set] -xscrollcommand [list .paned.schoolframe.scrollx set]]
-grid $schoolcanvas -sticky nwes
-grid [ttk::scrollbar .paned.schoolframe.scrollx -orient horizontal -command [list $schoolcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.schoolframe.scrolly -orient vertical -command [list $schoolcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.schoolframe.scrolly -orient vertical -command [list $schoolcanvas yview]] -side right -fill y
+pack $schoolcanvas -side top -fill both
+pack [ttk::scrollbar .paned.schoolframe.scrollx -orient horizontal -command [list $schoolcanvas xview]] -fill x
 set schoolframe [ttk::frame $schoolcanvas.school]
 # Crew members list
 grid [ttk::frame $schoolframe.crew] -sticky nwes

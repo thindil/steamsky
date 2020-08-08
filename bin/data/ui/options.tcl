@@ -1,8 +1,8 @@
 ttk::frame .paned.optionsframe
 set optionscanvas [canvas .paned.optionsframe.canvas -yscrollcommand [list .paned.optionsframe.scrolly set] -xscrollcommand [list .paned.optionsframe.scrollx set]]
-grid $optionscanvas -sticky nwes
-grid [ttk::scrollbar .paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.optionsframe.scrolly -orient vertical -command [list $optionscanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.optionsframe.scrolly -orient vertical -command [list $optionscanvas yview]] -side right -fill y
+pack $optionscanvas -side top -fill both
+pack [ttk::scrollbar .paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -fill x
 set optionsframe [ttk::frame $optionscanvas.options]
 grid [ttk::notebook $optionsframe.notebook] -sticky nwes
 # General options
