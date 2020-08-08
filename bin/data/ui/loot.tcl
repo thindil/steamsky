@@ -1,8 +1,8 @@
 ttk::frame .paned.lootframe
 set lootcanvas [canvas .paned.lootframe.canvas -yscrollcommand [list .paned.lootframe.scrolly set] -xscrollcommand [list .paned.lootframe.scrollx set]]
-grid $lootcanvas -sticky nwes
-grid [ttk::scrollbar .paned.lootframe.scrollx -orient horizontal -command [list $lootcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.lootframe.scrolly -orient vertical -command [list $lootcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.lootframe.scrolly -orient vertical -command [list $lootcanvas yview]] -side right -fill y
+pack $lootcanvas -side top -fill both
+pack [ttk::scrollbar .paned.lootframe.scrollx -orient horizontal -command [list $lootcanvas xview]] -fill x
 set lootframe [ttk::frame $lootcanvas.loot]
 # Type of items to show
 grid [ttk::frame $lootframe.options]
