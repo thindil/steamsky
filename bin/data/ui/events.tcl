@@ -1,8 +1,8 @@
 ttk::frame .paned.eventsframe
 set eventscanvas [canvas .paned.eventsframe.canvas -yscrollcommand [list .paned.eventsframe.scrolly set] -xscrollcommand [list .paned.eventsframe.scrollx set]]
-grid $eventscanvas -sticky nwes
-grid [ttk::scrollbar .paned.eventsframe.scrollx -orient horizontal -command [list $eventscanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.eventsframe.scrolly -orient vertical -command [list $eventscanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.eventsframe.scrolly -orient vertical -command [list $eventscanvas yview]] -side right -fill y
+pack $eventscanvas -side top -fill both
+pack [ttk::scrollbar .paned.eventsframe.scrollx -orient horizontal -command [list $eventscanvas xview]] -fill x
 set eventsframe [ttk::frame $eventscanvas.events]
 grid [ttk::treeview $eventsframe.eventsview -show headings -columns [list name distance]]
 $eventsframe.eventsview heading name -text {Name}
