@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.1] - 2020-08-09
 
 ### Changed
 - Updated README.md
