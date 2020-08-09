@@ -39,6 +39,24 @@ namespace eval ttk::theme::steamsky {
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
 
    #
+   # Load theme related images
+   #
+
+   proc LoadImages {imgdir} {
+       variable I
+       foreach file [glob -directory $imgdir *.svg] {
+           set img [file tail [file rootname $file]]
+           set I($img) [image create photo -file $file]
+           set tempimg [image create photo]
+           $tempimg copy $I($img)
+           $I($img) blank
+           $I($img) copy $tempimg -shrink -subsample [expr [image width $tempimg] / 22]
+       }
+   }
+
+   LoadImages [file join [file dirname [info script]] images]
+
+   #
    # Create theme
    #
 
@@ -73,6 +91,14 @@ namespace eval ttk::theme::steamsky {
             Horizontal.Scrollbar.thumb -expand true
          }
       }
+
+      #
+      # Elements:
+      #
+
+      ttk::style element create Checkbutton.indicator image [list $I(checkbox-unchecked) \
+         selected            $I(checkbox-checked) \
+         ] -width 22 -sticky w
 
       #
       # Settings:

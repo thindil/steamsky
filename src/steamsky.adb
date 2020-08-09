@@ -165,6 +165,7 @@ begin
 
    -- Load required Tcl packages
    Tooltip_Init(Interp);
+   Tcl.Ada.Tcl_Eval(Interp, "package require tksvg");
 
    -- Create and show the main game menu
    CreateMainMenu;
