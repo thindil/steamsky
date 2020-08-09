@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,491 +27,424 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo231">DebugUI/DebugWindow</a></li>
-<li>2. <a href="#robo232">DebugUI/Setting</a></li>
-<li>3. <a href="#robo233">DebugUI/Stack</a></li>
-<li>4. <a href="#robo509">DebugUI/AddCargo</a></li>
-<li>5. <a href="#robo510">DebugUI/AddEvent</a></li>
-<li>6. <a href="#robo511">DebugUI/AddShip</a></li>
-<li>7. <a href="#robo512">DebugUI/AddSkill</a></li>
-<li>8. <a href="#robo513">DebugUI/ChangeSkillLevel</a></li>
-<li>9. <a href="#robo514">DebugUI/ChangeStatLevel</a></li>
-<li>10. <a href="#robo516">DebugUI/DeleteEvent</a></li>
-<li>11. <a href="#robo517">DebugUI/MoveShip</a></li>
-<li>12. <a href="#robo518">DebugUI/RefreshUI</a></li>
-<li>13. <a href="#robo519">DebugUI/ResetWorldUI</a></li>
-<li>14. <a href="#robo520">DebugUI/Save_Game</a></li>
-<li>15. <a href="#robo521">DebugUI/SetCargoAmount</a></li>
-<li>16. <a href="#robo522">DebugUI/SetMemberStats</a></li>
-<li>17. <a href="#robo523">DebugUI/SetModuleStats</a></li>
-<li>18. <a href="#robo524">DebugUI/ShowBaseInfo</a></li>
-<li>19. <a href="#robo525">DebugUI/ShowBasesTypes</a></li>
-<li>20. <a href="#robo527">DebugUI/ShowItemEvent</a></li>
-<li>21. <a href="#robo528">DebugUI/UpdateAttribute</a></li>
-<li>22. <a href="#robo529">DebugUI/UpdateBase</a></li>
-<li>23. <a href="#robo530">DebugUI/UpdateCargoInfo</a></li>
-<li>24. <a href="#robo531">DebugUI/UpdateCrew</a></li>
-<li>25. <a href="#robo532">DebugUI/UpdateMember</a></li>
-<li>26. <a href="#robo533">DebugUI/UpdateModule</a></li>
-<li>27. <a href="#robo534">DebugUI/UpdateShip</a></li>
-<li>28. <a href="#robo535">DebugUI/UpdateShipCargo</a></li>
-<li>29. <a href="#robo536">DebugUI/UpdateSkill</a></li>
+<li>1. <a href="#robo422">DebugUI/Add_Event_Command</a></li>
+<li>2. <a href="#robo423">DebugUI/Add_Item_Command</a></li>
+<li>3. <a href="#robo424">DebugUI/Add_Ship_Command</a></li>
+<li>4. <a href="#robo425">DebugUI/Add_Skill_Command</a></li>
+<li>5. <a href="#robo427">DebugUI/Delete_Event_Command</a></li>
+<li>6. <a href="#robo428">DebugUI/Move_Ship_Command</a></li>
+<li>7. <a href="#robo429">DebugUI/Refresh_Base_Command</a></li>
+<li>8. <a href="#robo430">DebugUI/Refresh_Cargo_Command</a></li>
+<li>9. <a href="#robo431">DebugUI/Refresh_Command</a></li>
+<li>10. <a href="#robo432">DebugUI/Refresh_Events_Command</a></li>
+<li>11. <a href="#robo433">DebugUI/Refresh_Member_Command</a></li>
+<li>12. <a href="#robo434">DebugUI/Refresh_Module_Command</a></li>
+<li>13. <a href="#robo435">DebugUI/Save_Game_Command</a></li>
+<li>14. <a href="#robo436">DebugUI/Toggle_Item_Entry_Command</a></li>
+<li>15. <a href="#robo437">DebugUI/Update_Base_Command</a></li>
+<li>16. <a href="#robo438">DebugUI/Update_Item_Command</a></li>
+<li>17. <a href="#robo439">DebugUI/Update_Member_Command</a></li>
+<li>18. <a href="#robo440">DebugUI/Update_Module_Command</a></li>
 </ul>
 <hr />
-<a name="DebugUI2fDebugWindow"></a>
-<a name="robo231"></a><h2>DebugUI/DebugWindow [ Variables ]</h2>
+<a name="DebugUI2fAdd5fEvent5fCommand"></a>
+<a name="robo422"></a><h2>DebugUI/Add_Event_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Main debug window
+<pre> Add a new base event to the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>DebugWindow</strong><span class="sign">:</span> Gtk_Window<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="DebugUI2fSetting"></a>
-<a name="robo232"></a><h2>DebugUI/Setting [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> If true, UI is currently in setting state
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Setting</strong><span class="sign">:</span> Boolean<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="DebugUI2fStack"></a>
-<a name="robo233"></a><h2>DebugUI/Stack [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Gtk_Stack with most of UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Stack</strong><span class="sign">:</span> Gtk_Stack<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="DebugUI2fAddCargo"></a>
-<a name="robo509"></a><h2>DebugUI/AddCargo [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add new item to the player ship cargo
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddCargo</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
-</pre>
-
-<hr />
-<a name="DebugUI2fAddEvent"></a>
-<a name="robo510"></a><h2>DebugUI/AddEvent [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add new event to the game
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddEvent</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button clicked.
-</pre>
-
-<hr />
-<a name="DebugUI2fAddShip"></a>
-<a name="robo511"></a><h2>DebugUI/AddShip [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add new NPC ship on map
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddShip</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
-</pre>
-
-<hr />
-<a name="DebugUI2fAddSkill"></a>
-<a name="robo512"></a><h2>DebugUI/AddSkill [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add new skill to selected the player ship crew member
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddSkill</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked
-</pre>
-
-<hr />
-<a name="DebugUI2fChangeSkillLevel"></a>
-<a name="robo513"></a><h2>DebugUI/ChangeSkillLevel [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Change level of selected skill of the player ship crew member
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ChangeSkillLevel</strong>
-     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Text_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> UTF8_String<span class="sign">;</span>
-      New_Text<span class="sign">:</span> UTF8_String<span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Add_Event_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self     - Cell in which text will be changed (unused)
- Path     - Text with path to the selected cell
- New_Text - New text which will be set for selected cell
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fChangeStatLevel"></a>
-<a name="robo514"></a><h2>DebugUI/ChangeStatLevel [ Subprograms ]</h2>
+<a name="DebugUI2fAdd5fItem5fCommand"></a>
+<a name="robo423"></a><h2>DebugUI/Add_Item_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Change level of selected attribute of the player ship crew member
+<pre> Add a new item to the player ship cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ChangeStatLevel</strong>
-     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Cell_Renderer_Text_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> UTF8_String<span class="sign">;</span>
-      New_Text<span class="sign">:</span> UTF8_String<span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Add_Item_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self     - Cell in which text will be changed (unused)
- Path     - Text with path to the selected cell
- New_Text - New text which will be set for selected cell
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fDeleteEvent"></a>
-<a name="robo516"></a><h2>DebugUI/DeleteEvent [ Subprograms ]</h2>
+<a name="DebugUI2fAdd5fShip5fCommand"></a>
+<a name="robo424"></a><h2>DebugUI/Add_Ship_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Delete selected event from the game
+<pre> Add a new ship based event to the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>DeleteEvent</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
-</pre>
-
-<hr />
-<a name="DebugUI2fMoveShip"></a>
-<a name="robo517"></a><h2>DebugUI/MoveShip [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Move the player ship to selected location on the map
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>MoveShip</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked
-</pre>
-
-<hr />
-<a name="DebugUI2fRefreshUI"></a>
-<a name="robo518"></a><h2>DebugUI/RefreshUI [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Refresh whole debug UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>RefreshUI</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Add_Ship_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked. Unused.
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fResetWorldUI"></a>
-<a name="robo519"></a><h2>DebugUI/ResetWorldUI [ Subprograms ]</h2>
+<a name="DebugUI2fAdd5fSkill5fCommand"></a>
+<a name="robo425"></a><h2>DebugUI/Add_Skill_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update world editing data
+<pre> Add a new skill to the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ResetWorldUI</strong> <span class="keyword">is</span>
-</pre>
-
-<hr />
-<a name="DebugUI2fSave5fGame"></a>
-<a name="robo520"></a><h2>DebugUI/Save_Game [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Save current state of the game to disk
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>Save_Game</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Add_Skill_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked. Unused
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fSetCargoAmount"></a>
-<a name="robo521"></a><h2>DebugUI/SetCargoAmount [ Subprograms ]</h2>
+<a name="DebugUI2fDelete5fEvent5fCommand"></a>
+<a name="robo427"></a><h2>DebugUI/Delete_Event_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set cargo amount value for selected item in the player ship cargo
+<pre> Remove the selected event from the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetCargoAmount</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Combo_Box_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Delete_Event_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Combo_Box which value was changed.
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fSetMemberStats"></a>
-<a name="robo522"></a><h2>DebugUI/SetMemberStats [ Subprograms ]</h2>
+<a name="DebugUI2fMove5fShip5fCommand"></a>
+<a name="robo428"></a><h2>DebugUI/Move_Ship_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show statistics, skills, etc for selected the player ship crew member
+<pre> Move the player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetMemberStats</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Combo_Box_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Move_Ship_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Combo_Box with crew members names
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fSetModuleStats"></a>
-<a name="robo523"></a><h2>DebugUI/SetModuleStats [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fBase5fCommand"></a>
+<a name="robo429"></a><h2>DebugUI/Refresh_Base_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set information about selected the player ship module
+<pre> Refresh the information about the selected base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetModuleStats</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Combo_Box_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Base_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fShowBaseInfo"></a>
-<a name="robo524"></a><h2>DebugUI/ShowBaseInfo [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fCargo5fCommand"></a>
+<a name="robo430"></a><h2>DebugUI/Refresh_Cargo_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update information about selected base
+<pre> Refresh the information about the player ship cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowBaseInfo</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Entry_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Cargo_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_GEntry in which button Enter was pressed
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fShowBasesTypes"></a>
-<a name="robo525"></a><h2>DebugUI/ShowBasesTypes [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fCommand"></a>
+<a name="robo431"></a><h2>DebugUI/Refresh_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update bases types list after selecting faction
+<pre> Refresh the whole game information
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowBasesTypes</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Combo_Box_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Combo_Box in which value was changed
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fShowItemEvent"></a>
-<a name="robo527"></a><h2>DebugUI/ShowItemEvent [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fEvents5fCommand"></a>
+<a name="robo432"></a><h2>DebugUI/Refresh_Events_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show or hide info about item used by selected event
+<pre> Refresh the list of events
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowItemEvent</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Combo_Box_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Events_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Combo_Box with selected event
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateAttribute"></a>
-<a name="robo528"></a><h2>DebugUI/UpdateAttribute [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fMember5fCommand"></a>
+<a name="robo433"></a><h2>DebugUI/Refresh_Member_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update the attribute of selected the player ship crew member
+<pre> Refresh the information about selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>UpdateAttribute</strong>
-     <span class="sign">(</span>Model<span class="sign">:</span> Gtk_Tree_Model<span class="sign">;</span> Path<span class="sign">:</span> Gtk_Tree_Path<span class="sign">;</span> Iter<span class="sign">:</span> Gtk_Tree_Iter<span class="sign">)</span>
-      <span class="keyword">return</span> Boolean <span class="keyword">is</span>
-      <span class="keyword">pragma</span> Unreferenced<span class="sign">(</span>Path<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Member_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Model - Gtk_Tree_Model with attributes values
- Path  - Gtk_Tree_Path in Model to selected attribute (unused)
- Iter  - Gtk_Tree_Iter in Model to selected attribute
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always returns false
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateBase"></a>
-<a name="robo529"></a><h2>DebugUI/UpdateBase [ Subprograms ]</h2>
+<a name="DebugUI2fRefresh5fModule5fCommand"></a>
+<a name="robo434"></a><h2>DebugUI/Refresh_Module_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update selected base with new data
+<pre> Refresh the information about selected module
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateBase</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Refresh_Module_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateCargoInfo"></a>
-<a name="robo530"></a><h2>DebugUI/UpdateCargoInfo [ Subprograms ]</h2>
+<a name="DebugUI2fSave5fGame5fCommand"></a>
+<a name="robo435"></a><h2>DebugUI/Save_Game_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update the player ship cargo list
+<pre> Save the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateCargoInfo</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Save_Game_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Widget which will be mapped
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateCrew"></a>
-<a name="robo531"></a><h2>DebugUI/UpdateCrew [ Subprograms ]</h2>
+<a name="DebugUI2fToggle5fItem5fEntry5fCommand"></a>
+<a name="robo436"></a><h2>DebugUI/Toggle_Item_Entry_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update the player ship crew
+<pre> Show or hide item entry for bases events
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateCrew</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Toggle_Item_Entry_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Widget which was mapped
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateMember"></a>
-<a name="robo532"></a><h2>DebugUI/UpdateMember [ Subprograms ]</h2>
+<a name="DebugUI2fUpdate5fBase5fCommand"></a>
+<a name="robo437"></a><h2>DebugUI/Update_Base_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update selected the player ship crew member statistics, skill, etc
+<pre> Update the selected base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMember</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Update_Base_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateModule"></a>
-<a name="robo533"></a><h2>DebugUI/UpdateModule [ Subprograms ]</h2>
+<a name="DebugUI2fUpdate5fItem5fCommand"></a>
+<a name="robo438"></a><h2>DebugUI/Update_Item_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update selected the player ship module with new data
+<pre> Update the amount of an item in the player ship cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateModule</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Update_Item_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateShip"></a>
-<a name="robo534"></a><h2>DebugUI/UpdateShip [ Subprograms ]</h2>
+<a name="DebugUI2fUpdate5fMember5fCommand"></a>
+<a name="robo439"></a><h2>DebugUI/Update_Member_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update the player ship data
+<pre> Update the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateShip</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Update_Member_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Widget which was mapped
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="DebugUI2fUpdateShipCargo"></a>
-<a name="robo535"></a><h2>DebugUI/UpdateShipCargo [ Subprograms ]</h2>
+<a name="DebugUI2fUpdate5fModule5fCommand"></a>
+<a name="robo440"></a><h2>DebugUI/Update_Module_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Updated existing item in the player ship cargo
+<pre> Update the selected module
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateShipCargo</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked.
-</pre>
-
-<hr />
-<a name="DebugUI2fUpdateSkill"></a>
-<a name="robo536"></a><h2>DebugUI/UpdateSkill [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo29">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Update the skill of selected player ship crew member
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>UpdateSkill</strong>
-     <span class="sign">(</span>Model<span class="sign">:</span> Gtk_Tree_Model<span class="sign">;</span> Path<span class="sign">:</span> Gtk_Tree_Path<span class="sign">;</span> Iter<span class="sign">:</span> Gtk_Tree_Iter<span class="sign">)</span>
-      <span class="keyword">return</span> Boolean <span class="keyword">is</span>
-      <span class="keyword">pragma</span> Unreferenced<span class="sign">(</span>Path<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Update_Module_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Model - Gtk_Tree_Model with skills values
- Path  - Gtk_Tree_Path in Model to selected skill (unused)
- Iter  - Gtk_Tree_Iter in Model to selected skill
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always returns false
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

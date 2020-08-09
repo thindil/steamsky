@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,68 +27,92 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo218">Crafts.UI/RecipeIndex</a></li>
-<li>2. <a href="#robo472">Crafts.UI/SetCrafting</a></li>
-<li>3. <a href="#robo474">Crafts.UI/ShowRecipeInfo</a></li>
-<li>4. <a href="#robo475">Crafts.UI/ShowSetRecipe</a></li>
+<li>1. <a href="#robo418">CUI4/Set_Crafting_Command</a></li>
+<li>2. <a href="#robo419">CUI4/Show_Crafting_Command</a></li>
+<li>3. <a href="#robo420">CUI4/Show_Recipe_Info_Command</a></li>
+<li>4. <a href="#robo421">CUI4/ShowSetRecipe</a></li>
 </ul>
 <hr />
-<a name="Crafts2eUI2fRecipeIndex"></a>
-<a name="robo218"></a><h2>Crafts.UI/RecipeIndex [ Variables ]</h2>
+<a name="CUI42fSet5fCrafting5fCommand"></a>
+<a name="robo418"></a><h2>CUI4/Set_Crafting_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo25">Crafts.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo10">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set the selected recipe as a crafting order in the selected workshop
+</pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>RecipeIndex</strong><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Set_Crafting_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Crafts2eUI2fSetCrafting"></a>
-<a name="robo472"></a><h2>Crafts.UI/SetCrafting [ Subprograms ]</h2>
+<a name="CUI42fShow5fCrafting5fCommand"></a>
+<a name="robo419"></a><h2>CUI4/Show_Crafting_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo25">Crafts.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo10">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set selected recipe as crafting order
+<pre> Show information about available crafting recipes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetCrafting</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Crafting_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Crafts2eUI2fShowRecipeInfo"></a>
-<a name="robo474"></a><h2>Crafts.UI/ShowRecipeInfo [ Subprograms ]</h2>
+<a name="CUI42fShow5fRecipe5fInfo5fCommand"></a>
+<a name="robo420"></a><h2>CUI4/Show_Recipe_Info_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo25">Crafts.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo10">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show detailed information about selected crafting recipe
+<pre> Show information about the selected recipe
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowRecipeInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Recipe_Info_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Crafts2eUI2fShowSetRecipe"></a>
-<a name="robo475"></a><h2>Crafts.UI/ShowSetRecipe [ Subprograms ]</h2>
+<a name="CUI42fShowSetRecipe"></a>
+<a name="robo421"></a><h2>CUI4/ShowSetRecipe [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo25">Crafts.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crafts-ui_ads.html#robo10">CUI4</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show UI to set selected recipe as crafting order
+<pre> Show <a href="./goals-ui_ads.html#robo17">UI</a> to set selected recipe as crafting order
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowSetRecipe</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowSetRecipe</strong><span class="sign">(</span>Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/crafts-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/crafts-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

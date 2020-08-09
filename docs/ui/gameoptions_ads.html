@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,76 +27,43 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo35">Steamsky/GameOptions</a></li>
+<li>1. <a href="#robo44">Steamsky/GameOptions</a></li>
 <ul>
-<li>1.1. <a href="./gameoptions_adb.html#robo124">GameOptions/Accel_Data</a></li>
-<li>1.2. <a href="./gameoptions_adb.html#robo275">GameOptions/Accels</a></li>
-<li>1.3. <a href="./gameoptions_adb.html#robo276">GameOptions/Setting</a></li>
-<li>1.4. <a href="./gameoptions_adb.html#robo563">GameOptions/ApplyTheme</a></li>
-<li>1.5. <a href="#robo564">GameOptions/CloseOptions</a></li>
-<li>1.6. <a href="#robo565">GameOptions/CreateGameOptions</a></li>
-<li>1.7. <a href="./gameoptions_adb.html#robo566">GameOptions/ResizeFont</a></li>
-<li>1.8. <a href="./gameoptions_adb.html#robo567">GameOptions/SetAccelerator</a></li>
-<li>1.9. <a href="./gameoptions_adb.html#robo568">GameOptions/SetDefaultFontSize</a></li>
-<li>1.10. <a href="./gameoptions_adb.html#robo569">GameOptions/SetFontsSizes</a></li>
-<li>1.11. <a href="#robo570">GameOptions/ShowGameOptions</a></li>
-<li>1.12. <a href="./gameoptions_adb.html#robo571">GameOptions/ToggleAnimationType</a></li>
+<li>1.1. <a href="./gameoptions_adb.html#robo123">GameOptions/Accel_Data</a></li>
+<li>1.2. <a href="#robo464">GameOptions/AddCommands</a></li>
+<li>1.3. <a href="./gameoptions_adb.html#robo465">GameOptions/Close_Options_Command</a></li>
+<li>1.4. <a href="./gameoptions_adb.html#robo466">GameOptions/Set_Default_Fonts_Command</a></li>
+<li>1.5. <a href="./gameoptions_adb.html#robo467">GameOptions/Set_Fonts_Command</a></li>
+<li>1.6. <a href="./gameoptions_adb.html#robo468">GameOptions/Show_Options_Command</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Steamsky2fGameOptions"></a>
-<a name="robo35"></a><h2>Steamsky/GameOptions [ Packages ]</h2>
+<a name="robo44"></a><h2>Steamsky/GameOptions [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Provides code for game options UI
+<pre> Provide code to set the game options
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source"><span class="keyword">package</span> <strong>GameOptions</strong> <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="GameOptions2fCloseOptions"></a>
-<a name="robo564"></a><h2>GameOptions/CloseOptions [ Subprograms ]</h2>
+<a name="GameOptions2fAddCommands"></a>
+<a name="robo464"></a><h2>GameOptions/AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo44">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Close options, save them and back to sky map view
+<pre> Add Tcl commands related to the game options
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>CloseOptions</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign"><span class="sign">)</span>;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="GameOptions2fCreateGameOptions"></a>
-<a name="robo565"></a><h2>GameOptions/CreateGameOptions [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Create infterace for game options
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>CreateGameOptions</strong><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="GameOptions2fShowGameOptions"></a>
-<a name="robo570"></a><h2>GameOptions/ShowGameOptions [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">GameOptions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show interface for game options
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowGameOptions</strong><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>AddCommands</strong><span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/gameoptions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/gameoptions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

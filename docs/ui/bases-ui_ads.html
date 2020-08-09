@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,83 +27,42 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo17">Steamsky/Bases.UI</a></li>
+<li>1. <a href="#robo3">Bases/BUI</a></li>
 <ul>
-<li>1.1. <a href="./bases-ui_adb.html#robo67">Bases.UI/States</a></li>
-<li>1.2. <a href="./bases-ui_adb.html#robo191">Bases.UI/CurrentState</a></li>
-<li>1.3. <a href="./bases-ui_adb.html#robo416">Bases.UI/AcceptAction</a></li>
-<li>1.4. <a href="#robo417">Bases.UI/CreateBasesUI</a></li>
-<li>1.5. <a href="./bases-ui_adb.html#robo418">Bases.UI/ObjectSelected</a></li>
-<li>1.6. <a href="./bases-ui_adb.html#robo419">Bases.UI/SearchRecipes</a></li>
-<li>1.7. <a href="#robo420">Bases.UI/ShowBuyRecipesUI</a></li>
-<li>1.8. <a href="#robo421">Bases.UI/ShowHealUI</a></li>
-<li>1.9. <a href="#robo422">Bases.UI/ShowRepairUI</a></li>
-<li>1.10. <a href="./bases-ui_adb.html#robo423">Bases.UI/VisibleRecipes</a></li>
+<li>1.1. <a href="#robo369">BUI/AddCommands</a></li>
+<li>1.2. <a href="./bases-ui_adb.html#robo370">BUI/Base_Action_Command</a></li>
+<li>1.3. <a href="./bases-ui_adb.html#robo371">BUI/Search_Recipes_Command</a></li>
+<li>1.4. <a href="./bases-ui_adb.html#robo372">BUI/Show_Base_UI_Command</a></li>
+<li>1.5. <a href="./bases-ui_adb.html#robo373">BUI/Show_Wounded_Info_Command</a></li>
 </ul>
 </ul>
 <hr />
-<a name="Steamsky2fBases2eUI"></a>
-<a name="robo17"></a><h2>Steamsky/Bases.UI [ Packages ]</h2>
+<a name="Bases2fBUI"></a>
+<a name="robo3"></a><h2>Bases/BUI [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../bases_ads.html#robo32">Bases</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Provides code for buying recipes, healing and repair ship in bases
+<pre> Provide code for various things related to bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <strong>Bases.UI</strong> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="../bases_ads.html#robo32">Bases</a><span class="sign">.</span><a href="./goals-ui_ads.html#robo17">UI</a> <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="Bases2eUI2fCreateBasesUI"></a>
-<a name="robo417"></a><h2>Bases.UI/CreateBasesUI [ Subprograms ]</h2>
+<a name="BUI2fAddCommands"></a>
+<a name="robo369"></a><h2>BUI/AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo17">Bases.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Create infterace for various bases options
+<pre> Add Tcl commands related to actions in bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>CreateBasesUI</strong><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Bases2eUI2fShowBuyRecipesUI"></a>
-<a name="robo420"></a><h2>Bases.UI/ShowBuyRecipesUI [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo17">Bases.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show interface for buying crafting recipes
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowBuyRecipesUI</strong><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Bases2eUI2fShowHealUI"></a>
-<a name="robo421"></a><h2>Bases.UI/ShowHealUI [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo17">Bases.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show interface for buying crew members healing in bases
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowHealUI</strong><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Bases2eUI2fShowRepairUI"></a>
-<a name="robo422"></a><h2>Bases.UI/ShowRepairUI [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo17">Bases.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show interface for buying ship repairs in bases
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowRepairUI</strong><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>AddCommands</strong><span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/bases-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>
