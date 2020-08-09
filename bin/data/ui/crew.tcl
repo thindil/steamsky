@@ -1,8 +1,8 @@
 ttk::frame .paned.crewframe
 set crewcanvas [canvas .paned.crewframe.canvas -yscrollcommand [list .paned.crewframe.scrolly set] -xscrollcommand [list .paned.crewframe.scrollx set]]
-grid $crewcanvas -sticky nwes
-grid [ttk::scrollbar .paned.crewframe.scrollx -orient horizontal -command [list $crewcanvas xview]] -row 1 -column 0 -columnspan 2 -sticky we
-grid [ttk::scrollbar .paned.crewframe.scrolly -orient vertical -command [list $crewcanvas yview]] -row 0 -column 1 -sticky ns
+pack [ttk::scrollbar .paned.crewframe.scrolly -orient vertical -command [list $crewcanvas yview]] -side right -fill y
+pack $crewcanvas -side top -fill both
+pack [ttk::scrollbar .paned.crewframe.scrollx -orient horizontal -command [list $crewcanvas xview]] -fill x
 set crewframe [ttk::frame $crewcanvas.crew]
 # Crew list
 grid [ttk::frame $crewframe.crew] -sticky nwes
