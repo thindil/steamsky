@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,100 +27,115 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo188">Bases.RecruitUI/RecruitIndex</a></li>
-<li>2. <a href="#robo395">Bases.RecruitUI/Hire</a></li>
-<li>3. <a href="#robo396">Bases.RecruitUI/NegotiateHire</a></li>
-<li>4. <a href="#robo397">Bases.RecruitUI/ShowRecruitInfo</a></li>
-<li>5. <a href="#robo399">Bases.RecruitUI/StartNegotiations</a></li>
-<li>6. <a href="#robo400">Bases.RecruitUI/UpdateRecruitList</a></li>
+<li>1. <a href="#robo297">RecruitUI/RecruitIndex</a></li>
+<li>2. <a href="#robo596">RecruitUI/Hire_Command</a></li>
+<li>3. <a href="#robo597">RecruitUI/Negotiate_Hire_Command</a></li>
+<li>4. <a href="#robo598">RecruitUI/Show_Recruit_Command</a></li>
+<li>5. <a href="#robo599">RecruitUI/Show_Recruit_Info_Command</a></li>
 </ul>
 <hr />
-<a name="Bases2eRecruitUI2fRecruitIndex"></a>
-<a name="robo188"></a><h2>Bases.RecruitUI/RecruitIndex [ Variables ]</h2>
+<a name="RecruitUI2fRecruitIndex"></a>
+<a name="robo297"></a><h2>RecruitUI/RecruitIndex [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Currently selected recruit base recruits index
+<pre> The index of currently selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>RecruitIndex</strong><span class="sign">:</span> Natural<span class="sign">;</span>
+<pre class="source">   <strong>RecruitIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2eRecruitUI2fHire"></a>
-<a name="robo395"></a><h2>Bases.RecruitUI/Hire [ Subprograms ]</h2>
+<a name="RecruitUI2fHire5fCommand"></a>
+<a name="robo596"></a><h2>RecruitUI/Hire_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <strong>Hire</strong> selected recruit
+<pre> Hire the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>Hire</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Hire_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Bases2eRecruitUI2fNegotiateHire"></a>
-<a name="robo396"></a><h2>Bases.RecruitUI/NegotiateHire [ Subprograms ]</h2>
+<a name="RecruitUI2fNegotiate5fHire5fCommand"></a>
+<a name="robo597"></a><h2>RecruitUI/Negotiate_Hire_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set selected recruit hire costs when player change hiring offer
+<pre> Show information about the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>NegotiateHire</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Negotiate_Hire_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Bases2eRecruitUI2fShowRecruitInfo"></a>
-<a name="robo397"></a><h2>Bases.RecruitUI/ShowRecruitInfo [ Subprograms ]</h2>
+<a name="RecruitUI2fShow5fRecruit5fCommand"></a>
+<a name="robo598"></a><h2>RecruitUI/Show_Recruit_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show info about seleted recruit
+<pre> Show the selected base available recruits
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowRecruitInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Recruit_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Bases2eRecruitUI2fStartNegotiations"></a>
-<a name="robo399"></a><h2>Bases.RecruitUI/StartNegotiations [ Subprograms ]</h2>
+<a name="RecruitUI2fShow5fRecruit5fInfo5fCommand"></a>
+<a name="robo599"></a><h2>RecruitUI/Show_Recruit_Info_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set UI for negotiations with selected recruit
+<pre> Show information about the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>StartNegotiations</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Recruit_Info_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="Bases2eRecruitUI2fUpdateRecruitList"></a>
-<a name="robo400"></a><h2>Bases.RecruitUI/UpdateRecruitList [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo14">Bases.RecruitUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Update list of available recruits in base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateRecruitList</strong> <span class="keyword">is</span>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

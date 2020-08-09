@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,137 +27,102 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo197">BasesList/BaseIndex</a></li>
-<li>2. <a href="#robo198">BasesList/SettingTime</a></li>
-<li>3. <a href="#robo433">BasesList/SearchBases</a></li>
-<li>4. <a href="#robo434">BasesList/SetDestinationBase</a></li>
-<li>5. <a href="#robo435">BasesList/ShowBase</a></li>
-<li>6. <a href="#robo436">BasesList/ShowBaseInfo</a></li>
-<li>7. <a href="#robo438">BasesList/ToggleBaseInfo</a></li>
-<li>8. <a href="#robo439">BasesList/VisibleBases</a></li>
+<li>1. <a href="#robo352">BasesList/Show_Base_Command</a></li>
+<li>2. <a href="#robo353">BasesList/Show_Base_Info_Command</a></li>
+<li>3. <a href="#robo354">BasesList/Show_Bases_Command</a></li>
+<li>4. <a href="#robo442">EUI/Set_Base_Command</a></li>
 </ul>
 <hr />
-<a name="BasesList2fBaseIndex"></a>
-<a name="robo197"></a><h2>BasesList/BaseIndex [ Variables ]</h2>
+<a name="BasesList2fShow5fBase5fCommand"></a>
+<a name="robo352"></a><h2>BasesList/Show_Base_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo33">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Index of sky base to show
+<pre> Show the selected base on map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>BaseIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="BasesList2fSettingTime"></a>
-<a name="robo198"></a><h2>BasesList/SettingTime [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> If true, UI is currently in setting state
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SettingTime</strong><span class="sign">:</span> Boolean<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="BasesList2fSearchBases"></a>
-<a name="robo433"></a><h2>BasesList/SearchBases [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Search base by it name
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SearchBases</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="BasesList2fSetDestinationBase"></a>
-<a name="robo434"></a><h2>BasesList/SetDestinationBase [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set selected base as the destination for the player ship
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SetDestinationBase</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="BasesList2fShowBase"></a>
-<a name="robo435"></a><h2>BasesList/ShowBase [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show selected base on the map
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowBase</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="BasesList2fShowBaseInfo"></a>
-<a name="robo436"></a><h2>BasesList/ShowBaseInfo [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show info about selected base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowBaseInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="BasesList2fToggleBaseInfo"></a>
-<a name="robo438"></a><h2>BasesList/ToggleBaseInfo [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show or hide detailed info about selected base
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ToggleBaseInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="BasesList2fVisibleBases"></a>
-<a name="robo439"></a><h2>BasesList/VisibleBases [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo18">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Check if selected base is visible on bases list
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>VisibleBases</strong>
-     <span class="sign">(</span>Model<span class="sign">:</span> Gtk_Tree_Model<span class="sign">;</span> Iter<span class="sign">:</span> Gtk_Tree_Iter<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Base_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Model - Gtk_Tree_Model with bases which will be checked
- Iter  - Gtk_Tree_Iter of base which will be checked
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
-<p class="item_name">RESULT</p>
-<pre> True if base should be visible, otherwise false
+
+<hr />
+<a name="BasesList2fShow5fBase5fInfo5fCommand"></a>
+<a name="robo353"></a><h2>BasesList/Show_Base_Info_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo33">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show the information about the selected base
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Base_Info_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+
+<hr />
+<a name="BasesList2fShow5fBases5fCommand"></a>
+<a name="robo354"></a><h2>BasesList/Show_Bases_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./baseslist_ads.html#robo33">BasesList</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show the list of known bases to a player
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Bases_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+
+<hr />
+<a name="EUI2fSet5fBase5fCommand"></a>
+<a name="robo442"></a><h2>EUI/Set_Base_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./events-ui_ads.html#robo15">EUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set the selected base as the player's ship destination
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Set_Base_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/baseslist.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/baseslist.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

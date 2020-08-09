@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
-<title>./src/ui/maps-ui-handlers.adb</title>
-<!-- Source: ./src/ui/maps-ui-handlers.adb -->
+<title>./src/ui/maps-ui.adb</title>
+<!-- Source: ./src/ui/maps-ui.adb -->
 <!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,24 +27,36 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo315">Maps.UI.Handlers/AccelsRemoved</a></li>
+<li>1. <a href="#robo285">Maps.UI/MapView</a></li>
+<li>2. <a href="#robo567">MUI/CreateGameMenu</a></li>
 </ul>
 <hr />
-<a name="Maps2eUI2eHandlers2fAccelsRemoved"></a>
-<a name="robo315"></a><h2>Maps.UI.Handlers/AccelsRemoved [ Variables ]</h2>
+<a name="Maps2eUI2fMapView"></a>
+<a name="robo285"></a><h2>Maps.UI/MapView [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./maps-ui-handlers_ads.html#robo46">Maps.UI.Handlers</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> If true, keyboard shortcuts was removed from the main game window.
- Default is false
+<pre> Text widget with the sky map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>AccelsRemoved</strong><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span>
+<pre class="source">   <strong>MapView</strong><span class="sign">:</span> Tk_Text<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MUI2fCreateGameMenu"></a>
+<a name="robo567"></a><h2>MUI/CreateGameMenu [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./maps-ui_ads.html#robo20">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Create the main game menu. Clear old elements and add all default
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>CreateGameMenu</strong> <span class="keyword">is</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/maps-ui-handlers.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/maps-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

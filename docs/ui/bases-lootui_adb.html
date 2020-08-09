@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,91 +27,92 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo187">Bases.LootUI/SettingTime</a></li>
-<li>2. <a href="#robo389">Bases.LootUI/LootItem</a></li>
-<li>3. <a href="#robo390">Bases.LootUI/SearchLoot</a></li>
-<li>4. <a href="#robo391">Bases.LootUI/ShowItemInfo</a></li>
-<li>5. <a href="#robo393">Bases.LootUI/VisibleLoot</a></li>
+<li>1. <a href="#robo507">LUI/ItemIndex</a></li>
+<li>2. <a href="#robo508">LUI/Loot_Item_Command</a></li>
+<li>3. <a href="#robo509">LUI/Show_Loot_Command</a></li>
+<li>4. <a href="#robo510">LUI/Show_Loot_Item_Info_Command</a></li>
 </ul>
 <hr />
-<a name="Bases2eLootUI2fSettingTime"></a>
-<a name="robo187"></a><h2>Bases.LootUI/SettingTime [ Variables ]</h2>
+<a name="LUI2fItemIndex"></a>
+<a name="robo507"></a><h2>LUI/ItemIndex [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo13">Bases.LootUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo64">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> If true, UI is currently in setting state
+<pre> Index of the currently selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SettingTime</strong><span class="sign">:</span> Boolean<span class="sign">;</span>
+<pre class="source">   <strong>ItemIndex</strong><span class="sign">:</span> Integer<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Bases2eLootUI2fLootItem"></a>
-<a name="robo389"></a><h2>Bases.LootUI/LootItem [ Subprograms ]</h2>
+<a name="LUI2fLoot5fItem5fCommand"></a>
+<a name="robo508"></a><h2>LUI/Loot_Item_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo13">Bases.LootUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo64">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Take or add selected item to the base cargo to or from the player ship
- cargo
+<pre> Take or drop the selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>LootItem</strong><span class="sign">(</span>User_Data<span class="sign">:</span> <span class="keyword">access</span> GObject_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Loot_Item_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="Bases2eLootUI2fSearchLoot"></a>
-<a name="robo390"></a><h2>Bases.LootUI/SearchLoot [ Subprograms ]</h2>
+<a name="LUI2fShow5fLoot5fCommand"></a>
+<a name="robo509"></a><h2>LUI/Show_Loot_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo13">Bases.LootUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo64">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Search the item by its name
+<pre> Show information about looting
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SearchLoot</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Loot_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 <hr />
-<a name="Bases2eLootUI2fShowItemInfo"></a>
-<a name="robo391"></a><h2>Bases.LootUI/ShowItemInfo [ Subprograms ]</h2>
+<a name="LUI2fShow5fLoot5fItem5fInfo5fCommand"></a>
+<a name="robo510"></a><h2>LUI/Show_Loot_Item_Info_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo13">Bases.LootUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo64">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show detailed information about selected item
+<pre> Show information about the selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowItemInfo</strong><span class="sign">(</span>Object<span class="sign">:</span> <span class="keyword">access</span> Gtkada_Builder_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Loot_Item_Info_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Object - Gtkada_Builder used to create UI
-</pre>
-
-<hr />
-<a name="Bases2eLootUI2fVisibleLoot"></a>
-<a name="robo393"></a><h2>Bases.LootUI/VisibleLoot [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo13">Bases.LootUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Check if selected item is visible on items list
- Model - Gtk_Tree_Model with items list which will be checked
- Iter  - Gtk_Tree_Iter of item which will be checked
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>VisibleLoot</strong>
-     <span class="sign">(</span>Model<span class="sign">:</span> Gtk_Tree_Model<span class="sign">;</span> Iter<span class="sign">:</span> Gtk_Tree_Iter<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">is</span>
-</pre>
-<p class="item_name">RESULT</p>
-<pre> True if item should be visible, otherwise false
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>

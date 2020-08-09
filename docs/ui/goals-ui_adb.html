@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -27,127 +27,56 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo277">Goals.UI/FromMainMenu</a></li>
-<li>2. <a href="#robo278">Goals.UI/GoalsWindow</a></li>
-<li>3. <a href="#robo572">Goals.UI/CloseGoals</a></li>
-<li>4. <a href="#robo574">Goals.UI/GoalSelected</a></li>
-<li>5. <a href="#robo575">Goals.UI/HideGoals</a></li>
-<li>6. <a href="#robo576">Goals.UI/SelectGoal</a></li>
-<li>7. <a href="#robo577">Goals.UI/SelectGoalView</a></li>
+<li>1. <a href="#robo476">GUI/Set_Goal_Command</a></li>
+<li>2. <a href="#robo477">GUI/Show_Goals_Command</a></li>
 </ul>
 <hr />
-<a name="Goals2eUI2fFromMainMenu"></a>
-<a name="robo277"></a><h2>Goals.UI/FromMainMenu [ Variables ]</h2>
+<a name="GUI2fSet5fGoal5fCommand"></a>
+<a name="robo476"></a><h2>GUI/Set_Goal_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> If true, UI was called from main menu. Default true
+<pre> Set selected goal as a current goal
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FromMainMenu</strong><span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Goals2eUI2fGoalsWindow"></a>
-<a name="robo278"></a><h2>Goals.UI/GoalsWindow [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Main Gtk_Window for selecting a goal.
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>GoalsWindow</strong><span class="sign">:</span> Gtk_Window<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Goals2eUI2fCloseGoals"></a>
-<a name="robo572"></a><h2>Goals.UI/CloseGoals [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Hide goals UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>CloseGoals</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Set_Goal_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked. Unused
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 <hr />
-<a name="Goals2eUI2fGoalSelected"></a>
-<a name="robo574"></a><h2>Goals.UI/GoalSelected [ Subprograms ]</h2>
+<a name="GUI2fShow5fGoals5fCommand"></a>
+<a name="robo477"></a><h2>GUI/Show_Goals_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Enable or disable "Select goal" button
+<pre> Show goals <a href="./goals-ui_ads.html#robo17">UI</a> to the player
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GoalSelected</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Tree_View_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span></pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Tree_View with goals
-</pre>
-
-<hr />
-<a name="Goals2eUI2fHideGoals"></a>
-<a name="robo575"></a><h2>Goals.UI/HideGoals [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Hide goals UI instead of destroy it
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>HideGoals</strong>
-     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Widget_Record<span class="keyword">'Class</span><span class="sign">;</span> Event<span class="sign">:</span> Gdk_Event<span class="sign">)</span><span class="keyword"> return </span>Boolean<span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Event<span class="sign"><span class="sign">)</span>;</span>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Goals_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Self  - Gtk_Widget which triggered this event (<a href="#robo278">GoalsWindow</a>)
- Event - Gdk_Event structure with data about the event. Unused.
-</pre>
-
-<hr />
-<a name="Goals2eUI2fSelectGoal"></a>
-<a name="robo576"></a><h2>Goals.UI/SelectGoal [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set currently selected goal as a current game goal
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SelectGoal</strong><span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Button_Record<span class="keyword">'Class</span><span class="sign">)</span><span class="keyword"> is
-</span>     <span class="keyword"> pragma </span>Unreferenced<span class="sign">(</span>Self<span class="sign"><span class="sign">)</span>;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self - Gtk_Button which was clicked. Unused
-</pre>
-
-<hr />
-<a name="Goals2eUI2fSelectGoalView"></a>
-<a name="robo577"></a><h2>Goals.UI/SelectGoalView [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./goals-ui_ads.html#robo37">Goals.UI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set currently selected goal as a current game goal after selecting it
- in <a href="../goals_ads.html#robo36">Goals</a> Tree_View.
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SelectGoalView</strong>
-     <span class="sign">(</span>Self<span class="sign">:</span> <span class="keyword">access</span> Gtk_Tree_View_Record<span class="keyword">'Class</span><span class="sign">;</span> Path<span class="sign">:</span> Gtk_Tree_Path<span class="sign">;</span>
-      Column<span class="sign">:</span> not null access Gtk_Tree_View_Column_Record'</span>Class<span class="sign">)</span> <span class="keyword">is</span>
-      <span class="keyword">pragma</span> Unreferenced<span class="sign">(</span>Self<span class="sign">,</span> Path<span class="sign">,</span> Column<span class="sign">)</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Self   - Gtk_Tree_View with list of goals. Unused.
- Path   - Gtk_Tree_Path to row which was clicked. Unused.
- Column - Gtk_Tree_View_Column which was clicked. Unused.
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/goals-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 17 2020 06:27:28
+<p>Generated from ./src/ui/goals-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
 </p>
 </div> <!-- footer -->
 </body>
