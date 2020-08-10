@@ -192,7 +192,7 @@ proc SetInfo {name index} {
    }
    .newgamemenu.info.text configure -state disabled
 }
-proc SetPoints {} {
+proc SetPoints {{difficulty Custom}} {
    set values [list [.newgamemenu.canvas.difficulty.enemydamage get] [.newgamemenu.canvas.difficulty.playerdamage get] [.newgamemenu.canvas.difficulty.enemymeleedamage get] [.newgamemenu.canvas.difficulty.playermeleedamage get] [.newgamemenu.canvas.difficulty.experience get] [.newgamemenu.canvas.difficulty.reputation get] [.newgamemenu.canvas.difficulty.upgrade get] [.newgamemenu.canvas.difficulty.prices get]]
    set totalpoints 0
    for {set i 0} {$i < 8} {incr i} {
@@ -218,7 +218,7 @@ proc SetPoints {} {
       set totalpoints 1
    }
    .newgamemenu.canvas.difficulty.totalpoints configure -text "Total gained points: $totalpoints%"
-   .newgamemenu.canvas.difficulty.difficultylevel set Custom
+   .newgamemenu.canvas.difficulty.difficultylevel set $difficulty
    return true
 }
 ttk::frame .newgamemenu
@@ -282,7 +282,7 @@ grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficult
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0
 bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
    set level [.newgamemenu.canvas.difficulty.difficultylevel get]
-   switch [.newgamemenu.canvas.difficulty.difficultylevel get] {
+   switch $level {
       "Very Easy" {
          .newgamemenu.canvas.difficulty.enemydamage set 10
          .newgamemenu.canvas.difficulty.playerdamage set 450
@@ -334,10 +334,8 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
          .newgamemenu.canvas.difficulty.prices set 450
       }
    }
-   SetPoints
-   .newgamemenu.canvas.difficulty.difficultylevel set $level
+   SetPoints $level
 }
-.newgamemenu.canvas.difficulty.difficultylevel set Normal
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
 bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> {SetInfo difficulty 1}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1
@@ -391,7 +389,6 @@ grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 -column
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
 bind .newgamemenu.canvas.difficulty.randomize <FocusIn> {SetInfo difficulty 11}
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 11 -columnspan 2
-event generate .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>>
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
