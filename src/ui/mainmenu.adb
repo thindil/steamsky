@@ -22,6 +22,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
@@ -154,7 +155,6 @@ package body MainMenu is
       end if;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
-      Current(ComboBox, Natural'Image(NewGameSettings.DifficultyLevel));
       SpinBox.Interp := Get_Context;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
       Execute_Widget_Command
@@ -195,6 +195,8 @@ package body MainMenu is
         (SpinBox, "set",
          Natural'Image(Natural(NewGameSettings.PricesBonus * 100.0)));
       ShowMainMenu;
+      Current(ComboBox, Natural'Image(NewGameSettings.DifficultyLevel));
+      Generate(ComboBox, "<<ComboboxSelected>>");
    end CreateMainMenu;
 
    procedure ShowMainMenu is
