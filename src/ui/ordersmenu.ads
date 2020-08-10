@@ -22,6 +22,7 @@ with Tcl; use Tcl;
 -- Provides code for create and show orders menu
 -- SOURCE
 package OrdersMenu is
+-- ****
 
    -- ****f* OrdersMenu/Show_Orders_Command
    -- FUNCTION

@@ -80,12 +80,7 @@ with WaitMenu;
 
 package body Maps.UI is
 
-   -- ****if* MUI/CreateGameMenu
-   -- FUNCTION
-   -- Create the main game menu. Clear old elements and add all default
-   -- SOURCE
    procedure CreateGameMenu is
-      -- ****
    begin
       Delete(GameMenu, "0", "end");
       Menu.Add

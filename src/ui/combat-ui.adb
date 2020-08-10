@@ -682,6 +682,7 @@ package body Combat.UI is
    -- Update information about boarding party: remove old UI and create new elements
    -- SOURCE
    procedure UpdateBoardingUI is
+      -- ****
       OrdersList, OrderName, Tooltip: Unbounded_String;
       Label: Ttk_Label;
       Frame, Item: Ttk_Frame;

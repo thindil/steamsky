@@ -228,7 +228,7 @@ package body Maps.UI.Commands is
    MapX: Positive;
    -- ****
 
-   -- ****iv* Maps.UI.Commands/MapX
+   -- ****iv* Maps.UI.Commands/MapY
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE
