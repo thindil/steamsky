@@ -126,6 +126,7 @@ package body GameOptions is
       53 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
       54 =>
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
+   -- ****
 
    -- ****f* GameOptions/Show_Options_Command
    -- FUNCTION
