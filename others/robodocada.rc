@@ -19,14 +19,15 @@ options:
   --sourceindex "Source files,sources"
   --css others/robodoc.css
 headertypes:
-  h Packages robo_packages 7
-  a Tasks robo_tasks 6
-  t Types robo_types 5
-  s Records robo_records 4
-  d Constants robo_constants 3
-  v Variables robo_variables 2
-  e Exceptions robo_exceptions 1
-  f Subprograms robo_subprograms 0
+  h Packages robo_packages 8
+  a Tasks robo_tasks 7
+  t Types robo_types 6
+  s Records robo_records 5
+  d Constants robo_constants 4
+  v Variables robo_variables 3
+  e Exceptions robo_exceptions 2
+  f Subprograms robo_subprograms 1
+  o Commands robo_commands 0
 item order:
   FUNCTION
   SOURCE
