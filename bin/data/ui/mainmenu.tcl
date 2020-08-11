@@ -11,7 +11,7 @@ proc InvokeButton {name} {
 # Main Menu
 ttk::frame .mainmenu
 pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
-pack [ttk::label .mainmenu.version -text {Version 5.1 development}]
+pack [ttk::label .mainmenu.version]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
    set newtab difficulty
    bind . <Alt-s> {InvokeButton .newgamemenu.buttonsbox2.start}
