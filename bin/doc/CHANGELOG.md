@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Setting the game difficulty level from the game setting
+- Reading the game version from the game setting
 
 ## [5.1] - 2020-08-09
 
