@@ -24,7 +24,7 @@ with Items; use Items;
 with Missions; use Missions;
 with Ships; use Ships;
 
--- ****h* Steamsky/Bases
+-- ****h* Bases/Bases
 -- FUNCTION
 -- Provide code for manipulate sky bases
 -- SOURCE
