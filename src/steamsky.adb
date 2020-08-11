@@ -26,6 +26,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with ErrorDialog; use ErrorDialog;
 with Game; use Game;
@@ -166,6 +167,7 @@ begin
    -- Load required Tcl packages
    Tooltip_Init(Interp);
    Tcl.Ada.Tcl_Eval(Interp, "package require tksvg");
+   Autoscroll_Init(Interp);
 
    -- Create and show the main game menu
    CreateMainMenu;
