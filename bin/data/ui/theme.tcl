@@ -13,16 +13,11 @@ namespace eval ttk::theme::steamsky {
    array set colors {
       -bg             "#1a130c"
       -fg             "#eee8aa"
-
       -disabledbg     "#000000"
       -disabledfg     "#7f8c8d"
-
       -selectbg       "#800000"
       -selectfg       "#eee8aa"
-
-      -window         "#1a130c"
       -focuscolor     "#ffdf00"
-      -checklight     "#ffdf00"
    }
 
    #
@@ -49,7 +44,7 @@ namespace eval ttk::theme::steamsky {
          -troughcolor $colors(-bg) \
          -selectbackground $colors(-selectbg) \
          -selectforeground $colors(-selectfg) \
-         -fieldbackground $colors(-window) \
+         -fieldbackground $colors(-bg) \
          -font InterfaceFont \
          -borderwidth 1 \
          -focuscolor $colors(-focuscolor)
@@ -66,7 +61,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TButton -background [list active $colors(-selectbg)]
       option add *TButton.cursor hand1
 
-      # Menu button setting
+      # Menubutton setting
       ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised
       ttk::style map TMenubutton -foreground [list active $colors(-selectfg) disabled $colors(-disabledfg)]
       ttk::style map TMenubutton -background [list active $colors(-selectbg)]
@@ -74,9 +69,9 @@ namespace eval ttk::theme::steamsky {
 
       # Flat button setting
       ttk::style configure Toolbutton -padding {6 2} -anchor center
-      ttk::style map Toolbutton -background [list active $colors(-selectbg) selected $colors(-selectbg)]
+      ttk::style map Toolbutton -background [list active $colors(-selectbg)] -relief [list selected sunken]
 
-      # Radio button setting
+      # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
       option add *TRadiobutton.cursor hand1
 
@@ -98,25 +93,29 @@ namespace eval ttk::theme::steamsky {
       # Labels with green text
       ttk::style configure Headergreen.TLabel -foreground green
 
-      # Progress bar setting
+      # Progressbar setting
       ttk::style configure TProgressbar -background red
 
       # Entry setting
       ttk::style configure TEntry -insertcolor $colors(-fg)
 
-      # Spin box setting
+      # Spinbox setting
       ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat
 
-      # Scroll bar setting
+      # Scrollbar setting
       ttk::style configure TScrollbar -arrowcolor $colors(-fg)
 
       # Paned window
       ttk::style configure TPanedwindow -background $colors(-disabledfg)
 
-      # Combo box setting
+      # Combobox setting
       ttk::style configure TCombobox -arrowcolor $colors(-fg) -relief flat
+      option add *TCombobox*Listbox.cursor hand1
+      bind TCombobox <Motion> {
+         %W configure -cursor hand1
+      }
 
-      # Tree view (like cargo, trading) setting
+      # Treeview (like cargo, trading) setting
       ttk::style configure Treeview -background $colors(-bg)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style configure Treeview -rowheight [expr {[font metrics InterfaceFont -linespace] + 2}]
