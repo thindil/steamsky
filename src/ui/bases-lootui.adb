@@ -49,7 +49,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.LootUI is
 
-   -- ****f* LUI/Show_Loot_Command
+   -- ****o* LUI/Show_Loot_Command
    -- FUNCTION
    -- Show information about looting
    -- PARAMETERS
@@ -57,6 +57,8 @@ package body Bases.LootUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- COMMANDS
+   -- ShowLoot
    -- SOURCE
    function Show_Loot_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -224,7 +226,7 @@ package body Bases.LootUI is
    ItemIndex: Integer;
    -- ****
 
-   -- ****f* LUI/Show_Loot_Item_Info_Command
+   -- ****o* LUI/Show_Loot_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -232,6 +234,8 @@ package body Bases.LootUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- COMMANDS
+   -- ShowLootItemInfo
    -- SOURCE
    function Show_Loot_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -465,7 +469,7 @@ package body Bases.LootUI is
       return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
-   -- ****f* LUI/Loot_Item_Command
+   -- ****o* LUI/Loot_Item_Command
    -- FUNCTION
    -- Take or drop the selected item
    -- PARAMETERS
@@ -473,6 +477,9 @@ package body Bases.LootUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- COMMANDS
+   -- LootItem actiontype
+   -- actiontype can be: drop, dropall, take, takeall
    -- SOURCE
    function Loot_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
