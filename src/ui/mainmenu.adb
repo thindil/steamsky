@@ -38,6 +38,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -82,6 +83,7 @@ package body MainMenu is
       ComboBox: Ttk_ComboBox;
       Values: Unbounded_String;
       SpinBox: Ttk_SpinBox;
+      VersionLabel: Ttk_Label;
    begin
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
@@ -116,6 +118,10 @@ package body MainMenu is
          ShowMainMenu;
          return;
       end if;
+      VersionLabel.Interp := Get_Context;
+      VersionLabel.Name := New_String(".mainmenu.version");
+      configure
+        (VersionLabel, "-text {" & GameVersion & " (development)}");
       TextEntry.Interp := Get_Context;
       TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
