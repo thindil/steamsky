@@ -21,7 +21,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
--- ****h* Steamsky/Careers
+-- ****h* Careers/Careers
 -- FUNCTION
 -- Provide code for characters careers
 -- SOURCE
