@@ -22,7 +22,7 @@ with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 with Items; use Items;
 
--- ****h* Steamsky/BasesTypes
+-- ****h* BasesTypes/BasesTypes
 -- FUNCTION
 -- Provide code for bases types
 -- SOURCE
