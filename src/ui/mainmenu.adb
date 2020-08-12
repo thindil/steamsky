@@ -120,22 +120,16 @@ package body MainMenu is
       end if;
       VersionLabel.Interp := Get_Context;
       VersionLabel.Name := New_String(".mainmenu.version");
-      configure
-        (VersionLabel, "-text {" & GameVersion & " (development)}");
+      configure(VersionLabel, "-text {" & GameVersion & " (development)}");
       TextEntry.Interp := Get_Context;
       TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
-      ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
-      if NewGameSettings.PlayerGender = 'M' then
-         Set(ComboBox, "Male");
-      else
-         Set(ComboBox, "Female");
-      end if;
+      Tcl_SetVar(Get_Context, "playergender", "" & NewGameSettings.PlayerGender);
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
+      ComboBox.Interp := Get_Context;
       ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then

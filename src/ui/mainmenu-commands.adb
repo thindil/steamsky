@@ -41,6 +41,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -438,6 +439,7 @@ package body MainMenu.Commands is
       FactionName, Values: Unbounded_String;
       ComboBox: Ttk_ComboBox;
       Label: Ttk_Label;
+      GenderFrame: Ttk_Frame;
       procedure UpdateInfo(NewText: String) is
          InfoText: Tk_Text;
       begin
@@ -456,6 +458,8 @@ package body MainMenu.Commands is
       ComboBox.Interp := Interp;
       ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       Label.Interp := Interp;
+      GenderFrame.Interp := Interp;
+      GenderFrame.Name := New_String(".newgamemenu.canvas.player.gender");
       FactionName := To_Unbounded_String(Get(ComboBox));
       if FactionName = To_Unbounded_String("Random") then
          Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
@@ -487,17 +491,13 @@ package body MainMenu.Commands is
                Label.Name :=
                  New_String(".newgamemenu.canvas.player.labelgender");
                Grid_Remove(Label);
-               ComboBox.Name :=
-                 New_String(".newgamemenu.canvas.player.gender");
-               Set(ComboBox, "Male");
-               Grid_Remove(ComboBox);
+               Grid_Remove(GenderFrame);
+               Tcl_SetVar(Interp, "playergender", "M");
             else
                Label.Name :=
                  New_String(".newgamemenu.canvas.player.labelgender");
                Tcl.Tk.Ada.Grid.Grid(Label);
-               ComboBox.Name :=
-                 New_String(".newgamemenu.canvas.player.gender");
-               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+               Tcl.Tk.Ada.Grid.Grid(GenderFrame);
             end if;
             Values := Null_Unbounded_String;
             for I in Faction.Careers.Iterate loop
@@ -674,8 +674,7 @@ package body MainMenu.Commands is
          end if;
       end loop;
       if CArgv.Arg(Argv, 1) = "player" then
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
-         Gender := Get(ComboBox)(1);
+         Gender := Tcl_GetVar(Interp, "playergender")(1);
          Delete(NameEntry, "0", "end");
          Insert
            (NameEntry, "end",
@@ -713,13 +712,7 @@ package body MainMenu.Commands is
       TextEntry: Ttk_Entry;
       SpinBox: Ttk_SpinBox;
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.gender");
-      if Get(ComboBox) = "Male" then
-         NewGameSettings.PlayerGender := 'M';
-      else
-         NewGameSettings.PlayerGender := 'F';
-      end if;
+      NewGameSettings.PlayerGender := Tcl_GetVar(Interp, "playergender")(1);
       GoalButton.Interp := Interp;
       GoalButton.Name := New_String(".newgamemenu.canvas.player.goal");
       if cget(GoalButton, "-text") = "Random" then
@@ -733,6 +726,7 @@ package body MainMenu.Commands is
       NewGameSettings.PlayerName := To_Unbounded_String(Get(TextEntry));
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       NewGameSettings.ShipName := To_Unbounded_String(Get(TextEntry));
+      ComboBox.Interp := Interp;
       ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then

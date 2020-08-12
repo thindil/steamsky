@@ -250,9 +250,11 @@ tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1
 bind .newgamemenu.canvas.player.playername <Return> {RandomName player}
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
-grid [ttk::combobox .newgamemenu.canvas.player.gender -state readonly -values [list Male Female] -width 14] -row 1 -column 1
-tooltip::tooltip .newgamemenu.canvas.player.gender [lindex $playertooltips 2]
-bind .newgamemenu.canvas.player.gender <FocusIn> {SetInfo player 2}
+grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1
+grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male -style Male.Toolbutton -value M -variable playergender -text "[format %c 0xf222]" -command {SetInfo player 2}]
+tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
+grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female -style Female.Toolbutton -value F -variable playergender -text "[format %c 0xf221]" -command {SetInfo player 2}] -row 0 -column 1
+tooltip::tooltip .newgamemenu.canvas.player.gender.female Female
 grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -row 2
 grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
