@@ -15,9 +15,11 @@ namespace eval ttk::theme::steamsky {
       -fg             "#eee8aa"
       -disabledbg     "#000000"
       -disabledfg     "#7f8c8d"
-      -selectbg       "#800000"
-      -selectfg       "#eee8aa"
-      -focuscolor     "#ffdf00"
+      -darkred        "#600000"
+      -goldenyellow   "#ffdf00"
+      -blue           "#458588"
+      -pink           "#b16286"
+      -darkorange     "#372412"
    }
 
    #
@@ -37,17 +39,20 @@ namespace eval ttk::theme::steamsky {
    # Create theme
    #
 
-   ttk::style theme create steamsky -parent default -settings {
+   ttk::style theme create steamsky -parent clam -settings {
       ttk::style configure . \
          -background $colors(-bg) \
          -foreground $colors(-fg) \
          -troughcolor $colors(-bg) \
-         -selectbackground $colors(-selectbg) \
-         -selectforeground $colors(-selectfg) \
+         -selectbackground $colors(-darkred) \
+         -selectforeground $colors(-goldenyellow) \
          -fieldbackground $colors(-bg) \
          -font InterfaceFont \
          -borderwidth 1 \
-         -focuscolor $colors(-focuscolor)
+         -focuscolor $colors(-goldenyellow) \
+         -bordercolor $colors(-bg) \
+         -lightcolor $colors(-darkorange) \
+         -darkcolor $colors(-darkorange)
 
       ttk::style map . -foreground [list disabled $colors(-disabledfg)]
 
@@ -56,20 +61,26 @@ namespace eval ttk::theme::steamsky {
       #
 
       # Button setting
-      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -bordercolor $colors(-bg)
-      ttk::style map TButton -foreground [list active $colors(-selectfg) disabled $colors(-disabledfg)]
-      ttk::style map TButton -background [list active $colors(-selectbg)]
+      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow)
+      ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-disabledfg)]
+      ttk::style map TButton -background [list active $colors(-darkred)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
-      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised
-      ttk::style map TMenubutton -foreground [list active $colors(-selectfg) disabled $colors(-disabledfg)]
-      ttk::style map TMenubutton -background [list active $colors(-selectbg)]
+      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow)
+      ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-disabledfg)]
+      ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
       # Flat button setting
-      ttk::style configure Toolbutton -padding {6 2} -anchor center
-      ttk::style map Toolbutton -background [list active $colors(-selectbg)] -relief [list selected sunken]
+      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
+      ttk::style map Toolbutton -background [list active $colors(-darkred)] -relief [list selected sunken]
+
+      # Flat button for male gender
+      ttk::style configure Male.Toolbutton -foreground $colors(-blue)
+
+      # Flat button for female gender
+      ttk::style configure Female.Toolbutton -foreground $colors(-pink)
 
       # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
@@ -97,10 +108,10 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TProgressbar -background red
 
       # Entry setting
-      ttk::style configure TEntry -insertcolor $colors(-fg)
+      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow)
 
       # Spinbox setting
-      ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat
+      ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat -foreground $colors(-goldenyellow)
 
       # Scrollbar setting
       ttk::style configure TScrollbar -arrowcolor $colors(-fg)
@@ -120,13 +131,13 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style configure Treeview -rowheight [expr {[font metrics InterfaceFont -linespace] + 2}]
       ttk::style map Treeview \
-         -background [list selected $colors(-selectbg)] \
-         -foreground [list selected $colors(-selectfg)]
+         -background [list selected $colors(-darkred)] \
+         -foreground [list selected $colors(-goldenyellow)]
 
       # Check button setting
       ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
       ttk::style map TCheckbutton -indicatorcolor \
-         [list selected $colors(-selectfg)]
+         [list selected $colors(-goldenyellow)]
 
       # Canvas setting
       option add *Canvas.highlightThickness 0
