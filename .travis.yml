@@ -2,7 +2,7 @@ language: c
 
 branches:
    only:
-      - master12
+      - master
 
 services:
    - docker
@@ -13,20 +13,17 @@ matrix:
         env:
          - FILENAME=steamsky-dev-Linux-64.tar.gz
         install:
-         - docker pull thindil/gnat-gtkada;
+         - docker pull thindil/gnat-tashy:release-8.6.7
         script:
-         - docker run -v $(pwd):/app thindil/gnat-gtkada /bin/sh -c "cd /app && others/build.sh"
+         - docker run -v $(pwd):/app thindil/gnat-tashy:release-8.6.7 /bin/sh -c "cd /app && others/build.tcl"
          - tar -czf steamsky-dev-Linux-64.tar.gz usr
       - os: windows
         env:
          - FILENAME=steamsky-dev-Windows-64.zip
         install:
-         - export "PATH=/c/GNAT/bin:/c/GtkAda/bin:$PATH";
-         - export "GPR_PROJECT_PATH=/c/GtkAda/lib/gnat";
-         - wget "https://www.dropbox.com/s/nwxl8so7mukbnmp/gnat.7z?dl=0" -O gnat.7z;
-         - 7z x gnat.7z -oc:/;
-         - wget "https://www.dropbox.com/s/wnjswjwh64w33vd/gtkada.7z?dl=0" -O gtkada.7z;
-         - 7z x gtkada.7z -oc:/;
+         - export "PATH=/c/GNAT/bin:/c/Tcl86/bin:$PATH";
+         - wget "https://www.dropbox.com/s/99bf04k6hvh05yr/gnattcl.7z?dl=0" -O gnat.7z;
+         - 7z x gnattcl.7z -oc:/;
         script:
          - gprbuild -P steamsky.gpr -XMode=release
          - 7z a -tzip steamsky-dev-Windows-64.zip bin;
@@ -42,7 +39,7 @@ deploy:
   file:
    - $FILENAME
   name: Continuous Integration build
-  body: Development build of $TRAVIS_BRANCH built by Travis CI.
+  body: Development build of 6.0 built by Travis CI.
   prerelease: true
   overwrite: true
   target_commitish: $TRAVIS_COMMIT
