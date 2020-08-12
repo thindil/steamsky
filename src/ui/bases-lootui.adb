@@ -55,8 +55,10 @@ package body Bases.LootUI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
    -- COMMANDS
    -- ShowLoot
    -- SOURCE
@@ -234,6 +236,8 @@ package body Bases.LootUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
    -- COMMANDS
    -- ShowLootItemInfo
    -- SOURCE
@@ -477,6 +481,8 @@ package body Bases.LootUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
    -- COMMANDS
    -- LootItem actiontype
    -- actiontype can be: drop, dropall, take, takeall

@@ -48,14 +48,18 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
-   -- ****f* RecruitUI/Show_Recruit_Command
+   -- ****o* RecruitUI/Show_Recruit_Command
    -- FUNCTION
    -- Show the selected base available recruits
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowRecruit
    -- SOURCE
    function Show_Recruit_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -142,7 +146,7 @@ package body Bases.RecruitUI is
    RecruitIndex: Positive;
    -- ****
 
-   -- ****f* RecruitUI/Show_Recruit_Info_Command
+   -- ****o* RecruitUI/Show_Recruit_Info_Command
    -- FUNCTION
    -- Show information about the selected recruit
    -- PARAMETERS
@@ -150,6 +154,10 @@ package body Bases.RecruitUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowRecruitInfoCommand
    -- SOURCE
    function Show_Recruit_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -347,7 +355,7 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
-   -- ****f* RecruitUI/Negotiate_Hire_Command
+   -- ****o* RecruitUI/Negotiate_Hire_Command
    -- FUNCTION
    -- Show information about the selected recruit
    -- PARAMETERS
@@ -355,6 +363,10 @@ package body Bases.RecruitUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- NegotiateHire
    -- SOURCE
    function Negotiate_Hire_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -440,14 +452,18 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Negotiate_Hire_Command;
 
-   -- ****f* RecruitUI/Hire_Command
+   -- ****o* RecruitUI/Hire_Command
    -- FUNCTION
    -- Hire the selected recruit
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Hire
    -- SOURCE
    function Hire_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
