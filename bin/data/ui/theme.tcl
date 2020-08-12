@@ -111,7 +111,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow)
 
       # Spinbox setting
-      ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat -foreground $colors(-goldenyellow)
+      ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow)
 
       # Scrollbar setting
       ttk::style configure TScrollbar -arrowcolor $colors(-fg)
