@@ -506,7 +506,7 @@ package body MainMenu.Commands is
             Append(Values, " Random");
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
             configure(ComboBox, "-values [list " & To_String(Values) & "]");
-            Set(ComboBox, "Random");
+            Set(ComboBox, "General");
             Values := To_Unbounded_String(" Any");
             for I in Faction.BasesTypes.Iterate loop
                Append
