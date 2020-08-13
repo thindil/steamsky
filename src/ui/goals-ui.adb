@@ -25,6 +25,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -98,6 +99,7 @@ package body Goals.UI is
       GoalButton: Ttk_Button;
       SelectedGoal: Natural;
       ButtonName: constant String := CArgv.Arg(Argv, 1);
+      ButtonText: Unbounded_String;
    begin
       GoalsView.Interp := Interp;
       GoalsView.Name := New_String(".goalsdialog.view");
@@ -113,7 +115,12 @@ package body Goals.UI is
       GoalButton.Interp := Interp;
       GoalButton.Name := New_String(ButtonName);
       if SelectedGoal > 0 then
-         configure(GoalButton, "-text {" & GoalText(SelectedGoal) & "}");
+         ButtonText := To_Unbounded_String(GoalText(SelectedGoal));
+         Add(GoalButton, To_String(ButtonText));
+         if Length(ButtonText) > 15 then
+            ButtonText := Unbounded_Slice(ButtonText, 1, 18) & "...";
+         end if;
+         configure(GoalButton, "-text {" & To_String(ButtonText) & "}");
       else
          configure(GoalButton, "-text {Random}");
       end if;
