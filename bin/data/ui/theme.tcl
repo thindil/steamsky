@@ -35,6 +35,18 @@ namespace eval ttk::theme::steamsky {
    # Font used as icons for buttons/labels
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
 
+
+   #
+   # Images
+   #
+   variable I
+   set I(checkbox-checked) [image create photo -file \
+      [file join [file dirname [info script]] images checkbox-checked.svg] \
+      -format {svg -scaletoheight 22}]
+   set I(checkbox-unchecked) [image create photo -file \
+      [file join [file dirname [info script]] images checkbox-unchecked.svg] \
+      -format {svg -scaletoheight 22}]
+
    #
    # Create theme
    #
@@ -55,6 +67,15 @@ namespace eval ttk::theme::steamsky {
          -darkcolor $colors(-darkorange)
 
       ttk::style map . -foreground [list disabled $colors(-disabledfg)]
+
+
+      #
+      # Elements:
+      #
+
+      ttk::style element create Checkbutton.indicator image [list $I(checkbox-unchecked) \
+         selected            $I(checkbox-checked) \
+         ] -width 22 -sticky w
 
       #
       # Settings:
