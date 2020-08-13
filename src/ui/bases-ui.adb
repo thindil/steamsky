@@ -44,7 +44,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
 
-   -- ****f* BUI/Show_Base_UI_Command
+   -- ****o* BUI/Show_Base_UI_Command
    -- FUNCTION
    -- Show the selected base action
    -- PARAMETERS
@@ -52,6 +52,11 @@ package body Bases.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseUI UIType
+   -- UIType can be heal, repair, recipes
    -- SOURCE
    function Show_Base_UI_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -218,14 +223,19 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Base_UI_Command;
 
-   -- ****f* BUI/Show_Wounded_Info_Command
+   -- ****o* BUI/Show_Item_Info_Command
    -- FUNCTION
    -- Show the information about the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowItemInfo ItemType
+   -- ItemType can be heal, repair, recipes
    -- SOURCE
    function Show_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -359,14 +369,19 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Item_Info_Command;
 
-   -- ****f* BUI/Base_Action_Command
+   -- ****o* BUI/Base_Action_Command
    -- FUNCTION
    -- Execute the selected action
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- BaseAction ActionType
+   -- ActionType can be heal, repair, recipes
    -- SOURCE
    function Base_Action_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -400,7 +415,7 @@ package body Bases.UI is
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Base_Action_Command;
 
-   -- ****if* BUI/Search_Recipes_Command
+   -- ****o* BUI/Search_Recipes_Command
    -- FUNCTION
    -- Show only this recipes which contains the selected sequence
    -- PARAMETERS
@@ -408,6 +423,10 @@ package body Bases.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SearchRecipes TextToSearch
    -- SOURCE
    function Search_Recipes_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

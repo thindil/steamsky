@@ -38,14 +38,18 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
 
-   -- ****f* SchoolUI/Show_School_Command
+   -- ****o* SchoolUI/Show_School_Command
    -- FUNCTION
    -- Show the selected base school
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowSchool
    -- SOURCE
    function Show_School_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -123,7 +127,7 @@ package body Bases.SchoolUI is
    MemberIndex: Positive;
    -- ****
 
-   -- ****f* SchoolUI/Show_Training_Info_Command
+   -- ****o* SchoolUI/Show_Training_Info_Command
    -- FUNCTION
    -- Show training costs for the selected crew member
    -- PARAMETERS
@@ -131,6 +135,10 @@ package body Bases.SchoolUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTrainingInfo
    -- SOURCE
    function Show_Training_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -199,7 +207,7 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_Training_Info_Command;
 
-   -- ****f* SchoolUI/Train_Skill_Command
+   -- ****o* SchoolUI/Train_Skill_Command
    -- FUNCTION
    -- Train the selected skill
    -- PARAMETERS
@@ -207,6 +215,10 @@ package body Bases.SchoolUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- TrainSkill
    -- SOURCE
    function Train_Skill_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
