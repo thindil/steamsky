@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Bases/SchooUI
+-- ****h* Bases/SchoolUI
 -- FUNCTION
 -- Provide code to train skills in bases
 -- SOURCE
