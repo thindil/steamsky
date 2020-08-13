@@ -125,7 +125,8 @@ package body MainMenu is
       TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
-      Tcl_SetVar(Get_Context, "playergender", "" & NewGameSettings.PlayerGender);
+      Tcl_SetVar
+        (Get_Context, "playergender", "" & NewGameSettings.PlayerGender);
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
@@ -157,43 +158,42 @@ package body MainMenu is
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       SpinBox.Interp := Get_Context;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image(Natural(NewGameSettings.EnemyDamageBonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image(Natural(NewGameSettings.PlayerDamageBonus * 100.0)));
-      Tcl_Eval(Get_Context, "SetPoints");
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image
            (Natural(NewGameSettings.EnemyMeleeDamageBonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image
            (Natural(NewGameSettings.PlayerMeleeDamageBonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image(Natural(NewGameSettings.ExperienceBonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image(Natural(NewGameSettings.ReputationBonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
-      Execute_Widget_Command
-        (SpinBox, "set",
+      Set
+        (SpinBox,
          Natural'Image(Natural(NewGameSettings.UpgradeCostBonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
-      Execute_Widget_Command
-        (SpinBox, "set",
-         Natural'Image(Natural(NewGameSettings.PricesBonus * 100.0)));
+      Set
+        (SpinBox, Natural'Image(Natural(NewGameSettings.PricesBonus * 100.0)));
+      Tcl_Eval(Get_Context, "SetPoints");
       ShowMainMenu;
       Current(ComboBox, Natural'Image(NewGameSettings.DifficultyLevel));
       Generate(ComboBox, "<<ComboboxSelected>>");
