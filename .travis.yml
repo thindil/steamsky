@@ -15,14 +15,14 @@ matrix:
         install:
          - docker pull thindil/gnat-tashy:release-8.6.7
         script:
-         - docker run -v $(pwd):/app thindil/gnat-tashy:release-8.6.7 /bin/sh -c "cd /app && others/build.tcl"
+         - docker run -v $(pwd):/app thindil/gnat-tashy:release-8.6.7 /bin/sh -c "apt-get update && apt-get install -y libxmlada-schema9-dev libxmlada-input9-dev && cd /app && others/build.tcl"
          - tar -czf steamsky-dev-Linux-64.tar.gz usr
       - os: windows
         env:
          - FILENAME=steamsky-dev-Windows-64.zip
         install:
          - export "PATH=/c/GNAT/bin:/c/Tcl86/bin:$PATH";
-         - wget "https://www.dropbox.com/s/99bf04k6hvh05yr/gnattcl.7z?dl=0" -O gnat.7z;
+         - wget "https://www.dropbox.com/s/99bf04k6hvh05yr/gnattcl.7z?dl=0" -O gnattcl.7z;
          - 7z x gnattcl.7z -oc:/;
         script:
          - gprbuild -P steamsky.gpr -XMode=release
