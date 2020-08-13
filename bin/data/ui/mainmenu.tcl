@@ -107,11 +107,11 @@ pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
    pack .mainmenu -fill both -expand true
 }] -side bottom -anchor e
 pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y
-pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set}] -side top -fill both -expand true
+pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true
 
 # News menu
 ttk::frame .newsmenu
-grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set}] -sticky nesw -columnspan 2
+grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -font HelpFont] -sticky nesw -columnspan 2
 grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns
 grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e
 grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
