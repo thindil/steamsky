@@ -178,7 +178,7 @@ grid rowconfigure .loadmenu 0 -weight 1
 
 # New game setting menu
 set windowid {}
-set playertooltips [list "General player character settings. Select field which you want to set to see more information about." "Enter character name or press Enter key for random name." "Select the gender of your character." "Enter ship name or press Enter for random ship name." "Select starting goal for your character.\nYou can change it later in game." "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
+set playertooltips [list "General player character settings. Select field which you want to set to see more information about." "Enter character name." "Select the gender of your character." "Enter ship name." "Select starting goal for your character.\nYou can change it later in game." "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
 set difficultytooltips [list "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it." "Select game difficulty preset level." "Percentage of damage done by enemy ships in combat.\nLowering it makes the  game easier but lowers the\namount of score gained as well." "Percentage of damage done by the player's ship in combat.\nRaising it makes the game easier but lowers the amount\nof score gained as well." "Percentage of damage done by enemies in melee combat.\nLowering it makes the game easier but lowers the\namount of score gained as well." "Percentage of damage done by player's crew (and player character)\nin melee combat. Raising it makes the game easier but lowers the\namount of score gained as well." "Percentage of experience gained by player and their crew from actions.\nRaising it makes the game easier but lowers the amount of score gained as well." "Percentage of reputation in bases gained or lost by player in sky bases\ndue to player actions. Raising it makes the game easier but lowers the\namount of score gained as well." "Percentage of the standard material cost and time needed\nfor upgrading ship modules. Lowering it makes the game\neasier but lowers the amount of score gained as well." "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers\nthe amount of score gained as well." "Select random values for all settings." "If you select this option, all difficulty settings will be\nrandomized during start new game. Not recommended for new players."]
 proc SetInfo {name index} {
    global playertooltips
@@ -247,7 +247,8 @@ ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1]
-bind .newgamemenu.canvas.player.playername <Return> {RandomName player}
+grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Toolbutton -command {RandomName player}] -row 0 -column 2
+tooltip::tooltip .newgamemenu.canvas.player.randomplayer "Select a random name for the character,\nbased on the character gender"
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
 grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1
@@ -259,23 +260,24 @@ grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -r
 grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
-bind .newgamemenu.canvas.player.shipname <Return> {RandomName ship}
+grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Toolbutton -command {RandomName ship}] -row 2 -column 2
+tooltip::tooltip .newgamemenu.canvas.player.randomship "Select a random name for the ship"
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
-grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1
+grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 -columnspan 2
 tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
 bind .newgamemenu.canvas.player.goal <FocusIn> {SetInfo player 4}
 grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4
-grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 14] -row 4 -column 1
+grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 16] -row 4 -column 1 -columnspan 2
 tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $playertooltips 5]
 bind .newgamemenu.canvas.player.faction <FocusIn> SetFaction
 bind .newgamemenu.canvas.player.faction <<ComboboxSelected>> SetFaction
 grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5
-grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 14] -row 5 -column 1
+grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 16] -row 5 -column 1 -columnspan 2
 tooltip::tooltip .newgamemenu.canvas.player.career [lindex $playertooltips 6]
 bind .newgamemenu.canvas.player.career <FocusIn> {SetCareer}
 bind .newgamemenu.canvas.player.career <<ComboboxSelected>> SetCareer
 grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6
-grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 14] -row 6 -column 1
+grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] -row 6 -column 1 -columnspan 2
 tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
 bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
