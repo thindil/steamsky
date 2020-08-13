@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ships; use Ships;
 
--- ****h* Steamsky/Config
+-- ****h* Config/Config
 -- FUNCTION
 -- Provide code for load and save the game configuration
 -- SOURCE
