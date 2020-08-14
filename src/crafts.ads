@@ -23,7 +23,7 @@ with ShipModules; use ShipModules;
 with Game; use Game;
 with Ships; use Ships;
 
--- ****h* Steamsky/Crafts
+-- ****h* Crafts/Crafts
 -- FUNCTION
 -- Provide code for crafting
 -- SOURCE
