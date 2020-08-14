@@ -71,10 +71,6 @@ package Themes is
    -- TargetIcon           - Icon used for player selected target on map
    -- StoryIcon            - Icon used for show story event location on map
    -- OverloadedIcon       - Icon used for show warning about overloaded ship
-   -- CheckButtonUnchecked - Name of image file used for check buttons when
-   --                        unchecked
-   -- CheckButtonChecked   - Name of image file used for check buttons when
-   --                        checked
    -- SOURCE
    type ThemeRecord is record
       Name: Unbounded_String;
@@ -113,8 +109,6 @@ package Themes is
       TargetIcon: Wide_Character;
       StoryIcon: Wide_Character;
       OverloadedIcon: Wide_Character;
-      CheckButtonUnchecked: Unbounded_String;
-      CheckButtonChecked: Unbounded_String;
    end record;
    -- ****
 

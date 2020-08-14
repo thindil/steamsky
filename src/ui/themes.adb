@@ -72,13 +72,7 @@ package body Themes is
             EmptyMapIcon => Wide_Character'Val(16#f0c8#),
             TargetIcon => Wide_Character'Val(16#f05b#),
             StoryIcon => Wide_Character'Val(16#f059#),
-            OverloadedIcon => Wide_Character'Val(16#f55b#),
-            CheckButtonUnchecked =>
-              DataDirectory &
-              To_Unbounded_String("/ui/images/checkbox-unchecked.svg"),
-            CheckButtonChecked =>
-              DataDirectory &
-              To_Unbounded_String("/ui/images/checkbox-checked.svg"));
+            OverloadedIcon => Wide_Character'Val(16#f55b#));
       end SetDefaultValues;
    begin
       SetDefaultValues;
@@ -260,14 +254,6 @@ package body Themes is
                         TempRecord.OverloadedIcon :=
                           Wide_Character'Val
                             (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("CheckButtonUnchecked") then
-                        TempRecord.CheckButtonUnchecked :=
-                          Full_Name(FoundDirectory) & Value;
-                     elsif FieldName =
-                       To_Unbounded_String("CheckButtonChecked") then
-                        TempRecord.CheckButtonChecked :=
-                          Full_Name(FoundDirectory) & Value;
                      end if;
                   end if;
                end loop;
