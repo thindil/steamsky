@@ -19,7 +19,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
--- ****h* Steamsky/Events
+-- ****h* Events/Events
 -- FUNCTION
 -- Provide code to generate and update random events
 -- SOURCE

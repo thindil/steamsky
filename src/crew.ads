@@ -20,7 +20,7 @@ with Ada.Containers.Vectors; use Ada.Containers;
 with Items; use Items;
 with Game; use Game;
 
--- ****h* Steamsky/Crew
+-- ****h* Crew/Crew
 -- FUNCTION
 -- Provide code for manipulate player ship crew
 -- SOURCE
