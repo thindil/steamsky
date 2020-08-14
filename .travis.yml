@@ -46,6 +46,3 @@ deploy:
   tag_name: travis-dev-build
   on:
    branch: master
-
-notifications:
-  email: false
