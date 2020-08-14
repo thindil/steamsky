@@ -616,6 +616,12 @@ package body Combat.UI is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetBoarding MemberIndex
+   -- MemberIndex is a index of the player ship crew member which will get the
+   -- boarding order
    -- SOURCE
    function Set_Boarding_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -826,6 +832,10 @@ package body Combat.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- NextTurn
    -- SOURCE
    function Next_Turn_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -892,6 +902,10 @@ package body Combat.UI is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCombatUI
    -- SOURCE
    function Show_Combat_UI_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -918,6 +932,12 @@ package body Combat.UI is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCombatOrder Position
+   -- Position argument can be pilot, engineer or number of the gun which
+   -- gunner will take a new combat order
    -- SOURCE
    function Set_Combat_Order_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -992,7 +1012,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Order_Command;
 
-   -- ****if* CUI/Set_Boarding_Order_Command
+   -- ****o* CUI/Set_Boarding_Order_Command
    -- FUNCTION
    -- Set boarding order for the selected player's ship crew member
    -- PARAMETERS
@@ -1000,6 +1020,12 @@ package body Combat.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetBoardingOrder EnemyIndex
+   -- EnemyIndex parameter is the index of the enemy in the enemy ship crew
+   -- which will be set as target for the selected player ship crew member.
    -- SOURCE
    function Set_Boarding_Order_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
