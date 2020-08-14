@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Set General career as default for each faction
 
+### Removed
+- Checkboxes images setting from the UI themes
+
 ### Fixed
 - Setting the game difficulty level from the game setting
 - Reading the game version from the game setting
