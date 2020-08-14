@@ -52,14 +52,20 @@ with Utils.UI; use Utils.UI;
 
 package body BasesList is
 
-   -- ****f* BasesList/Show_Bases_Command
+   -- ****o* BasesList/Show_Bases_Command
    -- FUNCTION
    -- Show the list of known bases to a player
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBases ?search basename?
+   -- If search parameter is added, basename parameter is a string which will
+   -- be looking for in the bases names
    -- SOURCE
    function Show_Bases_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -238,14 +244,18 @@ package body BasesList is
       return TCL_OK;
    end Show_Bases_Command;
 
-   -- ****f* BasesList/Show_Base_Info_Command
+   -- ****o* BasesList/Show_Base_Info_Command
    -- FUNCTION
    -- Show the information about the selected base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseInfo
    -- SOURCE
    function Show_Base_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -424,6 +434,10 @@ package body BasesList is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBase
    -- SOURCE
    function Show_Base_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -457,6 +471,10 @@ package body BasesList is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetBase2
    -- SOURCE
    function Set_Base_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

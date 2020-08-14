@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* SteamSky/BasesList
+-- ****h* BasesList/BasesList
 -- FUNCTION
 -- Provide code to show the list of known bases to a player
 -- SOURCE
