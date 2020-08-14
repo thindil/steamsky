@@ -11,15 +11,15 @@ namespace eval ttk::theme::steamsky {
 
    variable colors
    array set colors {
-      -bg             "#1a130c"
-      -fg             "#eee8aa"
-      -disabledbg     "#000000"
-      -disabledfg     "#7f8c8d"
+      -verydarkorange "#1a130c"
+      -palegoldenrod  "#eee8aa"
+      -gray           "#7f8c8d"
       -darkred        "#600000"
       -goldenyellow   "#ffdf00"
       -blue           "#458588"
       -pink           "#b16286"
       -darkorange     "#372412"
+      -almostblackred "#120d0d"
    }
 
    #
@@ -53,21 +53,20 @@ namespace eval ttk::theme::steamsky {
 
    ttk::style theme create steamsky -parent clam -settings {
       ttk::style configure . \
-         -background $colors(-bg) \
-         -foreground $colors(-fg) \
-         -troughcolor $colors(-bg) \
+         -background $colors(-verydarkorange) \
+         -foreground $colors(-palegoldenrod) \
+         -troughcolor $colors(-verydarkorange) \
          -selectbackground $colors(-darkred) \
          -selectforeground $colors(-goldenyellow) \
-         -fieldbackground $colors(-bg) \
+         -fieldbackground $colors(-verydarkorange) \
          -font InterfaceFont \
          -borderwidth 1 \
          -focuscolor $colors(-goldenyellow) \
-         -bordercolor $colors(-bg) \
-         -lightcolor $colors(-darkorange) \
-         -darkcolor $colors(-darkorange)
+         -bordercolor $colors(-darkorange) \
+         -lightcolor $colors(-verydarkorange) \
+         -darkcolor $colors(-verydarkorange)
 
-      ttk::style map . -foreground [list disabled $colors(-disabledfg)]
-
+      ttk::style map . -foreground [list disabled $colors(-gray)]
 
       #
       # Elements:
@@ -83,19 +82,19 @@ namespace eval ttk::theme::steamsky {
 
       # Button setting
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow)
-      ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-disabledfg)]
+      ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TButton -background [list active $colors(-darkred)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
-      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow)
-      ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-disabledfg)]
+      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow)
+      ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
       # Flat button setting
       ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
-      ttk::style map Toolbutton -background [list active $colors(-darkred)] -relief [list selected sunken]
+      ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
 
       # Flat button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue)
@@ -108,7 +107,7 @@ namespace eval ttk::theme::steamsky {
       option add *TRadiobutton.cursor hand1
 
       # Separator setting
-      ttk::style configure TSeparator -background $colors(-bg)
+      ttk::style configure TSeparator -background $colors(-verydarkorange)
 
       # Not needed state header button (ship info in right top corner)
       ttk::style configure Header.Toolbutton -font InterfaceIcons
@@ -129,36 +128,41 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TProgressbar -background red
 
       # Entry setting
-      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow)
+      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
 
       # Spinbox setting
-      ttk::style configure TSpinbox -arrowcolor $colors(-fg) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow)
+      ttk::style configure TSpinbox -arrowcolor $colors(-palegoldenrod) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
 
       # Scrollbar setting
-      ttk::style configure TScrollbar -arrowcolor $colors(-fg)
+      ttk::style configure TScrollbar -arrowcolor $colors(-palegoldenrod)
 
       # Paned window
-      ttk::style configure TPanedwindow -background $colors(-disabledfg)
+      ttk::style configure TPanedwindow -background $colors(-gray)
 
       # Combobox setting
-      ttk::style configure TCombobox -arrowcolor $colors(-fg) -relief flat
+      ttk::style configure TCombobox -arrowcolor $colors(-palegoldenrod) -relief flat
       option add *TCombobox*Listbox.cursor hand1
       bind TCombobox <Motion> {
          %W configure -cursor hand1
       }
 
       # Treeview (like cargo, trading) setting
-      ttk::style configure Treeview -background $colors(-bg)
+      ttk::style configure Treeview -fieldbackground $colors(-almostblackred) -background $colors(-almostblackred)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style configure Treeview -rowheight [expr {[font metrics InterfaceFont -linespace] + 2}]
+      ttk::style configure Heading -relief raised
       ttk::style map Treeview \
          -background [list selected $colors(-darkred)] \
          -foreground [list selected $colors(-goldenyellow)]
 
       # Check button setting
-      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-bg)
+      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-verydarkorange)
       ttk::style map TCheckbutton -indicatorcolor \
          [list selected $colors(-goldenyellow)]
+
+      # Info frames (like modules, items, etc)
+      ttk::style configure TLabelframe.Label -foreground darkgreen
+      ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
 
       # Canvas setting
       option add *Canvas.highlightThickness 0
