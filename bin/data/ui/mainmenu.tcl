@@ -108,11 +108,13 @@ pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
 }] -side bottom -anchor e
 pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y
 pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true
+::autoscroll::autoscroll .showfilemenu.scroll
 
 # News menu
 ttk::frame .newsmenu
 grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -font HelpFont] -sticky nesw -columnspan 2
 grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns
+::autoscroll::autoscroll .newsmenu.scroll
 grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e
 grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
@@ -135,7 +137,9 @@ grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrol
 .hofmenu.view column points -width 100
 .hofmenu.view heading diedfrom -text {Died from}
 grid [ttk::scrollbar .hofmenu.yscroll -orient vertical -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns
+::autoscroll::autoscroll .hofmenu.yscroll
 grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 -sticky we
+::autoscroll::autoscroll .hofmenu.xscroll
 grid [ttk::button .hofmenu.back -text {Back to menu} -command {
    bind . <Alt-b> {}
    bind . <Escape> {}
@@ -155,7 +159,9 @@ grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscr
 .loadmenu.view heading lastsaved -text {Last saved}
 bind .loadmenu.view <<TreeviewSelect>> {InvokeButton .loadmenu.load}
 grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns
+::autoscroll::autoscroll .loadmenu.yscroll
 grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
+::autoscroll::autoscroll .loadmenu.xscroll
 grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 2 -column 0 -sticky e
 grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
    bind . <Alt-b> {}
@@ -228,9 +234,11 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state select
    .newgamemenu.info.text delete 1.0 end
    .newgamemenu.info.text insert end [lindex $playertooltips 0]
    .newgamemenu.info.text configure -state disabled
+   ::autoscroll::unautoscroll .newgamemenu.scrollbar
    .newgamemenu.canvas delete $windowid
    set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.player] / 2] [expr [winfo reqheight .newgamemenu.canvas.player] / 2] -window .newgamemenu.canvas.player]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
+   ::autoscroll::autoscroll .newgamemenu.scrollbar
 }] -sticky e
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
@@ -396,6 +404,7 @@ grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained 
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
+::autoscroll::autoscroll .newgamemenu.info.scroll
 grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0 -command {
    bind . <Alt-s> {}
