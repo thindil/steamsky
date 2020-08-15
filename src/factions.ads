@@ -21,7 +21,7 @@ with Ada.Strings.Unbounded.Hash;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
--- ****h* Steamsky/Factions
+-- ****h* Factions/Factions
 -- FUNCTION
 -- Provide code for factions
 -- SOURCE

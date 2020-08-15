@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 
--- ****h* Steamsky/Game
+-- ****h* Game/Game
 -- FUNCTION
 -- Main the game structures and data
 -- SOURCE
