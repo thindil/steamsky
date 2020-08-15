@@ -131,9 +131,6 @@ of the game, you can also use all of this starting parameters.
 
 ### Testing versions
 
-**NOTE:** Creating testing version of the development version of the game was
-temporary disabled (at least until version 5.1 arrive)
-
 Here are available testing versions of the game. You can find them
 in [Releases](https://github.com/thindil/steamsky/releases/tag/travis-dev-build).
 To use them, first you must download normal release. Then, for Linux: inside
