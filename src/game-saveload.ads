@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Game/GSaveLoad
+-- ****h* GSaveLoad/GSaveLoad
 -- FUNCTION
 -- Provide code to save and load the game data from file
 -- SOURCE
