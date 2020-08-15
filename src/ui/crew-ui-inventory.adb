@@ -50,14 +50,20 @@ package body Crew.UI.Inventory is
    MemberIndex: Positive;
    -- ****
 
-   -- ****f* CUI3/Show_Inventory_Command
+   -- ****o* Inventory/Show_Inventory_Command
    -- FUNCTION
    -- Show information about the selected crew member's inventory
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowInventory MemberIndex
+   -- MemberIndex parameter is the index of the member of players ship crew
+   -- which inventory will be shown
    -- SOURCE
    function Show_Inventory_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -175,7 +181,7 @@ package body Crew.UI.Inventory is
    ItemIndex: Positive;
    -- ****
 
-   -- ****f* Inventory/Show_Inventory_Item_Info_Command
+   -- ****o* Inventory/Show_Inventory_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -183,6 +189,10 @@ package body Crew.UI.Inventory is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowInventoryItemInfo
    -- SOURCE
    function Show_Inventory_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -230,14 +240,18 @@ package body Crew.UI.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
-   -- ****f* Inventory/Set_Use_Item_Command
+   -- ****o* Inventory/Set_Use_Item_Command
    -- FUNCTION
    -- Set if item is used by a crew member or not
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetUseItem
    -- SOURCE
    function Set_Use_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -307,14 +321,18 @@ package body Crew.UI.Inventory is
            Trim(Positive'Image(MemberIndex), Left));
    end Set_Use_Item_Command;
 
-   -- ****f* Inventory/Move_Item_Command
+   -- ****o* Inventory/Move_Item_Command
    -- FUNCTION
    -- Move the selected item to the ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveItem
    -- SOURCE
    function Move_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
