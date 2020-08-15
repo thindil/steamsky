@@ -45,14 +45,18 @@ with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
-   -- ****f* CUI4/Show_Crafting_Command
+   -- ****o* CUI4/Show_Crafting_Command
    -- FUNCTION
    -- Show information about available crafting recipes
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrafting
    -- SOURCE
    function Show_Crafting_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -333,7 +337,7 @@ package body Crafts.UI is
             Exception_Message(An_Exception) & ".");
    end ShowSetRecipe;
 
-   -- ****f* CUI4/Show_Recipe_Info_Command
+   -- ****o* CUI4/Show_Recipe_Info_Command
    -- FUNCTION
    -- Show information about the selected recipe
    -- PARAMETERS
@@ -341,6 +345,10 @@ package body Crafts.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowRecipeInfo
    -- SOURCE
    function Show_Recipe_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -609,7 +617,7 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Recipe_Info_Command;
 
-   -- ****f* CUI4/Set_Crafting_Command
+   -- ****o* CUI4/Set_Crafting_Command
    -- FUNCTION
    -- Set the selected recipe as a crafting order in the selected workshop
    -- PARAMETERS
@@ -617,6 +625,10 @@ package body Crafts.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCrafting
    -- SOURCE
    function Set_Crafting_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

@@ -56,7 +56,7 @@ with Utils.UI; use Utils.UI;
 
 package body Crew.UI is
 
-   -- ****f* CUI3/Show_Crew_Info_Command
+   -- ****o* CUI3/Show_Crew_Info_Command
    -- FUNCTION
    -- Show information about the player's ship crew
    -- PARAMETERS
@@ -64,6 +64,10 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrewInfo
    -- SOURCE
    function Show_Crew_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -342,7 +346,7 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Crew_Info_Command;
 
-   -- ****f* CUI3/Set_Crew_Order_Command
+   -- ****o* CUI3/Set_Crew_Order_Command
    -- FUNCTION
    -- Set order for the selected crew member
    -- PARAMETERS
@@ -350,6 +354,14 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCrewOrder order memberindex ?moduleindex?
+   -- Order is an index for the order which will be set, memberindex is an
+   -- index of the member in the player ship crew which will be have order set
+   -- and optional parameter moduleindex is index of module in player ship
+   -- which will be assigned to the crew member
    -- SOURCE
    function Set_Crew_Order_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -382,7 +394,7 @@ package body Crew.UI is
    MemberIndex: Positive;
    -- ****
 
-   -- ****f* CUI3/Show_Member_Info_Command
+   -- ****o* CUI3/Show_Member_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected crew member
    -- PARAMETERS
@@ -390,6 +402,12 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMemberInfo memberindex
+   -- MemberIndex is the index of the player ship crew member which info will
+   -- be shown
    -- SOURCE
    function Show_Member_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -788,7 +806,7 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Member_Info_Command;
 
-   -- ****f* CUI3/Set_Priority_Command
+   -- ****o* CUI3/Set_Priority_Command
    -- FUNCTION
    -- Set the selected priority of the selected crew member
    -- PARAMETERS
@@ -796,6 +814,12 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetPriority orderindex priority
+   -- Orderindex is the index of the order priority which will be changed,
+   -- priority is the new level of the priority of the selected order
    -- SOURCE
    function Set_Priority_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -826,7 +850,7 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
-   -- ****f* CUI3/Order_For_All_Command
+   -- ****o* CUI3/Order_For_All_Command
    -- FUNCTION
    -- Set the selected order for the whole crew
    -- PARAMETERS
@@ -834,6 +858,12 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- OrderForAll order
+   -- Order is the name of the order which will be assigned to the whole
+   -- player ship crew
    -- SOURCE
    function Order_For_All_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -863,7 +893,7 @@ package body Crew.UI is
          return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Order_For_All_Command;
 
-   -- ****f* CUI3/Dismiss_Command
+   -- ****o* CUI3/Dismiss_Command
    -- FUNCTION
    -- Dismiss the selected crew member
    -- PARAMETERS
@@ -871,6 +901,10 @@ package body Crew.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Dismiss
    -- SOURCE
    function Dismiss_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
