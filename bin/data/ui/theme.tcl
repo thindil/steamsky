@@ -20,6 +20,7 @@ namespace eval ttk::theme::steamsky {
       -pink           "#b16286"
       -darkorange     "#372412"
       -almostblackred "#120d0d"
+      -darkyellow     "#7d7800"
    }
 
    #
@@ -170,6 +171,9 @@ namespace eval ttk::theme::steamsky {
       # Info frames (like modules, items, etc)
       ttk::style configure TLabelframe.Label -foreground darkgreen
       ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
+
+      # Main frames of the game
+      ttk::style configure Main.TFrame -relief solid -bordercolor black -borderwidth 1
 
       # Canvas setting
       option add *Canvas.highlightThickness 0

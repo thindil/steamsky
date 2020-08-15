@@ -9,8 +9,8 @@ proc InvokeButton {name} {
 }
 
 # Main Menu
-ttk::frame .mainmenu
-pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}]
+ttk::frame .mainmenu -style Main.TFrame
+pack [ttk::label .mainmenu.logo -text {Steam Sky} -font {Rye 70}] -pady 2
 pack [ttk::label .mainmenu.version]
 pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
    set newtab difficulty
@@ -64,8 +64,8 @@ bind . <Alt-a> {InvokeButton .mainmenu.about}
 bind . <Alt-q> {InvokeButton .mainmenu.quit}
 
 # About menu
-ttk::frame .aboutmenu
-grid [ttk::label .aboutmenu.about -text {Roguelike in the sky with a steampunk theme}] -columnspan 3
+ttk::frame .aboutmenu -style Main.TFrame
+grid [ttk::label .aboutmenu.about -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
 grid [ttk::button .aboutmenu.website -text {Website} -style Toolbutton -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
 grid [ttk::button .aboutmenu.mail -text {(c)2016-2020 Bartek thindil Jasicki} -style Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] -row 2 -columnspan 3
 grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
@@ -83,7 +83,7 @@ grid [ttk::button .aboutmenu.readme -text {README} -command {
    pack .showfilemenu -fill both -expand true
    ShowFile README.md
 }] -row 3 -column 2 -sticky w
-grid [ttk::label .aboutmenu.license -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} -wraplength 590] -row 4 -columnspan 3
+grid [ttk::label .aboutmenu.license -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} -wraplength 590] -row 4 -columnspan 3 -padx 2
 grid [ttk::label .aboutmenu.license2 -text {Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.} -wraplength 590] -row 5 -columnspan 3
 grid [ttk::button .aboutmenu.showlicense -text {Show full license} -underline 0 -command {
    pack forget .aboutmenu
@@ -99,36 +99,36 @@ grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -comman
 }] -row 6 -column 2 -sticky e
 
 # Show file content
-ttk::frame .showfilemenu
+ttk::frame .showfilemenu -style Main.TFrame
 pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Escape> {}
    pack forget .showfilemenu
    pack .mainmenu -fill both -expand true
-}] -side bottom -anchor e
-pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y
-pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true
+}] -side bottom -anchor e -pady 2 -padx 2
+pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y -pady 2 -padx 2
+pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true -pady 2 -padx 2
 ::autoscroll::autoscroll .showfilemenu.scroll
 
 # News menu
-ttk::frame .newsmenu
-grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -font HelpFont] -sticky nesw -columnspan 2
-grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns
+ttk::frame .newsmenu -style Main.TFrame
+grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -font HelpFont] -sticky nesw -columnspan 2 -pady 2 -padx 2
+grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns -pady 2 -padx 2
 ::autoscroll::autoscroll .newsmenu.scroll
-grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e
+grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e -pady 2
 grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
    bind . <Escape> {}
    pack forget .newsmenu
    pack .mainmenu -fill both -expand true
-}] -row 1 -column 1 -sticky e
+}] -row 1 -column 1 -sticky e -pady 2 -padx 2
 grid columnconfigure .newsmenu 0 -weight 1
 grid rowconfigure .newsmenu 0 -weight 1
 
 # Hall of Fame menu
-ttk::frame .hofmenu
-grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom] -selectmode none] -sticky nesw
+ttk::frame .hofmenu -style Main.TFrame
+grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom] -selectmode none] -sticky nesw -padx 2 -pady 2
 .hofmenu.view heading position -text {Position}
 .hofmenu.view column position -width 100
 .hofmenu.view heading name -text {Name}
@@ -136,7 +136,7 @@ grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrol
 .hofmenu.view heading points -text {Points}
 .hofmenu.view column points -width 100
 .hofmenu.view heading diedfrom -text {Died from}
-grid [ttk::scrollbar .hofmenu.yscroll -orient vertical -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns
+grid [ttk::scrollbar .hofmenu.yscroll -orient vertical -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns -padx 2 -pady 2
 ::autoscroll::autoscroll .hofmenu.yscroll
 grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 -sticky we
 ::autoscroll::autoscroll .hofmenu.xscroll
@@ -145,24 +145,24 @@ grid [ttk::button .hofmenu.back -text {Back to menu} -command {
    bind . <Escape> {}
    pack forget .hofmenu
    pack .mainmenu -fill both -expand true
-}] -row 2 -column 0 -columnspan 2 -sticky e
+}] -row 2 -column 0 -columnspan 2 -sticky e -pady 2 -padx 2
 grid columnconfigure .hofmenu 0 -weight 1
 grid rowconfigure .hofmenu 0 -weight 1
 
 # Load game menu
-ttk::frame .loadmenu
-grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscrollcommand {.loadmenu.xscroll set} -show headings -columns [list playername shipname lastsaved]] -sticky nesw -columnspan 3
+ttk::frame .loadmenu -style Main.TFrame
+grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscrollcommand {.loadmenu.xscroll set} -show headings -columns [list playername shipname lastsaved]] -sticky nesw -columnspan 3 -padx 2 -pady 2
 .loadmenu.view heading playername -text {Player name}
 .loadmenu.view column playername -width 150
 .loadmenu.view heading shipname -text {Ship name}
 .loadmenu.view column shipname -width 150
 .loadmenu.view heading lastsaved -text {Last saved}
 bind .loadmenu.view <<TreeviewSelect>> {InvokeButton .loadmenu.load}
-grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns
+grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns -padx 2 -pady 2
 ::autoscroll::autoscroll .loadmenu.yscroll
 grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
 ::autoscroll::autoscroll .loadmenu.xscroll
-grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 2 -column 0 -sticky e
+grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 2 -column 0 -sticky e -pady 2 -padx 2
 grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Alt-l> {}
@@ -170,7 +170,7 @@ grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
    bind . <Escape> {}
    pack forget .loadmenu
    LoadGame
-}] -row 2 -column 1 -sticky e
+}] -row 2 -column 1 -sticky e -pady 2 -padx 2
 grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Alt-l> {}
@@ -178,7 +178,7 @@ grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command
    bind . <Escape> {}
    pack forget .loadmenu
    pack .mainmenu -fill both -expand true
-}] -row 2 -column 2 -sticky e
+}] -row 2 -column 2 -sticky e -padx 2 -pady 2
 grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
 
@@ -227,8 +227,8 @@ proc SetPoints {{difficulty Custom}} {
    .newgamemenu.canvas.difficulty.difficultylevel set $difficulty
    return true
 }
-ttk::frame .newgamemenu
-grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3
+ttk::frame .newgamemenu -style Main.TFrame
+grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady 2
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Radio.Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
@@ -249,7 +249,7 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -styl
    set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.difficulty] / 2] [expr [winfo reqheight .newgamemenu.canvas.difficulty] / 2] -window .newgamemenu.canvas.difficulty]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
 }] -column 1 -row 0 -sticky w
-grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1
+grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1 -padx 2
 grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
 ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
@@ -401,11 +401,11 @@ grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 -column
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
 bind .newgamemenu.canvas.difficulty.randomize <FocusIn> {SetInfo difficulty 11}
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 11 -columnspan 2
-grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes
+grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes -padx 2
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
 ::autoscroll::autoscroll .newgamemenu.info.scroll
-grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3
+grid [ttk::frame .newgamemenu.buttonsbox2] -row 2 -columnspan 3 -pady 2
 grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
