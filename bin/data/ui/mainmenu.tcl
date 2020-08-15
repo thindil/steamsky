@@ -223,7 +223,7 @@ proc SetPoints {{difficulty Custom}} {
 }
 ttk::frame .newgamemenu
 grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3
-grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Toolbutton -value player -variable newtab -underline 0 -command {
+grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Radio.Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
    .newgamemenu.info.text insert end [lindex $playertooltips 0]
@@ -232,7 +232,7 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state select
    set windowid [.newgamemenu.canvas create window [expr [winfo reqwidth .newgamemenu.canvas.player] / 2] [expr [winfo reqheight .newgamemenu.canvas.player] / 2] -window .newgamemenu.canvas.player]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
 }] -sticky e
-grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Toolbutton -value difficulty -variable newtab -underline 0 -command {
+grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
    .newgamemenu.info.text insert end [lindex $difficultytooltips 0]
