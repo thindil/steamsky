@@ -135,6 +135,13 @@ namespace eval ttk::theme::steamsky {
 
       # Scrollbar setting
       ttk::style configure TScrollbar -arrowcolor $colors(-palegoldenrod)
+      bind TScrollbar <Motion> {
+         if {[%W cget -orient] == "horizontal"} {
+            %W configure -cursor sb_h_double_arrow
+         } else {
+            %W configure -cursor sb_v_double_arrow
+         }
+      }
 
       # Paned window
       ttk::style configure TPanedwindow -background $colors(-gray)
@@ -166,6 +173,10 @@ namespace eval ttk::theme::steamsky {
 
       # Canvas setting
       option add *Canvas.highlightThickness 0
+
+      # Tooltips setting
+      set ::tooltip::labelOpts [list -highlightthickness 0 -relief solid -borderwidth 1 \
+         -background black -foreground $colors(-palegoldenrod)]
 
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
