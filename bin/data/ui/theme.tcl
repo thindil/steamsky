@@ -164,9 +164,7 @@ namespace eval ttk::theme::steamsky {
          -foreground [list selected $colors(-goldenyellow)]
 
       # Check button setting
-      ttk::style configure TCheckbutton -padding 4 -indicatorcolor $colors(-verydarkorange)
-      ttk::style map TCheckbutton -indicatorcolor \
-         [list selected $colors(-goldenyellow)]
+      ttk::style configure TCheckbutton -padding 4
 
       # Info frames (like modules, items, etc)
       ttk::style configure TLabelframe.Label -foreground darkgreen
