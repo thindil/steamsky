@@ -129,7 +129,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TProgressbar -background red
 
       # Entry setting
-      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
+      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
 
       # Spinbox setting
       ttk::style configure TSpinbox -arrowcolor $colors(-palegoldenrod) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
@@ -148,7 +148,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TPanedwindow -background $colors(-gray)
 
       # Combobox setting
-      ttk::style configure TCombobox -arrowcolor $colors(-palegoldenrod) -relief flat
+      ttk::style configure TCombobox -arrowcolor $colors(-palegoldenrod) -relief flat -padding 4
       option add *TCombobox*Listbox.cursor hand1
       bind TCombobox <Motion> {
          %W configure -cursor hand1
