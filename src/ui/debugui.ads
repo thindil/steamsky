@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/DebugUI
+-- ****h* DebugUI/DebugUI
 -- FUNCTION
 -- Provide code to modify the game data
 -- SOURCE
