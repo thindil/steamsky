@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Steamsky/GameOptions
+-- ****h* GameOptions/GameOptions
 -- FUNCTION
 -- Provide code to set the game options
 -- SOURCE

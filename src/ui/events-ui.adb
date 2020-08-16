@@ -37,7 +37,7 @@ with Utils.UI; use Utils.UI;
 
 package body Events.UI is
 
-   -- ****if* EUI/Show_Event_Info_Command
+   -- ****o* EUI/Show_Event_Info_Command
    -- FUNCTION
    -- Show information about the selected event
    -- PARAMETERS
@@ -45,6 +45,10 @@ package body Events.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowEventInfo
    -- SOURCE
    function Show_Event_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -104,7 +108,7 @@ package body Events.UI is
       return TCL_OK;
    end Show_Event_Info_Command;
 
-   -- ****if* EUI/Show_Event_Command
+   -- ****o* EUI/Show_Event_Command
    -- FUNCTION
    -- Show event on map
    -- PARAMETERS
@@ -112,6 +116,10 @@ package body Events.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowEvent
    -- SOURCE
    function Show_Event_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -138,7 +146,7 @@ package body Events.UI is
       return TCL_OK;
    end Show_Event_Command;
 
-   -- ****if* EUI/Set_Event_Command
+   -- ****o* EUI/Set_Event_Command
    -- FUNCTION
    -- Set event as the player's ship destination
    -- PARAMETERS
@@ -146,6 +154,10 @@ package body Events.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetEvent
    -- SOURCE
    function Set_Event_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

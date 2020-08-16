@@ -65,6 +65,7 @@ package body GameOptions is
       EntryName: Unbounded_String;
    end record;
    -- ****
+
    -- ****iv* GameOptions/Accels
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
@@ -128,7 +129,7 @@ package body GameOptions is
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
    -- ****
 
-   -- ****f* GameOptions/Show_Options_Command
+   -- ****o* GameOptions/Show_Options_Command
    -- FUNCTION
    -- Show the game options to the player
    -- PARAMETERS
@@ -136,6 +137,10 @@ package body GameOptions is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOptions
    -- SOURCE
    function Show_Options_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -330,7 +335,7 @@ package body GameOptions is
       return TCL_OK;
    end Show_Options_Command;
 
-   -- ****f* GameOptions/Set_Fonts_Command
+   -- ****o* GameOptions/Set_Fonts_Command
    -- FUNCTION
    -- Set the selected font
    -- PARAMETERS
@@ -338,6 +343,10 @@ package body GameOptions is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetFonts
    -- SOURCE
    function Set_Fonts_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -377,7 +386,7 @@ package body GameOptions is
       return TCL_OK;
    end Set_Fonts_Command;
 
-   -- ****f* GameOptions/Set_Default_Fonts_Command
+   -- ****o* GameOptions/Set_Default_Fonts_Command
    -- FUNCTION
    -- Set the default values for fonts
    -- PARAMETERS
@@ -385,6 +394,10 @@ package body GameOptions is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetDefaultFonts
    -- SOURCE
    function Set_Default_Fonts_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -422,7 +435,7 @@ package body GameOptions is
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
-   -- ****f* GameOptions/Close_Options_Command
+   -- ****o* GameOptions/Close_Options_Command
    -- FUNCTION
    -- Save all options and back to the map
    -- PARAMETERS
@@ -430,6 +443,10 @@ package body GameOptions is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseOptions
    -- SOURCE
    function Close_Options_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

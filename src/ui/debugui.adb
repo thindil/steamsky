@@ -52,14 +52,18 @@ with Utils.UI; use Utils.UI;
 
 package body DebugUI is
 
-   -- ****f* DebugUI/Refresh_Module_Command
+   -- ****o* DebugUI/Refresh_Module_Command
    -- FUNCTION
    -- Refresh the information about selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RefreshModule
    -- SOURCE
    function Refresh_Module_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -104,14 +108,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Module_Command;
 
-   -- ****f* DebugUI/Refresh_Member_Command
+   -- ****o* DebugUI/Refresh_Member_Command
    -- FUNCTION
    -- Refresh the information about selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RefreshMember
    -- SOURCE
    function Refresh_Member_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -233,14 +241,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Member_Command;
 
-   -- ****f* DebugUI/Refresh_Cargo_Command
+   -- ****o* DebugUI/Refresh_Cargo_Command
    -- FUNCTION
    -- Refresh the information about the player ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RefreshCargo
    -- SOURCE
    function Refresh_Cargo_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -267,14 +279,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Cargo_Command;
 
-   -- ****f* DebugUI/Refresh_Command
+   -- ****o* DebugUI/Refresh_Command
    -- FUNCTION
    -- Refresh the whole game information
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Refresh
    -- SOURCE
    function Refresh_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -325,14 +341,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Command;
 
-   -- ****f* DebugUI/Refresh_Base_Command
+   -- ****o* DebugUI/Refresh_Base_Command
    -- FUNCTION
    -- Refresh the information about the selected base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RefreshBase
    -- SOURCE
    function Refresh_Base_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -388,14 +408,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Base_Command;
 
-   -- ****f* DebugUI/Refresh_Events_Command
+   -- ****o* DebugUI/Refresh_Events_Command
    -- FUNCTION
    -- Refresh the list of events
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RefreshEvents
    -- SOURCE
    function Refresh_Events_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -482,14 +506,18 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Events_Command;
 
-   -- ****f* DebugUI/Save_Game_Command
+   -- ****o* DebugUI/Save_Game_Command
    -- FUNCTION
    -- Save the game
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugSaveGame
    -- SOURCE
    function Save_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -508,14 +536,18 @@ package body DebugUI is
       return TCL_OK;
    end Save_Game_Command;
 
-   -- ****f* DebugUI/Move_Ship_Command
+   -- ****o* DebugUI/Move_Ship_Command
    -- FUNCTION
    -- Move the player ship
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugMoveShip
    -- SOURCE
    function Move_Ship_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -540,14 +572,18 @@ package body DebugUI is
       return TCL_OK;
    end Move_Ship_Command;
 
-   -- ****f* DebugUI/Update_Module_Command
+   -- ****o* DebugUI/Update_Module_Command
    -- FUNCTION
    -- Update the selected module
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugUpdateModule
    -- SOURCE
    function Update_Module_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -596,14 +632,18 @@ package body DebugUI is
       return TCL_OK;
    end Update_Module_Command;
 
-   -- ****f* DebugUI/Add_Skill_Command
+   -- ****o* DebugUI/Add_Skill_Command
    -- FUNCTION
    -- Add a new skill to the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugAddSkill
    -- SOURCE
    function Add_Skill_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -637,14 +677,18 @@ package body DebugUI is
       return TCL_OK;
    end Add_Skill_Command;
 
-   -- ****f* DebugUI/Update_Member_Command
+   -- ****o* DebugUI/Update_Member_Command
    -- FUNCTION
    -- Update the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugUpdateMember
    -- SOURCE
    function Update_Member_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -698,7 +742,7 @@ package body DebugUI is
       return TCL_OK;
    end Update_Member_Command;
 
-   -- ****f* DebugUI/Add_Item_Command
+   -- ****o* DebugUI/Add_Item_Command
    -- FUNCTION
    -- Add a new item to the player ship cargo
    -- PARAMETERS
@@ -706,6 +750,10 @@ package body DebugUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugAddItem
    -- SOURCE
    function Add_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -740,7 +788,7 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
 
-   -- ****f* DebugUI/Update_Item_Command
+   -- ****o* DebugUI/Update_Item_Command
    -- FUNCTION
    -- Update the amount of an item in the player ship cargo
    -- PARAMETERS
@@ -748,6 +796,10 @@ package body DebugUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugUpdateItem
    -- SOURCE
    function Update_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -775,14 +827,18 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
 
-   -- ****f* DebugUI/Update_Base_Command
+   -- ****o* DebugUI/Update_Base_Command
    -- FUNCTION
    -- Update the selected base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugUpdateBase
    -- SOURCE
    function Update_Base_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -841,7 +897,7 @@ package body DebugUI is
       return TCL_OK;
    end Update_Base_Command;
 
-   -- ****f* DebugUI/Add_Ship_Command
+   -- ****o* DebugUI/Add_Ship_Command
    -- FUNCTION
    -- Add a new ship based event to the game
    -- PARAMETERS
@@ -849,6 +905,10 @@ package body DebugUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugAddShip
    -- SOURCE
    function Add_Ship_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -901,14 +961,18 @@ package body DebugUI is
       return TCL_OK;
    end Add_Ship_Command;
 
-   -- ****f* DebugUI/Toggle_Item_Entry_Command
+   -- ****o* DebugUI/Toggle_Item_Entry_Command
    -- FUNCTION
    -- Show or hide item entry for bases events
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleItemEntry
    -- SOURCE
    function Toggle_Item_Entry_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -942,7 +1006,7 @@ package body DebugUI is
       return TCL_OK;
    end Toggle_Item_Entry_Command;
 
-   -- ****f* DebugUI/Add_Event_Command
+   -- ****o* DebugUI/Add_Event_Command
    -- FUNCTION
    -- Add a new base event to the game
    -- PARAMETERS
@@ -950,6 +1014,10 @@ package body DebugUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugAddEvent
    -- SOURCE
    function Add_Event_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1025,7 +1093,7 @@ package body DebugUI is
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;
 
-   -- ****f* DebugUI/Delete_Event_Command
+   -- ****o* DebugUI/Delete_Event_Command
    -- FUNCTION
    -- Remove the selected event from the game
    -- PARAMETERS
@@ -1033,6 +1101,10 @@ package body DebugUI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DebugDeleteEvent
    -- SOURCE
    function Delete_Event_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
