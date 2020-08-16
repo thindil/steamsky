@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Set General career as default for each faction
 - Updated MODDING.md
 - Updated README.md
+- Updated interface
 
 ### Removed
 - Checkboxes images setting from the UI themes
