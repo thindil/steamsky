@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Vectors; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
--- ****h* Steamsky/Goals
+-- ****h* Goals/Goals
 -- FUNCTION
 -- Provide code for manipulate goals
 -- SOURCE

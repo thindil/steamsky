@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,7 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
--- ****h* Steamsky/HallOfFame
+-- ****h* HallOfFame/HallOfFame
 -- FUNCTION
 -- Provide code to manipulate hall of fame data
 -- SOURCE

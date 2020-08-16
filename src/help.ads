@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -19,7 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Ordered_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
--- ****h* Steamsky/Help
+-- ****h* Help/Help
 -- FUNCTION
 -- Provide code for manipulate help system
 -- SOURCE
