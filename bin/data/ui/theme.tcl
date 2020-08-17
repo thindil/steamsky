@@ -70,6 +70,16 @@ namespace eval ttk::theme::steamsky {
       ttk::style map . -foreground [list disabled $colors(-gray)]
 
       #
+      # Layouts:
+      #
+      ttk::style layout Horizontal.TProgressbar {
+         Horizontal.Progressbar.trough -sticky nswe -children {
+            Horizontal.Progressbar.pbar -side left -sticky ns
+         }
+         Horizontal.Progressbar.label -sticky nesw
+      }
+
+      #
       # Elements:
       #
 
@@ -127,6 +137,7 @@ namespace eval ttk::theme::steamsky {
 
       # Progressbar setting
       ttk::style configure TProgressbar -background red
+      ttk::style configure text.Horizontal.TProgressbar -text {} -background red
 
       # Entry setting
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
