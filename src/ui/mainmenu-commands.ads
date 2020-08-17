@@ -24,7 +24,7 @@ with Tcl; use Tcl;
 package MainMenu.Commands is
 -- ****
 
-   -- ****if* MCommands/Open_Link_Command
+   -- ****o* MCommands/Open_Link_Command
    -- FUNCTION
    -- Open the selected link in the proper program
    -- PARAMETERS
@@ -32,6 +32,11 @@ package MainMenu.Commands is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- OpenLink url
+   -- Url is link which will be opened
    -- SOURCE
    function Open_Link_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

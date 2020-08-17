@@ -38,14 +38,18 @@ with Utils.UI; use Utils.UI;
 
 package body Help.UI is
 
-   -- ****f* HUI/Show_Topic_Command
+   -- ****o* HUI/Show_Topic_Command
    -- FUNCTION
    -- Show the content of the selected topic help
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTopic
    -- SOURCE
    function Show_Topic_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -237,14 +241,19 @@ package body Help.UI is
       return TCL_OK;
    end Show_Topic_Command;
 
-   -- ****f* HUI/Show_Help_Command
+   -- ****o* HUI/Show_Help_Command
    -- FUNCTION
-   -- Show help window to the playera
+   -- Show help window to the player
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowHelp topicindex
+   -- Topicindex is the index of the help topic which content will be show
    -- SOURCE
    function Show_Help_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -303,7 +312,7 @@ package body Help.UI is
       return TCL_OK;
    end Show_Help_Command;
 
-   -- ****f* HUI/Close_Help_Command
+   -- ****o* HUI/Close_Help_Command
    -- FUNCTION
    -- Destroy help window and save sash position to the game configuration
    -- PARAMETERS
@@ -311,6 +320,10 @@ package body Help.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseHelp
    -- SOURCE
    function Close_Help_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

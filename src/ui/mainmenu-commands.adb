@@ -89,14 +89,20 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Open_Link_Command;
 
-   -- ****if* MCommands/Show_File_Command
+   -- ****o* MCommands/Show_File_Command
    -- FUNCTION
    -- Show the selected file content
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowFile filename
+   -- Filename is the name of the file in the documentation directory which
+   -- will be show
    -- SOURCE
    function Show_File_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -145,14 +151,19 @@ package body MainMenu.Commands is
    AllNews: Boolean := False;
    -- ****
 
-   -- ****if* MCommands/Show_News_Command
+   -- ****o* MCommands/Show_News_Command
    -- FUNCTION
    -- Show changes in the game, all or just recent
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowNews boolean
+   -- If boolean is true, show all news, otherwise only recent
    -- SOURCE
    function Show_News_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -209,14 +220,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_News_Command;
 
-   -- ****if* MCommands/Show_Hall_Of_Fame_Command
+   -- ****o* MCommands/Show_Hall_Of_Fame_Command
    -- FUNCTION
    -- Show the Hall of Fame
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowHallOfFame
    -- SOURCE
    function Show_Hall_Of_Fame_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -247,14 +262,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
 
-   -- ****if* MCommands/Show_Load_Game_Command
+   -- ****o* MCommands/Show_Load_Game_Command
    -- FUNCTION
    -- Show available saved games
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowLoadGame
    -- SOURCE
    function Show_Load_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -297,14 +316,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Load_Game_Command;
 
-   -- ****if* MCommands/Delete_Game_Command
+   -- ****o* MCommands/Delete_Game_Command
    -- FUNCTION
    -- Delete the selected save file
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DeleteGame
    -- SOURCE
    function Delete_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -344,6 +367,10 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Delete_Game_Command;
 
+   -- ****if* MCommands/StartGame
+   -- FUNCTION
+   -- Start the game
+   -- SOURCE
    procedure StartGame is
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
@@ -362,7 +389,6 @@ package body MainMenu.Commands is
       if Y < 0 then
          Y := 0;
       end if;
-      Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
       Wm_Set
         (MainWindow, "geometry",
          Trim(Positive'Image(GameSettings.WindowWidth), Left) & "x" &
@@ -372,14 +398,18 @@ package body MainMenu.Commands is
       CreateGameUI;
    end StartGame;
 
-   -- ****if* MCommands/Load_Game_Command
+   -- ****o* MCommands/Load_Game_Command
    -- FUNCTION
    -- Load the selected save file and start the game
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- LoadGame
    -- SOURCE
    function Load_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -415,14 +445,18 @@ package body MainMenu.Commands is
          return TCL_OK;
    end Load_Game_Command;
 
-   -- ****if* MCommands/Set_Faction_Command
+   -- ****o* MCommands/Set_Faction_Command
    -- FUNCTION
    -- Set faction destription and available bases and careers
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetFaction
    -- SOURCE
    function Set_Faction_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -523,14 +557,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Faction_Command;
 
-   -- ****if* MCommands/Set_Career_Command
+   -- ****o* MCommands/Set_Career_Command
    -- FUNCTION
    -- Set career description
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCareer
    -- SOURCE
    function Set_Career_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -583,14 +621,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Career_Command;
 
-   -- ****if* MCommands/Set_Base_Command
+   -- ****o* MCommands/Set_Base_Command
    -- FUNCTION
    -- Set starting base description
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetBase
    -- SOURCE
    function Set_Base_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -634,7 +676,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Base_Command;
 
-   -- ****if* MCommands/Random_Name_Command
+   -- ****o* MCommands/Random_Name_Command
    -- FUNCTION
    -- Generate random player or ship name
    -- PARAMETERS
@@ -642,6 +684,12 @@ package body MainMenu.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RandomName type
+   -- Type is type of name which should be generated. Possible options are
+   -- player or ship
    -- SOURCE
    function Random_Name_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -686,14 +734,18 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Random_Name_Command;
 
-   -- ****if* MCommands/New_Game_Command
+   -- ****o* MCommands/New_Game_Command
    -- FUNCTION
    -- Set all parameters and start a new game
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- NewGame
    -- SOURCE
    function New_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -779,7 +831,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end New_Game_Command;
 
-   -- ****if* MCommands/Show_Main_Menu_Command
+   -- ****o* MCommands/Show_Main_Menu_Command
    -- FUNCTION
    -- Clear the main game window and show main menu
    -- PARAMETERS
@@ -787,6 +839,10 @@ package body MainMenu.Commands is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMainMenu
    -- SOURCE
    function Show_Main_Menu_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
