@@ -38,14 +38,9 @@ with Utils.UI; use Utils.UI;
 package body ErrorDialog is
 
    procedure SaveException(An_Exception: Exception_Occurrence) is
-      use type Interfaces.C.int;
-
       ErrorFile: File_Type;
       ErrorText: Unbounded_String;
-      Interp: Tcl.Tcl_Interp := Get_Context;
-      Text: Tk_Text;
    begin
-      Tcl_Eval(Interp, "destroy .");
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
       end if;
@@ -71,29 +66,38 @@ package body ErrorDialog is
       Put_Line(ErrorFile, To_String(ErrorText));
       Close(ErrorFile);
       EndLogging;
-      Interp := Tcl.Tcl_CreateInterp;
-      if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
-         Ada.Text_IO.Put_Line
-           ("Steam Sky: Tcl.Tcl_Init failed: " &
-            Tcl.Ada.Tcl_GetStringResult(Interp));
-         return;
-      end if;
-      if Tcl.Tk.Tk_Init(Interp) = Tcl.TCL_ERROR then
-         Ada.Text_IO.Put_Line
-           ("Steam Sky: Tcl.Tk.Tk_Init failed: " &
-            Tcl.Ada.Tcl_GetStringResult(Interp));
-         return;
-      end if;
-      Set_Context(Interp);
-      Tcl_EvalFile
-        (Get_Context,
-         To_String(DataDirectory) & "ui" & Dir_Separator & "errordialog.tcl");
-      AddCommand("OpenLink", Open_Link_Command'Access);
-      Text.Interp := Interp;
-      Text.Name := New_String(".technical.text");
-      Insert(Text, "end", "{" & To_String(ErrorText) & "}");
-      configure(Text, "-state disabled");
-      Tcl.Tk.Tk_MainLoop;
+      declare
+         use type Interfaces.C.int;
+
+         Interp: Tcl.Tcl_Interp := Get_Context;
+         Text: Tk_Text;
+      begin
+         Tcl_Eval(Interp, "destroy .");
+         Interp := Tcl.Tcl_CreateInterp;
+         if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
+            Ada.Text_IO.Put_Line
+              ("Steam Sky: Tcl.Tcl_Init failed: " &
+               Tcl.Ada.Tcl_GetStringResult(Interp));
+            return;
+         end if;
+         if Tcl.Tk.Tk_Init(Interp) = Tcl.TCL_ERROR then
+            Ada.Text_IO.Put_Line
+              ("Steam Sky: Tcl.Tk.Tk_Init failed: " &
+               Tcl.Ada.Tcl_GetStringResult(Interp));
+            return;
+         end if;
+         Set_Context(Interp);
+         Tcl_EvalFile
+           (Get_Context,
+            To_String(DataDirectory) & "ui" & Dir_Separator &
+            "errordialog.tcl");
+         AddCommand("OpenLink", Open_Link_Command'Access);
+         Text.Interp := Interp;
+         Text.Name := New_String(".technical.text");
+         Insert(Text, "end", "{" & To_String(ErrorText) & "}");
+         configure(Text, "-state disabled");
+         Tcl.Tk.Tk_MainLoop;
+      end;
    end SaveException;
 
 end ErrorDialog;
