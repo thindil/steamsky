@@ -7,8 +7,14 @@ pack [ttk::scrollbar .paned.shipinfoframe.scrollx -orient horizontal -command [l
 set shipinfoframe [ttk::frame $shipinfocanvas.shipinfo]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
 # Ship name
-grid [ttk::label $shipinfoframe.left.namelbl -text {Name:}]
-grid [ttk::entry $shipinfoframe.left.name] -column 1 -row 0
+grid [ttk::label $shipinfoframe.left.namelbl -text {Name:}] -sticky w
+grid [ttk::label $shipinfoframe.left.name -wraplength 100] -column 1 -row 0 -sticky w
+grid [ttk::button $shipinfoframe.left.rename -text "[format %c 0xf044]" -style Toolbutton -command {
+   if {[getstring::tk_getString .gs text "Enter a new name:"]} {
+      SetShipName $text
+   }
+}] -column 2 -row 0 -sticky w
+tooltip::tooltip $shipinfoframe.left.rename {Set a new name for the ship}
 bind $shipinfoframe.left.name <Enter> SetShipName
 # Upgrade progress
 ttk::label $shipinfoframe.left.upgradelabel

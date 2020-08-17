@@ -31,7 +31,6 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -81,7 +80,7 @@ package body Ships.UI is
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame, Item: Ttk_Frame;
-      NameEntry: Ttk_Entry;
+      NameEntry: Ttk_Label;
       ShipInfo, UpgradeInfo: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
@@ -120,8 +119,7 @@ package body Ships.UI is
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       NameEntry.Interp := Interp;
       NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
-      Delete(NameEntry, "0", "end");
-      Insert(NameEntry, "0", To_String(PlayerShip.Name));
+      configure(NameEntry, "-text {" & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
@@ -378,8 +376,8 @@ package body Ships.UI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
    -- SOURCE
    function Set_Ship_Name_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -392,13 +390,17 @@ package body Ships.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      NameEntry: Ttk_Entry;
+      pragma Unreferenced(ClientData);
+      NameEntry: Ttk_Label;
    begin
+      if Argc = 1 then
+         return TCL_OK;
+      end if;
       NameEntry.Interp := Interp;
       NameEntry.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.left.name");
-      PlayerShip.Name := To_Unbounded_String(Get(NameEntry));
+      PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      configure(NameEntry, "-text {" & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Set_Ship_Name_Command;
 
