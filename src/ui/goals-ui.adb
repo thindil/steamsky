@@ -32,7 +32,7 @@ with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
-   -- ****if* GUI/Show_Goals_Command
+   -- ****o* GUI/Show_Goals_Command
    -- FUNCTION
    -- Show goals UI to the player
    -- PARAMETERS
@@ -40,6 +40,11 @@ package body Goals.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowGoals buttonpath
+   -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Show_Goals_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -74,7 +79,7 @@ package body Goals.UI is
       return TCL_OK;
    end Show_Goals_Command;
 
-   -- ****if* GUI/Set_Goal_Command
+   -- ****o* GUI/Set_Goal_Command
    -- FUNCTION
    -- Set selected goal as a current goal
    -- PARAMETERS
@@ -82,6 +87,11 @@ package body Goals.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetGoal buttonpath
+   -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Set_Goal_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
