@@ -144,9 +144,6 @@ namespace eval ttk::theme::steamsky {
          }
       }
 
-      # Paned window
-      ttk::style configure TPanedwindow -background $colors(-gray)
-
       # Combobox setting
       ttk::style configure TCombobox -arrowcolor $colors(-palegoldenrod) -relief flat -padding 4
       option add *TCombobox*Listbox.cursor hand1
