@@ -177,6 +177,11 @@ namespace eval ttk::theme::steamsky {
       set ::tooltip::labelOpts [list -highlightthickness 0 -relief solid -borderwidth 1 \
          -background black -foreground $colors(-palegoldenrod)]
 
+      # Dialog with getting string (like name of the ship, modules, etc)
+      option add *TkSDialog.background [ttk::style lookup . -background]
+      option add *TkSDialog*Button.foreground $colors(-goldenyellow)
+      option add *TkSDialog*Entry.foreground $colors(-goldenyellow)
+
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
