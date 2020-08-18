@@ -8,8 +8,7 @@ set shipinfoframe [ttk::frame $shipinfocanvas.shipinfo]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
 grid columnconfigure $shipinfoframe.left 1 -weight 1
 # Ship name
-grid [ttk::label $shipinfoframe.left.namelbl -text {Name:}] -sticky w
-grid [ttk::label $shipinfoframe.left.name -wraplength 100] -column 1 -row 0 -sticky w
+grid [ttk::label $shipinfoframe.left.name -wraplength 300] -columnspan 2 -sticky w
 grid [ttk::button $shipinfoframe.left.rename -text "[format %c 0xf044]" -style Toolbutton -command {
    if {[getstring::tk_getString .gs text "Enter a new name:"]} {
       SetShipName $text

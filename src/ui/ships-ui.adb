@@ -118,7 +118,7 @@ package body Ships.UI is
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       NameEntry.Interp := Interp;
       NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
-      configure(NameEntry, "-text {" & To_String(PlayerShip.Name) & "}");
+      configure(NameEntry, "-text {Name: " & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
@@ -137,7 +137,8 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          UpgradeInfo :=
-           "Upgrade:" & PlayerShip.Modules(PlayerShip.UpgradeModule).Name & " ";
+           "Upgrade:" & PlayerShip.Modules(PlayerShip.UpgradeModule).Name &
+           " ";
          case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
@@ -232,7 +233,8 @@ package body Ships.UI is
             Append(UpgradeInfo, " (final upgrades)");
          end if;
          configure(UpgradeLabel, "-text {" & To_String(UpgradeInfo) & "}");
-         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -columnspan 3 -row 1 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeLabel, "-column 0 -columnspan 3 -row 1 -sticky w");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-column 0 -row 2 -columnspan 2 -sticky we");
          Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 2 -sticky w");
@@ -402,7 +404,7 @@ package body Ships.UI is
       NameEntry.Name :=
         New_String(".paned.shipinfoframe.canvas.shipinfo.left.name");
       PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
-      configure(NameEntry, "-text {" & CArgv.Arg(Argv, 1) & "}");
+      configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Set_Ship_Name_Command;
 
