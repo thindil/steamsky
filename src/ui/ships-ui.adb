@@ -76,7 +76,7 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Label, UpgradeLabel, NameEntry: Ttk_Label;
+      Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame, Item: Ttk_Frame;
@@ -116,14 +116,13 @@ package body Ships.UI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipInfoFrame.Name :=
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
-      NameEntry.Interp := Interp;
-      NameEntry.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
-      configure(NameEntry, "-text {Name: " & To_String(PlayerShip.Name) & "}");
+      Label.Interp := Interp;
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
+      configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
-      UpgradeLabel.Interp := Interp;
-      UpgradeLabel.Name :=
+      Label.Name :=
         New_String(Widget_Image(ShipInfoFrame) & ".left.upgradelabel");
       UpgradeProgress.Interp := Interp;
       UpgradeProgress.Name :=
@@ -132,7 +131,7 @@ package body Ships.UI is
       CancelButton.Name :=
         New_String(Widget_Image(ShipInfoFrame) & ".left.cancel");
       if PlayerShip.UpgradeModule = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeLabel);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
@@ -232,9 +231,9 @@ package body Ships.UI is
          else
             Append(UpgradeInfo, " (final upgrades)");
          end if;
-         configure(UpgradeLabel, "-text {" & To_String(UpgradeInfo) & "}");
+         configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid
-           (UpgradeLabel, "-column 0 -columnspan 3 -row 1 -sticky w");
+           (Label, "-column 0 -columnspan 3 -row 1 -sticky w");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-column 0 -row 2 -columnspan 2 -sticky we");
          Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 2 -sticky w");
@@ -271,6 +270,8 @@ package body Ships.UI is
       Append
         (ShipInfo,
          LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
+      Label.Name :=
+        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.left.info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
