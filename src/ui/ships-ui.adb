@@ -86,7 +86,7 @@ package body Ships.UI is
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
       ModulesView: Ttk_Tree_View;
-      CloseButton: Ttk_Button;
+      CloseButton, CancelButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
    begin
@@ -129,9 +129,13 @@ package body Ships.UI is
       UpgradeProgress.Interp := Interp;
       UpgradeProgress.Name :=
         New_String(Widget_Image(ShipInfoFrame) & ".left.upgrade");
+      CancelButton.Interp := Interp;
+      CancelButton.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".left.cancel");
       if PlayerShip.UpgradeModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeLabel);
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          UpgradeInfo := To_Unbounded_String("Upgrading: ");
          Append
@@ -231,9 +235,10 @@ package body Ships.UI is
          else
             Append(UpgradeInfo, " (final upgrades)");
          end if;
-         configure(UpgradeLabel, "-text {" & To_String(UpgradeInfo) & "}");
-         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -row 1");
-         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress, "-column 1 -row 1");
+         Append(ShipInfo, LF & UpgradeInfo);
+         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -row 1 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress, "-column 1 -row 1 -sticky we");
+         Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 1 -sticky w");
       end if;
       Append(ShipInfo, LF & "Repair first: ");
       if PlayerShip.RepairModule = 0 then
@@ -715,10 +720,6 @@ package body Ships.UI is
       if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
         PlayerShip.UpgradeModule /= ModuleIndex then
          Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-      end if;
-      if PlayerShip.UpgradeModule /= 0 then
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".stop");
          Tcl.Tk.Ada.Grid.Grid(Button);
       end if;
       if PlayerShip.RepairModule /= ModuleIndex then

@@ -6,6 +6,7 @@ pack [ttk::scrollbar .paned.shipinfoframe.scrollx -orient horizontal -command [l
 # General ship info
 set shipinfoframe [ttk::frame $shipinfocanvas.shipinfo]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
+grid columnconfigure $shipinfoframe.left 1 -weight 1
 # Ship name
 grid [ttk::label $shipinfoframe.left.namelbl -text {Name:}] -sticky w
 grid [ttk::label $shipinfoframe.left.name -wraplength 100] -column 1 -row 0 -sticky w
@@ -17,12 +18,15 @@ grid [ttk::button $shipinfoframe.left.rename -text "[format %c 0xf044]" -style T
 tooltip::tooltip $shipinfoframe.left.rename {Set a new name for the ship}
 bind $shipinfoframe.left.name <Enter> SetShipName
 # Upgrade progress
-ttk::label $shipinfoframe.left.upgradelabel
-ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0
+ttk::label $shipinfoframe.left.upgradelabel -text {Upgrade:}
+ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar
+tooltip::tooltip $shipinfoframe.left.upgrade {The current ship's upgrade progress}
+ttk::button $shipinfoframe.left.cancel -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading
+tooltip::tooltip $shipinfoframe.left.cancel {Stop the current upgrade}
 # Ship info
-grid [ttk::label $shipinfoframe.left.info] -row 2 -columnspan 2
+grid [ttk::label $shipinfoframe.left.info] -row 2 -columnspan 3 -sticky we
 # Ship modules
-grid [ttk::treeview $shipinfoframe.left.modules -show tree] -row 3 -columnspan 2
+grid [ttk::treeview $shipinfoframe.left.modules -show tree] -row 3 -columnspan 3 -sticky we
 bind $shipinfoframe.left.modules <<TreeviewSelect>> ShowModuleInfo
 grid [ttk::frame $shipinfoframe.right] -column 1 -row 0 -sticky nwes
 # Crew info
@@ -60,6 +64,5 @@ grid [ttk::button $shipinfoframe.right.options.train -text {Train} -command {Ass
 grid [ttk::combobox $shipinfoframe.right.options.traincombo -state readonly] -column 1 -row 5
 grid [ttk::button $shipinfoframe.right.options.disable -text {Disable engine} -command DisableEngine] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
-grid [ttk::button $shipinfoframe.right.options.stop -text {Stop upgrading} -command {StopUpgrading}] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.remove -text {Remove repair priority} -command {SetRepair remove}] -columnspan 2
