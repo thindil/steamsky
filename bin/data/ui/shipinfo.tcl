@@ -19,14 +19,15 @@ tooltip::tooltip $shipinfoframe.left.rename {Set a new name for the ship}
 bind $shipinfoframe.left.name <Enter> SetShipName
 # Upgrade progress
 ttk::label $shipinfoframe.left.upgradelabel -text {Upgrade:}
+ttk::label $shipinfoframe.left.upgradename
 ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar
 tooltip::tooltip $shipinfoframe.left.upgrade {The current ship's upgrade progress}
 ttk::button $shipinfoframe.left.cancel -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading
 tooltip::tooltip $shipinfoframe.left.cancel {Stop the current upgrade}
 # Ship info
-grid [ttk::label $shipinfoframe.left.info] -row 2 -columnspan 3 -sticky we
+grid [ttk::label $shipinfoframe.left.info] -row 3 -columnspan 3 -sticky we
 # Ship modules
-grid [ttk::treeview $shipinfoframe.left.modules -show tree] -row 3 -columnspan 3 -sticky we
+grid [ttk::treeview $shipinfoframe.left.modules -show tree] -row 4 -columnspan 3 -sticky we
 bind $shipinfoframe.left.modules <<TreeviewSelect>> ShowModuleInfo
 grid [ttk::frame $shipinfoframe.right] -column 1 -row 0 -sticky nwes
 # Crew info
