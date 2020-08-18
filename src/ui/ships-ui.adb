@@ -76,11 +76,10 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Label, UpgradeLabel: Ttk_Label;
+      Label, UpgradeLabel, NameEntry: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame, Item: Ttk_Frame;
-      NameEntry: Ttk_Label;
       ShipInfo, UpgradeInfo: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
@@ -137,11 +136,8 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
-         UpgradeInfo := To_Unbounded_String("Upgrading: ");
-         Append
-           (UpgradeInfo,
-            To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
-            " ");
+         UpgradeInfo :=
+           "Upgrade:" & PlayerShip.Modules(PlayerShip.UpgradeModule).Name & " ";
          case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
@@ -235,10 +231,11 @@ package body Ships.UI is
          else
             Append(UpgradeInfo, " (final upgrades)");
          end if;
-         Append(ShipInfo, LF & UpgradeInfo);
-         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -row 1 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress, "-column 1 -row 1 -sticky we");
-         Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 1 -sticky w");
+         configure(UpgradeLabel, "-text {" & To_String(UpgradeInfo) & "}");
+         Tcl.Tk.Ada.Grid.Grid(UpgradeLabel, "-column 0 -columnspan 3 -row 1 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-column 0 -row 2 -columnspan 2 -sticky we");
+         Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 2 -sticky w");
       end if;
       Append(ShipInfo, LF & "Repair first: ");
       if PlayerShip.RepairModule = 0 then
