@@ -24,7 +24,7 @@ with Crew; use Crew;
 with Factions; use Factions;
 with Game; use Game;
 
--- ****h* Steamsky/Mobs
+-- ****h* Mobs/Mobs
 -- FUNCTION
 -- Provides code for manipulate mobiles
 -- SOURCE
