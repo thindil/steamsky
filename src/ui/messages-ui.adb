@@ -75,14 +75,19 @@ package body Messages.UI is
       end if;
    end ShowMessage;
 
-   -- ****f* MUI2/Show_Last_Messages_Command
+   -- ****o* MUI2/Show_Last_Messages_Command
    -- FUNCTION
    -- Show the list of last messages to a player
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowLastMessages messagestype
+   -- MessagesType is the type of messages to show, default all
    -- SOURCE
    function Show_Last_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -179,7 +184,7 @@ package body Messages.UI is
       return TCL_OK;
    end Show_Last_Messages_Command;
 
-   -- ****if* MUI2/Select_Messages_Command
+   -- ****o* MUI2/Select_Messages_Command
    -- FUNCTION
    -- Show only messages of the selected type
    -- PARAMETERS
@@ -187,6 +192,10 @@ package body Messages.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SelectMessages
    -- SOURCE
    function Select_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -209,14 +218,18 @@ package body Messages.UI is
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
 
-   -- ****if* MUI2/Delete_Messages_Command
+   -- ****o* MUI2/Delete_Messages_Command
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DeleteMessages
    -- SOURCE
    function Delete_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -245,7 +258,7 @@ package body Messages.UI is
       return TCL_OK;
    end Delete_Messages_Command;
 
-   -- ****if* MUI2/Search_Messages_Command
+   -- ****o* MUI2/Search_Messages_Command
    -- FUNCTION
    -- Show only this messages which contains the selected sequence
    -- PARAMETERS
@@ -253,6 +266,11 @@ package body Messages.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SearchMessages text
+   -- Text is the string to search in the messages
    -- SOURCE
    function Search_Messages_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

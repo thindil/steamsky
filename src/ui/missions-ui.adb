@@ -50,7 +50,7 @@ package body Missions.UI is
    BaseIndex: Natural;
    -- ****
 
-   -- ****if* MUI3/Show_Mission_Info_Command
+   -- ****o* MUI3/Show_Mission_Info_Command
    -- FUNCTION
    -- Show information about the selected mission
    -- PARAMETERS
@@ -58,6 +58,10 @@ package body Missions.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMissionInfo
    -- SOURCE
    function Show_Mission_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -256,7 +260,7 @@ package body Missions.UI is
       return TCL_OK;
    end Show_Mission_Info_Command;
 
-   -- ****if* MUI3/Show_Mission_Command
+   -- ****o* MUI3/Show_Mission_Command
    -- FUNCTION
    -- Show mission on map
    -- PARAMETERS
@@ -264,6 +268,10 @@ package body Missions.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMission
    -- SOURCE
    function Show_Mission_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -349,7 +357,7 @@ package body Missions.UI is
       Selection_Set(MissionsView, "[list 1]");
    end RefreshMissionsList;
 
-   -- ****if* MUI3/Set_Mission_Command
+   -- ****o* MUI3/Set_Mission_Command
    -- FUNCTION
    -- Set mission as the player's ship destination or accept it in a base
    -- PARAMETERS
@@ -357,6 +365,10 @@ package body Missions.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetMission
    -- SOURCE
    function Set_Mission_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
