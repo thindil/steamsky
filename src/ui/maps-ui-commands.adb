@@ -67,7 +67,7 @@ package body Maps.UI.Commands is
       To_Unbounded_String("hide"), To_Unbounded_String("left"),
       To_Unbounded_String("right"));
 
-   -- ****if* MapCommands/Hide_Map_Buttons_Command
+   -- ****o* MapCommands/Hide_Map_Buttons_Command
    -- FUNCTION
    -- Hide map movement buttons
    -- PARAMETERS
@@ -75,6 +75,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- HideMapButtons
    -- SOURCE
    function Hide_Map_Buttons_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -101,7 +105,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Hide_Map_Buttons_Command;
 
-   -- ****if* MapCommands/Show_Map_Buttons_Command
+   -- ****o* MapCommands/Show_Map_Buttons_Command
    -- FUNCTION
    -- Show map movement buttons
    -- PARAMETERS
@@ -109,6 +113,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMapButtons
    -- SOURCE
    function Show_Map_Buttons_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -145,14 +153,19 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Map_Buttons_Command;
 
-   -- ****if* MapCommands/Move_Map_Buttons_Command
+   -- ****o* MapCommands/Move_Map_Buttons_Command
    -- FUNCTION
    -- Move map movement buttons left of right
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveMapButtons buttonname
+   -- Buttonname is the name of the button which was clicked
    -- SOURCE
    function Move_Map_Buttons_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -186,7 +199,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Buttons_Command;
 
-   -- ****if* MapCommands/Draw_Map_Command
+   -- ****o* MapCommands/Draw_Map_Command
    -- FUNCTION
    -- Draw the sky map
    -- PARAMETERS
@@ -194,6 +207,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DrawMap
    -- SOURCE
    function Draw_Map_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -235,14 +252,19 @@ package body Maps.UI.Commands is
    MapY: Positive;
    -- ****
 
-   -- ****if* MapCommands/Update_Map_Info_Command
+   -- ****o* MapCommands/Update_Map_Info_Command
    -- FUNCTION
    -- Update map cell info
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateMapInfo x y
+   -- X and Y are coordinates of the map cell which info will be show
    -- SOURCE
    function Update_Map_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -287,7 +309,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Update_Map_Info_Command;
 
-   -- ****if* MapCommands/Move_Map_Info_Command
+   -- ****o* MapCommands/Move_Map_Info_Command
    -- FUNCTION
    -- Move map info frame when mouse enter it
    -- PARAMETERS
@@ -295,6 +317,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveMapInfo
    -- SOURCE
    function Move_Map_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -320,14 +346,19 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Info_Command;
 
-   -- ****if* MapCommands/Show_Destination_Menu_Command
+   -- ****o* MapCommands/Show_Destination_Menu_Command
    -- FUNCTION
    -- Create and show destination menu
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowDestinationMenu x y
+   -- X and Y are mouse coordinates on which the destination menu will be show
    -- SOURCE
    function Show_Destination_Menu_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -369,14 +400,18 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
-   -- ****if* MapCommands/Set_Destination_Command
+   -- ****o* MapCommands/Set_Destination_Command
    -- FUNCTION
    -- Set current map cell as destination for the player's ship
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetDestination
    -- SOURCE
    function Set_Destination_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -404,14 +439,19 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Set_Destination_Command;
 
-   -- ****if* MapCommands/Move_Map_Command
+   -- ****o* MapCommands/Move_Map_Command
    -- FUNCTION
    -- Move map in the selected direction
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveMap direction
+   -- Direction in which the map will be moved
    -- SOURCE
    function Move_Map_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -521,14 +561,18 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Command;
 
-   -- ****if* MapCommands/Zoom_Map_Command
+   -- ****o* MapCommands/Zoom_Map_Command
    -- FUNCTION
    -- Zoom the sky map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ZoomMap
    -- SOURCE
    function Zoom_Map_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -559,14 +603,19 @@ package body Maps.UI.Commands is
       return Draw_Map_Command(ClientData, Interp, Argc, Argv);
    end Zoom_Map_Command;
 
-   -- ****if* MapCommands/Move_Command
+   -- ****o* MapCommands/Move_Command
    -- FUNCTION
    -- Move the player ship in the selected location and check what happens
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveShip direction
+   -- Direction in which the player's ship will be moved
    -- SOURCE
    function Move_Ship_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -792,15 +841,19 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Ship_Command;
 
-   -- ****if* MapCommands/Quit_Game_Command
+   -- ****o* MapCommands/Quit_Game_Command
    -- FUNCTION
    -- Ask player if he/she wants to quit from the game and if yes, save it and
    -- show main menu
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- QuitGame
    -- SOURCE
    function Quit_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -828,7 +881,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Quit_Game_Command;
 
-   -- ****if* MapCommands/Resign_Game_Command
+   -- ****o* MapCommands/Resign_Game_Command
    -- FUNCTION
    -- Resing from the game - if player resigned, kill he/she character and
    -- follow as for death of the player's character
@@ -837,6 +890,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ResignGame
    -- SOURCE
    function Resign_Game_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -860,7 +917,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Resign_Game_Command;
 
-   -- ****if* MapCommands/Show_Stats_Command
+   -- ****o* MapCommands/Show_Stats_Command
    -- FUNCTION
    -- Show the player's game statistics
    -- PARAMETERS
@@ -868,6 +925,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowStats
    -- SOURCE
    function Show_Stats_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -890,7 +951,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Stats_Command;
 
-   -- ****if* MapCommands/Show_Sky_Map_Command
+   -- ****o* MapCommands/Show_Sky_Map_Command
    -- FUNCTION
    -- Show sky map
    -- PARAMETERS
@@ -898,6 +959,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowSkyMap
    -- SOURCE
    function Show_Sky_Map_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -920,7 +985,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
-   -- ****if* MapCommands/Show_Events_Command
+   -- ****o* MapCommands/Show_Events_Command
    -- FUNCTION
    -- Show the list of known events
    -- PARAMETERS
@@ -928,6 +993,10 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowEvents
    -- SOURCE
    function Show_Events_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -955,7 +1024,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Events_Command;
 
-   -- ****if* MapCommands/Show_Missions_Command
+   -- ****o* MapCommands/Show_Missions_Command
    -- FUNCTION
    -- Show the list of accepted missions
    -- PARAMETERS
@@ -963,6 +1032,12 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMissions type
+   -- Type is the type of missions to show. Possible values are accepted or
+   -- available
    -- SOURCE
    function Show_Missions_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -994,14 +1069,18 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Missions_Command;
 
-   -- ****if* MapCommands/Show_Stories_Command
+   -- ****o* MapCommands/Show_Stories_Command
    -- FUNCTION
    -- Show the list of know stories
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowStories
    -- SOURCE
    function Show_Stories_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1028,7 +1107,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Stories_Command;
 
-   -- ****if* MapCommands/Move_Cursor_Command
+   -- ****o* MapCommands/Move_Mouse_Command
    -- FUNCTION
    -- Move mouse cursor with keyboard
    -- PARAMETERS
@@ -1036,6 +1115,12 @@ package body Maps.UI.Commands is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveMouse direction
+   -- Direction is the direction in which the mouse cursor should be moves or
+   -- click if emulate clicking with the left button
    -- SOURCE
    function Move_Mouse_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1101,14 +1186,18 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Mouse_Command;
 
-   -- ****if* MapCommands/Toggle_Full_Screen_Command
+   -- ****o* MapCommands/Toggle_Full_Screen_Command
    -- FUNCTION
    -- Toggle the game full screen mode
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ToggleFullScreen
    -- SOURCE
    function Toggle_Full_Screen_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
