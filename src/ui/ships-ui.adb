@@ -100,7 +100,7 @@ package body Ships.UI is
         New_String(Widget_Image(ShipInfoFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.left.info");
+        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.left.name");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -116,8 +116,6 @@ package body Ships.UI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipInfoFrame.Name :=
         New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
-      Label.Interp := Interp;
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".left.name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
@@ -129,7 +127,8 @@ package body Ships.UI is
         New_String(Widget_Image(ShipInfoFrame) & ".left.upgrade");
       CancelButton.Interp := Interp;
       CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.cancel");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.cancelupgrade");
+      -- Show or hide upgrade module info
       if PlayerShip.UpgradeModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
@@ -238,13 +237,21 @@ package body Ships.UI is
            (UpgradeProgress, "-column 0 -row 2 -columnspan 2 -sticky we");
          Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 2 -sticky w");
       end if;
-      Append(ShipInfo, LF & "Repair first: ");
+      -- Show or hide repair priority info
+      Label.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".left.repairlabel");
+      CancelButton.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".left.cancelpriority");
       if PlayerShip.RepairModule = 0 then
-         Append(ShipInfo, "Any module");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
-         Append
-           (ShipInfo,
-            To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name));
+         configure
+           (Label,
+            "-text {Repair first: " &
+            To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       Append(ShipInfo, LF & "Destination: ");
       if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
@@ -724,10 +731,6 @@ package body Ships.UI is
       end if;
       if PlayerShip.RepairModule /= ModuleIndex then
          Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-      end if;
-      if PlayerShip.RepairModule /= 0 then
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".remove");
          Tcl.Tk.Ada.Grid.Grid(Button);
       end if;
    end ShowModuleOptions;
