@@ -3,34 +3,36 @@ set shipinfocanvas [canvas .paned.shipinfoframe.canvas -yscrollcommand [list .pa
 pack [ttk::scrollbar .paned.shipinfoframe.scrolly -orient vertical -command [list $shipinfocanvas yview]] -side right -fill y
 pack $shipinfocanvas -side top -fill both
 pack [ttk::scrollbar .paned.shipinfoframe.scrollx -orient horizontal -command [list $shipinfocanvas xview]] -fill x
-# General ship info
 set shipinfoframe [ttk::frame $shipinfocanvas.shipinfo]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
-grid columnconfigure $shipinfoframe.left 1 -weight 1
+# General ship info
+grid [ttk::labelframe $shipinfoframe.left.general -text {General info:}]
+grid columnconfigure $shipinfoframe.left.general 1 -weight 1
 # Ship name
-grid [ttk::label $shipinfoframe.left.name -wraplength 300] -columnspan 2 -sticky w
-grid [ttk::button $shipinfoframe.left.rename -text "[format %c 0xf044]" -style Toolbutton -command {
+grid [ttk::label $shipinfoframe.left.general.name -wraplength 300] -columnspan 2 -sticky w
+grid [ttk::button $shipinfoframe.left.general.rename -text "[format %c 0xf044]" -style Toolbutton -command {
    if {[getstring::tk_getString .gs text "Enter a new name:"]} {
       SetShipName $text
    }
 }] -column 2 -row 0 -sticky w
-tooltip::tooltip $shipinfoframe.left.rename {Set a new name for the ship}
-bind $shipinfoframe.left.name <Enter> SetShipName
+tooltip::tooltip $shipinfoframe.left.general.rename {Set a new name for the ship}
+bind $shipinfoframe.left.general.name <Enter> SetShipName
 # Upgrade progress
-grid [ttk::label $shipinfoframe.left.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
-grid [ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar] -sticky we -columnspan 2
-tooltip::tooltip $shipinfoframe.left.upgrade {The current ship's upgrade progress}
-grid [ttk::button $shipinfoframe.left.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
-tooltip::tooltip $shipinfoframe.left.cancelupgrade {Stop the current upgrade}
+grid [ttk::label $shipinfoframe.left.general.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
+grid [ttk::progressbar $shipinfoframe.left.general.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar] -sticky we -columnspan 2
+tooltip::tooltip $shipinfoframe.left.general.upgrade {The current ship's upgrade progress}
+grid [ttk::button $shipinfoframe.left.general.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
+tooltip::tooltip $shipinfoframe.left.general.cancelupgrade {Stop the current upgrade}
 # Repair priority
-grid [ttk::label $shipinfoframe.left.repairlabel] -row 3 -columnspan 2 -sticky we
-grid [ttk::button $shipinfoframe.left.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
-tooltip::tooltip $shipinfoframe.left.cancelpriority {Remove the repair priority}
+grid [ttk::label $shipinfoframe.left.general.repairlabel] -row 3 -columnspan 2 -sticky we
+grid [ttk::button $shipinfoframe.left.general.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
+tooltip::tooltip $shipinfoframe.left.general.cancelpriority {Remove the repair priority}
 # Ship info
-grid [ttk::label $shipinfoframe.left.info] -row 4 -columnspan 3 -sticky we
+grid [ttk::label $shipinfoframe.left.general.info] -row 4 -columnspan 3 -sticky we
 # Ship modules
-grid [ttk::treeview $shipinfoframe.left.modules -show tree] -row 5 -columnspan 3 -sticky we
-bind $shipinfoframe.left.modules <<TreeviewSelect>> ShowModuleInfo
+grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
+grid [ttk::treeview $shipinfoframe.left.modules.modules -show tree] -row 5 -columnspan 3 -sticky nwes
+bind $shipinfoframe.left.modules.modules <<TreeviewSelect>> ShowModuleInfo
 grid [ttk::frame $shipinfoframe.right] -column 1 -row 0 -sticky nwes
 # Crew info
 grid [ttk::labelframe $shipinfoframe.right.crew -text {Crew Info:}]

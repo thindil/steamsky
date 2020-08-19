@@ -104,7 +104,8 @@ package body Ships.UI is
         New_String(Widget_Image(ShipInfoFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.left.name");
+        New_String
+          (Widget_Image(ShipInfoCanvas) & ".shipinfo.left.general.name");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -125,13 +126,14 @@ package body Ships.UI is
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
       Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.upgradelabel");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.general.upgradelabel");
       UpgradeProgress.Interp := Interp;
       UpgradeProgress.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.upgrade");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.general.upgrade");
       CancelButton.Interp := Interp;
       CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.cancelupgrade");
+        New_String
+          (Widget_Image(ShipInfoFrame) & ".left.general.cancelupgrade");
       -- Show or hide upgrade module info
       if PlayerShip.UpgradeModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -241,9 +243,10 @@ package body Ships.UI is
       end if;
       -- Show or hide repair priority info
       Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.repairlabel");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.general.repairlabel");
       CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.cancelpriority");
+        New_String
+          (Widget_Image(ShipInfoFrame) & ".left.general.cancelpriority");
       if PlayerShip.RepairModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
@@ -280,11 +283,12 @@ package body Ships.UI is
         (ShipInfo,
          LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
       Label.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.left.info");
+        New_String
+          (Widget_Image(ShipInfoCanvas) & ".shipinfo.left.general.info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.modules");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.modules.modules");
       Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
       for I in PlayerShip.Modules.Iterate loop
          Insert
@@ -417,7 +421,7 @@ package body Ships.UI is
       end if;
       NameEntry.Interp := Interp;
       NameEntry.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.left.name");
+        New_String(".paned.shipinfoframe.canvas.shipinfo.left.general.name");
       PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
@@ -805,7 +809,8 @@ package body Ships.UI is
    begin
       ModulesView.Interp := Interp;
       ModulesView.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.left.modules");
+        New_String
+          (".paned.shipinfoframe.canvas.shipinfo.left.modules.modules");
       ModuleIndex := Positive'Value(Selection(ModulesView));
       Module := PlayerShip.Modules(ModuleIndex);
       Label.Interp := Interp;
