@@ -27,7 +27,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -82,7 +81,6 @@ package body Ships.UI is
       pragma Unreferenced(ClientData, Argv);
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
-      ShipInfoCanvas: Tk_Canvas;
       ShipInfoFrame, Item: Ttk_Frame;
       ShipInfo, UpgradeInfo: Unbounded_String;
       MaxUpgrade: Integer;
@@ -99,18 +97,13 @@ package body Ships.UI is
       CloseButton.Name := New_String(".header.closebutton");
       ShipInfoFrame.Interp := Interp;
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ShipInfoCanvas.Interp := Interp;
-      ShipInfoCanvas.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".canvas");
       Label.Interp := Interp;
       Label.Name :=
-        New_String
-          (Widget_Image(ShipInfoCanvas) & ".shipinfo.left.general.name");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.general.name");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
-         Bind(ShipInfoFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -119,8 +112,6 @@ package body Ships.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      ShipInfoFrame.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
@@ -283,8 +274,7 @@ package body Ships.UI is
         (ShipInfo,
          LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
       Label.Name :=
-        New_String
-          (Widget_Image(ShipInfoCanvas) & ".shipinfo.left.general.info");
+        New_String(Widget_Image(ShipInfoFrame) & ".left.general.info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
@@ -298,7 +288,7 @@ package body Ships.UI is
       end loop;
       Selection_Set(ModulesView, "[list 1]");
       ShipInfoFrame.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo.right.crew");
+        New_String(Widget_Image(ShipInfoFrame) & ".right.crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -368,22 +358,11 @@ package body Ships.UI is
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
          Row := Row + 1;
       end loop;
-      ShipInfoFrame.Name :=
-        New_String(Widget_Image(ShipInfoCanvas) & ".shipinfo");
       configure
-        (ShipInfoCanvas,
+        (ShipInfoFrame,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      Canvas_Create
-        (ShipInfoCanvas, "window",
-         "[expr " & Winfo_Get(ShipInfoFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(ShipInfoFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(ShipInfoFrame));
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (ShipInfoCanvas,
-         "-scrollregion [list " & BBox(ShipInfoCanvas, "all") & "]");
       ShowScreen("shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
@@ -420,8 +399,7 @@ package body Ships.UI is
          return TCL_OK;
       end if;
       NameEntry.Interp := Interp;
-      NameEntry.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.left.general.name");
+      NameEntry.Name := New_String(".paned.shipinfoframe.left.general.name");
       PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
@@ -531,8 +509,7 @@ package body Ships.UI is
       end ShowAssignAmmo;
    begin
       ButtonsFrame.Interp := Get_Context;
-      ButtonsFrame.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.right.options");
+      ButtonsFrame.Name := New_String(".paned.shipinfoframe.right.options");
       Button.Interp := Get_Context;
       ComboBox.Interp := Get_Context;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
@@ -809,17 +786,14 @@ package body Ships.UI is
    begin
       ModulesView.Interp := Interp;
       ModulesView.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.left.modules.modules");
+        New_String(".paned.shipinfoframe.left.modules.modules");
       ModuleIndex := Positive'Value(Selection(ModulesView));
       Module := PlayerShip.Modules(ModuleIndex);
       Label.Interp := Interp;
-      Label.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.damagelbl");
+      Label.Name := New_String(".paned.shipinfoframe.right.module.damagelbl");
       ProgressBar.Interp := Interp;
       ProgressBar.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.damage");
+        New_String(".paned.shipinfoframe.right.module.damage");
       if Module.Durability < Module.MaxDurability then
          Tcl.Tk.Ada.Grid.Grid(Label);
          DamagePercent :=
@@ -844,32 +818,23 @@ package body Ships.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-column 1 -row 0");
       end if;
-      Label.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+      Label.Name := New_String(".paned.shipinfoframe.right.module.cleanlbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ProgressBar.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+        New_String(".paned.shipinfoframe.right.module.clean");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
-      Label.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.qualitylbl");
+      Label.Name := New_String(".paned.shipinfoframe.right.module.qualitylbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ProgressBar.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+        New_String(".paned.shipinfoframe.right.module.quality");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
-      Label.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.upgradelbl");
+      Label.Name := New_String(".paned.shipinfoframe.right.module.upgradelbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ProgressBar.Name :=
-        New_String
-          (".paned.shipinfoframe.canvas.shipinfo.right.module.upgrade");
+        New_String(".paned.shipinfoframe.right.module.upgrade");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
       ModuleText.Interp := Interp;
-      ModuleText.Name :=
-        New_String(".paned.shipinfoframe.canvas.shipinfo.right.module.info");
+      ModuleText.Name := New_String(".paned.shipinfoframe.right.module.info");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
       Insert
@@ -935,11 +900,9 @@ package body Ships.UI is
                " kg}");
          when HULL =>
             ProgressBar.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+              New_String(".paned.shipinfoframe.right.module.clean");
             Label.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+              New_String(".paned.shipinfoframe.right.module.cleanlbl");
             DamagePercent :=
               Float(Module.InstalledModules) / Float(Module.MaxModules);
             configure(ProgressBar, "-value" & Float'Image(DamagePercent));
@@ -959,11 +922,9 @@ package body Ships.UI is
          when CABIN =>
             AddOwnersInfo("Owner");
             ProgressBar.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.clean");
+              New_String(".paned.shipinfoframe.right.module.clean");
             Label.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.cleanlbl");
+              New_String(".paned.shipinfoframe.right.module.cleanlbl");
             if Module.Cleanliness /= Module.Quality then
                DamagePercent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
@@ -983,11 +944,9 @@ package body Ships.UI is
                Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
             end if;
             ProgressBar.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.quality");
+              New_String(".paned.shipinfoframe.right.module.quality");
             Label.Name :=
-              New_String
-                (".paned.shipinfoframe.canvas.shipinfo.right.module.qualitylbl");
+              New_String(".paned.shipinfoframe.right.module.qualitylbl");
             configure
               (ProgressBar,
                "-value" & Float'Image(Float(Module.Quality) / 100.0));
@@ -1226,8 +1185,7 @@ package body Ships.UI is
             MaxUpgrade := 1;
          end if;
          ProgressBar.Name :=
-           New_String
-             (".paned.shipinfoframe.canvas.shipinfo.right.module.upgrade");
+           New_String(".paned.shipinfoframe.right.module.upgrade");
          UpgradePercent :=
            1.0 - (Float(Module.UpgradeProgress) / Float(MaxUpgrade));
          configure(ProgressBar, "-value" & Float'Image(UpgradePercent));
@@ -1243,8 +1201,7 @@ package body Ships.UI is
             Append(ModuleInfo, " (final upgrades)");
          end if;
          Label.Name :=
-           New_String
-             (".paned.shipinfoframe.canvas.shipinfo.right.module.upgradelbl");
+           New_String(".paned.shipinfoframe.right.module.upgradelbl");
          configure(Label, "-text {" & To_String(ModuleInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3");
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
@@ -1316,8 +1273,7 @@ package body Ships.UI is
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "crew" then
          ComboBox.Name :=
-           New_String
-             (".paned.shipinfoframe.canvas.shipinfo.right.options.crewcombo");
+           New_String(".paned.shipinfoframe.right.options.crewcombo");
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Name =
               To_Unbounded_String(Get(ComboBox)) then
@@ -1366,8 +1322,7 @@ package body Ships.UI is
          UpdateHeader;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
          ComboBox.Name :=
-           New_String
-             (".paned.shipinfoframe.canvas.shipinfo.right.options.ammocombo");
+           New_String(".paned.shipinfoframe.right.options.ammocombo");
          for I in PlayerShip.Cargo.Iterate loop
             if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
               To_Unbounded_String(Get(ComboBox)) then
@@ -1388,8 +1343,7 @@ package body Ships.UI is
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
          ComboBox.Name :=
-           New_String
-             (".paned.shipinfoframe.canvas.shipinfo.right.options.skillcombo");
+           New_String(".paned.shipinfoframe.right.options.skillcombo");
          for I in Skills_List.Iterate loop
             if Skills_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
                AssignIndex := SkillsData_Container.To_Index(I);
