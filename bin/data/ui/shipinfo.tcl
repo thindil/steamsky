@@ -3,27 +3,32 @@ grid [ttk::frame $shipinfoframe.left] -sticky nwes
 # General ship info
 grid [ttk::labelframe $shipinfoframe.left.general -text {General info:}]
 grid columnconfigure $shipinfoframe.left.general 1 -weight 1
+set shipcanvas [canvas $shipinfoframe.left.general.canvas -yscrollcommand [list $shipinfoframe.left.general.scrolly set] -xscrollcommand [list $shipinfoframe.left.general.scrollx set]]
+pack [ttk::scrollbar $shipinfoframe.left.general.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
+pack $shipcanvas -side top -fill both
+pack [ttk::scrollbar $shipinfoframe.left.general.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x
+ttk::frame $shipcanvas.frame
 # Ship name
-grid [ttk::label $shipinfoframe.left.general.name -wraplength 300] -columnspan 2 -sticky w
-grid [ttk::button $shipinfoframe.left.general.rename -text "[format %c 0xf044]" -style Toolbutton -command {
+grid [ttk::label $shipcanvas.frame.name -wraplength 300] -columnspan 2 -sticky w
+grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Toolbutton -command {
    if {[getstring::tk_getString .gs text "Enter a new name:"]} {
       SetShipName $text
    }
 }] -column 2 -row 0 -sticky w
-tooltip::tooltip $shipinfoframe.left.general.rename {Set a new name for the ship}
-bind $shipinfoframe.left.general.name <Enter> SetShipName
+tooltip::tooltip $shipcanvas.frame.rename {Set a new name for the ship}
+bind $shipcanvas.frame.name <Enter> SetShipName
 # Upgrade progress
-grid [ttk::label $shipinfoframe.left.general.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
-grid [ttk::progressbar $shipinfoframe.left.general.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar] -sticky we -columnspan 2
-tooltip::tooltip $shipinfoframe.left.general.upgrade {The current ship's upgrade progress}
-grid [ttk::button $shipinfoframe.left.general.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
-tooltip::tooltip $shipinfoframe.left.general.cancelupgrade {Stop the current upgrade}
+grid [ttk::label $shipcanvas.frame.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
+grid [ttk::progressbar $shipcanvas.frame.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar] -sticky we -columnspan 2
+tooltip::tooltip $shipcanvas.frame.upgrade {The current ship's upgrade progress}
+grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
+tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
-grid [ttk::label $shipinfoframe.left.general.repairlabel] -row 3 -columnspan 2 -sticky we
-grid [ttk::button $shipinfoframe.left.general.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
-tooltip::tooltip $shipinfoframe.left.general.cancelpriority {Remove the repair priority}
+grid [ttk::label $shipcanvas.frame.repairlabel] -row 3 -columnspan 2 -sticky we
+grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
+tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship info
-grid [ttk::label $shipinfoframe.left.general.info] -row 4 -columnspan 3 -sticky we
+grid [ttk::label $shipcanvas.frame.info] -row 4 -columnspan 3 -sticky we
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
 grid [ttk::treeview $shipinfoframe.left.modules.modules -show tree] -row 5 -columnspan 3 -sticky nwes
