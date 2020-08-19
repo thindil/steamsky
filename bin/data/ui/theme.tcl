@@ -93,15 +93,20 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
-      # Flat button setting
+      # Flat buttons setting
+      # Default flat button
       ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
-
       # Flat button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue)
-
       # Flat button for female gender
       ttk::style configure Female.Toolbutton -foreground $colors(-pink)
+      # Not needed state header button (ship info in right top corner)
+      ttk::style configure Header.Toolbutton -font InterfaceIcons
+      # Alarm state header button (ship info in right top corner)
+      ttk::style configure Headerred.Toolbutton -font InterfaceIcons -foreground red
+      # Normal state header button (ship info in right top corner)
+      ttk::style configure Headergreen.Toolbutton -font InterfaceIcons -foreground green
 
       # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
@@ -110,24 +115,15 @@ namespace eval ttk::theme::steamsky {
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
 
-      # Not needed state header button (ship info in right top corner)
-      ttk::style configure Header.Toolbutton -font InterfaceIcons
-
-      # Alarm state header button (ship info in right top corner)
-      ttk::style configure Headerred.Toolbutton -font InterfaceIcons -foreground red
-
-      # Normal state header button (ship info in right top corner)
-      ttk::style configure Headergreen.Toolbutton -font InterfaceIcons -foreground green
-
+      # Labels setting
       # Labels with red text
       ttk::style configure Headerred.TLabel -foreground red
-
       # Labels with green text
       ttk::style configure Headergreen.TLabel -foreground green
 
       # Progressbar setting
       # Default progressbars
-      ttk::style configure TProgressbar -background red
+      ttk::style configure TProgressbar -background red -troughcolor $colors(-almostblackred)
       # Green horizontal progress bar
       ttk::style configure green.Horizontal.TProgressbar -background green
 
