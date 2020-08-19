@@ -20,7 +20,7 @@ with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
 
--- ****h* Steamsky/ShipModules
+-- ****h* ShipModules/ShipModules
 -- FUNCTION
 -- Provided code to manipulate ship modules prototypes
 -- SOURCE

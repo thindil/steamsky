@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,7 +25,7 @@ with Game; use Game;
 with Items; use Items;
 with Mobs; use Mobs;
 
--- ****h* Steamsky/Ships
+-- ****h* Ships/Ships
 -- FUNCTION
 -- Provides code for manipulate ships
 -- SOURCE
