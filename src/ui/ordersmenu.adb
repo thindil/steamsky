@@ -457,14 +457,20 @@ package body OrdersMenu is
       return TCL_OK;
    end Show_Orders_Command;
 
-   -- ****f* OrdersMenu/Docking_Command
+   -- ****o* OrdersMenu/Docking_Command
    -- FUNCTION
    -- Dock or undock from the sky base
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Docking ?escape?
+   -- If argument escape is present, escape from the base without paying,
+   -- otherwise normal docking or undocking operation
    -- SOURCE
    function Docking_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -510,14 +516,18 @@ package body OrdersMenu is
       return TCL_OK;
    end Docking_Command;
 
-   -- ****f* OrdersMenu/Ask_For_Bases_Command
+   -- ****o* OrdersMenu/Ask_For_Bases_Command
    -- FUNCTION
    -- Ask for bases in the currently visited base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- AskForBases
    -- SOURCE
    function Ask_For_Bases_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -537,14 +547,18 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Bases_Command;
 
-   -- ****f* OrdersMenu/Ask_For_Events_Command
+   -- ****o* OrdersMenu/Ask_For_Events_Command
    -- FUNCTION
    -- Ask for events in the currently visited base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- AskForEvents
    -- SOURCE
    function Ask_For_Events_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -564,14 +578,18 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Events_Command;
 
-   -- ****f* OrdersMenu/Attack_Command
+   -- ****o* OrdersMenu/Attack_Command
    -- FUNCTION
    -- Start the combat
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Attack
    -- SOURCE
    function Attack_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -595,9 +613,13 @@ package body OrdersMenu is
    -- Pray in the selected base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Pray
    -- SOURCE
    function Pray_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -628,9 +650,13 @@ package body OrdersMenu is
    -- Set the selected base as a home base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetAsHome
    -- SOURCE
    function Set_As_Home_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

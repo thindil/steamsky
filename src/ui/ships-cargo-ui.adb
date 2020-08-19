@@ -46,14 +46,19 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.Cargo.UI is
 
-   -- ****f* CUI2/Show_Cargo_Info_Command
+   -- ****o* CUI2/Show_Cargo_Info_Command
    -- FUNCTION
    -- Show information about the player's ship cargo
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCargoInfo ?itemtype?
+   -- Itemtype is type of the items to show. Default value is All
    -- SOURCE
    function Show_Cargo_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -195,7 +200,7 @@ package body Ships.Cargo.UI is
    ItemIndex: Positive;
    -- ****
 
-   -- ****f* CUI2/Show_Cargo_Item_Info_Command
+   -- ****o* CUI2/Show_Cargo_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -203,6 +208,10 @@ package body Ships.Cargo.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCargoItemInfo
    -- SOURCE
    function Show_Cargo_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -259,7 +268,7 @@ package body Ships.Cargo.UI is
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
-   -- ****f* CUI2/Drop_Item_Command
+   -- ****o* CUI2/Drop_Item_Command
    -- FUNCTION
    -- Drop selected amount of the selected item from the ship's cargo
    -- PARAMETERS
@@ -267,6 +276,10 @@ package body Ships.Cargo.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DropItem
    -- SOURCE
    function Drop_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -325,7 +338,7 @@ package body Ships.Cargo.UI is
       return Show_Cargo_Info_Command(ClientData, Interp, Argc, Argv);
    end Drop_Item_Command;
 
-   -- ****f* CUI2/Give_Item_Command
+   -- ****o* CUI2/Give_Item_Command
    -- FUNCTION
    -- Give selected amount of the selected item from the ship's cargo to the
    -- selected crew member
@@ -334,6 +347,10 @@ package body Ships.Cargo.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- GiveItem
    -- SOURCE
    function Give_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

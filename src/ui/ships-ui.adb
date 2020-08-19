@@ -55,14 +55,18 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
-   -- ****f* SUI2/Show_Ship_Info_Command
+   -- ****o* SUI2/Show_Ship_Info_Command
    -- FUNCTION
    -- Show information about the player's ship
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowShipInfo
    -- SOURCE
    function Show_Ship_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -382,7 +386,7 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Ship_Info_Command;
 
-   -- ****f* SUI2/Set_Ship_Name_Command
+   -- ****o* SUI2/Set_Ship_Name_Command
    -- FUNCTION
    -- Change name of the player's ship
    -- PARAMETERS
@@ -390,6 +394,11 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetShipName shipname
+   -- Shipname is the new name for the player's ship
    -- SOURCE
    function Set_Ship_Name_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -735,7 +744,7 @@ package body Ships.UI is
       end if;
    end ShowModuleOptions;
 
-   -- ****f* SUI2/Show_Module_Info_Command
+   -- ****o* SUI2/Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
    -- PARAMETERS
@@ -743,6 +752,10 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowModuleInfo
    -- SOURCE
    function Show_Module_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1238,7 +1251,7 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Module_Info_Command;
 
-   -- ****f* SUI2/Set_Upgrade_Command
+   -- ****o* SUI2/Set_Upgrade_Command
    -- FUNCTION
    -- Set the selected upgrade for the selected module
    -- PARAMETERS
@@ -1246,6 +1259,10 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetUpgrade
    -- SOURCE
    function Set_Upgrade_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1265,7 +1282,7 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
 
-   -- ****f* SUI2/Assign_Module_Command
+   -- ****o* SUI2/Assign_Module_Command
    -- FUNCTION
    -- Assing member, ammo or skill to module
    -- PARAMETERS
@@ -1273,6 +1290,10 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- AssignModule
    -- SOURCE
    function Assign_Module_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1382,14 +1403,18 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Assign_Module_Command;
 
-   -- ****f* SUI2/Disable_Engine_Command
+   -- ****o* SUI2/Disable_Engine_Command
    -- FUNCTION
    -- Enable or disable selected engine
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DisableEngine
    -- SOURCE
    function Disable_Engine_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1436,7 +1461,7 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Disable_Engine_Command;
 
-   -- ****f* SUI2/Stop_Upgrading_Command
+   -- ****o* SUI2/Stop_Upgrading_Command
    -- FUNCTION
    -- Stop the current ship upgrade
    -- PARAMETERS
@@ -1444,6 +1469,10 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- StopUpgrading
    -- SOURCE
    function Stop_Upgrading_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1470,7 +1499,7 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
-   -- ****f* SUI2/Set_Repair_Command
+   -- ****o* SUI2/Set_Repair_Command
    -- FUNCTION
    -- Set or remove the repair priority from the selected module
    -- PARAMETERS
@@ -1478,6 +1507,13 @@ package body Ships.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetRepair action
+   -- Action can be assing or remove. If assing, then assing the currently
+   -- selected module as the repair first, otherwise clear current priority
+   -- setting
    -- SOURCE
    function Set_Repair_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

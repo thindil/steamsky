@@ -17,14 +17,14 @@ with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 
--- ****h* Steamsky/OrdersMenu
+-- ****h* OrdersMenu/OrdersMenu
 -- FUNCTION
 -- Provides code for create and show orders menu
 -- SOURCE
 package OrdersMenu is
 -- ****
 
-   -- ****f* OrdersMenu/Show_Orders_Command
+   -- ****o* OrdersMenu/Show_Orders_Command
    -- FUNCTION
    -- Add available options and show orders menu to the player
    -- PARAMETERS
@@ -32,6 +32,10 @@ package OrdersMenu is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOrders
    -- SOURCE
    function Show_Orders_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
