@@ -37,8 +37,10 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
@@ -92,6 +94,7 @@ package body Ships.UI is
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
+      Scrollbar: Ttk_Scrollbar;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -114,6 +117,15 @@ package body Ships.UI is
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.left.general.canvas.frame");
+      Scrollbar.Interp := Interp;
+      Scrollbar.Name :=
+        New_String
+          (Widget_Image(Paned) & ".shipinfoframe.left.general.scrolly");
+      Unautoscroll(Scrollbar);
+      Scrollbar.Name :=
+        New_String
+          (Widget_Image(Paned) & ".shipinfoframe.left.general.scrollx");
+      Unautoscroll(Scrollbar);
       Label.Interp := Interp;
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
@@ -286,6 +298,16 @@ package body Ships.UI is
       Tcl_Eval(Get_Context, "update");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      Xview_Move_To(ShipCanvas, "0.0");
+      Yview_Move_To(ShipCanvas, "0.0");
+      Scrollbar.Name :=
+        New_String
+          (Widget_Image(Paned) & ".shipinfoframe.left.general.scrolly");
+      Autoscroll(Scrollbar);
+      Scrollbar.Name :=
+        New_String
+          (Widget_Image(Paned) & ".shipinfoframe.left.general.scrollx");
+      Autoscroll(Scrollbar);
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
