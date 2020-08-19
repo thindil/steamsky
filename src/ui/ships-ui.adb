@@ -27,6 +27,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -90,6 +91,7 @@ package body Ships.UI is
       CloseButton, CancelButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
+      ShipCanvas: Tk_Canvas;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -97,14 +99,11 @@ package body Ships.UI is
       CloseButton.Name := New_String(".header.closebutton");
       ShipInfoFrame.Interp := Interp;
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.general.name");
-      if Winfo_Get(Label, "exists") = "0" then
+      if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
-      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+      elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
@@ -112,19 +111,22 @@ package body Ships.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      ShipInfoFrame.Name :=
+        New_String
+          (Widget_Image(Paned) & ".shipinfoframe.left.general.canvas.frame");
+      Label.Interp := Interp;
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
       ShipInfo :=
         To_Unbounded_String
           ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
-      Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.general.upgradelabel");
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".upgradelabel");
       UpgradeProgress.Interp := Interp;
       UpgradeProgress.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.general.upgrade");
+        New_String(Widget_Image(ShipInfoFrame) & ".upgrade");
       CancelButton.Interp := Interp;
       CancelButton.Name :=
-        New_String
-          (Widget_Image(ShipInfoFrame) & ".left.general.cancelupgrade");
+        New_String(Widget_Image(ShipInfoFrame) & ".cancelupgrade");
       -- Show or hide upgrade module info
       if PlayerShip.UpgradeModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -233,11 +235,9 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       -- Show or hide repair priority info
-      Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.general.repairlabel");
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".repairlabel");
       CancelButton.Name :=
-        New_String
-          (Widget_Image(ShipInfoFrame) & ".left.general.cancelpriority");
+        New_String(Widget_Image(ShipInfoFrame) & ".cancelpriority");
       if PlayerShip.RepairModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
@@ -273,9 +273,20 @@ package body Ships.UI is
       Append
         (ShipInfo,
          LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
-      Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".left.general.info");
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
+      ShipCanvas.Interp := Interp;
+      ShipCanvas.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.left.general.canvas");
+      Canvas_Create
+        (ShipCanvas, "window",
+         "[expr " & Winfo_Get(ShipInfoFrame, "reqwidth") & " / 2] [expr " &
+         Winfo_Get(ShipInfoFrame, "reqheight") & " / 2] -window " &
+         Widget_Image(ShipInfoFrame));
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       ModulesView.Interp := Interp;
       ModulesView.Name :=
         New_String(Widget_Image(ShipInfoFrame) & ".left.modules.modules");
@@ -399,7 +410,8 @@ package body Ships.UI is
          return TCL_OK;
       end if;
       NameEntry.Interp := Interp;
-      NameEntry.Name := New_String(".paned.shipinfoframe.left.general.name");
+      NameEntry.Name :=
+        New_String(".paned.shipinfoframe.left.general.canvas.frame.name");
       PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
