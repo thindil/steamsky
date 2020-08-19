@@ -235,11 +235,9 @@ package body Ships.UI is
             Append(UpgradeInfo, " (final upgrades)");
          end if;
          configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-column 0 -columnspan 3 -row 1 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-column 0 -row 2 -columnspan 2 -sticky we");
-         Tcl.Tk.Ada.Grid.Grid(CancelButton, "-column 2 -row 2 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(UpgradeProgress);
+         Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       -- Show or hide repair priority info
       Label.Name :=

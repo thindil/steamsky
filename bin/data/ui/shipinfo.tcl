@@ -17,11 +17,10 @@ grid [ttk::button $shipinfoframe.left.rename -text "[format %c 0xf044]" -style T
 tooltip::tooltip $shipinfoframe.left.rename {Set a new name for the ship}
 bind $shipinfoframe.left.name <Enter> SetShipName
 # Upgrade progress
-ttk::label $shipinfoframe.left.upgradelabel -text {Upgrade:}
-ttk::label $shipinfoframe.left.upgradename
-ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar
+grid [ttk::label $shipinfoframe.left.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
+grid [ttk::progressbar $shipinfoframe.left.upgrade -orient horizontal -maximum 1.0 -style green.Horizontal.TProgressbar] -sticky we -columnspan 2
 tooltip::tooltip $shipinfoframe.left.upgrade {The current ship's upgrade progress}
-ttk::button $shipinfoframe.left.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading
+grid [ttk::button $shipinfoframe.left.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
 tooltip::tooltip $shipinfoframe.left.cancelupgrade {Stop the current upgrade}
 # Repair priority
 grid [ttk::label $shipinfoframe.left.repairlabel] -row 3 -columnspan 2 -sticky we
