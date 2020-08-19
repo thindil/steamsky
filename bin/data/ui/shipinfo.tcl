@@ -2,12 +2,12 @@ set shipinfoframe [ttk::frame .paned.shipinfoframe]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
 # General ship info
 grid [ttk::labelframe $shipinfoframe.left.general -text {General info:}]
-grid columnconfigure $shipinfoframe.left.general 1 -weight 1
 set shipcanvas [canvas $shipinfoframe.left.general.canvas -yscrollcommand [list $shipinfoframe.left.general.scrolly set] -xscrollcommand [list $shipinfoframe.left.general.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.left.general.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack $shipcanvas -side top -fill both
 pack [ttk::scrollbar $shipinfoframe.left.general.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x
 ttk::frame $shipcanvas.frame
+grid columnconfigure $shipcanvas.frame 1 -weight 1
 # Ship name
 grid [ttk::label $shipcanvas.frame.name -wraplength 300] -columnspan 2 -sticky w
 grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Toolbutton -command {
