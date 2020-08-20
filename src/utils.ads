@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -18,7 +18,7 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Game; use Game;
 
--- ****h* Steamsky/Utils
+-- ****h* Utils/Utils
 -- FUNCTION
 -- Provided various uncategorized code
 -- SOURCE
