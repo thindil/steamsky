@@ -1,4 +1,5 @@
 set shipinfoframe [ttk::frame .paned.shipinfoframe]
+$shipinfoframe configure -height [.paned sashpos 0]
 grid [ttk::frame $shipinfoframe.left] -sticky nwes
 # General ship info
 grid [ttk::labelframe $shipinfoframe.left.general -text {General info:}]
@@ -30,11 +31,15 @@ tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship info
 grid [ttk::label $shipcanvas.frame.info] -row 4 -columnspan 3 -sticky we
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+$shipinfoframe.left.general configure -width [expr ([winfo reqwidth $shipinfoframe] / 2) - 5] -height [expr ([winfo reqheight $shipinfoframe] / 2) - 5]
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
 grid [ttk::treeview $shipinfoframe.left.modules.modules -show tree] -row 5 -columnspan 3 -sticky nwes
 bind $shipinfoframe.left.modules.modules <<TreeviewSelect>> ShowModuleInfo
 grid [ttk::frame $shipinfoframe.right] -column 1 -row 0 -sticky nwes
+$shipinfoframe.left.modules configure -width [expr ([winfo reqwidth $shipinfoframe] / 2) - 5] -height [expr ([winfo reqheight $shipinfoframe] / 2) - 5]
+# temp code
+grid remove $shipinfoframe.left.modules
 # Crew info
 grid [ttk::labelframe $shipinfoframe.right.crew -text {Crew Info:}]
 grid [ttk::label $shipinfoframe.right.crew.name -text {Name}]
@@ -44,6 +49,9 @@ grid [ttk::label $shipinfoframe.right.crew.fatigue -text {Fatigue}] -column 3 -r
 grid [ttk::label $shipinfoframe.right.crew.thirst -text {Thirst}] -column 4 -row 0
 grid [ttk::label $shipinfoframe.right.crew.hunter -text {Hunger}] -column 5 -row 0
 grid [ttk::label $shipinfoframe.right.crew.morale -text {Morale}] -column 6 -row 0
+$shipinfoframe.right.crew configure -width [expr ([winfo reqwidth $shipinfoframe] / 2) - 5] -height [expr ([winfo reqheight $shipinfoframe] / 2) - 5]
+# temp code
+grid remove $shipinfoframe.right.crew
 # Detailed info about the selected ship's module
 grid [ttk::labelframe $shipinfoframe.right.module -text {Module Info:}]
 ttk::label $shipinfoframe.right.module.damagelbl -text {Damage:}
@@ -57,6 +65,8 @@ ttk::progressbar $shipinfoframe.right.module.upgrade -orient horizontal -maximum
 set moduleinfo [text $shipinfoframe.right.module.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
 grid $moduleinfo -row 4 -columnspan 2
+# temp code
+grid remove $shipinfoframe.right.module
 # Buttons with ship's module actions
 grid [ttk::labelframe $shipinfoframe.right.options -text {Module Options:}]
 grid [ttk::button $shipinfoframe.right.options.durability -text {Upgrade durability} -command {SetUpgrade 1}] -columnspan 2
@@ -71,3 +81,10 @@ grid [ttk::combobox $shipinfoframe.right.options.traincombo -state readonly] -co
 grid [ttk::button $shipinfoframe.right.options.disable -text {Disable engine} -command DisableEngine] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
 grid [ttk::button $shipinfoframe.right.options.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
+# temp code
+grid remove $shipinfoframe.right.options
+#bind $shipinfoframe <Configure> {
+#   %W.left.general configure -width [expr (%w / 2) - 10] -height [expr (%h / 2) - 20]
+#   %W.left.modules configure -width [expr (%w / 2) - 10] -height [expr (%h / 2) - 20]
+#   %W.right.crew configure -width [expr (%w / 2) - 10] -height [expr (%h / 2) - 20]
+#}
