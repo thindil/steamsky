@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,7 +22,7 @@ with Ada.Containers.Hashed_Maps;
 with DOM.Readers; use DOM.Readers;
 with Game; use Game;
 
--- ****h* Steamsky/Stories
+-- ****h* Stories/Stories
 -- FUNCTION
 -- Provide code for manipulate the game stories
 -- SOURCE
