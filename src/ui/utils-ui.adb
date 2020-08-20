@@ -270,7 +270,8 @@ package body Utils.UI is
       end if;
       Label.Interp := Interp;
       Label.Name := New_String(To_String(LabelName));
-      if CArgv.Arg(Argv, 1) /= "trade"
+      if CArgv.Arg(Argv, 1) /=
+        ".paned.tradeframe.canvas.trade.item.sellframe.amount"
         and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
           FuelType then
          Amount := GetItemAmount(FuelType) - Natural'Value(To_String(Value));
