@@ -55,14 +55,20 @@ with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
 
-   -- ****f* TUI/Show_Trade_Command
+   -- ****o* TUI/Show_Trade_Command
    -- FUNCTION
    -- Show information about trading
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTrade ?itemtype? ?searchstring?
+   -- Itemtype is type of items to show, searchstring is string which is
+   -- looking for in items names
    -- SOURCE
    function Show_Trade_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -301,7 +307,7 @@ package body Trades.UI is
    ItemIndex: Integer;
    -- ****
 
-   -- ****f* TUI/Show_Trade_Item_Info_Command
+   -- ****o* TUI/Show_Trade_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -309,6 +315,10 @@ package body Trades.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTradeItemInfo
    -- SOURCE
    function Show_Trade_Item_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -722,7 +732,7 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
-   -- ****f* TUI/Trade_Item_Command
+   -- ****o* TUI/Trade_Item_Command
    -- FUNCTION
    -- Buy or sell the selected item
    -- PARAMETERS
@@ -730,6 +740,11 @@ package body Trades.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- TradeItem tradetype
+   -- Tradetype is type of trade action. Can be buy, buymax, sell, sellmax
    -- SOURCE
    function Trade_Item_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -858,7 +873,7 @@ package body Trades.UI is
          return TCL_OK;
    end Trade_Item_Command;
 
-   -- ****if* TUI/Search_Trade_Command
+   -- ****o* TUI/Search_Trade_Command
    -- FUNCTION
    -- Show only this items which contains the selected sequence
    -- PARAMETERS
@@ -866,6 +881,10 @@ package body Trades.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SearchTrade
    -- SOURCE
    function Search_Trade_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

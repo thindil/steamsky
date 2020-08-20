@@ -24,7 +24,7 @@ with Tcl; use Tcl;
 package WaitMenu is
 -- ****
 
-   -- ****f* WaitMenu/Show_Wait_Command
+   -- ****o* WaitMenu/Show_Wait_Command
    -- FUNCTION
    -- Show available wait orders to the player
    -- PARAMETERS
@@ -32,6 +32,10 @@ package WaitMenu is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowWait
    -- SOURCE
    function Show_Wait_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
