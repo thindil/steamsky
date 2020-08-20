@@ -29,6 +29,7 @@ grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -s
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship info
 grid [ttk::label $shipcanvas.frame.info] -row 4 -columnspan 3 -sticky we
+$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
 grid [ttk::treeview $shipinfoframe.left.modules.modules -show tree] -row 5 -columnspan 3 -sticky nwes

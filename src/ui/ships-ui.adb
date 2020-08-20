@@ -287,15 +287,10 @@ package body Ships.UI is
          LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
+      Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Interp;
       ShipCanvas.Name :=
         New_String(Widget_Image(Paned) & ".shipinfoframe.left.general.canvas");
-      Canvas_Create
-        (ShipCanvas, "window",
-         "[expr " & Winfo_Get(ShipInfoFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(ShipInfoFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(ShipInfoFrame));
-      Tcl_Eval(Get_Context, "update");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
