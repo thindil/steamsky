@@ -43,7 +43,7 @@ with Utils.UI; use Utils.UI;
 
 package body Stories.UI is
 
-   -- ****if* SUI3/Show_Story_Command
+   -- ****o* SUI3/Show_Story_Command
    -- FUNCTION
    -- Show the current story information
    -- PARAMETERS
@@ -51,6 +51,10 @@ package body Stories.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowStory
    -- SOURCE
    function Show_Story_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -182,14 +186,18 @@ package body Stories.UI is
       return TCL_OK;
    end Show_Story_Command;
 
-   -- ****if* SUI3/Show_Story_Location_Command
+   -- ****o* SUI3/Show_Story_Location_Command
    -- FUNCTION
    -- Show the current story event on map
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowStoryLocation
    -- SOURCE
    function Show_Story_Location_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -212,14 +220,18 @@ package body Stories.UI is
       return TCL_OK;
    end Show_Story_Location_Command;
 
-   -- ****if* SUI3/Set_Story_Command
+   -- ****o* SUI3/Set_Story_Command
    -- FUNCTION
    -- Set the current story event as the player's ship destination
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetStory
    -- SOURCE
    function Set_Story_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

@@ -173,7 +173,7 @@ package body WaitMenu is
       return TCL_OK;
    end Show_Wait_Command;
 
-   -- ****f* WaitMenu/Wait_Command
+   -- ****o* WaitMenu/Wait_Command
    -- FUNCTION
    -- Wait the selected amount of time
    -- PARAMETERS
@@ -181,6 +181,10 @@ package body WaitMenu is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Wait
    -- SOURCE
    function Wait_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

@@ -55,7 +55,7 @@ package body Utils.UI is
    TimerId: Unbounded_String := Null_Unbounded_String;
    -- ****
 
-   -- ****if* UUI/Close_Dialog_Command
+   -- ****o* UUI/Close_Dialog_Command
    -- FUNCTION
    -- Close the selected dialog
    -- PARAMETERS
@@ -63,6 +63,11 @@ package body Utils.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseDialog dialogname
+   -- Dialogname is name of the dialog to close
    -- SOURCE
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -158,13 +163,19 @@ package body Utils.UI is
       end if;
    end AddCommand;
 
-   -- ****if* UUI/Resize_Canvas_Command
+   -- ****o* UUI/Resize_Canvas_Command
    -- PARAMETERS
    -- Resize the selected canvas
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ResizeCanvas name width height
+   -- Name is the name of the canvas to resize, width it a new width, height
+   -- is a new height
    -- SOURCE
    function Resize_Canvas_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -189,7 +200,7 @@ package body Utils.UI is
       return TCL_OK;
    end Resize_Canvas_Command;
 
-   -- ****if* UUI/Check_Amount_Command
+   -- ****o* UUI/Check_Amount_Command
    -- PARAMETERS
    -- Check amount of the item, if it is not below low level warning or if
    -- entered amount is a proper number
@@ -197,6 +208,12 @@ package body Utils.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CheckAmount name cargoindex value
+   -- Name is the name of spinbox which value will be checked, cargoindex is
+   -- the index of the item in the cargo
    -- SOURCE
    function Check_Amount_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -300,7 +317,7 @@ package body Utils.UI is
          return TCL_OK;
    end Check_Amount_Command;
 
-   -- ****if* UUI/Validate_Amount_Command
+   -- ****o* UUI/Validate_Amount_Command
    -- PARAMETERS
    -- Validate amount of the item when button to increase or decrease the
    -- amount was pressed
@@ -308,6 +325,11 @@ package body Utils.UI is
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ValidateAmount name
+   -- Name is the name of spinbox which value will be validated
    -- SOURCE
    function Validate_Amount_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
