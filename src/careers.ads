@@ -28,7 +28,7 @@ with Game; use Game;
 package Careers is
 -- ****
 
-   -- ****t* Careers/CareerRecord
+   -- ****s* Careers/CareerRecord
    -- FUNCTION
    -- Data structure for player career
    -- PARAMETERS
