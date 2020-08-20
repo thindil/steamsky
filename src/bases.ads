@@ -31,7 +31,7 @@ with Ships; use Ships;
 package Bases is
 -- ****
 
-   -- ****t* Bases/Recruit_Data
+   -- ****s* Bases/Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
    -- PARAMETERS
@@ -77,7 +77,7 @@ package Bases is
    type Reputation_Array is array(1 .. 2) of Integer;
    -- ****
 
-   -- ****t* Bases/Base_Cargo
+   -- ****s* Bases/Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
    -- PARAMETERS
@@ -108,7 +108,7 @@ package Bases is
    type Bases_Size is (Small, Medium, Big);
    -- ****
 
-   -- ****t* Bases/BaseRecord
+   -- ****s* Bases/BaseRecord
    -- FUNCTION
    -- Data structure for bases
    -- PARAMETERS

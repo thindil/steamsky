@@ -44,7 +44,7 @@ package BasesTypes is
       Prices_Array, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* BasesTypes/BaseType_Data
+   -- ****s* BasesTypes/BaseType_Data
    -- FUNCTION
    -- Data structure for bases types
    -- PARAMETERS
