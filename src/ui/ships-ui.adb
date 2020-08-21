@@ -261,26 +261,35 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
-      Append(ShipInfo, LF & "Destination: ");
+      -- Show or hide destination info
+      Label.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".destinationlabel");
+      CancelButton.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".canceldestination");
       if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
-         Append(ShipInfo, "None");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          if SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY)
              .BaseIndex >
            0 then
-            Append
-              (ShipInfo,
+            configure
+              (Label,
+               "-text {Destination: " &
                To_String
                  (SkyBases
                     (SkyMap(PlayerShip.DestinationX, PlayerShip.DestinationY)
                        .BaseIndex)
-                    .Name));
+                    .Name) &
+               "}");
          else
-            Append
-              (ShipInfo,
-               "X:" & Positive'Image(PlayerShip.DestinationX) & " Y:" &
-               Positive'Image(PlayerShip.DestinationY));
+            configure
+              (Label,
+               "-text {Destination: X:" & Positive'Image(PlayerShip.DestinationX) &
+               " Y:" & Positive'Image(PlayerShip.DestinationY) & "}");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       Append
         (ShipInfo,
@@ -1522,6 +1531,37 @@ package body Ships.UI is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Repair_Command;
 
+   -- ****o* SUI2/Reset_Destination_Command
+   -- FUNCTION
+   -- Reset the current destination point for the player's ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ResetDestination
+   -- SOURCE
+   function Reset_Destination_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Reset_Destination_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+   begin
+      PlayerShip.DestinationX := 0;
+      PlayerShip.DestinationY := 0;
+      return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+   end Reset_Destination_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipInfo", Show_Ship_Info_Command'Access);
@@ -1532,6 +1572,7 @@ package body Ships.UI is
       AddCommand("DisableEngine", Disable_Engine_Command'Access);
       AddCommand("StopUpgrading", Stop_Upgrading_Command'Access);
       AddCommand("SetRepair", Set_Repair_Command'Access);
+      AddCommand("ResetDestination", Reset_Destination_Command'Access);
    end AddCommands;
 
 end Ships.UI;
