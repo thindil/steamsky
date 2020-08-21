@@ -386,13 +386,6 @@ package body Ships.UI is
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
          Row := Row + 1;
       end loop;
-      ShipInfoFrame.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe");
-      configure
-        (ShipInfoFrame,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
       ShowScreen("shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
