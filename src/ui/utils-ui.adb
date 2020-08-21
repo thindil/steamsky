@@ -569,7 +569,7 @@ package body Utils.UI is
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       MessagesFrame.Interp := Get_Context;
       MessagesFrame.Name := New_String(".paned.controls.messages");
-      if NewScreenName = "optionsframe" or
+      if NewScreenName in "optionsframe" | "messagesframe" or
         not GameSettings.ShowLastMessages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
          if NewScreenName /= "mapframe" then
