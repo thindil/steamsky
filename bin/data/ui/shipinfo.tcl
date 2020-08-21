@@ -25,7 +25,7 @@ tooltip::tooltip $shipcanvas.frame.upgrade {The current ship's upgrade progress}
 grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
-grid [ttk::label $shipcanvas.frame.repairlabel] -row 3 -columnspan 2 -sticky we
+grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we
 grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship info
