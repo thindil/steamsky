@@ -34,8 +34,8 @@ grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]"
 tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination}
 # Ship home base
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 3 -sticky we
-# Ship info
-grid [ttk::label $shipcanvas.frame.info] -columnspan 3 -sticky we
+# Ship weight
+grid [ttk::label $shipcanvas.frame.weight] -columnspan 3 -sticky we
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
