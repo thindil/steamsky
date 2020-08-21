@@ -129,9 +129,6 @@ package body Ships.UI is
       Label.Interp := Interp;
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
-      ShipInfo :=
-        To_Unbounded_String
-          ("Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name));
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".upgradelabel");
       UpgradeProgress.Interp := Interp;
       UpgradeProgress.Name :=
@@ -285,15 +282,21 @@ package body Ships.UI is
          else
             configure
               (Label,
-               "-text {Destination: X:" & Positive'Image(PlayerShip.DestinationX) &
-               " Y:" & Positive'Image(PlayerShip.DestinationY) & "}");
+               "-text {Destination: X:" &
+               Positive'Image(PlayerShip.DestinationX) & " Y:" &
+               Positive'Image(PlayerShip.DestinationY) & "}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".homelabel");
+      configure
+        (Label,
+         "-text {Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name) &
+         "}");
       Append
         (ShipInfo,
-         LF & "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
+         "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".info");
       configure(Label, "-text {" & To_String(ShipInfo) & "}");
       Tcl_Eval(Get_Context, "update");

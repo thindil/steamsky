@@ -25,15 +25,17 @@ tooltip::tooltip $shipcanvas.frame.upgrade {The current ship's upgrade progress}
 grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Toolbutton -command StopUpgrading] -row 2 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
-grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we
+grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 3 -sticky we
 grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Toolbutton -command {SetRepair remove}] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship destination
-grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 2 -sticky we
+grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 3 -sticky we
 grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]" -style Toolbutton -command {ResetDestination}] -row 4 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination}
+# Ship home base
+grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 3 -sticky we
 # Ship info
-grid [ttk::label $shipcanvas.frame.info] -row 5 -columnspan 3 -sticky we
+grid [ttk::label $shipcanvas.frame.info] -columnspan 3 -sticky we
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.left.modules -text {Modules}] -sticky nwes
