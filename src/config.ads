@@ -25,7 +25,7 @@ with Ships; use Ships;
 package Config is
 -- ****
 
-   -- ****t* Config/NewGameRecord
+   -- ****s* Config/NewGameRecord
    -- FUNCTION
    -- Data for new game settings
    -- PARAMETERS
@@ -89,7 +89,7 @@ package Config is
    type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
    -- ****
 
-   -- ****t* Config/GameSettingsRecord
+   -- ****s* Config/GameSettingsRecord
    -- FUNCTION
    -- Data for game settings
    -- PARAMETERS

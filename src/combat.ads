@@ -71,7 +71,7 @@ package Combat is
    BoardingOrders: Integer_Container.Vector;
    -- ****
 
-   -- ****t* Combat/Enemy_Record
+   -- ****s* Combat/Enemy_Record
    -- FUNCTION
    -- Data structure for enemies
    -- PARAMETERS
