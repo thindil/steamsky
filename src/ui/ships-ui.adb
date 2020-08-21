@@ -85,7 +85,7 @@ package body Ships.UI is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoFrame, Item: Ttk_Frame;
-      ShipInfo, UpgradeInfo: Unbounded_String;
+      UpgradeInfo: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
@@ -294,11 +294,8 @@ package body Ships.UI is
         (Label,
          "-text {Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name) &
          "}");
-      Append
-        (ShipInfo,
-         "Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg");
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".info");
-      configure(Label, "-text {" & To_String(ShipInfo) & "}");
+      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".weight");
+      configure(Label, "-text {Weight:" & Integer'Image(CountShipWeight(PlayerShip)) & "kg}");
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Interp;
       ShipCanvas.Name :=
