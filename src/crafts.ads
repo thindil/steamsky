@@ -30,7 +30,7 @@ with Ships; use Ships;
 package Crafts is
 -- ****
 
-   -- ****t* Crafts/Craft_Data
+   -- ****s* Crafts/Craft_Data
    -- FUNCTION
    -- Data structure for recipes
    -- PARAMETERS
