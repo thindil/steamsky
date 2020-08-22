@@ -540,11 +540,11 @@ package body Ships.UI is
       end ShowAssignAmmo;
    begin
       ButtonsFrame.Interp := Get_Context;
-      ButtonsFrame.Name := New_String(".paned.shipinfoframe.module");
+      ButtonsFrame.Name := New_String(".paned.shipinfoframe.module.options");
       Button.Interp := Get_Context;
       ComboBox.Interp := Get_Context;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
-      for I in 5 .. Slice_Count(Tokens) loop
+      for I in 1 .. Slice_Count(Tokens) loop
          if Slice(Tokens, I) /= "" then
             Button.Name := New_String(Slice(Tokens, I));
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
@@ -846,6 +846,9 @@ package body Ships.UI is
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+         Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
       end if;
       Label.Name := New_String(".paned.shipinfoframe.module.cleanlbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
