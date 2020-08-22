@@ -35,7 +35,7 @@ package Events is
       FullDocks, EnemyPatrol, Trader, FriendlyShip);
    -- ****
 
-   -- ****t* Events/EventData
+   -- ****s* Events/EventData
    -- FUNCTION
    -- Data structure for random events
    -- PARAMETERS
