@@ -50,27 +50,27 @@ grid [ttk::label $shipinfoframe.crew.hunter -text {Hunger}] -column 5 -row 0
 grid [ttk::label $shipinfoframe.crew.morale -text {Morale}] -column 6 -row 0
 # Detailed info about the selected ship's module
 grid [ttk::labelframe $shipinfoframe.module -text {Module Info:}] -row 1 -column 1 -sticky nwes
-ttk::label $shipinfoframe.module.damagelbl -text {Damage:}
-ttk::progressbar $shipinfoframe.module.damage -orient horizontal -maximum 1.0
-ttk::label $shipinfoframe.module.cleanlbl -text {Clean:}
-ttk::progressbar $shipinfoframe.module.clean -orient horizontal -maximum 1.0
-ttk::label $shipinfoframe.module.qualitylbl -text {Quality:}
-ttk::progressbar $shipinfoframe.module.quality -orient horizontal -maximum 1.0
-ttk::label $shipinfoframe.module.upgradelbl -text {Upgrade:}
-ttk::progressbar $shipinfoframe.module.upgrade -orient horizontal -maximum 1.0
+grid [ttk::label $shipinfoframe.module.damagelbl -text {Damage:}]
+grid [ttk::progressbar $shipinfoframe.module.damage -orient horizontal -maximum 1.0] -row 0 -column 1
+grid [ttk::label $shipinfoframe.module.cleanlbl -text {Clean:}]
+grid [ttk::progressbar $shipinfoframe.module.clean -orient horizontal -maximum 1.0] -row 1 -column 1
+grid [ttk::label $shipinfoframe.module.qualitylbl -text {Quality:}]
+grid [ttk::progressbar $shipinfoframe.module.quality -orient horizontal -maximum 1.0] -row 2 -column 1
+grid [ttk::label $shipinfoframe.module.upgradelbl -text {Upgrade:}]
+grid [ttk::progressbar $shipinfoframe.module.upgrade -orient horizontal -maximum 1.0] -row 3 -column 1
 set moduleinfo [text $shipinfoframe.module.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
-grid $moduleinfo -columnspan 2 -sticky nwes
+grid $moduleinfo -row 4 -columnspan 2 -sticky nwes
 # Buttons with ship's module actions
 grid [ttk::button $shipinfoframe.module.durability -text {Upgrade durability} -command {SetUpgrade 1}] -columnspan 2
 grid [ttk::button $shipinfoframe.module.upgrade1 -text {Upgrade1} -command {SetUpgrade 2}] -columnspan 2
 grid [ttk::button $shipinfoframe.module.upgrade2 -text {Upgrade2} -command {SetUpgrade 3}] -columnspan 2
 grid [ttk::button $shipinfoframe.module.assigncrew -text {Assign crew} -command {AssignModule crew}]
-grid [ttk::combobox $shipinfoframe.module.crewcombo -state readonly] -column 1 -row 4
+grid [ttk::combobox $shipinfoframe.module.crewcombo -state readonly] -column 1 -row 8
 grid [ttk::button $shipinfoframe.module.assignammo -text {Assign as ammo} -command {AssignModule ammo}]
-grid [ttk::combobox $shipinfoframe.module.ammocombo -state readonly] -column 1 -row 5
+grid [ttk::combobox $shipinfoframe.module.ammocombo -state readonly] -column 1 -row 9
 grid [ttk::button $shipinfoframe.module.train -text {Train} -command {AssignModule skill}]
-grid [ttk::combobox $shipinfoframe.module.traincombo -state readonly] -column 1 -row 6
+grid [ttk::combobox $shipinfoframe.module.traincombo -state readonly] -column 1 -row 10
 grid [ttk::button $shipinfoframe.module.disable -text {Disable engine} -command DisableEngine] -columnspan 2
 grid [ttk::button $shipinfoframe.module.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
 grid [ttk::button $shipinfoframe.module.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
