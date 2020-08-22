@@ -42,7 +42,7 @@ package Factions is
    type Reputation_Array is array(1 .. 2) of Integer;
    -- ****
 
-   -- ****t* Factions/RelationsRecord
+   -- ****s* Factions/RelationsRecord
    -- FUNCTION
    -- Data structure for relations between factions
    -- PARAMETERS
@@ -64,7 +64,7 @@ package Factions is
       RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* Factions/CareerRecord
+   -- ****s* Factions/CareerRecord
    -- FUNCTION
    -- Data structure for player career in faction
    -- PARAMETERS
@@ -99,8 +99,7 @@ package Factions is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****
-   -- ****t* Factions/FactionRecord
+   -- ****s* Factions/FactionRecord
    -- FUNCTION
    -- Data structure for faction
    -- PARAMETERS

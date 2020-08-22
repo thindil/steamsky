@@ -66,7 +66,7 @@ package Crew is
    subtype Skill_Range is Natural range 0 .. 100;
    -- ****
 
-   -- ****t* Crew/Member_Data
+   -- ****s* Crew/Member_Data
    -- FUNCTION
    -- Data structure for ship crew member
    -- PARAMETERS
