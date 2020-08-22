@@ -544,7 +544,7 @@ package body Ships.UI is
       Button.Interp := Get_Context;
       ComboBox.Interp := Get_Context;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
-      for I in 1 .. Slice_Count(Tokens) loop
+      for I in 5 .. Slice_Count(Tokens) loop
          if Slice(Tokens, I) /= "" then
             Button.Name := New_String(Slice(Tokens, I));
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
@@ -845,7 +845,7 @@ package body Ships.UI is
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-column 1 -row 0");
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar);
       end if;
       Label.Name := New_String(".paned.shipinfoframe.module.cleanlbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -942,8 +942,8 @@ package body Ships.UI is
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+            Tcl.Tk.Ada.Grid.Grid(Label);
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
          when CABIN =>
             AddOwnersInfo("Owner");
             ProgressBar.Name :=
@@ -964,8 +964,8 @@ package body Ships.UI is
                   configure(Label, "-text {Ruined}");
                end if;
                configure(ProgressBar, "-value" & Float'Image(DamagePercent));
-               Tcl.Tk.Ada.Grid.Grid(Label, "-row 1");
-               Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+               Tcl.Tk.Ada.Grid.Grid(Label);
+               Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             end if;
             ProgressBar.Name :=
               New_String(".paned.shipinfoframe.module.quality");
@@ -982,8 +982,8 @@ package body Ships.UI is
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Label, "-row 2");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1");
+            Tcl.Tk.Ada.Grid.Grid(Label);
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
          when GUN | HARPOON_GUN =>
             Insert(ModuleText, "end", "{" & LF & "Strength:}");
             if Modules_List(Module.ProtoIndex).MType = GUN then
@@ -1224,8 +1224,8 @@ package body Ships.UI is
          end if;
          Label.Name := New_String(".paned.shipinfoframe.module.upgradelbl");
          configure(Label, "-text {" & To_String(ModuleInfo) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row 3");
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar);
       end if;
       configure(ModuleText, "-state disabled");
       ShowModuleOptions;
