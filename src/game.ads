@@ -26,7 +26,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 package Game is
 -- ****
 
-   -- ****t* Game/Date_Record
+   -- ****s* Game/Date_Record
    -- FUNCTION
    -- Data for game date/time
    -- Year    - Current in game year
@@ -51,7 +51,7 @@ package Game is
    GameDate: Date_Record;
    -- ****
 
-   -- ****v* Game/GameVersion
+   -- ****d* Game/GameVersion
    -- FUNCTION
    -- Current the game version
    -- SOURCE
@@ -100,7 +100,7 @@ package Game is
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
    -- ****
 
-   -- ****t* Game/Skill_Record
+   -- ****s* Game/Skill_Record
    -- FUNCTION
    -- Data for skills
    -- PARAMETERS
@@ -128,7 +128,7 @@ package Game is
    package SkillsData_Container is new Vectors(Positive, Skill_Record);
    -- ****
 
-   -- ****t* Game/Attribute_Record
+   -- ****s* Game/Attribute_Record
    -- FUNCTION
    -- Data for attributes
    -- PARAMETERS

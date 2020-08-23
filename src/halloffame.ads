@@ -24,7 +24,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package HallOfFame is
 -- ****
 
-   -- ****t* HallOfFame/HallOfFame_Data
+   -- ****s* HallOfFame/HallOfFame_Data
    -- FUNCTION
    -- Data structure for hall of fame
    -- PARAMETERS

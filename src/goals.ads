@@ -34,7 +34,7 @@ package Goals is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
    -- ****
 
-   -- ****t* Goals/Goal_Data
+   -- ****s* Goals/Goal_Data
    -- FUNCTION
    -- Data structure for each goal
    -- PARAMETERS
