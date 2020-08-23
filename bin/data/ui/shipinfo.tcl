@@ -75,19 +75,19 @@ set moduleinfo [text $shipinfoframe.cargo.info -wrap char -height 10 -width 40]
 $moduleinfo tag configure red -foreground red
 grid $moduleinfo -row 4 -columnspan 2 -sticky nwes
 # Buttons with ship's module actions
-grid [ttk::frame $shipinfoframe.cargo.options] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.durability -text {Upgrade durability} -command {SetUpgrade 1}] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.upgrade1 -text {Upgrade1} -command {SetUpgrade 2}] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.upgrade2 -text {Upgrade2} -command {SetUpgrade 3}] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.assigncrew -text {Assign crew} -command {AssignModule crew}]
-grid [ttk::combobox $shipinfoframe.cargo.options.crewcombo -state readonly] -column 1 -row 3
-grid [ttk::button $shipinfoframe.cargo.options.assignammo -text {Assign as ammo} -command {AssignModule ammo}]
-grid [ttk::combobox $shipinfoframe.cargo.options.ammocombo -state readonly] -column 1 -row 4
-grid [ttk::button $shipinfoframe.cargo.options.train -text {Train} -command {AssignModule skill}]
-grid [ttk::combobox $shipinfoframe.cargo.options.traincombo -state readonly] -column 1 -row 5
-grid [ttk::button $shipinfoframe.cargo.options.disable -text {Disable engine} -command DisableEngine] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
-grid [ttk::button $shipinfoframe.cargo.options.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
+#grid [ttk::frame $shipinfoframe.cargo.options] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.durability -text {Upgrade durability} -command {SetUpgrade 1}] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.upgrade1 -text {Upgrade1} -command {SetUpgrade 2}] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.upgrade2 -text {Upgrade2} -command {SetUpgrade 3}] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.assigncrew -text {Assign crew} -command {AssignModule crew}]
+#grid [ttk::combobox $shipinfoframe.cargo.options.crewcombo -state readonly] -column 1 -row 3
+#grid [ttk::button $shipinfoframe.cargo.options.assignammo -text {Assign as ammo} -command {AssignModule ammo}]
+#grid [ttk::combobox $shipinfoframe.cargo.options.ammocombo -state readonly] -column 1 -row 4
+#grid [ttk::button $shipinfoframe.cargo.options.train -text {Train} -command {AssignModule skill}]
+#grid [ttk::combobox $shipinfoframe.cargo.options.traincombo -state readonly] -column 1 -row 5
+#grid [ttk::button $shipinfoframe.cargo.options.disable -text {Disable engine} -command DisableEngine] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.continue -text {Continue upgrading} -command {SetUpgrade 4}] -columnspan 2
+#grid [ttk::button $shipinfoframe.cargo.options.repair -text {Repair as first} -command {SetRepair assign}] -columnspan 2
 # Configure main ship info grid
 grid columnconfigure $shipinfoframe 0 -weight 1
 grid columnconfigure $shipinfoframe 1 -weight 1

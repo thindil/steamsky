@@ -57,6 +57,323 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
+   -- ****if* SUI2/ShowModuleOptions
+   -- FUNCTION
+   -- Show available options for the selected module
+   -- PARAMETERS
+   -- ModuleIndex - Index of the player ship module which options will be show
+   -- SOURCE
+   procedure ShowModuleOptions(ModuleIndex: Positive) is
+      -- ****
+      ButtonsFrame: Ttk_Frame;
+      Button: Ttk_Button;
+      MaxValue: Positive;
+      Tokens: Slice_Set;
+      IsPassenger: Boolean := False;
+      ComboBox: Ttk_ComboBox;
+      ComboOptions: Unbounded_String;
+      procedure ShowAssignSkill is
+         SkillText, ProtoIndex: Unbounded_String;
+      begin
+         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+            Append(SkillText, " {" & Skills_List(I).Name);
+            if Skills_List(I).Tool /= Null_Unbounded_String then
+               Append(SkillText, " Tool: ");
+               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+                  Append(SkillText, Items_List(ProtoIndex).ShowType);
+               else
+                  Append(SkillText, Items_List(ProtoIndex).IType);
+               end if;
+            end if;
+            Append(SkillText, "}");
+         end loop;
+         ComboBox.Name :=
+           New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+         configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
+         Current(ComboBox, "0");
+      end ShowAssignSkill;
+      procedure ShowAssignMember is
+         Assigned: Boolean;
+      begin
+         for I in
+           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+            Assigned := False;
+            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+               if Owner = I then
+                  Assigned := True;
+                  exit;
+               end if;
+            end loop;
+            if not Assigned and PlayerShip.Crew(I).Skills.Length > 0 and
+              PlayerShip.Crew(I).ContractLength /= 0 then
+               case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                 .MType is
+                  when MEDICAL_ROOM =>
+                     if PlayerShip.Crew(I).Health = 100 then
+                        Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
+                     end if;
+                  when others =>
+                     Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
+               end case;
+            end if;
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
+         Current(ComboBox, "0");
+      end ShowAssignMember;
+      procedure ShowAssignAmmo is
+         AmmoIndex: Natural;
+      begin
+         if PlayerShip.Modules(ModuleIndex).MType = GUN then
+            AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
+         else
+            AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
+         end if;
+         ComboOptions := Null_Unbounded_String;
+         for I in
+           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
+            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+              Items_Types
+                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                   .Value) and
+              I /= AmmoIndex then
+               Append
+                 (ComboOptions,
+                  " {" &
+                  To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
+                  "}");
+            end if;
+         end loop;
+         if ComboOptions = Null_Unbounded_String then
+            return;
+         end if;
+         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".assignammo");
+         configure(Button, "-text {Assign as ammo}");
+         Add(Button, "Assign selected ammo to gun");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
+         Current(ComboBox, "0");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+      end ShowAssignAmmo;
+   begin
+      ButtonsFrame.Interp := Get_Context;
+      ButtonsFrame.Name :=
+        New_String(".paned.shipinfoframe.modules.canvas.frame");
+      Button :=
+        Create
+          (Widget_Image(ButtonsFrame) & ".rename" &
+           Trim(Positive'Image(ModuleIndex), Left),
+           "-text {Rename module}");
+      ComboBox.Interp := Get_Context;
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
+      MaxValue :=
+        Natural
+          (Float
+             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .Durability) *
+           1.5);
+      if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         Button :=
+           Create
+             (Widget_Image(ButtonsFrame) & ".durability" &
+              Trim(Positive'Image(ModuleIndex), Left),
+              "-text {Upgrade durability} -command {SetUpgrade 1}");
+      end if;
+--      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+--         when ENGINE =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--               configure(Button, "-text {Upgrade engine power}");
+--               Add(Button, "Start upgrading engine power");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--            end if;
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .Value) /
+--                 2.0);
+--            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--               configure(Button, "-text {Reduce fuel usage}");
+--               Add
+--                 (Button, "Start working on reduce fuel usage of this engine");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--            end if;
+--            Button.Name := New_String(Widget_Image(ButtonsFrame) & ".disable");
+--            Tcl.Tk.Ada.Grid.Grid(Button);
+--            if not PlayerShip.Modules(ModuleIndex).Disabled then
+--               configure(Button, "-text {Disable engine}");
+--               Add(Button, "Turn off engine so it stop using fuel");
+--            else
+--               configure(Button, "-text {Enable engine}");
+--               Add(Button, "Turn on engine so ship will be fly faster");
+--            end if;
+--         when CABIN =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--               configure(Button, "-text {Upgrade quality}");
+--               Add(Button, "Start upgrading cabin quality");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--            end if;
+--            Missions_Loop :
+--            for Mission of AcceptedMissions loop
+--               if Mission.MType = Passenger then
+--                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+--                     if Mission.Data = Owner then
+--                        IsPassenger := True;
+--                        exit Missions_Loop;
+--                     end if;
+--                  end loop;
+--               end if;
+--            end loop Missions_Loop;
+--            if not IsPassenger then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+--               configure(Button, "-text {Assing as owner}");
+--               Add(Button, "Assign selected crew member as owner of module");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--               ComboBox.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+--               ShowAssignMember;
+--               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+--            end if;
+--         when GUN | HARPOON_GUN =>
+--            declare
+--               CurrentValue: Positive;
+--            begin
+--               if PlayerShip.Modules(ModuleIndex).MType = GUN then
+--                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
+--               else
+--                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
+--               end if;
+--               MaxValue :=
+--                 Natural
+--                   (Float
+--                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                         .MaxValue) *
+--                    1.5);
+--               if CurrentValue < MaxValue then
+--                  Button.Name :=
+--                    New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
+--                     configure(Button, "-text {Upgrade damage}");
+--                     Add(Button, "Start upgrading damage of gun");
+--                  else
+--                     configure(Button, "-text {Upgrade strength}");
+--                     Add(Button, "Start upgrading strength of gun");
+--                  end if;
+--                  Tcl.Tk.Ada.Grid.Grid(Button);
+--               end if;
+--            end;
+--            Button.Name :=
+--              New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+--            configure(Button, "-text {Assign as gunner}");
+--            Add(Button, "Assign selected crew member as gunner");
+--            Tcl.Tk.Ada.Grid.Grid(Button);
+--            ComboBox.Name :=
+--              New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+--            ShowAssignMember;
+--            Tcl.Tk.Ada.Grid.Grid(ComboBox);
+--            ComboBox.Name :=
+--              New_String(Widget_Image(ButtonsFrame) & ".ammocombo");
+--            ShowAssignAmmo;
+--         when BATTERING_RAM =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--               configure(Button, "-text {Upgrade damage}");
+--               Add(Button, "Start upgrading damage of battering ram");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--            end if;
+--         when HULL =>
+--            MaxValue :=
+--              Natural
+--                (Float
+--                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+--                      .MaxValue) *
+--                 1.5);
+--            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
+--               configure(Button, "-text {Enlarge hull}");
+--               Add
+--                 (Button,
+--                  "Start enlarging hull so it can have more modules installed");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--            end if;
+--         when ALCHEMY_LAB .. GREENHOUSE =>
+--            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
+--              Null_Unbounded_String then
+--               Button.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+--               configure(Button, "-text {Assign as worker}");
+--               Add(Button, "Assign selected crew member as worker");
+--               Tcl.Tk.Ada.Grid.Grid(Button);
+--               ComboBox.Name :=
+--                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+--               ShowAssignMember;
+--               Tcl.Tk.Ada.Grid.Grid(ComboBox);
+--            end if;
+--         when MEDICAL_ROOM =>
+--            for Member of PlayerShip.Crew loop
+--               if Member.Health < 100 and
+--                 FindItem
+--                     (Inventory => PlayerShip.Cargo,
+--                      ItemType =>
+--                        Factions_List(PlayerShip.Crew(1).Faction)
+--                          .HealingTools) >
+--                   0 then
+--                  Button.Name :=
+--                    New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
+--                  configure(Button, "-text {Assign as medic}");
+--                  Add(Button, "Assign selected crew member as medic");
+--                  Tcl.Tk.Ada.Grid.Grid(Button);
+--                  ComboBox.Name :=
+--                    New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
+--                  ShowAssignMember;
+--                  Tcl.Tk.Ada.Grid.Grid(ComboBox);
+--                  exit;
+--               end if;
+--            end loop;
+--         when TRAINING_ROOM =>
+--            ShowAssignSkill;
+--         when others =>
+--            null;
+--      end case;
+--      if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
+--        PlayerShip.UpgradeModule /= ModuleIndex then
+--         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
+--         Tcl.Tk.Ada.Grid.Grid(Button);
+--      end if;
+--      if PlayerShip.RepairModule /= ModuleIndex then
+--         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
+--         Tcl.Tk.Ada.Grid.Grid(Button);
+--      end if;
+   end ShowModuleOptions;
+
    -- ****o* SUI2/Show_Ship_Info_Command
    -- FUNCTION
    -- Show information about the player's ship
@@ -353,6 +670,7 @@ package body Ships.UI is
               "} -maximum 1.0");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
+         ShowModuleOptions(Row - 1);
          Row := Row + 1;
       end loop;
       Tcl_Eval(Get_Context, "update");
@@ -489,317 +807,6 @@ package body Ships.UI is
    -- SOURCE
    ModuleIndex: Positive;
    -- ****
-
-   -- ****if* SUI2/ShowModuleOptions
-   -- FUNCTION
-   -- Show available options for the selected module
-   -- SOURCE
-   procedure ShowModuleOptions is
-      -- ****
-      ButtonsFrame, Button: Ttk_Frame;
-      MaxValue: Positive;
-      Tokens: Slice_Set;
-      IsPassenger: Boolean := False;
-      ComboBox: Ttk_ComboBox;
-      ComboOptions: Unbounded_String;
-      procedure ShowAssignSkill is
-         SkillText, ProtoIndex: Unbounded_String;
-      begin
-         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-            Append(SkillText, " {" & Skills_List(I).Name);
-            if Skills_List(I).Tool /= Null_Unbounded_String then
-               Append(SkillText, " Tool: ");
-               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
-               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-                  Append(SkillText, Items_List(ProtoIndex).ShowType);
-               else
-                  Append(SkillText, Items_List(ProtoIndex).IType);
-               end if;
-            end if;
-            Append(SkillText, "}");
-         end loop;
-         ComboBox.Name :=
-           New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-         configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
-         Current(ComboBox, "0");
-      end ShowAssignSkill;
-      procedure ShowAssignMember is
-         Assigned: Boolean;
-      begin
-         for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            Assigned := False;
-            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
-               if Owner = I then
-                  Assigned := True;
-                  exit;
-               end if;
-            end loop;
-            if not Assigned and PlayerShip.Crew(I).Skills.Length > 0 and
-              PlayerShip.Crew(I).ContractLength /= 0 then
-               case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                 .MType is
-                  when MEDICAL_ROOM =>
-                     if PlayerShip.Crew(I).Health = 100 then
-                        Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
-                     end if;
-                  when others =>
-                     Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
-               end case;
-            end if;
-         end loop;
-         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
-         Current(ComboBox, "0");
-      end ShowAssignMember;
-      procedure ShowAssignAmmo is
-         AmmoIndex: Natural;
-      begin
-         if PlayerShip.Modules(ModuleIndex).MType = GUN then
-            AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
-         else
-            AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
-         end if;
-         ComboOptions := Null_Unbounded_String;
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              Items_Types
-                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                   .Value) and
-              I /= AmmoIndex then
-               Append
-                 (ComboOptions,
-                  " {" &
-                  To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
-                  "}");
-            end if;
-         end loop;
-         if ComboOptions = Null_Unbounded_String then
-            return;
-         end if;
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".assignammo");
-         configure(Button, "-text {Assign as ammo}");
-         Add(Button, "Assign selected ammo to gun");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
-         Current(ComboBox, "0");
-         Tcl.Tk.Ada.Grid.Grid(ComboBox);
-      end ShowAssignAmmo;
-   begin
-      ButtonsFrame.Interp := Get_Context;
-      ButtonsFrame.Name := New_String(".paned.shipinfoframe.cargo.options");
-      Button.Interp := Get_Context;
-      ComboBox.Interp := Get_Context;
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
-      for I in 1 .. Slice_Count(Tokens) loop
-         if Slice(Tokens, I) /= "" then
-            Button.Name := New_String(Slice(Tokens, I));
-            Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         end if;
-      end loop;
-      MaxValue :=
-        Natural
-          (Float
-             (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                .Durability) *
-           1.5);
-      Button.Name := New_String(Widget_Image(ButtonsFrame) & ".durability");
-      if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
-         Tcl.Tk.Ada.Grid.Grid(Button);
-      end if;
-      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
-         when ENGINE =>
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .MaxValue) *
-                 1.5);
-            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-               configure(Button, "-text {Upgrade engine power}");
-               Add(Button, "Start upgrading engine power");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-            end if;
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .Value) /
-                 2.0);
-            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-               configure(Button, "-text {Reduce fuel usage}");
-               Add
-                 (Button, "Start working on reduce fuel usage of this engine");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-            end if;
-            Button.Name := New_String(Widget_Image(ButtonsFrame) & ".disable");
-            Tcl.Tk.Ada.Grid.Grid(Button);
-            if not PlayerShip.Modules(ModuleIndex).Disabled then
-               configure(Button, "-text {Disable engine}");
-               Add(Button, "Turn off engine so it stop using fuel");
-            else
-               configure(Button, "-text {Enable engine}");
-               Add(Button, "Turn on engine so ship will be fly faster");
-            end if;
-         when CABIN =>
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .MaxValue) *
-                 1.5);
-            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-               configure(Button, "-text {Upgrade quality}");
-               Add(Button, "Start upgrading cabin quality");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-            end if;
-            Missions_Loop :
-            for Mission of AcceptedMissions loop
-               if Mission.MType = Passenger then
-                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
-                     if Mission.Data = Owner then
-                        IsPassenger := True;
-                        exit Missions_Loop;
-                     end if;
-                  end loop;
-               end if;
-            end loop Missions_Loop;
-            if not IsPassenger then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
-               configure(Button, "-text {Assing as owner}");
-               Add(Button, "Assign selected crew member as owner of module");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-               ComboBox.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-               ShowAssignMember;
-               Tcl.Tk.Ada.Grid.Grid(ComboBox);
-            end if;
-         when GUN | HARPOON_GUN =>
-            declare
-               CurrentValue: Positive;
-            begin
-               if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
-               else
-                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
-               end if;
-               MaxValue :=
-                 Natural
-                   (Float
-                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                         .MaxValue) *
-                    1.5);
-               if CurrentValue < MaxValue then
-                  Button.Name :=
-                    New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                     configure(Button, "-text {Upgrade damage}");
-                     Add(Button, "Start upgrading damage of gun");
-                  else
-                     configure(Button, "-text {Upgrade strength}");
-                     Add(Button, "Start upgrading strength of gun");
-                  end if;
-                  Tcl.Tk.Ada.Grid.Grid(Button);
-               end if;
-            end;
-            Button.Name :=
-              New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
-            configure(Button, "-text {Assign as gunner}");
-            Add(Button, "Assign selected crew member as gunner");
-            Tcl.Tk.Ada.Grid.Grid(Button);
-            ComboBox.Name :=
-              New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-            ShowAssignMember;
-            Tcl.Tk.Ada.Grid.Grid(ComboBox);
-            ComboBox.Name :=
-              New_String(Widget_Image(ButtonsFrame) & ".ammocombo");
-            ShowAssignAmmo;
-         when BATTERING_RAM =>
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .MaxValue) *
-                 1.5);
-            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-               configure(Button, "-text {Upgrade damage}");
-               Add(Button, "Start upgrading damage of battering ram");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-            end if;
-         when HULL =>
-            MaxValue :=
-              Natural
-                (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                      .MaxValue) *
-                 1.5);
-            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
-               configure(Button, "-text {Enlarge hull}");
-               Add
-                 (Button,
-                  "Start enlarging hull so it can have more modules installed");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-            end if;
-         when ALCHEMY_LAB .. GREENHOUSE =>
-            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
-              Null_Unbounded_String then
-               Button.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
-               configure(Button, "-text {Assign as worker}");
-               Add(Button, "Assign selected crew member as worker");
-               Tcl.Tk.Ada.Grid.Grid(Button);
-               ComboBox.Name :=
-                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-               ShowAssignMember;
-               Tcl.Tk.Ada.Grid.Grid(ComboBox);
-            end if;
-         when MEDICAL_ROOM =>
-            for Member of PlayerShip.Crew loop
-               if Member.Health < 100 and
-                 FindItem
-                     (Inventory => PlayerShip.Cargo,
-                      ItemType =>
-                        Factions_List(PlayerShip.Crew(1).Faction)
-                          .HealingTools) >
-                   0 then
-                  Button.Name :=
-                    New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
-                  configure(Button, "-text {Assign as medic}");
-                  Add(Button, "Assign selected crew member as medic");
-                  Tcl.Tk.Ada.Grid.Grid(Button);
-                  ComboBox.Name :=
-                    New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-                  ShowAssignMember;
-                  Tcl.Tk.Ada.Grid.Grid(ComboBox);
-                  exit;
-               end if;
-            end loop;
-         when TRAINING_ROOM =>
-            ShowAssignSkill;
-         when others =>
-            null;
-      end case;
-      if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
-        PlayerShip.UpgradeModule /= ModuleIndex then
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-      end if;
-      if PlayerShip.RepairModule /= ModuleIndex then
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-      end if;
-   end ShowModuleOptions;
 
    -- ****o* SUI2/Show_Module_Info_Command
    -- FUNCTION
@@ -1276,7 +1283,6 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
       end if;
       configure(ModuleText, "-state disabled");
-      ShowModuleOptions;
       return TCL_OK;
    end Show_Module_Info_Command;
 
