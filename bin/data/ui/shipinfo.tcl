@@ -7,6 +7,7 @@ pack [ttk::scrollbar $shipinfoframe.general.scrollx -orient horizontal -command 
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
+# Minimize/maximize button
 grid [ttk::button $shipcanvas.frame.maxmin -style Toolbutton -text "[format %c 0x2191]" -command {ShipMaxMin general show}]
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
@@ -39,8 +40,18 @@ grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.modules -text {Modules}] -sticky nwes
-grid [ttk::treeview $shipinfoframe.modules.modules -show tree] -row 1 -columnspan 3 -sticky nwes
-bind $shipinfoframe.modules.modules <<TreeviewSelect>> ShowModuleInfo
+set shipcanvas [canvas $shipinfoframe.modules.canvas -yscrollcommand [list $shipinfoframe.modules.scrolly set] -xscrollcommand [list $shipinfoframe.modules.scrollx set]]
+pack [ttk::scrollbar $shipinfoframe.modules.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
+pack $shipcanvas -side top -fill both -expand true
+ttk::frame $shipcanvas.frame
+grid columnconfigure $shipcanvas.frame 1 -weight 1
+grid [ttk::button $shipcanvas.frame.maxmin -style Toolbutton -text "[format %c 0x2191]" -command {ShipMaxMin modules show}] -sticky w
+tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
+grid [ttk::label $shipcanvas.frame.name -text {Name}]
+grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
+grid [ttk::label $shipcanvas.frame.actions -text {Actions}] -column 2 -row 1
+$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 # Crew info
 grid [ttk::labelframe $shipinfoframe.crew -text {Crew Info:}] -row 0 -column 1 -sticky nwes
 grid [ttk::label $shipinfoframe.crew.name -text {Name}]
@@ -51,7 +62,7 @@ grid [ttk::label $shipinfoframe.crew.thirst -text {Thirst}] -column 4 -row 0
 grid [ttk::label $shipinfoframe.crew.hunter -text {Hunger}] -column 5 -row 0
 grid [ttk::label $shipinfoframe.crew.morale -text {Morale}] -column 6 -row 0
 # Detailed info about the selected ship's module
-grid [ttk::labelframe $shipinfoframe.cargo -text {Module Info:}] -row 1 -column 1 -sticky nwes
+ttk::labelframe $shipinfoframe.cargo -text {Module Info:}
 grid [ttk::label $shipinfoframe.cargo.damagelbl -text {Damage:}]
 grid [ttk::progressbar $shipinfoframe.cargo.damage -orient horizontal -maximum 1.0] -row 0 -column 1
 grid [ttk::label $shipinfoframe.cargo.cleanlbl -text {Clean:}]

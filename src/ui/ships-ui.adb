@@ -89,7 +89,6 @@ package body Ships.UI is
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
-      ModulesView: Ttk_Tree_View;
       CloseButton, CancelButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
@@ -311,18 +310,66 @@ package body Ships.UI is
       Scrollbar.Name :=
         New_String(Widget_Image(Paned) & ".shipinfoframe.general.scrollx");
       Autoscroll(Scrollbar);
+      -- Setting ship modules info
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ModulesView.Interp := Interp;
-      ModulesView.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".modules.modules");
-      Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
-      for I in PlayerShip.Modules.Iterate loop
-         Insert
-           (ModulesView,
-            "{} end -id" & Positive'Image(Modules_Container.To_Index(I)) &
-            " -text {" & To_String(PlayerShip.Modules(I).Name) & "}");
+      Scrollbar.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrolly");
+      Unautoscroll(Scrollbar);
+      Scrollbar.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrollx");
+      Unautoscroll(Scrollbar);
+      ShipInfoFrame.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".modules.canvas.frame");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 2 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (ShipInfoFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Interp;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
       end loop;
-      Selection_Set(ModulesView, "[list 1]");
+      Row := 2;
+      for Module of PlayerShip.Modules loop
+         Label :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".name" &
+              Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(Module.Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Natural'Image(Row) & " -sticky w");
+         UpgradeProgress :=
+           Create
+             (Widget_Image(ShipInfoFrame) & ".durability" &
+              Trim(Natural'Image(Row), Left),
+              "-value {" &
+              Float'Image
+                (Float(Module.Durability) / Float(Module.MaxDurability)) &
+              "} -maximum 1.0");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
+         Row := Row + 1;
+      end loop;
+      Tcl_Eval(Get_Context, "update");
+      ShipCanvas.Interp := Interp;
+      ShipCanvas.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.canvas");
+      configure
+        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      Xview_Move_To(ShipCanvas, "0.0");
+      Yview_Move_To(ShipCanvas, "0.0");
+      Scrollbar.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrolly");
+      Autoscroll(Scrollbar);
+      Scrollbar.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrollx");
+      Autoscroll(Scrollbar);
+      ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -333,7 +380,7 @@ package body Ships.UI is
               (ShipInfoFrame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
+            Item.Interp := Interp;
             Item.Name := New_String(Slice(Tokens, J));
             Destroy(Item);
          end loop;
@@ -1577,9 +1624,9 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      FramesNames: constant array(1 .. 4) of Unbounded_String :=
+      FramesNames: constant array(1 .. 3) of Unbounded_String :=
         (To_Unbounded_String("general"), To_Unbounded_String("modules"),
-         To_Unbounded_String("crew"), To_Unbounded_String("cargo"));
+         To_Unbounded_String("crew"));
       Frame: Ttk_Frame;
       Button: Ttk_Button;
    begin
