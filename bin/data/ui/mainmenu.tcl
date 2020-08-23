@@ -255,7 +255,7 @@ ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
 grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1]
-grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Toolbutton -command {RandomName player}] -row 0 -column 2
+grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName player}] -row 0 -column 2
 tooltip::tooltip .newgamemenu.canvas.player.randomplayer "Select a random name for the character,\nbased on the character gender"
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
@@ -268,7 +268,7 @@ grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -r
 grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
-grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Toolbutton -command {RandomName ship}] -row 2 -column 2
+grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName ship}] -row 2 -column 2
 tooltip::tooltip .newgamemenu.canvas.player.randomship "Select a random name for the ship"
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
 grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 -columnspan 2
