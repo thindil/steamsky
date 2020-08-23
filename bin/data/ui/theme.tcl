@@ -98,9 +98,9 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
       # Flat button for male gender
-      ttk::style configure Male.Toolbutton -foreground $colors(-blue)
+      ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
       # Flat button for female gender
-      ttk::style configure Female.Toolbutton -foreground $colors(-pink)
+      ttk::style configure Female.Toolbutton -foreground $colors(-pink) -font InterfaceIcons
       # Not needed state header button (ship info in right top corner)
       ttk::style configure Header.Toolbutton -font InterfaceIcons
       # Alarm state header button (ship info in right top corner)
