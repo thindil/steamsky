@@ -38,6 +38,8 @@ grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+::autoscroll::autoscroll $shipinfoframe.general.scrolly
+::autoscroll::autoscroll $shipinfoframe.general.scrollx
 # Ship modules
 grid [ttk::labelframe $shipinfoframe.modules -text {Modules}] -sticky nwes
 set shipcanvas [canvas $shipinfoframe.modules.canvas -yscrollcommand [list $shipinfoframe.modules.scrolly set] -xscrollcommand [list $shipinfoframe.modules.scrollx set]]
@@ -52,6 +54,8 @@ grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
 grid [ttk::label $shipcanvas.frame.actions -text {Actions}] -column 2 -row 1
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+::autoscroll::autoscroll $shipinfoframe.modules.scrolly
+::autoscroll::autoscroll $shipinfoframe.modules.scrollx
 # Crew info
 grid [ttk::labelframe $shipinfoframe.crew -text {Crew Info:}] -row 0 -column 1 -sticky nwes
 grid [ttk::label $shipinfoframe.crew.name -text {Name}]
