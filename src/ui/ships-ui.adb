@@ -40,7 +40,6 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
@@ -436,13 +435,6 @@ package body Ships.UI is
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
-      Scrollbar.Interp := Interp;
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.general.scrolly");
-      Unautoscroll(Scrollbar);
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.general.scrollx");
-      Unautoscroll(Scrollbar);
       Label.Interp := Interp;
       Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
@@ -624,20 +616,8 @@ package body Ships.UI is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.general.scrolly");
-      Autoscroll(Scrollbar);
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.general.scrollx");
-      Autoscroll(Scrollbar);
       -- Setting ship modules info
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrolly");
-      Unautoscroll(Scrollbar);
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrollx");
-      Unautoscroll(Scrollbar);
       ShipInfoFrame.Name :=
         New_String(Widget_Image(ShipInfoFrame) & ".modules.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
@@ -684,12 +664,6 @@ package body Ships.UI is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrolly");
-      Autoscroll(Scrollbar);
-      Scrollbar.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.scrollx");
-      Autoscroll(Scrollbar);
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
