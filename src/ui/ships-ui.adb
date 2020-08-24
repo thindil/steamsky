@@ -163,6 +163,7 @@ package body Ships.UI is
           (Widget_Image(ButtonsFrame) & ".rename" &
            Trim(Positive'Image(ModuleIndex), Left),
            "-text ""[format %c 0xf044]"" -style Header.Toolbutton");
+      Add(Button, "Rename module");
       Tcl.Tk.Ada.Grid.Grid(Button);
       ComboBox.Interp := Get_Context;
       MaxValue :=
@@ -177,6 +178,7 @@ package body Ships.UI is
              (Widget_Image(ButtonsFrame) & ".upgradedurability" &
               Trim(Positive'Image(ModuleIndex), Left),
               "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1}");
+         Add(Button, "Start upgrading module durability");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
