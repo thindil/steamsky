@@ -68,7 +68,6 @@ package body Ships.UI is
       ButtonsFrame: Ttk_Frame;
       Button: Ttk_Button;
       MaxValue: Positive;
-      Tokens: Slice_Set;
       IsPassenger: Boolean := False;
       ComboBox: Ttk_ComboBox;
       ComboOptions: Unbounded_String;
@@ -156,16 +155,17 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end ShowAssignAmmo;
    begin
-      ButtonsFrame.Interp := Get_Context;
-      ButtonsFrame.Name :=
-        New_String(".paned.shipinfoframe.modules.canvas.frame");
+      ButtonsFrame :=
+        Create
+          (".paned.shipinfoframe.modules.canvas.frame.actions" &
+           Trim(Positive'Image(ModuleIndex), Left));
       Button :=
         Create
           (Widget_Image(ButtonsFrame) & ".rename" &
            Trim(Positive'Image(ModuleIndex), Left),
-           "-text {Rename module}");
+           "-text ""[format %c 0xf044]"" -style Header.Toolbutton");
+      Tcl.Tk.Ada.Grid.Grid(Button);
       ComboBox.Interp := Get_Context;
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(ButtonsFrame), " ");
       MaxValue :=
         Natural
           (Float
@@ -173,12 +173,12 @@ package body Ships.UI is
                 .Durability) *
            1.5);
       if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
-         Tcl.Tk.Ada.Grid.Grid(Button);
          Button :=
            Create
-             (Widget_Image(ButtonsFrame) & ".durability" &
+             (Widget_Image(ButtonsFrame) & ".upgradedurability" &
               Trim(Positive'Image(ModuleIndex), Left),
-              "-text {Upgrade durability} -command {SetUpgrade 1}");
+              "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
 --      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
 --         when ENGINE =>
@@ -372,6 +372,9 @@ package body Ships.UI is
 --         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
 --         Tcl.Tk.Ada.Grid.Grid(Button);
 --      end if;
+      Tcl.Tk.Ada.Grid.Grid
+        (ButtonsFrame,
+         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2");
    end ShowModuleOptions;
 
    -- ****o* SUI2/Show_Ship_Info_Command
@@ -1653,7 +1656,7 @@ package body Ships.UI is
          end loop;
          configure
            (Button,
-            "-text ""[format %c 0x2191]"" -command {ShipMaxMin " &
+            "-text ""[format %c 0xf106]"" -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
          for Name of FramesNames loop
@@ -1665,7 +1668,7 @@ package body Ships.UI is
          end loop;
          configure
            (Button,
-            "-text ""[format %c 0x2193]"" -command {ShipMaxMin " &
+            "-text ""[format %c 0xf107]"" -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " hide}");
       end if;
       return TCL_OK;
