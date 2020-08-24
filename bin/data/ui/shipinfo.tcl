@@ -8,7 +8,7 @@ pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 # Minimize/maximize button
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0x2191]" -command {ShipMaxMin general show}]
+grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin general show}]
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
 grid [ttk::label $shipcanvas.frame.name] -columnspan 2 -sticky w
@@ -46,7 +46,7 @@ pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command 
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0x2191]" -command {ShipMaxMin modules show}] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
