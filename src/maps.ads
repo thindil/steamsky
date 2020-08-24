@@ -22,7 +22,7 @@
 package Maps is
 -- ****
 
-   -- ****t* Maps/SkyCell
+   -- ****s* Maps/SkyCell
    -- FUNCTION
    -- Data structure for cells in game map
    -- PARAMETERS
