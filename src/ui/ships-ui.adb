@@ -179,35 +179,39 @@ package body Ships.UI is
               "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
---      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
---         when ENGINE =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---               configure(Button, "-text {Upgrade engine power}");
---               Add(Button, "Start upgrading engine power");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---            end if;
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .Value) /
---                 2.0);
---            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---               configure(Button, "-text {Reduce fuel usage}");
---               Add
---                 (Button, "Start working on reduce fuel usage of this engine");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---            end if;
+      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+         when ENGINE =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
+               Button :=
+                  Create
+                     (Widget_Image(ButtonsFrame) & ".upgradepower" &
+                     Trim(Positive'Image(ModuleIndex), Left),
+                     "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+               Add(Button, "Start upgrading engine power");
+                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+            end if;
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .Value) /
+                 2.0);
+            if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
+               Button :=
+                  Create
+                     (Widget_Image(ButtonsFrame) & ".reducefuel" &
+                     Trim(Positive'Image(ModuleIndex), Left),
+                     "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3}");
+               Add
+                 (Button, "Start working on reduce fuel usage of this engine");
+                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+            end if;
 --            Button.Name := New_String(Widget_Image(ButtonsFrame) & ".disable");
 --            Tcl.Tk.Ada.Grid.Grid(Button);
 --            if not PlayerShip.Modules(ModuleIndex).Disabled then
@@ -359,9 +363,9 @@ package body Ships.UI is
 --            end loop;
 --         when TRAINING_ROOM =>
 --            ShowAssignSkill;
---         when others =>
---            null;
---      end case;
+         when others =>
+            null;
+      end case;
 --      if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
 --        PlayerShip.UpgradeModule /= ModuleIndex then
 --         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
@@ -373,7 +377,7 @@ package body Ships.UI is
 --      end if;
       Tcl.Tk.Ada.Grid.Grid
         (ButtonsFrame,
-         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2");
+         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
    end ShowModuleOptions;
 
    -- ****o* SUI2/Show_Ship_Info_Command
