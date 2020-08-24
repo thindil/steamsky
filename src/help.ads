@@ -26,7 +26,7 @@ with DOM.Readers; use DOM.Readers;
 package Help is
 -- ****
 
-   -- ****t* Help/Help_Data
+   -- ****s* Help/Help_Data
    -- FUNCTION
    -- Data structure for help topic
    -- PARAMETERS
