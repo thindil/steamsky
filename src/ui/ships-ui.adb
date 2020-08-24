@@ -35,9 +35,9 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -70,6 +70,7 @@ package body Ships.UI is
       IsPassenger: Boolean := False;
       ComboBox: Ttk_ComboBox;
       ComboOptions: Unbounded_String;
+      MenuButton: Ttk_MenuButton;
       procedure ShowAssignSkill is
          SkillText, ProtoIndex: Unbounded_String;
       begin
@@ -91,34 +92,6 @@ package body Ships.UI is
          configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
          Current(ComboBox, "0");
       end ShowAssignSkill;
-      procedure ShowAssignMember is
-         Assigned: Boolean;
-      begin
-         for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            Assigned := False;
-            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
-               if Owner = I then
-                  Assigned := True;
-                  exit;
-               end if;
-            end loop;
-            if not Assigned and PlayerShip.Crew(I).Skills.Length > 0 and
-              PlayerShip.Crew(I).ContractLength /= 0 then
-               case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                 .MType is
-                  when MEDICAL_ROOM =>
-                     if PlayerShip.Crew(I).Health = 100 then
-                        Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
-                     end if;
-                  when others =>
-                     Append(ComboOptions, " " & PlayerShip.Crew(I).Name);
-               end case;
-            end if;
-         end loop;
-         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
-         Current(ComboBox, "0");
-      end ShowAssignMember;
       procedure ShowAssignAmmo is
          AmmoIndex: Natural;
       begin
@@ -191,12 +164,12 @@ package body Ships.UI is
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
                Button :=
-                  Create
-                     (Widget_Image(ButtonsFrame) & ".upgradepower" &
-                     Trim(Positive'Image(ModuleIndex), Left),
-                     "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".upgradepower" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add(Button, "Start upgrading engine power");
-                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
             end if;
             MaxValue :=
               Natural
@@ -206,59 +179,67 @@ package body Ships.UI is
                  2.0);
             if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
                Button :=
-                  Create
-                     (Widget_Image(ButtonsFrame) & ".reducefuel" &
-                     Trim(Positive'Image(ModuleIndex), Left),
-                     "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3}");
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".reducefuel" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3}");
                Add
                  (Button, "Start working on reduce fuel usage of this engine");
-                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
             end if;
---            Button.Name := New_String(Widget_Image(ButtonsFrame) & ".disable");
---            Tcl.Tk.Ada.Grid.Grid(Button);
---            if not PlayerShip.Modules(ModuleIndex).Disabled then
---               configure(Button, "-text {Disable engine}");
---               Add(Button, "Turn off engine so it stop using fuel");
---            else
---               configure(Button, "-text {Enable engine}");
---               Add(Button, "Turn on engine so ship will be fly faster");
---            end if;
---         when CABIN =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---               configure(Button, "-text {Upgrade quality}");
---               Add(Button, "Start upgrading cabin quality");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---            end if;
---            Missions_Loop :
---            for Mission of AcceptedMissions loop
---               if Mission.MType = Passenger then
---                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
---                     if Mission.Data = Owner then
---                        IsPassenger := True;
---                        exit Missions_Loop;
---                     end if;
---                  end loop;
---               end if;
---            end loop Missions_Loop;
---            if not IsPassenger then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
---               configure(Button, "-text {Assing as owner}");
---               Add(Button, "Assign selected crew member as owner of module");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---               ComboBox.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
---               ShowAssignMember;
---               Tcl.Tk.Ada.Grid.Grid(ComboBox);
---            end if;
+            if not PlayerShip.Modules(ModuleIndex).Disabled then
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".turnoff" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command DisableEngine");
+               Add(Button, "Turn off engine so it stop using fuel");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+            else
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".turnoff" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command DisableEngine");
+               Add(Button, "Turn on engine so ship will be fly faster");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+            end if;
+         when CABIN =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+               Add(Button, "Start upgrading cabin quality");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+            end if;
+            Missions_Loop :
+            for Mission of AcceptedMissions loop
+               if Mission.MType = Passenger then
+                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                     if Mission.Data = Owner then
+                        IsPassenger := True;
+                        exit Missions_Loop;
+                     end if;
+                  end loop;
+               end if;
+            end loop Missions_Loop;
+            if not IsPassenger then
+               MenuButton :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".assigncrew" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+               Add(MenuButton, "Assign a crew member as owner of module");
+               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+            end if;
 --         when GUN | HARPOON_GUN =>
 --            declare
 --               CurrentValue: Positive;
@@ -418,7 +399,7 @@ package body Ships.UI is
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
-      Scrollbar: Ttk_Scrollbar;
+      CrewMenu: Tk_Menu;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -426,6 +407,8 @@ package body Ships.UI is
       CloseButton.Name := New_String(".header.closebutton");
       ShipInfoFrame.Interp := Interp;
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
+      CrewMenu.Interp := Interp;
+      CrewMenu.Name := New_String(".shipinfocrewmenu");
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -438,6 +421,11 @@ package body Ships.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Delete(CrewMenu, "0", "end");
+      for Member of PlayerShip.Crew loop
+         Menu.Add
+           (CrewMenu, "command", "-label {" & To_String(Member.Name) & "}");
+      end loop;
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
