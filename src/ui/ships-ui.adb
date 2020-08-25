@@ -68,29 +68,7 @@ package body Ships.UI is
       Button: Ttk_Button;
       MaxValue: Positive;
       IsPassenger: Boolean := False;
-      ComboBox: Ttk_ComboBox;
       MenuButton: Ttk_MenuButton;
-      procedure ShowAssignSkill is
-         SkillText, ProtoIndex: Unbounded_String;
-      begin
-         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-            Append(SkillText, " {" & Skills_List(I).Name);
-            if Skills_List(I).Tool /= Null_Unbounded_String then
-               Append(SkillText, " Tool: ");
-               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
-               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-                  Append(SkillText, Items_List(ProtoIndex).ShowType);
-               else
-                  Append(SkillText, Items_List(ProtoIndex).IType);
-               end if;
-            end if;
-            Append(SkillText, "}");
-         end loop;
-         ComboBox.Name :=
-           New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
-         configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
-         Current(ComboBox, "0");
-      end ShowAssignSkill;
    begin
       ButtonsFrame :=
         Create
@@ -344,23 +322,19 @@ package body Ships.UI is
                   exit;
                end if;
             end loop;
---         when TRAINING_ROOM =>
---            ShowAssignSkill;
+         when TRAINING_ROOM =>
+            MenuButton :=
+              Create
+                (Widget_Image(ButtonsFrame) & ".assignskill" &
+                 Trim(Positive'Image(ModuleIndex), Left),
+                 "-text ""[format %c 0xf19d]"" -style Header.Toolbutton -menu .shipinfoammomenu");
+            Add
+              (MenuButton,
+               "Assign a skill which will be trained in the training room");
+            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
          when others =>
             null;
       end case;
---      if PlayerShip.Modules(ModuleIndex).UpgradeAction /= NONE and
---        PlayerShip.UpgradeModule /= ModuleIndex then
---         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".continue");
---         Tcl.Tk.Ada.Grid.Grid(Button);
---      end if;
---      if PlayerShip.RepairModule /= ModuleIndex then
---         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".repair");
---         Tcl.Tk.Ada.Grid.Grid(Button);
---      end if;
-      Tcl.Tk.Ada.Grid.Grid
-        (ButtonsFrame,
-         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
    end ShowModuleOptions;
 
    -- ****o* SUI2/Show_Ship_Info_Command
@@ -421,11 +395,33 @@ package body Ships.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      -- Set crew members list
       Delete(CrewMenu, "0", "end");
       for Member of PlayerShip.Crew loop
          Menu.Add
            (CrewMenu, "command", "-label {" & To_String(Member.Name) & "}");
       end loop;
+      -- Set skills list
+      CrewMenu.Name := New_String(".shipinfoskillsmenu");
+      Delete(CrewMenu, "0", "end");
+      declare
+         SkillText, ProtoIndex: Unbounded_String;
+      begin
+         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+            SkillText := Skills_List(I).Name;
+            if Skills_List(I).Tool /= Null_Unbounded_String then
+               Append(SkillText, " Tool: ");
+               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+                  Append(SkillText, Items_List(ProtoIndex).ShowType);
+               else
+                  Append(SkillText, Items_List(ProtoIndex).IType);
+               end if;
+            end if;
+            Menu.Add
+              (CrewMenu, "command", "-label {" & To_String(SkillText) & "}");
+         end loop;
+      end;
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
