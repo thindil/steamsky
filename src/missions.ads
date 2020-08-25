@@ -39,7 +39,7 @@ package Missions is
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
    -- ****
 
-   -- ****t* Missions/Mission_Data(MType:
+   -- ****s* Missions/Mission_Data(MType:
    -- FUNCTION
    -- Data structure for missions
    -- PARAMETERS
