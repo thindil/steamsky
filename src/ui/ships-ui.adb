@@ -280,20 +280,21 @@ package body Ships.UI is
                   Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
                end if;
             end;
---         when BATTERING_RAM =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---               configure(Button, "-text {Upgrade damage}");
---               Add(Button, "Start upgrading damage of battering ram");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---            end if;
+         when BATTERING_RAM =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+               Add(Button, "Start upgrading damage of battering ram");
+            end if;
 --         when HULL =>
 --            MaxValue :=
 --              Natural
