@@ -335,6 +335,16 @@ package body Ships.UI is
          when others =>
             null;
       end case;
+      Button :=
+        Create
+          (Widget_Image(ButtonsFrame) & ".showinfo" &
+           Trim(Positive'Image(ModuleIndex), Left),
+           "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo}");
+      Add(Button, "Show detailed information about the module");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (ButtonsFrame,
+         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
    end ShowModuleOptions;
 
    -- ****o* SUI2/Show_Ship_Info_Command
