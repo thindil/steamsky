@@ -325,27 +325,25 @@ package body Ships.UI is
                Add(MenuButton, "Assign selected crew member as worker");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             end if;
---         when MEDICAL_ROOM =>
---            for Member of PlayerShip.Crew loop
---               if Member.Health < 100 and
---                 FindItem
---                     (Inventory => PlayerShip.Cargo,
---                      ItemType =>
---                        Factions_List(PlayerShip.Crew(1).Faction)
---                          .HealingTools) >
---                   0 then
---                  Button.Name :=
---                    New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
---                  configure(Button, "-text {Assign as medic}");
---                  Add(Button, "Assign selected crew member as medic");
---                  Tcl.Tk.Ada.Grid.Grid(Button);
---                  ComboBox.Name :=
---                    New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
---                  ShowAssignMember;
---                  Tcl.Tk.Ada.Grid.Grid(ComboBox);
---                  exit;
---               end if;
---            end loop;
+         when MEDICAL_ROOM =>
+            for Member of PlayerShip.Crew loop
+               if Member.Health < 100 and
+                 FindItem
+                     (Inventory => PlayerShip.Cargo,
+                      ItemType =>
+                        Factions_List(PlayerShip.Crew(1).Faction)
+                          .HealingTools) >
+                   0 then
+                  MenuButton :=
+                    Create
+                      (Widget_Image(ButtonsFrame) & ".assigncrew" &
+                       Trim(Positive'Image(ModuleIndex), Left),
+                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+                  Add(Button, "Assign selected crew member as medic");
+                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+                  exit;
+               end if;
+            end loop;
 --         when TRAINING_ROOM =>
 --            ShowAssignSkill;
          when others =>
