@@ -69,7 +69,6 @@ package body Ships.UI is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       ComboBox: Ttk_ComboBox;
-      ComboOptions: Unbounded_String;
       MenuButton: Ttk_MenuButton;
       procedure ShowAssignSkill is
          SkillText, ProtoIndex: Unbounded_String;
@@ -92,40 +91,6 @@ package body Ships.UI is
          configure(ComboBox, "-values [list" & To_String(SkillText) & "]");
          Current(ComboBox, "0");
       end ShowAssignSkill;
-      procedure ShowAssignAmmo is
-         AmmoIndex: Natural;
-      begin
-         if PlayerShip.Modules(ModuleIndex).MType = GUN then
-            AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
-         else
-            AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
-         end if;
-         ComboOptions := Null_Unbounded_String;
-         for I in
-           PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
-              Items_Types
-                (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
-                   .Value) and
-              I /= AmmoIndex then
-               Append
-                 (ComboOptions,
-                  " {" &
-                  To_String(Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
-                  "}");
-            end if;
-         end loop;
-         if ComboOptions = Null_Unbounded_String then
-            return;
-         end if;
-         Button.Name := New_String(Widget_Image(ButtonsFrame) & ".assignammo");
-         configure(Button, "-text {Assign as ammo}");
-         Add(Button, "Assign selected ammo to gun");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-         configure(ComboBox, "-values [list" & To_String(ComboOptions) & "]");
-         Current(ComboBox, "0");
-         Tcl.Tk.Ada.Grid.Grid(ComboBox);
-      end ShowAssignAmmo;
    begin
       ButtonsFrame :=
         Create
@@ -138,7 +103,6 @@ package body Ships.UI is
            "-text ""[format %c 0xf044]"" -style Header.Toolbutton");
       Add(Button, "Rename module");
       Tcl.Tk.Ada.Grid.Grid(Button);
-      ComboBox.Interp := Get_Context;
       MaxValue :=
         Natural
           (Float
@@ -240,46 +204,82 @@ package body Ships.UI is
                Add(MenuButton, "Assign a crew member as owner of module");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             end if;
---         when GUN | HARPOON_GUN =>
---            declare
---               CurrentValue: Positive;
---            begin
---               if PlayerShip.Modules(ModuleIndex).MType = GUN then
---                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
---               else
---                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
---               end if;
---               MaxValue :=
---                 Natural
---                   (Float
---                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                         .MaxValue) *
---                    1.5);
---               if CurrentValue < MaxValue then
---                  Button.Name :=
---                    New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
---                     configure(Button, "-text {Upgrade damage}");
---                     Add(Button, "Start upgrading damage of gun");
---                  else
---                     configure(Button, "-text {Upgrade strength}");
---                     Add(Button, "Start upgrading strength of gun");
---                  end if;
---                  Tcl.Tk.Ada.Grid.Grid(Button);
---               end if;
---            end;
---            Button.Name :=
---              New_String(Widget_Image(ButtonsFrame) & ".assigncrew");
---            configure(Button, "-text {Assign as gunner}");
---            Add(Button, "Assign selected crew member as gunner");
---            Tcl.Tk.Ada.Grid.Grid(Button);
---            ComboBox.Name :=
---              New_String(Widget_Image(ButtonsFrame) & ".crewcombo");
---            ShowAssignMember;
---            Tcl.Tk.Ada.Grid.Grid(ComboBox);
---            ComboBox.Name :=
---              New_String(Widget_Image(ButtonsFrame) & ".ammocombo");
---            ShowAssignAmmo;
+         when GUN | HARPOON_GUN =>
+            declare
+               CurrentValue: Positive;
+            begin
+               if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
+               else
+                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
+               end if;
+               MaxValue :=
+                 Natural
+                   (Float
+                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                         .MaxValue) *
+                    1.5);
+               if CurrentValue < MaxValue then
+                  Button :=
+                    Create
+                      (Widget_Image(ButtonsFrame) & ".upgradequality" &
+                       Trim(Positive'Image(ModuleIndex), Left),
+                       "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                  if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                     Add(Button, "Start upgrading damage of gun");
+                  else
+                     Add(Button, "Start upgrading strength of gun");
+                  end if;
+                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               end if;
+            end;
+            MenuButton :=
+              Create
+                (Widget_Image(ButtonsFrame) & ".assigncrew" &
+                 Trim(Positive'Image(ModuleIndex), Left),
+                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+            Add(MenuButton, "Assign a crew member as gunner");
+            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+            declare
+               AmmoIndex: Natural;
+               AmmoMenu: Tk_Menu;
+               NotEmpty: Boolean := False;
+            begin
+               if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                  AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
+               else
+                  AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
+               end if;
+               AmmoMenu.Interp := Get_Context;
+               AmmoMenu.Name := New_String(".shipinfoammomenu");
+               Delete(AmmoMenu, "0", "end");
+               for I in
+                 PlayerShip.Cargo.First_Index ..
+                   PlayerShip.Cargo.Last_Index loop
+                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+                    Items_Types
+                      (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                         .Value) and
+                    I /= AmmoIndex then
+                     Menu.Add
+                       (AmmoMenu, "command",
+                        "-label {" &
+                        To_String
+                          (Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
+                        "}");
+                     NotEmpty := True;
+                  end if;
+               end loop;
+               if NotEmpty then
+                  MenuButton :=
+                    Create
+                      (Widget_Image(ButtonsFrame) & ".assignammo" &
+                       Trim(Positive'Image(ModuleIndex), Left),
+                       "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu");
+                  Add(MenuButton, "Assign an ammo to gun");
+                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+               end if;
+            end;
 --         when BATTERING_RAM =>
 --            MaxValue :=
 --              Natural
