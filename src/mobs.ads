@@ -31,7 +31,7 @@ with Game; use Game;
 package Mobs is
 -- ****
 
-   -- ****t* Mobs/MobInventoryRecord
+   -- ****s* Mobs/MobInventoryRecord
    -- FUNCTION
    -- Data structure for mobs inventory
    -- PARAMETERS
@@ -53,7 +53,7 @@ package Mobs is
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
    -- ****
 
-   -- ****t* Mobs/ProtoMobRecord
+   -- ****s* Mobs/ProtoMobRecord
    -- FUNCTION
    -- Data structure for mobs prototypes
    -- PARAMETERS

@@ -42,7 +42,7 @@ package Messages is
    type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
    -- ****
 
-   -- ****t* Messages/Message_Data
+   -- ****s* Messages/Message_Data
    -- FUNCTION
    -- Data structure for messages
    -- PARAMETERS
