@@ -294,23 +294,26 @@ package body Ships.UI is
                     Trim(Positive'Image(ModuleIndex), Left),
                     "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add(Button, "Start upgrading damage of battering ram");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
             end if;
---         when HULL =>
---            MaxValue :=
---              Natural
---                (Float
---                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
---                      .MaxValue) *
---                 1.5);
---            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
---               Button.Name :=
---                 New_String(Widget_Image(ButtonsFrame) & ".upgrade1");
---               configure(Button, "-text {Enlarge hull}");
---               Add
---                 (Button,
---                  "Start enlarging hull so it can have more modules installed");
---               Tcl.Tk.Ada.Grid.Grid(Button);
---            end if;
+         when HULL =>
+            MaxValue :=
+              Natural
+                (Float
+                   (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                      .MaxValue) *
+                 1.5);
+            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
+                    Trim(Positive'Image(ModuleIndex), Left),
+                    "-text ""[format %c 0xf568]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+               Add
+                 (Button,
+                  "Start enlarging hull so it can have more modules installed");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+            end if;
 --         when ALCHEMY_LAB .. GREENHOUSE =>
 --            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
 --              Null_Unbounded_String then
