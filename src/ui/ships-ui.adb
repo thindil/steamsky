@@ -72,6 +72,7 @@ package body Ships.UI is
       MenuButton: Ttk_MenuButton;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
+      AssignMenu: Tk_Menu;
    begin
       ButtonsFrame :=
         Create
@@ -100,6 +101,26 @@ package body Ships.UI is
          Add(Button, "Start upgrading module durability");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
+      -- Set crew members list
+      AssignMenu.Interp := Get_Context;
+      AssignMenu.Name := New_String(".shipinfocrewmenu" & ModuleIndexString);
+      if Winfo_Get(AssignMenu, "exists") = "0" then
+         AssignMenu :=
+           Create(".shipinfocrewmenu" & ModuleIndexString, "-tearoff false");
+      end if;
+      Delete(AssignMenu, "0", "end");
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Modules(ModuleIndex).Owner.Contains
+             (Crew_Container.To_Index(I)) then
+            Menu.Add
+              (AssignMenu, "command",
+               "-label {" & To_String(PlayerShip.Crew(I).Name) & "(current)}");
+         else
+            Menu.Add
+              (AssignMenu, "command",
+               "-label {" & To_String(PlayerShip.Crew(I).Name) & "}");
+         end if;
+      end loop;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
          when ENGINE =>
             MaxValue :=
@@ -187,7 +208,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
+                    ModuleIndexString);
                Add(MenuButton, "Assign a crew member as owner of module");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             end if;
@@ -225,7 +247,8 @@ package body Ships.UI is
               Create
                 (Widget_Image(ButtonsFrame) & ".assigncrew" &
                  ModuleIndexString,
-                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
+                 ModuleIndexString);
             Add(MenuButton, "Assign a crew member as gunner");
             Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             declare
@@ -311,7 +334,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
+                    ModuleIndexString);
                Add(MenuButton, "Assign selected crew member as worker");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             end if;
@@ -328,7 +352,8 @@ package body Ships.UI is
                     Create
                       (Widget_Image(ButtonsFrame) & ".assigncrew" &
                        ModuleIndexString,
-                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
+                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
+                       ModuleIndexString);
                   Add(Button, "Assign selected crew member as medic");
                   Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
                   exit;
@@ -403,7 +428,6 @@ package body Ships.UI is
       ShipInfoFrame.Interp := Interp;
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       CrewMenu.Interp := Interp;
-      CrewMenu.Name := New_String(".shipinfocrewmenu");
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -416,12 +440,6 @@ package body Ships.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      -- Set crew members list
-      Delete(CrewMenu, "0", "end");
-      for Member of PlayerShip.Crew loop
-         Menu.Add
-           (CrewMenu, "command", "-label {" & To_String(Member.Name) & "}");
-      end loop;
       -- Set skills list
       CrewMenu.Name := New_String(".shipinfoskillsmenu");
       Delete(CrewMenu, "0", "end");
