@@ -140,7 +140,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".turnoff" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command DisableEngine");
+                    "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command {DisableEngine " &
+                    ModuleIndexString & "}");
                Add(Button, "Turn off engine so it stop using fuel");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             else
@@ -148,7 +149,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".turnoff" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command DisableEngine");
+                    "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command {DisableEngine " &
+                    ModuleIndexString & "}");
                Add(Button, "Turn on engine so ship will be fly faster");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             end if;
@@ -1449,6 +1451,7 @@ package body Ships.UI is
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
       CanDisable: Boolean := False;
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if not PlayerShip.Modules(ModuleIndex).Disabled then
          for I in PlayerShip.Modules.Iterate loop
@@ -1463,7 +1466,7 @@ package body Ships.UI is
          if not CanDisable then
             ShowMessage
               ("You can't disable this engine because it is your last working engine.");
-            return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
+            return TCL_OK;
          end if;
          PlayerShip.Modules(ModuleIndex).Disabled := True;
          AddMessage
