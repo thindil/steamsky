@@ -31,8 +31,6 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
@@ -114,11 +112,15 @@ package body Ships.UI is
              (Crew_Container.To_Index(I)) then
             Menu.Add
               (AssignMenu, "command",
-               "-label {" & To_String(PlayerShip.Crew(I).Name) & "(current)}");
+               "-label {" & To_String(PlayerShip.Crew(I).Name) &
+               "(current)} -command {AssignModule crew " & ModuleIndexString &
+               Positive'Image(Crew_Container.To_Index(I)) & "}");
          else
             Menu.Add
               (AssignMenu, "command",
-               "-label {" & To_String(PlayerShip.Crew(I).Name) & "}");
+               "-label {" & To_String(PlayerShip.Crew(I).Name) &
+               "} -command {AssignModule crew " & ModuleIndexString &
+               Positive'Image(Crew_Container.To_Index(I)) & "}");
          end if;
       end loop;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
@@ -210,7 +212,7 @@ package body Ships.UI is
                     ModuleIndexString,
                     "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
                     ModuleIndexString);
-               Add(MenuButton, "Assign a crew member as owner of module");
+               Add(MenuButton, "Assign a crew member as owner of cabin");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
             end if;
          when GUN | HARPOON_GUN =>
@@ -1349,21 +1351,11 @@ package body Ships.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      AssignIndex: Positive;
-      ComboBox: Ttk_ComboBox;
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      AssignIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
       Assigned: Boolean;
    begin
-      ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "crew" then
-         ComboBox.Name :=
-           New_String(".paned.shipinfoframe.cargo.options.crewcombo");
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Name =
-              To_Unbounded_String(Get(ComboBox)) then
-               AssignIndex := Crew_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
             when CABIN =>
                Modules_Loop :
@@ -1404,15 +1396,13 @@ package body Ships.UI is
          end case;
          UpdateHeader;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
-         ComboBox.Name :=
-           New_String(".paned.shipinfoframe.cargo.options.ammocombo");
-         for I in PlayerShip.Cargo.Iterate loop
-            if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
-              To_Unbounded_String(Get(ComboBox)) then
-               AssignIndex := Inventory_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+--         for I in PlayerShip.Cargo.Iterate loop
+--            if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
+--              To_Unbounded_String(Get(ComboBox)) then
+--               AssignIndex := Inventory_Container.To_Index(I);
+--               exit;
+--            end if;
+--         end loop;
          if PlayerShip.Modules(ModuleIndex).MType = GUN then
             PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
          else
@@ -1425,14 +1415,12 @@ package body Ships.UI is
             " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         ComboBox.Name :=
-           New_String(".paned.shipinfoframe.cargo.options.skillcombo");
-         for I in Skills_List.Iterate loop
-            if Skills_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
-               AssignIndex := SkillsData_Container.To_Index(I);
-               exit;
-            end if;
-         end loop;
+--         for I in Skills_List.Iterate loop
+--            if Skills_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
+--               AssignIndex := SkillsData_Container.To_Index(I);
+--               exit;
+--            end if;
+--         end loop;
          PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
