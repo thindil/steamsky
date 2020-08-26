@@ -37,7 +37,7 @@ package ShipModules is
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
    -- ****
 
-   -- ****t* ShipModules/BaseModule_Data
+   -- ****s* ShipModules/BaseModule_Data
    -- FUNCTION
    -- Data structure for prototypes of ship modules
    -- PARAMETERS

@@ -70,7 +70,7 @@ package Ships is
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    -- ****
 
-   -- ****t* Ships/ModuleData
+   -- ****s* Ships/ModuleData
    -- FUNCTION
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
    -- bays don't have any special fields
@@ -164,7 +164,7 @@ package Ships is
    package Crew_Container is new Vectors(Positive, Member_Data);
    -- ****
 
-   -- ****t* Ships/ShipRecord
+   -- ****s* Ships/ShipRecord
    -- FUNCTION
    -- Data structure for ships
    -- PARAMETERS
@@ -199,7 +199,7 @@ package Ships is
    end record;
    -- ****
 
-   -- ****t* Ships/ProtoMember_Data
+   -- ****s* Ships/ProtoMember_Data
    -- FUNCTION
    -- Data structure for proto crew info
    -- PARAMETERS
@@ -222,7 +222,7 @@ package Ships is
    package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
    -- ****
 
-   -- ****t* Ships/ProtoShipData
+   -- ****s* Ships/ProtoShipData
    -- FUNCTION
    -- Data structure for ship prototypes
    -- PARAMETERS

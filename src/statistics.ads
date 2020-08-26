@@ -26,7 +26,7 @@ with Crew; use Crew;
 package Statistics is
 -- ****
 
-   -- ****t* Statistics/Statistics_Data
+   -- ****s* Statistics/Statistics_Data
    -- FUNCTION
    -- Data for finished goals, destroyed ships and killed mobs
    -- PARAMETERS
@@ -46,7 +46,7 @@ package Statistics is
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
    -- ****
 
-   -- ****t* Statistics/GameStats_Data
+   -- ****s* Statistics/GameStats_Data
    -- FUNCTION
    -- Data for game statistics
    -- PARAMETERS
