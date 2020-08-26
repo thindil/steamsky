@@ -95,7 +95,8 @@ package body Ships.UI is
            Create
              (Widget_Image(ButtonsFrame) & ".upgradedurability" &
               ModuleIndexString,
-              "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1}");
+              "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1 " &
+              ModuleIndexString & "}");
          Add(Button, "Start upgrading module durability");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
@@ -112,7 +113,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradepower" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                    "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
+                    ModuleIndexString & "}");
                Add(Button, "Start upgrading engine power");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
             end if;
@@ -127,7 +129,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".reducefuel" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3}");
+                    "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3 " &
+                    ModuleIndexString & "}");
                Add
                  (Button, "Start working on reduce fuel usage of this engine");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
@@ -161,7 +164,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                    "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
+                    ModuleIndexString & "}");
                Add(Button, "Start upgrading cabin quality");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
             end if;
@@ -205,7 +209,8 @@ package body Ships.UI is
                     Create
                       (Widget_Image(ButtonsFrame) & ".upgradequality" &
                        ModuleIndexString,
-                       "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                       "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
+                       ModuleIndexString & "}");
                   if PlayerShip.Modules(ModuleIndex).MType = GUN then
                      Add(Button, "Start upgrading damage of gun");
                   else
@@ -273,7 +278,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                    "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
+                    ModuleIndexString & "}");
                Add(Button, "Start upgrading damage of battering ram");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
             end if;
@@ -289,7 +295,8 @@ package body Ships.UI is
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf568]"" -style Header.Toolbutton -command {SetUpgrade 2}");
+                    "-text ""[format %c 0xf568]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
+                    ModuleIndexString & "}");
                Add
                  (Button,
                   "Start enlarging hull so it can have more modules installed");
@@ -1290,7 +1297,9 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
    begin
-      StartUpgrading(ModuleIndex, Positive'Value(CArgv.Arg(Argv, 1)));
+      StartUpgrading
+        (Positive'Value(CArgv.Arg(Argv, 2)),
+         Positive'Value(CArgv.Arg(Argv, 1)));
       UpdateOrders(PlayerShip);
       UpdateMessages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
