@@ -1,5 +1,4 @@
 set shipinfoframe [ttk::frame .paned.shipinfoframe]
-menu .shipinfoammomenu -tearoff false
 menu .shipinfoskillsmenu -tearoff false
 # General ship info
 grid [ttk::labelframe $shipinfoframe.general -text {General info:}] -sticky nwes

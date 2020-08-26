@@ -264,7 +264,14 @@ package body Ships.UI is
                   AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
                end if;
                AmmoMenu.Interp := Get_Context;
-               AmmoMenu.Name := New_String(".shipinfoammomenu");
+               AmmoMenu.Name :=
+                 New_String(".shipinfoammomenu" & ModuleIndexString);
+               if Winfo_Get(AmmoMenu, "exists") = "0" then
+                  AmmoMenu :=
+                    Create
+                      (".shipinfoammomenu" & ModuleIndexString,
+                       "-tearoff false");
+               end if;
                Delete(AmmoMenu, "0", "end");
                for I in
                  PlayerShip.Cargo.First_Index ..
@@ -279,7 +286,8 @@ package body Ships.UI is
                         "-label {" &
                         To_String
                           (Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
-                        "}");
+                        "} -command {AssignModule ammo " & ModuleIndexString &
+                        Positive'Image(I) & "}");
                      NotEmpty := True;
                   end if;
                end loop;
@@ -288,7 +296,8 @@ package body Ships.UI is
                     Create
                       (Widget_Image(ButtonsFrame) & ".assignammo" &
                        ModuleIndexString,
-                       "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu");
+                       "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu" &
+                       ModuleIndexString);
                   Add(MenuButton, "Assign an ammo to gun");
                   Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
                end if;
@@ -1329,7 +1338,7 @@ package body Ships.UI is
 
    -- ****o* SUI2/Assign_Module_Command
    -- FUNCTION
-   -- Assing member, ammo or skill to module
+   -- Assign member, ammo or skill to module
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
@@ -1396,13 +1405,6 @@ package body Ships.UI is
          end case;
          UpdateHeader;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
---         for I in PlayerShip.Cargo.Iterate loop
---            if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
---              To_Unbounded_String(Get(ComboBox)) then
---               AssignIndex := Inventory_Container.To_Index(I);
---               exit;
---            end if;
---         end loop;
          if PlayerShip.Modules(ModuleIndex).MType = GUN then
             PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
          else
