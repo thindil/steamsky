@@ -1,5 +1,4 @@
 set shipinfoframe [ttk::frame .paned.shipinfoframe]
-menu .shipinfocrewmenu -tearoff false
 menu .shipinfoammomenu -tearoff false
 menu .shipinfoskillsmenu -tearoff false
 # General ship info
