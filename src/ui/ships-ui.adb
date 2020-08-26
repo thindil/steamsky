@@ -70,17 +70,18 @@ package body Ships.UI is
       MaxValue: Positive;
       IsPassenger: Boolean := False;
       MenuButton: Ttk_MenuButton;
+      ModuleIndexString: constant String :=
+        Trim(Positive'Image(ModuleIndex), Left);
    begin
       ButtonsFrame :=
         Create
           (".paned.shipinfoframe.modules.canvas.frame.actions" &
-           Trim(Positive'Image(ModuleIndex), Left));
+           ModuleIndexString);
       Button :=
         Create
-          (Widget_Image(ButtonsFrame) & ".rename" &
-           Trim(Positive'Image(ModuleIndex), Left),
-           "-text ""[format %c 0xf044]"" -style Header.Toolbutton -command {RenameModule" &
-           Positive'Image(ModuleIndex) & "}");
+          (Widget_Image(ButtonsFrame) & ".rename" & ModuleIndexString,
+           "-text ""[format %c 0xf044]"" -style Header.Toolbutton -command {RenameModule " &
+           ModuleIndexString & "}");
       Add(Button, "Rename module");
       Tcl.Tk.Ada.Grid.Grid(Button);
       MaxValue :=
@@ -93,7 +94,7 @@ package body Ships.UI is
          Button :=
            Create
              (Widget_Image(ButtonsFrame) & ".upgradedurability" &
-              Trim(Positive'Image(ModuleIndex), Left),
+              ModuleIndexString,
               "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1}");
          Add(Button, "Start upgrading module durability");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
@@ -110,7 +111,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradepower" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add(Button, "Start upgrading engine power");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
@@ -125,7 +126,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".reducefuel" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3}");
                Add
                  (Button, "Start working on reduce fuel usage of this engine");
@@ -135,7 +136,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".turnoff" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command DisableEngine");
                Add(Button, "Turn off engine so it stop using fuel");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
@@ -143,7 +144,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".turnoff" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command DisableEngine");
                Add(Button, "Turn on engine so ship will be fly faster");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
@@ -159,7 +160,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add(Button, "Start upgrading cabin quality");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
@@ -179,7 +180,7 @@ package body Ships.UI is
                MenuButton :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
                Add(MenuButton, "Assign a crew member as owner of module");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
@@ -203,7 +204,7 @@ package body Ships.UI is
                   Button :=
                     Create
                       (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                       Trim(Positive'Image(ModuleIndex), Left),
+                       ModuleIndexString,
                        "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                   if PlayerShip.Modules(ModuleIndex).MType = GUN then
                      Add(Button, "Start upgrading damage of gun");
@@ -216,7 +217,7 @@ package body Ships.UI is
             MenuButton :=
               Create
                 (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                 Trim(Positive'Image(ModuleIndex), Left),
+                 ModuleIndexString,
                  "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
             Add(MenuButton, "Assign a crew member as gunner");
             Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
@@ -254,7 +255,7 @@ package body Ships.UI is
                   MenuButton :=
                     Create
                       (Widget_Image(ButtonsFrame) & ".assignammo" &
-                       Trim(Positive'Image(ModuleIndex), Left),
+                       ModuleIndexString,
                        "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu");
                   Add(MenuButton, "Assign an ammo to gun");
                   Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
@@ -271,7 +272,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add(Button, "Start upgrading damage of battering ram");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
@@ -287,7 +288,7 @@ package body Ships.UI is
                Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf568]"" -style Header.Toolbutton -command {SetUpgrade 2}");
                Add
                  (Button,
@@ -300,7 +301,7 @@ package body Ships.UI is
                MenuButton :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                    Trim(Positive'Image(ModuleIndex), Left),
+                    ModuleIndexString,
                     "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
                Add(MenuButton, "Assign selected crew member as worker");
                Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
@@ -317,7 +318,7 @@ package body Ships.UI is
                   MenuButton :=
                     Create
                       (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                       Trim(Positive'Image(ModuleIndex), Left),
+                       ModuleIndexString,
                        "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu");
                   Add(Button, "Assign selected crew member as medic");
                   Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
@@ -328,7 +329,7 @@ package body Ships.UI is
             MenuButton :=
               Create
                 (Widget_Image(ButtonsFrame) & ".assignskill" &
-                 Trim(Positive'Image(ModuleIndex), Left),
+                 ModuleIndexString,
                  "-text ""[format %c 0xf19d]"" -style Header.Toolbutton -menu .shipinfoammomenu");
             Add
               (MenuButton,
@@ -339,8 +340,7 @@ package body Ships.UI is
       end case;
       Button :=
         Create
-          (Widget_Image(ButtonsFrame) & ".showinfo" &
-           Trim(Positive'Image(ModuleIndex), Left),
+          (Widget_Image(ButtonsFrame) & ".showinfo" & ModuleIndexString,
            "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo}");
       Add(Button, "Show detailed information about the module");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
