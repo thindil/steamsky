@@ -1444,7 +1444,8 @@ package body Ships.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- DisableEngine
+   -- DisableEngine engineindex
+   -- engineindex is the index of the engine module in the player ship
    -- SOURCE
    function Disable_Engine_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
