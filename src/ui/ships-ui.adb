@@ -371,15 +371,50 @@ package body Ships.UI is
                end if;
             end loop;
          when TRAINING_ROOM =>
-            MenuButton :=
-              Create
-                (Widget_Image(ButtonsFrame) & ".assignskill" &
-                 ModuleIndexString,
-                 "-text ""[format %c 0xf19d]"" -style Header.Toolbutton -menu .shipinfoammomenu");
-            Add
-              (MenuButton,
-               "Assign a skill which will be trained in the training room");
-            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+            declare
+               SkillText, ProtoIndex: Unbounded_String;
+               SkillMenu: Tk_Menu;
+            begin
+               SkillMenu.Interp := Get_Context;
+               SkillMenu.Name :=
+                 New_String(".shipinfoskillmenu" & ModuleIndexString);
+               if Winfo_Get(SkillMenu, "exists") = "0" then
+                  SkillMenu :=
+                    Create
+                      (".shipinfoskillmenu" & ModuleIndexString,
+                       "-tearoff false");
+               end if;
+               Delete(SkillMenu, "0", "end");
+               for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+                  SkillText := Skills_List(I).Name;
+                  if Skills_List(I).Tool /= Null_Unbounded_String then
+                     Append(SkillText, " Tool: ");
+                     ProtoIndex :=
+                       FindProtoItem(ItemType => Skills_List(I).Tool);
+                     if Items_List(ProtoIndex).ShowType /=
+                       Null_Unbounded_String then
+                        Append(SkillText, Items_List(ProtoIndex).ShowType);
+                     else
+                        Append(SkillText, Items_List(ProtoIndex).IType);
+                     end if;
+                  end if;
+                  Menu.Add
+                    (SkillMenu, "command",
+                     "-label {" & To_String(SkillText) &
+                     "} -command {AssignModule skill " & ModuleIndexString &
+                     Positive'Image(I) & "}");
+               end loop;
+               MenuButton :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".assignskill" &
+                    ModuleIndexString,
+                    "-text ""[format %c 0xf02d]"" -style Header.Toolbutton -menu .shipinfoskillmenu" &
+                    ModuleIndexString);
+               Add
+                 (MenuButton,
+                  "Assign a skill which will be trained in the training room");
+               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+            end;
          when others =>
             null;
       end case;
@@ -430,7 +465,6 @@ package body Ships.UI is
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
-      CrewMenu: Tk_Menu;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -438,7 +472,6 @@ package body Ships.UI is
       CloseButton.Name := New_String(".header.closebutton");
       ShipInfoFrame.Interp := Interp;
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      CrewMenu.Interp := Interp;
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -452,26 +485,6 @@ package body Ships.UI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       -- Set skills list
-      CrewMenu.Name := New_String(".shipinfoskillsmenu");
-      Delete(CrewMenu, "0", "end");
-      declare
-         SkillText, ProtoIndex: Unbounded_String;
-      begin
-         for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-            SkillText := Skills_List(I).Name;
-            if Skills_List(I).Tool /= Null_Unbounded_String then
-               Append(SkillText, " Tool: ");
-               ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
-               if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-                  Append(SkillText, Items_List(ProtoIndex).ShowType);
-               else
-                  Append(SkillText, Items_List(ProtoIndex).IType);
-               end if;
-            end if;
-            Menu.Add
-              (CrewMenu, "command", "-label {" & To_String(SkillText) & "}");
-         end loop;
-      end;
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
