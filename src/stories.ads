@@ -43,7 +43,7 @@ package Stories is
    type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
    -- ****
 
-   -- ****t* Stories/StepText_Data
+   -- ****s* Stories/StepText_Data
    -- FUNCTION
    -- Data structure for stories steps texts
    -- PARAMETERS
@@ -63,7 +63,7 @@ package Stories is
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
    -- ****
 
-   -- ****t* Stories/StepFinish_Data
+   -- ****s* Stories/StepFinish_Data
    -- FUNCTION
    -- Structure for finish condition data
    -- PARAMETERS
@@ -83,7 +83,7 @@ package Stories is
    package StepData_Container is new Vectors(Positive, StepFinish_Data);
    -- ****
 
-   -- ****t* Stories/Step_Data
+   -- ****s* Stories/Step_Data
    -- FUNCTION
    -- Data structure for stories steps
    -- PARAMETERS
@@ -112,7 +112,7 @@ package Stories is
    package Steps_Container is new Vectors(Positive, Step_Data);
    -- ****
 
-   -- ****t* Stories/Story_Data
+   -- ****s* Stories/Story_Data
    -- FUNCTION
    -- Data structure for stories
    -- PARAMETERS
@@ -150,7 +150,7 @@ package Stories is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* Stories/CurrentStory_Data
+   -- ****s* Stories/CurrentStory_Data
    -- FUNCTION
    -- Data structure for current active story
    -- PARAMETERS
@@ -175,7 +175,7 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/FinishedStory_Data
+   -- ****s* Stories/FinishedStory_Data
    -- FUNCTION
    -- Data structure for finished story/steps
    -- PARAMETERS
