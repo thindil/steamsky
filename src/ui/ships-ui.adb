@@ -70,7 +70,7 @@ package body Ships.UI is
       MenuButton: Ttk_MenuButton;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
-      AssignMenu: Tk_Menu;
+      CrewMenu: Tk_Menu;
    begin
       ButtonsFrame :=
         Create
@@ -100,24 +100,24 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       end if;
       -- Set crew members list
-      AssignMenu.Interp := Get_Context;
-      AssignMenu.Name := New_String(".shipinfocrewmenu" & ModuleIndexString);
-      if Winfo_Get(AssignMenu, "exists") = "0" then
-         AssignMenu :=
+      CrewMenu.Interp := Get_Context;
+      CrewMenu.Name := New_String(".shipinfocrewmenu" & ModuleIndexString);
+      if Winfo_Get(CrewMenu, "exists") = "0" then
+         CrewMenu :=
            Create(".shipinfocrewmenu" & ModuleIndexString, "-tearoff false");
       end if;
-      Delete(AssignMenu, "0", "end");
+      Delete(CrewMenu, "0", "end");
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Modules(ModuleIndex).Owner.Contains
              (Crew_Container.To_Index(I)) then
             Menu.Add
-              (AssignMenu, "command",
+              (CrewMenu, "command",
                "-label {" & To_String(PlayerShip.Crew(I).Name) &
                "(current)} -command {AssignModule crew " & ModuleIndexString &
                Positive'Image(Crew_Container.To_Index(I)) & "}");
          else
             Menu.Add
-              (AssignMenu, "command",
+              (CrewMenu, "command",
                "-label {" & To_String(PlayerShip.Crew(I).Name) &
                "} -command {AssignModule crew " & ModuleIndexString &
                Positive'Image(Crew_Container.To_Index(I)) & "}");
