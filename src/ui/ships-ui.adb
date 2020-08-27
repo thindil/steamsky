@@ -1314,7 +1314,9 @@ package body Ships.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetUpgrade
+   -- SetUpgrade upgradetype moduleindex
+   -- upgradetype is type of upgrade to start: 1, 2 or 3. moduleindex is the
+   -- index of the player ship module which will be upgraded
    -- SOURCE
    function Set_Upgrade_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1347,7 +1349,11 @@ package body Ships.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- AssignModule
+   -- AssignModule assigntype moduleindex assignindex
+   -- assigntype is type of item to assing to module: crew, ammo, skills.
+   -- moduleindex is the index of the playership module to which item will be
+   -- assigned. assignindex is the index of the item which will be assigned
+   -- to the module
    -- SOURCE
    function Assign_Module_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
