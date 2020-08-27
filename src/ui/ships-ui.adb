@@ -1423,12 +1423,6 @@ package body Ships.UI is
             " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
---         for I in Skills_List.Iterate loop
---            if Skills_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
---               AssignIndex := SkillsData_Container.To_Index(I);
---               exit;
---            end if;
---         end loop;
          PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
