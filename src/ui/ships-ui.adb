@@ -409,7 +409,7 @@ package body Ships.UI is
                    (Widget_Image(ButtonsFrame) & ".assignskill" &
                     ModuleIndexString,
                     "-text ""[format %c 0xf02d]"" -style Header.Toolbutton -menu .shipinfoskillmenu" &
-                    ModuleIndexString);
+                    ModuleIndexString & " -direction left");
                Add
                  (MenuButton,
                   "Assign a skill which will be trained in the training room");
