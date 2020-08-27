@@ -25,19 +25,13 @@ package body Bases.Cargo is
    procedure GenerateCargo is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Chance: Positive;
       Population: constant Natural :=
         (if SkyBases(BaseIndex).Population > 0 then
            SkyBases(BaseIndex).Population
          else 1);
+      Chance: Positive :=
+        (if Population < 150 then 5 elsif Population < 300 then 10 else 15);
    begin
-      if SkyBases(BaseIndex).Population < 150 then
-         Chance := 5;
-      elsif SkyBases(BaseIndex).Population < 300 then
-         Chance := 10;
-      else
-         Chance := 15;
-      end if;
       Chance := Chance + DaysDifference(SkyBases(BaseIndex).Visited);
       if SkyBases(BaseIndex).Cargo.Length = 0 then
          Chance := 101;
@@ -49,8 +43,8 @@ package body Bases.Cargo is
          SkyBases(BaseIndex).Cargo.Append
            (New_Item =>
               (ProtoIndex => MoneyIndex,
-               Amount => (GetRandom(50, 200) * Population), Durability => 100,
-               Price => 0));
+               Amount => (GetRandom(50, 200) * Population),
+               Durability => Default_Item_Durability, Price => 0));
          for I in Items_List.Iterate loop
             if Is_Buyable
                 (SkyBases(BaseIndex).BaseType, Objects_Container.Key(I),
@@ -59,7 +53,7 @@ package body Bases.Cargo is
                  (New_Item =>
                     (ProtoIndex => Objects_Container.Key(I),
                      Amount => (GetRandom(0, 100) * Population),
-                     Durability => 100,
+                     Durability => Default_Item_Durability,
                      Price =>
                        Get_Price
                          (SkyBases(BaseIndex).BaseType,
@@ -69,16 +63,12 @@ package body Bases.Cargo is
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
              (To_Unbounded_String("blackmarket")) then
             declare
-               Amount: Positive;
+               Amount: constant Positive :=
+                 (if Population < 150 then GetRandom(1, 10)
+                  elsif Population < 300 then GetRandom(1, 20)
+                  else GetRandom(1, 30));
                ItemIndex: Natural;
             begin
-               if Population < 150 then
-                  Amount := GetRandom(1, 10);
-               elsif Population < 300 then
-                  Amount := GetRandom(1, 20);
-               else
-                  Amount := GetRandom(1, 30);
-               end if;
                for I in 1 .. Amount loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
                   for J in Items_List.Iterate loop
@@ -94,7 +84,7 @@ package body Bases.Cargo is
                              (New_Item =>
                                 (ProtoIndex => Objects_Container.Key(J),
                                  Amount => (GetRandom(0, 100) * Population),
-                                 Durability => 100,
+                                 Durability => Default_Item_Durability,
                                  Price =>
                                    Get_Price
                                      (SkyBases(BaseIndex).BaseType,
