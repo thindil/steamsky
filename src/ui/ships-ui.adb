@@ -27,6 +27,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -882,8 +883,14 @@ package body Ships.UI is
       ModuleDialog: constant Tk_Toplevel :=
         Create(".moduledialog", "-class Dialog");
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      ModuleFrame: constant Ttk_Frame := Create(Widget_Image(ModuleDialog) & ".frame");
+      ModuleFrame: constant Ttk_Frame :=
+        Create(Widget_Image(ModuleDialog) & ".frame");
       X, Y: Integer;
+      CloseButton: constant Ttk_Button :=
+        Create
+          (Widget_Image(ModuleFrame) & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
+           "}");
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -922,15 +929,15 @@ package body Ships.UI is
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
-            configure(Label, "-text {Slightly damaged}");
+            configure(Label, "-text {Status: Slightly damaged}");
          elsif DamagePercent < 0.8 and DamagePercent > 0.49 then
-            configure(Label, "-text {Damaged}");
+            configure(Label, "-text {Status: Damaged}");
          elsif DamagePercent < 0.5 and DamagePercent > 0.19 then
-            configure(Label, "-text {Heavily damaged}");
+            configure(Label, "-text {Status: Heavily damaged}");
          elsif DamagePercent < 0.2 and DamagePercent > 0.0 then
-            configure(Label, "-text {Almost destroyed}");
+            configure(Label, "-text {Status: Almost destroyed}");
          elsif DamagePercent = 0.0 then
-            configure(Label, "-text {Destroyed}");
+            configure(Label, "-text {Status: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
          ProgressBar :=
@@ -946,24 +953,11 @@ package body Ships.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 0 -column 1");
       end if;
-      Label.Interp := Interp;
-      Label.Name := New_String(".paned.shipinfoframe.cargo.cleanlbl");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ProgressBar.Interp := Interp;
-      ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.clean");
-      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
-      Label.Name := New_String(".paned.shipinfoframe.cargo.qualitylbl");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.quality");
-      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
-      Label.Name := New_String(".paned.shipinfoframe.cargo.upgradelbl");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.upgrade");
-      Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
-      ModuleText.Interp := Interp;
-      ModuleText.Name := New_String(".paned.shipinfoframe.cargo.info");
-      configure(ModuleText, "-state normal");
-      Delete(ModuleText, "1.0", "end");
+      ModuleText :=
+        Create
+          (Widget_Image(ModuleFrame) & ".info",
+           "-wrap char -height 10 -width 40");
+      Tag_Configure(ModuleText, "red", "-foreground red");
       Insert
         (ModuleText, "end",
          "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
@@ -1026,24 +1020,19 @@ package body Ships.UI is
                Integer'Image(Modules_List(Module.ProtoIndex).MaxValue) &
                " kg}");
          when HULL =>
-            ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.clean");
-            Label.Name := New_String(".paned.shipinfoframe.cargo.cleanlbl");
-            DamagePercent :=
-              Float(Module.InstalledModules) / Float(Module.MaxModules);
-            configure(ProgressBar, "-value" & Float'Image(DamagePercent));
-            configure
-              (Label,
-               "-text {Modules installed:" &
-               Integer'Image(Module.InstalledModules) & " /" &
-               Integer'Image(Module.MaxModules) & "}");
+            Label :=
+              Create
+                (Widget_Image(ModuleFrame) & ".modules",
+                 "-text {Modules installed:" &
+                 Integer'Image(Module.InstalledModules) & " /" &
+                 Integer'Image(Module.MaxModules) & "}");
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
             if Module.MaxModules = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
-            Tcl.Tk.Ada.Grid.Grid(Label);
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          when CABIN =>
             AddOwnersInfo("Owner");
             ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.clean");
@@ -1327,6 +1316,10 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
       end if;
       configure(ModuleText, "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(ModuleText);
+      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Focus(CloseButton);
+      Tcl.Tk.Ada.Pack.Pack(ModuleFrame, "-expand true -fill both");
       X := (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - 400) / 2;
       if X < 0 then
          X := 0;
