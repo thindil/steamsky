@@ -83,6 +83,13 @@ package body Ships.UI is
            ModuleIndexString & "}");
       Add(Button, "Rename module");
       Tcl.Tk.Ada.Grid.Grid(Button);
+      Button :=
+        Create
+          (Widget_Image(ButtonsFrame) & ".repair" & ModuleIndexString,
+           "-text ""[format %c 0xf54a]"" -style Header.Toolbutton -command {SetRepair assign " &
+           ModuleIndexString & "}");
+      Add(Button, "Repair selected module as first when damaged");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
       MaxValue :=
         Natural
           (Float
@@ -97,7 +104,7 @@ package body Ships.UI is
               "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1 " &
               ModuleIndexString & "}");
          Add(Button, "Start upgrading module durability");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
       end if;
       -- Set crew members list
       CrewMenu.Interp := Get_Context;
@@ -139,7 +146,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
                     ModuleIndexString & "}");
                Add(Button, "Start upgrading engine power");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
             end if;
             MaxValue :=
               Natural
@@ -156,7 +163,7 @@ package body Ships.UI is
                     ModuleIndexString & "}");
                Add
                  (Button, "Start working on reduce fuel usage of this engine");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             end if;
             if not PlayerShip.Modules(ModuleIndex).Disabled then
                Button :=
@@ -166,7 +173,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command {DisableEngine " &
                     ModuleIndexString & "}");
                Add(Button, "Turn off engine so it stop using fuel");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
             else
                Button :=
                  Create
@@ -175,7 +182,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command {DisableEngine " &
                     ModuleIndexString & "}");
                Add(Button, "Turn on engine so ship will be fly faster");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
             end if;
          when CABIN =>
             MaxValue :=
@@ -192,7 +199,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
                     ModuleIndexString & "}");
                Add(Button, "Start upgrading cabin quality");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
             end if;
             Missions_Loop :
             for Mission of AcceptedMissions loop
@@ -213,7 +220,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
                     ModuleIndexString);
                Add(MenuButton, "Assign a crew member as owner of cabin");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
             end if;
          when GUN | HARPOON_GUN =>
             declare
@@ -242,7 +249,7 @@ package body Ships.UI is
                   else
                      Add(Button, "Start upgrading strength of gun");
                   end if;
-                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
                end if;
             end;
             MenuButton :=
@@ -252,7 +259,7 @@ package body Ships.UI is
                  "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
                  ModuleIndexString);
             Add(MenuButton, "Assign a crew member as gunner");
-            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
             declare
                AmmoIndex: Natural;
                AmmoMenu: Tk_Menu;
@@ -299,7 +306,7 @@ package body Ships.UI is
                        "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu" &
                        ModuleIndexString);
                   Add(MenuButton, "Assign an ammo to gun");
-                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 5");
                end if;
             end;
          when BATTERING_RAM =>
@@ -317,7 +324,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
                     ModuleIndexString & "}");
                Add(Button, "Start upgrading damage of battering ram");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
             end if;
          when HULL =>
             MaxValue :=
@@ -336,7 +343,7 @@ package body Ships.UI is
                Add
                  (Button,
                   "Start enlarging hull so it can have more modules installed");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
             if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
@@ -348,7 +355,7 @@ package body Ships.UI is
                     "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
                     ModuleIndexString);
                Add(MenuButton, "Assign selected crew member as worker");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -366,7 +373,7 @@ package body Ships.UI is
                        "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
                        ModuleIndexString);
                   Add(Button, "Assign selected crew member as medic");
-                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 3");
+                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
                   exit;
                end if;
             end loop;
@@ -413,7 +420,7 @@ package body Ships.UI is
                Add
                  (MenuButton,
                   "Assign a skill which will be trained in the training room");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 5");
             end;
          when others =>
             null;
@@ -423,7 +430,7 @@ package body Ships.UI is
           (Widget_Image(ButtonsFrame) & ".showinfo" & ModuleIndexString,
            "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo}");
       Add(Button, "Show detailed information about the module");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 6");
       Tcl.Tk.Ada.Grid.Grid
         (ButtonsFrame,
          "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
@@ -831,13 +838,6 @@ package body Ships.UI is
       return TCL_OK;
    end Set_Ship_Name_Command;
 
-   -- ****if* SUI2/ModuleIndex
-   -- FUNCTION
-   -- Index of the currently selected module
-   -- SOURCE
-   ModuleIndex: Positive;
-   -- ****
-
    -- ****o* SUI2/Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
@@ -864,7 +864,7 @@ package body Ships.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Module: ModuleData;
-      MaxValue: Positive;
+      MaxValue, ModuleIndex: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Float;
@@ -1573,9 +1573,11 @@ package body Ships.UI is
       return Interfaces.C.int is
    begin
       if CArgv.Arg(Argv, 1) = "assign" then
-         PlayerShip.RepairModule := ModuleIndex;
+         PlayerShip.RepairModule := Positive'Value(CArgv.Arg(Argv, 2));
          AddMessage
-           ("You assigned " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You assigned " &
+            To_String
+              (PlayerShip.Modules(Positive'Value(CArgv.Arg(Argv, 2))).Name) &
             " as repair priority.",
             OrderMessage);
       else
