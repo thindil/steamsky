@@ -372,6 +372,7 @@ package body MainMenu.Commands is
    -- Start the game
    -- SOURCE
    procedure StartGame is
+      -- ****
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
    begin
