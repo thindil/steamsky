@@ -561,7 +561,8 @@ package body Bases.ShipyardUI is
          Bases.Ship.UpgradeShip(False, ModuleIndex);
       end if;
       UpdateMessages;
-      return Show_Shipyard_Command(ClientData, Interp, 2, CArgv.Empty);
+      return Show_Shipyard_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
    exception
       when Trade_No_Money =>
          ShowMessage
