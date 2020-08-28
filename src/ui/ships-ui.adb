@@ -25,18 +25,22 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -428,7 +432,8 @@ package body Ships.UI is
       Button :=
         Create
           (Widget_Image(ButtonsFrame) & ".showinfo" & ModuleIndexString,
-           "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo}");
+           "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo " &
+           ModuleIndexString & "}");
       Add(Button, "Show detailed information about the module");
       Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 6");
       Tcl.Tk.Ada.Grid.Grid
@@ -845,11 +850,12 @@ package body Ships.UI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowModuleInfo
+   -- ShowModuleInfo moduleindex
+   -- ModuleIndex is the index of the module to show
    -- SOURCE
    function Show_Module_Info_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -862,17 +868,22 @@ package body Ships.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
       Module: ModuleData;
-      MaxValue, ModuleIndex: Positive;
+      MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
       DamagePercent, UpgradePercent: Float;
-      ModulesView: Ttk_Tree_View;
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
       ModuleText: Tk_Text;
       ModuleInfo: Unbounded_String;
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ModuleDialog: constant Tk_Toplevel :=
+        Create(".moduledialog", "-class Dialog");
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      ModuleFrame: constant Ttk_Frame := Create(Widget_Image(ModuleDialog) & ".frame");
+      X, Y: Integer;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -899,16 +910,15 @@ package body Ships.UI is
          end if;
       end AddOwnersInfo;
    begin
-      ModulesView.Interp := Interp;
-      ModulesView.Name := New_String(".paned.shipinfoframe.modules.modules");
-      ModuleIndex := Positive'Value(Selection(ModulesView));
       Module := PlayerShip.Modules(ModuleIndex);
-      Label.Interp := Interp;
-      Label.Name := New_String(".paned.shipinfoframe.cargo.damagelbl");
-      ProgressBar.Interp := Interp;
-      ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.damage");
+      Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      Wm_Set(ModuleDialog, "title", "{Steam Sky - Module Info}");
+      Wm_Set(ModuleDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(ModuleDialog, "attributes", "-type dialog");
+      end if;
       if Module.Durability < Module.MaxDurability then
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Label := Create(Widget_Image(ModuleFrame) & ".damagelbl");
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
@@ -922,20 +932,24 @@ package body Ships.UI is
          elsif DamagePercent = 0.0 then
             configure(Label, "-text {Destroyed}");
          end if;
-         configure(ProgressBar, "-value {" & Float'Image(DamagePercent) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         ProgressBar :=
+           Create
+             (Widget_Image(ModuleFrame) & ".damage",
+              "-orient horizontal -maximum 1.0 -value {" &
+              Float'Image(DamagePercent) & "}");
          MaxValue :=
            Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
          if Module.MaxDurability = MaxValue then
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-         Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 0 -column 1");
       end if;
+      Label.Interp := Interp;
       Label.Name := New_String(".paned.shipinfoframe.cargo.cleanlbl");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      ProgressBar.Interp := Interp;
       ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.clean");
       Tcl.Tk.Ada.Grid.Grid_Remove(ProgressBar);
       Label.Name := New_String(".paned.shipinfoframe.cargo.qualitylbl");
@@ -1313,6 +1327,21 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
       end if;
       configure(ModuleText, "-state disabled");
+      X := (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - 400) / 2;
+      if X < 0 then
+         X := 0;
+      end if;
+      Y := (Positive'Value(Winfo_Get(ModuleDialog, "vrootheight")) - 200) / 2;
+      if Y < 0 then
+         Y := 0;
+      end if;
+      Wm_Set
+        (ModuleDialog, "geometry",
+         "400x200" & "+" & Trim(Positive'Image(X), Left) & "+" &
+         Trim(Positive'Image(Y), Left));
+      Bind
+        (ModuleDialog, "<Destroy>",
+         "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
       return TCL_OK;
    end Show_Module_Info_Command;
 
