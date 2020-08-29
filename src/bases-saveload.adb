@@ -204,20 +204,20 @@ package body Bases.SaveLoad is
    begin
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
-      BaseIndex := 1;
       for I in 0 .. Length(NodesList) - 1 loop
+         BaseIndex := I + 1;
          BaseNode := Item(NodesList, I);
          SkyBases(BaseIndex) :=
            (Name => To_Unbounded_String(Get_Attribute(BaseNode, "name")),
-            Visited => (0, 0, 0, 0, 0),
+            Visited => (others => 0),
             SkyX => Integer'Value(Get_Attribute(BaseNode, "x")),
             SkyY => Integer'Value(Get_Attribute(BaseNode, "y")),
             BaseType => To_Unbounded_String(Get_Attribute(BaseNode, "type")),
             Population => Integer'Value(Get_Attribute(BaseNode, "population")),
-            RecruitDate => (0, 0, 0, 0, 0), Recruits => BaseRecruits,
+            RecruitDate => (others => 0), Recruits => BaseRecruits,
             Known => False, AskedForBases => False,
-            AskedForEvents => (0, 0, 0, 0, 0), Reputation => (0, 0),
-            MissionsDate => (0, 0, 0, 0, 0), Missions => BaseMissions,
+            AskedForEvents => (others => 0), Reputation => (0, 0),
+            MissionsDate => (others => 0), Missions => BaseMissions,
             Owner => Factions_Container.Key(Factions_List.First),
             Cargo => BaseCargo,
             Size => Bases_Size'Value(Get_Attribute(BaseNode, "size")));
@@ -234,23 +234,19 @@ package body Bases.SaveLoad is
             ChildNode := Item(BaseData, J);
             NodeName := To_Unbounded_String(Node_Name(ChildNode));
             if NodeName = To_Unbounded_String("visiteddate") then
-               SkyBases(BaseIndex).Visited.Year :=
-                 Natural'Value(Get_Attribute(ChildNode, "year"));
-               SkyBases(BaseIndex).Visited.Month :=
-                 Natural'Value(Get_Attribute(ChildNode, "month"));
-               SkyBases(BaseIndex).Visited.Day :=
-                 Natural'Value(Get_Attribute(ChildNode, "day"));
-               SkyBases(BaseIndex).Visited.Hour :=
-                 Natural'Value(Get_Attribute(ChildNode, "hour"));
-               SkyBases(BaseIndex).Visited.Minutes :=
-                 Natural'Value(Get_Attribute(ChildNode, "minutes"));
+               SkyBases(BaseIndex).Visited :=
+                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
+                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
+                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+                  Hour => Natural'Value(Get_Attribute(ChildNode, "hour")),
+                  Minutes =>
+                    Natural'Value(Get_Attribute(ChildNode, "minutes")));
             elsif NodeName = To_Unbounded_String("recruitdate") then
-               SkyBases(BaseIndex).RecruitDate.Year :=
-                 Natural'Value(Get_Attribute(ChildNode, "year"));
-               SkyBases(BaseIndex).RecruitDate.Month :=
-                 Natural'Value(Get_Attribute(ChildNode, "month"));
-               SkyBases(BaseIndex).RecruitDate.Day :=
-                 Natural'Value(Get_Attribute(ChildNode, "day"));
+               SkyBases(BaseIndex).RecruitDate :=
+                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
+                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
+                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+                  Hour => 0, Minutes => 0);
             elsif NodeName = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
@@ -321,12 +317,11 @@ package body Bases.SaveLoad is
                         HomeBase => HomeBase, Faction => RecruitFaction));
                end;
             elsif NodeName = To_Unbounded_String("askedforeventsdate") then
-               SkyBases(BaseIndex).AskedForEvents.Year :=
-                 Natural'Value(Get_Attribute(ChildNode, "year"));
-               SkyBases(BaseIndex).AskedForEvents.Month :=
-                 Natural'Value(Get_Attribute(ChildNode, "month"));
-               SkyBases(BaseIndex).AskedForEvents.Day :=
-                 Natural'Value(Get_Attribute(ChildNode, "day"));
+               SkyBases(BaseIndex).AskedForEvents :=
+                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
+                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
+                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+                  Hour => 0, Minutes => 0);
             elsif NodeName = To_Unbounded_String("reputation") then
                SkyBases(BaseIndex).Reputation(1) :=
                  Natural'Value(Get_Attribute(ChildNode, "level"));
@@ -335,12 +330,11 @@ package body Bases.SaveLoad is
                     Natural'Value(Get_Attribute(ChildNode, "progress"));
                end if;
             elsif NodeName = To_Unbounded_String("missionsdate") then
-               SkyBases(BaseIndex).MissionsDate.Year :=
-                 Natural'Value(Get_Attribute(ChildNode, "year"));
-               SkyBases(BaseIndex).MissionsDate.Month :=
-                 Natural'Value(Get_Attribute(ChildNode, "month"));
-               SkyBases(BaseIndex).MissionsDate.Day :=
-                 Natural'Value(Get_Attribute(ChildNode, "day"));
+               SkyBases(BaseIndex).MissionsDate :=
+                 (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
+                  Month => Natural'Value(Get_Attribute(ChildNode, "month")),
+                  Day => Natural'Value(Get_Attribute(ChildNode, "day")),
+                  Hour => 0, Minutes => 0);
             elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
@@ -430,7 +424,6 @@ package body Bases.SaveLoad is
          SkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY)
            .BaseIndex :=
            BaseIndex;
-         BaseIndex := BaseIndex + 1;
       end loop;
    end LoadBases;
 
