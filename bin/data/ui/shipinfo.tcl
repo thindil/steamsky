@@ -65,19 +65,6 @@ grid [ttk::label $shipinfoframe.crew.fatigue -text {Fatigue}] -column 3 -row 0
 grid [ttk::label $shipinfoframe.crew.thirst -text {Thirst}] -column 4 -row 0
 grid [ttk::label $shipinfoframe.crew.hunter -text {Hunger}] -column 5 -row 0
 grid [ttk::label $shipinfoframe.crew.morale -text {Morale}] -column 6 -row 0
-# Detailed info about the selected ship's module
-ttk::labelframe $shipinfoframe.cargo -text {Module Info:}
-grid [ttk::label $shipinfoframe.cargo.damagelbl -text {Damage:}]
-grid [ttk::progressbar $shipinfoframe.cargo.damage -orient horizontal -maximum 1.0] -row 0 -column 1
-grid [ttk::label $shipinfoframe.cargo.cleanlbl -text {Clean:}]
-grid [ttk::progressbar $shipinfoframe.cargo.clean -orient horizontal -maximum 1.0] -row 1 -column 1
-grid [ttk::label $shipinfoframe.cargo.qualitylbl -text {Quality:}]
-grid [ttk::progressbar $shipinfoframe.cargo.quality -orient horizontal -maximum 1.0] -row 2 -column 1
-grid [ttk::label $shipinfoframe.cargo.upgradelbl -text {Upgrade:}]
-grid [ttk::progressbar $shipinfoframe.cargo.upgrade -orient horizontal -maximum 1.0] -row 3 -column 1
-set moduleinfo [text $shipinfoframe.cargo.info -wrap char -height 10 -width 40]
-$moduleinfo tag configure red -foreground red
-grid $moduleinfo -row 4 -columnspan 2 -sticky nwes
 # Configure main ship info grid
 grid columnconfigure $shipinfoframe 0 -weight 1
 grid columnconfigure $shipinfoframe 1 -weight 1
