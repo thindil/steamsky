@@ -1043,7 +1043,7 @@ package body Ships.UI is
                ProgressBar :=
                  Create
                    (Widget_Image(ModuleDialog) & ".clean",
-                    "-orient horizontal -maximum 1.0 -value {" &
+                    "-orient horizontal -style yellow.Horizontal.TProgressbar -maximum 1.0 -value {" &
                     Float'Image(DamagePercent) & "}");
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
@@ -1051,7 +1051,7 @@ package body Ships.UI is
             ProgressBar :=
               Create
                 (Widget_Image(ModuleDialog) & ".quality",
-                 "-orient horizontal -maximum 1.0 -value {" &
+                 "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
             Label :=
               Create
@@ -1293,7 +1293,7 @@ package body Ships.UI is
          ProgressBar :=
            Create
              (Widget_Image(ModuleDialog) & ".clean",
-              "-orient horizontal -maximum 1.0 -value {" &
+              "-orient horizontal -style green.Horizontal.TProgressbar -maximum 1.0 -value {" &
               Float'Image(UpgradePercent) & "}");
          Label :=
            Create
