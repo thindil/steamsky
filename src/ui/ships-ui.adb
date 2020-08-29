@@ -880,13 +880,16 @@ package body Ships.UI is
       ModuleInfo: Unbounded_String;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Tk_Toplevel :=
-        Create(".moduledialog", "-class Dialog");
+        Create
+          (".moduledialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
       CloseButton: constant Ttk_Button :=
         Create
           (Widget_Image(ModuleDialog) & ".button",
            "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
            "}");
+      Height: Positive := 10;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -936,6 +939,7 @@ package body Ships.UI is
             configure(Label, "-text {Status: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
+         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          MaxValue :=
            Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
          if Module.MaxDurability = MaxValue then
@@ -946,7 +950,7 @@ package body Ships.UI is
       ModuleText :=
         Create
           (Widget_Image(ModuleDialog) & ".info",
-           "-wrap char -height 10 -width 40");
+           "-wrap char -height 15 -width 40");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Insert
         (ModuleText, "end",
@@ -1023,6 +1027,7 @@ package body Ships.UI is
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
+            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when CABIN =>
             AddOwnersInfo("Owner");
             if Module.Cleanliness /= Module.Quality then
@@ -1047,6 +1052,7 @@ package body Ships.UI is
                     Float'Image(DamagePercent) & "}");
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+               Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
             ProgressBar :=
               Create
@@ -1065,6 +1071,7 @@ package body Ships.UI is
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-row 2 -sticky w");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1");
+            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert(ModuleText, "end", "{" & LF & "Strength:}");
             if Modules_List(Module.ProtoIndex).MType = GUN then
@@ -1301,17 +1308,19 @@ package body Ships.UI is
               "-text {" & To_String(ModuleInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
+         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       end if;
       configure(ModuleText, "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       declare
-         Width, Height: Positive;
+         Width: Positive;
          X, Y: Integer;
       begin
-         Width := Positive'Value(Winfo_Get(ModuleText, "reqwidth"));
-         Height := 400;
+         Width := Positive'Value(Winfo_Get(ModuleText, "reqwidth")) + 4;
          X :=
            (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - Width) / 2;
          if X < 0 then
