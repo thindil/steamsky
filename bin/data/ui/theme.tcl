@@ -126,6 +126,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TProgressbar -background red -troughcolor $colors(-almostblackred)
       # Green horizontal progress bar
       ttk::style configure green.Horizontal.TProgressbar -background green
+      # Blue horizontal progress bar
+      ttk::style configure green.Horizontal.TProgressbar -background $colors(-blue)
 
       # Entry setting
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
