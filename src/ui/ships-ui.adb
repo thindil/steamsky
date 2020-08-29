@@ -942,7 +942,6 @@ package body Ships.UI is
             configure
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 0 -column 1");
       end if;
       ModuleText :=
         Create
@@ -1026,7 +1025,6 @@ package body Ships.UI is
             Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          when CABIN =>
             AddOwnersInfo("Owner");
-            ProgressBar.Name := New_String(".paned.shipinfoframe.cargo.clean");
             if Module.Cleanliness /= Module.Quality then
                Label := Create(Widget_Image(ModuleDialog), ".cleanlbl");
                DamagePercent :=
