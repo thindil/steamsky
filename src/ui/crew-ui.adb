@@ -632,7 +632,7 @@ package body Crew.UI is
          if GameSettings.ShowNumbers then
             configure
               (MemberLabel,
-               "{Morale:" & Natural'Image(Member.Morale(1)) & "%}");
+               "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
          else
             case Member.Morale(1) is
                when 0 .. 24 =>
