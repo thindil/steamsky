@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Don't check fuel amount during trading
 - Don't show last messages on messages screen
 - Crash on ship removing module in shipyard
+- Crash on showing crew information
 
 ## [5.1] - 2020-08-09
 
