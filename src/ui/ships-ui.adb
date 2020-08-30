@@ -87,19 +87,25 @@ package body Ships.UI is
            ModuleIndexString & "}");
       Add(Button, "Rename module");
       Tcl.Tk.Ada.Grid.Grid(Button);
-      Button :=
-        Create
-          (Widget_Image(ButtonsFrame) & ".repair" & ModuleIndexString,
-           "-text ""[format %c 0xf54a]"" -style Header.Toolbutton -command {SetRepair assign " &
-           ModuleIndexString & "}");
-      Add(Button, "Repair selected module as first when damaged");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+      if PlayerShip.RepairModule /= ModuleIndex then
+         Button :=
+           Create
+             (Widget_Image(ButtonsFrame) & ".repair" & ModuleIndexString,
+              "-text ""[format %c 0xf54a]"" -style Header.Toolbutton -command {SetRepair assign " &
+              ModuleIndexString & "}");
+         Add(Button, "Repair selected module as first when damaged");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+      end if;
       MaxValue :=
         Natural
           (Float
              (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .Durability) *
            1.5);
+      if PlayerShip.Modules(ModuleIndex).UpgradeAction = DURABILITY and
+        PlayerShip.UpgradeModule = ModuleIndex then
+         MaxValue := 1;
+      end if;
       if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
          Button :=
            Create
@@ -142,6 +148,10 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
+            if PlayerShip.Modules(ModuleIndex).UpgradeAction = MAX_VALUE and
+              PlayerShip.UpgradeModule = ModuleIndex then
+               MaxValue := 1;
+            end if;
             if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
                Button :=
                  Create
@@ -158,6 +168,10 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .Value) /
                  2.0);
+            if PlayerShip.Modules(ModuleIndex).UpgradeAction = VALUE and
+              PlayerShip.UpgradeModule = ModuleIndex then
+               MaxValue := PlayerShip.Modules(ModuleIndex).FuelUsage + 1;
+            end if;
             if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
                Button :=
                  Create
@@ -195,6 +209,10 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
+            if PlayerShip.Modules(ModuleIndex).UpgradeAction = MAX_VALUE and
+              PlayerShip.UpgradeModule = ModuleIndex then
+               MaxValue := 1;
+            end if;
             if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
                Button :=
                  Create
@@ -241,6 +259,10 @@ package body Ships.UI is
                       (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                          .MaxValue) *
                     1.5);
+               if PlayerShip.Modules(ModuleIndex).UpgradeAction = MAX_VALUE and
+                 PlayerShip.UpgradeModule = ModuleIndex then
+                  MaxValue := 1;
+               end if;
                if CurrentValue < MaxValue then
                   Button :=
                     Create
@@ -320,6 +342,10 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
+            if PlayerShip.Modules(ModuleIndex).UpgradeAction = MAX_VALUE and
+              PlayerShip.UpgradeModule = ModuleIndex then
+               MaxValue := 1;
+            end if;
             if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
                Button :=
                  Create
@@ -337,6 +363,10 @@ package body Ships.UI is
                    (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                       .MaxValue) *
                  1.5);
+            if PlayerShip.Modules(ModuleIndex).UpgradeAction = MAX_VALUE and
+              PlayerShip.UpgradeModule = ModuleIndex then
+               MaxValue := 1;
+            end if;
             if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
                Button :=
                  Create
@@ -1052,7 +1082,8 @@ package body Ships.UI is
                     Float'Image(DamagePercent) & "}");
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
-               Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+               Height :=
+                 Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
             ProgressBar :=
               Create
