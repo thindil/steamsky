@@ -28,15 +28,14 @@ with BasesTypes; use BasesTypes;
 package body Bases.Ship is
 
    procedure RepairShip(ModuleIndex: Integer) is
-      Cost, Time, MoneyIndex2: Natural := 0;
-      TraderIndex: Positive;
+      Cost, Time: Natural := 0;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      TraderIndex: constant Positive := FindMember(Talk);
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
          raise BasesShip_Nothing_To_Repair;
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      TraderIndex := FindMember(Talk);
       CountPrice(Cost, TraderIndex);
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
          raise Trade_Not_Enough_Money;
@@ -75,7 +74,8 @@ package body Bases.Ship is
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      HullIndex, ModulesAmount, TraderIndex, ShipModuleIndex: Positive;
+      TraderIndex: constant Positive := FindMember(Talk);
+      HullIndex, ModulesAmount, ShipModuleIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -100,7 +100,6 @@ package body Bases.Ship is
                null;
          end case;
       end loop;
-      TraderIndex := FindMember(Talk);
       if Install then
          Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
