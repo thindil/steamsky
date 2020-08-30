@@ -19,7 +19,6 @@ with Maps; use Maps;
 with Utils; use Utils;
 with Trades; use Trades;
 with BasesTypes; use BasesTypes;
-with ada.text_io;
 
 package body Bases.Cargo is
 
@@ -110,7 +109,6 @@ package body Bases.Cargo is
                return MaxAmount;
             end GetMaxAmount;
          begin
-               Ada.Text_IO.Put_Line("here");
             for Item of SkyBases(BaseIndex).Cargo loop
                Roll := GetRandom(1, 100);
                if Roll < 30 and Item.Amount > 0 then
