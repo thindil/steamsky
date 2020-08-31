@@ -24,6 +24,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -31,6 +32,8 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
+use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
@@ -1381,7 +1384,65 @@ package body Ships.UI.Modules is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ModuleDialog: constant Tk_Toplevel :=
+        Create
+          (".moduledialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      CloseButton: constant Ttk_Button :=
+        Create
+          (Widget_Image(ModuleDialog) & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
+           "}");
+      Height, Width: Positive := 10;
+      CrewButton: Ttk_CheckButton;
    begin
+      Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
+      Wm_Set(ModuleDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(ModuleDialog, "attributes", "-type dialog");
+      end if;
+      for I in PlayerShip.Crew.Iterate loop
+         CrewButton :=
+           Create
+             (Widget_Image(ModuleDialog) & ".crewbutton" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+         Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
+         if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
+            Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
+         end if;
+         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
+      end loop;
+      Tcl.Tk.Ada.Pack.Pack(CloseButton);
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+      Focus(CloseButton);
+      declare
+         X, Y: Integer;
+      begin
+         X :=
+           (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - Width) / 2;
+         if X < 0 then
+            X := 0;
+         end if;
+         Y :=
+           (Positive'Value(Winfo_Get(ModuleDialog, "vrootheight")) - Height) /
+           2;
+         if Y < 0 then
+            Y := 0;
+         end if;
+         Wm_Set
+           (ModuleDialog, "geometry",
+            Trim(Positive'Image(Width), Left) & "x" &
+            Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(X), Left) & "+" &
+            Trim(Positive'Image(Y), Left));
+         Bind
+           (ModuleDialog, "<Destroy>",
+            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
+         Tcl_Eval(Interp, "update");
+      end;
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
