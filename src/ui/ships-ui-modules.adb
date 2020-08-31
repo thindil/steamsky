@@ -459,7 +459,7 @@ package body Ships.UI.Modules is
          "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
    end ShowModuleOptions;
 
-   -- ****o* SUI2/Show_Module_Info_Command
+   -- ****o* SUModules/Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
    -- PARAMETERS
@@ -963,7 +963,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Module_Info_Command;
 
-   -- ****o* SUI2/Set_Upgrade_Command
+   -- ****o* SUModules/Set_Upgrade_Command
    -- FUNCTION
    -- Set the selected upgrade for the selected module
    -- PARAMETERS
@@ -998,7 +998,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
 
-   -- ****o* SUI2/Assign_Module_Command
+   -- ****o* SUModules/Assign_Module_Command
    -- FUNCTION
    -- Assign member, ammo or skill to module
    -- PARAMETERS
@@ -1093,7 +1093,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Assign_Module_Command;
 
-   -- ****o* SUI2/Disable_Engine_Command
+   -- ****o* SUModules/Disable_Engine_Command
    -- FUNCTION
    -- Enable or disable selected engine
    -- PARAMETERS
@@ -1153,7 +1153,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Disable_Engine_Command;
 
-   -- ****o* SUI2/Stop_Upgrading_Command
+   -- ****o* SUModules/Stop_Upgrading_Command
    -- FUNCTION
    -- Stop the current ship upgrade
    -- PARAMETERS
@@ -1191,7 +1191,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
-   -- ****o* SUI2/Set_Repair_Command
+   -- ****o* SUModules/Set_Repair_Command
    -- FUNCTION
    -- Set or remove the repair priority from the selected module
    -- PARAMETERS
@@ -1235,7 +1235,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Repair_Command;
 
-   -- ****o* SUI2/Reset_Destination_Command
+   -- ****o* SUModules/Reset_Destination_Command
    -- FUNCTION
    -- Reset the current destination point for the player's ship
    -- PARAMETERS
@@ -1266,7 +1266,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 
-   -- ****o* SUI2/Ship_Max_Min_Command
+   -- ****o* SUModules/Ship_Max_Min_Command
    -- FUNCTION
    -- Maximize or minimize the selected section of ship info
    -- PARAMETERS
@@ -1333,7 +1333,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Ship_Max_Min_Command;
 
-   -- ****o* SUI2/Rename_Module_Command
+   -- ****o* SUModules/Rename_Module_Command
    -- FUNCTION
    -- Change name of the selected player's ship module
    -- PARAMETERS
