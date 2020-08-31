@@ -611,6 +611,9 @@ package body Bases.ShipyardUI is
       if MType = ANY then
          ShowModule := True;
       else
+         if Get_String(Model, Iter, 1) = "" then
+            return False;
+         end if;
          if Modules_List(To_Unbounded_String(Get_String(Model, Iter, 1)))
              .Price >
            0 and
