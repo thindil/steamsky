@@ -51,7 +51,6 @@ with Ships.Crew; use Ships.Crew;
 with Ships.Upgrade; use Ships.Upgrade;
 with Utils.UI; use Utils.UI;
 
-
 package body Ships.UI.Modules is
 
    procedure ShowModuleOptions(ModuleIndex: Positive) is
@@ -62,7 +61,6 @@ package body Ships.UI.Modules is
       MenuButton: Ttk_MenuButton;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
-      CrewMenu: Tk_Menu;
    begin
       ButtonsFrame :=
         Create
@@ -104,30 +102,6 @@ package body Ships.UI.Modules is
          Add(Button, "Start upgrading module durability");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
       end if;
-      -- Set crew members list
-      CrewMenu.Interp := Get_Context;
-      CrewMenu.Name := New_String(".shipinfocrewmenu" & ModuleIndexString);
-      if Winfo_Get(CrewMenu, "exists") = "0" then
-         CrewMenu :=
-           Create(".shipinfocrewmenu" & ModuleIndexString, "-tearoff false");
-      end if;
-      Delete(CrewMenu, "0", "end");
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Modules(ModuleIndex).Owner.Contains
-             (Crew_Container.To_Index(I)) then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {" & To_String(PlayerShip.Crew(I).Name) &
-               "(current)} -command {AssignModule crew " & ModuleIndexString &
-               Positive'Image(Crew_Container.To_Index(I)) & "}");
-         else
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {" & To_String(PlayerShip.Crew(I).Name) &
-               "} -command {AssignModule crew " & ModuleIndexString &
-               Positive'Image(Crew_Container.To_Index(I)) & "}");
-         end if;
-      end loop;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
          when ENGINE =>
             MaxValue :=
@@ -223,14 +197,14 @@ package body Ships.UI.Modules is
                end if;
             end loop Missions_Loop;
             if not IsPassenger then
-               MenuButton :=
+               Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
-                    ModuleIndexString);
-               Add(MenuButton, "Assign a crew member as owner of cabin");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
+                    ModuleIndexString & "}");
+               Add(Button, "Assign a crew member as owner of cabin");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             end if;
          when GUN | HARPOON_GUN =>
             declare
@@ -266,14 +240,14 @@ package body Ships.UI.Modules is
                   Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
                end if;
             end;
-            MenuButton :=
+            Button :=
               Create
                 (Widget_Image(ButtonsFrame) & ".assigncrew" &
                  ModuleIndexString,
-                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
-                 ModuleIndexString);
-            Add(MenuButton, "Assign a crew member as gunner");
-            Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
+                 ModuleIndexString & "}");
+            Add(Button, "Assign a crew member as gunner");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             declare
                AmmoIndex: Natural;
                AmmoMenu: Tk_Menu;
@@ -370,14 +344,14 @@ package body Ships.UI.Modules is
          when ALCHEMY_LAB .. GREENHOUSE =>
             if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
               Null_Unbounded_String then
-               MenuButton :=
+               Button :=
                  Create
                    (Widget_Image(ButtonsFrame) & ".assigncrew" &
                     ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
-                    ModuleIndexString);
-               Add(MenuButton, "Assign selected crew member as worker");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
+                    ModuleIndexString & "}");
+               Add(Button, "Assign selected crew member as worker");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -388,14 +362,14 @@ package body Ships.UI.Modules is
                         Factions_List(PlayerShip.Crew(1).Faction)
                           .HealingTools) >
                    0 then
-                  MenuButton :=
+                  Button :=
                     Create
                       (Widget_Image(ButtonsFrame) & ".assigncrew" &
                        ModuleIndexString,
-                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -menu .shipinfocrewmenu" &
-                       ModuleIndexString);
+                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
+                       ModuleIndexString & "}");
                   Add(Button, "Assign selected crew member as medic");
-                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 4");
+                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
                   exit;
                end if;
             end loop;
@@ -1379,6 +1353,38 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Rename_Module_Command;
 
+   -- ****o* SUModules/Show_Assign_Crew_Command
+   -- FUNCTION
+   -- Show assign the crew member UI
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowAssignCrew moduleindex
+   -- Moduleindex is the index of the module to which a new crew members will
+   -- be assigned.
+   -- SOURCE
+   function Show_Assign_Crew_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Assign_Crew_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      return TCL_OK;
+   end Show_Assign_Crew_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
@@ -1390,6 +1396,7 @@ package body Ships.UI.Modules is
       AddCommand("ResetDestination", Reset_Destination_Command'Access);
       AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
       AddCommand("RenameModule", Rename_Module_Command'Access);
+      AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
