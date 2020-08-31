@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash on showing shipyard when module type was set
+
 ## [5.0.3] - 2020-08-02
 
 ### Fixed
