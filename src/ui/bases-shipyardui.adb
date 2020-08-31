@@ -100,6 +100,7 @@ package body Bases.ShipyardUI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ModuleSize: Integer;
       FirstIndex: Unbounded_String;
+      ModuleTypeBox: Ttk_ComboBox;
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -120,6 +121,10 @@ package body Bases.ShipyardUI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
+      elsif Winfo_Get(ShipyardCanvas, "ismapped") = "0" and Argc = 1 then
+         ModuleTypeBox.Interp := Interp;
+         ModuleTypeBox.Name := New_String(Widget_Image(ShipyardCanvas) & ".shipyard.notebook.install.options.modules");
+         Current(ModuleTypeBox, "0");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       ShipyardFrame.Name :=
