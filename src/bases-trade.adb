@@ -63,15 +63,15 @@ package body Bases.Trade is
    procedure HireRecruit
      (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
       ContractLenght: Integer) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex2, Price, TraderIndex: Natural;
+      MoneyIndex2, Price: Natural;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Morale: Positive;
       Inventory: Inventory_Container.Vector;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
-      TraderIndex := FindMember(Talk);
       if TraderIndex = 0 then
          raise Trade_No_Trader;
       end if;
@@ -118,13 +118,13 @@ package body Bases.Trade is
    end HireRecruit;
 
    procedure BuyRecipe(RecipeIndex: Unbounded_String) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, MoneyIndex2: Natural;
       RecipeName: constant String :=
         To_String(Items_List(Recipes_List(RecipeIndex).ResultIndex).Name);
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
-      TraderIndex: Natural;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
       if not BasesTypes_List(BaseType).Recipes.Contains(RecipeIndex) then
          raise Trade_Cant_Buy;
@@ -133,7 +133,6 @@ package body Bases.Trade is
         Positive_Container.No_Index then
          raise Trade_Already_Known;
       end if;
-      TraderIndex := FindMember(Talk);
       if TraderIndex = 0 then
          raise Trade_No_Trader;
       end if;
@@ -169,16 +168,15 @@ package body Bases.Trade is
    end BuyRecipe;
 
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost, Time, MoneyIndex2: Natural := 0;
-      TraderIndex: Natural;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
       HealCost(Cost, Time, MemberIndex);
       if Cost = 0 then
          raise Trade_Cant_Heal;
       end if;
-      TraderIndex := FindMember(Talk);
       if TraderIndex = 0 then
          raise Trade_No_Trader;
       end if;
@@ -215,7 +213,7 @@ package body Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if MemberIndex > 0 then
@@ -283,10 +281,11 @@ package body Bases.Trade is
 
    procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
-      MoneyIndex2, TraderIndex: Natural;
+      MoneyIndex2: Natural;
       GainedExp: Positive;
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      TraderIndex: constant Natural := FindMember(Talk);
    begin
       if Cost = 0 then
          raise Trade_Cant_Train;
@@ -311,7 +310,6 @@ package body Bases.Trade is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(MoneyIndex, Cost);
-      TraderIndex := FindMember(Talk);
       if TraderIndex > 0 then
          GainExp(5, TalkingSkill, TraderIndex);
       end if;
