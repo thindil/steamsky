@@ -183,17 +183,6 @@ package body Ships.UI is
               (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
             Float(MaxUpgrade));
          configure(UpgradeProgress, "-value" & Float'Image(UpgradePercent));
-         if UpgradePercent < 0.11 then
-            Append(UpgradeInfo, " (started)");
-         elsif UpgradePercent < 0.31 then
-            Append(UpgradeInfo, " (designing)");
-         elsif UpgradePercent < 0.51 then
-            Append(UpgradeInfo, " (base upgrades)");
-         elsif UpgradePercent < 0.80 then
-            Append(UpgradeInfo, " (advanced upgrades)");
-         else
-            Append(UpgradeInfo, " (final upgrades)");
-         end if;
          configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(UpgradeProgress);
