@@ -1414,6 +1414,7 @@ package body Ships.UI.Modules is
       ButtonName: Unbounded_String;
       CrewIndex: constant Natural :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
+      InfoLabel: Ttk_Label;
    begin
       if Argc = 3 then
          if Tcl_GetVar
@@ -1464,6 +1465,16 @@ package body Ships.UI.Modules is
             end if;
          end loop;
       end if;
+      InfoLabel.Interp := Interp;
+      InfoLabel.Name := New_String(".moduledialog.label");
+      configure
+        (InfoLabel,
+         "-text {Available:" &
+         Natural'Image
+           (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+            Assigned) &
+         "}");
+      UpdateHeader;
       return TCL_OK;
    end Update_Assign_Crew_Command;
 
