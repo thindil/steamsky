@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to assign a crew member to training room in ship info
+
 ### Fixed
 - Crash on showing shipyard when module type was set
 
