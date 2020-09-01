@@ -596,6 +596,8 @@ package body Ships.UI.Handlers is
                GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
             when MEDICAL_ROOM =>
                GiveOrders(PlayerShip, AssignIndex, Heal, ModuleIndex);
+            when TRAINING_ROOM =>
+               GiveOrders(PlayerShip, AssignIndex, Train, ModuleIndex);
             when others =>
                null;
          end case;
@@ -630,6 +632,9 @@ package body Ships.UI.Handlers is
       UpdateMessages;
       ShowShipInfo;
       ShowModuleInfo(Builder);
+   exception
+      when An_Exception : Crew_Order_Error =>
+         ShowDialog(Exception_Message(An_Exception));
    end Assign;
 
    procedure DisableEngine(Object: access Gtkada_Builder_Record'Class) is
