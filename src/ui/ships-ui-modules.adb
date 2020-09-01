@@ -377,6 +377,16 @@ package body Ships.UI.Modules is
                end if;
             end loop;
          when TRAINING_ROOM =>
+            if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
+               Button :=
+                 Create
+                   (Widget_Image(ButtonsFrame) & ".assigncrew" &
+                    ModuleIndexString,
+                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
+                    ModuleIndexString & "}");
+               Add(Button, "Assign selected crew member as worker");
+               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+            end if;
             declare
                SkillText, ProtoIndex: Unbounded_String;
                SkillMenu: Tk_Menu;
@@ -1043,6 +1053,8 @@ package body Ships.UI.Modules is
                GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
             when MEDICAL_ROOM =>
                GiveOrders(PlayerShip, AssignIndex, Heal, ModuleIndex);
+            when TRAINING_ROOM =>
+               GiveOrders(PlayerShip, AssignIndex, Train, ModuleIndex);
             when others =>
                null;
          end case;
