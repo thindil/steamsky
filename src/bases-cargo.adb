@@ -23,7 +23,7 @@ with BasesTypes; use BasesTypes;
 package body Bases.Cargo is
 
    procedure GenerateCargo is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Population: constant Natural :=
         (if SkyBases(BaseIndex).Population > 0 then
@@ -131,7 +131,7 @@ package body Bases.Cargo is
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex: Natural := 0) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemIndex: constant Natural :=
         (if ProtoIndex /= Null_Unbounded_String then
