@@ -376,6 +376,15 @@ package body Ships.UI is
             end loop;
          when TRAINING_ROOM =>
             Show_All(Gtk_Widget(Get_Object(Builder, "boxassignskill")));
+            if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
+               Set_Label
+                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+                  "Assign as _trainee");
+               Set_Tooltip_Text
+                 (Gtk_Button(Get_Object(Builder, "btnassigncrew")),
+                  "Assign selected crew member as trainee");
+               Show_All(Gtk_Widget(Get_Object(Builder, "boxassigncrew")));
+            end if;
          when others =>
             null;
       end case;
