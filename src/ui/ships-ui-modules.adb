@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -56,6 +57,13 @@ with Ships.Upgrade; use Ships.Upgrade;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
+
+   -- ****ie* SUModules/SteamSky_ShipUI_Error
+   -- FUNCTION
+   -- Raised when there are any problems with ship UI
+   -- SOURCE
+   SteamSky_ShipUI_Error: exception;
+   -- ****
 
    procedure ShowModuleOptions(ModuleIndex: Positive) is
       ButtonsFrame: Ttk_Frame;
@@ -1081,6 +1089,10 @@ package body Ships.UI.Modules is
       end if;
       UpdateMessages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
+   exception
+      when An_Exception : Crew_Order_Error =>
+         ShowMessage(Exception_Message(An_Exception));
+         return TCL_OK;
    end Assign_Module_Command;
 
    -- ****o* SUModules/Disable_Engine_Command
@@ -1380,9 +1392,10 @@ package body Ships.UI.Modules is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- UpdateAssignCrew moduleindex
+   -- UpdateAssignCrew moduleindex ?crewindex?
    -- Moduleindex is the index of the module to which a new crew members will
-   -- be assigned.
+   -- be assigned. Crewindex is the index of the crew member which will be
+   -- assigned or removed
    -- SOURCE
    function Update_Assign_Crew_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -1395,12 +1408,37 @@ package body Ships.UI.Modules is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Assigned: Natural := 0;
       CrewButton: Ttk_CheckButton;
       ButtonName: Unbounded_String;
+      CrewIndex: constant Natural :=
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
    begin
+      if Argc = 3 then
+         if Tcl_GetVar
+             (Interp, ".moduledialog.crewbutton" & CArgv.Arg(Argv, 2)) =
+           "0" then
+            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+               if Owner = CrewIndex then
+                  Owner := 0;
+                  exit;
+               end if;
+            end loop;
+            if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
+                .MType /=
+              CABIN then
+               GiveOrders(PlayerShip, CrewIndex, Rest, 0, False);
+            end if;
+         elsif Assign_Module_Command
+             (ClientData, Interp, 4,
+              CArgv.Empty & "AssignModule" & "crew" & CArgv.Arg(Argv, 1) &
+              CArgv.Arg(Argv, 2)) /=
+           TCL_OK then
+            raise SteamSky_ShipUI_Error
+              with "Can't assign a crew member to module";
+         end if;
+      end if;
       CrewButton.Interp := Interp;
       for I in PlayerShip.Crew.Iterate loop
          CrewButton.Name :=
@@ -1471,7 +1509,6 @@ package body Ships.UI.Modules is
       InfoLabel: constant Ttk_Label :=
         Create(Widget_Image(ModuleDialog) & ".label");
       Assigned: Natural := 0;
-      SteamSky_ShipUI_Error: exception;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
@@ -1486,7 +1523,7 @@ package body Ships.UI.Modules is
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) &
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
-              "}");
+              Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
             if Owner = Crew_Container.To_Index(I) then
