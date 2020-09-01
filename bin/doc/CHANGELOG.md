@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to reset the player ship destination in ship info screen
+- Ability to assign a crew member to training room in ship info screen
 
 ### Changed
 - Set General career as default for each faction
