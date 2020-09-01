@@ -1408,6 +1408,9 @@ package body Ships.UI.Modules is
            "}");
       Height, Width: Positive := 10;
       CrewButton: Ttk_CheckButton;
+      InfoLabel: constant Ttk_Label :=
+        Create(Widget_Image(ModuleDialog) & ".label");
+      Assigned: Natural := 0;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
@@ -1425,6 +1428,7 @@ package body Ships.UI.Modules is
          for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
             if Owner = Crew_Container.To_Index(I) then
                Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
+               Assigned := Assigned + 1;
                exit;
             end if;
          end loop;
@@ -1434,6 +1438,18 @@ package body Ships.UI.Modules is
             Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
          end if;
       end loop;
+      configure
+        (InfoLabel,
+         "-text {Available:" &
+         Natural'Image
+           (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+            Assigned) &
+         "}");
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) + 10 > Width then
+         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) + 10;
+      end if;
       Tcl.Tk.Ada.Pack.Pack(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
