@@ -1409,11 +1409,18 @@ package body Ships.UI.Modules is
              (Widget_Image(ModuleDialog) & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+         Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
+         for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+            if Owner = Crew_Container.To_Index(I) then
+               Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
+               exit;
+            end if;
+         end loop;
+         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
          Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
          if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
             Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
          end if;
-         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
       end loop;
       Tcl.Tk.Ada.Pack.Pack(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
