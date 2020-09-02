@@ -1617,7 +1617,7 @@ package body Ships.UI.Modules is
           (Widget_Image(ModuleDialog) & ".titlelabel",
            "-text {Assign skill to " &
            To_String(PlayerShip.Modules(ModuleIndex).Name) &
-           "} -wraplength 250");
+           "}");
       SkillsView: constant Ttk_Tree_View := Create(Widget_Image(ModuleDialog) & ".view", "-columns [list name tool] -show headings");
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
@@ -1628,9 +1628,12 @@ package body Ships.UI.Modules is
       end if;
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      Heading(SkillsView, "name", "-text {Skill}");
+      Heading(SkillsView, "tool", "-text {Training tool}");
       Tcl.Tk.Ada.Pack.Pack(SkillsView);
       Height := Height + Positive'Value(Winfo_Get(SkillsView, "reqheight"));
       Width := Width + Positive'Value(Winfo_Get(SkillsView, "reqwidth")) + 20;
+      configure(InfoLabel, "-wraplength" & Positive'Image(Width - 30));
       Tcl.Tk.Ada.Pack.Pack(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
