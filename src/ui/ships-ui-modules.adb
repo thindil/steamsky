@@ -1466,15 +1466,17 @@ package body Ships.UI.Modules is
          end loop;
       end if;
       InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".moduledialog.label");
-      configure
-        (InfoLabel,
-         "-text {Available:" &
-         Natural'Image
-           (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
-            Assigned) &
-         "}");
-      UpdateHeader;
+      InfoLabel.Name := New_String(".moduledialog.infolabel");
+      if Winfo_Get(InfoLabel, "exists") = "1" then
+         configure
+           (InfoLabel,
+            "-text {Available:" &
+            Natural'Image
+              (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+               Assigned) &
+            "}");
+         UpdateHeader;
+      end if;
       return TCL_OK;
    end Update_Assign_Crew_Command;
 
@@ -1515,10 +1517,15 @@ package body Ships.UI.Modules is
           (Widget_Image(ModuleDialog) & ".button",
            "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
            "}");
-      Height, Width: Positive := 10;
+      Height: Positive := 10;
+      Width: Positive := 260;
       CrewButton: Ttk_CheckButton;
-      InfoLabel: constant Ttk_Label :=
-        Create(Widget_Image(ModuleDialog) & ".label");
+      InfoLabel: Ttk_Label :=
+        Create
+          (Widget_Image(ModuleDialog) & ".titlelabel",
+           "-text {Assign a crew member to " &
+           To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           "} -wraplength 250");
       Assigned: Natural := 0;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
@@ -1527,6 +1534,8 @@ package body Ships.UI.Modules is
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
          Wm_Set(ModuleDialog, "attributes", "-type dialog");
       end if;
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       for I in PlayerShip.Crew.Iterate loop
          CrewButton :=
            Create
@@ -1553,13 +1562,14 @@ package body Ships.UI.Modules is
         TCL_OK then
          raise SteamSky_ShipUI_Error with "Can't set assign crew UI";
       end if;
-      configure
-        (InfoLabel,
-         "-text {Available:" &
-         Natural'Image
-           (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
-            Assigned) &
-         "}");
+      InfoLabel :=
+        Create
+          (Widget_Image(ModuleDialog) & ".infolabel",
+           "-text {Available:" &
+           Natural'Image
+             (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+              Assigned) &
+           "}");
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) + 10 > Width then
