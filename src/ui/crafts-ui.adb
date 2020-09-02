@@ -503,6 +503,16 @@ package body Crafts.UI is
          Set(RecipesList, RecipesIter, 1, To_String(Known_Recipes.Element(I)));
       end loop;
       CheckTool(AlchemyTools);
+      if CanCraft then
+         CanCraft := False;
+         for Module of PlayerShip.Modules loop
+            if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
+              and then Module.Durability > 0 then
+               CanCraft := True;
+               exit;
+            end if;
+         end loop;
+      end if;
       for I in Studies.First_Index .. Studies.Last_Index loop
          Append(RecipesList, RecipesIter);
          if CanCraft then
