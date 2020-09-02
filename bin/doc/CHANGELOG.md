@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Crash on ship removing module in shipyard
 - Crash on showing crew information
 - Resetting module type to show after reentering shipyard
+- Checking for crafting location for study and deconstruct orders
 
 ## [5.1] - 2020-08-09
 
