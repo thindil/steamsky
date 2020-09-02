@@ -166,7 +166,7 @@ package body Bases.Cargo is
    function FindBaseCargo
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin
