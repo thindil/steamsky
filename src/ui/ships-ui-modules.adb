@@ -39,6 +39,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -396,50 +397,16 @@ package body Ships.UI.Modules is
                Add(Button, "Assign selected crew member as worker");
                Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
             end if;
-            declare
-               SkillText, ProtoIndex: Unbounded_String;
-               SkillMenu: Tk_Menu;
-            begin
-               SkillMenu.Interp := Get_Context;
-               SkillMenu.Name :=
-                 New_String(".shipinfoskillmenu" & ModuleIndexString);
-               if Winfo_Get(SkillMenu, "exists") = "0" then
-                  SkillMenu :=
-                    Create
-                      (".shipinfoskillmenu" & ModuleIndexString,
-                       "-tearoff false");
-               end if;
-               Delete(SkillMenu, "0", "end");
-               for I in Skills_List.First_Index .. Skills_List.Last_Index loop
-                  SkillText := Skills_List(I).Name;
-                  if Skills_List(I).Tool /= Null_Unbounded_String then
-                     Append(SkillText, " Tool: ");
-                     ProtoIndex :=
-                       FindProtoItem(ItemType => Skills_List(I).Tool);
-                     if Items_List(ProtoIndex).ShowType /=
-                       Null_Unbounded_String then
-                        Append(SkillText, Items_List(ProtoIndex).ShowType);
-                     else
-                        Append(SkillText, Items_List(ProtoIndex).IType);
-                     end if;
-                  end if;
-                  Menu.Add
-                    (SkillMenu, "command",
-                     "-label {" & To_String(SkillText) &
-                     "} -command {AssignModule skill " & ModuleIndexString &
-                     Positive'Image(I) & "}");
-               end loop;
-               MenuButton :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".assignskill" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf02d]"" -style Header.Toolbutton -menu .shipinfoskillmenu" &
-                    ModuleIndexString & " -direction left");
-               Add
-                 (MenuButton,
-                  "Assign a skill which will be trained in the training room");
-               Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 5");
-            end;
+            Button :=
+              Create
+                (Widget_Image(ButtonsFrame) & ".assignskill" &
+                 ModuleIndexString,
+                 "-text ""[format %c 0xf02d]"" -style Header.Toolbutton -command {ShowAssignSkill " &
+                 ModuleIndexString & "}");
+            Add
+              (Button,
+               "Assign a skill which will be trained in the training room");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
          when others =>
             null;
       end case;
@@ -1606,6 +1573,95 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
+   -- ****o* SUModules/Show_Assign_Skill_Command
+   -- FUNCTION
+   -- Show assign the skill UI
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowAssignSkill moduleindex
+   -- Moduleindex is the index of the module to which a new skill will
+   -- be assigned.
+   -- SOURCE
+   function Show_Assign_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Assign_Skill_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ModuleDialog: constant Tk_Toplevel :=
+        Create
+          (".moduledialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      CloseButton: constant Ttk_Button :=
+        Create
+          (Widget_Image(ModuleDialog) & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
+           "}");
+      Height, Width: Positive := 10;
+      InfoLabel: constant Ttk_Label :=
+        Create
+          (Widget_Image(ModuleDialog) & ".titlelabel",
+           "-text {Assign skill to " &
+           To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           "} -wraplength 250");
+      SkillsView: constant Ttk_Tree_View := Create(Widget_Image(ModuleDialog) & ".view", "-columns [list name tool] -show headings");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
+      Wm_Set(ModuleDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(ModuleDialog, "attributes", "-type dialog");
+      end if;
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      Tcl.Tk.Ada.Pack.Pack(SkillsView);
+      Height := Height + Positive'Value(Winfo_Get(SkillsView, "reqheight"));
+      Width := Width + Positive'Value(Winfo_Get(SkillsView, "reqwidth")) + 20;
+      Tcl.Tk.Ada.Pack.Pack(CloseButton);
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+      Focus(CloseButton);
+      declare
+         X, Y: Integer;
+      begin
+         X :=
+           (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - Width) / 2;
+         if X < 0 then
+            X := 0;
+         end if;
+         Y :=
+           (Positive'Value(Winfo_Get(ModuleDialog, "vrootheight")) - Height) /
+           2;
+         if Y < 0 then
+            Y := 0;
+         end if;
+         Wm_Set
+           (ModuleDialog, "geometry",
+            Trim(Positive'Image(Width), Left) & "x" &
+            Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(X), Left) & "+" &
+            Trim(Positive'Image(Y), Left));
+         Bind
+           (ModuleDialog, "<Destroy>",
+            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
+         Tcl_Eval(Interp, "update");
+      end;
+      return TCL_OK;
+   end Show_Assign_Skill_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
@@ -1619,6 +1675,7 @@ package body Ships.UI.Modules is
       AddCommand("RenameModule", Rename_Module_Command'Access);
       AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
       AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
+      AddCommand("ShowAssignSkill", Show_Assign_Skill_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
