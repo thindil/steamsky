@@ -629,9 +629,7 @@ package body Ships.UI.Handlers is
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
             OrderMessage);
       end if;
-      UpdateMessages;
-      ShowShipInfo;
-      ShowModuleInfo(Builder);
+      ShowShipUI;
    exception
       when An_Exception : Crew_Order_Error =>
          ShowDialog(Exception_Message(An_Exception));
