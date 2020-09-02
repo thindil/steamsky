@@ -42,9 +42,9 @@ To build(works on Linux and Windows too) you need:
 
    https://github.com/thindil/tashy
 
-   **Important:** To build this version of Steam Sky you will need a repository
-   version of the library, not release (probably soon or later it will
-   be better synchronized).
+   **Important:** To build this version of Steam Sky you will need the 8.6.7
+   version of the library or above. Earlier versions will not work due to lack
+   of some bindings.
 
 If you have all the required packages, navigate to the main directory(where
 this file is) to compile:
