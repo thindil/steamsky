@@ -405,6 +405,13 @@ package Game is
    subtype BasesRange is Positive range 1 .. 1024;
    -- ****
 
+   -- ****t* Game/Extended_BaseRange
+   -- FUNCTION
+   -- Amount of sky bases starting from 0
+   -- SOURCE
+   subtype Extended_BaseRange is Natural range 0 .. 1024;
+   -- ****
+
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data
