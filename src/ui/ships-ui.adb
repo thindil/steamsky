@@ -303,7 +303,7 @@ package body Ships.UI is
       ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
+      for I in 2 .. (Rows - 1) loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves
@@ -315,7 +315,7 @@ package body Ships.UI is
             Destroy(Item);
          end loop;
       end loop;
-      Row := 1;
+      Row := 2;
       for Member of PlayerShip.Crew loop
          Label :=
            Create
@@ -370,6 +370,13 @@ package body Ships.UI is
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
          Row := Row + 1;
       end loop;
+      Tcl_Eval(Get_Context, "update");
+      ShipCanvas.Name :=
+        New_String(Widget_Image(Paned) & ".shipinfoframe.crew.canvas");
+      configure
+        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      Xview_Move_To(ShipCanvas, "0.0");
+      Yview_Move_To(ShipCanvas, "0.0");
       ShowScreen("shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
