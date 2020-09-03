@@ -413,13 +413,6 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Button :=
-        Create
-          (Widget_Image(ButtonsFrame) & ".showinfo" & ModuleIndexString,
-           "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowModuleInfo " &
-           ModuleIndexString & "}");
-      Add(Button, "Show detailed information about the module");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 6");
       Tcl.Tk.Ada.Grid.Grid
         (ButtonsFrame,
          "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
