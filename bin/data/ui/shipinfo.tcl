@@ -65,6 +65,7 @@ pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w
+tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.order -text {Order}] -column 1 -row 1
 grid [ttk::label $shipcanvas.frame.health -text {Health}] -column 2 -row 1
@@ -73,8 +74,8 @@ grid [ttk::label $shipcanvas.frame.thirst -text {Thirst}] -column 4 -row 1
 grid [ttk::label $shipcanvas.frame.hunter -text {Hunger}] -column 5 -row 1
 grid [ttk::label $shipcanvas.frame.morale -text {Morale}] -column 6 -row 1
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
-#::autoscroll::autoscroll $shipinfoframe.crew.scrolly
-#::autoscroll::autoscroll $shipinfoframe.crew.scrollx
+::autoscroll::autoscroll $shipinfoframe.crew.scrolly
+::autoscroll::autoscroll $shipinfoframe.crew.scrollx
 # Configure main ship info grid
 grid columnconfigure $shipinfoframe 0 -weight 1
 grid columnconfigure $shipinfoframe 1 -weight 1
