@@ -300,7 +300,7 @@ package body Ships.UI is
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew");
+      ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop

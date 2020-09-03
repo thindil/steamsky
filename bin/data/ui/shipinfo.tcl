@@ -58,13 +58,23 @@ $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [w
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
 # Crew info
 grid [ttk::labelframe $shipinfoframe.crew -text {Crew Info:}] -row 0 -column 1 -sticky nwes
-grid [ttk::label $shipinfoframe.crew.name -text {Name}]
-grid [ttk::label $shipinfoframe.crew.order -text {Order}] -column 1 -row 0
-grid [ttk::label $shipinfoframe.crew.health -text {Health}] -column 2 -row 0
-grid [ttk::label $shipinfoframe.crew.fatigue -text {Fatigue}] -column 3 -row 0
-grid [ttk::label $shipinfoframe.crew.thirst -text {Thirst}] -column 4 -row 0
-grid [ttk::label $shipinfoframe.crew.hunter -text {Hunger}] -column 5 -row 0
-grid [ttk::label $shipinfoframe.crew.morale -text {Morale}] -column 6 -row 0
+set shipcanvas [canvas $shipinfoframe.crew.canvas -yscrollcommand [list $shipinfoframe.crew.scrolly set] -xscrollcommand [list $shipinfoframe.crew.scrollx set]]
+pack [ttk::scrollbar $shipinfoframe.crew.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $shipinfoframe.crew.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
+pack $shipcanvas -side top -fill both -expand true
+ttk::frame $shipcanvas.frame
+grid columnconfigure $shipcanvas.frame 1 -weight 1
+grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w
+grid [ttk::label $shipcanvas.frame.name -text {Name}]
+grid [ttk::label $shipcanvas.frame.order -text {Order}] -column 1 -row 1
+grid [ttk::label $shipcanvas.frame.health -text {Health}] -column 2 -row 1
+grid [ttk::label $shipcanvas.frame.fatigue -text {Fatigue}] -column 3 -row 1
+grid [ttk::label $shipcanvas.frame.thirst -text {Thirst}] -column 4 -row 1
+grid [ttk::label $shipcanvas.frame.hunter -text {Hunger}] -column 5 -row 1
+grid [ttk::label $shipcanvas.frame.morale -text {Morale}] -column 6 -row 1
+$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+#::autoscroll::autoscroll $shipinfoframe.crew.scrolly
+#::autoscroll::autoscroll $shipinfoframe.crew.scrollx
 # Configure main ship info grid
 grid columnconfigure $shipinfoframe 0 -weight 1
 grid columnconfigure $shipinfoframe 1 -weight 1
