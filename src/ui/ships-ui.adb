@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with Factions; use Factions;
@@ -55,7 +56,7 @@ package body Ships.UI is
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
-      CloseButton, CancelButton: Ttk_Button;
+      CloseButton, CancelButton, Button: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
@@ -271,13 +272,15 @@ package body Ships.UI is
       end loop;
       Row := 2;
       for Module of PlayerShip.Modules loop
-         Label :=
+         Button :=
            Create
              (Widget_Image(ShipInfoFrame) & ".name" &
               Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Module.Name) & "}");
+              "-text {" & To_String(Module.Name) &
+              "} -command {ShowModuleInfo" & Positive'Image(Row - 1) & "}");
+         Add(Button, "Show detailed information about the module");
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Natural'Image(Row) & " -sticky w");
+           (Button, "-row" & Natural'Image(Row) & " -sticky w");
          UpgradeProgress :=
            Create
              (Widget_Image(ShipInfoFrame) & ".durability" &
@@ -299,8 +302,10 @@ package body Ships.UI is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
+      -- Setting crew info
       ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ShipInfoFrame.Name := New_String(Widget_Image(ShipInfoFrame) & ".crew.canvas.frame");
+      ShipInfoFrame.Name :=
+        New_String(Widget_Image(ShipInfoFrame) & ".crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 2 .. (Rows - 1) loop
