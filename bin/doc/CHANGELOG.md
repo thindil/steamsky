@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.4] - 2020-09-03
 
 ### Added
 - Ability to assign a crew member to training room in ship info
