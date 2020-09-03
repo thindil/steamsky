@@ -198,7 +198,7 @@ package body Bases.SaveLoad is
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
-      BaseIndex: Positive;
+      BaseIndex: BasesRange;
       NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
    begin
