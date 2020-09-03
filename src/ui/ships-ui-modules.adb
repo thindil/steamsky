@@ -1234,73 +1234,6 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 
-   -- ****o* SUModules/Ship_Max_Min_Command
-   -- FUNCTION
-   -- Maximize or minimize the selected section of ship info
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShipMaxMin framename
-   -- Framename is name of the frame to maximize or minimize
-   -- SOURCE
-   function Ship_Max_Min_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Ship_Max_Min_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      FramesNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("general"), To_Unbounded_String("modules"),
-         To_Unbounded_String("crew"));
-      Frame: Ttk_Frame;
-      Button: Ttk_Button;
-   begin
-      Frame.Interp := Interp;
-      Frame.Name := New_String(".paned.shipinfoframe");
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String
-          (Widget_Image(Frame) & "." & CArgv.Arg(Argv, 1) &
-           ".canvas.frame.maxmin");
-      if CArgv.Arg(Argv, 2) /= "show" then
-         for Name of FramesNames loop
-            if To_String(Name) /= CArgv.Arg(Argv, 1) then
-               Frame.Name :=
-                 New_String(".paned.shipinfoframe." & To_String(Name));
-               Tcl.Tk.Ada.Grid.Grid(Frame);
-            end if;
-         end loop;
-         configure
-           (Button,
-            "-text ""[format %c 0xf106]"" -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
-      else
-         for Name of FramesNames loop
-            if To_String(Name) /= CArgv.Arg(Argv, 1) then
-               Frame.Name :=
-                 New_String(".paned.shipinfoframe." & To_String(Name));
-               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-            end if;
-         end loop;
-         configure
-           (Button,
-            "-text ""[format %c 0xf107]"" -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
-      end if;
-      return TCL_OK;
-   end Ship_Max_Min_Command;
-
    -- ****o* SUModules/Rename_Module_Command
    -- FUNCTION
    -- Change name of the selected player's ship module
@@ -1723,7 +1656,6 @@ package body Ships.UI.Modules is
       AddCommand("StopUpgrading", Stop_Upgrading_Command'Access);
       AddCommand("SetRepair", Set_Repair_Command'Access);
       AddCommand("ResetDestination", Reset_Destination_Command'Access);
-      AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
       AddCommand("RenameModule", Rename_Module_Command'Access);
       AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
       AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
