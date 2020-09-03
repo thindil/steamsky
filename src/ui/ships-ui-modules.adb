@@ -39,10 +39,12 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
@@ -53,6 +55,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Upgrade; use Ships.Upgrade;
 with Utils.UI; use Utils.UI;
@@ -1048,6 +1051,9 @@ package body Ships.UI.Modules is
             " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
+         if PlayerShip.Modules(ModuleIndex).TrainedSkill = AssignIndex then
+            return TCL_OK;
+         end if;
          PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -1616,11 +1622,23 @@ package body Ships.UI.Modules is
         Create
           (Widget_Image(ModuleDialog) & ".titlelabel",
            "-text {Assign skill to " &
-           To_String(PlayerShip.Modules(ModuleIndex).Name) &
-           "}");
-      SkillsView: constant Ttk_Tree_View := Create(Widget_Image(ModuleDialog) & ".view", "-columns [list name tool] -show headings");
+           To_String(PlayerShip.Modules(ModuleIndex).Name) & "}");
+      SkillsFrame: constant Ttk_Frame :=
+        Create(Widget_Image(ModuleDialog) & ".frame");
+      ScrollY: constant Ttk_Scrollbar :=
+        Create
+          (Widget_Image(SkillsFrame) & ".scrolly",
+           "-orient vertical -command [list " & Widget_Image(SkillsFrame) &
+           ".view yview]");
+      SkillsView: constant Ttk_Tree_View :=
+        Create
+          (Widget_Image(SkillsFrame) & ".view",
+           "-columns [list name tool] -show headings -yscrollcommand [list " &
+           Widget_Image(SkillsFrame) & ".scrolly set]");
+      ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      Autoscroll(ScrollY);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
       Wm_Set(ModuleDialog, "transient", ".");
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
@@ -1630,11 +1648,49 @@ package body Ships.UI.Modules is
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
+      Tag_Configure(SkillsView, "gray", "-foreground gray");
+      for I in Skills_List.First_Index .. Skills_List.Last_Index loop
+         if Skills_List(I).Tool /= Null_Unbounded_String then
+            ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
+            if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+               ToolName := Items_List(ProtoIndex).ShowType;
+            else
+               ToolName := Items_List(ProtoIndex).IType;
+            end if;
+         end if;
+         Tags := Null_Unbounded_String;
+         SkillName := Skills_List(I).Name;
+         if GetItemAmount(Items_List(ProtoIndex).IType) = 0 then
+            Tags := To_Unbounded_String(" -tags [list gray]");
+            Append(SkillName, " (no tool)");
+         end if;
+         Insert
+           (SkillsView,
+            "{} end -id" & Positive'Image(I) & " -values [list {" &
+            To_String(SkillName) & "} {" & To_String(ToolName) & "}]" &
+            To_String(Tags));
+      end loop;
+      if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
+         Selection_Set
+           (SkillsView,
+            "[list" &
+            Positive'Image(PlayerShip.Modules(ModuleIndex).TrainedSkill) &
+            "]");
+         TtkTreeView.Focus
+           (SkillsView,
+            Positive'Image(PlayerShip.Modules(ModuleIndex).TrainedSkill));
+      end if;
+      Bind
+        (SkillsView, "<<TreeviewSelect>>",
+         "{AssignModule skill" & Positive'Image(ModuleIndex) &
+         " [.moduledialog.frame.view focus]}");
+      Tcl.Tk.Ada.Pack.Pack(ScrollY, "-side right -fill y");
       Tcl.Tk.Ada.Pack.Pack(SkillsView);
+      Tcl.Tk.Ada.Pack.Pack(SkillsFrame);
       Height := Height + Positive'Value(Winfo_Get(SkillsView, "reqheight"));
-      Width := Width + Positive'Value(Winfo_Get(SkillsView, "reqwidth")) + 20;
-      configure(InfoLabel, "-wraplength" & Positive'Image(Width - 30));
-      Tcl.Tk.Ada.Pack.Pack(CloseButton);
+      Width := Width + Positive'Value(Winfo_Get(SkillsView, "reqwidth")) + 30;
+      configure(InfoLabel, "-wraplength" & Positive'Image(Width - 10));
+      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-side bottom");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       declare
