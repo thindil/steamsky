@@ -37,7 +37,6 @@ with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -46,7 +45,6 @@ with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Crafts; use Crafts;
 with Factions; use Factions;
@@ -70,11 +68,8 @@ package body Ships.UI.Modules is
    -- ****
 
    procedure ShowModuleOptions(ModuleIndex: Positive) is
-      ButtonsFrame: Ttk_Frame;
-      Button: Ttk_Button;
       MaxValue: Positive;
       IsPassenger: Boolean := False;
-      MenuButton: Ttk_MenuButton;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
       ModuleMenu: constant Tk_Menu :=
@@ -218,14 +213,10 @@ package body Ships.UI.Modules is
                   end if;
                end if;
             end;
-            Button :=
-              Create
-                (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                 ModuleIndexString,
-                 "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
-                 ModuleIndexString & "}");
-            Add(Button, "Assign a crew member as gunner");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+            Menu.Add
+              (ModuleMenu, "command",
+               "-label {Assign a crew member as gunner...} -command {ShowAssignCrew " &
+               ModuleIndexString & "}");
             declare
                AmmoIndex: Natural;
                AmmoMenu: Tk_Menu;
@@ -265,14 +256,10 @@ package body Ships.UI.Modules is
                   end if;
                end loop;
                if NotEmpty then
-                  MenuButton :=
-                    Create
-                      (Widget_Image(ButtonsFrame) & ".assignammo" &
-                       ModuleIndexString,
-                       "-text ""[format %c 0xf1e2]"" -style Header.Toolbutton -menu .shipinfoammomenu" &
-                       ModuleIndexString);
-                  Add(MenuButton, "Assign an ammo to gun");
-                  Tcl.Tk.Ada.Grid.Grid(MenuButton, "-row 0 -column 5");
+                  Menu.Add
+                    (ModuleMenu, "cascade",
+                     "-label {Assign an ammo to gun} -menu .shipinfoammomenu" &
+                     ModuleIndexString);
                end if;
             end;
          when BATTERING_RAM =>
@@ -287,14 +274,10 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
-                    ModuleIndexString & "}");
-               Add(Button, "Start upgrading damage of battering ram");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Start upgrading damage of battering ram} -command {SetUpgrade 2 " &
+                  ModuleIndexString & "}");
             end if;
          when HULL =>
             MaxValue :=
@@ -308,28 +291,18 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf568]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
-                    ModuleIndexString & "}");
-               Add
-                 (Button,
-                  "Start enlarging hull so it can have more modules installed");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
+                  ModuleIndexString & "}");
             end if;
          when ALCHEMY_LAB .. GREENHOUSE =>
             if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
               Null_Unbounded_String then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
-                    ModuleIndexString & "}");
-               Add(Button, "Assign selected crew member as worker");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
+                  ModuleIndexString & "}");
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -340,38 +313,24 @@ package body Ships.UI.Modules is
                         Factions_List(PlayerShip.Crew(1).Faction)
                           .HealingTools) >
                    0 then
-                  Button :=
-                    Create
-                      (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                       ModuleIndexString,
-                       "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
-                       ModuleIndexString & "}");
-                  Add(Button, "Assign selected crew member as medic");
-                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+                  Menu.Add
+                    (ModuleMenu, "command",
+                     "-label {Assign selected crew member as medic...} -command {ShowAssignCrew " &
+                     ModuleIndexString & "}");
                   exit;
                end if;
             end loop;
          when TRAINING_ROOM =>
             if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
-                    ModuleIndexString & "}");
-               Add(Button, "Assign selected crew member as worker");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
+                  ModuleIndexString & "}");
             end if;
-            Button :=
-              Create
-                (Widget_Image(ButtonsFrame) & ".assignskill" &
-                 ModuleIndexString,
-                 "-text ""[format %c 0xf02d]"" -style Header.Toolbutton -command {ShowAssignSkill " &
-                 ModuleIndexString & "}");
-            Add
-              (Button,
-               "Assign a skill which will be trained in the training room");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
+            Menu.Add
+              (ModuleMenu, "command",
+               "-label {Assign a skill which will be trained in the training room...} -command {ShowAssignSkill " &
+               ModuleIndexString & "}");
          when others =>
             null;
       end case;
