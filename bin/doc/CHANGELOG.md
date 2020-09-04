@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file.
 - Crash on showing crew information
 - Resetting module type to show after reentering shipyard
 - Checking for crafting location for study and deconstruct orders
+- Can't sell items when one of crew members has set percent from profit as a
+  payment
 
 ## [5.1] - 2020-08-09
 
