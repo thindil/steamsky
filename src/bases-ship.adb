@@ -77,7 +77,7 @@ package body Bases.Ship is
       TraderIndex: constant Positive := FindMember(Talk);
       HullIndex, ModulesAmount, ShipModuleIndex: Positive;
       FreeTurretIndex, Price: Natural := 0;
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Owners: Natural_Container.Vector;
    begin
@@ -445,7 +445,7 @@ package body Bases.Ship is
    end UpgradeShip;
 
    procedure PayForDock is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       DockingCost: Natural;
@@ -490,7 +490,7 @@ package body Bases.Ship is
 
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
       ProtoIndex: Unbounded_String;
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if ModuleIndex > 0 then
