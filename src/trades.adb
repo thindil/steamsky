@@ -171,7 +171,7 @@ package body Trades is
             Profit :=
               Profit -
               Positive
-                (Float'Floor
+                (Float'Ceiling
                    (Float(Profit) * (Float(Member.Payment(2)) / 100.0)));
          end if;
       end loop;
