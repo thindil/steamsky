@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -171,7 +171,7 @@ package body Trades is
             Profit :=
               Profit -
               Positive
-                (Float'Floor
+                (Float'Ceiling
                    (Float(Profit) * (Float(Member.Payment(2)) / 100.0)));
          end if;
       end loop;
