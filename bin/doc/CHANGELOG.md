@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Can't sell items when one of crew members has set percent from profit as a
+  payment
+
 ## [5.0.4] - 2020-09-03
 
 ### Added
