@@ -1,6 +1,6 @@
 set shipinfoframe [ttk::frame .paned.shipinfoframe]
 # General ship info
-grid [ttk::labelframe $shipinfoframe.general -text {General info:}] -sticky nwes
+grid [ttk::labelframe $shipinfoframe.general -text {General Info:}] -sticky nwes
 set shipcanvas [canvas $shipinfoframe.general.canvas -yscrollcommand [list $shipinfoframe.general.scrolly set] -xscrollcommand [list $shipinfoframe.general.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.general.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.general.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
@@ -41,7 +41,7 @@ $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [w
 ::autoscroll::autoscroll $shipinfoframe.general.scrolly
 ::autoscroll::autoscroll $shipinfoframe.general.scrollx
 # Ship modules
-grid [ttk::labelframe $shipinfoframe.modules -text {Modules}] -sticky nwes
+grid [ttk::labelframe $shipinfoframe.modules -text {Modules Info:}] -sticky nwes
 set shipcanvas [canvas $shipinfoframe.modules.canvas -yscrollcommand [list $shipinfoframe.modules.scrolly set] -xscrollcommand [list $shipinfoframe.modules.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.modules.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
