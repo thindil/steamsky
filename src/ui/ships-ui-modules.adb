@@ -72,9 +72,16 @@ package body Ships.UI.Modules is
       IsPassenger: Boolean := False;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
-      ModuleMenu: constant Tk_Menu :=
-        Create(".modulemenu" & ModuleIndexString, "-tearoff false");
+      ModuleMenu: Tk_Menu;
    begin
+      ModuleMenu.Interp := Get_Context;
+      ModuleMenu.Name := New_String(".modulemenu" & ModuleIndexString);
+      if Winfo_Get(ModuleMenu, "exists") = "1" then
+         Delete(ModuleMenu, "0", "end");
+      else
+         ModuleMenu :=
+           Create(".modulemenu" & ModuleIndexString, "-tearoff false");
+      end if;
       Menu.Add
         (ModuleMenu, "command",
          "-label {Rename module} -command {RenameModule " & ModuleIndexString &
@@ -336,7 +343,7 @@ package body Ships.UI.Modules is
       end case;
       Menu.Add
         (ModuleMenu, "command",
-         "-label {Show more info about the module} -command {ShowModuleInfo" &
+         "-label {Show more info about the module} -command {ShowModuleInfo " &
          ModuleIndexString & "}");
    end ShowModuleOptions;
 
