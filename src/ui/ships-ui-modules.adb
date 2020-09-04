@@ -77,26 +77,18 @@ package body Ships.UI.Modules is
       MenuButton: Ttk_MenuButton;
       ModuleIndexString: constant String :=
         Trim(Positive'Image(ModuleIndex), Left);
+      ModuleMenu: constant Tk_Menu :=
+        Create(".modulemenu" & ModuleIndexString, "-tearoff false");
    begin
-      ButtonsFrame :=
-        Create
-          (".paned.shipinfoframe.modules.canvas.frame.actions" &
-           ModuleIndexString);
-      Button :=
-        Create
-          (Widget_Image(ButtonsFrame) & ".rename" & ModuleIndexString,
-           "-text ""[format %c 0xf044]"" -style Header.Toolbutton -command {RenameModule " &
-           ModuleIndexString & "}");
-      Add(Button, "Rename module");
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Menu.Add
+        (ModuleMenu, "command",
+         "-label {Rename module} -command {RenameModule " & ModuleIndexString &
+         "}");
       if PlayerShip.RepairModule /= ModuleIndex then
-         Button :=
-           Create
-             (Widget_Image(ButtonsFrame) & ".repair" & ModuleIndexString,
-              "-text ""[format %c 0xf54a]"" -style Header.Toolbutton -command {SetRepair assign " &
-              ModuleIndexString & "}");
-         Add(Button, "Repair selected module as first when damaged");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+         Menu.Add
+           (ModuleMenu, "command",
+            "-label {Repair selected module as first when damaged} -command {SetRepair assign " &
+            ModuleIndexString & "}");
       end if;
       MaxValue :=
         Natural
@@ -109,14 +101,10 @@ package body Ships.UI.Modules is
          MaxValue := 1;
       end if;
       if PlayerShip.Modules(ModuleIndex).MaxDurability < MaxValue then
-         Button :=
-           Create
-             (Widget_Image(ButtonsFrame) & ".upgradedurability" &
-              ModuleIndexString,
-              "-text ""[format %c 0xf6e3]"" -style Header.Toolbutton -command {SetUpgrade 1 " &
-              ModuleIndexString & "}");
-         Add(Button, "Start upgrading module durability");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 2");
+         Menu.Add
+           (ModuleMenu, "command",
+            "-label {Start upgrading module durability} -command {SetUpgrade 1 " &
+            ModuleIndexString & "}");
       end if;
       case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
          when ENGINE =>
@@ -131,14 +119,10 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".upgradepower" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf546]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
-                    ModuleIndexString & "}");
-               Add(Button, "Start upgrading engine power");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Start upgrading engine power} -command {SetUpgrade 2 " &
+                  ModuleIndexString & "}");
             end if;
             MaxValue :=
               Natural
@@ -151,34 +135,21 @@ package body Ships.UI.Modules is
                MaxValue := PlayerShip.Modules(ModuleIndex).FuelUsage + 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).FuelUsage > MaxValue then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".reducefuel" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf55d]"" -style Header.Toolbutton -command {SetUpgrade 3 " &
-                    ModuleIndexString & "}");
-               Add
-                 (Button, "Start working on reduce fuel usage of this engine");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Start working on reduce fuel usage of this engine} -command {SetUpgrade 3 " &
+                  ModuleIndexString & "}");
             end if;
             if not PlayerShip.Modules(ModuleIndex).Disabled then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".turnoff" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf28d]"" -style Header.Toolbutton -command {DisableEngine " &
-                    ModuleIndexString & "}");
-               Add(Button, "Turn off engine so it stop using fuel");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Turn off engine so it stop using fuel} -command {DisableEngine " &
+                  ModuleIndexString & "}");
             else
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".turnoff" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf144]"" -style Header.Toolbutton -command {DisableEngine " &
-                    ModuleIndexString & "}");
-               Add(Button, "Turn on engine so ship will be fly faster");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 5");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Turn on engine so ship will be fly faster} -command {DisableEngine " &
+                  ModuleIndexString & "}");
             end if;
          when CABIN =>
             MaxValue :=
@@ -192,14 +163,10 @@ package body Ships.UI.Modules is
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf5aa]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
-                    ModuleIndexString & "}");
-               Add(Button, "Start upgrading cabin quality");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Start upgrading cabin quality} -command {SetUpgrade 2 " &
+                  ModuleIndexString & "}");
             end if;
             Missions_Loop :
             for Mission of AcceptedMissions loop
@@ -213,14 +180,10 @@ package body Ships.UI.Modules is
                end if;
             end loop Missions_Loop;
             if not IsPassenger then
-               Button :=
-                 Create
-                   (Widget_Image(ButtonsFrame) & ".assigncrew" &
-                    ModuleIndexString,
-                    "-text ""[format %c 0xf007]"" -style Header.Toolbutton -command {ShowAssignCrew " &
-                    ModuleIndexString & "}");
-               Add(Button, "Assign a crew member as owner of cabin");
-               Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 4");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Assign a crew member as owner of cabin...} -command {ShowAssignCrew " &
+                  ModuleIndexString & "}");
             end if;
          when GUN | HARPOON_GUN =>
             declare
@@ -242,18 +205,17 @@ package body Ships.UI.Modules is
                   MaxValue := 1;
                end if;
                if CurrentValue < MaxValue then
-                  Button :=
-                    Create
-                      (Widget_Image(ButtonsFrame) & ".upgradequality" &
-                       ModuleIndexString,
-                       "-text ""[format %c 0xf666]"" -style Header.Toolbutton -command {SetUpgrade 2 " &
-                       ModuleIndexString & "}");
                   if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                     Add(Button, "Start upgrading damage of gun");
+                     Menu.Add
+                       (ModuleMenu, "command",
+                        "-label {Start upgrading damage of gun} -command {SetUpgrade 2 " &
+                        ModuleIndexString & "}");
                   else
-                     Add(Button, "Start upgrading strength of gun");
+                     Menu.Add
+                       (ModuleMenu, "command",
+                        "-label {Start upgrading strength of gun} -command {SetUpgrade 2 " &
+                        ModuleIndexString & "}");
                   end if;
-                  Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 3");
                end if;
             end;
             Button :=
@@ -413,9 +375,10 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Tcl.Tk.Ada.Grid.Grid
-        (ButtonsFrame,
-         "-row" & Positive'Image(ModuleIndex + 1) & " -column 2 -sticky w");
+      Menu.Add
+        (ModuleMenu, "command",
+         "-label {Show more info about the module} -command {ShowModuleInfo" &
+         ModuleIndexString & "}");
    end ShowModuleOptions;
 
    -- ****o* SUModules/Show_Module_Info_Command
