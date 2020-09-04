@@ -451,9 +451,15 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      FramesNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("general"), To_Unbounded_String("modules"),
-         To_Unbounded_String("crew"));
+      type Frame_Info is record
+         Name: Unbounded_String;
+         Column: Natural range 0 .. 1;
+         Row: Natural range 0 .. 1;
+      end record;
+      Frames: constant array(1 .. 3) of Frame_Info :=
+        ((To_Unbounded_String("general"), 0, 0),
+         (To_Unbounded_String("modules"), 0, 1),
+         (To_Unbounded_String("crew"), 1, 0));
       Frame: Ttk_Frame;
       Button: Ttk_Button;
    begin
@@ -465,11 +471,17 @@ package body Ships.UI is
           (Widget_Image(Frame) & "." & CArgv.Arg(Argv, 1) &
            ".canvas.frame.maxmin");
       if CArgv.Arg(Argv, 2) /= "show" then
-         for Name of FramesNames loop
-            if To_String(Name) /= CArgv.Arg(Argv, 1) then
-               Frame.Name :=
-                 New_String(".paned.shipinfoframe." & To_String(Name));
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String(".paned.shipinfoframe." & To_String(FrameInfo.Name));
+            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid(Frame);
+            else
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Frame,
+                  "-columnspan 1 -rowspan 1 -column" &
+                  Natural'Image(FrameInfo.Column) & " -row" &
+                  Natural'Image(FrameInfo.Row));
             end if;
          end loop;
          configure
@@ -477,11 +489,14 @@ package body Ships.UI is
             "-text ""[format %c 0xf106]"" -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
-         for Name of FramesNames loop
-            if To_String(Name) /= CArgv.Arg(Argv, 1) then
-               Frame.Name :=
-                 New_String(".paned.shipinfoframe." & To_String(Name));
+         for FrameInfo of Frames loop
+            Frame.Name :=
+              New_String(".paned.shipinfoframe." & To_String(FrameInfo.Name));
+            if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+            else
+               Tcl.Tk.Ada.Grid.Grid_Configure
+                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop;
          configure
