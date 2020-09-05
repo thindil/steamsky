@@ -53,7 +53,7 @@ package body Ships.UI is
       Label: Ttk_Label;
       Paned: Ttk_PanedWindow;
       ShipInfoFrame, Item: Ttk_Frame;
-      UpgradeInfo: Unbounded_String;
+      UpgradeInfo, ProgressBarStyle: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
@@ -284,14 +284,23 @@ package body Ships.UI is
          Add(Button, "Show available module's options");
          Tcl.Tk.Ada.Grid.Grid
            (Button, "-row" & Natural'Image(Row) & " -sticky w");
+         UpgradePercent :=
+           (Float(Module.Durability) / Float(Module.MaxDurability));
+         if UpgradePercent = 1.0 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif UpgradePercent > 0.24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle := Null_Unbounded_String;
+         end if;
          UpgradeProgress :=
            Create
              (Widget_Image(ShipInfoFrame) & ".durability" &
               Trim(Natural'Image(Row), Left),
-              "-value {" &
-              Float'Image
-                (Float(Module.Durability) / Float(Module.MaxDurability)) &
-              "} -maximum 1.0 -length 150");
+              "-value {" & Float'Image(UpgradePercent) &
+              "} -maximum 1.0 -length 150" & To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
