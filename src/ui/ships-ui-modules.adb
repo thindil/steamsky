@@ -534,7 +534,7 @@ package body Ships.UI.Modules is
          when CABIN =>
             AddOwnersInfo("Owner");
             if Module.Cleanliness /= Module.Quality then
-               Label := Create(Widget_Image(ModuleDialog), ".cleanlbl");
+               Label := Create(Widget_Image(ModuleDialog) & ".cleanlbl");
                DamagePercent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if DamagePercent > 0.0 and DamagePercent < 0.2 then
