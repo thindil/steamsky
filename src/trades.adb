@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -123,12 +123,13 @@ package body Trades is
       ProtoIndex: constant Unbounded_String :=
         PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
-      Profit, Price: Positive;
+      Price: Positive;
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Natural := FindMember(Talk);
+      Profit: Integer;
    begin
       SellAmount := Positive'Value(Amount);
       if TraderIndex = 0 then
@@ -173,6 +174,10 @@ package body Trades is
               Positive
                 (Float'Ceiling
                    (Float(Profit) * (Float(Member.Payment(2)) / 100.0)));
+            if Profit < 1 then
+               Profit := 0;
+               exit;
+            end if;
          end if;
       end loop;
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
