@@ -291,7 +291,7 @@ package body Ships.UI is
               "-value {" &
               Float'Image
                 (Float(Module.Durability) / Float(Module.MaxDurability)) &
-              "} -maximum 1.0");
+              "} -maximum 1.0 -length 150");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
