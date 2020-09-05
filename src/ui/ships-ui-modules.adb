@@ -76,12 +76,11 @@ package body Ships.UI.Modules is
    begin
       ModuleMenu.Interp := Get_Context;
       ModuleMenu.Name := New_String(".modulemenu" & ModuleIndexString);
-      if Winfo_Get(ModuleMenu, "exists") = "1" then
-         Delete(ModuleMenu, "0", "end");
-      else
+      if Winfo_Get(ModuleMenu, "exists") = "0" then
          ModuleMenu :=
            Create(".modulemenu" & ModuleIndexString, "-tearoff false");
       end if;
+      Delete(ModuleMenu, "0", "end");
       Menu.Add
         (ModuleMenu, "command",
          "-label {Rename module} -command {RenameModule " & ModuleIndexString &
@@ -236,11 +235,11 @@ package body Ships.UI.Modules is
                end if;
                AmmoMenu.Interp := Get_Context;
                AmmoMenu.Name :=
-                 New_String(".shipinfoammomenu" & ModuleIndexString);
+                 New_String(Widget_Image(ModuleMenu) & ".ammomenu");
                if Winfo_Get(AmmoMenu, "exists") = "0" then
                   AmmoMenu :=
                     Create
-                      (".shipinfoammomenu" & ModuleIndexString,
+                      (Widget_Image(ModuleMenu) & ".ammomenu",
                        "-tearoff false");
                end if;
                Delete(AmmoMenu, "0", "end");
@@ -265,8 +264,8 @@ package body Ships.UI.Modules is
                if NotEmpty then
                   Menu.Add
                     (ModuleMenu, "cascade",
-                     "-label {Assign an ammo to gun} -menu .shipinfoammomenu" &
-                     ModuleIndexString);
+                     "-label {Assign an ammo to gun} -menu " &
+                     Widget_Image(AmmoMenu));
                end if;
             end;
          when BATTERING_RAM =>
