@@ -52,7 +52,6 @@ grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[form
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
-grid [ttk::label $shipcanvas.frame.actions -text {Actions}] -column 2 -row 1
 $shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
