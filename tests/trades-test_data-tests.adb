@@ -112,7 +112,15 @@ package body Trades.Test_Data.Tests is
 
       SellItems(2, "1");
       PlayerShip.Cargo(2).Amount := OldAmount;
-      Assert(True, "This test can only crash.");
+      PlayerShip.Crew(2).Payment(2) := 1;
+      PlayerShip.Crew(3).Payment(2) := 4;
+      PlayerShip.Crew(4).Payment(2) := 1;
+      SellItems(2, "1");
+      PlayerShip.Cargo(2).Amount := OldAmount;
+      PlayerShip.Crew(2).Payment(2) := 0;
+      PlayerShip.Crew(3).Payment(2) := 0;
+      PlayerShip.Crew(4).Payment(2) := 0;
+      Assert(True, "This tests can only crash.");
 
 --  begin read only
    end Test_SellItems_test_sellitems;
