@@ -301,6 +301,7 @@ package body Ships.UI is
               Trim(Natural'Image(Row), Left),
               "-value {" & Float'Image(UpgradePercent) &
               "} -maximum 1.0 -length 150" & To_String(ProgressBarStyle));
+         Add(UpgradeProgress, "The current durability of the selected module.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
