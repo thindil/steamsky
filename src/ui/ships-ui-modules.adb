@@ -380,7 +380,7 @@ package body Ships.UI.Modules is
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
       ModuleText: Tk_Text;
-      ModuleInfo: Unbounded_String;
+      ModuleInfo, ProgressBarStyle: Unbounded_String;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Tk_Toplevel :=
         Create
@@ -539,20 +539,32 @@ package body Ships.UI.Modules is
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if DamagePercent > 0.0 and DamagePercent < 0.2 then
                   configure(Label, "-text {Bit dusty}");
+                  ProgressBarStyle :=
+                    To_Unbounded_String
+                      (" -style green.Horizontal.TProgressbar");
                elsif DamagePercent > 0.19 and DamagePercent < 0.5 then
                   configure(Label, "-text {Dusty}");
+                  ProgressBarStyle :=
+                    To_Unbounded_String
+                      (" -style yellow.Horizontal.TProgressbar");
                elsif DamagePercent > 0.49 and DamagePercent < 0.8 then
                   configure(Label, "-text {Dirty}");
+                  ProgressBarStyle :=
+                    To_Unbounded_String
+                      (" -style yellow.Horizontal.TProgressbar");
                elsif DamagePercent > 0.79 and DamagePercent < 1.0 then
                   configure(Label, "-text {Very dirty}");
+                  ProgressBarStyle := Null_Unbounded_String;
                else
                   configure(Label, "-text {Ruined}");
+                  ProgressBarStyle := Null_Unbounded_String;
                end if;
                ProgressBar :=
                  Create
                    (Widget_Image(ModuleDialog) & ".clean",
-                    "-orient horizontal -style yellow.Horizontal.TProgressbar -maximum 1.0 -value {" &
-                    Float'Image(DamagePercent) & "}");
+                    "-orient horizontal -maximum 1.0 -value {" &
+                    Float'Image(DamagePercent) & "}" &
+                    To_String(ProgressBarStyle));
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
                Height :=
