@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Updated README.md
 - Updated interface
+- Updated help
 
 ### Removed
 - Checkboxes images setting from the UI themes
