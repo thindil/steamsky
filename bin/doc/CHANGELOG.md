@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.2] - 2020-09-06
 
 ### Added
 - Ability to reset the player ship destination in ship info screen
