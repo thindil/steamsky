@@ -12,32 +12,35 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="../sources.html#top">Source files</a>
 <a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
 <a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
 <a class="menuitem" href="../robo_types.html#top">Types</a>
 <a class="menuitem" href="../robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo312">UUI/TimerId</a></li>
-<li>2. <a href="#robo698">UUI/Check_Amount_Command</a></li>
-<li>3. <a href="#robo699">UUI/Close_Dialog_Command</a></li>
-<li>4. <a href="#robo701">UUI/Resize_Canvas_Command</a></li>
-<li>5. <a href="#robo707">UUI/Validate_Amount_Command</a></li>
+<li>1. <a href="#robo316">UUI/TimerId</a></li>
+<li>2. <a href="#robo717">UUI/Check_Amount_Command</a></li>
+<li>3. <a href="#robo718">UUI/Close_Dialog_Command</a></li>
+<li>4. <a href="#robo719">UUI/Resize_Canvas_Command</a></li>
+<li>5. <a href="#robo720">UUI/Validate_Amount_Command</a></li>
 </ul>
 <hr />
 <a name="UUI2fTimerId"></a>
-<a name="robo312"></a><h2>UUI/TimerId [ Variables ]</h2>
+<a name="robo316"></a><h2>UUI/TimerId [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo66">UUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Id of timer for auto close command
 </pre>
@@ -47,9 +50,9 @@
 
 <hr />
 <a name="UUI2fCheck5fAmount5fCommand"></a>
-<a name="robo698"></a><h2>UUI/Check_Amount_Command [ Subprograms ]</h2>
+<a name="robo717"></a><h2>UUI/Check_Amount_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo66">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>Check_Amount_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
@@ -65,12 +68,20 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> CheckAmount name cargoindex value
+ Name is the name of spinbox which value will be checked, cargoindex is
+ the index of the item in the cargo
+</pre>
 
 <hr />
 <a name="UUI2fClose5fDialog5fCommand"></a>
-<a name="robo699"></a><h2>UUI/Close_Dialog_Command [ Subprograms ]</h2>
+<a name="robo718"></a><h2>UUI/Close_Dialog_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo66">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Close the selected dialog
 </pre>
@@ -87,12 +98,19 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> CloseDialog dialogname
+ Dialogname is name of the dialog to close
+</pre>
 
 <hr />
 <a name="UUI2fResize5fCanvas5fCommand"></a>
-<a name="robo701"></a><h2>UUI/Resize_Canvas_Command [ Subprograms ]</h2>
+<a name="robo719"></a><h2>UUI/Resize_Canvas_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo66">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>Resize_Canvas_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
@@ -107,12 +125,20 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ResizeCanvas name width height
+ Name is the name of the canvas to resize, width it a new width, height
+ is a new height
+</pre>
 
 <hr />
 <a name="UUI2fValidate5fAmount5fCommand"></a>
-<a name="robo707"></a><h2>UUI/Validate_Amount_Command [ Subprograms ]</h2>
+<a name="robo720"></a><h2>UUI/Validate_Amount_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo66">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo68">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>Validate_Amount_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
@@ -128,11 +154,19 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ValidateAmount name
+ Name is the name of spinbox which value will be validated
+</pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+

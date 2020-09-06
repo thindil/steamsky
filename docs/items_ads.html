@@ -12,51 +12,54 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="./sources.html#top">Source files</a>
 <a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_constants.html#top">Constants</a>
 <a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_commands.html#top">Commands</a>
+<a class="menuitem" href="./robo_records.html#top">Records</a>
 <a class="menuitem" href="./robo_types.html#top">Types</a>
 <a class="menuitem" href="./robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo48">SteamSky/Items</a></li>
+<li>1. <a href="#robo35">Items/Items</a></li>
 <ul>
-<li>1.1. <a href="#robo130">Items/Inventory_Container</a></li>
-<li>1.2. <a href="#robo131">Items/InventoryData</a></li>
-<li>1.3. <a href="#robo132">Items/Items_Durability</a></li>
-<li>1.4. <a href="#robo133">Items/Object_Data</a></li>
-<li>1.5. <a href="#robo134">Items/Objects_Container</a></li>
-<li>1.6. <a href="#robo266">Items/ArmsArmors_List</a></li>
-<li>1.7. <a href="#robo267">Items/ChestArmors_List</a></li>
-<li>1.8. <a href="#robo268">Items/Default_Item_Durability</a></li>
-<li>1.9. <a href="#robo269">Items/HeadArmors_List</a></li>
-<li>1.10. <a href="#robo270">Items/Items_List</a></li>
-<li>1.11. <a href="#robo271">Items/Items_Types</a></li>
-<li>1.12. <a href="#robo272">Items/LegsArmors_List</a></li>
-<li>1.13. <a href="#robo273">Items/Shields_List</a></li>
-<li>1.14. <a href="#robo274">Items/Tools_List</a></li>
-<li>1.15. <a href="#robo275">Items/Weapons_List</a></li>
-<li>1.16. <a href="#robo495">Items/DamageItem</a></li>
-<li>1.17. <a href="#robo496">Items/FindItem</a></li>
-<li>1.18. <a href="#robo497">Items/FindProtoItem</a></li>
-<li>1.19. <a href="#robo498">Items/GetItemChanceToDamage</a></li>
-<li>1.20. <a href="#robo499">Items/GetItemDamage</a></li>
-<li>1.21. <a href="#robo500">Items/GetItemName</a></li>
-<li>1.22. <a href="#robo501">Items/LoadItems</a></li>
-<li>1.23. <a href="#robo502">Items/SetToolsList</a></li>
+<li>1.1. <a href="#robo113">Items/Inventory_Container</a></li>
+<li>1.2. <a href="#robo114">Items/Items_Durability</a></li>
+<li>1.3. <a href="#robo115">Items/Objects_Container</a></li>
+<li>1.4. <a href="#robo169">Items/InventoryData</a></li>
+<li>1.5. <a href="#robo170">Items/Object_Data</a></li>
+<li>1.6. <a href="#robo190">Items/Default_Item_Durability</a></li>
+<li>1.7. <a href="#robo271">Items/ArmsArmors_List</a></li>
+<li>1.8. <a href="#robo272">Items/ChestArmors_List</a></li>
+<li>1.9. <a href="#robo273">Items/HeadArmors_List</a></li>
+<li>1.10. <a href="#robo274">Items/Items_List</a></li>
+<li>1.11. <a href="#robo275">Items/Items_Types</a></li>
+<li>1.12. <a href="#robo276">Items/LegsArmors_List</a></li>
+<li>1.13. <a href="#robo277">Items/Shields_List</a></li>
+<li>1.14. <a href="#robo278">Items/Tools_List</a></li>
+<li>1.15. <a href="#robo279">Items/Weapons_List</a></li>
+<li>1.16. <a href="#robo447">Items/DamageItem</a></li>
+<li>1.17. <a href="#robo448">Items/FindItem</a></li>
+<li>1.18. <a href="#robo449">Items/FindProtoItem</a></li>
+<li>1.19. <a href="#robo450">Items/GetItemChanceToDamage</a></li>
+<li>1.20. <a href="#robo451">Items/GetItemDamage</a></li>
+<li>1.21. <a href="#robo452">Items/GetItemName</a></li>
+<li>1.22. <a href="#robo453">Items/LoadItems</a></li>
+<li>1.23. <a href="#robo454">Items/SetToolsList</a></li>
 </ul>
 </ul>
 <hr />
-<a name="SteamSky2fItems"></a>
-<a name="robo48"></a><h2>SteamSky/Items [ Packages ]</h2>
+<a name="Items2fItems"></a>
+<a name="robo35"></a><h2>Items/Items [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -68,21 +71,46 @@
 
 <hr />
 <a name="Items2fInventory5fContainer"></a>
-<a name="robo130"></a><h2>Items/Inventory_Container [ Types ]</h2>
+<a name="robo113"></a><h2>Items/Inventory_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store inventory data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Inventory_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo131">InventoryData</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Inventory_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo169">InventoryData</a><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Items2fItems5fDurability"></a>
+<a name="robo114"></a><h2>Items/Items_Durability [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to mark items durability
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">subtype</span> <strong>Items_Durability</strong> <span class="keyword">is</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 101<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Items2fObjects5fContainer"></a>
+<a name="robo115"></a><h2>Items/Objects_Container [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store items data
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">package</span> <strong>Objects_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo170">Object_Data</a><span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fInventoryData"></a>
-<a name="robo131"></a><h2>Items/InventoryData [ Types ]</h2>
+<a name="robo169"></a><h2>Items/InventoryData [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for item in inventory
 </pre>
@@ -91,7 +119,7 @@
       ProtoIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Amount<span class="sign">:</span> Positive<span class="sign">;</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Durability<span class="sign">:</span> <a href="#robo132">Items_Durability</a><span class="sign">;</span>
+      Durability<span class="sign">:</span> <a href="#robo114">Items_Durability</a><span class="sign">;</span>
       Price<span class="sign">:</span> Natural<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -104,22 +132,10 @@
 </pre>
 
 <hr />
-<a name="Items2fItems5fDurability"></a>
-<a name="robo132"></a><h2>Items/Items_Durability [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to mark items durability
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">subtype</span> <strong>Items_Durability</strong> <span class="keyword">is</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 101<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Items2fObject5fData"></a>
-<a name="robo133"></a><h2>Items/Object_Data [ Types ]</h2>
+<a name="robo170"></a><h2>Items/Object_Data [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for objects prototypes
 </pre>
@@ -129,7 +145,7 @@
       Weight<span class="sign">:</span> Positive<span class="sign">;</span>
       IType<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Price<span class="sign">:</span> Natural<span class="sign">;</span>
-      Value<span class="sign">:</span> <a href="./game_ads.html#robo116">Integer_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+      Value<span class="sign">:</span> <a href="./game_ads.html#robo103">Integer_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       ShowType<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Reputation<span class="sign">:</span> Integer<span class="sign">;</span>
@@ -148,159 +164,146 @@
 </pre>
 
 <hr />
-<a name="Items2fObjects5fContainer"></a>
-<a name="robo134"></a><h2>Items/Objects_Container [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Used to store items data
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Objects_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> <a href="#robo133">Object_Data</a><span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Items2fArmsArmors5fList"></a>
-<a name="robo266"></a><h2>Items/ArmsArmors_List [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> List of indexes of all arms armors in game
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>ArmsArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="Items2fChestArmors5fList"></a>
-<a name="robo267"></a><h2>Items/ChestArmors_List [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> List of indexes of all chest armors in game
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>ChestArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="Items2fDefault5fItem5fDurability"></a>
-<a name="robo268"></a><h2>Items/Default_Item_Durability [ Variables ]</h2>
+<a name="robo190"></a><h2>Items/Default_Item_Durability [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Default value for items durability
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Default_Item_Durability</strong><span class="sign">:</span> <span class="keyword">constant</span> <a href="#robo132">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> 100<span class="sign">;</span>
+<pre class="source">   <strong>Default_Item_Durability</strong><span class="sign">:</span> <span class="keyword">constant</span> <a href="#robo114">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> 100<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Items2fArmsArmors5fList"></a>
+<a name="robo271"></a><h2>Items/ArmsArmors_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> List of indexes of all arms armors in game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ArmsArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Items2fChestArmors5fList"></a>
+<a name="robo272"></a><h2>Items/ChestArmors_List [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> List of indexes of all chest armors in game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>ChestArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fHeadArmors5fList"></a>
-<a name="robo269"></a><h2>Items/HeadArmors_List [ Variables ]</h2>
+<a name="robo273"></a><h2>Items/HeadArmors_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all head armors in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>HeadArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>HeadArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fItems5fList"></a>
-<a name="robo270"></a><h2>Items/Items_List [ Variables ]</h2>
+<a name="robo274"></a><h2>Items/Items_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of item available in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Items_List</strong><span class="sign">:</span> <a href="#robo134">Objects_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Items_List</strong><span class="sign">:</span> <a href="#robo115">Objects_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fItems5fTypes"></a>
-<a name="robo271"></a><h2>Items/Items_Types [ Variables ]</h2>
+<a name="robo275"></a><h2>Items/Items_Types [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of items
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Items_Types</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Items_Types</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fLegsArmors5fList"></a>
-<a name="robo272"></a><h2>Items/LegsArmors_List [ Variables ]</h2>
+<a name="robo276"></a><h2>Items/LegsArmors_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all legs armors in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>LegsArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>LegsArmors_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fShields5fList"></a>
-<a name="robo273"></a><h2>Items/Shields_List [ Variables ]</h2>
+<a name="robo277"></a><h2>Items/Shields_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all shields in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Shields_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Shields_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fTools5fList"></a>
-<a name="robo274"></a><h2>Items/Tools_List [ Variables ]</h2>
+<a name="robo278"></a><h2>Items/Tools_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all tools types in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Tools_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Tools_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fWeapons5fList"></a>
-<a name="robo275"></a><h2>Items/Weapons_List [ Variables ]</h2>
+<a name="robo279"></a><h2>Items/Weapons_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all weapons in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Weapons_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo122">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Weapons_List</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Items2fDamageItem"></a>
-<a name="robo495"></a><h2>Items/DamageItem [ Subprograms ]</h2>
+<a name="robo447"></a><h2>Items/DamageItem [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if item in ship cargo or character inventory was damaged
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>DamageItem</strong>
-     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo12">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="#robo130">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span> <a href="./ui/crew-ui-inventory_adb.html#robo488">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span>
-      SkillLevel<span class="sign">,</span> <a href="./ui/crew-ui-inventory_adb.html#robo265">MemberIndex</a><span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/crew-ui-inventory_adb.html#robo488">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo12">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo20">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="#robo113">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span> <a href="./ui/crew-ui-inventory_adb.html#robo443">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span>
+      SkillLevel<span class="sign">,</span> <a href="./ui/bases-schoolui_adb.html#robo302">MemberIndex</a><span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/crew-ui-inventory_adb.html#robo443">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo20">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DamageItem"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./crew-inventory_ads.html#robo12">Inventory</a>   - <a href="./crew-inventory_ads.html#robo12">Inventory</a> in which selected item is
- <a href="./ui/crew-ui-inventory_adb.html#robo488">ItemIndex</a>   - <a href="./crew-inventory_ads.html#robo12">Inventory</a> index of selected item
+<pre> <a href="./crew-inventory_ads.html#robo20">Inventory</a>   - <a href="./crew-inventory_ads.html#robo20">Inventory</a> in which selected item is
+ <a href="./ui/crew-ui-inventory_adb.html#robo443">ItemIndex</a>   - <a href="./crew-inventory_ads.html#robo20">Inventory</a> index of selected item
  SkillLevel  - Level of skill character which uses that item. Default
                is 0
- <a href="./ui/crew-ui-inventory_adb.html#robo265">MemberIndex</a> - Index of crew member of player ship which uses that
+ <a href="./ui/bases-schoolui_adb.html#robo302">MemberIndex</a> - Index of crew member of player ship which uses that
                item. Default is 0
 </pre>
 <p class="item_name">RESULT</p>
@@ -309,22 +312,22 @@
 
 <hr />
 <a name="Items2fFindItem"></a>
-<a name="robo496"></a><h2>Items/FindItem [ Subprograms ]</h2>
+<a name="robo448"></a><h2>Items/FindItem [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Find item in ship cargo or character inventory
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>FindItem</strong>
-     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo12">Inventory</a><span class="sign">:</span> <a href="#robo130">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo20">Inventory</a><span class="sign">:</span> <a href="#robo113">Inventory_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       ProtoIndex<span class="sign">,</span> ItemType<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-      Durability<span class="sign">:</span> <a href="#robo132">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> <a href="#robo132">Items_Durability</a><span class="squote">'Last;
-      Quality: Positive := 100) return Natural with
-      Test_Case =&gt; ("Test_FindItem", Robustness);
+      Durability<span class="sign">:</span> <a href="#robo114">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> <a href="#robo114">Items_Durability</a><span class="keyword">'Last</span><span class="sign">;</span>
+      Quality<span class="sign">:</span> Positive <span class="sign">:=</span> 100<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_FindItem"</span><span class="sign">,</span> Robustness<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./crew-inventory_ads.html#robo12">Inventory</a>  - <a href="./crew-inventory_ads.html#robo12">Inventory</a> in which item will be looking for
+<pre> <a href="./crew-inventory_ads.html#robo20">Inventory</a>  - <a href="./crew-inventory_ads.html#robo20">Inventory</a> in which item will be looking for
  ProtoIndex - Prototype index of item. Can be empty if ItemType is set
  ItemType   - Type of item to search. Can be empty if ProtoIndex is set
  Durability - Durability of item to search. Can be empty
@@ -336,9 +339,9 @@
 
 <hr />
 <a name="Items2fFindProtoItem"></a>
-<a name="robo497"></a><h2>Items/FindProtoItem [ Subprograms ]</h2>
+<a name="robo449"></a><h2>Items/FindProtoItem [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Search for map index of selected item
 </pre>
@@ -357,9 +360,9 @@
 
 <hr />
 <a name="Items2fGetItemChanceToDamage"></a>
-<a name="robo498"></a><h2>Items/GetItemChanceToDamage [ Subprograms ]</h2>
+<a name="robo450"></a><h2>Items/GetItemChanceToDamage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get item chance to damage info
 </pre>
@@ -376,15 +379,15 @@
 
 <hr />
 <a name="Items2fGetItemDamage"></a>
-<a name="robo499"></a><h2>Items/GetItemDamage [ Subprograms ]</h2>
+<a name="robo451"></a><h2>Items/GetItemDamage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get description of item damage
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GetItemDamage</strong>
-     <span class="sign">(</span>ItemDurability<span class="sign">:</span> <a href="#robo132">Items_Durability</a><span class="sign">;</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span>
+     <span class="sign">(</span>ItemDurability<span class="sign">:</span> <a href="#robo114">Items_Durability</a><span class="sign">;</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span>
       <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetItemDamage"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -399,9 +402,9 @@
 
 <hr />
 <a name="Items2fGetItemName"></a>
-<a name="robo500"></a><h2>Items/GetItemName [ Subprograms ]</h2>
+<a name="robo452"></a><h2>Items/GetItemName [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get name of item in ship cargo or character inventory
  Item       - Item to get it name
@@ -412,7 +415,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GetItemName</strong>
-     <span class="sign">(</span>Item<span class="sign">:</span> <a href="#robo131">InventoryData</a><span class="sign">;</span> DamageInfo<span class="sign">,</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+     <span class="sign">(</span>Item<span class="sign">:</span> <a href="#robo169">InventoryData</a><span class="sign">;</span> DamageInfo<span class="sign">,</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
       <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetItemName"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -422,9 +425,9 @@
 
 <hr />
 <a name="Items2fLoadItems"></a>
-<a name="robo501"></a><h2>Items/LoadItems [ Subprograms ]</h2>
+<a name="robo453"></a><h2>Items/LoadItems [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load items from files
 </pre>
@@ -437,9 +440,9 @@
 
 <hr />
 <a name="Items2fSetToolsList"></a>
-<a name="robo502"></a><h2>Items/SetToolsList [ Subprograms ]</h2>
+<a name="robo454"></a><h2>Items/SetToolsList [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo48">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Fill tools types list
 </pre>
@@ -449,8 +452,9 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+

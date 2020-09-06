@@ -12,45 +12,48 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="../sources.html#top">Source files</a>
 <a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
 <a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
 <a class="menuitem" href="../robo_types.html#top">Types</a>
 <a class="menuitem" href="../robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo422">DebugUI/Add_Event_Command</a></li>
-<li>2. <a href="#robo423">DebugUI/Add_Item_Command</a></li>
-<li>3. <a href="#robo424">DebugUI/Add_Ship_Command</a></li>
-<li>4. <a href="#robo425">DebugUI/Add_Skill_Command</a></li>
-<li>5. <a href="#robo427">DebugUI/Delete_Event_Command</a></li>
-<li>6. <a href="#robo428">DebugUI/Move_Ship_Command</a></li>
-<li>7. <a href="#robo429">DebugUI/Refresh_Base_Command</a></li>
-<li>8. <a href="#robo430">DebugUI/Refresh_Cargo_Command</a></li>
-<li>9. <a href="#robo431">DebugUI/Refresh_Command</a></li>
-<li>10. <a href="#robo432">DebugUI/Refresh_Events_Command</a></li>
-<li>11. <a href="#robo433">DebugUI/Refresh_Member_Command</a></li>
-<li>12. <a href="#robo434">DebugUI/Refresh_Module_Command</a></li>
-<li>13. <a href="#robo435">DebugUI/Save_Game_Command</a></li>
-<li>14. <a href="#robo436">DebugUI/Toggle_Item_Entry_Command</a></li>
-<li>15. <a href="#robo437">DebugUI/Update_Base_Command</a></li>
-<li>16. <a href="#robo438">DebugUI/Update_Item_Command</a></li>
-<li>17. <a href="#robo439">DebugUI/Update_Member_Command</a></li>
-<li>18. <a href="#robo440">DebugUI/Update_Module_Command</a></li>
+<li>1. <a href="#robo607">DebugUI/Add_Event_Command</a></li>
+<li>2. <a href="#robo608">DebugUI/Add_Item_Command</a></li>
+<li>3. <a href="#robo609">DebugUI/Add_Ship_Command</a></li>
+<li>4. <a href="#robo610">DebugUI/Add_Skill_Command</a></li>
+<li>5. <a href="#robo611">DebugUI/Delete_Event_Command</a></li>
+<li>6. <a href="#robo612">DebugUI/Move_Ship_Command</a></li>
+<li>7. <a href="#robo613">DebugUI/Refresh_Base_Command</a></li>
+<li>8. <a href="#robo614">DebugUI/Refresh_Cargo_Command</a></li>
+<li>9. <a href="#robo615">DebugUI/Refresh_Command</a></li>
+<li>10. <a href="#robo616">DebugUI/Refresh_Events_Command</a></li>
+<li>11. <a href="#robo617">DebugUI/Refresh_Member_Command</a></li>
+<li>12. <a href="#robo618">DebugUI/Refresh_Module_Command</a></li>
+<li>13. <a href="#robo619">DebugUI/Save_Game_Command</a></li>
+<li>14. <a href="#robo620">DebugUI/Toggle_Item_Entry_Command</a></li>
+<li>15. <a href="#robo621">DebugUI/Update_Base_Command</a></li>
+<li>16. <a href="#robo622">DebugUI/Update_Item_Command</a></li>
+<li>17. <a href="#robo623">DebugUI/Update_Member_Command</a></li>
+<li>18. <a href="#robo624">DebugUI/Update_Module_Command</a></li>
 </ul>
 <hr />
 <a name="DebugUI2fAdd5fEvent5fCommand"></a>
-<a name="robo422"></a><h2>DebugUI/Add_Event_Command [ Subprograms ]</h2>
+<a name="robo607"></a><h2>DebugUI/Add_Event_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add a new base event to the game
 </pre>
@@ -67,12 +70,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugAddEvent
+</pre>
 
 <hr />
 <a name="DebugUI2fAdd5fItem5fCommand"></a>
-<a name="robo423"></a><h2>DebugUI/Add_Item_Command [ Subprograms ]</h2>
+<a name="robo608"></a><h2>DebugUI/Add_Item_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add a new item to the player ship cargo
 </pre>
@@ -89,12 +98,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugAddItem
+</pre>
 
 <hr />
 <a name="DebugUI2fAdd5fShip5fCommand"></a>
-<a name="robo424"></a><h2>DebugUI/Add_Ship_Command [ Subprograms ]</h2>
+<a name="robo609"></a><h2>DebugUI/Add_Ship_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add a new ship based event to the game
 </pre>
@@ -111,12 +126,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugAddShip
+</pre>
 
 <hr />
 <a name="DebugUI2fAdd5fSkill5fCommand"></a>
-<a name="robo425"></a><h2>DebugUI/Add_Skill_Command [ Subprograms ]</h2>
+<a name="robo610"></a><h2>DebugUI/Add_Skill_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add a new skill to the selected crew member
 </pre>
@@ -128,17 +149,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugAddSkill
 </pre>
 
 <hr />
 <a name="DebugUI2fDelete5fEvent5fCommand"></a>
-<a name="robo427"></a><h2>DebugUI/Delete_Event_Command [ Subprograms ]</h2>
+<a name="robo611"></a><h2>DebugUI/Delete_Event_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Remove the selected event from the game
 </pre>
@@ -155,12 +182,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugDeleteEvent
+</pre>
 
 <hr />
 <a name="DebugUI2fMove5fShip5fCommand"></a>
-<a name="robo428"></a><h2>DebugUI/Move_Ship_Command [ Subprograms ]</h2>
+<a name="robo612"></a><h2>DebugUI/Move_Ship_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move the player ship
 </pre>
@@ -172,17 +205,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugMoveShip
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fBase5fCommand"></a>
-<a name="robo429"></a><h2>DebugUI/Refresh_Base_Command [ Subprograms ]</h2>
+<a name="robo613"></a><h2>DebugUI/Refresh_Base_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the information about the selected base
 </pre>
@@ -194,17 +233,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> RefreshBase
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fCargo5fCommand"></a>
-<a name="robo430"></a><h2>DebugUI/Refresh_Cargo_Command [ Subprograms ]</h2>
+<a name="robo614"></a><h2>DebugUI/Refresh_Cargo_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the information about the player ship cargo
 </pre>
@@ -216,17 +261,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> RefreshCargo
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fCommand"></a>
-<a name="robo431"></a><h2>DebugUI/Refresh_Command [ Subprograms ]</h2>
+<a name="robo615"></a><h2>DebugUI/Refresh_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the whole game information
 </pre>
@@ -238,17 +289,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> Refresh
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fEvents5fCommand"></a>
-<a name="robo432"></a><h2>DebugUI/Refresh_Events_Command [ Subprograms ]</h2>
+<a name="robo616"></a><h2>DebugUI/Refresh_Events_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the list of events
 </pre>
@@ -260,17 +317,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> RefreshEvents
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fMember5fCommand"></a>
-<a name="robo433"></a><h2>DebugUI/Refresh_Member_Command [ Subprograms ]</h2>
+<a name="robo617"></a><h2>DebugUI/Refresh_Member_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the information about selected crew member
 </pre>
@@ -282,17 +345,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> RefreshMember
 </pre>
 
 <hr />
 <a name="DebugUI2fRefresh5fModule5fCommand"></a>
-<a name="robo434"></a><h2>DebugUI/Refresh_Module_Command [ Subprograms ]</h2>
+<a name="robo618"></a><h2>DebugUI/Refresh_Module_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Refresh the information about selected module
 </pre>
@@ -304,17 +373,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> RefreshModule
 </pre>
 
 <hr />
 <a name="DebugUI2fSave5fGame5fCommand"></a>
-<a name="robo435"></a><h2>DebugUI/Save_Game_Command [ Subprograms ]</h2>
+<a name="robo619"></a><h2>DebugUI/Save_Game_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save the game
 </pre>
@@ -326,17 +401,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugSaveGame
 </pre>
 
 <hr />
 <a name="DebugUI2fToggle5fItem5fEntry5fCommand"></a>
-<a name="robo436"></a><h2>DebugUI/Toggle_Item_Entry_Command [ Subprograms ]</h2>
+<a name="robo620"></a><h2>DebugUI/Toggle_Item_Entry_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show or hide item entry for bases events
 </pre>
@@ -348,17 +429,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ToggleItemEntry
 </pre>
 
 <hr />
 <a name="DebugUI2fUpdate5fBase5fCommand"></a>
-<a name="robo437"></a><h2>DebugUI/Update_Base_Command [ Subprograms ]</h2>
+<a name="robo621"></a><h2>DebugUI/Update_Base_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update the selected base
 </pre>
@@ -370,17 +457,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugUpdateBase
 </pre>
 
 <hr />
 <a name="DebugUI2fUpdate5fItem5fCommand"></a>
-<a name="robo438"></a><h2>DebugUI/Update_Item_Command [ Subprograms ]</h2>
+<a name="robo622"></a><h2>DebugUI/Update_Item_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update the amount of an item in the player ship cargo
 </pre>
@@ -397,12 +490,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugUpdateItem
+</pre>
 
 <hr />
 <a name="DebugUI2fUpdate5fMember5fCommand"></a>
-<a name="robo439"></a><h2>DebugUI/Update_Member_Command [ Subprograms ]</h2>
+<a name="robo623"></a><h2>DebugUI/Update_Member_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update the selected crew member
 </pre>
@@ -414,17 +513,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugUpdateMember
 </pre>
 
 <hr />
 <a name="DebugUI2fUpdate5fModule5fCommand"></a>
-<a name="robo440"></a><h2>DebugUI/Update_Module_Command [ Subprograms ]</h2>
+<a name="robo624"></a><h2>DebugUI/Update_Module_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo40">DebugUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./debugui_ads.html#robo22">DebugUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update the selected module
 </pre>
@@ -436,16 +541,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DebugUpdateModule
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/ui/debugui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+
