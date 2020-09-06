@@ -12,65 +12,68 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="../sources.html#top">Source files</a>
 <a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
 <a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
 <a class="menuitem" href="../robo_types.html#top">Types</a>
 <a class="menuitem" href="../robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo11">Crew/CUI3</a></li>
+<li>1. <a href="#robo19">Crew/CUI3</a></li>
 <ul>
-<li>1.1. <a href="./crew-ui-inventory_ads.html#robo13">CUI3/Inventory</a></li>
+<li>1.1. <a href="./crew-ui-inventory_ads.html#robo21">CUI3/Inventory</a></li>
 <ul>
-<li>1.1.1. <a href="./crew-ui-inventory_adb.html#robo265">Inventory/MemberIndex</a></li>
-<li>1.1.2. <a href="./crew-ui-inventory_ads.html#robo485">Inventory/AddCommands</a></li>
-<li>1.1.3. <a href="../crew-inventory_ads.html#robo486">Inventory/FindTools</a></li>
-<li>1.1.4. <a href="../crew-inventory_ads.html#robo487">Inventory/FreeInventory</a></li>
-<li>1.1.5. <a href="./crew-ui-inventory_adb.html#robo488">Inventory/ItemIndex</a></li>
-<li>1.1.6. <a href="../crew-inventory_ads.html#robo489">Inventory/ItemIsUsed</a></li>
-<li>1.1.7. <a href="./crew-ui-inventory_adb.html#robo490">Inventory/Move_Item_Command</a></li>
-<li>1.1.8. <a href="./crew-ui-inventory_adb.html#robo491">Inventory/Set_Use_Item_Command</a></li>
-<li>1.1.9. <a href="./crew-ui-inventory_adb.html#robo492">Inventory/Show_Inventory_Item_Info_Command</a></li>
-<li>1.1.10. <a href="../crew-inventory_ads.html#robo493">Inventory/TakeOffItem</a></li>
-<li>1.1.11. <a href="../crew-inventory_ads.html#robo494">Inventory/UpdateInventory</a></li>
+<li>1.1.1. <a href="./crew-ui-inventory_adb.html#robo270">Inventory/MemberIndex</a></li>
+<li>1.1.2. <a href="./crew-ui-inventory_ads.html#robo440">Inventory/AddCommands</a></li>
+<li>1.1.3. <a href="../crew-inventory_ads.html#robo441">Inventory/FindTools</a></li>
+<li>1.1.4. <a href="../crew-inventory_ads.html#robo442">Inventory/FreeInventory</a></li>
+<li>1.1.5. <a href="./crew-ui-inventory_adb.html#robo443">Inventory/ItemIndex</a></li>
+<li>1.1.6. <a href="../crew-inventory_ads.html#robo444">Inventory/ItemIsUsed</a></li>
+<li>1.1.7. <a href="../crew-inventory_ads.html#robo445">Inventory/TakeOffItem</a></li>
+<li>1.1.8. <a href="../crew-inventory_ads.html#robo446">Inventory/UpdateInventory</a></li>
+<li>1.1.9. <a href="./crew-ui-inventory_adb.html#robo637">Inventory/Move_Item_Command</a></li>
+<li>1.1.10. <a href="./crew-ui-inventory_adb.html#robo638">Inventory/Set_Use_Item_Command</a></li>
+<li>1.1.11. <a href="./crew-ui-inventory_adb.html#robo639">Inventory/Show_Inventory_Command</a></li>
+<li>1.1.12. <a href="./crew-ui-inventory_adb.html#robo640">Inventory/Show_Inventory_Item_Info_Command</a></li>
 </ul>
-<li>1.2. <a href="./crew-ui_adb.html#robo218">CUI3/MemberIndex</a></li>
-<li>1.3. <a href="#robo409">CUI3/AddCommands</a></li>
-<li>1.4. <a href="./crew-ui_adb.html#robo410">CUI3/Dismiss_Command</a></li>
-<li>1.5. <a href="./crew-ui_adb.html#robo411">CUI3/Order_For_All_Command</a></li>
-<li>1.6. <a href="./crew-ui_adb.html#robo412">CUI3/Set_Crew_Order_Command</a></li>
-<li>1.7. <a href="./crew-ui_adb.html#robo413">CUI3/Set_Priority_Command</a></li>
-<li>1.8. <a href="./crew-ui_adb.html#robo414">CUI3/Show_Crew_Info_Command</a></li>
-<li>1.9. <a href="./crew-ui-inventory_adb.html#robo415">CUI3/Show_Inventory_Command</a></li>
-<li>1.10. <a href="./crew-ui_adb.html#robo416">CUI3/Show_Member_Info_Command</a></li>
+<li>1.2. <a href="./crew-ui_adb.html#robo223">CUI3/MemberIndex</a></li>
+<li>1.3. <a href="#robo404">CUI3/AddCommands</a></li>
+<li>1.4. <a href="./crew-ui_adb.html#robo598">CUI3/Dismiss_Command</a></li>
+<li>1.5. <a href="./crew-ui_adb.html#robo599">CUI3/Order_For_All_Command</a></li>
+<li>1.6. <a href="./crew-ui_adb.html#robo600">CUI3/Set_Crew_Order_Command</a></li>
+<li>1.7. <a href="./crew-ui_adb.html#robo601">CUI3/Set_Priority_Command</a></li>
+<li>1.8. <a href="./crew-ui_adb.html#robo602">CUI3/Show_Crew_Info_Command</a></li>
+<li>1.9. <a href="./crew-ui_adb.html#robo603">CUI3/Show_Member_Info_Command</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Crew2fCUI3"></a>
-<a name="robo11"></a><h2>Crew/CUI3 [ Packages ]</h2>
+<a name="robo19"></a><h2>Crew/CUI3 [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../crew_ads.html#robo39">Crew</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../crew_ads.html#robo18">Crew</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code to show information about the player's ship crew
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="../crew_ads.html#robo39">Crew</a><span class="sign">.</span><a href="./goals-ui_ads.html#robo17">UI</a> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="../crew_ads.html#robo18">Crew</a><span class="sign">.</span><a href="./goals-ui_ads.html#robo30">UI</a> <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="CUI32fAddCommands"></a>
-<a name="robo409"></a><h2>CUI3/AddCommands [ Subprograms ]</h2>
+<a name="robo404"></a><h2>CUI3/AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo19">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the player's ship crew
 </pre>
@@ -80,8 +83,9 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/crew-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/ui/crew-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+

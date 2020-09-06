@@ -12,32 +12,54 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="../sources.html#top">Source files</a>
 <a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
 <a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
 <a class="menuitem" href="../robo_types.html#top">Types</a>
 <a class="menuitem" href="../robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo579">MUI2/Delete_Messages_Command</a></li>
-<li>2. <a href="#robo580">MUI2/Search_Messages_Command</a></li>
-<li>3. <a href="#robo581">MUI2/Select_Messages_Command</a></li>
-<li>4. <a href="#robo582">MUI2/Show_Last_Messages_Command</a></li>
-<li>5. <a href="#robo583">MUI2/ShowMessage</a></li>
+<li>1. <a href="#robo495">MUI2/ShowMessage</a></li>
+<li>2. <a href="#robo677">MUI2/Delete_Messages_Command</a></li>
+<li>3. <a href="#robo678">MUI2/Search_Messages_Command</a></li>
+<li>4. <a href="#robo679">MUI2/Select_Messages_Command</a></li>
+<li>5. <a href="#robo680">MUI2/Show_Last_Messages_Command</a></li>
 </ul>
 <hr />
-<a name="MUI22fDelete5fMessages5fCommand"></a>
-<a name="robo579"></a><h2>MUI2/Delete_Messages_Command [ Subprograms ]</h2>
+<a name="MUI22fShowMessage"></a>
+<a name="robo495"></a><h2>MUI2/ShowMessage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo21">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo41">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show the selected message to a player
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowMessage</strong>
+     <span class="sign">(</span>Message<span class="sign">:</span> <a href="../messages_ads.html#robo172">Message_Data</a><span class="sign">;</span> MessagesView<span class="sign">:</span> Ttk_Tree_View<span class="sign">;</span>
+      MessagesType<span class="sign">:</span> <a href="../messages_ads.html#robo118">Message_Type</a><span class="sign">)</span> <span class="keyword">is</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Message      - The message to show
+ MessagesView - The treeview in which the message will be shown
+ MessagesType - The selected type of messages to show
+</pre>
+
+<hr />
+<a name="MUI22fDelete5fMessages5fCommand"></a>
+<a name="robo677"></a><h2>MUI2/Delete_Messages_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo41">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Delete all messages
 </pre>
@@ -49,17 +71,23 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
+<pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
  Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DeleteMessages
 </pre>
 
 <hr />
 <a name="MUI22fSearch5fMessages5fCommand"></a>
-<a name="robo580"></a><h2>MUI2/Search_Messages_Command [ Subprograms ]</h2>
+<a name="robo678"></a><h2>MUI2/Search_Messages_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo21">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo41">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show only this messages which contains the selected sequence
 </pre>
@@ -76,12 +104,19 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SearchMessages text
+ Text is the string to search in the messages
+</pre>
 
 <hr />
 <a name="MUI22fSelect5fMessages5fCommand"></a>
-<a name="robo581"></a><h2>MUI2/Select_Messages_Command [ Subprograms ]</h2>
+<a name="robo679"></a><h2>MUI2/Select_Messages_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo21">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo41">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show only messages of the selected type
 </pre>
@@ -98,12 +133,18 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SelectMessages
+</pre>
 
 <hr />
 <a name="MUI22fShow5fLast5fMessages5fCommand"></a>
-<a name="robo582"></a><h2>MUI2/Show_Last_Messages_Command [ Subprograms ]</h2>
+<a name="robo680"></a><h2>MUI2/Show_Last_Messages_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo21">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo41">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show the list of last messages to a player
 </pre>
@@ -117,33 +158,22 @@
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
 </pre>
-
-<hr />
-<a name="MUI22fShowMessage"></a>
-<a name="robo583"></a><h2>MUI2/ShowMessage [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo21">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show the selected message to a player
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
 </pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowMessage</strong>
-     <span class="sign">(</span>Message<span class="sign">:</span> <a href="../messages_ads.html#robo138">Message_Data</a><span class="sign">;</span> MessagesView<span class="sign">:</span> Ttk_Tree_View<span class="sign">;</span>
-      MessagesType<span class="sign">:</span> <a href="../messages_ads.html#robo139">Message_Type</a><span class="sign">)</span> <span class="keyword">is</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Message      - The message to show
- MessagesView - The treeview in which the message will be shown
- MessagesType - The selected type of messages to show
+<p class="item_name">COMMANDS</p>
+<pre> ShowLastMessages messagestype
+ MessagesType is the type of messages to show, default all
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/messages-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/ui/messages-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+

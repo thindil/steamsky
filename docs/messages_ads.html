@@ -12,50 +12,53 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="./sources.html#top">Source files</a>
 <a class="menuitem" href="./index.html#top">Index</a>
+<a class="menuitem" href="./robo_constants.html#top">Constants</a>
 <a class="menuitem" href="./robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="./robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="./robo_packages.html#top">Packages</a>
+<a class="menuitem" href="./robo_commands.html#top">Commands</a>
+<a class="menuitem" href="./robo_records.html#top">Records</a>
 <a class="menuitem" href="./robo_types.html#top">Types</a>
 <a class="menuitem" href="./robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo52">Steamsky/Messages</a></li>
+<li>1. <a href="#robo40">Messages/Messages</a></li>
 <ul>
-<li>1.1. <a href="./ui/messages-ui_ads.html#robo21">Messages/MUI2</a></li>
+<li>1.1. <a href="./ui/messages-ui_ads.html#robo41">Messages/MUI2</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/messages-ui_ads.html#robo578">MUI2/AddCommands</a></li>
-<li>1.1.2. <a href="./ui/messages-ui_adb.html#robo579">MUI2/Delete_Messages_Command</a></li>
-<li>1.1.3. <a href="./ui/messages-ui_adb.html#robo580">MUI2/Search_Messages_Command</a></li>
-<li>1.1.4. <a href="./ui/messages-ui_adb.html#robo581">MUI2/Select_Messages_Command</a></li>
-<li>1.1.5. <a href="./ui/messages-ui_adb.html#robo582">MUI2/Show_Last_Messages_Command</a></li>
-<li>1.1.6. <a href="./ui/messages-ui_adb.html#robo583">MUI2/ShowMessage</a></li>
+<li>1.1.1. <a href="./ui/messages-ui_ads.html#robo494">MUI2/AddCommands</a></li>
+<li>1.1.2. <a href="./ui/messages-ui_adb.html#robo495">MUI2/ShowMessage</a></li>
+<li>1.1.3. <a href="./ui/messages-ui_adb.html#robo677">MUI2/Delete_Messages_Command</a></li>
+<li>1.1.4. <a href="./ui/messages-ui_adb.html#robo678">MUI2/Search_Messages_Command</a></li>
+<li>1.1.5. <a href="./ui/messages-ui_adb.html#robo679">MUI2/Select_Messages_Command</a></li>
+<li>1.1.6. <a href="./ui/messages-ui_adb.html#robo680">MUI2/Show_Last_Messages_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo137">Messages/Message_Color</a></li>
-<li>1.3. <a href="#robo138">Messages/Message_Data</a></li>
-<li>1.4. <a href="#robo139">Messages/Message_Type</a></li>
-<li>1.5. <a href="#robo140">Messages/Messages_Container</a></li>
-<li>1.6. <a href="#robo289">Messages/LastMessageIndex</a></li>
-<li>1.7. <a href="#robo290">Messages/Messages_List</a></li>
-<li>1.8. <a href="#robo550">Messages/AddMessage</a></li>
-<li>1.9. <a href="#robo551">Messages/ClearMessages</a></li>
-<li>1.10. <a href="#robo552">Messages/FormatedTime</a></li>
-<li>1.11. <a href="#robo553">Messages/GetLastMessageIndex</a></li>
-<li>1.12. <a href="#robo554">Messages/GetMessage</a></li>
-<li>1.13. <a href="#robo555">Messages/MessagesAmount</a></li>
-<li>1.14. <a href="#robo556">Messages/RestoreMessage</a></li>
+<li>1.2. <a href="#robo117">Messages/Message_Color</a></li>
+<li>1.3. <a href="#robo118">Messages/Message_Type</a></li>
+<li>1.4. <a href="#robo119">Messages/Messages_Container</a></li>
+<li>1.5. <a href="#robo172">Messages/Message_Data</a></li>
+<li>1.6. <a href="#robo293">Messages/LastMessageIndex</a></li>
+<li>1.7. <a href="#robo294">Messages/Messages_List</a></li>
+<li>1.8. <a href="#robo467">Messages/AddMessage</a></li>
+<li>1.9. <a href="#robo468">Messages/ClearMessages</a></li>
+<li>1.10. <a href="#robo469">Messages/FormatedTime</a></li>
+<li>1.11. <a href="#robo470">Messages/GetLastMessageIndex</a></li>
+<li>1.12. <a href="#robo471">Messages/GetMessage</a></li>
+<li>1.13. <a href="#robo472">Messages/MessagesAmount</a></li>
+<li>1.14. <a href="#robo473">Messages/RestoreMessage</a></li>
 </ul>
 </ul>
 <hr />
-<a name="Steamsky2fMessages"></a>
-<a name="robo52"></a><h2>Steamsky/Messages [ Packages ]</h2>
+<a name="Messages2fMessages"></a>
+<a name="robo40"></a><h2>Messages/Messages [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -67,9 +70,9 @@
 
 <hr />
 <a name="Messages2fMessage5fColor"></a>
-<a name="robo137"></a><h2>Messages/Message_Color [ Types ]</h2>
+<a name="robo117"></a><h2>Messages/Message_Color [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Colors of messages
 </pre>
@@ -78,31 +81,10 @@
 </pre>
 
 <hr />
-<a name="Messages2fMessage5fData"></a>
-<a name="robo138"></a><h2>Messages/Message_Data [ Types ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Data structure for messages
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> <strong>Message_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
-      Message<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      MType<span class="sign">:</span> <a href="#robo139">Message_Type</a><span class="sign">;</span>
-      Color<span class="sign">:</span> <a href="#robo137">Message_Color</a><span class="sign">;</span>
-   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> Message - Text of message
- MType   - Type of message
- Color   - Color used for show message
-</pre>
-
-<hr />
 <a name="Messages2fMessage5fType"></a>
-<a name="robo139"></a><h2>Messages/Message_Type [ Types ]</h2>
+<a name="robo118"></a><h2>Messages/Message_Type [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of messages
 </pre>
@@ -114,21 +96,42 @@
 
 <hr />
 <a name="Messages2fMessages5fContainer"></a>
-<a name="robo140"></a><h2>Messages/Messages_Container [ Types ]</h2>
+<a name="robo119"></a><h2>Messages/Messages_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store messages data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Messages_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo138">Message_Data</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Messages_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo172">Message_Data</a><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Messages2fMessage5fData"></a>
+<a name="robo172"></a><h2>Messages/Message_Data [ Records ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Data structure for messages
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> <strong>Message_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
+      Message<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      MType<span class="sign">:</span> <a href="#robo118">Message_Type</a><span class="sign">;</span>
+      Color<span class="sign">:</span> <a href="#robo117">Message_Color</a><span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Message - Text of message
+ MType   - Type of message
+ Color   - Color used for show message
 </pre>
 
 <hr />
 <a name="Messages2fLastMessageIndex"></a>
-<a name="robo289"></a><h2>Messages/LastMessageIndex [ Variables ]</h2>
+<a name="robo293"></a><h2>Messages/LastMessageIndex [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of last message to show
 </pre>
@@ -138,29 +141,29 @@
 
 <hr />
 <a name="Messages2fMessages5fList"></a>
-<a name="robo290"></a><h2>Messages/Messages_List [ Variables ]</h2>
+<a name="robo294"></a><h2>Messages/Messages_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all messages
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Messages_List</strong><span class="sign">:</span> <a href="#robo140">Messages_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Messages_List</strong><span class="sign">:</span> <a href="#robo119">Messages_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Messages2fAddMessage"></a>
-<a name="robo550"></a><h2>Messages/AddMessage [ Subprograms ]</h2>
+<a name="robo467"></a><h2>Messages/AddMessage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add new message to list
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>AddMessage</strong>
-     <span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo139">Message_Type</a><span class="sign">;</span> Color<span class="sign">:</span> <a href="#robo137">Message_Color</a> <span class="sign">:</span><span class="sign">=</span> WHITE<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> Message<span class="squote">'Length &gt; 0,
-      Test_Case =&gt; ("Test_AddMessage", Nominal);
+     <span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo118">Message_Type</a><span class="sign">;</span> Color<span class="sign">:</span> <a href="#robo117">Message_Color</a> <span class="sign">:</span><span class="sign">=</span> WHITE<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Message<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_AddMessage"</span><span class="sign">,</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Message - Text of message to add
@@ -170,9 +173,9 @@
 
 <hr />
 <a name="Messages2fClearMessages"></a>
-<a name="robo551"></a><h2>Messages/ClearMessages [ Subprograms ]</h2>
+<a name="robo468"></a><h2>Messages/ClearMessages [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Remove all messages
 </pre>
@@ -183,18 +186,18 @@
 
 <hr />
 <a name="Messages2fFormatedTime"></a>
-<a name="robo552"></a><h2>Messages/FormatedTime [ Subprograms ]</h2>
+<a name="robo469"></a><h2>Messages/FormatedTime [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Format game time
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>FormatedTime</strong><span class="sign">(</span>Time<span class="sign">:</span> <a href="./game_ads.html#robo115">Date_Record</a> <span class="sign">:</span><span class="sign">=</span> <a href="./game_ads.html#robo235">GameDate</a><span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> <strong>FormatedTime</strong><span class="sign">(</span>Time<span class="sign">:</span> <a href="./game_ads.html#robo164">Date_Record</a> <span class="sign">:</span><span class="sign">=</span> <a href="./game_ads.html#robo240">GameDate</a><span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_FormattedTime"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Time - <a href="./game_ads.html#robo43">Game</a> time to format. Default is current game time
+<pre> Time - <a href="./game_ads.html#robo27">Game</a> time to format. Default is current game time
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Formatted in YYYY-MM-DD HH:MM style in game time
@@ -202,9 +205,9 @@
 
 <hr />
 <a name="Messages2fGetLastMessageIndex"></a>
-<a name="robo553"></a><h2>Messages/GetLastMessageIndex [ Subprograms ]</h2>
+<a name="robo470"></a><h2>Messages/GetLastMessageIndex [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get last message index
 </pre>
@@ -218,16 +221,16 @@
 
 <hr />
 <a name="Messages2fGetMessage"></a>
-<a name="robo554"></a><h2>Messages/GetMessage [ Subprograms ]</h2>
+<a name="robo471"></a><h2>Messages/GetMessage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get Nth message of selected type
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>GetMessage</strong>
-     <span class="sign">(</span>MessageIndex<span class="sign">:</span> Integer<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo139">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">)</span>
-      <span class="keyword">return</span> <a href="#robo138">Message_Data</a> <span class="keyword">with</span>
+     <span class="sign">(</span>MessageIndex<span class="sign">:</span> Integer<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo118">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">)</span>
+      <span class="keyword">return</span> <a href="#robo172">Message_Data</a> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetMessage"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -242,14 +245,14 @@
 
 <hr />
 <a name="Messages2fMessagesAmount"></a>
-<a name="robo555"></a><h2>Messages/MessagesAmount [ Subprograms ]</h2>
+<a name="robo472"></a><h2>Messages/MessagesAmount [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get amount of selected type messages
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>MessagesAmount</strong><span class="sign">(</span>MType<span class="sign">:</span> <a href="#robo139">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> <strong>MessagesAmount</strong><span class="sign">(</span>MType<span class="sign">:</span> <a href="#robo118">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_MessagesAmount"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -261,16 +264,16 @@
 
 <hr />
 <a name="Messages2fRestoreMessage"></a>
-<a name="robo556"></a><h2>Messages/RestoreMessage [ Subprograms ]</h2>
+<a name="robo473"></a><h2>Messages/RestoreMessage [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo52">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo40">Messages</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Restore message from save file
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>RestoreMessage</strong>
-     <span class="sign">(</span>Message<span class="sign">:</span> Unbounded_String<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo139">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">;</span>
-      Color<span class="sign">:</span> <a href="#robo137">Message_Color</a> <span class="sign">:</span><span class="sign">=</span> WHITE<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>Message<span class="sign">:</span> Unbounded_String<span class="sign">;</span> MType<span class="sign">:</span> <a href="#robo118">Message_Type</a> <span class="sign">:</span><span class="sign">=</span> Default<span class="sign">;</span>
+      Color<span class="sign">:</span> <a href="#robo117">Message_Color</a> <span class="sign">:</span><span class="sign">=</span> WHITE<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Message <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -281,8 +284,9 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/messages.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/messages.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+

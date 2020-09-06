@@ -12,34 +12,37 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
 <a class="menuitem" href="../sources.html#top">Source files</a>
 <a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
 <a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
 <a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
 <a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
 <a class="menuitem" href="../robo_types.html#top">Types</a>
 <a class="menuitem" href="../robo_variables.html#top">Variables</a>
 </div> <!-- navigation -->
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo218">CUI3/MemberIndex</a></li>
-<li>2. <a href="#robo410">CUI3/Dismiss_Command</a></li>
-<li>3. <a href="#robo411">CUI3/Order_For_All_Command</a></li>
-<li>4. <a href="#robo412">CUI3/Set_Crew_Order_Command</a></li>
-<li>5. <a href="#robo413">CUI3/Set_Priority_Command</a></li>
-<li>6. <a href="#robo414">CUI3/Show_Crew_Info_Command</a></li>
-<li>7. <a href="#robo416">CUI3/Show_Member_Info_Command</a></li>
+<li>1. <a href="#robo223">CUI3/MemberIndex</a></li>
+<li>2. <a href="#robo598">CUI3/Dismiss_Command</a></li>
+<li>3. <a href="#robo599">CUI3/Order_For_All_Command</a></li>
+<li>4. <a href="#robo600">CUI3/Set_Crew_Order_Command</a></li>
+<li>5. <a href="#robo601">CUI3/Set_Priority_Command</a></li>
+<li>6. <a href="#robo602">CUI3/Show_Crew_Info_Command</a></li>
+<li>7. <a href="#robo603">CUI3/Show_Member_Info_Command</a></li>
 </ul>
 <hr />
 <a name="CUI32fMemberIndex"></a>
-<a name="robo218"></a><h2>CUI3/MemberIndex [ Variables ]</h2>
+<a name="robo223"></a><h2>CUI3/MemberIndex [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> The index of the currently selected crew member
 </pre>
@@ -49,9 +52,9 @@
 
 <hr />
 <a name="CUI32fDismiss5fCommand"></a>
-<a name="robo410"></a><h2>CUI3/Dismiss_Command [ Subprograms ]</h2>
+<a name="robo598"></a><h2>CUI3/Dismiss_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Dismiss the selected crew member
 </pre>
@@ -68,12 +71,18 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> Dismiss
+</pre>
 
 <hr />
 <a name="CUI32fOrder5fFor5fAll5fCommand"></a>
-<a name="robo411"></a><h2>CUI3/Order_For_All_Command [ Subprograms ]</h2>
+<a name="robo599"></a><h2>CUI3/Order_For_All_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set the selected order for the whole crew
 </pre>
@@ -90,12 +99,20 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> OrderForAll order
+ Order is the name of the order which will be assigned to the whole
+ player ship crew
+</pre>
 
 <hr />
 <a name="CUI32fSet5fCrew5fOrder5fCommand"></a>
-<a name="robo412"></a><h2>CUI3/Set_Crew_Order_Command [ Subprograms ]</h2>
+<a name="robo600"></a><h2>CUI3/Set_Crew_Order_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set order for the selected crew member
 </pre>
@@ -112,12 +129,22 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SetCrewOrder order memberindex ?moduleindex?
+ Order is an index for the order which will be set, memberindex is an
+ index of the member in the player ship crew which will be have order set
+ and optional parameter moduleindex is index of module in player ship
+ which will be assigned to the crew member
+</pre>
 
 <hr />
 <a name="CUI32fSet5fPriority5fCommand"></a>
-<a name="robo413"></a><h2>CUI3/Set_Priority_Command [ Subprograms ]</h2>
+<a name="robo601"></a><h2>CUI3/Set_Priority_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set the selected priority of the selected crew member
 </pre>
@@ -134,12 +161,20 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SetPriority orderindex priority
+ Orderindex is the index of the order priority which will be changed,
+ priority is the new level of the priority of the selected order
+</pre>
 
 <hr />
 <a name="CUI32fShow5fCrew5fInfo5fCommand"></a>
-<a name="robo414"></a><h2>CUI3/Show_Crew_Info_Command [ Subprograms ]</h2>
+<a name="robo602"></a><h2>CUI3/Show_Crew_Info_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about the player's ship crew
 </pre>
@@ -156,12 +191,18 @@
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command. Unused
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ShowCrewInfo
+</pre>
 
 <hr />
 <a name="CUI32fShow5fMember5fInfo5fCommand"></a>
-<a name="robo416"></a><h2>CUI3/Show_Member_Info_Command [ Subprograms ]</h2>
+<a name="robo603"></a><h2>CUI3/Show_Member_Info_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo11">CUI3</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./crew-ui_ads.html#robo19">CUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show detailed information about the selected crew member
 </pre>
@@ -178,11 +219,20 @@
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ShowMemberInfo memberindex
+ <a href="./bases-schoolui_adb.html#robo302">MemberIndex</a> is the index of the player ship crew member which info will
+ be shown
+</pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/crew-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 09 2020 06:34:36
+<p>Generated from ./src/ui/crew-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
 </p>
 </div> <!-- footer -->
 </body>
 </html>
+
