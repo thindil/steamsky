@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Code documentation
+
 ## [5.2] - 2020-09-06
 
 ### Added
