@@ -45,6 +45,7 @@ with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Crafts; use Crafts;
 with Factions; use Factions;
@@ -565,6 +566,7 @@ package body Ships.UI.Modules is
                     "-orient horizontal -maximum 1.0 -value {" &
                     Float'Image(DamagePercent) & "}" &
                     To_String(ProgressBarStyle));
+               Add(ProgressBar, "Cleanliness of the selected cabin");
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (ProgressBar, "-row 1 -column 1 -sticky we");
@@ -576,6 +578,7 @@ package body Ships.UI.Modules is
                 (Widget_Image(ModuleDialog) & ".quality",
                  "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
+            Add(ProgressBar, "Quality of the selected cabin");
             Label :=
               Create
                 (Widget_Image(ModuleDialog) & ".qualitylbl",
@@ -819,6 +822,7 @@ package body Ships.UI.Modules is
              (Widget_Image(ModuleDialog) & ".clean",
               "-orient horizontal -style green.Horizontal.TProgressbar -maximum 1.0 -value {" &
               Float'Image(UpgradePercent) & "}");
+         Add(ProgressBar, "The progress of the current upgrade of the module");
          Label :=
            Create
              (Widget_Image(ModuleDialog) & ".upgradelbl",
