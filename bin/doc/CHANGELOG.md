@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Code documentation
+- Showing the player ship's crew info
 
 ## [5.2] - 2020-09-06
 
