@@ -566,7 +566,8 @@ package body Ships.UI.Modules is
                     Float'Image(DamagePercent) & "}" &
                     To_String(ProgressBarStyle));
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
-               Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 1 -column 1");
+               Tcl.Tk.Ada.Grid.Grid
+                 (ProgressBar, "-row 1 -column 1 -sticky we");
                Height :=
                  Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
@@ -586,7 +587,7 @@ package body Ships.UI.Modules is
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-row 2 -sticky w");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1");
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1 -sticky we");
             Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert(ModuleText, "end", "{" & LF & "Strength:}");
