@@ -819,7 +819,7 @@ package body Ships.UI.Modules is
            1.0 - (Float(Module.UpgradeProgress) / Float(MaxUpgrade));
          ProgressBar :=
            Create
-             (Widget_Image(ModuleDialog) & ".clean",
+             (Widget_Image(ModuleDialog) & ".upgrade",
               "-orient horizontal -style green.Horizontal.TProgressbar -maximum 1.0 -value {" &
               Float'Image(UpgradePercent) & "}");
          Add(ProgressBar, "The progress of the current upgrade of the module");
