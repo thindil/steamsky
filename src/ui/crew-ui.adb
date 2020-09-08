@@ -243,7 +243,8 @@ package body Crew.UI is
       else
          if GameSettings.ShowNumbers then
             configure
-              (MemberLabel, "{Thirst:" & Natural'Image(Member.Thirst) & "%}");
+              (MemberLabel,
+               "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
          else
             case Member.Thirst is
                when 1 .. 40 =>
@@ -272,7 +273,8 @@ package body Crew.UI is
       else
          if GameSettings.ShowNumbers then
             configure
-              (MemberLabel, "{Hunger:" & Natural'Image(Member.Hunger) & "%}");
+              (MemberLabel,
+               "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
          else
             case Member.Hunger is
                when 1 .. 40 =>
