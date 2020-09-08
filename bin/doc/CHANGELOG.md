@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Code documentation
 - Showing the player ship's crew info
 - Crash on showing the player ship cabin's info when upgrading it
+- Crash on showing the player ship crew info
 
 ## [5.2] - 2020-09-06
 
