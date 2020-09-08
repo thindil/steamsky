@@ -6,11 +6,11 @@ pack [ttk::scrollbar .paned.inventoryframe.scrollx -orient horizontal -command [
 set inventoryframe [ttk::frame $inventorycanvas.inventory]
 # Items list
 grid [ttk::frame $inventoryframe.list] -sticky nwes
-set inventoryview [ttk::treeview $inventoryframe.list.view -columns [list name used durability type amount weight] -show headings -yscrollcommand [list $inventoryframe.list.scrolly set]]
+set inventoryview [ttk::treeview $inventoryframe.list.view -columns [list name used type durability amount weight] -show headings -yscrollcommand [list $inventoryframe.list.scrolly set]]
 $inventoryview heading name -text {Name}
 $inventoryview heading used -text {Used}
-$inventoryview heading durability -text {Durability}
 $inventoryview heading type -text {Type}
+$inventoryview heading durability -text {Durability}
 $inventoryview heading amount -text {Amount}
 $inventoryview heading weight -text {Weight (in kg)}
 grid $inventoryview -sticky nwes
