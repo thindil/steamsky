@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Better checking for tools for crafting and training
 
 ### Fixed
 - Can't sell items when one of crew members has set percent from profit as a
