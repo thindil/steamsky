@@ -812,6 +812,11 @@ package body Crew.UI is
       UpdateHeader;
       UpdateMessages;
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
+   exception
+      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+         UpdateMessages;
+         return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Crew_Order_Command;
 
    -- ****o* CUI3/Set_Priority_Command
