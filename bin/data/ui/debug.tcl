@@ -1,4 +1,4 @@
-toplevel .debugdialog -class Dialog
+toplevel .debugdialog -class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2
 wm title .debugdialog {Steam Sky - Debug menu}
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .debugdialog -type dialog
