@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Better checking for tools for crafting and training
 
 ### Fixed
 - Code documentation
