@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Order of columns in inventory info
 - Showing messages list
 - Crash on giving orders to the crew members
+- Background color for debug menu
 
 ## [5.2] - 2020-09-06
 
