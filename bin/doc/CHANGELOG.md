@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Crash on showing the player ship crew info
 - Order of columns in inventory info
 - Showing messages list
+- Crash on giving orders to the crew members
 
 ## [5.2] - 2020-09-06
 
