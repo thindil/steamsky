@@ -743,6 +743,16 @@ package body Crew.UI is
          end if;
          Row := Row + 1;
       end loop;
+      for Module of PlayerShip.Modules loop
+         if Module.Durability < Module.MaxDurability then
+            NeedRepair := True;
+         end if;
+         if (Module.Durability > 0 and Module.MType = CABIN)
+           and then Module.Cleanliness < Module.Quality then
+            NeedClean := True;
+         end if;
+         exit when NeedClean and NeedRepair;
+      end loop;
       CrewButton.Name :=
         New_String(Widget_Image(CrewCanvas) & ".crew.info.clean");
       if NeedClean then
