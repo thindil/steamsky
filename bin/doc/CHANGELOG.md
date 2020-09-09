@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Showing messages list
 - Crash on giving orders to the crew members
 - Background color for debug menu
+- Showing repair/clean all buttons
 
 ## [5.2] - 2020-09-06
 
