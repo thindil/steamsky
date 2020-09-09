@@ -127,13 +127,27 @@ package body Crew.Inventory is
       ToolQuality: Positive := 100) return Natural is
       ToolsIndex: Natural := PlayerShip.Crew(MemberIndex).Equipment(7);
    begin
+      -- If the crew member has equiped tool, check if it is a proper tool.
+      -- If not, remove it and put to the ship cargo
       if ToolsIndex > 0 then
-         if Items_List
-             (PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-             .IType /=
-           ItemType then
-            return 0;
-         end if;
+         declare
+            ProtoIndex: constant Unbounded_String :=
+              PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex;
+         begin
+            if Items_List(ProtoIndex).IType /= ItemType or
+              (Items_List(ProtoIndex).Value.Length > 0
+               and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
+               TakeOffItem(MemberIndex, ToolsIndex);
+               UpdateCargo
+                 (PlayerShip, ProtoIndex, 1,
+                  PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
+                    .Durability);
+               UpdateInventory
+                 (MemberIndex => MemberIndex, Amount => -1,
+                  InventoryIndex => ToolsIndex);
+               ToolsIndex := 0;
+            end if;
+         end;
       end if;
       ToolsIndex :=
         FindItem
@@ -155,7 +169,6 @@ package body Crew.Inventory is
                  FindItem
                    (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
                     ItemType => ItemType, Quality => ToolQuality);
-               PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
             exception
                when Crew_No_Space_Error =>
                   case Order is
@@ -191,9 +204,8 @@ package body Crew.Inventory is
                   return 0;
             end;
          end if;
-      else
-         PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
       end if;
+      PlayerShip.Crew(MemberIndex).Equipment(7) := ToolsIndex;
       return ToolsIndex;
    end FindTools;
 
