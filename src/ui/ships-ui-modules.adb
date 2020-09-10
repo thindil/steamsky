@@ -742,10 +742,11 @@ package body Ships.UI.Modules is
             if Module.TrainedSkill > 0 then
                Insert
                  (ModuleText, "end",
-                  "{Set for training " &
+                  "{" & LF & "Set for training " &
                   To_String(Skills_List(Module.TrainedSkill).Name) & ".}");
             else
-               Insert(ModuleText, "end", "{Must be set for training.}");
+               Insert
+                 (ModuleText, "end", "{" & LF & "Must be set for training.}");
             end if;
             Insert(ModuleText, "end", "{" & LF & "}");
             AddOwnersInfo("Trainee");
