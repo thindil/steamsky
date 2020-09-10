@@ -818,18 +818,28 @@ package body Ships.UI.Modules is
          end if;
          UpgradePercent :=
            1.0 - (Float(Module.UpgradeProgress) / Float(MaxUpgrade));
+         if UpgradePercent > 0.74 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif UpgradePercent > 0.24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          ProgressBar :=
            Create
              (Widget_Image(ModuleDialog) & ".upgrade",
-              "-orient horizontal -style green.Horizontal.TProgressbar -maximum 1.0 -value {" &
-              Float'Image(UpgradePercent) & "}");
+              "-orient horizontal -maximum 1.0 -value {" &
+              Float'Image(UpgradePercent) & "}" & To_String(ProgressBarStyle));
          Add(ProgressBar, "The progress of the current upgrade of the module");
          Label :=
            Create
              (Widget_Image(ModuleDialog) & ".upgradelbl",
               "-text {" & To_String(ModuleInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
-         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1");
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1 -sticky we");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       end if;
       configure(ModuleText, "-state disabled");
