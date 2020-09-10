@@ -184,7 +184,20 @@ package body Ships.UI is
            (Float
               (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
             Float(MaxUpgrade));
-         configure(UpgradeProgress, "-value" & Float'Image(UpgradePercent));
+         if UpgradePercent > 0.74 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif UpgradePercent > 0.24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
+         configure
+           (UpgradeProgress,
+            "-value" & Float'Image(UpgradePercent) &
+            To_String(ProgressBarStyle));
          configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(UpgradeProgress);
@@ -293,7 +306,8 @@ package body Ships.UI is
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
-            ProgressBarStyle := Null_Unbounded_String;
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
          end if;
          UpgradeProgress :=
            Create
@@ -301,7 +315,8 @@ package body Ships.UI is
               Trim(Natural'Image(Row), Left),
               "-value {" & Float'Image(UpgradePercent) &
               "} -maximum 1.0 -length 150" & To_String(ProgressBarStyle));
-         Add(UpgradeProgress, "The current durability of the selected module.");
+         Add
+           (UpgradeProgress, "The current durability of the selected module.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
          Row := Row + 1;
