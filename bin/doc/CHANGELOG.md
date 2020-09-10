@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Better checking for tools for crafting and training
+- Better checking for tools during giving orders
 
 ### Fixed
 - Code documentation
