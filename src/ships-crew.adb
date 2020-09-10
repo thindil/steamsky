@@ -192,70 +192,6 @@ package body Ships.Crew is
            with MemberName & " can't start training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
       end if;
-      if GivenOrder = Upgrading or GivenOrder = Repair or GivenOrder = Clean or
-        GivenOrder = Train then -- Check for tools
-         if GivenOrder = Clean then
-            RequiredTool := CleaningTools;
-         elsif GivenOrder = Train then
-            RequiredTool :=
-              Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
-            ToolQuality :=
-              GetTrainingToolQuality
-                (MemberIndex, Ship.Modules(ModuleIndex).TrainedSkill);
-         else
-            RequiredTool := RepairTools;
-         end if;
-         if RequiredTool /= Null_Unbounded_String then
-            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
-            if ToolsIndex > 0
-              and then
-                Items_List
-                  (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-                  .IType /=
-                RequiredTool then
-               ToolsIndex := 0;
-            end if;
-            if ToolsIndex = 0 then
-               ToolsIndex :=
-                 FindItem
-                   (Inventory => Ship.Cargo, ItemType => RequiredTool,
-                    Quality => ToolQuality);
-               if ToolsIndex = 0 then
-                  ToolsIndex :=
-                    FindItem
-                      (Inventory => Ship.Crew(MemberIndex).Inventory,
-                       ItemType => RequiredTool, Quality => ToolQuality);
-                  if ToolsIndex > 0 then
-                     Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
-                  end if;
-               else
-                  Ship.Crew(MemberIndex).Equipment(7) := 0;
-               end if;
-            end if;
-            if ToolsIndex = 0 then
-               case GivenOrder is
-                  when Repair =>
-                     raise Crew_Order_Error
-                       with MemberName &
-                       " can't start repairing ship because you don't have the proper tools.";
-                  when Clean =>
-                     raise Crew_Order_Error
-                       with MemberName &
-                       " can't start cleaning ship because you don't have any cleaning tools.";
-                  when Upgrading =>
-                     raise Crew_Order_Error
-                       with MemberName &
-                       " can't start upgrading module because you don't have the proper tools.";
-                  when Train =>
-                     raise Crew_Order_Error
-                       with MemberName &
-                       " can't start training because you don't have the proper tools.";
-                  when others =>
-                     return;
-               end case;
-            end if;
-         end if;
-      end if;
       if GivenOrder = Pilot or GivenOrder = Engineer or
         GivenOrder = Upgrading or GivenOrder = Talk then
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
@@ -382,6 +318,77 @@ package body Ships.Crew is
            FindItem
              (Inventory => Ship.Crew(MemberIndex).Inventory,
               ItemType => RequiredTool);
+      end if;
+      if GivenOrder in Upgrading | Repair | Clean | Train then -- Check for tools
+         if GivenOrder = Clean then
+            RequiredTool := CleaningTools;
+         elsif GivenOrder = Train then
+            RequiredTool :=
+              Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
+            ToolQuality :=
+              GetTrainingToolQuality
+                (MemberIndex, Ship.Modules(ModuleIndex).TrainedSkill);
+         else
+            RequiredTool := RepairTools;
+         end if;
+         if RequiredTool /= Null_Unbounded_String then
+            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+            if ToolsIndex > 0
+              and then
+                Items_List
+                  (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+                  .IType /=
+                RequiredTool then
+               TakeOffItem(MemberIndex, ToolsIndex);
+               UpdateCargo
+                 (Ship,
+                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
+                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
+               UpdateInventory
+                 (MemberIndex => MemberIndex, Amount => -1,
+                  InventoryIndex => ToolsIndex);
+               ToolsIndex := 0;
+            end if;
+            if ToolsIndex = 0 then
+               ToolsIndex :=
+                 FindItem
+                   (Inventory => Ship.Cargo, ItemType => RequiredTool,
+                    Quality => ToolQuality);
+               if ToolsIndex = 0 then
+                  ToolsIndex :=
+                    FindItem
+                      (Inventory => Ship.Crew(MemberIndex).Inventory,
+                       ItemType => RequiredTool, Quality => ToolQuality);
+                  if ToolsIndex > 0 then
+                     Ship.Crew(MemberIndex).Equipment(7) := ToolsIndex;
+                  end if;
+               else
+                  Ship.Crew(MemberIndex).Equipment(7) := 0;
+               end if;
+            end if;
+            if ToolsIndex = 0 then
+               case GivenOrder is
+                  when Repair =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't start repairing ship because you don't have the proper tools.";
+                  when Clean =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't start cleaning ship because you don't have any cleaning tools.";
+                  when Upgrading =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't start upgrading module because you don't have the proper tools.";
+                  when Train =>
+                     raise Crew_Order_Error
+                       with MemberName &
+                       " can't start training because you don't have the proper tools.";
+                  when others =>
+                     return;
+               end case;
+            end if;
+         end if;
       end if;
       if GivenOrder = Rest then
          Ship.Crew(MemberIndex).PreviousOrder := Rest;
