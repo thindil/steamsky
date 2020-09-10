@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving orders to the crew members
 - Background color for debug menu
 - Showing repair/clean all buttons
+- Showing repair/clean orders for each crew member
 
 ## [5.2] - 2020-09-06
 
