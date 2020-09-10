@@ -588,7 +588,7 @@ package body Crew.UI is
       end loop;
       Row := 1;
       for I in PlayerShip.Crew.Iterate loop
-         NeedClean := False;
+         NeedClean := True;
          NeedRepair := False;
          CrewButton :=
            Create
@@ -636,6 +636,10 @@ package body Crew.UI is
                   Positive'Image(Positive(Crew_Container.To_Index(I))) & "}");
             end if;
             for J in PlayerShip.Modules.Iterate loop
+               if PlayerShip.Modules(J).Durability <
+                 PlayerShip.Modules(J).MaxDurability then
+                  NeedRepair := True;
+               end if;
                if PlayerShip.Modules(J).Durability > 0 then
                   case Modules_List(PlayerShip.Modules(J).ProtoIndex).MType is
                      when GUN | HARPOON_GUN =>
