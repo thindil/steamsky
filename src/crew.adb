@@ -307,6 +307,16 @@ package body Crew is
                   Member.PreviousOrder := Member.Order;
                   Member.Order := Rest;
                   Member.OrderTime := 15;
+                  if Member.Equipment(7) > 0 then
+                     UpdateCargo
+                       (PlayerShip,
+                        Member.Inventory(Member.Equipment(7)).ProtoIndex, 1,
+                        Member.Inventory(Member.Equipment(7)).Durability);
+                     UpdateInventory
+                       (MemberIndex => I, Amount => -1,
+                        InventoryIndex => Member.Equipment(7));
+                     Member.Equipment(7) := 0;
+                  end if;
                   AddMessage
                     (To_String(Member.Name) &
                      " is too tired to work, they're going to rest.",
