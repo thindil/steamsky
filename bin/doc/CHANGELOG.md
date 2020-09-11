@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about assigned skill to training room
 - Positioning of orders menu
 - Showing clean all button when not needed
+- Updated assign crew member list when crew member go to another work
 
 ## [5.2] - 2020-09-06
 
