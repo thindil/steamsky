@@ -19,8 +19,9 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
@@ -450,9 +451,9 @@ package body OrdersMenu is
          ShowMessage
            ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
       else
-         Tcl_Eval
-           (Interp,
-            "tk_popup .orders [expr [winfo width .paned.mapframe] / 3] [expr [winfo height .paned.mapframe] / 3]");
+         Tk_Popup
+           (OrdersMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+            Winfo_Get(Get_Main_Window(Interp), "pointery"));
       end if;
       return TCL_OK;
    end Show_Orders_Command;
