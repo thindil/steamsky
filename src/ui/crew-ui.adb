@@ -747,6 +747,7 @@ package body Crew.UI is
          end if;
          Row := Row + 1;
       end loop;
+      NeedClean := False;
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
