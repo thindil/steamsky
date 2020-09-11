@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Better checking for tools for crafting and training
 - Better checking for tools during giving orders
+- When tired crew member going on rest, returns tools
 
 ### Fixed
 - Code documentation
