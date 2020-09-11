@@ -944,6 +944,14 @@ package body Ships.UI.Modules is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       AssignIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
       Assigned: Boolean;
+      procedure UpdateOrder(Order: Crew_Orders) is
+      begin
+         GiveOrders(PlayerShip, AssignIndex, Order, ModuleIndex);
+         if PlayerShip.Crew(AssignIndex).Order /= Order then
+            Tcl_SetVar
+              (Interp, ".moduledialog.crewbutton" & CArgv.Arg(Argv, 3), "0");
+         end if;
+      end UpdateOrder;
    begin
       if CArgv.Arg(Argv, 1) = "crew" then
          case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
@@ -976,13 +984,13 @@ package body Ships.UI.Modules is
                   To_String(PlayerShip.Crew(AssignIndex).Name) & ".",
                   OrderMessage);
             when GUN | HARPOON_GUN =>
-               GiveOrders(PlayerShip, AssignIndex, Gunner, ModuleIndex);
+               UpdateOrder(Gunner);
             when ALCHEMY_LAB .. GREENHOUSE =>
-               GiveOrders(PlayerShip, AssignIndex, Craft, ModuleIndex);
+               UpdateOrder(Craft);
             when MEDICAL_ROOM =>
-               GiveOrders(PlayerShip, AssignIndex, Heal, ModuleIndex);
+               UpdateOrder(Heal);
             when TRAINING_ROOM =>
-               GiveOrders(PlayerShip, AssignIndex, Train, ModuleIndex);
+               UpdateOrder(Train);
             when others =>
                null;
          end case;
