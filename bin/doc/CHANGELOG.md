@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Showing repair/clean orders for each crew member
 - Showing info about assigned skill to training room
 - Positioning of orders menu
+- Showing clean all button when not needed
 
 ## [5.2] - 2020-09-06
 
