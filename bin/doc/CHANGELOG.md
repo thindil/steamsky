@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Better checking for tools for crafting and training
 - Better checking for tools during giving orders
 - When tired crew member going on rest, returns tools
+- When giving orders always take tools from crew members
 
 ### Fixed
 - Code documentation
