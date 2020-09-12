@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Updated assign crew member list when crew member go to another work
 - Showing list of items after selling or buying items
 - Showing color messages on messages list
+- Auto-resizing of last messages widget
 
 ## [5.2] - 2020-09-06
 
