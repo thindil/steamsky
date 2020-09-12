@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Showing clean all button when not needed
 - Updated assign crew member list when crew member go to another work
 - Showing list of items after selling or buying items
+- Showing color messages on messages list
 
 ## [5.2] - 2020-09-06
 
