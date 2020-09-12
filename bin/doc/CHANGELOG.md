@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Can't sell items when one of crew members has set percent from profit as a
   payment
+- Default icons for moving map UI
 
 ## [5.0.4] - 2020-09-03
 
