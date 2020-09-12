@@ -103,6 +103,9 @@ $messagesview tag configure cyan -foreground cyan
 $messagesview tag configure blue -foreground #3465a4
 $messagesview tag configure gray -foreground {dim gray}
 pack $messagesview -side top -fill both
+bind .paned.controls <Configure> {
+   $messagesview configure -height [expr [winfo height .paned.controls] / [font metrics InterfaceFont -linespace]]
+}
 # Movement buttons
 set bframe [ttk::frame .paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
