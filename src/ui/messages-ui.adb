@@ -56,22 +56,22 @@ package body Messages.UI is
       if Message.MType = MessagesType or MessagesType = Default then
          case Message.Color is
             when YELLOW =>
-               MessageTag := To_Unbounded_String(" [list yellow]");
+               MessageTag := To_Unbounded_String(" -tags [list yellow]");
             when GREEN =>
-               MessageTag := To_Unbounded_String(" [list green]");
+               MessageTag := To_Unbounded_String(" -tags [list green]");
             when RED =>
-               MessageTag := To_Unbounded_String(" [list red]");
+               MessageTag := To_Unbounded_String(" -tags [list red]");
             when BLUE =>
-               MessageTag := To_Unbounded_String(" [list blue]");
+               MessageTag := To_Unbounded_String(" -tags [list blue]");
             when CYAN =>
-               MessageTag := To_Unbounded_String(" [list cyan]");
+               MessageTag := To_Unbounded_String(" -tags [list cyan]");
             when others =>
                MessageTag := Null_Unbounded_String;
          end case;
          Insert
            (MessagesView,
-            "{} end -text {" & To_String(Message.Message) &
-            To_String(MessageTag) & "}");
+            "{} end -text {" & To_String(Message.Message) & "}" &
+            To_String(MessageTag));
       end if;
    end ShowMessage;
 
