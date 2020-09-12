@@ -319,6 +319,21 @@ package body Ships.Crew is
              (Inventory => Ship.Crew(MemberIndex).Inventory,
               ItemType => RequiredTool);
       end if;
+      ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
+      if ToolsIndex > 0
+        and then
+          Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
+            .IType /=
+          RequiredTool then
+         TakeOffItem(MemberIndex, ToolsIndex);
+         UpdateCargo
+           (Ship, Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
+            Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
+         UpdateInventory
+           (MemberIndex => MemberIndex, Amount => -1,
+            InventoryIndex => ToolsIndex);
+         ToolsIndex := 0;
+      end if;
       if GivenOrder in Upgrading | Repair | Clean | Train then -- Check for tools
          if GivenOrder = Clean then
             RequiredTool := CleaningTools;
@@ -332,23 +347,6 @@ package body Ships.Crew is
             RequiredTool := RepairTools;
          end if;
          if RequiredTool /= Null_Unbounded_String then
-            ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
-            if ToolsIndex > 0
-              and then
-                Items_List
-                  (Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
-                  .IType /=
-                RequiredTool then
-               TakeOffItem(MemberIndex, ToolsIndex);
-               UpdateCargo
-                 (Ship,
-                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
-                  Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
-               UpdateInventory
-                 (MemberIndex => MemberIndex, Amount => -1,
-                  InventoryIndex => ToolsIndex);
-               ToolsIndex := 0;
-            end if;
             if ToolsIndex = 0 then
                ToolsIndex :=
                  FindItem
