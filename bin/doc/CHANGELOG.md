@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Positioning of orders menu
 - Showing clean all button when not needed
 - Updated assign crew member list when crew member go to another work
+- Showing list of items after selling or buying items
 
 ## [5.2] - 2020-09-06
 
