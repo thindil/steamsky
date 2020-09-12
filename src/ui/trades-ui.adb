@@ -738,7 +738,7 @@ package body Trades.UI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -757,6 +757,7 @@ package body Trades.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
@@ -765,6 +766,7 @@ package body Trades.UI is
       ProtoIndex: Unbounded_String;
       SpinBox: Ttk_SpinBox;
       Label: Ttk_Label;
+      TypeBox: Ttk_ComboBox;
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -818,7 +820,11 @@ package body Trades.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Trade_Command(ClientData, Interp, Argc, Argv);
+      TypeBox.Interp := Interp;
+      TypeBox.Name :=
+        New_String(".paned.tradeframe.canvas.trade.options.type");
+      return Show_Trade_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
    exception
       when An_Exception : Trade_Cant_Buy =>
          ShowMessage
