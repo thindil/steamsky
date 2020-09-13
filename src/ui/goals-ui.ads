@@ -13,14 +13,14 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
--- ****h* Goals/UI
+-- ****h* Goals/GUI
 -- FUNCTION
 -- Provide code to show and select the player goal
 -- SOURCE
 package Goals.UI is
 -- ****
 
-   -- ****f* UI/AddCommands
+   -- ****f* GUI/AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the goals UI
    -- SOURCE

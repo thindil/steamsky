@@ -20,7 +20,7 @@
 package Help.UI is
 -- ****
 
-   -- ****f* Help.UI/AddCommands
+   -- ****f* HUI/AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the help UI
    -- SOURCE
