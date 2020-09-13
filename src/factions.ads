@@ -35,13 +35,6 @@ package Factions is
    type NamesTypes is (STANDARD, ROBOTIC);
    -- ****
 
-   -- ****t* Factions/Reputation_Array
-   -- FUNCTION
-   -- Minium and maximum reputation values
-   -- SOURCE
-   type Reputation_Array is array(1 .. 2) of Integer;
-   -- ****
-
    -- ****s* Factions/RelationsRecord
    -- FUNCTION
    -- Data structure for relations between factions

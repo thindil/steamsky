@@ -398,6 +398,13 @@ package Game is
    type DamageFactor is digits 2 range 0.0 .. 1.0;
    -- ****
 
+   -- ****t* Game/Reputation_Array
+   -- FUNCTION
+   -- Data structure for reputation, 1 = level, 2 = points to next level
+   -- SOURCE
+   type Reputation_Array is array(1 .. 2) of Integer;
+   -- ****
+
    -- ****t* Game/BasesRange
    -- FUNCTION
    -- Amount of sky bases
