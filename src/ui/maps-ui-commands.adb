@@ -238,14 +238,14 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Draw_Map_Command;
 
-   -- ****iv* Maps.UI.Commands/MapX
+   -- ****iv* MapCommands/MapX
    -- FUNCTION
    -- Current map cell X coordinate (where mouse is hovering)
    -- SOURCE
    MapX: Positive;
    -- ****
 
-   -- ****iv* Maps.UI.Commands/MapY
+   -- ****iv* MapCommands/MapY
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE

@@ -415,7 +415,7 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
-   -- ****iv* Maps.UI/MapView
+   -- ****iv* MUI/MapView
    -- FUNCTION
    -- Text widget with the sky map
    -- SOURCE
