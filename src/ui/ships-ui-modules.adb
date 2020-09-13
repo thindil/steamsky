@@ -310,6 +310,10 @@ package body Ships.UI.Modules is
                  (ModuleMenu, "command",
                   "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
                   ModuleIndexString & "}");
+               Menu.Add
+                 (ModuleMenu, "command",
+                  "-label {Cancel current crafting order} -command {CancelOrder " &
+                  ModuleIndexString & "}");
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -1611,6 +1615,52 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
+   -- ****o* SUModules/Cancel_Order_Command
+   -- FUNCTION
+   -- Cancel the current crafting order
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- Cancel moduleindex
+   -- Moduleindex is the index of the module which the crafting order will
+   -- be canceled
+   -- SOURCE
+   function Cancel_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Cancel_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      PlayerShip.Modules(ModuleIndex).CraftingIndex := Null_Unbounded_String;
+      PlayerShip.Modules(ModuleIndex).CraftingAmount := 0;
+      PlayerShip.Modules(ModuleIndex).CraftingTime := 0;
+      for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+         if Owner > 0 then
+            GiveOrders(PlayerShip, Owner, Rest);
+         end if;
+      end loop;
+      AddMessage
+        ("You cancelled crafting order in " &
+         To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+         CraftMessage, RED);
+      UpdateMessages;
+      UpdateHeader;
+      return TCL_OK;
+   end Cancel_Order_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
@@ -1624,6 +1674,7 @@ package body Ships.UI.Modules is
       AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
       AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
       AddCommand("ShowAssignSkill", Show_Assign_Skill_Command'Access);
+      AddCommand("CancelOrder", Cancel_Order_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
