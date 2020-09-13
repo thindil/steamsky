@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to cancel crafting orders in the selected module
+
 ### Changed
 - Updated interface
 - Better checking for tools for crafting and training
