@@ -658,7 +658,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Command;
 
-   -- ****if* Combat.UI/ShowCombatFrame
+   -- ****if* CUI/ShowCombatFrame
    -- FUNCTION
    -- Show ship to ship combat UI or boarding UI
    -- SOURCE
