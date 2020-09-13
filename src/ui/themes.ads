@@ -17,7 +17,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Containers.Indefinite_Hashed_Maps;
 with Ada.Strings.Hash;
 
--- ****h* SteamSky/Themes
+-- ****h* Themes/Themes
 -- FUNCTION
 -- Provide code for read and set the game UI themes
 -- SOURCE

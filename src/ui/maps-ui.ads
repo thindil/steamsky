@@ -39,7 +39,7 @@ package Maps.UI is
       To_Unbounded_String("q"), To_Unbounded_String("x"));
    -- ****
 
-   -- ****v* Maps.UI/MapAccelerators
+   -- ****v* MUI/MapAccelerators
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
@@ -72,7 +72,7 @@ package Maps.UI is
       To_Unbounded_String("Control-3"), To_Unbounded_String("Control-4"));
    -- ****
 
-   -- ****v* Maps.UI/FullScreenAccel
+   -- ****v* MUI/FullScreenAccel
    -- FUNCTION
    -- Keyboard shortcut for switching full screen mode
    -- SOURCE
@@ -93,7 +93,7 @@ package Maps.UI is
    GameMenu: Tk_Menu;
    -- ****
 
-   -- ****v* Maps.UI/DefaultFontsSizes
+   -- ****v* MUI/DefaultFontsSizes
    -- FUNCTION
    -- Default sizes of the game fonts
    -- SOURCE
@@ -147,7 +147,7 @@ package Maps.UI is
 
 private
 
-   -- ****v* Maps.UI/StartX
+   -- ****v* MUI/StartX
    -- FUNCTION
    -- Top left map coordinate
    -- SOURCE

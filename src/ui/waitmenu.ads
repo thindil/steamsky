@@ -17,7 +17,7 @@ with Interfaces.C;
 with CArgv;
 with Tcl; use Tcl;
 
--- ****h* Steamsky/WaitMenu
+-- ****h* WaitMenu/WaitMenu
 -- FUNCTION
 -- Provide code for wait orders
 -- SOURCE
