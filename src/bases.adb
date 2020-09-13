@@ -111,37 +111,32 @@ package body Bases is
 
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String is
-      NewName: Unbounded_String;
+      NewName: Unbounded_String := Null_Unbounded_String;
    begin
-      NewName := Null_Unbounded_String;
-      if Factions_List(FactionIndex).NamesType = Factions.STANDARD then
-         if GetRandom(1, 100) < 16 then
-            NewName :=
-              BaseSyllablesPre
-                (GetRandom
-                   (BaseSyllablesPre.First_Index,
-                    BaseSyllablesPre.Last_Index)) &
-              " ";
-         end if;
+      if Factions_List(FactionIndex).NamesType = ROBOTIC then
+         return GenerateRoboticName;
+      end if;
+      if GetRandom(1, 100) < 16 then
          NewName :=
-           NewName &
-           BaseSyllablesStart
+           BaseSyllablesPre
              (GetRandom
-                (BaseSyllablesStart.First_Index,
-                 BaseSyllablesStart.Last_Index)) &
-           BaseSyllablesEnd
+                (BaseSyllablesPre.First_Index, BaseSyllablesPre.Last_Index)) &
+           " ";
+      end if;
+      NewName :=
+        NewName &
+        BaseSyllablesStart
+          (GetRandom
+             (BaseSyllablesStart.First_Index, BaseSyllablesStart.Last_Index)) &
+        BaseSyllablesEnd
+          (GetRandom
+             (BaseSyllablesEnd.First_Index, BaseSyllablesEnd.Last_Index));
+      if GetRandom(1, 100) < 16 then
+         NewName :=
+           NewName & " " &
+           BaseSyllablesPost
              (GetRandom
-                (BaseSyllablesEnd.First_Index, BaseSyllablesEnd.Last_Index));
-         if GetRandom(1, 100) < 16 then
-            NewName :=
-              NewName & " " &
-              BaseSyllablesPost
-                (GetRandom
-                   (BaseSyllablesPost.First_Index,
-                    BaseSyllablesPost.Last_Index));
-         end if;
-      else
-         NewName := GenerateRoboticName;
+                (BaseSyllablesPost.First_Index, BaseSyllablesPost.Last_Index));
       end if;
       return NewName;
    end GenerateBaseName;
@@ -217,18 +212,12 @@ package body Bases is
          TempTools.Clear;
          Equipment := (others => 0);
          Payment := 0;
-         if GetRandom(1, 100) < 99 then
-            RecruitFaction := SkyBases(BaseIndex).Owner;
-         else
-            RecruitFaction := GetRandomFaction;
-         end if;
+         RecruitFaction :=
+           (if GetRandom(1, 100) < 99 then SkyBases(BaseIndex).Owner
+            else GetRandomFaction);
          if not Factions_List(RecruitFaction).Flags.Contains
              (To_Unbounded_String("nogender")) then
-            if GetRandom(1, 2) = 1 then
-               Gender := 'M';
-            else
-               Gender := 'F';
-            end if;
+            Gender := (if GetRandom(1, 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
          end if;
@@ -247,12 +236,10 @@ package body Bases is
             MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
          end if;
          for J in 1 .. SkillsAmount loop
-            if J > 1 then
-               SkillNumber :=
-                 GetRandom(Skills_List.First_Index, Skills_List.Last_Index);
-            else
-               SkillNumber := Factions_List(RecruitFaction).WeaponSkill;
-            end if;
+            SkillNumber :=
+              (if J > 1 then
+                 GetRandom(Skills_List.First_Index, Skills_List.Last_Index)
+               else Factions_List(RecruitFaction).WeaponSkill);
             SkillLevel := GetRandom(1, MaxSkillLevel);
             if SkillLevel > HighestLevel then
                HighestLevel := SkillLevel;
@@ -261,11 +248,10 @@ package body Bases is
             SkillIndex := 0;
             for C in Skills.Iterate loop
                if Skills(C)(1) = SkillNumber then
-                  if Skills(C)(2) < SkillLevel then
-                     SkillIndex := Skills_Container.To_Index(C);
-                  else
-                     SkillIndex := -1;
-                  end if;
+                  SkillIndex :=
+                    (if Skills(C)(2) < SkillLevel then
+                       Skills_Container.To_Index(C)
+                     else -1);
                   exit;
                end if;
             end loop;
@@ -315,11 +301,9 @@ package body Bases is
          if Price = 0 then
             Price := 1;
          end if;
-         if GetRandom(1, 100) < 99 then
-            RecruitBase := BaseIndex;
-         else
-            RecruitBase := GetRandom(SkyBases'First, SkyBases'Last);
-         end if;
+         RecruitBase :=
+           (if GetRandom(1, 100) < 99 then BaseIndex
+            else GetRandom(SkyBases'First, SkyBases'Last));
          BaseRecruits.Append
            (New_Item =>
               (Name => GenerateMemberName(Gender, RecruitFaction),
@@ -637,13 +621,11 @@ package body Bases is
          if GetRandom(1, 100) > 30 then
             return;
          end if;
-         if GetRandom(1, 100) < 20 then
-            PopulationDiff := 0 - GetRandom(1, 10);
-         else
-            PopulationDiff := GetRandom(1, 10);
-         end if;
+         PopulationDiff :=
+           (if GetRandom(1, 100) < 20 then -(GetRandom(1, 10))
+            else GetRandom(1, 10));
          if SkyBases(BaseIndex).Population + PopulationDiff < 0 then
-            PopulationDiff := 0 - SkyBases(BaseIndex).Population;
+            PopulationDiff := -(SkyBases(BaseIndex).Population);
          end if;
          SkyBases(BaseIndex).Population :=
            SkyBases(BaseIndex).Population + PopulationDiff;
