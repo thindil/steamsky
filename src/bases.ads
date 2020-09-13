@@ -70,13 +70,6 @@ package Bases is
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    -- ****
 
-   -- ****t* Bases/Reputation_Array
-   -- FUNCTION
-   -- Data structure for reputation, 1 = level, 2 = points to next level
-   -- SOURCE
-   type Reputation_Array is array(1 .. 2) of Integer;
-   -- ****
-
    -- ****s* Bases/Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
