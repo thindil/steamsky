@@ -1,4 +1,4 @@
---    Copyright 2019 Bartek thindil Jasicki
+--    Copyright 2019-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -48,17 +48,14 @@ package body BasesTypes is
              (Item(NodesList, Index), Name);
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
-            if Name = "flag" then
-               Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
-            else
-               Value := To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-            end if;
-            if Get_Attribute(ChildNode, "action")'Length > 0 then
-               SubAction :=
-                 DataAction'Value(Get_Attribute(ChildNode, "action"));
-            else
-               SubAction := ADD;
-            end if;
+            Value :=
+              (if Name = "flag" then
+                 To_Unbounded_String(Get_Attribute(ChildNode, "name"))
+               else To_Unbounded_String(Get_Attribute(ChildNode, "index")));
+            SubAction :=
+              (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                 DataAction'Value(Get_Attribute(ChildNode, "action"))
+               else ADD);
             if Name = "recipe" then
                if not Recipes_List.Contains(Value) then
                   raise Data_Loading_Error
@@ -98,11 +95,10 @@ package body BasesTypes is
             Description => Null_Unbounded_String);
          BaseNode := Item(NodesList, I);
          BaseIndex := To_Unbounded_String(Get_Attribute(BaseNode, "index"));
-         if Get_Attribute(BaseNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(BaseNode, "action"));
-         else
-            Action := ADD;
-         end if;
+         Action :=
+           (if Get_Attribute(BaseNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(BaseNode, "action"))
+            else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
                 (BasesTypes_List, BaseIndex) then
@@ -142,12 +138,10 @@ package body BasesTypes is
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                if not Items_List.Contains(ItemIndex) then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
