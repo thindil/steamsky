@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -25,13 +26,13 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Maps.UI; use Maps.UI;
@@ -48,7 +49,7 @@ package body Messages.UI is
    -- MessagesType - The selected type of messages to show
    -- SOURCE
    procedure ShowMessage
-     (Message: Message_Data; MessagesView: Ttk_Tree_View;
+     (Message: Message_Data; MessagesView: Tk_Text;
       MessagesType: Message_Type) is
       -- ****
       MessageTag: Unbounded_String;
@@ -56,21 +57,21 @@ package body Messages.UI is
       if Message.MType = MessagesType or MessagesType = Default then
          case Message.Color is
             when YELLOW =>
-               MessageTag := To_Unbounded_String(" -tags [list yellow]");
+               MessageTag := To_Unbounded_String(" [list yellow]");
             when GREEN =>
-               MessageTag := To_Unbounded_String(" -tags [list green]");
+               MessageTag := To_Unbounded_String(" [list green]");
             when RED =>
-               MessageTag := To_Unbounded_String(" -tags [list red]");
+               MessageTag := To_Unbounded_String(" [list red]");
             when BLUE =>
-               MessageTag := To_Unbounded_String(" -tags [list blue]");
+               MessageTag := To_Unbounded_String(" [list blue]");
             when CYAN =>
-               MessageTag := To_Unbounded_String(" -tags [list cyan]");
+               MessageTag := To_Unbounded_String(" [list cyan]");
             when others =>
                MessageTag := Null_Unbounded_String;
          end case;
          Insert
-           (MessagesView,
-            "{} end -text {" & To_String(Message.Message) & "}" &
+           (MessagesView, "end",
+            "{" & To_String(Message.Message) & LF & "}" &
             To_String(MessageTag));
       end if;
    end ShowMessage;
@@ -106,7 +107,7 @@ package body Messages.UI is
       MessagesFrame: Ttk_Frame;
       CloseButton: Ttk_Button;
       MessagesType: Message_Type := Default;
-      MessagesView: Ttk_Tree_View;
+      MessagesView: Tk_Text;
       TypeBox: Ttk_ComboBox;
       SearchEntry: Ttk_Entry;
    begin
@@ -147,11 +148,12 @@ package body Messages.UI is
       MessagesView.Interp := Interp;
       MessagesView.Name :=
         New_String(Widget_Image(MessagesCanvas) & ".messages.list.view");
-      Delete(MessagesView, "[list " & Children(MessagesView, "{}") & "]");
+      configure(MessagesView, "-state normal");
+      Delete(MessagesView, "1.0", "end");
       if MessagesAmount(MessagesType) = 0 then
          Insert
-           (MessagesView,
-            "{} end -text {There are no messages of that type.}");
+           (MessagesView, "end",
+            "{There are no messages of that type.}");
       else
          if GameSettings.MessagesOrder = OLDER_FIRST then
             for Message of Messages_List loop
@@ -163,6 +165,7 @@ package body Messages.UI is
             end loop;
          end if;
       end if;
+      configure(MessagesView, "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       MessagesFrame.Name :=
         New_String(Widget_Image(MessagesCanvas) & ".messages");
@@ -286,7 +289,7 @@ package body Messages.UI is
       pragma Unreferenced(ClientData, Argc);
       TypeBox: Ttk_ComboBox;
       MessagesType: Message_Type;
-      MessagesView: Ttk_Tree_View;
+      MessagesView: Tk_Text;
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       TypeBox.Interp := Interp;
@@ -296,7 +299,8 @@ package body Messages.UI is
       MessagesView.Interp := Interp;
       MessagesView.Name :=
         New_String(".paned.messagesframe.canvas.messages.list.view");
-      Delete(MessagesView, "[list " & Children(MessagesView, "{}") & "]");
+      configure(MessagesView, "-state normal");
+      Delete(MessagesView, "1.0", "end");
       if SearchText'Length = 0 then
          if GameSettings.MessagesOrder = OLDER_FIRST then
             for Message of Messages_List loop
@@ -323,6 +327,7 @@ package body Messages.UI is
             end if;
          end loop;
       end if;
+      configure(MessagesView, "-state disable");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Search_Messages_Command;
