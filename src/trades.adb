@@ -167,18 +167,37 @@ package body Trades is
                  (Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
       CountPrice(Profit, TraderIndex, False);
-      for Member of PlayerShip.Crew loop
-         if Member.Payment(2) > 0 then
+      for I in PlayerShip.Crew.Iterate loop
+         if PlayerShip.Crew(I).Payment(2) > 0 then
+            if Profit = 0 then
+               UpdateMorale
+                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-25, -5));
+               AddMessage
+                 (To_String(PlayerShip.Crew(I).Name) &
+                  " is sad because doesn't get own part of profit.",
+                  TradeMessage, RED);
+               goto End_Of_Loop;
+            end if;
             Profit :=
               Profit -
-               Positive
+              Positive
                 (Float'Ceiling
-                   (Float(Profit) * (Float(Member.Payment(2)) / 100.0)));
+                   (Float(Profit) *
+                    (Float(PlayerShip.Crew(I).Payment(2)) / 100.0)));
             if Profit < 1 then
+               if Profit < 0 then
+                  UpdateMorale
+                    (PlayerShip, Crew_Container.To_Index(I),
+                     GetRandom(-12, -2));
+                  AddMessage
+                    (To_String(PlayerShip.Crew(I).Name) &
+                     " is sad because doesn't get own part of profit.",
+                     TradeMessage, RED);
+               end if;
                Profit := 0;
-               exit;
             end if;
          end if;
+         <<End_Of_Loop>>
       end loop;
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
