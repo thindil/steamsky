@@ -330,85 +330,8 @@ package body Ships.UI is
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
       -- Setting crew info
-      ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ShipInfoFrame.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".crew.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 2 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (ShipInfoFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Interp;
-            Item.Name := New_String(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
-      Row := 2;
-      for Member of PlayerShip.Crew loop
-         Label :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".name" &
-              Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Member.Name) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
-         Label :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".order" &
-              Trim(Natural'Image(Row), Left),
-              "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Natural'Image(Row) & " -column 1");
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".health" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Health) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".fatigue" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" &
-              Integer'Image
-                (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
-              "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".thirst" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Thirst) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".hunger" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Hunger) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".morale" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Morale(1)) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
-         Row := Row + 1;
-      end loop;
-      Tcl_Eval(Get_Context, "update");
-      ShipCanvas.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.crew.canvas");
-      configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+      UpdateCrewInfo;
+      -- Show ship info
       ShowScreen("shipinfoframe");
       return TCL_OK;
    end Show_Ship_Info_Command;
@@ -541,5 +464,88 @@ package body Ships.UI is
       AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
    end AddCommands;
+
+   procedure UpdateCrewInfo is
+      Label: Ttk_Label;
+      CrewInfoFrame, Item: Ttk_Frame;
+      UpgradeProgress: Ttk_ProgressBar;
+      Tokens: Slice_Set;
+      Rows, Row: Natural := 0;
+      ShipCanvas: Tk_Canvas;
+   begin
+      CrewInfoFrame.Interp := Get_Context;
+      CrewInfoFrame.Name :=
+        New_String(CrewInfoFrame & ".paned.shipinfoframe.crew.canvas.frame");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 2 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (CrewInfoFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item.Interp := Get_Context;
+            Item.Name := New_String(Slice(Tokens, J));
+            Destroy(Item);
+         end loop;
+      end loop;
+      Row := 2;
+      for Member of PlayerShip.Crew loop
+         Label :=
+           Create
+             (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(Member.Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+         Label :=
+           Create
+             (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
+              "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Natural'Image(Row) & " -column 1");
+         UpgradeProgress :=
+           Create
+             (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Health) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
+         UpgradeProgress :=
+           Create
+             (CrewInfoFrame & ".fatigue" & Trim(Natural'Image(Row), Left),
+              "-value {" &
+              Integer'Image
+                (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
+              "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
+         UpgradeProgress :=
+           Create
+             (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Thirst) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
+         UpgradeProgress :=
+           Create
+             (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Hunger) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
+         UpgradeProgress :=
+           Create
+             (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(Member.Morale(1)) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
+         Row := Row + 1;
+      end loop;
+      Tcl_Eval(Get_Context, "update");
+      ShipCanvas.Interp := Get_Context;
+      ShipCanvas.Name := New_String(".paned.shipinfoframe.crew.canvas");
+      configure
+        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      Xview_Move_To(ShipCanvas, "0.0");
+      Yview_Move_To(ShipCanvas, "0.0");
+      null;
+   end UpdateCrewInfo;
 
 end Ships.UI;
