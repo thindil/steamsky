@@ -37,7 +37,7 @@ tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
-$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.general.scrolly
 ::autoscroll::autoscroll $shipinfoframe.general.scrollx
 # Ship modules
@@ -52,7 +52,7 @@ grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[form
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
-$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
 # Crew info
@@ -72,7 +72,7 @@ grid [ttk::label $shipcanvas.frame.fatigue -text {Fatigue}] -column 3 -row 1
 grid [ttk::label $shipcanvas.frame.thirst -text {Thirst}] -column 4 -row 1
 grid [ttk::label $shipcanvas.frame.hunter -text {Hunger}] -column 5 -row 1
 grid [ttk::label $shipcanvas.frame.morale -text {Morale}] -column 6 -row 1
-$shipcanvas create window [expr [winfo reqwidth $shipcanvas.frame] / 2] [expr [winfo reqheight $shipcanvas.frame] / 2] -window $shipcanvas.frame
+$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.crew.scrolly
 ::autoscroll::autoscroll $shipinfoframe.crew.scrollx
 # Configure main ship info grid
