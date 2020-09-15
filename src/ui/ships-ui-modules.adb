@@ -27,6 +27,7 @@ with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -1285,7 +1286,8 @@ package body Ships.UI.Modules is
    begin
       if Argc = 3 then
          if Tcl_GetVar
-             (Interp, ".moduledialog.crewbutton" & CArgv.Arg(Argv, 2)) =
+             (Interp,
+              ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 2)) =
            "0" then
             for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
                if Owner = CrewIndex then
@@ -1311,7 +1313,7 @@ package body Ships.UI.Modules is
       for I in PlayerShip.Crew.Iterate loop
          CrewButton.Name :=
            New_String
-             (".moduledialog.crewbutton" &
+             (".moduledialog.canvas.frame.crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
          State(CrewButton, "!disabled");
       end loop;
@@ -1324,7 +1326,7 @@ package body Ships.UI.Modules is
          for I in PlayerShip.Crew.Iterate loop
             ButtonName :=
               To_Unbounded_String
-                (".moduledialog.crewbutton" &
+                (".moduledialog.canvas.frame.crewbutton" &
                  Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
             if Tcl_GetVar(Interp, To_String(ButtonName)) = "0" then
                CrewButton.Name := New_String(To_String(ButtonName));
@@ -1333,7 +1335,7 @@ package body Ships.UI.Modules is
          end loop;
       end if;
       InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".moduledialog.infolabel");
+      InfoLabel.Name := New_String(".moduledialog.canvas.frame.infolabel");
       if Winfo_Get(InfoLabel, "exists") = "1" then
          configure
            (InfoLabel,
@@ -1380,17 +1382,31 @@ package body Ships.UI.Modules is
           (".moduledialog",
            "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      XScroll: constant Ttk_Scrollbar :=
+        Create
+          (ModuleDialog & ".xscroll",
+           "-orient horizontal -command [list .moduledialog.canvas xview]");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (ModuleDialog & ".yscroll",
+           "-orient vertical -command [list .moduledialog.canvas yview]");
+      CrewCanvas: constant Tk_Canvas :=
+        Create
+          (ModuleDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll &
+           " set] -xscrollcommand [list " & XScroll & " set]");
+      CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (Widget_Image(ModuleDialog) & ".button",
+          (CrewFrame & ".button",
            "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
            "}");
       Height: Positive := 10;
-      Width: Positive := 260;
+      Width: Positive := 250;
       CrewButton: Ttk_CheckButton;
       InfoLabel: Ttk_Label :=
         Create
-          (Widget_Image(ModuleDialog) & ".titlelabel",
+          (CrewFrame & ".titlelabel",
            "-text {Assign a crew member to " &
            To_String(PlayerShip.Modules(ModuleIndex).Name) &
            "} -wraplength 250");
@@ -1402,12 +1418,17 @@ package body Ships.UI.Modules is
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
          Wm_Set(ModuleDialog, "attributes", "-type dialog");
       end if;
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(CrewCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
+      Autoscroll(YScroll);
+      Autoscroll(XScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       for I in PlayerShip.Crew.Iterate loop
          CrewButton :=
            Create
-             (Widget_Image(ModuleDialog) & ".crewbutton" &
+             (CrewFrame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) &
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
@@ -1432,7 +1453,7 @@ package body Ships.UI.Modules is
       end if;
       InfoLabel :=
         Create
-          (Widget_Image(ModuleDialog) & ".infolabel",
+          (CrewFrame & ".infolabel",
            "-text {Available:" &
            Natural'Image
              (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
@@ -1440,12 +1461,26 @@ package body Ships.UI.Modules is
            "}");
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
-      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) + 10 > Width then
-         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) + 10;
+      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
+         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
       end if;
       Tcl.Tk.Ada.Pack.Pack(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
+      if Height > 500 then
+         Height := 500;
+      end if;
+      configure
+        (CrewFrame,
+         "-height" & Positive'Image(Height) & " -width" &
+         Positive'Image(Width));
+      Canvas_Create
+        (CrewCanvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
+      configure
+        (CrewCanvas, "-scrollregion [list " & BBox(CrewCanvas, "all") & "]");
+      Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+      Height := Height + Positive'Value(Winfo_Get(XScroll, "reqheight")) + 5;
       declare
          X, Y: Integer;
       begin
