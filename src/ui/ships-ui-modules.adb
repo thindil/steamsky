@@ -1575,11 +1575,11 @@ package body Ships.UI.Modules is
         Create
           (SkillsFrame & ".view",
            "-columns [list name tool] -show headings -yscrollcommand [list " &
-           ScrollSkillY & " set]");
+           SkillsFrame & ".scrolly set]");
       ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Autoscroll(ScrollSkillY);
+--     Autoscroll(ScrollSkillY);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
       Wm_Set(ModuleDialog, "transient", ".");
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
@@ -1630,8 +1630,8 @@ package body Ships.UI.Modules is
         (SkillsView, "<<TreeviewSelect>>",
          "{AssignModule skill" & Positive'Image(ModuleIndex) & " [" &
          SkillsView & " focus]}");
---      Tcl.Tk.Ada.Pack.Pack(ScrollSkillY, "-side right -fill y");
---      Tcl.Tk.Ada.Pack.Pack(SkillsView);
+      Tcl.Tk.Ada.Pack.Pack(ScrollSkillY, "-side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(SkillsView);
       Tcl.Tk.Ada.Pack.Pack(SkillsFrame);
       Height := Height + Positive'Value(Winfo_Get(SkillsView, "reqheight"));
       Width :=
