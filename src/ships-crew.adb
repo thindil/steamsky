@@ -325,7 +325,6 @@ package body Ships.Crew is
           Items_List(Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex)
             .IType /=
           RequiredTool then
-         TakeOffItem(MemberIndex, ToolsIndex);
          UpdateCargo
            (Ship, Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,
             Ship.Crew(MemberIndex).Inventory(ToolsIndex).Durability);
@@ -397,7 +396,6 @@ package body Ships.Crew is
            Ship.Crew(MemberIndex).Order = Train then
             ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
             if ToolsIndex > 0 then
-               TakeOffItem(MemberIndex, ToolsIndex);
                UpdateCargo
                  (Ship,
                   Ship.Crew(MemberIndex).Inventory(ToolsIndex).ProtoIndex, 1,

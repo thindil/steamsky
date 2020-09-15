@@ -137,7 +137,6 @@ package body Crew.Inventory is
             if Items_List(ProtoIndex).IType /= ItemType or
               (Items_List(ProtoIndex).Value.Length > 0
                and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
-               TakeOffItem(MemberIndex, ToolsIndex);
                UpdateCargo
                  (PlayerShip, ProtoIndex, 1,
                   PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
