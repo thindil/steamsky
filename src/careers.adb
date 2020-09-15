@@ -43,11 +43,10 @@ package body Careers is
          CareerNode := Item(NodesList, I);
          CareerIndex :=
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
-         if Get_Attribute(CareerNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(CareerNode, "action"));
-         else
-            Action := ADD;
-         end if;
+         Action :=
+           (if Get_Attribute(CareerNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(CareerNode, "action"))
+            else ADD);
          if Action in UPDATE | REMOVE then
             if not Careers_Container.Contains(Careers_List, CareerIndex) then
                raise Data_Loading_Error
@@ -74,13 +73,12 @@ package body Careers is
                SkillName :=
                  To_Unbounded_String
                    (Get_Attribute(Item(ChildNodes, J), "name"));
-               if Get_Attribute(Item(ChildNodes, J), "action")'Length > 0 then
-                  SkillAction :=
+               SkillAction :=
+                 (if Get_Attribute(Item(ChildNodes, J), "action")'Length > 0
+                  then
                     DataAction'Value
-                      (Get_Attribute(Item(ChildNodes, J), "action"));
-               else
-                  SkillAction := ADD;
-               end if;
+                      (Get_Attribute(Item(ChildNodes, J), "action"))
+                  else ADD);
                if FindSkillIndex(SkillName) = 0 then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
