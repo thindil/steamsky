@@ -954,7 +954,9 @@ package body Ships.UI.Modules is
          GiveOrders(PlayerShip, AssignIndex, Order, ModuleIndex);
          if PlayerShip.Crew(AssignIndex).Order /= Order then
             Tcl_SetVar
-              (Interp, ".moduledialog.crewbutton" & CArgv.Arg(Argv, 3), "0");
+              (Interp,
+               ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 3),
+               "0");
          end if;
       end UpdateOrder;
    begin
