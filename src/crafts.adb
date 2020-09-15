@@ -399,7 +399,6 @@ package body Crafts is
          if ToolIndex in
              PlayerShip.Crew(CrafterIndex).Inventory.First_Index ..
                    PlayerShip.Crew(CrafterIndex).Inventory.Last_Index then
-            TakeOffItem(CrafterIndex, ToolIndex);
             UpdateCargo
               (PlayerShip,
                PlayerShip.Crew(CrafterIndex).Inventory(ToolIndex).ProtoIndex,
