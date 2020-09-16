@@ -406,6 +406,7 @@ package body Ships.SaveLoad is
                ModuleNode: Node;
                MType: ModuleType2;
                Owners: Natural_Container.Vector;
+               Locked: Boolean := False;
             begin
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                ProtoIndex :=
@@ -437,6 +438,10 @@ package body Ships.SaveLoad is
                if Get_Attribute(ChildNode, "upgradeprogress") /= "" then
                   UpgradeProgress :=
                     Integer'Value(Get_Attribute(ChildNode, "upgradeprogress"));
+               end if;
+               if Get_Attribute(ChildNode, "locked") /= ""
+                 and then Get_Attribute(ChildNode, "locked") = "Y" then
+                  Locked := True;
                end if;
                if Get_Attribute(ChildNode, "mtype") /= "" then
                   case Modules_List(ProtoIndex)
@@ -521,7 +526,8 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction, Data => Data));
+                           UpgradeAction => UpgradeAction, Locked => Locked,
+                           Data => Data));
                   when ENGINE =>
                      declare
                         FuelUsage, Power: Positive;
@@ -561,7 +567,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               FuelUsage => FuelUsage, Power => Power,
                               Disabled => Disabled));
                      end;
@@ -596,7 +602,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               Cleanliness => Cleanliness, Quality => Quality));
                      end;
                   when COCKPIT =>
@@ -607,7 +613,7 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           UpgradeAction => UpgradeAction, Locked => Locked));
                   when WORKSHOP =>
                      declare
                         CraftingIndex: Unbounded_String;
@@ -648,7 +654,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               CraftingIndex => CraftingIndex,
                               CraftingTime => CraftingTime,
                               CraftingAmount => CraftingAmount));
@@ -661,7 +667,7 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           UpgradeAction => UpgradeAction, Locked => Locked));
                   when TRAINING_ROOM =>
                      declare
                         TrainedSkill: Natural;
@@ -685,7 +691,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               TrainedSkill => TrainedSkill));
                      end;
                   when TURRET =>
@@ -711,7 +717,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               GunIndex => GunIndex));
                      end;
                   when GUN =>
@@ -745,8 +751,8 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction, Damage => Damage,
-                              AmmoIndex => AmmoIndex));
+                              UpgradeAction => UpgradeAction, Locked => Locked,
+                              Damage => Damage, AmmoIndex => AmmoIndex));
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
@@ -756,7 +762,7 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           UpgradeAction => UpgradeAction, Locked => Locked));
                   when HULL =>
                      declare
                         InstalledModules, MaxModules: Natural;
@@ -790,7 +796,7 @@ package body Ships.SaveLoad is
                               UpgradeProgress => UpgradeProgress,
                               UpgradeAction => UpgradeAction,
                               InstalledModules => InstalledModules,
-                              MaxModules => MaxModules));
+                              MaxModules => MaxModules, Locked => Locked));
                      end;
                   when ARMOR =>
                      PlayerShip.Modules.Append
@@ -800,7 +806,7 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           UpgradeAction => UpgradeAction, Locked => Locked));
                   when BATTERING_RAM =>
                      declare
                         Damage: Natural;
@@ -824,7 +830,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               Damage2 => Damage, CoolingDown => False));
                      end;
                   when HARPOON_GUN =>
@@ -858,7 +864,7 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              UpgradeAction => UpgradeAction, Locked => Locked,
                               Duration => Duration,
                               HarpoonIndex => HarpoonIndex));
                      end;

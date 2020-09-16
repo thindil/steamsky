@@ -56,7 +56,7 @@ package body Game.SaveLoad is
    -- FUNCTION
    -- Current version of the save game
    -- SOURCE
-   SaveVersion: constant Positive := 5;
+   SaveVersion: constant Positive := 6;
    -- ****
 
    procedure SaveGame(PrettyPrint: Boolean := False) is

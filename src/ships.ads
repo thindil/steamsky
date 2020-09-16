@@ -83,6 +83,7 @@ package Ships is
    -- Owner            - Crew member indexes for owners of module
    -- UpgradeProgress  - Progress of module upgrade
    -- UpgradeAction    - Type of module upgrade
+   -- Locked           - If true, only the assigned crew member(s) can enter the module
    -- FuelUsage        - Amount of fuel used for each move on map
    -- Power            - Power of engine used for counting ship speed
    -- Disabled         - Did engine is disabled or not
@@ -114,6 +115,7 @@ package Ships is
       Owner: Natural_Container.Vector;
       UpgradeProgress: Integer;
       UpgradeAction: ShipUpgrade;
+      Locked: Boolean;
       case MType is
          when ENGINE =>
             FuelUsage: Positive;

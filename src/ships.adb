@@ -135,7 +135,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, FuelUsage => TempModule.Value,
+                        UpgradeAction => NONE, Locked => False,
+                        FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
                   ShipModules.Append
@@ -145,7 +146,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Cleanliness => TempModule.Value,
+                        UpgradeAction => NONE, Locked => False,
+                        Cleanliness => TempModule.Value,
                         Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
                   ShipModules.Append
@@ -155,7 +157,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
+                        UpgradeAction => NONE, Locked => False,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
                when MEDICAL_ROOM =>
@@ -167,7 +169,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        UpgradeAction => NONE, Locked => False));
                when COCKPIT =>
                   ShipModules.Append
                     (New_Item =>
@@ -176,7 +178,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        UpgradeAction => NONE, Locked => False));
                when TRAINING_ROOM =>
                   ShipModules.Append
                     (New_Item =>
@@ -186,7 +188,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, TrainedSkill => 0));
+                        UpgradeAction => NONE, Locked => False,
+                        TrainedSkill => 0));
                when TURRET =>
                   ShipModules.Append
                     (New_Item =>
@@ -195,7 +198,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, GunIndex => 0));
+                        UpgradeAction => NONE, Locked => False,
+                        GunIndex => 0));
                when GUN =>
                   ShipModules.Append
                     (New_Item =>
@@ -204,8 +208,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Damage => TempModule.MaxValue,
-                        AmmoIndex => 0));
+                        UpgradeAction => NONE, Locked => False,
+                        Damage => TempModule.MaxValue, AmmoIndex => 0));
                when CARGO =>
                   ShipModules.Append
                     (New_Item =>
@@ -214,7 +218,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        UpgradeAction => NONE, Locked => False));
                when HULL =>
                   ShipModules.Append
                     (New_Item =>
@@ -223,7 +227,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
+                        UpgradeAction => NONE, Locked => False,
                         InstalledModules => TempModule.Value,
                         MaxModules => TempModule.MaxValue));
                when ARMOR =>
@@ -234,7 +238,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        UpgradeAction => NONE, Locked => False));
                when BATTERING_RAM =>
                   ShipModules.Append
                     (New_Item =>
@@ -244,8 +248,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Damage2 => TempModule.MaxValue,
-                        CoolingDown => False));
+                        UpgradeAction => NONE, Locked => False,
+                        Damage2 => TempModule.MaxValue, CoolingDown => False));
                when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>
@@ -255,8 +259,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Duration => TempModule.MaxValue,
-                        HarpoonIndex => 0));
+                        UpgradeAction => NONE, Locked => False,
+                        Duration => TempModule.MaxValue, HarpoonIndex => 0));
                when ANY =>
                   null;
             end case;
