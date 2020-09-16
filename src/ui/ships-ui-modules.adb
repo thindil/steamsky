@@ -465,7 +465,7 @@ package body Ships.UI.Modules is
          elsif DamagePercent = 0.0 then
             configure(Label, "-text {Status: Destroyed}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          MaxValue :=
            Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
