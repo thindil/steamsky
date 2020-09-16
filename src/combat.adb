@@ -231,11 +231,9 @@ package body Combat is
             EnemyPerception: Natural := 0;
          begin
             OldSpeed := PlayerShip.Speed;
-            if Enemy.Perception > 0 then
-               EnemyPerception := Enemy.Perception;
-            else
-               EnemyPerception := CountPerception(Enemy.Ship, PlayerShip);
-            end if;
+            EnemyPerception :=
+              (if Enemy.Perception > 0 then Enemy.Perception
+               else CountPerception(Enemy.Ship, PlayerShip));
             if (PlayerPerception + GetRandom(1, 50)) >
               (EnemyPerception + GetRandom(1, 50)) then
                AddMessage
@@ -330,9 +328,8 @@ package body Combat is
                  ("Gunner index:" & Natural'Image(GunnerIndex) & ".",
                   Log.Combat);
                if Ship = PlayerShip then
-                  if GunnerIndex = 0 then
-                     Shoots := 0;
-                  else
+                  Shoots := 0;
+                  if GunnerIndex > 0 then
                      for Gun of Guns loop
                         if Gun(1) = Modules_Container.To_Index(K) then
                            GunnerOrder := Gun(2);
@@ -489,11 +486,7 @@ package body Combat is
                if Enemy.Distance > 100 then
                   Shoots := 0;
                else
-                  if Ship.Modules(K).CoolingDown then
-                     Shoots := 0;
-                  else
-                     Shoots := 1;
-                  end if;
+                  Shoots := (if Ship.Modules(K).CoolingDown then 0 else 1);
                end if;
                Ship.Modules(K).CoolingDown := not Ship.Modules(K).CoolingDown;
             end if;
@@ -523,14 +516,11 @@ package body Combat is
                  ("Chance to hit:" & Integer'Image(HitChance), Log.Combat);
                for I in 1 .. Shoots loop
                   if Ship = PlayerShip then
-                     if Ship.Modules(K).MType in GUN | HARPOON_GUN then
-                        ShootMessage :=
+                     ShootMessage :=
+                       (if Ship.Modules(K).MType in GUN | HARPOON_GUN then
                           Ship.Crew(GunnerIndex).Name &
-                          To_Unbounded_String(" shoots at ") & EnemyNameOwner;
-                     else
-                        ShootMessage :=
-                          To_Unbounded_String("You ram ") & EnemyNameOwner;
-                     end if;
+                          To_Unbounded_String(" shoots at ") & EnemyNameOwner
+                        else To_Unbounded_String("You ram ") & EnemyNameOwner);
                   else
                      ShootMessage :=
                        EnemyNameOwner & To_Unbounded_String(" attacks");
@@ -876,11 +866,8 @@ package body Combat is
                Attacker.Equipment(1) = 0) and
               not Factions_List(Defender.Faction).Flags.Contains
                 (To_Unbounded_String("diseaseimmune")) then
-               if Damage * 10 < 30 then
-                  Damage := Damage * 10;
-               else
-                  Damage := Damage + 30;
-               end if;
+               Damage :=
+                 (if Damage * 10 < 30 then Damage * 10 else Damage + 30);
             end if;
             if Damage < 1 then
                Damage := 1;
@@ -943,11 +930,9 @@ package body Combat is
                   Attacker.Attributes :=
                     PlayerShip.Crew(AttackerIndex).Attributes;
                end if;
-               if Damage > Defender.Health then
-                  Defender.Health := 0;
-               else
-                  Defender.Health := Defender.Health - Damage;
-               end if;
+               Defender.Health :=
+                 (if Damage > Defender.Health then 0
+                  else Defender.Health - Damage);
             end if;
             AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
             Attacker.Tired := Attacker.Tired + 1;
