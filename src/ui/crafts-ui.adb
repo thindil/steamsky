@@ -208,7 +208,7 @@ package body Crafts.UI is
          CanCraft := False;
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
-               and then Module.Durability > 0 then
+              and then Module.Durability > 0 then
                CanCraft := True;
                exit;
             end if;
