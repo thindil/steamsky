@@ -123,7 +123,10 @@ package body Bases.ShipyardUI is
          return TCL_OK;
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "0" and Argc = 1 then
          ModuleTypeBox.Interp := Interp;
-         ModuleTypeBox.Name := New_String(Widget_Image(ShipyardCanvas) & ".shipyard.notebook.install.options.modules");
+         ModuleTypeBox.Name :=
+           New_String
+             (Widget_Image(ShipyardCanvas) &
+              ".shipyard.notebook.install.options.modules");
          Current(ModuleTypeBox, "0");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");

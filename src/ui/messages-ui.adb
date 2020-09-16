@@ -151,9 +151,7 @@ package body Messages.UI is
       configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if MessagesAmount(MessagesType) = 0 then
-         Insert
-           (MessagesView, "end",
-            "{There are no messages of that type.}");
+         Insert(MessagesView, "end", "{There are no messages of that type.}");
       else
          if GameSettings.MessagesOrder = OLDER_FIRST then
             for Message of Messages_List loop
