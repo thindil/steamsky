@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to cancel crafting orders in the selected module
 - Crew members lose morale if they don't get their part of trade profit
+- Ability to show the home base from ship info
 
 ### Changed
 - Updated interface
