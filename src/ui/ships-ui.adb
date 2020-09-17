@@ -472,6 +472,7 @@ package body Ships.UI is
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
+      ProgressBarStyle: Unbounded_String;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
@@ -503,37 +504,91 @@ package body Ships.UI is
               "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -column 1");
+         if Member.Health > 74 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Health > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Health) & "}");
+              "-value {" & Natural'Image(Member.Health) & "}" &
+              To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
+         if Member.Tired - Member.Attributes(ConditionIndex)(1) < 25 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Tired - Member.Attributes(ConditionIndex)(1) > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".fatigue" & Trim(Natural'Image(Row), Left),
               "-value {" &
               Integer'Image
                 (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
-              "}");
+              "}" & To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
+         if Member.Thirst < 25 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Thirst > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Thirst) & "}");
+              "-value {" & Natural'Image(Member.Thirst) & "}" &
+              To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
+         if Member.Hunger < 25 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Hunger > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Hunger) & "}");
+              "-value {" & Natural'Image(Member.Hunger) & "}" &
+              To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
+         if Member.Morale(1) > 49 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Morale(1) > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Morale(1)) & "}");
+              "-value {" & Natural'Image(Member.Morale(1)) & "}" &
+              To_String(ProgressBarStyle));
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
          Row := Row + 1;
