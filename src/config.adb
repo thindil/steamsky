@@ -15,7 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 with Game; use Game;
 
@@ -57,9 +57,6 @@ package body Config is
          FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
          TopicsPosition => 200, ShowBaseInfo => True, ShowCargoInfo => True,
          ShowInventoryInfo => True, ShowNumbers => False);
-      if not Exists(To_String(SaveDirectory) & "game.cfg") then
-         return;
-      end if;
       Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
       while not End_Of_File(ConfigFile) loop
          RawData := To_Unbounded_String(Get_Line(ConfigFile));
@@ -185,6 +182,9 @@ package body Config is
          end if;
       end loop;
       Close(ConfigFile);
+   exception
+      when Ada.Directories.Name_Error =>
+         null;
    end LoadConfig;
 
    procedure SaveConfig is
