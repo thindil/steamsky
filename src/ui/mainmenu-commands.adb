@@ -437,6 +437,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    exception
       when An_Exception : SaveGame_Invalid_Data =>
+         ShowMainMenu;
          if MessageBox
              ("-message {Can't load this game. Reason: " &
               Exception_Message(An_Exception) & "} -icon error -type ok") =
