@@ -35,6 +35,8 @@ grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]"
 tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination}
 # Ship home base
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we
+grid [ttk::button $shipcanvas.frame.showhome -text "[format %c 0xf06e]" -style Header.Toolbutton -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 -sticky w
+tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
