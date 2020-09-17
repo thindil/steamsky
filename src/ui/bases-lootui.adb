@@ -210,9 +210,7 @@ package body Bases.LootUI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (LootCanvas, "window",
-         "[expr " & Winfo_Get(LootFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(LootFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(LootFrame));
+         "0 0 -anchor nw -window " & Widget_Image(LootFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (LootCanvas, "-scrollregion [list " & BBox(LootCanvas, "all") & "]");
