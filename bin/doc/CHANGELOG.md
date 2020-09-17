@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Auto-resizing of last messages widget
 - Update crew info in ship info on assign or unassign crew member to module
 - Showing module damamge in module info
+- Showing main menu when the player tries load invalid savegame
 
 ## [5.2] - 2020-09-06
 
