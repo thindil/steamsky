@@ -1445,8 +1445,6 @@ package body Ships.UI.Modules is
            To_String(PlayerShip.Modules(ModuleIndex).Name) &
            "} -wraplength 250");
       Assigned: Natural := 0;
-      LockedButton: constant Ttk_CheckButton :=
-        Create(CrewFrame & ".locked", "-text {Lock module}");
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
@@ -1461,15 +1459,6 @@ package body Ships.UI.Modules is
       Autoscroll(XScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
-      if PlayerShip.Modules(ModuleIndex).MType in WORKSHOP | TRAINING_ROOM |
-            MEDICAL_ROOM then
-         Add
-           (LockedButton,
-            "If module is locked only the assigned crew member(s) can use or work in it.");
-         Tcl.Tk.Ada.Pack.Pack(LockedButton);
-         Height :=
-           Height + Positive'Value(Winfo_Get(LockedButton, "reqheight"));
-      end if;
       for I in PlayerShip.Crew.Iterate loop
          CrewButton :=
            Create

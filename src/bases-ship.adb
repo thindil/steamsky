@@ -170,7 +170,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
                when MEDICAL_ROOM =>
@@ -183,7 +183,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False));
+                        UpgradeAction => NONE));
                when TRAINING_ROOM =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -194,7 +194,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         TrainedSkill => 0));
                when COCKPIT =>
                   PlayerShip.Modules.Append
@@ -206,7 +206,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False));
+                        UpgradeAction => NONE));
                when TURRET =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -217,7 +217,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         GunIndex => 0));
                when CABIN =>
                   PlayerShip.Modules.Append
@@ -228,7 +228,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         Cleanliness => Modules_List(ModuleIndex).Value,
                         Quality => Modules_List(ModuleIndex).MaxValue));
                when ShipModules.CARGO =>
@@ -241,7 +241,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False));
+                        UpgradeAction => NONE));
                when ENGINE =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -252,7 +252,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         FuelUsage => Modules_List(ModuleIndex).Value,
                         Power => Modules_List(ModuleIndex).MaxValue,
                         Disabled => False));
@@ -265,7 +265,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False));
+                        UpgradeAction => NONE));
                when BATTERING_RAM =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -276,7 +276,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         Damage2 => Modules_List(ModuleIndex).MaxValue,
                         CoolingDown => False));
                when GUN =>
@@ -288,7 +288,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         Damage => Modules_List(ModuleIndex).MaxValue,
                         AmmoIndex => 0));
                when HARPOON_GUN =>
@@ -301,7 +301,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Locked => False,
+                        UpgradeAction => NONE,
                         Duration => Modules_List(ModuleIndex).MaxValue,
                         HarpoonIndex => 0));
                when ANY | HULL =>
@@ -317,7 +317,6 @@ package body Bases.Ship is
                   Durability => Modules_List(ModuleIndex).Durability,
                   MaxDurability => Modules_List(ModuleIndex).Durability,
                   Owner => Owners, UpgradeProgress => 0, UpgradeAction => NONE,
-                  Locked => False,
                   InstalledModules => Modules_List(ModuleIndex).Value,
                   MaxModules => Modules_List(ModuleIndex).MaxValue));
          end if;
