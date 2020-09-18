@@ -499,14 +499,17 @@ package body Ships.UI is
              (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
               "-text {" & To_String(Member.Name) & "}");
          Add(Button, "Show available crew member's options");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row" & Natural'Image(Row) & " -sticky w");
+         Tcl.Tk.Ada.Grid.Grid
+           (Button, "-row" & Natural'Image(Row) & " -sticky w");
          Label :=
            Create
              (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
-         Add
-           (Label,
-            "The current order for the selected crew member.");
+              "-text {" & Crew_Orders'Image(Member.Order)(1) &
+              To_Lower
+                (Crew_Orders'Image(Member.Order)
+                   (2 .. Crew_Orders'Image(Member.Order)'Last)) &
+              "}");
+         Add(Label, "The current order for the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -column 1");
          if Member.Health > 74 then
