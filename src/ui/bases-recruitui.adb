@@ -128,9 +128,7 @@ package body Bases.RecruitUI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (RecruitCanvas, "window",
-         "[expr " & Winfo_Get(RecruitFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(RecruitFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(RecruitFrame));
+         "0 0 -anchor nw -window " & Widget_Image(RecruitFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (RecruitCanvas,
