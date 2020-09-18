@@ -456,6 +456,7 @@ package body Mobs is
       end;
       Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
+      Mob.OrderTime := 15;
       Mob.PreviousOrder := Rest;
       Mob.Health := 100;
       Mob.Tired := 0;
