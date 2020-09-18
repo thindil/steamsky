@@ -16,6 +16,8 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.UTF_Encoding.Wide_Strings;
+use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -42,6 +44,7 @@ with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships.UI.Modules;
 with Utils.UI; use Utils.UI;
+with Themes; use Themes;
 
 package body Ships.UI is
 
@@ -470,17 +473,20 @@ package body Ships.UI is
       CrewInfoFrame, Item: Ttk_Frame;
       UpgradeProgress: Ttk_ProgressBar;
       Tokens: Slice_Set;
-      Rows, Row: Natural := 0;
+      Rows: Natural := 0;
       ShipCanvas: Tk_Canvas;
       ProgressBarStyle: Unbounded_String;
-      Button: Ttk_MenuButton;
+      CrewButton: Ttk_MenuButton;
+      Row: Positive := 1;
+      NeedRepair, NeedClean: Boolean := False;
+      Button: Ttk_Button;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
         New_String(CrewInfoFrame & ".paned.shipinfoframe.crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 2 .. (Rows - 1) loop
+      for I in 1 .. (Rows - 1) loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves
@@ -492,15 +498,46 @@ package body Ships.UI is
             Destroy(Item);
          end loop;
       end loop;
-      Row := 2;
-      for Member of PlayerShip.Crew loop
+      for Module of PlayerShip.Modules loop
+         if Module.Durability < Module.MaxDurability then
+            NeedRepair := True;
+         end if;
+         if (Module.Durability > 0 and Module.MType = CABIN)
+           and then Module.Cleanliness < Module.Quality then
+            NeedClean := True;
+         end if;
+         exit when NeedClean and NeedRepair;
+      end loop;
+      if NeedClean then
          Button :=
+           Create
+             (CrewInfoFrame & ".clean",
+              "-text {" &
+              Encode
+                ("" &
+                 Themes_List(To_String(GameSettings.InterfaceTheme))
+                   .CleanIcon) &
+              "} -style Header.Toolbutton");
+         Tcl.Tk.Ada.Grid.Grid(Button);
+         Row := 2;
+      end if;
+      Label := Create(CrewInfoFrame & ".name", "-text {Name}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+      Label := Create(CrewInfoFrame & ".order", "-text {Order}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 1");
+      Label := Create(CrewInfoFrame & ".health", "-text {Health}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 2");
+      Label := Create(CrewInfoFrame & ".tired", "-text {Fatigue}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 3");
+      Row := Row + 1;
+      for Member of PlayerShip.Crew loop
+         CrewButton :=
            Create
              (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
               "-text {" & To_String(Member.Name) & "}");
-         Add(Button, "Show available crew member's options");
+         Add(CrewButton, "Show available crew member's options");
          Tcl.Tk.Ada.Grid.Grid
-           (Button, "-row" & Natural'Image(Row) & " -sticky w");
+           (CrewButton, "-row" & Natural'Image(Row) & " -sticky w");
          Label :=
            Create
              (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
@@ -623,7 +660,6 @@ package body Ships.UI is
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-      null;
    end UpdateCrewInfo;
 
 end Ships.UI;
