@@ -59,11 +59,10 @@ package body Crafts is
          RecipeNode := Item(NodesList, I);
          RecipeIndex :=
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
-         if Get_Attribute(RecipeNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(RecipeNode, "action"));
-         else
-            Action := ADD;
-         end if;
+         Action :=
+           (if Get_Attribute(RecipeNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(RecipeNode, "action"))
+            else ADD);
          if Action in UPDATE | REMOVE then
             if not Recipes_Container.Contains(Recipes_List, RecipeIndex) then
                raise Data_Loading_Error
@@ -347,14 +346,14 @@ package body Crafts is
       declare
          HaveTool: Boolean := False;
       begin
-         if Recipe.Tool /= To_Unbounded_String("None") then
-            if FindItem
-                (Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool,
-                 Quality => Recipe.ToolQuality) >
-              0 then
-               HaveTool := True;
-            end if;
-         else
+         if Recipe.Tool /= To_Unbounded_String("None")
+           and then
+             FindItem
+               (Inventory => PlayerShip.Cargo, ItemType => Recipe.Tool,
+                Quality => Recipe.ToolQuality) >
+             0 then
+            HaveTool := True;
+         elsif Recipe.Tool = To_Unbounded_String("None") then
             HaveTool := True;
          end if;
          if not HaveTool then
@@ -477,221 +476,220 @@ package body Crafts is
                CraftedAmount := 0;
                Craft_Loop :
                while CurrentMinutes > 0 loop
-                  if CurrentMinutes >= RecipeTime then
-                     CurrentMinutes := CurrentMinutes - RecipeTime;
-                     WorkTime := WorkTime - RecipeTime;
-                     RecipeTime := Recipe.Time;
-                     MaterialIndexes.Clear;
-                     if Length(Module.CraftingIndex) > 6
-                       and then Slice(Module.CraftingIndex, 1, 5) =
-                         "Study" then
+                  if CurrentMinutes < RecipeTime then
+                     RecipeTime := RecipeTime - CurrentMinutes;
+                     WorkTime := WorkTime - CurrentMinutes;
+                     CurrentMinutes := 0;
+                     goto End_Of_Craft_Loop;
+                  end if;
+                  RecipeTime := RecipeTime - CurrentMinutes;
+                  WorkTime := WorkTime - CurrentMinutes;
+                  CurrentMinutes := 0;
+                  CurrentMinutes := CurrentMinutes - RecipeTime;
+                  WorkTime := WorkTime - RecipeTime;
+                  RecipeTime := Recipe.Time;
+                  MaterialIndexes.Clear;
+                  if Length(Module.CraftingIndex) > 6
+                    and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
+                     for J in Items_List.Iterate loop
+                        if Items_List(J).Name =
+                          Items_List(Recipe.ResultIndex).Name then
+                           MaterialIndexes.Append
+                             (New_Item => Objects_Container.Key(J));
+                           exit;
+                        end if;
+                     end loop;
+                  elsif Length(Module.CraftingIndex) > 12
+                    and then Slice(Module.CraftingIndex, 1, 11) =
+                      "Deconstruct" then
+                     MaterialIndexes.Append
+                       (New_Item =>
+                          Unbounded_Slice
+                            (Module.CraftingIndex, 13,
+                             Length(Module.CraftingIndex)));
+                  else
+                     for K in Recipe.MaterialTypes.Iterate loop
                         for J in Items_List.Iterate loop
-                           if Items_List(J).Name =
-                             Items_List(Recipe.ResultIndex).Name then
+                           if Items_List(J).IType =
+                             Recipe.MaterialTypes
+                               (UnboundedString_Container.To_Index(K)) then
                               MaterialIndexes.Append
                                 (New_Item => Objects_Container.Key(J));
                               exit;
                            end if;
                         end loop;
-                     elsif Length(Module.CraftingIndex) > 12
-                       and then Slice(Module.CraftingIndex, 1, 11) =
-                         "Deconstruct" then
-                        MaterialIndexes.Append
-                          (New_Item =>
-                             Unbounded_Slice
-                               (Module.CraftingIndex, 13,
-                                Length(Module.CraftingIndex)));
-                     else
-                        for K in Recipe.MaterialTypes.Iterate loop
-                           for J in Items_List.Iterate loop
-                              if Items_List(J).IType =
-                                Recipe.MaterialTypes
-                                  (UnboundedString_Container.To_Index(K)) then
-                                 MaterialIndexes.Append
-                                   (New_Item => Objects_Container.Key(J));
-                                 exit;
-                              end if;
-                           end loop;
-                        end loop;
-                     end if;
-                     CraftingMaterial := 0;
-                     for MaterialIndex of MaterialIndexes loop
-                        CraftingMaterial :=
-                          FindItem
-                            (PlayerShip.Cargo,
-                             ItemType => Items_List(MaterialIndex).IType);
-                        if CraftingMaterial = 0 then
-                           AddMessage
-                             ("You don't have the crafting materials for " &
-                              To_String(RecipeName) & ".",
-                              CraftMessage, RED);
-                           ResetOrder(Module, Owner);
-                           exit Craft_Loop;
-                        elsif PlayerShip.Cargo(CraftingMaterial).ProtoIndex /=
-                          MaterialIndex then
-                           MaterialIndex :=
-                             PlayerShip.Cargo(CraftingMaterial).ProtoIndex;
-                        end if;
                      end loop;
-                     if Recipe.Tool /= To_Unbounded_String("None") then
-                        ToolIndex :=
-                          FindTools
-                            (CrafterIndex, Recipe.Tool, Craft,
-                             Recipe.ToolQuality);
-                        if ToolIndex = 0 then
-                           AddMessage
-                             ("You don't have the tool for " &
-                              To_String(RecipeName) & ".",
-                              CraftMessage, RED);
-                           ResetOrder(Module, Owner);
-                           exit Craft_Loop;
-                        end if;
-                     else
-                        ToolIndex := 0;
-                     end if;
-                     Amount := 0;
-                     for J in MaterialIndexes.Iterate loop
-                        Amount :=
-                          Amount +
-                          Items_List(MaterialIndexes(J)).Weight *
-                            Recipe.MaterialAmounts
-                              (UnboundedString_Container.To_Index(J));
-                     end loop;
-                     ResultAmount :=
-                       Recipe.ResultAmount +
-                       Integer
-                         (Float'Floor
-                            (Float(Recipe.ResultAmount) *
-                             (Float
-                                (GetSkillLevel
-                                   (PlayerShip.Crew(CrafterIndex),
-                                    Recipe.Skill)) /
-                              100.0)));
-                     Damage :=
-                       1.0 -
-                       DamageFactor
-                         (Float(Module.Durability) /
-                          Float(Module.MaxDurability));
-                     ResultAmount :=
-                       ResultAmount -
-                       Natural(Float(ResultAmount) * Float(Damage));
-                     if ResultAmount = 0 then
-                        ResultAmount := 1;
-                     end if;
-                     for J in MaterialIndexes.Iterate loop
-                        HaveMaterial := False;
-                        for Item of PlayerShip.Cargo loop
-                           if Items_List(Item.ProtoIndex).IType =
-                             Items_List(MaterialIndexes(J)).IType and
-                             Item.Amount >=
-                               Recipe.MaterialAmounts
-                                 (UnboundedString_Container.To_Index(J)) then
-                              HaveMaterial := True;
-                              exit;
-                           end if;
-                        end loop;
-                        exit when not HaveMaterial;
-                     end loop;
-                     if not HaveMaterial then
+                  end if;
+                  CraftingMaterial := 0;
+                  for MaterialIndex of MaterialIndexes loop
+                     CraftingMaterial :=
+                       FindItem
+                         (PlayerShip.Cargo,
+                          ItemType => Items_List(MaterialIndex).IType);
+                     if CraftingMaterial = 0 then
                         AddMessage
-                          ("You don't have enough crafting materials for " &
+                          ("You don't have the crafting materials for " &
+                           To_String(RecipeName) & ".",
+                           CraftMessage, RED);
+                        ResetOrder(Module, Owner);
+                        exit Craft_Loop;
+                     elsif PlayerShip.Cargo(CraftingMaterial).ProtoIndex /=
+                       MaterialIndex then
+                        MaterialIndex :=
+                          PlayerShip.Cargo(CraftingMaterial).ProtoIndex;
+                     end if;
+                  end loop;
+                  if Recipe.Tool /= To_Unbounded_String("None") then
+                     ToolIndex :=
+                       FindTools
+                         (CrafterIndex, Recipe.Tool, Craft,
+                          Recipe.ToolQuality);
+                     if ToolIndex = 0 then
+                        AddMessage
+                          ("You don't have the tool for " &
                            To_String(RecipeName) & ".",
                            CraftMessage, RED);
                         ResetOrder(Module, Owner);
                         exit Craft_Loop;
                      end if;
-                     CraftedAmount := CraftedAmount + ResultAmount;
-                     Module.CraftingAmount := Module.CraftingAmount - 1;
-                     for J in MaterialIndexes.Iterate loop
-                        CargoIndex := 1;
-                        while CargoIndex <= PlayerShip.Cargo.Last_Index loop
-                           if Items_List
-                               (PlayerShip.Cargo(CargoIndex).ProtoIndex)
-                               .IType =
-                             Items_List(MaterialIndexes(J)).IType then
-                              if PlayerShip.Cargo(CargoIndex).Amount >
-                                Recipe.MaterialAmounts
-                                  (UnboundedString_Container.To_Index(J)) then
-                                 NewAmount :=
-                                   PlayerShip.Cargo(CargoIndex).Amount -
-                                   Recipe.MaterialAmounts
-                                     (UnboundedString_Container.To_Index(J));
-                                 PlayerShip.Cargo(CargoIndex).Amount :=
-                                   NewAmount;
-                                 exit;
-                              elsif PlayerShip.Cargo(CargoIndex).Amount =
-                                Recipe.MaterialAmounts
-                                  (UnboundedString_Container.To_Index(J)) then
-                                 PlayerShip.Cargo.Delete
-                                   (Index => CargoIndex, Count => 1);
-                                 if ToolIndex > CargoIndex then
-                                    ToolIndex := ToolIndex - 1;
-                                 end if;
-                                 exit;
-                              end if;
-                           end if;
-                           CargoIndex := CargoIndex + 1;
-                        end loop;
+                  else
+                     ToolIndex := 0;
+                  end if;
+                  Amount := 0;
+                  for J in MaterialIndexes.Iterate loop
+                     Amount :=
+                       Amount +
+                       Items_List(MaterialIndexes(J)).Weight *
+                         Recipe.MaterialAmounts
+                           (UnboundedString_Container.To_Index(J));
+                  end loop;
+                  ResultAmount :=
+                    Recipe.ResultAmount +
+                    Integer
+                      (Float'Floor
+                         (Float(Recipe.ResultAmount) *
+                          (Float
+                             (GetSkillLevel
+                                (PlayerShip.Crew(CrafterIndex),
+                                 Recipe.Skill)) /
+                           100.0)));
+                  Damage :=
+                    1.0 -
+                    DamageFactor
+                      (Float(Module.Durability) / Float(Module.MaxDurability));
+                  ResultAmount :=
+                    ResultAmount -
+                    Natural(Float(ResultAmount) * Float(Damage));
+                  if ResultAmount = 0 then
+                     ResultAmount := 1;
+                  end if;
+                  for J in MaterialIndexes.Iterate loop
+                     HaveMaterial := False;
+                     for Item of PlayerShip.Cargo loop
+                        if Items_List(Item.ProtoIndex).IType =
+                          Items_List(MaterialIndexes(J)).IType and
+                          Item.Amount >=
+                            Recipe.MaterialAmounts
+                              (UnboundedString_Container.To_Index(J)) then
+                           HaveMaterial := True;
+                           exit;
+                        end if;
                      end loop;
-                     if ToolIndex > 0 then
-                        DamageItem
-                          (PlayerShip.Crew(CrafterIndex).Inventory, ToolIndex,
-                           GetSkillLevel
-                             (PlayerShip.Crew(CrafterIndex), Recipe.Skill),
-                           CrafterIndex);
-                     end if;
-                     if Length(Module.CraftingIndex) < 6
-                       or else
-                       (Length(Module.CraftingIndex) > 6
-                        and then Slice(Module.CraftingIndex, 1, 5) /=
-                          "Study") then
-                        Amount :=
-                          Amount -
-                          (Items_List(Recipe.ResultIndex).Weight *
-                           ResultAmount);
-                        if FreeCargo(Amount) < 0 then
-                           AddMessage
-                             ("You don't have the free cargo space for " &
-                              To_String(RecipeName) & ".",
-                              CraftMessage, RED);
-                           ResetOrder(Module, Owner);
-                           exit Craft_Loop;
-                        end if;
-                        if Length(Module.CraftingIndex) > 11
-                          and then Slice(Module.CraftingIndex, 1, 11) =
-                            "Deconstruct" then
-                           UpdateCargo
-                             (PlayerShip, Recipe.ResultIndex, ResultAmount);
-                        else
-                           UpdateCargo
-                             (PlayerShip,
-                              Recipes_List(Module.CraftingIndex).ResultIndex,
-                              ResultAmount);
-                        end if;
-                        for I in Recipes_List.Iterate loop
-                           if Recipes_List(I).ResultIndex =
-                             Recipe.ResultIndex then
-                              UpdateCraftingOrders(Recipes_Container.Key(I));
+                     exit when not HaveMaterial;
+                  end loop;
+                  if not HaveMaterial then
+                     AddMessage
+                       ("You don't have enough crafting materials for " &
+                        To_String(RecipeName) & ".",
+                        CraftMessage, RED);
+                     ResetOrder(Module, Owner);
+                     exit Craft_Loop;
+                  end if;
+                  CraftedAmount := CraftedAmount + ResultAmount;
+                  Module.CraftingAmount := Module.CraftingAmount - 1;
+                  for J in MaterialIndexes.Iterate loop
+                     CargoIndex := 1;
+                     while CargoIndex <= PlayerShip.Cargo.Last_Index loop
+                        if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex)
+                            .IType =
+                          Items_List(MaterialIndexes(J)).IType then
+                           if PlayerShip.Cargo(CargoIndex).Amount >
+                             Recipe.MaterialAmounts
+                               (UnboundedString_Container.To_Index(J)) then
+                              NewAmount :=
+                                PlayerShip.Cargo(CargoIndex).Amount -
+                                Recipe.MaterialAmounts
+                                  (UnboundedString_Container.To_Index(J));
+                              PlayerShip.Cargo(CargoIndex).Amount := NewAmount;
+                              exit;
+                           elsif PlayerShip.Cargo(CargoIndex).Amount =
+                             Recipe.MaterialAmounts
+                               (UnboundedString_Container.To_Index(J)) then
+                              PlayerShip.Cargo.Delete
+                                (Index => CargoIndex, Count => 1);
+                              if ToolIndex > CargoIndex then
+                                 ToolIndex := ToolIndex - 1;
+                              end if;
                               exit;
                            end if;
-                        end loop;
-                     else
-                        for I in Recipes_List.Iterate loop
-                           if Recipes_List(I).ResultIndex =
-                             Recipe.ResultIndex then
-                              Known_Recipes.Append
-                                (New_Item => Recipes_Container.Key(I));
-                              exit;
-                           end if;
-                        end loop;
+                        end if;
+                        CargoIndex := CargoIndex + 1;
+                     end loop;
+                  end loop;
+                  if ToolIndex > 0 then
+                     DamageItem
+                       (PlayerShip.Crew(CrafterIndex).Inventory, ToolIndex,
+                        GetSkillLevel
+                          (PlayerShip.Crew(CrafterIndex), Recipe.Skill),
+                        CrafterIndex);
+                  end if;
+                  if Length(Module.CraftingIndex) < 6
+                    or else
+                    (Length(Module.CraftingIndex) > 6
+                     and then Slice(Module.CraftingIndex, 1, 5) /=
+                       "Study") then
+                     Amount :=
+                       Amount -
+                       (Items_List(Recipe.ResultIndex).Weight * ResultAmount);
+                     if FreeCargo(Amount) < 0 then
+                        AddMessage
+                          ("You don't have the free cargo space for " &
+                           To_String(RecipeName) & ".",
+                           CraftMessage, RED);
+                        ResetOrder(Module, Owner);
                         exit Craft_Loop;
                      end if;
-                     exit Craft_Loop when Module.CraftingAmount = 0;
+                     if Length(Module.CraftingIndex) > 11
+                       and then Slice(Module.CraftingIndex, 1, 11) =
+                         "Deconstruct" then
+                        UpdateCargo
+                          (PlayerShip, Recipe.ResultIndex, ResultAmount);
+                     else
+                        UpdateCargo
+                          (PlayerShip,
+                           Recipes_List(Module.CraftingIndex).ResultIndex,
+                           ResultAmount);
+                     end if;
+                     for I in Recipes_List.Iterate loop
+                        if Recipes_List(I).ResultIndex =
+                          Recipe.ResultIndex then
+                           UpdateCraftingOrders(Recipes_Container.Key(I));
+                           exit;
+                        end if;
+                     end loop;
                   else
-                     RecipeTime := RecipeTime - CurrentMinutes;
-                     WorkTime := WorkTime - CurrentMinutes;
-                     CurrentMinutes := 0;
+                     for I in Recipes_List.Iterate loop
+                        if Recipes_List(I).ResultIndex =
+                          Recipe.ResultIndex then
+                           Known_Recipes.Append
+                             (New_Item => Recipes_Container.Key(I));
+                           exit;
+                        end if;
+                     end loop;
+                     exit Craft_Loop;
                   end if;
+                  exit Craft_Loop when Module.CraftingAmount = 0;
+                  <<End_Of_Craft_Loop>>
                end loop Craft_Loop;
                Module.CraftingTime := RecipeTime;
                if CraftedAmount > 0 then
