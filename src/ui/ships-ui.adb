@@ -470,7 +470,7 @@ package body Ships.UI is
 
    procedure UpdateCrewInfo is
       Label: Ttk_Label;
-      CrewInfoFrame, Item: Ttk_Frame;
+      CrewInfoFrame, Item, ButtonsFrame: Ttk_Frame;
       UpgradeProgress: Ttk_ProgressBar;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -508,19 +508,36 @@ package body Ships.UI is
          end if;
          exit when NeedClean and NeedRepair;
       end loop;
+      ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
       if NeedClean then
          Button :=
            Create
-             (CrewInfoFrame & ".clean",
+             (ButtonsFrame & ".clean",
               "-text {" &
               Encode
                 ("" &
                  Themes_List(To_String(GameSettings.InterfaceTheme))
                    .CleanIcon) &
-              "} -style Header.Toolbutton");
+              "} -style Header.Toolbutton -command {OrderForAll Clean}");
+         Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button);
          Row := 2;
       end if;
+      if NeedRepair then
+         Button :=
+           Create
+             (ButtonsFrame & ".repair",
+              "-text {" &
+              Encode
+                ("" &
+                 Themes_List(To_String(GameSettings.InterfaceTheme))
+                   .RepairIcon) &
+              "} -style Header.Toolbutton -command {OrderForAll Repair}");
+         Add(Button, "Repair ship everyone");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+         Row := 2;
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
       Label := Create(CrewInfoFrame & ".name", "-text {Name}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
       Label := Create(CrewInfoFrame & ".order", "-text {Order}");
@@ -529,6 +546,12 @@ package body Ships.UI is
       Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 2");
       Label := Create(CrewInfoFrame & ".tired", "-text {Fatigue}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 3");
+      Label := Create(CrewInfoFrame & ".thirst", "-text {Thirst}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 4");
+      Label := Create(CrewInfoFrame & ".hunger", "-text {Hunger}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 5");
+      Label := Create(CrewInfoFrame & ".morale", "-text {Morale}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 6");
       Row := Row + 1;
       for Member of PlayerShip.Crew loop
          CrewButton :=
