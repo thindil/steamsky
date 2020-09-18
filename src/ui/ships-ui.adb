@@ -473,6 +473,7 @@ package body Ships.UI is
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
       ProgressBarStyle: Unbounded_String;
+      Button: Ttk_MenuButton;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
@@ -493,15 +494,19 @@ package body Ships.UI is
       end loop;
       Row := 2;
       for Member of PlayerShip.Crew loop
-         Label :=
+         Button :=
            Create
              (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
               "-text {" & To_String(Member.Name) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
+         Add(Button, "Show available crew member's options");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-row" & Natural'Image(Row) & " -sticky w");
          Label :=
            Create
              (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
               "-text {" & To_Lower(Crew_Orders'Image(Member.Order)) & "}");
+         Add
+           (Label,
+            "The current order for the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -column 1");
          if Member.Health > 74 then
@@ -519,6 +524,9 @@ package body Ships.UI is
              (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
               "-value {" & Natural'Image(Member.Health) & "}" &
               To_String(ProgressBarStyle));
+         Add
+           (UpgradeProgress,
+            "The current health level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
          if Member.Tired - Member.Attributes(ConditionIndex)(1) < 25 then
@@ -538,6 +546,9 @@ package body Ships.UI is
               Integer'Image
                 (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
               "}" & To_String(ProgressBarStyle));
+         Add
+           (UpgradeProgress,
+            "The current tired level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
          if Member.Thirst < 25 then
@@ -555,6 +566,9 @@ package body Ships.UI is
              (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
               "-value {" & Natural'Image(Member.Thirst) & "}" &
               To_String(ProgressBarStyle));
+         Add
+           (UpgradeProgress,
+            "The current thirst level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
          if Member.Hunger < 25 then
@@ -572,6 +586,9 @@ package body Ships.UI is
              (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
               "-value {" & Natural'Image(Member.Hunger) & "}" &
               To_String(ProgressBarStyle));
+         Add
+           (UpgradeProgress,
+            "The current hunger level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
          if Member.Morale(1) > 49 then
@@ -589,6 +606,9 @@ package body Ships.UI is
              (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
               "-value {" & Natural'Image(Member.Morale(1)) & "}" &
               To_String(ProgressBarStyle));
+         Add
+           (UpgradeProgress,
+            "The current morale level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
          Row := Row + 1;
