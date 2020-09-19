@@ -235,7 +235,8 @@ package body Crew is
       procedure UpdateMember(Member: in out Member_Data) is
          BackToWork: Boolean := True;
          ConsumeResult: Natural := 0;
-         procedure NormalizeStat(Stat: in out Integer; MaxValue: Positive := 100) is
+         procedure NormalizeStat
+           (Stat: in out Integer; MaxValue: Positive := 100) is
          begin
             if Stat > MaxValue then
                Stat := MaxValue;

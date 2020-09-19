@@ -146,7 +146,8 @@ package body Maps.UI.OrdersMenu is
          Set_Label(Gtk_Button(Get_Object(Builder, "btndock")), "_Undock");
          Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btndock")), False);
          if SkyBases(BaseIndex).Population > 0 then
-            Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btnescape")), False);
+            Set_No_Show_All
+              (Gtk_Widget(Get_Object(Object, "btnescape")), False);
          end if;
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Set_No_Show_All(Gtk_Widget(Get_Object(Object, "btntrade")), False);
