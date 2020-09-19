@@ -51,13 +51,4 @@ package Ships.UI is
    procedure AddCommands;
    -- ****
 
-private
-
-   -- ****f* SUI2/UpdateCrewInfo
-   -- FUNCTION
-   -- Update information about the player ship crew members
-   -- SOURCE
-   procedure UpdateCrewInfo;
-   -- ****
-
 end Ships.UI;
