@@ -463,6 +463,7 @@ package body Ships.UI is
       AddCommand("SetShipName", Set_Ship_Name_Command'Access);
       AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
+      Ships.UI.Crew.AddCommands;
    end AddCommands;
 
 end Ships.UI;

@@ -15,6 +15,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -33,7 +34,11 @@ with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with Maps.UI; use Maps.UI;
+with Messages; use Messages;
+with Ships.Crew; use Ships.Crew;
 with Themes; use Themes;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew is
 
@@ -253,5 +258,55 @@ package body Ships.UI.Crew is
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
    end UpdateCrewInfo;
+
+   -- ****o* SUCrew/Order_For_All_Command
+   -- FUNCTION
+   -- Set the selected order for the whole crew
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- OrderForAll order
+   -- Order is the name of the order which will be assigned to the whole
+   -- player ship crew
+   -- SOURCE
+   function Order_For_All_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Order_For_All_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         GiveOrders
+           (PlayerShip, Crew_Container.To_Index(I),
+            Crew_Orders'Value(CArgv.Arg(Argv, 1)));
+      end loop;
+      UpdateHeader;
+      UpdateMessages;
+      UpdateCrewInfo;
+      return TCL_OK;
+   exception
+      when An_Exception : Crew_Order_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage);
+         UpdateHeader;
+         UpdateMessages;
+         return TCL_OK;
+   end Order_For_All_Command;
+
+   procedure AddCommands is
+   begin
+      AddCommand("OrderForAll", Order_For_All_Command'Access);
+   end AddCommands;
 
 end Ships.UI.Crew;
