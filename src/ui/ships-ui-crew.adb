@@ -27,15 +27,18 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
+with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Themes; use Themes;
 with Utils.UI; use Utils.UI;
@@ -54,6 +57,18 @@ package body Ships.UI.Crew is
       Row: Positive := 1;
       NeedRepair, NeedClean: Boolean := False;
       Button: Ttk_Button;
+      CrewMenu: Tk_Menu;
+      function IsWorking
+        (Owners: Natural_Container.Vector; MemberIndex: Positive)
+         return Boolean is
+      begin
+         for Owner of Owners loop
+            if Owner = MemberIndex then
+               return True;
+            end if;
+         end loop;
+         return False;
+      end IsWorking;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
@@ -127,11 +142,144 @@ package body Ships.UI.Crew is
       Label := Create(CrewInfoFrame & ".morale", "-text {Morale}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 6");
       Row := Row + 1;
+      CrewMenu.Interp := Get_Context;
       for Member of PlayerShip.Crew loop
+         CrewMenu.Name :=
+           New_String(".membermenu" & Trim(Positive'Image(Row - 1), Left));
+         if (Winfo_Get(CrewMenu, "exists")) = "0" then
+            CrewMenu :=
+              Create
+                (".membermenu" & Trim(Positive'Image(Row - 1), Left),
+                 "-tearoff false");
+         end if;
+         Delete(CrewMenu, "0", "end");
+         Menu.Add(CrewMenu, "command", "-label {Rename crew member}");
+         if
+           ((Member.Tired = 100 or Member.Hunger = 100 or
+             Member.Thirst = 100) and
+            Member.Order /= Rest) or
+           (Member.Skills.Length = 0 or Member.ContractLength = 0) then
+            Menu.Add
+              (CrewMenu, "command",
+               "-label {Go on break} -command {SetCrewOrder Rest" &
+               Positive'Image(Row - 1) & "}");
+         else
+            if Member.Order /= Pilot then
+               Menu.Add
+                 (CrewMenu, "command",
+                  "-label {Piloting} -command {SetCrewOrder Pilot" &
+                  Positive'Image(Row - 1) & "}");
+            end if;
+            if Member.Order /= Engineer then
+               Menu.Add
+                 (CrewMenu, "command",
+                  "-label {Engineering} -command {SetCrewOrder Engineer" &
+                  Positive'Image(Row - 1) & "}");
+            end if;
+            for J in PlayerShip.Modules.Iterate loop
+               if PlayerShip.Modules(J).Durability <
+                 PlayerShip.Modules(J).MaxDurability then
+                  NeedRepair := True;
+               end if;
+               if PlayerShip.Modules(J).Durability > 0 then
+                  case Modules_List(PlayerShip.Modules(J).ProtoIndex).MType is
+                     when GUN | HARPOON_GUN =>
+                        if PlayerShip.Modules(J).Owner(1) /= (Row - 1) then
+                           Menu.Add
+                             (CrewMenu, "command",
+                              "-label {Operate " &
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Gunner" &
+                              Positive'Image(Row - 1) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
+                              "}");
+                        end if;
+                     when ALCHEMY_LAB .. GREENHOUSE =>
+                        if not IsWorking
+                            (PlayerShip.Modules(J).Owner, Row - 1) then
+                           Menu.Add
+                             (CrewMenu, "command",
+                              "-label {Work in " &
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Craft" &
+                              Positive'Image(Row - 1) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
+                              "}");
+                        end if;
+                     when CABIN =>
+                        if PlayerShip.Modules(J).Cleanliness <
+                          PlayerShip.Modules(J).Quality and
+                          Member.Order /= Clean and NeedClean then
+                           Menu.Add
+                             (CrewMenu, "command",
+                              "-label {Clean ship} -command {SetCrewOrder Clean" &
+                              Positive'Image(Row - 1) & "}");
+                           NeedClean := False;
+                        end if;
+                     when TRAINING_ROOM =>
+                        if not IsWorking
+                            (PlayerShip.Modules(J).Owner, Row - 1) then
+                           Menu.Add
+                             (CrewMenu, "command",
+                              "-label {Go on training in " &
+                              To_String(PlayerShip.Modules(J).Name) &
+                              "} -command {SetCrewOrder Train" &
+                              Positive'Image(Row - 1) &
+                              Positive'Image
+                                (Positive(Modules_Container.To_Index(J))) &
+                              "}");
+                        end if;
+                     when others =>
+                        null;
+                  end case;
+                  if PlayerShip.Modules(J).Durability <
+                    PlayerShip.Modules(J).MaxDurability and
+                    NeedRepair then
+                     Menu.Add
+                       (CrewMenu, "command",
+                        "-label {Repair ship} -command {SetCrewOrder Repair" &
+                        Positive'Image(Row - 1) & "}");
+                     NeedRepair := False;
+                  end if;
+               end if;
+            end loop;
+            for J in PlayerShip.Crew.Iterate loop
+               if PlayerShip.Crew(J).Health < 100 and
+                 Crew_Container.To_Index(J) /= (Row - 1) and
+                 PlayerShip.Crew(J).Order /= Heal then
+                  Menu.Add
+                    (CrewMenu, "command",
+                     "-label {Heal wounded crew members} -command {SetCrewOrder Heal" &
+                     Positive'Image(Row - 1) & "}");
+                  exit;
+               end if;
+            end loop;
+            if PlayerShip.UpgradeModule > 0 and Member.Order /= Upgrading then
+               Menu.Add
+                 (CrewMenu, "command",
+                  "-label {Upgrade module} -command {SetCrewOrder Upgrading" &
+                  Positive'Image(Row - 1) & "}");
+            end if;
+            if Member.Order /= Talk then
+               Menu.Add
+                 (CrewMenu, "command",
+                  "-label {Talking in bases} -command {SetCrewOrder Talk" &
+                  Positive'Image(Row - 1) & "}");
+            end if;
+            if Member.Order /= Rest then
+               Menu.Add
+                 (CrewMenu, "command",
+                  "-label {Go on break} -command {SetCrewOrder Rest" &
+                  Positive'Image(Row - 1) & "}");
+            end if;
+         end if;
          CrewButton :=
            Create
              (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Member.Name) & "}");
+              "-text {" & To_String(Member.Name) & "} -menu .membermenu" &
+              Trim(Positive'Image(Row - 1), Left));
          Add(CrewButton, "Show available crew member's options");
          Tcl.Tk.Ada.Grid.Grid
            (CrewButton, "-row" & Natural'Image(Row) & " -sticky w");
