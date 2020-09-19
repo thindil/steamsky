@@ -109,9 +109,7 @@ package body Bases.SchoolUI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (SchoolCanvas, "window",
-         "[expr " & Winfo_Get(SchoolFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(SchoolFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(SchoolFrame));
+         "0 0 -anchor nw -window " & Widget_Image(SchoolFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (SchoolCanvas,
