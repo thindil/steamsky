@@ -95,7 +95,9 @@ package body Crew.UI is
                            2, Modules_Container.To_Index(I));
                      end if;
                   when ALCHEMY_LAB .. GREENHOUSE =>
-                     if not IsWorking(PlayerShip.Modules(I).Owner) then
+                     if not IsWorking(PlayerShip.Modules(I).Owner) and
+                       PlayerShip.Modules(I).CraftingIndex /=
+                         Null_Unbounded_String then
                         AddOrder
                           ("Work in " & To_String(PlayerShip.Modules(I).Name),
                            4, Modules_Container.To_Index(I));
