@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crew members don't gain experience in begining of the game
+- Don't show crafting order when any workshop don't have set it
 
 ## [5.0.5] - 2020-09-13
 
