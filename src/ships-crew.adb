@@ -334,7 +334,8 @@ package body Ships.Crew is
             InventoryIndex => ToolsIndex);
          ToolsIndex := 0;
       end if;
-      if GivenOrder in Upgrading | Repair | Clean | Train then -- Check for tools
+      if GivenOrder in Upgrading | Repair | Clean |
+            Train then -- Check for tools
          if GivenOrder = Clean then
             RequiredTool := CleaningTools;
          elsif GivenOrder = Train then
