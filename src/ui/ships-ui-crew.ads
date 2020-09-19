@@ -20,11 +20,18 @@
 package Ships.UI.Crew is
 -- ****
 
-   -- ****f* SUCREW/UpdateCrewInfo
+   -- ****f* SUCrew/UpdateCrewInfo
    -- FUNCTION
    -- Update information about the player ship crew members
    -- SOURCE
    procedure UpdateCrewInfo;
+   -- ****
+
+   -- ****f* SUCrew/AddCommands
+   -- FUNCTION
+   -- Add Tcl commands related to the player's ship crew members information
+   -- SOURCE
+   procedure AddCommands;
    -- ****
 
 end Ships.UI.Crew;

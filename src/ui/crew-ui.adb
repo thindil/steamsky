@@ -878,49 +878,6 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
-   -- ****o* CUI3/Order_For_All_Command
-   -- FUNCTION
-   -- Set the selected order for the whole crew
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- OrderForAll order
-   -- Order is the name of the order which will be assigned to the whole
-   -- player ship crew
-   -- SOURCE
-   function Order_For_All_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Order_For_All_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-   begin
-      for I in PlayerShip.Crew.Iterate loop
-         GiveOrders
-           (PlayerShip, Crew_Container.To_Index(I),
-            Crew_Orders'Value(CArgv.Arg(Argv, 1)));
-      end loop;
-      UpdateHeader;
-      UpdateMessages;
-      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
-   exception
-      when An_Exception : Crew_Order_Error =>
-         AddMessage(Exception_Message(An_Exception), OrderMessage);
-         UpdateHeader;
-         UpdateMessages;
-         return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
-   end Order_For_All_Command;
-
    -- ****o* CUI3/Dismiss_Command
    -- FUNCTION
    -- Dismiss the selected crew member
@@ -974,7 +931,6 @@ package body Crew.UI is
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
-      AddCommand("OrderForAll", Order_For_All_Command'Access);
       AddCommand("Dismiss", Dismiss_Command'Access);
       Crew.UI.Inventory.AddCommands;
    end AddCommands;
