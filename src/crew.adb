@@ -52,12 +52,12 @@ package body Crew is
          PlayerShip.Crew(CrewIndex).Attributes(Attribute)(2) := AttributeExp;
       end GainExpInAttribute;
    begin
-      if Careers_List(PlayerCareer).Skills.Contains
-          (Skills_List(SkillNumber).Name) then
-         NewAmount := Amount + (Amount / 2);
-      else
-         NewAmount := Amount;
-      end if;
+      NewAmount :=
+        (if
+           Careers_List(PlayerCareer).Skills.Contains
+             (Skills_List(SkillNumber).Name)
+         then Amount + (Amount / 2)
+         else Amount);
       NewAmount := Natural(Float(NewAmount) * NewGameSettings.ExperienceBonus);
       if NewAmount = 0 then
          return;
@@ -251,10 +251,9 @@ package body Crew is
          end if;
          if TiredLevel = 0 and Member.Order = Rest and
            Member.PreviousOrder /= Rest then
-            if Member.PreviousOrder not in Repair | Clean then
-               if FindMember(Member.PreviousOrder) > 0 then
-                  BackToWork := False;
-               end if;
+            if Member.PreviousOrder not in Repair | Clean
+              and then FindMember(Member.PreviousOrder) > 0 then
+               BackToWork := False;
             end if;
             if Member.PreviousOrder in Gunner | Craft then
                Module_Loop :
