@@ -38,7 +38,6 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
-with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
 with Themes; use Themes;
 with Utils.UI; use Utils.UI;
@@ -182,7 +181,7 @@ package body Ships.UI.Crew is
                   NeedRepair := True;
                end if;
                if PlayerShip.Modules(J).Durability > 0 then
-                  case Modules_List(PlayerShip.Modules(J).ProtoIndex).MType is
+                  case PlayerShip.Modules(J).MType is
                      when GUN | HARPOON_GUN =>
                         if PlayerShip.Modules(J).Owner(1) /= (Row - 1) then
                            Menu.Add
@@ -195,9 +194,11 @@ package body Ships.UI.Crew is
                                 (Positive(Modules_Container.To_Index(J))) &
                               "}");
                         end if;
-                     when ALCHEMY_LAB .. GREENHOUSE =>
+                     when WORKSHOP =>
                         if not IsWorking
-                            (PlayerShip.Modules(J).Owner, Row - 1) then
+                            (PlayerShip.Modules(J).Owner, Row - 1) and
+                          PlayerShip.Modules(J).CraftingIndex /=
+                            Null_Unbounded_String then
                            Menu.Add
                              (CrewMenu, "command",
                               "-label {Work in " &
