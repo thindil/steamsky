@@ -137,14 +137,12 @@ package body Game is
                   FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
                else
                   BaseOwner := Factions_Container.Key(J);
-                  if Factions_List(J).Population(2) = 0 then
-                     BasePopulation := Factions_List(J).Population(1);
-                  else
-                     BasePopulation :=
-                       GetRandom
+                  BasePopulation :=
+                    (if Factions_List(J).Population(2) = 0 then
+                       Factions_List(J).Population(1)
+                     else GetRandom
                          (Factions_List(J).Population(1),
-                          Factions_List(J).Population(2));
-                  end if;
+                          Factions_List(J).Population(2)));
                   BaseReputation :=
                     GetReputation
                       (NewGameSettings.PlayerFaction,
@@ -304,14 +302,12 @@ package body Game is
          TmpInventory: Inventory_Container.Vector;
       begin
          for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
-            if ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount > 0 then
-               Amount :=
+            Amount :=
+              (if ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount > 0 then
                  GetRandom
                    (ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount,
-                    ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount);
-            else
-               Amount := ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount;
-            end if;
+                    ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount)
+               else ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount);
             TmpInventory.Append
               (New_Item =>
                  (ProtoIndex =>
@@ -319,12 +315,12 @@ package body Game is
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop;
-         if Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
-             (To_Unbounded_String("nomorale")) then
-            PlayerMorale := 50;
-         else
-            PlayerMorale := 100;
-         end if;
+         PlayerMorale :=
+           (if
+              Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
+                (To_Unbounded_String("nomorale"))
+            then 50
+            else 100);
          PlayerShip.Crew.Prepend
            (New_Item =>
               (Name => NewGameSettings.PlayerName,
