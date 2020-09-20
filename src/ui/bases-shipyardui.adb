@@ -199,9 +199,7 @@ package body Bases.ShipyardUI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (ShipyardCanvas, "window",
-         "[expr " & Winfo_Get(ShipyardFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(ShipyardFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(ShipyardFrame));
+         "0 0 -anchor nw -window " & Widget_Image(ShipyardFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (ShipyardCanvas,
