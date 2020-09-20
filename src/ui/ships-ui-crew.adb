@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Maps.UI; use Maps.UI;
@@ -152,7 +153,10 @@ package body Ships.UI.Crew is
                  "-tearoff false");
          end if;
          Delete(CrewMenu, "0", "end");
-         Menu.Add(CrewMenu, "command", "-label {Rename crew member}");
+         Menu.Add
+           (CrewMenu, "command",
+            "-label {Rename crew member} -command {RenameMember" &
+            Positive'Image(Row - 1) & "}");
          if
            ((Member.Tired = 100 or Member.Hunger = 100 or
              Member.Thirst = 100) and
@@ -453,9 +457,56 @@ package body Ships.UI.Crew is
          return TCL_OK;
    end Order_For_All_Command;
 
+   -- ****o* SUCrew/Rename_Member_Command
+   -- FUNCTION
+   -- Change name of the selected player's ship crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- RenameMember memberindex
+   -- Memberindex is the index of the crew member which name will be changed
+   -- SOURCE
+   function Rename_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Rename_Member_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Button: Ttk_Button;
+      CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      Button.Interp := Interp;
+      Button.Name :=
+        New_String
+          (".paned.shipinfoframe.crew.canvas.frame.name" &
+           Trim(Positive'Image(CrewIndex + 1), Left));
+      if Tk_Get_String
+          (Interp, ".gs", "text",
+           "{Enter a new name for the " & cget(Button, "-text") & "}") =
+        "0" then
+         return TCL_OK;
+      end if;
+      PlayerShip.Crew(CrewIndex).Name :=
+        To_Unbounded_String(Tcl_GetVar(Interp, "text"));
+      configure(Button, "-text $text");
+      return TCL_OK;
+   end Rename_Member_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
+      AddCommand("RenameMember", Rename_Member_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
