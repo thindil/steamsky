@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.6] - 2020-09-20
 
 ### Fixed
 - Crew members don't gain experience in begining of the game
