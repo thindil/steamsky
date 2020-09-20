@@ -110,7 +110,7 @@ package body Ships.UI.Modules is
             "-label {Start upgrading module durability} -command {SetUpgrade 1 " &
             ModuleIndexString & "}");
       end if;
-      case Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).MType is
+      case PlayerShip.Modules(ModuleIndex).MType is
          when ENGINE =>
             MaxValue :=
               Natural
@@ -305,7 +305,7 @@ package body Ships.UI.Modules is
                   "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
                   ModuleIndexString & "}");
             end if;
-         when ALCHEMY_LAB .. GREENHOUSE =>
+         when WORKSHOP =>
             if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
               Null_Unbounded_String then
                Menu.Add
