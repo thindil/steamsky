@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Showing main menu when the player tries load invalid savegame
 - Crew members don't gain experience in begining of the game
 - Don't show crafting order when any workshop don't have set it
+- Can't find fonts on Linux
 
 ## [5.2] - 2020-09-06
 
