@@ -157,6 +157,14 @@ package body Ships.UI.Crew is
            (CrewMenu, "command",
             "-label {Rename crew member} -command {RenameMember" &
             Positive'Image(Row - 1) & "}");
+         Menu.Add
+           (CrewMenu, "command",
+            "-label {Show more info about the crew member}");
+         Menu.Add
+           (CrewMenu, "command", "-label {Show inventory of the crew member}");
+         Menu.Add
+           (CrewMenu, "command",
+            "-label {Set order priorities of the crew member}");
          if
            ((Member.Tired = 100 or Member.Hunger = 100 or
              Member.Thirst = 100) and
@@ -170,13 +178,13 @@ package body Ships.UI.Crew is
             if Member.Order /= Pilot then
                Menu.Add
                  (CrewMenu, "command",
-                  "-label {Piloting} -command {SetCrewOrder Pilot" &
+                  "-label {Go piloting the ship} -command {SetCrewOrder Pilot" &
                   Positive'Image(Row - 1) & "}");
             end if;
             if Member.Order /= Engineer then
                Menu.Add
                  (CrewMenu, "command",
-                  "-label {Engineering} -command {SetCrewOrder Engineer" &
+                  "-label {Go engineering the ship} -command {SetCrewOrder Engineer" &
                   Positive'Image(Row - 1) & "}");
             end if;
             for J in PlayerShip.Modules.Iterate loop
