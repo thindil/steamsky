@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -51,11 +51,10 @@ package body Goals is
          GoalNode := Item(NodesList, I);
          TempRecord.Index :=
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
-         if Get_Attribute(GoalNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(GoalNode, "action"));
-         else
-            Action := ADD;
-         end if;
+         Action :=
+           (if Get_Attribute(GoalNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(GoalNode, "action"))
+            else ADD);
          GoalIndex := 0;
          for J in Goals_List.Iterate loop
             if Goals_List(J).Index = TempRecord.Index then
@@ -132,11 +131,7 @@ package body Goals is
          end case;
       end GetFactionName;
    begin
-      if Index > 0 then
-         Goal := Goals_List(Index);
-      else
-         Goal := CurrentGoal;
-      end if;
+      Goal := (if Index > 0 then Goals_List(Index) else CurrentGoal);
       case Goal.GType is
          when REPUTATION =>
             Text := To_Unbounded_String("Gain max reputation in");
@@ -172,7 +167,7 @@ package body Goals is
          when RANDOM =>
             null;
       end case;
-      if (Goal.GType /= RANDOM and Goal.GType /= KILL) and Goal.Amount > 1 then
+      if (Goal.GType not in RANDOM | KILL) and Goal.Amount > 1 then
          Append(Text, "s");
       end if;
       case Goal.GType is
@@ -285,11 +280,9 @@ package body Goals is
         CurrentGoal.TargetIndex /= Null_Unbounded_String then
          return;
       end if;
-      if Amount >= CurrentGoal.Amount then
-         CurrentGoal.Amount := 0;
-      else
-         CurrentGoal.Amount := CurrentGoal.Amount - Amount;
-      end if;
+      CurrentGoal.Amount :=
+        (if Amount >= CurrentGoal.Amount then 0
+         else CurrentGoal.Amount - Amount);
       if CurrentGoal.Amount = 0 then
          UpdateFinishedGoals(CurrentGoal.Index);
          AddMessage
