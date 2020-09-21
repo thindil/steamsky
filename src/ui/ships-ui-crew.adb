@@ -149,18 +149,18 @@ package body Ships.UI.Crew is
       CrewMenu.Interp := Get_Context;
       for I in PlayerShip.Crew.Iterate loop
          CrewMenu.Name :=
-           New_String(".membermenu" & Trim(Positive'Image(Row - 1), Left));
+           New_String(".membermenu" & Trim(Positive'Image(Row), Left));
          if (Winfo_Get(CrewMenu, "exists")) = "0" then
             CrewMenu :=
               Create
-                (".membermenu" & Trim(Positive'Image(Row - 1), Left),
+                (".membermenu" & Trim(Positive'Image(Row), Left),
                  "-tearoff false");
          end if;
          Delete(CrewMenu, "0", "end");
          Menu.Add
            (CrewMenu, "command",
             "-label {Rename crew member} -command {RenameMember" &
-            Positive'Image(Row - 1) & "}");
+            Positive'Image(Crew_Container.To_Index(I)) & "}");
          Menu.Add
            (CrewMenu, "command",
             "-label {Show more info about the crew member}");
@@ -179,19 +179,19 @@ package body Ships.UI.Crew is
             Menu.Add
               (CrewMenu, "command",
                "-label {Go on break} -command {SetCrewOrder Rest" &
-               Positive'Image(Row - 1) & "}");
+               Positive'Image(Crew_Container.To_Index(I)) & "}");
          else
             if PlayerShip.Crew(I).Order /= Pilot then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go piloting the ship} -command {SetCrewOrder Pilot" &
-                  Positive'Image(Row - 1) & "}");
+                  Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Engineer then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go engineering the ship} -command {SetCrewOrder Engineer" &
-                  Positive'Image(Row - 1) & "}");
+                  Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
             for J in PlayerShip.Modules.Iterate loop
                if PlayerShip.Modules(J).Durability <
@@ -201,13 +201,14 @@ package body Ships.UI.Crew is
                if PlayerShip.Modules(J).Durability > 0 then
                   case PlayerShip.Modules(J).MType is
                      when GUN | HARPOON_GUN =>
-                        if PlayerShip.Modules(J).Owner(1) /= (Row - 1) then
+                        if PlayerShip.Modules(J).Owner(1) /=
+                          Crew_Container.To_Index(I) then
                            Menu.Add
                              (CrewMenu, "command",
                               "-label {Operate " &
                               To_String(PlayerShip.Modules(J).Name) &
                               "} -command {SetCrewOrder Gunner" &
-                              Positive'Image(Row - 1) &
+                              Positive'Image(Crew_Container.To_Index(I)) &
                               Positive'Image
                                 (Positive(Modules_Container.To_Index(J))) &
                               "}");
@@ -222,7 +223,7 @@ package body Ships.UI.Crew is
                               "-label {Work in " &
                               To_String(PlayerShip.Modules(J).Name) &
                               "} -command {SetCrewOrder Craft" &
-                              Positive'Image(Row - 1) &
+                              Positive'Image(Crew_Container.To_Index(I)) &
                               Positive'Image
                                 (Positive(Modules_Container.To_Index(J))) &
                               "}");
@@ -234,7 +235,8 @@ package body Ships.UI.Crew is
                            Menu.Add
                              (CrewMenu, "command",
                               "-label {Clean ship} -command {SetCrewOrder Clean" &
-                              Positive'Image(Row - 1) & "}");
+                              Positive'Image(Crew_Container.To_Index(I)) &
+                              "}");
                            NeedClean := False;
                         end if;
                      when TRAINING_ROOM =>
@@ -245,7 +247,7 @@ package body Ships.UI.Crew is
                               "-label {Go on training in " &
                               To_String(PlayerShip.Modules(J).Name) &
                               "} -command {SetCrewOrder Train" &
-                              Positive'Image(Row - 1) &
+                              Positive'Image(Crew_Container.To_Index(I)) &
                               Positive'Image
                                 (Positive(Modules_Container.To_Index(J))) &
                               "}");
@@ -259,7 +261,7 @@ package body Ships.UI.Crew is
                      Menu.Add
                        (CrewMenu, "command",
                         "-label {Repair ship} -command {SetCrewOrder Repair" &
-                        Positive'Image(Row - 1) & "}");
+                        Positive'Image(Crew_Container.To_Index(I)) & "}");
                      NeedRepair := False;
                   end if;
                end if;
@@ -271,7 +273,7 @@ package body Ships.UI.Crew is
                   Menu.Add
                     (CrewMenu, "command",
                      "-label {Heal wounded crew members} -command {SetCrewOrder Heal" &
-                     Positive'Image(Row - 1) & "}");
+                     Positive'Image(Crew_Container.To_Index(I)) & "}");
                   exit;
                end if;
             end loop;
@@ -280,26 +282,33 @@ package body Ships.UI.Crew is
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Upgrade module} -command {SetCrewOrder Upgrading" &
-                  Positive'Image(Row - 1) & "}");
+                  Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Talk then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Talking in bases} -command {SetCrewOrder Talk" &
-                  Positive'Image(Row - 1) & "}");
+                  Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
             if PlayerShip.Crew(I).Order /= Rest then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go on break} -command {SetCrewOrder Rest" &
-                  Positive'Image(Row - 1) & "}");
+                  Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
+         end if;
+         if Crew_Container.To_Index(I) /= 1 and PlayerShip.Speed = DOCKED then
+            Menu.Add
+              (CrewMenu, "command",
+               "-label {Dismiss} -command {Dismiss" &
+               Positive'Image(Crew_Container.To_Index(I)) & "}");
          end if;
          CrewButton :=
            Create
-             (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) &
-              "} -menu .membermenu" & Trim(Positive'Image(Row - 1), Left));
+             (CrewInfoFrame & ".name" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-text {" & To_String(PlayerShip.Crew(I).Name) & "} -menu " &
+              CrewMenu);
          Add(CrewButton, "Show available crew member's options");
          Tcl.Tk.Ada.Grid.Grid
            (CrewButton, "-row" & Natural'Image(Row) & " -sticky w");
@@ -421,12 +430,6 @@ package body Ships.UI.Crew is
             "The current morale level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
-         if Crew_Container.To_Index(I) /= 1 and PlayerShip.Speed = DOCKED then
-            Menu.Add
-              (CrewMenu, "command",
-               "-label {Dismiss} -command {Dismiss" & Positive'Image(Row - 1) &
-               "}");
-         end if;
          Row := Row + 1;
       end loop;
       Tcl_Eval(Get_Context, "update");
@@ -516,7 +519,7 @@ package body Ships.UI.Crew is
       Button.Name :=
         New_String
           (".paned.shipinfoframe.crew.canvas.frame.name" &
-           Trim(Positive'Image(CrewIndex + 1), Left));
+           Trim(Positive'Image(CrewIndex), Left));
       if Tk_Get_String
           (Interp, ".gs", "text",
            "{Enter a new name for the " & cget(Button, "-text") & "}") =
@@ -561,7 +564,9 @@ package body Ships.UI.Crew is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if MessageBox
-          ("-message {Are you sure want to dismiss this crew member?} -icon question -type yesno") /=
+          ("-message {Are you sure want to dismiss " &
+           To_String(PlayerShip.Crew(MemberIndex).Name) &
+           "?} -icon question -type yesno") /=
         "yes" then
          return TCL_OK;
       end if;
