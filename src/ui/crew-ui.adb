@@ -25,7 +25,6 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -878,60 +877,12 @@ package body Crew.UI is
       return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Priority_Command;
 
-   -- ****o* CUI3/Dismiss_Command
-   -- FUNCTION
-   -- Dismiss the selected crew member
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- Dismiss
-   -- SOURCE
-   function Dismiss_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Dismiss_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-   begin
-      if MessageBox
-          ("-message {Are you sure want to dismiss this crew member?} -icon question -type yesno") /=
-        "yes" then
-         return TCL_OK;
-      end if;
-      AddMessage
-        ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
-         OrderMessage);
-      DeleteMember(MemberIndex, PlayerShip);
-      SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
-      for I in PlayerShip.Crew.Iterate loop
-         UpdateMorale
-           (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
-      end loop;
-      UpdateHeader;
-      UpdateMessages;
-      return Show_Crew_Info_Command(ClientData, Interp, 2, Argv);
-   end Dismiss_Command;
-
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
-      AddCommand("Dismiss", Dismiss_Command'Access);
       Crew.UI.Inventory.AddCommands;
    end AddCommands;
 
