@@ -212,9 +212,7 @@ package body Bases.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (BaseCanvas, "window",
-         "[expr " & Winfo_Get(BaseFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(BaseFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(BaseFrame));
+         "0 0 -anchor nw -window " & Widget_Image(BaseFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
