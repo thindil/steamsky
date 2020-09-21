@@ -143,7 +143,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 6");
       Row := Row + 1;
       CrewMenu.Interp := Get_Context;
-      for Member of PlayerShip.Crew loop
+      for I in PlayerShip.Crew.Iterate loop
          CrewMenu.Name :=
            New_String(".membermenu" & Trim(Positive'Image(Row - 1), Left));
          if (Winfo_Get(CrewMenu, "exists")) = "0" then
@@ -166,22 +166,24 @@ package body Ships.UI.Crew is
            (CrewMenu, "command",
             "-label {Set order priorities of the crew member}");
          if
-           ((Member.Tired = 100 or Member.Hunger = 100 or
-             Member.Thirst = 100) and
-            Member.Order /= Rest) or
-           (Member.Skills.Length = 0 or Member.ContractLength = 0) then
+           ((PlayerShip.Crew(I).Tired = 100 or
+             PlayerShip.Crew(I).Hunger = 100 or
+             PlayerShip.Crew(I).Thirst = 100) and
+            PlayerShip.Crew(I).Order /= Rest) or
+           (PlayerShip.Crew(I).Skills.Length = 0 or
+            PlayerShip.Crew(I).ContractLength = 0) then
             Menu.Add
               (CrewMenu, "command",
                "-label {Go on break} -command {SetCrewOrder Rest" &
                Positive'Image(Row - 1) & "}");
          else
-            if Member.Order /= Pilot then
+            if PlayerShip.Crew(I).Order /= Pilot then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go piloting the ship} -command {SetCrewOrder Pilot" &
                   Positive'Image(Row - 1) & "}");
             end if;
-            if Member.Order /= Engineer then
+            if PlayerShip.Crew(I).Order /= Engineer then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go engineering the ship} -command {SetCrewOrder Engineer" &
@@ -224,7 +226,7 @@ package body Ships.UI.Crew is
                      when CABIN =>
                         if PlayerShip.Modules(J).Cleanliness <
                           PlayerShip.Modules(J).Quality and
-                          Member.Order /= Clean and NeedClean then
+                          PlayerShip.Crew(I).Order /= Clean and NeedClean then
                            Menu.Add
                              (CrewMenu, "command",
                               "-label {Clean ship} -command {SetCrewOrder Clean" &
@@ -269,19 +271,20 @@ package body Ships.UI.Crew is
                   exit;
                end if;
             end loop;
-            if PlayerShip.UpgradeModule > 0 and Member.Order /= Upgrading then
+            if PlayerShip.UpgradeModule > 0 and
+              PlayerShip.Crew(I).Order /= Upgrading then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Upgrade module} -command {SetCrewOrder Upgrading" &
                   Positive'Image(Row - 1) & "}");
             end if;
-            if Member.Order /= Talk then
+            if PlayerShip.Crew(I).Order /= Talk then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Talking in bases} -command {SetCrewOrder Talk" &
                   Positive'Image(Row - 1) & "}");
             end if;
-            if Member.Order /= Rest then
+            if PlayerShip.Crew(I).Order /= Rest then
                Menu.Add
                  (CrewMenu, "command",
                   "-label {Go on break} -command {SetCrewOrder Rest" &
@@ -291,26 +294,26 @@ package body Ships.UI.Crew is
          CrewButton :=
            Create
              (CrewInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Member.Name) & "} -menu .membermenu" &
-              Trim(Positive'Image(Row - 1), Left));
+              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "} -menu .membermenu" & Trim(Positive'Image(Row - 1), Left));
          Add(CrewButton, "Show available crew member's options");
          Tcl.Tk.Ada.Grid.Grid
            (CrewButton, "-row" & Natural'Image(Row) & " -sticky w");
          Label :=
            Create
              (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
-              "-text {" & Crew_Orders'Image(Member.Order)(1) &
+              "-text {" & Crew_Orders'Image(PlayerShip.Crew(I).Order)(1) &
               To_Lower
-                (Crew_Orders'Image(Member.Order)
-                   (2 .. Crew_Orders'Image(Member.Order)'Last)) &
+                (Crew_Orders'Image(PlayerShip.Crew(I).Order)
+                   (2 .. Crew_Orders'Image(PlayerShip.Crew(I).Order)'Last)) &
               "}");
          Add(Label, "The current order for the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -column 1");
-         if Member.Health > 74 then
+         if PlayerShip.Crew(I).Health > 74 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Health > 24 then
+         elsif PlayerShip.Crew(I).Health > 24 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
@@ -320,17 +323,21 @@ package body Ships.UI.Crew is
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Health) & "}" &
+              "-value {" & Natural'Image(PlayerShip.Crew(I).Health) & "}" &
               To_String(ProgressBarStyle));
          Add
            (UpgradeProgress,
             "The current health level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
-         if Member.Tired - Member.Attributes(ConditionIndex)(1) < 25 then
+         if PlayerShip.Crew(I).Tired -
+           PlayerShip.Crew(I).Attributes(ConditionIndex)(1) <
+           25 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Tired - Member.Attributes(ConditionIndex)(1) > 24 then
+         elsif PlayerShip.Crew(I).Tired -
+           PlayerShip.Crew(I).Attributes(ConditionIndex)(1) >
+           24 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
@@ -342,17 +349,18 @@ package body Ships.UI.Crew is
              (CrewInfoFrame & ".fatigue" & Trim(Natural'Image(Row), Left),
               "-value {" &
               Integer'Image
-                (Member.Tired - Member.Attributes(ConditionIndex)(1)) &
+                (PlayerShip.Crew(I).Tired -
+                 PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) &
               "}" & To_String(ProgressBarStyle));
          Add
            (UpgradeProgress,
             "The current tired level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
-         if Member.Thirst < 25 then
+         if PlayerShip.Crew(I).Thirst < 25 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Thirst > 24 then
+         elsif PlayerShip.Crew(I).Thirst > 24 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
@@ -362,17 +370,17 @@ package body Ships.UI.Crew is
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Thirst) & "}" &
+              "-value {" & Natural'Image(PlayerShip.Crew(I).Thirst) & "}" &
               To_String(ProgressBarStyle));
          Add
            (UpgradeProgress,
             "The current thirst level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
-         if Member.Hunger < 25 then
+         if PlayerShip.Crew(I).Hunger < 25 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Hunger > 24 then
+         elsif PlayerShip.Crew(I).Hunger > 24 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
@@ -382,17 +390,17 @@ package body Ships.UI.Crew is
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Hunger) & "}" &
+              "-value {" & Natural'Image(PlayerShip.Crew(I).Hunger) & "}" &
               To_String(ProgressBarStyle));
          Add
            (UpgradeProgress,
             "The current hunger level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
-         if Member.Morale(1) > 49 then
+         if PlayerShip.Crew(I).Morale(1) > 49 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Morale(1) > 24 then
+         elsif PlayerShip.Crew(I).Morale(1) > 24 then
             ProgressBarStyle :=
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
          else
@@ -402,13 +410,19 @@ package body Ships.UI.Crew is
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(Member.Morale(1)) & "}" &
+              "-value {" & Natural'Image(PlayerShip.Crew(I).Morale(1)) & "}" &
               To_String(ProgressBarStyle));
          Add
            (UpgradeProgress,
             "The current morale level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
+         if Crew_Container.To_Index(I) /= 1 and PlayerShip.Speed = DOCKED then
+            Menu.Add
+              (CrewMenu, "command",
+               "-label {Dismiss} -command {Dismiss" & Positive'Image(Row - 1) &
+               "}");
+         end if;
          Row := Row + 1;
       end loop;
       Tcl_Eval(Get_Context, "update");
