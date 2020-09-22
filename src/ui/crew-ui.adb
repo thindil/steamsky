@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -45,7 +44,6 @@ with Config; use Config;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
@@ -787,52 +785,6 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Crew_Info_Command;
 
-   -- ****o* CUI3/Set_Crew_Order_Command
-   -- FUNCTION
-   -- Set order for the selected crew member
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetCrewOrder order memberindex ?moduleindex?
-   -- Order is an index for the order which will be set, memberindex is an
-   -- index of the member in the player ship crew which will be have order set
-   -- and optional parameter moduleindex is index of module in player ship
-   -- which will be assigned to the crew member
-   -- SOURCE
-   function Set_Crew_Order_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Crew_Order_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      ModuleIndex: Natural := 0;
-   begin
-      if Argc = 4 then
-         ModuleIndex := Natural'Value(CArgv.Arg(Argv, 3));
-      end if;
-      GiveOrders
-        (PlayerShip, Positive'Value(CArgv.Arg(Argv, 2)),
-         Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
-      UpdateHeader;
-      UpdateMessages;
-      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
-   exception
-      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-         AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
-         UpdateMessages;
-         return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
-   end Set_Crew_Order_Command;
-
    -- ****o* CUI3/Set_Priority_Command
    -- FUNCTION
    -- Set the selected priority of the selected crew member
@@ -880,7 +832,6 @@ package body Crew.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
-      AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
       Crew.UI.Inventory.AddCommands;
