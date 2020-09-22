@@ -27,7 +27,7 @@ pack .header -fill x
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
-set mapview [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor cross -bd 0]
+set mapview [text .paned.mapframe.map -bg black -fg white -font MapFont -cursor crosshair -bd 0]
 grid $mapview -sticky nwes
 $mapview tag configure unvisited -background #1f2223
 $mapview tag configure yellow -foreground yellow
