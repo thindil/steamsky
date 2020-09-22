@@ -379,7 +379,8 @@ package body Ships.UI.Modules is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Module: ModuleData;
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
       MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
@@ -388,7 +389,6 @@ package body Ships.UI.Modules is
       Label: Ttk_Label;
       ModuleText: Tk_Text;
       ModuleInfo, ProgressBarStyle: Unbounded_String;
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Tk_Toplevel :=
         Create
           (".moduledialog",
@@ -439,7 +439,6 @@ package body Ships.UI.Modules is
          end if;
       end AddOwnersInfo;
    begin
-      Module := PlayerShip.Modules(ModuleIndex);
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(ModuleDialog, "title", "{Steam Sky - Module Info}");
       Wm_Set(ModuleDialog, "transient", ".");
