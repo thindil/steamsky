@@ -585,11 +585,60 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Dismiss_Command;
 
+   -- ****o* SUCrew/Set_Crew_Order_Command
+   -- FUNCTION
+   -- Set order for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCrewOrder order memberindex ?moduleindex?
+   -- Order is an index for the order which will be set, memberindex is an
+   -- index of the member in the player ship crew which will be have order set
+   -- and optional parameter moduleindex is index of module in player ship
+   -- which will be assigned to the crew member
+   -- SOURCE
+   function Set_Crew_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Crew_Order_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp);
+      ModuleIndex: Natural := 0;
+   begin
+      if Argc = 4 then
+         ModuleIndex := Natural'Value(CArgv.Arg(Argv, 3));
+      end if;
+      GiveOrders
+        (PlayerShip, Positive'Value(CArgv.Arg(Argv, 2)),
+         Crew_Orders'Value(CArgv.Arg(Argv, 1)), ModuleIndex);
+      UpdateHeader;
+      UpdateMessages;
+      UpdateCrewInfo;
+      return TCL_OK;
+   exception
+      when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
+         AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
+         UpdateMessages;
+         return TCL_OK;
+   end Set_Crew_Order_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
       AddCommand("RenameMember", Rename_Member_Command'Access);
       AddCommand("Dismiss", Dismiss_Command'Access);
+      AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
