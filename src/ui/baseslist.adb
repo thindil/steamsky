@@ -233,9 +233,7 @@ package body BasesList is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (BasesCanvas, "window",
-         "[expr " & Winfo_Get(BasesFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(BasesFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(BasesFrame));
+         "0 0 -anchor nw -window " & Widget_Image(BasesFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
