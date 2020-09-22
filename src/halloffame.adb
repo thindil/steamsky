@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -17,7 +17,7 @@
 
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -45,9 +45,6 @@ package body HallOfFame is
       if HallOfFame_Array(1).Name /= Null_Unbounded_String then
          return;
       end if;
-      if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
-         return;
-      end if;
       Open(To_String(SaveDirectory) & "halloffame.dat", HoFFile);
       Parse(Reader, HoFFile);
       Close(HoFFile);
@@ -64,6 +61,9 @@ package body HallOfFame is
            To_Unbounded_String(Get_Attribute(EntryNode, "deathreason"));
       end loop;
       Free(Reader);
+   exception
+      when Ada.Directories.Name_Error =>
+         null;
    end LoadHallOfFame;
 
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
