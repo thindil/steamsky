@@ -196,6 +196,6 @@ namespace eval ttk::theme::steamsky {
          insertbackground [ttk::style lookup . -foreground]
       option add *font [ttk::style lookup . -font]
       option add *Text.relief flat
-      option add *Text.cursor arrow
+      option add *Text.cursor left_ptr
    }
 }
