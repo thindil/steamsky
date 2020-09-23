@@ -832,7 +832,6 @@ package body Crew.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
-      AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
       Crew.UI.Inventory.AddCommands;
    end AddCommands;
