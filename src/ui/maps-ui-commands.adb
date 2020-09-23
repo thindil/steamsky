@@ -15,6 +15,8 @@
 
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.UTF_Encoding.Wide_Strings;
+use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
@@ -54,6 +56,7 @@ with Ships.Movement; use Ships.Movement;
 with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
 with Stories.UI; use Stories.UI;
+with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
 package body Maps.UI.Commands is
@@ -230,10 +233,14 @@ package body Maps.UI.Commands is
       MapView.Name := New_String(".paned.mapframe.map");
       configure
         (MapView,
-         "-width [expr [winfo width $mapview] / [font measure MapFont { }] - 2]");
+         "-width [expr [winfo width $mapview] / [font measure MapFont {" &
+         Encode
+           ("" &
+            Themes_List(To_String(GameSettings.InterfaceTheme)).EmptyMapIcon) &
+         "}]]");
       configure
         (MapView,
-         "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace] - 1]");
+         "-height [expr [winfo height $mapview] / [font metrics MapFont -linespace]]");
       DrawMap;
       return TCL_OK;
    end Draw_Map_Command;
