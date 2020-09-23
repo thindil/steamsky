@@ -701,7 +701,9 @@ package body Ships.UI.Crew is
       Height: Positive := 10;
       Frame: Ttk_Frame;
       MemberInfo: Unbounded_String;
-      Label: Ttk_Label;
+      MemberLabel: Ttk_Label;
+      Width: Positive;
+      TiredPoints: Integer;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -715,6 +717,149 @@ package body Ships.UI.Crew is
       Autoscroll(YScroll);
       Autoscroll(XScroll);
       Frame := Create(MemberNotebook & ".general");
+      if Member.Health < 100 then
+         if GameSettings.ShowNumbers then
+            MemberLabel :=
+              Create
+                (Frame & ".health",
+                 "-text {Health:" & Natural'Image(Member.Health) & "%}");
+         else
+            case Member.Health is
+               when 81 .. 99 =>
+                  MemberLabel :=
+                    Create
+                      (Frame & ".health", "-text {Health: Slightly wounded}");
+               when 51 .. 80 =>
+                  MemberLabel :=
+                    Create(Frame & ".health", "-text {Health: Wounded}");
+               when 1 .. 50 =>
+                  MemberLabel :=
+                    Create
+                      (Frame & ".health", "-text {Health: Heavily wounded}");
+               when others =>
+                  null;
+            end case;
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Height :=
+           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      end if;
+      TiredPoints := Member.Tired - Member.Attributes(ConditionIndex)(1);
+      if TiredPoints < 0 then
+         TiredPoints := 0;
+      end if;
+      if TiredPoints > 0 then
+         if GameSettings.ShowNumbers then
+            MemberLabel :=
+              Create
+                (Frame & ".tired",
+                 "-text {Tiredness:" & Natural'Image(TiredPoints) & "%}");
+         else
+            case TiredPoints is
+               when 1 .. 40 =>
+                  MemberLabel :=
+                    Create(Frame & ".tired", "-text {Tiredness: Bit tired}");
+               when 41 .. 80 =>
+                  MemberLabel :=
+                    Create(Frame & ".tired", "-text {Tiredness: Tired}");
+               when 81 .. 99 =>
+                  MemberLabel :=
+                    Create(Frame & ".tired", "-text {Tiredness: Very tired}");
+               when 100 =>
+                  MemberLabel :=
+                    Create(Frame & ".tired", "-text {Tiredness: Unconscious}");
+               when others =>
+                  null;
+            end case;
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Height :=
+           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      end if;
+      if Member.Thirst > 0 then
+         if GameSettings.ShowNumbers then
+            MemberLabel :=
+              Create
+                (Frame & ".thirst",
+                 "-text {Thirst:" & Natural'Image(Member.Thirst) & "%}");
+         else
+            case Member.Thirst is
+               when 1 .. 40 =>
+                  MemberLabel :=
+                    Create(Frame & ".thirst", "-text {Thirst: Bit thirsty}");
+               when 41 .. 80 =>
+                  MemberLabel :=
+                    Create(Frame & ".thirst", "-text {Thirst: Thirsty}");
+               when 81 .. 99 =>
+                  MemberLabel :=
+                    Create(Frame & ".thirst", "-text {Thirst: Very thirsty}");
+               when 100 =>
+                  MemberLabel :=
+                    Create(Frame & ".thirst", "-text {Thirst: Dehydrated}");
+               when others =>
+                  null;
+            end case;
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Height :=
+           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      end if;
+      if Member.Hunger > 0 then
+         if GameSettings.ShowNumbers then
+            MemberLabel :=
+              Create
+                (Frame & ".hunger",
+                 "-text {Hunger:" & Natural'Image(Member.Hunger) & "%}");
+         else
+            case Member.Hunger is
+               when 1 .. 40 =>
+                  MemberLabel :=
+                    Create(Frame & ".hunger", "-text {Hunger: Bit hungry}");
+               when 41 .. 80 =>
+                  MemberLabel :=
+                    Create(Frame & ".hunger", "-text {Hunger: Hungry}");
+               when 81 .. 99 =>
+                  MemberLabel :=
+                    Create(Frame & ".hunger", "-text {Hunger: Very hungry}");
+               when 100 =>
+                  MemberLabel :=
+                    Create(Frame & ".hunger", "-text {Hunger: Starving}");
+               when others =>
+                  null;
+            end case;
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Height :=
+           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      end if;
+      if Member.Morale(1) /= 50 then
+         if GameSettings.ShowNumbers then
+            MemberLabel :=
+              Create
+                (Frame & ".morale",
+                 "-text {Morale:" & Natural'Image(Member.Morale(1)) & "%}");
+         else
+            case Member.Morale(1) is
+               when 0 .. 24 =>
+                  MemberLabel :=
+                    Create(Frame & ".morale", "-text {Morale: Upset}");
+               when 25 .. 49 =>
+                  MemberLabel :=
+                    Create(Frame & ".morale", "-text {Morale: Unhappy}");
+               when 51 .. 74 =>
+                  MemberLabel :=
+                    Create(Frame & ".morale", "-text {Morale: Happy}");
+               when 75 .. 100 =>
+                  MemberLabel :=
+                    Create(Frame & ".morale", "-text {Morale: Excited}");
+               when others =>
+                  null;
+            end case;
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
+         Height :=
+           Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      end if;
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
         UnboundedString_Container.No_Index then
@@ -756,12 +901,13 @@ package body Ships.UI.Crew is
             Append(MemberInfo, ".");
          end if;
       end if;
-      Label :=
+      MemberLabel :=
         Create
           (Frame & ".label",
            "-text {" & To_String(MemberInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+      Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+      Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
       TtkNotebook.Add(MemberNotebook, Widget_Image(Frame), "-text {General}");
       Tcl.Tk.Ada.Grid.Grid(MemberNotebook);
       Height :=
@@ -775,20 +921,17 @@ package body Ships.UI.Crew is
       configure
         (MemberFrame,
          "-height" & Positive'Image(Height) & " -width " &
-         Winfo_Get(Label, "reqheight"));
+         Winfo_Get(MemberLabel, "reqwidth"));
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Height := Height + 20;
+      Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
       declare
-         Width: Positive;
          X, Y: Integer;
       begin
-         Width :=
-           Positive'Value(Winfo_Get(Label, "reqwidth")) +
-           Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
          X :=
            (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
          if X < 0 then
