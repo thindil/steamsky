@@ -673,9 +673,7 @@ package body Combat.UI is
       CombatFrame.Name := New_String(Widget_Image(CombatCanvas) & FrameName);
       Canvas_Create
         (CombatCanvas, "window",
-         "[expr " & Winfo_Get(CombatFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(CombatFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(CombatFrame));
+         "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
       Add_Tag(CombatCanvas, "child", "all");
       Tcl_Eval(Get_Context, "update");
       configure
