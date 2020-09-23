@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -40,11 +40,10 @@ package body Help is
          TmpHelp :=
            (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
          HelpNode := Item(NodesList, I);
-         if Get_Attribute(HelpNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(HelpNode, "action"));
-         else
-            Action := ADD;
-         end if;
+         Action :=
+           (if Get_Attribute(HelpNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(HelpNode, "action"))
+            else ADD);
          HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
          HelpTitle := To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          if (Action = UPDATE or Action = REMOVE) then
