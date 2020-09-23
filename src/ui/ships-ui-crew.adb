@@ -15,6 +15,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -38,6 +39,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
+with Tcl.Tk.Ada.Widgets.TtkNotebook; use Tcl.Tk.Ada.Widgets.TtkNotebook;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -47,6 +49,7 @@ with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
+with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
@@ -689,11 +692,16 @@ package body Ships.UI.Crew is
            "-yscrollcommand [list " & YScroll &
            " set] -xscrollcommand [list " & XScroll & " set]");
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
+      MemberNotebook: constant Ttk_Notebook :=
+        Create(MemberFrame & ".notebook");
       CloseButton: constant Ttk_Button :=
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height: Positive := 10;
+      Frame: Ttk_Frame;
+      MemberInfo: Unbounded_String;
+      Label: Ttk_Label;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -706,14 +714,68 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
+      Frame := Create(MemberNotebook & ".general");
+      if Factions_List(Member.Faction).Flags.Find_Index
+          (To_Unbounded_String("nogender")) =
+        UnboundedString_Container.No_Index then
+         if Member.Gender = 'M' then
+            MemberInfo := To_Unbounded_String("Gender: Male");
+         else
+            MemberInfo := To_Unbounded_String("Gender: Female");
+         end if;
+      end if;
+      Append(MemberInfo, LF & "Faction: ");
+      Append(MemberInfo, Factions_List(Member.Faction).Name);
+      Append(MemberInfo, LF & "Home base: ");
+      Append(MemberInfo, SkyBases(Member.HomeBase).Name);
+      if Member.Skills.Length = 0 or Member.ContractLength = 0 then
+         Append(MemberInfo, LF & "Passenger");
+         if Member.ContractLength > 0 then
+            Append(MemberInfo, LF & "Time limit:");
+            MinutesToDate(Member.ContractLength, MemberInfo);
+         end if;
+      else
+         if MemberIndex > 1 then
+            Append(MemberInfo, LF & "Contract length:");
+            if Member.ContractLength > 0 then
+               Append
+                 (MemberInfo, Integer'Image(Member.ContractLength) & " days.");
+            else
+               Append(MemberInfo, " pernament.");
+            end if;
+            Append
+              (MemberInfo,
+               LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
+               To_String(MoneyName) & " each day");
+            if Member.Payment(2) > 0 then
+               Append
+                 (MemberInfo,
+                  " and " & Natural'Image(Member.Payment(2)) &
+                  " percent of profit from each trade");
+            end if;
+            Append(MemberInfo, ".");
+         end if;
+      end if;
+      Label :=
+        Create
+          (Frame & ".label",
+           "-text {" & To_String(MemberInfo) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      TtkNotebook.Add(MemberNotebook, Widget_Image(Frame), "-text {General}");
+      Tcl.Tk.Ada.Grid.Grid(MemberNotebook);
+      Height :=
+        Height + Positive'Value(Winfo_Get(MemberNotebook, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
          Height := 500;
       end if;
       configure
-        (MemberFrame, "-height" & Positive'Image(Height) & " -width 200");
+        (MemberFrame,
+         "-height" & Positive'Image(Height) & " -width " &
+         Winfo_Get(Label, "reqheight"));
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
@@ -724,7 +786,9 @@ package body Ships.UI.Crew is
          Width: Positive;
          X, Y: Integer;
       begin
-         Width := 200 + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+         Width :=
+           Positive'Value(Winfo_Get(Label, "reqwidth")) +
+           Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
          X :=
            (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
          if X < 0 then
