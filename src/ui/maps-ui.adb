@@ -966,7 +966,7 @@ package body Maps.UI is
          ShowScreen("mapframe");
       end if;
       UpdateHeader;
-      DrawMap;
+      Tcl_Eval(Get_Context, "DrawMap");
       UpdateMessages;
       UpdateMoveButtons;
    end ShowSkyMap;
