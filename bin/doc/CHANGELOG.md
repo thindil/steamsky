@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Don't show crafting order when any workshop don't have set it
 - Can't find fonts on Linux
 - Crash on non-existing the game theme
+- Redraw map after changed size of map font
 
 ## [5.2] - 2020-09-06
 
