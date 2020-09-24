@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Can't find fonts on Linux
 - Crash on non-existing the game theme
 - Redraw map after changed size of map font
+- Selecting save game from list, load it
 
 ## [5.2] - 2020-09-06
 
