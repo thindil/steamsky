@@ -698,12 +698,13 @@ package body Ships.UI.Crew is
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height: Positive := 10;
+      Height, NewHeight: Positive := 10;
       Frame: Ttk_Frame;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
-      Width: Positive;
+      Width, NewWidth: Positive;
       TiredPoints: Integer;
+      ProgressBar: Ttk_ProgressBar;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -716,6 +717,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
+      -- General info about the selected crew member
       Frame := Create(MemberNotebook & ".general");
       if Member.Health < 100 then
          if GameSettings.ShowNumbers then
@@ -905,10 +907,62 @@ package body Ships.UI.Crew is
         Create
           (Frame & ".label",
            "-text {" & To_String(MemberInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+      Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
       TtkNotebook.Add(MemberNotebook, Widget_Image(Frame), "-text {General}");
+      -- Statistics of the selected crew member
+      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+         Frame := Create(MemberNotebook & ".stats");
+         for I in Member.Attributes.Iterate loop
+            MemberLabel :=
+              Create
+                (Frame & ".label" &
+                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+                 "-text {" &
+                 To_String
+                   (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+                 ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
+            Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+            ProgressBar :=
+              Create
+                (Frame & ".level" &
+                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+                 "-value" & Positive'Image(Member.Attributes(I)(1) * 2) &
+                 " -length 200");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (ProgressBar,
+               To_String
+                 (Attributes_List(Attributes_Container.To_Index(I))
+                    .Description));
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            ProgressBar :=
+              Create
+                (Frame & ".experience" &
+                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+                 "-value" &
+                 Positive'Image
+                   (Member.Attributes(I)(2) /
+                    (Member.Attributes(I)(1) * 250)) &
+                 " -length 200");
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            NewWidth := Positive'Value(Winfo_Get(ProgressBar, "reqwidth"));
+         end loop;
+         TtkNotebook.Add
+           (MemberNotebook, Widget_Image(Frame), "-text {Statistics}");
+         if NewHeight > Height then
+            Height := NewHeight;
+         end if;
+         if NewWidth > Width then
+            Width := NewWidth;
+         end if;
+      end if;
       Tcl.Tk.Ada.Grid.Grid(MemberNotebook);
       Height :=
         Height + Positive'Value(Winfo_Get(MemberNotebook, "reqheight"));
