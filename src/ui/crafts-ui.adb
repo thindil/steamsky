@@ -255,9 +255,7 @@ package body Crafts.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (CraftsCanvas, "window",
-         "[expr " & Winfo_Get(CraftsFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(CraftsFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(CraftsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(CraftsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (CraftsCanvas,
