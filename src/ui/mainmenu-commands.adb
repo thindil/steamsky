@@ -306,7 +306,7 @@ package body MainMenu.Commands is
             Slice(Tokens, 1) & " " & Slice(Tokens, 2) & " {" &
             Ada.Calendar.Formatting.Image
               (Modification_Time(FoundFile), False, UTC_Time_Offset) &
-            "}]");
+            "}] -tags [list itemrow]");
          if not Selected then
             Selection_Set(LoadView, "{" & Simple_Name(FoundFile) & "}");
             Selected := True;

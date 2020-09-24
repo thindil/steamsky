@@ -157,7 +157,8 @@ grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscr
 .loadmenu.view heading shipname -text {Ship name}
 .loadmenu.view column shipname -width 150
 .loadmenu.view heading lastsaved -text {Last saved}
-bind .loadmenu.view <<TreeviewSelect>> {InvokeButton .loadmenu.load}
+bind .loadmenu.view <Return> {InvokeButton .loadmenu.load}
+.loadmenu.view tag bind itemrow <Double-1> {InvokeButton .loadmenu.load}
 grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns -padx 2 -pady 2
 ::autoscroll::autoscroll .loadmenu.yscroll
 grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
