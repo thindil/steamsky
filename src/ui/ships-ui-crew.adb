@@ -700,11 +700,12 @@ package body Ships.UI.Crew is
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, NewHeight: Positive := 10;
       Frame: Ttk_Frame;
-      MemberInfo: Unbounded_String;
+      MemberInfo, TooltipText, ItemIndex: Unbounded_String;
       MemberLabel: Ttk_Label;
       Width, NewWidth: Positive;
       TiredPoints: Integer;
       ProgressBar: Ttk_ProgressBar;
+      Quality: Natural;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -911,8 +912,8 @@ package body Ships.UI.Crew is
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
       TtkNotebook.Add(MemberNotebook, Widget_Image(Frame), "-text {General}");
-      -- Statistics of the selected crew member
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+         -- Statistics of the selected crew member
          Frame := Create(MemberNotebook & ".stats");
          for I in Member.Attributes.Iterate loop
             MemberLabel :=
@@ -956,6 +957,73 @@ package body Ships.UI.Crew is
          end loop;
          TtkNotebook.Add
            (MemberNotebook, Widget_Image(Frame), "-text {Statistics}");
+         if NewHeight > Height then
+            Height := NewHeight;
+         end if;
+         if NewWidth > Width then
+            Width := NewWidth;
+         end if;
+         -- Skills of the selected crew member
+         Frame := Create(MemberNotebook & ".skills");
+         NewHeight := 10;
+         for I in Member.Skills.Iterate loop
+            MemberLabel :=
+              Create
+                (Frame & ".label" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
+                 ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
+            Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+            ProgressBar :=
+              Create
+                (Frame & ".level" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-value" & Positive'Image(Member.Skills(I)(2)));
+            TooltipText := Null_Unbounded_String;
+            Append(TooltipText, "Related statistic: ");
+            Append
+              (TooltipText,
+               Attributes_List(Skills_List(Member.Skills(I)(1)).Attribute)
+                 .Name);
+            if Skills_List(Member.Skills(I)(1)).Tool /=
+              Null_Unbounded_String then
+               Append(TooltipText, ". Training tool: ");
+               Quality := 0;
+               for J in Items_List.Iterate loop
+                  if Items_List(J).IType =
+                    Skills_List(Member.Skills(I)(1)).Tool
+                    and then
+                    (Items_List(J).Value.Length > 0
+                     and then Items_List(J).Value(1) <=
+                       GetTrainingToolQuality
+                         (MemberIndex, Member.Skills(I)(1))) then
+                     if Items_List(J).Value(1) > Quality then
+                        ItemIndex := Objects_Container.Key(J);
+                        Quality := Items_List(J).Value(1);
+                     end if;
+                  end if;
+               end loop;
+               Append(TooltipText, Items_List(ItemIndex).Name);
+            end if;
+            Append(TooltipText, ". ");
+            Append(TooltipText, Skills_List(Member.Skills(I)(1)).Description);
+            Tcl.Tklib.Ada.Tooltip.Add(ProgressBar, To_String(TooltipText));
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            ProgressBar :=
+              Create
+                (Widget_Image(Frame) & ".experience" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-value" &
+                 Positive'Image
+                   (Member.Skills(I)(3) / (Member.Skills(I)(2) * 25)));
+            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+         end loop;
+         TtkNotebook.Add
+           (MemberNotebook, Widget_Image(Frame), "-text {Skills}");
          if NewHeight > Height then
             Height := NewHeight;
          end if;
