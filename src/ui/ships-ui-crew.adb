@@ -980,7 +980,8 @@ package body Ships.UI.Crew is
               Create
                 (Frame & ".level" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-value" & Positive'Image(Member.Skills(I)(2)));
+                 "-value" & Positive'Image(Member.Skills(I)(2)) &
+                 " -length 200");
             TooltipText := Null_Unbounded_String;
             Append(TooltipText, "Related statistic: ");
             Append
@@ -1019,7 +1020,8 @@ package body Ships.UI.Crew is
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-value" &
                  Positive'Image
-                   (Member.Skills(I)(3) / (Member.Skills(I)(2) * 25)));
+                   (Member.Skills(I)(3) / (Member.Skills(I)(2) * 25)) &
+                 " -length 200");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
          end loop;
          TtkNotebook.Add
