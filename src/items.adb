@@ -51,12 +51,11 @@ package body Items is
             Description => Null_Unbounded_String, Reputation => -100);
          ItemNode := Item(NodesList, I);
          ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
-         if Get_Attribute(ItemNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(ItemNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action :=
+           (if Get_Attribute(ItemNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(ItemNode, "action"))
+            else ADD);
+         if Action in UPDATE | REMOVE then
             if not Objects_Container.Contains(Items_List, ItemIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -203,11 +202,9 @@ package body Items is
       return String is
       ItemName: Unbounded_String;
    begin
-      if Item.Name /= Null_Unbounded_String then
-         ItemName := Item.Name;
-      else
-         ItemName := Items_List(Item.ProtoIndex).Name;
-      end if;
+      ItemName :=
+        (if Item.Name /= Null_Unbounded_String then Item.Name
+         else Items_List(Item.ProtoIndex).Name);
       if DamageInfo and then Item.Durability < 100 then
          Append
            (ItemName, " (" & GetItemDamage(Item.Durability, ToLower) & ")");
