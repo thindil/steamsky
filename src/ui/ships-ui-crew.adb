@@ -949,7 +949,7 @@ package body Ships.UI.Crew is
                  Positive'Image
                    (Member.Attributes(I)(2) /
                     (Member.Attributes(I)(1) * 250)) &
-                 " -length 200");
+                 " -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
@@ -1021,8 +1021,11 @@ package body Ships.UI.Crew is
                  "-value" &
                  Positive'Image
                    (Member.Skills(I)(3) / (Member.Skills(I)(2) * 25)) &
-                 " -length 200");
+                 " -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            NewWidth := Positive'Value(Winfo_Get(ProgressBar, "reqwidth"));
          end loop;
          TtkNotebook.Add
            (MemberNotebook, Widget_Image(Frame), "-text {Skills}");
