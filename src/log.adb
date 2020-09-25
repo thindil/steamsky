@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -58,13 +58,11 @@ package body Log is
       if not Is_Open(LogFile) then
          return;
       end if;
-      if TimeStamp then
-         NewMessage := To_Unbounded_String("[");
-         Append
-           (NewMessage, Ada.Calendar.Formatting.Image(Clock) & "]:" & Message);
-      else
-         NewMessage := To_Unbounded_String(Message);
-      end if;
+      NewMessage :=
+        (if TimeStamp then
+           To_Unbounded_String
+             ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
+         else To_Unbounded_String(Message));
       if NewLine then
          Put_Line(LogFile, To_String(NewMessage));
       else
