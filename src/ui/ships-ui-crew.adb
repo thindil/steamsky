@@ -946,10 +946,10 @@ package body Ships.UI.Crew is
                 (Frame & ".experience" &
                  Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
                  "-value" &
-                 Positive'Image
-                   (Member.Attributes(I)(2) /
-                    (Member.Attributes(I)(1) * 250)) &
-                 " -length 200 -style experience.Horizontal.TProgressbar");
+                 Float'Image
+                   (Float(Member.Attributes(I)(2)) /
+                    Float(Member.Attributes(I)(1) * 250)) &
+                 " -maximum 1.0  -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
@@ -1019,9 +1019,10 @@ package body Ships.UI.Crew is
                 (Widget_Image(Frame) & ".experience" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-value" &
-                 Positive'Image
-                   (Member.Skills(I)(3) / (Member.Skills(I)(2) * 25)) &
-                 " -length 200 -style experience.Horizontal.TProgressbar");
+                 Float'Image
+                   (Float(Member.Skills(I)(3)) /
+                    Float((Member.Skills(I)(2) * 25))) &
+                 " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
