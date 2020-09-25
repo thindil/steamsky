@@ -163,9 +163,7 @@ package body Crew.UI.Inventory is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (InventoryCanvas, "window",
-         "[expr " & Winfo_Get(InventoryFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(InventoryFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(InventoryFrame));
+         "0 0 -anchor nw -window " & Widget_Image(InventoryFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (InventoryCanvas,
