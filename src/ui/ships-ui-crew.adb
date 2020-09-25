@@ -731,14 +731,14 @@ package body Ships.UI.Crew is
                when 81 .. 99 =>
                   MemberLabel :=
                     Create
-                      (Frame & ".health", "-text {Health: Slightly wounded}");
+                      (Frame & ".health", "-text {Slightly wounded}");
                when 51 .. 80 =>
                   MemberLabel :=
-                    Create(Frame & ".health", "-text {Health: Wounded}");
+                    Create(Frame & ".health", "-text {Wounded}");
                when 1 .. 50 =>
                   MemberLabel :=
                     Create
-                      (Frame & ".health", "-text {Health: Heavily wounded}");
+                      (Frame & ".health", "-text {Heavily wounded}");
                when others =>
                   null;
             end case;
@@ -761,16 +761,16 @@ package body Ships.UI.Crew is
             case TiredPoints is
                when 1 .. 40 =>
                   MemberLabel :=
-                    Create(Frame & ".tired", "-text {Tiredness: Bit tired}");
+                    Create(Frame & ".tired", "-text {Bit tired}");
                when 41 .. 80 =>
                   MemberLabel :=
-                    Create(Frame & ".tired", "-text {Tiredness: Tired}");
+                    Create(Frame & ".tired", "-text {Tired}");
                when 81 .. 99 =>
                   MemberLabel :=
-                    Create(Frame & ".tired", "-text {Tiredness: Very tired}");
+                    Create(Frame & ".tired", "-text {Very tired}");
                when 100 =>
                   MemberLabel :=
-                    Create(Frame & ".tired", "-text {Tiredness: Unconscious}");
+                    Create(Frame & ".tired", "-text {Unconscious}");
                when others =>
                   null;
             end case;
@@ -789,16 +789,16 @@ package body Ships.UI.Crew is
             case Member.Thirst is
                when 1 .. 40 =>
                   MemberLabel :=
-                    Create(Frame & ".thirst", "-text {Thirst: Bit thirsty}");
+                    Create(Frame & ".thirst", "-text {Bit thirsty}");
                when 41 .. 80 =>
                   MemberLabel :=
-                    Create(Frame & ".thirst", "-text {Thirst: Thirsty}");
+                    Create(Frame & ".thirst", "-text {Thirsty}");
                when 81 .. 99 =>
                   MemberLabel :=
-                    Create(Frame & ".thirst", "-text {Thirst: Very thirsty}");
+                    Create(Frame & ".thirst", "-text {Very thirsty}");
                when 100 =>
                   MemberLabel :=
-                    Create(Frame & ".thirst", "-text {Thirst: Dehydrated}");
+                    Create(Frame & ".thirst", "-text {Dehydrated}");
                when others =>
                   null;
             end case;
@@ -817,16 +817,16 @@ package body Ships.UI.Crew is
             case Member.Hunger is
                when 1 .. 40 =>
                   MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Hunger: Bit hungry}");
+                    Create(Frame & ".hunger", "-text {Bit hungry}");
                when 41 .. 80 =>
                   MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Hunger: Hungry}");
+                    Create(Frame & ".hunger", "-text {Hungry}");
                when 81 .. 99 =>
                   MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Hunger: Very hungry}");
+                    Create(Frame & ".hunger", "-text {Very hungry}");
                when 100 =>
                   MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Hunger: Starving}");
+                    Create(Frame & ".hunger", "-text {Starving}");
                when others =>
                   null;
             end case;
@@ -845,16 +845,16 @@ package body Ships.UI.Crew is
             case Member.Morale(1) is
                when 0 .. 24 =>
                   MemberLabel :=
-                    Create(Frame & ".morale", "-text {Morale: Upset}");
+                    Create(Frame & ".morale", "-text {Upset}");
                when 25 .. 49 =>
                   MemberLabel :=
-                    Create(Frame & ".morale", "-text {Morale: Unhappy}");
+                    Create(Frame & ".morale", "-text {Unhappy}");
                when 51 .. 74 =>
                   MemberLabel :=
-                    Create(Frame & ".morale", "-text {Morale: Happy}");
+                    Create(Frame & ".morale", "-text {Happy}");
                when 75 .. 100 =>
                   MemberLabel :=
-                    Create(Frame & ".morale", "-text {Morale: Excited}");
+                    Create(Frame & ".morale", "-text {Excited}");
                when others =>
                   null;
             end case;
@@ -867,9 +867,9 @@ package body Ships.UI.Crew is
           (To_Unbounded_String("nogender")) =
         UnboundedString_Container.No_Index then
          if Member.Gender = 'M' then
-            MemberInfo := To_Unbounded_String("Gender: Male");
+            MemberInfo := To_Unbounded_String("Male");
          else
-            MemberInfo := To_Unbounded_String("Gender: Female");
+            MemberInfo := To_Unbounded_String("Female");
          end if;
       end if;
       Append(MemberInfo, LF & "Faction: ");
