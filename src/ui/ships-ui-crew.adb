@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -699,7 +700,7 @@ package body Ships.UI.Crew is
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, NewHeight: Positive := 10;
-      Frame: Ttk_Frame;
+      Frame, ProgressFrame: Ttk_Frame;
       MemberInfo, TooltipText, ItemIndex: Unbounded_String;
       MemberLabel: Ttk_Label;
       Width, NewWidth: Positive;
@@ -730,15 +731,12 @@ package body Ships.UI.Crew is
             case Member.Health is
                when 81 .. 99 =>
                   MemberLabel :=
-                    Create
-                      (Frame & ".health", "-text {Slightly wounded}");
+                    Create(Frame & ".health", "-text {Slightly wounded}");
                when 51 .. 80 =>
-                  MemberLabel :=
-                    Create(Frame & ".health", "-text {Wounded}");
+                  MemberLabel := Create(Frame & ".health", "-text {Wounded}");
                when 1 .. 50 =>
                   MemberLabel :=
-                    Create
-                      (Frame & ".health", "-text {Heavily wounded}");
+                    Create(Frame & ".health", "-text {Heavily wounded}");
                when others =>
                   null;
             end case;
@@ -760,11 +758,9 @@ package body Ships.UI.Crew is
          else
             case TiredPoints is
                when 1 .. 40 =>
-                  MemberLabel :=
-                    Create(Frame & ".tired", "-text {Bit tired}");
+                  MemberLabel := Create(Frame & ".tired", "-text {Bit tired}");
                when 41 .. 80 =>
-                  MemberLabel :=
-                    Create(Frame & ".tired", "-text {Tired}");
+                  MemberLabel := Create(Frame & ".tired", "-text {Tired}");
                when 81 .. 99 =>
                   MemberLabel :=
                     Create(Frame & ".tired", "-text {Very tired}");
@@ -791,8 +787,7 @@ package body Ships.UI.Crew is
                   MemberLabel :=
                     Create(Frame & ".thirst", "-text {Bit thirsty}");
                when 41 .. 80 =>
-                  MemberLabel :=
-                    Create(Frame & ".thirst", "-text {Thirsty}");
+                  MemberLabel := Create(Frame & ".thirst", "-text {Thirsty}");
                when 81 .. 99 =>
                   MemberLabel :=
                     Create(Frame & ".thirst", "-text {Very thirsty}");
@@ -819,14 +814,12 @@ package body Ships.UI.Crew is
                   MemberLabel :=
                     Create(Frame & ".hunger", "-text {Bit hungry}");
                when 41 .. 80 =>
-                  MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Hungry}");
+                  MemberLabel := Create(Frame & ".hunger", "-text {Hungry}");
                when 81 .. 99 =>
                   MemberLabel :=
                     Create(Frame & ".hunger", "-text {Very hungry}");
                when 100 =>
-                  MemberLabel :=
-                    Create(Frame & ".hunger", "-text {Starving}");
+                  MemberLabel := Create(Frame & ".hunger", "-text {Starving}");
                when others =>
                   null;
             end case;
@@ -844,17 +837,13 @@ package body Ships.UI.Crew is
          else
             case Member.Morale(1) is
                when 0 .. 24 =>
-                  MemberLabel :=
-                    Create(Frame & ".morale", "-text {Upset}");
+                  MemberLabel := Create(Frame & ".morale", "-text {Upset}");
                when 25 .. 49 =>
-                  MemberLabel :=
-                    Create(Frame & ".morale", "-text {Unhappy}");
+                  MemberLabel := Create(Frame & ".morale", "-text {Unhappy}");
                when 51 .. 74 =>
-                  MemberLabel :=
-                    Create(Frame & ".morale", "-text {Happy}");
+                  MemberLabel := Create(Frame & ".morale", "-text {Happy}");
                when 75 .. 100 =>
-                  MemberLabel :=
-                    Create(Frame & ".morale", "-text {Excited}");
+                  MemberLabel := Create(Frame & ".morale", "-text {Excited}");
                when others =>
                   null;
             end case;
@@ -941,19 +930,28 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            ProgressFrame :=
+              Create
+                (Frame & ".experienceframe" &
+                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+                 "-height 10 -width 200");
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
-                (Frame & ".experience" &
+                (ProgressFrame & ".experience" &
                  Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
                  "-value" &
                  Float'Image
                    (Float(Member.Attributes(I)(2)) /
                     Float(Member.Attributes(I)(1) * 250)) &
-                 " -maximum 1.0  -length 200 -style experience.Horizontal.TProgressbar");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+                 " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
+            Tcl.Tk.Ada.Place.Place
+              (ProgressBar,
+               "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
             NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-            NewWidth := Positive'Value(Winfo_Get(ProgressBar, "reqwidth"));
+              NewHeight +
+              Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
+            NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
          end loop;
          TtkNotebook.Add
            (MemberNotebook, Widget_Image(Frame), "-text {Statistics}");
@@ -1014,19 +1012,28 @@ package body Ships.UI.Crew is
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+            ProgressFrame :=
+              Create
+                (Frame & ".experienceframe" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-height 10 -width 200");
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
-                (Widget_Image(Frame) & ".experience" &
+                (ProgressFrame & ".experience" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-value" &
                  Float'Image
                    (Float(Member.Skills(I)(3)) /
                     Float((Member.Skills(I)(2) * 25))) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
-            Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+            Tcl.Tk.Ada.Place.Place
+              (ProgressBar,
+               "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
             NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-            NewWidth := Positive'Value(Winfo_Get(ProgressBar, "reqwidth"));
+              NewHeight +
+              Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
+            NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
          end loop;
          TtkNotebook.Add
            (MemberNotebook, Widget_Image(Frame), "-text {Skills}");
