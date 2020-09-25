@@ -343,6 +343,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       LoadView: Ttk_Tree_View;
       ItemIndex, Items: Unbounded_String;
+      BackButton: Ttk_Button;
    begin
       if MessageBox
           ("-message {Are you sure you want delete this savegame?} -icon question -type yesno") /=
@@ -356,7 +357,11 @@ package body MainMenu.Commands is
       Delete(LoadView, To_String(ItemIndex));
       Items := To_Unbounded_String(Children(LoadView, "{}"));
       if Items = Null_Unbounded_String then
-         ShowMainMenu;
+         BackButton.Interp := Interp;
+         BackButton.Name := New_String(".loadmenu.back");
+         if Invoke(BackButton) = "" then
+            return TCL_OK;
+         end if;
       else
          ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
          if ItemIndex = Null_Unbounded_String then
