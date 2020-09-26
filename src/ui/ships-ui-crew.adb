@@ -934,7 +934,7 @@ package body Ships.UI.Crew is
               Create
                 (Frame & ".experienceframe" &
                  Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-                 "-height 10 -width 200");
+                 "-height 12 -width 200");
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
@@ -1016,7 +1016,7 @@ package body Ships.UI.Crew is
               Create
                 (Frame & ".experienceframe" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-height 10 -width 200");
+                 "-height 12 -width 200");
             Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
