@@ -943,7 +943,6 @@ package body Maps.UI is
         0 then
          Tcl.Tk.Ada.Pack.Pack(Paned);
       end if;
-      UpdateMapInfo;
       Button.Interp := Get_Context;
       Button.Name := New_String(".paned.mapframe.buttons.hide");
       if Invoke(Button) /= "" then
