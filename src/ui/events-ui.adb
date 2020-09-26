@@ -302,9 +302,7 @@ package body Events.UI is
       EventsFrame.Name := New_String(Widget_Image(EventsCanvas) & ".events");
       Canvas_Create
         (EventsCanvas, "window",
-         "[expr " & Winfo_Get(EventsFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(EventsFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(EventsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(EventsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (EventsCanvas,
