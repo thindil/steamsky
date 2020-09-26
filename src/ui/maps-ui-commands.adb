@@ -17,7 +17,7 @@ with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
-with Interfaces.C;
+with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
 with Tcl; use Tcl;
@@ -249,14 +249,14 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Current map cell X coordinate (where mouse is hovering)
    -- SOURCE
-   MapX: Positive;
+   MapX: Natural := 0;
    -- ****
 
    -- ****iv* MapCommands/MapY
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE
-   MapY: Positive;
+   MapY: Natural := 0;
    -- ****
 
    -- ****o* MapCommands/Update_Map_Info_Command
@@ -380,6 +380,12 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       DestinationMenu: Tk_Menu;
    begin
+      if MapX = 0 or MapY = 0 then
+         if Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
+           TCL_OK then
+            return TCL_ERROR;
+         end if;
+      end if;
       if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
