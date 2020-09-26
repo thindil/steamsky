@@ -913,6 +913,11 @@ package body Ships.UI.Crew is
                  To_String
                    (Attributes_List(Attributes_Container.To_Index(I)).Name) &
                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (MemberLabel,
+               To_String
+                 (Attributes_List(Attributes_Container.To_Index(I))
+                    .Description));
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
@@ -945,6 +950,8 @@ package body Ships.UI.Crew is
                    (Float(Member.Attributes(I)(2)) /
                     Float(Member.Attributes(I)(1) * 250)) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (ProgressBar, "Experience need to reach next level");
             Tcl.Tk.Ada.Place.Place
               (ProgressBar,
                "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
@@ -965,21 +972,6 @@ package body Ships.UI.Crew is
          Frame := Create(MemberNotebook & ".skills");
          NewHeight := 10;
          for I in Member.Skills.Iterate loop
-            MemberLabel :=
-              Create
-                (Frame & ".label" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
-                 ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
-            Tcl.Tk.Ada.Grid.Grid(MemberLabel);
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
-            ProgressBar :=
-              Create
-                (Frame & ".level" &
-                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-                 "-value" & Positive'Image(Member.Skills(I)(2)) &
-                 " -length 200");
             TooltipText := Null_Unbounded_String;
             Append(TooltipText, "Related statistic: ");
             Append
@@ -988,7 +980,7 @@ package body Ships.UI.Crew is
                  .Name);
             if Skills_List(Member.Skills(I)(1)).Tool /=
               Null_Unbounded_String then
-               Append(TooltipText, ". Training tool: ");
+               Append(TooltipText, ".\nTraining tool: ");
                Quality := 0;
                for J in Items_List.Iterate loop
                   if Items_List(J).IType =
@@ -1006,8 +998,24 @@ package body Ships.UI.Crew is
                end loop;
                Append(TooltipText, Items_List(ItemIndex).Name);
             end if;
-            Append(TooltipText, ". ");
+            Append(TooltipText, "." & LF);
             Append(TooltipText, Skills_List(Member.Skills(I)(1)).Description);
+            MemberLabel :=
+              Create
+                (Frame & ".label" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
+                 ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
+            Tcl.Tklib.Ada.Tooltip.Add(MemberLabel, To_String(TooltipText));
+            Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+            ProgressBar :=
+              Create
+                (Frame & ".level" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+                 "-value" & Positive'Image(Member.Skills(I)(2)) &
+                 " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add(ProgressBar, To_String(TooltipText));
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
@@ -1027,6 +1035,8 @@ package body Ships.UI.Crew is
                    (Float(Member.Skills(I)(3)) /
                     Float((Member.Skills(I)(2) * 25))) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (ProgressBar, "Experience need to reach next level");
             Tcl.Tk.Ada.Place.Place
               (ProgressBar,
                "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
