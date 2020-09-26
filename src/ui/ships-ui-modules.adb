@@ -910,6 +910,9 @@ package body Ships.UI.Modules is
          Bind
            (ModuleDialog, "<Destroy>",
             "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
+         Bind
+           (ModuleDialog, "<Escape>",
+            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
