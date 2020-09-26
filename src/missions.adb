@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -306,19 +306,13 @@ package body Missions is
                Inventory: Inventory_Container.Vector;
                MaxAttributeLevel, Morale: Integer;
             begin
-               if GetRandom(1, 100) < 60 then
-                  PassengerBase := BaseIndex;
-               else
-                  PassengerBase := GetRandom(SkyBases'First, SkyBases'Last);
-               end if;
+               PassengerBase :=
+                 (if GetRandom(1, 100) < 60 then BaseIndex
+                  else GetRandom(SkyBases'First, SkyBases'Last));
                if not Factions_List(SkyBases(PassengerBase).Owner).Flags
                    .Contains
                    (To_Unbounded_String("nogender")) then
-                  if GetRandom(1, 2) = 1 then
-                     Gender := 'M';
-                  else
-                     Gender := 'F';
-                  end if;
+                  Gender := (if GetRandom(1, 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
