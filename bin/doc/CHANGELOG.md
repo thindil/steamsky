@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Redraw map after changed size of map font
 - Selecting save game from list, load it
 - Showing main menu after deleting last savegame
+- Crash on trying to show destination menu on start the game
 
 ## [5.2] - 2020-09-06
 
