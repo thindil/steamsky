@@ -174,15 +174,6 @@ package body Ships.UI.Crew is
            (CrewMenu, "command",
             "-label {Rename crew member} -command {RenameMember" &
             Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Menu.Add
-           (CrewMenu, "command",
-            "-label {Show more info about the crew member} -command {ShowMemberInfo" &
-            Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Menu.Add
-           (CrewMenu, "command", "-label {Show inventory of the crew member}");
-         Menu.Add
-           (CrewMenu, "command",
-            "-label {Set order priorities of the crew member}");
          if
            ((PlayerShip.Crew(I).Tired = 100 or
              PlayerShip.Crew(I).Hunger = 100 or
@@ -310,6 +301,18 @@ package body Ships.UI.Crew is
                   "-label {Go on break} -command {SetCrewOrder Rest" &
                   Positive'Image(Crew_Container.To_Index(I)) & "}");
             end if;
+         end if;
+         Menu.Add
+           (CrewMenu, "command",
+            "-label {Show more info about the crew member} -command {ShowMemberInfo" &
+            Positive'Image(Crew_Container.To_Index(I)) & "}");
+         Menu.Add
+           (CrewMenu, "command", "-label {Show inventory of the crew member}");
+         if PlayerShip.Crew(I).Skills.Length > 0 and
+           PlayerShip.Crew(I).ContractLength /= 0 then
+            Menu.Add
+              (CrewMenu, "command",
+               "-label {Set order priorities of the crew member}");
          end if;
          if Crew_Container.To_Index(I) /= 1 and PlayerShip.Speed = DOCKED then
             Menu.Add
