@@ -1089,7 +1089,7 @@ package body Ships.UI.Crew is
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
-      Height := Height + 20;
+      Height := Height + 30;
       Width := Width + 20;
       declare
          X, Y: Integer;
@@ -1112,6 +1112,7 @@ package body Ships.UI.Crew is
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
          Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
+         Bind(MemberDialog, "<Escape>", "{CloseDialog " & MemberDialog & "}");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
