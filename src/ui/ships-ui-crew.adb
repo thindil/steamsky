@@ -37,10 +37,11 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
-with Tcl.Tk.Ada.Widgets.TtkNotebook; use Tcl.Tk.Ada.Widgets.TtkNotebook;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -693,8 +694,6 @@ package body Ships.UI.Crew is
            "-yscrollcommand [list " & YScroll &
            " set] -xscrollcommand [list " & XScroll & " set]");
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
-      MemberNotebook: constant Ttk_Notebook :=
-        Create(MemberFrame & ".notebook");
       CloseButton: constant Ttk_Button :=
         Create
           (MemberFrame & ".button",
@@ -707,6 +706,7 @@ package body Ships.UI.Crew is
       TiredPoints: Integer;
       ProgressBar: Ttk_ProgressBar;
       Quality: Natural;
+      TabButton: Ttk_RadioButton;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -719,8 +719,29 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
+      Frame := Create(MemberFrame & ".buttonbox");
+      Tcl_SetVar(Interp, "newtab", "general");
+      TabButton :=
+        Create
+          (Frame & ".general",
+           " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
+      Tcl.Tk.Ada.Grid.Grid(TabButton);
+      Height := Height + Positive'Value(Winfo_Get(TabButton, "reqheight"));
+      if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
+         TabButton :=
+           Create
+             (Frame & ".stats",
+              " -text Statistics -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
+         Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
+         TabButton :=
+           Create
+             (Frame & ".skills",
+              " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
+         Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 2 -row 0");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Frame);
       -- General info about the selected crew member
-      Frame := Create(MemberNotebook & ".general");
+      Frame := Create(MemberFrame & ".general");
       if Member.Health < 100 then
          if GameSettings.ShowNumbers then
             MemberLabel :=
@@ -900,10 +921,10 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(MemberLabel, "-sticky w");
       Height := Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(MemberLabel, "reqwidth"));
-      TtkNotebook.Add(MemberNotebook, Widget_Image(Frame), "-text {General}");
+      Tcl.Tk.Ada.Grid.Grid(Frame);
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
-         Frame := Create(MemberNotebook & ".stats");
+         Frame := Create(MemberFrame & ".stats");
          for I in Member.Attributes.Iterate loop
             MemberLabel :=
               Create
@@ -960,8 +981,6 @@ package body Ships.UI.Crew is
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
          end loop;
-         TtkNotebook.Add
-           (MemberNotebook, Widget_Image(Frame), "-text {Statistics}");
          if NewHeight > Height then
             Height := NewHeight;
          end if;
@@ -969,7 +988,7 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
          -- Skills of the selected crew member
-         Frame := Create(MemberNotebook & ".skills");
+         Frame := Create(MemberFrame & ".skills");
          NewHeight := 10;
          for I in Member.Skills.Iterate loop
             TooltipText := Null_Unbounded_String;
@@ -1045,8 +1064,6 @@ package body Ships.UI.Crew is
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
          end loop;
-         TtkNotebook.Add
-           (MemberNotebook, Widget_Image(Frame), "-text {Skills}");
          if NewHeight > Height then
             Height := NewHeight;
          end if;
@@ -1054,9 +1071,6 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(MemberNotebook);
-      Height :=
-        Height + Positive'Value(Winfo_Get(MemberNotebook, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
@@ -1100,6 +1114,45 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Info_Command;
 
+   -- ****o* SUCrew/Show_Member_Tab_Command
+   -- FUNCTION
+   -- Show the selected information about the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMemberTab
+   -- SOURCE
+   function Show_Member_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Member_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      MemberFrame, Frame: Ttk_Frame;
+   begin
+      MemberFrame.Interp := Interp;
+      MemberFrame.Name := New_String(".memberdialog.canvas.frame");
+      Frame.Interp := Interp;
+      Frame.Name :=
+        New_String(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 1"));
+      Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+      Frame.Name :=
+        New_String(MemberFrame & "." & Tcl_GetVar(Interp, "newtab"));
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-row 1");
+      return TCL_OK;
+   end Show_Member_Tab_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1107,6 +1160,7 @@ package body Ships.UI.Crew is
       AddCommand("Dismiss", Dismiss_Command'Access);
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
+      AddCommand("ShowMemberTab", Show_Member_Tab_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
