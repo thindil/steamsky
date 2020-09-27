@@ -324,9 +324,7 @@ package body GameOptions is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (OptionsCanvas, "window",
-         "[expr " & Winfo_Get(OptionsFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(OptionsFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(OptionsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(OptionsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (OptionsCanvas,
