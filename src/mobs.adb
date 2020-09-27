@@ -67,12 +67,11 @@ package body Mobs is
             Equipment => TempEquipment);
          MobNode := Item(NodesList, I);
          MobIndex := To_Unbounded_String(Get_Attribute(MobNode, "index"));
-         if Get_Attribute(MobNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(MobNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action :=
+           (if Get_Attribute(MobNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(MobNode, "action"))
+            else ADD);
+         if Action in UPDATE | REMOVE then
             if not ProtoMobs_Container.Contains(ProtoMobs_List, MobIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -105,12 +104,10 @@ package body Mobs is
                     "', there no skill named '" &
                     Get_Attribute(ChildNode, "name") & "'.";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "level")'Length /= 0 then
@@ -239,12 +236,10 @@ package body Mobs is
                     "', there is no item with index '" &
                     Get_Attribute(ChildNode, "index") & "'.";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
@@ -361,11 +356,8 @@ package body Mobs is
       HighestSkillLevel, WeaponSkillLevel: Positive := 1;
       SkillIndex: Positive;
    begin
-      if GetRandom(1, 100) < 99 then
-         Mob.Faction := FactionIndex;
-      else
-         Mob.Faction := GetRandomFaction;
-      end if;
+      Mob.Faction :=
+        (if GetRandom(1, 100) < 99 then FactionIndex else GetRandomFaction);
       Mob.Gender := 'M';
       if not Factions_List(Mob.Faction).Flags.Contains
           (To_Unbounded_String("nogender"))
@@ -374,11 +366,10 @@ package body Mobs is
       end if;
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
       for Skill of ProtoMob.Skills loop
-         if Skill(1) = Positive(Skills_List.Length) + 1 then
-            SkillIndex := Factions_List(Mob.Faction).WeaponSkill;
-         else
-            SkillIndex := Skill(1);
-         end if;
+         SkillIndex :=
+           (if Skill(1) = Positive(Skills_List.Length) + 1 then
+              Factions_List(Mob.Faction).WeaponSkill
+            else Skill(1));
          if Skill(3) = 0 then
             Mob.Skills.Append(New_Item => (SkillIndex, Skill(2), 0));
          else
@@ -401,14 +392,12 @@ package body Mobs is
          end if;
       end loop;
       for I in ProtoMob.Inventory.Iterate loop
-         if ProtoMob.Inventory(I).MaxAmount > 0 then
-            Amount :=
+         Amount :=
+           (if ProtoMob.Inventory(I).MaxAmount > 0 then
               GetRandom
                 (ProtoMob.Inventory(I).MinAmount,
-                 ProtoMob.Inventory(I).MaxAmount);
-         else
-            Amount := ProtoMob.Inventory(I).MinAmount;
-         end if;
+                 ProtoMob.Inventory(I).MaxAmount)
+            else ProtoMob.Inventory(I).MinAmount);
          Mob.Inventory.Append
            (New_Item =>
               (ProtoIndex => ProtoMob.Inventory(I).ProtoIndex,
