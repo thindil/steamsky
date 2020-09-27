@@ -1077,17 +1077,20 @@ package body Ships.UI.Crew is
       if Height > 500 then
          Height := 500;
       end if;
+      if Width < 230 then
+         Width := 230;
+      end if;
       configure
         (MemberFrame,
-         "-height" & Positive'Image(Height) & " -width " &
-         Winfo_Get(MemberLabel, "reqwidth"));
+         "-height" & Positive'Image(Height) & " -width" &
+         Positive'Image(Width));
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Height := Height + 20;
-      Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+      Width := Width + 20;
       declare
          X, Y: Integer;
       begin
