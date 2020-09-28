@@ -713,7 +713,9 @@ package body Ships.UI.Crew is
       InfoButton: Ttk_Button;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
+      Wm_Set
+        (MemberDialog, "title",
+         "{Steam Sky - " & To_String(Member.Name) & " Info}");
       Wm_Set(MemberDialog, "transient", ".");
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
          Wm_Set(MemberDialog, "attributes", "-type dialog");
