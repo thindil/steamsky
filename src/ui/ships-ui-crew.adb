@@ -39,6 +39,8 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
@@ -1308,13 +1310,27 @@ package body Ships.UI.Crew is
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, Width: Positive := 10;
+      Height: Positive := 10;
+      Label: Ttk_Label;
+      PrioritiesNames: constant array
+        (Member.Orders'Range) of Unbounded_String :=
+        (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
+         To_Unbounded_String("Operating guns"),
+         To_Unbounded_String("Repair ship"),
+         To_Unbounded_String("Manufacturing"),
+         To_Unbounded_String("Upgrading ship"),
+         To_Unbounded_String("Talking in bases"),
+         To_Unbounded_String("Healing wounded"),
+         To_Unbounded_String("Cleaning ship"),
+         To_Unbounded_String("Defend ship"),
+         To_Unbounded_String("Board enemy ship"),
+         To_Unbounded_String("Train skill"));
+      ComboBox: Ttk_ComboBox;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set
         (MemberDialog, "title",
-         "{Steam Sky - " & To_String(PlayerShip.Crew(MemberIndex).Name) &
-         " Priorities}");
+         "{Steam Sky - " & To_String(Member.Name) & " Orders Priorities}");
       Wm_Set(MemberDialog, "transient", ".");
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
          Wm_Set(MemberDialog, "attributes", "-type dialog");
@@ -1324,33 +1340,43 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
-      -- Content of the dialog
-      -- End of the content of the dialog
-      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Label := Create(MemberFrame & ".name", "-text {Priority}");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Label := Create(MemberFrame & ".level", "-text {Level}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      for I in Member.Orders'Range loop
+         Label :=
+           Create
+             (MemberFrame & ".name" & Trim(Positive'Image(I), Left),
+              "-text {" & To_String(PrioritiesNames(I)) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
+         ComboBox :=
+           Create
+             (MemberFrame & ".level" & Trim(Positive'Image(I), Left),
+              "-values [list None Normal Highest] -state readonly");
+         Tcl.Tk.Ada.Grid.Grid(ComboBox, "-column 1 -row" & Positive'Image(I));
+         Height := Height + Positive'Value(Winfo_Get(ComboBox, "reqheight"));
+      end loop;
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
          Height := 500;
       end if;
-      if Width < 230 then
-         Width := 230;
-      end if;
       configure
-        (MemberFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
+        (MemberFrame, "-height" & Positive'Image(Height) & " -width 230");
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Height := Height + 30;
-      Width := Width + 20;
       declare
          X, Y: Integer;
       begin
          X :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
+           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - 250) / 2;
          if X < 0 then
             X := 0;
          end if;
@@ -1362,8 +1388,7 @@ package body Ships.UI.Crew is
          end if;
          Wm_Set
            (MemberDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
+            "250x" & Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
          Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
