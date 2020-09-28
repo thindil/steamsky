@@ -312,7 +312,8 @@ package body Ships.UI.Crew is
            PlayerShip.Crew(I).ContractLength /= 0 then
             Menu.Add
               (CrewMenu, "command",
-               "-label {Set order priorities of the crew member}");
+               "-label {Set order priorities of the crew member} -command {ShowMemberPriorities" &
+               Positive'Image(Crew_Container.To_Index(I)) & "}");
          end if;
          if Crew_Container.To_Index(I) /= 1 and PlayerShip.Speed = DOCKED then
             Menu.Add
@@ -1254,6 +1255,122 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
+   -- ****o* SUCrew/Show_Member_Priorities_Command
+   -- FUNCTION
+   -- Show information about the selected crew member priorities
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMemberPriorities memberindex
+   -- MemberIndex is the index of the crew member to show
+   -- SOURCE
+   function Show_Member_Priorities_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Member_Priorities_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
+      MemberDialog: constant Tk_Toplevel :=
+        Create
+          (".memberdialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      XScroll: constant Ttk_Scrollbar :=
+        Create
+          (MemberDialog & ".xscroll",
+           "-orient horizontal -command [list .memberdialog.canvas xview]");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (MemberDialog & ".yscroll",
+           "-orient vertical -command [list .memberdialog.canvas yview]");
+      MemberCanvas: constant Tk_Canvas :=
+        Create
+          (MemberDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll &
+           " set] -xscrollcommand [list " & XScroll & " set]");
+      MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (MemberFrame & ".button",
+           "-text Close -command {CloseDialog " & MemberDialog & "}");
+      Height, Width: Positive := 10;
+   begin
+      Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      Wm_Set
+        (MemberDialog, "title",
+         "{Steam Sky - " & To_String(PlayerShip.Crew(MemberIndex).Name) &
+         " Priorities}");
+      Wm_Set(MemberDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(MemberDialog, "attributes", "-type dialog");
+      end if;
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(MemberCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
+      Autoscroll(YScroll);
+      Autoscroll(XScroll);
+      -- Content of the dialog
+      -- End of the content of the dialog
+      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+      Focus(CloseButton);
+      if Height > 500 then
+         Height := 500;
+      end if;
+      if Width < 230 then
+         Width := 230;
+      end if;
+      configure
+        (MemberFrame,
+         "-height" & Positive'Image(Height) & " -width" &
+         Positive'Image(Width));
+      Canvas_Create
+        (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
+      configure
+        (MemberCanvas,
+         "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
+      Height := Height + 30;
+      Width := Width + 20;
+      declare
+         X, Y: Integer;
+      begin
+         X :=
+           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
+         if X < 0 then
+            X := 0;
+         end if;
+         Y :=
+           (Positive'Value(Winfo_Get(MemberDialog, "vrootheight")) - Height) /
+           2;
+         if Y < 0 then
+            Y := 0;
+         end if;
+         Wm_Set
+           (MemberDialog, "geometry",
+            Trim(Positive'Image(Width), Left) & "x" &
+            Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(X), Left) & "+" &
+            Trim(Positive'Image(Y), Left));
+         Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
+         Bind(MemberDialog, "<Escape>", "{CloseDialog " & MemberDialog & "}");
+         Tcl_Eval(Interp, "update");
+      end;
+      return TCL_OK;
+   end Show_Member_Priorities_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1264,6 +1381,8 @@ package body Ships.UI.Crew is
       AddCommand("ShowMemberTab", Show_Member_Tab_Command'Access);
       AddCommand("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
       AddCommand("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
+      AddCommand
+        ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
