@@ -174,9 +174,7 @@ package body Messages.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (MessagesCanvas, "window",
-         "[expr " & Winfo_Get(MessagesFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(MessagesFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(MessagesFrame));
+         "0 0 -anchor nw -window " & Widget_Image(MessagesFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (MessagesCanvas,
