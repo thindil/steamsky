@@ -50,12 +50,11 @@ package body ShipModules is
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
-         if Get_Attribute(ModuleNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(ModuleNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action :=
+           (if Get_Attribute(ModuleNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(ModuleNode, "action"))
+            else ADD);
+         if Action in UPDATE | REMOVE then
             if not BaseModules_Container.Contains
                 (Modules_List, ModuleIndex) then
                raise Data_Loading_Error
