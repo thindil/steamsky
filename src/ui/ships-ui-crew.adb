@@ -703,12 +703,11 @@ package body Ships.UI.Crew is
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, NewHeight: Positive := 10;
       Frame, ProgressFrame: Ttk_Frame;
-      MemberInfo, TooltipText, ItemIndex: Unbounded_String;
+      MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
       Width, NewWidth: Positive;
       TiredPoints: Integer;
       ProgressBar: Ttk_ProgressBar;
-      Quality: Natural;
       TabButton: Ttk_RadioButton;
       InfoButton: Ttk_Button;
    begin
@@ -1000,51 +999,40 @@ package body Ships.UI.Crew is
          Frame := Create(MemberFrame & ".skills");
          NewHeight := 10;
          for I in Member.Skills.Iterate loop
-            TooltipText := Null_Unbounded_String;
-            Append(TooltipText, "Related statistic: ");
-            Append
-              (TooltipText,
-               Attributes_List(Skills_List(Member.Skills(I)(1)).Attribute)
-                 .Name);
-            if Skills_List(Member.Skills(I)(1)).Tool /=
-              Null_Unbounded_String then
-               Append(TooltipText, ".\nTraining tool: ");
-               Quality := 0;
-               for J in Items_List.Iterate loop
-                  if Items_List(J).IType =
-                    Skills_List(Member.Skills(I)(1)).Tool
-                    and then
-                    (Items_List(J).Value.Length > 0
-                     and then Items_List(J).Value(1) <=
-                       GetTrainingToolQuality
-                         (MemberIndex, Member.Skills(I)(1))) then
-                     if Items_List(J).Value(1) > Quality then
-                        ItemIndex := Objects_Container.Key(J);
-                        Quality := Items_List(J).Value(1);
-                     end if;
-                  end if;
-               end loop;
-               Append(TooltipText, Items_List(ItemIndex).Name);
-            end if;
-            Append(TooltipText, "." & LF);
-            Append(TooltipText, Skills_List(Member.Skills(I)(1)).Description);
+            ProgressFrame :=
+              Create
+                (Frame & ".skillinfo" &
+                 Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
             MemberLabel :=
               Create
-                (Frame & ".label" &
+                (ProgressFrame & ".label" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
                  ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
-            Tcl.Tklib.Ada.Tooltip.Add(MemberLabel, To_String(TooltipText));
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+            InfoButton :=
+              Create
+                (ProgressFrame & ".button",
+                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                 Positive'Image(Member.Skills(I)(1)) & " " &
+                 CArgv.Arg(Argv, 1) & "}");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (InfoButton,
+               "Show detailed information about the selected skill.");
+            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
+            NewHeight :=
+              NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
                 (Frame & ".level" &
                  Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
                  "-value" & Positive'Image(Member.Skills(I)(2)) &
                  " -length 200");
-            Tcl.Tklib.Ada.Tooltip.Add(ProgressBar, To_String(TooltipText));
+            Tcl.Tklib.Ada.Tooltip.Add
+              (ProgressBar, "The current level of the skill.");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
@@ -1203,6 +1191,69 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
+   -- ****o* SUCrew/Show_Crew_Skill_Info_Command
+   -- FUNCTION
+   -- Show the detailed information about the selected crew member skill
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrewSkillInfo skillindex memberindex
+   -- Skillindex is the index of skill which info will be show.
+   -- Memberindex is the index of the crew member which skill will be show.
+   -- SOURCE
+   function Show_Crew_Skill_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Crew_Skill_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      MessageText, ItemIndex: Unbounded_String;
+      Quality: Natural;
+   begin
+      Append(MessageText, "Related statistic: ");
+      Append
+        (MessageText, Attributes_List(Skills_List(SkillIndex).Attribute).Name);
+      if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
+         Append(MessageText, "." & LF & "Training tool: ");
+         Quality := 0;
+         for I in Items_List.Iterate loop
+            if Items_List(I).IType = Skills_List(SkillIndex).Tool
+              and then
+              (Items_List(I).Value.Length > 0
+               and then Items_List(I).Value(1) <=
+                 GetTrainingToolQuality
+                   (Positive'Value(CArgv.Arg(Argv, 2)), SkillIndex)) then
+               if Items_List(I).Value(1) > Quality then
+                  ItemIndex := Objects_Container.Key(I);
+                  Quality := Items_List(I).Value(1);
+               end if;
+            end if;
+         end loop;
+         Append(MessageText, Items_List(ItemIndex).Name);
+      end if;
+      Append(MessageText, "." & LF);
+      Append(MessageText, Skills_List(SkillIndex).Description);
+      if MessageBox
+          ("-parent .memberdialog -icon info -type ok -message {" &
+           To_String(MessageText) & "}") =
+        "ok" then
+         return TCL_OK;
+      end if;
+      return TCL_OK;
+   end Show_Crew_Skill_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1212,6 +1263,7 @@ package body Ships.UI.Crew is
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("ShowMemberTab", Show_Member_Tab_Command'Access);
       AddCommand("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
+      AddCommand("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
