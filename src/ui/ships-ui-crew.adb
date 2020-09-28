@@ -710,6 +710,7 @@ package body Ships.UI.Crew is
       ProgressBar: Ttk_ProgressBar;
       Quality: Natural;
       TabButton: Ttk_RadioButton;
+      InfoButton: Ttk_Button;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set(MemberDialog, "title", "{Steam Sky - Module Info}");
@@ -929,22 +930,30 @@ package body Ships.UI.Crew is
          -- Statistics of the selected crew member
          Frame := Create(MemberFrame & ".stats");
          for I in Member.Attributes.Iterate loop
+            ProgressFrame :=
+              Create
+                (Frame & ".statinfo" &
+                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
             MemberLabel :=
               Create
-                (Frame & ".label" &
-                 Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+                (ProgressFrame & ".label",
                  "-text {" &
                  To_String
                    (Attributes_List(Attributes_Container.To_Index(I)).Name) &
                  ": " & GetAttributeLevelName(Member.Attributes(I)(1)) & "}");
-            Tcl.Tklib.Ada.Tooltip.Add
-              (MemberLabel,
-               To_String
-                 (Attributes_List(Attributes_Container.To_Index(I))
-                    .Description));
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
+            InfoButton :=
+              Create
+                (ProgressFrame & ".button",
+                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+                 Positive'Image(Attributes_Container.To_Index(I)) & "}");
+            Tcl.Tklib.Ada.Tooltip.Add
+              (InfoButton,
+               "Show detailed information about the selected statistic.");
+            Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
             NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
+              NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
+            Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
             ProgressBar :=
               Create
                 (Frame & ".level" &
@@ -952,10 +961,7 @@ package body Ships.UI.Crew is
                  "-value" & Positive'Image(Member.Attributes(I)(1) * 2) &
                  " -length 200");
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar,
-               To_String
-                 (Attributes_List(Attributes_Container.To_Index(I))
-                    .Description));
+              (ProgressBar, "The current level of the attribute.");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar);
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
@@ -1160,6 +1166,43 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Tab_Command;
 
+   -- ****o* SUCrew/Show_Crew_Stats_Info_Command
+   -- FUNCTION
+   -- Show the detailed information about the selected crew member statistic
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrewStatsInfo statindex
+   -- Statindex is the index of statistic which info will be show
+   -- SOURCE
+   function Show_Crew_Stats_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Crew_Stats_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Dummy: constant String :=
+        MessageBox
+          ("-parent .memberdialog -icon info -type ok -message {" &
+           To_String
+             (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1)))
+                .Description) &
+           "}");
+   begin
+      return TCL_OK;
+   end Show_Crew_Stats_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1168,6 +1211,7 @@ package body Ships.UI.Crew is
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
       AddCommand("ShowMemberTab", Show_Member_Tab_Command'Access);
+      AddCommand("ShowCrewStatsInfo", Show_Crew_Stats_Info_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
