@@ -47,7 +47,6 @@ with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships; use Ships;
-with Ships.Crew; use Ships.Crew;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
@@ -785,54 +784,9 @@ package body Crew.UI is
       return TCL_OK;
    end Show_Crew_Info_Command;
 
-   -- ****o* CUI3/Set_Priority_Command
-   -- FUNCTION
-   -- Set the selected priority of the selected crew member
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetPriority orderindex priority
-   -- Orderindex is the index of the order priority which will be changed,
-   -- priority is the new level of the priority of the selected order
-   -- SOURCE
-   function Set_Priority_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Priority_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-   begin
-      if CArgv.Arg(Argv, 2) = "2" then
-         for Order of PlayerShip.Crew(MemberIndex).Orders loop
-            if Order = 2 then
-               Order := 1;
-               exit;
-            end if;
-         end loop;
-      end if;
-      PlayerShip.Crew(MemberIndex).Orders
-        (Positive'Value(CArgv.Arg(Argv, 1))) :=
-        Natural'Value(CArgv.Arg(Argv, 2));
-      UpdateOrders(PlayerShip);
-      UpdateHeader;
-      UpdateMessages;
-      return Show_Crew_Info_Command(ClientData, Interp, Argc, Argv);
-   end Set_Priority_Command;
-
    procedure AddCommands is
    begin
       AddCommand("ShowCrewInfo", Show_Crew_Info_Command'Access);
-      AddCommand("SetPriority", Set_Priority_Command'Access);
       Crew.UI.Inventory.AddCommands;
    end AddCommands;
 
