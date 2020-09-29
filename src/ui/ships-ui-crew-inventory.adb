@@ -15,6 +15,7 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -22,6 +23,7 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -98,6 +100,7 @@ package body Ships.UI.Crew.Inventory is
       ItemButton: Ttk_MenuButton;
       DamageBar: Ttk_ProgressBar;
       ProgressBarStyle: Unbounded_String;
+      ItemMenu: Tk_Menu;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set
@@ -119,13 +122,44 @@ package body Ships.UI.Crew.Inventory is
       Label := Create(MemberFrame & ".used", "-text {Used}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 2 -row 0");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      ItemMenu.Interp := Interp;
       for I in Member.Inventory.Iterate loop
+         ItemMenu.Name :=
+           New_String
+             (".itemmenu" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left));
+         if (Winfo_Get(ItemMenu, "exists")) = "0" then
+            ItemMenu :=
+              Create
+                (".itemmenu" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-tearoff false");
+         end if;
+         Delete(ItemMenu, "0", "end");
+         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+            Menu.Add(ItemMenu, "command", "-label {Unequip}");
+            Label :=
+              Create
+                (MemberFrame & ".used" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-text {Yes}");
+         else
+            Menu.Add(ItemMenu, "command", "-label {Equip}");
+            Label :=
+              Create
+                (MemberFrame & ".used" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-text {No}");
+         end if;
+         Menu.Add(ItemMenu, "command", "-label {Move the item to the ship cargo}");
+         Menu.Add(ItemMenu, "command", "-label {Show more info about the item}");
          ItemButton :=
            Create
              (MemberFrame & ".name" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
               "-text {" & GetItemName(Member.Inventory(I), False, False) &
-              "}");
+              "} -menu " & ItemMenu);
+         Add(ItemButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid(ItemButton, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(ItemButton, "reqheight"));
          if Member.Inventory(I).Durability > 74 then
@@ -149,19 +183,6 @@ package body Ships.UI.Crew.Inventory is
            (DamageBar,
             "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
             " -column 1");
-         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-            Label :=
-              Create
-                (MemberFrame & ".used" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {Yes}");
-         else
-            Label :=
-              Create
-                (MemberFrame & ".used" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {No}");
-         end if;
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
