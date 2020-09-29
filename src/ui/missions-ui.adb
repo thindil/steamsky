@@ -457,9 +457,7 @@ package body Missions.UI is
         New_String(Widget_Image(MissionsCanvas) & ".missions");
       Canvas_Create
         (MissionsCanvas, "window",
-         "[expr " & Winfo_Get(MissionsFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(MissionsFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(MissionsFrame));
+         "0 0 -anchor nw -window " & Widget_Image(MissionsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (MissionsCanvas,
