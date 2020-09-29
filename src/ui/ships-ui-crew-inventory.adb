@@ -29,10 +29,12 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
+with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Factions; use Factions;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -93,6 +95,8 @@ package body Ships.UI.Crew.Inventory is
       Height, Width, NewWidth: Positive := 10;
       Label: Ttk_Label;
       ItemButton: Ttk_MenuButton;
+      DamageBar: Ttk_ProgressBar;
+      ProgressBarStyle: Unbounded_String;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set
@@ -119,15 +123,39 @@ package body Ships.UI.Crew.Inventory is
            Create
              (MemberFrame & ".name" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & To_String(Member.Inventory(I).Name) & "}");
+              "-text {" & GetItemName(Member.Inventory(I), False, False) &
+              "}");
          Tcl.Tk.Ada.Grid.Grid(ItemButton, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(ItemButton, "reqheight"));
-         NewWidth := Positive'Value(Winfo_Get(ItemButton, "reqwidth"));
+         if Member.Inventory(I).Durability > 74 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+         elsif Member.Inventory(I).Durability > 24 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Horizontal.TProgressbar");
+         end if;
+         DamageBar :=
+           Create
+             (MemberFrame & ".durability" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-value {" & Positive'Image(Member.Inventory(I).Durability) &
+              "}" & To_String(ProgressBarStyle));
+         Add(DamageBar, "The current durability level of the selected item.");
+         Tcl.Tk.Ada.Grid.Grid
+           (DamageBar,
+            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -column 1");
+         NewWidth :=
+           Positive'Value(Winfo_Get(ItemButton, "reqwidth")) +
+           Positive'Value(Winfo_Get(DamageBar, "reqwidth"));
          if NewWidth > Width then
             Width := NewWidth;
          end if;
       end loop;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 3");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
