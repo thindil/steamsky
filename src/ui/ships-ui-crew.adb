@@ -58,6 +58,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
+with Ships.UI.Crew.Inventory;
 with Themes; use Themes;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -309,7 +310,9 @@ package body Ships.UI.Crew is
             "-label {Show more info about the crew member} -command {ShowMemberInfo" &
             Positive'Image(Crew_Container.To_Index(I)) & "}");
          Menu.Add
-           (CrewMenu, "command", "-label {Show inventory of the crew member}");
+           (CrewMenu, "command",
+            "-label {Show inventory of the crew member} -command {ShowMemberInventory" &
+            Positive'Image(Crew_Container.To_Index(I)) & "}");
          if PlayerShip.Crew(I).Skills.Length > 0 and
            PlayerShip.Crew(I).ContractLength /= 0 then
             Menu.Add
@@ -1485,6 +1488,7 @@ package body Ships.UI.Crew is
       AddCommand
         ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
+      Ships.UI.Crew.Inventory.AddCommands;
    end AddCommands;
 
 end Ships.UI.Crew;
