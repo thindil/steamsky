@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Crew.Inventory; use Crew.Inventory;
 with Factions; use Factions;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -148,9 +149,27 @@ package body Ships.UI.Crew.Inventory is
            (DamageBar,
             "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
             " -column 1");
+         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+            Label :=
+              Create
+                (MemberFrame & ".used" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-text {Yes}");
+         else
+            Label :=
+              Create
+                (MemberFrame & ".used" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-text {No}");
+         end if;
+         Tcl.Tk.Ada.Grid.Grid
+           (Label,
+            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -column 2");
          NewWidth :=
            Positive'Value(Winfo_Get(ItemButton, "reqwidth")) +
-           Positive'Value(Winfo_Get(DamageBar, "reqwidth"));
+           Positive'Value(Winfo_Get(DamageBar, "reqwidth")) +
+           Positive'Value(Winfo_Get(Label, "reqwidth"));
          if NewWidth > Width then
             Width := NewWidth;
          end if;
