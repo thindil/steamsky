@@ -1310,7 +1310,7 @@ package body Ships.UI.Crew is
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height: Positive := 10;
+      Height, Width, NewWidth: Positive := 10;
       Label: Ttk_Label;
       PrioritiesNames: constant array
         (Member.Orders'Range) of Unbounded_String :=
@@ -1354,9 +1354,20 @@ package body Ships.UI.Crew is
          ComboBox :=
            Create
              (MemberFrame & ".level" & Trim(Positive'Image(I), Left),
-              "-values [list None Normal Highest] -state readonly");
+              "-values [list None Normal Highest] -state readonly -width 8");
+         Current(ComboBox, Natural'Image(Member.Orders(I)));
+         Bind
+           (ComboBox, "<<ComboboxSelected>>",
+            "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
+            " current]" & Positive'Image(MemberIndex) & "}");
          Tcl.Tk.Ada.Grid.Grid(ComboBox, "-column 1 -row" & Positive'Image(I));
          Height := Height + Positive'Value(Winfo_Get(ComboBox, "reqheight"));
+         NewWidth :=
+           Positive'Value(Winfo_Get(Label, "reqwidth")) +
+           Positive'Value(Winfo_Get(ComboBox, "reqwidth"));
+         if NewWidth > Width then
+            Width := NewWidth;
+         end if;
       end loop;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
@@ -1365,18 +1376,21 @@ package body Ships.UI.Crew is
          Height := 500;
       end if;
       configure
-        (MemberFrame, "-height" & Positive'Image(Height) & " -width 230");
+        (MemberFrame,
+         "-height" & Positive'Image(Height) & " -width" &
+         Positive'Image(Width));
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Height := Height + 30;
+      Width := Width + 30;
       declare
          X, Y: Integer;
       begin
          X :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - 250) / 2;
+           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
          if X < 0 then
             X := 0;
          end if;
@@ -1388,7 +1402,8 @@ package body Ships.UI.Crew is
          end if;
          Wm_Set
            (MemberDialog, "geometry",
-            "250x" & Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(Width), Left) & "x" &
+            Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
          Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
@@ -1397,6 +1412,65 @@ package body Ships.UI.Crew is
       end;
       return TCL_OK;
    end Show_Member_Priorities_Command;
+
+   -- ****o* SUCrew/Set_Priority_Command
+   -- FUNCTION
+   -- Set the selected priority of the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetPriority orderindex priority memberindex
+   -- Orderindex is the index of the order priority which will be changed,
+   -- priority is the new level of the priority of the selected order,
+   -- memberindex is the index of the crew member which priority order will
+   -- be set
+   -- SOURCE
+   function Set_Priority_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Priority_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ComboBox: Ttk_ComboBox;
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
+   begin
+      if CArgv.Arg(Argv, 2) = "2" then
+         for Order of PlayerShip.Crew(MemberIndex).Orders loop
+            if Order = 2 then
+               Order := 1;
+               exit;
+            end if;
+         end loop;
+      end if;
+      PlayerShip.Crew(MemberIndex).Orders
+        (Positive'Value(CArgv.Arg(Argv, 1))) :=
+        Natural'Value(CArgv.Arg(Argv, 2));
+      UpdateOrders(PlayerShip);
+      UpdateHeader;
+      UpdateMessages;
+      UpdateCrewInfo;
+      ComboBox.Interp := Interp;
+      for I in PlayerShip.Crew(MemberIndex).Orders'Range loop
+         ComboBox.Name :=
+           New_String
+             (".memberdialog.canvas.frame.level" &
+              Trim(Positive'Image(I), Left));
+         Current
+           (ComboBox, Natural'Image(PlayerShip.Crew(MemberIndex).Orders(I)));
+      end loop;
+      return TCL_OK;
+   end Set_Priority_Command;
 
    procedure AddCommands is
    begin
@@ -1410,6 +1484,7 @@ package body Ships.UI.Crew is
       AddCommand("ShowCrewSkillInfo", Show_Crew_Skill_Info_Command'Access);
       AddCommand
         ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
+      AddCommand("SetPriority", Set_Priority_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew;
