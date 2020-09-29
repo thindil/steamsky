@@ -167,7 +167,7 @@ package body Ships.Crew is
       ToolQuality: Positive := 100;
    begin
       if GivenOrder = Ship.Crew(MemberIndex).Order then
-         if GivenOrder = Craft or GivenOrder = Gunner then
+         if GivenOrder in Craft | Gunner then
             for I in Ship.Modules.Iterate loop
                if Modules_Container.To_Index(I) = ModuleIndex then
                   for Owner of Ship.Modules(I).Owner loop
@@ -192,16 +192,14 @@ package body Ships.Crew is
            with MemberName & " can't start training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
       end if;
-      if GivenOrder = Pilot or GivenOrder = Engineer or
-        GivenOrder = Upgrading or GivenOrder = Talk then
+      if GivenOrder in Pilot | Engineer | Upgrading | Talk then
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
             if Ship.Crew(I).Order = GivenOrder then
                GiveOrders(PlayerShip, I, Rest, 0, False);
                exit;
             end if;
          end loop;
-      elsif
-        (GivenOrder = Gunner or GivenOrder = Craft or GivenOrder = Train) or
+      elsif (GivenOrder in Gunner | Craft | Train) or
         (GivenOrder = Heal and ModuleIndex > 0) then
          declare
             FreePosition: Boolean := False;
@@ -219,8 +217,7 @@ package body Ships.Crew is
             end if;
          end;
       end if;
-      if ModuleIndex = 0 and
-        (GivenOrder = Pilot or GivenOrder = Engineer or GivenOrder = Rest) then
+      if ModuleIndex = 0 and (GivenOrder in Pilot | Engineer | Rest) then
          declare
             MType: ModuleType := ENGINE;
          begin
@@ -390,10 +387,8 @@ package body Ships.Crew is
       end if;
       if GivenOrder = Rest then
          Ship.Crew(MemberIndex).PreviousOrder := Rest;
-         if Ship.Crew(MemberIndex).Order = Repair or
-           Ship.Crew(MemberIndex).Order = Clean or
-           Ship.Crew(MemberIndex).Order = Upgrading or
-           Ship.Crew(MemberIndex).Order = Train then
+         if Ship.Crew(MemberIndex).Order in Repair | Clean | Upgrading |
+               Train then
             ToolsIndex := Ship.Crew(MemberIndex).Equipment(7);
             if ToolsIndex > 0 then
                UpdateCargo
@@ -496,11 +491,10 @@ package body Ships.Crew is
         (Order: Crew_Orders; MaxPriority: Boolean := True) return Boolean is
          ModuleIndex, MemberIndex, OrderIndex: Natural := 0;
       begin
-         if Crew_Orders'Pos(Order) < Crew_Orders'Pos(Defend) then
-            OrderIndex := Crew_Orders'Pos(Order) + 1;
-         else
-            OrderIndex := Crew_Orders'Pos(Order);
-         end if;
+         OrderIndex :=
+           (if Crew_Orders'Pos(Order) < Crew_Orders'Pos(Defend) then
+              Crew_Orders'Pos(Order) + 1
+            else Crew_Orders'Pos(Order));
          if MaxPriority then
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Orders(OrderIndex) = 2 and
@@ -523,17 +517,16 @@ package body Ships.Crew is
          if MemberIndex = 0 then
             return False;
          end if;
-         if Order = Gunner or Order = Craft or Order = Heal or Order = Pilot or
-           Order = Engineer or Order = Train then
+         if Order in Gunner | Craft | Heal | Pilot | Engineer | Train then
             for I in Ship.Modules.Iterate loop
                if Ship.Modules(I).Durability > 0 then
-                  case Modules_List(Ship.Modules(I).ProtoIndex).MType is
+                  case Ship.Modules(I).MType is
                      when GUN =>
                         if Order = Gunner and Ship.Modules(I).Owner(1) = 0 then
                            ModuleIndex := Modules_Container.To_Index(I);
                            exit;
                         end if;
-                     when ALCHEMY_LAB .. GREENHOUSE =>
+                     when WORKSHOP =>
                         if Order = Craft and
                           Ship.Modules(I).CraftingIndex /=
                             Null_Unbounded_String then
