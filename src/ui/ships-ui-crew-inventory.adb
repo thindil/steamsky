@@ -35,7 +35,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
@@ -430,6 +429,13 @@ package body Ships.UI.Crew.Inventory is
            CArgv.Arg(Argv, 2) & "}");
       Height, Width: Positive := 10;
       Label: Ttk_Label;
+      AmountBox: constant Ttk_SpinBox :=
+        Create
+          (ItemFrame & ".amount",
+           "-width 5 -from 1.0 -to" &
+           Float'Image
+             (Float
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount)));
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Move Item}");
       Wm_Set(ItemDialog, "transient", ".");
@@ -446,10 +452,15 @@ package body Ships.UI.Crew.Inventory is
           (ItemFrame & ".title",
            "-text {Move " &
            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
-           " to ship cargo} -wraplength 200");
+           " to ship cargo} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      State(Button, "disabled");
+      Width := Width + Positive'Value(Winfo_Get(Label, "reqwidth"));
+      Label := Create(ItemFrame & ".amountlbl", "-text {Amount:}");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Set(AmountBox, "1");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(Button);
       Button :=
         Create
@@ -529,11 +540,13 @@ package body Ships.UI.Crew.Inventory is
       Amount: Positive;
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      ItemDialog: Tk_Toplevel;
       AmountBox: Ttk_SpinBox;
    begin
+      ItemDialog.Interp := Interp;
+      ItemDialog.Name := New_String(".itemdialog");
       AmountBox.Interp := Interp;
-      AmountBox.Name :=
-        New_String(".paned.inventoryframe.canvas.inventory.item.amount");
+      AmountBox.Name := New_String(ItemDialog & ".canvas.frame.amount");
       Amount := Positive'Value(Get(AmountBox));
       if FreeCargo
           (0 -
@@ -572,6 +585,8 @@ package body Ships.UI.Crew.Inventory is
            0) then
          GiveOrders(PlayerShip, MemberIndex, Rest);
       end if;
+      Destroy(ItemDialog);
+      Tcl_Eval(Interp, "CloseDialog .memberdialog");
       return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Move_Item_Command;
 
