@@ -463,8 +463,8 @@ package body Ships.Movement is
             end loop;
          end if;
       end if;
-      if Ship = PlayerShip and
-        (Ship.Speed = DOCKED or Ship.Speed = FULL_STOP) and InfoOnly then
+      if Ship = PlayerShip and (Ship.Speed in DOCKED | FULL_STOP) and
+        InfoOnly then
          ShipSetSpeed := GameSettings.UndockSpeed;
          if ShipSetSpeed = FULL_STOP then
             ShipSetSpeed := QUARTER_SPEED;
@@ -490,7 +490,7 @@ package body Ships.Movement is
       FuelNeeded: Integer := 0;
       Speed: ShipSpeed := PlayerShip.Speed;
    begin
-      if Speed = DOCKED or Speed = FULL_STOP then
+      if Speed in DOCKED | FULL_STOP then
          Speed := GameSettings.UndockSpeed;
       end if;
       for Module of PlayerShip.Modules loop
