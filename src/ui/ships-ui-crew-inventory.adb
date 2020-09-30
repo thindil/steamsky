@@ -141,14 +141,20 @@ package body Ships.UI.Crew.Inventory is
          end if;
          Delete(ItemMenu, "0", "end");
          if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-            Menu.Add(ItemMenu, "command", "-label {Unequip}");
+            Menu.Add
+              (ItemMenu, "command",
+               "-label {Unequip} -command {SetUseItem " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Inventory_Container.To_Index(I)) & "}");
             Label :=
               Create
                 (MemberFrame & ".used" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
                  "-text {Yes}");
          else
-            Menu.Add(ItemMenu, "command", "-label {Equip}");
+            Menu.Add
+              (ItemMenu, "command",
+               "-label {Equip} -command {SetUseItem " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Inventory_Container.To_Index(I)) & "}");
             Label :=
               Create
                 (MemberFrame & ".used" &
@@ -269,8 +275,102 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Member_Inventory_Command;
 
+   -- ****o* SUCI/Set_Use_Item_Command
+   -- FUNCTION
+   -- Set if item is used by a crew member or not
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetUseItem memberindex itemindex
+   -- Memberindex is the index of the crew member in which inventory item will
+   -- be set, itemindex is the index of the item which will be set
+   -- SOURCE
+   function Set_Use_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Use_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      ItemType: constant Unbounded_String :=
+        Items_List
+          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          .IType;
+      UsedLabel: Ttk_Label;
+      ItemMenu: Tk_Menu;
+   begin
+      UsedLabel.Interp := Interp;
+      UsedLabel.Name :=
+        New_String(".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2));
+      ItemMenu.Interp := Interp;
+      ItemMenu.Name := New_String(".itemmenu" & CArgv.Arg(Argv, 2));
+      if not ItemIsUsed(MemberIndex, ItemIndex) then
+         if ItemType = WeaponType then
+            if Items_List
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                .Value
+                (4) =
+              2 and
+              PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
+               ShowMessage
+                 (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                  " can't use this weapon because have shield equiped. Take off shield first.");
+               return TCL_OK;
+            end if;
+            PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+         elsif ItemType = ShieldType then
+            if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
+               if Items_List
+                   (PlayerShip.Crew(MemberIndex).Inventory
+                      (PlayerShip.Crew(MemberIndex).Equipment(1))
+                      .ProtoIndex)
+                   .Value
+                   (4) =
+                 2 then
+                  ShowMessage
+                    (To_String(PlayerShip.Crew(MemberIndex).Name) &
+                     " can't use shield because have equiped two-hand weapon. Take off weapon first.");
+                  return TCL_OK;
+               end if;
+            end if;
+            PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+         elsif ItemType = HeadArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+         elsif ItemType = ChestArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+         elsif ItemType = ArmsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+         elsif ItemType = LegsArmor then
+            PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+         elsif Tools_List.Find_Index(Item => ItemType) /=
+           UnboundedString_Container.No_Index then
+            PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
+         end if;
+         configure(UsedLabel, "-text {Yes}");
+         Entry_Configure(ItemMenu, "0", "-label {Unequip}");
+      else
+         TakeOffItem(MemberIndex, ItemIndex);
+         configure(UsedLabel, "-text {No}");
+         Entry_Configure(ItemMenu, "0", "-label {Equip}");
+      end if;
+      return TCL_OK;
+   end Set_Use_Item_Command;
+
    procedure AddCommands is
    begin
+      AddCommand("SetUseItem", Set_Use_Item_Command'Access);
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
    end AddCommands;
 
