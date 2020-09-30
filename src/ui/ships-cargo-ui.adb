@@ -183,9 +183,7 @@ package body Ships.Cargo.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (CargoCanvas, "window",
-         "[expr " & Winfo_Get(CargoFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(CargoFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(CargoFrame));
+         "0 0 -anchor nw -window " & Widget_Image(CargoFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (CargoCanvas, "-scrollregion [list " & BBox(CargoCanvas, "all") & "]");
