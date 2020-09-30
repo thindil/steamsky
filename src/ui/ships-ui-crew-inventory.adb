@@ -28,6 +28,8 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
@@ -39,6 +41,8 @@ with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crew.Inventory; use Crew.Inventory;
 with Factions; use Factions;
+with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
@@ -162,7 +166,10 @@ package body Ships.UI.Crew.Inventory is
                  "-text {No}");
          end if;
          Menu.Add
-           (ItemMenu, "command", "-label {Move the item to the ship cargo}");
+           (ItemMenu, "command",
+            "-label {Move the item to the ship cargo} -command {ShowMoveItem " &
+            CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)) & "}");
          Menu.Add
            (ItemMenu, "command", "-label {Show more info about the item}");
          ItemButton :=
@@ -368,10 +375,194 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Set_Use_Item_Command;
 
+   -- ****o* SUCI/Show_Move_Item_Command
+   -- FUNCTION
+   -- Show UI to move the selected item to the ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMoveItem memberindex itemindex
+   -- Memberindex is the index of the crew member in which inventory item will
+   -- be set, itemindex is the index of the item which will be set
+   -- SOURCE
+   function Show_Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      ItemDialog: constant Tk_Toplevel :=
+        Create
+          (".itemdialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      XScroll: constant Ttk_Scrollbar :=
+        Create
+          (ItemDialog & ".xscroll",
+           "-orient horizontal -command [list .itemdialog.canvas xview]");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (ItemDialog & ".yscroll",
+           "-orient vertical -command [list .itemdialog.canvas yview]");
+      ItemCanvas: constant Tk_Canvas :=
+        Create
+          (ItemDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll &
+           " set] -xscrollcommand [list " & XScroll & " set]");
+      ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
+      Button: Ttk_Button :=
+        Create
+          (ItemFrame & ".cancelbutton",
+           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
+      Height, Width, NewWidth: Positive := 10;
+      Label: Ttk_Label;
+   begin
+      Wm_Set(ItemDialog, "title", "{Steam Sky - Move Item}");
+      Wm_Set(ItemDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(ItemDialog, "attributes", "-type dialog");
+      end if;
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(ItemCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
+      Autoscroll(YScroll);
+      Autoscroll(XScroll);
+      Label := Create(ItemFrame & ".title", "-text {Move}");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid(Button);
+      Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
+      Focus(Button);
+      if Height > 500 then
+         Height := 500;
+      end if;
+      configure
+        (ItemFrame,
+         "-height" & Positive'Image(Height) & " -width" &
+         Positive'Image(Width));
+      Canvas_Create
+        (ItemCanvas, "window", "0 0 -anchor nw -window " & ItemFrame);
+      configure
+        (ItemCanvas, "-scrollregion [list " & BBox(ItemCanvas, "all") & "]");
+      Height := Height + 30;
+      Width := Width + 30;
+      declare
+         X, Y: Integer;
+      begin
+         X :=
+           (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - Width) / 2;
+         if X < 0 then
+            X := 0;
+         end if;
+         Y :=
+           (Positive'Value(Winfo_Get(ItemDialog, "vrootheight")) - Height) / 2;
+         if Y < 0 then
+            Y := 0;
+         end if;
+         Wm_Set
+           (ItemDialog, "geometry",
+            Trim(Positive'Image(Width), Left) & "x" &
+            Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(X), Left) & "+" &
+            Trim(Positive'Image(Y), Left));
+         Bind(ItemDialog, "<Destroy>", "{CloseDialog " & ItemDialog & "}");
+         Bind(ItemDialog, "<Escape>", "{CloseDialog " & ItemDialog & "}");
+         Tcl_Eval(Interp, "update");
+      end;
+      return TCL_OK;
+   end Show_Move_Item_Command;
+
+   -- ****o* SUCI/Move_Item_Command
+   -- FUNCTION
+   -- Move the selected item to the ship cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveItem memberindex itemindex
+   -- Memberindex is the index of the crew member in which inventory item will
+   -- be set, itemindex is the index of the item which will be set
+   -- SOURCE
+   function Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      Amount: Positive;
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      AmountBox: Ttk_SpinBox;
+   begin
+      AmountBox.Interp := Interp;
+      AmountBox.Name :=
+        New_String(".paned.inventoryframe.canvas.inventory.item.amount");
+      Amount := Positive'Value(Get(AmountBox));
+      if FreeCargo
+          (0 -
+           (Items_List
+              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+              .Weight *
+            Amount)) <
+        0 then
+         ShowMessage
+           ("No free space in ship cargo for that amount of " &
+            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)));
+         return TCL_OK;
+      end if;
+      UpdateCargo
+        (Ship => PlayerShip,
+         ProtoIndex =>
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex,
+         Amount => Amount,
+         Durability =>
+           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
+         Price => PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Price);
+      UpdateInventory
+        (MemberIndex => MemberIndex, Amount => (0 - Amount),
+         InventoryIndex => ItemIndex);
+      if
+        (PlayerShip.Crew(MemberIndex).Order = Clean and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => CleaningTools) =
+           0) or
+        ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
+          PlayerShip.Crew(MemberIndex).Order = Repair) and
+         FindItem
+             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+              ItemType => RepairTools) =
+           0) then
+         GiveOrders(PlayerShip, MemberIndex, Rest);
+      end if;
+      return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
+   end Move_Item_Command;
+
    procedure AddCommands is
    begin
-      AddCommand("SetUseItem", Set_Use_Item_Command'Access);
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
+      AddCommand("SetUseItem", Set_Use_Item_Command'Access);
+      AddCommand("ShowMoveItem", Show_Move_Item_Command'Access);
+      AddCommand("MoveItem", Move_Item_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
