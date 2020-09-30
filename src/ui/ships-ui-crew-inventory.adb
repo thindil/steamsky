@@ -401,11 +401,11 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
       ItemDialog: constant Tk_Toplevel :=
         Create
           (".itemdialog",
            "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
       XScroll: constant Ttk_Scrollbar :=
         Create
           (ItemDialog & ".xscroll",
@@ -420,11 +420,12 @@ package body Ships.UI.Crew.Inventory is
            "-yscrollcommand [list " & YScroll &
            " set] -xscrollcommand [list " & XScroll & " set]");
       ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
-      Button: Ttk_Button :=
+      Button: constant Ttk_Button :=
         Create
           (ItemFrame & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
-      Height, Width, NewWidth: Positive := 10;
+           "-text Cancel -command {focus .memberdialog.canvas.frame.button;destroy " &
+           ItemDialog & "}");
+      Height, Width: Positive := 10;
       Label: Ttk_Label;
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Move Item}");
@@ -475,8 +476,10 @@ package body Ships.UI.Crew.Inventory is
             Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
-         Bind(ItemDialog, "<Destroy>", "{CloseDialog " & ItemDialog & "}");
-         Bind(ItemDialog, "<Escape>", "{CloseDialog " & ItemDialog & "}");
+         Bind
+           (ItemDialog, "<Escape>",
+            "{focus .memberdialog.canvas.frame.button;destroy " & ItemDialog &
+            "}");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
