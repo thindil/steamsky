@@ -96,7 +96,7 @@ package body Ships.UI.Crew.Inventory is
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, Width, NewWidth: Positive := 10;
-      Label: Ttk_Label;
+      Label, AmountLabel, WeightLabel, ItemLabel: Ttk_Label;
       ItemButton: Ttk_MenuButton;
       DamageBar: Ttk_ProgressBar;
       ProgressBarStyle: Unbounded_String;
@@ -121,6 +121,10 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0");
       Label := Create(MemberFrame & ".used", "-text {Used}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 2 -row 0");
+      AmountLabel := Create(MemberFrame & ".amount", "-text {Amount}");
+      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-column 3 -row 0");
+      WeightLabel := Create(MemberFrame & ".weight", "-text {Weight}");
+      Tcl.Tk.Ada.Grid.Grid(WeightLabel, "-column 4 -row 0");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       ItemMenu.Interp := Interp;
       for I in Member.Inventory.Iterate loop
@@ -151,8 +155,10 @@ package body Ships.UI.Crew.Inventory is
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
                  "-text {No}");
          end if;
-         Menu.Add(ItemMenu, "command", "-label {Move the item to the ship cargo}");
-         Menu.Add(ItemMenu, "command", "-label {Show more info about the item}");
+         Menu.Add
+           (ItemMenu, "command", "-label {Move the item to the ship cargo}");
+         Menu.Add
+           (ItemMenu, "command", "-label {Show more info about the item}");
          ItemButton :=
            Create
              (MemberFrame & ".name" &
@@ -187,15 +193,39 @@ package body Ships.UI.Crew.Inventory is
            (Label,
             "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
             " -column 2");
+         ItemLabel :=
+           Create
+             (MemberFrame & ".amount" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & Positive'Image(Member.Inventory(I).Amount) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (ItemLabel,
+            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -column 3");
+         ItemLabel :=
+           Create
+             (MemberFrame & ".weight" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" &
+              Positive'Image
+                (Member.Inventory(I).Amount *
+                 Items_List(Member.Inventory(I).ProtoIndex).Weight) &
+              "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (ItemLabel,
+            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+            " -column 4");
          NewWidth :=
            Positive'Value(Winfo_Get(ItemButton, "reqwidth")) +
            Positive'Value(Winfo_Get(DamageBar, "reqwidth")) +
-           Positive'Value(Winfo_Get(Label, "reqwidth"));
+           Positive'Value(Winfo_Get(Label, "reqwidth")) +
+           Positive'Value(Winfo_Get(AmountLabel, "reqwidth")) +
+           Positive'Value(Winfo_Get(WeightLabel, "reqwidth"));
          if NewWidth > Width then
             Width := NewWidth;
          end if;
       end loop;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 5");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
