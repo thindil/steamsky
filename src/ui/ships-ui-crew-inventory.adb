@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
@@ -401,7 +402,9 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemDialog: constant Tk_Toplevel :=
         Create
           (".itemdialog",
@@ -420,11 +423,11 @@ package body Ships.UI.Crew.Inventory is
            "-yscrollcommand [list " & YScroll &
            " set] -xscrollcommand [list " & XScroll & " set]");
       ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
-      Button: constant Ttk_Button :=
+      Button: Ttk_Button :=
         Create
-          (ItemFrame & ".cancelbutton",
-           "-text Cancel -command {focus .memberdialog.canvas.frame.button;destroy " &
-           ItemDialog & "}");
+          (ItemFrame & ".movebutton",
+           "-text Move -command {MoveItem " & CArgv.Arg(Argv, 1) & " " &
+           CArgv.Arg(Argv, 2) & "}");
       Height, Width: Positive := 10;
       Label: Ttk_Label;
    begin
@@ -438,10 +441,22 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
-      Label := Create(ItemFrame & ".title", "-text {Move}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Label :=
+        Create
+          (ItemFrame & ".title",
+           "-text {Move " &
+           GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
+           " to ship cargo} -wraplength 200");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      State(Button, "disabled");
       Tcl.Tk.Ada.Grid.Grid(Button);
+      Button :=
+        Create
+          (ItemFrame & ".cancelbutton",
+           "-text Cancel -command {focus .memberdialog.canvas.frame.button;destroy " &
+           ItemDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2");
       Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
       Focus(Button);
       if Height > 500 then
