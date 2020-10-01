@@ -924,7 +924,7 @@ package body Maps.UI is
         0 then
          Header.Interp := Get_Context;
          Header.Name := New_String(".header");
-         Tcl.Tk.Ada.Pack.Pack(Header);
+         Tcl.Tk.Ada.Pack.Pack(Header, "-fill x");
       end if;
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
