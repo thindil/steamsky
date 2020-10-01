@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - When tired crew member going on rest, returns tools
 - When giving orders always take tools from crew members
 - Updated help
+- Updated README.md
 
 ### Fixed
 - Code documentation
