@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
@@ -26,40 +27,26 @@ package body Ships.SaveLoad is
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
       RawValue: Unbounded_String;
       CategoryNode, DataNode: DOM.Core.Element;
+      procedure SaveNumber
+        (Value: Integer; Name: String;
+         Node: DOM.Core.Element := CategoryNode) is
+         RawValue: constant String :=
+           Trim(Integer'Image(Value), Ada.Strings.Left);
+      begin
+         Set_Attribute(Node, Name, RawValue);
+      end SaveNumber;
    begin
       CategoryNode := Create_Element(SaveData, "playership");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "name", To_String(PlayerShip.Name));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyX));
-      Set_Attribute
-        (CategoryNode, "x", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.SkyY));
-      Set_Attribute
-        (CategoryNode, "y", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue :=
-        To_Unbounded_String(Integer'Image(ShipSpeed'Pos(PlayerShip.Speed)));
-      Set_Attribute
-        (CategoryNode, "speed", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.UpgradeModule));
-      Set_Attribute
-        (CategoryNode, "upgrademodule",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationX));
-      Set_Attribute
-        (CategoryNode, "destinationx",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.DestinationY));
-      Set_Attribute
-        (CategoryNode, "destinationy",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.RepairModule));
-      Set_Attribute
-        (CategoryNode, "repairpriority",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(PlayerShip.HomeBase));
-      Set_Attribute
-        (CategoryNode, "homebase",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(PlayerShip.SkyX, "x");
+      SaveNumber(PlayerShip.SkyY, "y");
+      SaveNumber(ShipSpeed'Pos(PlayerShip.Speed), "speed");
+      SaveNumber(PlayerShip.UpgradeModule, "upgrademodule");
+      SaveNumber(PlayerShip.DestinationX, "destinationx");
+      SaveNumber(PlayerShip.DestinationY, "destinationy");
+      SaveNumber(PlayerShip.RepairModule, "repairpriority");
+      SaveNumber(PlayerShip.HomeBase, "homebase");
       declare
          ModuleDataNode: DOM.Core.Element;
       begin
@@ -68,26 +55,13 @@ package body Ships.SaveLoad is
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Module.Name));
             Set_Attribute(DataNode, "index", To_String(Module.ProtoIndex));
-            RawValue := To_Unbounded_String(Integer'Image(Module.Weight));
-            Set_Attribute
-              (DataNode, "weight",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Module.Durability));
-            Set_Attribute
-              (DataNode, "durability",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue :=
-              To_Unbounded_String(Integer'Image(Module.MaxDurability));
-            Set_Attribute
-              (DataNode, "maxdurability",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+            SaveNumber(Module.Weight, "weight", DataNode);
+            SaveNumber(Module.Durability, "durability", DataNode);
+            SaveNumber(Module.MaxDurability, "maxdurability", DataNode);
             for Owner of Module.Owner loop
                ModuleDataNode := Create_Element(SaveData, "owner");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-               RawValue := To_Unbounded_String(Integer'Image(Owner));
-               Set_Attribute
-                 (ModuleDataNode, "value",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Owner, "value", ModuleDataNode);
             end loop;
             if Module.UpgradeProgress > 0 then
                RawValue :=
@@ -97,12 +71,9 @@ package body Ships.SaveLoad is
                   To_String(Trim(RawValue, Ada.Strings.Left)));
             end if;
             if Module.UpgradeAction /= NONE then
-               RawValue :=
-                 To_Unbounded_String
-                   (Integer'Image(ShipUpgrade'Pos(Module.UpgradeAction)));
-               Set_Attribute
-                 (DataNode, "upgradeaction",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber
+                 (ShipUpgrade'Pos(Module.UpgradeAction), "upgradeaction",
+                  DataNode);
             end if;
             case Module.MType is
                when WORKSHOP =>
@@ -112,42 +83,23 @@ package body Ships.SaveLoad is
                     (ModuleDataNode, "value", To_String(Module.CraftingIndex));
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.CraftingTime));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.CraftingTime, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.CraftingAmount));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.CraftingAmount, "value", ModuleDataNode);
                when TRAINING_ROOM =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.TrainedSkill));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.TrainedSkill, "value", ModuleDataNode);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.FuelUsage));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.FuelUsage, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue := To_Unbounded_String(Integer'Image(Module.Power));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Power, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   if Module.Disabled then
@@ -158,80 +110,39 @@ package body Ships.SaveLoad is
                when CABIN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Cleanliness));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Cleanliness, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Quality));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Quality, "value", ModuleDataNode);
                when TURRET =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.GunIndex));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.GunIndex, "value", ModuleDataNode);
                when GUN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.AmmoIndex));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.AmmoIndex, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Damage));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Damage, "value", ModuleDataNode);
                when HULL =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String
-                      (Integer'Image(Module.InstalledModules));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.InstalledModules, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.MaxModules));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.MaxModules, "value", ModuleDataNode);
                when BATTERING_RAM =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Damage2));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Damage2, "value", ModuleDataNode);
                when HARPOON_GUN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.HarpoonIndex));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.HarpoonIndex, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Module.Duration));
-                  Set_Attribute
-                    (ModuleDataNode, "value",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Module.Duration, "value", ModuleDataNode);
             end case;
          end loop;
       end;
@@ -239,20 +150,13 @@ package body Ships.SaveLoad is
          DataNode := Create_Element(SaveData, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
          Set_Attribute(DataNode, "index", To_String(Item.ProtoIndex));
-         RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
-         Set_Attribute
-           (DataNode, "amount", To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber(Item.Amount, "amount", DataNode);
          if Item.Name /= Null_Unbounded_String then
             Set_Attribute(DataNode, "name", To_String(Item.Name));
          end if;
-         RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
-         Set_Attribute
-           (DataNode, "durability",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber(Item.Durability, "durability", DataNode);
          if Item.Price > 0 then
-            RawValue := To_Unbounded_String(Integer'Image(Item.Price));
-            Set_Attribute
-              (DataNode, "price", To_String(Trim(RawValue, Ada.Strings.Left)));
+            SaveNumber(Item.Price, "price", DataNode);
          end if;
       end loop;
       declare
@@ -284,11 +188,9 @@ package body Ships.SaveLoad is
                Member.Morale(1), Member.Morale(2), Member.Loyalty,
                Member.HomeBase);
             for I in AttributesNames'Range loop
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(AttributesValues(I)));
-               Set_Attribute
-                 (DataNode, To_String(AttributesNames(I)),
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber
+                 (AttributesValues(I), To_String(AttributesNames(I)),
+                  DataNode);
             end loop;
             for Skill of Member.Skills loop
                StatNode := Create_Element(SaveData, "skill");
@@ -521,8 +423,7 @@ package body Ships.SaveLoad is
                            Durability => Durability,
                            MaxDurability => MaxDurability, Owner => Owners,
                            UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction,
-                           Data => Data));
+                           UpgradeAction => UpgradeAction, Data => Data));
                   when ENGINE =>
                      declare
                         FuelUsage, Power: Positive;
@@ -746,8 +647,8 @@ package body Ships.SaveLoad is
                               Durability => Durability,
                               MaxDurability => MaxDurability, Owner => Owners,
                               UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
-                              Damage => Damage, AmmoIndex => AmmoIndex));
+                              UpgradeAction => UpgradeAction, Damage => Damage,
+                              AmmoIndex => AmmoIndex));
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
