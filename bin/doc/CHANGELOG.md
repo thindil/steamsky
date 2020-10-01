@@ -46,6 +46,7 @@ All notable changes to this project will be documented in this file.
 - Selecting save game from list, load it
 - Showing main menu after deleting last savegame
 - Crash on trying to show destination menu on start the game
+- Resizing header after again start the game
 
 ## [5.2] - 2020-09-06
 
