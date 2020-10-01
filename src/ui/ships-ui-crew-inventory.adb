@@ -435,7 +435,11 @@ package body Ships.UI.Crew.Inventory is
            "-width 5 -from 1.0 -to" &
            Float'Image
              (Float
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount)));
+                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount)) &
+           " -validate key -validatecommand {ValidateMoveAmount" &
+           Positive'Image
+             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
+           " %P}");
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Move Item}");
       Wm_Set(ItemDialog, "transient", ".");
@@ -590,12 +594,53 @@ package body Ships.UI.Crew.Inventory is
       return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Move_Item_Command;
 
+   -- ****o* SUCI/Validate_Move_Amount_Command
+   -- FUNCTION
+   -- Validate amount of the item to move
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ValidateMoveAmount
+   -- SOURCE
+   function Validate_Move_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Validate_Move_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Amount: Positive;
+   begin
+      Amount := Positive'Value(CArgv.Arg(Argv, 2));
+      if Amount > Positive'Value(CArgv.Arg(Argv, 1)) then
+         Tcl_SetResult(Interp, "0");
+         return TCL_OK;
+      end if;
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   exception
+      when Constraint_Error =>
+         Tcl_SetResult(Interp, "0");
+         return TCL_OK;
+   end Validate_Move_Amount_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
       AddCommand("SetUseItem", Set_Use_Item_Command'Access);
       AddCommand("ShowMoveItem", Show_Move_Item_Command'Access);
       AddCommand("MoveItem", Move_Item_Command'Access);
+      AddCommand("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
