@@ -13,10 +13,9 @@ matrix:
         env:
          - FILENAME=steamsky-dev-Linux-64.tar.gz
         install:
-         - echo "$DOCKERPASS" | docker login https://docker.pkg.github.com -u "$DOCKERUSER" --password-stdin
-         - docker pull docker.pkg.github.com/thindil/tashy/tashy:8.6.7
+         - docker pull ghcr.io/thindil/tashy:8.6.9
         script:
-         - docker run -v $(pwd):/app docker.pkg.github.com/thindil/tashy/tashy:8.6.7 /bin/sh -c "apt-get update && apt-get install -y libxmlada-schema9-dev libxmlada-input9-dev && cd /app && others/build.tcl"
+         - docker run -v $(pwd):/app ghcr.io/thindil/tashy:8.6.9 /bin/sh -c "apt-get update && apt-get install -y libxmlada-schema9-dev libxmlada-input9-dev && cd /app && others/build.tcl"
          - tar -czf steamsky-dev-Linux-64.tar.gz usr
       - os: windows
         env:
