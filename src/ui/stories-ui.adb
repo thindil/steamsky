@@ -307,9 +307,7 @@ package body Stories.UI is
         New_String(Widget_Image(StoriesCanvas) & ".stories");
       Canvas_Create
         (StoriesCanvas, "window",
-         "[expr " & Winfo_Get(StoriesFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(StoriesFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(StoriesFrame));
+         "0 0 -anchor nw -window " & Widget_Image(StoriesFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (StoriesCanvas,
