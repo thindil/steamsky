@@ -196,7 +196,7 @@ package body Ships.UI.Crew.Inventory is
              (MemberFrame & ".durability" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
               "-value {" & Positive'Image(Member.Inventory(I).Durability) &
-              "}" & To_String(ProgressBarStyle));
+              "} -length 150" & To_String(ProgressBarStyle));
          Add(DamageBar, "The current durability level of the selected item.");
          Tcl.Tk.Ada.Grid.Grid
            (DamageBar,
