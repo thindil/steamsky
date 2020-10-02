@@ -107,16 +107,6 @@ package body Ships.UI.Crew is
             Destroy(Item);
          end loop;
       end loop;
-      for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
-            NeedRepair := True;
-         end if;
-         if (Module.Durability > 0 and Module.MType = CABIN)
-           and then Module.Cleanliness < Module.Quality then
-            NeedClean := True;
-         end if;
-         exit when NeedClean and NeedRepair;
-      end loop;
       ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
       if NeedClean then
          Button :=
@@ -164,6 +154,16 @@ package body Ships.UI.Crew is
       Row := Row + 1;
       CrewMenu.Interp := Get_Context;
       for I in PlayerShip.Crew.Iterate loop
+         for Module of PlayerShip.Modules loop
+            if Module.Durability < Module.MaxDurability then
+               NeedRepair := True;
+            end if;
+            if (Module.Durability > 0 and Module.MType = CABIN)
+              and then Module.Cleanliness < Module.Quality then
+               NeedClean := True;
+            end if;
+            exit when NeedClean and NeedRepair;
+         end loop;
          CrewMenu.Name :=
            New_String(".membermenu" & Trim(Positive'Image(Row), Left));
          if (Winfo_Get(CrewMenu, "exists")) = "0" then
