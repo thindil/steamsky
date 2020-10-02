@@ -13,9 +13,9 @@ matrix:
         env:
          - FILENAME=steamsky-dev-Linux-64.tar.gz
         install:
-         - docker pull ghcr.io/thindil/tashy:8.6.9
+         - docker pull ghcr.io/thindil/adabuild:2020.1
         script:
-         - docker run -v $(pwd):/app ghcr.io/thindil/tashy:8.6.9 /bin/sh -c "apt-get update && apt-get install -y libxmlada-schema9-dev libxmlada-input9-dev && cd /app && others/build.tcl"
+         - docker run -v $(pwd):/app ghcr.io/thindil/adabuild:2020.1 /bin/sh -c "cd /app && others/build.tcl"
          - tar -czf steamsky-dev-Linux-64.tar.gz usr
       - os: windows
         env:
