@@ -30,6 +30,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -343,7 +344,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       LoadView: Ttk_Tree_View;
       ItemIndex, Items: Unbounded_String;
-      BackButton: Ttk_Button;
+      Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
    begin
       if MessageBox
           ("-message {Are you sure you want delete this savegame?} -icon question -type yesno") /=
@@ -351,17 +352,18 @@ package body MainMenu.Commands is
          return TCL_OK;
       end if;
       LoadView.Interp := Interp;
-      LoadView.Name := New_String(".loadmenu.view");
+      LoadView.Name := New_String(Frame & ".view");
       ItemIndex := To_Unbounded_String(Selection(LoadView));
       Delete_File(To_String(SaveDirectory & ItemIndex));
       Delete(LoadView, To_String(ItemIndex));
       Items := To_Unbounded_String(Children(LoadView, "{}"));
       if Items = Null_Unbounded_String then
-         BackButton.Interp := Interp;
-         BackButton.Name := New_String(".loadmenu.back");
-         if Invoke(BackButton) = "" then
-            return TCL_OK;
-         end if;
+         Unbind_From_Main_Window(Interp, "<Alt-b>");
+         Unbind_From_Main_Window(Interp, "<Alt-l>");
+         Unbind_From_Main_Window(Interp, "<Alt-d>");
+         Unbind_From_Main_Window(Interp, "<Escape>");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
+         ShowMainMenu;
       else
          ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
          if ItemIndex = Null_Unbounded_String then
