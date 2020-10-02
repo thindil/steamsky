@@ -597,8 +597,16 @@ package body Utils.UI is
       if MemberIndex > 0 then
          ProtoIndex :=
            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
+         Append
+           (ItemInfo,
+            GetItemDamage
+              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability) &
+            LF);
       else
          ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+         Append
+           (ItemInfo,
+            GetItemDamage(PlayerShip.Cargo(ItemIndex).Durability) & LF);
       end if;
       Append
         (ItemInfo,
