@@ -195,74 +195,42 @@ package body Ships.SaveLoad is
             for Skill of Member.Skills loop
                StatNode := Create_Element(SaveData, "skill");
                StatNode := Append_Child(DataNode, StatNode);
-               RawValue := To_Unbounded_String(Integer'Image(Skill(1)));
-               Set_Attribute
-                 (StatNode, "index",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
-               RawValue := To_Unbounded_String(Integer'Image(Skill(2)));
-               Set_Attribute
-                 (StatNode, "level",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Skill(1), "index", StatNode);
+               SaveNumber(Skill(2), "level", StatNode);
                if Skill(3) > 0 then
-                  RawValue := To_Unbounded_String(Integer'Image(Skill(3)));
-                  Set_Attribute
-                    (StatNode, "experience",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Skill(3), "experience", StatNode);
                end if;
             end loop;
             for J in Member.Orders'Range loop
                StatNode := Create_Element(SaveData, "priority");
                StatNode := Append_Child(DataNode, StatNode);
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Member.Orders(J)));
-               Set_Attribute
-                 (StatNode, "value",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Member.Orders(J), "value", StatNode);
             end loop;
             for Attribute of Member.Attributes loop
                StatNode := Create_Element(SaveData, "attribute");
                StatNode := Append_Child(DataNode, StatNode);
-               RawValue := To_Unbounded_String(Integer'Image(Attribute(1)));
-               Set_Attribute
-                 (StatNode, "level",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Attribute(1), "level", StatNode);
                if Attribute(2) > 0 then
-                  RawValue := To_Unbounded_String(Integer'Image(Attribute(2)));
-                  Set_Attribute
-                    (StatNode, "experience",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Attribute(2), "experience", StatNode);
                end if;
             end loop;
             for Item of Member.Inventory loop
                StatNode := Create_Element(SaveData, "item");
                StatNode := Append_Child(DataNode, StatNode);
                Set_Attribute(StatNode, "index", To_String(Item.ProtoIndex));
-               RawValue := To_Unbounded_String(Integer'Image(Item.Amount));
-               Set_Attribute
-                 (StatNode, "amount",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Item.Amount, "amount", StatNode);
                if Item.Name /= Null_Unbounded_String then
                   Set_Attribute(StatNode, "name", To_String(Item.Name));
                end if;
-               RawValue := To_Unbounded_String(Integer'Image(Item.Durability));
-               Set_Attribute
-                 (StatNode, "durability",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Item.Durability, "durability", StatNode);
                if Item.Price > 0 then
-                  RawValue := To_Unbounded_String(Integer'Image(Item.Price));
-                  Set_Attribute
-                    (StatNode, "price",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(Item.Price, "price", StatNode);
                end if;
             end loop;
             for I in Member.Equipment'Range loop
                StatNode := Create_Element(SaveData, "equipment");
                StatNode := Append_Child(DataNode, StatNode);
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Member.Equipment(I)));
-               Set_Attribute
-                 (StatNode, "index",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Member.Equipment(I), "index", StatNode);
             end loop;
          end loop;
       end;
@@ -778,11 +746,10 @@ package body Ships.SaveLoad is
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
                Durability :=
                  Natural'Value(Get_Attribute(ChildNode, "durability"));
-               if Get_Attribute(ChildNode, "price")'Length > 0 then
-                  Price := Natural'Value(Get_Attribute(ChildNode, "price"));
-               else
-                  Price := 0;
-               end if;
+               Price :=
+                 (if Get_Attribute(ChildNode, "price")'Length > 0 then
+                    Natural'Value(Get_Attribute(ChildNode, "price"))
+                  else 0);
                PlayerShip.Cargo.Append
                  (New_Item =>
                     (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
@@ -847,13 +814,11 @@ package body Ships.SaveLoad is
                        Integer'Value(Get_Attribute(MemberNode, "index"));
                      Level :=
                        Integer'Value(Get_Attribute(MemberNode, "level"));
-                     if Get_Attribute(MemberNode, "experience") /= "" then
-                        Experience :=
+                     Experience :=
+                       (if Get_Attribute(MemberNode, "experience") /= "" then
                           Integer'Value
-                            (Get_Attribute(MemberNode, "experience"));
-                     else
-                        Experience := 0;
-                     end if;
+                            (Get_Attribute(MemberNode, "experience"))
+                        else 0);
                      Skills.Append(New_Item => (Index, Level, Experience));
                   elsif Node_Name(MemberNode) = "priority" then
                      Orders(PriorityIndex) :=
@@ -862,13 +827,11 @@ package body Ships.SaveLoad is
                   elsif Node_Name(MemberNode) = "attribute" then
                      Level :=
                        Integer'Value(Get_Attribute(MemberNode, "level"));
-                     if Get_Attribute(MemberNode, "experience") /= "" then
-                        Experience :=
+                     Experience :=
+                       (if Get_Attribute(MemberNode, "experience") /= "" then
                           Integer'Value
-                            (Get_Attribute(MemberNode, "experience"));
-                     else
-                        Experience := 0;
-                     end if;
+                            (Get_Attribute(MemberNode, "experience"))
+                        else 0);
                      Attributes.Append(New_Item => (Level, Experience));
                   elsif Node_Name(MemberNode) = "item" then
                      ItemIndex :=
@@ -879,12 +842,10 @@ package body Ships.SaveLoad is
                        To_Unbounded_String(Get_Attribute(MemberNode, "name"));
                      Durability :=
                        Integer'Value(Get_Attribute(MemberNode, "durability"));
-                     if Get_Attribute(MemberNode, "price")'Length > 0 then
-                        Price :=
-                          Integer'Value(Get_Attribute(MemberNode, "price"));
-                     else
-                        Price := 0;
-                     end if;
+                     Price :=
+                       (if Get_Attribute(MemberNode, "price")'Length > 0 then
+                          Integer'Value(Get_Attribute(MemberNode, "price"))
+                        else 0);
                      Inventory.Append
                        (New_Item =>
                           (ProtoIndex => ItemIndex, Amount => Amount,
@@ -896,18 +857,14 @@ package body Ships.SaveLoad is
                      EquipmentIndex := EquipmentIndex + 1;
                   end if;
                end loop;
-               if Get_Attribute(ChildNode, "homebase") /= "" then
-                  HomeBase :=
-                    Natural'Value(Get_Attribute(ChildNode, "homebase"));
-               else
-                  HomeBase := PlayerShip.HomeBase;
-               end if;
-               if Get_Attribute(ChildNode, "faction") /= "" then
-                  FactionIndex :=
-                    To_Unbounded_String(Get_Attribute(ChildNode, "faction"));
-               else
-                  FactionIndex := SkyBases(HomeBase).Owner;
-               end if;
+               HomeBase :=
+                 (if Get_Attribute(ChildNode, "homebase") /= "" then
+                    Natural'Value(Get_Attribute(ChildNode, "homebase"))
+                  else PlayerShip.HomeBase);
+               FactionIndex :=
+                 (if Get_Attribute(ChildNode, "faction") /= "" then
+                    To_Unbounded_String(Get_Attribute(ChildNode, "faction"))
+                  else SkyBases(HomeBase).Owner);
                PlayerShip.Crew.Append
                  (New_Item =>
                     (Name => Name, Gender => Gender(1), Health => Health,
