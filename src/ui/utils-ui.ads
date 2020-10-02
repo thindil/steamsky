@@ -105,13 +105,13 @@ package Utils.UI is
    -- FUNCTION
    -- Show info about selected item in ship cargo or crew member inventory
    -- PARAMETERS
-   -- Widget      - The name of Tk_Text which text will be set
+   -- Parent      - The name of the parent widget
    -- ItemIndex   - Index of item (can be inventory or ship cargo)
    -- MemberIndex - If item is in crew member inventory, crew index of member,
    --               otherwise 0
    -- SOURCE
    procedure ShowInventoryItemInfo
-     (WidgetName: String; ItemIndex: Positive; MemberIndex: Natural) with
+     (Parent: String; ItemIndex: Positive; MemberIndex: Natural) with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
       -- ****
 end Utils.UI;

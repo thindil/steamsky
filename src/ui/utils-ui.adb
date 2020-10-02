@@ -23,6 +23,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -587,26 +588,32 @@ package body Utils.UI is
    end ShowScreen;
 
    procedure ShowInventoryItemInfo
-     (WidgetName: String; ItemIndex: Positive; MemberIndex: Natural) is
+     (Parent: String; ItemIndex: Positive; MemberIndex: Natural) is
       ProtoIndex: Unbounded_String;
       ItemInfo: Unbounded_String;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
-      Widget: Tk_Text;
    begin
       if MemberIndex > 0 then
          ProtoIndex :=
            PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
-         Append
-           (ItemInfo,
-            GetItemDamage
-              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability) &
-            LF);
+         if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+           Default_Item_Durability then
+            Append
+              (ItemInfo,
+               GetItemDamage
+                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                    .Durability) &
+               LF);
+         end if;
       else
          ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
-         Append
-           (ItemInfo,
-            GetItemDamage(PlayerShip.Cargo(ItemIndex).Durability) & LF);
+         if PlayerShip.Cargo(ItemIndex).Durability <
+           Default_Item_Durability then
+            Append
+              (ItemInfo,
+               GetItemDamage(PlayerShip.Cargo(ItemIndex).Durability) & LF);
+         end if;
       end if;
       Append
         (ItemInfo,
@@ -669,12 +676,12 @@ package body Utils.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      Widget.Interp := Get_Context;
-      Widget.Name := New_String(WidgetName);
-      Widgets.configure(Widget, "-state normal");
-      Delete(Widget, "1.0", "end");
-      Insert(Widget, "end", "{" & To_String(ItemInfo) & "}");
-      Widgets.configure(Widget, "-state disabled");
+      if MessageBox
+          ("-message {" & To_String(ItemInfo) & "} -type ok -parent " &
+           Parent & " -title {Item Info}") =
+        "ok" then
+         return;
+      end if;
    end ShowInventoryItemInfo;
 
 end Utils.UI;
