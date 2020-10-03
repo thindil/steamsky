@@ -45,8 +45,8 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - wineconsole tclsh others/build.tcl
-   description: Build Steam sky release for Windows on Linux
+      - sudo docker run --rm -it -v $1:/app ghcr.io/thindil/adabuildwin64:2020.1 /bin/bash
+   description: Build Steam sky release for Windows on Linux (enter docker image only for now, required argument is path to the game)
    flags:
       - unixonly
 - command:
