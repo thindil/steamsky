@@ -397,8 +397,6 @@ package body Crew.UI.Inventory is
    procedure AddCommands is
    begin
       AddCommand("ShowInventory", Show_Inventory_Command'Access);
-      AddCommand
-        ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
    end AddCommands;
 
 end Crew.UI.Inventory;

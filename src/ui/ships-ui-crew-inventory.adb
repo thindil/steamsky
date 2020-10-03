@@ -171,7 +171,10 @@ package body Ships.UI.Crew.Inventory is
             CArgv.Arg(Argv, 1) &
             Positive'Image(Inventory_Container.To_Index(I)) & "}");
          Menu.Add
-           (ItemMenu, "command", "-label {Show more info about the item}");
+           (ItemMenu, "command",
+            "-label {Show more info about the item} -command {ShowInventoryItemInfo " &
+            CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)) & "}");
          ItemButton :=
            Create
              (MemberFrame & ".name" &
@@ -600,7 +603,7 @@ package body Ships.UI.Crew.Inventory is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -634,6 +637,39 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
    end Validate_Move_Amount_Command;
 
+   -- ****o* SUCI/Show_Inventory_Item_Info_Command
+   -- FUNCTION
+   -- Show detailed information about the selected item in crew member
+   -- inventory
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ValidateMoveAmount
+   -- SOURCE
+   function Show_Inventory_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Inventory_Item_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+   begin
+      ShowInventoryItemInfo
+        (".memberdialog", Positive'Value(CArgv.Arg(Argv, 2)),
+         Positive'Value(CArgv.Arg(Argv, 1)));
+      return TCL_OK;
+   end Show_Inventory_Item_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
@@ -641,6 +677,8 @@ package body Ships.UI.Crew.Inventory is
       AddCommand("ShowMoveItem", Show_Move_Item_Command'Access);
       AddCommand("MoveItem", Move_Item_Command'Access);
       AddCommand("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
+      AddCommand
+        ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
