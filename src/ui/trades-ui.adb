@@ -289,9 +289,7 @@ package body Trades.UI is
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (TradeCanvas, "window",
-         "[expr " & Winfo_Get(TradeFrame, "reqwidth") & " / 2] [expr " &
-         Winfo_Get(TradeFrame, "reqheight") & " / 2] -window " &
-         Widget_Image(TradeFrame));
+         "0 0 -anchor nw -window " & Widget_Image(TradeFrame));
       Tcl_Eval(Get_Context, "update");
       configure
         (TradeCanvas, "-scrollregion [list " & BBox(TradeCanvas, "all") & "]");
