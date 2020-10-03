@@ -74,11 +74,14 @@ package body Bases.LootUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      LootCanvas: Tk_Canvas;
-      LootFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      LootFrame: Ttk_Frame := Get_Widget(Paned & ".lootframe", Interp);
+      LootCanvas: constant Tk_Canvas :=
+        Get_Widget(LootFrame & ".canvas", Interp);
+      Label: Ttk_Label :=
+        Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       ItemsView: Ttk_Tree_View;
       ItemDurability, ItemType, ProtoIndex, FirstIndex,
       ItemName: Unbounded_String;
@@ -90,17 +93,6 @@ package body Bases.LootUI is
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      LootFrame.Interp := Interp;
-      LootFrame.Name := New_String(Widget_Image(Paned) & ".lootframe");
-      LootCanvas.Interp := Interp;
-      LootCanvas.Name := New_String(Widget_Image(LootFrame) & ".canvas");
-      Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(LootCanvas) & ".loot.options.typelabel");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -114,10 +106,8 @@ package body Bases.LootUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       LootFrame.Name := New_String(Widget_Image(LootCanvas) & ".loot");
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(Widget_Image(LootFrame) & ".options.type");
-      ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(Widget_Image(LootFrame) & ".loot.view");
+      ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
+      ItemsView := Get_Widget(LootFrame & ".loot.view", Interp);
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       BaseCargo := SkyBases(BaseIndex).Cargo;
       for I in PlayerShip.Cargo.Iterate loop
@@ -251,7 +241,8 @@ package body Bases.LootUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      LootView: Ttk_Tree_View;
+      LootView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.lootframe.canvas.loot.loot.view", Interp);
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
@@ -259,12 +250,13 @@ package body Bases.LootUI is
       SelectedItem: Unbounded_String;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
-      ItemText: Tk_Text;
-      Frame: Ttk_Frame;
-      Label: Ttk_Label;
+      ItemText: constant Tk_Text :=
+        Get_Widget(".paned.lootframe.canvas.loot.item.info.text", Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget(".paned.lootframe.canvas.loot.item.dropframe", Interp);
+      Label: constant Ttk_Label :=
+        Get_Widget(".paned.lootframe.canvas.loot.item.shipspace", Interp);
    begin
-      LootView.Interp := Interp;
-      LootView.Name := New_String(".paned.lootframe.canvas.loot.loot.view");
       SelectedItem := To_Unbounded_String(Selection(LootView));
       if SelectedItem = Null_Unbounded_String then
          return TCL_OK;
@@ -354,24 +346,18 @@ package body Bases.LootUI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      ItemText.Interp := Interp;
-      ItemText.Name :=
-        New_String(".paned.lootframe.canvas.loot.item.info.text");
       configure(ItemText, "-state normal");
       Delete(ItemText, "1.0", "end");
       Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
       configure(ItemText, "-state disabled");
-      Frame.Interp := Interp;
-      Frame.Name := New_String(".paned.lootframe.canvas.loot.item.dropframe");
       if CargoIndex > 0 then
          declare
             MaxDropAmount: constant Integer :=
               PlayerShip.Cargo(CargoIndex).Amount;
-            AmountBox: Ttk_SpinBox;
-            AmountLabel: Ttk_Label;
+            AmountBox: constant Ttk_SpinBox :=
+              Get_Widget(Frame & ".amount", Interp);
+            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
          begin
-            AmountBox.Interp := Interp;
-            AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
             Set(AmountBox, "1");
             if MaxDropAmount > 0 then
                configure(AmountBox, "-to" & Natural'Image(MaxDropAmount));
@@ -382,9 +368,6 @@ package body Bases.LootUI is
                   Positive'Image(ItemIndex) &
                   " %P} -command {ValidateAmount " & Widget_Image(AmountBox) &
                   Positive'Image(ItemIndex) & "}");
-               AmountLabel.Interp := Interp;
-               AmountLabel.Name :=
-                 New_String(Widget_Image(Frame) & ".amountlbl");
                configure
                  (AmountLabel,
                   "-text {(max" & Natural'Image(MaxDropAmount) & "):}");
@@ -422,11 +405,10 @@ package body Bases.LootUI is
          declare
             MaxTakeAmount: constant Integer :=
               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-            AmountBox: Ttk_SpinBox;
-            AmountLabel: Ttk_Label;
+            AmountBox: constant Ttk_SpinBox :=
+              Get_Widget(Frame & ".amount", Interp);
+            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
          begin
-            AmountBox.Interp := Interp;
-            AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
             if MaxTakeAmount > 0 then
                Set(AmountBox, "1");
                configure(AmountBox, "-to" & Natural'Image(MaxTakeAmount));
@@ -435,9 +417,6 @@ package body Bases.LootUI is
                   "-to" & Natural'Image(MaxTakeAmount) &
                   " -validatecommand {ValidateSpinbox %S %s" &
                   Positive'Image(MaxTakeAmount) & "}");
-               AmountLabel.Interp := Interp;
-               AmountLabel.Name :=
-                 New_String(Widget_Image(Frame) & ".amountlbl");
                configure
                  (AmountLabel,
                   "-text {(max" & Natural'Image(MaxTakeAmount) & "):}");
@@ -456,8 +435,6 @@ package body Bases.LootUI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
-      Label.Interp := Interp;
-      Label.Name := New_String(".paned.lootframe.canvas.loot.item.shipspace");
       declare
          FreeSpace: Integer := FreeCargo(0);
       begin
@@ -502,7 +479,9 @@ package body Bases.LootUI is
       Amount: Natural;
       ProtoIndex: Unbounded_String;
       SpinBox: Ttk_SpinBox;
-      Label: Ttk_Label;
+      Label: constant Ttk_Label :=
+        Get_Widget
+          (".paned.lootframe.canvas.loot.item.dropframe.amountlbl", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -518,12 +497,9 @@ package body Bases.LootUI is
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
       SpinBox.Interp := Interp;
-      Label.Interp := Interp;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          SpinBox.Name :=
            New_String(".paned.lootframe.canvas.loot.item.dropframe.amount");
-         Label.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.dropframe.amountlbl");
          if CArgv.Arg(Argv, 1) = "drop" then
             Amount := Positive'Value(Get(SpinBox));
          else
