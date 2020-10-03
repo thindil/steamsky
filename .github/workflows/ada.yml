@@ -1,0 +1,55 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build_linux:
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuild:2020.1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build the program
+      run: others/build.tcl x86_64-linux-gnu
+
+    - name: Compress the artifact
+      run: tar -cf steamsky-development-linux.tar usr
+
+    - name: Upload the artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: steamsky-development-linux
+         path: steamsky-development-linux.tar
+
+  build_windows:
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuildwin64:2020.1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Install Tcl
+      run: |
+         apt update
+         apt install -y tcl
+
+    - name: Build the program
+      run: others/build.tcl x86_64-windows
+
+    - name: Compress the artifact
+      run: tar -cf steamsky-development-windows.tar release
+
+    - name: Upload the artifact
+      uses: actions/upload-artifact@v2
+      with:
+         name: steamsky-development-windows
+         path: steamsky-development-windows.tar
