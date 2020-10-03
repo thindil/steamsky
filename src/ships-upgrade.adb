@@ -90,13 +90,11 @@ package body Ships.Upgrade is
                        NewGameSettings.UpgradeCostBonus);
                when GUN | BATTERING_RAM =>
                   declare
-                     Damage: Positive;
+                     Damage: constant Positive :=
+                       (if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                          PlayerShip.Modules(ModuleIndex).Damage
+                        else PlayerShip.Modules(ModuleIndex).Damage2);
                   begin
-                     if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                        Damage := PlayerShip.Modules(ModuleIndex).Damage;
-                     else
-                        Damage := PlayerShip.Modules(ModuleIndex).Damage2;
-                     end if;
                      if Damage = MaxValue then
                         raise Ship_Upgrade_Error
                           with "You can't further improve the damage of " &
@@ -232,25 +230,25 @@ package body Ships.Upgrade is
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
+      UpgradedModule: ModuleData :=
+        PlayerShip.Modules(PlayerShip.UpgradeModule);
       procedure FindMatsAndTools is
       begin
          UpgradeMaterial :=
            FindItem
              (Inventory => PlayerShip.Cargo,
               ItemType =>
-                Modules_List
-                  (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                  .RepairMaterial);
+                Modules_List(UpgradedModule.ProtoIndex).RepairMaterial);
          UpgradeTools := FindTools(WorkerIndex, RepairTools, Upgrading);
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
+         PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
          AddMessage
-           (MessageText &
-            To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) & ".",
-            OrderMessage, YELLOW);
-         PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress := 0;
-         PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction := NONE;
+           (MessageText & To_String(UpgradedModule.Name) & ".", OrderMessage,
+            YELLOW);
+         UpgradedModule.UpgradeProgress := 0;
+         UpgradedModule.UpgradeAction := NONE;
          PlayerShip.UpgradeModule := 0;
          GiveOrders(PlayerShip, WorkerIndex, Rest);
       end MaxUpgradeReached;
@@ -261,11 +259,10 @@ package body Ships.Upgrade is
       end if;
       CurrentMinutes := Minutes;
       OrderTime := PlayerShip.Crew(WorkerIndex).OrderTime;
-      if PlayerShip.Modules(PlayerShip.UpgradeModule).Durability = 0 then
+      if UpgradedModule.Durability = 0 then
          AddMessage
            (To_String(PlayerShip.Crew(WorkerIndex).Name) &
-            " stops upgrading " &
-            To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
+            " stops upgrading " & To_String(UpgradedModule.Name) &
             " because it's destroyed.",
             OrderMessage, RED);
          GiveOrders(PlayerShip, WorkerIndex, Rest);
@@ -288,25 +285,20 @@ package body Ships.Upgrade is
       UpgradePoints :=
         ((GetSkillLevel
             (PlayerShip.Crew(WorkerIndex),
-             Modules_List
-               (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-               .RepairSkill) /
+             Modules_List(UpgradedModule.ProtoIndex).RepairSkill) /
           10) *
          Times) +
         Times;
-      while UpgradePoints > 0 and
-        PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress > 0 loop
+      while UpgradePoints > 0 and UpgradedModule.UpgradeProgress > 0 loop
          ResultAmount := UpgradePoints;
-         if ResultAmount >
-           PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress then
-            ResultAmount :=
-              PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress;
+         if ResultAmount > UpgradedModule.UpgradeProgress then
+            ResultAmount := UpgradedModule.UpgradeProgress;
          end if;
          FindMatsAndTools;
          if UpgradeMaterial = 0 then
             AddMessage
               ("You don't have enough materials to upgrade " &
-               To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
+               To_String(UpgradedModule.Name),
                OrderMessage, RED);
             GiveOrders(PlayerShip, WorkerIndex, Rest);
             exit;
@@ -314,14 +306,13 @@ package body Ships.Upgrade is
          if UpgradeTools = 0 then
             AddMessage
               ("You don't have the repair tool to upgrade " &
-               To_String(PlayerShip.Modules(PlayerShip.UpgradeModule).Name),
+               To_String(UpgradedModule.Name),
                OrderMessage, RED);
             GiveOrders(PlayerShip, WorkerIndex, Rest);
             exit;
          end if;
-         if PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction =
-           MAX_VALUE then
-            case PlayerShip.Modules(PlayerShip.UpgradeModule).MType is
+         if UpgradedModule.UpgradeAction = MAX_VALUE then
+            case UpgradedModule.MType is
                when ENGINE =>
                   if ResultAmount >
                     PlayerShip.Cargo(UpgradeMaterial).Amount * 200 then
@@ -357,8 +348,7 @@ package body Ships.Upgrade is
                   end if;
                   MaterialCost := ResultAmount;
             end case;
-         elsif PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction =
-           DURABILITY then
+         elsif UpgradedModule.UpgradeAction = DURABILITY then
             if ResultAmount >
               PlayerShip.Cargo(UpgradeMaterial).Amount * 10 then
                ResultAmount := PlayerShip.Cargo(UpgradeMaterial).Amount * 10;
@@ -377,254 +367,152 @@ package body Ships.Upgrade is
             MaterialCost := PlayerShip.Cargo(UpgradeMaterial).Amount;
          end if;
          GainExp
-           (ResultAmount,
-            Modules_List
-              (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-              .RepairSkill,
+           (ResultAmount, Modules_List(UpgradedModule.ProtoIndex).RepairSkill,
             WorkerIndex);
          DamageItem
            (PlayerShip.Crew(WorkerIndex).Inventory, UpgradeTools,
             GetSkillLevel
               (PlayerShip.Crew(WorkerIndex),
-               Modules_List
-                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                 .RepairSkill),
+               Modules_List(UpgradedModule.ProtoIndex).RepairSkill),
             WorkerIndex);
          FindMatsAndTools;
-         UpgradeProgress :=
-           PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress -
-           ResultAmount;
+         UpgradeProgress := UpgradedModule.UpgradeProgress - ResultAmount;
          UpgradePoints := UpgradePoints - ResultAmount;
          UpdateCargo
            (PlayerShip, PlayerShip.Cargo.Element(UpgradeMaterial).ProtoIndex,
             (0 - MaterialCost));
          if UpgradeProgress = 0 then
             WeightGain :=
-              Modules_List
-                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                .Weight /
-              Modules_List
-                (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
-                .Durability;
+              Modules_List(UpgradedModule.ProtoIndex).Weight /
+              Modules_List(UpgradedModule.ProtoIndex).Durability;
             if WeightGain < 1 then
                WeightGain := 1;
             end if;
-            case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
+            case UpgradedModule.UpgradeAction is
                when DURABILITY =>
                   if
-                    (Modules_List
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .ProtoIndex)
-                       .Durability /
-                     20) >
+                    (Modules_List(UpgradedModule.ProtoIndex).Durability / 20) >
                     0 then
-                     PlayerShip.Modules(PlayerShip.UpgradeModule)
-                       .MaxDurability :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule)
-                         .MaxDurability +
-                       (Modules_List
-                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .ProtoIndex)
-                          .Durability /
+                     UpgradedModule.MaxDurability :=
+                       UpgradedModule.MaxDurability +
+                       (Modules_List(UpgradedModule.ProtoIndex).Durability /
                         20);
-                     PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
+                     UpgradedModule.Weight :=
+                       UpgradedModule.Weight +
                        (WeightGain *
-                        (Modules_List
-                           (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                              .ProtoIndex)
-                           .Durability /
+                        (Modules_List(UpgradedModule.ProtoIndex).Durability /
                          20));
                   else
-                     PlayerShip.Modules(PlayerShip.UpgradeModule)
-                       .MaxDurability :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule)
-                         .MaxDurability +
-                       1;
-                     PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
-                       WeightGain;
+                     UpgradedModule.MaxDurability :=
+                       UpgradedModule.MaxDurability + 1;
+                     UpgradedModule.Weight :=
+                       UpgradedModule.Weight + WeightGain;
                   end if;
                   AddMessage
                     (To_String(PlayerShip.Crew(WorkerIndex).Name) &
                      " has upgraded the durability of " &
-                     To_String
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
-                     ".",
+                     To_String(UpgradedModule.Name) & ".",
                      OrderMessage, GREEN);
                   MaxValue :=
                     Positive
                       (Float
-                         (Modules_List
-                            (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .ProtoIndex)
-                            .Durability) *
+                         (Modules_List(UpgradedModule.ProtoIndex).Durability) *
                        1.5);
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule)
-                      .MaxDurability =
-                    MaxValue then
+                  if UpgradedModule.MaxDurability = MaxValue then
                      MaxUpgradeReached
                        ("You've reached the maximum durability for ");
                      return;
                   else
-                     PlayerShip.Modules(PlayerShip.UpgradeModule)
-                       .UpgradeProgress :=
-                       Modules_List
-                         (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
-                         .Durability;
+                     UpgradedModule.UpgradeProgress :=
+                       Modules_List(UpgradedModule.ProtoIndex).Durability;
                   end if;
                when MAX_VALUE =>
-                  case PlayerShip.Modules(PlayerShip.UpgradeModule).MType is
+                  case UpgradedModule.MType is
                      when HULL =>
                         WeightGain := WeightGain * 10;
-                        PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .MaxModules :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .MaxModules +
-                          1;
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .MaxModules;
+                        UpgradedModule.MaxModules :=
+                          UpgradedModule.MaxModules + 1;
+                        UpgradeValue := UpgradedModule.MaxModules;
                      when ENGINE =>
                         WeightGain :=
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            40);
-                        PlayerShip.Modules(PlayerShip.UpgradeModule).Power :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Power +
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                        UpgradedModule.Power :=
+                          UpgradedModule.Power +
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            20);
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Power;
+                        UpgradeValue := UpgradedModule.Power;
                      when CABIN =>
-                        PlayerShip.Modules(PlayerShip.UpgradeModule).Quality :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .Quality +
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                        UpgradedModule.Quality :=
+                          UpgradedModule.Quality +
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            20);
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Quality;
+                        UpgradeValue := UpgradedModule.Quality;
                      when GUN =>
                         if
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            20) >
                           0 then
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Damage :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Damage +
-                             (Modules_List
-                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                   .ProtoIndex)
+                           UpgradedModule.Damage :=
+                             UpgradedModule.Damage +
+                             (Modules_List(UpgradedModule.ProtoIndex)
                                 .MaxValue /
                               20);
                         else
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Damage :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Damage +
-                             1;
+                           UpgradedModule.Damage := UpgradedModule.Damage + 1;
                         end if;
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage;
+                        UpgradeValue := UpgradedModule.Damage;
                      when BATTERING_RAM =>
                         if
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            20) >
                           0 then
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Damage2 :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Damage2 +
-                             (Modules_List
-                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                   .ProtoIndex)
+                           UpgradedModule.Damage2 :=
+                             UpgradedModule.Damage2 +
+                             (Modules_List(UpgradedModule.ProtoIndex)
                                 .MaxValue /
                               20);
                         else
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Damage2 :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Damage2 +
-                             1;
+                           UpgradedModule.Damage2 :=
+                             UpgradedModule.Damage2 + 1;
                         end if;
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule).Damage2;
+                        UpgradeValue := UpgradedModule.Damage2;
                      when HARPOON_GUN =>
                         if
-                          (Modules_List
-                             (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .ProtoIndex)
-                             .MaxValue /
+                          (Modules_List(UpgradedModule.ProtoIndex).MaxValue /
                            20) >
                           0 then
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Duration :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Duration +
-                             (Modules_List
-                                (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                   .ProtoIndex)
+                           UpgradedModule.Duration :=
+                             UpgradedModule.Duration +
+                             (Modules_List(UpgradedModule.ProtoIndex)
                                 .MaxValue /
                               20);
                         else
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .Duration :=
-                             PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .Duration +
-                             1;
+                           UpgradedModule.Duration :=
+                             UpgradedModule.Duration + 1;
                         end if;
-                        UpgradeValue :=
-                          PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .Duration;
+                        UpgradeValue := UpgradedModule.Duration;
                      when others =>
                         null;
                   end case;
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
-                    WeightGain;
+                  UpgradedModule.Weight := UpgradedModule.Weight + WeightGain;
                   AddMessage
                     (To_String(PlayerShip.Crew(WorkerIndex).Name) &
-                     " has upgraded " &
-                     To_String
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
-                     ".",
+                     " has upgraded " & To_String(UpgradedModule.Name) & ".",
                      OrderMessage, GREEN);
                   MaxValue :=
                     Positive
                       (Float
-                         (Modules_List
-                            (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .ProtoIndex)
-                            .MaxValue) *
+                         (Modules_List(UpgradedModule.ProtoIndex).MaxValue) *
                        1.5);
                   if UpgradeValue >= MaxValue then
                      MaxUpgradeReached
                        ("You've reached the maximum upgrade for ");
                      return;
                   else
-                     case Modules_List
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .ProtoIndex)
-                       .MType is
+                     case Modules_List(UpgradedModule.ProtoIndex).MType is
                         when ENGINE =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -635,8 +523,7 @@ package body Ships.Upgrade is
                                    20) *
                                 NewGameSettings.UpgradeCostBonus);
                         when HARPOON_GUN =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -647,8 +534,7 @@ package body Ships.Upgrade is
                                    10) *
                                 NewGameSettings.UpgradeCostBonus);
                         when GUN | BATTERING_RAM =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -659,8 +545,7 @@ package body Ships.Upgrade is
                                    2) *
                                 NewGameSettings.UpgradeCostBonus);
                         when CABIN =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -670,8 +555,7 @@ package body Ships.Upgrade is
                                      .MaxValue) *
                                 NewGameSettings.UpgradeCostBonus);
                         when HULL =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -684,41 +568,24 @@ package body Ships.Upgrade is
                         when others =>
                            null;
                      end case;
-                     if PlayerShip.Modules(PlayerShip.UpgradeModule)
-                         .UpgradeProgress =
-                       0 then
-                        PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .UpgradeProgress :=
-                          1;
+                     if UpgradedModule.UpgradeProgress = 0 then
+                        UpgradedModule.UpgradeProgress := 1;
                      end if;
                   end if;
                when VALUE =>
-                  if PlayerShip.Modules(PlayerShip.UpgradeModule).MType =
-                    ENGINE then
+                  if UpgradedModule.MType = ENGINE then
                      WeightGain := WeightGain * 10;
-                     PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage -
-                       1;
-                     UpgradeValue :=
-                       PlayerShip.Modules(PlayerShip.UpgradeModule).FuelUsage;
+                     UpgradedModule.FuelUsage := UpgradedModule.FuelUsage - 1;
+                     UpgradeValue := UpgradedModule.FuelUsage;
                   end if;
-                  PlayerShip.Modules(PlayerShip.UpgradeModule).Weight :=
-                    PlayerShip.Modules(PlayerShip.UpgradeModule).Weight +
-                    WeightGain;
+                  UpgradedModule.Weight := UpgradedModule.Weight + WeightGain;
                   AddMessage
                     (To_String(PlayerShip.Crew(WorkerIndex).Name) &
-                     " has upgraded " &
-                     To_String
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule).Name) &
-                     ".",
+                     " has upgraded " & To_String(UpgradedModule.Name) & ".",
                      OrderMessage, GREEN);
                   MaxValue :=
                     Natural
-                      (Float
-                         (Modules_List
-                            (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .ProtoIndex)
-                            .Value) /
+                      (Float(Modules_List(UpgradedModule.ProtoIndex).Value) /
                        2.0);
                   if MaxValue < 1 then
                      MaxValue := 1;
@@ -728,13 +595,9 @@ package body Ships.Upgrade is
                        ("You've reached the maximum upgrade for ");
                      return;
                   else
-                     case Modules_List
-                       (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                          .ProtoIndex)
-                       .MType is
+                     case Modules_List(UpgradedModule.ProtoIndex).MType is
                         when ENGINE =>
-                           PlayerShip.Modules(PlayerShip.UpgradeModule)
-                             .UpgradeProgress :=
+                           UpgradedModule.UpgradeProgress :=
                              Integer
                                (Float
                                   (Modules_List
@@ -744,12 +607,8 @@ package body Ships.Upgrade is
                                      .Value *
                                    20) *
                                 NewGameSettings.UpgradeCostBonus);
-                           if PlayerShip.Modules(PlayerShip.UpgradeModule)
-                               .UpgradeProgress =
-                             0 then
-                              PlayerShip.Modules(PlayerShip.UpgradeModule)
-                                .UpgradeProgress :=
-                                1;
+                           if UpgradedModule.UpgradeProgress = 0 then
+                              UpgradedModule.UpgradeProgress := 1;
                            end if;
                         when others =>
                            null;
@@ -759,10 +618,10 @@ package body Ships.Upgrade is
                   null;
             end case;
          else
-            PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress :=
-              UpgradeProgress;
+            UpgradedModule.UpgradeProgress := UpgradeProgress;
          end if;
       end loop;
+      PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
    end UpgradeShip;
 
 end Ships.Upgrade;
