@@ -51,7 +51,6 @@ with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
 with Crew; use Crew;
-with Crew.UI;
 with DebugUI; use DebugUI;
 with Events; use Events;
 with Factions; use Factions;
@@ -88,9 +87,6 @@ package body Maps.UI is
          "-label {Ship information} -command ShowShipInfo");
       Menu.Add
         (GameMenu, "command", "-label {Ship cargo} -command ShowCargoInfo");
-      Menu.Add
-        (GameMenu, "command",
-         "-label {Crew information} -command ShowCrewInfo");
       Menu.Add
         (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
       Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
@@ -889,7 +885,6 @@ package body Maps.UI is
          Help.UI.AddCommands;
          Ships.Cargo.UI.AddCommands;
          Ships.UI.AddCommands;
-         Crew.UI.AddCommands;
          Crafts.UI.AddCommands;
          Messages.UI.AddCommands;
          BasesList.AddCommands;
