@@ -97,11 +97,8 @@ package body Ships is
                            when others =>
                               null;
                         end case;
-                        if TempModule.MType = ENGINE or
-                          TempModule.MType = CABIN or TempModule.MType = GUN or
-                          TempModule.MType = BATTERING_RAM or
-                          TempModule.MType = HULL or
-                          TempModule.MType = HARPOON_GUN then
+                        if TempModule.MType in ENGINE | CABIN | GUN |
+                              BATTERING_RAM | HULL | HARPOON_GUN then
                            MaxValue :=
                              Positive
                                (Float(Modules_List(Module).MaxValue) * 1.5);
@@ -135,8 +132,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        FuelUsage => TempModule.Value,
+                        UpgradeAction => NONE, FuelUsage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
                   ShipModules.Append
@@ -146,8 +142,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        Cleanliness => TempModule.Value,
+                        UpgradeAction => NONE, Cleanliness => TempModule.Value,
                         Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
                   ShipModules.Append
@@ -188,8 +183,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        TrainedSkill => 0));
+                        UpgradeAction => NONE, TrainedSkill => 0));
                when TURRET =>
                   ShipModules.Append
                     (New_Item =>
@@ -198,8 +192,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        GunIndex => 0));
+                        UpgradeAction => NONE, GunIndex => 0));
                when GUN =>
                   ShipModules.Append
                     (New_Item =>
@@ -208,8 +201,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        Damage => TempModule.MaxValue, AmmoIndex => 0));
+                        UpgradeAction => NONE, Damage => TempModule.MaxValue,
+                        AmmoIndex => 0));
                when CARGO =>
                   ShipModules.Append
                     (New_Item =>
@@ -248,8 +241,8 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        Damage2 => TempModule.MaxValue, CoolingDown => False));
+                        UpgradeAction => NONE, Damage2 => TempModule.MaxValue,
+                        CoolingDown => False));
                when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>
@@ -259,30 +252,24 @@ package body Ships is
                         Durability => TempModule.Durability,
                         MaxDurability => TempModule.Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        Duration => TempModule.MaxValue, HarpoonIndex => 0));
+                        UpgradeAction => NONE, Duration => TempModule.MaxValue,
+                        HarpoonIndex => 0));
                when ANY =>
                   null;
             end case;
          end loop;
       end;
       -- Set ship name
-      if Name = Null_Unbounded_String then
-         NewName := ProtoShip.Name;
-      else
-         NewName := Name;
-      end if;
+      NewName :=
+        (if Name = Null_Unbounded_String then ProtoShip.Name else Name);
       -- Set ship crew
       declare
          Member: Member_Data;
       begin
          for ProtoMember of ProtoShip.Crew loop
-            if ProtoMember.MaxAmount = 0 then
-               Amount := ProtoMember.MinAmount;
-            else
-               Amount :=
-                 GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount);
-            end if;
+            Amount :=
+              (if ProtoMember.MaxAmount = 0 then ProtoMember.MinAmount
+               else GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount));
             for I in 1 .. Amount loop
                Member := GenerateMob(ProtoMember.ProtoIndex, ProtoShip.Owner);
                ShipCrew.Append(New_Item => Member);
@@ -304,7 +291,7 @@ package body Ships is
                for Module of ShipModules loop
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
-                       ((Module.MType = GUN or Module.MType = HARPOON_GUN) and
+                       ((Module.MType in GUN | HARPOON_GUN) and
                         Member.Order = Gunner) then
                         Module.Owner(1) := ShipCrew.Last_Index;
                         exit;
@@ -319,13 +306,11 @@ package body Ships is
       end;
       -- Set ship cargo
       for I in ProtoShip.Cargo.Iterate loop
-         if ProtoShip.Cargo(I).MaxAmount > 0 then
-            Amount :=
+         Amount :=
+           (if ProtoShip.Cargo(I).MaxAmount > 0 then
               GetRandom
-                (ProtoShip.Cargo(I).MinAmount, ProtoShip.Cargo(I).MaxAmount);
-         else
-            Amount := ProtoShip.Cargo(I).MinAmount;
-         end if;
+                (ProtoShip.Cargo(I).MinAmount, ProtoShip.Cargo(I).MaxAmount)
+            else ProtoShip.Cargo(I).MinAmount);
          ShipCargo.Append
            (New_Item =>
               (ProtoIndex => ProtoShip.Cargo(I).ProtoIndex, Amount => Amount,
@@ -415,11 +400,9 @@ package body Ships is
       end if;
       -- Set home base for crew members
       for Member of TmpShip.Crew loop
-         if GetRandom(1, 100) < 99 then
-            Member.HomeBase := TmpShip.HomeBase;
-         else
-            Member.HomeBase := GetRandom(SkyBases'First, SkyBases'Last);
-         end if;
+         Member.HomeBase :=
+           (if GetRandom(1, 100) < 99 then TmpShip.HomeBase
+            else GetRandom(SkyBases'First, SkyBases'Last));
       end loop;
       return TmpShip;
    end CreateShip;
@@ -464,12 +447,11 @@ package body Ships is
             KnownRecipes => TempRecipes);
          ShipNode := Item(NodesList, I);
          ShipIndex := To_Unbounded_String(Get_Attribute(ShipNode, "index"));
-         if Get_Attribute(ShipNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(ShipNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action :=
+           (if Get_Attribute(ShipNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(ShipNode, "action"))
+            else ADD);
+         if (Action in UPDATE | REMOVE) then
             if not ProtoShips_Container.Contains
                 (ProtoShips_List, ShipIndex) then
                raise Data_Loading_Error
@@ -494,12 +476,10 @@ package body Ships is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "module");
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
-               if Get_Attribute(ChildNode, "amount") /= "" then
-                  ModuleAmount :=
-                    Positive'Value(Get_Attribute(ChildNode, "amount"));
-               else
-                  ModuleAmount := 1;
-               end if;
+               ModuleAmount :=
+                 (if Get_Attribute(ChildNode, "amount") /= "" then
+                    Positive'Value(Get_Attribute(ChildNode, "amount"))
+                  else 1);
                ModuleIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                if not BaseModules_Container.Contains
@@ -509,12 +489,10 @@ package body Ships is
                     Get_Attribute(ChildNode, "index") & "| in " &
                     To_String(TempRecord.Name) & ".";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                if SubAction = ADD then
                   TempRecord.Modules.Append
                     (New_Item => ModuleIndex,
@@ -606,12 +584,10 @@ package body Ships is
                     Get_Attribute(ChildNode, "index") & "| in " &
                     To_String(TempRecord.Name) & ".";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount")'Length /= 0 then
@@ -704,12 +680,10 @@ package body Ships is
                     Get_Attribute(Item(ChildNodes, J), "index") & "| in " &
                     To_String(TempRecord.Name) & ".";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                if SubAction = ADD then
                   TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
                else
@@ -735,12 +709,10 @@ package body Ships is
                     Get_Attribute(ChildNode, "index") & "| in " &
                     To_String(TempRecord.Name) & ".";
                end if;
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      if Get_Attribute(ChildNode, "amount") /= "" then
