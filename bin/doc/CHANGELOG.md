@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - When giving orders always take tools from crew members
 - Updated help
 - Updated README.md
+- Moved crew info to ship info screen
 
 ### Fixed
 - Code documentation
