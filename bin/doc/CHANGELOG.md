@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.3] - 2020-10-04
 
 ### Added
 - Ability to cancel crafting orders in the selected module
