@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,32 +30,20 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo374">Combat.UI/ShowCombatFrame</a></li>
-<li>2. <a href="#robo393">CUI/GetGunSpeed</a></li>
-<li>3. <a href="#robo394">CUI/Next_Turn_Command</a></li>
-<li>4. <a href="#robo395">CUI/Set_Boarding_Command</a></li>
-<li>5. <a href="#robo396">CUI/Set_Combat_Order_Command</a></li>
-<li>6. <a href="#robo397">CUI/Show_Combat_UI_Command</a></li>
-<li>7. <a href="#robo399">CUI/UpdateBoardingUI</a></li>
-<li>8. <a href="#robo400">CUI/UpdateCombatUI</a></li>
-<li>9. <a href="#robo401">CUI/UpdateMessages</a></li>
-<li>10. <a href="#robo593">CUI/Set_Boarding_Order_Command</a></li>
+<li>1. <a href="#robo389">CUI/GetGunSpeed</a></li>
+<li>2. <a href="#robo390">CUI/Next_Turn_Command</a></li>
+<li>3. <a href="#robo391">CUI/Set_Boarding_Command</a></li>
+<li>4. <a href="#robo392">CUI/Set_Combat_Order_Command</a></li>
+<li>5. <a href="#robo393">CUI/Show_Combat_UI_Command</a></li>
+<li>6. <a href="#robo394">CUI/ShowCombatFrame</a></li>
+<li>7. <a href="#robo396">CUI/UpdateBoardingUI</a></li>
+<li>8. <a href="#robo397">CUI/UpdateCombatUI</a></li>
+<li>9. <a href="#robo398">CUI/UpdateMessages</a></li>
+<li>10. <a href="#robo590">CUI/Set_Boarding_Order_Command</a></li>
 </ul>
 <hr />
-<a name="Combat2eUI2fShowCombatFrame"></a>
-<a name="robo374"></a><h2>Combat.UI/ShowCombatFrame [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show ship to ship combat <a href="./goals-ui_ads.html#robo30">UI</a> or boarding <a href="./goals-ui_ads.html#robo30">UI</a>
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowCombatFrame</strong><span class="sign">(</span>FrameName<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
-</pre>
-
-<hr />
 <a name="CUI2fGetGunSpeed"></a>
-<a name="robo393"></a><h2>CUI/GetGunSpeed [ Subprograms ]</h2>
+<a name="robo389"></a><h2>CUI/GetGunSpeed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -74,7 +62,7 @@
 
 <hr />
 <a name="CUI2fNext5fTurn5fCommand"></a>
-<a name="robo394"></a><h2>CUI/Next_Turn_Command [ Subprograms ]</h2>
+<a name="robo390"></a><h2>CUI/Next_Turn_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -102,7 +90,7 @@
 
 <hr />
 <a name="CUI2fSet5fBoarding5fCommand"></a>
-<a name="robo395"></a><h2>CUI/Set_Boarding_Command [ Subprograms ]</h2>
+<a name="robo391"></a><h2>CUI/Set_Boarding_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -125,14 +113,14 @@
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> SetBoarding <a href="./bases-schoolui_adb.html#robo302">MemberIndex</a>
- <a href="./bases-schoolui_adb.html#robo302">MemberIndex</a> is a index of the player ship crew member which will get the
+<pre> SetBoarding <a href="./bases-schoolui_adb.html#robo299">MemberIndex</a>
+ <a href="./bases-schoolui_adb.html#robo299">MemberIndex</a> is a index of the player ship crew member which will get the
  boarding order
 </pre>
 
 <hr />
 <a name="CUI2fSet5fCombat5fOrder5fCommand"></a>
-<a name="robo396"></a><h2>CUI/Set_Combat_Order_Command [ Subprograms ]</h2>
+<a name="robo392"></a><h2>CUI/Set_Combat_Order_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -162,11 +150,11 @@
 
 <hr />
 <a name="CUI2fShow5fCombat5fUI5fCommand"></a>
-<a name="robo397"></a><h2>CUI/Show_Combat_UI_Command [ Subprograms ]</h2>
+<a name="robo393"></a><h2>CUI/Show_Combat_UI_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show combat <a href="./goals-ui_ads.html#robo30">UI</a>
+<pre> Show combat UI
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> <strong>Show_Combat_UI_Command</strong>
@@ -185,16 +173,28 @@
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> <a href="./combat-ui_ads.html#robo398">ShowCombatUI</a>
+<pre> <a href="./combat-ui_ads.html#robo395">ShowCombatUI</a>
+</pre>
+
+<hr />
+<a name="CUI2fShowCombatFrame"></a>
+<a name="robo394"></a><h2>CUI/ShowCombatFrame [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show ship to ship combat UI or boarding UI
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> <strong>ShowCombatFrame</strong><span class="sign">(</span>FrameName<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="CUI2fUpdateBoardingUI"></a>
-<a name="robo399"></a><h2>CUI/UpdateBoardingUI [ Subprograms ]</h2>
+<a name="robo396"></a><h2>CUI/UpdateBoardingUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update information about boarding party: remove old <a href="./goals-ui_ads.html#robo30">UI</a> and create new elements
+<pre> Update information about boarding party: remove old UI and create new elements
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateBoardingUI</strong> <span class="keyword">is</span>
@@ -202,11 +202,11 @@
 
 <hr />
 <a name="CUI2fUpdateCombatUI"></a>
-<a name="robo400"></a><h2>CUI/UpdateCombatUI [ Subprograms ]</h2>
+<a name="robo397"></a><h2>CUI/UpdateCombatUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update information about combat: remove old <a href="./goals-ui_ads.html#robo30">UI</a> and create new elements
+<pre> Update information about combat: remove old UI and create new elements
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateCombatUI</strong> <span class="keyword">is</span>
@@ -214,7 +214,7 @@
 
 <hr />
 <a name="CUI2fUpdateMessages"></a>
-<a name="robo401"></a><h2>CUI/UpdateMessages [ Subprograms ]</h2>
+<a name="robo398"></a><h2>CUI/UpdateMessages [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -226,7 +226,7 @@
 
 <hr />
 <a name="CUI2fSet5fBoarding5fOrder5fCommand"></a>
-<a name="robo593"></a><h2>CUI/Set_Boarding_Order_Command [ Commands ]</h2>
+<a name="robo590"></a><h2>CUI/Set_Boarding_Order_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo14">CUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -256,7 +256,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
+<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
 </p>
 </div> <!-- footer -->
 </body>

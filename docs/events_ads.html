@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -30,34 +30,34 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo25">Events/Events</a></li>
+<li>1. <a href="#robo23">Events/Events</a></li>
 <ul>
-<li>1.1. <a href="./ui/events-ui_ads.html#robo24">Events/EUI</a></li>
+<li>1.1. <a href="./ui/events-ui_ads.html#robo22">Events/EUI</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/baseslist_adb.html#robo409">EUI/Set_Base_Command</a></li>
-<li>1.1.2. <a href="./ui/events-ui_ads.html#robo410">EUI/ShowEventsList</a></li>
-<li>1.1.3. <a href="./ui/events-ui_adb.html#robo625">EUI/Set_Event_Command</a></li>
-<li>1.1.4. <a href="./ui/events-ui_adb.html#robo626">EUI/Show_Event_Command</a></li>
-<li>1.1.5. <a href="./ui/events-ui_adb.html#robo627">EUI/Show_Event_Info_Command</a></li>
+<li>1.1.1. <a href="./ui/baseslist_adb.html#robo405">EUI/Set_Base_Command</a></li>
+<li>1.1.2. <a href="./ui/events-ui_ads.html#robo406">EUI/ShowEventsList</a></li>
+<li>1.1.3. <a href="./ui/events-ui_adb.html#robo616">EUI/Set_Event_Command</a></li>
+<li>1.1.4. <a href="./ui/events-ui_adb.html#robo617">EUI/Show_Event_Command</a></li>
+<li>1.1.5. <a href="./ui/events-ui_adb.html#robo618">EUI/Show_Event_Info_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo88">Events/Events_Container</a></li>
-<li>1.3. <a href="#robo89">Events/Events_Types</a></li>
-<li>1.4. <a href="#robo159">Events/EventData</a></li>
-<li>1.5. <a href="#robo224">Events/Events_List</a></li>
-<li>1.6. <a href="#robo225">Events/FriendlyShips</a></li>
-<li>1.7. <a href="#robo226">Events/Traders</a></li>
-<li>1.8. <a href="#robo411">Events/CheckForEvent</a></li>
-<li>1.9. <a href="#robo412">Events/DeleteEvent</a></li>
-<li>1.10. <a href="#robo413">Events/GenerateEnemies</a></li>
-<li>1.11. <a href="#robo414">Events/GenerateTraders</a></li>
-<li>1.12. <a href="./events_adb.html#robo415">Events/GetPlayerShips</a></li>
-<li>1.13. <a href="#robo416">Events/RecoverBase</a></li>
-<li>1.14. <a href="#robo417">Events/UpdateEvents</a></li>
+<li>1.2. <a href="#robo87">Events/Events_Container</a></li>
+<li>1.3. <a href="#robo88">Events/Events_Types</a></li>
+<li>1.4. <a href="#robo158">Events/EventData</a></li>
+<li>1.5. <a href="#robo222">Events/Events_List</a></li>
+<li>1.6. <a href="#robo223">Events/FriendlyShips</a></li>
+<li>1.7. <a href="#robo224">Events/Traders</a></li>
+<li>1.8. <a href="#robo407">Events/CheckForEvent</a></li>
+<li>1.9. <a href="#robo408">Events/DeleteEvent</a></li>
+<li>1.10. <a href="#robo409">Events/GenerateEnemies</a></li>
+<li>1.11. <a href="#robo410">Events/GenerateTraders</a></li>
+<li>1.12. <a href="./events_adb.html#robo411">Events/GetPlayerShips</a></li>
+<li>1.13. <a href="#robo412">Events/RecoverBase</a></li>
+<li>1.14. <a href="#robo413">Events/UpdateEvents</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Events2fEvents"></a>
-<a name="robo25"></a><h2>Events/Events [ Packages ]</h2>
+<a name="robo23"></a><h2>Events/Events [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -69,21 +69,21 @@
 
 <hr />
 <a name="Events2fEvents5fContainer"></a>
-<a name="robo88"></a><h2>Events/Events_Container [ Types ]</h2>
+<a name="robo87"></a><h2>Events/Events_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store events data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> <strong>Events_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo159">EventData</a><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> <strong>Events_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span> <a href="#robo158">EventData</a><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fEvents5fTypes"></a>
-<a name="robo89"></a><h2>Events/Events_Types [ Types ]</h2>
+<a name="robo88"></a><h2>Events/Events_Types [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of events
 </pre>
@@ -95,20 +95,20 @@
 
 <hr />
 <a name="Events2fEventData"></a>
-<a name="robo159"></a><h2>Events/EventData [ Records ]</h2>
+<a name="robo158"></a><h2>Events/EventData [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for random events
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> <strong>EventData</strong><span class="sign">(</span>EType<span class="sign">:</span> <a href="#robo89">Events_Types</a> <span class="sign">:</span><span class="sign">=</span> None<span class="sign">)</span> <span class="keyword">is</span> <span class="keyword">record</span>
-      SkyX<span class="sign">:</span> <a href="./game_ads.html#robo99">BasesRange</a><span class="sign">;</span>
-      SkyY<span class="sign">:</span> <a href="./game_ads.html#robo99">BasesRange</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> <strong>EventData</strong><span class="sign">(</span>EType<span class="sign">:</span> <a href="#robo88">Events_Types</a> <span class="sign">:</span><span class="sign">=</span> None<span class="sign">)</span> <span class="keyword">is</span> <span class="keyword">record</span>
+      SkyX<span class="sign">:</span> <a href="./game_ads.html#robo97">BasesRange</a><span class="sign">;</span>
+      SkyY<span class="sign">:</span> <a href="./game_ads.html#robo97">BasesRange</a><span class="sign">;</span>
       Time<span class="sign">:</span> Integer<span class="sign">;</span>
       <span class="keyword">case</span> EType <span class="keyword">is</span>
          <span class="keyword">when</span> DoublePrice <span class="sign">=</span><span class="sign">&gt;</span>
-            <a href="./ui/crew-ui-inventory_adb.html#robo443">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+            <a href="./ui/bases-lootui_adb.html#robo454">ItemIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">;</span>
          <span class="keyword">when</span> AttackOnBase <span class="sign">|</span> EnemyShip <span class="sign">|</span> EnemyPatrol <span class="sign">|</span> Trader <span class="sign">|</span> FriendlyShip <span class="sign">=</span><span class="sign">&gt;</span>
             ShipIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
          <span class="keyword">when</span> <span class="keyword">others</span> <span class="sign">=</span><span class="sign">&gt;</span>
@@ -120,52 +120,52 @@
 <pre> SkyX      - X coordinate on sky map
  SkyY      - Y coordinate on sky map
  Time      - Time to end of event
- <a href="./ui/crew-ui-inventory_adb.html#robo443">ItemIndex</a> - Index of proto item which have bonus to price
+ <a href="./ui/bases-lootui_adb.html#robo454">ItemIndex</a> - Index of proto item which have bonus to price
  ShipIndex - Index of proto ship which player meet
  Data      - Various data for event (for example index of enemy ship)
 </pre>
 
 <hr />
 <a name="Events2fEvents5fList"></a>
-<a name="robo224"></a><h2>Events/Events_List [ Variables ]</h2>
+<a name="robo222"></a><h2>Events/Events_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all events in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Events_List</strong><span class="sign">:</span> <a href="#robo88">Events_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Events_List</strong><span class="sign">:</span> <a href="#robo87">Events_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fFriendlyShips"></a>
-<a name="robo225"></a><h2>Events/FriendlyShips [ Variables ]</h2>
+<a name="robo223"></a><h2>Events/FriendlyShips [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly ships in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>FriendlyShips</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>FriendlyShips</strong><span class="sign">:</span> <a href="./game_ads.html#robo107">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fTraders"></a>
-<a name="robo226"></a><h2>Events/Traders [ Variables ]</h2>
+<a name="robo224"></a><h2>Events/Traders [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly traders in the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Traders</strong><span class="sign">:</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+<pre class="source">   <strong>Traders</strong><span class="sign">:</span> <a href="./game_ads.html#robo107">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fCheckForEvent"></a>
-<a name="robo411"></a><h2>Events/CheckForEvent [ Subprograms ]</h2>
+<a name="robo407"></a><h2>Events/CheckForEvent [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if event happen
 </pre>
@@ -179,15 +179,15 @@
 
 <hr />
 <a name="Events2fDeleteEvent"></a>
-<a name="robo412"></a><h2>Events/DeleteEvent [ Subprograms ]</h2>
+<a name="robo408"></a><h2>Events/DeleteEvent [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Delete selected event
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>DeleteEvent</strong><span class="sign">(</span>EventIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> EventIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo224">Events_List</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> EventIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="#robo222">Events_List</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DeleteEvent"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -196,15 +196,15 @@
 
 <hr />
 <a name="Events2fGenerateEnemies"></a>
-<a name="robo413"></a><h2>Events/GenerateEnemies [ Subprograms ]</h2>
+<a name="robo409"></a><h2>Events/GenerateEnemies [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create list of enemies ships
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>GenerateEnemies</strong>
-     <span class="sign">(</span>Enemies<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./game_ads.html#robo108">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
+     <span class="sign">(</span>Enemies<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> <a href="./game_ads.html#robo107">UnboundedString_Container</a><span class="sign">.</span>Vector<span class="sign">;</span>
       Owner<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"Any"</span><span class="sign">)</span><span class="sign">;</span>
       WithTraders<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Owner <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
@@ -219,9 +219,9 @@
 
 <hr />
 <a name="Events2fGenerateTraders"></a>
-<a name="robo414"></a><h2>Events/GenerateTraders [ Subprograms ]</h2>
+<a name="robo410"></a><h2>Events/GenerateTraders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create list of traders needed for trader event
 </pre>
@@ -232,25 +232,25 @@
 
 <hr />
 <a name="Events2fRecoverBase"></a>
-<a name="robo416"></a><h2>Events/RecoverBase [ Subprograms ]</h2>
+<a name="robo412"></a><h2>Events/RecoverBase [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Recover abandoned base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>RecoverBase</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo300">BaseIndex</a><span class="sign">:</span> <a href="./game_ads.html#robo99">BasesRange</a><span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>RecoverBase</strong><span class="sign">(</span><a href="./ui/missions-ui_adb.html#robo297">BaseIndex</a><span class="sign">:</span> <a href="./game_ads.html#robo97">BasesRange</a><span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_RecoverBase"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/missions-ui_adb.html#robo300">BaseIndex</a> - Index of the base where recovery happened
+<pre> <a href="./ui/missions-ui_adb.html#robo297">BaseIndex</a> - Index of the base where recovery happened
 </pre>
 
 <hr />
 <a name="Events2fUpdateEvents"></a>
-<a name="robo417"></a><h2>Events/UpdateEvents [ Subprograms ]</h2>
+<a name="robo413"></a><h2>Events/UpdateEvents [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update all events timers
 </pre>
@@ -264,7 +264,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
+<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
 </p>
 </div> <!-- footer -->
 </body>

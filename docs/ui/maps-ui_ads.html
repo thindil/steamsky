@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,68 +30,83 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo39">Maps/MUI</a></li>
+<li>1. <a href="#robo38">Maps/MUI</a></li>
 <ul>
-<li>1.1. <a href="./maps-ui-commands_ads.html#robo45">MUI/MapCommands</a></li>
+<li>1.1. <a href="./maps-ui-commands_ads.html#robo44">MUI/MapCommands</a></li>
 <ul>
-<li>1.1.1. <a href="./maps-ui-commands_ads.html#robo462">MapCommands/AddCommands</a></li>
-<li>1.1.2. <a href="./maps-ui-commands_adb.html#robo644">MapCommands/Draw_Map_Command</a></li>
-<li>1.1.3. <a href="./maps-ui-commands_adb.html#robo645">MapCommands/Hide_Map_Buttons_Command</a></li>
-<li>1.1.4. <a href="./maps-ui-commands_adb.html#robo646">MapCommands/Move_Command</a></li>
-<li>1.1.5. <a href="./maps-ui-commands_adb.html#robo647">MapCommands/Move_Map_Buttons_Command</a></li>
-<li>1.1.6. <a href="./maps-ui-commands_adb.html#robo648">MapCommands/Move_Map_Command</a></li>
-<li>1.1.7. <a href="./maps-ui-commands_adb.html#robo649">MapCommands/Move_Map_Info_Command</a></li>
-<li>1.1.8. <a href="./maps-ui-commands_adb.html#robo650">MapCommands/Move_Mouse_Command</a></li>
-<li>1.1.9. <a href="./maps-ui-commands_adb.html#robo651">MapCommands/Quit_Game_Command</a></li>
-<li>1.1.10. <a href="./maps-ui-commands_adb.html#robo652">MapCommands/Resign_Game_Command</a></li>
-<li>1.1.11. <a href="./maps-ui-commands_adb.html#robo653">MapCommands/Set_Destination_Command</a></li>
-<li>1.1.12. <a href="./maps-ui-commands_adb.html#robo654">MapCommands/Show_Destination_Menu_Command</a></li>
-<li>1.1.13. <a href="./maps-ui-commands_adb.html#robo655">MapCommands/Show_Events_Command</a></li>
-<li>1.1.14. <a href="./maps-ui-commands_adb.html#robo656">MapCommands/Show_Map_Buttons_Command</a></li>
-<li>1.1.15. <a href="./maps-ui-commands_adb.html#robo657">MapCommands/Show_Missions_Command</a></li>
-<li>1.1.16. <a href="./maps-ui-commands_adb.html#robo658">MapCommands/Show_Sky_Map_Command</a></li>
-<li>1.1.17. <a href="./maps-ui-commands_adb.html#robo659">MapCommands/Show_Stats_Command</a></li>
-<li>1.1.18. <a href="./maps-ui-commands_adb.html#robo660">MapCommands/Show_Stories_Command</a></li>
-<li>1.1.19. <a href="./maps-ui-commands_adb.html#robo661">MapCommands/Toggle_Full_Screen_Command</a></li>
-<li>1.1.20. <a href="./maps-ui-commands_adb.html#robo662">MapCommands/Update_Map_Info_Command</a></li>
-<li>1.1.21. <a href="./maps-ui-commands_adb.html#robo663">MapCommands/Zoom_Map_Command</a></li>
+<li>1.1.1. <a href="./maps-ui-commands_adb.html#robo281">MapCommands/MapX</a></li>
+<li>1.1.2. <a href="./maps-ui-commands_adb.html#robo282">MapCommands/MapY</a></li>
+<li>1.1.3. <a href="./maps-ui-commands_ads.html#robo457">MapCommands/AddCommands</a></li>
+<li>1.1.4. <a href="./maps-ui-commands_adb.html#robo631">MapCommands/Draw_Map_Command</a></li>
+<li>1.1.5. <a href="./maps-ui-commands_adb.html#robo632">MapCommands/Hide_Map_Buttons_Command</a></li>
+<li>1.1.6. <a href="./maps-ui-commands_adb.html#robo633">MapCommands/Move_Command</a></li>
+<li>1.1.7. <a href="./maps-ui-commands_adb.html#robo634">MapCommands/Move_Map_Buttons_Command</a></li>
+<li>1.1.8. <a href="./maps-ui-commands_adb.html#robo635">MapCommands/Move_Map_Command</a></li>
+<li>1.1.9. <a href="./maps-ui-commands_adb.html#robo636">MapCommands/Move_Map_Info_Command</a></li>
+<li>1.1.10. <a href="./maps-ui-commands_adb.html#robo637">MapCommands/Move_Mouse_Command</a></li>
+<li>1.1.11. <a href="./maps-ui-commands_adb.html#robo638">MapCommands/Quit_Game_Command</a></li>
+<li>1.1.12. <a href="./maps-ui-commands_adb.html#robo639">MapCommands/Resign_Game_Command</a></li>
+<li>1.1.13. <a href="./maps-ui-commands_adb.html#robo640">MapCommands/Set_Destination_Command</a></li>
+<li>1.1.14. <a href="./maps-ui-commands_adb.html#robo641">MapCommands/Show_Destination_Menu_Command</a></li>
+<li>1.1.15. <a href="./maps-ui-commands_adb.html#robo642">MapCommands/Show_Events_Command</a></li>
+<li>1.1.16. <a href="./maps-ui-commands_adb.html#robo643">MapCommands/Show_Map_Buttons_Command</a></li>
+<li>1.1.17. <a href="./maps-ui-commands_adb.html#robo644">MapCommands/Show_Missions_Command</a></li>
+<li>1.1.18. <a href="./maps-ui-commands_adb.html#robo645">MapCommands/Show_Sky_Map_Command</a></li>
+<li>1.1.19. <a href="./maps-ui-commands_adb.html#robo646">MapCommands/Show_Stats_Command</a></li>
+<li>1.1.20. <a href="./maps-ui-commands_adb.html#robo647">MapCommands/Show_Stories_Command</a></li>
+<li>1.1.21. <a href="./maps-ui-commands_adb.html#robo648">MapCommands/Toggle_Full_Screen_Command</a></li>
+<li>1.1.22. <a href="./maps-ui-commands_adb.html#robo649">MapCommands/Update_Map_Info_Command</a></li>
+<li>1.1.23. <a href="./maps-ui-commands_adb.html#robo650">MapCommands/Zoom_Map_Command</a></li>
 </ul>
-<li>1.2. <a href="#robo297">MUI/CenterX</a></li>
-<li>1.3. <a href="#robo298">MUI/GameMenu</a></li>
-<li>1.4. <a href="#robo299">MUI/MenuAccelerators</a></li>
-<li>1.5. <a href="#robo484">MUI/CreateGameMenu</a></li>
-<li>1.6. <a href="#robo485">MUI/CreateGameUI</a></li>
-<li>1.7. <a href="#robo486">MUI/DeathConfirm</a></li>
-<li>1.8. <a href="#robo487">MUI/DrawMap</a></li>
-<li>1.9. <a href="#robo488">MUI/SetKeys</a></li>
-<li>1.10. <a href="./missions-ui_ads.html#robo489">MUI/ShowMissionsList</a></li>
-<li>1.11. <a href="#robo490">MUI/ShowSkyMap</a></li>
-<li>1.12. <a href="#robo491">MUI/UpdateHeader</a></li>
-<li>1.13. <a href="#robo492">MUI/UpdateMapInfo</a></li>
-<li>1.14. <a href="#robo493">MUI/UpdateMoveButtons</a></li>
+<li>1.2. <a href="#robo289">MUI/CenterX</a></li>
+<li>1.3. <a href="#robo290">MUI/DefaultFontsSizes</a></li>
+<li>1.4. <a href="#robo291">MUI/FullScreenAccel</a></li>
+<li>1.5. <a href="#robo292">MUI/GameMenu</a></li>
+<li>1.6. <a href="#robo293">MUI/MapAccelerators</a></li>
+<li>1.7. <a href="./maps-ui_adb.html#robo294">MUI/MapView</a></li>
+<li>1.8. <a href="#robo295">MUI/MenuAccelerators</a></li>
+<li>1.9. <a href="#robo296">MUI/StartX</a></li>
+<li>1.10. <a href="#robo479">MUI/CreateGameMenu</a></li>
+<li>1.11. <a href="#robo480">MUI/CreateGameUI</a></li>
+<li>1.12. <a href="#robo481">MUI/DeathConfirm</a></li>
+<li>1.13. <a href="#robo482">MUI/DrawMap</a></li>
+<li>1.14. <a href="#robo483">MUI/SetKeys</a></li>
+<li>1.15. <a href="./missions-ui_ads.html#robo484">MUI/ShowMissionsList</a></li>
+<li>1.16. <a href="#robo485">MUI/ShowSkyMap</a></li>
+<li>1.17. <a href="#robo486">MUI/UpdateHeader</a></li>
+<li>1.18. <a href="#robo487">MUI/UpdateMapInfo</a></li>
+<li>1.19. <a href="#robo488">MUI/UpdateMoveButtons</a></li>
 </ul>
-<li>2. <a href="#robo286">Maps.UI/DefaultFontsSizes</a></li>
-<li>3. <a href="#robo287">Maps.UI/FullScreenAccel</a></li>
-<li>4. <a href="#robo288">Maps.UI/MapAccelerators</a></li>
-<li>5. <a href="#robo290">Maps.UI/StartX</a></li>
 </ul>
 <hr />
 <a name="Maps2fMUI"></a>
-<a name="robo39"></a><h2>Maps/MUI [ Packages ]</h2>
+<a name="robo38"></a><h2>Maps/MUI [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../maps_ads.html#robo38">Maps</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../maps_ads.html#robo37">Maps</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code for showing and interacting with maps
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="../maps_ads.html#robo38">Maps</a><span class="sign">.</span><a href="./goals-ui_ads.html#robo30">UI</a> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="../maps_ads.html#robo37">Maps</a><span class="sign">.</span>UI <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="Maps2eUI2fDefaultFontsSizes"></a>
-<a name="robo286"></a><h2>Maps.UI/DefaultFontsSizes [ Variables ]</h2>
+<a name="MUI2fCenterX"></a>
+<a name="robo289"></a><h2>MUI/CenterX [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Coordinates of the center point of the map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>CenterX</strong><span class="sign">,</span> CenterY<span class="sign">:</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MUI2fDefaultFontsSizes"></a>
+<a name="robo290"></a><h2>MUI/DefaultFontsSizes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Default sizes of the game fonts
 </pre>
@@ -100,10 +115,10 @@
 </pre>
 
 <hr />
-<a name="Maps2eUI2fFullScreenAccel"></a>
-<a name="robo287"></a><h2>Maps.UI/FullScreenAccel [ Variables ]</h2>
+<a name="MUI2fFullScreenAccel"></a>
+<a name="robo291"></a><h2>MUI/FullScreenAccel [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Keyboard shortcut for switching full screen mode
 </pre>
@@ -112,10 +127,22 @@
 </pre>
 
 <hr />
-<a name="Maps2eUI2fMapAccelerators"></a>
-<a name="robo288"></a><h2>Maps.UI/MapAccelerators [ Variables ]</h2>
+<a name="MUI2fGameMenu"></a>
+<a name="robo292"></a><h2>MUI/GameMenu [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The main game menu
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>GameMenu</strong><span class="sign">:</span> Tk_Menu<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MUI2fMapAccelerators"></a>
+<a name="robo293"></a><h2>MUI/MapAccelerators [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Array with default map keyboard accelerators
 </pre>
@@ -150,10 +177,30 @@
 </pre>
 
 <hr />
-<a name="Maps2eUI2fStartX"></a>
-<a name="robo290"></a><h2>Maps.UI/StartX [ Variables ]</h2>
+<a name="MUI2fMenuAccelerators"></a>
+<a name="robo295"></a><h2>MUI/MenuAccelerators [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Array with the game menu default accelerators
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <strong>MenuAccelerators</strong><span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 15<span class="sign">)</span> <span class="keyword">of</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"s"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"a"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"o"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"r"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"m"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"b"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"n"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"i"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"t"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"w"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"g"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"F1"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"p"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"q"</span><span class="sign">)</span><span class="sign">,</span>
+      To_Unbounded_String<span class="sign">(</span><span class="quote">"x"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="MUI2fStartX"></a>
+<a name="robo296"></a><h2>MUI/StartX [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Top left map coordinate
 </pre>
@@ -162,54 +209,10 @@
 </pre>
 
 <hr />
-<a name="MUI2fCenterX"></a>
-<a name="robo297"></a><h2>MUI/CenterX [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Coordinates of the center point of the map
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>CenterX</strong><span class="sign">,</span> CenterY<span class="sign">:</span> Positive<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="MUI2fGameMenu"></a>
-<a name="robo298"></a><h2>MUI/GameMenu [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> The main game menu
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>GameMenu</strong><span class="sign">:</span> Tk_Menu<span class="sign">;</span>
-</pre>
-
-<hr />
-<a name="MUI2fMenuAccelerators"></a>
-<a name="robo299"></a><h2>MUI/MenuAccelerators [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Array with the game menu default accelerators
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>MenuAccelerators</strong><span class="sign">:</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 16<span class="sign">)</span> <span class="keyword">of</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span>
-     <span class="sign">(</span>To_Unbounded_String<span class="sign">(</span><span class="quote">"s"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"a"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"c"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"o"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"r"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"m"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"b"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"n"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"i"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"t"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"w"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"g"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"F1"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"p"</span><span class="sign">)</span><span class="sign">,</span>
-      To_Unbounded_String<span class="sign">(</span><span class="quote">"q"</span><span class="sign">)</span><span class="sign">,</span> To_Unbounded_String<span class="sign">(</span><span class="quote">"x"</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="MUI2fCreateGameMenu"></a>
-<a name="robo484"></a><h2>MUI/CreateGameMenu [ Subprograms ]</h2>
+<a name="robo479"></a><h2>MUI/CreateGameMenu [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create the main game menu. Clear old elements and add all default
 </pre>
@@ -219,11 +222,11 @@
 
 <hr />
 <a name="MUI2fCreateGameUI"></a>
-<a name="robo485"></a><h2>MUI/CreateGameUI [ Subprograms ]</h2>
+<a name="robo480"></a><h2>MUI/CreateGameUI [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Create the game <a href="./goals-ui_ads.html#robo30">UI</a> and show sky map to the player
+<pre> Create the game UI and show sky map to the player
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>CreateGameUI</strong><span class="sign">;</span>
@@ -231,9 +234,9 @@
 
 <hr />
 <a name="MUI2fDeathConfirm"></a>
-<a name="robo486"></a><h2>MUI/DeathConfirm [ Subprograms ]</h2>
+<a name="robo481"></a><h2>MUI/DeathConfirm [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show stats or go to main menu on player character death
 </pre>
@@ -243,9 +246,9 @@
 
 <hr />
 <a name="MUI2fDrawMap"></a>
-<a name="robo487"></a><h2>MUI/DrawMap [ Subprograms ]</h2>
+<a name="robo482"></a><h2>MUI/DrawMap [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Draw map on the screen
 </pre>
@@ -255,9 +258,9 @@
 
 <hr />
 <a name="MUI2fSetKeys"></a>
-<a name="robo488"></a><h2>MUI/SetKeys [ Subprograms ]</h2>
+<a name="robo483"></a><h2>MUI/SetKeys [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set keyboard shortcuts
 </pre>
@@ -267,9 +270,9 @@
 
 <hr />
 <a name="MUI2fShowSkyMap"></a>
-<a name="robo490"></a><h2>MUI/ShowSkyMap [ Subprograms ]</h2>
+<a name="robo485"></a><h2>MUI/ShowSkyMap [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show sky map - draw map, update header, etc
 </pre>
@@ -283,11 +286,11 @@
 
 <hr />
 <a name="MUI2fUpdateHeader"></a>
-<a name="robo491"></a><h2>MUI/UpdateHeader [ Subprograms ]</h2>
+<a name="robo486"></a><h2>MUI/UpdateHeader [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Update the game information on the <a href="./goals-ui_ads.html#robo30">UI</a> header (time, crew, etc)
+<pre> Update the game information on the UI header (time, crew, etc)
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateHeader</strong><span class="sign">;</span>
@@ -295,15 +298,15 @@
 
 <hr />
 <a name="MUI2fUpdateMapInfo"></a>
-<a name="robo492"></a><h2>MUI/UpdateMapInfo [ Subprograms ]</h2>
+<a name="robo487"></a><h2>MUI/UpdateMapInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update information about map cell
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMapInfo</strong>
-     <span class="sign">(</span>X<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo304">PlayerShip</a><span class="sign">.</span>SkyX<span class="sign">;</span> Y<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo304">PlayerShip</a><span class="sign">.</span>SkyY<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>X<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span>SkyX<span class="sign">;</span> Y<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> <a href="../ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span>SkyY<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> X - X coordinate of the map cell
@@ -312,9 +315,9 @@
 
 <hr />
 <a name="MUI2fUpdateMoveButtons"></a>
-<a name="robo493"></a><h2>MUI/UpdateMoveButtons [ Subprograms ]</h2>
+<a name="robo488"></a><h2>MUI/UpdateMoveButtons [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo39">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">MUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Updated the player ship movement buttons
 </pre>
@@ -324,7 +327,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/maps-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Sep 06 2020 06:33:16
+<p>Generated from ./src/ui/maps-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
 </p>
 </div> <!-- footer -->
 </body>
