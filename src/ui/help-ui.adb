@@ -110,7 +110,7 @@ package body Help.UI is
          MenuAccelerators(6), MenuAccelerators(7), MenuAccelerators(8),
          MenuAccelerators(9), MapAccelerators(2), MenuAccelerators(12),
          MenuAccelerators(13), MenuAccelerators(14), MenuAccelerators(15),
-         MenuAccelerators(16), MapAccelerators(1), MenuAccelerators(16),
+         MenuAccelerators(15), MapAccelerators(1), MenuAccelerators(15),
          MapAccelerators(3), MapAccelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
