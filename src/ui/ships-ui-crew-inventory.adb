@@ -226,7 +226,7 @@ package body Ships.UI.Crew.Inventory is
               Positive'Image
                 (Member.Inventory(I).Amount *
                  Items_List(Member.Inventory(I).ProtoIndex).Weight) &
-              "}");
+              " kg}");
          Tcl.Tk.Ada.Grid.Grid
            (ItemLabel,
             "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
