@@ -21,7 +21,7 @@ if {$argc == 0} {
 
 # Check if correct target was set
 if {$target != "x86_64-linux-gnu" && $target != "x86_64-windows"} {
-   puts {Invalid compilation target. Allowed options are x86_64-linux-gnu and x86_64_windows}
+   puts {Invalid compilation target. Allowed options are x86_64-linux-gnu and x86_64-windows}
    return
 }
 
