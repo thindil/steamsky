@@ -63,20 +63,14 @@ package body Bases.SchoolUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: Ttk_PanedWindow;
-      SchoolCanvas: Tk_Canvas;
-      SchoolFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      SchoolFrame: Ttk_Frame := Get_Widget(Paned & ".schoolframe", Interp);
+      SchoolCanvas: constant Tk_Canvas :=
+        Get_Widget(SchoolFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       CrewView: Ttk_Tree_View;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      SchoolFrame.Interp := Interp;
-      SchoolFrame.Name := New_String(Widget_Image(Paned) & ".schoolframe");
-      SchoolCanvas.Interp := Interp;
-      SchoolCanvas.Name := New_String(Widget_Image(SchoolFrame) & ".canvas");
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -90,8 +84,7 @@ package body Bases.SchoolUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
-      CrewView.Interp := Interp;
-      CrewView.Name := New_String(Widget_Image(SchoolFrame) & ".crew.view");
+      CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
       for I in PlayerShip.Crew.Iterate loop
          Insert
@@ -150,18 +143,17 @@ package body Bases.SchoolUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CrewView, SkillsView: Ttk_Tree_View;
+      CrewView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.schoolframe.canvas.school.crew.view", Interp);
+      SkillsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.schoolframe.canvas.school.skills.view", Interp);
       Cost, MoneyIndex2, FirstIndex: Natural := 0;
-      MoneyLabel: Ttk_Label;
-      TrainButton: Ttk_Button;
+      MoneyLabel: constant Ttk_Label :=
+        Get_Widget(".paned.schoolframe.canvas.school.skills.money", Interp);
+      TrainButton: constant Ttk_Button :=
+        Get_Widget(".paned.schoolframe.canvas.school.skills.train", Interp);
    begin
-      CrewView.Interp := Interp;
-      CrewView.Name :=
-        New_String(".paned.schoolframe.canvas.school.crew.view");
       MemberIndex := Positive'Value(Selection(CrewView));
-      SkillsView.Interp := Interp;
-      SkillsView.Name :=
-        New_String(".paned.schoolframe.canvas.school.skills.view");
       Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
       for I in Skills_List.Iterate loop
          Cost := TrainCost(MemberIndex, SkillsData_Container.To_Index(I));
@@ -178,9 +170,6 @@ package body Bases.SchoolUI is
          end if;
       end loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      MoneyLabel.Interp := Interp;
-      MoneyLabel.Name :=
-        New_String(".paned.schoolframe.canvas.school.skills.money");
       if MoneyIndex2 > 0 then
          configure
            (MoneyLabel,
@@ -193,9 +182,6 @@ package body Bases.SchoolUI is
             "-text {You don't have any " & To_String(MoneyName) &
             " to pay for learning.}");
       end if;
-      TrainButton.Interp := Interp;
-      TrainButton.Name :=
-        New_String(".paned.schoolframe.canvas.school.skills.train");
       if Children(SkillsView, "{}") /= "{}" then
          Selection_Set(SkillsView, "[list" & Positive'Image(FirstIndex) & "]");
          configure(TrainButton, "-state normal");
@@ -229,12 +215,10 @@ package body Bases.SchoolUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      SkillsView: Ttk_Tree_View;
+      SkillsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.schoolframe.canvas.school.skills.view", Interp);
       SkillIndex: Positive;
    begin
-      SkillsView.Interp := Interp;
-      SkillsView.Name :=
-        New_String(".paned.schoolframe.canvas.school.skills.view");
       SkillIndex := Positive'Value(Selection(SkillsView));
       TrainSkill(MemberIndex, SkillIndex);
       UpdateMessages;
