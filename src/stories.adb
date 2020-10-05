@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -65,12 +65,11 @@ package body Stories is
             Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
          StoryNode := Item(NodesList, I);
          StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
-         if Get_Attribute(StoryNode, "action")'Length > 0 then
-            Action := DataAction'Value(Get_Attribute(StoryNode, "action"));
-         else
-            Action := ADD;
-         end if;
-         if (Action = UPDATE or Action = REMOVE) then
+         Action :=
+           (if Get_Attribute(StoryNode, "action")'Length > 0 then
+              DataAction'Value(Get_Attribute(StoryNode, "action"))
+            else ADD);
+         if (Action in UPDATE | REMOVE) then
             if not Stories_Container.Contains(Stories_List, StoryIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -118,12 +117,10 @@ package body Stories is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      TempRecord.StartData.Append(New_Item => Value);
@@ -146,12 +143,10 @@ package body Stories is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                case SubAction is
                   when ADD =>
                      TempRecord.ForbiddenFactions.Append(New_Item => Value);
@@ -178,12 +173,10 @@ package body Stories is
                ChildNode := Item(ChildNodes, J);
                TempStep.Index :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
-               if Get_Attribute(ChildNode, "action")'Length > 0 then
-                  SubAction :=
-                    DataAction'Value(Get_Attribute(ChildNode, "action"));
-               else
-                  SubAction := ADD;
-               end if;
+               SubAction :=
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                  else ADD);
                for K in TempRecord.Steps.Iterate loop
                   if TempRecord.Steps(K).Index = TempStep.Index then
                      StepIndex := Steps_Container.To_Index(K);
@@ -204,12 +197,10 @@ package body Stories is
                       (ChildNode, "finishdata");
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
-                     if Get_Attribute(StepNode, "action")'Length > 0 then
-                        SubSubAction :=
-                          DataAction'Value(Get_Attribute(StepNode, "action"));
-                     else
-                        SubSubAction := ADD;
-                     end if;
+                     SubSubAction :=
+                       (if Get_Attribute(StepNode, "action")'Length > 0 then
+                          DataAction'Value(Get_Attribute(StepNode, "action"))
+                        else ADD);
                      Value :=
                        To_Unbounded_String(Get_Attribute(StepNode, "name"));
                      case SubSubAction is
@@ -244,12 +235,10 @@ package body Stories is
                       (Item(ChildNodes, J), "text");
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
-                     if Get_Attribute(StepNode, "action")'Length > 0 then
-                        SubSubAction :=
-                          DataAction'Value(Get_Attribute(StepNode, "action"));
-                     else
-                        SubSubAction := ADD;
-                     end if;
+                     SubSubAction :=
+                       (if Get_Attribute(StepNode, "action")'Length > 0 then
+                          DataAction'Value(Get_Attribute(StepNode, "action"))
+                        else ADD);
                      Value :=
                        To_Unbounded_String
                          (Get_Attribute(StepNode, "condition"));
