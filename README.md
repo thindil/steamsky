@@ -18,14 +18,29 @@ There are currently 2 versions of the game:
 
 ## Build game from sources
 
+### Docker way
+
+You can use Docker images `adabuild` and `adabuildwin64` from the project
+[dockerada](https://github.com/thindil/dockerada). They contain all libraries
+and compiler needed to build the game.
+
+To build the game for Linux, download `adabuild` image and type in console:
+
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuild /bin/bash -c "cd /app && gprbuild -p -P steamsky.gpr -XMode=release"`
+
+To build the game for Windows 64-bit, download `adabuildwin64` image and type in console:
+
+`docker run --rm -v [path to source code]:/app ghcr.io/thindil/adabuildwin64 /bin/bash -c "cd /app && gprbuild -p -P steamsky.gpr -XMode=release --target=x86_64-windows"`
+
+### Classic way
+
 To build(works on Linux and Windows too) you need:
 
-* compiler - GCC with enabled Ada support or (best option) GNAT from:
+* compiler - GCC with enabled Ada support or GNAT from:
 
   https://www.adacore.com/download/
 
-  It is recommended that you use GNAT GPL 2019 to compile the game on Linux.
-  Game does not work with old compilers (like GCC 4.9) since it
+  The game does not work with old compilers (like GCC 4.9) since it
   lacks full support for Ada 2012
 
 * XmlAda - if you use GNAT from AdaCore it is included in package. In other
