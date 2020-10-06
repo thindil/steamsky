@@ -148,11 +148,10 @@ package body Trades is
       if BaseItemIndex = 0 then
          Price := Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
       else
-         if BaseIndex > 0 then
-            Price := SkyBases(BaseIndex).Cargo(BaseItemIndex).Price;
-         else
-            Price := TraderCargo(BaseItemIndex).Price;
-         end if;
+         Price :=
+           (if BaseIndex > 0 then
+              SkyBases(BaseIndex).Cargo(BaseItemIndex).Price
+            else TraderCargo(BaseItemIndex).Price);
       end if;
       if EventIndex > 0 and then Events_List(EventIndex).EType = DoublePrice
         and then Events_List(EventIndex).ItemIndex = ProtoIndex then
