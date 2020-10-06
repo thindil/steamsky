@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated README.md
 
+### Fixed
+- Showing keyboard shortcuts
+
 ## [5.3] - 2020-10-04
 
 ### Added
