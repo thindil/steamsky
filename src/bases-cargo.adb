@@ -25,7 +25,7 @@ package body Bases.Cargo is
    procedure GenerateCargo is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Population: constant Natural :=
+      Population: constant Positive :=
         (if SkyBases(BaseIndex).Population > 0 then
            SkyBases(BaseIndex).Population
          else 1);
@@ -63,11 +63,11 @@ package body Bases.Cargo is
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
              (To_Unbounded_String("blackmarket")) then
             declare
-               Amount: constant Positive :=
+               Amount: constant Positive range 1 .. 30 :=
                  (if Population < 150 then GetRandom(1, 10)
                   elsif Population < 300 then GetRandom(1, 20)
                   else GetRandom(1, 30));
-               ItemIndex: Natural;
+               ItemIndex: Natural range 0 .. Positive(Items_List.Length);
             begin
                for I in 1 .. Amount loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
@@ -98,7 +98,7 @@ package body Bases.Cargo is
          end if;
       else
          declare
-            Roll: Positive;
+            Roll: Positive range 1 .. 100;
             function GetMaxAmount(Amount: Positive) return Positive is
                MaxAmount: Natural;
             begin
@@ -115,12 +115,10 @@ package body Bases.Cargo is
                   Item.Amount :=
                     Item.Amount - GetRandom(1, GetMaxAmount(Item.Amount));
                elsif Roll < 60 and SkyBases(BaseIndex).Population > 0 then
-                  if Item.Amount = 0 then
-                     Item.Amount := GetRandom(1, 10) * Population;
-                  else
-                     Item.Amount :=
-                       Item.Amount + GetRandom(1, GetMaxAmount(Item.Amount));
-                  end if;
+                  Item.Amount :=
+                    (if Item.Amount = 0 then GetRandom(1, 10) * Population
+                     else Item.Amount +
+                       GetRandom(1, GetMaxAmount(Item.Amount)));
                end if;
             end loop;
          end;
@@ -133,7 +131,8 @@ package body Bases.Cargo is
       CargoIndex: Natural := 0) is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      ItemIndex: constant Natural :=
+      ItemIndex: constant Natural range 0 ..
+          Natural(SkyBases(BaseIndex).Cargo.Length) :=
         (if ProtoIndex /= Null_Unbounded_String then
            FindBaseCargo(ProtoIndex, Durability)
          else CargoIndex);
