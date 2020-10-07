@@ -252,13 +252,15 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName, RecruitFaction: Unbounded_String;
                   Gender: String(1 .. 1);
-                  Price, Payment, HomeBase: Positive;
+                  HomeBase: BasesRange;
+                  Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
-                  Index, Level: Natural;
+                  Index: SkillsData_Container.Extended_Index;
                   Inventory: UnboundedString_Container.Vector;
                   Equipment: Equipment_Array;
                   RecruitNode: Node;
+                  Level: Skill_Range;
                begin
                   Skills.Clear;
                   Attributes.Clear;
@@ -275,9 +277,11 @@ package body Bases.SaveLoad is
                      NodeName := To_Unbounded_String(Node_Name(RecruitNode));
                      if NodeName = To_Unbounded_String("skill") then
                         Index :=
-                          Natural'Value(Get_Attribute(RecruitNode, "index"));
+                          SkillsData_Container.Extended_Index'Value
+                            (Get_Attribute(RecruitNode, "index"));
                         Level :=
-                          Natural'Value(Get_Attribute(RecruitNode, "level"));
+                          Skill_Range'Value
+                            (Get_Attribute(RecruitNode, "level"));
                         Skills.Append(New_Item => (Index, Level, 0));
                      elsif NodeName = To_Unbounded_String("attribute") then
                         Level :=
@@ -300,7 +304,8 @@ package body Bases.SaveLoad is
                      end if;
                      if Get_Attribute(ChildNode, "homebase") /= "" then
                         HomeBase :=
-                          Positive'Value(Get_Attribute(ChildNode, "homebase"));
+                          BasesRange'Value
+                            (Get_Attribute(ChildNode, "homebase"));
                      end if;
                      if Get_Attribute(ChildNode, "faction") /= "" then
                         RecruitFaction :=
@@ -338,7 +343,7 @@ package body Bases.SaveLoad is
             elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
-                  TargetX, TargetY: Natural;
+                  TargetX, TargetY: Natural range 0 .. 1024;
                   Time, Reward: Positive;
                   Target: Integer;
                   Index: Unbounded_String;
@@ -404,14 +409,15 @@ package body Bases.SaveLoad is
                end;
             elsif NodeName = To_Unbounded_String("item") then
                declare
-                  Durability: Positive;
+                  Durability: Items_Durability;
                   Amount, Price: Natural;
                   ProtoIndex: Unbounded_String;
                begin
                   ProtoIndex :=
                     To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                   Durability :=
-                    Positive'Value(Get_Attribute(ChildNode, "durability"));
+                    Items_Durability'Value
+                      (Get_Attribute(ChildNode, "durability"));
                   Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
                   Price := Natural'Value(Get_Attribute(ChildNode, "price"));
                   SkyBases(BaseIndex).Cargo.Append
