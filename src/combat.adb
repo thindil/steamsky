@@ -935,8 +935,12 @@ package body Combat is
                   else Defender.Health - Damage);
             end if;
             AddMessage(To_String(AttackMessage), CombatMessage, MessageColor);
-            Attacker.Tired := Attacker.Tired + 1;
-            Defender.Tired := Defender.Tired + 1;
+            Attacker.Tired :=
+              (if Attacker.Tired + 1 > Skill_Range'Last then Skill_Range'Last
+               else Attacker.Tired + 1);
+            Defender.Tired :=
+              (if Defender.Tired + 1 > Skill_Range'Last then Skill_Range'Last
+               else Defender.Tired + 1);
             if PlayerAttack2 then
                PlayerShip.Crew(AttackerIndex) := Attacker;
                Enemy.Ship.Crew(DefenderIndex) := Defender;
