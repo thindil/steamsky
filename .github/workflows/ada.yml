@@ -5,7 +5,26 @@ on:
     branches: [ master ]
 
 jobs:
+
+   tests:
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuild:2020.1
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Build the tests
+      run: gprbuild -P tests/driver/test_driver.gpr
+
+    - name: Run the tests
+      run: others/tests.tcl 100
+
   build_linux:
+
+    needs: tests
 
     runs-on: ubuntu-latest
 
@@ -28,6 +47,8 @@ jobs:
          path: steamsky-development-linux.tar
 
   build_windows:
+
+    needs: tests
 
     runs-on: ubuntu-latest
 
