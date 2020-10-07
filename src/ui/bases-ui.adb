@@ -70,10 +70,13 @@ package body Bases.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: Ttk_PanedWindow;
-      BaseCanvas: Tk_Canvas;
-      BaseFrame: Ttk_Frame;
-      CloseButton, ActionButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      BaseFrame: Ttk_Frame := Get_Widget(Paned & ".baseframe", Interp);
+      BaseCanvas: constant Tk_Canvas :=
+        Get_Widget(BaseFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
+      ActionButton: Ttk_Button;
       SearchEntry: Ttk_Entry;
       ItemsView: Ttk_Tree_View;
       FirstIndex: Unbounded_String;
@@ -81,14 +84,6 @@ package body Bases.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      BaseFrame.Interp := Interp;
-      BaseFrame.Name := New_String(Widget_Image(Paned) & ".baseframe");
-      BaseCanvas.Interp := Interp;
-      BaseCanvas.Name := New_String(Widget_Image(BaseFrame) & ".canvas");
       if Winfo_Get(BaseCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -101,19 +96,15 @@ package body Bases.UI is
          return TCL_OK;
       end if;
       BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
-      SearchEntry.Interp := Interp;
-      SearchEntry.Name := New_String(Widget_Image(BaseFrame) & ".search");
+      SearchEntry := Get_Widget(BaseFrame & ".search", Interp);
       if CArgv.Arg(Argv, 1) /= "recipes" then
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
       else
          Tcl.Tk.Ada.Grid.Grid(SearchEntry);
       end if;
-      ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(Widget_Image(BaseFrame) & ".items.view");
+      ItemsView := Get_Widget(BaseFrame & ".items.view", Interp);
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
-      ActionButton.Interp := Interp;
-      ActionButton.Name :=
-        New_String(Widget_Image(BaseFrame) & ".info.accept");
+      ActionButton := Get_Widget(BaseFrame & ".info.accept", Interp);
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          for I in PlayerShip.Crew.Iterate loop
@@ -247,23 +238,22 @@ package body Bases.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      ItemsView: Ttk_Tree_View;
+      ItemsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.baseframe.canvas.base.items.view", Interp);
       FormattedTime, ItemIndex: Unbounded_String;
       Cost, Time: Natural := 0;
-      InfoLabel: Ttk_Label;
+      InfoLabel: Ttk_Label :=
+        Get_Widget(".paned.baseframe.canvas.base.info.info", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Natural;
-      ActionButton: Ttk_Button;
+      ActionButton: constant Ttk_Button :=
+        Get_Widget(".paned.baseframe.canvas.base.info.accept", Interp);
    begin
-      ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(".paned.baseframe.canvas.base.items.view");
       if Selection(ItemsView) = "" then
          return TCL_OK;
       end if;
       ItemIndex := To_Unbounded_String(Selection(ItemsView));
-      InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.info");
       if CArgv.Arg(Argv, 1) = "heal" then
          HealCost(Cost, Time, Natural'Value(To_String(ItemIndex)));
          if Time < 60 then
@@ -346,9 +336,6 @@ package body Bases.UI is
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.money");
-      ActionButton.Interp := Interp;
-      ActionButton.Name :=
-        New_String(".paned.baseframe.canvas.base.info.accept");
       if MoneyIndex2 > 0 then
          configure
            (InfoLabel,
@@ -393,11 +380,10 @@ package body Bases.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      ItemsView: Ttk_Tree_View;
+      ItemsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.baseframe.canvas.base.items.view", Interp);
       ItemIndex: Unbounded_String;
    begin
-      ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(".paned.baseframe.canvas.base.items.view");
       ItemIndex := To_Unbounded_String(Selection(ItemsView));
       if CArgv.Arg(Argv, 1) = "heal" then
          HealWounded(Natural'Value(To_String(ItemIndex)));
