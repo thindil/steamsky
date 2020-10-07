@@ -230,8 +230,7 @@ package body Ships.Upgrade is
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
-      UpgradedModule: ModuleData :=
-        PlayerShip.Modules(PlayerShip.UpgradeModule);
+      UpgradedModule: ModuleData;
       procedure FindMatsAndTools is
       begin
          UpgradeMaterial :=
@@ -253,10 +252,14 @@ package body Ships.Upgrade is
          GiveOrders(PlayerShip, WorkerIndex, Rest);
       end MaxUpgradeReached;
    begin
+      if PlayerShip.UpgradeModule = 0 then
+         return;
+      end if;
       WorkerIndex := FindMember(Upgrading);
       if WorkerIndex = 0 then
          return;
       end if;
+      UpgradedModule := PlayerShip.Modules(PlayerShip.UpgradeModule);
       CurrentMinutes := Minutes;
       OrderTime := PlayerShip.Crew(WorkerIndex).OrderTime;
       if UpgradedModule.Durability = 0 then
