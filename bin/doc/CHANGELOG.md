@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Showing keyboard shortcuts
 - Crash on the new turn
 - Crash during boarding when attacker or defender are too tired
+- Crash on selling items when no enough profit to pay crew members
 
 ## [5.3] - 2020-10-04
 
