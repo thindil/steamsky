@@ -79,33 +79,27 @@ package body BasesList is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: Ttk_PanedWindow;
-      BasesCanvas: Tk_Canvas;
-      BasesFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
-      ComboBox: Ttk_ComboBox;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".panded", Interp);
+      BasesFrame: Ttk_Frame := Get_Widget(Paned & ".basesframe", Interp);
+      BasesCanvas: constant Tk_Canvas :=
+        Get_Widget(BasesFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(BasesCanvas & ".bases.options.types");
       ComboValues, BaseValues, BasesType, BasesOwner, BasesStatus,
       BasesName: Unbounded_String;
-      BasesView: Ttk_Tree_View;
-      SearchEntry: Ttk_Entry;
+      BasesView: constant Ttk_Tree_View :=
+        Get_Widget(BasesCanvas & ".bases.list.view", Interp);
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(BasesCanvas & ".bases.options.search", Interp);
       FirstIndex: Natural := 0;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      BasesFrame.Interp := Interp;
-      BasesFrame.Name := New_String(Widget_Image(Paned) & ".basesframe");
-      BasesCanvas.Interp := Interp;
-      BasesCanvas.Name := New_String(Widget_Image(BasesFrame) & ".canvas");
-      ComboBox.Interp := Interp;
       if Winfo_Get(BasesCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "baseslist.tcl");
          Bind(BasesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         ComboBox.Name :=
-           New_String(Widget_Image(BasesCanvas) & ".bases.options.types");
          Append(ComboValues, " {Any}");
          for BaseType of BasesTypes_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");
@@ -127,17 +121,11 @@ package body BasesList is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      SearchEntry.Interp := Interp;
-      SearchEntry.Name :=
-        New_String(Widget_Image(BasesCanvas) & ".bases.options.search");
       if Argc = 1 or else CArgv.Arg(Argv, 1) /= "search" then
          Delete(SearchEntry, "0", "end");
       elsif CArgv.Arg(Argv, 1) = "search" then
          BasesName := To_Unbounded_String(CArgv.Arg(Argv, 2));
       end if;
-      BasesView.Interp := Interp;
-      BasesView.Name :=
-        New_String(Widget_Image(BasesCanvas) & ".bases.list.view");
       Delete(BasesView, "[list " & Children(BasesView, "{}") & "]");
       ComboBox.Name :=
         New_String(Widget_Image(BasesCanvas) & ".bases.options.types");
@@ -269,16 +257,20 @@ package body BasesList is
       pragma Unreferenced(ClientData, Argc, Argv);
       BaseInfo: Unbounded_String;
       BaseIndex: Positive;
-      BasesView: Ttk_Tree_View;
-      BaseLabel: Ttk_Label;
+      BasesView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.basesframe.canvas.bases.list.view", Interp);
+      BaseLabel: constant Ttk_Label :=
+        Get_Widget(".paned.basesframe.canvas.bases.base.info.text", Interp);
       procedure SetReputationText(ReputationText: String) is
-         ReputationBar: Ttk_ProgressBar;
-         ReputationLabel: Ttk_Label;
+         ReputationBar: Ttk_ProgressBar :=
+           Get_Widget
+             (".paned.basesframe.canvas.bases.base.info.minusreputation",
+              Interp);
+         ReputationLabel: constant Ttk_Label :=
+           Get_Widget
+             (".paned.basesframe.canvas.bases.base.info.reputationlbl",
+              Interp);
       begin
-         ReputationBar.Interp := Interp;
-         ReputationBar.Name :=
-           New_String
-             (".paned.basesframe.canvas.bases.base.info.minusreputation");
          if SkyBases(BaseIndex).Reputation(1) < 0 then
             configure
               (ReputationBar,
@@ -301,10 +293,6 @@ package body BasesList is
             Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
          end if;
          Add(ReputationBar, ReputationText);
-         ReputationLabel.Interp := Interp;
-         ReputationLabel.Name :=
-           New_String
-             (".paned.basesframe.canvas.bases.base.info.reputationlbl");
          if SkyBases(BaseIndex).Reputation(1) = 0 then
             configure(ReputationLabel, "-text {Reputation: Unknown}");
          else
@@ -322,11 +310,6 @@ package body BasesList is
          end if;
       end SetReputationText;
    begin
-      BasesView.Interp := Interp;
-      BasesView.Name := New_String(".paned.basesframe.canvas.bases.list.view");
-      BaseLabel.Interp := Interp;
-      BaseLabel.Name :=
-        New_String(".paned.basesframe.canvas.bases.base.info.text");
       if not GameSettings.ShowBaseInfo or Selection(BasesView)'Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(BaseLabel);
          return TCL_OK;
@@ -449,12 +432,10 @@ package body BasesList is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      BasesView: Ttk_Tree_View;
-      BaseIndex: Positive;
+      BasesView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.basesframe.canvas.bases.list.view", Interp);
+      BaseIndex: constant Positive := Positive'Value(Selection(BasesView));
    begin
-      BasesView.Interp := Interp;
-      BasesView.Name := New_String(".paned.basesframe.canvas.bases.list.view");
-      BaseIndex := Positive'Value(Selection(BasesView));
       CenterX := SkyBases(BaseIndex).SkyX;
       CenterY := SkyBases(BaseIndex).SkyY;
       ShowSkyMap(True);
@@ -486,12 +467,10 @@ package body BasesList is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      BasesView: Ttk_Tree_View;
-      BaseIndex: Positive;
+      BasesView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.basesframe.canvas.bases.list.view", Interp);
+      BaseIndex: constant Positive := Positive'Value(Selection(BasesView));
    begin
-      BasesView.Interp := Interp;
-      BasesView.Name := New_String(".paned.basesframe.canvas.bases.list.view");
-      BaseIndex := Positive'Value(Selection(BasesView));
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
          ShowMessage("You are at this base now.");
