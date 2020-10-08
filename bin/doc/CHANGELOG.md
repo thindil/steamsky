@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash during boarding when attacker or defender are too tired
+
 ## [5.0.6] - 2020-09-20
 
 ### Fixed
