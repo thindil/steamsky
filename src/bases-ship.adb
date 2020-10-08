@@ -29,8 +29,9 @@ package body Bases.Ship is
 
    procedure RepairShip(ModuleIndex: Integer) is
       Cost, Time: Natural := 0;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      TraderIndex: constant Positive := FindMember(Talk);
+      MoneyIndex2: constant Inventory_Container.Extended_Index :=
+        FindItem(PlayerShip.Cargo, MoneyIndex);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       RepairCost(Cost, Time, ModuleIndex);
       if Cost = 0 then
@@ -73,10 +74,13 @@ package body Bases.Ship is
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      TraderIndex: constant Positive := FindMember(Talk);
-      HullIndex, ModulesAmount, ShipModuleIndex: Positive;
-      FreeTurretIndex, Price: Natural := 0;
+      MoneyIndex2: constant Inventory_Container.Extended_Index :=
+        FindItem(PlayerShip.Cargo, MoneyIndex);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      HullIndex, ShipModuleIndex: Modules_Container.Extended_Index;
+      FreeTurretIndex: Modules_Container.Extended_Index := 0;
+      ModulesAmount: Positive;
+      Price: Natural := 0;
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Owners: Natural_Container.Vector;
@@ -194,8 +198,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        TrainedSkill => 0));
+                        UpgradeAction => NONE, TrainedSkill => 0));
                when COCKPIT =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -217,8 +220,7 @@ package body Bases.Ship is
                         Durability => Modules_List(ModuleIndex).Durability,
                         MaxDurability => Modules_List(ModuleIndex).Durability,
                         Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
-                        GunIndex => 0));
+                        UpgradeAction => NONE, GunIndex => 0));
                when CABIN =>
                   PlayerShip.Modules.Append
                     (New_Item =>
@@ -449,9 +451,10 @@ package body Bases.Ship is
    procedure PayForDock is
       BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Inventory_Container.Extended_Index :=
+        FindItem(PlayerShip.Cargo, MoneyIndex);
       DockingCost: Natural;
-      TraderIndex: constant Natural := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       if SkyBases(BaseIndex).Population = 0 then
          return;
