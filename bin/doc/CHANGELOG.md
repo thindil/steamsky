@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Crash on the new turn
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
+- Showing orders keyboard shortcut in Firsts Steps in help
 
 ## [5.3] - 2020-10-04
 
