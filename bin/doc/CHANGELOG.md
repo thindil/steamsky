@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
+- Sorting crew members in schools
 
 ## [5.0.6] - 2020-09-20
 
