@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -63,7 +63,7 @@ package body Bases.SchoolUI is
       if CrewIter = Null_Iter then
          return;
       end if;
-      CrewIndex := Natural'Value(To_String(Get_Path(CrewModel, CrewIter))) + 1;
+      CrewIndex := Positive(Get_Int(CrewModel, CrewIter, 1));
       Clear(SkillsList);
       for I in Skills_List.Iterate loop
          Cost := Gint(TrainCost(CrewIndex, SkillsData_Container.To_Index(I)));
@@ -156,9 +156,10 @@ package body Bases.SchoolUI is
         Gtk_List_Store(Get_Object(Builder, "crewlist"));
    begin
       Clear(CrewList);
-      for Member of PlayerShip.Crew loop
+      for I in PlayerShip.Crew.Iterate loop
          Append(CrewList, CrewIter);
-         Set(CrewList, CrewIter, 0, To_String(Member.Name));
+         Set(CrewList, CrewIter, 0, To_String(PlayerShip.Crew(I).Name));
+         Set(CrewList, CrewIter, 1, Gint(Crew_Container.To_Index(I)));
       end loop;
       Set_Visible_Child_Name
         (Gtk_Stack(Get_Object(Builder, "gamestack")), "school");
