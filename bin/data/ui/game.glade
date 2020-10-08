@@ -486,6 +486,8 @@ along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
     <columns>
       <!-- column-name gchararray1 -->
       <column type="gchararray"/>
+      <!-- column-name guint1 -->
+      <column type="guint"/>
     </columns>
   </object>
   <object class="GtkListStore" id="crewlist1">
