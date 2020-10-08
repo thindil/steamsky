@@ -168,13 +168,14 @@ package body Trades is
       CountPrice(Profit, TraderIndex, False);
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Payment(2) > 0 then
-            if Profit = 0 then
+            if Profit < 1 then
                UpdateMorale
                  (PlayerShip, Crew_Container.To_Index(I), GetRandom(-25, -5));
                AddMessage
                  (To_String(PlayerShip.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",
                   TradeMessage, RED);
+               Profit := 0;
                goto End_Of_Loop;
             end if;
             Profit :=
