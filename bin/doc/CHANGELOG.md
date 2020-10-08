@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing keyboard shortcuts
 - Crash on the new turn
+- Crash during boarding when attacker or defender are too tired
 
 ## [5.3] - 2020-10-04
 
