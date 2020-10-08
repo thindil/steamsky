@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
 - Sorting crew members in schools
+- Showing orders keyboard shortcut in Firsts Steps in help
 
 ## [5.0.6] - 2020-09-20
 
