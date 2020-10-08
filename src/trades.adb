@@ -169,6 +169,10 @@ package body Trades is
       CountPrice(Profit, TraderIndex, False);
       for Member of PlayerShip.Crew loop
          if Member.Payment(2) > 0 then
+            if Profit < 1 then
+               Profit := 0;
+               exit;
+            end if;
             Profit :=
               Profit -
               Positive
