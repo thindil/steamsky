@@ -105,7 +105,8 @@ package body Combat.UI is
       LoopStart: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
-      MessagesView: Tk_Text;
+      MessagesView: constant Tk_Text :=
+        Get_Widget(".paned.controls.messages.view");
       procedure ShowMessage is
          TagNames: constant array(1 .. 5) of Unbounded_String :=
            (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
@@ -130,8 +131,6 @@ package body Combat.UI is
          end if;
       end ShowMessage;
    begin
-      MessagesView.Interp := Get_Context;
-      MessagesView.Name := New_String(".paned.controls.messages.view");
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if LoopStart = 0 then
@@ -177,9 +176,11 @@ package body Combat.UI is
    procedure UpdateCombatUI is
       -- ****
       Tokens: Slice_Set;
-      Frame, Item: Ttk_Frame;
+      Frame: Ttk_Frame :=
+        Get_Widget(".paned.combatframe.canvas.combat.left.crew");
+      Item: Ttk_Frame;
       Label: Ttk_Label;
-      ComboBox: Ttk_ComboBox;
+      ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
         (To_Unbounded_String("{Don't shoot"),
          To_Unbounded_String("{Precise fire "),
@@ -255,11 +256,7 @@ package body Combat.UI is
          return To_String(CrewList);
       end GetCrewList;
    begin
-      Frame.Interp := Get_Context;
       Item.Interp := Get_Context;
-      Frame.Name := New_String(".paned.combatframe.canvas.combat.left.crew");
-      ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotcrew");
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
       ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorder");
@@ -277,8 +274,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
          end loop;
       end loop;
@@ -379,8 +375,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
          end loop;
       end loop;
@@ -574,8 +569,7 @@ package body Combat.UI is
                Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
                " ");
             for J in 1 .. Slice_Count(Tokens) loop
-               Item.Interp := Get_Context;
-               Item.Name := New_String(Slice(Tokens, J));
+               Item := Get_Widget(Slice(Tokens, J));
                Destroy(Item);
             end loop;
          end loop;
@@ -664,13 +658,10 @@ package body Combat.UI is
    -- SOURCE
    procedure ShowCombatFrame(FrameName: String) is
       -- ****
-      CombatCanvas: Tk_Canvas;
-      CombatFrame: Ttk_Frame;
+      CombatCanvas: constant Tk_Canvas :=
+        Get_Widget(".paned.combatframe.canvas");
+      CombatFrame: constant Ttk_Frame := Get_Widget(CombatCanvas & FrameName);
    begin
-      CombatCanvas.Interp := Get_Context;
-      CombatCanvas.Name := New_String(".paned.combatframe.canvas");
-      CombatFrame.Interp := Get_Context;
-      CombatFrame.Name := New_String(Widget_Image(CombatCanvas) & FrameName);
       Canvas_Create
         (CombatCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
@@ -688,17 +679,16 @@ package body Combat.UI is
    procedure UpdateBoardingUI is
       -- ****
       OrdersList, OrderName, Tooltip: Unbounded_String;
+      Frame: Ttk_Frame :=
+        Get_Widget(".paned.combatframe.canvas.boarding.right.enemy");
       Label: Ttk_Label;
-      Frame, Item: Ttk_Frame;
+      Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
       ComboBox: Ttk_ComboBox;
       OrderIndex: Positive := 1;
    begin
-      Frame.Interp := Get_Context;
-      Frame.Name :=
-        New_String(".paned.combatframe.canvas.boarding.right.enemy");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -707,8 +697,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
          end loop;
       end loop;
@@ -765,8 +754,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
          end loop;
       end loop;
@@ -847,20 +835,15 @@ package body Combat.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Button: Ttk_Button;
-      Frame: Ttk_Frame;
-      CombatCanvas: Tk_Canvas;
+      CombatCanvas: constant Tk_Canvas :=
+        Get_Widget(".paned.combatframe.canvas", Interp);
+      Frame: Ttk_Frame := Get_Widget(CombatCanvas & ".combat", Interp);
+      Button: Ttk_Button := Get_Widget(Frame & ".next", Interp);
    begin
       CombatTurn;
       UpdateHeader;
-      CombatCanvas.Interp := Interp;
-      CombatCanvas.Name := New_String(".paned.combatframe.canvas");
-      Frame.Interp := Interp;
-      Frame.Name := New_String(Widget_Image(CombatCanvas) & ".combat");
       if EndCombat then
          UpdateCombatUI;
-         Button.Interp := Interp;
-         Button.Name := New_String(Widget_Image(Frame) & ".next");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name := New_String(".header.closebutton");
          configure(Button, "-command {ShowSkyMap}");
@@ -1037,13 +1020,12 @@ package body Combat.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Combobox: Ttk_ComboBox;
-   begin
-      Combobox.Interp := Interp;
-      Combobox.Name :=
-        New_String
+      Combobox: constant Ttk_ComboBox :=
+        Get_Widget
           (".paned.combatframe.canvas.boarding.left.crew.order" &
-           CArgv.Arg(Argv, 1));
+           CArgv.Arg(Argv, 1),
+           Interp);
+   begin
       if Natural'Value(Current(Combobox)) + 1 >
         Natural(Enemy.Ship.Crew.Length) then
          BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) := -1;
@@ -1055,10 +1037,11 @@ package body Combat.UI is
    end Set_Boarding_Order_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      CombatCanvas: Tk_Canvas;
-      CombatFrame: Ttk_Frame;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
+      CombatCanvas: constant Tk_Canvas := Get_Widget(CombatFrame & ".canvas");
+      Label: constant Ttk_Label :=
+        Get_Widget(CombatCanvas & ".combat.right.enemy.description");
       CombatStarted: Boolean;
       Button: Ttk_Button;
    begin
@@ -1081,17 +1064,6 @@ package body Combat.UI is
                return;
             end if;
          end if;
-         Paned.Interp := Get_Context;
-         Paned.Name := New_String(".paned");
-         CombatFrame.Interp := Get_Context;
-         CombatFrame.Name := New_String(Widget_Image(Paned) & ".combatframe");
-         CombatCanvas.Interp := Get_Context;
-         CombatCanvas.Name :=
-           New_String(Widget_Image(CombatFrame) & ".canvas");
-         Label.Interp := Get_Context;
-         Label.Name :=
-           New_String
-             (Widget_Image(CombatCanvas) & ".combat.right.enemy.description");
          if Winfo_Get(Label, "exists") = "0" then
             Tcl_EvalFile
               (Get_Context,
