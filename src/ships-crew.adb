@@ -184,7 +184,12 @@ package body Ships.Crew is
       if GivenOrder /= Rest and
         ((Ship.Crew(MemberIndex).Morale(1) < 11 and GetRandom(1, 100) < 50) or
          Ship.Crew(MemberIndex).Loyalty < 20) then
-         raise Crew_Order_Error with MemberName & " refuses to execute order.";
+         if Ship = PlayerShip then
+            raise Crew_Order_Error
+              with MemberName & " refuses to execute order.";
+         else
+            return;
+         end if;
       end if;
       if GivenOrder = Train
         and then Ship.Modules(ModuleIndex).TrainedSkill = 0 then
