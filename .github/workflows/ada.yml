@@ -16,6 +16,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Install gnattest
+      run: |
+         apt update
+         apt install -y asis-programs
+
+    - name: Generate tests
+      run: gnattest -P steamsky.gpr
+
     - name: Build the tests
       run: gprbuild -P tests/driver/test_driver.gpr
 
