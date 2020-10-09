@@ -286,7 +286,10 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-
+      EnemyShip: ShipRecord :=
+        CreateShip
+          (To_Unbounded_String("2"), Null_Unbounded_String, 10, 10,
+           FULL_SPEED);
    begin
 
       GiveOrders(PlayerShip, 1, Rest);
@@ -295,6 +298,9 @@ package body Ships.Crew.Test_Data.Tests is
       GiveOrders(PlayerShip, 4, Rest);
       Assert
         (PlayerShip.Crew(4).Order = Rest, "Failed to give order to gunner.");
+      EnemyShip.Crew(1).Morale(1) := 5;
+      GiveOrders(EnemyShip, 1, Talk);
+      Assert(True, "This test can only crash");
 
 --  begin read only
    end Test_GiveOrders_test_giveorders;
