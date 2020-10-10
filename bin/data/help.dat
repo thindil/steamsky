@@ -116,7 +116,7 @@ If destination is not set, pressing key {GameKey 5} allow you to wait 1 game min
 
 {u}Discovering new bases{/u}
    At game start, you know only one base. You can discover others by flying on it or by asking for other bases in current base. To ask, press {GameKey 14} key and then select option {b}'Ask for bases'{/b}. You can ask for other bases only once in each base. Each ask take 30 minutes of game time. Amount of discovered bases depends on current base size (in larger bases they know more other bases). From time to time you can meet friendly trader ship, which you can ask for bases too.
-As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. All bases marked on map as {b}'o'{/b}.
+As you fly near bases (you are in this same cell where base is), you discover they types and then they will be colored on sky map (e.g. Agricultural bases are green). Unvisited bases are in default text color. Symbol of the bases on map represents the faction to which the base belongs.
 
 {u}Reputation in bases{/u}
    You can gain or lost reputation with each base. Generally, you gain reputation when you interact with base (trade, repair ship, recruit new crew members, ask for events, etc.). You can check your reputation level in your list of known bases. If your reputation with base is low, you can't dock to that base. You gain (or lose) reputation twice times faster in your home base ship. You may check which base is your home base in ship info screen (press key {GameKey 11}). You may change your home base anytime you are docked to base - it base cost is 1000 {MoneyName}.
