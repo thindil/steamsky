@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated MODDING.md
+
 ### Fixed
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
