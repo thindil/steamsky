@@ -144,18 +144,21 @@ package body Bases is
    procedure GenerateRecruits is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxRecruits, RecruitsAmount, SkillsAmount, SkillNumber, SkillLevel,
-      HighestSkill, HighestLevel, RecruitBase: Positive;
+      RecruitBase: BasesRange;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
       Price, Payment: Natural;
-      SkillIndex, MaxSkillAmount: Integer;
+      SkillIndex: Integer range -1 .. Integer'Last;
       Attributes: Attributes_Container.Vector;
       Inventory, TempTools: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
-      MaxSkillLevel: Integer;
+      MaxSkillLevel: Integer range -100 .. 100;
+      SkillLevel, HighestLevel: Skill_Range;
       RecruitFaction: Unbounded_String;
+      MaxRecruits, RecruitsAmount: Positive range 1 .. 30;
+      MaxSkillAmount, SkillsAmount, SkillNumber,
+      HighestSkill: Skills_Container.Extended_Index;
       procedure AddInventory
         (ItemsIndexes: UnboundedString_Container.Vector;
          EquipIndex: Positive) is
@@ -319,12 +322,14 @@ package body Bases is
    procedure AskForBases is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Radius, TempX, TempY: Integer;
-      Amount, TmpBaseIndex, TraderIndex: Natural;
+      TmpBaseIndex: Extended_BaseRange;
       ShipIndex: Unbounded_String;
-      UnknownBases: Natural := 0;
+      UnknownBases: Extended_BaseRange := 0;
+      TraderIndex: constant Natural := FindMember(Talk);
+      Amount: Natural range 0 .. 40;
+      Radius: Integer range -40 .. 40;
+      TempX, TempY: Integer range -40 .. BasesRange'Last + 40;
    begin
-      TraderIndex := FindMember(Talk);
       if TraderIndex = 0 then
          return;
       end if;
@@ -429,17 +434,20 @@ package body Bases is
    end AskForBases;
 
    procedure AskForEvents is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MaxEvents, EventsAmount, TmpBaseIndex, EventX, EventY, EventTime, DiffX,
-      DiffY: Positive;
+      EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
-      MinX, MinY, MaxX, MaxY, ItemIndex: Integer;
+      MinX, MinY, MaxX, MaxY: Integer range -100 .. 1124;
       Enemies: UnboundedString_Container.Vector;
-      Attempts, TraderIndex: Natural;
+      Attempts: Natural range 0 .. 10;
       NewItemIndex, ShipIndex: Unbounded_String;
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      MaxEvents, EventsAmount: Positive range 1 .. 15;
+      TmpBaseIndex: BasesRange;
+      EventX, EventY: Positive range 1 .. 1024;
+      ItemIndex: Integer;
    begin
-      TraderIndex := FindMember(Talk);
       if TraderIndex = 0 then
          return;
       end if;
@@ -644,7 +652,8 @@ package body Bases is
    procedure UpdatePrices is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Chance, Roll: Positive;
+      Roll: Positive range 1 .. 100;
+      Chance: Positive;
    begin
       if SkyBases(BaseIndex).Population = 0 then
          return;
