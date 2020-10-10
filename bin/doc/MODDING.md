@@ -483,11 +483,11 @@ Value must be an existing skill name.
   keys in order: move ship up/left, move ship up, move ship up/right, move
   ship left, move ship one field or wait 1 minute, move ship right, move ship
   down/left, move ship down, move ship down/right, move ship to destination,
-  show ship info, show cargo info, show crew info, show ship orders, show
-  crafting menu, show last messages, show know bases, show known events, show
-  accepted missions, move map position, show game statistics, show help, show
+  show ship info, show cargo info, show ship orders, show crafting menu, show 
+  last messages, show know bases, show known events, show accepted missions,
+  show know stories, move map position, show game statistics, show help, show
   game options, quit from game, resign from game, show menu, show wait orders,
-  zoom out, zoom in. Example: `{GameKey 10}` will be translated to key used
+  zoom out, zoom in. Example: `{GameKey 10}` will be translated to key used 
   for auto move ship.
 - Inside help text you can use special variables: `{MoneyName}` which later
   will be replaced with name of game money, `{FuelName}` which later will be
