@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated README.md
 - Updated help
+- Updated MODDING.md
 
 ### Fixed
 - Showing keyboard shortcuts
