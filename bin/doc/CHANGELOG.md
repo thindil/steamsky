@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Sorting crew members in schools
 - Showing orders keyboard shortcut in Firsts Steps in help
 - Crash in combat when enemy crew member has too low morale
+- Info about bases symbols on map in help
 
 ## [5.0.6] - 2020-09-20
 
