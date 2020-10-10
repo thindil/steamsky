@@ -70,15 +70,18 @@ package body Crafts.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: Ttk_PanedWindow;
-      CraftsCanvas: Tk_Canvas;
-      CraftsFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      CraftsFrame: Ttk_Frame := Get_Widget(Paned & ".craftframe", Interp);
+      CraftsCanvas: constant Tk_Canvas :=
+        Get_Widget(CraftsFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       Studies, Deconstructs: UnboundedString_Container.Vector;
       CanCraft: Boolean;
       Recipe: Craft_Data;
       CargoIndex: Natural;
-      RecipesView: Ttk_Tree_View;
+      RecipesView: constant Ttk_Tree_View :=
+        Get_Widget(CraftsCanvas & ".craft.list.view", Interp);
       FirstIndex: Unbounded_String;
       procedure CheckTool(ToolNeeded: Unbounded_String) is
       begin
@@ -97,14 +100,6 @@ package body Crafts.UI is
          end if;
       end CheckTool;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      CraftsFrame.Interp := Interp;
-      CraftsFrame.Name := New_String(Widget_Image(Paned) & ".craftframe");
-      CraftsCanvas.Interp := Interp;
-      CraftsCanvas.Name := New_String(Widget_Image(CraftsFrame) & ".canvas");
       if Winfo_Get(CraftsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -134,9 +129,6 @@ package body Crafts.UI is
             end if;
          end loop;
       end loop;
-      RecipesView.Interp := Interp;
-      RecipesView.Name :=
-        New_String(Widget_Image(CraftsCanvas) & ".craft.list.view");
       Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          CanCraft := False;
@@ -273,9 +265,12 @@ package body Crafts.UI is
       MaxAmount: Positive;
       MType: ModuleType;
       RecipeIndex, ModulesList: Unbounded_String;
-      AmountBox: Ttk_SpinBox;
-      MaxLabel: Ttk_Label;
-      ModulesBox: Ttk_ComboBox;
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set.amount");
+      MaxLabel: constant Ttk_Label :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set.maxamount");
+      ModulesBox: constant Ttk_ComboBox :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set.workshop");
    begin
       if Element(Index, 1) = '{' then
          RecipeIndex := Unbounded_Slice(Index, 2, Length(Index) - 1);
@@ -283,18 +278,12 @@ package body Crafts.UI is
          RecipeIndex := Index;
       end if;
       MaxAmount := CheckRecipe(RecipeIndex);
-      AmountBox.Interp := Get_Context;
-      AmountBox.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.set.amount");
       Set(AmountBox, "1");
       configure
         (AmountBox,
          "-to" & Positive'Image(MaxAmount) &
          " -validatecommand {ValidateSpinbox %S %s" &
          Positive'Image(MaxAmount) & "}");
-      MaxLabel.Interp := Get_Context;
-      MaxLabel.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.set.maxamount");
       if MaxAmount > 1 then
          configure
            (MaxLabel, "-text {max (" & Positive'Image(MaxAmount) & ")}");
@@ -322,9 +311,6 @@ package body Crafts.UI is
             Append(ModulesList, " {" & Module.Name & "}");
          end if;
       end loop;
-      ModulesBox.Interp := Get_Context;
-      ModulesBox.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.set.workshop");
       configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
       Current(ModulesBox, "0");
    exception
@@ -370,24 +356,22 @@ package body Crafts.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      RecipesView: Ttk_Tree_View;
+      RecipesView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.craftframe.canvas.craft.list.view", Interp);
       WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
       HaveTool: Boolean := False;
       TextLength: Positive;
-      RecipeText: Tk_Text;
-      CraftFrame: Ttk_Frame;
-      ErrorLabel: Ttk_Label;
+      RecipeText: constant Tk_Text :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.info.text", Interp);
+      CraftFrame: constant Ttk_Frame :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set", Interp);
+      ErrorLabel: constant Ttk_Label :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.error", Interp);
    begin
-      RecipesView.Interp := Interp;
-      RecipesView.Name :=
-        New_String(".paned.craftframe.canvas.craft.list.view");
       RecipeIndex := To_Unbounded_String(Selection(RecipesView));
-      RecipeText.Interp := Interp;
-      RecipeText.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.info.text");
       configure(RecipeText, "-state normal");
       Delete(RecipeText, "1.0", "end");
       if Length(RecipeIndex) > 6
@@ -593,11 +577,6 @@ package body Crafts.UI is
         (RecipeText, "end",
          "{" & LF & "Time needed:" & Positive'Image(Recipe.Time) &
          " minutes}");
-      CraftFrame.Interp := Interp;
-      CraftFrame.Name := New_String(".paned.craftframe.canvas.craft.item.set");
-      ErrorLabel.Interp := Interp;
-      ErrorLabel.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.error");
       if HaveMaterials and HaveTool and HaveWorkplace then
          ShowSetRecipe(RecipeIndex);
          Tcl.Tk.Ada.Grid.Grid(CraftFrame);
@@ -650,25 +629,19 @@ package body Crafts.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      RecipesView: Ttk_Tree_View;
+      RecipesView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.craftframe.canvas.craft.list.view", Interp);
       RecipeIndex: Unbounded_String;
-      ModulesBox: Ttk_ComboBox;
-      AmountBox: Ttk_SpinBox;
+      ModulesBox: constant Ttk_ComboBox :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set.workshop");
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".paned.craftframe.canvas.craft.item.set.amount", Interp);
    begin
-      RecipesView.Interp := Interp;
-      RecipesView.Name :=
-        New_String(".paned.craftframe.canvas.craft.list.view");
       RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
-      AmountBox.Interp := Interp;
-      AmountBox.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.set.amount");
-      ModulesBox.Interp := Interp;
-      ModulesBox.Name :=
-        New_String(".paned.craftframe.canvas.craft.item.set.workshop");
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
