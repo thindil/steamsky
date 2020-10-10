@@ -3,6 +3,7 @@
 --  automatically. Contents of this package can be modified in any way
 --  except for sections surrounded by a 'read only' marker.
 
+with Ada.Directories; use Ada.Directories;
 with Ada.Text_IO; use Ada.Text_IO;
 with Config; use Config;
 
@@ -16,6 +17,7 @@ package body Game.Test_Data is
       end if;
       DataDirectory := To_Unbounded_String("../../bin/data/");
       SaveDirectory := To_Unbounded_String("../../bin/data/saves/");
+      Create_Path(To_String(SaveDirectory));
       DocDirectory := To_Unbounded_String("../../bin/doc/");
       ModsDirectory := To_Unbounded_String("../../bin/data/mods/");
       ThemesDirectory := To_Unbounded_String("../../bin/data/themes/");
