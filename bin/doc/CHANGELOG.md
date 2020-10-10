@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Crash on selling items when no enough profit to pay crew members
 - Showing orders keyboard shortcut in Firsts Steps in help
 - Crash in combat when enemy crew member has too low morale
+- Info about bases symbols on map in help
 
 ## [5.3] - 2020-10-04
 
