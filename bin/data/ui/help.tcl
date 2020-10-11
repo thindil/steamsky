@@ -11,9 +11,9 @@ pack [ttk::treeview .help.paned.topics.view -show tree -yscrollcommand [list .he
 .help.paned add [ttk::frame .help.paned.content]
 pack [ttk::scrollbar .help.paned.content.scroll -orient vertical -command [list .help.paned.content.view yview]] -side right -fill y
 set helpview [text .help.paned.content.view -wrap word -yscrollcommand [list .help.paned.content.scroll set] -font HelpFont -width 70]
-$helpview tag configure special -foreground yellow -font {-family Roboto -size 14 -weight bold}
-$helpview tag configure bold -font {-family Roboto -size 14 -weight bold}
-$helpview tag configure underline -font {-family Roboto -size 14 -underline true}
-$helpview tag configure italic -font {-family Roboto -size 14 -slant italic}
+$helpview tag configure special -foreground yellow -font BoldHelpFont
+$helpview tag configure bold -font BoldHelpFont
+$helpview tag configure underline -font UnderlineHelpFont
+$helpview tag configure italic -font ItalicHelpFont
 pack $helpview -side top -fill both
 bind .help <Escape> {CloseHelp}
