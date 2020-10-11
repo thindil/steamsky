@@ -272,7 +272,10 @@ package body Combat is
       DamageRange: Positive := 10000;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
-         GunnerIndex, Shoots, AmmoIndex, ArmorIndex, WeaponIndex: Natural;
+         GunnerIndex: Crew_Container.Extended_Index;
+         AmmoIndex: Inventory_Container.Extended_Index;
+         ArmorIndex, WeaponIndex: Modules_Container.Extended_Index;
+         Shoots: Natural;
          GunnerOrder: Positive;
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
          Damage: DamageFactor := 0.0;
@@ -847,7 +850,7 @@ package body Combat is
             end if;
             if Attacker.Equipment(1) = 0 then
                declare
-                  DamageBonus: Integer :=
+                  DamageBonus: Natural :=
                     GetSkillLevel(Attacker, UnarmedSkill) / 200;
                begin
                   if DamageBonus = 0 then
@@ -1543,7 +1546,7 @@ package body Combat is
               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
          end if;
          declare
-            LostReputationChance: Positive := 10;
+            LostReputationChance: Positive range 10 .. 40 := 10;
          begin
             if ProtoShips_List(EnemyShipIndex).Owner =
               PlayerShip.Crew(1).Faction then
