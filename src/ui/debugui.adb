@@ -77,23 +77,20 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ProtoEntry: Ttk_Entry;
-      ModuleCombo: Ttk_ComboBox;
+      ProtoEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.ship.proto", Interp);
+      ModuleCombo: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.ship.module", Interp);
       ModuleIndex: Positive;
-      SpinBox: Ttk_SpinBox;
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.ship.weight", Interp);
    begin
-      ModuleCombo.Interp := Interp;
-      ModuleCombo.Name := New_String(".debugdialog.main.ship.module");
       ModuleIndex := Natural'Value(Current(ModuleCombo)) + 1;
-      ProtoEntry.Interp := Interp;
-      ProtoEntry.Name := New_String(".debugdialog.main.ship.proto");
       Delete(ProtoEntry, "0", "end");
       Insert
         (ProtoEntry, "0",
          To_String
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Name));
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.ship.weight");
       Set(SpinBox, Positive'Image(PlayerShip.Modules(ModuleIndex).Weight));
       SpinBox.Name := New_String(".debugdialog.main.ship.dur");
       Set(SpinBox, Integer'Image(PlayerShip.Modules(ModuleIndex).Durability));
@@ -133,9 +130,13 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ComboBox: Ttk_ComboBox;
-      SpinBox: Ttk_SpinBox;
-      MemberFrame, Item: Ttk_Frame;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.crew.member", Interp);
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.crew.health", Interp);
+      MemberFrame: Ttk_Frame :=
+        Get_Widget(".debugdialog.main.crew.stats", Interp);
+      Item: Ttk_Frame;
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
@@ -143,11 +144,7 @@ package body DebugUI is
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".debugdialog.main.crew.member");
       Member := PlayerShip.Crew(Natural'Value(Current(ComboBox)) + 1);
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.crew.health");
       Set(SpinBox, Positive'Image(Member.Health));
       SpinBox.Name := New_String(".debugdialog.main.crew.thirst");
       Set(SpinBox, Positive'Image(Member.Thirst));
@@ -159,8 +156,6 @@ package body DebugUI is
       Set(SpinBox, Positive'Image(Member.Morale(1)));
       SpinBox.Name := New_String(".debugdialog.main.crew.loyalty");
       Set(SpinBox, Positive'Image(Member.Loyalty));
-      MemberFrame.Interp := Interp;
-      MemberFrame.Name := New_String(".debugdialog.main.crew.stats");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -170,8 +165,7 @@ package body DebugUI is
               (MemberFrame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Interp;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J), Interp);
             Destroy(Item);
          end loop;
       end loop;
@@ -206,8 +200,7 @@ package body DebugUI is
               (MemberFrame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Interp;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J), Interp);
             Destroy(Item);
          end loop;
       end loop;
@@ -266,15 +259,13 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CargoCombo: Ttk_ComboBox;
+      CargoCombo: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.cargo.update", Interp);
       ItemIndex: Positive;
-      AmountBox: Ttk_SpinBox;
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.cargo.updateamount", Interp);
    begin
-      CargoCombo.Interp := Interp;
-      CargoCombo.Name := New_String(".debugdialog.main.cargo.update");
       ItemIndex := Natural'Value(Current(CargoCombo)) + 1;
-      AmountBox.Interp := Interp;
-      AmountBox.Name := New_String(".debugdialog.main.cargo.updateamount");
       Set(AmountBox, Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
       return TCL_OK;
    end Refresh_Cargo_Command;
@@ -304,17 +295,14 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      SpinBox: Ttk_SpinBox;
-      ComboBox: Ttk_ComboBox;
+      SpinBox: Ttk_SpinBox := Get_Widget(".debugdialog.main.ship.x", Interp);
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.ship.module", Interp);
       ValuesList: Unbounded_String;
    begin
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.ship.x");
       Set(SpinBox, Positive'Image(PlayerShip.SkyX));
       SpinBox.Name := New_String(".debugdialog.main.ship.y");
       Set(SpinBox, Positive'Image(PlayerShip.SkyY));
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".debugdialog.main.ship.module");
       for Module of PlayerShip.Modules loop
          Append(ValuesList, " {" & Module.Name & "}");
       end loop;
@@ -366,14 +354,15 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      NameEntry: Ttk_Entry;
+      NameEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.bases.name", Interp);
       BaseIndex: Natural := 0;
       BaseName: Unbounded_String;
-      ComboBox: Ttk_ComboBox;
-      SpinBox: Ttk_SpinBox;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.bases.type", Interp);
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.bases.population", Interp);
    begin
-      NameEntry.Interp := Interp;
-      NameEntry.Name := New_String(".debugdialog.main.bases.name");
       BaseName := To_Unbounded_String(Get(NameEntry));
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
@@ -384,8 +373,6 @@ package body DebugUI is
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".debugdialog.main.bases.type");
       Set
         (ComboBox,
          To_String(BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
@@ -394,8 +381,6 @@ package body DebugUI is
       ComboBox.Name := New_String(".debugdialog.main.bases.size");
       Current
         (ComboBox, Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.bases.population");
       Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Population));
       SpinBox.Name := New_String(".debugdialog.main.bases.reputation");
       Set(SpinBox, Integer'Image(SkyBases(BaseIndex).Reputation(1)));
@@ -433,14 +418,12 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      EventsBox: Ttk_ComboBox;
+      EventsBox: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.world.delete", Interp);
       ValuesList: Unbounded_String;
-      EventsButton: Ttk_Button;
+      EventsButton: constant Ttk_Button :=
+        Get_Widget(".debugdialog.main.world.deleteevent", Interp);
    begin
-      EventsBox.Interp := Interp;
-      EventsBox.Name := New_String(".debugdialog.main.world.delete");
-      EventsButton.Interp := Interp;
-      EventsButton.Name := New_String(".debugdialog.main.world.deleteevent");
       if Events_List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(EventsButton);
          Tcl.Tk.Ada.Grid.Grid_Remove(EventsBox);
@@ -561,10 +544,8 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      SpinBox: Ttk_SpinBox;
+      SpinBox: Ttk_SpinBox := Get_Widget(".debugdialog.main.ship.x", Interp);
    begin
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.ship.x");
       PlayerShip.SkyX := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(".debugdialog.main.ship.y");
       PlayerShip.SkyY := Positive'Value(Get(SpinBox));
@@ -597,17 +578,16 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ModuleBox: Ttk_ComboBox;
+      ModuleBox: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.ship.module", Interp);
       ModuleIndex: Positive;
-      ModuleEntry: Ttk_Entry;
+      ModuleEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.ship.proto", Interp);
       Value: Unbounded_String;
-      SpinBox: Ttk_SpinBox;
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.ship.weight", Interp);
    begin
-      ModuleBox.Interp := Interp;
-      ModuleBox.Name := New_String(".debugdialog.main.ship.module");
       ModuleIndex := Natural'Value(Current(ModuleBox)) + 1;
-      ModuleEntry.Interp := Interp;
-      ModuleEntry.Name := New_String(".debugdialog.main.ship.proto");
       Value := To_Unbounded_String(Get(ModuleEntry));
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
@@ -617,8 +597,6 @@ package body DebugUI is
             exit;
          end if;
       end loop;
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.ship.weight");
       PlayerShip.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(".debugdialog.main.ship.dur");
       PlayerShip.Modules(ModuleIndex).Durability :=
