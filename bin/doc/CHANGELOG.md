@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.7] - 2020-10-10
 
 ### Changed
 - Updated MODDING.md
