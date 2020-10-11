@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Showing orders keyboard shortcut in Firsts Steps in help
 - Crash in combat when enemy crew member has too low morale
 - Info about bases symbols on map in help
+- Look of setting menu shortcuts
 
 ## [5.3] - 2020-10-04
 
