@@ -33,6 +33,12 @@ namespace eval ttk::theme::steamsky {
    font create InterfaceFont -family {Amarante} -size 14
    # Font used to show the game help
    font create HelpFont -family {Roboto} -size 14
+   # Font used to show the bold text in help
+   font create BoldHelpFont -family {Roboto} -size 14 -weight bold
+   # Font used to show the underlined text in help
+   font create UnderlineHelpFont -family {Roboto} -underline true
+   # Font used to show the italic text in help
+   font create ItalicHelpFont -family {Roboto} -size 14 -slant italic
    # Font used as icons for buttons/labels
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
 

@@ -371,6 +371,15 @@ package body GameOptions is
          GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
          Font.Configure
            ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
+         Font.Configure
+           ("BoldHelpFont",
+            "-size" & Positive'Image(GameSettings.HelpFontSize));
+         Font.Configure
+           ("UnderlineHelpFont",
+            "-size" & Positive'Image(GameSettings.HelpFontSize));
+         Font.Configure
+           ("ItalicHelpFont",
+            "-size" & Positive'Image(GameSettings.HelpFontSize));
       else
          GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
          Font.Configure
