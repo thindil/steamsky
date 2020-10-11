@@ -154,46 +154,46 @@ grid [ttk::label $menuoptions.lbl2 -text {Ship cargo information:}]
 grid [ttk::entry $menuoptions.cargo] -row 1 -column 1
 bind $menuoptions.cargo <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl4 -text {Ship orders:}]
-grid [ttk::entry $menuoptions.orders] -row 3 -column 1
+grid [ttk::entry $menuoptions.orders] -row 2 -column 1
 bind $menuoptions.orders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl5 -text {Crafting orders:}]
-grid [ttk::entry $menuoptions.crafts] -row 4 -column 1
+grid [ttk::entry $menuoptions.crafts] -row 3 -column 1
 bind $menuoptions.crafts <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl6 -text {Last messages:}]
-grid [ttk::entry $menuoptions.messages] -row 5 -column 1
+grid [ttk::entry $menuoptions.messages] -row 4 -column 1
 bind $menuoptions.messages <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl7 -text {List of known bases:}]
-grid [ttk::entry $menuoptions.bases] -row 6 -column 1
+grid [ttk::entry $menuoptions.bases] -row 5 -column 1
 bind $menuoptions.bases <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl8 -text {List of known events:}]
-grid [ttk::entry $menuoptions.events] -row 7 -column 1
+grid [ttk::entry $menuoptions.events] -row 6 -column 1
 bind $menuoptions.events <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl9 -text {List of accepted missions:}]
-grid [ttk::entry $menuoptions.missions] -row 8 -column 1
+grid [ttk::entry $menuoptions.missions] -row 7 -column 1
 bind $menuoptions.missions <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl10 -text {Stories:}]
-grid [ttk::entry $menuoptions.stories] -row 9 -column 1
+grid [ttk::entry $menuoptions.stories] -row 8 -column 1
 bind $menuoptions.stories <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}]
-grid [ttk::entry $menuoptions.waitorders] -row 10 -column 1
+grid [ttk::entry $menuoptions.waitorders] -row 9 -column 1
 bind $menuoptions.waitorders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}]
-grid [ttk::entry $menuoptions.gamestats] -row 11 -column 1
+grid [ttk::entry $menuoptions.gamestats] -row 10 -column 1
 bind $menuoptions.gamestats <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl13 -text {Help:}]
-grid [ttk::entry $menuoptions.help] -row 12 -column 1
+grid [ttk::entry $menuoptions.help] -row 11 -column 1
 bind $menuoptions.help <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl14 -text {Game options:}]
-grid [ttk::entry $menuoptions.gameoptions] -row 13 -column 1
+grid [ttk::entry $menuoptions.gameoptions] -row 12 -column 1
 bind $menuoptions.gameoptions <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}]
-grid [ttk::entry $menuoptions.quit] -row 14 -column 1
+grid [ttk::entry $menuoptions.quit] -row 13 -column 1
 bind $menuoptions.quit <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}]
-grid [ttk::entry $menuoptions.resign] -row 15 -column 1
+grid [ttk::entry $menuoptions.resign] -row 14 -column 1
 bind $menuoptions.resign <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl17 -text {Show menu:}]
-grid [ttk::entry $menuoptions.menu] -row 16 -column 1
+grid [ttk::entry $menuoptions.menu] -row 15 -column 1
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
