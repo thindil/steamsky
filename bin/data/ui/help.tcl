@@ -4,7 +4,9 @@ wm transient .help .
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .help -type dialog
 }
-grid [ttk::panedwindow .help.paned]
+grid [ttk::panedwindow .help.paned] -sticky nwes
+grid columnconfigure .help .help.paned -weight 1
+grid rowconfigure .help .help.paned -weight 1
 .help.paned add [ttk::frame .help.paned.topics]
 pack [ttk::scrollbar .help.paned.topics.scroll -orient vertical -command [list .help.paned.topics.view yview]] -side right -fill y
 pack [ttk::treeview .help.paned.topics.view -show tree -yscrollcommand [list .help.paned.topics.scroll set]] -side top -fill both
@@ -17,3 +19,6 @@ $helpview tag configure underline -font UnderlineHelpFont
 $helpview tag configure italic -font ItalicHelpFont
 pack $helpview -side top -fill both
 bind .help <Escape> {CloseHelp}
+bind .help.paned.content <Configure> {
+   $helpview configure -height [expr [winfo height .help.paned.content] / [font metrics HelpFont -linespace]]
+}
