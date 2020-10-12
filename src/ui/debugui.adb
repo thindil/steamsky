@@ -635,12 +635,11 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ComboBox: Ttk_ComboBox;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.crew.member", Interp);
       MemberIndex: Positive;
       SkillName: Unbounded_String;
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".debugdialog.main.crew.member");
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
@@ -680,15 +679,13 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ComboBox: Ttk_ComboBox;
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.crew.member", Interp);
       MemberIndex: Positive;
-      SpinBox: Ttk_SpinBox;
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.crew.health", Interp);
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".debugdialog.main.crew.member");
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".debugdialog.main.crew.health");
       PlayerShip.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(".debugdialog.main.crew.thirst");
       PlayerShip.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
@@ -744,12 +741,12 @@ package body DebugUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      ItemEntry: Ttk_Entry;
-      ItemBox: Ttk_SpinBox;
+      ItemEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.cargo.add", Interp);
+      ItemBox: constant Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.cargo.amount", Interp);
       ItemIndex, ItemName: Unbounded_String;
    begin
-      ItemEntry.Interp := Interp;
-      ItemEntry.Name := New_String(".debugdialog.main.cargo.add");
       ItemName := To_Unbounded_String(Get(ItemEntry));
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
@@ -760,8 +757,6 @@ package body DebugUI is
       if ItemIndex = Null_Unbounded_String then
          return TCL_OK;
       end if;
-      ItemBox.Interp := Interp;
-      ItemBox.Name := New_String(".debugdialog.main.cargo.amount");
       UpdateCargo(PlayerShip, ItemIndex, Positive'Value(Get(ItemBox)));
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
@@ -790,15 +785,13 @@ package body DebugUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      ItemCombo: Ttk_ComboBox;
-      ItemBox: Ttk_SpinBox;
+      ItemCombo: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.cargo.update", Interp);
+      ItemBox: constant Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.cargo.updateamount", Interp);
       ItemIndex: Positive;
    begin
-      ItemCombo.Interp := Interp;
-      ItemCombo.Name := New_String(".debugdialog.main.cargo.update");
       ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
-      ItemBox.Interp := Interp;
-      ItemBox.Name := New_String(".debugdialog.main.cargo.updateamount");
       UpdateCargo
         (Ship => PlayerShip, Amount => Positive'Value(Get(ItemBox)),
          CargoIndex => ItemIndex);
@@ -831,13 +824,14 @@ package body DebugUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       BaseIndex: Natural := 0;
-      BaseEntry: Ttk_Entry;
+      BaseEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.bases.name", Interp);
       BaseName: Unbounded_String;
-      BaseCombo: Ttk_ComboBox;
-      BaseBox: Ttk_SpinBox;
+      BaseCombo: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.bases.type", Interp);
+      BaseBox: Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.bases.population", Interp);
    begin
-      BaseEntry.Interp := Interp;
-      BaseEntry.Name := New_String(".debugdialog.main.bases.name");
       BaseName := To_Unbounded_String(Get(BaseEntry));
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
@@ -848,8 +842,6 @@ package body DebugUI is
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
-      BaseCombo.Interp := Interp;
-      BaseCombo.Name := New_String(".debugdialog.main.bases.type");
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             SkyBases(BaseIndex).BaseType := BasesTypes_Container.Key(I);
@@ -865,8 +857,6 @@ package body DebugUI is
       end loop;
       BaseCombo.Name := New_String(".debugdialog.main.bases.size");
       SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
-      BaseBox.Interp := Interp;
-      BaseBox.Name := New_String(".debugdialog.main.bases.population");
       SkyBases(BaseIndex).Population := Natural'Value(Get(BaseBox));
       BaseBox.Name := New_String(".debugdialog.main.bases.reputation");
       SkyBases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
@@ -899,16 +889,13 @@ package body DebugUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      ShipEntry: Ttk_Entry;
+      ShipEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.world.ship", Interp);
       ShipName: Unbounded_String;
       NpcShipX, NpcShipY, Duration: Positive;
-      ShipBox: Ttk_SpinBox;
+      ShipBox: Ttk_SpinBox := Get_Widget(".debugdialog.main.world.x", Interp);
    begin
-      ShipEntry.Interp := Interp;
-      ShipEntry.Name := New_String(".debugdialog.main.world.ship");
       ShipName := To_Unbounded_String(Get(ShipEntry));
-      ShipBox.Interp := Interp;
-      ShipBox.Name := New_String(".debugdialog.main.world.x");
       NpcShipX := Positive'Value(Get(ShipBox));
       ShipBox.Name := New_String(".debugdialog.main.world.y");
       NpcShipY := Positive'Value(Get(ShipBox));
@@ -964,16 +951,13 @@ package body DebugUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      EventCombo: Ttk_ComboBox;
-      ItemEntry: Ttk_Entry;
-      ItemLabel: Ttk_Label;
+      EventCombo: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.world.event", Interp);
+      ItemEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.world.item", Interp);
+      ItemLabel: constant Ttk_Label :=
+        Get_Widget(".debugdialog.main.world.itemlbl", Interp);
    begin
-      EventCombo.Interp := Interp;
-      EventCombo.Name := New_String(".debugdialog.main.world.event");
-      ItemEntry.Interp := Interp;
-      ItemEntry.Name := New_String(".debugdialog.main.world.item");
-      ItemLabel.Interp := Interp;
-      ItemLabel.Name := New_String(".debugdialog.main.world.itemlbl");
       if Current(EventCombo) = "1" then
          Tcl.Tk.Ada.Grid.Grid(ItemLabel);
          Tcl.Tk.Ada.Grid.Grid(ItemEntry);
@@ -1008,15 +992,16 @@ package body DebugUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      EventEntry: Ttk_Entry;
+      EventEntry: constant Ttk_Entry :=
+        Get_Widget(".debugdialog.main.world.base", Interp);
       EventName: Unbounded_String;
       BaseIndex, EventType: Natural := 0;
-      EventBox: Ttk_ComboBox;
-      DurationBox: Ttk_SpinBox;
+      EventBox: Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.world.event", Interp);
+      DurationBox: constant Ttk_SpinBox :=
+        Get_Widget(".debugdialog.main.world.baseduration", Interp);
       Added: Boolean := True;
    begin
-      EventEntry.Interp := Interp;
-      EventEntry.Name := New_String(".debugdialog.main.world.base");
       EventName := To_Unbounded_String(Get(EventEntry));
       for I in SkyBases'Range loop
          if SkyBases(I).Name = EventName then
@@ -1027,11 +1012,7 @@ package body DebugUI is
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
-      EventBox.Interp := Interp;
-      EventBox.Name := New_String(".debugdialog.main.world.event");
       EventType := Natural'Value(Current(EventBox));
-      DurationBox.Interp := Interp;
-      DurationBox.Name := New_String(".debugdialog.main.world.baseduration");
       case EventType is
          when 0 =>
             Events_List.Append
@@ -1095,16 +1076,15 @@ package body DebugUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      EventBox: Ttk_ComboBox;
+      EventBox: constant Ttk_ComboBox :=
+        Get_Widget(".debugdialog.main.world.delete", Interp);
    begin
-      EventBox.Interp := Interp;
-      EventBox.Name := New_String(".debugdialog.main.world.delete");
       DeleteEvent(Natural'Value(Current(EventBox)) + 1);
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Delete_Event_Command;
 
    procedure ShowDebugUI is
-      ComboBox: Ttk_ComboBox;
+      ComboBox: Ttk_ComboBox := Get_Widget(".debugdialog.main.bases.type");
       ValuesList: Unbounded_String;
    begin
       Tcl_EvalFile
@@ -1128,8 +1108,6 @@ package body DebugUI is
       AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
       AddCommand("DebugAddEvent", Add_Event_Command'Access);
       AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
-      ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(".debugdialog.main.bases.type");
       for BaseType of BasesTypes_List loop
          Append(ValuesList, " " & BaseType.Name);
       end loop;
