@@ -66,10 +66,31 @@ pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w
-tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
+tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship crew info}
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.crew.scrolly
 ::autoscroll::autoscroll $shipinfoframe.crew.scrollx
+# Cargo info
+grid [ttk::labelframe $shipinfoframe.cargo -text {Cargo Info:}] -row 1 -column 1 -sticky nwes
+set shipcanvas [canvas $shipinfoframe.cargo.canvas -yscrollcommand [list $shipinfoframe.cargo.scrolly set] -xscrollcommand [list $shipinfoframe.cargo.scrollx set]]
+pack [ttk::scrollbar $shipinfoframe.cargo.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $shipinfoframe.cargo.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
+pack $shipcanvas -side top -fill both -expand true
+ttk::frame $shipcanvas.frame
+grid columnconfigure $shipcanvas.frame 1 -weight 1
+grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin cargo show}] -sticky w
+tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship cargo info}
+grid [ttk::frame $shipcanvas.frame.selecttype] -columnspan 5 -sticky w
+grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}]
+grid [ttk::combobox $shipcanvas.frame.selecttype.combo -state readonly] -row 0 -column 1
+grid [ttk::label $shipcanvas.frame.name -text {Name}]
+grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 2
+grid [ttk::label $shipcanvas.frame.type -text {Type}] -column 2 -row 2
+grid [ttk::label $shipcanvas.frame.amount -text {Amount}] -column 3 -row 2
+grid [ttk::label $shipcanvas.frame.weight -text {Weight}] -column 4 -row 2
+$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
+::autoscroll::autoscroll $shipinfoframe.cargo.scrolly
+::autoscroll::autoscroll $shipinfoframe.cargo.scrollx
 # Configure main ship info grid
 grid columnconfigure $shipinfoframe 0 -weight 1
 grid columnconfigure $shipinfoframe 1 -weight 1
