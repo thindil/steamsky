@@ -406,10 +406,11 @@ package body Ships.UI is
          Column: Natural range 0 .. 1;
          Row: Natural range 0 .. 1;
       end record;
-      Frames: constant array(1 .. 3) of Frame_Info :=
+      Frames: constant array(1 .. 4) of Frame_Info :=
         ((To_Unbounded_String("general"), 0, 0),
          (To_Unbounded_String("modules"), 0, 1),
-         (To_Unbounded_String("crew"), 1, 0));
+         (To_Unbounded_String("crew"), 1, 0),
+         (To_Unbounded_String("cargo"), 1, 1));
       Frame: Ttk_Frame;
       Button: Ttk_Button;
    begin
