@@ -40,11 +40,12 @@ package body Crafts is
       TempAmount: Positive_Container.Vector;
       RecipesData: Document;
       NodesList, ChildNodes: Node_List;
-      SkillIndex, Amount, DeleteIndex: Natural;
+      Amount, DeleteIndex: Natural;
       RecipeIndex, ItemIndex, Value: Unbounded_String;
       RecipeNode, ChildNode: Node;
       MaterialAdded: Boolean;
       Action: DataAction;
+      SkillIndex: Skills_Container.Extended_Index;
    begin
       RecipesData := Get_Tree(Reader);
       NodesList :=
@@ -382,8 +383,7 @@ package body Crafts is
    end CheckRecipe;
 
    procedure Manufacturing(Minutes: Positive) is
-      CrafterIndex, ResultAmount, CraftedAmount, GainedExp, ToolIndex,
-      CargoIndex: Natural := 0;
+      ResultAmount, CraftedAmount, GainedExp: Natural := 0;
       Amount, NewAmount: Integer := 0;
       Recipe: Craft_Data;
       MaterialIndexes: UnboundedString_Container.Vector;
@@ -392,6 +392,8 @@ package body Crafts is
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
       CraftingMaterial: Natural;
+      CrafterIndex: Crew_Container.Extended_Index;
+      CargoIndex, ToolIndex: Inventory_Container.Extended_Index;
       procedure ResetOrder(Module: in out ModuleData; ModuleOwner: Natural) is
          HaveWorker: Boolean := False;
       begin
