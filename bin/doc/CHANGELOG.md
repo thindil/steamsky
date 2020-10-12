@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Crash in combat when enemy crew member has too low morale
 - Info about bases symbols on map in help
 - Look of setting menu shortcuts
+- Resizing of fonts in help tags
 
 ## [5.3] - 2020-10-04
 
