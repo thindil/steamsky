@@ -20,7 +20,6 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Tcl; use Tcl;
@@ -92,8 +91,7 @@ package body ErrorDialog is
             To_String(DataDirectory) & "ui" & Dir_Separator &
             "errordialog.tcl");
          AddCommand("OpenLink", Open_Link_Command'Access);
-         Text.Interp := Interp;
-         Text.Name := New_String(".technical.text");
+         Text := Get_Widget(".technical.text", Interp);
          Insert(Text, "end", "{" & To_String(ErrorText) & "}");
          configure(Text, "-state disabled");
          Tcl.Tk.Tk_MainLoop;
