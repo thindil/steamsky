@@ -92,7 +92,7 @@ package body Ships.UI.Crew is
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
-        New_String(CrewInfoFrame & ".paned.shipinfoframe.crew.canvas.frame");
+        New_String(".paned.shipinfoframe.crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
