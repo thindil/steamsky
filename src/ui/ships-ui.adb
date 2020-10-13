@@ -40,6 +40,7 @@ with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with ShipModules; use ShipModules;
 with Ships.UI.Crew;
+with Ships.UI.Cargo;
 with Ships.UI.Modules;
 with Utils.UI; use Utils.UI;
 
@@ -331,6 +332,8 @@ package body Ships.UI is
       Yview_Move_To(ShipCanvas, "0.0");
       -- Setting crew info
       Ships.UI.Crew.UpdateCrewInfo;
+      -- Setting cargo info
+      Ships.UI.Cargo.UpdateCargoInfo;
       -- Show ship info
       ShowScreen("shipinfoframe");
       return TCL_OK;
@@ -465,6 +468,7 @@ package body Ships.UI is
       AddCommand("ShipMaxMin", Ship_Max_Min_Command'Access);
       Ships.UI.Modules.AddCommands;
       Ships.UI.Crew.AddCommands;
+      Ships.UI.Cargo.AddCommands;
    end AddCommands;
 
 end Ships.UI;
