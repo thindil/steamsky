@@ -45,7 +45,7 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - sudo docker run --rm -it -v $1:/app ghcr.io/thindil/adabuildwin64:2020.1 /bin/bash
+      - sudo docker run --rm -it -v $1:/app ghcr.io/thindil/adabuildwin64 /bin/bash
    description: Build Steam sky release for Windows on Linux (enter docker image only for now, required argument is path to the game)
    flags:
       - unixonly
