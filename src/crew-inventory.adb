@@ -26,7 +26,7 @@ package body Crew.Inventory is
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) is
-      ItemIndex: Natural := 0;
+      ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
       if InventoryIndex = 0 then
          ItemIndex :=
@@ -40,7 +40,7 @@ package body Crew.Inventory is
       end if;
       if Amount > 0 then
          declare
-            Weight: constant Integer :=
+            Weight: constant Positive :=
               (if ItemIndex > 0 then
                  Items_List
                    (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
@@ -125,7 +125,8 @@ package body Crew.Inventory is
    function FindTools
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
-      ToolsIndex: Natural := PlayerShip.Crew(MemberIndex).Equipment(7);
+      ToolsIndex: Inventory_Container.Extended_Index :=
+        PlayerShip.Crew(MemberIndex).Equipment(7);
    begin
       -- If the crew member has equiped tool, check if it is a proper tool.
       -- If not, remove it and put to the ship cargo
