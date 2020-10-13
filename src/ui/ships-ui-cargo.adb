@@ -28,13 +28,38 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
 
-   procedure UpdateCargoInfo(ItemsType: String := "All") is
+   -- ****o* SUCargo/Show_Cargo_Command
+   -- FUNCTION
+   -- Show the cargo of the player ship
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateCargo
+   -- SOURCE
+   function Show_Cargo_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Cargo_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
       ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(".paned.shipinfoframe.cargo.canvas");
-      CargoInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
+        Get_Widget(".paned.shipinfoframe.cargo.canvas", Interp);
+      CargoInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame", Interp);
       Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -43,9 +68,10 @@ package body Ships.UI.Cargo is
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       CargoButton: Ttk_MenuButton;
       TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(CargoInfoFrame & ".selecttype.combo");
+        Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
       DurabilityBar: Ttk_ProgressBar;
       ItemLabel: Ttk_Label;
+      ItemsType: constant String := Get(TypeBox);
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -126,19 +152,18 @@ package body Ships.UI.Cargo is
          <<End_Of_Loop>>
          Row := Row + 1;
       end loop;
-      Unbind(TypeBox, "<<ComboboxSelected>>");
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
-      Set(TypeBox, ItemsType);
       Tcl_Eval(Get_Context, "update");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
-   end UpdateCargoInfo;
+      return TCL_OK;
+   end Show_Cargo_Command;
 
    procedure AddCommands is
    begin
-      null;
+      AddCommand("ShowCargo", Show_Cargo_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;

@@ -20,15 +20,6 @@
 package Ships.UI.Cargo is
 -- ****
 
-   -- ****f* SUCargo/UpdateCargoInfo
-   -- FUNCTION
-   -- Update information about the player ship cargo
-   -- PARAMETERS
-   -- ItemsType - Type of items to show. Default all items
-   -- SOURCE
-   procedure UpdateCargoInfo(ItemsType: String := "All");
-   -- ****
-
    -- ****f* SUCargo/AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the player's ship cargo information
