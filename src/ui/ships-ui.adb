@@ -20,11 +20,14 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
@@ -63,6 +66,9 @@ package body Ships.UI is
       Rows, Row: Natural := 0;
       ShipCanvas: Tk_Canvas;
       Button: Ttk_MenuButton;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
    begin
       Paned.Interp := Interp;
       Paned.Name := New_String(".paned");
@@ -333,7 +339,8 @@ package body Ships.UI is
       -- Setting crew info
       Ships.UI.Crew.UpdateCrewInfo;
       -- Setting cargo info
-      Ships.UI.Cargo.UpdateCargoInfo;
+      Set(TypeBox, "All");
+      Generate(TypeBox, "<<ComboboxSelected>>");
       -- Show ship info
       ShowScreen("shipinfoframe");
       return TCL_OK;

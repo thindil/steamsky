@@ -83,6 +83,7 @@ tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship cargo info
 grid [ttk::frame $shipcanvas.frame.selecttype] -columnspan 5 -sticky w
 grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}]
 grid [ttk::combobox $shipcanvas.frame.selecttype.combo -state readonly] -row 0 -column 1
+bind $shipcanvas.frame.selecttype.combo <<ComboboxSelected>> ShowCargo
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 2
 grid [ttk::label $shipcanvas.frame.type -text {Type}] -column 2 -row 2
