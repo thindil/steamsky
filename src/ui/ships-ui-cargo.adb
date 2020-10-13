@@ -21,12 +21,14 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Utils.UI; use Utils.UI;
 
@@ -59,7 +61,8 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(ClientData, Argc, Argv);
       ShipCanvas: constant Tk_Canvas :=
         Get_Widget(".paned.shipinfoframe.cargo.canvas", Interp);
-      CargoInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame", Interp);
+      CargoInfoFrame: constant Ttk_Frame :=
+        Get_Widget(ShipCanvas & ".frame", Interp);
       Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -72,6 +75,7 @@ package body Ships.UI.Cargo is
       DurabilityBar: Ttk_ProgressBar;
       ItemLabel: Ttk_Label;
       ItemsType: constant String := Get(TypeBox);
+      ItemMenu: Tk_Menu;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -87,6 +91,31 @@ package body Ships.UI.Cargo is
          end loop;
       end loop;
       for I in PlayerShip.Cargo.Iterate loop
+         ItemMenu :=
+           Get_Widget
+             (".cargoitemmenu" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              Interp);
+         if (Winfo_Get(ItemMenu, "exists")) = "0" then
+            ItemMenu :=
+              Create
+                (".cargoitemmenu" &
+                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+                 "-tearoff false");
+         end if;
+         Delete(ItemMenu, "0", "end");
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Give the item to a crew member} -command {ShowGiveItem " &
+            Positive'Image(Inventory_Container.To_Index(I)) & "}");
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Drop the item from the ship's cargo} -command {ShowDropItem " &
+            Positive'Image(Inventory_Container.To_Index(I)) & "}");
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Show more info about the item} -command {ShowCargoItemInfo " &
+            Positive'Image(Inventory_Container.To_Index(I)) & "}");
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
             ItemType := Items_List(ProtoIndex).ShowType;
@@ -103,7 +132,8 @@ package body Ships.UI.Cargo is
            Create
              (CargoInfoFrame & ".name" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & GetItemName(PlayerShip.Cargo(I)) & "}");
+              "-text {" & GetItemName(PlayerShip.Cargo(I)) & "} -menu " &
+              ItemMenu);
          Add(CargoButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid
            (CargoButton, "-row" & Natural'Image(Row) & " -sticky w");
