@@ -248,7 +248,7 @@ package body Ships.UI.Cargo is
         Create
           (ItemFrame & ".dropbutton",
            "-text Drop -command {DropItem " & CArgv.Arg(Argv, 1) & "}");
-      Height, Width: Positive := 10;
+      Height: Positive := 10;
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
@@ -274,16 +274,17 @@ package body Ships.UI.Cargo is
         Create
           (ItemFrame & ".title",
            "-text {Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
-           " from ship cargo} -wraplength 400");
+           " from ship cargo} -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Width := Width + Positive'Value(Winfo_Get(Label, "reqwidth"));
       Label := Create(ItemFrame & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Label := Create(ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 400");
+      Label :=
+        Create
+          (ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -298,21 +299,16 @@ package body Ships.UI.Cargo is
       if Height > 500 then
          Height := 500;
       end if;
-      configure
-        (ItemFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
+      configure(ItemFrame, "-height" & Positive'Image(Height) & " -width 370");
       Canvas_Create
         (ItemCanvas, "window", "0 0 -anchor nw -window " & ItemFrame);
       configure
         (ItemCanvas, "-scrollregion [list " & BBox(ItemCanvas, "all") & "]");
       Height := Height + 30;
-      Width := Width + 30;
       declare
          X, Y: Integer;
       begin
-         X :=
-           (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - Width) / 2;
+         X := (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - 400) / 2;
          if X < 0 then
             X := 0;
          end if;
@@ -323,8 +319,7 @@ package body Ships.UI.Cargo is
          end if;
          Wm_Set
            (ItemDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
+            "400x" & Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
          Bind(ItemDialog, "<Escape>", "{destroy " & ItemDialog & "}");
