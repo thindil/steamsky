@@ -256,7 +256,7 @@ package body Ships.UI.Cargo is
            "-width 5 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
-           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+           Positive'Image(ItemIndex) &
            " %P} -command {ValidateAmount " & ItemFrame & ".amount" &
            Positive'Image(ItemIndex) & "}");
    begin
