@@ -255,8 +255,10 @@ package body Ships.UI.Cargo is
           (ItemFrame & ".amount",
            "-width 5 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
-           " -validate key -validatecommand {ValidateMoveAmount" &
-           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) & " %P}");
+           " -validate key -validatecommand {CheckAmount %W" &
+           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+           " %P} -command {ValidateAmount " & ItemFrame & ".amount" &
+           Positive'Image(ItemIndex) & "}");
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Drop Item}");
       Wm_Set(ItemDialog, "transient", ".");
@@ -281,12 +283,16 @@ package body Ships.UI.Cargo is
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Label := Create(ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3");
       Button :=
         Create
           (ItemFrame & ".cancelbutton",
            "-text Cancel -command {destroy " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3");
       Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
       Focus(Button);
       if Height > 500 then
