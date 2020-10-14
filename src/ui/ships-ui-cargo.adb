@@ -38,6 +38,11 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Maps.UI; use Maps.UI;
+with Messages; use Messages;
+with Missions; use Missions;
+with Ships.Cargo; use Ships.Cargo;
+with Stories; use Stories;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
@@ -256,9 +261,8 @@ package body Ships.UI.Cargo is
            "-width 5 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
-           Positive'Image(ItemIndex) &
-           " %P} -command {ValidateAmount " & ItemFrame & ".amount" &
-           Positive'Image(ItemIndex) & "}");
+           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
+           ItemFrame & ".amount" & Positive'Image(ItemIndex) & "}");
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Drop Item}");
       Wm_Set(ItemDialog, "transient", ".");
@@ -328,6 +332,77 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Drop_Item_Command;
 
+   -- ****o* SUCargo/Drop_Item_Command
+   -- FUNCTION
+   -- Drop selected amount of the selected item from the ship's cargo
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DropItem
+   -- SOURCE
+   function Drop_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Drop_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      DropAmount, DropAmount2: Natural;
+      ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
+      SpinBox: constant Ttk_SpinBox :=
+        Get_Widget(ItemDialog & ".canvas.frame.amount", Interp);
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      DropAmount := Natural'Value(Get(SpinBox));
+      DropAmount2 := DropAmount;
+      if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
+        MissionItemsType then
+         for J in 1 .. DropAmount2 loop
+            for I in
+              AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+               if AcceptedMissions(I).MType = Deliver and
+                 AcceptedMissions(I).ItemIndex =
+                   PlayerShip.Cargo(ItemIndex).ProtoIndex then
+                  DeleteMission(I);
+                  DropAmount := DropAmount - 1;
+                  exit;
+               end if;
+            end loop;
+         end loop;
+      elsif CurrentStory.Index /= Null_Unbounded_String then
+         if Stories_List(CurrentStory.Index).StartData(1) =
+           PlayerShip.Cargo(ItemIndex).ProtoIndex then
+            FinishedStories.Delete(FinishedStories.Last_Index);
+            ClearCurrentStory;
+         end if;
+      end if;
+      if DropAmount > 0 then
+         AddMessage
+           ("You dropped" & Positive'Image(DropAmount) & " " &
+            GetItemName(PlayerShip.Cargo(ItemIndex)) & ".",
+            OtherMessage);
+         UpdateCargo
+           (Ship => PlayerShip,
+            ProtoIndex => PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            Amount => (0 - DropAmount),
+            Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
+            Price => PlayerShip.Cargo.Element(ItemIndex).Price);
+      end if;
+      Destroy(ItemDialog);
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
+   end Drop_Item_Command;
+
    -- ****o* SUCargo/Show_Cargo_Item_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected item in the player ship
@@ -364,6 +439,7 @@ package body Ships.UI.Cargo is
       AddCommand("ShowCargo", Show_Cargo_Command'Access);
       AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
       AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
+      AddCommand("DropItem", Drop_Item_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;

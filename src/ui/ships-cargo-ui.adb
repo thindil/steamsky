@@ -403,7 +403,6 @@ package body Ships.Cargo.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowCargoInfo", Show_Cargo_Info_Command'Access);
-      AddCommand("DropItem", Drop_Item_Command'Access);
       AddCommand("GiveItem", Give_Item_Command'Access);
    end AddCommands;
 
