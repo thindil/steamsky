@@ -62,15 +62,14 @@ package body Events.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      EventsView: Ttk_Tree_View;
+      EventsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.eventsframe.canvas.events.eventsview", Interp);
       EventIndex: Positive;
       EventInfo: Unbounded_String;
       BaseIndex: Integer;
-      Label: Ttk_Label;
+      Label: constant Ttk_Label :=
+        Get_Widget(".paned.eventsframe.canvas.events.info.info.label", Interp);
    begin
-      EventsView.Interp := Interp;
-      EventsView.Name :=
-        New_String(".paned.eventsframe.canvas.events.eventsview");
       EventIndex := Positive'Value(Selection(EventsView));
       BaseIndex :=
         SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
@@ -101,9 +100,6 @@ package body Events.UI is
          when None | BaseRecovery =>
             null;
       end case;
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String(".paned.eventsframe.canvas.events.info.info.label");
       configure(Label, "-text {" & To_String(EventInfo) & "}");
       return TCL_OK;
    end Show_Event_Info_Command;
@@ -133,12 +129,10 @@ package body Events.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      EventsView: Ttk_Tree_View;
+      EventsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.eventsframe.canvas.events.eventsview", Interp);
       EventIndex: Positive;
    begin
-      EventsView.Interp := Interp;
-      EventsView.Name :=
-        New_String(".paned.eventsframe.canvas.events.eventsview");
       EventIndex := Positive'Value(Selection(EventsView));
       CenterX := Events_List(EventIndex).SkyX;
       CenterY := Events_List(EventIndex).SkyY;
@@ -171,12 +165,10 @@ package body Events.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      EventsView: Ttk_Tree_View;
+      EventsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.eventsframe.canvas.events.eventsview", Interp);
       EventIndex: Positive;
    begin
-      EventsView.Interp := Interp;
-      EventsView.Name :=
-        New_String(".paned.eventsframe.canvas.events.eventsview");
       EventIndex := Positive'Value(Selection(EventsView));
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
@@ -192,21 +184,14 @@ package body Events.UI is
    end Set_Event_Command;
 
    procedure ShowEventsList is
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      EventsCanvas: Tk_Canvas;
-      EventsFrame: Ttk_Frame;
-      EventsView: Ttk_Tree_View;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      EventsFrame: Ttk_Frame := Get_Widget(Paned & ".eventsframe");
+      EventsCanvas: constant Tk_Canvas := Get_Widget(EventsFrame & ".canvas");
+      Label: constant Ttk_Label :=
+        Get_Widget(EventsCanvas & ".events.info.info.label");
+      EventsView: constant Ttk_Tree_View :=
+        Get_Widget(EventsCanvas & ".events.eventsview");
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      EventsFrame.Interp := Get_Context;
-      EventsFrame.Name := New_String(Widget_Image(Paned) & ".eventsframe");
-      EventsCanvas.Interp := Get_Context;
-      EventsCanvas.Name := New_String(Widget_Image(EventsFrame) & ".canvas");
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String(Widget_Image(EventsCanvas) & ".events.info.info.label");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -219,9 +204,6 @@ package body Events.UI is
          ShowSkyMap(True);
          return;
       end if;
-      EventsView.Interp := Get_Context;
-      EventsView.Name :=
-        New_String(Widget_Image(EventsCanvas) & ".events.eventsview");
       Delete(EventsView, "[list " & Children(EventsView, "{}") & "]");
       for I in Events_List.First_Index .. Events_List.Last_Index loop
          case Events_List(I).EType is
