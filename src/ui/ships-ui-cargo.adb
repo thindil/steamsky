@@ -204,6 +204,135 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Command;
 
+   -- ****o* SUCargo/Show_Give_Item_Command
+   -- FUNCTION
+   -- Show UI to give the selected item from the ship cargo to the selected
+   -- crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowGiveItem itemindex
+   -- Itemindex is the index of the item which will be set
+   -- SOURCE
+   function Show_Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ItemDialog: constant Tk_Toplevel :=
+        Create
+          (".itemdialog",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      XScroll: constant Ttk_Scrollbar :=
+        Create
+          (ItemDialog & ".xscroll",
+           "-orient horizontal -command [list .itemdialog.canvas xview]");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (ItemDialog & ".yscroll",
+           "-orient vertical -command [list .itemdialog.canvas yview]");
+      ItemCanvas: constant Tk_Canvas :=
+        Create
+          (ItemDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll &
+           " set] -xscrollcommand [list " & XScroll & " set]");
+      ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
+      Button: Ttk_Button :=
+        Create
+          (ItemFrame & ".givebutton",
+           "-text Drop -command {giveItem " & CArgv.Arg(Argv, 1) & "}");
+      Height: Positive := 10;
+      Label: Ttk_Label;
+      AmountBox: constant Ttk_SpinBox :=
+        Create
+          (ItemFrame & ".giveamount",
+           "-width 5 -from 1.0 -to" &
+           Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
+           " -validate key -validatecommand {CheckAmount %W" &
+           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
+           ItemFrame & ".giveamount" & Positive'Image(ItemIndex) & "}");
+   begin
+      Wm_Set(ItemDialog, "title", "{Steam Sky - Give Item}");
+      Wm_Set(ItemDialog, "transient", ".");
+      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
+         Wm_Set(ItemDialog, "attributes", "-type dialog");
+      end if;
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(ItemCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
+      Autoscroll(YScroll);
+      Autoscroll(XScroll);
+      Label :=
+        Create
+          (ItemFrame & ".title",
+           "-text {Give " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
+           " from ship cargo to the selected crew member} -wraplength 370");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Label := Create(ItemFrame & ".amountlbl", "-text {Amount:}");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Set(AmountBox, "1");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Label :=
+        Create
+          (ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 370");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3");
+      Button :=
+        Create
+          (ItemFrame & ".cancelbutton",
+           "-text Cancel -command {destroy " & ItemDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3");
+      Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
+      Focus(Button);
+      if Height > 500 then
+         Height := 500;
+      end if;
+      configure(ItemFrame, "-height" & Positive'Image(Height) & " -width 370");
+      Canvas_Create
+        (ItemCanvas, "window", "0 0 -anchor nw -window " & ItemFrame);
+      configure
+        (ItemCanvas, "-scrollregion [list " & BBox(ItemCanvas, "all") & "]");
+      Height := Height + 30;
+      declare
+         X, Y: Integer;
+      begin
+         X := (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - 400) / 2;
+         if X < 0 then
+            X := 0;
+         end if;
+         Y :=
+           (Positive'Value(Winfo_Get(ItemDialog, "vrootheight")) - Height) / 2;
+         if Y < 0 then
+            Y := 0;
+         end if;
+         Wm_Set
+           (ItemDialog, "geometry",
+            "400x" & Trim(Positive'Image(Height), Left) & "+" &
+            Trim(Positive'Image(X), Left) & "+" &
+            Trim(Positive'Image(Y), Left));
+         Bind(ItemDialog, "<Escape>", "{destroy " & ItemDialog & "}");
+         Tcl_Eval(Interp, "update");
+      end;
+      return TCL_OK;
+   end Show_Give_Item_Command;
+
    -- ****o* SUCargo/Show_Drop_Item_Command
    -- FUNCTION
    -- Show UI to drop the selected item from the ship cargo
@@ -438,6 +567,7 @@ package body Ships.UI.Cargo is
    begin
       AddCommand("ShowCargo", Show_Cargo_Command'Access);
       AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
+      AddCommand("ShowGiveItem", Show_Give_Item_Command'Access);
       AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
       AddCommand("DropItem", Drop_Item_Command'Access);
    end AddCommands;
