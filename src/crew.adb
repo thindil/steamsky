@@ -33,9 +33,11 @@ with Config; use Config;
 package body Crew is
 
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) is
-      SkillExp, SkillLevel, SkillIndex, AttributeExp, AttributeLevel,
-      NewAmount: Natural := 0;
-      AttributeIndex: constant Positive := Skills_List(SkillNumber).Attribute;
+      SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
+      AttributeIndex: constant Skills_Container.Extended_Index :=
+        Skills_List(SkillNumber).Attribute;
+      SkillIndex: Skills_Container.Extended_Index;
+      SkillLevel: Skill_Range;
       procedure GainExpInAttribute(Attribute: Positive) is
       begin
          if PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1) = 50 then
@@ -185,14 +187,16 @@ package body Crew is
       TiredLevel, HungerLevel, ThirstLevel: Integer := 0;
       HealthLevel: Integer := 100;
       DeathReason: Unbounded_String;
-      CabinIndex, Times, RestAmount, I, ToolIndex: Natural;
+      ToolIndex: Inventory_Container.Extended_Index;
+      CabinIndex: Modules_Container.Extended_Index;
+      Times, RestAmount, I: Natural;
       OrderTime, CurrentMinutes, HealAmount: Integer;
       Damage: DamageFactor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
-      SkillIndex: Positive;
+      SkillIndex: Skills_Container.Extended_Index;
       function Consume(ItemType: Unbounded_String) return Natural is
          ConsumeValue: Natural;
-         ItemIndex: Natural :=
+         ItemIndex: Inventory_Container.Extended_Index :=
            FindItem(Inventory => PlayerShip.Cargo, ItemType => ItemType);
       begin
          if ItemIndex > 0 then
@@ -772,7 +776,8 @@ package body Crew is
    end UpdateCrew;
 
    procedure WaitForRest is
-      TimeNeeded, CabinIndex, TempTimeNeeded: Natural := 0;
+      CabinIndex: Modules_Container.Extended_Index := 0;
+      TimeNeeded, TempTimeNeeded: Natural := 0;
       Damage: DamageFactor := 0.0;
       CabinBonus: Natural;
    begin
@@ -872,9 +877,10 @@ package body Crew is
    end GetAttributeLevelName;
 
    procedure DailyPayment is
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Inventory_Container.Extended_Index :=
+        FindItem(PlayerShip.Cargo, MoneyIndex);
       PayMessage: Unbounded_String;
-      MemberIndex: Positive;
+      MemberIndex: Crew_Container.Extended_Index;
       HaveMoney: Boolean := True;
       MoneyNeeded: Natural;
    begin
