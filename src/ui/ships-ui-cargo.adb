@@ -38,6 +38,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
@@ -253,7 +254,7 @@ package body Ships.UI.Cargo is
       Button: Ttk_Button :=
         Create
           (ItemFrame & ".givebutton",
-           "-text Drop -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
+           "-text Give -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
       Height: Positive := 10;
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
@@ -344,6 +345,69 @@ package body Ships.UI.Cargo is
       end;
       return TCL_OK;
    end Show_Give_Item_Command;
+
+   -- ****o* CUI2/Give_Item_Command
+   -- FUNCTION
+   -- Give selected amount of the selected item from the ship's cargo to the
+   -- selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- GiveItem
+   -- SOURCE
+   function Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Give_Item_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      MemberIndex, Amount: Positive;
+      ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
+      ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
+      SpinBox: constant Ttk_SpinBox :=
+        Get_Widget(ItemDialog & ".canvas.frame.giveamount");
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(ItemDialog & ".canvas.frame.member");
+   begin
+      Amount := Natural'Value(Get(SpinBox));
+      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      if FreeInventory
+          (MemberIndex, 0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
+        0 then
+         ShowMessage
+           ("No free space in " &
+            To_String(PlayerShip.Crew(MemberIndex).Name) &
+            "'s inventory for that amount of " & GetItemName(Item));
+         return TCL_OK;
+      end if;
+      AddMessage
+        ("You gave" & Positive'Image(Amount) & " " &
+         GetItemName(PlayerShip.Cargo(ItemIndex)) & " to " &
+         To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+         OtherMessage);
+      UpdateInventory
+        (MemberIndex => MemberIndex, Amount => Amount,
+         ProtoIndex => Item.ProtoIndex, Durability => Item.Durability,
+         Price => Item.Price);
+      UpdateCargo
+        (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
+         Price => Item.Price);
+      Destroy(ItemDialog);
+      UpdateHeader;
+      UpdateMessages;
+      return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
+   end Give_Item_Command;
 
    -- ****o* SUCargo/Show_Drop_Item_Command
    -- FUNCTION
@@ -580,6 +644,7 @@ package body Ships.UI.Cargo is
       AddCommand("ShowCargo", Show_Cargo_Command'Access);
       AddCommand("ShowCargoItemInfo", Show_Cargo_Item_Info_Command'Access);
       AddCommand("ShowGiveItem", Show_Give_Item_Command'Access);
+      AddCommand("GiveItem", Give_Item_Command'Access);
       AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
       AddCommand("DropItem", Drop_Item_Command'Access);
    end AddCommands;
