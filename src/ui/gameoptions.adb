@@ -153,24 +153,18 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: Ttk_PanedWindow;
-      OptionsCanvas: Tk_Canvas;
-      OptionsFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      OptionsFrame: Ttk_Frame := Get_Widget(Paned & ".optionsframe", Interp);
+      OptionsCanvas: constant Tk_Canvas :=
+        Get_Widget(OptionsFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      OptionsFrame.Interp := Interp;
-      OptionsFrame.Name := New_String(Widget_Image(Paned) & ".optionsframe");
-      OptionsCanvas.Interp := Interp;
-      OptionsCanvas.Name := New_String(Widget_Image(OptionsFrame) & ".canvas");
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
@@ -232,8 +226,7 @@ package body GameOptions is
         (Interp, Widget_Image(OptionsFrame) & ".autoaskforevents",
          Trim
            (Natural'Image(Boolean'Pos(GameSettings.AutoAskForEvents)), Left));
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".fuel");
+      SpinBox := Get_Widget(Widget_Image(OptionsFrame) & ".fuel", Interp);
       Set(SpinBox, Natural'Image(GameSettings.LowFuel));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".drinks");
       Set(SpinBox, Natural'Image(GameSettings.LowDrinks));
@@ -357,10 +350,8 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      SpinBox: Ttk_SpinBox;
+      SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(CArgv.Arg(Argv, 1));
       if CArgv.Arg(Argv, 1) =
         ".paned.optionsframe.canvas.options.notebook.interface.mapfont" then
          GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
@@ -466,16 +457,16 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       RootName: constant String :=
         ".paned.optionsframe.canvas.options.notebook";
-      ComboBox: Ttk_ComboBox;
-      SpinBox: Ttk_SpinBox;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(RootName & ".general.speed", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(RootName & ".general.fuel", Interp);
       KeyEntry: Ttk_Entry;
       KeysFile: File_Type;
    begin
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       configure(CloseButton, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then
@@ -483,8 +474,6 @@ package body GameOptions is
       else
          GameSettings.AutoRest := False;
       end if;
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(RootName & ".general.speed");
       GameSettings.UndockSpeed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
       if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
@@ -512,8 +501,6 @@ package body GameOptions is
       else
          GameSettings.AutoAskForEvents := False;
       end if;
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(RootName & ".general.fuel");
       GameSettings.LowFuel := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.drinks");
       GameSettings.LowDrinks := Positive'Value(Get(SpinBox));
