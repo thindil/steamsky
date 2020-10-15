@@ -36,8 +36,8 @@ package body Crew is
       SkillExp, AttributeExp, AttributeLevel, NewAmount: Natural := 0;
       AttributeIndex: constant Skills_Container.Extended_Index :=
         Skills_List(SkillNumber).Attribute;
-      SkillIndex: Skills_Container.Extended_Index;
-      SkillLevel: Skill_Range;
+      SkillIndex: Skills_Container.Extended_Index := 0;
+      SkillLevel: Skill_Range := 0;
       procedure GainExpInAttribute(Attribute: Positive) is
       begin
          if PlayerShip.Crew(CrewIndex).Attributes(Attribute)(1) = 50 then
