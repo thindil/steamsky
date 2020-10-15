@@ -259,13 +259,13 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemFrame & ".giveamount",
-           "-width 10 -from 1.0 -to" &
+           "-width 15 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemFrame & ".giveamount" & Positive'Image(ItemIndex) & "}");
       CrewBox: constant Ttk_ComboBox :=
-        Create(ItemFrame & ".member", "-state readonly");
+        Create(ItemFrame & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Give Item}");
