@@ -12,7 +12,7 @@ if {$tcl_platform(os) == "Linux"} {
 cd bin
 
 if {$argc > 0} {
-   exec $executable [list $argv]
+   exec $executable [list $argv] >@stdout
 } else {
-   exec $executable
+   exec $executable >@stdout
 }
