@@ -253,17 +253,20 @@ package body Ships.UI.Cargo is
       Button: Ttk_Button :=
         Create
           (ItemFrame & ".givebutton",
-           "-text Drop -command {giveItem " & CArgv.Arg(Argv, 1) & "}");
+           "-text Drop -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
       Height: Positive := 10;
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemFrame & ".giveamount",
-           "-width 5 -from 1.0 -to" &
+           "-width 10 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemFrame & ".giveamount" & Positive'Image(ItemIndex) & "}");
+      CrewBox: constant Ttk_ComboBox :=
+        Create(ItemFrame & ".member", "-state readonly");
+      MembersNames: Unbounded_String;
    begin
       Wm_Set(ItemDialog, "title", "{Steam Sky - Give Item}");
       Wm_Set(ItemDialog, "transient", ".");
@@ -287,18 +290,27 @@ package body Ships.UI.Cargo is
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Label := Create(ItemFrame & ".memberlbl", "-text {To:}");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      for Member of PlayerShip.Crew loop
+         Append(MembersNames, " " & Member.Name);
+      end loop;
+      configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
+      Current(CrewBox, "0");
+      Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 2");
+      Height := Height + Positive'Value(Winfo_Get(CrewBox, "reqheight"));
       Label :=
         Create
           (ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4");
       Button :=
         Create
           (ItemFrame & ".cancelbutton",
            "-text Cancel -command {destroy " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 4");
       Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
       Focus(Button);
       if Height > 500 then
@@ -387,7 +399,7 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemFrame & ".amount",
-           "-width 5 -from 1.0 -to" &
+           "-width 10 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
