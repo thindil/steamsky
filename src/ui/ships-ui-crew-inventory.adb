@@ -19,6 +19,7 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -28,6 +29,8 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -549,6 +552,9 @@ package body Ships.UI.Crew.Inventory is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemDialog: Tk_Toplevel;
       AmountBox: Ttk_SpinBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
    begin
       ItemDialog.Interp := Interp;
       ItemDialog.Name := New_String(".itemdialog");
@@ -593,6 +599,7 @@ package body Ships.UI.Crew.Inventory is
          GiveOrders(PlayerShip, MemberIndex, Rest);
       end if;
       Destroy(ItemDialog);
+      Generate(TypeBox, "<<ComboboxSelected>>");
       Tcl_Eval(Interp, "CloseDialog .memberdialog");
       return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Move_Item_Command;
