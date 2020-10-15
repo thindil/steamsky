@@ -33,10 +33,10 @@ package body Events is
 
    function CheckForEvent return Boolean is
       TimePassed: Integer;
-      CrewIndex: Natural := 0;
-      Roll, Roll2: Positive;
+      CrewIndex: Crew_Container.Extended_Index := 0;
+      Roll, Roll2: Positive range 1 .. 100;
       Engines: Positive_Container.Vector;
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Enemies: UnboundedString_Container.Vector;
       procedure GainPerception is
@@ -312,7 +312,7 @@ package body Events is
             elsif Roll > 4 and Roll < 10 then -- Lost cargo in base
                Roll2 := GetRandom(1, PlayerShip.Cargo.Last_Index);
                declare
-                  LostCargo: Positive := GetRandom(1, 10);
+                  LostCargo: Positive range 1 .. 10 := GetRandom(1, 10);
                begin
                   if LostCargo > PlayerShip.Cargo(Roll2).Amount then
                      LostCargo := PlayerShip.Cargo(Roll2).Amount;
@@ -333,10 +333,11 @@ package body Events is
    end CheckForEvent;
 
    procedure UpdateEvents(Minutes: Positive) is
-      CurrentIndex: Positive := Events_List.First_Index;
+      CurrentIndex: Events_Container.Extended_Index := Events_List.First_Index;
       NewTime: Integer;
       EventsAmount: constant Natural := Natural(Events_List.Length);
-      PopulationLost, BaseIndex: Positive;
+      PopulationLost: Positive range 1 .. 10;
+      BaseIndex: BasesRange;
    begin
       if EventsAmount = 0 then
          return;
