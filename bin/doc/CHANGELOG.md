@@ -8,9 +8,10 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Updated help
 - Updated MODDING.md
+- Moved cargo info to ship info screen
 
 ### Fixed
-- Showing keyboard shortcuts
+- Showing keyboard shortcuts in help
 - Crash on the new turn
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
