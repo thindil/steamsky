@@ -373,7 +373,8 @@ package body Factions is
    end IsFriendly;
 
    function GetRandomFaction return Unbounded_String is
-      FactionIndex, CurrentIndex: Positive;
+      FactionIndex,
+      CurrentIndex: Positive range 1 .. Positive(Factions_List.Length);
    begin
       FactionIndex := GetRandom(1, Positive(Factions_List.Length));
       CurrentIndex := 1;
