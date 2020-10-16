@@ -16,7 +16,6 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -58,14 +57,14 @@ package body Goals.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      GoalsView: Ttk_Tree_View;
-      SelectButton: Ttk_Button;
+      GoalsView: constant Ttk_Tree_View :=
+        Get_Widget(".goalsdialog.view", Interp);
+      SelectButton: constant Ttk_Button :=
+        Get_Widget(".goalsdialog.selectbutton", Interp);
    begin
       Tcl_EvalFile
         (Interp,
          To_String(DataDirectory) & "ui" & Dir_Separator & "goals.tcl");
-      GoalsView.Interp := Interp;
-      GoalsView.Name := New_String(".goalsdialog.view");
       for I in Goals_List.Iterate loop
          Insert
            (GoalsView,
@@ -73,8 +72,6 @@ package body Goals.UI is
             Trim(Positive'Image(Goals_Container.To_Index(I)), Left) &
             "} -text {" & GoalText(Goals_Container.To_Index(I)) & "}");
       end loop;
-      SelectButton.Interp := Interp;
-      SelectButton.Name := New_String(".goalsdialog.selectbutton");
       configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Show_Goals_Command;
@@ -105,14 +102,13 @@ package body Goals.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      GoalsView: Ttk_Tree_View;
-      GoalButton: Ttk_Button;
+      GoalsView: constant Ttk_Tree_View :=
+        Get_Widget(".goalsdialog.view", Interp);
       SelectedGoal: Natural;
       ButtonName: constant String := CArgv.Arg(Argv, 1);
+      GoalButton: constant Ttk_Button := Get_Widget(ButtonName, Interp);
       ButtonText: Unbounded_String;
    begin
-      GoalsView.Interp := Interp;
-      GoalsView.Name := New_String(".goalsdialog.view");
       SelectedGoal := Natural'Value(Selection(GoalsView));
       ClearCurrentGoal;
       if SelectedGoal > 0 then
@@ -122,8 +118,6 @@ package body Goals.UI is
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-      GoalButton.Interp := Interp;
-      GoalButton.Name := New_String(ButtonName);
       if SelectedGoal > 0 then
          ButtonText := To_Unbounded_String(GoalText(SelectedGoal));
          Add(GoalButton, To_String(ButtonText));
