@@ -101,17 +101,17 @@ package body Help.UI is
          11 =>
            (Name => To_Unbounded_String("UnarmedSkill"),
             Value => Skills_List(UnarmedSkill).Name));
-      AccelNames: constant array(1 .. 29) of Unbounded_String :=
+      AccelNames: constant array(1 .. 28) of Unbounded_String :=
         (MapAccelerators(5), MapAccelerators(6), MapAccelerators(7),
          MapAccelerators(8), MapAccelerators(9), MapAccelerators(10),
          MapAccelerators(11), MapAccelerators(12), MapAccelerators(13),
          MapAccelerators(14), MenuAccelerators(1), MenuAccelerators(2),
          MenuAccelerators(3), MenuAccelerators(4), MenuAccelerators(5),
-         MenuAccelerators(6), MenuAccelerators(7), MenuAccelerators(8),
-         MapAccelerators(2), MenuAccelerators(9), MenuAccelerators(11),
+         MenuAccelerators(6), MenuAccelerators(7), MapAccelerators(2),
+         MenuAccelerators(8), MenuAccelerators(10), MenuAccelerators(11),
          MenuAccelerators(12), MenuAccelerators(13), MenuAccelerators(14),
-         MenuAccelerators(15), MapAccelerators(1), MenuAccelerators(10),
-         MapAccelerators(3), MapAccelerators(4));
+         MapAccelerators(1), MenuAccelerators(9), MapAccelerators(3),
+         MapAccelerators(4));
       type FontTag is record
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
