@@ -67,7 +67,6 @@ with Missions; use Missions;
 with ShipModules; use ShipModules;
 with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
-with Ships.Cargo.UI; use Ships.Cargo.UI;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
 with Statistics.UI; use Statistics.UI;
@@ -85,8 +84,6 @@ package body Maps.UI is
       Menu.Add
         (GameMenu, "command",
          "-label {Ship information} -command ShowShipInfo");
-      Menu.Add
-        (GameMenu, "command", "-label {Ship cargo} -command ShowCargoInfo");
       Menu.Add
         (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
       Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
@@ -883,7 +880,6 @@ package body Maps.UI is
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
          Help.UI.AddCommands;
-         Ships.Cargo.UI.AddCommands;
          Ships.UI.AddCommands;
          Crafts.UI.AddCommands;
          Messages.UI.AddCommands;
