@@ -79,7 +79,7 @@ package body BasesList is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".panded", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
       BasesFrame: Ttk_Frame := Get_Widget(Paned & ".basesframe", Interp);
       BasesCanvas: constant Tk_Canvas :=
         Get_Widget(BasesFrame & ".canvas", Interp);
