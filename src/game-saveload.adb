@@ -79,6 +79,14 @@ package body Game.SaveLoad is
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop;
       end SaveStatistics;
+      procedure SaveNumber
+        (Value: Integer; Name: String;
+         Node: DOM.Core.Element := CategoryNode) is
+         RawValue: constant String :=
+           Trim(Integer'Image(Value), Ada.Strings.Left);
+      begin
+         Set_Attribute(Node, Name, RawValue);
+      end SaveNumber;
       type Difficulty_Data is record
          Name: Unbounded_String;
          Value: Float;
@@ -124,21 +132,11 @@ package body Game.SaveLoad is
       LogMessage("Saving game time...", Everything, False);
       CategoryNode := Create_Element(SaveData, "gamedate");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      RawValue := To_Unbounded_String(Integer'Image(GameDate.Year));
-      Set_Attribute
-        (CategoryNode, "year", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(GameDate.Month));
-      Set_Attribute
-        (CategoryNode, "month", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(GameDate.Day));
-      Set_Attribute
-        (CategoryNode, "day", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(GameDate.Hour));
-      Set_Attribute
-        (CategoryNode, "hour", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Integer'Image(GameDate.Minutes));
-      Set_Attribute
-        (CategoryNode, "minutes", To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(GameDate.Year, "year");
+      SaveNumber(GameDate.Month, "month");
+      SaveNumber(GameDate.Day, "day");
+      SaveNumber(GameDate.Hour, "hour");
+      SaveNumber(GameDate.Minutes, "minutes");
       LogMessage("done.", Everything, True, False);
       -- Save map
       LogMessage("Saving map...", Everything, False);
@@ -150,14 +148,8 @@ package body Game.SaveLoad is
                if SkyMap(X, Y).Visited then
                   FieldNode := Create_Element(SaveData, "field");
                   FieldNode := Append_Child(MainNode, FieldNode);
-                  RawValue := To_Unbounded_String(Integer'Image(X));
-                  Set_Attribute
-                    (FieldNode, "x",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
-                  RawValue := To_Unbounded_String(Integer'Image(Y));
-                  Set_Attribute
-                    (FieldNode, "y",
-                     To_String(Trim(RawValue, Ada.Strings.Left)));
+                  SaveNumber(X, "x", FieldNode);
+                  SaveNumber(Y, "y", FieldNode);
                end if;
             end loop;
          end loop;
@@ -201,18 +193,10 @@ package body Game.SaveLoad is
                Message := GetMessage(I);
                MessageNode := Create_Element(SaveData, "message");
                MessageNode := Append_Child(MainNode, MessageNode);
-               RawValue :=
-                 To_Unbounded_String
-                   (Integer'Image(Message_Type'Pos(Message.MType)));
-               Set_Attribute
-                 (MessageNode, "type",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
-               RawValue :=
-                 To_Unbounded_String
-                   (Integer'Image(Message_Color'Pos(Message.Color)));
-               Set_Attribute
-                 (MessageNode, "color",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber
+                 (Message_Type'Pos(Message.MType), "type", MessageNode);
+               SaveNumber
+                 (Message_Color'Pos(Message.Color), "color", MessageNode);
                MessageText :=
                  Create_Text_Node(SaveData, To_String(Message.Message));
                MessageText := Append_Child(MessageNode, MessageText);
@@ -228,20 +212,10 @@ package body Game.SaveLoad is
          for Event of Events_List loop
             EventNode := Create_Element(SaveData, "event");
             EventNode := Append_Child(MainNode, EventNode);
-            RawValue :=
-              To_Unbounded_String
-                (Integer'Image(Events_Types'Pos(Event.EType)));
-            Set_Attribute
-              (EventNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Event.SkyX));
-            Set_Attribute
-              (EventNode, "x", To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Event.SkyY));
-            Set_Attribute
-              (EventNode, "y", To_String(Trim(RawValue, Ada.Strings.Left)));
-            RawValue := To_Unbounded_String(Integer'Image(Event.Time));
-            Set_Attribute
-              (EventNode, "time", To_String(Trim(RawValue, Ada.Strings.Left)));
+            SaveNumber(Events_Types'Pos(Event.EType), "type", EventNode);
+            SaveNumber(Event.SkyX, "x", EventNode);
+            SaveNumber(Event.SkyY, "y", EventNode);
+            SaveNumber(Event.Time, "time", EventNode);
             case Event.EType is
                when DoublePrice =>
                   RawValue := Event.ItemIndex;
@@ -261,44 +235,23 @@ package body Game.SaveLoad is
       CategoryNode := Create_Element(SaveData, "statistics");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       SaveStatistics(GameStats.DestroyedShips, "destroyedships");
-      RawValue := To_Unbounded_String(Positive'Image(GameStats.BasesVisited));
-      Set_Attribute
-        (CategoryNode, "visitedbases",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Positive'Image(GameStats.MapVisited));
-      Set_Attribute
-        (CategoryNode, "mapdiscovered",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue :=
-        To_Unbounded_String(Positive'Image(GameStats.DistanceTraveled));
-      Set_Attribute
-        (CategoryNode, "distancetraveled",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(GameStats.BasesVisited, "visitedbases");
+      SaveNumber(GameStats.MapVisited, "mapdiscovered");
+      SaveNumber(GameStats.DistanceTraveled, "distancetraveled");
       SaveStatistics(GameStats.CraftingOrders, "finishedcrafts");
-      RawValue :=
-        To_Unbounded_String(Positive'Image(GameStats.AcceptedMissions));
-      Set_Attribute
-        (CategoryNode, "acceptedmissions",
-         To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(GameStats.AcceptedMissions, "acceptedmissions");
       SaveStatistics(GameStats.FinishedMissions, "finishedmissions");
       SaveStatistics(GameStats.FinishedGoals, "finishedgoals");
       SaveStatistics(GameStats.KilledMobs, "killedmobs");
-      RawValue := To_Unbounded_String(Natural'Image(GameStats.Points));
-      Set_Attribute
-        (CategoryNode, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(GameStats.Points, "points");
       LogMessage("done.", Everything, True, False);
       -- Save current goal
       LogMessage("Saving current goal...", Everything, False);
       CategoryNode := Create_Element(SaveData, "currentgoal");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "index", To_String(CurrentGoal.Index));
-      RawValue :=
-        To_Unbounded_String(Integer'Image(GoalTypes'Pos(CurrentGoal.GType)));
-      Set_Attribute
-        (CategoryNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
-      RawValue := To_Unbounded_String(Natural'Image(CurrentGoal.Amount));
-      Set_Attribute
-        (CategoryNode, "amount", To_String(Trim(RawValue, Ada.Strings.Left)));
+      SaveNumber(GoalTypes'Pos(CurrentGoal.GType), "type");
+      SaveNumber(CurrentGoal.Amount, "amount");
       Set_Attribute
         (CategoryNode, "target", To_String(CurrentGoal.TargetIndex));
       LogMessage("done.", Everything, True, False);
@@ -323,11 +276,7 @@ package body Game.SaveLoad is
                     (CurrentStory.CurrentStep)
                     .Index));
          end if;
-         RawValue :=
-           To_Unbounded_String(Positive'Image(CurrentStory.MaxSteps));
-         Set_Attribute
-           (CategoryNode, "maxsteps",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber(CurrentStory.MaxSteps, "maxsteps");
          if CurrentStory.ShowText then
             Set_Attribute(CategoryNode, "showtext", "Y");
          else
@@ -336,12 +285,8 @@ package body Game.SaveLoad is
          if CurrentStory.Data /= Null_Unbounded_String then
             Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
          end if;
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(StepConditionType'Pos(CurrentStory.FinishedStep)));
-         Set_Attribute
-           (CategoryNode, "finishedstep",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber
+           (StepConditionType'Pos(CurrentStory.FinishedStep), "finishedstep");
          LogMessage("done.", Everything, True, False);
       end if;
       -- Save finished stories data
@@ -355,11 +300,7 @@ package body Game.SaveLoad is
             CategoryNode := Append_Child(MainNode, CategoryNode);
             Set_Attribute
               (CategoryNode, "index", To_String(FinishedStory.Index));
-            RawValue :=
-              To_Unbounded_String(Positive'Image(FinishedStory.StepsAmount));
-            Set_Attribute
-              (CategoryNode, "stepsamount",
-               To_String(Trim(RawValue, Ada.Strings.Left)));
+            SaveNumber(FinishedStory.StepsAmount, "stepsamount");
             for Step of FinishedStory.StepsTexts loop
                StepNode := Create_Element(SaveData, "steptext");
                StepNode := Append_Child(CategoryNode, StepNode);
@@ -373,11 +314,7 @@ package body Game.SaveLoad is
       for Mission of AcceptedMissions loop
          CategoryNode := Create_Element(SaveData, "acceptedmission");
          CategoryNode := Append_Child(MainNode, CategoryNode);
-         RawValue :=
-           To_Unbounded_String
-             (Integer'Image(Missions_Types'Pos(Mission.MType)));
-         Set_Attribute
-           (CategoryNode, "type", To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber(Missions_Types'Pos(Mission.MType), "type");
          if Mission.MType = Deliver then
             RawValue := Mission.ItemIndex;
          elsif Mission.MType = Passenger then
@@ -390,25 +327,11 @@ package body Game.SaveLoad is
          Set_Attribute
            (CategoryNode, "target",
             To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.Time));
-         Set_Attribute
-           (CategoryNode, "time", To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.TargetX));
-         Set_Attribute
-           (CategoryNode, "targetx",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.TargetY));
-         Set_Attribute
-           (CategoryNode, "targety",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.Reward));
-         Set_Attribute
-           (CategoryNode, "reward",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
-         RawValue := To_Unbounded_String(Integer'Image(Mission.StartBase));
-         Set_Attribute
-           (CategoryNode, "startbase",
-            To_String(Trim(RawValue, Ada.Strings.Left)));
+         SaveNumber(Mission.Time, "time");
+         SaveNumber(Mission.TargetX, "targetx");
+         SaveNumber(Mission.TargetY, "targety");
+         SaveNumber(Mission.Reward, "reward");
+         SaveNumber(Mission.StartBase, "startbase");
          if Mission.Finished then
             Set_Attribute(CategoryNode, "finished", "Y");
          else
