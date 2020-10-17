@@ -16,7 +16,6 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
 with Tcl; use Tcl;
@@ -132,13 +131,11 @@ package body Help.UI is
         (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"),
          To_Unbounded_String("blackmarket"), To_Unbounded_String("barracks"));
       BasesWithFlag: Unbounded_String;
-      TopicsView: Ttk_Tree_View;
-      HelpView: Tk_Text;
+      TopicsView: constant Ttk_Tree_View :=
+        Get_Widget(".help.paned.topics.view", Interp);
+      HelpView: constant Tk_Text :=
+        Get_Widget(".help.paned.content.view", Interp);
    begin
-      TopicsView.Interp := Interp;
-      TopicsView.Name := New_String(".help.paned.topics.view");
-      HelpView.Interp := Interp;
-      HelpView.Name := New_String(".help.paned.content.view");
       configure(HelpView, "-state normal");
       Delete(HelpView, "1.0", "end");
       for Help of Help_List loop
@@ -267,15 +264,15 @@ package body Help.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      HelpWindow: Tk_Toplevel;
+      HelpWindow: constant Tk_Toplevel := Get_Widget(".help", Interp);
       X, Y: Integer;
-      Paned: Ttk_PanedWindow;
-      TopicsView: Ttk_Tree_View;
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(HelpWindow & ".paned", Interp);
+      TopicsView: constant Ttk_Tree_View :=
+        Get_Widget(Paned & ".topics.view", Interp);
    begin
       Tcl_EvalFile
         (Interp, To_String(DataDirectory) & "ui" & Dir_Separator & "help.tcl");
-      HelpWindow.Interp := Interp;
-      HelpWindow.Name := New_String(".help");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
          GameSettings.WindowWidth) /
@@ -296,11 +293,7 @@ package body Help.UI is
          Trim(Positive'Image(GameSettings.WindowHeight), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       Tcl_Eval(Interp, "update");
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".help.paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.TopicsPosition));
-      TopicsView.Interp := Interp;
-      TopicsView.Name := New_String(".help.paned.topics.view");
       for I in Help_List.Iterate loop
          Insert
            (TopicsView,
@@ -337,14 +330,11 @@ package body Help.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      HelpWindow: Tk_Toplevel;
-      Paned: Ttk_PanedWindow;
+      HelpWindow: Tk_Toplevel := Get_Widget(".help", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(HelpWindow & ".paned", Interp);
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".help.paned");
       GameSettings.TopicsPosition := Natural'Value(SashPos(Paned, "0"));
-      HelpWindow.Interp := Interp;
-      HelpWindow.Name := New_String(".help");
       Destroy(HelpWindow);
       return TCL_OK;
    end Close_Help_Command;
