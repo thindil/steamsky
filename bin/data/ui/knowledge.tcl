@@ -8,7 +8,7 @@ pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin general show}]
+grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}]
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known bases}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.bases.scrolly
