@@ -75,7 +75,7 @@ package body GameOptions is
       2 => (MenuAccelerators(2), To_Unbounded_String(".menu.orders")),
       3 => (MenuAccelerators(3), To_Unbounded_String(".menu.crafts")),
       4 => (MenuAccelerators(4), To_Unbounded_String(".menu.messages")),
-      5 => (MenuAccelerators(5), To_Unbounded_String(".menu.bases")),
+      5 => (MenuAccelerators(5), To_Unbounded_String(".menu.knowledge")),
       6 => (MenuAccelerators(6), To_Unbounded_String(".menu.events")),
       7 => (MenuAccelerators(7), To_Unbounded_String(".menu.missions")),
       8 => (MenuAccelerators(8), To_Unbounded_String(".menu.stories")),

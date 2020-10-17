@@ -58,6 +58,7 @@ with Game; use Game;
 with GameOptions;
 with Help.UI; use Help.UI;
 with Items; use Items;
+with Knowledge; use Knowledge;
 with Log;
 with MainMenu; use MainMenu;
 with Maps.UI.Commands;
@@ -92,10 +93,10 @@ package body Maps.UI is
          "-label {Last messages} -command ShowLastMessages");
       Menu.Add
         (GameMenu, "command",
-         "-label {List of known bases} -command ShowBases");
+         "-label {Knowledge lists} -command ShowKnowledge");
       Menu.Add
         (GameMenu, "command",
-         "-label {List of known events} -command ShowEvents");
+         "-label {List of known events} -command ShowBases");
       Menu.Add
         (GameMenu, "command",
          "-label {Accepted missions} -command {ShowMissions accepted}");
@@ -891,6 +892,7 @@ package body Maps.UI is
          Bases.UI.AddCommands;
          ShipyardUI.AddCommands;
          LootUI.AddCommands;
+         Knowledge.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");

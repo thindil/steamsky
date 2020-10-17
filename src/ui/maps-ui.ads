@@ -31,7 +31,7 @@ package Maps.UI is
    MenuAccelerators: array(1 .. 14) of Unbounded_String :=
      (To_Unbounded_String("s"), To_Unbounded_String("o"),
       To_Unbounded_String("r"), To_Unbounded_String("m"),
-      To_Unbounded_String("b"), To_Unbounded_String("n"),
+      To_Unbounded_String("k"), To_Unbounded_String("n"),
       To_Unbounded_String("i"), To_Unbounded_String("t"),
       To_Unbounded_String("w"), To_Unbounded_String("g"),
       To_Unbounded_String("F1"), To_Unbounded_String("p"),
