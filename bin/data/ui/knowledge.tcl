@@ -8,8 +8,29 @@ pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
-grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}]
+grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known bases}
+# List of bases options
+grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w
+grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]
+grid [ttk::combobox $knowledgecanvas.frame.options.types -state readonly -width 10] -row 0 -column 1
+bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases types}
+grid [ttk::label $knowledgecanvas.frame.options.statuslbl -text {Status:}] -row 0 -column 2
+grid [ttk::combobox $knowledgecanvas.frame.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}] -width 10] -row 0 -column 3
+bind $knowledgecanvas.frame.options.status <<ComboboxSelected>> {ShowBases status}
+$knowledgecanvas.frame.options.status current 0
+grid [ttk::label $knowledgecanvas.frame.options.ownerlbl -text {Owner:}] -row 0 -column 4
+grid [ttk::combobox $knowledgecanvas.frame.options.owner -state readonly -width 10] -row 0 -column 5
+bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases owner}
+grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}] -row 0 -column 6
+grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases search %P} -width 20] -row 0 -column 7
+# List of bases
+grid [ttk::label $knowledgecanvas.frame.name -text {Name}]
+grid [ttk::label $knowledgecanvas.frame.distance -text {Distance}] -column 1 -row 2
+grid [ttk::label $knowledgecanvas.frame.population -text {Population}] -column 2 -row 2
+grid [ttk::label $knowledgecanvas.frame.size -text {Size}] -column 3 -row 2
+grid [ttk::label $knowledgecanvas.frame.owner -text {Owner}] -column 4 -row 2
+grid [ttk::label $knowledgecanvas.frame.type -text {Type}] -column 5 -row 2
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.bases.scrolly
 ::autoscroll::autoscroll $knowledgeframe.bases.scrollx
@@ -21,8 +42,10 @@ pack [ttk::scrollbar $knowledgeframe.missions.scrollx -orient horizontal -comman
 pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+# Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin missions show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of accepted missions}
+# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.missions.scrolly
 ::autoscroll::autoscroll $knowledgeframe.missions.scrollx
@@ -34,8 +57,10 @@ pack [ttk::scrollbar $knowledgeframe.events.scrollx -orient horizontal -command 
 pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+# Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin events show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known events}
+# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.events.scrolly
 ::autoscroll::autoscroll $knowledgeframe.events.scrollx
@@ -47,8 +72,10 @@ pack [ttk::scrollbar $knowledgeframe.stories.scrollx -orient horizontal -command
 pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+# Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin stories show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known stories}
+# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.stories.scrolly
 ::autoscroll::autoscroll $knowledgeframe.stories.scrollx
