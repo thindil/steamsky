@@ -1,6 +1,6 @@
 set shipinfoframe [ttk::frame .paned.shipinfoframe]
 # General ship info
-grid [ttk::labelframe $shipinfoframe.general -text {General Info:}] -sticky nwes
+grid [ttk::labelframe $shipinfoframe.general -text {General Info:}] -sticky nwes -padx 4
 set shipcanvas [canvas $shipinfoframe.general.canvas -yscrollcommand [list $shipinfoframe.general.scrolly set] -xscrollcommand [list $shipinfoframe.general.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.general.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.general.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
@@ -43,7 +43,7 @@ $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.general.scrolly
 ::autoscroll::autoscroll $shipinfoframe.general.scrollx
 # Ship modules
-grid [ttk::labelframe $shipinfoframe.modules -text {Modules Info:}] -sticky nwes
+grid [ttk::labelframe $shipinfoframe.modules -text {Modules Info:}] -sticky nwes -padx 4
 set shipcanvas [canvas $shipinfoframe.modules.canvas -yscrollcommand [list $shipinfoframe.modules.scrolly set] -xscrollcommand [list $shipinfoframe.modules.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.modules.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
@@ -58,7 +58,7 @@ $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
 # Crew info
-grid [ttk::labelframe $shipinfoframe.crew -text {Crew Info:}] -row 0 -column 1 -sticky nwes
+grid [ttk::labelframe $shipinfoframe.crew -text {Crew Info:}] -row 0 -column 1 -sticky nwes -padx 4
 set shipcanvas [canvas $shipinfoframe.crew.canvas -yscrollcommand [list $shipinfoframe.crew.scrolly set] -xscrollcommand [list $shipinfoframe.crew.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.crew.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.crew.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
@@ -71,7 +71,7 @@ $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.crew.scrolly
 ::autoscroll::autoscroll $shipinfoframe.crew.scrollx
 # Cargo info
-grid [ttk::labelframe $shipinfoframe.cargo -text {Cargo Info:}] -row 1 -column 1 -sticky nwes
+grid [ttk::labelframe $shipinfoframe.cargo -text {Cargo Info:}] -row 1 -column 1 -sticky nwes -padx 4
 set shipcanvas [canvas $shipinfoframe.cargo.canvas -yscrollcommand [list $shipinfoframe.cargo.scrolly set] -xscrollcommand [list $shipinfoframe.cargo.scrollx set]]
 pack [ttk::scrollbar $shipinfoframe.cargo.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.cargo.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
