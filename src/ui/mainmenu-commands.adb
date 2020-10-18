@@ -117,12 +117,10 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      TextView: Tk_Text;
+      TextView: constant Tk_Text := Get_Widget(".showfilemenu.text", Interp);
       ShowFile: File_Type;
       FileName: constant String := CArgv.Arg(Argv, 1);
    begin
-      TextView.Interp := Interp;
-      TextView.Name := New_String(".showfilemenu.text");
       configure(TextView, "-state normal");
       Delete(TextView, "1.0", "end");
       if not Exists(To_String(DocDirectory) & FileName) then
@@ -178,13 +176,12 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      TextView: Tk_Text;
+      TextView: constant Tk_Text := Get_Widget(".newsmenu.text", Interp);
       ChangesFile: File_Type;
       FileText: Unbounded_String;
-      AllNewsButton: Ttk_Button;
+      AllNewsButton: constant Ttk_Button :=
+        Get_Widget(".newsmenu.showall", Interp);
    begin
-      AllNewsButton.Interp := Interp;
-      AllNewsButton.Name := New_String(".newsmenu.showall");
       if CArgv.Arg(Argv, 1) = "false" then
          AllNews := False;
          configure
@@ -196,8 +193,6 @@ package body MainMenu.Commands is
            (AllNewsButton,
             "-text {Show only newest changes} -command {ShowNews false}");
       end if;
-      TextView.Interp := Interp;
-      TextView.Name := New_String(".newsmenu.text");
       configure(TextView, "-state normal");
       Delete(TextView, "1.0", "end");
       if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
@@ -246,10 +241,8 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      HofView: Ttk_Tree_View;
+      HofView: constant Ttk_Tree_View := Get_Widget(".hofmenu.view", Interp);
    begin
-      HofView.Interp := Interp;
-      HofView.Name := New_String(".hofmenu.view");
       Delete(HofView, "[list " & Children(HofView, "{}") & "]");
       for I in HallOfFame_Array'Range loop
          exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
@@ -288,14 +281,12 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      LoadView: Ttk_Tree_View;
+      LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       Tokens: Slice_Set;
       Selected: Boolean := False;
    begin
-      LoadView.Interp := Interp;
-      LoadView.Name := New_String(".loadmenu.view");
       Delete(LoadView, "[list " & Children(LoadView, "{}") & "]");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       while More_Entries(Files) loop
@@ -342,17 +333,15 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      LoadView: Ttk_Tree_View;
-      ItemIndex, Items: Unbounded_String;
       Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
+      LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
+      ItemIndex, Items: Unbounded_String;
    begin
       if MessageBox
           ("-message {Are you sure you want delete this savegame?} -icon question -type yesno") /=
         "yes" then
          return TCL_OK;
       end if;
-      LoadView.Interp := Interp;
-      LoadView.Name := New_String(Frame & ".view");
       ItemIndex := To_Unbounded_String(Selection(LoadView));
       Delete_File(To_String(SaveDirectory & ItemIndex));
       Delete(LoadView, To_String(ItemIndex));
@@ -431,10 +420,8 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      LoadView: Ttk_Tree_View;
+      LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
    begin
-      LoadView.Interp := Interp;
-      LoadView.Name := New_String(".loadmenu.view");
       if Selection(LoadView) = "" then
          return TCL_OK;
       end if;
@@ -480,14 +467,15 @@ package body MainMenu.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, Values: Unbounded_String;
-      ComboBox: Ttk_ComboBox;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
       Label: Ttk_Label;
-      GenderFrame: Ttk_Frame;
+      GenderFrame: constant Ttk_Frame :=
+        Get_Widget(".newgamemenu.canvas.player.gender", Interp);
       procedure UpdateInfo(NewText: String) is
-         InfoText: Tk_Text;
+         InfoText: constant Tk_Text :=
+           Get_Widget(".newgamemenu.info.text", Interp);
       begin
-         InfoText.Interp := Interp;
-         InfoText.Name := New_String(".newgamemenu.info.text");
          configure(InfoText, "-state normal");
          Delete(InfoText, "1.0", "end");
          Insert
@@ -498,11 +486,7 @@ package body MainMenu.Commands is
          configure(InfoText, "-state disabled");
       end UpdateInfo;
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       Label.Interp := Interp;
-      GenderFrame.Interp := Interp;
-      GenderFrame.Name := New_String(".newgamemenu.canvas.player.gender");
       FactionName := To_Unbounded_String(Get(ComboBox));
       if FactionName = To_Unbounded_String("Random") then
          Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
@@ -592,16 +576,14 @@ package body MainMenu.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, CareerName: Unbounded_String;
-      ComboBox: Ttk_ComboBox;
-      InfoText: Tk_Text;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
+      InfoText: constant Tk_Text :=
+        Get_Widget(".newgamemenu.info.text", Interp);
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       FactionName := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
       CareerName := To_Unbounded_String(Get(ComboBox));
-      InfoText.Interp := Interp;
-      InfoText.Name := New_String(".newgamemenu.info.text");
       configure(InfoText, "-state normal");
       Delete(InfoText, "1.0", "end");
       Insert
@@ -656,14 +638,12 @@ package body MainMenu.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       BaseName: Unbounded_String;
-      ComboBox: Ttk_ComboBox;
-      InfoText: Tk_Text;
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.base", Interp);
+      InfoText: constant Tk_Text :=
+        Get_Widget(".newgamemenu.info.text", Interp);
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
       BaseName := To_Unbounded_String(Get(ComboBox));
-      InfoText.Interp := Interp;
-      InfoText.Name := New_String(".newgamemenu.info.text");
       configure(InfoText, "-state normal");
       Delete(InfoText, "1.0", "end");
       Insert
@@ -712,17 +692,15 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      ComboBox: Ttk_ComboBox;
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
       FactionName, FactionIndex: Unbounded_String;
       Gender: Character;
-      NameEntry: Ttk_Entry;
+      NameEntry: constant Ttk_Entry :=
+        Get_Widget
+          (".newgamemenu.canvas.player." & CArgv.Arg(Argv, 1) & "name",
+           Interp);
    begin
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
-      NameEntry.Interp := Interp;
-      NameEntry.Name :=
-        New_String
-          (".newgamemenu.canvas.player." & CArgv.Arg(Argv, 1) & "name");
       FactionName := To_Unbounded_String(Get(ComboBox));
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = FactionName then
@@ -768,27 +746,25 @@ package body MainMenu.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ComboBox: Ttk_ComboBox;
-      GoalButton: Ttk_Button;
-      TextEntry: Ttk_Entry;
-      SpinBox: Ttk_SpinBox;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
+      GoalButton: constant Ttk_Button :=
+        Get_Widget(".newgamemenu.canvas.player.goal", Interp);
+      TextEntry: Ttk_Entry :=
+        Get_Widget(".newgamemenu.canvas.player.playername", Interp);
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".newgamemenu.canvas.difficulty.enemydamage", Interp);
    begin
       NewGameSettings.PlayerGender := Tcl_GetVar(Interp, "playergender")(1);
-      GoalButton.Interp := Interp;
-      GoalButton.Name := New_String(".newgamemenu.canvas.player.goal");
       if cget(GoalButton, "-text") = "Random" then
          ClearCurrentGoal;
          CurrentGoal :=
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-      TextEntry.Interp := Interp;
-      TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       NewGameSettings.PlayerName := To_Unbounded_String(Get(TextEntry));
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       NewGameSettings.ShipName := To_Unbounded_String(Get(TextEntry));
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
             NewGameSettings.PlayerFaction := Factions_Container.Key(I);
@@ -813,8 +789,6 @@ package body MainMenu.Commands is
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       NewGameSettings.DifficultyLevel := Natural'Value(Current(ComboBox));
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
       NewGameSettings.EnemyDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
