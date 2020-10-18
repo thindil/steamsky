@@ -63,7 +63,7 @@ package body Game is
       -- Set game statistics
       ClearGameStats;
       declare
-         Roll, Index: Positive;
+         Roll, Index: Positive range 1 .. Positive(Factions_List.Length);
       begin
          -- Set player faction if random option was selected
          if NewGameSettings.PlayerFaction = To_Unbounded_String("random") then
@@ -122,7 +122,7 @@ package body Game is
             Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
             Positive_Container."=");
          BasesArray: Bases_Container.Map;
-         Attempts: Natural;
+         Attempts: Positive range 1 .. 251;
       begin
          for I in Factions_List.Iterate loop
             MaxSpawnRoll := MaxSpawnRoll + Factions_List(I).SpawnChance;
@@ -298,8 +298,14 @@ package body Game is
            Factions_List(NewGameSettings.PlayerFaction).Careers
              (NewGameSettings.PlayerCareer)
              .PlayerIndex;
-         Amount, PlayerMorale: Positive;
+         Amount: Positive;
          TmpInventory: Inventory_Container.Vector;
+         PlayerMorale: constant Positive :=
+           (if
+              Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
+                (To_Unbounded_String("nomorale"))
+            then 50
+            else 100);
       begin
          for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
             Amount :=
@@ -315,12 +321,6 @@ package body Game is
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop;
-         PlayerMorale :=
-           (if
-              Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
-                (To_Unbounded_String("nomorale"))
-            then 50
-            else 100);
          PlayerShip.Crew.Prepend
            (New_Item =>
               (Name => NewGameSettings.PlayerName,
@@ -389,7 +389,7 @@ package body Game is
 
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) is
       AddedHours, AddedMinutes: Natural;
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       TiredPoints: Natural := 0;
       NeedCleaning: Boolean := False;
