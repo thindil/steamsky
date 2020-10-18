@@ -25,9 +25,13 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with BasesTypes; use BasesTypes;
+with Factions; use Factions;
 with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -40,23 +44,36 @@ package body Knowledge is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: Ttk_PanedWindow;
-      KnowledgeFrame, Item: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      KnowledgeFrame: Ttk_Frame := Get_Widget(Paned & ".knowledgeframe");
+      Item: Ttk_Frame;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      KnowledgeCanvas: Tk_Canvas;
+      KnowledgeCanvas: Tk_Canvas :=
+        Get_Widget(KnowledgeFrame & ".bases.canvas", Interp);
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(KnowledgeCanvas & ".frame.options.types");
+      ComboValues: Unbounded_String;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      KnowledgeFrame.Interp := Interp;
-      KnowledgeFrame.Name := New_String(Widget_Image(Paned) & ".knowledgeframe");
       if Winfo_Get(KnowledgeFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "knowledge.tcl");
+         Append(ComboValues, " {Any}");
+         for BaseType of BasesTypes_List loop
+            Append(ComboValues, " {" & BaseType.Name & "}");
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
+         Current(ComboBox, "0");
+         ComboValues := To_Unbounded_String(" {Any}");
+         ComboBox.Name := New_String(KnowledgeCanvas & ".frame.options.owner");
+         for I in Factions_List.Iterate loop
+            Append(ComboValues, " {" & Factions_List(I).Name & "}");
+         end loop;
+         configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
+         Current(ComboBox, "0");
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -67,20 +84,16 @@ package body Knowledge is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       -- Setting bases list
       KnowledgeFrame.Name :=
-        New_String
-          (Widget_Image(Paned) & ".knowledgeframe.bases.canvas.frame");
+        New_String(Paned & ".knowledgeframe.bases.canvas.frame");
       Tcl_Eval(Get_Context, "update");
-      KnowledgeCanvas.Interp := Interp;
-      KnowledgeCanvas.Name :=
-        New_String(Widget_Image(Paned) & ".knowledgeframe.bases.canvas");
       configure
-        (KnowledgeCanvas, "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
+        (KnowledgeCanvas,
+         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting accepted missions info
-      KnowledgeFrame.Name := New_String(Widget_Image(Paned) & ".knowledgeframe");
       KnowledgeFrame.Name :=
-        New_String(Widget_Image(KnowledgeFrame) & ".missions.canvas.frame");
+        New_String(Paned & ".knowledgeframe.missions.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 2 .. (Rows - 1) loop
@@ -98,9 +111,10 @@ package body Knowledge is
       Tcl_Eval(Get_Context, "update");
       KnowledgeCanvas.Interp := Interp;
       KnowledgeCanvas.Name :=
-        New_String(Widget_Image(Paned) & ".knowledgeframe.missions.canvas");
+        New_String(Paned & ".knowledgeframe.missions.canvas");
       configure
-        (KnowledgeCanvas, "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
+        (KnowledgeCanvas,
+         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting the known events list
