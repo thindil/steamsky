@@ -198,6 +198,7 @@ package body MainMenu is
       X, Y: Integer;
       Files: Search_Type;
       Button: Ttk_Button := Get_Widget(".mainmenu.loadgame");
+      OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
    begin
       X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -208,7 +209,12 @@ package body MainMenu is
          Y := 0;
       end if;
       if GameSettings.FullScreen then
-         Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 0");
+         Wm_Set(MainWindow, "attributes", "-fullscreen 0");
+      end if;
+      if OsName = "Linux" then
+         Wm_Set(MainWindow, "attributes", "-zoomed 0");
+      else
+         Wm_Set(MainWindow, "state", "normal");
       end if;
       Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
       Wm_Set
