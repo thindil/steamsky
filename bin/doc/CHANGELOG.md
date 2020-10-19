@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Resizing of fonts in help tags
 - Auto-resizing of help window
 - Saving the main game window size
+- Unmaximize main menu window when quit the game
 
 ## [5.3] - 2020-10-04
 
