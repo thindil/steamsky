@@ -33,6 +33,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with BasesTypes; use BasesTypes;
 with Factions; use Factions;
 with Game; use Game;
+with Knowledge.Bases;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -83,14 +84,7 @@ package body Knowledge is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       -- Setting bases list
-      KnowledgeFrame.Name :=
-        New_String(Paned & ".knowledgeframe.bases.canvas.frame");
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (KnowledgeCanvas,
-         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
-      Xview_Move_To(KnowledgeCanvas, "0.0");
-      Yview_Move_To(KnowledgeCanvas, "0.0");
+      Knowledge.Bases.UpdateBasesList;
       -- Setting accepted missions info
       KnowledgeFrame.Name :=
         New_String(Paned & ".knowledgeframe.missions.canvas.frame");
@@ -109,7 +103,6 @@ package body Knowledge is
          end loop;
       end loop;
       Tcl_Eval(Get_Context, "update");
-      KnowledgeCanvas.Interp := Interp;
       KnowledgeCanvas.Name :=
         New_String(Paned & ".knowledgeframe.missions.canvas");
       configure
@@ -211,6 +204,7 @@ package body Knowledge is
    begin
       AddCommand("ShowKnowledge", Show_Knowledge_Command'Access);
       AddCommand("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
+      Knowledge.Bases.AddCommands;
    end AddCommands;
 
 end Knowledge;
