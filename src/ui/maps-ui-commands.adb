@@ -229,6 +229,10 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapView: Tk_Text;
    begin
+      GameSettings.WindowWidth :=
+        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
+      GameSettings.WindowHeight :=
+        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
       MapView.Interp := Interp;
       MapView.Name := New_String(".paned.mapframe.map");
       configure
