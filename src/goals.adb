@@ -62,7 +62,7 @@ package body Goals is
                exit;
             end if;
          end loop;
-         if (Action = UPDATE or Action = REMOVE) then
+         if Action in UPDATE | REMOVE then
             if GoalIndex = 0 then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
