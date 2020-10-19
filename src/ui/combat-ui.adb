@@ -1096,9 +1096,9 @@ package body Combat.UI is
                   OrderMessage);
             end if;
          end loop;
-         Delete(GameMenu, "4", "5");
-         Delete(GameMenu, "5", "10");
-         Delete(GameMenu, "6");
+         Delete(GameMenu, "2", "3");
+         Delete(GameMenu, "3", "8");
+         Delete(GameMenu, "4");
       end if;
       UpdateCombatUI;
       configure
