@@ -78,17 +78,19 @@ package body MainMenu is
           ("logo",
            "-file {" & UI_Directory & Dir_Separator & "images" &
            Dir_Separator & "icon.png}");
-      pragma Unreferenced(Icon);
-      TextEntry: Ttk_Entry;
-      ComboBox: Ttk_ComboBox;
+      TextEntry: Ttk_Entry :=
+        Get_Widget(".newgamemenu.canvas.player.playername");
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(".newgamemenu.canvas.player.faction");
       Values: Unbounded_String;
-      SpinBox: Ttk_SpinBox;
-      VersionLabel: Ttk_Label;
+      SpinBox: Ttk_SpinBox :=
+        Get_Widget(".newgamemenu.canvas.difficulty.enemydamage");
+      VersionLabel: constant Ttk_Label := Get_Widget(".mainmenu.version");
    begin
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
-      Wm_Set(MainWindow, "iconphoto", "-default logo");
+      Wm_Set(MainWindow, "iconphoto", "-default " & Icon);
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
             Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
@@ -118,11 +120,7 @@ package body MainMenu is
          ShowMainMenu;
          return;
       end if;
-      VersionLabel.Interp := Get_Context;
-      VersionLabel.Name := New_String(".mainmenu.version");
       configure(VersionLabel, "-text {" & GameVersion & " (development)}");
-      TextEntry.Interp := Get_Context;
-      TextEntry.Name := New_String(".newgamemenu.canvas.player.playername");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
       Tcl_SetVar
@@ -130,8 +128,6 @@ package body MainMenu is
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
-      ComboBox.Interp := Get_Context;
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.faction");
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
             Append(Values, " {" & Factions_List(I).Name & "}");
@@ -156,8 +152,6 @@ package body MainMenu is
       end if;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
-      SpinBox.Interp := Get_Context;
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.enemydamage");
       Set
         (SpinBox,
          Natural'Image(Natural(NewGameSettings.EnemyDamageBonus * 100.0)));
@@ -203,7 +197,7 @@ package body MainMenu is
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
       Files: Search_Type;
-      Button: Ttk_Button;
+      Button: Ttk_Button := Get_Widget(".mainmenu.loadgame");
    begin
       X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -223,8 +217,6 @@ package body MainMenu is
          Trim(Positive'Image(Y), Left));
       Tcl_Eval(MainMenuFrame.Interp, "pack forget .header .paned");
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
-      Button.Interp := MainMenuFrame.Interp;
-      Button.Name := New_String(".mainmenu.loadgame");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
