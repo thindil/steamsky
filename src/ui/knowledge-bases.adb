@@ -78,7 +78,11 @@ package body Knowledge.Bases is
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
             if BaseName'Length > 0
-              and then Index(SkyBases(I).Name, BaseName, 1) = 0 then
+              and then
+                Index
+                  (To_Lower(To_String(SkyBases(I).Name)), To_Lower(BaseName),
+                   1) =
+                0 then
                goto End_Of_Loop;
             end if;
             if BasesStatus = To_Unbounded_String("Only not visited") and
@@ -161,7 +165,8 @@ package body Knowledge.Bases is
                    (BasesFrame & ".population" & Trim(Positive'Image(I), Left),
                     "-text {not visited yet}");
                Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 2 -columnspan 5");
+                 (BaseLabel,
+                  "-row" & Natural'Image(Row) & " -column 2 -columnspan 5");
             end if;
             Row := Row + 1;
          end if;
