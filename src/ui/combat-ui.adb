@@ -1043,9 +1043,9 @@ package body Combat.UI is
       Label: constant Ttk_Label :=
         Get_Widget(CombatCanvas & ".combat.right.enemy.description");
       CombatStarted: Boolean;
-      Button: Ttk_Button;
+      Button: Ttk_Button := Get_Widget(".header.closebutton");
    begin
-      Button.Interp := Get_Context;
+      Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
            and then EnemyName /=
