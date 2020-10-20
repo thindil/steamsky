@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -27,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -45,11 +47,11 @@ package body Knowledge.Bases is
       Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      ComboBox: Ttk_Combobox :=
-        Get_Widget(BasesFrame & ".options.types");
+      ComboBox: Ttk_Combobox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
       BaseButton: Ttk_MenuButton;
       Row: Positive := 3;
+      BaseLabel: Ttk_Label;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -75,8 +77,7 @@ package body Knowledge.Bases is
       for I in SkyBases'Range loop
          if SkyBases(I).Known then
             if BaseName'Length > 0
-              and then Index(SkyBases(I).Name, BaseName, 1) =
-                0 then
+              and then Index(SkyBases(I).Name, BaseName, 1) = 0 then
                goto End_Of_Loop;
             end if;
             if BasesStatus = To_Unbounded_String("Only not visited") and
@@ -99,43 +100,68 @@ package body Knowledge.Bases is
                   goto End_Of_Loop;
                end if;
             end if;
-         BaseButton :=
-           Create
-             (BasesFrame & ".name" &
-              Trim(Positive'Image(I), Left),
-              "-text {" & To_String(SkyBases(I).Name) & "}");
-         Add(BaseButton, "Show available base's options");
-         Tcl.Tk.Ada.Grid.Grid
-           (BaseButton, "-row" & Natural'Image(Row) & " -sticky w");
---            Append
---              (BaseValues,
---               " " &
---               Natural'Image
---                 (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)));
---            if SkyBases(I).Visited.Year /= 0 then
---               if SkyBases(I).Population = 0 then
---                  Append(BaseValues, " empty");
---               elsif SkyBases(I).Population < 150 then
---                  Append(BaseValues, " small");
---               elsif SkyBases(I).Population < 300 then
---                  Append(BaseValues, " medium");
---               else
---                  Append(BaseValues, " large");
---               end if;
---               Append
---                 (BaseValues,
---                  " {" & To_Lower(Bases_Size'Image(SkyBases(I).Size)) & "}");
---               Append
---                 (BaseValues,
---                  " {" & Factions_List(SkyBases(I).Owner).Name & "}");
---               Append
---                 (BaseValues,
---                  " {" & BasesTypes_List(SkyBases(I).BaseType).Name & "}");
---            else
---               Append
---                 (BaseValues,
---                  " {not visited} {not visited} {not visited} {not visited}");
---            end if;
+            BaseButton :=
+              Create
+                (BasesFrame & ".name" & Trim(Positive'Image(I), Left),
+                 "-text {" & To_String(SkyBases(I).Name) & "}");
+            Add(BaseButton, "Show available base's options");
+            Tcl.Tk.Ada.Grid.Grid
+              (BaseButton, "-row" & Natural'Image(Row) & " -sticky w");
+            BaseLabel :=
+              Create
+                (BasesFrame & ".distance" & Trim(Positive'Image(I), Left),
+                 "-text {" &
+                 Natural'Image
+                   (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)) &
+                 "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (BaseLabel, "-row" & Natural'Image(Row) & " -column 1");
+            if SkyBases(I).Visited.Year > 0 then
+               BaseLabel :=
+                 Create
+                   (BasesFrame & ".population" &
+                    Trim(Positive'Image(I), Left));
+               if SkyBases(I).Population = 0 then
+                  configure(BaseLabel, "-text {empty}");
+               elsif SkyBases(I).Population < 150 then
+                  configure(BaseLabel, "-text {small}");
+               elsif SkyBases(I).Population < 300 then
+                  configure(BaseLabel, "-text {medium}");
+               else
+                  configure(BaseLabel, "-text {large}");
+               end if;
+               Tcl.Tk.Ada.Grid.Grid
+                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 2");
+               BaseLabel :=
+                 Create
+                   (BasesFrame & ".size" & Trim(Positive'Image(I), Left),
+                    "-text {" & To_Lower(Bases_Size'Image(SkyBases(I).Size)) &
+                    "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 3");
+               BaseLabel :=
+                 Create
+                   (BasesFrame & ".owner" & Trim(Positive'Image(I), Left),
+                    "-text {" &
+                    To_String(Factions_List(SkyBases(I).Owner).Name) & "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 4");
+               BaseLabel :=
+                 Create
+                   (BasesFrame & ".type" & Trim(Positive'Image(I), Left),
+                    "-text {" &
+                    To_String(BasesTypes_List(SkyBases(I).BaseType).Name) &
+                    "}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 5");
+            else
+               BaseLabel :=
+                 Create
+                   (BasesFrame & ".population" & Trim(Positive'Image(I), Left),
+                    "-text {not visited yet}");
+               Tcl.Tk.Ada.Grid.Grid
+                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 2 -columnspan 5");
+            end if;
             Row := Row + 1;
          end if;
          <<End_Of_Loop>>
