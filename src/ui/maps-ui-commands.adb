@@ -134,11 +134,10 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
-      ButtonsBox: Ttk_Frame;
+      ButtonsBox: constant Ttk_Frame :=
+        Get_Widget(".paned.mapframe.buttons", Interp);
    begin
       Button.Interp := Interp;
-      ButtonsBox.Interp := Interp;
-      ButtonsBox.Name := New_String(".paned.mapframe.buttons");
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
@@ -182,14 +181,11 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Button: Ttk_Button;
-      ButtonsBox: Ttk_Frame;
+      ButtonsBox: constant Ttk_Frame :=
+        Get_Widget(".paned.mapframe.buttons", Interp);
+      Button: Ttk_Button :=
+        Get_Widget(ButtonsBox & "." & CArgv.Arg(Argv, 1), Interp);
    begin
-      ButtonsBox.Interp := Interp;
-      ButtonsBox.Name := New_String(".paned.mapframe.buttons");
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String(Widget_Image(ButtonsBox) & "." & CArgv.Arg(Argv, 1));
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if CArgv.Arg(Argv, 1) = "left" then
          Button.Name := New_String(Widget_Image(ButtonsBox) & ".right");
@@ -227,14 +223,12 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MapView: Tk_Text;
+      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
    begin
       GameSettings.WindowWidth :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
       GameSettings.WindowHeight :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
-      MapView.Interp := Interp;
-      MapView.Name := New_String(".paned.mapframe.map");
       configure
         (MapView,
          "-width [expr [winfo width $mapview] / [font measure MapFont {" &
@@ -289,11 +283,9 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MapView: Tk_Text;
+      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
       MapIndex: Unbounded_String;
    begin
-      MapView.Interp := Interp;
-      MapView.Name := New_String(".paned.mapframe.map");
       MapIndex :=
         To_Unbounded_String
           (Index
@@ -345,10 +337,9 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MapInfoFrame: Ttk_Frame;
+      MapInfoFrame: constant Ttk_Frame :=
+        Get_Widget(".paned.mapframe.info", Interp);
    begin
-      MapInfoFrame.Interp := Interp;
-      MapInfoFrame.Name := New_String(".paned.mapframe.info");
       if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0 then
          Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky ne");
       else
@@ -382,7 +373,7 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      DestinationMenu: Tk_Menu;
+      DestinationMenu: constant Tk_Menu := Get_Widget(".destination", Interp);
    begin
       if MapX = 0 or MapY = 0 then
          if Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
@@ -393,8 +384,6 @@ package body Maps.UI.Commands is
       if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
-      DestinationMenu.Interp := Interp;
-      DestinationMenu.Name := New_String(".destination");
       Delete(DestinationMenu, "0", "end");
       Add
         (DestinationMenu, "command",
@@ -482,12 +471,10 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MapView: Tk_Text;
+      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
-      SpinBox: Ttk_SpinBox;
+      SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.frame.x", Interp);
    begin
-      MapView.Interp := Interp;
-      MapView.Name := New_String(".paned.mapframe.map");
       if Winfo_Get(MapView, "ismapped") = "0" then
          return TCL_OK;
       end if;
@@ -497,8 +484,6 @@ package body Maps.UI.Commands is
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
-         SpinBox.Interp := Interp;
-         SpinBox.Name := New_String(".movemapdialog.frame.x");
          CenterX := Positive'Value(Get(SpinBox));
          SpinBox.Name := New_String(".movemapdialog.frame.y");
          CenterY := Positive'Value(Get(SpinBox));
@@ -766,10 +751,9 @@ package body Maps.UI.Commands is
                end;
             end if;
             declare
-               MessageDialog: Ttk_Frame;
+               MessageDialog: constant Ttk_Frame :=
+                 Get_Widget(".message", Interp);
             begin
-               MessageDialog.Interp := Interp;
-               MessageDialog.Name := New_String(".message");
                if Winfo_Get(MessageDialog, "exists") = "0" then
                   if GetItemAmount(FuelType) <= GameSettings.LowFuel then
                      ShowMessage("Your fuel level is dangerously low.");
@@ -884,13 +868,11 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: Ttk_PanedWindow;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
    begin
       if MessageBox
           ("-message {Are you sure want to quit?} -icon question -type yesno") =
         "yes" then
-         Paned.Interp := Interp;
-         Paned.Name := New_String(".paned");
          GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
          EndGame(True);
          ShowMainMenu;
@@ -959,10 +941,9 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShowStatistics;
       return TCL_OK;
@@ -993,10 +974,9 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       ShowSkyMap(True);
       return TCL_OK;
@@ -1027,15 +1007,14 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
       if Events_List.Length = 0 then
          ShowMessage
            ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.");
          return TCL_OK;
       end if;
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShowEventsList;
       return TCL_OK;
@@ -1068,7 +1047,8 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "accepted" then
          if AcceptedMissions.Length = 0 then
@@ -1080,8 +1060,6 @@ package body Maps.UI.Commands is
       else
          ShowMissionsList(False);
       end if;
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       return TCL_OK;
    end Show_Missions_Command;
@@ -1111,15 +1089,14 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
       if FinishedStories.Length = 0 then
          ShowMessage("You didn't discovered any story yet.");
          return TCL_OK;
       end if;
       ShowStories;
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       return TCL_OK;
    end Show_Stories_Command;
@@ -1151,10 +1128,8 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MapView: Tk_Text;
+      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
    begin
-      MapView.Interp := Interp;
-      MapView.Name := New_String(".paned.mapframe.map");
       if CArgv.Arg(Argv, 1) = "click" then
          Generate
            (MapView, "<1>",
