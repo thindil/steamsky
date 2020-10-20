@@ -67,7 +67,7 @@ package body HallOfFame is
    end LoadHallOfFame;
 
    procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
-      NewIndex: Natural := 0;
+      NewIndex: Natural range 0 .. 10 := 0;
       HoFFile: File_Type;
       HoF: DOM_Implementation;
       EntryNode, MainNode: DOM.Core.Element;
