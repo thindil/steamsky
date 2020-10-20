@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Auto-resizing of help window
 - Saving the main game window size
 - Unmaximize main menu window when quit the game
+- Hide close button in combat
 
 ## [5.3] - 2020-10-04
 
