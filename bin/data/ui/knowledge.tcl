@@ -13,16 +13,16 @@ tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of kn
 grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w
 grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]
 grid [ttk::combobox $knowledgecanvas.frame.options.types -state readonly -width 10] -row 0 -column 1
-bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases types}
+bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases}
 grid [ttk::label $knowledgecanvas.frame.options.statuslbl -text {Status:}] -row 0 -column 2
 grid [ttk::combobox $knowledgecanvas.frame.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}] -width 10] -row 0 -column 3
-bind $knowledgecanvas.frame.options.status <<ComboboxSelected>> {ShowBases status}
+bind $knowledgecanvas.frame.options.status <<ComboboxSelected>> {ShowBases}
 $knowledgecanvas.frame.options.status current 0
 grid [ttk::label $knowledgecanvas.frame.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $knowledgecanvas.frame.options.owner -state readonly -width 10] -row 0 -column 5
-bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases owner}
+bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases}
 grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}]
-grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases search %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
+grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
 # List of bases
 grid [ttk::label $knowledgecanvas.frame.name -text {Name}]
 grid [ttk::label $knowledgecanvas.frame.distance -text {Distance}] -column 1 -row 2

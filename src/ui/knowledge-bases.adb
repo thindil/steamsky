@@ -35,6 +35,7 @@ with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Factions; use Factions;
 with Maps; use Maps;
+with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
 
@@ -173,9 +174,46 @@ package body Knowledge.Bases is
       Yview_Move_To(BasesCanvas, "0.0");
    end UpdateBasesList;
 
+   -- ****o* KBases/Show_Bases_Command
+   -- FUNCTION
+   -- Show the list of known bases to a player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBases ?basename?
+   -- Basename parameter is a string which will be looking for in the bases
+   -- names
+   -- SOURCE
+   function Show_Bases_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Bases_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData);
+   begin
+      if Argc > 1 then
+         UpdateBasesList(CArgv.Arg(Argv, 1));
+      else
+         UpdateBasesList;
+      end if;
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   end Show_Bases_Command;
+
    procedure AddCommands is
    begin
-      null;
+      AddCommand("ShowBases", Show_Bases_Command'Access);
    end AddCommands;
 
 end Knowledge.Bases;
