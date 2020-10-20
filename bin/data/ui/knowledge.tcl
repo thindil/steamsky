@@ -6,7 +6,6 @@ pack [ttk::scrollbar $knowledgeframe.bases.scrolly -orient vertical -command [li
 pack [ttk::scrollbar $knowledgeframe.bases.scrollx -orient horizontal -command [list $knowledgecanvas xview]] -fill x -side bottom
 pack $knowledgecanvas -side top -fill both -expand true
 ttk::frame $knowledgecanvas.frame
-grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known bases}
@@ -22,8 +21,8 @@ $knowledgecanvas.frame.options.status current 0
 grid [ttk::label $knowledgecanvas.frame.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $knowledgecanvas.frame.options.owner -state readonly -width 10] -row 0 -column 5
 bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases owner}
-grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}] -row 0 -column 6
-grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases search %P} -width 20] -row 0 -column 7
+grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}]
+grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases search %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
 # List of bases
 grid [ttk::label $knowledgecanvas.frame.name -text {Name}]
 grid [ttk::label $knowledgecanvas.frame.distance -text {Distance}] -column 1 -row 2
