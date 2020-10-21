@@ -24,12 +24,14 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -53,6 +55,7 @@ package body Knowledge.Bases is
       BaseButton: Ttk_MenuButton;
       Row: Positive := 3;
       BaseLabel: Ttk_Label;
+      BaseMenu: Tk_Menu;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -75,7 +78,28 @@ package body Knowledge.Bases is
       BasesStatus := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
+      BaseMenu.Interp := Get_Context;
       for I in SkyBases'Range loop
+         BaseMenu.Name :=
+           New_String(".baselistmenu" & Trim(Positive'Image(I), Left));
+         if Winfo_Get(BaseMenu, "exists") = "0" then
+            BaseMenu :=
+              Create
+                (".baselistmenu" & Trim(Positive'Image(I), Left),
+                 "-tearoff false");
+              Menu.Add
+                 (BaseMenu, "command",
+                 "-label {Show the base on map} -command {ShowBase " &
+                 Positive'Image(I) & "}");
+              Menu.Add
+                 (BaseMenu, "command",
+                 "-label {Set the base as destination for the ship} -command {SetBaseDestination " &
+                 Positive'Image(I) & "}");
+              Menu.Add
+                 (BaseMenu, "command",
+                 "-label {Show more information about the base} -command {ShowBaseInfo " &
+                 Positive'Image(I) & "}");
+         end if;
          if SkyBases(I).Known then
             if BaseName'Length > 0
               and then
@@ -102,7 +126,8 @@ package body Knowledge.Bases is
             BaseButton :=
               Create
                 (BasesFrame & ".name" & Trim(Positive'Image(I), Left),
-                 "-text {" & To_String(SkyBases(I).Name) & "}");
+                 "-text {" & To_String(SkyBases(I).Name) & "} -menu {" &
+                 BaseMenu & "}");
             Add(BaseButton, "Show available base's options");
             Tcl.Tk.Ada.Grid.Grid
               (BaseButton, "-row" & Natural'Image(Row) & " -sticky w");
