@@ -93,17 +93,11 @@ package body Knowledge.Bases is
               SkyBases(I).Visited.Year = 0 then
                goto End_Of_Loop;
             end if;
-            if BasesStatus /= To_Unbounded_String("Only not visited") then
-               if BasesType /= To_Unbounded_String("Any")
-                 and then BasesTypes_List(SkyBases(I).BaseType).Name /=
-                   BasesType then
-                  goto End_Of_Loop;
-               end if;
-               if BasesOwner /= To_Unbounded_String("Any")
-                 and then Factions_List(SkyBases(I).Owner).Name /=
-                   BasesOwner then
-                  goto End_Of_Loop;
-               end if;
+            if SkyBases(I).Visited.Year = 0
+              and then
+              (BasesType /= To_Unbounded_String("Any") or
+               BasesOwner /= To_Unbounded_String("Any")) then
+               goto End_Of_Loop;
             end if;
             BaseButton :=
               Create
