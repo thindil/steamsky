@@ -87,7 +87,7 @@ grid [ttk::button $mframe.hide -style Toolbutton -command HideMapButtons] -colum
 grid $mframe -row 0 -column 0 -sticky se
 grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
 bind .paned.mapframe.info <Enter> MoveMapInfo
-grid [ttk::label .paned.mapframe.info.info] -sticky nwes
+grid [ttk::label .paned.mapframe.info.info -style MapInfo.TLabel] -sticky nwes
 ttk::label .paned.mapframe.info.eventinfo
 grid rowconfigure .paned.mapframe 0 -weight 1
 grid columnconfigure .paned.mapframe 0 -weight 1

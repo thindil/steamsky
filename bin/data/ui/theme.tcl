@@ -193,6 +193,9 @@ namespace eval ttk::theme::steamsky {
       option add *TkSDialog*Button.foreground $colors(-goldenyellow)
       option add *TkSDialog*Entry.foreground $colors(-goldenyellow)
 
+      # Map info label
+      ttk::style configure MapInfo.TLabel -background black -relief raised -bordercolor $colors(-gray) -padding 5
+
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
