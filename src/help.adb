@@ -46,7 +46,7 @@ package body Help is
             else ADD);
          HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
          HelpTitle := To_Unbounded_String(Get_Attribute(HelpNode, "title"));
-         if (Action = UPDATE or Action = REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not Help_Container.Contains(Help_List, HelpTitle) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
