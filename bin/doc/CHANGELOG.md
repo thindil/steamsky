@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Saving the main game window size
 - Unmaximize main menu window when quit the game
 - Hide close button in combat
+- Look of map info window
 
 ## [5.3] - 2020-10-04
 
