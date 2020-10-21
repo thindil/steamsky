@@ -120,14 +120,12 @@ package body Maps.UI is
    end CreateGameMenu;
 
    procedure DeathConfirm is
-      Button: Ttk_Button;
-      Paned: Ttk_PanedWindow;
+      Button: Ttk_Button := Get_Widget(".header.menubutton");
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
    begin
       if MessageBox
           ("-message {You are dead. Would you like to see your game statistics?} -icon question -type yesno") =
         "yes" then
-         Button.Interp := Get_Context;
-         Button.Name := New_String(".header.menubutton");
          Tcl.Tk.Ada.Grid.Grid(Button);
          Button.Name := New_String(".header.closebutton");
          configure(Button, "-command ShowMainMenu");
@@ -136,8 +134,6 @@ package body Maps.UI is
          Delete(GameMenu, "6", "14");
          ShowStatistics;
       else
-         Paned.Interp := Get_Context;
-         Paned.Name := New_String(".paned");
          GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
          EndGame(False);
          ShowMainMenu;
@@ -149,12 +145,10 @@ package body Maps.UI is
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
-      Label: Ttk_Label;
-      Button: Ttk_Button;
-      Frame: Ttk_Frame;
+      Label: Ttk_Label := Get_Widget(".header.time");
+      Button: Ttk_Button := Get_Widget(".header.pilot");
+      Frame: constant Ttk_Frame := Get_Widget(".paned.combat");
    begin
-      Label.Interp := Get_Context;
-      Label.Name := New_String(".header.time");
       configure(Label, "-text {" & FormatedTime & "}");
       if GameSettings.ShowNumbers then
          configure
@@ -234,8 +228,6 @@ package body Maps.UI is
       end loop;
       Label.Name := New_String(".header.overloaded");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Frame.Interp := Get_Context;
-      Frame.Name := New_String(".paned.combat");
       if HavePilot and
         (HaveEngineer or
          Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
@@ -290,8 +282,6 @@ package body Maps.UI is
             NeedRepairs := True;
          end if;
       end loop;
-      Button.Interp := Get_Context;
-      Button.Name := New_String(".header.pilot");
       if HavePilot then
          configure(Button, "-style Headergreen.Toolbutton");
          Add(Button, "Pilot is in position.");
@@ -467,19 +457,15 @@ package body Maps.UI is
                MapChar := CurrentTheme.PlayerShipIcon;
             else
                MapChar := CurrentTheme.EmptyMapIcon;
-               if SkyMap(X, Y).Visited then
-                  MapTag := To_Unbounded_String("black");
-               else
-                  MapTag := To_Unbounded_String("unvisited gray");
-               end if;
+               MapTag :=
+                 (if SkyMap(X, Y).Visited then To_Unbounded_String("black")
+                  else To_Unbounded_String("unvisited gray"));
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
                   MapChar := CurrentTheme.TargetIcon;
-                  if SkyMap(X, Y).Visited then
-                     MapTag := Null_Unbounded_String;
-                  else
-                     MapTag := To_Unbounded_String("unvisited");
-                  end if;
+                  MapTag :=
+                    (if SkyMap(X, Y).Visited then Null_Unbounded_String
+                     else To_Unbounded_String("unvisited"));
                elsif X = StoryX and Y = StoryY then
                   MapChar := CurrentTheme.StoryIcon;
                   MapTag := To_Unbounded_String("green");
@@ -570,12 +556,10 @@ package body Maps.UI is
    procedure UpdateMapInfo
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
       MapInfoText, EventInfoText: Unbounded_String;
-      MapInfo, EventInfo: Ttk_Label;
+      MapInfo: constant Ttk_Label := Get_Widget(".paned.mapframe.info.info");
+      EventInfo: constant Ttk_Label :=
+        Get_Widget(".paned.mapframe.info.eventinfo");
    begin
-      MapInfo.Interp := Get_Context;
-      MapInfo.Name := New_String(".paned.mapframe.info.info");
-      EventInfo.Interp := Get_Context;
-      EventInfo.Name := New_String(".paned.mapframe.info.eventinfo");
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if PlayerShip.SkyX /= X or PlayerShip.SkyY /= Y then
@@ -588,7 +572,7 @@ package body Maps.UI is
       end if;
       if SkyMap(X, Y).BaseIndex > 0 then
          declare
-            BaseIndex: constant Positive := SkyMap(X, Y).BaseIndex;
+            BaseIndex: constant BasesRange := SkyMap(X, Y).BaseIndex;
          begin
             if SkyBases(BaseIndex).Known then
                Append(MapInfoText, LF);
@@ -663,7 +647,8 @@ package body Maps.UI is
       end if;
       if SkyMap(X, Y).EventIndex > 0 then
          declare
-            EventIndex: constant Positive := SkyMap(X, Y).EventIndex;
+            EventIndex: constant Events_Container.Extended_Index :=
+              SkyMap(X, Y).EventIndex;
          begin
             if Events_List(EventIndex).EType /= BaseRecovery and
               SkyMap(X, Y).BaseIndex > 0 then
@@ -708,7 +693,8 @@ package body Maps.UI is
       end if;
       if SkyMap(X, Y).MissionIndex > 0 then
          declare
-            MissionIndex: constant Positive := SkyMap(X, Y).MissionIndex;
+            MissionIndex: constant Mission_Container.Extended_Index :=
+              SkyMap(X, Y).MissionIndex;
          begin
             Append(MapInfoText, LF);
             if SkyMap(X, Y).BaseIndex > 0 or SkyMap(X, Y).EventIndex > 0 then
@@ -741,7 +727,7 @@ package body Maps.UI is
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          declare
-            StoryX, StoryY: Integer := 0;
+            StoryX, StoryY: Natural := 0;
             FinishCondition: StepConditionType;
          begin
             GetStoryLocation(StoryX, StoryY);
@@ -798,11 +784,10 @@ package body Maps.UI is
          To_Unbounded_String("Move ship south"),
          To_Unbounded_String("Move ship south and east"));
       Button: Ttk_Button;
-      Speedbox: Ttk_ComboBox;
+      Speedbox: constant Ttk_ComboBox :=
+        Get_Widget(".paned.controls.buttons.speed");
    begin
       Button.Interp := Get_Context;
-      Speedbox.Interp := Get_Context;
-      Speedbox.Name := New_String(".paned.controls.buttons.speed");
       if PlayerShip.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
          Button.Name := New_String(".paned.controls.buttons.moveto");
@@ -846,16 +831,17 @@ package body Maps.UI is
    end UpdateMoveButtons;
 
    procedure CreateGameUI is
-      Paned: Ttk_PanedWindow;
-      Button: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      Button: constant Ttk_Button :=
+        Get_Widget(".paned.mapframe.buttons.hide");
       SteamSky_Map_Error: exception;
-      Header, MessagesFrame: Ttk_Frame;
+      Header: constant Ttk_Frame := Get_Widget(".header");
+      MessagesFrame: constant Ttk_Frame :=
+        Get_Widget(".paned.controls.messages");
       use Log;
    begin
-      GameMenu.Interp := Get_Context;
-      GameMenu.Name := New_String(".gamemenu");
-      MapView.Interp := Get_Context;
-      MapView.Name := New_String(".paned.mapframe.map");
+      GameMenu := Get_Widget(".gamemenu");
+      MapView := Get_Widget(".paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
          declare
             KeysFile: File_Type;
@@ -915,8 +901,6 @@ package body Maps.UI is
           (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
            ".header") =
         0 then
-         Header.Interp := Get_Context;
-         Header.Name := New_String(".header");
          Tcl.Tk.Ada.Pack.Pack(Header, "-fill x");
       end if;
       UpdateHeader;
@@ -927,8 +911,6 @@ package body Maps.UI is
            (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
       end loop;
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       if Index
           (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
@@ -936,8 +918,6 @@ package body Maps.UI is
         0 then
          Tcl.Tk.Ada.Pack.Pack(Paned);
       end if;
-      Button.Interp := Get_Context;
-      Button.Name := New_String(".paned.mapframe.buttons.hide");
       if Invoke(Button) /= "" then
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
@@ -946,8 +926,6 @@ package body Maps.UI is
       UpdateMessages;
       UpdateMoveButtons;
       if not GameSettings.ShowLastMessages then
-         MessagesFrame.Interp := Get_Context;
-         MessagesFrame.Name := New_String(".paned.controls.messages");
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
    end CreateGameUI;
