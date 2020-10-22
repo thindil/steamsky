@@ -178,10 +178,10 @@ package body Items is
    function GetItemDamage
      (ItemDurability: Items_Durability; ToLower: Boolean := False)
       return String is
-      DamagePercent: Float;
+      DamagePercent: DamageFactor;
       DamageText: Unbounded_String;
    begin
-      DamagePercent := 1.0 - (Float(ItemDurability) / 100.0);
+      DamagePercent := 1.0 - (DamageFactor(ItemDurability) / 100.0);
       if DamagePercent < 0.2 then
          DamageText := To_Unbounded_String("Slightly used");
       elsif DamagePercent < 0.5 then
@@ -217,7 +217,7 @@ package body Items is
       SkillLevel, MemberIndex: Natural := 0) is
       DamageChance: Integer :=
         Items_List(Inventory(ItemIndex).ProtoIndex).Value(1);
-      I: Natural := Inventory.First_Index;
+      I: Inventory_Container.Extended_Index := Inventory.First_Index;
    begin
       if SkillLevel > 0 then
          DamageChance := DamageChance - (SkillLevel / 5);
