@@ -895,7 +895,7 @@ package body Maps.UI is
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
-            "{.gamemenu invoke" & Positive'Image(I) & "}");
+            "{InvokeMenu" & Positive'Image(I) & "}");
       end loop;
       if Index
           (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
@@ -945,7 +945,8 @@ package body Maps.UI is
    begin
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
-         "{tk_popup " & Widget_Image(GameMenu) & " %X %Y}");
+         "{if {[winfo class [focus]] != {TEntry}} {tk_popup " &
+         Widget_Image(GameMenu) & " %X %Y}}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
          "{.paned.mapframe.buttons.wait invoke}");
