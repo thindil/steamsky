@@ -6,21 +6,21 @@ or if you prefer, on mail <thindil@laeran.pl>
 
 ### Some general hints about reporting bugs
 
-- If you use Github issues, it is recommended to use the bug report template.
+* If you use Github issues, it is recommended to use the bug report template.
   It contains advice for the desired information included in the report.
-- In the "Title" field try to write short but not a too vague description
+* In the "Title" field try to write short but not a too vague description
   of the problem. Good example: "Game crashed when entering base". Bad example:
   "Game crashes often."
-- In the body/comment field try to write as much informations about the problem
-  as possible. In most cases, more informations is better than less. General
+* In the body/comment field try to write as much information about the problem
+  as possible. In most cases, more information is better than less. General
   rule of a good problem report is to give enough information to allow other people
   to reproduce the problem. It may be in the form of the steps which are
   needed for recreating this problem.
-- If the game crashed, in most cases it should create file *error.log* in
+* If the game crashed, in most cases it should create file *error.log* in
   *data* directory. It will be a lot of help if you can attach that file to the
   bug report. Every bug information in this file contains: Date when the crash
   occured, version of the game used, the source code file and line in this file.
-  If game can't discover the source code file, it write memory address instead.
+  If game can't discover the source code file, it writes memory address instead.
   You can check this last information by using command `addr2line` in the
   directory where *steamsky* executable file is. Example:
 
@@ -46,7 +46,7 @@ go against my ideas. Of course, if you really want it, you can always start
 discussion about a new feature, just I'm afraid, it may take a long time to
 implement it into the game.
 
-If you want to talk/propose changes to any existing features/mechanics in the game, 
+If you want to talk/propose changes to any existing features/mechanics in the game,
 feel free to contact me via issues tracker or mail (addresses that
 you can find at top of this file). General rule about propositions is
 same as for bugs reports - please, try to write as much information as
@@ -58,13 +58,13 @@ implemented in the game.
 
 ## Code propositions
 
-### General informations
+### General information
 
 If you want start helping in the development of the gane, please consider starting with
 something easy like fixing bugs. Before you begin to add new feature to
 the game, please contact with me by issues tracker or mail, addresses are
 at top of this file. Same as with features proposition - your code may
-"collide" with my work and in this moment you may just lose time by working on
+"collide" with my work and at this moment you may just lose time by working on
 it. So it is better that we first discuss your proposition. In any other case,
 fell free to fix and or improve my code.
 
@@ -92,7 +92,7 @@ for format the game and unit tests code.
 
 The game uses [ROBODoc](https://rfsber.home.xs4all.nl/Robo/) for generating
 code documentation. When you write your own code, please add proper header
-documentation to it. If you use Vim/NeoVim, easiest way is to use plugin
+documentation to it. If you use Vim/NeoVim, the easiest way is to use plugin
 [RoboVim](https://github.com/thindil/robovim). Example of documentation
 header:
 
@@ -141,7 +141,7 @@ or, if you prefer (and you have installed), use [Bob](https://github.com/thindil
 
 `bob analyze`
 
-More informations about code coverage and profiling, you can find in the proper
+More information about code coverage and profiling, you can find in the proper
 documentation for both programs.
 
 #### Generating reports
@@ -167,8 +167,8 @@ or, if you prefer (and you have installed), use [Bob](https://github.com/thindil
 
 `bob createtests`
 
-Tests are generated only for this subprograms which have explicitly declared
-tests cases in declarations. Thus if here are no tests cases declared in the
+Tests are generated only for these subprograms which have explicitly declared
+tests cases in declarations. Thus, if here are no tests cases declared in the
 game code, there will be no unit tests generated.
 
 ### Running unit tests
@@ -181,7 +181,7 @@ or, if you prefer (and you have installed), use [Bob](https://github.com/thindil
 
 `bob tests [amount]`
 
-Where `[amount]` is how many times the tests should be run. It is recommended
+The `[amount]` is how many times the tests should be run. It is recommended
 to run them few times in a row to catch all problems. Tests will stops if there
 will be any problem. At this moment unit tests are available only on Linux.
 
