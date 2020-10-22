@@ -1,5 +1,10 @@
 # Game menu
 menu .gamemenu -title {Steam Sky - menu}
+proc InvokeMenu {index} {
+   if {[winfo class [focus]] != {TEntry}} {
+      .gamemenu invoke $index
+   }
+}
 # Orders menu
 menu .orders -tearoff false
 # Destination menu
