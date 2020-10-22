@@ -70,29 +70,50 @@ package body Ships.UI.Modules is
    SteamSky_ShipUI_Error: exception;
    -- ****
 
-   procedure ShowModuleOptions(ModuleIndex: Positive) is
+   -- ****if* SUModules/Show_Module_Menu_Command
+   -- FUNCTION
+   -- Show the menu with available the selected module options
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowModuleMenu moduleindex
+   -- ModuleIndex is the index of the module's menu to show
+   -- SOURCE
+   function Show_Module_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Module_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
       MaxValue: Positive;
       IsPassenger: Boolean := False;
-      ModuleIndexString: constant String :=
-        Trim(Positive'Image(ModuleIndex), Left);
-      ModuleMenu: Tk_Menu;
+      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      ModuleMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
    begin
-      ModuleMenu.Interp := Get_Context;
-      ModuleMenu.Name := New_String(".modulemenu" & ModuleIndexString);
       if Winfo_Get(ModuleMenu, "exists") = "0" then
-         ModuleMenu :=
-           Create(".modulemenu" & ModuleIndexString, "-tearoff false");
+         ModuleMenu := Create(".modulemenu", "-tearoff false");
       end if;
       Delete(ModuleMenu, "0", "end");
       Menu.Add
         (ModuleMenu, "command",
-         "-label {Rename module} -command {RenameModule " & ModuleIndexString &
-         "}");
+         "-label {Rename module} -command {RenameModule " &
+         CArgv.Arg(Argv, 1) & "}");
       if PlayerShip.RepairModule /= ModuleIndex then
          Menu.Add
            (ModuleMenu, "command",
             "-label {Repair selected module as first when damaged} -command {SetRepair assign " &
-            ModuleIndexString & "}");
+            CArgv.Arg(Argv, 1) & "}");
       end if;
       MaxValue :=
         Natural
@@ -108,7 +129,7 @@ package body Ships.UI.Modules is
          Menu.Add
            (ModuleMenu, "command",
             "-label {Start upgrading module durability} -command {SetUpgrade 1 " &
-            ModuleIndexString & "}");
+            CArgv.Arg(Argv, 1) & "}");
       end if;
       case PlayerShip.Modules(ModuleIndex).MType is
          when ENGINE =>
@@ -126,7 +147,7 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading engine power} -command {SetUpgrade 2 " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
             MaxValue :=
               Natural
@@ -142,18 +163,18 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start working on reduce fuel usage of this engine} -command {SetUpgrade 3 " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
             if not PlayerShip.Modules(ModuleIndex).Disabled then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Turn off engine so it stop using fuel} -command {DisableEngine " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             else
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Turn on engine so ship will be fly faster} -command {DisableEngine " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
          when CABIN =>
             MaxValue :=
@@ -170,7 +191,7 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading cabin quality} -command {SetUpgrade 2 " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
             Missions_Loop :
             for Mission of AcceptedMissions loop
@@ -187,7 +208,7 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Assign a crew member as owner of cabin...} -command {ShowAssignCrew " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
          when GUN | HARPOON_GUN =>
             declare
@@ -213,19 +234,19 @@ package body Ships.UI.Modules is
                      Menu.Add
                        (ModuleMenu, "command",
                         "-label {Start upgrading damage of gun} -command {SetUpgrade 2 " &
-                        ModuleIndexString & "}");
+                        CArgv.Arg(Argv, 1) & "}");
                   else
                      Menu.Add
                        (ModuleMenu, "command",
                         "-label {Start upgrading strength of gun} -command {SetUpgrade 2 " &
-                        ModuleIndexString & "}");
+                        CArgv.Arg(Argv, 1) & "}");
                   end if;
                end if;
             end;
             Menu.Add
               (ModuleMenu, "command",
                "-label {Assign a crew member as gunner...} -command {ShowAssignCrew " &
-               ModuleIndexString & "}");
+               CArgv.Arg(Argv, 1) & "}");
             declare
                AmmoIndex: Natural;
                AmmoMenu: Tk_Menu;
@@ -259,7 +280,7 @@ package body Ships.UI.Modules is
                         "-label {" &
                         To_String
                           (Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
-                        "} -command {AssignModule ammo " & ModuleIndexString &
+                        "} -command {AssignModule ammo " & CArgv.Arg(Argv, 1) &
                         Positive'Image(I) & "}");
                      NotEmpty := True;
                   end if;
@@ -286,7 +307,7 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading damage of battering ram} -command {SetUpgrade 2 " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
          when HULL =>
             MaxValue :=
@@ -303,7 +324,7 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
          when WORKSHOP =>
             if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
@@ -311,11 +332,11 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Cancel current crafting order} -command {CancelOrder " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
          when MEDICAL_ROOM =>
             for Member of PlayerShip.Crew loop
@@ -329,7 +350,7 @@ package body Ships.UI.Modules is
                   Menu.Add
                     (ModuleMenu, "command",
                      "-label {Assign selected crew member as medic...} -command {ShowAssignCrew " &
-                     ModuleIndexString & "}");
+                     CArgv.Arg(Argv, 1) & "}");
                   exit;
                end if;
             end loop;
@@ -338,20 +359,24 @@ package body Ships.UI.Modules is
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
-                  ModuleIndexString & "}");
+                  CArgv.Arg(Argv, 1) & "}");
             end if;
             Menu.Add
               (ModuleMenu, "command",
                "-label {Assign a skill which will be trained in the training room...} -command {ShowAssignSkill " &
-               ModuleIndexString & "}");
+               CArgv.Arg(Argv, 1) & "}");
          when others =>
             null;
       end case;
       Menu.Add
         (ModuleMenu, "command",
          "-label {Show more info about the module} -command {ShowModuleInfo " &
-         ModuleIndexString & "}");
-   end ShowModuleOptions;
+         CArgv.Arg(Argv, 1) & "}");
+      Tk_Popup
+        (ModuleMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Module_Menu_Command;
 
    -- ****o* SUModules/Show_Module_Info_Command
    -- FUNCTION
@@ -1767,6 +1792,7 @@ package body Ships.UI.Modules is
 
    procedure AddCommands is
    begin
+      AddCommand("ShowModuleMenu", Show_Module_Menu_Command'Access);
       AddCommand("ShowModuleInfo", Show_Module_Info_Command'Access);
       AddCommand("SetUpgrade", Set_Upgrade_Command'Access);
       AddCommand("AssignModule", Assign_Module_Command'Access);
