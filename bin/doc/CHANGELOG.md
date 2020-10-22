@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated MODDING.md
 - Moved cargo info to ship info screen
+- Disable menu keyboard shortcuts when entering the text
 
 ### Fixed
 - Showing keyboard shortcuts in help
