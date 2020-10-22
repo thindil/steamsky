@@ -102,24 +102,20 @@ package body Messages.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: Ttk_PanedWindow;
-      MessagesCanvas: Tk_Canvas;
-      MessagesFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      MessagesFrame: Ttk_Frame := Get_Widget(Paned & ".messagesframe", Interp);
+      MessagesCanvas: constant Tk_Canvas :=
+        Get_Widget(MessagesFrame & ".canvas", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       MessagesType: Message_Type := Default;
-      MessagesView: Tk_Text;
-      TypeBox: Ttk_ComboBox;
-      SearchEntry: Ttk_Entry;
+      MessagesView: constant Tk_Text :=
+        Get_Widget(MessagesCanvas & ".messages.list.view", Interp);
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget(MessagesCanvas & ".messages.options.types", Interp);
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(MessagesCanvas & ".messages.options.search", Interp);
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      MessagesFrame.Interp := Interp;
-      MessagesFrame.Name := New_String(Widget_Image(Paned) & ".messagesframe");
-      MessagesCanvas.Interp := Interp;
-      MessagesCanvas.Name :=
-        New_String(Widget_Image(MessagesFrame) & ".canvas");
       if Winfo_Get(MessagesCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -135,19 +131,9 @@ package body Messages.UI is
       if Argc > 1 then
          MessagesType := Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1)));
       else
-         TypeBox.Interp := Interp;
-         TypeBox.Name :=
-           New_String
-             (Widget_Image(MessagesCanvas) & ".messages.options.types");
          Current(TypeBox, "0");
       end if;
-      SearchEntry.Interp := Interp;
-      SearchEntry.Name :=
-        New_String(Widget_Image(MessagesCanvas) & ".messages.options.search");
       Delete(SearchEntry, "0", "end");
-      MessagesView.Interp := Interp;
-      MessagesView.Name :=
-        New_String(Widget_Image(MessagesCanvas) & ".messages.list.view");
       configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if MessagesAmount(MessagesType) = 0 then
@@ -208,11 +194,10 @@ package body Messages.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      TypeBox: Ttk_ComboBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.messagesframe.canvas.messages.options.types", Interp);
    begin
-      TypeBox.Interp := Interp;
-      TypeBox.Name :=
-        New_String(".paned.messagesframe.canvas.messages.options.types");
       return Show_Last_Messages_Command
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
@@ -242,7 +227,9 @@ package body Messages.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      TypeBox: Ttk_ComboBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.messagesframe.canvas.messages.options.types", Interp);
    begin
       if MessageBox
           ("-message {Are you sure you want to clear all messages?} -icon question -type yesno") /=
@@ -250,9 +237,6 @@ package body Messages.UI is
          return TCL_OK;
       end if;
       ClearMessages;
-      TypeBox.Interp := Interp;
-      TypeBox.Name :=
-        New_String(".paned.messagesframe.canvas.messages.options.types");
       Current(TypeBox, "0");
       return TCL_OK;
    end Delete_Messages_Command;
@@ -283,18 +267,15 @@ package body Messages.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      TypeBox: Ttk_ComboBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.messagesframe.canvas.messages.options.types", Interp);
       MessagesType: Message_Type;
-      MessagesView: Tk_Text;
+      MessagesView: constant Tk_Text :=
+        Get_Widget(".paned.messagesframe.canvas.messages.list.view", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
-      TypeBox.Interp := Interp;
-      TypeBox.Name :=
-        New_String(".paned.messagesframe.canvas.messages.options.types");
       MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));
-      MessagesView.Interp := Interp;
-      MessagesView.Name :=
-        New_String(".paned.messagesframe.canvas.messages.list.view");
       configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if SearchText'Length = 0 then
