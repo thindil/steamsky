@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file.
 - Unmaximize main menu window when quit the game
 - Hide close button in combat
 - Look of map info window
-- Typos in README.md
+- Typos in README.md, CONTRIBUTING.md
 
 ## [5.3] - 2020-10-04
 
