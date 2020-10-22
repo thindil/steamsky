@@ -20,15 +20,6 @@
 package Ships.UI.Modules is
 -- ****
 
-   -- ****f* SUModules/ShowModuleOptions
-   -- FUNCTION
-   -- Show available options for the selected module
-   -- PARAMETERS
-   -- ModuleIndex - Index of the player ship module which options will be show
-   -- SOURCE
-   procedure ShowModuleOptions(ModuleIndex: Positive);
-   -- ****
-
    -- ****f* SUModules/AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the player's ship modules information
