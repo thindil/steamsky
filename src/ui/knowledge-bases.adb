@@ -25,12 +25,14 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -52,10 +54,9 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       ComboBox: Ttk_Combobox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
-      BaseButton: Ttk_MenuButton;
+      BaseButton: Ttk_Button;
       Row: Positive := 3;
       BaseLabel: Ttk_Label;
-      BaseMenu: Tk_Menu;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -78,28 +79,7 @@ package body Knowledge.Bases is
       BasesStatus := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
-      BaseMenu.Interp := Get_Context;
       for I in SkyBases'Range loop
-         BaseMenu.Name :=
-           New_String(".baselistmenu" & Trim(Positive'Image(I), Left));
-         if Winfo_Get(BaseMenu, "exists") = "0" then
-            BaseMenu :=
-              Create
-                (".baselistmenu" & Trim(Positive'Image(I), Left),
-                 "-tearoff false");
-              Menu.Add
-                 (BaseMenu, "command",
-                 "-label {Show the base on map} -command {ShowBase " &
-                 Positive'Image(I) & "}");
-              Menu.Add
-                 (BaseMenu, "command",
-                 "-label {Set the base as destination for the ship} -command {SetBaseDestination " &
-                 Positive'Image(I) & "}");
-              Menu.Add
-                 (BaseMenu, "command",
-                 "-label {Show more information about the base} -command {ShowBaseInfo " &
-                 Positive'Image(I) & "}");
-         end if;
          if SkyBases(I).Known then
             if BaseName'Length > 0
               and then
@@ -126,8 +106,8 @@ package body Knowledge.Bases is
             BaseButton :=
               Create
                 (BasesFrame & ".name" & Trim(Positive'Image(I), Left),
-                 "-text {" & To_String(SkyBases(I).Name) & "} -menu {" &
-                 BaseMenu & "}");
+                 "-text {" & To_String(SkyBases(I).Name) &
+                 "} -command {ShowBasesMenu" & Positive'Image(I) & "}");
             Add(BaseButton, "Show available base's options");
             Tcl.Tk.Ada.Grid.Grid
               (BaseButton, "-row" & Natural'Image(Row) & " -sticky w");
@@ -235,9 +215,60 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Bases_Command;
 
+   -- ****if* KBases/Show_Bases_Menu_Command
+   -- FUNCTION
+   -- Show the menu with available the selected base options
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseMenu baseindex
+   -- BaseIndex is the index of the base's menu to show
+   -- SOURCE
+   function Show_Bases_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Bases_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      BaseMenu: Tk_Menu := Get_Widget(".baseslistmenu", Interp);
+   begin
+      if Winfo_Get(BaseMenu, "exists") = "0" then
+         BaseMenu := Create(".baseslistmenu", "-tearoff false");
+      end if;
+      Delete(BaseMenu, "0", "end");
+      Menu.Add
+        (BaseMenu, "command",
+         "-label {Show the base on map} -command {ShowBase " &
+         CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (BaseMenu, "command",
+         "-label {Set the base as destination for the ship} -command {SetBaseDestination " &
+         CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (BaseMenu, "command",
+         "-label {Show more information about the base} -command {ShowBaseInfo " &
+         CArgv.Arg(Argv, 1) & "}");
+      Tk_Popup
+        (BaseMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Bases_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
+      AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
    end AddCommands;
 
 end Knowledge.Bases;
