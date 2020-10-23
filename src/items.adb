@@ -178,10 +178,10 @@ package body Items is
    function GetItemDamage
      (ItemDurability: Items_Durability; ToLower: Boolean := False)
       return String is
-      DamagePercent: DamageFactor;
+      DamagePercent: Float range 0.0 .. 1.0;
       DamageText: Unbounded_String;
    begin
-      DamagePercent := 1.0 - (DamageFactor(ItemDurability) / 100.0);
+      DamagePercent := 1.0 - (Float(ItemDurability) / 100.0);
       if DamagePercent < 0.2 then
          DamageText := To_Unbounded_String("Slightly used");
       elsif DamagePercent < 0.5 then
