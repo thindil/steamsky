@@ -27,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - Hide close button in combat
 - Look of map info window
 - Typos in README.md, CONTRIBUTING.md
+- Showing orders for the whole crew
 
 ## [5.3] - 2020-10-04
 
