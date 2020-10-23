@@ -35,7 +35,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -104,10 +103,9 @@ package body Ships.UI.Crew.Inventory is
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, Width, NewWidth: Positive := 10;
       Label, AmountLabel, WeightLabel, ItemLabel: Ttk_Label;
-      ItemButton: Ttk_MenuButton;
+      ItemButton: Ttk_Button;
       DamageBar: Ttk_ProgressBar;
       ProgressBarStyle: Unbounded_String;
-      ItemMenu: Tk_Menu;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       Wm_Set
@@ -133,57 +131,27 @@ package body Ships.UI.Crew.Inventory is
       WeightLabel := Create(MemberFrame & ".weight", "-text {Weight}");
       Tcl.Tk.Ada.Grid.Grid(WeightLabel, "-column 4 -row 0");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      ItemMenu.Interp := Interp;
       for I in Member.Inventory.Iterate loop
-         ItemMenu.Name :=
-           New_String
-             (".itemmenu" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left));
-         if (Winfo_Get(ItemMenu, "exists")) = "0" then
-            ItemMenu :=
-              Create
-                (".itemmenu" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-tearoff false");
-         end if;
-         Delete(ItemMenu, "0", "end");
          if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-            Menu.Add
-              (ItemMenu, "command",
-               "-label {Unequip} -command {SetUseItem " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Inventory_Container.To_Index(I)) & "}");
             Label :=
               Create
                 (MemberFrame & ".used" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
                  "-text {Yes}");
          else
-            Menu.Add
-              (ItemMenu, "command",
-               "-label {Equip} -command {SetUseItem " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Inventory_Container.To_Index(I)) & "}");
             Label :=
               Create
                 (MemberFrame & ".used" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
                  "-text {No}");
          end if;
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Move the item to the ship cargo} -command {ShowMoveItem " &
-            CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Show more info about the item} -command {ShowInventoryItemInfo " &
-            CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)) & "}");
          ItemButton :=
            Create
              (MemberFrame & ".name" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
               "-text {" & GetItemName(Member.Inventory(I), False, False) &
-              "} -menu " & ItemMenu);
+              "} -command {ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+              Positive'Image(Inventory_Container.To_Index(I)) & "}");
          Add(ItemButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid(ItemButton, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(ItemButton, "reqheight"));
@@ -322,13 +290,10 @@ package body Ships.UI.Crew.Inventory is
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
       UsedLabel: Ttk_Label;
-      ItemMenu: Tk_Menu;
    begin
       UsedLabel.Interp := Interp;
       UsedLabel.Name :=
         New_String(".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2));
-      ItemMenu.Interp := Interp;
-      ItemMenu.Name := New_String(".itemmenu" & CArgv.Arg(Argv, 2));
       if not ItemIsUsed(MemberIndex, ItemIndex) then
          if ItemType = WeaponType then
             if Items_List
@@ -372,11 +337,9 @@ package body Ships.UI.Crew.Inventory is
             PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
          end if;
          configure(UsedLabel, "-text {Yes}");
-         Entry_Configure(ItemMenu, "0", "-label {Unequip}");
       else
          TakeOffItem(MemberIndex, ItemIndex);
          configure(UsedLabel, "-text {No}");
-         Entry_Configure(ItemMenu, "0", "-label {Equip}");
       end if;
       return TCL_OK;
    end Set_Use_Item_Command;
@@ -677,6 +640,64 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
+   -- ****if* SUCI/Show_Inventory_Menu_Command
+   -- FUNCTION
+   -- Show the menu with available the selected item options
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowInventoryMenu moduleindex
+   -- ModuleIndex is the index of the item's menu to show
+   -- SOURCE
+   function Show_Inventory_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Inventory_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
+      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      if (Winfo_Get(ItemMenu, "exists")) = "0" then
+         ItemMenu := Create(".itemmenu", "-tearoff false");
+      end if;
+      Delete(ItemMenu, "0", "end");
+      if ItemIsUsed(MemberIndex, Positive'Value(CArgv.Arg(Argv, 2))) then
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Unequip} -command {SetUseItem " & CArgv.Arg(Argv, 1) &
+            " " & CArgv.Arg(Argv, 2) & "}");
+      else
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Equip} -command {SetUseItem " & CArgv.Arg(Argv, 1) & " " &
+            CArgv.Arg(Argv, 2) & "}");
+      end if;
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Move the item to the ship cargo} -command {ShowMoveItem " &
+         CArgv.Arg(Argv, 1) & " " & CArgv.Arg(Argv, 2) & "}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Show more info about the item} -command {ShowInventoryItemInfo " &
+         CArgv.Arg(Argv, 1) & " " & CArgv.Arg(Argv, 2) & "}");
+      Tk_Popup
+        (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Inventory_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
@@ -686,6 +707,7 @@ package body Ships.UI.Crew.Inventory is
       AddCommand("ValidateMoveAmount", Validate_Move_Amount_Command'Access);
       AddCommand
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
+      AddCommand("ShowInventoryMenu", Show_Inventory_Menu_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
