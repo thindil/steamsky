@@ -95,6 +95,16 @@ package body Ships.UI.Crew is
          end loop;
       end loop;
       ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
+      for Module of PlayerShip.Modules loop
+         if Module.Durability < Module.MaxDurability then
+            NeedRepair := True;
+         end if;
+         if (Module.Durability > 0 and Module.MType = CABIN)
+           and then Module.Cleanliness < Module.Quality then
+            NeedClean := True;
+         end if;
+         exit when NeedClean and NeedRepair;
+      end loop;
       if NeedClean then
          Button :=
            Create
