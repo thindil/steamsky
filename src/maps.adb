@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -22,8 +22,8 @@ package body Maps is
 
    function CountDistance
      (DestinationX, DestinationY: Positive) return Natural is
-      DiffX, DiffY: Natural;
-      Distance: Float;
+      DiffX, DiffY: Natural range 0 .. 1024;
+      Distance: Float range 0.0 .. 1450.0;
    begin
       DiffX := abs (PlayerShip.SkyX - DestinationX);
       DiffY := abs (PlayerShip.SkyY - DestinationY);
