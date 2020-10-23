@@ -75,29 +75,31 @@ package body Missions.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MissionsView: Ttk_Tree_View;
+      MissionsView: constant Ttk_Tree_View :=
+        Get_Widget
+          (".paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
       MissionInfo: Unbounded_String;
       Mission: Mission_Data;
-      MissionText: Tk_Text;
-      MissionLabel: Ttk_Label;
-      Button: Ttk_Button;
+      MissionText: constant Tk_Text :=
+        Get_Widget
+          (".paned.missionsframe.canvas.missions.info.info.text", Interp);
+      MissionLabel: constant Ttk_Label :=
+        Get_Widget
+          (".paned.missionsframe.canvas.missions.info.missioninfo", Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget(".paned.missionsframe.canvas.missions.info.set", Interp);
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
-      MissionScale: Ttk_Scale;
+      MissionScale: constant Ttk_Scale :=
+        Get_Widget(".paned.missionsframe.canvas.missions.info.reward", Interp);
    begin
-      MissionsView.Interp := Interp;
-      MissionsView.Name :=
-        New_String(".paned.missionsframe.canvas.missions.missionsview");
       MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
          Mission := AcceptedMissions(MissionIndex);
       else
          Mission := SkyBases(BaseIndex).Missions(MissionIndex);
       end if;
-      MissionText.Interp := Get_Context;
-      MissionText.Name :=
-        New_String(".paned.missionsframe.canvas.missions.info.info.text");
       configure(MissionText, "-state normal");
       Delete(MissionText, "1.0", "end");
       case Mission.MType is
@@ -174,13 +176,7 @@ package body Missions.UI is
          Natural'Image
            (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
          " " & To_String(MoneyName));
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String(".paned.missionsframe.canvas.missions.info.set");
       State(Button, "!disabled");
-      MissionScale.Interp := Interp;
-      MissionScale.Name :=
-        New_String(".paned.missionsframe.canvas.missions.info.reward");
       if BaseIndex > 0 then
          declare
             Distance: Positive;
@@ -205,9 +201,6 @@ package body Missions.UI is
       end if;
       Insert(MissionText, "end", "{" & To_String(MissionInfo) & "}");
       configure(MissionText, "-state disabled");
-      MissionLabel.Interp := Get_Context;
-      MissionLabel.Name :=
-        New_String(".paned.missionsframe.canvas.missions.info.missioninfo");
       if Mission.Finished then
          configure(MissionLabel, "-text {The mission is ready to return}");
          Tcl.Tk.Ada.Grid.Grid(MissionLabel);
@@ -285,12 +278,11 @@ package body Missions.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MissionsView: Ttk_Tree_View;
+      MissionsView: constant Ttk_Tree_View :=
+        Get_Widget
+          (".paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
    begin
-      MissionsView.Interp := Interp;
-      MissionsView.Name :=
-        New_String(".paned.missionsframe.canvas.missions.missionsview");
       MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
          CenterX := AcceptedMissions(MissionIndex).TargetX;
@@ -304,11 +296,9 @@ package body Missions.UI is
    end Show_Mission_Command;
 
    procedure RefreshMissionsList(List: Mission_Container.Vector) is
-      MissionsView: Ttk_Tree_View;
+      MissionsView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.missionsframe.canvas.missions.missionsview");
    begin
-      MissionsView.Interp := Get_Context;
-      MissionsView.Name :=
-        New_String(".paned.missionsframe.canvas.missions.missionsview");
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       for I in List.First_Index .. List.Last_Index loop
          case List(I).MType is
@@ -382,12 +372,11 @@ package body Missions.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MissionsView: Ttk_Tree_View;
+      MissionsView: constant Ttk_Tree_View :=
+        Get_Widget
+          (".paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
    begin
-      MissionsView.Interp := Interp;
-      MissionsView.Name :=
-        New_String(".paned.missionsframe.canvas.missions.missionsview");
       MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
          if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
@@ -409,22 +398,13 @@ package body Missions.UI is
    end Set_Mission_Command;
 
    procedure ShowMissionsList(Accepted: Boolean := True) is
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      MissionsCanvas: Tk_Canvas;
-      MissionsFrame: Ttk_Frame;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      MissionsFrame: Ttk_Frame := Get_Widget((Paned & ".missionsframe"));
+      MissionsCanvas: constant Tk_Canvas :=
+        Get_Widget(MissionsFrame & ".canvas");
+      Label: constant Ttk_Label :=
+        Get_Widget(MissionsCanvas & ".missions.info.missioninfo");
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      MissionsFrame.Interp := Get_Context;
-      MissionsFrame.Name := New_String(Widget_Image(Paned) & ".missionsframe");
-      MissionsCanvas.Interp := Get_Context;
-      MissionsCanvas.Name :=
-        New_String(Widget_Image(MissionsFrame) & ".canvas");
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String
-          (Widget_Image(MissionsCanvas) & ".missions.info.missioninfo");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
