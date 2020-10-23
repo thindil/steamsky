@@ -24,6 +24,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -31,7 +33,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkMenuButton; use Tcl.Tk.Ada.Widgets.TtkMenuButton;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -83,13 +84,12 @@ package body Ships.UI.Cargo is
       Row: Positive := 3;
       ItemType, ProtoIndex, ProgressBarStyle: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      CargoButton: Ttk_MenuButton;
+      CargoButton: Ttk_Button;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
       DurabilityBar: Ttk_ProgressBar;
       ItemLabel: Ttk_Label;
       ItemsType: constant String := Get(TypeBox);
-      ItemMenu: Tk_Menu;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -105,31 +105,6 @@ package body Ships.UI.Cargo is
          end loop;
       end loop;
       for I in PlayerShip.Cargo.Iterate loop
-         ItemMenu :=
-           Get_Widget
-             (".cargoitemmenu" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              Interp);
-         if (Winfo_Get(ItemMenu, "exists")) = "0" then
-            ItemMenu :=
-              Create
-                (".cargoitemmenu" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-tearoff false");
-         end if;
-         Delete(ItemMenu, "0", "end");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Give the item to a crew member} -command {ShowGiveItem " &
-            Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Drop the item from the ship's cargo} -command {ShowDropItem " &
-            Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Menu.Add
-           (ItemMenu, "command",
-            "-label {Show more info about the item} -command {ShowCargoItemInfo " &
-            Positive'Image(Inventory_Container.To_Index(I)) & "}");
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
             ItemType := Items_List(ProtoIndex).ShowType;
@@ -146,8 +121,9 @@ package body Ships.UI.Cargo is
            Create
              (CargoInfoFrame & ".name" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & GetItemName(PlayerShip.Cargo(I)) & "} -menu " &
-              ItemMenu);
+              "-text {" & GetItemName(PlayerShip.Cargo(I)) &
+              "} -command {ShowCargoMenu" &
+              Positive'Image(Inventory_Container.To_Index(I)) & "}");
          Add(CargoButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid
            (CargoButton, "-row" & Natural'Image(Row) & " -sticky w");
@@ -639,6 +615,56 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
+   -- ****if* SUCargo/Show_Cargo_Menu_Command
+   -- FUNCTION
+   -- Show the menu with available the selected item options
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCargoMenu moduleindex
+   -- ModuleIndex is the index of the item's menu to show
+   -- SOURCE
+   function Show_Cargo_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Cargo_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ItemMenu: Tk_Menu := Get_Widget(".cargoitemmenu", Interp);
+   begin
+      if (Winfo_Get(ItemMenu, "exists")) = "0" then
+         ItemMenu := Create(".cargoitemmenu", "-tearoff false");
+      end if;
+      Delete(ItemMenu, "0", "end");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Give the item to a crew member} -command {ShowGiveItem " &
+         CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Drop the item from the ship's cargo} -command {ShowDropItem " &
+         CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Show more info about the item} -command {ShowCargoItemInfo " &
+         CArgv.Arg(Argv, 1) & "}");
+      Tk_Popup
+        (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Cargo_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCargo", Show_Cargo_Command'Access);
@@ -647,6 +673,7 @@ package body Ships.UI.Cargo is
       AddCommand("GiveItem", Give_Item_Command'Access);
       AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
       AddCommand("DropItem", Drop_Item_Command'Access);
+      AddCommand("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;
