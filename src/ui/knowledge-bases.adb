@@ -39,6 +39,7 @@ with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Factions; use Factions;
 with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
@@ -265,10 +266,45 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Bases_Menu_Command;
 
+   -- ****if* KBases/Show_Base_Command
+   -- FUNCTION
+   -- Show the selected base on map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBase baseidex
+   -- BaseIndex is the index of the base to show
+   -- SOURCE
+   function Show_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Base_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      CenterX := SkyBases(BaseIndex).SkyX;
+      CenterY := SkyBases(BaseIndex).SkyY;
+      ShowSkyMap(True);
+      return TCL_OK;
+   end Show_Base_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
+      AddCommand("ShowBase", Show_Base_Command'Access);
    end AddCommands;
 
 end Knowledge.Bases;
