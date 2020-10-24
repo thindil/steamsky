@@ -403,53 +403,38 @@ package body Knowledge.Bases is
           (BaseFrame & ".button",
            "-text Close -command {CloseDialog " & BaseDialog & "}");
       Height, Width: Positive := 10;
+      BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
       procedure SetReputationText(ReputationText: String) is
-         ReputationBar: Ttk_ProgressBar :=
-           Get_Widget
-             (".paned.basesframe.canvas.bases.base.info.minusreputation",
-              Interp);
+         ReputationBar: constant Ttk_ProgressBar :=
+           Create(BaseFrame & ".reputation", "-maximum 200.0 -length 150");
          ReputationLabel: constant Ttk_Label :=
-           Get_Widget
-             (".paned.basesframe.canvas.bases.base.info.reputationlbl",
-              Interp);
+           Create(BaseFrame & ".reputationlabel");
+         ProgressBarStyle: Unbounded_String;
       begin
-         if SkyBases(BaseIndex).Reputation(1) < 0 then
-            configure
-              (ReputationBar,
-               "-value" &
-               Positive'Image(abs (SkyBases(BaseIndex).Reputation(1))));
-            Tcl.Tk.Ada.Grid.Grid(ReputationBar);
-         else
-            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
-         end if;
-         Add(ReputationBar, ReputationText);
-         ReputationBar.Name :=
-           New_String
-             (".paned.basesframe.canvas.bases.base.info.plusreputation");
-         if SkyBases(BaseIndex).Reputation(1) > 0 then
-            configure
-              (ReputationBar,
-               "-value" & Positive'Image(SkyBases(BaseIndex).Reputation(1)));
-            Tcl.Tk.Ada.Grid.Grid(ReputationBar);
-         else
-            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
-         end if;
-         Add(ReputationBar, ReputationText);
-         if SkyBases(BaseIndex).Reputation(1) = 0 then
-            configure(ReputationLabel, "-text {Reputation: Unknown}");
-         else
-            configure(ReputationLabel, "-text {Reputation:}");
-         end if;
          if SkyBases(BaseIndex).Visited.Year > 0 then
-            Tcl.Tk.Ada.Grid.Grid(ReputationLabel);
-         else
-            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationLabel);
-            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationBar);
-            ReputationBar.Name :=
-              New_String
-                (".paned.basesframe.canvas.bases.base.info.minusreputation");
-            Tcl.Tk.Ada.Grid.Grid_Remove(ReputationLabel);
+            if SkyBases(BaseIndex).Reputation(1) < 0 then
+               ProgressBarStyle := Null_Unbounded_String;
+            elsif SkyBases(BaseIndex).Reputation(1) < 20 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+            else
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+            end if;
+            if SkyBases(BaseIndex).Reputation(1) = 0 then
+               configure(ReputationLabel, "-text {Reputation: Unknown}");
+            else
+               configure(ReputationLabel, "-text {Reputation:}");
+               configure
+                 (ReputationBar,
+                  "-value" &
+                  Integer'Image((SkyBases(BaseIndex).Reputation(1)) + 100) &
+                  To_String(ProgressBarStyle));
+               Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
+               Add(ReputationBar, ReputationText);
+            end if;
+            Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
          end if;
       end SetReputationText;
    begin
@@ -464,94 +449,93 @@ package body Knowledge.Bases is
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
-      if SkyBases(BaseIndex).Visited.Year > 0 then
-         BaseInfo :=
-           To_Unbounded_String
-             ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
-              Positive'Image(SkyBases(BaseIndex).SkyY));
-         Append
-           (BaseInfo,
-            LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
-         declare
-            TimeDiff: Integer;
-         begin
-            if SkyBases(BaseIndex).Population > 0 and
-              SkyBases(BaseIndex).Reputation(1) > -25 then
-               TimeDiff :=
-                 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
-               if TimeDiff > 0 then
-                  Append
-                    (BaseInfo,
-                     LF & "New recruits available in" &
-                     Natural'Image(TimeDiff) & " days.");
-               else
-                  Append(BaseInfo, LF & "New recruits available now.");
-               end if;
-            else
+      BaseInfo :=
+        To_Unbounded_String
+          ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
+           Positive'Image(SkyBases(BaseIndex).SkyY));
+      Append
+        (BaseInfo,
+         LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
+      declare
+         TimeDiff: Integer;
+      begin
+         if SkyBases(BaseIndex).Population > 0 and
+           SkyBases(BaseIndex).Reputation(1) > -25 then
+            TimeDiff := 30 - DaysDifference(SkyBases(BaseIndex).RecruitDate);
+            if TimeDiff > 0 then
                Append
                  (BaseInfo,
-                  LF & "You can't recruit crew members at this base.");
-            end if;
-            if SkyBases(BaseIndex).Population > 0 and
-              SkyBases(BaseIndex).Reputation(1) > -25 then
-               TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
-               if TimeDiff < 7 then
-                  Append
-                    (BaseInfo,
-                     LF & "You asked for events" & Natural'Image(TimeDiff) &
-                     " days ago.");
-               else
-                  Append(BaseInfo, LF & "You can ask for events again.");
-               end if;
+                  LF & "New recruits available in" & Natural'Image(TimeDiff) &
+                  " days.");
             else
-               Append(BaseInfo, LF & "You can't ask for events at this base.");
+               Append(BaseInfo, LF & "New recruits available now.");
             end if;
-            if SkyBases(BaseIndex).Population > 0 and
-              SkyBases(BaseIndex).Reputation(1) > -1 then
-               TimeDiff :=
-                 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
-               if TimeDiff > 0 then
-                  Append
-                    (BaseInfo,
-                     LF & "New missions available in" &
-                     Natural'Image(TimeDiff) & " days.");
-               else
-                  Append(BaseInfo, LF & "New missions available now.");
-               end if;
-            else
-               Append(BaseInfo, LF & "You can't take missions at this base.");
-            end if;
-         end;
-         case SkyBases(BaseIndex).Reputation(1) is
-            when -100 .. -75 =>
-               SetReputationText("Hated");
-            when -74 .. -50 =>
-               SetReputationText("Outlaw");
-            when -49 .. -25 =>
-               SetReputationText("Hostile");
-            when -24 .. -1 =>
-               SetReputationText("Unfriendly");
-            when 0 =>
-               SetReputationText("Unknown");
-            when 1 .. 25 =>
-               SetReputationText("Visitor");
-            when 26 .. 50 =>
-               SetReputationText("Trader");
-            when 51 .. 75 =>
-               SetReputationText("Friend");
-            when 76 .. 100 =>
-               SetReputationText("Well known");
-            when others =>
-               null;
-         end case;
-         if BaseIndex = PlayerShip.HomeBase then
-            Append(BaseInfo, LF & "It is your home base.");
+         else
+            Append
+              (BaseInfo, LF & "You can't recruit crew members at this base.");
          end if;
-      else
-         BaseInfo := To_Unbounded_String("Not visited yet.");
-         SetReputationText("Unknown");
+         if SkyBases(BaseIndex).Population > 0 and
+           SkyBases(BaseIndex).Reputation(1) > -25 then
+            TimeDiff := DaysDifference(SkyBases(BaseIndex).AskedForEvents);
+            if TimeDiff < 7 then
+               Append
+                 (BaseInfo,
+                  LF & "You asked for events" & Natural'Image(TimeDiff) &
+                  " days ago.");
+            else
+               Append(BaseInfo, LF & "You can ask for events again.");
+            end if;
+         else
+            Append(BaseInfo, LF & "You can't ask for events at this base.");
+         end if;
+         if SkyBases(BaseIndex).Population > 0 and
+           SkyBases(BaseIndex).Reputation(1) > -1 then
+            TimeDiff := 7 - DaysDifference(SkyBases(BaseIndex).MissionsDate);
+            if TimeDiff > 0 then
+               Append
+                 (BaseInfo,
+                  LF & "New missions available in" & Natural'Image(TimeDiff) &
+                  " days.");
+            else
+               Append(BaseInfo, LF & "New missions available now.");
+            end if;
+         else
+            Append(BaseInfo, LF & "You can't take missions at this base.");
+         end if;
+      end;
+      case SkyBases(BaseIndex).Reputation(1) is
+         when -100 .. -75 =>
+            SetReputationText("Hated");
+         when -74 .. -50 =>
+            SetReputationText("Outlaw");
+         when -49 .. -25 =>
+            SetReputationText("Hostile");
+         when -24 .. -1 =>
+            SetReputationText("Unfriendly");
+         when 0 =>
+            SetReputationText("Unknown");
+         when 1 .. 25 =>
+            SetReputationText("Visitor");
+         when 26 .. 50 =>
+            SetReputationText("Trader");
+         when 51 .. 75 =>
+            SetReputationText("Friend");
+         when 76 .. 100 =>
+            SetReputationText("Well known");
+         when others =>
+            null;
+      end case;
+      if BaseIndex = PlayerShip.HomeBase then
+         Append(BaseInfo, LF & "It is your home base.");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
+      BaseLabel :=
+        Create
+          (BaseFrame & ".info",
+           "-text {" & To_String(BaseInfo) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(BaseLabel, "-row 0 -columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(BaseLabel, "reqheight"));
+      Width := Width + Positive'Value(Winfo_Get(BaseLabel, "reqwidth"));
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
@@ -562,25 +546,21 @@ package body Knowledge.Bases is
          "-height" & Positive'Image(Height) & " -width" &
          Positive'Image(Width));
       Canvas_Create
-        (BaseCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(BaseFrame));
+        (BaseCanvas, "window", "0 0 -anchor nw -window " & BaseFrame);
       configure
-        (BaseCanvas,
-         "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
+        (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
       Height := Height + 20;
       declare
          X, Y: Integer;
       begin
-         Width :=
-           Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+         Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
          X :=
            (Positive'Value(Winfo_Get(BaseDialog, "vrootwidth")) - Width) / 2;
          if X < 0 then
             X := 0;
          end if;
          Y :=
-           (Positive'Value(Winfo_Get(BaseDialog, "vrootheight")) - Height) /
-           2;
+           (Positive'Value(Winfo_Get(BaseDialog, "vrootheight")) - Height) / 2;
          if Y < 0 then
             Y := 0;
          end if;
@@ -590,12 +570,8 @@ package body Knowledge.Bases is
             Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
-         Bind
-           (BaseDialog, "<Destroy>",
-            "{CloseDialog " & BaseDialog & "}");
-         Bind
-           (BaseDialog, "<Escape>",
-            "{CloseDialog " & BaseDialog & "}");
+         Bind(BaseDialog, "<Destroy>", "{CloseDialog " & BaseDialog & "}");
+         Bind(BaseDialog, "<Escape>", "{CloseDialog " & BaseDialog & "}");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
