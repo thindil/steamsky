@@ -486,8 +486,8 @@ package body BasesList is
 
    procedure AddCommands is
    begin
+      AddCommand("ShowBases2", Show_Bases_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
-      AddCommand("ShowBase", Show_Base_Command'Access);
       AddCommand("SetBase2", Set_Base_Command'Access);
    end AddCommands;
 
