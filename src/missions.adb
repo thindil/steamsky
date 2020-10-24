@@ -39,7 +39,9 @@ package body Missions is
    procedure GenerateMissions is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionsAmount, MissionX, MissionY, TmpBaseIndex: Positive;
+      MissionX, MissionY: Positive range 1 .. 1024;
+      MissionsAmount: Positive range 1 .. 26;
+      TmpBaseIndex: BasesRange;
       Mission: Mission_Data;
       MissionsItems: UnboundedString_Container.Vector;
       BasesInRange: Positive_Container.Vector;
@@ -175,7 +177,7 @@ package body Missions is
                     QualitiesArray
                       (GetRandom(QualitiesArray'First, QualitiesArray'Last)));
          end case;
-         if Mission.MType = Deliver or Mission.MType = Passenger then
+         if Mission.MType in Deliver | Passenger then
             loop
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
@@ -211,11 +213,11 @@ package body Missions is
    end GenerateMissions;
 
    procedure AcceptMission(MissionIndex: Positive) is
-      BaseIndex: constant Positive :=
+      BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
-      TraderIndex: constant Positive := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       if SkyBases(BaseIndex).Reputation(1) < 0 then
          raise Missions_Accepting_Error
@@ -299,7 +301,7 @@ package body Missions is
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
             declare
-               PassengerBase: Positive;
+               PassengerBase: BasesRange;
                Gender: Character;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
@@ -373,7 +375,7 @@ package body Missions is
 
    procedure UpdateMissions(Minutes: Positive) is
       Time: Integer;
-      I: Positive := AcceptedMissions.First_Index;
+      I: Mission_Container.Extended_Index := AcceptedMissions.First_Index;
    begin
       while I <= AcceptedMissions.Last_Index loop
          Time := AcceptedMissions(I).Time - Minutes;
@@ -477,7 +479,7 @@ package body Missions is
          end case;
          AddMessage(To_String(MessageText), MissionMessage, RED);
       else
-         if Mission.MType = Deliver or Mission.MType = Passenger then
+         if Mission.MType in Deliver | Passenger then
             GainRep
               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
                (Reputation / 2));
