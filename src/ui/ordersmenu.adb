@@ -18,7 +18,6 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -59,10 +58,8 @@ package body OrdersMenu is
       MissionsLimit: Integer;
       Event: Events_Types := None;
       ItemIndex: Natural;
-      OrdersMenu: Tk_Menu;
+      OrdersMenu: constant Tk_Menu := Get_Widget(".orders", Interp);
    begin
-      OrdersMenu.Interp := Interp;
-      OrdersMenu.Name := New_String(".orders");
       if Winfo_Get(OrdersMenu, "ismapped") = "1" then
          if Invoke(OrdersMenu, "end") /= "" then
             return TCL_ERROR;
