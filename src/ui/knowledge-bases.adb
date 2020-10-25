@@ -254,6 +254,7 @@ package body Knowledge.Bases is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       BaseMenu: Tk_Menu := Get_Widget(".baseslistmenu", Interp);
+      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if Winfo_Get(BaseMenu, "exists") = "0" then
          BaseMenu := Create(".baseslistmenu", "-tearoff false");
@@ -267,10 +268,12 @@ package body Knowledge.Bases is
         (BaseMenu, "command",
          "-label {Set the base as destination for the ship} -command {SetBase2 " &
          CArgv.Arg(Argv, 1) & "}");
-      Menu.Add
-        (BaseMenu, "command",
-         "-label {Show more information about the base} -command {ShowBaseInfo " &
-         CArgv.Arg(Argv, 1) & "}");
+      if SkyBases(BaseIndex).Visited.Year > 0 then
+         Menu.Add
+           (BaseMenu, "command",
+            "-label {Show more information about the base} -command {ShowBaseInfo " &
+            CArgv.Arg(Argv, 1) & "}");
+      end if;
       Tk_Popup
         (BaseMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
