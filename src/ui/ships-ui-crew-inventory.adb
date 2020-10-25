@@ -15,7 +15,6 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -289,11 +288,10 @@ package body Ships.UI.Crew.Inventory is
         Items_List
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
-      UsedLabel: Ttk_Label;
+      UsedLabel: constant Ttk_Label :=
+        Get_Widget
+          (".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2), Interp);
    begin
-      UsedLabel.Interp := Interp;
-      UsedLabel.Name :=
-        New_String(".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2));
       if not ItemIsUsed(MemberIndex, ItemIndex) then
          if ItemType = WeaponType then
             if Items_List
@@ -513,16 +511,13 @@ package body Ships.UI.Crew.Inventory is
       Amount: Positive;
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
-      ItemDialog: Tk_Toplevel;
-      AmountBox: Ttk_SpinBox;
+      ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(ItemDialog & ".canvas.frame.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (".paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
    begin
-      ItemDialog.Interp := Interp;
-      ItemDialog.Name := New_String(".itemdialog");
-      AmountBox.Interp := Interp;
-      AmountBox.Name := New_String(ItemDialog & ".canvas.frame.amount");
       Amount := Positive'Value(Get(AmountBox));
       if FreeCargo
           (0 -
