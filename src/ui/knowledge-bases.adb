@@ -415,30 +415,32 @@ package body Knowledge.Bases is
            Create(BaseFrame & ".reputationlabel");
          ProgressBarStyle: Unbounded_String;
       begin
-         if SkyBases(BaseIndex).Visited.Year > 0 then
-            if SkyBases(BaseIndex).Reputation(1) < 0 then
-               ProgressBarStyle := Null_Unbounded_String;
-            elsif SkyBases(BaseIndex).Reputation(1) < 20 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-            else
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-            end if;
-            if SkyBases(BaseIndex).Reputation(1) = 0 then
-               configure(ReputationLabel, "-text {Reputation: Unknown}");
-            else
-               configure(ReputationLabel, "-text {Reputation:}");
-               configure
-                 (ReputationBar,
-                  "-value" &
-                  Integer'Image((SkyBases(BaseIndex).Reputation(1)) + 100) &
-                  To_String(ProgressBarStyle));
-               Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
-               Add(ReputationBar, ReputationText);
-            end if;
-            Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
+         if SkyBases(BaseIndex).Reputation(1) < 0 then
+            ProgressBarStyle := Null_Unbounded_String;
+         elsif SkyBases(BaseIndex).Reputation(1) < 20 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+         else
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
          end if;
+         if SkyBases(BaseIndex).Reputation(1) = 0 then
+            configure(ReputationLabel, "-text {Reputation: Unknown}");
+         else
+            configure(ReputationLabel, "-text {Reputation:}");
+            configure
+              (ReputationBar,
+               "-value" &
+               Integer'Image((SkyBases(BaseIndex).Reputation(1)) + 100) &
+               To_String(ProgressBarStyle));
+            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
+            Add(ReputationBar, ReputationText);
+            Width :=
+              Width + Positive'Value(Winfo_Get(ReputationBar, "reqwidth"));
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
+         Width :=
+           Width + Positive'Value(Winfo_Get(ReputationLabel, "reqwidth"));
       end SetReputationText;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
@@ -537,7 +539,9 @@ package body Knowledge.Bases is
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(BaseLabel, "-row 0 -columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(BaseLabel, "reqheight"));
-      Width := Width + Positive'Value(Winfo_Get(BaseLabel, "reqwidth"));
+      if Positive'Value(Winfo_Get(BaseLabel, "reqwidth")) + 10 > Width then
+         Width := 10 + Positive'Value(Winfo_Get(BaseLabel, "reqwidth"));
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
