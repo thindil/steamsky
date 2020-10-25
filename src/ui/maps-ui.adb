@@ -96,7 +96,7 @@ package body Maps.UI is
          "-label {Knowledge lists} -command ShowKnowledge");
       Menu.Add
         (GameMenu, "command",
-         "-label {List of known events} -command ShowBases2");
+         "-label {List of known events} -command ShowEvents");
       Menu.Add
         (GameMenu, "command",
          "-label {Accepted missions} -command {ShowMissions accepted}");
