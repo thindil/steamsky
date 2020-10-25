@@ -353,8 +353,8 @@ package body Mobs is
       Mob: Member_Data;
       ProtoMob: constant ProtoMobRecord := ProtoMobs_List(MobIndex);
       Amount: Natural;
-      HighestSkillLevel, WeaponSkillLevel: Positive := 1;
-      SkillIndex: Positive;
+      HighestSkillLevel, WeaponSkillLevel: Skill_Range := 1;
+      SkillIndex: Skills_Container.Extended_Index;
    begin
       Mob.Faction :=
         (if GetRandom(1, 100) < 99 then FactionIndex else GetRandomFaction);
