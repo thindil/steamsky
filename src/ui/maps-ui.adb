@@ -46,7 +46,6 @@ with Bases.RecruitUI;
 with Bases.SchoolUI;
 with Bases.ShipyardUI;
 with Bases.UI;
-with BasesList; use BasesList;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
@@ -870,7 +869,6 @@ package body Maps.UI is
          Ships.UI.AddCommands;
          Crafts.UI.AddCommands;
          Messages.UI.AddCommands;
-         BasesList.AddCommands;
          GameOptions.AddCommands;
          Trades.UI.AddCommands;
          SchoolUI.AddCommands;
