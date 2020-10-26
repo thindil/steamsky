@@ -360,14 +360,13 @@ package body Ships.UI.Crew is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Button: Ttk_Button;
       CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String
+      Button: constant Ttk_Button :=
+        Get_Widget
           (".paned.shipinfoframe.crew.canvas.frame.name" &
-           Trim(Positive'Image(CrewIndex), Left));
+           Trim(Positive'Image(CrewIndex), Left),
+           Interp);
+   begin
       if Tk_Get_String
           (Interp, ".gs", "text",
            "{Enter a new name for the " & cget(Button, "-text") & "}") =
@@ -973,13 +972,11 @@ package body Ships.UI.Crew is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MemberFrame, Frame: Ttk_Frame;
+      MemberFrame: constant Ttk_Frame :=
+        Get_Widget(".memberdialog.canvas.frame", Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 1"), Interp);
    begin
-      MemberFrame.Interp := Interp;
-      MemberFrame.Name := New_String(".memberdialog.canvas.frame");
-      Frame.Interp := Interp;
-      Frame.Name :=
-        New_String(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 1"));
       Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       Frame.Name :=
         New_String(MemberFrame & "." & Tcl_GetVar(Interp, "newtab"));
