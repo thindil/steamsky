@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,7 +25,7 @@ package body Ships.Cargo is
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Natural := 100; CargoIndex, Price: Natural := 0) is
-      ItemIndex: Natural := 0;
+      ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
       if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
          for I in Ship.Cargo.Iterate loop
