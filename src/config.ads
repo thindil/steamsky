@@ -133,12 +133,6 @@ package Config is
    -- AutoSave              - How often game is autosaved
    -- TopicPosition         - Position of help topics window in pixels from
    --                         top of the help window
-   -- ShowBaseInfo          - If true, show detailed information about
-   --                         selected base in bases list
-   -- ShowCargoInfo         - If true, show detailed information about
-   --                         selected item in player ship cargo
-   -- ShowInventoryInfo     - If true, show detailed information about
-   --                         selected item in crew member inventory
    -- ShowNumbers           - If true, show numbers values instead of text for
    --                         various things (like weapon strength, etc)
    -- SOURCE
@@ -172,9 +166,6 @@ package Config is
       AutoCloseMessagesTime: Positive;
       AutoSave: AutoSaveType;
       TopicsPosition: Natural;
-      ShowBaseInfo: Boolean;
-      ShowCargoInfo: Boolean;
-      ShowInventoryInfo: Boolean;
       ShowNumbers: Boolean;
    end record;
    -- ****
