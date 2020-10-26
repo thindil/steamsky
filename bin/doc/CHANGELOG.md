@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Moved cargo info to ship info screen
 - Disable menu keyboard shortcuts when entering the text
 
+### Removed
+- Settings to show bases and items info
+
 ### Fixed
 - Showing keyboard shortcuts in help
 - Crash on the new turn
