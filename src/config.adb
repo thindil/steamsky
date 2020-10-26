@@ -55,8 +55,7 @@ package body Config is
          AutoAskForEvents => False, ShowTooltips => True,
          ShowLastMessages => True, MessagesPosition => 400,
          FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
-         TopicsPosition => 200, ShowBaseInfo => True, ShowCargoInfo => True,
-         ShowInventoryInfo => True, ShowNumbers => False);
+         TopicsPosition => 200, ShowNumbers => False);
       Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
       while not End_Of_File(ConfigFile) loop
          RawData := To_Unbounded_String(Get_Line(ConfigFile));
@@ -170,12 +169,6 @@ package body Config is
                GameSettings.AutoSave := AutoSaveType'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
                GameSettings.TopicsPosition := Natural'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("ShowBaseInfo") then
-               GameSettings.ShowBaseInfo := LoadBoolean;
-            elsif FieldName = To_Unbounded_String("ShowCargoInfo") then
-               GameSettings.ShowCargoInfo := LoadBoolean;
-            elsif FieldName = To_Unbounded_String("ShowInventoryInfo") then
-               GameSettings.ShowInventoryInfo := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
                GameSettings.ShowNumbers := LoadBoolean;
             end if;
@@ -312,9 +305,6 @@ package body Config is
       Put_Line
         (ConfigFile,
          "TopicsPosition =" & Natural'Image(GameSettings.TopicsPosition));
-      SaveBoolean(GameSettings.ShowBaseInfo, "ShowBaseInfo");
-      SaveBoolean(GameSettings.ShowCargoInfo, "ShowCargoInfo");
-      SaveBoolean(GameSettings.ShowInventoryInfo, "ShowInventoryInfo");
       SaveBoolean(GameSettings.ShowNumbers, "ShowNumbers");
       Close(ConfigFile);
    end SaveConfig;
