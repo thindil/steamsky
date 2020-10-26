@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Updated MODDING.md
 - Moved cargo info to ship info screen
 - Disable menu keyboard shortcuts when entering the text
+- Moved known bases list to knowledge screen
 
 ### Removed
 - Settings to show bases and items info
