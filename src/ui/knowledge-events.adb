@@ -13,18 +13,23 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
 with Factions; use Factions;
+with Game; use Game;
+with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
@@ -74,10 +79,10 @@ package body Knowledge.Events is
         (EventMenu, "command",
          "-label {Set the event as destination for the ship} -command {SetEvent " &
          CArgv.Arg(Argv, 1) & "}");
-         Menu.Add
-           (EventMenu, "command",
-            "-label {Show more information about the event} -command {ShowEventInfo " &
-            CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (EventMenu, "command",
+         "-label {Show more information about the event} -command {ShowEventInfo " &
+         CArgv.Arg(Argv, 1) & "}");
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
@@ -184,8 +189,45 @@ package body Knowledge.Events is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc);
+      EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      EventInfo: Unbounded_String;
+      BaseIndex: constant Extended_BaseRange :=
+        SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
+          .BaseIndex;
    begin
+      EventInfo :=
+        To_Unbounded_String
+          ("X:" & Positive'Image(Events_List(EventIndex).SkyX) & " Y:" &
+           Positive'Image(Events_List(EventIndex).SkyY));
+      case Events_List(EventIndex).EType is
+         when EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
+            Append
+              (EventInfo,
+               LF & "Ship type: " &
+               To_String
+                 (ProtoShips_List(Events_List(EventIndex).ShipIndex).Name));
+         when FullDocks | AttackOnBase | Disease =>
+            Append
+              (EventInfo,
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+         when DoublePrice =>
+            Append
+              (EventInfo,
+               LF & "Base name: " & To_String(SkyBases(BaseIndex).Name));
+            Append
+              (EventInfo,
+               LF & "Item: " &
+               To_String(Items_List(Events_List(EventIndex).ItemIndex).Name));
+         when None | BaseRecovery =>
+            null;
+      end case;
+      if MessageBox
+          ("-message {" & To_String(EventInfo) &
+           "} -type ok -parent .  -title {Event Info}") =
+        "ok" then
+         return TCL_OK;
+      end if;
       return TCL_OK;
    end Show_Event_Info_Command;
 
