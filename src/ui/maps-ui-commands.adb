@@ -42,7 +42,6 @@ with Combat.UI; use Combat.UI;
 with Config; use Config;
 with Crew; use Crew;
 with Events; use Events;
-with Events.UI; use Events.UI;
 with Factions; use Factions;
 with Game; use Game;
 with MainMenu; use MainMenu;
@@ -982,44 +981,6 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
-   -- ****o* MapCommands/Show_Events_Command
-   -- FUNCTION
-   -- Show the list of known events
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowEvents
-   -- SOURCE
-   function Show_Events_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Events_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
-   begin
-      if Events_List.Length = 0 then
-         ShowMessage
-           ("You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.");
-         return TCL_OK;
-      end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      ShowEventsList;
-      return TCL_OK;
-   end Show_Events_Command;
-
    -- ****o* MapCommands/Show_Missions_Command
    -- FUNCTION
    -- Show the list of accepted missions
@@ -1232,7 +1193,6 @@ package body Maps.UI.Commands is
       AddCommand("ResignGame", Resign_Game_Command'Access);
       AddCommand("ShowStats", Show_Stats_Command'Access);
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
-      AddCommand("ShowEvents", Show_Events_Command'Access);
       AddCommand("ShowMissions", Show_Missions_Command'Access);
       AddCommand("ShowStories", Show_Stories_Command'Access);
       AddCommand("MoveCursor", Move_Mouse_Command'Access);
