@@ -70,60 +70,59 @@ package body GameOptions is
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
    -- SOURCE
-   Accels: array(1 .. 52) of Accel_Data :=
+   Accels: array(1 .. 51) of Accel_Data :=
      (1 => (MenuAccelerators(1), To_Unbounded_String(".menu.shipinfo")),
       2 => (MenuAccelerators(2), To_Unbounded_String(".menu.orders")),
       3 => (MenuAccelerators(3), To_Unbounded_String(".menu.crafts")),
       4 => (MenuAccelerators(4), To_Unbounded_String(".menu.messages")),
       5 => (MenuAccelerators(5), To_Unbounded_String(".menu.knowledge")),
-      6 => (MenuAccelerators(6), To_Unbounded_String(".menu.events")),
-      7 => (MenuAccelerators(7), To_Unbounded_String(".menu.missions")),
-      8 => (MenuAccelerators(8), To_Unbounded_String(".menu.stories")),
-      9 => (MenuAccelerators(9), To_Unbounded_String(".menu.waitorders")),
-      10 => (MenuAccelerators(10), To_Unbounded_String(".menu.gamestats")),
-      11 => (MenuAccelerators(11), To_Unbounded_String(".menu.help")),
-      12 => (MenuAccelerators(12), To_Unbounded_String(".menu.gameoptions")),
-      13 => (MenuAccelerators(13), To_Unbounded_String(".menu.quit")),
-      14 => (MenuAccelerators(14), To_Unbounded_String(".menu.resign")),
-      15 => (MapAccelerators(1), To_Unbounded_String(".menu.menu")),
-      16 => (MapAccelerators(2), To_Unbounded_String(".map.mapoptions")),
-      17 => (MapAccelerators(3), To_Unbounded_String(".map.zoomin")),
-      18 => (MapAccelerators(4), To_Unbounded_String(".map.zoomout")),
-      19 => (MapAccelerators(5), To_Unbounded_String(".movement.upleft")),
-      20 => (MapAccelerators(6), To_Unbounded_String(".movement.up")),
-      21 => (MapAccelerators(7), To_Unbounded_String(".movement.upright")),
-      22 => (MapAccelerators(8), To_Unbounded_String(".movement.left")),
-      23 => (MapAccelerators(9), To_Unbounded_String(".movement.right")),
-      24 => (MapAccelerators(10), To_Unbounded_String(".movement.wait")),
-      25 => (MapAccelerators(11), To_Unbounded_String(".movement.downleft")),
-      26 => (MapAccelerators(12), To_Unbounded_String(".movement.down")),
-      27 => (MapAccelerators(13), To_Unbounded_String(".movement.downright")),
-      28 => (MapAccelerators(14), To_Unbounded_String(".movement.moveto")),
-      29 => (MapAccelerators(15), To_Unbounded_String(".map.center")),
-      30 => (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase")),
-      31 => (MapAccelerators(17), To_Unbounded_String(".map.mapupleft")),
-      32 => (MapAccelerators(18), To_Unbounded_String(".map.mapup")),
-      33 => (MapAccelerators(19), To_Unbounded_String(".map.mapupright")),
-      34 => (MapAccelerators(20), To_Unbounded_String(".map.mapleft")),
-      35 => (MapAccelerators(21), To_Unbounded_String(".map.mapright")),
-      36 => (MapAccelerators(22), To_Unbounded_String(".map.mapdownleft")),
-      37 => (MapAccelerators(23), To_Unbounded_String(".map.mapdown")),
-      38 => (MapAccelerators(24), To_Unbounded_String(".map.mapdownright")),
-      39 => (MapAccelerators(25), To_Unbounded_String(".map.cursorupleft")),
-      40 => (MapAccelerators(26), To_Unbounded_String(".map.cursorup")),
-      41 => (MapAccelerators(27), To_Unbounded_String(".map.cursorupright")),
-      42 => (MapAccelerators(28), To_Unbounded_String(".map.cursorleft")),
-      43 => (MapAccelerators(29), To_Unbounded_String(".map.cursorright")),
-      44 => (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft")),
-      45 => (MapAccelerators(31), To_Unbounded_String(".map.cursordown")),
-      46 => (MapAccelerators(32), To_Unbounded_String(".map.cursordownright")),
-      47 => (MapAccelerators(33), To_Unbounded_String(".map.clickmouse")),
-      48 => (MapAccelerators(34), To_Unbounded_String(".movement.fullstop")),
-      49 =>
+      6 => (MenuAccelerators(6), To_Unbounded_String(".menu.missions")),
+      7 => (MenuAccelerators(7), To_Unbounded_String(".menu.stories")),
+      8 => (MenuAccelerators(8), To_Unbounded_String(".menu.waitorders")),
+      9 => (MenuAccelerators(9), To_Unbounded_String(".menu.gamestats")),
+      10 => (MenuAccelerators(10), To_Unbounded_String(".menu.help")),
+      11 => (MenuAccelerators(11), To_Unbounded_String(".menu.gameoptions")),
+      12 => (MenuAccelerators(12), To_Unbounded_String(".menu.quit")),
+      13 => (MenuAccelerators(13), To_Unbounded_String(".menu.resign")),
+      14 => (MapAccelerators(1), To_Unbounded_String(".menu.menu")),
+      15 => (MapAccelerators(2), To_Unbounded_String(".map.mapoptions")),
+      16 => (MapAccelerators(3), To_Unbounded_String(".map.zoomin")),
+      17 => (MapAccelerators(4), To_Unbounded_String(".map.zoomout")),
+      18 => (MapAccelerators(5), To_Unbounded_String(".movement.upleft")),
+      19 => (MapAccelerators(6), To_Unbounded_String(".movement.up")),
+      20 => (MapAccelerators(7), To_Unbounded_String(".movement.upright")),
+      21 => (MapAccelerators(8), To_Unbounded_String(".movement.left")),
+      22 => (MapAccelerators(9), To_Unbounded_String(".movement.right")),
+      23 => (MapAccelerators(10), To_Unbounded_String(".movement.wait")),
+      24 => (MapAccelerators(11), To_Unbounded_String(".movement.downleft")),
+      25 => (MapAccelerators(12), To_Unbounded_String(".movement.down")),
+      26 => (MapAccelerators(13), To_Unbounded_String(".movement.downright")),
+      27 => (MapAccelerators(14), To_Unbounded_String(".movement.moveto")),
+      28 => (MapAccelerators(15), To_Unbounded_String(".map.center")),
+      29 => (MapAccelerators(16), To_Unbounded_String(".map.centerhomebase")),
+      30 => (MapAccelerators(17), To_Unbounded_String(".map.mapupleft")),
+      31 => (MapAccelerators(18), To_Unbounded_String(".map.mapup")),
+      32 => (MapAccelerators(19), To_Unbounded_String(".map.mapupright")),
+      33 => (MapAccelerators(20), To_Unbounded_String(".map.mapleft")),
+      34 => (MapAccelerators(21), To_Unbounded_String(".map.mapright")),
+      35 => (MapAccelerators(22), To_Unbounded_String(".map.mapdownleft")),
+      36 => (MapAccelerators(23), To_Unbounded_String(".map.mapdown")),
+      37 => (MapAccelerators(24), To_Unbounded_String(".map.mapdownright")),
+      38 => (MapAccelerators(25), To_Unbounded_String(".map.cursorupleft")),
+      39 => (MapAccelerators(26), To_Unbounded_String(".map.cursorup")),
+      40 => (MapAccelerators(27), To_Unbounded_String(".map.cursorupright")),
+      41 => (MapAccelerators(28), To_Unbounded_String(".map.cursorleft")),
+      42 => (MapAccelerators(29), To_Unbounded_String(".map.cursorright")),
+      43 => (MapAccelerators(30), To_Unbounded_String(".map.cursordownleft")),
+      44 => (MapAccelerators(31), To_Unbounded_String(".map.cursordown")),
+      45 => (MapAccelerators(32), To_Unbounded_String(".map.cursordownright")),
+      46 => (MapAccelerators(33), To_Unbounded_String(".map.clickmouse")),
+      47 => (MapAccelerators(34), To_Unbounded_String(".movement.fullstop")),
+      48 =>
         (MapAccelerators(35), To_Unbounded_String(".movement.quarterspeed")),
-      50 => (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed")),
-      51 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
-      52 =>
+      49 => (MapAccelerators(36), To_Unbounded_String(".movement.halfspeed")),
+      50 => (MapAccelerators(37), To_Unbounded_String(".movement.fullspeed")),
+      51 =>
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
    -- ****
 
@@ -295,7 +294,7 @@ package body GameOptions is
          Accels(I).ShortCut := MenuAccelerators(I);
       end loop;
       for I in MapAccelerators'Range loop
-         Accels(I + 15).ShortCut := MapAccelerators(I);
+         Accels(I + 14).ShortCut := MapAccelerators(I);
       end loop;
       Accels(Accels'Last).ShortCut := FullScreenAccel;
       for Accel of Accels loop
@@ -574,13 +573,13 @@ package body GameOptions is
            (Interp, "<" & To_String(Accels(I).ShortCut) & ">");
          KeyEntry.Name :=
            New_String(RootName & To_String(Accels(I).EntryName));
-         if I < 15 then
+         if I < 14 then
             MenuAccelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
               (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
                "{InvokeMenu" & Positive'Image(I) & "}");
          else
-            MapAccelerators(I - 14) := To_Unbounded_String(Get(KeyEntry));
+            MapAccelerators(I - 13) := To_Unbounded_String(Get(KeyEntry));
          end if;
       end loop;
       Unbind_From_Main_Window
