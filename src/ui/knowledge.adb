@@ -13,7 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -28,9 +30,12 @@ with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
+with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Knowledge.Bases;
@@ -57,6 +62,9 @@ package body Knowledge is
       ComboBox: Ttk_ComboBox :=
         Get_Widget(KnowledgeCanvas & ".frame.options.types");
       ComboValues: Unbounded_String;
+      Row: Positive;
+      Label: Ttk_Label;
+      Button: Ttk_Button;
    begin
       if Winfo_Get(KnowledgeFrame, "exists") = "0" then
          Tcl_EvalFile
@@ -97,8 +105,7 @@ package body Knowledge is
               (KnowledgeFrame, "-row" & Positive'Image(I)),
             " ");
          for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Interp;
-            Item.Name := New_String(Slice(Tokens, J));
+            Item := Get_Widget(Slice(Tokens, J), Interp);
             Destroy(Item);
          end loop;
       end loop;
@@ -111,6 +118,116 @@ package body Knowledge is
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting the known events list
+      KnowledgeFrame.Name :=
+        New_String(Paned & ".knowledgeframe.events.canvas.frame");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (KnowledgeFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item := Get_Widget(Slice(Tokens, J), Interp);
+            Destroy(Item);
+         end loop;
+      end loop;
+      if Events_List.Length = 0 then
+         Label :=
+           Create
+             (KnowledgeFrame & ".noevents",
+              "-text {You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+      else
+         Label := Create(KnowledgeFrame & ".name", "-text {Name}");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+         Label := Create(KnowledgeFrame & ".distance", "-text {Distance}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -column 1");
+         Row := 2;
+         for Event of Events_List loop
+            case Event.EType is
+               when EnemyShip =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Enemy ship spotted} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when FullDocks =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Full docks in base} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when AttackOnBase =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Base is under attack} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when Disease =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Disease in base} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when EnemyPatrol =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Enemy patrol} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when DoublePrice =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Double price in base} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when Trader =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Friendly trader spotted} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when FriendlyShip =>
+                  Button :=
+                    Create
+                      (KnowledgeFrame & ".name" &
+                       Trim(Positive'Image(Row), Left),
+                       "-text {Friendly ship spotted} -command {ShowEventMenu" &
+                       Positive'Image(Row - 1) & "}");
+               when None | BaseRecovery =>
+                  null;
+            end case;
+            Add(Button, "Show available event's options");
+            Tcl.Tk.Ada.Grid.Grid
+              (Button, "-row" & Positive'Image(Row) & " -sticky w");
+            Label :=
+              Create
+                (KnowledgeFrame & ".distance" &
+                 Trim(Positive'Image(Row), Left),
+                 "-text {" &
+                 Natural'Image(CountDistance(Event.SkyX, Event.SkyY)) & "}");
+            Tcl.Tk.Ada.Grid.Grid
+              (Label, "-row" & Positive'Image(Row) & " -column 1");
+            Row := Row + 1;
+         end loop;
+      end if;
+      Tcl_Eval(Get_Context, "update");
+      KnowledgeCanvas.Name :=
+        New_String(Paned & ".knowledgeframe.events.canvas");
+      configure
+        (KnowledgeCanvas,
+         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
+      Xview_Move_To(KnowledgeCanvas, "0.0");
+      Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting the known stories list
       -- Show knowledge
       ShowScreen("knowledgeframe");
