@@ -39,6 +39,7 @@ with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Knowledge.Bases;
+with Knowledge.Events;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -322,6 +323,7 @@ package body Knowledge is
       AddCommand("ShowKnowledge", Show_Knowledge_Command'Access);
       AddCommand("KnowledgeMaxMin", Knowledge_Max_Min_Command'Access);
       Knowledge.Bases.AddCommands;
+      Knowledge.Events.AddCommands;
    end AddCommands;
 
 end Knowledge;
