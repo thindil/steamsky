@@ -73,7 +73,7 @@ set specialkey {}
 # Set proper shortcut, validate it and check if it is not set somewhere
 proc SetShortcut {field key} {
    global specialkey moveoptions menuoptions mapoptions ioptions
-   set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright $moveoptions.left $moveoptions.wait $moveoptions.right $moveoptions.downleft $moveoptions.down $moveoptions.downright $moveoptions.moveto $moveoptions.fullstop $moveoptions.quarterspeed $moveoptions.halfspeed $moveoptions.fullspeed $menuoptions.shipinfo $menuoptions.orders $menuoptions.crafts $menuoptions.messages $menuoptions.knowledge $menuoptions.events $menuoptions.missions  $menuoptions.stories $menuoptions.waitorders $menuoptions.gamestats $menuoptions.help $menuoptions.gameoptions $menuoptions.quit $menuoptions.resign $menuoptions.menu $mapoptions.center $mapoptions.centerhomebase $mapoptions.mapleft $mapoptions.mapright $mapoptions.mapup $mapoptions.mapdown $mapoptions.mapupleft $mapoptions.mapupright $mapoptions.mapdownleft $mapoptions.mapdownright $mapoptions.cursorupleft $mapoptions.cursorup $mapoptions.cursorupright $mapoptions.cursorleft $mapoptions.cursorright $mapoptions.cursordownleft $mapoptions.cursordown $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
+   set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright $moveoptions.left $moveoptions.wait $moveoptions.right $moveoptions.downleft $moveoptions.down $moveoptions.downright $moveoptions.moveto $moveoptions.fullstop $moveoptions.quarterspeed $moveoptions.halfspeed $moveoptions.fullspeed $menuoptions.shipinfo $menuoptions.orders $menuoptions.crafts $menuoptions.messages $menuoptions.knowledge $menuoptions.missions  $menuoptions.stories $menuoptions.waitorders $menuoptions.gamestats $menuoptions.help $menuoptions.gameoptions $menuoptions.quit $menuoptions.resign $menuoptions.menu $mapoptions.center $mapoptions.centerhomebase $mapoptions.mapleft $mapoptions.mapright $mapoptions.mapup $mapoptions.mapdown $mapoptions.mapupleft $mapoptions.mapupright $mapoptions.mapdownleft $mapoptions.mapdownright $mapoptions.cursorupleft $mapoptions.cursorup $mapoptions.cursorupright $mapoptions.cursorleft $mapoptions.cursorright $mapoptions.cursordownleft $mapoptions.cursordown $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
    if {$key == "Control_L" || $key == "Control_R" || $key == "Alt_L" || $key == "Alt_R" || $key == "Shift_L" || $key == "Shift_R"} {
       set specialkey [string range $key 0 [expr [string length $key] - 3]]
       return
@@ -162,35 +162,32 @@ bind $menuoptions.messages <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl7 -text {Knowledge lists:}]
 grid [ttk::entry $menuoptions.knowledge] -row 4 -column 1
 bind $menuoptions.knowledge <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl8 -text {List of known events:}]
-grid [ttk::entry $menuoptions.events] -row 5 -column 1
-bind $menuoptions.events <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl9 -text {List of accepted missions:}]
-grid [ttk::entry $menuoptions.missions] -row 6 -column 1
+grid [ttk::entry $menuoptions.missions] -row 5 -column 1
 bind $menuoptions.missions <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl10 -text {Stories:}]
-grid [ttk::entry $menuoptions.stories] -row 7 -column 1
+grid [ttk::entry $menuoptions.stories] -row 6 -column 1
 bind $menuoptions.stories <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}]
-grid [ttk::entry $menuoptions.waitorders] -row 8 -column 1
+grid [ttk::entry $menuoptions.waitorders] -row 7 -column 1
 bind $menuoptions.waitorders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}]
-grid [ttk::entry $menuoptions.gamestats] -row 9 -column 1
+grid [ttk::entry $menuoptions.gamestats] -row 8 -column 1
 bind $menuoptions.gamestats <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl13 -text {Help:}]
-grid [ttk::entry $menuoptions.help] -row 10 -column 1
+grid [ttk::entry $menuoptions.help] -row 9 -column 1
 bind $menuoptions.help <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl14 -text {Game options:}]
-grid [ttk::entry $menuoptions.gameoptions] -row 11 -column 1
+grid [ttk::entry $menuoptions.gameoptions] -row 10 -column 1
 bind $menuoptions.gameoptions <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}]
-grid [ttk::entry $menuoptions.quit] -row 12 -column 1
+grid [ttk::entry $menuoptions.quit] -row 11 -column 1
 bind $menuoptions.quit <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}]
-grid [ttk::entry $menuoptions.resign] -row 13 -column 1
+grid [ttk::entry $menuoptions.resign] -row 12 -column 1
 bind $menuoptions.resign <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl17 -text {Show menu:}]
-grid [ttk::entry $menuoptions.menu] -row 14 -column 1
+grid [ttk::entry $menuoptions.menu] -row 13 -column 1
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
