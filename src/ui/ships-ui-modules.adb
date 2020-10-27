@@ -249,7 +249,8 @@ package body Ships.UI.Modules is
                CArgv.Arg(Argv, 1) & "}");
             declare
                AmmoIndex: Natural;
-               AmmoMenu: Tk_Menu;
+               AmmoMenu: Tk_Menu :=
+                 Get_Widget(Widget_Image(ModuleMenu) & ".ammomenu");
                NotEmpty: Boolean := False;
             begin
                if PlayerShip.Modules(ModuleIndex).MType = GUN then
@@ -257,9 +258,6 @@ package body Ships.UI.Modules is
                else
                   AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
                end if;
-               AmmoMenu.Interp := Get_Context;
-               AmmoMenu.Name :=
-                 New_String(Widget_Image(ModuleMenu) & ".ammomenu");
                if Winfo_Get(AmmoMenu, "exists") = "0" then
                   AmmoMenu :=
                     Create
@@ -1291,14 +1289,13 @@ package body Ships.UI.Modules is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Button: Ttk_Button;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String
+      Button: constant Ttk_Button :=
+        Get_Widget
           (".paned.shipinfoframe.modules.canvas.frame.name" &
-           Trim(Positive'Image(ModuleIndex + 1), Left));
+           Trim(Positive'Image(ModuleIndex + 1), Left),
+           Interp);
+   begin
       if Tk_Get_String
           (Interp, ".gs", "text",
            "{Enter a new name for the " & cget(Button, "-text") & "}") =
@@ -1344,7 +1341,8 @@ package body Ships.UI.Modules is
       ButtonName: Unbounded_String;
       CrewIndex: constant Natural :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
-      InfoLabel: Ttk_Label;
+      InfoLabel: constant Ttk_Label :=
+        Get_Widget(".moduledialog.canvas.frame.infolabel", Interp);
    begin
       if Argc = 3 then
          if Tcl_GetVar
@@ -1396,8 +1394,6 @@ package body Ships.UI.Modules is
             end if;
          end loop;
       end if;
-      InfoLabel.Interp := Interp;
-      InfoLabel.Name := New_String(".moduledialog.canvas.frame.infolabel");
       if Winfo_Get(InfoLabel, "exists") = "1" then
          configure
            (InfoLabel,
