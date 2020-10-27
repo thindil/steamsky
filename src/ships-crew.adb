@@ -33,7 +33,7 @@ package body Ships.Crew is
      (Member: Member_Data; SkillIndex: Positive) return Natural is
       SkillLevel: Integer := 0;
       Damage: DamageFactor := 0.0;
-      BaseSkillLevel: Natural;
+      BaseSkillLevel: Natural range 0 .. 151;
    begin
       for Skill of Member.Skills loop
          if Skill(1) = SkillIndex then
@@ -162,9 +162,10 @@ package body Ships.Crew is
      (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
       ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) is
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
-      ModuleIndex2, ToolsIndex: Natural := 0;
+      ToolsIndex: Inventory_Container.Extended_Index := 0;
       RequiredTool: Unbounded_String;
-      ToolQuality: Positive := 100;
+      ToolQuality: Items_Durability := Default_Item_Durability;
+      ModuleIndex2: Modules_Container.Extended_Index := 0;
    begin
       if GivenOrder = Ship.Crew(MemberIndex).Order then
          if GivenOrder in Craft | Gunner then
@@ -491,10 +492,13 @@ package body Ships.Crew is
    procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False) is
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
-      EventIndex: constant Natural := SkyMap(Ship.SkyX, Ship.SkyY).EventIndex;
+      EventIndex: constant Events_Container.Extended_Index :=
+        SkyMap(Ship.SkyX, Ship.SkyY).EventIndex;
       function UpdatePosition
         (Order: Crew_Orders; MaxPriority: Boolean := True) return Boolean is
-         ModuleIndex, MemberIndex, OrderIndex: Natural := 0;
+         OrderIndex: Natural := 0;
+         MemberIndex: Crew_Container.Extended_Index := 0;
+         ModuleIndex: Modules_Container.Extended_Index := 0;
       begin
          OrderIndex :=
            (if Crew_Orders'Pos(Order) < Crew_Orders'Pos(Defend) then
