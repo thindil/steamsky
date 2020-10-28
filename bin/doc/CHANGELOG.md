@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Look of map info window
 - Typos in README.md, CONTRIBUTING.md, MODDING.md
 - Showing orders for the whole crew
+- Showing info about the event on map
 
 ## [5.3] - 2020-10-04
 
