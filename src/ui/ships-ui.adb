@@ -53,28 +53,26 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      ShipInfoFrame: Ttk_Frame := Get_Widget(Paned & ".shipinfoframe", Interp);
       Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      ShipInfoFrame, Item: Ttk_Frame;
+      Item: Ttk_Frame;
       UpgradeInfo, ProgressBarStyle: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
-      CloseButton, CancelButton: Ttk_Button;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
+      CancelButton: Ttk_Button;
       Tokens: Slice_Set;
       Rows, Row: Natural := 0;
-      ShipCanvas: Tk_Canvas;
+      ShipCanvas: Tk_Canvas :=
+        Get_Widget(Paned & ".shipinfoframe.general.canvas");
       Button: Ttk_Button;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (".paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      ShipInfoFrame.Interp := Interp;
-      ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -90,16 +88,11 @@ package body Ships.UI is
       ShipInfoFrame.Name :=
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
-      Label.Interp := Interp;
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".name");
+      Label := Get_Widget(ShipInfoFrame & ".name");
       configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".upgradelabel");
-      UpgradeProgress.Interp := Interp;
-      UpgradeProgress.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".upgrade");
-      CancelButton.Interp := Interp;
-      CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".cancelupgrade");
+      Label.Name := New_String(ShipInfoFrame & ".upgradelabel");
+      UpgradeProgress := Get_Widget(ShipInfoFrame & ".upgrade");
+      CancelButton := Get_Widget(ShipInfoFrame & ".cancelupgrade");
       -- Show or hide upgrade module info
       if PlayerShip.UpgradeModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -210,9 +203,8 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       -- Show or hide repair priority info
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".repairlabel");
-      CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".cancelpriority");
+      Label.Name := New_String(ShipInfoFrame & ".repairlabel");
+      CancelButton.Name := New_String(ShipInfoFrame & ".cancelpriority");
       if PlayerShip.RepairModule = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
@@ -225,10 +217,8 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
       -- Show or hide destination info
-      Label.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".destinationlabel");
-      CancelButton.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".canceldestination");
+      Label.Name := New_String(ShipInfoFrame & ".destinationlabel");
+      CancelButton.Name := New_String(ShipInfoFrame & ".canceldestination");
       if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
@@ -255,20 +245,17 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".homelabel");
+      Label.Name := New_String(ShipInfoFrame & ".homelabel");
       configure
         (Label,
          "-text {Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name) &
          "}");
-      Label.Name := New_String(Widget_Image(ShipInfoFrame) & ".weight");
+      Label.Name := New_String(ShipInfoFrame & ".weight");
       configure
         (Label,
          "-text {Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
          "kg}");
       Tcl_Eval(Get_Context, "update");
-      ShipCanvas.Interp := Interp;
-      ShipCanvas.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.general.canvas");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
@@ -295,10 +282,9 @@ package body Ships.UI is
       for Module of PlayerShip.Modules loop
          Button :=
            Create
-             (ShipInfoFrame & ".name" &
-              Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Module.Name) & "} -command {ShowModuleMenu" &
-              Positive'Image(Row - 1) & "}");
+             (ShipInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(Module.Name) &
+              "} -command {ShowModuleMenu" & Positive'Image(Row - 1) & "}");
          Add(Button, "Show available module's options");
          Tcl.Tk.Ada.Grid.Grid
            (Button, "-row" & Natural'Image(Row) & " -sticky w");
@@ -327,9 +313,7 @@ package body Ships.UI is
          Row := Row + 1;
       end loop;
       Tcl_Eval(Get_Context, "update");
-      ShipCanvas.Interp := Interp;
-      ShipCanvas.Name :=
-        New_String(Widget_Image(Paned) & ".shipinfoframe.modules.canvas");
+      ShipCanvas.Name := New_String(Paned & ".shipinfoframe.modules.canvas");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
@@ -370,14 +354,12 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      NameEntry: Ttk_Label;
+      NameEntry: constant Ttk_Label :=
+        Get_Widget(".paned.shipinfoframe.general.canvas.frame.name", Interp);
    begin
       if Argc = 1 then
          return TCL_OK;
       end if;
-      NameEntry.Interp := Interp;
-      NameEntry.Name :=
-        New_String(".paned.shipinfoframe.general.canvas.frame.name");
       PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
@@ -419,16 +401,11 @@ package body Ships.UI is
          (To_Unbounded_String("modules"), 0, 1),
          (To_Unbounded_String("crew"), 1, 0),
          (To_Unbounded_String("cargo"), 1, 1));
-      Frame: Ttk_Frame;
-      Button: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".paned.shipinfoframe", Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget
+          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
    begin
-      Frame.Interp := Interp;
-      Frame.Name := New_String(".paned.shipinfoframe");
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String
-          (Widget_Image(Frame) & "." & CArgv.Arg(Argv, 1) &
-           ".canvas.frame.maxmin");
       if CArgv.Arg(Argv, 2) /= "show" then
          for FrameInfo of Frames loop
             Frame.Name :=
