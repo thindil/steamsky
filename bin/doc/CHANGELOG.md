@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Moved cargo info to ship info screen
 - Disable menu keyboard shortcuts when entering the text
 - Moved known bases list to knowledge screen
+- Moved known events list to knowledge screen
 
 ### Removed
 - Settings to show bases and items info
