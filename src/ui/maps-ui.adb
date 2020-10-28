@@ -646,8 +646,7 @@ package body Maps.UI is
             EventIndex: constant Events_Container.Extended_Index :=
               SkyMap(X, Y).EventIndex;
          begin
-            if Events_List(EventIndex).EType /= BaseRecovery and
-              SkyMap(X, Y).BaseIndex > 0 then
+            if Events_List(EventIndex).EType /= BaseRecovery then
                Append(EventInfoText, LF);
             end if;
             case Events_List(EventIndex).EType is
@@ -678,12 +677,12 @@ package body Maps.UI is
                configure
                  (EventInfo,
                   "-text {" & To_String(EventInfoText) &
-                  "} -style Headergreen.TLabel");
+                  "} -style MapInfoGreen.TLabel");
             else
                configure
                  (EventInfo,
                   "-text {" & To_String(EventInfoText) &
-                  "} -style Headerred.TLabel");
+                  "} -style MapInfoRed.TLabel");
             end if;
          end;
       end if;

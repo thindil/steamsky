@@ -90,10 +90,11 @@ grid [ttk::button $mframe.s -text {S} -style Toolbutton -command {MoveMap s}] -c
 grid [ttk::button $mframe.se -text {SE} -style Toolbutton -command {MoveMap se}] -column 3 -row 3
 grid [ttk::button $mframe.hide -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
-grid [ttk::frame .paned.mapframe.info] -column 0 -row 0 -sticky ne
+# Map info frame
+grid [ttk::frame .paned.mapframe.info -relief solid -padding 5 -style MapInfo.TFrame -borderwidth 1] -column 0 -row 0 -sticky ne
 bind .paned.mapframe.info <Enter> MoveMapInfo
 grid [ttk::label .paned.mapframe.info.info -style MapInfo.TLabel] -sticky nwes
-ttk::label .paned.mapframe.info.eventinfo
+ttk::label .paned.mapframe.info.eventinfo -wraplength 225
 grid rowconfigure .paned.mapframe 0 -weight 1
 grid columnconfigure .paned.mapframe 0 -weight 1
 # Last messages
