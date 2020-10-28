@@ -13,15 +13,14 @@
   this option from the help menu.
 * Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
-  where `[number]` is between 1 and 28 (example: `{GameKey 9}`). Proper game
+  where `[number]` is between 1 and 27 (example: `{GameKey 9}`). Proper game
   keys in order: move ship up/left, move ship up, move ship up/right, move
   ship left, move ship one field or wait 1 minute, move ship right, move ship
   down/left, move ship down, move ship down/right, move ship to destination,
   show ship info, show ship orders, show crafting menu, show last messages,
-  show know bases, show known events, show accepted missions, show know
-  stories, move map position, show game statistics, show help, show game
-  options, quit from game, resign from game, show menu, show wait orders, zoom
-  in map, zoom out map.
+  show knowledge info, show accepted missions, show know stories, move map
+  position, show game statistics, show help, show game options, quit from game,
+  resign from game, show menu, show wait orders, zoom in map, zoom out map.
   (example: `{GameKey 10}` will be translated to key used for auto move ship).
 * Inside help text you can use special variables: `{MoneyName}` which later
   will be replaced with the name of the game's money, `{FuelName}` which later will be
@@ -91,7 +90,7 @@ Thus, if you find an Agricultural base near a Refinery, start travelling between
     3. Some factions will escape if you destroy weapon on theirs ships. This is useful if you meet a lot bigger ship than your.
 </entry>
  <entry index="movement" title=" 3. Ship movement">{u}Undocking from or docking to bases{/u}
-    Your ship starts docked to a base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from the base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 12} key (or first {GameKey 25} key for see game menu) for open Orders menu.
+    Your ship starts docked to a base. To move it, you must first give order {b}&quot;Undock&quot;{/b} from the base, by clicking on {b}&quot;Undock&quot;{/b} button. To see other orders available for ship, press {GameKey 12} key (or first {GameKey 24} key for see game menu) for open Orders menu.
 Each docking operation cost some money, depending on your ship size (bigger ships have bigger docking cost) and your reputation in that base. Info about docking fee on the dock button shows the base cost (only ship size) of docking. Same is with staying longer in base - for each day you pay this same price as for docking. When you will undock from bases, you will be pay the docking fee. You can't undock from the base if your ship is overloaded or until you don't pay the docking fee. You can try to escape from the base without paying, but this always ends with losing some reputation in that base and sometimes even with your ship damage. To escape from the base click on {b}&quot;Escape&quot;{/b} button.
 When you undocked from base, in this same menu, you can dock again.
 
@@ -105,7 +104,7 @@ With higher set ship speed, there is bigger chance that one of engines will be d
 You may disable or enable selected ship engine in ship info screen. Press key {GameKey 11} then select engine from list and press button {b}Disable engine{/b} for turning it off or {b}Enable engine{/b} for turning it on. When you fly you must have at least one working engine (when you docked to base you can disable all engines).
 
 {u}Events{/u}
-   During travel you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exist by some time. Events on map are marked with mark {b}'?'{/b}. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 12} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
+   During travel you may encounter various events. Some events may bring new options to orders (for example, attack on other ships) or take options away (for example, full docks in bases prevent docking to base). Most events exist by some time. You may also ask for events in bases in which you are docked. You can ask in every base once on 7 game days. To ask, press {GameKey 12} key and then select option {b}'Ask for events'{/b}. Each ask take 30 minutes of game time. Amount of discovered events depends on current base size (in larger bases they know more other bases). From time to time, you can meet friendly ship which you can ask for events too.
 
 {u}Setting ship destination{/u}
    You can set your destination travel point on map by selecting map cell by left click on it. If you left-click on map cell where your ship is, you will open orders menu.
@@ -298,7 +297,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 {u}Various info{/u}
 * Red color of cabin quality in {i}Transport passengers{/i} missions in {b}Available Missions{/b} menu means you don't have installed cabin with that quality or higher on ship. Yellow means you have cabin with that quality or higher but it is taken by someone else.
 * Each mission have time limit - if you don't finish mission in that time, mission will fail. {i}Delivery{/i} mission will fail too if you drop mission item from your cargo. {i}Transport passengers{/i} mission will fail if you dismiss passenger from your ship. If you fail mission, you lose some reputation with that base.
-* You can see all accepted missions in {b}Missions{/b} menu (key {GameKey 17}). There you can set mission target map cell as destination for your ship.</entry>
+* You can see all accepted missions in {b}Missions{/b} menu (key {GameKey 16}). There you can set mission target map cell as destination for your ship.</entry>
  <entry index="recruit" title="11. Hiring crew members">{u}General info{/u}
     You can hire new crew members in bases. First you must dock to base, then you choice {b}Recruit{/b} option from {b}Orders{/b} menu. Amount of available recruits depends on size of base, but in some bases ({barracks}) there is more recruits and they are cheaper. They hire cost and future payment, depends on amount of knowledge (amount of skills and attributes and levels of skills and attributes) and equipment. Skills, amount of skills, attributes and equipment quality of recruits depends on your reputation in selected base, but from time to time, you can find very experienced recruits in bases too.
 
@@ -309,7 +308,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * Here no limit how much crew members you can have on ship, just remember, all of them needs food, drinks, place to rest and payment.
 * Hiring new crew members reduce population of base. New recruits are available every 30 days between visits of base.
 * Starting morale of recruit depends on player reputation in selected base, except members of {nomorale} factions.</entry>
- <entry index="tips" title="12. Tips">* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 21} key on sky map (no need to press {GameKey 25} first to show menu).
+ <entry index="tips" title="12. Tips">* All shortcuts from game menu works on map screen too, even when game menu is hidden. For example: you can always see help by press {GameKey 20} key on sky map (no need to press {GameKey 24} first to show menu).
 * If you want travel faster (for example, for escape from fight), you can drop some items from your cargo. Go to cargo information screen, select desired item and select proper option from item options menu.
 * Each crew member need proper module for work. If that module is destroyed, member cannot start selected work (for example, can't start piloting when cockpit is destroyed).
 * You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
@@ -319,9 +318,9 @@ If you successfully finish mission, your character gain some morale, if you fail
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
 * Your ship gets dirty at the start of every day. You can send as many crew members as you want to clean the ship or give an order to the whole crew. It is the only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
 * A base's population may change with time. Don't be surprised when a small base may be abandoned after a successful attack on it or after disease. A base's population may grow with time.
-* You may set some game options during play by selecting 'Game Options' menu (key {GameKey 22}). Changes done to options are used in current and each next game.
+* You may set some game options during play by selecting 'Game Options' menu (key {GameKey 21}). Changes done to options are used in current and each next game.
 * If you deliver proper medical supplies for free to diseased base, you gain some reputation in that base. If you sell medical supplies to diseased base, you earn some money but lose reputation. The amount of gained or lost reputation depends on how much medical supplies you gave or sold.
-* You can check the progress of your character goal in 'Game statistics' menu (key {GameKey 20}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, a new random goal will be given.
+* You can check the progress of your character goal in 'Game statistics' menu (key {GameKey 25}). There you can change it too, but if you do it, progress of old goal will be lost. If you finish your current goal, a new random goal will be given.
 * Goal 'Visit x bases' is updated only when you dock to that base for the first time. For example: 'Visit 10 Pirates bases' means that you have to dock for the first time to 10 Pirates bases. If you visit the base to which you were docked earlier, the goal will not be updated.
 * Abandoned bases may be recovered by someone. In that situation, they gain a small population and a new owner.
 * You may move most items (with exception of items needed for missions) between ship cargo and crew members inventory in cargo screen and from inventory to ship in selected crew member inventory screen.
@@ -329,7 +328,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * During combat with undead ships, it is good to send boarding party on enemy ship. After combat they may find interesting thing...
 * Your career determine not only your starting ship and crew, but mainly gaining experience by you and your crew members in skills during game. Those who choice combat based career will be learn combat skills faster than those who choice crafting based career.
 * When you waiting in place outside sky bases, your ship will be use fuel too. Watch out on it, because if you will not have enough fuel, you may fall from sky and die.
-* You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 27} and {GameKey 28} keys.
-* You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 22}).</entry>
+* You may "zoom in" or "zoom out" map with mouse wheel, while holding SHIFT key (it changing size of font used for map) or with {GameKey 26} and {GameKey 27} keys.
+* You may change all keyboard shortcuts in 'Game Options' menu (key {GameKey 21}).</entry>
 </help>
 
