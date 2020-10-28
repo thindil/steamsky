@@ -88,9 +88,9 @@ package body Ships.Movement is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
       Speed: SpeedType;
-      FuelIndex: Natural;
+      FuelIndex: Inventory_Container.Extended_Index;
       function NeedRest(Order: Crew_Orders) return Boolean is
-         MemberIndex: Natural;
+         MemberIndex: Crew_Container.Extended_Index;
       begin
          MemberIndex := FindMember(Order);
          if MemberIndex = 0 then
@@ -204,7 +204,7 @@ package body Ships.Movement is
 
    function DockShip
      (Docking: Boolean; Escape: Boolean := False) return String is
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String;
    begin
@@ -276,10 +276,12 @@ package body Ships.Movement is
          if not Escape then
             if SkyBases(BaseIndex).Population > 0 then
                declare
-                  MoneyIndex2: constant Natural :=
+                  MoneyIndex2: constant Inventory_Container.Extended_Index :=
                     FindItem(PlayerShip.Cargo, MoneyIndex);
-                  DockingCost, FuelIndex: Natural;
-                  TraderIndex: constant Natural := FindMember(Talk);
+                  DockingCost: Natural;
+                  FuelIndex: Inventory_Container.Extended_Index;
+                  TraderIndex: constant Crew_Container.Extended_Index :=
+                    FindMember(Talk);
                begin
                   if MoneyIndex2 = 0 then
                      return "You can't undock from this base because you don't have any " &
@@ -322,7 +324,7 @@ package body Ships.Movement is
                end;
             else
                declare
-                  FuelIndex: constant Natural :=
+                  FuelIndex: constant Inventory_Container.Extended_Index :=
                     FindItem
                       (Inventory => PlayerShip.Cargo, ItemType => FuelType);
                begin
@@ -340,7 +342,7 @@ package body Ships.Movement is
                Roll: constant Integer := GetRandom(1, 100);
                MessageText: Unbounded_String;
                Color: Message_Color := WHITE;
-               ModuleIndex: Positive;
+               ModuleIndex: Modules_Container.Extended_Index;
             begin
                MessageText :=
                  To_Unbounded_String
