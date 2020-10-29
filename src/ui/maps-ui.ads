@@ -28,14 +28,13 @@ package Maps.UI is
    -- FUNCTION
    -- Array with the game menu default accelerators
    -- SOURCE
-   MenuAccelerators: array(1 .. 13) of Unbounded_String :=
+   MenuAccelerators: array(1 .. 12) of Unbounded_String :=
      (To_Unbounded_String("s"), To_Unbounded_String("o"),
       To_Unbounded_String("r"), To_Unbounded_String("m"),
-      To_Unbounded_String("k"), To_Unbounded_String("i"),
-      To_Unbounded_String("t"), To_Unbounded_String("w"),
-      To_Unbounded_String("g"), To_Unbounded_String("F1"),
-      To_Unbounded_String("p"), To_Unbounded_String("q"),
-      To_Unbounded_String("x"));
+      To_Unbounded_String("k"), To_Unbounded_String("t"),
+      To_Unbounded_String("w"), To_Unbounded_String("g"),
+      To_Unbounded_String("F1"), To_Unbounded_String("p"),
+      To_Unbounded_String("q"), To_Unbounded_String("x"));
    -- ****
 
    -- ****v* MUI/MapAccelerators
