@@ -42,21 +42,12 @@ package body Statistics.UI is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      StatsCanvas: Tk_Canvas;
-      StatsFrame: Ttk_Frame;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      StatsFrame: Ttk_Frame := Get_Widget(Paned & ".statsframe");
+      StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
+      Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.stats");
       TreeView: Ttk_Tree_View;
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      StatsFrame.Interp := Get_Context;
-      StatsFrame.Name := New_String(Widget_Image(Paned) & ".statsframe");
-      StatsCanvas.Interp := Get_Context;
-      StatsCanvas.Name := New_String(Widget_Image(StatsFrame) & ".canvas");
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String(Widget_Image(StatsCanvas) & ".stats.left.stats");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -117,9 +108,7 @@ package body Statistics.UI is
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
-      TreeView.Interp := Get_Context;
-      TreeView.Name :=
-        New_String(Widget_Image(StatsFrame) & ".left.craftsview");
+      TreeView := Get_Widget(StatsFrame & ".left.craftsview");
       if Children(TreeView, "{}") /= "{}" then
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
