@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -28,8 +28,8 @@ package body Ships.Repairs is
       RepairNeeded, RepairStopped: Boolean := False;
       CrewRepairPoints: Natural_Container.Vector;
       procedure RepairModule(ModuleIndex: Positive) is
-         PointsIndex, PointsBonus, RepairMaterial, ToolsIndex,
-         RepairValue: Natural;
+         PointsIndex, PointsBonus, RepairValue: Natural;
+         RepairMaterial, ToolsIndex: Inventory_Container.Extended_Index;
       begin
          PointsIndex := 0;
          RepairNeeded := True;
