@@ -919,6 +919,7 @@ package body Maps.UI is
         (Get_Context, "<Escape>", "{InvokeButton .header.closebutton}");
       UpdateMessages;
       UpdateMoveButtons;
+      UpdateMapInfo;
       if not GameSettings.ShowLastMessages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
