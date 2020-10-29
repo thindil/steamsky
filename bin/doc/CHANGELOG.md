@@ -31,7 +31,7 @@ All notable changes to this project will be documented in this file.
 - Unmaximize main menu window when quit the game
 - Hide close button in combat
 - Look of map info window
-- Typos in README.md, CONTRIBUTING.md, MODDING.md
+- Typos in README.md, CONTRIBUTING.md, MODDING.md and help
 - Showing orders for the whole crew
 - Showing info about the event on map
 
