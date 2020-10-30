@@ -293,7 +293,7 @@ package body GameOptions is
          Accels(I).ShortCut := MenuAccelerators(I);
       end loop;
       for I in MapAccelerators'Range loop
-         Accels(I + 13).ShortCut := MapAccelerators(I);
+         Accels(I + 12).ShortCut := MapAccelerators(I);
       end loop;
       Accels(Accels'Last).ShortCut := FullScreenAccel;
       for Accel of Accels loop
