@@ -35,6 +35,7 @@ All notable changes to this project will be documented in this file.
 - Typos in README.md, CONTRIBUTING.md, MODDING.md and help
 - Showing orders for the whole crew
 - Showing info about the event on map
+- Crash on map with starting a story
 
 ## [5.3] - 2020-10-04
 
