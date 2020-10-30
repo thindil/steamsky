@@ -68,29 +68,24 @@ package body Stories.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      StoryView: Tk_Text;
+      StoryView: constant Tk_Text :=
+        Get_Widget(".paned.storiesframe.canvas.stories.list.view", Interp);
       TargetText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       StoryIndex: Positive;
-      StoriesBox: Ttk_ComboBox;
-      Button: Ttk_Button;
+      StoriesBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".paned.storiesframe.canvas.stories.options.titles", Interp);
+      Button: Ttk_Button :=
+        Get_Widget(".paned.storiesframe.canvas.stories.options.show", Interp);
    begin
-      StoriesBox.Interp := Interp;
-      StoriesBox.Name :=
-        New_String(".paned.storiesframe.canvas.stories.options.titles");
       StoryIndex := Natural'Value(Current(StoriesBox));
-      StoryView.Interp := Interp;
-      StoryView.Name :=
-        New_String(".paned.storiesframe.canvas.stories.list.view");
       configure(StoryView, "-state normal");
       Delete(StoryView, "1.0", "end");
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Insert(StoryView, "end", To_String(StepText) & LF & LF);
       end loop;
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String(".paned.storiesframe.canvas.stories.options.show");
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
          Insert(StoryView, "end", To_String(GetCurrentStoryText) & LF);
@@ -261,22 +256,16 @@ package body Stories.UI is
    end Set_Story_Command;
 
    procedure ShowStories is
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      StoriesCanvas: Tk_Canvas;
-      StoriesFrame: Ttk_Frame;
-      StoriesBox: Ttk_ComboBox;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      StoriesFrame: Ttk_Frame := Get_Widget(Paned & ".storiesframe");
+      StoriesCanvas: constant Tk_Canvas :=
+        Get_Widget(StoriesFrame & ".canvas");
+      Label: constant Ttk_Label :=
+        Get_Widget(StoriesCanvas & ".stories.info.info.label");
+      StoriesBox: constant Ttk_ComboBox :=
+        Get_Widget(StoriesCanvas & ".stories.options.titles");
       StoriesList: Unbounded_String;
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      StoriesFrame.Interp := Get_Context;
-      StoriesFrame.Name := New_String(Widget_Image(Paned) & ".storiesframe");
-      StoriesCanvas.Interp := Get_Context;
-      StoriesCanvas.Name := New_String(Widget_Image(StoriesFrame) & ".canvas");
-      Label.Interp := Get_Context;
-      Label.Name :=
-        New_String(Widget_Image(StoriesCanvas) & ".stories.info.info.label");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -289,9 +278,6 @@ package body Stories.UI is
          ShowSkyMap(True);
          return;
       end if;
-      StoriesBox.Interp := Get_Context;
-      StoriesBox.Name :=
-        New_String(Widget_Image(StoriesCanvas) & ".stories.options.titles");
       for FinishedStory of FinishedStories loop
          Append
            (StoriesList, " {" & Stories_List(FinishedStory.Index).Name & "}");
@@ -303,11 +289,9 @@ package body Stories.UI is
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
-      StoriesFrame.Name :=
-        New_String(Widget_Image(StoriesCanvas) & ".stories");
+      StoriesFrame.Name := New_String(StoriesCanvas & ".stories");
       Canvas_Create
-        (StoriesCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(StoriesFrame));
+        (StoriesCanvas, "window", "0 0 -anchor nw -window " & StoriesFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (StoriesCanvas,
