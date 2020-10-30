@@ -404,7 +404,7 @@ package body Maps.UI is
       EndX, EndY: Integer;
       MapHeight, MapWidth: Positive;
       MapTag: Unbounded_String;
-      StoryX, StoryY: Integer := 0;
+      StoryX, StoryY: Natural := 1;
       CurrentTheme: constant ThemeRecord :=
         Themes_List(To_String(GameSettings.InterfaceTheme));
    begin
@@ -719,7 +719,7 @@ package body Maps.UI is
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          declare
-            StoryX, StoryY: Natural := 0;
+            StoryX, StoryY: Natural := 1;
             FinishCondition: StepConditionType;
          begin
             GetStoryLocation(StoryX, StoryY);
