@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Disable menu keyboard shortcuts when entering the text
 - Moved known bases list to knowledge screen
 - Moved known events list to knowledge screen
+- Moved accepted missions list to knowlegde screen
 
 ### Removed
 - Settings to show bases and items info
