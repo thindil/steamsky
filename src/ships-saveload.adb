@@ -25,7 +25,6 @@ with Bases; use Bases;
 package body Ships.SaveLoad is
 
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
-      RawValue: Unbounded_String;
       CategoryNode, DataNode: DOM.Core.Element;
       procedure SaveNumber
         (Value: Integer; Name: String;
@@ -64,11 +63,7 @@ package body Ships.SaveLoad is
                SaveNumber(Owner, "value", ModuleDataNode);
             end loop;
             if Module.UpgradeProgress > 0 then
-               RawValue :=
-                 To_Unbounded_String(Integer'Image(Module.UpgradeProgress));
-               Set_Attribute
-                 (DataNode, "upgradeprogress",
-                  To_String(Trim(RawValue, Ada.Strings.Left)));
+               SaveNumber(Module.UpgradeProgress, "upgradeprogress", DataNode);
             end if;
             if Module.UpgradeAction /= NONE then
                SaveNumber
