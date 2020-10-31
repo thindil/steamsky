@@ -47,7 +47,6 @@ with Game; use Game;
 with MainMenu; use MainMenu;
 with Messages; use Messages;
 with Missions; use Missions;
-with Missions.UI; use Missions.UI;
 with OrdersMenu; use OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
@@ -981,50 +980,6 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
-   -- ****o* MapCommands/Show_Missions_Command
-   -- FUNCTION
-   -- Show the list of accepted missions
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowMissions type
-   -- Type is the type of missions to show. Possible values are accepted or
-   -- available
-   -- SOURCE
-   function Show_Missions_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Missions_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
-   begin
-      if CArgv.Arg(Argv, 1) = "accepted" then
-         if AcceptedMissions.Length = 0 then
-            ShowMessage
-              ("You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.");
-            return TCL_OK;
-         end if;
-         ShowMissionsList;
-      else
-         ShowMissionsList(False);
-      end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      return TCL_OK;
-   end Show_Missions_Command;
-
    -- ****o* MapCommands/Show_Stories_Command
    -- FUNCTION
    -- Show the list of know stories
@@ -1193,7 +1148,6 @@ package body Maps.UI.Commands is
       AddCommand("ResignGame", Resign_Game_Command'Access);
       AddCommand("ShowStats", Show_Stats_Command'Access);
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
-      AddCommand("ShowMissions", Show_Missions_Command'Access);
       AddCommand("ShowStories", Show_Stories_Command'Access);
       AddCommand("MoveCursor", Move_Mouse_Command'Access);
       AddCommand("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
