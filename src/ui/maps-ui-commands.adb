@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -52,8 +51,6 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Statistics.UI; use Statistics.UI;
-with Stories; use Stories;
-with Stories.UI; use Stories.UI;
 with Themes; use Themes;
 with Utils.UI; use Utils.UI;
 
@@ -980,43 +977,6 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
-   -- ****o* MapCommands/Show_Stories_Command
-   -- FUNCTION
-   -- Show the list of know stories
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowStories
-   -- SOURCE
-   function Show_Stories_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Stories_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
-   begin
-      if FinishedStories.Length = 0 then
-         ShowMessage("You didn't discovered any story yet.");
-         return TCL_OK;
-      end if;
-      ShowStories;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      return TCL_OK;
-   end Show_Stories_Command;
-
    -- ****o* MapCommands/Move_Mouse_Command
    -- FUNCTION
    -- Move mouse cursor with keyboard
@@ -1148,7 +1108,6 @@ package body Maps.UI.Commands is
       AddCommand("ResignGame", Resign_Game_Command'Access);
       AddCommand("ShowStats", Show_Stats_Command'Access);
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
-      AddCommand("ShowStories", Show_Stories_Command'Access);
       AddCommand("MoveCursor", Move_Mouse_Command'Access);
       AddCommand("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
    end AddCommands;
