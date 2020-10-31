@@ -82,11 +82,14 @@ package body Trades.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Label: Ttk_Label;
-      Paned: Ttk_PanedWindow;
-      TradeCanvas: Tk_Canvas;
-      TradeFrame: Ttk_Frame;
-      CloseButton: Ttk_Button;
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      TradeFrame: Ttk_Frame := Get_Widget(Paned & ".tradeframe", Interp);
+      TradeCanvas: constant Tk_Canvas :=
+        Get_Widget(TradeFrame & ".canvas", Interp);
+      Label: Ttk_Label :=
+        Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
       ItemsView: Ttk_Tree_View;
       ItemDurability, ItemType, ProtoIndex, BaseType, FirstIndex,
       ItemName: Unbounded_String;
@@ -102,17 +105,6 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       Profit: Integer;
    begin
-      Paned.Interp := Interp;
-      Paned.Name := New_String(".paned");
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".header.closebutton");
-      TradeFrame.Interp := Interp;
-      TradeFrame.Name := New_String(Widget_Image(Paned) & ".tradeframe");
-      TradeCanvas.Interp := Interp;
-      TradeCanvas.Name := New_String(Widget_Image(TradeFrame) & ".canvas");
-      Label.Interp := Interp;
-      Label.Name :=
-        New_String(Widget_Image(TradeCanvas) & ".trade.options.typelabel");
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -125,11 +117,9 @@ package body Trades.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
-      TradeFrame.Name := New_String(Widget_Image(TradeCanvas) & ".trade");
-      ComboBox.Interp := Interp;
-      ComboBox.Name := New_String(Widget_Image(TradeFrame) & ".options.type");
-      ItemsView.Interp := Interp;
-      ItemsView.Name := New_String(Widget_Image(TradeFrame) & ".trade.view");
+      TradeFrame.Name := New_String(TradeCanvas & ".trade");
+      ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);
+      ItemsView := Get_Widget(TradeFrame & ".trade.view", Interp);
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       if BaseIndex > 0 then
          BaseType := SkyBases(BaseIndex).BaseType;
@@ -330,7 +320,8 @@ package body Trades.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      TradeView: Ttk_Tree_View;
+      TradeView: constant Ttk_Tree_View :=
+        Get_Widget(".paned.tradeframe.canvas.trade.trade.view", Interp);
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
@@ -339,13 +330,13 @@ package body Trades.UI is
       Price, MoneyIndex2: Natural;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
-      ItemText: Tk_Text;
-      Frame: Ttk_Frame;
-      Label: Ttk_Label;
+      ItemText: constant Tk_Text :=
+        Get_Widget(".paned.tradeframe.canvas.trade.item.info.text", Interp);
+      Frame: Ttk_Frame :=
+        Get_Widget(".paned.tradeframe.canvas.trade.item.sellframe", Interp);
+      Label: Ttk_Label :=
+        Get_Widget(".paned.tradeframe.canvas.trade.item.shipmoney", Interp);
    begin
-      TradeView.Interp := Interp;
-      TradeView.Name :=
-        New_String(".paned.tradeframe.canvas.trade.trade.view");
       SelectedItem := To_Unbounded_String(Selection(TradeView));
       if SelectedItem = Null_Unbounded_String then
          return TCL_OK;
@@ -476,9 +467,6 @@ package body Trades.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      ItemText.Interp := Interp;
-      ItemText.Name :=
-        New_String(".paned.tradeframe.canvas.trade.item.info.text");
       configure(ItemText, "-state normal");
       Delete(ItemText, "1.0", "end");
       Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
@@ -487,19 +475,15 @@ package body Trades.UI is
          CargoIndex := 0;
          BaseCargoIndex := 0;
       end if;
-      Frame.Interp := Interp;
-      Frame.Name :=
-        New_String(".paned.tradeframe.canvas.trade.item.sellframe");
       if CargoIndex > 0 then
          declare
             MaxSellAmount: Integer := PlayerShip.Cargo(CargoIndex).Amount;
             MaxPrice: Natural := MaxSellAmount * Price;
             Weight: Integer;
-            AmountBox: Ttk_SpinBox;
-            AmountLabel: Ttk_Label;
+            AmountBox: constant Ttk_SpinBox :=
+              Get_Widget(Frame & ".amount", Interp);
+            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
          begin
-            AmountBox.Interp := Interp;
-            AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
             Set(AmountBox, "1");
             CountPrice(MaxPrice, FindMember(Talk), False);
             if BaseIndex > 0
@@ -547,9 +531,6 @@ package body Trades.UI is
                   Positive'Image(ItemIndex) &
                   " %P} -command {ValidateAmount " & Widget_Image(AmountBox) &
                   Positive'Image(ItemIndex) & "}");
-               AmountLabel.Interp := Interp;
-               AmountLabel.Name :=
-                 New_String(Widget_Image(Frame) & ".amountlbl");
                configure
                  (AmountLabel,
                   "-text {(max" & Natural'Image(MaxSellAmount) & "):}");
@@ -595,11 +576,10 @@ package body Trades.UI is
               PlayerShip.Cargo(MoneyIndex2).Amount / Price;
             MaxPrice: Natural := MaxBuyAmount * Price;
             Weight: Integer;
-            AmountBox: Ttk_SpinBox;
-            AmountLabel: Ttk_Label;
+            AmountBox: constant Ttk_SpinBox :=
+              Get_Widget(Frame & ".amount", Interp);
+            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
          begin
-            AmountBox.Interp := Interp;
-            AmountBox.Name := New_String(Widget_Image(Frame) & ".amount");
             if MaxBuyAmount > 0 then
                Set(AmountBox, "1");
                CountPrice(MaxPrice, FindMember(Talk));
@@ -648,9 +628,6 @@ package body Trades.UI is
                      "-to" & Natural'Image(MaxBuyAmount) &
                      " -validatecommand {ValidateSpinbox %S %s" &
                      Positive'Image(MaxBuyAmount) & "}");
-                  AmountLabel.Interp := Interp;
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".amountlbl");
                   configure
                     (AmountLabel,
                      "-text {(max" & Natural'Image(MaxBuyAmount) & "):}");
@@ -672,9 +649,6 @@ package body Trades.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
-      Label.Interp := Interp;
-      Label.Name :=
-        New_String(".paned.tradeframe.canvas.trade.item.shipmoney");
       if MoneyIndex2 > 0 then
          configure
            (Label,
@@ -902,12 +876,10 @@ package body Trades.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      TypeBox: Ttk_ComboBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget(".paned.tradeframe.canvas.trade.options.type", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
-      TypeBox.Interp := Interp;
-      TypeBox.Name :=
-        New_String(".paned.tradeframe.canvas.trade.options.type");
       if SearchText'Length = 0 then
          return Show_Trade_Command
              (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
