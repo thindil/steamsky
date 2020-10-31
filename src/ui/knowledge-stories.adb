@@ -34,7 +34,6 @@ with Messages; use Messages;
 with Ships; use Ships;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
-with ada.text_io;
 
 package body Knowledge.Stories is
 
@@ -66,7 +65,7 @@ package body Knowledge.Stories is
       StoryView: constant Tk_Text :=
         Get_Widget
           (".paned.knowledgeframe.stories.canvas.frame.list.view", Interp);
-      TargetText: Unbounded_String;
+      StoryText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       StoryIndex: Positive;
@@ -82,13 +81,11 @@ package body Knowledge.Stories is
       configure(StoryView, "-state normal");
       Delete(StoryView, "1.0", "end");
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
-         Ada.Text_IO.Put_Line(To_String(StepText));
-         Insert(StoryView, "end", To_String(StepText) & LF & LF);
+         Append(StoryText, StepText & LF & LF);
       end loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
-         Ada.Text_IO.Put_Line(To_String(GetCurrentStoryText));
-         Insert(StoryView, "end", To_String(GetCurrentStoryText) & LF);
+         Append(StoryText, GetCurrentStoryText & LF);
          if CurrentStory.Data /= Null_Unbounded_String then
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
@@ -103,61 +100,57 @@ package body Knowledge.Stories is
             case Step.FinishCondition is
                when ASKINBASE =>
                   if Slice_Count(Tokens) < 2 then
-                     TargetText :=
-                       To_Unbounded_String(" You must travel to base ") &
-                       CurrentStory.Data & To_Unbounded_String(" at X:");
+                     Append
+                       (StoryText,
+                        " You must travel to base " & CurrentStory.Data &
+                        " at X:");
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
-                           Append
-                             (TargetText, Positive'Image(SkyBases(I).SkyX));
-                           Append(TargetText, " Y:");
-                           Append
-                             (TargetText, Positive'Image(SkyBases(I).SkyY));
+                           Append(StoryText, Positive'Image(SkyBases(I).SkyX));
+                           Append(StoryText, " Y:");
+                           Append(StoryText, Positive'Image(SkyBases(I).SkyY));
                            exit;
                         end if;
                      end loop;
                   else
-                     TargetText :=
-                       To_Unbounded_String(" You can ask in any base. ");
+                     Append(StoryText, " You can ask in any base. ");
                   end if;
                when DESTROYSHIP =>
-                  TargetText :=
-                    To_Unbounded_String(" You must find ") &
-                    ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
-                      .Name &
-                    To_Unbounded_String(" at X:") &
-                    To_Unbounded_String(Slice(Tokens, 1)) &
-                    To_Unbounded_String(" Y:") &
-                    To_Unbounded_String(Slice(Tokens, 2));
+                  Append
+                    (StoryText,
+                     " You must find " &
+                     ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
+                       .Name &
+                     " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
-                  TargetText :=
-                    To_Unbounded_String(" You must travel to X:") &
-                    To_Unbounded_String(Slice(Tokens, 1)) &
-                    To_Unbounded_String(" Y:") &
-                    To_Unbounded_String(Slice(Tokens, 2));
+                  Append
+                    (StoryText,
+                     " You must travel to X:" & Slice(Tokens, 1) & " Y:" &
+                     Slice(Tokens, 2));
                when LOOT =>
-                  TargetText :=
-                    To_Unbounded_String(" You must loot: ") &
-                    Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
-                    To_Unbounded_String(" from ");
+                  Append
+                    (StoryText,
+                     " You must loot: " &
+                     Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
+                     " from ");
                   if Slice(Tokens, 2) = "any" then
-                     Append(TargetText, "any ");
+                     Append(StoryText, "any ");
                      if Factions_Container.Contains
                          (Factions_List,
                           GetStepData(Step.FinishData, "faction")) then
                         Append
-                          (TargetText,
+                          (StoryText,
                            Factions_List
                              (GetStepData(Step.FinishData, "faction"))
                              .Name);
-                        Append(TargetText, " ship.");
                      end if;
+                     Append(StoryText, " ship.");
                   else
                      for I in ProtoShips_List.Iterate loop
                         if ProtoShips_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
-                           Append(TargetText, ProtoShips_List(I).Name);
-                           Append(TargetText, ".");
+                           Append(StoryText, ProtoShips_List(I).Name);
+                           Append(StoryText, ".");
                            exit;
                         end if;
                      end loop;
@@ -166,16 +159,17 @@ package body Knowledge.Stories is
                   null;
             end case;
          end if;
-         Ada.Text_IO.Put_Line(To_String(TargetText));
-         Insert(StoryView, "end", To_String(TargetText) & LF);
+         Insert(StoryView, "end", "{" & To_String(StoryText) & "}");
          Tcl.Tk.Ada.Grid.Grid(Button);
          Button.Name :=
-           New_String(".paned.knowledgeframe.stories.canvas.frame.options.set");
+           New_String
+             (".paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid(Button);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name :=
-           New_String(".paned.knowledgeframe.stories.canvas.frame.options.set");
+           New_String
+             (".paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
       configure(StoryView, "-state disabled");
