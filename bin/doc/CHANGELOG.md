@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Moved known bases list to knowledge screen
 - Moved known events list to knowledge screen
 - Moved accepted missions list to knowlegde screen
+- Moved know stories list to knowledge screen
 
 ### Removed
 - Settings to show bases and items info
