@@ -14,24 +14,17 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
-with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Factions; use Factions;
 with Items; use Items;
@@ -39,11 +32,13 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
+with Stories; use Stories;
 with Utils.UI; use Utils.UI;
+with ada.text_io;
 
-package body Stories.UI is
+package body Knowledge.Stories is
 
-   -- ****o* SUI3/Show_Story_Command
+   -- ****o* KStories/Show_Story_Command
    -- FUNCTION
    -- Show the current story information
    -- PARAMETERS
@@ -69,25 +64,30 @@ package body Stories.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       StoryView: constant Tk_Text :=
-        Get_Widget(".paned.storiesframe.canvas.stories.list.view", Interp);
+        Get_Widget
+          (".paned.knowledgeframe.stories.canvas.frame.list.view", Interp);
       TargetText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       StoryIndex: Positive;
       StoriesBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.storiesframe.canvas.stories.options.titles", Interp);
+          (".paned.knowledgeframe.stories.canvas.frame.options.titles",
+           Interp);
       Button: Ttk_Button :=
-        Get_Widget(".paned.storiesframe.canvas.stories.options.show", Interp);
+        Get_Widget
+          (".paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
    begin
-      StoryIndex := Natural'Value(Current(StoriesBox));
+      StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
       configure(StoryView, "-state normal");
       Delete(StoryView, "1.0", "end");
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
+         Ada.Text_IO.Put_Line(To_String(StepText));
          Insert(StoryView, "end", To_String(StepText) & LF & LF);
       end loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
+         Ada.Text_IO.Put_Line(To_String(GetCurrentStoryText));
          Insert(StoryView, "end", To_String(GetCurrentStoryText) & LF);
          if CurrentStory.Data /= Null_Unbounded_String then
             if CurrentStory.CurrentStep = 0 then
@@ -166,22 +166,23 @@ package body Stories.UI is
                   null;
             end case;
          end if;
+         Ada.Text_IO.Put_Line(To_String(TargetText));
          Insert(StoryView, "end", To_String(TargetText) & LF);
          Tcl.Tk.Ada.Grid.Grid(Button);
          Button.Name :=
-           New_String(".paned.storiesframe.canvas.stories.options.set");
+           New_String(".paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid(Button);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name :=
-           New_String(".paned.storiesframe.canvas.stories.options.set");
+           New_String(".paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
       configure(StoryView, "-state disabled");
       return TCL_OK;
    end Show_Story_Command;
 
-   -- ****o* SUI3/Show_Story_Location_Command
+   -- ****o* KStories/Show_Story_Location_Command
    -- FUNCTION
    -- Show the current story event on map
    -- PARAMETERS
@@ -215,7 +216,7 @@ package body Stories.UI is
       return TCL_OK;
    end Show_Story_Location_Command;
 
-   -- ****o* SUI3/Set_Story_Command
+   -- ****o* KStories/Set_Story_Command
    -- FUNCTION
    -- Set the current story event as the player's ship destination
    -- PARAMETERS
@@ -255,45 +256,11 @@ package body Stories.UI is
       return TCL_OK;
    end Set_Story_Command;
 
-   procedure ShowStories is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
-      StoriesFrame: Ttk_Frame := Get_Widget(Paned & ".storiesframe");
-      StoriesCanvas: constant Tk_Canvas :=
-        Get_Widget(StoriesFrame & ".canvas");
-      Label: constant Ttk_Label :=
-        Get_Widget(StoriesCanvas & ".stories.info.info.label");
-      StoriesBox: constant Ttk_ComboBox :=
-        Get_Widget(StoriesCanvas & ".stories.options.titles");
-      StoriesList: Unbounded_String;
+   procedure AddCommands is
    begin
-      if Winfo_Get(Label, "exists") = "0" then
-         Tcl_EvalFile
-           (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "stories.tcl");
-         Bind(StoriesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" then
-         ShowSkyMap(True);
-         return;
-      end if;
-      for FinishedStory of FinishedStories loop
-         Append
-           (StoriesList, " {" & Stories_List(FinishedStory.Index).Name & "}");
-      end loop;
-      configure(StoriesBox, "-values [list " & To_String(StoriesList) & "]");
-      Current(StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
-      configure
-        (StoriesCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
-      StoriesFrame.Name := New_String(StoriesCanvas & ".stories");
-      Canvas_Create
-        (StoriesCanvas, "window", "0 0 -anchor nw -window " & StoriesFrame);
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (StoriesCanvas,
-         "-scrollregion [list " & BBox(StoriesCanvas, "all") & "]");
-      ShowScreen("storiesframe");
-   end ShowStories;
+      AddCommand("ShowStory", Show_Story_Command'Access);
+      AddCommand("ShowStoryLocation", Show_Story_Location_Command'Access);
+      AddCommand("SetStory", Set_Story_Command'Access);
+   end AddCommands;
 
-end Stories.UI;
+end Knowledge.Stories;

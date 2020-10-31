@@ -22,9 +22,12 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -32,6 +35,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
@@ -42,6 +46,8 @@ with Knowledge.Bases;
 with Knowledge.Events;
 with Missions; use Missions;
 with Knowledge.Missions;
+with Stories; use Stories;
+with Knowledge.Stories;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
@@ -302,6 +308,74 @@ package body Knowledge is
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting the known stories list
+      KnowledgeFrame.Name :=
+        New_String(Paned & ".knowledgeframe.stories.canvas.frame");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      for I in 1 .. (Rows - 1) loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves
+              (KnowledgeFrame, "-row" & Positive'Image(I)),
+            " ");
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item := Get_Widget(Slice(Tokens, J), Interp);
+            Destroy(Item);
+         end loop;
+      end loop;
+      if FinishedStories.Length = 0 then
+         Label :=
+           Create
+             (KnowledgeFrame & ".nostories",
+              "-text {You didn't discovered any story yet.} -wraplength 400");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+      else
+         declare
+            OptionsFrame: constant Ttk_Frame :=
+              Create(KnowledgeFrame & ".options");
+            StoriesBox: constant Ttk_ComboBox :=
+              Create(OptionsFrame & ".titles", "-state readonly");
+            StoriesList: Unbounded_String;
+            StoriesFrame: constant Ttk_Frame :=
+              Create(KnowledgeFrame & ".list");
+            StoriesView: constant Tk_Text :=
+              Create
+                (StoriesFrame & ".view",
+                 "-wrap word -yscrollcommand [list " & StoriesFrame &
+                 ".scrolly set]");
+            StoriesScroll: constant Ttk_Scrollbar :=
+              Create
+                (StoriesFrame & ".scrolly",
+                 "-orient vertical -command [list " & StoriesView & " yview]");
+         begin
+            for FinishedStory of FinishedStories loop
+               Append
+                 (StoriesList,
+                  " {" & Stories_List(FinishedStory.Index).Name & "}");
+            end loop;
+            configure
+              (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
+            Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
+            Current
+              (StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
+            Tcl.Tk.Ada.Grid.Grid(StoriesBox);
+            Button :=
+              Create
+                (OptionsFrame & ".show",
+                 "-text {Show on map} -command ShowStoryLocation");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 0");
+            Button :=
+              Create
+                (OptionsFrame & ".set",
+                 "-text {Set as destintion for ship} -command SetStory");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-column 2 -row 0");
+            Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky w");
+            Tcl.Tk.Ada.Pack.Pack(StoriesScroll, "-side right -fill y");
+            Tcl.Tk.Ada.Pack.Pack(StoriesView, "-side top -fill both");
+            Tcl.Tk.Ada.Grid.Grid(StoriesFrame);
+            Generate(StoriesBox, "<<ComboboxSelected>>");
+         end;
+      end if;
       -- Show knowledge
       ShowScreen("knowledgeframe");
       return TCL_OK;
@@ -397,6 +471,7 @@ package body Knowledge is
       Knowledge.Bases.AddCommands;
       Knowledge.Events.AddCommands;
       Knowledge.Missions.AddCommands;
+      Knowledge.Stories.AddCommands;
    end AddCommands;
 
 end Knowledge;
