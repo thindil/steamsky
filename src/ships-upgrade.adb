@@ -188,7 +188,7 @@ package body Ships.Upgrade is
             return;
       end case;
       declare
-         MaterialIndex: constant Natural :=
+         MaterialIndex: constant Inventory_Container.Extended_Index :=
            FindItem
              (Inventory => PlayerShip.Cargo,
               ItemType =>
@@ -224,13 +224,15 @@ package body Ships.Upgrade is
    end StartUpgrading;
 
    procedure UpgradeShip(Minutes: Positive) is
-      ResultAmount, UpgradePoints, WorkerIndex, UpgradeMaterial,
-      UpgradeProgress, UpgradeTools, MaterialCost, MaxValue: Natural := 0;
+      ResultAmount, UpgradePoints, UpgradeProgress, MaterialCost,
+      MaxValue: Natural := 0;
       UpgradeValue: Positive;
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
       UpgradedModule: ModuleData;
+      UpgradeMaterial, UpgradeTools: Inventory_Container.Extended_Index;
+      WorkerIndex: Crew_Container.Extended_Index;
       procedure FindMatsAndTools is
       begin
          UpgradeMaterial :=
