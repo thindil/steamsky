@@ -23,6 +23,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -397,13 +398,39 @@ package body Missions.UI is
       return TCL_OK;
    end Set_Mission_Command;
 
-   procedure ShowMissionsList(Accepted: Boolean := True) is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
-      MissionsFrame: Ttk_Frame := Get_Widget((Paned & ".missionsframe"));
+   -- ****o* MUI3/Show_Base_Missions_Command
+   -- FUNCTION
+   -- Show the list of available missions in the base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseMissions
+   -- SOURCE
+   function Show_Base_Missions_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Base_Missions_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      MissionsFrame: Ttk_Frame := Get_Widget(Paned & ".missionsframe", Interp);
       MissionsCanvas: constant Tk_Canvas :=
-        Get_Widget(MissionsFrame & ".canvas");
+        Get_Widget(MissionsFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(MissionsCanvas & ".missions.info.missioninfo");
+        Get_Widget(MissionsCanvas & ".missions.info.missioninfo", Interp);
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".header.closebutton", Interp);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -415,19 +442,16 @@ package body Missions.UI is
          AddCommand("SetMission", Set_Mission_Command'Access);
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
-         return;
+         return TCL_OK;
       end if;
-      if Accepted then
-         BaseIndex := 0;
-         RefreshMissionsList(AcceptedMissions);
-      else
-         BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-         if SkyBases(BaseIndex).Missions.Length = 0 then
-            ShowSkyMap(True);
-            return;
-         end if;
-         RefreshMissionsList(SkyBases(BaseIndex).Missions);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp missions}");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      if SkyBases(BaseIndex).Missions.Length = 0 then
+         ShowSkyMap(True);
+         return TCL_OK;
       end if;
+      RefreshMissionsList(SkyBases(BaseIndex).Missions);
       configure
         (MissionsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
@@ -443,6 +467,12 @@ package body Missions.UI is
         (MissionsCanvas,
          "-scrollregion [list " & BBox(MissionsCanvas, "all") & "]");
       ShowScreen("missionsframe");
-   end ShowMissionsList;
+      return TCL_OK;
+   end Show_Base_Missions_Command;
+
+   procedure AddCommands is
+   begin
+      AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
+   end AddCommands;
 
 end Missions.UI;

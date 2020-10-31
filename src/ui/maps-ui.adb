@@ -64,6 +64,7 @@ with Maps.UI.Commands;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Missions; use Missions;
+with Missions.UI; use Missions.UI;
 with ShipModules; use ShipModules;
 with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
@@ -870,6 +871,7 @@ package body Maps.UI is
          ShipyardUI.AddCommands;
          LootUI.AddCommands;
          Knowledge.AddCommands;
+         Missions.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");

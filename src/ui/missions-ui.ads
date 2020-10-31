@@ -20,14 +20,11 @@
 package Missions.UI is
 -- ****
 
-   -- ****f* MUI/ShowMissionsList
+   -- ****f* MUI3/AddCommands
    -- FUNCTION
-   -- Show the list of accepted missions to a player
-   -- PARAMETERS
-   -- Accepted - If true, show list of accepted missions. Otherwise show list
-   -- of available missions in the selected base
+   -- Add Tcl commands related to the available missions list
    -- SOURCE
-   procedure ShowMissionsList(Accepted: Boolean := True);
+   procedure AddCommands;
    -- ****
 
 end Missions.UI;
