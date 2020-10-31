@@ -261,7 +261,7 @@ package body OrdersMenu is
                if MissionsLimit > 0 then
                   Add
                     (OrdersMenu, "command",
-                     "-label Missions -underline 0 -command {ShowMissions available}");
+                     "-label Missions -underline 0 -command ShowBaseMissions");
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
