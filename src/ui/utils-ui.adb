@@ -82,11 +82,9 @@ package body Utils.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Dialog: Tk_Toplevel;
+      Dialog: Tk_Toplevel := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
    begin
-      Dialog.Interp := Interp;
-      Dialog.Name := New_String(CArgv.Arg(Argv, 1));
       Destroy(Dialog);
       if Winfo_Get(MainWindow, "exists") = "1"
         and then Status(MainWindow) = "1" then
@@ -190,10 +188,8 @@ package body Utils.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      Canvas: Ttk_Frame;
+      Canvas: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
-      Canvas.Interp := Interp;
-      Canvas.Name := New_String(CArgv.Arg(Argv, 1));
       Widgets.configure
         (Canvas,
          "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
@@ -264,8 +260,7 @@ package body Utils.UI is
          Tcl_SetResult(Interp, "0");
          return TCL_OK;
       end if;
-      Label.Interp := Interp;
-      Label.Name := New_String(To_String(LabelName));
+      Label := Get_Widget(To_String(LabelName), Interp);
       if CArgv.Arg(Argv, 1) /=
         ".paned.tradeframe.canvas.trade.item.sellframe.amount"
         and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
@@ -340,11 +335,9 @@ package body Utils.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      SpinBox: Ttk_SpinBox;
+      SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       NewArgv: CArgv.Chars_Ptr_Ptr := Argv;
    begin
-      SpinBox.Interp := Interp;
-      SpinBox.Name := New_String(CArgv.Arg(Argv, 1));
       NewArgv := NewArgv & Get(SpinBox);
       return Check_Amount_Command
           (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
@@ -500,7 +493,8 @@ package body Utils.UI is
         (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
-      MessagesView: Tk_Text;
+      MessagesView: constant Tk_Text :=
+        Get_Widget(".paned.controls.messages.view");
       procedure ShowMessage is
       begin
          if Message.Color = WHITE then
@@ -514,8 +508,6 @@ package body Utils.UI is
          end if;
       end ShowMessage;
    begin
-      MessagesView.Interp := Get_Context;
-      MessagesView.Name := New_String(".paned.controls.messages.view");
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if LoopStart = 0 then
@@ -545,26 +537,22 @@ package body Utils.UI is
    end UpdateMessages;
 
    procedure ShowScreen(NewScreenName: String) is
-      Paned: Ttk_PanedWindow;
-      SubWindow, MessagesFrame: Ttk_Frame;
+      Paned: Ttk_PanedWindow := Get_Widget(".paned");
+      SubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
+      MessagesFrame: constant Ttk_Frame :=
+        Get_Widget(Paned & ".controls.messages");
    begin
-      Paned.Interp := Get_Context;
-      Paned.Name := New_String(".paned");
-      SubWindow.Interp := Get_Context;
       SubWindows := To_Unbounded_String(Panes(Paned));
       if Index(SubWindows, " ") = 0 then
-         SubWindow.Name := New_String(To_String(SubWindows));
+         SubWindow := Get_Widget(To_String(SubWindows));
       else
-         SubWindow.Name :=
-           New_String(Slice(SubWindows, 1, Index(SubWindows, " ")));
+         SubWindow := Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " ")));
       end if;
       Forget(Paned, SubWindow);
       SubWindow.Name := New_String(".paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
-      MessagesFrame.Interp := Get_Context;
-      MessagesFrame.Name := New_String(".paned.controls.messages");
       if NewScreenName in "optionsframe" | "messagesframe" or
         not GameSettings.ShowLastMessages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
@@ -584,9 +572,8 @@ package body Utils.UI is
 
    procedure ShowInventoryItemInfo
      (Parent: String; ItemIndex: Positive; MemberIndex: Natural) is
-      ProtoIndex: Unbounded_String;
-      ItemInfo: Unbounded_String;
-      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+      ProtoIndex, ItemInfo: Unbounded_String;
+      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
       if MemberIndex > 0 then
