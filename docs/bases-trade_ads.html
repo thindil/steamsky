@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,9 +32,9 @@
 <ul>
 <li>1. <a href="#robo3">Bases/BTrade</a></li>
 <ul>
-<li>1.1. <a href="#robo314">BTrade/Trade_Already_Known</a></li>
-<li>1.2. <a href="#robo315">BTrade/Trade_Cant_Heal</a></li>
-<li>1.3. <a href="#robo316">BTrade/Trade_Cant_Train</a></li>
+<li>1.1. <a href="#robo316">BTrade/Trade_Already_Known</a></li>
+<li>1.2. <a href="#robo317">BTrade/Trade_Cant_Heal</a></li>
+<li>1.3. <a href="#robo318">BTrade/Trade_Cant_Train</a></li>
 <li>1.4. <a href="#robo362">BTrade/BuyRecipe</a></li>
 <li>1.5. <a href="./bases-trade_adb.html#robo363">BTrade/CheckMoney</a></li>
 <li>1.6. <a href="#robo364">BTrade/HealCost</a></li>
@@ -59,7 +59,7 @@
 
 <hr />
 <a name="BTrade2fTrade5fAlready5fKnown"></a>
-<a name="robo314"></a><h2>BTrade/Trade_Already_Known [ Exceptions ]</h2>
+<a name="robo316"></a><h2>BTrade/Trade_Already_Known [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -71,7 +71,7 @@
 
 <hr />
 <a name="BTrade2fTrade5fCant5fHeal"></a>
-<a name="robo315"></a><h2>BTrade/Trade_Cant_Heal [ Exceptions ]</h2>
+<a name="robo317"></a><h2>BTrade/Trade_Cant_Heal [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -83,7 +83,7 @@
 
 <hr />
 <a name="BTrade2fTrade5fCant5fTrain"></a>
-<a name="robo316"></a><h2>BTrade/Trade_Cant_Train [ Exceptions ]</h2>
+<a name="robo318"></a><h2>BTrade/Trade_Cant_Train [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -121,14 +121,14 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>HealCost</strong>
      <span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span>
-      <a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a><span class="sign">:</span> <a href="./ships_ads.html#robo126">Crew_Container</a><span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+      <a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a><span class="sign">:</span> <a href="./ships_ads.html#robo128">Crew_Container</a><span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo303">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HealCost"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Cost        - Overall cost of heal wounded player ship crew member(s)
  Time        - Time needed to heal wounded player ship crew member(s)
- <a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> - Index of player ship crew member to heal or 0 for heal
+ <a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> - Index of player ship crew member to heal or 0 for heal
                all wounded crew members
 </pre>
 <p class="item_name">RESULT</p>
@@ -144,12 +144,12 @@
 <pre> Heals wounded crew members in bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>HealWounded</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a><span class="sign">:</span> <a href="./ships_ads.html#robo126">Crew_Container</a><span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>HealWounded</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a><span class="sign">:</span> <a href="./ships_ads.html#robo128">Crew_Container</a><span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo303">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HealWounded"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> - Index of player ship crew member to heal or 0 for heal
+<pre> <a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> - Index of player ship crew member to heal or 0 for heal
                all wounded crew members
 </pre>
 
@@ -163,12 +163,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> <strong>HireRecruit</strong>
-     <span class="sign">(</span><a href="./ui/bases-recruitui_adb.html#robo298">RecruitIndex</a><span class="sign">,</span> Cost<span class="sign">:</span> Positive<span class="sign">;</span> <a href="./crew_ads.html#robo380">DailyPayment</a><span class="sign">,</span> TradePayment<span class="sign">:</span> Natural<span class="sign">;</span>
+     <span class="sign">(</span><a href="./ui/bases-recruitui_adb.html#robo300">RecruitIndex</a><span class="sign">,</span> Cost<span class="sign">:</span> Positive<span class="sign">;</span> <a href="./crew_ads.html#robo380">DailyPayment</a><span class="sign">,</span> TradePayment<span class="sign">:</span> Natural<span class="sign">;</span>
       ContractLenght<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HireRecruit"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-recruitui_adb.html#robo298">RecruitIndex</a>   - Index of recruit, from base recruits list to hire
+<pre> <a href="./ui/bases-recruitui_adb.html#robo300">RecruitIndex</a>   - Index of recruit, from base recruits list to hire
  Cost           - Cost of hire of selected recruit
  <a href="./crew_ads.html#robo380">DailyPayment</a>   - Daily payment of selected recruit
  TradePayment   - Percent of earnings from each trade which this recruit
@@ -186,14 +186,14 @@
 <pre> Count cost of training action
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>TrainCost</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">function</span> <strong>TrainCost</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
-       SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo252">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo303">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
+       SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo254">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_TrainCost"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> - Index of player ship crew member which will be training
+<pre> <a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> - Index of player ship crew member which will be training
  SkillIndex  - Index of skill of selected crew member which will be
                training
 </pre>
@@ -210,20 +210,20 @@
 <pre> Train selected skill
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>TrainSkill</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>TrainSkill</strong><span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a><span class="sign">,</span> SkillIndex<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
-       SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo252">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span><a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo303">PlayerShip</a><span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
+       SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./game_ads.html#robo254">Skills_List</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_TrainSkill"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-schoolui_adb.html#robo299">MemberIndex</a> - Index of playership crew member which train
+<pre> <a href="./ui/bases-schoolui_adb.html#robo301">MemberIndex</a> - Index of playership crew member which train
  SkillIndex  - Index of skill of selected crew member to train
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-trade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
+<p>Generated from ./src/bases-trade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
 </p>
 </div> <!-- footer -->
 </body>

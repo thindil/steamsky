@@ -6,13 +6,13 @@
 <meta http-equiv="Content-Style-Type" content="text/css" />
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
 <link rel="stylesheet" href="../robodoc.css" type="text/css" />
-<title>./src/ui/stories-ui.adb</title>
-<!-- Source: ./src/ui/stories-ui.adb -->
+<title>./src/ui/knowledge-events.adb</title>
+<!-- Source: ./src/ui/knowledge-events.adb -->
 <!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,20 +30,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo702">SUI3/Set_Story_Command</a></li>
-<li>2. <a href="#robo703">SUI3/Show_Story_Command</a></li>
-<li>3. <a href="#robo704">SUI3/Show_Story_Location_Command</a></li>
+<li>1. <a href="#robo452">KEvents/Set_Event_Command</a></li>
+<li>2. <a href="#robo453">KEvents/Show_Event_Command</a></li>
+<li>3. <a href="#robo454">KEvents/Show_Events_Menu_Command</a></li>
+<li>4. <a href="#robo635">KEvents/Show_Event_Info_Command</a></li>
 </ul>
 <hr />
-<a name="SUI32fSet5fStory5fCommand"></a>
-<a name="robo702"></a><h2>SUI3/Set_Story_Command [ Commands ]</h2>
+<a name="KEvents2fSet5fEvent5fCommand"></a>
+<a name="robo452"></a><h2>KEvents/Set_Event_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories-ui_ads.html#robo59">SUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo33">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Set the current story event as the player's ship destination
+<pre> Set the selected event as the player's ship destination
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Story_Command</strong>
+<pre class="source">   <span class="keyword">function</span> <strong>Set_Event_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -53,25 +54,55 @@
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed. Unused
  Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> SetStory
+<pre> SetEvent2 eventidex
+ EventIndex is the index of the event to show
 </pre>
 
 <hr />
-<a name="SUI32fShow5fStory5fCommand"></a>
-<a name="robo703"></a><h2>SUI3/Show_Story_Command [ Commands ]</h2>
+<a name="KEvents2fShow5fEvent5fCommand"></a>
+<a name="robo453"></a><h2>KEvents/Show_Event_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories-ui_ads.html#robo59">SUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo33">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show the current story information
+<pre> Show the selected event on map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Story_Command</strong>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Event_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ShowEvent eventidex
+ EventIndex is the index of the event to show
+</pre>
+
+<hr />
+<a name="KEvents2fShow5fEvents5fMenu5fCommand"></a>
+<a name="robo454"></a><h2>KEvents/Show_Events_Menu_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo33">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show the menu with available the selected event options
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Events_Menu_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -81,25 +112,26 @@
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
  Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> ShowStory
+<pre> ShowEventMenu eventindex
+ EventIndex is the index of the event's menu to show
 </pre>
 
 <hr />
-<a name="SUI32fShow5fStory5fLocation5fCommand"></a>
-<a name="robo704"></a><h2>SUI3/Show_Story_Location_Command [ Commands ]</h2>
+<a name="KEvents2fShow5fEvent5fInfo5fCommand"></a>
+<a name="robo635"></a><h2>KEvents/Show_Event_Info_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./stories-ui_ads.html#robo59">SUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo33">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show the current story event on map
+<pre> Show information about the selected event
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Story_Location_Command</strong>
+<pre class="source">   <span class="keyword">function</span> <strong>Show_Event_Info_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -107,20 +139,21 @@
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
+ Interp     - Tcl interpreter in which command was executed.
  Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> ShowStoryLocation
+<pre> ShowEventInfo eventindex
+ EventIndex is the index of the event to show
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/stories-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
+<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
 </p>
 </div> <!-- footer -->
 </body>

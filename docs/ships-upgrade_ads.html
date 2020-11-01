@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -30,30 +30,30 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo55">Ships/SUpgrade</a></li>
+<li>1. <a href="#robo57">Ships/SUpgrade</a></li>
 <ul>
-<li>1.1. <a href="#robo333">SUpgrade/Ship_Upgrade_Error</a></li>
-<li>1.2. <a href="#robo563">SUpgrade/StartUpgrading</a></li>
-<li>1.3. <a href="#robo564">SUpgrade/UpgradeShip</a></li>
+<li>1.1. <a href="#robo335">SUpgrade/Ship_Upgrade_Error</a></li>
+<li>1.2. <a href="#robo576">SUpgrade/StartUpgrading</a></li>
+<li>1.3. <a href="#robo577">SUpgrade/UpgradeShip</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Ships2fSUpgrade"></a>
-<a name="robo55"></a><h2>Ships/SUpgrade [ Packages ]</h2>
+<a name="robo57"></a><h2>Ships/SUpgrade [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships_ads.html#robo50">Ships</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships_ads.html#robo52">Ships</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provided code for upgrade player ship modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="./ships_ads.html#robo50">Ships</a><span class="sign">.</span>Upgrade <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="./ships_ads.html#robo52">Ships</a><span class="sign">.</span>Upgrade <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="SUpgrade2fShip5fUpgrade5fError"></a>
-<a name="robo333"></a><h2>SUpgrade/Ship_Upgrade_Error [ Exceptions ]</h2>
+<a name="robo335"></a><h2>SUpgrade/Ship_Upgrade_Error [ Exceptions ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SUpgrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">SUpgrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Raised when player can't start upgrading module
 </pre>
@@ -63,28 +63,28 @@
 
 <hr />
 <a name="SUpgrade2fStartUpgrading"></a>
-<a name="robo563"></a><h2>SUpgrade/StartUpgrading [ Subprograms ]</h2>
+<a name="robo576"></a><h2>SUpgrade/StartUpgrading [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SUpgrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">SUpgrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set upgrading order
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>StartUpgrading</strong><span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo306">ModuleIndex</a><span class="sign">,</span> UpgradeType<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>StartUpgrading</strong><span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo308">ModuleIndex</a><span class="sign">,</span> UpgradeType<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo306">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo301">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index <span class="keyword">and</span> UpgradeType <span class="sign">&lt;</span> 5<span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo308">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo303">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index <span class="keyword">and</span> UpgradeType <span class="sign">&lt;</span> 5<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_StartUpgrading"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-shipyardui_adb.html#robo306">ModuleIndex</a> - Player ship index of module to upgrade
+<pre> <a href="./ui/bases-shipyardui_adb.html#robo308">ModuleIndex</a> - Player ship index of module to upgrade
  UpgradeType - Type of upgrade to start
 </pre>
 
 <hr />
 <a name="SUpgrade2fUpgradeShip"></a>
-<a name="robo564"></a><h2>SUpgrade/UpgradeShip [ Subprograms ]</h2>
+<a name="robo577"></a><h2>SUpgrade/UpgradeShip [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SUpgrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo57">SUpgrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Upgrade selected module on ship
 </pre>
@@ -98,7 +98,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-upgrade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Oct 04 2020 06:22:52
+<p>Generated from ./src/ships-upgrade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
 </p>
 </div> <!-- footer -->
 </body>
