@@ -480,15 +480,15 @@ Value must be an existing skill name.
   this option from help menu.
 * Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
-  where `[number]` is between 1 and 26 (example: `{GameKey 9}`). Proper game
+  where `[number]` is between 1 and 25 (example: `{GameKey 9}`). Proper game
   keys in order: move ship up/left, move ship up, move ship up/right, move
   ship left, move ship one field or wait 1 minute, move ship right, move ship
   down/left, move ship down, move ship down/right, move ship to destination,
   show ship info, show ship orders, show crafting menu, show last messages,
-  show knowledge info, show know stories, move map position, show game
-  statistics, show help, show game options, quit from game, resign from game,
-  show menu, show wait orders, zoom out, zoom in. Example: `{GameKey 10}`
-  will be translated to key used for auto move ship.
+  show knowledge info, move map position, show game statistics, show help,
+  show game options, quit from game, resign from game, show menu, show wait
+  orders, zoom out, zoom in. Example: `{GameKey 10}` will be translated to key
+  used for auto move ship.
 * Inside help text you can use special variables: `{MoneyName}` which later
   will be replaced with name of game money, `{FuelName}` which later will be
   replaced with name of fuel for ship, `{StrengthName}` which later will be
