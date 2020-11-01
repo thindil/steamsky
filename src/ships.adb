@@ -38,7 +38,8 @@ package body Ships is
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
-      HullIndex, Amount: Natural := 0;
+      HullIndex: Modules_Container.Extended_Index := 0;
+      Amount: Natural := 0;
       ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
       ShipCargo: Inventory_Container.Vector;
       Owners: Natural_Container.Vector;
@@ -46,8 +47,9 @@ package body Ships is
       -- Set ship modules
       declare
          UpgradesAmount, WeightGain: Natural := 0;
-         MaxValue, Roll: Positive;
+         MaxValue: Positive;
          TempModule: BaseModule_Data;
+         Roll: Positive range 1 .. 100;
       begin
          if RandomUpgrades then
             UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
@@ -111,8 +113,6 @@ package body Ships is
                               (TempModule.MaxValue -
                                Modules_List(Module).MaxValue));
                         end if;
-                     when others =>
-                        null;
                   end case;
                   UpgradesAmount := UpgradesAmount - 1;
                end if;
@@ -451,7 +451,7 @@ package body Ships is
            (if Get_Attribute(ShipNode, "action")'Length > 0 then
               DataAction'Value(Get_Attribute(ShipNode, "action"))
             else ADD);
-         if (Action in UPDATE | REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not ProtoShips_Container.Contains
                 (ProtoShips_List, ShipIndex) then
                raise Data_Loading_Error
