@@ -22,7 +22,7 @@
 package Bases.Cargo is
 -- ****
 
-   -- ****f* BCargo/GenerateCargo
+   -- ****f* BCargo/BCargo.GenerateCargo
    -- FUNCTION
    -- Generate base cargo
    -- SOURCE
@@ -30,7 +30,7 @@ package Bases.Cargo is
       Test_Case => ("Test_GenerateCargo", Robustness);
       -- ****
 
-   -- ****f* BCargo/UpdateBaseCargo
+   -- ****f* BCargo/BCargo.UpdateBaseCargo
    -- FUNCTION
    -- Update cargo in base
    -- PARAMETERS
@@ -47,7 +47,7 @@ package Bases.Cargo is
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 
-      -- ****f* BCargo/FindBaseCargo
+      -- ****f* BCargo/BCargo.FindBaseCargo
       -- FUNCTION
       -- Find index of item in base cargo
       -- PARAMETERS
