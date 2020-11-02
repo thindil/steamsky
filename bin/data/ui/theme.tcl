@@ -175,7 +175,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TCheckbutton -padding 4
 
       # Info frames (like modules, items, etc)
-      ttk::style configure TLabelframe.Label -foreground darkgreen
+      ttk::style configure TLabelframe.Label -foreground green
       ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
 
       # Main frames of the game
