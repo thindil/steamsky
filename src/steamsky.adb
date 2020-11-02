@@ -111,15 +111,9 @@ begin
       end if;
    end loop;
 
-   if not Exists(To_String(SaveDirectory)) then
-      Create_Path(To_String(SaveDirectory));
-   end if;
-   if not Exists(To_String(ModsDirectory)) then
-      Create_Path(To_String(ModsDirectory));
-   end if;
-   if not Exists(To_String(ThemesDirectory)) then
-      Create_Path(To_String(ThemesDirectory));
-   end if;
+   Create_Path(To_String(SaveDirectory));
+   Create_Path(To_String(ModsDirectory));
+   Create_Path(To_String(ThemesDirectory));
 
    StartLogging;
 
