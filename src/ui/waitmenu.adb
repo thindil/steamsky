@@ -47,7 +47,7 @@ package body WaitMenu is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MessageDialog: Tk_Toplevel;
+      MessageDialog: Tk_Toplevel := Get_Widget(".wait", Interp);
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
       WaitFrame: Ttk_Frame;
       Button: Ttk_Button;
@@ -57,8 +57,6 @@ package body WaitMenu is
       Width, Height: Positive;
       X, Y: Integer;
    begin
-      MessageDialog.Interp := Get_Context;
-      MessageDialog.Name := New_String(".wait");
       if Winfo_Get(MessageDialog, "exists") = "1" then
          Button.Interp := Get_Context;
          Button.Name := New_String(".wait.frame.close");
@@ -199,8 +197,10 @@ package body WaitMenu is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TimeNeeded: Natural := 0;
-      CloseButton: Ttk_Button;
-      AmountBox: Ttk_SpinBox;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".wait.frame.close", Interp);
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".wait.frame.amount", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "1" then
          UpdateGame(1);
@@ -251,15 +251,11 @@ package body WaitMenu is
             return TCL_OK;
          end if;
       elsif CArgv.Arg(Argv, 1) = "amount" then
-         AmountBox.Interp := Interp;
-         AmountBox.Name := New_String(".wait.frame.amount");
          UpdateGame(Positive'Value(Get(AmountBox)));
          WaitInPlace(Positive'Value(Get(AmountBox)));
       end if;
       UpdateHeader;
       DrawMap;
-      CloseButton.Interp := Interp;
-      CloseButton.Name := New_String(".wait.frame.close");
       if Invoke(CloseButton) /= "" then
          raise SteamSky_Wait_Error with "Can't hide wait menu";
       end if;
