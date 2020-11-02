@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 
+### Fixed
+- Showing horizontal scrollbar in known bases info
+
 ## [5.4] - 2020-11-01
 
 ### Changed
