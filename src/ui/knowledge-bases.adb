@@ -394,7 +394,7 @@ package body Knowledge.Bases is
       YScroll: constant Ttk_Scrollbar :=
         Create
           (BaseDialog & ".yscroll",
-           "-orient vertical -command [list .moduledialog.canvas yview]");
+           "-orient vertical -command [list .basedialog.canvas yview]");
       BaseCanvas: constant Tk_Canvas :=
         Create
           (BaseDialog & ".canvas",
@@ -441,6 +441,8 @@ package body Knowledge.Bases is
          Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
          Width :=
            Width + Positive'Value(Winfo_Get(ReputationLabel, "reqwidth"));
+         Height :=
+           Height + Positive'Value(Winfo_Get(ReputationLabel, "reqheight"));
       end SetReputationText;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
@@ -450,8 +452,8 @@ package body Knowledge.Bases is
          Wm_Set(BaseDialog, "attributes", "-type dialog");
       end if;
       Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
       Tcl.Tk.Ada.Pack.Pack(BaseCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
       BaseInfo :=
