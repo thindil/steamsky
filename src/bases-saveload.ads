@@ -24,7 +24,7 @@ with DOM.Core; use DOM.Core;
 package Bases.SaveLoad is
 -- ****
 
-   -- ****f* BSaveLoad/SaveBases
+   -- ****f* BSaveLoad/BSaveLoad.SaveBases
    -- FUNCTION
    -- Save bases from current game in file
    -- PARAMETERS
@@ -34,7 +34,7 @@ package Bases.SaveLoad is
    procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
    -- ****
 
-   -- ****f* BSaveLoad/LoadBases
+   -- ****f* BSaveLoad/BSaveLoad.LoadBases
    -- FUNCTION
    -- Load bases from file
    -- PARAMETERS
