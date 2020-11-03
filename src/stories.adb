@@ -69,7 +69,7 @@ package body Stories is
            (if Get_Attribute(StoryNode, "action")'Length > 0 then
               DataAction'Value(Get_Attribute(StoryNode, "action"))
             else ADD);
-         if (Action in UPDATE | REMOVE) then
+         if Action in UPDATE | REMOVE then
             if not Stories_Container.Contains(Stories_List, StoryIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -327,7 +327,7 @@ package body Stories is
    -- SOURCE
    function SelectBase(Value: String) return Unbounded_String is
       -- ****
-      BaseIndex: Positive;
+      BaseIndex: BasesRange;
    begin
       if Value = "any" then
          return Null_Unbounded_String;
@@ -355,7 +355,7 @@ package body Stories is
      (StepData: StepData_Container.Vector) return Unbounded_String is
       -- ****
       LocationData, Value: Unbounded_String := Null_Unbounded_String;
-      LocationX, LocationY: Integer;
+      LocationX, LocationY: Positive;
    begin
       Value := GetStepData(StepData, "x");
       if Value = To_Unbounded_String("random") then
