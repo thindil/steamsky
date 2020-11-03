@@ -873,7 +873,7 @@ package body Maps.UI is
          Missions.UI.AddCommands;
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
-         Bind(MapView, "<1>", "{ShowDestinationMenu %x %y}");
+         Bind(MapView, "<1>", "{ShowDestinationMenu %X %Y}");
          SetKeys;
          if Log.DebugMode = Log.Menu then
             ShowDebugUI;
