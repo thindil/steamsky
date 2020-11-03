@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Showing horizontal scrollbar in known bases info
 - Position of destination menu
 - Showing base type when its name has more that one word
+- Crash when default base type has more than one word in name
 
 ## [5.4] - 2020-11-01
 
