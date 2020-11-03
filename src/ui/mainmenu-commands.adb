@@ -538,7 +538,8 @@ package body MainMenu.Commands is
             for I in Faction.BasesTypes.Iterate loop
                Append
                  (Values,
-                  " " & BasesTypes_List(BaseType_Container.Key(I)).Name);
+                  " {" & BasesTypes_List(BaseType_Container.Key(I)).Name &
+                  "}");
             end loop;
             ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
             configure(ComboBox, "-values [list " & To_String(Values) & "]");
