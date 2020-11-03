@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing horizontal scrollbar in known bases info
 - Position of destination menu
+- Showing base type when its name has more that one word
 
 ## [5.4] - 2020-11-01
 
