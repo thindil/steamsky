@@ -146,7 +146,9 @@ package body MainMenu is
       if NewGameSettings.StartingBase /= To_Unbounded_String("Any") then
          Set
            (ComboBox,
-            To_String(BasesTypes_List(NewGameSettings.StartingBase).Name));
+            "{" &
+            To_String(BasesTypes_List(NewGameSettings.StartingBase).Name) &
+            "}");
       else
          Set(ComboBox, "Any");
       end if;
