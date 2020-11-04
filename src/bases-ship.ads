@@ -22,35 +22,35 @@
 package Bases.Ship is
 -- ****
 
-   -- ****e* Ship/BasesShip_Nothing_To_Repair
+   -- ****e* Ship/Ship.BasesShip_Nothing_To_Repair
    -- FUNCTION
    -- Raised when there is nothing to repair
    -- SOURCE
    BasesShip_Nothing_To_Repair: exception;
    -- ****
 
-   -- ****e* Ship/BasesShip_Unique_Module
+   -- ****e* Ship/Ship.BasesShip_Unique_Module
    -- FUNCTION
    -- Raised when player try install another same unique module
    -- SOURCE
    BasesShip_Unique_Module: exception;
    -- ****
 
-   -- ****e* Ship/BasesShip_Installation_Error
+   -- ****e* Ship/Ship.BasesShip_Installation_Error
    -- FUNCTION
    -- Raised when problems with installing ship module occurs
    -- SOURCE
    BasesShip_Installation_Error: exception;
    -- ****
 
-   -- ****e* Ship/BasesShip_Removing_Error
+   -- ****e* Ship/Ship.BasesShip_Removing_Error
    -- FUNCTION
    -- Raised when problems with removing ship module occurs
    -- SOURCE
    BasesShip_Removing_Error: exception;
    -- ****
 
-   -- ****f* Ship/RepairShip
+   -- ****f* Ship/Ship.RepairShip
    -- FUNCTION
    -- Repairs player ship in bases
    -- PARAMETERS
@@ -62,7 +62,7 @@ package Bases.Ship is
       Test_Case => ("Test_RepairShip", Nominal);
       -- ****
 
-      -- ****f* Ship/UpgradeShip
+      -- ****f* Ship/Ship.UpgradeShip
       -- FUNCTION
       -- Install or remove modules on player ship
       -- PARAMETERS
@@ -75,7 +75,7 @@ package Bases.Ship is
       Test_Case => ("Test_UpdgradeShip", Nominal);
       -- ****
 
-      -- ****f* Ship/PayForDock
+      -- ****f* Ship/Ship.PayForDock
       -- FUNCTION
       -- Pay daily fee for docking
       -- SOURCE
@@ -83,7 +83,7 @@ package Bases.Ship is
       Test_Case => ("Test_PayForDock", Robustness);
       -- ****
 
-      -- ****f* Ship/RepairCost
+      -- ****f* Ship/Ship.RepairCost
       -- FUNCTION
       -- Count cost and time of repairs of player ship
       -- PARAMETERS
