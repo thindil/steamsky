@@ -426,11 +426,11 @@ package body Maps.UI is
       end if;
       if EndY > 1024 then
          EndY := 1024;
-         StartY := 1024 - MapHeight;
+         StartY := 1025 - MapHeight;
       end if;
       if EndX > 1024 then
          EndX := 1024;
-         StartX := 1024 - MapWidth;
+         StartX := 1025 - MapWidth;
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          GetStoryLocation(StoryX, StoryY);
