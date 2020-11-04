@@ -459,7 +459,8 @@ package body Maps.UI is
                   MapTag :=
                     (if SkyMap(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String("unvisited"));
-               elsif X = StoryX and Y = StoryY then
+               elsif CurrentStory.Index /= Null_Unbounded_String
+                 and then (X = StoryX and Y = StoryY) then
                   MapChar := CurrentTheme.StoryIcon;
                   MapTag := To_Unbounded_String("green");
                elsif SkyMap(X, Y).MissionIndex > 0 then
