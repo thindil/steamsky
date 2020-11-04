@@ -32,13 +32,14 @@ package body Trades is
 
    procedure BuyItems(BaseItemIndex: Positive; Amount: String) is
       BuyAmount, Price: Positive;
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Cost, MoneyIndex2: Natural;
-      EventIndex: constant Natural :=
+      Cost: Natural;
+      MoneyIndex2: Inventory_Container.Extended_Index;
+      EventIndex: constant Events_Container.Extended_Index :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       ItemName, ItemIndex: Unbounded_String;
-      TraderIndex: constant Natural := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       BuyAmount := Positive'Value(Amount);
       if TraderIndex = 0 then
@@ -118,17 +119,17 @@ package body Trades is
 
    procedure SellItems(ItemIndex: Positive; Amount: String) is
       SellAmount: Positive;
-      BaseIndex: constant Natural :=
+      BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ProtoIndex: constant Unbounded_String :=
         PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
-      EventIndex: constant Natural :=
+      EventIndex: constant Events_Container.Extended_Index :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
-      TraderIndex: constant Natural := FindMember(Talk);
+      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
       Profit: Integer;
    begin
       SellAmount := Positive'Value(Amount);
@@ -265,8 +266,9 @@ package body Trades is
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_STOP);
-      CargoAmount, CargoItemIndex, ItemIndex: Natural;
-      ItemAmount: Positive;
+      CargoAmount: Natural range 0 .. 10;
+      CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
+      ItemAmount: Positive range 1 .. 1000;
       NewItemIndex: Unbounded_String;
    begin
       TraderCargo.Clear;
