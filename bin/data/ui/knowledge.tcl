@@ -44,7 +44,6 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin missions show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of accepted missions}
-# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.missions.scrolly
 ::autoscroll::autoscroll $knowledgeframe.missions.scrollx
@@ -59,7 +58,6 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin events show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known events}
-# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.events.scrolly
 ::autoscroll::autoscroll $knowledgeframe.events.scrollx
@@ -74,7 +72,6 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {KnowledgeMaxMin stories show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known stories}
-# Add content here
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.stories.scrolly
 ::autoscroll::autoscroll $knowledgeframe.stories.scrollx

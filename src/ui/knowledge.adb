@@ -37,6 +37,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
@@ -373,9 +374,18 @@ package body Knowledge is
             Tcl.Tk.Ada.Pack.Pack(StoriesScroll, "-side right -fill y");
             Tcl.Tk.Ada.Pack.Pack(StoriesView, "-side top -fill both");
             Tcl.Tk.Ada.Grid.Grid(StoriesFrame);
+            Autoscroll(StoriesScroll);
             Generate(StoriesBox, "<<ComboboxSelected>>");
          end;
       end if;
+      Tcl_Eval(Get_Context, "update");
+      KnowledgeCanvas.Name :=
+        New_String(Paned & ".knowledgeframe.stories.canvas");
+      configure
+        (KnowledgeCanvas,
+         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
+      Xview_Move_To(KnowledgeCanvas, "0.0");
+      Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Show knowledge
       ShowScreen("knowledgeframe");
       return TCL_OK;
