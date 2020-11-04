@@ -293,6 +293,9 @@ package body Maps.UI.Commands is
       MapY :=
         StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
+      if MapY > 1024 then
+         return TCL_OK;
+      end if;
       if StartX +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex))) <
@@ -303,6 +306,9 @@ package body Maps.UI.Commands is
         StartX +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
+      if MapX > 1024 then
+         return TCL_OK;
+      end if;
       UpdateMapInfo(MapX, MapY);
       return TCL_OK;
    end Update_Map_Info_Command;
