@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Position of destination menu
 - Showing base type when its name has more that one word
 - Crash when default base type has more than one word in name
+- Showing player when he/she is at left or bottom border of the map
 
 ## [5.4] - 2020-11-01
 
