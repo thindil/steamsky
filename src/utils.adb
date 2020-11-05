@@ -1,4 +1,4 @@
---    Copyright 2017-2018 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -27,13 +27,6 @@ package body Utils is
       Rand_Roll.Reset(Generator);
       return Rand_Roll.Random(Generator);
    end GetRandom;
-
-   function DaysDifference(DateToCompare: Date_Record) return Natural is
-   begin
-      return (GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
-        (DateToCompare.Day + (30 * DateToCompare.Month) +
-         (DateToCompare.Year * 360));
-   end DaysDifference;
 
    function GenerateRoboticName return Unbounded_String is
       NewName: Unbounded_String;
