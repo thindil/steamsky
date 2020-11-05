@@ -63,8 +63,7 @@ package body Knowledge.Stories is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       StoryView: constant Tk_Text :=
-        Get_Widget
-          (".paned.knowledgeframe.stories.canvas.frame.list.view", Interp);
+        Get_Widget(".paned.knowledgeframe.stories.canvas.frame.view", Interp);
       StoryText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
@@ -76,16 +75,21 @@ package body Knowledge.Stories is
       Button: Ttk_Button :=
         Get_Widget
           (".paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
+      Rows: Positive := 1;
+      LineWidth: constant Positive :=
+        Positive'Value(cget(StoryView, "-width"));
    begin
       StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
       configure(StoryView, "-state normal");
       Delete(StoryView, "1.0", "end");
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
-         Append(StoryText, StepText & LF & LF);
+         Append(StoryText, StepText & LF);
+         Rows := Rows + (Length(StepText) / LineWidth) + 1;
       end loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
          Append(StoryText, GetCurrentStoryText & LF);
+         Rows := Rows + (Length(GetCurrentStoryText & LF) / LineWidth) + 1;
          if CurrentStory.Data /= Null_Unbounded_String then
             if CurrentStory.CurrentStep = 0 then
                Step := Stories_List(CurrentStory.Index).StartingStep;
@@ -102,7 +106,7 @@ package body Knowledge.Stories is
                   if Slice_Count(Tokens) < 2 then
                      Append
                        (StoryText,
-                        " You must travel to base " & CurrentStory.Data &
+                        "You must travel to base " & CurrentStory.Data &
                         " at X:");
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
@@ -113,24 +117,24 @@ package body Knowledge.Stories is
                         end if;
                      end loop;
                   else
-                     Append(StoryText, " You can ask in any base. ");
+                     Append(StoryText, "You can ask in any base. ");
                   end if;
                when DESTROYSHIP =>
                   Append
                     (StoryText,
-                     " You must find " &
+                     "You must find " &
                      ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
                        .Name &
                      " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
                   Append
                     (StoryText,
-                     " You must travel to X:" & Slice(Tokens, 1) & " Y:" &
+                     "You must travel to X:" & Slice(Tokens, 1) & " Y:" &
                      Slice(Tokens, 2));
                when LOOT =>
                   Append
                     (StoryText,
-                     " You must loot: " &
+                     "You must loot: " &
                      Items_List(To_Unbounded_String((Slice(Tokens, 1)))).Name &
                      " from ");
                   if Slice(Tokens, 2) = "any" then
@@ -172,7 +176,7 @@ package body Knowledge.Stories is
              (".paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
-      configure(StoryView, "-state disabled");
+      configure(StoryView, "-state disabled -height" & Positive'Image(Rows));
       return TCL_OK;
    end Show_Story_Command;
 
