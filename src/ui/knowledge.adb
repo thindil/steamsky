@@ -24,7 +24,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -35,9 +34,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
@@ -337,17 +334,8 @@ package body Knowledge is
             StoriesBox: constant Ttk_ComboBox :=
               Create(OptionsFrame & ".titles", "-state readonly");
             StoriesList: Unbounded_String;
-            StoriesFrame: constant Ttk_Frame :=
-              Create(KnowledgeFrame & ".list");
             StoriesView: constant Tk_Text :=
-              Create
-                (StoriesFrame & ".view",
-                 "-wrap word -yscrollcommand [list " & StoriesFrame &
-                 ".scrolly set]");
-            StoriesScroll: constant Ttk_Scrollbar :=
-              Create
-                (StoriesFrame & ".scrolly",
-                 "-orient vertical -command [list " & StoriesView & " yview]");
+              Create(KnowledgeFrame & ".view", "-wrap word");
          begin
             for FinishedStory of FinishedStories loop
                Append
@@ -371,10 +359,7 @@ package body Knowledge is
                  "-text {Set as destintion for ship} -command SetStory");
             Tcl.Tk.Ada.Grid.Grid(Button, "-column 2 -row 0");
             Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky w");
-            Tcl.Tk.Ada.Pack.Pack(StoriesScroll, "-side right -fill y");
-            Tcl.Tk.Ada.Pack.Pack(StoriesView, "-side top -fill both");
-            Tcl.Tk.Ada.Grid.Grid(StoriesFrame);
-            Autoscroll(StoriesScroll);
+            Tcl.Tk.Ada.Grid.Grid(StoriesView, "-sticky nwes");
             Generate(StoriesBox, "<<ComboboxSelected>>");
          end;
       end if;
