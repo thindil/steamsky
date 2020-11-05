@@ -359,7 +359,7 @@ package body Knowledge is
                  "-text {Set as destintion for ship} -command SetStory");
             Tcl.Tk.Ada.Grid.Grid(Button, "-column 2 -row 0");
             Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky w");
-            Tcl.Tk.Ada.Grid.Grid(StoriesView, "-sticky nwes");
+            Tcl.Tk.Ada.Grid.Grid(StoriesView, "-sticky w");
             Generate(StoriesBox, "<<ComboboxSelected>>");
          end;
       end if;

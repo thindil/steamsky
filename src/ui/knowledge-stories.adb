@@ -19,12 +19,14 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Factions; use Factions;
 with Items; use Items;
@@ -77,10 +79,12 @@ package body Knowledge.Stories is
           (".paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
       Rows: Positive := 1;
       LineWidth: constant Positive :=
-        Positive'Value(cget(StoryView, "-width"));
+        (Positive'Value(Winfo_Get(StoriesBox, "reqwidth")) +
+         Positive'Value(Winfo_Get(Button, "reqwidth"))) /
+        Positive'Value(Measure("InterfaceFont", "{ }"));
    begin
       StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
-      configure(StoryView, "-state normal");
+      configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
       Delete(StoryView, "1.0", "end");
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Append(StoryText, StepText & LF);
