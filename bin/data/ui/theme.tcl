@@ -101,7 +101,7 @@ namespace eval ttk::theme::steamsky {
 
       # Flat buttons setting
       # Default flat button
-      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
+      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -relief raised
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
       # Flat button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
