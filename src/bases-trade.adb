@@ -28,7 +28,7 @@ with BasesTypes; use BasesTypes;
 
 package body Bases.Trade is
 
-   -- ****if* BTrade/CheckMoney
+   -- ****if* BTrade/BTrade.CheckMoney
    -- FUNCTION
    -- Check if player have enough money
    -- PARAMETERS
