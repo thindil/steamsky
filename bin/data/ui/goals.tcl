@@ -35,3 +35,5 @@ grid $selectbutton -row 2 -columnspan 2 -sticky we
 grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog}] -row 3 -columnspan 2 -sticky we
 bind .goalsdialog <Escape> {.goalsdialog.closebutton invoke}
 wm geometry .goalsdialog =400x400+[expr ([winfo vrootwidth .goalsdialog] / 2) - 200]+[expr [winfo vrootheight .goalsdialog] / 3]
+::autoscroll::autoscroll .goalsdialog.yscroll
+::autoscroll::autoscroll .goalsdialog.xscroll
