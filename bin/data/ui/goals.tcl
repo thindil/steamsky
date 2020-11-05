@@ -4,10 +4,10 @@ wm transient .goalsdialog .
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .goalsdialog -type dialog
 }
-set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set]]
+set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -xscrollcommand [list .goalsdialog.xscroll set]]
 set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
 grid $view -sticky nwes
-$view column #0 -width 400
+$view column #0 -minwidth 400 -stretch 1
 $view insert {} end -id 0 -text Random
 $view insert {} end -id REPUTATION -text {Gain max reputation in bases}
 $view insert {} end -id DESTROY -text {Destroy enemy ships}
@@ -28,9 +28,10 @@ bind $view <<TreeviewSelect>> {
 bind $view <Double-1> {$selectbutton invoke}
 bind $view <Return> {$selectbutton invoke}
 grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical -command [list $view yview]] -column 1 -row 0 -sticky ns
+grid [ttk::scrollbar .goalsdialog.xscroll -orient horizontal -command [list $view xview]] -row 1 -column 0 -sticky we -columnspan 2
 grid columnconfigure .goalsdialog $view -weight 1
 grid rowconfigure .goalsdialog $view -weight 1
-grid $selectbutton -row 1 -columnspan 2 -sticky we
-grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog}] -row 2 -columnspan 2 -sticky we
+grid $selectbutton -row 2 -columnspan 2 -sticky we
+grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog}] -row 3 -columnspan 2 -sticky we
 bind .goalsdialog <Escape> {.goalsdialog.closebutton invoke}
-wm geometry .goalsdialog +[expr ([winfo vrootwidth .goalsdialog] / 2) - 200]+[expr [winfo vrootheight .goalsdialog] / 3]
+wm geometry .goalsdialog =400x400+[expr ([winfo vrootwidth .goalsdialog] / 2) - 200]+[expr [winfo vrootheight .goalsdialog] / 3]
