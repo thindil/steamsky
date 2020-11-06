@@ -801,6 +801,7 @@ package body Maps.UI is
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Button.Name := New_String(".paned.controls.buttons.moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
+            Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
             Button.Name := New_String(".paned.controls.buttons.wait");
             configure(Button, "-text Move");
             Add(Button, "Move ship one map field toward destination.");
@@ -808,6 +809,7 @@ package body Maps.UI is
          else
             Button.Name := New_String(".paned.controls.buttons.moveto");
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+            Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 3");
             Button.Name := New_String(".paned.controls.buttons.wait");
             configure(Button, "-text Wait");
             Add(Button, "Wait 1 minute.");
