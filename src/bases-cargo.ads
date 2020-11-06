@@ -43,7 +43,7 @@ package Bases.Cargo is
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Natural := 0) with
+      CargoIndex: Inventory_Container.Extended_Index := 0) with
       Test_Case => ("Test_UpdateBaseCargo", Robustness);
       -- ****
 

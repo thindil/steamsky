@@ -128,7 +128,7 @@ package body Bases.Cargo is
    procedure UpdateBaseCargo
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Natural := 0) is
+      CargoIndex: Inventory_Container.Extended_Index := 0) is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemIndex: constant Natural range 0 ..
