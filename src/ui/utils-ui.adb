@@ -25,7 +25,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -95,18 +94,21 @@ package body Utils.UI is
 
    procedure ShowMessage(Text: String) is
       MessageDialog: constant Tk_Toplevel :=
-        Create(".message", "-class Dialog");
+        Create
+          (".message",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
-      MessageFrame: constant Ttk_Frame := Create(".message.frame");
       MessageLabel: constant Ttk_Label :=
         Create
-          (Widget_Image(MessageFrame) & ".text",
-           "-text {" & Text & "} -wraplength 300");
+          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
       MessageButton: constant Ttk_Button :=
         Create
-          (Widget_Image(MessageFrame) & ".button",
-           "-text X -command {CloseDialog .message} -style Toolbutton");
+          (MessageDialog & ".button",
+           "-text Close -command {CloseDialog " & MessageDialog & "}");
+      DialogHeight: constant Positive :=
+        Positive'Value(Winfo_Get(MessageLabel, "reqheight")) +
+        Positive'Value(Winfo_Get(MessageButton, "reqheight")) + 10;
    begin
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
       if TimerId /= Null_Unbounded_String then
@@ -119,24 +121,24 @@ package body Utils.UI is
          Wm_Set(MessageDialog, "attributes", "-type dialog");
       end if;
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we");
-      Tcl.Tk.Ada.Grid.Grid(MessageButton, "-row 0 -column 1");
-      Tcl.Tk.Ada.Pack.Pack(MessageFrame, "-expand true -fill both");
-      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 400) / 2;
+      Tcl.Tk.Ada.Grid.Grid(MessageButton);
+      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 310) / 2;
       if X < 0 then
          X := 0;
       end if;
-      Y := (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) - 200) / 2;
+      Y :=
+        (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) -
+         DialogHeight) /
+        2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
         (MessageDialog, "geometry",
-         "400x200" & "+" & Trim(Positive'Image(X), Left) & "+" &
-         Trim(Positive'Image(Y), Left));
+         "310x" & Trim(Positive'Image(DialogHeight), Left) & "+" &
+         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       Focus(MessageButton);
-      Bind
-        (MessageDialog, "<Destroy>",
-         "{CloseDialog " & Value(MessageDialog.Name) & "}");
+      Bind(MessageDialog, "<Destroy>", "{CloseDialog " & MessageDialog & "}");
       TimerId :=
         To_Unbounded_String
           (After
