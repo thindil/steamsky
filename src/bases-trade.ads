@@ -23,28 +23,28 @@
 package Bases.Trade is
 -- ****
 
-   -- ****e* BTrade/Trade_Already_Known
+   -- ****e* BTrade/BTrade.Trade_Already_Known
    -- FUNCTION
    -- Raised when player known selected recipe
    -- SOURCE
    Trade_Already_Known: exception;
    -- ****
 
-   -- ****e* BTrade/Trade_Cant_Heal
+   -- ****e* BTrade/BTrade.Trade_Cant_Heal
    -- FUNCTION
    -- Raised when no crew members are wounded
    -- SOURCE
    Trade_Cant_Heal: exception;
    -- ****
 
-   -- ****e* BTrade/Trade_Cant_Train
+   -- ****e* BTrade/BTrade.Trade_Cant_Train
    -- FUNCTION
    -- Raised when skill is maxed and can't be trained
    -- SOURCE
    Trade_Cant_Train: exception;
    -- ****
 
-   -- ****f* BTrade/HireRecruit
+   -- ****f* BTrade/BTrade.HireRecruit
    -- FUNCTION
    -- Hire selected recruit from bases and add him/her to player ship crew
    -- PARAMETERS
@@ -62,7 +62,7 @@ package Bases.Trade is
       Test_Case => ("Test_HireRecruit", Robustness);
       -- ****
 
-      -- ****f* BTrade/BuyRecipe
+      -- ****f* BTrade/BTrade.BuyRecipe
       -- FUNCTION
       -- Buy new crafting recipe
       -- PARAMETERS
@@ -73,7 +73,7 @@ package Bases.Trade is
       Test_Case => ("Test_BuyRecipe", Nominal);
       -- ****
 
-      -- ****f* BTrade/HealWounded
+      -- ****f* BTrade/BTrade.HealWounded
       -- FUNCTION
       -- Heals wounded crew members in bases
       -- PARAMETERS
@@ -85,7 +85,7 @@ package Bases.Trade is
       Test_Case => ("Test_HealWounded", Nominal);
       -- ****
 
-      -- ****f* BTrade/HealCost
+      -- ****f* BTrade/BTrade.HealCost
       -- FUNCTION
       -- Count cost of healing action
       -- PARAMETERS
@@ -103,7 +103,7 @@ package Bases.Trade is
       Test_Case => ("Test_HealCost", Nominal);
       -- ****
 
-      -- ****f* BTrade/TrainCost
+      -- ****f* BTrade/BTrade.TrainCost
       -- FUNCTION
       -- Count cost of training action
       -- PARAMETERS
@@ -120,7 +120,7 @@ package Bases.Trade is
       Test_Case => ("Test_TrainCost", Nominal);
       -- ****
 
-      -- ****f* BTrade/TrainSkill
+      -- ****f* BTrade/BTrade.TrainSkill
       -- FUNCTION
       -- Train selected skill
       -- PARAMETERS
