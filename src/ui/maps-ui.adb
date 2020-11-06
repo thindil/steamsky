@@ -139,7 +139,6 @@ package body Maps.UI is
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
       Label: Ttk_Label := Get_Widget(".header.time");
-      Button: Ttk_Button := Get_Widget(".header.pilot");
       Frame: constant Ttk_Frame := Get_Widget(".paned.combat");
    begin
       configure(Label, "-text {" & FormatedTime & "}");
@@ -275,117 +274,117 @@ package body Maps.UI is
             NeedRepairs := True;
          end if;
       end loop;
+      Label.Name := New_String(".header.pilot");
       if HavePilot then
-         configure(Button, "-style Headergreen.Toolbutton");
-         Add(Button, "Pilot is in position.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
-            configure(Button, "-style Headerred.Toolbutton");
-            Add(Button, "No pilot assigned. Ship can't move.");
+            configure(Label, "-style Headerred.TLabel");
+            Add(Label, "No pilot assigned. Ship can't move.");
          else
-            configure(Button, "-style Header.Toolbutton");
-            Add(Button, "No pilot assigned. Ship fly on it own.");
+            configure(Label, "-style TLabel");
+            Add(Label, "No pilot assigned. Ship fly on it own.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Button.Name := New_String(".header.engineer");
+      Label.Name := New_String(".header.engineer");
       if HaveEngineer then
-         configure(Button, "-style Headergreen.Toolbutton");
-         Add(Button, "Engineer is in position.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
-            configure(Button, "-style Headerred.Toolbutton");
-            Add(Button, "No engineer assigned. Ship can't move.");
+            configure(Label, "-style Headerred.TLabel");
+            Add(Label, "No engineer assigned. Ship can't move.");
          else
-            configure(Button, "-style Header.Toolbutton");
-            Add(Button, "No engineer assigned. Ship fly on it own.");
+            configure(Label, "-style TLabel");
+            Add(Label, "No engineer assigned. Ship fly on it own.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Button.Name := New_String(".header.gunner");
+      Label.Name := New_String(".header.gunner");
       if HaveGunner then
-         configure(Button, "-style Headergreen.Toolbutton");
-         Add(Button, "All guns are manned.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
-         configure(Button, "-style Headerred.Toolbutton");
-         Add(Button, "One or more guns don't have a gunner.");
+         configure(Label, "-style Headerred.TLabel");
+         Add(Label, "One or more guns don't have a gunner.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Button.Name := New_String(".header.repairs");
+      Label.Name := New_String(".header.repairs");
       if NeedRepairs then
          if HaveRepairman then
-            configure(Button, "-style Headergreen.Toolbutton");
-            Add(Button, "The ship is being repaired.");
+            configure(Label, "-style Headergreen.TLabel");
+            Add(Label, "The ship is being repaired.");
          else
-            configure(Button, "-style Headerred.Toolbutton");
-            Add(Button, "The ship needs repairs but no one is working them.");
+            configure(Label, "-style Headerred.TLabel");
+            Add(Label, "The ship needs repairs but no one is working them.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         configure(Button, "-style Header.Toolbutton");
-         Add(Button, "The ship doesn't require repairs.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Button.Name := New_String(".header.crafting");
+      Label.Name := New_String(".header.crafting");
       if NeedWorker then
          if HaveWorker then
-            configure(Button, "-style Headergreen.Toolbutton");
-            Add(Button, "All crafting orders are being executed.");
+            configure(Label, "-style Headergreen.TLabel");
+            Add(Label, "All crafting orders are being executed.");
          else
-            configure(Button, "-style Headerred.Toolbutton");
+            configure(Label, "-style Headerred.TLabel");
             Add
-              (Button,
+              (Label,
                "You need to assign crew members to begin manufacturing.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         configure(Button, "-style Header.Toolbutton");
-         Add(Button, "No crafting orders were set.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Button.Name := New_String(".header.upgrade");
+      Label.Name := New_String(".header.upgrade");
       if PlayerShip.UpgradeModule > 0 then
          if HaveUpgrader then
-            configure(Button, "-style Headergreen.Toolbutton");
-            Add(Button, "A ship module upgrade in progress.");
+            configure(Label, "-style Headergreen.TLabel");
+            Add(Label, "A ship module upgrade in progress.");
          else
-            configure(Button, "-style Headerred.Toolbutton");
+            configure(Label, "-style Headerred.TLabel");
             Add
-              (Button,
+              (Label,
                "A ship module upgrade is in progress but no one is working on it.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         configure(Button, "-style Header.Toolbutton");
-         Add(Button, "No ship module upgrade was set.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Button.Name := New_String(".header.talk");
+      Label.Name := New_String(".header.talk");
       if HaveTrader then
-         configure(Button, "-style Headergreen.Toolbutton");
-         Add(Button, "Trader is in position.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-         configure(Button, "-style Headerred.Toolbutton");
-         Add(Button, "No trader assigned. You need one to talk/trade.");
+         configure(Label, "-style Headerred.TLabel");
+         Add(Label, "No trader assigned. You need one to talk/trade.");
+         Tcl.Tk.Ada.Grid.Grid(Label);
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
          if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .EType =
            FriendlyShip then
-            configure(Button, "-style Headerred.Toolbutton");
-            Add(Button, "No trader assigned. You need one to talk/trade.");
+            configure(Label, "-style Headerred.TLabel");
+            Add(Label, "No trader assigned. You need one to talk/trade.");
+            Tcl.Tk.Ada.Grid.Grid(Label);
          else
-            configure(Button, "-style Header.Toolbutton");
-            Add(Button, "No trader needed.");
+            Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          end if;
       else
-         configure(Button, "-style Header.Toolbutton");
-         Add(Button, "No trader needed.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Button.Name := New_String(".header.clean");
+      Label.Name := New_String(".header.clean");
       if NeedCleaning then
          if HaveCleaner then
-            configure(Button, "-style Headergreen.Toolbutton");
-            Add(Button, "Ship is cleaned.");
+            configure(Label, "-style Headergreen.TLabel");
+            Add(Label, "Ship is cleaned.");
          else
-            configure(Button, "-style Headerred.Toolbutton");
-            Add(Button, "Ship is dirty but no one is cleaning it.");
+            configure(Label, "-style Headerred.TLabel");
+            Add(Label, "Ship is dirty but no one is cleaning it.");
          end if;
+         Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         configure(Button, "-style Header.Toolbutton");
-         Add(Button, "Ship needs no cleaning.");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       if PlayerShip.Crew(1).Health = 0 then
          DeathConfirm;
