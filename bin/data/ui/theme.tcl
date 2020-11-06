@@ -109,10 +109,6 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Female.Toolbutton -foreground $colors(-pink) -font InterfaceIcons
       # Not needed state header button (ship info in right top corner)
       ttk::style configure Header.Toolbutton -font InterfaceIcons
-      # Alarm state header button (ship info in right top corner)
-      ttk::style configure Headerred.Toolbutton -font InterfaceIcons -foreground red
-      # Normal state header button (ship info in right top corner)
-      ttk::style configure Headergreen.Toolbutton -font InterfaceIcons -foreground green
 
       # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
