@@ -154,6 +154,15 @@ namespace eval ttk::theme::steamsky {
             %W configure -cursor sb_v_double_arrow
          }
       }
+      bind TScrollbar <MouseWheel> {
+         [lindex [%W cget -command] 0] [lindex [%W cget -command] 1] scroll [expr (-1 * (%D / 120))] units
+      }
+      bind TScrollbar <Button-4> {
+         [lindex [%W cget -command] 0] [lindex [%W cget -command] 1] scroll -1 units
+      }
+      bind TScrollbar <Button-5> {
+         [lindex [%W cget -command] 0] [lindex [%W cget -command] 1] scroll 1 units
+      }
 
       # Combobox setting
       ttk::style configure TCombobox -arrowcolor $colors(-goldenyellow) -relief flat -padding 4 -foreground $colors(-goldenyellow)
