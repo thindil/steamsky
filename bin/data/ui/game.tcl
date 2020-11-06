@@ -16,19 +16,19 @@ ttk::button .header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
 grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .header.time {The game time}
 grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 3 -sticky e
-grid [ttk::label .header.nofood -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 4 -sticky e
-grid [ttk::label .header.nodrink -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 5 -sticky e
-grid [ttk::label .header.overloaded -style Headerred.TLabel] -row 0 -column 6 -sticky e
-grid [ttk::label .header.pilot -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 7 -sticky e
-grid [ttk::label .header.engineer -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 8 -sticky e
-grid [ttk::label .header.gunner -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 9 -sticky e
-grid [ttk::label .header.talk -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 10 -sticky e
-grid [ttk::label .header.repairs -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 11 -sticky e
-grid [ttk::label .header.upgrade -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 12 -sticky e
-grid [ttk::label .header.clean -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 13 -sticky e
-grid [ttk::label .header.crafting -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 14 -sticky e
-pack .header -fill x
+grid [ttk::label .header.nofuel -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 3 -padx 3
+grid [ttk::label .header.nofood -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 4 -padx 3
+grid [ttk::label .header.nodrink -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 5 -padx 3
+grid [ttk::label .header.overloaded -style Headerred.TLabel] -row 0 -column 6 -padx 3
+grid [ttk::label .header.pilot -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 7 -padx 3
+grid [ttk::label .header.engineer -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 8 -padx 3
+grid [ttk::label .header.gunner -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 9 -padx 3
+grid [ttk::label .header.talk -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 10 -padx 3
+grid [ttk::label .header.repairs -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 11 -padx 3
+grid [ttk::label .header.upgrade -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 12 -padx 3
+grid [ttk::label .header.clean -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 13 -padx 3
+grid [ttk::label .header.crafting -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 14 -padx 3
+pack .header -fill x -padx 5
 ttk::panedwindow .paned
 # Game map
 .paned add [ttk::frame .paned.mapframe]
