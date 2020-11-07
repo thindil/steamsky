@@ -183,6 +183,7 @@ package body Utils.UI is
         (MessageDialog, "geometry",
          "310x" & Trim(Positive'Image(DialogHeight), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
+      Wm_Set(MessageDialog, "overrideredirect", "1");
       Focus(MessageButton);
       Bind(MessageDialog, "<Destroy>", "{CloseDialog " & MessageDialog & "}");
       TimerId := To_Unbounded_String(After(1_000, "UpdateDialog .message"));
