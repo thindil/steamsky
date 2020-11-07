@@ -31,7 +31,7 @@ with Ships; use Ships;
 package Bases is
 -- ****
 
-   -- ****s* Bases/Recruit_Data
+   -- ****s* Bases/Bases.Recruit_Data
    -- FUNCTION
    -- Data structure for recruits
    -- PARAMETERS
@@ -63,14 +63,14 @@ package Bases is
    end record;
    -- ****
 
-   -- ****t* Bases/Recruit_Container
+   -- ****t* Bases/Bases.Recruit_Container
    -- FUNCTION
    -- Used to store sky bases recruits data
    -- SOURCE
    package Recruit_Container is new Vectors(Positive, Recruit_Data);
    -- ****
 
-   -- ****s* Bases/Base_Cargo
+   -- ****s* Bases/Bases.Base_Cargo
    -- FUNCTION
    -- Data structure for bases cargo
    -- PARAMETERS
@@ -87,21 +87,21 @@ package Bases is
    end record;
    -- ****
 
-   -- ****t* Bases/BaseCargo_Container
+   -- ****t* Bases/Bases.BaseCargo_Container
    -- FUNCTION
    -- Used to store sky bases cargos
    -- SOURCE
    package BaseCargo_Container is new Vectors(Positive, Base_Cargo);
    -- ****
 
-   -- ****t* Bases/Bases_Size
+   -- ****t* Bases/Bases.Bases_Size
    -- FUNCTION
    -- Bases sizes
    -- SOURCE
    type Bases_Size is (Small, Medium, Big);
    -- ****
 
-   -- ****s* Bases/BaseRecord
+   -- ****s* Bases/Bases.BaseRecord
    -- FUNCTION
    -- Data structure for bases
    -- PARAMETERS
@@ -144,42 +144,42 @@ package Bases is
    end record;
    -- ****
 
-   -- ****v* Bases/SkyBases
+   -- ****v* Bases/Bases.SkyBases
    -- FUNCTION
    -- List of sky bases
    -- SOURCE
    SkyBases: array(BasesRange) of BaseRecord;
    -- ****
 
-   -- ****v* Bases/BaseSyllablesPre
+   -- ****v* Bases/Bases.BaseSyllablesPre
    -- FUNCTION
    -- List of pre syllables for generating bases names
    -- SOURCE
    BaseSyllablesPre: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/BaseSyllablesStart
+   -- ****v* Bases/Bases.BaseSyllablesStart
    -- FUNCTION
    -- List of first syllables for generating bases names
    -- SOURCE
    BaseSyllablesStart: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/BaseSyllablesEnd
+   -- ****v* Bases/Bases.BaseSyllablesEnd
    -- FUNCTION
    -- List of second syllables for generating bases names
    -- SOURCE
    BaseSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Bases/BaseSyllablesPost
+   -- ****v* Bases/Bases.BaseSyllablesPost
    -- FUNCTION
    -- List of post syllables for generating bases names
    -- SOURCE
    BaseSyllablesPost: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****f* Bases/GainRep
+   -- ****f* Bases/Bases.GainRep
    -- FUNCTION
    -- Gain reputation in selected base
    -- PARAMETERS
@@ -190,7 +190,7 @@ package Bases is
       Test_Case => ("Test_GainRep", Robustness);
       -- ****
 
-      -- ****f* Bases/CountPrice
+      -- ****f* Bases/Bases.CountPrice
       -- FUNCTION
       -- Count price for actions with bases (buying/selling/docking/ect)
       -- PARAMETERS
@@ -209,7 +209,7 @@ package Bases is
       Test_Case => ("Test_CountPrice", Nominal);
       -- ****
 
-      -- ****f* Bases/GenerateBaseName
+      -- ****f* Bases/Bases.GenerateBaseName
       -- FUNCTION
       -- Generate random name for base based on faction
       -- PARAMETERS
@@ -223,7 +223,7 @@ package Bases is
       Test_Case => ("Test_GenerateBaseName", Nominal);
       -- ****
 
-      -- ****f* Bases/GenerateRecruits
+      -- ****f* Bases/Bases.GenerateRecruits
       -- FUNCTION
       -- Generate if needed new recruits in base
       -- SOURCE
@@ -231,7 +231,7 @@ package Bases is
       Test_Case => ("Test_GenerateRecruits", Robustness);
       -- ****
 
-      -- ****f* Bases/AskForBases
+      -- ****f* Bases/Bases.AskForBases
       -- FUNCTION
       -- Ask in base for direction for other bases
       -- SOURCE
@@ -239,7 +239,7 @@ package Bases is
       Test_Case => ("Test_AskForBases", Robustness);
       -- ****
 
-      -- ****f* Bases/AskForEvents
+      -- ****f* Bases/Bases.AskForEvents
       -- FUNCTION
       -- Ask in base for direction for random events
       -- SOURCE
@@ -247,7 +247,7 @@ package Bases is
       Test_Case => ("Test_AskForEvents", Robustness);
       -- ****
 
-      -- ****f* Bases/UpdatePopulation
+      -- ****f* Bases/Bases.UpdatePopulation
       -- FUNCTION
       -- Update base population if needed
       -- SOURCE
@@ -255,7 +255,7 @@ package Bases is
       Test_Case => ("Test_UpdatePopulation", Robustness);
       -- ****
 
-      -- ****f* Bases/UpdatePrices
+      -- ****f* Bases/Bases.UpdatePrices
       -- FUNCTION
       -- Random changes of items prices in base
       -- SOURCE
