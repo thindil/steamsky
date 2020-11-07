@@ -61,8 +61,8 @@ package body Bases.Trade is
    end CheckMoney;
 
    procedure HireRecruit
-     (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
-      ContractLenght: Integer) is
+     (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
+      DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
       BaseIndex: constant BasesRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index;
@@ -260,7 +260,9 @@ package body Bases.Trade is
       end if;
    end HealCost;
 
-   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural is
+   function TrainCost
+     (MemberIndex: Crew_Container.Extended_Index;
+      SkillIndex: Skills_Container.Extended_Index) return Natural is
       Cost: Natural := Natural(100.0 * NewGameSettings.PricesBonus);
    begin
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
@@ -281,7 +283,9 @@ package body Bases.Trade is
       return Cost;
    end TrainCost;
 
-   procedure TrainSkill(MemberIndex, SkillIndex: Positive) is
+   procedure TrainSkill
+     (MemberIndex: Crew_Container.Extended_Index;
+      SkillIndex: Skills_Container.Extended_Index) is
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;

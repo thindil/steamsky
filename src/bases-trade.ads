@@ -57,8 +57,8 @@ package Bases.Trade is
    --                  means infinite contract
    -- SOURCE
    procedure HireRecruit
-     (RecruitIndex, Cost: Positive; DailyPayment, TradePayment: Natural;
-      ContractLenght: Integer) with
+     (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
+      DailyPayment, TradePayment: Natural; ContractLenght: Integer) with
       Test_Case => ("Test_HireRecruit", Robustness);
       -- ****
 
@@ -113,7 +113,9 @@ package Bases.Trade is
       -- RESULT
       -- Overall cost of training selected skill by selected crew member
       -- SOURCE
-   function TrainCost(MemberIndex, SkillIndex: Positive) return Natural with
+   function TrainCost
+     (MemberIndex: Crew_Container.Extended_Index;
+      SkillIndex: Skills_Container.Extended_Index) return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
@@ -127,7 +129,9 @@ package Bases.Trade is
       -- MemberIndex - Index of playership crew member which train
       -- SkillIndex  - Index of skill of selected crew member to train
       -- SOURCE
-   procedure TrainSkill(MemberIndex, SkillIndex: Positive) with
+   procedure TrainSkill
+     (MemberIndex: Crew_Container.Extended_Index;
+      SkillIndex: Skills_Container.Extended_Index) with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
