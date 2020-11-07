@@ -161,7 +161,6 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Wm_Set(MessageDialog, "title", "{Steam Sky - Message}");
       Wm_Set(MessageDialog, "transient", ".");
       if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
          Wm_Set(MessageDialog, "attributes", "-type dialog");
