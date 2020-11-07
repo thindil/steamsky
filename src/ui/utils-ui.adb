@@ -92,6 +92,46 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
+   -- ****if* Utils.UI/Update_Dialog_Command
+   -- FUNCTION
+   -- Update countdown timer on the selected dialog. If timer reach 0, close
+   -- dialog
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateDialog dialogname
+   -- Dialogname is name of the dialog to update
+   -- SOURCE
+   function Update_Dialog_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Dialog_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      MessageButton: constant Ttk_Button :=
+        Get_Widget(".message.button", Interp);
+      Text: constant String := Widgets.cget(MessageButton, "-text");
+      Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
+   begin
+      if Seconds = 0 then
+         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
+      end if;
+      Widgets.configure
+        (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
+      TimerId := To_Unbounded_String(After(1_000, "UpdateDialog .message"));
+      return TCL_OK;
+   end Update_Dialog_Command;
+
    procedure ShowMessage(Text: String) is
       MessageDialog: constant Tk_Toplevel :=
         Create
@@ -105,7 +145,9 @@ package body Utils.UI is
       MessageButton: constant Ttk_Button :=
         Create
           (MessageDialog & ".button",
-           "-text Close -command {CloseDialog " & MessageDialog & "}");
+           "-text {Close" &
+           Positive'Image(GameSettings.AutoCloseMessagesTime) &
+           "} -command {CloseDialog " & MessageDialog & "}");
       DialogHeight: constant Positive :=
         Positive'Value(Winfo_Get(MessageLabel, "reqheight")) +
         Positive'Value(Winfo_Get(MessageButton, "reqheight")) + 10;
@@ -139,11 +181,7 @@ package body Utils.UI is
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       Focus(MessageButton);
       Bind(MessageDialog, "<Destroy>", "{CloseDialog " & MessageDialog & "}");
-      TimerId :=
-        To_Unbounded_String
-          (After
-             (GameSettings.AutoCloseMessagesTime * 1_000,
-              "{CloseDialog .message}"));
+      TimerId := To_Unbounded_String(After(1_000, "UpdateDialog .message"));
    end ShowMessage;
 
    procedure AddCommand
@@ -348,6 +386,7 @@ package body Utils.UI is
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
+      AddCommand("UpdateDialog", Update_Dialog_Command'Access);
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
       AddCommand("CheckAmount", Check_Amount_Command'Access);
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
