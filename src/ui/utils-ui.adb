@@ -84,6 +84,10 @@ package body Utils.UI is
       Dialog: Tk_Toplevel := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
    begin
+      if TimerId /= Null_Unbounded_String then
+         Cancel(To_String(TimerId));
+         TimerId := Null_Unbounded_String;
+      end if;
       Destroy(Dialog);
       if Winfo_Get(MainWindow, "exists") = "1"
         and then Status(MainWindow) = "1" then
