@@ -706,13 +706,17 @@ package body Utils.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      ShowInfo(To_String(ItemInfo), Parent);
+      if Parent = "." then
+         ShowInfo(To_String(ItemInfo));
+      else
+         ShowInfo(To_String(ItemInfo), Parent);
+      end if;
    end ShowInventoryItemInfo;
 
-   procedure ShowInfo(Text, ParentName: String) is
+   procedure ShowInfo(Text, ParentName: String := "") is
       InfoDialog: constant Tk_Toplevel :=
         Create
-          (ParentName & "info",
+          (ParentName & ".info",
            "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
       X, Y: Integer;
       InfoLabel: constant Ttk_Label :=
@@ -725,8 +729,13 @@ package body Utils.UI is
       DialogHeight: constant Positive :=
         Positive'Value(Winfo_Get(InfoLabel, "reqheight")) +
         Positive'Value(Winfo_Get(InfoButton, "reqheight")) + 10;
-      Parent: constant Ttk_Frame := Get_Widget(ParentName);
+      Parent: Ttk_Frame;
    begin
+      if ParentName'Length = 0 then
+         Parent := Get_Widget(".");
+      else
+         Parent := Get_Widget(ParentName);
+      end if;
       Tcl.Tk.Ada.Busy.Busy(Parent);
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
