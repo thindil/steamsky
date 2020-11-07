@@ -120,9 +120,11 @@ package Utils.UI is
       -- Show the selected info to a player
       -- PARAMETERS
       -- Text       - Text of info to show
-      -- ParentName - Name of the parent widget
+      -- ParentName - Name of the parent widget. If empty, then the main game
+      --              window will be used as parent for widget. Default value
+      --              is empty
       -- SOURCE
-   procedure ShowInfo(Text, ParentName: String);
+   procedure ShowInfo(Text, ParentName: String := "");
    -- ****
 
 end Utils.UI;
