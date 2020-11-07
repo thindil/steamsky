@@ -23,7 +23,6 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -61,13 +60,14 @@ package body Utils.UI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- CloseDialog dialogname
-   -- Dialogname is name of the dialog to close
+   -- CloseDialog dialogname ?parentname?
+   -- Dialogname is name of the dialog to close, optional parameter parentname
+   -- is the name of the parent window
    -- SOURCE
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -80,18 +80,21 @@ package body Utils.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData);
       Dialog: Tk_Toplevel := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
+      TopWindow: Tk_Toplevel := Get_Main_Window(Interp);
    begin
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
       Destroy(Dialog);
-      if Winfo_Get(MainWindow, "exists") = "1"
-        and then Status(MainWindow) = "1" then
-         Forget(MainWindow);
+      if (Argc > 2) then
+         TopWindow := Get_Widget(CArgv.Arg(Argv, 2));
+      end if;
+      if Winfo_Get(TopWindow, "exists") = "1"
+        and then Status(TopWindow) = "1" then
+         Forget(TopWindow);
       end if;
       return TCL_OK;
    end Close_Dialog_Command;
@@ -703,12 +706,54 @@ package body Utils.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      if MessageBox
-          ("-message {" & To_String(ItemInfo) & "} -type ok -parent " &
-           Parent & " -title {Item Info}") =
-        "ok" then
-         return;
-      end if;
+      ShowInfo(To_String(ItemInfo), Parent);
    end ShowInventoryItemInfo;
+
+   procedure ShowInfo(Text, ParentName: String) is
+      InfoDialog: constant Tk_Toplevel :=
+        Create
+          (ParentName & "info",
+           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
+      X, Y: Integer;
+      InfoLabel: constant Ttk_Label :=
+        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
+      InfoButton: constant Ttk_Button :=
+        Create
+          (InfoDialog & ".button",
+           "-text Close -command {CloseDialog " & InfoDialog & " " &
+           ParentName & "}");
+      DialogHeight: constant Positive :=
+        Positive'Value(Winfo_Get(InfoLabel, "reqheight")) +
+        Positive'Value(Winfo_Get(InfoButton, "reqheight")) + 10;
+      Parent: constant Ttk_Frame := Get_Widget(ParentName);
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Parent);
+      if TimerId /= Null_Unbounded_String then
+         Cancel(To_String(TimerId));
+         TimerId := Null_Unbounded_String;
+      end if;
+      Wm_Set(InfoDialog, "transient", ParentName);
+      if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
+         Wm_Set(InfoDialog, "attributes", "-type dialog");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(InfoButton);
+      X := (Positive'Value(Winfo_Get(InfoDialog, "vrootwidth")) - 310) / 2;
+      if X < 0 then
+         X := 0;
+      end if;
+      Y :=
+        (Positive'Value(Winfo_Get(InfoDialog, "vrootheight")) - DialogHeight) /
+        2;
+      if Y < 0 then
+         Y := 0;
+      end if;
+      Wm_Set
+        (InfoDialog, "geometry",
+         "310x" & Trim(Positive'Image(DialogHeight), Left) & "+" &
+         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
+      Wm_Set(InfoDialog, "overrideredirect", "1");
+      Focus(InfoButton);
+   end ShowInfo;
 
 end Utils.UI;

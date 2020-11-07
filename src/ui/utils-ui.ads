@@ -114,4 +114,15 @@ package Utils.UI is
      (Parent: String; ItemIndex: Positive; MemberIndex: Natural) with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
       -- ****
+
+      -- ****f* UUI/ShowInfo
+      -- FUNCTION
+      -- Show the selected info to a player
+      -- PARAMETERS
+      -- Text       - Text of info to show
+      -- ParentName - Name of the parent widget
+      -- SOURCE
+   procedure ShowInfo(Text, ParentName: String);
+   -- ****
+
 end Utils.UI;
