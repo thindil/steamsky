@@ -1010,14 +1010,11 @@ package body Ships.UI.Crew is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      Dummy: constant String :=
-        MessageBox
-          ("-parent .memberdialog -icon info -type ok -message {" &
-           To_String
-             (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1)))
-                .Description) &
-           "}");
    begin
+      ShowInfo
+        (To_String
+           (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Description),
+         ".memberdialog");
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
@@ -1075,12 +1072,7 @@ package body Ships.UI.Crew is
       end if;
       Append(MessageText, "." & LF);
       Append(MessageText, Skills_List(SkillIndex).Description);
-      if MessageBox
-          ("-parent .memberdialog -icon info -type ok -message {" &
-           To_String(MessageText) & "}") =
-        "ok" then
-         return TCL_OK;
-      end if;
+      ShowInfo(To_String(MessageText), ".memberdialog");
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 

@@ -17,7 +17,6 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -222,12 +221,7 @@ package body Knowledge.Events is
          when None | BaseRecovery =>
             null;
       end case;
-      if MessageBox
-          ("-message {" & To_String(EventInfo) &
-           "} -type ok -parent .  -title {Event Info}") =
-        "ok" then
-         return TCL_OK;
-      end if;
+      ShowInfo(To_String(EventInfo));
       return TCL_OK;
    end Show_Event_Info_Command;
 
