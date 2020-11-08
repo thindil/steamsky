@@ -31,46 +31,29 @@ package body Maps.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CountDistance_603480_547c35
-     (DestinationX, DestinationY: Positive) return Natural is
+   function Wrap_Test_CountDistance_ecd188_2a2146
+     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural is
    begin
-      begin
-         pragma Assert(DestinationX < 1025 and DestinationY < 1025);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "req_sloc(maps.ads:0):Test_CountDistance test requirement violated");
-      end;
       declare
-         Test_CountDistance_603480_547c35_Result: constant Natural :=
+         Test_CountDistance_ecd188_2a2146_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Maps.CountDistance
              (DestinationX, DestinationY);
       begin
-         begin
-            pragma Assert(True);
-            null;
-         exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "ens_sloc(maps.ads:0:):Test_CountDistance test commitment violated");
-         end;
-         return Test_CountDistance_603480_547c35_Result;
+         return Test_CountDistance_ecd188_2a2146_Result;
       end;
-   end Wrap_Test_CountDistance_603480_547c35;
+   end Wrap_Test_CountDistance_ecd188_2a2146;
 --  end read only
 
 --  begin read only
    procedure Test_CountDistance_test_countdistance(Gnattest_T: in out Test);
-   procedure Test_CountDistance_603480_547c35(Gnattest_T: in out Test) renames
+   procedure Test_CountDistance_ecd188_2a2146(Gnattest_T: in out Test) renames
      Test_CountDistance_test_countdistance;
---  id:2.2/6034801a19743abe/CountDistance/1/0/test_countdistance/
+--  id:2.2/ecd188bba777e9d6/CountDistance/1/0/test_countdistance/
    procedure Test_CountDistance_test_countdistance(Gnattest_T: in out Test) is
       function CountDistance
-        (DestinationX, DestinationY: Positive) return Natural renames
-        Wrap_Test_CountDistance_603480_547c35;
+        (DestinationX: MapXRange; DestinationY: MapYRange)
+         return Natural renames
+        Wrap_Test_CountDistance_ecd188_2a2146;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -79,10 +62,10 @@ package body Maps.Test_Data.Tests is
 
    begin
 
-      if X > 1024 then
+      if X > MapXRange'Last then
          X := PlayerShip.SkyX - 1;
       end if;
-      if Y > 1024 then
+      if Y > MapYRange'Last then
          Y := PlayerShip.SkyY - 1;
       end if;
       Assert

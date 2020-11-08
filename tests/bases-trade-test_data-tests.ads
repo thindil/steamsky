@@ -10,7 +10,7 @@ package Bases.Trade.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_HireRecruit_e2a034_6a9998(Gnattest_T: in out Test);
+   procedure Test_HireRecruit_8627ed_6a9998(Gnattest_T: in out Test);
    --  bases-trade.ads:59:4:HireRecruit:Test_HireRecruit
 
    procedure Test_BuyRecipe_64b3a1_e0c4a8(Gnattest_T: in out Test);
@@ -22,11 +22,11 @@ package Bases.Trade.Test_Data.Tests is
    procedure Test_HealCost_772065_7f6d4c(Gnattest_T: in out Test);
    --  bases-trade.ads:99:4:HealCost:Test_HealCost
 
-   procedure Test_TrainCost_8eb46e_3a2aca(Gnattest_T: in out Test);
+   procedure Test_TrainCost_976ed7_3a2aca(Gnattest_T: in out Test);
    --  bases-trade.ads:116:4:TrainCost:Test_TrainCost
 
-   procedure Test_TrainSkill_54836b_cf98b9(Gnattest_T: in out Test);
-   --  bases-trade.ads:130:4:TrainSkill:Test_TrainSkill
+   procedure Test_TrainSkill_4a3ab1_cf98b9(Gnattest_T: in out Test);
+   --  bases-trade.ads:132:4:TrainSkill:Test_TrainSkill
 
 end Bases.Trade.Test_Data.Tests;
 --  end read only

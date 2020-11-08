@@ -66,7 +66,7 @@ package body Bases.Cargo.Test_Data.Tests is
    procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Natural := 0) is
+      CargoIndex: Inventory_Container.Extended_Index := 0) is
    begin
       GNATtest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo
         (ProtoIndex, Amount, Durability, CargoIndex);
@@ -86,7 +86,7 @@ package body Bases.Cargo.Test_Data.Tests is
         (ProtoIndex: Unbounded_String := Null_Unbounded_String;
          Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
-         CargoIndex: Natural := 0) renames
+         CargoIndex: Inventory_Container.Extended_Index := 0) renames
         Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
 --  end read only
 
