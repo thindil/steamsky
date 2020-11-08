@@ -10,11 +10,11 @@ package Maps.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_CountDistance_603480_547c35(Gnattest_T: in out Test);
-   --  maps.ads:59:4:CountDistance:Test_CountDistance
+   procedure Test_CountDistance_ecd188_2a2146(Gnattest_T: in out Test);
+   --  maps.ads:67:4:CountDistance:Test_CountDistance
 
    procedure Test_NormalizeCoord_6338a5_63c4fc(Gnattest_T: in out Test);
-   --  maps.ads:74:4:NormalizeCoord:Test_NormalizeCoord
+   --  maps.ads:81:4:NormalizeCoord:Test_NormalizeCoord
 
 end Maps.Test_Data.Tests;
 --  end read only
