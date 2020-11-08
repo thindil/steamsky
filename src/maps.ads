@@ -15,6 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Events; use Events;
+with Game; use Game;
+with Missions; use Missions;
+
 -- ****h* Maps/Maps
 -- FUNCTION
 -- Provide code for manipulate the game map
@@ -32,18 +36,32 @@ package Maps is
    -- MissionIndex - If accepted mission is in cell > 0
    -- SOURCE
    type SkyCell is record
-      BaseIndex: Natural;
+      BaseIndex: Extended_BaseRange;
       Visited: Boolean;
-      EventIndex: Natural;
-      MissionIndex: Natural;
+      EventIndex: Events_Container.Extended_Index;
+      MissionIndex: Mission_Container.Extended_Index;
    end record;
+   -- ****
+
+   -- ****t* Maps/MapXRange
+   -- FUNCTION
+   -- X axis size of the game map
+   -- SOURCE
+   subtype MapXRange is Positive range 1 .. 1024;
+   -- ****
+
+   -- ****t* Maps/MapYRange
+   -- FUNCTION
+   -- Y axis size of the game map
+   -- SOURCE
+   subtype MapYRange is Positive range 1 .. 1024;
    -- ****
 
    -- ****v* Maps/SkyMap
    -- FUNCTION
    -- Game map
    -- SOURCE
-   SkyMap: array(1 .. 1024, 1 .. 1024) of SkyCell;
+   SkyMap: array(MapXRange, MapYRange) of SkyCell;
    -- ****
 
    -- ****f* Maps/CountDistance
@@ -57,9 +75,8 @@ package Maps is
    -- Distance between player ship and destination point
    -- SOURCE
    function CountDistance
-     (DestinationX, DestinationY: Positive) return Natural with
-      Pre => DestinationX < 1025 and DestinationY < 1025,
-      Test_Case => ("Test_CountDistance", Nominal);
+     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural with
+      Test_Case => ("Test_CountDistance", Robustness);
       -- ****
 
       -- ****f* Maps/NormalizeCoord

@@ -21,9 +21,10 @@ with Ships; use Ships;
 package body Maps is
 
    function CountDistance
-     (DestinationX, DestinationY: Positive) return Natural is
-      DiffX, DiffY: Natural range 0 .. 1024;
-      Distance: Float range 0.0 .. 1450.0;
+     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural is
+      DiffX: Natural range 0 .. MapXRange'Last;
+      DiffY: Natural range 0 .. MapYRange'Last;
+      Distance: Float range 0.0 .. Float(MapXRange'Last * MapYRange'Last);
    begin
       DiffX := abs (PlayerShip.SkyX - DestinationX);
       DiffY := abs (PlayerShip.SkyY - DestinationY);
