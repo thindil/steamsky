@@ -17,7 +17,6 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -234,12 +233,7 @@ package body Knowledge.Missions is
          Natural'Image
            (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
          " " & To_String(MoneyName));
-      if MessageBox
-          ("-message {" & To_String(MissionInfo) &
-           "} -type ok -parent .  -title {Mission Info}") =
-        "ok" then
-         return TCL_OK;
-      end if;
+      ShowInfo(To_String(MissionInfo));
       return TCL_OK;
    end Show_Mission_Info_Command;
 
