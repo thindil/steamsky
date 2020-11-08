@@ -930,12 +930,7 @@ package body Ships.UI.Modules is
             Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
-         Bind
-           (ModuleDialog, "<Destroy>",
-            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
-         Bind
-           (ModuleDialog, "<Escape>",
-            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
+         Wm_Set(ModuleDialog, "overrideredirect", "1");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
