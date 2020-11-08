@@ -29,14 +29,14 @@ with Items; use Items;
 package BasesTypes is
 -- ****
 
-   -- ****t* BasesTypes/Prices_Array
+   -- ****t* BasesTypes/BasesTypes.Prices_Array
    -- FUNCTION
    -- Buy and sell prices for the item in selected base type
    -- SOURCE
    type Prices_Array is array(1 .. 2) of Natural;
    -- ****
 
-   -- ****t* BasesTypes/BasesTrade_Container
+   -- ****t* BasesTypes/BasesTypes.BasesTrade_Container
    -- FUNCTION
    -- Used to store base buy and sell prices for items in selected base type
    -- SOURCE
@@ -44,7 +44,7 @@ package BasesTypes is
       Prices_Array, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****s* BasesTypes/BaseType_Data
+   -- ****s* BasesTypes/BasesTypes.BaseType_Data
    -- FUNCTION
    -- Data structure for bases types
    -- PARAMETERS
@@ -68,7 +68,7 @@ package BasesTypes is
    end record;
    -- ****
 
-   -- ****t* BasesTypes/BasesTypes_Container
+   -- ****t* BasesTypes/BasesTypes.BasesTypes_Container
    -- FUNCTION
    -- Used to store information about all available bases types
    -- SOURCE
@@ -76,14 +76,14 @@ package BasesTypes is
       BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* BasesTypes/BasesTypes_List
+   -- ****v* BasesTypes/BasesTypes.BasesTypes_List
    -- FUNCTION
    -- List of all available bases types
    -- SOURCE
    BasesTypes_List: BasesTypes_Container.Map;
    -- ****
 
-   -- ****f* BasesTypes/LoadBasesTypes
+   -- ****f* BasesTypes/BasesTypes.LoadBasesTypes
    -- FUNCTION
    -- Load bases types from file
    -- PARAMETERS
@@ -92,7 +92,7 @@ package BasesTypes is
    procedure LoadBasesTypes(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* BasesTypes/Is_Buyable
+   -- ****f* BasesTypes/BasesTypes.Is_Buyable
    -- FUNCTION
    -- Check if selected item is buyable in selected base type
    -- PARAMETERS
@@ -112,7 +112,7 @@ package BasesTypes is
       Test_Case => ("Test_Is_Buyable", Nominal);
       -- ****
 
-      -- ****f* BasesTypes/Get_Price
+      -- ****f* BasesTypes/BasesTypes.Get_Price
       -- FUNCTION
       -- Get price of selected item in selected base type
       -- PARAMETERS
