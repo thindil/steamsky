@@ -21,6 +21,7 @@ with Game; use Game;
 with Crew; use Crew;
 with Factions; use Factions;
 with Items; use Items;
+with Maps; use Maps;
 with Missions; use Missions;
 with Ships; use Ships;
 
@@ -126,8 +127,8 @@ package Bases is
    type BaseRecord is record
       Name: Unbounded_String;
       Visited: Date_Record;
-      SkyX: Integer;
-      SkyY: Integer;
+      SkyX: MapXRange;
+      SkyY: MapYRange;
       BaseType: Unbounded_String;
       Population: Natural;
       RecruitDate: Date_Record;

@@ -19,7 +19,6 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Maps; use Maps;
 
 package body Bases.SaveLoad is
 

@@ -15,7 +15,6 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Maps; use Maps;
 with Messages; use Messages;
 with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;

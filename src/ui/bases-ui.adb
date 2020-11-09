@@ -37,7 +37,6 @@ with Bases.Trade; use Bases.Trade;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts; use Crafts;
-with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
 with Utils.UI; use Utils.UI;
