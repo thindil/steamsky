@@ -175,7 +175,7 @@ package body Game is
             end if;
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
-               SkyX => 0, SkyY => 0, BaseType => BaseType,
+               SkyX => 1, SkyY => 1, BaseType => BaseType,
                Population => BasePopulation, RecruitDate => (others => 0),
                Recruits => TmpRecruits, Known => False, AskedForBases => False,
                AskedForEvents => (others => 0),

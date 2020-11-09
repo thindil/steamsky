@@ -16,7 +16,6 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Numerics.Elementary_Functions; use Ada.Numerics.Elementary_Functions;
-with Maps; use Maps;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;

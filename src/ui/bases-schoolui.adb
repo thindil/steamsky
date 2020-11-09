@@ -31,7 +31,6 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
-with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Trades; use Trades;
 with Utils.UI; use Utils.UI;
