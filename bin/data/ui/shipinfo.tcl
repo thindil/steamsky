@@ -8,11 +8,11 @@ pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 # Minimize/maximize button
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin general show}]
+grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin general show}]
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
 grid [ttk::label $shipcanvas.frame.name] -columnspan 2 -sticky w
-grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Header.Toolbutton -command {
+grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Small.TButton -command {
    if {[getstring::tk_getString .gs text "Enter a new name:"]} {
       SetShipName $text
    }
@@ -23,19 +23,19 @@ bind $shipcanvas.frame.name <Enter> SetShipName
 grid [ttk::label $shipcanvas.frame.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
 grid [ttk::progressbar $shipcanvas.frame.upgrade -orient horizontal -maximum 1.0] -sticky we -columnspan 2
 tooltip::tooltip $shipcanvas.frame.upgrade {The current ship's upgrade progress}
-grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Header.Toolbutton -command StopUpgrading] -row 3 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Small.TButton -command StopUpgrading] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
 grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we
-grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Header.Toolbutton -command {SetRepair remove}] -row 4 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Small.TButton -command {SetRepair remove}] -row 4 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship destination
 grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 2 -sticky we
-grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]" -style Header.Toolbutton -command {ResetDestination}] -row 5 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]" -style Small.TButton -command {ResetDestination}] -row 5 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination}
 # Ship home base
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we
-grid [ttk::button $shipcanvas.frame.showhome -text "[format %c 0xf06e]" -style Header.Toolbutton -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 -sticky w
+grid [ttk::button $shipcanvas.frame.showhome -text "[format %c 0xf06e]" -style Small.TButton -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
@@ -50,7 +50,7 @@ pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command 
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 grid [ttk::label $shipcanvas.frame.name -text {Name}]
 grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
@@ -65,7 +65,7 @@ pack [ttk::scrollbar $shipinfoframe.crew.scrollx -orient horizontal -command [li
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship crew info}
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.crew.scrolly
@@ -78,7 +78,7 @@ pack [ttk::scrollbar $shipinfoframe.cargo.scrollx -orient horizontal -command [l
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
-grid [ttk::button $shipcanvas.frame.maxmin -style Header.Toolbutton -text "[format %c 0xf106]" -command {ShipMaxMin cargo show}] -sticky w
+grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin cargo show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship cargo info}
 grid [ttk::frame $shipcanvas.frame.selecttype] -columnspan 5 -sticky w
 grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}]
