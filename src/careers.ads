@@ -28,7 +28,7 @@ with Game; use Game;
 package Careers is
 -- ****
 
-   -- ****s* Careers/CareerRecord
+   -- ****s* Careers/Careers.CareerRecord
    -- FUNCTION
    -- Data structure for player career
    -- PARAMETERS
@@ -42,7 +42,7 @@ package Careers is
    end record;
    -- ****
 
-   -- ****t* Careers/Careers_Container
+   -- ****t* Careers/Careers.Careers_Container
    -- FUNCTION
    -- Used to store all available careers
    -- SOURCE
@@ -50,14 +50,14 @@ package Careers is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* Careers/Careers_List
+   -- ****v* Careers/Careers.Careers_List
    -- FUNCTION
    -- List of all available careers for player
    -- SOURCE
    Careers_List: Careers_Container.Map;
    -- ****
 
-   -- ****f* Careers/LoadCareers
+   -- ****f* Careers/Careers.LoadCareers
    -- FUNCTION
    -- Load player careers from file
    -- PARAMETERS
