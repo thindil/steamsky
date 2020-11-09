@@ -99,9 +99,12 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
+      # Small buttons settings (like minimize/maximize buttons)
+      ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons
+
       # Flat buttons setting
       # Default flat button
-      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -relief raised
+      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
       # Flat button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
