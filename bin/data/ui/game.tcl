@@ -84,6 +84,8 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    set height [expr [winfo reqheight .movemapdialog.frame.close] * 6]
    wm geometry .movemapdialog [winfo reqwidth .movemapdialog.frame.moveto]x[expr [winfo reqheight .movemapdialog.frame.close] * 6]+[expr ([winfo vrootwidth .movemapdialog] - $width) / 2]+[expr ([winfo vrootheight .movemapdialog] - $height) / 2]
    wm overrideredirect .movemapdialog 1
+   focus .movemapdialog.frame.close
+   bind .movemapdialog <Escape> {InvokeButton .movemapdialog.frame.close}
 }] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
