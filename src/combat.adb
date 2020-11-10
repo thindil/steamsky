@@ -38,14 +38,14 @@ with Trades; use Trades;
 
 package body Combat is
 
-   -- ****iv* Combat/FactionName
+   -- ****iv* Combat/Combat.FactionName
    -- FUNCTION
    -- Name of enemy ship (and its crew) faction
    -- SOURCE
    FactionName: Unbounded_String;
    -- ****
 
-   -- ****iv* Combat/TurnNumber
+   -- ****iv* Combat/Combat.TurnNumber
    -- FUNCTION
    -- Number of turn of combat
    -- SOURCE
