@@ -197,7 +197,7 @@ package body BasesTypes is
 
    function Is_Buyable
      (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Natural := 0) return Boolean is
+      BaseIndex: Extended_BaseRange := 0) return Boolean is
    begin
       if BaseIndex > 0
         and then SkyBases(BaseIndex).Reputation(1) <
