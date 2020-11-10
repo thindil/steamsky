@@ -931,6 +931,7 @@ package body Ships.UI.Modules is
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
          Wm_Set(ModuleDialog, "overrideredirect", "1");
+         Bind(ModuleDialog, "<Escape>", "{CloseDialog " & ModuleDialog & "}");
          Tcl_Eval(Interp, "update");
       end;
       return TCL_OK;
