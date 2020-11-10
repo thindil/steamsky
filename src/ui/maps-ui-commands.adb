@@ -471,7 +471,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc);
       MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.frame.x", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.x", Interp);
    begin
       if Winfo_Get(MapView, "ismapped") = "0" then
          return TCL_OK;
@@ -483,7 +483,7 @@ package body Maps.UI.Commands is
          CenterY := PlayerShip.SkyY;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
          CenterX := Positive'Value(Get(SpinBox));
-         SpinBox.Name := New_String(".movemapdialog.frame.y");
+         SpinBox.Name := New_String(".movemapdialog.y");
          CenterY := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
          if CenterY - (MapHeight / 3) < 1 then
