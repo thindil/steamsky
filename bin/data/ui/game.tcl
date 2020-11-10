@@ -63,6 +63,9 @@ grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}]
 grid [ttk::button $mframe.right -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
+   if {[tk busy status .] == 0} {
+      tk busy .
+   }
    toplevel .movemapdialog -class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2
    wm title .movemapdialog {Steam Sky - move map}
    wm transient .movemapdialog .
