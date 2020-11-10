@@ -940,7 +940,7 @@ package body Ships.UI.Crew is
             Trim(Positive'Image(Height), Left) & "+" &
             Trim(Positive'Image(X), Left) & "+" &
             Trim(Positive'Image(Y), Left));
-         Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
+         Wm_Set(MemberDialog, "overrideredirect", "1");
          Bind(MemberDialog, "<Escape>", "{CloseDialog " & MemberDialog & "}");
          Tcl_Eval(Interp, "update");
       end;
