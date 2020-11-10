@@ -63,29 +63,28 @@ grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}]
 grid [ttk::button $mframe.right -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
-   toplevel .movemapdialog -class Dialog
+   toplevel .movemapdialog -class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2
    wm title .movemapdialog {Steam Sky - move map}
    wm transient .movemapdialog .
    if {$::tcl_platform(os) == "Linux"} {
       wm attributes .movemapdialog -type dialog
    }
-   pack [ttk::frame .movemapdialog.frame] -expand true -fill both
-   grid [ttk::label .movemapdialog.frame.xlabel -text X:]
-   grid [ttk::spinbox .movemapdialog.frame.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1
-   .movemapdialog.frame.x set 1
-   grid [ttk::label .movemapdialog.frame.ylabel -text Y:] -row 1
-   grid [ttk::spinbox .movemapdialog.frame.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
-   .movemapdialog.frame.y set 1
-   grid [ttk::button .movemapdialog.frame.moveto -text {Move map to selected location} -command {MoveMap movemapto}] -row 2 -columnspan 2 -sticky we
-   set width [winfo reqwidth .movemapdialog.frame.moveto]
-   grid [ttk::button .movemapdialog.frame.centeronship -text {Center map on ship} -command {MoveMap centeronship}] -row 3 -columnspan 2 -sticky we
-   grid [ttk::button .movemapdialog.frame.centeronhome -text {Center map on home base} -command {MoveMap centeronhome}] -row 4 -columnspan 2 -sticky we
-   grid [ttk::button .movemapdialog.frame.close -text {Close} -command {CloseDialog .movemapdialog}] -row 5 -columnspan 2 -sticky we
-   set height [expr [winfo reqheight .movemapdialog.frame.close] * 6]
-   wm geometry .movemapdialog [winfo reqwidth .movemapdialog.frame.moveto]x[expr [winfo reqheight .movemapdialog.frame.close] * 6]+[expr ([winfo vrootwidth .movemapdialog] - $width) / 2]+[expr ([winfo vrootheight .movemapdialog] - $height) / 2]
+   grid [ttk::label .movemapdialog.xlabel -text X:]
+   grid [ttk::spinbox .movemapdialog.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1
+   .movemapdialog.x set 1
+   grid [ttk::label .movemapdialog.ylabel -text Y:] -row 1
+   grid [ttk::spinbox .movemapdialog.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
+   .movemapdialog.y set 1
+   grid [ttk::button .movemapdialog.moveto -text {Move map to selected location} -command {MoveMap movemapto}] -row 2 -columnspan 2 -sticky we
+   set width [expr [winfo reqwidth .movemapdialog.moveto] + 5]
+   grid [ttk::button .movemapdialog.centeronship -text {Center map on ship} -command {MoveMap centeronship}] -row 3 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.centeronhome -text {Center map on home base} -command {MoveMap centeronhome}] -row 4 -columnspan 2 -sticky we
+   grid [ttk::button .movemapdialog.close -text {Close} -command {CloseDialog .movemapdialog}] -row 5 -columnspan 2 -sticky we
+   set height [expr [winfo reqheight .movemapdialog.close] * 6]
+   wm geometry .movemapdialog [expr [winfo reqwidth .movemapdialog.moveto] + 5]x[expr [winfo reqheight .movemapdialog.close] * 6]+[expr ([winfo vrootwidth .movemapdialog] - $width) / 2]+[expr ([winfo vrootheight .movemapdialog] - $height) / 2]
    wm overrideredirect .movemapdialog 1
-   focus .movemapdialog.frame.close
-   bind .movemapdialog <Escape> {InvokeButton .movemapdialog.frame.close}
+   focus .movemapdialog.close
+   bind .movemapdialog <Escape> {InvokeButton .movemapdialog.close}
 }] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
