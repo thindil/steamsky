@@ -63,6 +63,9 @@ grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}]
 grid [ttk::button $mframe.right -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
+   if {[winfo ismapped .paned.mapframe] == "0"} {
+      return
+   }
    if {[tk busy status .] == 0} {
       tk busy .
    }
