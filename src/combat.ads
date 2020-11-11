@@ -27,21 +27,21 @@ with Game; use Game;
 package Combat is
 -- ****
 
-   -- ****v* Combat/EnemyName
+   -- ****v* Combat/Combat.EnemyName
    -- FUNCTION
    -- Name of enemy
    -- SOURCE
    EnemyName: Unbounded_String := Null_Unbounded_String;
    -- ****
 
-   -- ****v* Combat/PilotOrder, EngineerOrder
+   -- ****v* Combat/Combat.PilotOrder, Combat.EngineerOrder
    -- FUNCTION
    -- Orders for crew members
    -- SOURCE
    PilotOrder, EngineerOrder: Positive;
    -- ****
 
-   -- ****t* Combat/GunsInfoArray
+   -- ****t* Combat/Combat.GunsInfoArray
    -- FUNCTION
    -- Data structure for gun information: 1 - Gun index in ship modules
    -- list, 2 - Gunner order, 3 - Amount of shoots from the gun, value below
@@ -50,28 +50,28 @@ package Combat is
    type GunsInfoArray is array(1 .. 3) of Integer;
    -- ****
 
-   -- ****t* Combat/Guns_Container
+   -- ****t* Combat/Combat.Guns_Container
    -- FUNCTION
    -- Used to store data for player ship guns
    -- SOURCE
    package Guns_Container is new Vectors(Positive, GunsInfoArray);
    -- ****
 
-   -- ****v* Combat/Guns
+   -- ****v* Combat/Combat.Guns
    -- FUNCTION
    -- List of guns installed on player ship
    -- SOURCE
    Guns: Guns_Container.Vector;
    -- ****
 
-   -- ****v* Combat/BoardingOrders
+   -- ****v* Combat/Combat.BoardingOrders
    -- FUNCTION
    -- List of orders for boarding party
    -- SOURCE
    BoardingOrders: Integer_Container.Vector;
    -- ****
 
-   -- ****s* Combat/Enemy_Record
+   -- ****s* Combat/Combat.Enemy_Record
    -- FUNCTION
    -- Data structure for enemies
    -- PARAMETERS
@@ -99,49 +99,49 @@ package Combat is
    end record;
    -- ****
 
-   -- ****v* Combat/Enemy
+   -- ****v* Combat/Combat.Enemy
    -- FUNCTION
    -- Enemy information
    -- SOURCE
    Enemy: Enemy_Record;
    -- ****
 
-   -- ****v* Combat/EndCombat
+   -- ****v* Combat/Combat.EndCombat
    -- FUNCTION
    -- True if combat ends
    -- SOURCE
    EndCombat: Boolean;
    -- ****
 
-   -- ****v* Combat/MessagesStarts
+   -- ****v* Combat/Combat.MessagesStarts
    -- FUNCTION
    -- Start index for showing messages
    -- SOURCE
    MessagesStarts: Natural;
    -- ****
 
-   -- ****v* Combat/OldSpeed
+   -- ****v* Combat/Combat.OldSpeed
    -- FUNCTION
    -- Speed of player ship before combat
    -- SOURCE
    OldSpeed: ShipSpeed := FULL_SPEED;
    -- ****
 
-   -- ****v* Combat/HarpoonDuration
+   -- ****v* Combat/Combat.HarpoonDuration
    -- FUNCTION
    -- How long (amount of rounds) player ship will be stopped by enemy harpoon
    -- SOURCE
    HarpoonDuration: Natural;
    -- ****
 
-   -- ****v* Combat/EnemyShipIndex
+   -- ****v* Combat/Combat.EnemyShipIndex
    -- FUNCTION
    -- Prototype index of enemy ship
    -- SOURCE
    EnemyShipIndex: Unbounded_String;
    -- ****
 
-   -- ****f* Combat/StartCombat
+   -- ****f* Combat/Combat.StartCombat
    -- FUNCTION
    -- Generate enemy and start battle
    -- PARAMETERS
@@ -157,7 +157,7 @@ package Combat is
       Test_Case => ("Test_StartCombat", Nominal);
       -- ****
 
-      -- ****f* Combat/CombatTurn
+      -- ****f* Combat/Combat.CombatTurn
       -- FUNCTION
       -- Count damage/ships actions, etc
       -- SOURCE
