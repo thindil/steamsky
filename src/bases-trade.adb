@@ -148,7 +148,7 @@ package body Bases.Trade is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 10;
       end if;
-      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -242,7 +242,7 @@ package body Bases.Trade is
             end if;
          end loop;
       end if;
-      Cost := Natural(Float(Cost) * NewGameSettings.PricesBonus);
+      Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -271,7 +271,8 @@ package body Bases.Trade is
             end if;
             Cost :=
               Natural
-                (Float((Skill(2) + 1) * 100) * NewGameSettings.PricesBonus);
+                (Float((Skill(2) + 1) * 100) *
+                 Float(NewGameSettings.PricesBonus));
             if Cost = 0 then
                Cost := 1;
             end if;

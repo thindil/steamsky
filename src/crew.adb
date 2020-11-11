@@ -60,7 +60,8 @@ package body Crew is
              (Skills_List(SkillNumber).Name)
          then Amount + (Amount / 2)
          else Amount);
-      NewAmount := Natural(Float(NewAmount) * NewGameSettings.ExperienceBonus);
+      NewAmount :=
+        Natural(Float(NewAmount) * Float(NewGameSettings.ExperienceBonus));
       if NewAmount = 0 then
          return;
       end if;

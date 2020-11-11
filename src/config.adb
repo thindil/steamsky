@@ -77,28 +77,29 @@ package body Config is
                NewGameSettings.StartingBase := Value;
             elsif FieldName = To_Unbounded_String("EnemyDamageBonus") then
                NewGameSettings.EnemyDamageBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PlayerDamageBonus") then
                NewGameSettings.PlayerDamageBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("EnemyMeleeDamageBonus") then
                NewGameSettings.EnemyMeleeDamageBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName =
               To_Unbounded_String("PlayerMeleeDamageBonus") then
                NewGameSettings.PlayerMeleeDamageBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ExperienceBonus") then
                NewGameSettings.ExperienceBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ReputationBonus") then
                NewGameSettings.ReputationBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("UpgradeCostBonus") then
                NewGameSettings.UpgradeCostBonus :=
-                 Float'Value(To_String(Value));
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PricesBonus") then
-               NewGameSettings.PricesBonus := Float'Value(To_String(Value));
+               NewGameSettings.PricesBonus :=
+                 Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("DifficultyLevel") then
                NewGameSettings.DifficultyLevel :=
                  Natural'Value(To_String(Value));
@@ -208,31 +209,35 @@ package body Config is
          "StartingBase = " & To_String(NewGameSettings.StartingBase));
       Put_Line
         (ConfigFile,
-         "EnemyDamageBonus =" & Float'Image(NewGameSettings.EnemyDamageBonus));
+         "EnemyDamageBonus =" &
+         Bonus_Type'Image(NewGameSettings.EnemyDamageBonus));
       Put_Line
         (ConfigFile,
          "PlayerDamageBonus =" &
-         Float'Image(NewGameSettings.PlayerDamageBonus));
+         Bonus_Type'Image(NewGameSettings.PlayerDamageBonus));
       Put_Line
         (ConfigFile,
          "EnemyMeleeDamageBonus =" &
-         Float'Image(NewGameSettings.EnemyMeleeDamageBonus));
+         Bonus_Type'Image(NewGameSettings.EnemyMeleeDamageBonus));
       Put_Line
         (ConfigFile,
          "PlayerMeleeDamageBonus =" &
-         Float'Image(NewGameSettings.PlayerMeleeDamageBonus));
+         Bonus_Type'Image(NewGameSettings.PlayerMeleeDamageBonus));
       Put_Line
         (ConfigFile,
-         "ExperienceBonus =" & Float'Image(NewGameSettings.ExperienceBonus));
+         "ExperienceBonus =" &
+         Bonus_Type'Image(NewGameSettings.ExperienceBonus));
       Put_Line
         (ConfigFile,
-         "ReputationBonus =" & Float'Image(NewGameSettings.ReputationBonus));
+         "ReputationBonus =" &
+         Bonus_Type'Image(NewGameSettings.ReputationBonus));
       Put_Line
         (ConfigFile,
-         "UpgradeCostBonus =" & Float'Image(NewGameSettings.UpgradeCostBonus));
+         "UpgradeCostBonus =" &
+         Bonus_Type'Image(NewGameSettings.UpgradeCostBonus));
       Put_Line
         (ConfigFile,
-         "PricesBonus =" & Float'Image(NewGameSettings.PricesBonus));
+         "PricesBonus =" & Bonus_Type'Image(NewGameSettings.PricesBonus));
       Put_Line
         (ConfigFile,
          "DifficultyLevel =" & Natural'Image(NewGameSettings.DifficultyLevel));

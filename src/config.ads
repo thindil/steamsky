@@ -25,6 +25,13 @@ with Ships; use Ships;
 package Config is
 -- ****
 
+   -- ****t* Config/Bonus_Type
+   -- FUNCTION
+   -- Used to store the game difficulty settings
+   -- SOURCE
+   subtype Bonus_Type is Float range 0.0 .. 5.0;
+   -- ****
+
    -- ****s* Config/NewGameRecord
    -- FUNCTION
    -- Data for new game settings
@@ -56,14 +63,14 @@ package Config is
       PlayerFaction: Unbounded_String;
       PlayerCareer: Unbounded_String;
       StartingBase: Unbounded_String;
-      EnemyDamageBonus: Float;
-      PlayerDamageBonus: Float;
-      EnemyMeleeDamageBonus: Float;
-      PlayerMeleeDamageBonus: Float;
-      ExperienceBonus: Float;
-      ReputationBonus: Float;
-      UpgradeCostBonus: Float;
-      PricesBonus: Float;
+      EnemyDamageBonus: Bonus_Type;
+      PlayerDamageBonus: Bonus_Type;
+      EnemyMeleeDamageBonus: Bonus_Type;
+      PlayerMeleeDamageBonus: Bonus_Type;
+      ExperienceBonus: Bonus_Type;
+      ReputationBonus: Bonus_Type;
+      UpgradeCostBonus: Bonus_Type;
+      PricesBonus: Bonus_Type;
       DifficultyLevel: Natural;
    end record;
    -- ****

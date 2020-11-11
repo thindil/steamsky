@@ -294,7 +294,9 @@ package body Ships.Movement is
                      end if;
                   end loop;
                   DockingCost :=
-                    Natural(Float(DockingCost) * NewGameSettings.PricesBonus);
+                    Natural
+                      (Float(DockingCost) *
+                       Float(NewGameSettings.PricesBonus));
                   if DockingCost = 0 then
                      DockingCost := 1;
                   end if;
