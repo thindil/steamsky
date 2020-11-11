@@ -18,7 +18,7 @@ with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
@@ -447,7 +447,7 @@ package body Maps.UI.Commands is
    -- FUNCTION
    -- Move map in the selected direction
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
@@ -468,7 +468,7 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(Argc);
       MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
       SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.x", Interp);
@@ -558,7 +558,8 @@ package body Maps.UI.Commands is
          CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
       end if;
       DrawMap;
-      return TCL_OK;
+      return Close_Dialog_Command
+          (ClientData, Interp, 2, Empty & "CloseDialog" & ".movemapdialog");
    end Move_Map_Command;
 
    -- ****o* MapCommands/Zoom_Map_Command
