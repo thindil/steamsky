@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing player when he/she is at left or bottom border of the map
 - Showing story icon on the map when player don't have any active
 - Showing scrollbars for stories on knowledge screen
+- Don't show the move map dialog on other than the map screens
 
 ## [5.4] - 2020-11-01
 
