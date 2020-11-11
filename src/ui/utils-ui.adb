@@ -16,9 +16,7 @@
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -53,28 +51,6 @@ package body Utils.UI is
    -- SOURCE
    TimerId: Unbounded_String := Null_Unbounded_String;
    -- ****
-
-   -- ****o* UUI/Close_Dialog_Command
-   -- FUNCTION
-   -- Close the selected dialog
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- CloseDialog dialogname ?parentname?
-   -- Dialogname is name of the dialog to close, optional parameter parentname
-   -- is the name of the parent window
-   -- SOURCE
-   function Close_Dialog_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
 
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;

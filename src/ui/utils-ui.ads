@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C; use Interfaces.C;
+with CArgv; use CArgv;
 with Tcl.Ada;
 with Ships; use Ships;
 
@@ -29,6 +31,28 @@ package Utils.UI is
    -- SOURCE
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
    -- ****
+
+   -- ****o* UUI/Close_Dialog_Command
+   -- FUNCTION
+   -- Close the selected dialog
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseDialog dialogname ?parentname?
+   -- Dialogname is name of the dialog to close, optional parameter parentname
+   -- is the name of the parent window
+   -- SOURCE
+   function Close_Dialog_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
 
    -- ****f* UUI/ShowMessage
    -- FUNCTION
