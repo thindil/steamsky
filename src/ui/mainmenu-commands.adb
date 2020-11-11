@@ -790,26 +790,31 @@ package body MainMenu.Commands is
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       NewGameSettings.DifficultyLevel := Natural'Value(Current(ComboBox));
-      NewGameSettings.EnemyDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.EnemyDamageBonus :=
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
-      NewGameSettings.PlayerDamageBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.PlayerDamageBonus :=
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
       NewGameSettings.EnemyMeleeDamageBonus :=
-        Float'Value(Get(SpinBox)) / 100.0;
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
       NewGameSettings.PlayerMeleeDamageBonus :=
-        Float'Value(Get(SpinBox)) / 100.0;
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
-      NewGameSettings.ExperienceBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.ExperienceBonus :=
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
-      NewGameSettings.ReputationBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.ReputationBonus :=
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
-      NewGameSettings.UpgradeCostBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.UpgradeCostBonus :=
+        Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
-      NewGameSettings.PricesBonus := Float'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.PricesBonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
       NewGame;
       StartGame;
       return TCL_OK;

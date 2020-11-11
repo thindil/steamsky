@@ -74,7 +74,7 @@ package body Ships.Upgrade is
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .MaxValue /
                           20) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when CABIN =>
                   if PlayerShip.Modules(ModuleIndex).Quality = MaxValue then
                      raise Ship_Upgrade_Error
@@ -87,7 +87,7 @@ package body Ships.Upgrade is
                          (Modules_List
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .MaxValue) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when GUN | BATTERING_RAM =>
                   declare
                      Damage: constant Positive :=
@@ -109,7 +109,7 @@ package body Ships.Upgrade is
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .MaxValue *
                           2) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when HULL =>
                   if PlayerShip.Modules(ModuleIndex).MaxModules = MaxValue then
                      raise Ship_Upgrade_Error
@@ -123,7 +123,7 @@ package body Ships.Upgrade is
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .MaxValue *
                           40) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when HARPOON_GUN =>
                   if PlayerShip.Modules(ModuleIndex).Duration = MaxValue then
                      raise Ship_Upgrade_Error
@@ -137,7 +137,7 @@ package body Ships.Upgrade is
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .MaxValue *
                           10) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -170,7 +170,7 @@ package body Ships.Upgrade is
                             (PlayerShip.Modules(ModuleIndex).ProtoIndex)
                             .Value *
                           20) *
-                       NewGameSettings.UpgradeCostBonus);
+                       Float(NewGameSettings.UpgradeCostBonus));
                when others =>
                   raise Ship_Upgrade_Error
                     with To_String(PlayerShip.Modules(ModuleIndex).Name) &
@@ -211,7 +211,9 @@ package body Ships.Upgrade is
       PlayerShip.UpgradeModule := ModuleIndex;
       if PlayerShip.Modules(ModuleIndex).UpgradeAction /= UpgradeAction then
          PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
-           Integer(Float(UpgradeProgress) * NewGameSettings.UpgradeCostBonus);
+           Integer
+             (Float(UpgradeProgress) *
+              Float(NewGameSettings.UpgradeCostBonus));
          if PlayerShip.Modules(ModuleIndex).UpgradeProgress = 0 then
             PlayerShip.Modules(ModuleIndex).UpgradeProgress := 1;
          end if;
@@ -526,7 +528,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue /
                                    20) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                         when HARPOON_GUN =>
                            UpgradedModule.UpgradeProgress :=
                              Integer
@@ -537,7 +539,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue *
                                    10) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                         when GUN | BATTERING_RAM =>
                            UpgradedModule.UpgradeProgress :=
                              Integer
@@ -548,7 +550,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue *
                                    2) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                         when CABIN =>
                            UpgradedModule.UpgradeProgress :=
                              Integer
@@ -558,7 +560,7 @@ package body Ships.Upgrade is
                                         (PlayerShip.UpgradeModule)
                                         .ProtoIndex)
                                      .MaxValue) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                         when HULL =>
                            UpgradedModule.UpgradeProgress :=
                              Integer
@@ -569,7 +571,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .MaxValue *
                                    40) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                         when others =>
                            null;
                      end case;
@@ -611,7 +613,7 @@ package body Ships.Upgrade is
                                         .ProtoIndex)
                                      .Value *
                                    20) *
-                                NewGameSettings.UpgradeCostBonus);
+                                Float(NewGameSettings.UpgradeCostBonus));
                            if UpgradedModule.UpgradeProgress = 0 then
                               UpgradedModule.UpgradeProgress := 1;
                            end if;

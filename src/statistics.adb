@@ -157,7 +157,7 @@ package body Statistics is
    function GetGamePoints return Natural is
       MalusIndexes: constant array(Positive range <>) of Positive :=
         (2, 4, 5, 6);
-      DifficultyValues: constant array(Positive range <>) of Float :=
+      DifficultyValues: constant array(Positive range <>) of Bonus_Type :=
         (NewGameSettings.EnemyDamageBonus, NewGameSettings.PlayerDamageBonus,
          NewGameSettings.EnemyMeleeDamageBonus,
          NewGameSettings.PlayerMeleeDamageBonus,
@@ -166,7 +166,7 @@ package body Statistics is
       PointsBonus, Value: Float := 0.0;
    begin
       for I in DifficultyValues'Range loop
-         Value := DifficultyValues(I);
+         Value := Float(DifficultyValues(I));
          for J in MalusIndexes'Range loop
             if I = MalusIndexes(J) then
                if Value < 1.0 then

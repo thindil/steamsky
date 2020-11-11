@@ -856,7 +856,8 @@ package body Ships.UI.Modules is
                null;
          end case;
          MaxUpgrade :=
-           Integer(Float(MaxUpgrade) * NewGameSettings.UpgradeCostBonus);
+           Integer
+             (Float(MaxUpgrade) * Float(NewGameSettings.UpgradeCostBonus));
          if MaxUpgrade = 0 then
             MaxUpgrade := 1;
          end if;

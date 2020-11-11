@@ -89,7 +89,7 @@ package body Game.SaveLoad is
       end SaveNumber;
       type Difficulty_Data is record
          Name: Unbounded_String;
-         Value: Float;
+         Value: Bonus_Type;
       end record;
       Difficulties: constant array(Positive range <>) of Difficulty_Data :=
         ((To_Unbounded_String("enemydamagebonus"),
@@ -122,7 +122,7 @@ package body Game.SaveLoad is
       CategoryNode := Create_Element(SaveData, "difficulty");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       for Difficulty of Difficulties loop
-         RawValue := To_Unbounded_String(Float'Image(Difficulty.Value));
+         RawValue := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
          Set_Attribute
            (CategoryNode, To_String(Difficulty.Name),
             To_String(Trim(RawValue, Ada.Strings.Left)));
@@ -390,22 +390,23 @@ package body Game.SaveLoad is
          LogMessage("Loading game difficulty settings...", Everything, False);
          SavedNode := Item(NodesList, 0);
          NewGameSettings.EnemyDamageBonus :=
-           Float'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
          NewGameSettings.PlayerDamageBonus :=
-           Float'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
          NewGameSettings.EnemyMeleeDamageBonus :=
-           Float'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
          NewGameSettings.PlayerMeleeDamageBonus :=
-           Float'Value(Get_Attribute(SavedNode, "playermeleedamagebonus"));
+           Bonus_Type'Value
+             (Get_Attribute(SavedNode, "playermeleedamagebonus"));
          NewGameSettings.ExperienceBonus :=
-           Float'Value(Get_Attribute(SavedNode, "experiencebonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "experiencebonus"));
          NewGameSettings.ReputationBonus :=
-           Float'Value(Get_Attribute(SavedNode, "reputationbonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "reputationbonus"));
          NewGameSettings.UpgradeCostBonus :=
-           Float'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
+           Bonus_Type'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
          if Get_Attribute(SavedNode, "pricesbonus") /= "" then
             NewGameSettings.PricesBonus :=
-              Float'Value(Get_Attribute(SavedNode, "pricesbonus"));
+              Bonus_Type'Value(Get_Attribute(SavedNode, "pricesbonus"));
          end if;
          LogMessage("done.", Everything, True, False);
       end if;
