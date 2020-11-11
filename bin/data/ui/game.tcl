@@ -88,6 +88,7 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    wm overrideredirect .movemapdialog 1
    focus .movemapdialog.close
    bind .movemapdialog <Escape> {InvokeButton .movemapdialog.close}
+   bind .movemapdialog <Return> {InvokeButton .movemapdialog.moveto}
 }] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
