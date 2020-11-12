@@ -65,7 +65,9 @@ package body Knowledge.Stories is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       StoryView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.knowledgeframe.stories.canvas.frame.view", Interp);
+        Get_Widget
+          (".gameframe.paned.knowledgeframe.stories.canvas.frame.view",
+           Interp);
       StoryText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
@@ -76,7 +78,8 @@ package body Knowledge.Stories is
            Interp);
       Button: Ttk_Button :=
         Get_Widget
-          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
+          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.show",
+           Interp);
       Rows: Positive := 1;
       LineWidth: constant Positive :=
         (Positive'Value(Winfo_Get(StoriesBox, "reqwidth")) +

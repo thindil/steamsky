@@ -366,7 +366,8 @@ package body Combat.UI is
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2");
       end loop;
-      Frame.Name := New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
+      Frame.Name :=
+        New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 0 .. (Rows - 1) loop
@@ -495,14 +496,16 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       Label.Name :=
-        New_String(".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
+        New_String
+          (".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
          SpaceIndex: Natural;
          ModuleName: Unbounded_String;
       begin
          Frame.Name :=
-           New_String(".gameframe.paned.combatframe.canvas.combat.right.enemy.damage");
+           New_String
+             (".gameframe.paned.combatframe.canvas.combat.right.enemy.damage");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -560,7 +563,8 @@ package body Combat.UI is
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
          Frame.Name :=
-           New_String(".gameframe.paned.combatframe.canvas.combat.right.boarding");
+           New_String
+             (".gameframe.paned.combatframe.canvas.combat.right.boarding");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -745,7 +749,8 @@ package body Combat.UI is
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
       end loop;
       Append(OrdersList, " {Back to the ship}");
-      Frame.Name := New_String(".gameframe.paned.combatframe.canvas.boarding.left.crew");
+      Frame.Name :=
+        New_String(".gameframe.paned.combatframe.canvas.boarding.left.crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -938,7 +943,8 @@ package body Combat.UI is
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
          ComboBox.Name :=
-           New_String(".gameframe.paned.combatframe.canvas.combat.left.crew.pilotorder");
+           New_String
+             (".gameframe.paned.combatframe.canvas.combat.left.crew.pilotorder");
          PilotOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
@@ -1077,7 +1083,8 @@ package body Combat.UI is
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
          else
-            Button.Name := New_String(".gameframe.paned.combatframe.canvas.combat.next");
+            Button.Name :=
+              New_String(".gameframe.paned.combatframe.canvas.combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
          end if;
          Button.Name := New_String(".gameframe.header.closebutton");

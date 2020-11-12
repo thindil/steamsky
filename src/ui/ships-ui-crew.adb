@@ -282,7 +282,8 @@ package body Ships.UI.Crew is
       end loop;
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Get_Context;
-      ShipCanvas.Name := New_String(".gameframe.paned.shipinfoframe.crew.canvas");
+      ShipCanvas.Name :=
+        New_String(".gameframe.paned.shipinfoframe.crew.canvas");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");

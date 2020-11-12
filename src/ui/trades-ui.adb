@@ -82,7 +82,8 @@ package body Trades.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       TradeFrame: Ttk_Frame := Get_Widget(Paned & ".tradeframe", Interp);
       TradeCanvas: constant Tk_Canvas :=
         Get_Widget(TradeFrame & ".canvas", Interp);
@@ -321,7 +322,8 @@ package body Trades.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       TradeView: constant Ttk_Tree_View :=
-        Get_Widget(".gameframe.paned.tradeframe.canvas.trade.trade.view", Interp);
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.trade.view", Interp);
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
@@ -331,11 +333,14 @@ package body Trades.UI is
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
       ItemText: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.tradeframe.canvas.trade.item.info.text", Interp);
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.item.info.text", Interp);
       Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.tradeframe.canvas.trade.item.sellframe", Interp);
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.item.sellframe", Interp);
       Label: Ttk_Label :=
-        Get_Widget(".gameframe.paned.tradeframe.canvas.trade.item.shipmoney", Interp);
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.item.shipmoney", Interp);
    begin
       SelectedItem := To_Unbounded_String(Selection(TradeView));
       if SelectedItem = Null_Unbounded_String then
@@ -558,7 +563,8 @@ package body Trades.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      Frame.Name := New_String(".gameframe.paned.tradeframe.canvas.trade.item.buyframe");
+      Frame.Name :=
+        New_String(".gameframe.paned.tradeframe.canvas.trade.item.buyframe");
       if BaseCargoIndex = 0 then
          BaseCargoIndex := BaseCargoIndex2;
       end if;
@@ -766,7 +772,8 @@ package body Trades.UI is
       Label.Interp := Interp;
       if CArgv.Arg(Argv, 1) in "buy" | "buymax" then
          SpinBox.Name :=
-           New_String(".gameframe.paned.tradeframe.canvas.trade.item.buyframe.amount");
+           New_String
+             (".gameframe.paned.tradeframe.canvas.trade.item.buyframe.amount");
          Label.Name :=
            New_String
              (".gameframe.paned.tradeframe.canvas.trade.item.buyframe.amountlbl");
@@ -780,7 +787,8 @@ package body Trades.UI is
          BuyItems(BaseCargoIndex, Natural'Image(Amount));
       else
          SpinBox.Name :=
-           New_String(".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount");
+           New_String
+             (".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount");
          Amount := Positive'Value(Get(SpinBox));
          if CArgv.Arg(Argv, 1) = "sell" then
             SellItems(CargoIndex, Natural'Image(Amount));
@@ -877,7 +885,8 @@ package body Trades.UI is
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
-        Get_Widget(".gameframe.paned.tradeframe.canvas.trade.options.type", Interp);
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.options.type", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       if SearchText'Length = 0 then
