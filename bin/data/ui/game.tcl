@@ -67,6 +67,10 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
       return
    }
+   if {[winfo exists .gameframe.movemapdialog]} {
+      CloseDialog .gameframe.movemapdialog
+      return
+   }
    if {[tk busy status .gameframe.paned] == 0} {
       tk busy .gameframe.header
       tk busy .gameframe.paned
