@@ -70,7 +70,8 @@ package body Crafts.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       CraftsFrame: Ttk_Frame := Get_Widget(Paned & ".craftframe", Interp);
       CraftsCanvas: constant Tk_Canvas :=
         Get_Widget(CraftsFrame & ".canvas", Interp);
@@ -268,9 +269,11 @@ package body Crafts.UI is
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.amount");
       MaxLabel: constant Ttk_Label :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.maxamount");
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.set.maxamount");
       ModulesBox: constant Ttk_ComboBox :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
    begin
       if Element(Index, 1) = '{' then
          RecipeIndex := Unbounded_Slice(Index, 2, Length(Index) - 1);
@@ -357,7 +360,8 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: constant Ttk_Tree_View :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
       WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
@@ -365,11 +369,14 @@ package body Crafts.UI is
       HaveTool: Boolean := False;
       TextLength: Positive;
       RecipeText: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.info.text", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.info.text", Interp);
       CraftFrame: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.set", Interp);
       ErrorLabel: constant Ttk_Label :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.error", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.error", Interp);
    begin
       RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       configure(RecipeText, "-state normal");
@@ -630,12 +637,15 @@ package body Crafts.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: constant Ttk_Tree_View :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
       RecipeIndex: Unbounded_String;
       ModulesBox: constant Ttk_ComboBox :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
       AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.amount", Interp);
+        Get_Widget
+          (".gameframe.paned.craftframe.canvas.craft.item.set.amount", Interp);
    begin
       RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       if Element(RecipeIndex, 1) = '{' then

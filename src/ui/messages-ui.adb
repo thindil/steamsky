@@ -102,7 +102,8 @@ package body Messages.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       MessagesFrame: Ttk_Frame := Get_Widget(Paned & ".messagesframe", Interp);
       MessagesCanvas: constant Tk_Canvas :=
         Get_Widget(MessagesFrame & ".canvas", Interp);
@@ -196,7 +197,8 @@ package body Messages.UI is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types", Interp);
+          (".gameframe.paned.messagesframe.canvas.messages.options.types",
+           Interp);
    begin
       return Show_Last_Messages_Command
           (ClientData, Interp, 2, Argv & Current(TypeBox));
@@ -229,7 +231,8 @@ package body Messages.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types", Interp);
+          (".gameframe.paned.messagesframe.canvas.messages.options.types",
+           Interp);
    begin
       if MessageBox
           ("-message {Are you sure you want to clear all messages?} -icon question -type yesno") /=
@@ -269,10 +272,12 @@ package body Messages.UI is
       pragma Unreferenced(ClientData, Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types", Interp);
+          (".gameframe.paned.messagesframe.canvas.messages.options.types",
+           Interp);
       MessagesType: Message_Type;
       MessagesView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.messagesframe.canvas.messages.list.view", Interp);
+        Get_Widget
+          (".gameframe.paned.messagesframe.canvas.messages.list.view", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));

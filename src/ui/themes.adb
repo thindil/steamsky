@@ -325,19 +325,23 @@ package body Themes is
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
-            Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
+            Button.Name :=
+              New_String(".gameframe.paned.mapframe.buttons.show");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
-            Button.Name := New_String(".gameframe.paned.mapframe.buttons.hide");
+            Button.Name :=
+              New_String(".gameframe.paned.mapframe.buttons.hide");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
-            Button.Name := New_String(".gameframe.paned.mapframe.buttons.left");
+            Button.Name :=
+              New_String(".gameframe.paned.mapframe.buttons.left");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
-            Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
+            Button.Name :=
+              New_String(".gameframe.paned.mapframe.buttons.right");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");

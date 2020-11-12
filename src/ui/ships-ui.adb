@@ -53,7 +53,8 @@ package body Ships.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       ShipInfoFrame: Ttk_Frame := Get_Widget(Paned & ".shipinfoframe", Interp);
       Label: Ttk_Label;
       Item: Ttk_Frame;
@@ -71,7 +72,8 @@ package body Ships.UI is
       Button: Ttk_Button;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
+          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo",
+           Interp);
    begin
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
@@ -356,7 +358,8 @@ package body Ships.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       NameEntry: constant Ttk_Label :=
-        Get_Widget(".gameframe.paned.shipinfoframe.general.canvas.frame.name", Interp);
+        Get_Widget
+          (".gameframe.paned.shipinfoframe.general.canvas.frame.name", Interp);
    begin
       if Argc = 1 then
          return TCL_OK;
@@ -410,7 +413,9 @@ package body Ships.UI is
       if CArgv.Arg(Argv, 2) /= "show" then
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(".gameframe.paned.shipinfoframe." & To_String(FrameInfo.Name));
+              New_String
+                (".gameframe.paned.shipinfoframe." &
+                 To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid(Frame);
             else
@@ -428,7 +433,9 @@ package body Ships.UI is
       else
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(".gameframe.paned.shipinfoframe." & To_String(FrameInfo.Name));
+              New_String
+                (".gameframe.paned.shipinfoframe." &
+                 To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else

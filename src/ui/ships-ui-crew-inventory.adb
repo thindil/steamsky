@@ -516,7 +516,8 @@ package body Ships.UI.Crew.Inventory is
         Get_Widget(ItemDialog & ".canvas.frame.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo", Interp);
+          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo",
+           Interp);
    begin
       Amount := Positive'Value(Get(AmountBox));
       if FreeCargo

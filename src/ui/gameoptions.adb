@@ -149,7 +149,8 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       OptionsFrame: Ttk_Frame := Get_Widget(Paned & ".optionsframe", Interp);
       OptionsCanvas: constant Tk_Canvas :=
         Get_Widget(OptionsFrame & ".canvas", Interp);
