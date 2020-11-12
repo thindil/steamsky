@@ -191,7 +191,9 @@ package body MainMenu is
         (SpinBox, Natural'Image(Natural(NewGameSettings.PricesBonus * 100.0)));
       Tcl_Eval(Get_Context, "SetPoints");
       ShowMainMenu;
-      Current(ComboBox, Natural'Image(NewGameSettings.DifficultyLevel));
+      Current
+        (ComboBox,
+         Natural'Image(Difficulty_Type'Pos(NewGameSettings.DifficultyLevel)));
       Generate(ComboBox, "<<ComboboxSelected>>");
    end CreateMainMenu;
 
@@ -201,6 +203,7 @@ package body MainMenu is
       Files: Search_Type;
       Button: Ttk_Button := Get_Widget(".mainmenu.loadgame");
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
+      GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
    begin
       X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -223,7 +226,9 @@ package body MainMenu is
         (MainWindow, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
          Trim(Positive'Image(Y), Left));
-      Tcl_Eval(MainMenuFrame.Interp, "pack forget .header .paned");
+      if Winfo_Get(GameFrame, "exists") = "1" then
+         Tcl.Tk.Ada.Pack.Pack_Forget(GameFrame);
+      end if;
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
       Start_Search(Files, To_String(SaveDirectory), "*.sav");
       if not More_Entries(Files) then
