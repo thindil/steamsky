@@ -75,7 +75,7 @@ package body Ships.UI.Cargo is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(".paned.shipinfoframe.cargo.canvas", Interp);
+        Get_Widget(".gameframe.paned.shipinfoframe.cargo.canvas", Interp);
       CargoInfoFrame: constant Ttk_Frame :=
         Get_Widget(ShipCanvas & ".frame", Interp);
       Item: Ttk_Frame;

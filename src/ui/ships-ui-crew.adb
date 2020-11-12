@@ -79,7 +79,7 @@ package body Ships.UI.Crew is
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
-        New_String(".paned.shipinfoframe.crew.canvas.frame");
+        New_String(".gameframe.paned.shipinfoframe.crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -282,7 +282,7 @@ package body Ships.UI.Crew is
       end loop;
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Get_Context;
-      ShipCanvas.Name := New_String(".paned.shipinfoframe.crew.canvas");
+      ShipCanvas.Name := New_String(".gameframe.paned.shipinfoframe.crew.canvas");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
@@ -363,7 +363,7 @@ package body Ships.UI.Crew is
       CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Button: constant Ttk_Button :=
         Get_Widget
-          (".paned.shipinfoframe.crew.canvas.frame.name" &
+          (".gameframe.paned.shipinfoframe.crew.canvas.frame.name" &
            Trim(Positive'Image(CrewIndex), Left),
            Interp);
    begin

@@ -73,14 +73,14 @@ package body Bases.LootUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       LootFrame: Ttk_Frame := Get_Widget(Paned & ".lootframe", Interp);
       LootCanvas: constant Tk_Canvas :=
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       ItemsView: Ttk_Tree_View;
       ItemDurability, ItemType, ProtoIndex, FirstIndex,
       ItemName: Unbounded_String;
@@ -241,7 +241,7 @@ package body Bases.LootUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       LootView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.lootframe.canvas.loot.loot.view", Interp);
+        Get_Widget(".gameframe.paned.lootframe.canvas.loot.loot.view", Interp);
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
@@ -250,11 +250,11 @@ package body Bases.LootUI is
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
       ItemText: constant Tk_Text :=
-        Get_Widget(".paned.lootframe.canvas.loot.item.info.text", Interp);
+        Get_Widget(".gameframe.paned.lootframe.canvas.loot.item.info.text", Interp);
       Frame: Ttk_Frame :=
-        Get_Widget(".paned.lootframe.canvas.loot.item.dropframe", Interp);
+        Get_Widget(".gameframe.paned.lootframe.canvas.loot.item.dropframe", Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(".paned.lootframe.canvas.loot.item.shipspace", Interp);
+        Get_Widget(".gameframe.paned.lootframe.canvas.loot.item.shipspace", Interp);
    begin
       SelectedItem := To_Unbounded_String(Selection(LootView));
       if SelectedItem = Null_Unbounded_String then
@@ -393,7 +393,7 @@ package body Bases.LootUI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       end if;
-      Frame.Name := New_String(".paned.lootframe.canvas.loot.item.takeframe");
+      Frame.Name := New_String(".gameframe.paned.lootframe.canvas.loot.item.takeframe");
       if BaseCargoIndex = 0 then
          BaseCargoIndex := BaseCargoIndex2;
       end if;
@@ -480,7 +480,7 @@ package body Bases.LootUI is
       SpinBox: Ttk_SpinBox;
       Label: constant Ttk_Label :=
         Get_Widget
-          (".paned.lootframe.canvas.loot.item.dropframe.amountlbl", Interp);
+          (".gameframe.paned.lootframe.canvas.loot.item.dropframe.amountlbl", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -498,7 +498,7 @@ package body Bases.LootUI is
       SpinBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          SpinBox.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.dropframe.amount");
+           New_String(".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount");
          if CArgv.Arg(Argv, 1) = "drop" then
             Amount := Positive'Value(Get(SpinBox));
          else
@@ -525,7 +525,7 @@ package body Bases.LootUI is
             OrderMessage);
       else
          SpinBox.Name :=
-           New_String(".paned.lootframe.canvas.loot.item.takeframe.amount");
+           New_String(".gameframe.paned.lootframe.canvas.loot.item.takeframe.amount");
          if CArgv.Arg(Argv, 1) = "take" then
             Amount := Positive'Value(Get(SpinBox));
          else

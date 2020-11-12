@@ -1,4 +1,4 @@
-set shipinfoframe [ttk::frame .paned.shipinfoframe]
+set shipinfoframe [ttk::frame .gameframe.paned.shipinfoframe]
 # General ship info
 grid [ttk::labelframe $shipinfoframe.general -text {General Info:}] -sticky nwes -padx 4
 set shipcanvas [canvas $shipinfoframe.general.canvas -yscrollcommand [list $shipinfoframe.general.scrolly set] -xscrollcommand [list $shipinfoframe.general.scrollx set]]

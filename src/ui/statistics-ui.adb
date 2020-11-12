@@ -42,7 +42,7 @@ package body Statistics.UI is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       StatsFrame: Ttk_Frame := Get_Widget(Paned & ".statsframe");
       StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
       Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.stats");

@@ -90,12 +90,12 @@ package body Bases.ShipyardUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       ShipyardFrame: Ttk_Frame := Get_Widget(Paned & ".shipyardframe", Interp);
       ShipyardCanvas: constant Tk_Canvas :=
         Get_Widget(ShipyardFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       ModulesView: Ttk_Tree_View;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -227,7 +227,7 @@ package body Bases.ShipyardUI is
          Speed := Modules_List(ModuleIndex).Speed;
          ModuleText :=
            Get_Widget
-             (".paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info");
+             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info");
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
@@ -279,7 +279,7 @@ package body Bases.ShipyardUI is
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Speed;
          ModuleText :=
            Get_Widget
-             (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info");
+             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info");
       end if;
       case MType is
          when HULL =>
@@ -434,22 +434,22 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(ClientData, Argc, Argv);
       ModulesView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.install.modules.view",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.modules.view",
            Interp);
       InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleText: constant Tk_Text :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info",
            Interp);
       MoneyLabel: constant Ttk_Label :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.money",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.money",
            Interp);
       InstallButton: constant Ttk_Button :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.install.info.install",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.install",
            Interp);
    begin
       if Selection(ModulesView) = "" then
@@ -611,19 +611,19 @@ package body Bases.ShipyardUI is
       ShipModuleIndex: Natural;
       DamageBar: constant Ttk_ProgressBar :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damage",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damage",
            Interp);
       ModulesView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.remove.modules.view",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.modules.view",
            Interp);
       ModuleText: constant Tk_Text :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info",
            Interp);
       Label: Ttk_Label :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damagelbl",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damagelbl",
            Interp);
    begin
       ShipModuleIndex := Natural'Value(Selection(ModulesView));
@@ -678,7 +678,7 @@ package body Bases.ShipyardUI is
         Null_Unbounded_String then
          Label.Name :=
            New_String
-             (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.description");
+             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.description");
          configure
            (Label,
             "-text {" & LF &
@@ -716,7 +716,7 @@ package body Bases.ShipyardUI is
       end loop;
       Label.Name :=
         New_String
-          (".paned.shipyardframe.canvas.shipyard.notebook.remove.info.money");
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.money");
       configure(Label, "-text {" & To_String(RemoveInfo) & "}");
       configure(ModuleText, "-state disabled");
       return TCL_OK;
@@ -745,7 +745,7 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.shipyardframe.canvas.shipyard.notebook.install.options.modules",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.options.modules",
            Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin

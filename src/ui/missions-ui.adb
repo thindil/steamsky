@@ -78,22 +78,22 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.missionsframe.canvas.missions.missionsview", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
       MissionInfo: Unbounded_String;
       Mission: Mission_Data;
       MissionText: constant Tk_Text :=
         Get_Widget
-          (".paned.missionsframe.canvas.missions.info.info.text", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.info.info.text", Interp);
       MissionLabel: constant Ttk_Label :=
         Get_Widget
-          (".paned.missionsframe.canvas.missions.info.missioninfo", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.info.missioninfo", Interp);
       Button: constant Ttk_Button :=
-        Get_Widget(".paned.missionsframe.canvas.missions.info.set", Interp);
+        Get_Widget(".gameframe.paned.missionsframe.canvas.missions.info.set", Interp);
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
       MissionScale: constant Ttk_Scale :=
-        Get_Widget(".paned.missionsframe.canvas.missions.info.reward", Interp);
+        Get_Widget(".gameframe.paned.missionsframe.canvas.missions.info.reward", Interp);
    begin
       MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
@@ -281,7 +281,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.missionsframe.canvas.missions.missionsview", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
    begin
       MissionIndex := Positive'Value(Selection(MissionsView));
@@ -298,7 +298,7 @@ package body Missions.UI is
 
    procedure RefreshMissionsList(List: Mission_Container.Vector) is
       MissionsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.missionsframe.canvas.missions.missionsview");
+        Get_Widget(".gameframe.paned.missionsframe.canvas.missions.missionsview");
    begin
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       for I in List.First_Index .. List.Last_Index loop
@@ -375,7 +375,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.missionsframe.canvas.missions.missionsview", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.missionsview", Interp);
       MissionIndex: Positive;
    begin
       MissionIndex := Positive'Value(Selection(MissionsView));
@@ -423,14 +423,14 @@ package body Missions.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       MissionsFrame: Ttk_Frame := Get_Widget(Paned & ".missionsframe", Interp);
       MissionsCanvas: constant Tk_Canvas :=
         Get_Widget(MissionsFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(MissionsCanvas & ".missions.info.missioninfo", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile

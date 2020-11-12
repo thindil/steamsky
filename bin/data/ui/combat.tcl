@@ -1,8 +1,8 @@
-ttk::frame .paned.combatframe
-set combatcanvas [canvas .paned.combatframe.canvas -yscrollcommand [list .paned.combatframe.scrolly set] -xscrollcommand [list .paned.combatframe.scrollx set]]
-pack [ttk::scrollbar .paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
+ttk::frame .gameframe.paned.combatframe
+set combatcanvas [canvas .gameframe.paned.combatframe.canvas -yscrollcommand [list .gameframe.paned.combatframe.scrolly set] -xscrollcommand [list .gameframe.paned.combatframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack $combatcanvas -side top -fill both
-pack [ttk::scrollbar .paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x
 
 # Ship to ship combat
 set combatframe [ttk::frame $combatcanvas.combat]

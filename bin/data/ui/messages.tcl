@@ -1,8 +1,8 @@
-ttk::frame .paned.messagesframe
-set messagescanvas [canvas .paned.messagesframe.canvas -yscrollcommand [list .paned.messagesframe.scrolly set] -xscrollcommand [list .paned.messagesframe.scrollx set]]
-pack [ttk::scrollbar .paned.messagesframe.scrolly -orient vertical -command [list $messagescanvas yview]] -side right -fill y
+ttk::frame .gameframe.paned.messagesframe
+set messagescanvas [canvas .gameframe.paned.messagesframe.canvas -yscrollcommand [list .gameframe.paned.messagesframe.scrolly set] -xscrollcommand [list .gameframe.paned.messagesframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.messagesframe.scrolly -orient vertical -command [list $messagescanvas yview]] -side right -fill y
 pack $messagescanvas -side top -fill both
-pack [ttk::scrollbar .paned.messagesframe.scrollx -orient horizontal -command [list $messagescanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.messagesframe.scrollx -orient horizontal -command [list $messagescanvas xview]] -fill x
 set messagesframe [ttk::frame $messagescanvas.messages]
 # Messages options
 grid [ttk::frame $messagesframe.options] -sticky w
