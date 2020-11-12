@@ -789,7 +789,8 @@ package body MainMenu.Commands is
       end loop;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
-      NewGameSettings.DifficultyLevel := Natural'Value(Current(ComboBox));
+      NewGameSettings.DifficultyLevel :=
+        Difficulty_Type'Val(Natural'Value(Current(ComboBox)));
       NewGameSettings.EnemyDamageBonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=

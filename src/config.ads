@@ -32,6 +32,13 @@ package Config is
    subtype Bonus_Type is Float range 0.0 .. 5.0;
    -- ****
 
+   -- ****t* Config/Difficulty_Type
+   -- FUNCTION
+   -- Used to set the game difficulty level
+   -- SOURCE
+   type Difficulty_Type is (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM);
+   -- ****
+
    -- ****s* Config/NewGameRecord
    -- FUNCTION
    -- Data for new game settings
@@ -71,7 +78,7 @@ package Config is
       ReputationBonus: Bonus_Type;
       UpgradeCostBonus: Bonus_Type;
       PricesBonus: Bonus_Type;
-      DifficultyLevel: Natural;
+      DifficultyLevel: Difficulty_Type;
    end record;
    -- ****
 
