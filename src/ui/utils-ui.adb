@@ -58,7 +58,7 @@ package body Utils.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Dialog: Tk_Toplevel := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      TopWindow: Tk_Toplevel := Get_Main_Window(Interp);
+      TopWindow: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
@@ -70,6 +70,10 @@ package body Utils.UI is
       end if;
       if Winfo_Get(TopWindow, "exists") = "1"
         and then Status(TopWindow) = "1" then
+         Forget(TopWindow);
+      end if;
+      TopWindow := Get_Widget(".gameframe.paned", Interp);
+      if Status(TopWindow) = "1" then
          Forget(TopWindow);
       end if;
       return TCL_OK;
