@@ -1,8 +1,8 @@
-ttk::frame .paned.missionsframe
-set missionscanvas [canvas .paned.missionsframe.canvas -yscrollcommand [list .paned.missionsframe.scrolly set] -xscrollcommand [list .paned.missionsframe.scrollx set]]
-pack [ttk::scrollbar .paned.missionsframe.scrolly -orient vertical -command [list $missionscanvas yview]] -side right -fill y
+ttk::frame .gameframe.paned.missionsframe
+set missionscanvas [canvas .gameframe.paned.missionsframe.canvas -yscrollcommand [list .gameframe.paned.missionsframe.scrolly set] -xscrollcommand [list .gameframe.paned.missionsframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.missionsframe.scrolly -orient vertical -command [list $missionscanvas yview]] -side right -fill y
 pack $missionscanvas -side top -fill both
-pack [ttk::scrollbar .paned.missionsframe.scrollx -orient horizontal -command [list $missionscanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.missionsframe.scrollx -orient horizontal -command [list $missionscanvas xview]] -fill x
 set missionsframe [ttk::frame $missionscanvas.missions]
 grid [ttk::treeview $missionsframe.missionsview -show headings -columns [list name distance]]
 $missionsframe.missionsview heading name -text {Name}

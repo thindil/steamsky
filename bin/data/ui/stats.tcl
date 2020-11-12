@@ -1,8 +1,8 @@
-ttk::frame .paned.statsframe
-set statscanvas [canvas .paned.statsframe.canvas -yscrollcommand [list .paned.statsframe.scrolly set] -xscrollcommand [list .paned.statsframe.scrollx set]]
-pack [ttk::scrollbar .paned.statsframe.scrolly -orient vertical -command [list $statscanvas yview]] -side right -fill y
+ttk::frame .gameframe.paned.statsframe
+set statscanvas [canvas .gameframe.paned.statsframe.canvas -yscrollcommand [list .gameframe.paned.statsframe.scrolly set] -xscrollcommand [list .gameframe.paned.statsframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.statsframe.scrolly -orient vertical -command [list $statscanvas yview]] -side right -fill y
 pack $statscanvas -side top -fill both
-pack [ttk::scrollbar .paned.statsframe.scrollx -orient horizontal -command [list $statscanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.statsframe.scrollx -orient horizontal -command [list $statscanvas xview]] -fill x
 set statsframe [ttk::frame $statscanvas.stats]
 grid [ttk::frame $statsframe.left] -sticky nwes
 grid [ttk::label $statsframe.left.stats]
@@ -28,4 +28,4 @@ grid [ttk::label $statsframe.right.killed]
 grid [ttk::treeview $statsframe.right.killedview -show headings -columns [list name amount] -selectmode none]
 $statsframe.right.killedview heading name -text {Name}
 $statsframe.right.killedview heading amount -text {Amount}
-grid columnconfigure .paned.statsframe 0 -weight 1
+grid columnconfigure .gameframe.paned.statsframe 0 -weight 1

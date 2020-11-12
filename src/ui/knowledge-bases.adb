@@ -57,7 +57,7 @@ package body Knowledge.Bases is
 
    procedure UpdateBasesList(BaseName: String := "") is
       BasesCanvas: constant Tk_Canvas :=
-        Get_Widget(".paned.knowledgeframe.bases.canvas");
+        Get_Widget(".gameframe.paned.knowledgeframe.bases.canvas");
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(BasesFrame & ".options.search");

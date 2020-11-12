@@ -69,12 +69,12 @@ package body Bases.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       BaseFrame: Ttk_Frame := Get_Widget(Paned & ".baseframe", Interp);
       BaseCanvas: constant Tk_Canvas :=
         Get_Widget(BaseFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       ActionButton: Ttk_Button;
       SearchEntry: Ttk_Entry;
       ItemsView: Ttk_Tree_View;
@@ -238,16 +238,16 @@ package body Bases.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ItemsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.baseframe.canvas.base.items.view", Interp);
+        Get_Widget(".gameframe.paned.baseframe.canvas.base.items.view", Interp);
       FormattedTime, ItemIndex: Unbounded_String;
       Cost, Time: Natural := 0;
       InfoLabel: Ttk_Label :=
-        Get_Widget(".paned.baseframe.canvas.base.info.info", Interp);
+        Get_Widget(".gameframe.paned.baseframe.canvas.base.info.info", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Natural;
       ActionButton: constant Ttk_Button :=
-        Get_Widget(".paned.baseframe.canvas.base.info.accept", Interp);
+        Get_Widget(".gameframe.paned.baseframe.canvas.base.info.accept", Interp);
    begin
       if Selection(ItemsView) = "" then
          return TCL_OK;
@@ -334,7 +334,7 @@ package body Bases.UI is
             To_String(MoneyName) & "}");
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      InfoLabel.Name := New_String(".paned.baseframe.canvas.base.info.money");
+      InfoLabel.Name := New_String(".gameframe.paned.baseframe.canvas.base.info.money");
       if MoneyIndex2 > 0 then
          configure
            (InfoLabel,
@@ -380,7 +380,7 @@ package body Bases.UI is
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
       ItemsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.baseframe.canvas.base.items.view", Interp);
+        Get_Widget(".gameframe.paned.baseframe.canvas.base.items.view", Interp);
       ItemIndex: Unbounded_String;
    begin
       ItemIndex := To_Unbounded_String(Selection(ItemsView));

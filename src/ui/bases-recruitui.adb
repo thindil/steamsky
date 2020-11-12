@@ -72,14 +72,14 @@ package body Bases.RecruitUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       RecruitFrame: Ttk_Frame := Get_Widget(Paned & ".recruitframe", Interp);
       RecruitCanvas: constant Tk_Canvas :=
         Get_Widget(RecruitFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(RecruitCanvas & ".recruit.recruit.info.info", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       RecruitsView: constant Ttk_Tree_View :=
@@ -157,30 +157,30 @@ package body Bases.RecruitUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecruitsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruits.view", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruits.view", Interp);
       Recruit: Recruit_Data;
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Label: Ttk_Label :=
         Get_Widget
-          (".paned.recruitframe.canvas.recruit.recruit.info.info", Interp);
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.info", Interp);
       LabelFrame: Ttk_LabelFrame :=
         Get_Widget
-          (".paned.recruitframe.canvas.recruit.recruit.info.stats", Interp);
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats", Interp);
       Tokens: Slice_Set;
       Item: Ttk_Frame;
       ProgressBar: Ttk_ProgressBar;
       Row: Natural := 0;
       EquipmentView: constant Ttk_Tree_View :=
         Get_Widget
-          (".paned.recruitframe.canvas.recruit.recruit.info.equipment.view",
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.equipment.view",
            Interp);
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
       Cost: Positive;
       Scale: Ttk_Scale;
       HireButton: constant Ttk_Button :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruit.hire", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruit.hire", Interp);
    begin
       RecruitIndex := Positive'Value(Selection(RecruitsView));
       Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
@@ -204,7 +204,7 @@ package body Bases.RecruitUI is
       for I in Recruit.Attributes.Iterate loop
          Label :=
            Create
-             (".paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
+             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
               "-text {" &
               To_String
@@ -217,7 +217,7 @@ package body Bases.RecruitUI is
               (Attributes_List(Attributes_Container.To_Index(I)).Description));
          ProgressBar :=
            Create
-             (".paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
+             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
               "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2));
          Tcl.Tk.Ada.Grid.Grid
@@ -230,7 +230,7 @@ package body Bases.RecruitUI is
               (Attributes_List(Attributes_Container.To_Index(I)).Description));
       end loop;
       LabelFrame.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.info.skills");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
       for I in 1 .. Slice_Count(Tokens) loop
          Item.Name := New_String(Slice(Tokens, I));
@@ -239,7 +239,7 @@ package body Bases.RecruitUI is
       for Skill of Recruit.Skills loop
          Label :=
            Create
-             (".paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
+             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
               Trim(Positive'Image(Skill(1)), Left),
               "-text {" & To_String(Skills_List(Skill(1)).Name) & ": " &
               GetSkillLevelName(Skill(2)) & "}");
@@ -251,7 +251,7 @@ package body Bases.RecruitUI is
             ". " & To_String(Skills_List(Skill(1)).Description));
          ProgressBar :=
            Create
-             (".paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
+             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
               Trim(Positive'Image(Skill(1)), Left),
               "-value" & Positive'Image(Skill(2)));
          Tcl.Tk.Ada.Grid.Grid
@@ -271,7 +271,7 @@ package body Bases.RecruitUI is
       end loop;
       Label.Name :=
         New_String
-          (".paned.recruitframe.canvas.recruit.recruit.info.initialcost");
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.initialcost");
       RecruitInfo := To_Unbounded_String("Starting offer:");
       Append
         (RecruitInfo,
@@ -285,33 +285,33 @@ package body Bases.RecruitUI is
          To_String(MoneyName) & ".");
       configure(Label, "-text {" & To_String(RecruitInfo) & "}");
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.dailylbl");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.dailylbl");
       configure
         (Label,
          "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
       Scale.Interp := Interp;
       Scale.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.daily");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.daily");
       configure
         (Scale,
          "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
          Natural'Image(Recruit.Payment));
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.percentlbl");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.percentlbl");
       configure(Label, "-text {Percent of profit from trades: 0}");
       Scale.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
       configure(Scale, "-value 0");
       Cost := Recruit.Price;
       CountPrice(Cost, FindMember(Talk));
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.cost");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.cost");
       configure
         (Label,
          "-text {Hire for" & Positive'Image(Cost) & " " &
          To_String(MoneyName) & "}");
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.money");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.money");
       if MoneyIndex2 > 0 then
          configure
            (Label,
@@ -363,21 +363,21 @@ package body Bases.RecruitUI is
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
       Scale: Ttk_Scale :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruit.daily", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruit.daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
       ContractBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.recruitframe.canvas.recruit.recruit.contract", Interp);
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.contract", Interp);
       ContractLength: constant Natural := Natural'Value(Current(ContractBox));
       TradePayment: Natural;
       Label: Ttk_Label :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruit.cost", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruit.cost", Interp);
       HireButton: constant Ttk_Button :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruit.hire", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruit.hire", Interp);
    begin
       Scale.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
@@ -403,11 +403,11 @@ package body Bases.RecruitUI is
          "-text {Hire for" & Natural'Image(Cost) & " " & To_String(MoneyName) &
          "}");
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.dailylbl");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.dailylbl");
       configure
         (Label, "-text {Daily payment:" & Natural'Image(DailyPayment) & "}");
       Label.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.percentlbl");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.percentlbl");
       configure
         (Label,
          "-text {Percent of profit from trades: " &
@@ -453,17 +453,17 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Scale: Ttk_Scale :=
-        Get_Widget(".paned.recruitframe.canvas.recruit.recruit.daily", Interp);
+        Get_Widget(".gameframe.paned.recruitframe.canvas.recruit.recruit.daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
       ContractBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.recruitframe.canvas.recruit.recruit.contract", Interp);
+          (".gameframe.paned.recruitframe.canvas.recruit.recruit.contract", Interp);
       ContractLength: constant Natural := Natural'Value(Current(ContractBox));
       TradePayment: Natural;
    begin
       Scale.Name :=
-        New_String(".paned.recruitframe.canvas.recruit.recruit.percent");
+        New_String(".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -

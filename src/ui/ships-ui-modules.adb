@@ -1289,7 +1289,7 @@ package body Ships.UI.Modules is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Button: constant Ttk_Button :=
         Get_Widget
-          (".paned.shipinfoframe.modules.canvas.frame.name" &
+          (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
            Trim(Positive'Image(ModuleIndex + 1), Left),
            Interp);
    begin

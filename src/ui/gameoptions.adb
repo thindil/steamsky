@@ -149,12 +149,12 @@ package body GameOptions is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       OptionsFrame: Ttk_Frame := Get_Widget(Paned & ".optionsframe", Interp);
       OptionsCanvas: constant Tk_Canvas :=
         Get_Widget(OptionsFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
@@ -189,7 +189,7 @@ package body GameOptions is
          end loop;
          ComboBox.Name :=
            New_String
-             (".paned.optionsframe.canvas.options.notebook.interface.theme");
+             (".gameframe.paned.optionsframe.canvas.options.notebook.interface.theme");
          configure(ComboBox, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -349,12 +349,12 @@ package body GameOptions is
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
       if CArgv.Arg(Argv, 1) =
-        ".paned.optionsframe.canvas.options.notebook.interface.mapfont" then
+        ".gameframe.paned.optionsframe.canvas.options.notebook.interface.mapfont" then
          GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
          Font.Configure
            ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
       elsif CArgv.Arg(Argv, 1) =
-        ".paned.optionsframe.canvas.options.notebook.interface.helpfont" then
+        ".gameframe.paned.optionsframe.canvas.options.notebook.interface.helpfont" then
          GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
          Font.Configure
            ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
@@ -416,7 +416,7 @@ package body GameOptions is
       for I in SpinBoxNames'Range loop
          SpinBox.Name :=
            New_String
-             (".paned.optionsframe.canvas.options.notebook.interface." &
+             (".gameframe.paned.optionsframe.canvas.options.notebook.interface." &
               To_String(SpinBoxNames(I)) & "font");
          Set(SpinBox, Positive'Image(DefaultFontsSizes(I)));
          Font.Configure
@@ -454,9 +454,9 @@ package body GameOptions is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       RootName: constant String :=
-        ".paned.optionsframe.canvas.options.notebook";
+        ".gameframe.paned.optionsframe.canvas.options.notebook";
       ComboBox: Ttk_ComboBox :=
         Get_Widget(RootName & ".general.speed", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(RootName & ".general.fuel", Interp);

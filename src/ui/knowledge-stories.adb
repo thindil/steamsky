@@ -65,18 +65,18 @@ package body Knowledge.Stories is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       StoryView: constant Tk_Text :=
-        Get_Widget(".paned.knowledgeframe.stories.canvas.frame.view", Interp);
+        Get_Widget(".gameframe.paned.knowledgeframe.stories.canvas.frame.view", Interp);
       StoryText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       StoryIndex: Positive;
       StoriesBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.knowledgeframe.stories.canvas.frame.options.titles",
+          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.titles",
            Interp);
       Button: Ttk_Button :=
         Get_Widget
-          (".paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
+          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.show", Interp);
       Rows: Positive := 1;
       LineWidth: constant Positive :=
         (Positive'Value(Winfo_Get(StoriesBox, "reqwidth")) +
@@ -171,13 +171,13 @@ package body Knowledge.Stories is
          Tcl.Tk.Ada.Grid.Grid(Button);
          Button.Name :=
            New_String
-             (".paned.knowledgeframe.stories.canvas.frame.options.set");
+             (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid(Button);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name :=
            New_String
-             (".paned.knowledgeframe.stories.canvas.frame.options.set");
+             (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
       configure(StoryView, "-state disabled -height" & Positive'Image(Rows));

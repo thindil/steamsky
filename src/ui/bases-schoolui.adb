@@ -62,12 +62,12 @@ package body Bases.SchoolUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       SchoolFrame: Ttk_Frame := Get_Widget(Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       CrewView: Ttk_Tree_View;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
@@ -143,14 +143,14 @@ package body Bases.SchoolUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CrewView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.schoolframe.canvas.school.crew.view", Interp);
+        Get_Widget(".gameframe.paned.schoolframe.canvas.school.crew.view", Interp);
       SkillsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.schoolframe.canvas.school.skills.view", Interp);
+        Get_Widget(".gameframe.paned.schoolframe.canvas.school.skills.view", Interp);
       Cost, MoneyIndex2, FirstIndex: Natural := 0;
       MoneyLabel: constant Ttk_Label :=
-        Get_Widget(".paned.schoolframe.canvas.school.skills.money", Interp);
+        Get_Widget(".gameframe.paned.schoolframe.canvas.school.skills.money", Interp);
       TrainButton: constant Ttk_Button :=
-        Get_Widget(".paned.schoolframe.canvas.school.skills.train", Interp);
+        Get_Widget(".gameframe.paned.schoolframe.canvas.school.skills.train", Interp);
    begin
       MemberIndex := Positive'Value(Selection(CrewView));
       Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
@@ -215,7 +215,7 @@ package body Bases.SchoolUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       SkillsView: constant Ttk_Tree_View :=
-        Get_Widget(".paned.schoolframe.canvas.school.skills.view", Interp);
+        Get_Widget(".gameframe.paned.schoolframe.canvas.school.skills.view", Interp);
       SkillIndex: Positive;
    begin
       SkillIndex := Positive'Value(Selection(SkillsView));

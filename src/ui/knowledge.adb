@@ -57,11 +57,11 @@ package body Knowledge is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
       KnowledgeFrame: Ttk_Frame := Get_Widget(Paned & ".knowledgeframe");
       Item: Ttk_Frame;
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
       Tokens: Slice_Set;
       Rows: Natural := 0;
       KnowledgeCanvas: Tk_Canvas :=
@@ -416,7 +416,7 @@ package body Knowledge is
       Button: Ttk_Button;
    begin
       Frame.Interp := Interp;
-      Frame.Name := New_String(".paned.knowledgeframe");
+      Frame.Name := New_String(".gameframe.paned.knowledgeframe");
       Button.Interp := Interp;
       Button.Name :=
         New_String
@@ -425,7 +425,7 @@ package body Knowledge is
       if CArgv.Arg(Argv, 2) /= "show" then
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(".paned.knowledgeframe." & To_String(FrameInfo.Name));
+              New_String(".gameframe.paned.knowledgeframe." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid(Frame);
             else
@@ -443,7 +443,7 @@ package body Knowledge is
       else
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String(".paned.knowledgeframe." & To_String(FrameInfo.Name));
+              New_String(".gameframe.paned.knowledgeframe." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else

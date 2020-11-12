@@ -92,10 +92,10 @@ package body Maps.UI.Commands is
       Button.Interp := Interp;
       for I in 2 .. 13 loop
          Button.Name :=
-           New_String(".paned.mapframe.buttons." & To_String(ButtonNames(I)));
+           New_String(".gameframe.paned.mapframe.buttons." & To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end loop;
-      Button.Name := New_String(".paned.mapframe.buttons.show");
+      Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Hide_Map_Buttons_Command;
@@ -127,7 +127,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
       ButtonsBox: constant Ttk_Frame :=
-        Get_Widget(".paned.mapframe.buttons", Interp);
+        Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
    begin
       Button.Interp := Interp;
       for I in 2 .. 11 loop
@@ -174,7 +174,7 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ButtonsBox: constant Ttk_Frame :=
-        Get_Widget(".paned.mapframe.buttons", Interp);
+        Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
       Button: Ttk_Button :=
         Get_Widget(ButtonsBox & "." & CArgv.Arg(Argv, 1), Interp);
    begin
@@ -215,7 +215,7 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
+      MapView: constant Tk_Text := Get_Widget(".gameframe.paned.mapframe.map", Interp);
    begin
       GameSettings.WindowWidth :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
@@ -275,7 +275,7 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
+      MapView: constant Tk_Text := Get_Widget(".gameframe.paned.mapframe.map", Interp);
       MapIndex: Unbounded_String;
    begin
       MapIndex :=
@@ -336,7 +336,7 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapInfoFrame: constant Ttk_Frame :=
-        Get_Widget(".paned.mapframe.info", Interp);
+        Get_Widget(".gameframe.paned.mapframe.info", Interp);
    begin
       if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0 then
          Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky ne");
@@ -469,7 +469,7 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
+      MapView: constant Tk_Text := Get_Widget(".gameframe.paned.mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
       SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.x", Interp);
    begin
@@ -867,7 +867,7 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned", Interp);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned", Interp);
    begin
       if MessageBox
           ("-message {Are you sure want to quit?} -icon question -type yesno") =
@@ -941,7 +941,7 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShowStatistics;
@@ -974,7 +974,7 @@ package body Maps.UI.Commands is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CloseButton: constant Ttk_Button :=
-        Get_Widget(".header.closebutton", Interp);
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       ShowSkyMap(True);
@@ -1008,7 +1008,7 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      MapView: constant Tk_Text := Get_Widget(".paned.mapframe.map", Interp);
+      MapView: constant Tk_Text := Get_Widget(".gameframe.paned.mapframe.map", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "click" then
          Generate

@@ -252,17 +252,17 @@ package body Utils.UI is
       Label: Ttk_Label;
    begin
       if CArgv.Arg(Argv, 1) =
-        ".paned.tradeframe.canvas.trade.item.sellframe.amount" then
+        ".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount" then
          LabelName :=
            To_Unbounded_String
-             (".paned.tradeframe.canvas.trade.item.sellframe.error");
+             (".gameframe.paned.tradeframe.canvas.trade.item.sellframe.error");
          WarningText :=
            To_Unbounded_String("You will sell amount below low level of ");
       elsif CArgv.Arg(Argv, 1) =
-        ".paned.lootframe.canvas.loot.item.dropframe.amount" then
+        ".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount" then
          LabelName :=
            To_Unbounded_String
-             (".paned.lootframe.canvas.loot.item.dropframe.error");
+             (".gameframe.paned.lootframe.canvas.loot.item.dropframe.error");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
       elsif CArgv.Arg(Argv, 1) = ".itemdialog.canvas.frame.amount" then
@@ -284,7 +284,7 @@ package body Utils.UI is
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
       if CArgv.Arg(Argv, 1) /=
-        ".paned.tradeframe.canvas.trade.item.sellframe.amount"
+        ".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount"
         and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
           FuelType then
          Amount := GetItemAmount(FuelType) - Natural'Value(To_String(Value));
@@ -517,7 +517,7 @@ package body Utils.UI is
          To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
       MessagesView: constant Tk_Text :=
-        Get_Widget(".paned.controls.messages.view");
+        Get_Widget(".gameframe.paned.controls.messages.view");
       procedure ShowMessage is
       begin
          if Message.Color = WHITE then
@@ -560,7 +560,7 @@ package body Utils.UI is
    end UpdateMessages;
 
    procedure ShowScreen(NewScreenName: String) is
-      Paned: Ttk_PanedWindow := Get_Widget(".paned");
+      Paned: Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       SubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
@@ -573,7 +573,7 @@ package body Utils.UI is
          SubWindow := Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " ")));
       end if;
       Forget(Paned, SubWindow);
-      SubWindow.Name := New_String(".paned." & NewScreenName);
+      SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       if NewScreenName in "optionsframe" | "messagesframe" or
@@ -585,7 +585,7 @@ package body Utils.UI is
       else
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
-      Paned.Name := New_String(".paned.controls.buttons");
+      Paned.Name := New_String(".gameframe.paned.controls.buttons");
       if NewScreenName = "mapframe" then
          Tcl.Tk.Ada.Grid.Grid(Paned);
       else

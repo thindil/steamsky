@@ -1,8 +1,8 @@
-ttk::frame .paned.baseframe
-set basecanvas [canvas .paned.baseframe.canvas -yscrollcommand [list .paned.baseframe.scrolly set] -xscrollcommand [list .paned.baseframe.scrollx set]]
-pack [ttk::scrollbar .paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -side right -fill y
+ttk::frame .gameframe.paned.baseframe
+set basecanvas [canvas .gameframe.paned.baseframe.canvas -yscrollcommand [list .gameframe.paned.baseframe.scrolly set] -xscrollcommand [list .gameframe.paned.baseframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -side right -fill y
 pack $basecanvas -side top -fill both
-pack [ttk::scrollbar .paned.baseframe.scrollx -orient horizontal -command [list $basecanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.baseframe.scrollx -orient horizontal -command [list $basecanvas xview]] -fill x
 set baseframe [ttk::frame $basecanvas.base]
 grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2
 # Items list

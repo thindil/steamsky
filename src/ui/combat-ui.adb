@@ -106,7 +106,7 @@ package body Combat.UI is
       Message: Message_Data;
       CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
       MessagesView: constant Tk_Text :=
-        Get_Widget(".paned.controls.messages.view");
+        Get_Widget(".gameframe.paned.controls.messages.view");
       procedure ShowMessage is
          TagNames: constant array(1 .. 5) of Unbounded_String :=
            (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
@@ -177,7 +177,7 @@ package body Combat.UI is
       -- ****
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
-        Get_Widget(".paned.combatframe.canvas.combat.left.crew");
+        Get_Widget(".gameframe.paned.combatframe.canvas.combat.left.crew");
       Item: Ttk_Frame;
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
@@ -366,7 +366,7 @@ package body Combat.UI is
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2");
       end loop;
-      Frame.Name := New_String(".paned.combatframe.canvas.combat.left.damage");
+      Frame.Name := New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 0 .. (Rows - 1) loop
@@ -495,14 +495,14 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       Label.Name :=
-        New_String(".paned.combatframe.canvas.combat.right.enemy.info");
+        New_String(".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
          SpaceIndex: Natural;
          ModuleName: Unbounded_String;
       begin
          Frame.Name :=
-           New_String(".paned.combatframe.canvas.combat.right.enemy.damage");
+           New_String(".gameframe.paned.combatframe.canvas.combat.right.enemy.damage");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -560,7 +560,7 @@ package body Combat.UI is
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
          Frame.Name :=
-           New_String(".paned.combatframe.canvas.combat.right.boarding");
+           New_String(".gameframe.paned.combatframe.canvas.combat.right.boarding");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -659,7 +659,7 @@ package body Combat.UI is
    procedure ShowCombatFrame(FrameName: String) is
       -- ****
       CombatCanvas: constant Tk_Canvas :=
-        Get_Widget(".paned.combatframe.canvas");
+        Get_Widget(".gameframe.paned.combatframe.canvas");
       CombatFrame: constant Ttk_Frame := Get_Widget(CombatCanvas & FrameName);
    begin
       Canvas_Create
@@ -680,7 +680,7 @@ package body Combat.UI is
       -- ****
       OrdersList, OrderName, Tooltip: Unbounded_String;
       Frame: Ttk_Frame :=
-        Get_Widget(".paned.combatframe.canvas.boarding.right.enemy");
+        Get_Widget(".gameframe.paned.combatframe.canvas.boarding.right.enemy");
       Label: Ttk_Label;
       Item: Ttk_Frame;
       Tokens: Slice_Set;
@@ -745,7 +745,7 @@ package body Combat.UI is
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
       end loop;
       Append(OrdersList, " {Back to the ship}");
-      Frame.Name := New_String(".paned.combatframe.canvas.boarding.left.crew");
+      Frame.Name := New_String(".gameframe.paned.combatframe.canvas.boarding.left.crew");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
@@ -836,7 +836,7 @@ package body Combat.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CombatCanvas: constant Tk_Canvas :=
-        Get_Widget(".paned.combatframe.canvas", Interp);
+        Get_Widget(".gameframe.paned.combatframe.canvas", Interp);
       Frame: Ttk_Frame := Get_Widget(CombatCanvas & ".combat", Interp);
       Button: Ttk_Button := Get_Widget(Frame & ".next", Interp);
    begin
@@ -845,13 +845,13 @@ package body Combat.UI is
       if EndCombat then
          UpdateCombatUI;
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(".header.closebutton");
+         Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command {ShowSkyMap}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(CombatCanvas) & ".boarding");
          if Winfo_Get(Frame, "ismapped") = "1" then
             Tcl.Tk.Ada.Widgets.Canvas.Delete
-              (CombatCanvas, ".paned.combatframe.canvas.boarding");
+              (CombatCanvas, ".gameframe.paned.combatframe.canvas.boarding");
             ShowCombatFrame(".combat");
          end if;
          CreateGameMenu;
@@ -938,7 +938,7 @@ package body Combat.UI is
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
          ComboBox.Name :=
-           New_String(".paned.combatframe.canvas.combat.left.crew.pilotorder");
+           New_String(".gameframe.paned.combatframe.canvas.combat.left.crew.pilotorder");
          PilotOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
@@ -954,7 +954,7 @@ package body Combat.UI is
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name :=
            New_String
-             (".paned.combatframe.canvas.combat.left.crew.engineerorder");
+             (".gameframe.paned.combatframe.canvas.combat.left.crew.engineerorder");
          EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
@@ -970,7 +970,7 @@ package body Combat.UI is
       else
          ComboBox.Name :=
            New_String
-             (".paned.combatframe.canvas.combat.left.crew.gunorder" &
+             (".gameframe.paned.combatframe.canvas.combat.left.crew.gunorder" &
               CArgv.Arg(Argv, 1));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 1));
          Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
@@ -1022,7 +1022,7 @@ package body Combat.UI is
       pragma Unreferenced(ClientData, Argc);
       Combobox: constant Ttk_ComboBox :=
         Get_Widget
-          (".paned.combatframe.canvas.boarding.left.crew.order" &
+          (".gameframe.paned.combatframe.canvas.boarding.left.crew.order" &
            CArgv.Arg(Argv, 1),
            Interp);
    begin
@@ -1037,13 +1037,13 @@ package body Combat.UI is
    end Set_Boarding_Order_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
       CombatCanvas: constant Tk_Canvas := Get_Widget(CombatFrame & ".canvas");
       Label: constant Ttk_Label :=
         Get_Widget(CombatCanvas & ".combat.right.enemy.description");
       CombatStarted: Boolean;
-      Button: Ttk_Button := Get_Widget(".header.closebutton");
+      Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if NewCombat then
@@ -1077,10 +1077,10 @@ package body Combat.UI is
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
          else
-            Button.Name := New_String(".paned.combatframe.canvas.combat.next");
+            Button.Name := New_String(".gameframe.paned.combatframe.canvas.combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
          end if;
-         Button.Name := New_String(".header.closebutton");
+         Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command ShowCombatUI");
          configure(Label, "-text {" & To_String(Enemy.Ship.Description) & "}");
          for Member of PlayerShip.Crew loop

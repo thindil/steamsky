@@ -1,4 +1,4 @@
-set knowledgeframe [ttk::frame .paned.knowledgeframe]
+set knowledgeframe [ttk::frame .gameframe.paned.knowledgeframe]
 # Bases list
 grid [ttk::labelframe $knowledgeframe.bases -text {Known bases:}] -sticky nwes -padx 4
 set knowledgecanvas [canvas $knowledgeframe.bases.canvas -yscrollcommand [list $knowledgeframe.bases.scrolly set] -xscrollcommand [list $knowledgeframe.bases.scrollx set]]

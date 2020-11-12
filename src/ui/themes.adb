@@ -279,65 +279,65 @@ package body Themes is
       Button.Interp := Get_Context;
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
-            Label.Name := New_String(".header.nofuel");
+            Label.Name := New_String(".gameframe.header.nofuel");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).NoFuelIcon) & "}");
-            Label.Name := New_String(".header.nofood");
+            Label.Name := New_String(".gameframe.header.nofood");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).NoFoodIcon) & "}");
-            Label.Name := New_String(".header.nodrink");
+            Label.Name := New_String(".gameframe.header.nodrink");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).NoDrinksIcon) & "}");
-            Label.Name := New_String(".header.overloaded");
+            Label.Name := New_String(".gameframe.header.overloaded");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
-            Label.Name := New_String(".header.pilot");
+            Label.Name := New_String(".gameframe.header.pilot");
             configure
               (Label, "-text {" & Encode("" & Themes_List(I).PilotIcon) & "}");
-            Label.Name := New_String(".header.engineer");
+            Label.Name := New_String(".gameframe.header.engineer");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).EngineerIcon) & "}");
-            Label.Name := New_String(".header.gunner");
+            Label.Name := New_String(".gameframe.header.gunner");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).GunnerIcon) & "}");
-            Label.Name := New_String(".header.talk");
+            Label.Name := New_String(".gameframe.header.talk");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).CrewTraderIcon) & "}");
-            Label.Name := New_String(".header.repairs");
+            Label.Name := New_String(".gameframe.header.repairs");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).RepairIcon) & "}");
-            Label.Name := New_String(".header.upgrade");
+            Label.Name := New_String(".gameframe.header.upgrade");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).UpgradeIcon) & "}");
-            Label.Name := New_String(".header.clean");
+            Label.Name := New_String(".gameframe.header.clean");
             configure
               (Label, "-text {" & Encode("" & Themes_List(I).CleanIcon) & "}");
-            Label.Name := New_String(".header.crafting");
+            Label.Name := New_String(".gameframe.header.crafting");
             configure
               (Label,
                "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
-            Button.Name := New_String(".paned.mapframe.buttons.show");
+            Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
-            Button.Name := New_String(".paned.mapframe.buttons.hide");
+            Button.Name := New_String(".gameframe.paned.mapframe.buttons.hide");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
-            Button.Name := New_String(".paned.mapframe.buttons.left");
+            Button.Name := New_String(".gameframe.paned.mapframe.buttons.left");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
-            Button.Name := New_String(".paned.mapframe.buttons.right");
+            Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
             configure
               (Button,
                "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
