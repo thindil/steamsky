@@ -476,7 +476,7 @@ package body Maps.UI.Commands is
       MapView: constant Tk_Text :=
         Get_Widget(".gameframe.paned.mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(".movemapdialog.x", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(".gameframe.movemapdialog.x", Interp);
    begin
       if Winfo_Get(MapView, "ismapped") = "0" then
          return TCL_OK;
@@ -488,7 +488,7 @@ package body Maps.UI.Commands is
          CenterY := PlayerShip.SkyY;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
          CenterX := Positive'Value(Get(SpinBox));
-         SpinBox.Name := New_String(".movemapdialog.y");
+         SpinBox.Name := New_String(".gameframe.movemapdialog.y");
          CenterY := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
          if CenterY - (MapHeight / 3) < 1 then
@@ -564,7 +564,8 @@ package body Maps.UI.Commands is
       end if;
       DrawMap;
       return Close_Dialog_Command
-          (ClientData, Interp, 2, Empty & "CloseDialog" & ".movemapdialog");
+          (ClientData, Interp, 2,
+           Empty & "CloseDialog" & ".gameframe.movemapdialog");
    end Move_Map_Command;
 
    -- ****o* MapCommands/Zoom_Map_Command

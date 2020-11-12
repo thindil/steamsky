@@ -1,7 +1,7 @@
 # Game menu
 menu .gamemenu -title {Steam Sky - menu}
 proc InvokeMenu {index} {
-   if {[winfo class [focus]] != {TEntry}} {
+   if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {
       .gamemenu invoke $index
    }
 }
@@ -79,17 +79,11 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    grid [ttk::spinbox .gameframe.movemapdialog.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
    .gameframe.movemapdialog.y set 1
    grid [ttk::button .gameframe.movemapdialog.moveto -text {Move map to selected location} -command {MoveMap movemapto}] -row 2 -columnspan 2 -sticky we
-   set width [expr [winfo reqwidth .gameframe.movemapdialog.moveto] + 5]
-   grid [ttk::button .gameframe.movemapdialog.centeronship -text {Center map on ship} -command {MoveMap centeronship} -underline 0] -row 3 -columnspan 2 -sticky we
-   grid [ttk::button .gameframe.movemapdialog.centeronhome -text {Center map on home base} -command {MoveMap centeronhome} -underline 1] -row 4 -columnspan 2 -sticky we
+   grid [ttk::button .gameframe.movemapdialog.centeronship -text {Center map on ship} -command {MoveMap centeronship}] -row 3 -columnspan 2 -sticky we
+   grid [ttk::button .gameframe.movemapdialog.centeronhome -text {Center map on home base} -command {MoveMap centeronhome}] -row 4 -columnspan 2 -sticky we
    grid [ttk::button .gameframe.movemapdialog.close -text {Close} -command {CloseDialog .gameframe.movemapdialog}] -row 5 -columnspan 2 -sticky we
-   set height [expr [winfo reqheight .gameframe.movemapdialog.close] * 6]
    grid .gameframe.movemapdialog -row 1 -column 0
    focus .gameframe.movemapdialog.close
-   bind .gameframe.movemapdialog <Escape> {InvokeButton .gameframe.movemapdialog.close}
-   bind .gameframe.movemapdialog <Return> {InvokeButton .gameframe.movemapdialog.moveto}
-   bind .gameframe.movemapdialog <Alt-c> {InvokeButton .gameframe.movemapdialog.centeronship}
-   bind .gameframe.movemapdialog <Alt-e> {InvokeButton .gameframe.movemapdialog.centeronhome}
 }] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
