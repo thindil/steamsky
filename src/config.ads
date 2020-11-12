@@ -25,21 +25,21 @@ with Ships; use Ships;
 package Config is
 -- ****
 
-   -- ****t* Config/Bonus_Type
+   -- ****t* Config/Config.Bonus_Type
    -- FUNCTION
    -- Used to store the game difficulty settings
    -- SOURCE
    subtype Bonus_Type is Float range 0.0 .. 5.0;
    -- ****
 
-   -- ****t* Config/Difficulty_Type
+   -- ****t* Config/Config.Difficulty_Type
    -- FUNCTION
    -- Used to set the game difficulty level
    -- SOURCE
    type Difficulty_Type is (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM);
    -- ****
 
-   -- ****s* Config/NewGameRecord
+   -- ****s* Config/Config.NewGameRecord
    -- FUNCTION
    -- Data for new game settings
    -- PARAMETERS
@@ -82,28 +82,28 @@ package Config is
    end record;
    -- ****
 
-   -- ****t* Config/AutoMoveBreak
+   -- ****t* Config/Config.AutoMoveBreak
    -- FUNCTION
    -- Options when stop auto move of player ship
    -- SOURCE
    type AutoMoveBreak is (NEVER, ANY, FRIENDLY, ENEMY);
    -- ****
 
-   -- ****t* Config/MessagesOrderType
+   -- ****t* Config/Config.MessagesOrderType
    -- FUNCTION
    -- Options to set showing messages order
    -- SOURCE
    type MessagesOrderType is (OLDER_FIRST, NEWER_FIRST);
    -- ****
 
-   -- ****t* Config/AutoSaveType
+   -- ****t* Config/Config.AutoSaveType
    -- FUNCTION
    -- Type used to set how often autosave is done
    -- SOURCE
    type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
    -- ****
 
-   -- ****s* Config/GameSettingsRecord
+   -- ****s* Config/Config.GameSettingsRecord
    -- FUNCTION
    -- Data for game settings
    -- PARAMETERS
@@ -184,28 +184,28 @@ package Config is
    end record;
    -- ****
 
-   -- ****v* Config/NewGameSettings
+   -- ****v* Config/Config.NewGameSettings
    -- FUNCTION
    -- Settings for the new game
    -- SOURCE
    NewGameSettings: NewGameRecord;
    -- ****
 
-   -- ****v* Config/GameSettings
+   -- ****v* Config/Config.GameSettings
    -- FUNCTION
    -- General settings for the game
    -- SOURCE
    GameSettings: GameSettingsRecord;
    -- ****
 
-   -- ****f* Config/LoadConfig
+   -- ****f* Config/Config.LoadConfig
    -- FUNCTION
    -- Load game configuration from file
    -- SOURCE
    procedure LoadConfig;
    -- ****
 
-   -- ****f* Config/SaveConfig
+   -- ****f* Config/Config.SaveConfig
    -- FUNCTION
    -- Save game configuration to file
    -- SOURCE
