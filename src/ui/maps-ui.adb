@@ -25,7 +25,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -110,14 +109,14 @@ package body Maps.UI is
    end CreateGameMenu;
 
    procedure DeathConfirm is
-      Button: Ttk_Button := Get_Widget(".header.menubutton");
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      Button: Ttk_Button := Get_Widget(".gameframe.header.menubutton");
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
    begin
       if MessageBox
           ("-message {You are dead. Would you like to see your game statistics?} -icon question -type yesno") =
         "yes" then
          Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name := New_String(".header.closebutton");
+         Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command ShowMainMenu");
          Tcl.Tk.Ada.Grid.Grid(Button);
          Delete(GameMenu, "3", "4");
@@ -135,8 +134,8 @@ package body Maps.UI is
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
-      Label: Ttk_Label := Get_Widget(".header.time");
-      Frame: constant Ttk_Frame := Get_Widget(".paned.combat");
+      Label: Ttk_Label := Get_Widget(".gameframe.header.time");
+      Frame: constant Ttk_Frame := Get_Widget(".gameframe.paned.combat");
    begin
       configure(Label, "-text {" & FormatedTime & "}");
       if GameSettings.ShowNumbers then
@@ -146,7 +145,7 @@ package body Maps.UI is
             Natural'Image((RealSpeed(PlayerShip) * 60) / 1000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;
-      Label.Name := New_String(".header.nofuel");
+      Label.Name := New_String(".gameframe.header.nofuel");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemAmount(FuelType);
       if ItemAmount = 0 then
@@ -163,7 +162,7 @@ package body Maps.UI is
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".header.nodrink");
+      Label.Name := New_String(".gameframe.header.nodrink");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemsAmount("Drinks");
       if ItemAmount = 0 then
@@ -180,7 +179,7 @@ package body Maps.UI is
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".header.nofood");
+      Label.Name := New_String(".gameframe.header.nofood");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemsAmount("Food");
       if ItemAmount = 0 then
@@ -215,7 +214,7 @@ package body Maps.UI is
                null;
          end case;
       end loop;
-      Label.Name := New_String(".header.overloaded");
+      Label.Name := New_String(".gameframe.header.overloaded");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       if HavePilot and
         (HaveEngineer or
@@ -271,7 +270,7 @@ package body Maps.UI is
             NeedRepairs := True;
          end if;
       end loop;
-      Label.Name := New_String(".header.pilot");
+      Label.Name := New_String(".gameframe.header.pilot");
       if HavePilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -285,7 +284,7 @@ package body Maps.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".header.engineer");
+      Label.Name := New_String(".gameframe.header.engineer");
       if HaveEngineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -299,7 +298,7 @@ package body Maps.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".header.gunner");
+      Label.Name := New_String(".gameframe.header.gunner");
       if HaveGunner then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -307,7 +306,7 @@ package body Maps.UI is
          Add(Label, "One or more guns don't have a gunner.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".header.repairs");
+      Label.Name := New_String(".gameframe.header.repairs");
       if NeedRepairs then
          if HaveRepairman then
             configure(Label, "-style Headergreen.TLabel");
@@ -320,7 +319,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".header.crafting");
+      Label.Name := New_String(".gameframe.header.crafting");
       if NeedWorker then
          if HaveWorker then
             configure(Label, "-style Headergreen.TLabel");
@@ -335,7 +334,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".header.upgrade");
+      Label.Name := New_String(".gameframe.header.upgrade");
       if PlayerShip.UpgradeModule > 0 then
          if HaveUpgrader then
             configure(Label, "-style Headergreen.TLabel");
@@ -350,7 +349,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".header.talk");
+      Label.Name := New_String(".gameframe.header.talk");
       if HaveTrader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
@@ -370,7 +369,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".header.clean");
+      Label.Name := New_String(".gameframe.header.clean");
       if NeedCleaning then
          if HaveCleaner then
             configure(Label, "-style Headergreen.TLabel");
@@ -546,9 +545,9 @@ package body Maps.UI is
    procedure UpdateMapInfo
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
       MapInfoText, EventInfoText: Unbounded_String;
-      MapInfo: constant Ttk_Label := Get_Widget(".paned.mapframe.info.info");
+      MapInfo: constant Ttk_Label := Get_Widget(".gameframe.paned.mapframe.info.info");
       EventInfo: constant Ttk_Label :=
-        Get_Widget(".paned.mapframe.info.eventinfo");
+        Get_Widget(".gameframe.paned.mapframe.info.eventinfo");
    begin
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
@@ -774,19 +773,19 @@ package body Maps.UI is
          To_Unbounded_String("Move ship south and east"));
       Button: Ttk_Button;
       Speedbox: constant Ttk_ComboBox :=
-        Get_Widget(".paned.controls.buttons.speed");
+        Get_Widget(".gameframe.paned.controls.buttons.speed");
    begin
       Button.Interp := Get_Context;
       if PlayerShip.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
-         Button.Name := New_String(".paned.controls.buttons.moveto");
+         Button.Name := New_String(".gameframe.paned.controls.buttons.moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(".paned.controls.buttons.wait");
+         Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
          configure(Button, "-text Wait");
          Add(Button, "Wait 1 minute.");
          for ButtonName of MoveButtonsNames loop
             Button.Name :=
-              New_String(".paned.controls.buttons." & To_String(ButtonName));
+              New_String(".gameframe.paned.controls.buttons." & To_String(ButtonName));
             State(Button, "disabled");
             Add
               (Button,
@@ -796,25 +795,25 @@ package body Maps.UI is
          Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
-            Button.Name := New_String(".paned.controls.buttons.moveto");
+            Button.Name := New_String(".gameframe.paned.controls.buttons.moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
-            Button.Name := New_String(".paned.controls.buttons.wait");
+            Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
             configure(Button, "-text Move");
             Add(Button, "Move ship one map field toward destination.");
             Tcl.Tk.Ada.Grid.Grid(Button);
          else
-            Button.Name := New_String(".paned.controls.buttons.moveto");
+            Button.Name := New_String(".gameframe.paned.controls.buttons.moveto");
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 3");
-            Button.Name := New_String(".paned.controls.buttons.wait");
+            Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
             configure(Button, "-text Wait");
             Add(Button, "Wait 1 minute.");
          end if;
          for I in MoveButtonsNames'Range loop
             Button.Name :=
               New_String
-                (".paned.controls.buttons." & To_String(MoveButtonsNames(I)));
+                (".gameframe.paned.controls.buttons." & To_String(MoveButtonsNames(I)));
             State(Button, "!disabled");
             Add(Button, To_String(MoveButtonsTooltips(I)));
          end loop;
@@ -822,17 +821,17 @@ package body Maps.UI is
    end UpdateMoveButtons;
 
    procedure CreateGameUI is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".paned");
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       Button: constant Ttk_Button :=
-        Get_Widget(".paned.mapframe.buttons.hide");
+        Get_Widget(".gameframe.paned.mapframe.buttons.hide");
       SteamSky_Map_Error: exception;
-      Header: constant Ttk_Frame := Get_Widget(".header");
+      Header: constant Ttk_Frame := Get_Widget(".gameframe.header");
       MessagesFrame: constant Ttk_Frame :=
-        Get_Widget(".paned.controls.messages");
+        Get_Widget(".gameframe.paned.controls.messages");
       use Log;
    begin
       GameMenu := Get_Widget(".gamemenu");
-      MapView := Get_Widget(".paned.mapframe.map");
+      MapView := Get_Widget(".gameframe.paned.mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
          declare
             KeysFile: File_Type;
@@ -889,10 +888,10 @@ package body Maps.UI is
             "{InvokeMenu" & Positive'Image(I) & "}");
       end loop;
       if Index
-          (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
-           ".header") =
+          (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
+           ".gameframe.header") =
         0 then
-         Tcl.Tk.Ada.Pack.Pack(Header, "-fill x");
+         Tcl.Tk.Ada.Grid.Grid(Header);
       end if;
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
@@ -904,16 +903,16 @@ package body Maps.UI is
       end loop;
       SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
       if Index
-          (Tcl.Tk.Ada.Pack.Pack_Slaves(Get_Main_Window(Get_Context)),
-           ".paned") =
+          (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
+           ".gameframe.paned") =
         0 then
-         Tcl.Tk.Ada.Pack.Pack(Paned);
+         Tcl.Tk.Ada.Grid.Grid(Paned);
       end if;
       if Invoke(Button) /= "" then
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
-        (Get_Context, "<Escape>", "{InvokeButton .header.closebutton}");
+        (Get_Context, "<Escape>", "{InvokeButton .gameframe.header.closebutton}");
       UpdateMessages;
       UpdateMoveButtons;
       UpdateMapInfo;
@@ -941,7 +940,7 @@ package body Maps.UI is
          Widget_Image(GameMenu) & " %X %Y}}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
-         "{.paned.mapframe.buttons.wait invoke}");
+         "{.gameframe.paned.mapframe.buttons.wait invoke}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(3)) & ">",
          "{ZoomMap raise}");
@@ -1037,16 +1036,16 @@ package body Maps.UI is
          "{MoveCursor click %x %y}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(34)) & ">",
-         "{.paned.controls.buttons.speed current 0}");
+         "{.gameframe.paned.controls.buttons.speed current 0}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(35)) & ">",
-         "{.paned.controls.buttons.speed current 1}");
+         "{.gameframe.paned.controls.buttons.speed current 1}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(36)) & ">",
-         "{.paned.controls.buttons.speed current 2}");
+         "{.gameframe.paned.controls.buttons.speed current 2}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
-         "{.paned.controls.buttons.speed current 3}");
+         "{.gameframe.paned.controls.buttons.speed current 3}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(FullScreenAccel) & ">",
          "{ToggleFullScreen}");

@@ -9,30 +9,31 @@ proc InvokeMenu {index} {
 menu .orders -tearoff false
 # Destination menu
 menu .destination -tearoff false
+pack [ttk::frame .gameframe] -fill both -expand true
 # Game header
-ttk::frame .header
-grid [ttk::menubutton .header.menubutton -text {Menu} -menu .gamemenu] -sticky w
-ttk::button .header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
-grid [ttk::label .header.time -text {1600-03-01}] -row 0 -column 2
-tooltip::tooltip .header.time {The game time}
-grid columnconfigure .header .header.time -weight 1
-grid [ttk::label .header.nofuel -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 3 -padx 3
-grid [ttk::label .header.nofood -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 4 -padx 3
-grid [ttk::label .header.nodrink -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 5 -padx 3
-grid [ttk::label .header.overloaded -style Headerred.TLabel] -row 0 -column 6 -padx 3
-grid [ttk::label .header.pilot -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 7 -padx 3
-grid [ttk::label .header.engineer -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 8 -padx 3
-grid [ttk::label .header.gunner -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 9 -padx 3
-grid [ttk::label .header.talk -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 10 -padx 3
-grid [ttk::label .header.repairs -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 11 -padx 3
-grid [ttk::label .header.upgrade -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 12 -padx 3
-grid [ttk::label .header.clean -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 13 -padx 3
-grid [ttk::label .header.crafting -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 14 -padx 3
-pack .header -fill x -padx 5
-ttk::panedwindow .paned
+ttk::frame .gameframe.header
+grid [ttk::menubutton .gameframe.header.menubutton -text {Menu} -menu .gamemenu] -sticky w
+ttk::button .gameframe.header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
+grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
+tooltip::tooltip .gameframe.header.time {The game time}
+grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
+grid [ttk::label .gameframe.header.nofuel -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 3 -padx 3
+grid [ttk::label .gameframe.header.nofood -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 4 -padx 3
+grid [ttk::label .gameframe.header.nodrink -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 5 -padx 3
+grid [ttk::label .gameframe.header.overloaded -style Headerred.TLabel] -row 0 -column 6 -padx 3
+grid [ttk::label .gameframe.header.pilot -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 7 -padx 3
+grid [ttk::label .gameframe.header.engineer -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 8 -padx 3
+grid [ttk::label .gameframe.header.gunner -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 9 -padx 3
+grid [ttk::label .gameframe.header.talk -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 10 -padx 3
+grid [ttk::label .gameframe.header.repairs -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 11 -padx 3
+grid [ttk::label .gameframe.header.upgrade -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 12 -padx 3
+grid [ttk::label .gameframe.header.clean -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 13 -padx 3
+grid [ttk::label .gameframe.header.crafting -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 14 -padx 3
+grid .gameframe.header -sticky we -padx 5
+ttk::panedwindow .gameframe.paned
 # Game map
-.paned add [ttk::frame .paned.mapframe]
-set mapview [text .paned.mapframe.map -bg black -wrap none -fg white -font MapFont -cursor crosshair -bd 0]
+.gameframe.paned add [ttk::frame .gameframe.paned.mapframe]
+set mapview [text .gameframe.paned.mapframe.map -bg black -wrap none -fg white -font MapFont -cursor crosshair -bd 0]
 grid $mapview -sticky nwes
 $mapview tag configure unvisited -background #1f2223
 $mapview tag configure yellow -foreground yellow
@@ -54,7 +55,7 @@ proc ValidateSpinbox {value currentvalue max} {
    return true
 }
 # Move map buttons
-set mframe [ttk::frame .paned.mapframe.buttons]
+set mframe [ttk::frame .gameframe.paned.mapframe.buttons]
 grid [ttk::button $mframe.show -style Toolbutton -command ShowMapButtons] -columnspan 5 -sticky we
 grid [ttk::button $mframe.left -style Toolbutton -command {MoveMapButtons left}] -rowspan 3 -row 1 -column 0 -sticky ns
 grid [ttk::button $mframe.nw -text {NW} -style Toolbutton -command {MoveMap nw}] -row 1 -column 1
@@ -63,7 +64,7 @@ grid [ttk::button $mframe.ne -text {NE} -style Toolbutton -command {MoveMap ne}]
 grid [ttk::button $mframe.right -style Toolbutton -command {MoveMapButtons right}] -rowspan 3 -row 1 -column 4 -sticky ns
 grid [ttk::button $mframe.w -text {W} -style Toolbutton -command {MoveMap w}] -row 2 -column 1
 grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
-   if {[winfo ismapped .paned.mapframe] == "0"} {
+   if {[winfo ismapped .gameframe.paned.mapframe] == "0"} {
       return
    }
    if {[tk busy status .] == 0} {
@@ -102,17 +103,17 @@ grid [ttk::button $mframe.se -text {SE} -style Toolbutton -command {MoveMap se}]
 grid [ttk::button $mframe.hide -style Toolbutton -command HideMapButtons] -columnspan 5 -row 4 -sticky we
 grid $mframe -row 0 -column 0 -sticky se
 # Map info frame
-grid [ttk::frame .paned.mapframe.info -relief solid -padding 5 -style MapInfo.TFrame -borderwidth 1] -column 0 -row 0 -sticky ne
-bind .paned.mapframe.info <Enter> MoveMapInfo
-grid [ttk::label .paned.mapframe.info.info -style MapInfo.TLabel] -sticky nwes
-ttk::label .paned.mapframe.info.eventinfo -wraplength 225
-grid rowconfigure .paned.mapframe 0 -weight 1
-grid columnconfigure .paned.mapframe 0 -weight 1
+grid [ttk::frame .gameframe.paned.mapframe.info -relief solid -padding 5 -style MapInfo.TFrame -borderwidth 1] -column 0 -row 0 -sticky ne
+bind .gameframe.paned.mapframe.info <Enter> MoveMapInfo
+grid [ttk::label .gameframe.paned.mapframe.info.info -style MapInfo.TLabel] -sticky nwes
+ttk::label .gameframe.paned.mapframe.info.eventinfo -wraplength 225
+grid rowconfigure .gameframe.paned.mapframe 0 -weight 1
+grid columnconfigure .gameframe.paned.mapframe 0 -weight 1
 # Last messages
-.paned add [ttk::frame .paned.controls]
-grid [ttk::frame .paned.controls.messages] -sticky w
-pack [ttk::scrollbar .paned.controls.messages.scroll -orient vertical -command [list .paned.controls.messages.view yview]] -side right -fill y
-set messagesview [text .paned.controls.messages.view -wrap word -yscrollcommand [list .paned.controls.messages.scroll set]]
+.gameframe.paned add [ttk::frame .gameframe.paned.controls]
+grid [ttk::frame .gameframe.paned.controls.messages] -sticky w
+pack [ttk::scrollbar .gameframe.paned.controls.messages.scroll -orient vertical -command [list .gameframe.paned.controls.messages.view yview]] -side right -fill y
+set messagesview [text .gameframe.paned.controls.messages.view -wrap word -yscrollcommand [list .gameframe.paned.controls.messages.scroll set]]
 $messagesview tag configure yellow -foreground yellow
 $messagesview tag configure green -foreground #4e9a06
 $messagesview tag configure red -foreground red
@@ -120,11 +121,11 @@ $messagesview tag configure cyan -foreground cyan
 $messagesview tag configure blue -foreground #3465a4
 $messagesview tag configure gray -foreground {dim gray}
 pack $messagesview -side top -fill both
-bind .paned.controls <Configure> {
-   $messagesview configure -height [expr [winfo height .paned.controls] / [font metrics InterfaceFont -linespace]]
+bind .gameframe.paned.controls <Configure> {
+   $messagesview configure -height [expr [winfo height .gameframe.paned.controls] / [font metrics InterfaceFont -linespace]]
 }
 # Movement buttons
-set bframe [ttk::frame .paned.controls.buttons]
+set bframe [ttk::frame .gameframe.paned.controls.buttons]
 grid $bframe -row 0 -column 1 -sticky nw
 grid [ttk::combobox $bframe.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] -width 10] -columnspan 2 -sticky we
 grid [ttk::button $bframe.moveto -text {Move to} -command {MoveShip moveto} -width 0] -row 0 -column 2
@@ -137,6 +138,8 @@ grid [ttk::button $bframe.e -text {E} -command {MoveShip e} -width -6] -column 2
 grid [ttk::button $bframe.sw -text {SW} -command {MoveShip sw} -width -6] -row 3
 grid [ttk::button $bframe.s -text {S} -command {MoveShip s} -width -6] -column 1 -row 3
 grid [ttk::button $bframe.se -text {SE} -command {MoveShip se} -width -6] -column 2 -row 3
-grid columnconfigure .paned.controls .paned.controls.messages -weight 1
-pack .paned -expand true -fill both
+grid columnconfigure .gameframe.paned.controls .gameframe.paned.controls.messages -weight 1
+grid .gameframe.paned -sticky nwes
+grid columnconfigure .gameframe .gameframe.paned -weight 1
+grid rowconfigure .gameframe .gameframe.paned -weight 1
 update
