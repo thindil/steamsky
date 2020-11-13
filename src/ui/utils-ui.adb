@@ -22,11 +22,10 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -56,25 +55,24 @@ package body Utils.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
-      Dialog: Tk_Toplevel := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      TopWindow: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      pragma Unreferenced(ClientData, Argc);
+      Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      ParentName: constant String := Winfo_Get(Dialog, "parent");
+      Frame: Ttk_Frame;
    begin
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
       Destroy(Dialog);
-      if (Argc > 2) then
-         TopWindow := Get_Widget(CArgv.Arg(Argv, 2));
-      end if;
-      if Winfo_Get(TopWindow, "exists") = "1"
-        and then Status(TopWindow) = "1" then
-         Forget(TopWindow);
-      end if;
-      TopWindow := Get_Widget(".gameframe.paned", Interp);
-      if Status(TopWindow) = "1" then
-         Forget(TopWindow);
+      if ParentName = ".gameframe" then
+         Frame := Get_Widget(".gameframe.header", Interp);
+         Forget(Frame);
+         Frame := Get_Widget(".gameframe.paned", Interp);
+         Forget(Frame);
+      else
+         Frame := Get_Widget(ParentName, Interp);
+         Forget(Frame);
       end if;
       return TCL_OK;
    end Close_Dialog_Command;
@@ -106,7 +104,7 @@ package body Utils.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       MessageButton: constant Ttk_Button :=
-        Get_Widget(".message.button", Interp);
+        Get_Widget(CArgv.Arg(Argv, 1) & ".button", Interp);
       Text: constant String := Widgets.cget(MessageButton, "-text");
       Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
    begin
@@ -115,17 +113,14 @@ package body Utils.UI is
       end if;
       Widgets.configure
         (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
-      TimerId := To_Unbounded_String(After(1_000, "UpdateDialog .message"));
+      TimerId :=
+        To_Unbounded_String
+          (After(1_000, "UpdateDialog " & CArgv.Arg(Argv, 1)));
       return TCL_OK;
    end Update_Dialog_Command;
 
-   procedure ShowMessage(Text: String) is
-      MessageDialog: constant Tk_Toplevel :=
-        Create
-          (".message",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
-      X, Y: Integer;
+   procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
+      MessageDialog: constant Ttk_Frame := Create(ParentFrame & ".message");
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
@@ -135,39 +130,29 @@ package body Utils.UI is
            "-text {Close" &
            Positive'Image(GameSettings.AutoCloseMessagesTime) &
            "} -command {CloseDialog " & MessageDialog & "}");
-      DialogHeight: constant Positive :=
-        Positive'Value(Winfo_Get(MessageLabel, "reqheight")) +
-        Positive'Value(Winfo_Get(MessageButton, "reqheight")) + 10;
+      Frame: Ttk_Frame;
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
+      if ParentFrame = ".gameframe" then
+         Frame := Get_Widget(".gameframe.header");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+      else
+         Frame := Get_Widget(ParentFrame);
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+      end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Wm_Set(MessageDialog, "transient", ".");
-      if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
-         Wm_Set(MessageDialog, "attributes", "-type dialog");
-      end if;
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we");
       Tcl.Tk.Ada.Grid.Grid(MessageButton);
-      X := (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - 310) / 2;
-      if X < 0 then
-         X := 0;
-      end if;
-      Y :=
-        (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) -
-         DialogHeight) /
-        2;
-      if Y < 0 then
-         Y := 0;
-      end if;
-      Wm_Set
-        (MessageDialog, "geometry",
-         "310x" & Trim(Positive'Image(DialogHeight), Left) & "+" &
-         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
-      Wm_Set(MessageDialog, "overrideredirect", "1");
+      Tcl.Tk.Ada.Place.Place
+        (MessageDialog, "-in " & ParentFrame & " -relx 0.25 -rely 0.25");
       Focus(MessageButton);
-      TimerId := To_Unbounded_String(After(1_000, "UpdateDialog .message"));
+      TimerId :=
+        To_Unbounded_String
+          (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
    end ShowMessage;
 
    procedure AddCommand
