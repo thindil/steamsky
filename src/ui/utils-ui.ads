@@ -38,14 +38,13 @@ package Utils.UI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- CloseDialog dialogname ?parentname?
-   -- Dialogname is name of the dialog to close, optional parameter parentname
-   -- is the name of the parent window
+   -- CloseDialog dialogname
+   -- Dialogname is name of the dialog to close
    -- SOURCE
    function Close_Dialog_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -54,13 +53,15 @@ package Utils.UI is
       Convention => C;
       -- ****
 
-   -- ****f* UUI/ShowMessage
-   -- FUNCTION
-   -- Show the selected message to a player
-   -- PARAMETERS
-   -- Text - Text of message to show
-   -- SOURCE
-   procedure ShowMessage(Text: String);
+      -- ****f* UUI/ShowMessage
+      -- FUNCTION
+      -- Show the selected message to a player
+      -- PARAMETERS
+      -- Text        - Text of message to show
+      -- ParentFrame - The parent frame of the message widget. Default is
+      --               the game frame. Can be empty
+      -- SOURCE
+   procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe");
    -- ****
 
    -- ****f* UUI/AddCommand
