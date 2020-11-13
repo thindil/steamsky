@@ -57,7 +57,7 @@ grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -vali
 tooltip::tooltip $goptions.messageslimit {Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.}
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}]
 tooltip::tooltip $goptions.lbl13 {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
-grid [ttk::spinbox $goptions.savedmessages -from 5 -to 20 -validate key -validatecommand {ValidateSpinbox %S %s 20}] -row 12 -column 1
+grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %S %s 20}] -row 12 -column 1
 tooltip::tooltip $goptions.savedmessages {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
 grid [ttk::label $goptions.lbl14 -text {Messages order:}]
 tooltip::tooltip $goptions.lbl14 {In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.}
