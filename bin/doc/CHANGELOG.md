@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Showing story icon on the map when player don't have any active
 - Showing scrollbars for stories on knowledge screen
 - Don't show the move map dialog on other than the map screens
+- Setting amount of saved messages in saved games
 
 ## [5.4] - 2020-11-01
 
