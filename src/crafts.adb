@@ -187,7 +187,7 @@ package body Crafts is
       end loop;
    end LoadRecipes;
 
-   -- ****if* Crafts/SetRecipeData
+   -- ****if* Crafts/Crafts.SetRecipeData
    -- FUNCTION
    -- Set crafting data for selected recipe
    -- PARAMETERS
