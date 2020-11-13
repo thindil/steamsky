@@ -110,7 +110,8 @@ package body Utils.UI is
    end Update_Dialog_Command;
 
    procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
-      MessageDialog: constant Ttk_Frame := Create(ParentFrame & ".message");
+      MessageDialog: constant Ttk_Frame :=
+        Create(ParentFrame & ".message", "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
@@ -126,8 +127,8 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we");
-      Tcl.Tk.Ada.Grid.Grid(MessageButton);
+      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
         (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
       Focus(MessageButton);
