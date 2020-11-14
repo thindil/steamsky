@@ -57,7 +57,9 @@ package body Utils.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Header: constant Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
+      Tcl.Tk.Ada.Busy.Forget(Header);
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
@@ -121,7 +123,9 @@ package body Utils.UI is
            "-text {Close" &
            Positive'Image(GameSettings.AutoCloseMessagesTime) &
            "} -command {CloseDialog " & MessageDialog & "}");
+      Header: constant Ttk_Frame := Get_Widget(".gameframe.header");
    begin
+      Tcl.Tk.Ada.Busy.Busy(Header);
       Grab_Set(MessageDialog);
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
@@ -133,6 +137,7 @@ package body Utils.UI is
         (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
       Focus(MessageButton);
       Bind(MessageButton, "<Tab>", "{break}");
+      Bind(MessageButton, "<Escape>", "{" & MessageButton & " invoke}");
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
