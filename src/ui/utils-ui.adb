@@ -132,6 +132,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Place.Place
         (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
       Focus(MessageButton);
+      Bind(MessageButton, "<Tab>", "{break}");
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
