@@ -166,9 +166,9 @@ package Config is
       AnimationType: Positive;
       MessagesLimit: Positive range 10 .. 5_000;
       SavedMessages: Positive range 5 .. 200;
-      HelpFontSize: Positive;
-      MapFontSize: Positive;
-      InterfaceFontSize: Positive;
+      HelpFontSize: Positive range 2 .. 51;
+      MapFontSize: Positive range 2 .. 51;
+      InterfaceFontSize: Positive range 2 .. 51;
       InterfaceTheme: Unbounded_String;
       MessagesOrder: MessagesOrderType;
       AutoAskForBases: Boolean;
@@ -177,7 +177,7 @@ package Config is
       ShowLastMessages: Boolean;
       MessagesPosition: Natural;
       FullScreen: Boolean;
-      AutoCloseMessagesTime: Positive;
+      AutoCloseMessagesTime: Positive range 1 .. 60;
       AutoSave: AutoSaveType;
       TopicsPosition: Natural;
       ShowNumbers: Boolean;
