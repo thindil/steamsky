@@ -71,6 +71,7 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
       CloseDialog .gameframe.movemapdialog
       return
    }
+   tk busy .gameframe.header
    grab [ttk::frame .gameframe.movemapdialog -style Dialog.TFrame]
    grid [ttk::label .gameframe.movemapdialog.xlabel -text X:] -pady {5 0}
    grid [ttk::spinbox .gameframe.movemapdialog.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1 -pady {5 0}
