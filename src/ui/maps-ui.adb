@@ -944,7 +944,7 @@ package body Maps.UI is
    begin
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
-         "{if {[winfo class [focus]] != {TEntry}} {tk_popup " &
+         "{if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {tk_popup " &
          Widget_Image(GameMenu) & " %X %Y}}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
