@@ -30,7 +30,7 @@ with Ships; use Ships;
 package Crafts is
 -- ****
 
-   -- ****s* Crafts/Craft_Data
+   -- ****s* Crafts/Crafts.Craft_Data
    -- FUNCTION
    -- Data structure for recipes
    -- PARAMETERS
@@ -61,7 +61,7 @@ package Crafts is
    end record;
    -- ****
 
-   -- ****t* Crafts/Recipes_Container
+   -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
    package Recipes_Container is new Hashed_Maps(Unbounded_String, Craft_Data,
       Ada.Strings.Unbounded.Hash, "=");
@@ -74,35 +74,35 @@ package Crafts is
    Recipes_List: Recipes_Container.Map;
    -- ****
 
-   -- ****v* Crafts/Known_Recipes
+   -- ****v* Crafts/Crafts.Known_Recipes
    -- FUNCTION
    -- List of all know by player recipes
    -- SOURCE
    Known_Recipes: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****e* Crafts/Crafting_No_Materials
+   -- ****e* Crafts/Crafts.Crafting_No_Materials
    -- FUNCTION
    -- Raised when no materials needed for selected recipe
    -- SOURCE
    Crafting_No_Materials: exception;
    -- ****
 
-   -- ****e* Crafts/Crafting_No_Tools
+   -- ****e* Crafts/Crafts.Crafting_No_Tools
    -- FUNCTION
    -- Raised when no tool needed for selected recipe
    -- SOURCE
    Crafting_No_Tools: exception;
    -- ****
 
-   -- ****e* Crafts/Crafting_No_Workshop
+   -- ****e* Crafts/Crafts.Crafting_No_Workshop
    -- FUNCTION
    -- Raised when no workshop needed for selected recipe
    -- SOURCE
    Crafting_No_Workshop: exception;
    -- ****
 
-   -- ****f* Crafts/LoadRecipes
+   -- ****f* Crafts/Crafts.LoadRecipes
    -- FUNCTION
    -- Load recipes from files
    -- PARAMETERS
@@ -111,7 +111,7 @@ package Crafts is
    procedure LoadRecipes(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Crafts/Manufacturing
+   -- ****f* Crafts/Crafts.Manufacturing
    -- FUNCTION
    -- Craft selected items
    -- PARAMETERS
@@ -121,7 +121,7 @@ package Crafts is
       Test_Case => ("Test_Manufacturing", Robustness);
       -- ****
 
-      -- ****f* Crafts/CheckRecipe
+      -- ****f* Crafts/Crafts.CheckRecipe
       -- FUNCTION
       -- Check if player have all requirements for selected recipe
       -- PARAMETERS
@@ -135,7 +135,7 @@ package Crafts is
       Test_Case => ("Test_CheckRecipe", Nominal);
       -- ****
 
-      -- ****f* Crafts/SetRecipe
+      -- ****f* Crafts/Crafts.SetRecipe
       -- FUNCTION
       -- Set crafting recipe for selected workshop
       -- PARAMETERS
