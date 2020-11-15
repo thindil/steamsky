@@ -73,10 +73,10 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    }
    tk busy .gameframe.header
    grab [ttk::frame .gameframe.movemapdialog -style Dialog.TFrame]
-   grid [ttk::label .gameframe.movemapdialog.xlabel -text X:] -pady {5 0}
+   grid [ttk::label .gameframe.movemapdialog.xlabel -text X: -takefocus 0] -pady {5 0}
    grid [ttk::spinbox .gameframe.movemapdialog.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1 -pady {5 0}
    .gameframe.movemapdialog.x set 1
-   grid [ttk::label .gameframe.movemapdialog.ylabel -text Y:] -row 1
+   grid [ttk::label .gameframe.movemapdialog.ylabel -text Y: -takefocus 0] -row 1
    grid [ttk::spinbox .gameframe.movemapdialog.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
    .gameframe.movemapdialog.y set 1
    grid [ttk::button .gameframe.movemapdialog.moveto -text {Move map to selected location} -command {MoveMap movemapto} -underline 0] -row 2 -columnspan 2 -sticky we -padx 5
@@ -86,11 +86,12 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    place .gameframe.movemapdialog -in .gameframe -relx 0.3 -rely 0.3
    focus .gameframe.movemapdialog.close
    foreach widget [winfo children .gameframe.movemapdialog] {
-      bind $widget <Alt-m> {.gameframe.movemapdialog.moveto invoke}
-      bind $widget <Alt-c> {.gameframe.movemapdialog.centeronship invoke}
-      bind $widget <Alt-e> {.gameframe.movemapdialog.centeronhome invoke}
-      bind $widget <Escape> {.gameframe.movemapdialog.close invoke}
+      bind $widget <Alt-m> {.gameframe.movemapdialog.moveto invoke;break}
+      bind $widget <Alt-c> {.gameframe.movemapdialog.centeronship invoke;break}
+      bind $widget <Alt-e> {.gameframe.movemapdialog.centeronhome invoke;break}
+      bind $widget <Escape> {.gameframe.movemapdialog.close invoke;break}
    }
+   bind .gameframe.movemapdialog.close <Tab> {focus .gameframe.movemapdialog.x;break}
 }] -column 2 -row 2
 grid [ttk::button $mframe.e -text {E} -style Toolbutton -command {MoveMap e}] -column 3 -row 2
 grid [ttk::button $mframe.sw -text {SW} -style Toolbutton -command {MoveMap sw}] -row 3 -column 1
