@@ -15,7 +15,6 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -47,7 +46,7 @@ package body WaitMenu is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MessageDialog: Tk_Toplevel := Get_Widget(".wait", Interp);
+      WaitDialog: Tk_Toplevel := Get_Widget(".wait", Interp);
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
       WaitFrame: Ttk_Frame;
       Button: Ttk_Button;
@@ -57,21 +56,20 @@ package body WaitMenu is
       Width, Height: Positive;
       X, Y: Integer;
    begin
-      if Winfo_Get(MessageDialog, "exists") = "1" then
-         Button.Interp := Get_Context;
-         Button.Name := New_String(".wait.frame.close");
+      if Winfo_Get(WaitDialog, "exists") = "1" then
+         Button := Get_Widget(".wait.frame.close");
          if Invoke(Button) /= "" then
             raise SteamSky_Wait_Error with "Can't hide wait menu";
          end if;
          return TCL_OK;
       end if;
-      MessageDialog := Create(".wait", "-class Dialog");
+      WaitDialog := Create(".wait", "-class Dialog");
       WaitFrame := Create(".wait.frame");
       Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set(MessageDialog, "title", "{Steam Sky - Message}");
-      Wm_Set(MessageDialog, "transient", ".");
+      Wm_Set(WaitDialog, "title", "{Steam Sky - Message}");
+      Wm_Set(WaitDialog, "transient", ".");
       if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(MessageDialog, "attributes", "-type dialog");
+         Wm_Set(WaitDialog, "attributes", "-type dialog");
       end if;
       Tcl.Tk.Ada.Pack.Pack(WaitFrame, "-expand true -fill both");
       Button :=
@@ -154,17 +152,17 @@ package body WaitMenu is
           (".wait.frame.close", "-text {Close} -command {CloseDialog .wait}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
       X :=
-        (Positive'Value(Winfo_Get(MessageDialog, "vrootwidth")) - Width) / 2;
+        (Positive'Value(Winfo_Get(WaitDialog, "vrootwidth")) - Width) / 2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
-        (Positive'Value(Winfo_Get(MessageDialog, "vrootheight")) - Height) / 2;
+        (Positive'Value(Winfo_Get(WaitDialog, "vrootheight")) - Height) / 2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
-        (MessageDialog, "geometry",
+        (WaitDialog, "geometry",
          Trim(Positive'Image(Width), Left) & "x" &
          Trim(Positive'Image(Height), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
