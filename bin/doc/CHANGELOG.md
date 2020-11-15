@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Showing scrollbars for stories on knowledge screen
 - Don't show the move map dialog on other than the map screens
 - Setting amount of saved messages in saved games
+- Don't show the game menu when there is any dialog
 
 ## [5.4] - 2020-11-01
 
