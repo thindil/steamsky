@@ -59,7 +59,9 @@ package body Utils.UI is
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Header: constant Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      Tcl.Tk.Ada.Busy.Forget(Header);
+      if Tcl.Tk.Ada.Busy.Status(Header) = "1" then
+         Tcl.Tk.Ada.Busy.Forget(Header);
+      end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
