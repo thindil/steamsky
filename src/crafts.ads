@@ -52,11 +52,11 @@ package Crafts is
       ResultIndex: Unbounded_String;
       ResultAmount: Natural;
       Workplace: ModuleType;
-      Skill: Positive;
+      Skill: SkillsData_Container.Extended_Index;
       Time: Positive;
       Difficulty: Positive;
       Tool: Unbounded_String;
-      Reputation: Integer;
+      Reputation: Integer range -100 .. 100;
       ToolQuality: Positive;
    end record;
    -- ****
