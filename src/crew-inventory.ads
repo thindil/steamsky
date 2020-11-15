@@ -24,7 +24,7 @@ with Ships; use Ships;
 package Crew.Inventory is
 -- ****
 
-   -- ****f* Inventory/UpdateInventory
+   -- ****f* Inventory/Inventory.UpdateInventory
    -- FUNCTION
    -- Update member inventory
    -- PARAMETERS
@@ -49,7 +49,7 @@ package Crew.Inventory is
       Test_Case => ("Test_UpdateInventory", Nominal);
       -- ****
 
-      -- ****f* Inventory/FreeInventory
+      -- ****f* Inventory/Inventory.FreeInventory
       -- FUNCTION
       -- Return available space in crew member inventory after adding or
       -- extracting Amount
@@ -65,7 +65,7 @@ package Crew.Inventory is
       Test_Case => ("Test_FreeInventory", Nominal);
       -- ****
 
-      -- ****f* Inventory/TakeOffItem
+      -- ****f* Inventory/Inventory.TakeOffItem
       -- FUNCTION
       -- Remove selected item from character equipment
       -- PARAMETERS
@@ -80,7 +80,7 @@ package Crew.Inventory is
       Test_Case => ("Test_TakeOffItem", Nominal);
       -- ****
 
-      -- ****f* Inventory/ItemIsUsed
+      -- ****f* Inventory/Inventory.ItemIsUsed
       -- FUNCTION
       -- Check if selected crew member use this item
       -- PARAMETERS
@@ -94,7 +94,7 @@ package Crew.Inventory is
       Test_Case => ("Test_ItemIsUsed", Nominal);
       -- ****
 
-      -- ****f* Inventory/FindTools
+      -- ****f* Inventory/Inventory.FindTools
       -- FUNCTION
       -- Search for specified tools in character and ship cargo
       -- PARAMETERS
