@@ -27,21 +27,21 @@ with Game; use Game;
 package Crew is
 -- ****
 
-   -- ****t* Crew/Skill_Array
+   -- ****t* Crew/Crew.Skill_Array
    -- FUNCTION
    -- Data structure for skills: 1 - Skill index, 2 - skill level, 3 - current experience in skill
    -- SOURCE
    type Skill_Array is array(1 .. 3) of Natural;
    -- ****
 
-   -- ****t* Crew/Skills_Container
+   -- ****t* Crew/Crew.Skills_Container
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
    package Skills_Container is new Vectors(Positive, Skill_Array);
    -- ****
 
-   -- ****t* Crew/Crew_Orders
+   -- ****t* Crew/Crew.Crew_Orders
    -- FUNCTION
    -- Available orders for ships crews
    -- SOURCE
@@ -50,7 +50,7 @@ package Crew is
       Rest, Defend, Boarding, Train);
    -- ****
 
-   -- ****t* Crew/Equipment_Array
+   -- ****t* Crew/Crew.Equipment_Array
    -- FUNCTION
    -- Data structure for currently equipped items for crew members. 1 - weapon,
    -- 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
@@ -58,7 +58,7 @@ package Crew is
    type Equipment_Array is array(1 .. 7) of Natural;
    -- ****
 
-   -- ****t* Crew/Skill_Range
+   -- ****t* Crew/Crew.Skill_Range
    -- FUNCTION
    -- Range used for skills but also for health, tiredness, hunger, thirst and
    -- loyalty
@@ -66,7 +66,7 @@ package Crew is
    subtype Skill_Range is Natural range 0 .. 100;
    -- ****
 
-   -- ****s* Crew/Member_Data
+   -- ****s* Crew/Crew.Member_Data
    -- FUNCTION
    -- Data structure for ship crew member
    -- PARAMETERS
@@ -121,84 +121,84 @@ package Crew is
    end record;
    -- ****
 
-   -- ****v* Crew/MaleSyllablesStart
+   -- ****v* Crew/Crew.MaleSyllablesStart
    -- FUNCTION
    -- List of males first syllables for generating crew members names
    -- SOURCE
    MaleSyllablesStart: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/MaleSyllablesMiddle
+   -- ****v* Crew/Crew.MaleSyllablesMiddle
    -- FUNCTION
    -- List of males middle syllables for generating crew members names
    -- SOURCE
    MaleSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/MaleSyllablesEnd
+   -- ****v* Crew/Crew.MaleSyllablesEnd
    -- FUNCTION
    -- List of males last syllables for generating crew members names
    -- SOURCE
    MaleSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/MaleVocals
+   -- ****v* Crew/Crew.MaleVocals
    -- FUNCTION
    -- List of males vocals for generating crew members names
    -- SOURCE
    MaleVocals: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/MaleConsonants
+   -- ****v* Crew/Crew.MaleConsonants
    -- FUNCTION
    -- List of males consonants for generating crew members names
    -- SOURCE
    MaleConsonants: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/FemaleSyllablesStart
+   -- ****v* Crew/Crew.FemaleSyllablesStart
    -- FUNCTION
    -- List of females first syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesStart: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/FemaleSyllablesMiddle
+   -- ****v* Crew/Crew.FemaleSyllablesMiddle
    -- FUNCTION
    -- List of females middle syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/FemaleSyllablesEnd
+   -- ****v* Crew/Crew.FemaleSyllablesEnd
    -- FUNCTION
    -- List of females last syllables for generating crew members names
    -- SOURCE
    FemaleSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Crew/FemaleVocals
+   -- ****v* Crew/Crew.FemaleVocals
    -- FUNCTION
    -- List of females vocals for generating crew members names
    -- SOURCE
    FemaleVocals: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****e* Crew/Crew_Order_Error
+   -- ****e* Crew/Crew.Crew_Order_Error
    -- FUNCTION
    -- Raised when new order can't be set for selected crew member
    -- SOURCE
    Crew_Order_Error: exception;
    -- ****
 
-   -- ****e* Crew/Crew_No_Space_Error
+   -- ****e* Crew/Crew.Crew_No_Space_Error
    -- FUNCTION
    -- Raised when no space for new item in crew member inventory
    -- SOURCE
    Crew_No_Space_Error: exception;
    -- ****
 
-   -- ****f* Crew/GainExp
+   -- ****f* Crew/Crew.GainExp
    -- FUNCTION
    -- Gain experience in selected skill.
    -- PARAMETERS
@@ -211,7 +211,7 @@ package Crew is
       Test_Case => ("Test_GainExp", Nominal);
       -- ****
 
-      -- ****f* Crew/GenerateMemberName
+      -- ****f* Crew/Crew.GenerateMemberName
       -- FUNCTION
       -- Generate random name for crew member
       -- PARAMETERS
@@ -229,7 +229,7 @@ package Crew is
       Test_Case => ("Test_GenerateMemberName", Nominal);
       -- ****
 
-      -- ****f* Crew/FindCabin
+      -- ****f* Crew/Crew.FindCabin
       -- FUNCTION
       -- Find index of cabin which belongs to selected crew member
       -- PARAMETERS
@@ -242,7 +242,7 @@ package Crew is
       Test_Case => ("Test_FindCabin", Robustness);
       -- ****
 
-      -- ****f* Crew/UpdateCrew
+      -- ****f* Crew/Crew.UpdateCrew
       -- FUNCTION
       -- Update player ship crew
       -- PARAMETERS
@@ -255,7 +255,7 @@ package Crew is
       Test_Case => ("Test_UpdateCrew", Robustness);
       -- ****
 
-      -- ****f* Crew/WaitForRest
+      -- ****f* Crew/Crew.WaitForRest
       -- FUNCTION
       -- Wait until whole crew is rested
       -- SOURCE
@@ -263,7 +263,7 @@ package Crew is
       Test_Case => ("Test_WaitForRest", Robustness);
       -- ****
 
-      -- ****f* Crew/GetSkillLevelName
+      -- ****f* Crew/Crew.GetSkillLevelName
       -- FUNCTION
       -- Get member skill level name
       -- PARAMETERS
@@ -275,7 +275,7 @@ package Crew is
       Test_Case => ("Test_GetSkillLevelName", Nominal);
       -- ****
 
-      -- ****f* Crew/GetAttributeLevelName
+      -- ****f* Crew/Crew.GetAttributeLevelName
       -- FUNCTION
       -- Get member attribute level name
       -- PARAMETERS
@@ -288,7 +288,7 @@ package Crew is
       Test_Case => ("Test_GetAttributeLevelName", Nominal);
       -- ****
 
-      -- ****f* Crew/DailyPayment
+      -- ****f* Crew/Crew.DailyPayment
       -- FUNCTION
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
@@ -296,7 +296,7 @@ package Crew is
       Test_Case => ("Test_DailyPayment", Robustness);
       -- ****
 
-      -- ****f* Crew/GetTrainingToolQuality
+      -- ****f* Crew/Crew.GetTrainingToolQuality
       -- FUNCTION
       -- Get minumum required quality for training tool for the selected skill
       -- for the selected crew member
