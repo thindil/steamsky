@@ -103,7 +103,7 @@ package body Maps.UI is
         (GameMenu, "command", "-label {Resign from game} -command ResignGame");
       for I in MenuAccelerators'Range loop
          Entry_Configure
-           (GameMenu, Positive'Image(I),
+           (GameMenu, Natural'Image(I - 1),
             "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
       end loop;
    end CreateGameMenu;
@@ -892,7 +892,7 @@ package body Maps.UI is
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
-            "{InvokeMenu" & Positive'Image(I) & "}");
+            "{InvokeMenu" & Natural'Image(I - 1) & "}");
       end loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),

@@ -1,5 +1,5 @@
 # Game menu
-menu .gamemenu -title {Steam Sky - menu}
+menu .gamemenu -tearoff false
 proc InvokeMenu {index} {
    if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {
       .gamemenu invoke $index
