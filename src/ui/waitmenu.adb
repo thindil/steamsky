@@ -95,7 +95,8 @@ package body WaitMenu is
            "-from 1.0 -to 1440.0 -width 6 -validate key -validatecommand {ValidateSpinbox %S %s 1440}");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
       Set(AmountBox, "1");
-      AmountLabel := Create(WaitDialog & ".mins", "-text minutes.");
+      AmountLabel :=
+        Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Tired > 0 and
@@ -138,8 +139,9 @@ package body WaitMenu is
            "-text {Close} -command {CloseDialog " & WaitDialog & "}");
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
-      Focus(Button);
       Tcl.Tk.Ada.Place.Place(WaitDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Focus(Button);
+      Bind(Button, "<Tab>", "{focus " & WaitDialog & ".wait1;break}");
       return TCL_OK;
    end Show_Wait_Command;
 
