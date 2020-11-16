@@ -61,33 +61,34 @@ package body WaitMenu is
       Button :=
         Create
           (WaitDialog & ".wait1", "-text {Wait 1 minute} -command {Wait 1}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button, "-sticky we -columnspan 3 -padx 5 -pady {5 0}");
       Button :=
         Create
           (WaitDialog & ".wait5", "-text {Wait 5 minutes} -command {Wait 5}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Button :=
         Create
           (WaitDialog & ".wait10",
            "-text {Wait 10 minutes} -command {Wait 10}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Button :=
         Create
           (WaitDialog & ".wait15",
            "-text {Wait 15 minutes} -command {Wait 15}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Button :=
         Create
           (WaitDialog & ".wait30",
            "-text {Wait 30 minutes} -command {Wait 30}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Button :=
         Create
           (WaitDialog & ".wait1h", "-text {Wait 1 hour} -command {Wait 60}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Button :=
         Create(WaitDialog & ".wait", "-text Wait  -command {Wait amount}");
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
       AmountBox :=
         Create
           (WaitDialog & ".amount",
@@ -95,7 +96,7 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
       Set(AmountBox, "1");
       AmountLabel := Create(WaitDialog & ".mins", "-text minutes.");
-      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2");
+      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Tired > 0 and
            PlayerShip.Crew(I).Order = Rest then
@@ -122,20 +123,21 @@ package body WaitMenu is
            Create
              (WaitDialog & ".rest",
               "-text {Wait until crew is rested} -command {Wait rest}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       end if;
       if NeedHealing then
          Button :=
            Create
              (WaitDialog & ".heal",
               "-text {Wait until crew is healed} -command {Wait heal}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       end if;
       Button :=
         Create
           (WaitDialog & ".close",
            "-text {Close} -command {CloseDialog " & WaitDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
       Focus(Button);
       Tcl.Tk.Ada.Place.Place(WaitDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       return TCL_OK;
