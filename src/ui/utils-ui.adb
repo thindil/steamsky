@@ -57,16 +57,17 @@ package body Utils.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      Header: constant Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      if Tcl.Tk.Ada.Busy.Status(Header) = "1" then
-         Tcl.Tk.Ada.Busy.Forget(Header);
+      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
+         Tcl.Tk.Ada.Busy.Forget(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Forget(Frame);
       end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Grab_Release(Dialog);
       Destroy(Dialog);
       return TCL_OK;
    end Close_Dialog_Command;
@@ -114,25 +115,30 @@ package body Utils.UI is
    end Update_Dialog_Command;
 
    procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
-      MessageDialog: constant Ttk_Frame :=
+      MessageDialog: Ttk_Frame;
+      MessageLabel: Ttk_Label;
+      MessageButton: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      if TimerId /= Null_Unbounded_String then
+         Cancel(To_String(TimerId));
+         TimerId := Null_Unbounded_String;
+      end if;
+      Tcl_Eval(Get_Context, "update");
+      MessageDialog :=
         Create(ParentFrame & ".message", "-style Dialog.TFrame");
-      MessageLabel: constant Ttk_Label :=
+      MessageLabel :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      MessageButton: constant Ttk_Button :=
+      MessageButton :=
         Create
           (MessageDialog & ".button",
            "-text {Close" &
            Positive'Image(GameSettings.AutoCloseMessagesTime) &
            "} -command {CloseDialog " & MessageDialog & "}");
-      Header: constant Ttk_Frame := Get_Widget(".gameframe.header");
-   begin
-      Tcl.Tk.Ada.Busy.Busy(Header);
-      Grab_Set(MessageDialog);
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
-      end if;
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
