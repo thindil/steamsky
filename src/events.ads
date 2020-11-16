@@ -49,7 +49,7 @@ package Events is
    type EventData(EType: Events_Types := None) is record
       SkyX: BasesRange;
       SkyY: BasesRange;
-      Time: Integer;
+      Time: Positive;
       case EType is
          when DoublePrice =>
             ItemIndex: Unbounded_String;
