@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Don't show the move map dialog on other than the map screens
 - Setting amount of saved messages in saved games
 - Don't show the game menu when there is any dialog
+- Crash on giving rest order to the crew members
 
 ## [5.4] - 2020-11-01
 
