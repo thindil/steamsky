@@ -1472,7 +1472,7 @@ package body Ships.UI.Crew is
          if Member.Order /= Rest then
             Menu.Add
               (CrewMenu, "command",
-               "-label {Go on break} -command {SetCrewOrder Rest" &
+               "-label {Go on break} -command {SetCrewOrder Rest " &
                CArgv.Arg(Argv, 1) & "}");
          end if;
       end if;
