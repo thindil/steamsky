@@ -84,7 +84,7 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    grid [ttk::button .gameframe.movemapdialog.centeronship -text {Center map on ship} -command {MoveMap centeronship} -underline 0] -row 3 -columnspan 2 -sticky we -padx 5
    grid [ttk::button .gameframe.movemapdialog.centeronhome -text {Center map on home base} -command {MoveMap centeronhome} -underline 1] -row 4 -columnspan 2 -sticky we -padx 5
    grid [ttk::button .gameframe.movemapdialog.close -text {Close} -command {CloseDialog .gameframe.movemapdialog}] -row 5 -columnspan 2 -sticky we -padx 5 -pady {0 5}
-   place .gameframe.movemapdialog -in .gameframe -relx 0.3 -rely 0.3
+   place .gameframe.movemapdialog -in .gameframe -relx 0.3 -rely 0.25
    focus .gameframe.movemapdialog.close
    foreach widget [winfo children .gameframe.movemapdialog] {
       bind $widget <Alt-m> {.gameframe.movemapdialog.moveto invoke;break}
