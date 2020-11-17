@@ -388,7 +388,7 @@ package body Events is
       end loop;
    end DeleteEvent;
 
-   -- ****if* Events/GetPlayerShips
+   -- ****if* Events/Events.GetPlayerShips
    -- FUNCTION
    -- Get the list of all prototypes ships which are only for the player
    -- PARAMETERS
