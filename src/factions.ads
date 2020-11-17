@@ -136,12 +136,12 @@ package Factions is
       FoodTypes: UnboundedString_Container.Vector;
       DrinksTypes: UnboundedString_Container.Vector;
       HealingTools: Unbounded_String;
-      HealingSkill: Positive;
+      HealingSkill: SkillsData_Container.Extended_Index;
       Flags: UnboundedString_Container.Vector;
       Careers: Careers_Container.Map;
       BaseIcon: Wide_Character;
       BasesTypes: BaseType_Container.Map;
-      WeaponSkill: Positive;
+      WeaponSkill: SkillsData_Container.Extended_Index;
    end record;
    -- ****
 
