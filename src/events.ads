@@ -26,7 +26,7 @@ with Game; use Game;
 package Events is
 -- ****
 
-   -- ****t* Events/Events_Types
+   -- ****t* Events/Events.Events_Types
    -- FUNCTION
    -- Types of events
    -- SOURCE
@@ -35,7 +35,7 @@ package Events is
       FullDocks, EnemyPatrol, Trader, FriendlyShip);
    -- ****
 
-   -- ****s* Events/EventData
+   -- ****s* Events/Events.EventData
    -- FUNCTION
    -- Data structure for random events
    -- PARAMETERS
@@ -61,35 +61,35 @@ package Events is
    end record;
    -- ****
 
-   -- ****t* Events/Events_Container
+   -- ****t* Events/Events.Events_Container
    -- FUNCTION
    -- Used to store events data
    -- SOURCE
    package Events_Container is new Vectors(Positive, EventData);
    -- ****
 
-   -- ****v* Events/Events_List
+   -- ****v* Events/Events.Events_List
    -- FUNCTION
    -- List of all events in the game
    -- SOURCE
    Events_List: Events_Container.Vector;
    -- ****
 
-   -- ****v* Events/Traders
+   -- ****v* Events/Events.Traders
    -- FUNCTION
    -- List of indexes of all friendly traders in the game
    -- SOURCE
    Traders: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Events/FriendlyShips
+   -- ****v* Events/Events.FriendlyShips
    -- FUNCTION
    -- List of indexes of all friendly ships in the game
    -- SOURCE
    FriendlyShips: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****f* Events/CheckForEvent
+   -- ****f* Events/Events.CheckForEvent
    -- FUNCTION
    -- Check if event happen
    -- RESULT
@@ -99,7 +99,7 @@ package Events is
       Test_Case => ("Test_CheckForEvent", Robustness);
       -- ****
 
-      -- ****f* Events/UpdateEvents
+      -- ****f* Events/Events.UpdateEvents
       -- FUNCTION
       -- Update all events timers
       -- PARAMETERS
@@ -109,7 +109,7 @@ package Events is
       Test_Case => ("Test_UpdateEvents", Robustness);
       -- ****
 
-      -- ****f* Events/DeleteEvent
+      -- ****f* Events/Events.DeleteEvent
       -- FUNCTION
       -- Delete selected event
       -- PARAMETERS
@@ -120,7 +120,7 @@ package Events is
       Test_Case => ("Test_DeleteEvent", Nominal);
       -- ****
 
-      -- ****f* Events/GenerateTraders
+      -- ****f* Events/Events.GenerateTraders
       -- FUNCTION
       -- Create list of traders needed for trader event
       -- SOURCE
@@ -128,7 +128,7 @@ package Events is
       Test_Case => ("Test_GenerateTraders", Robustness);
       -- ****
 
-      -- ****f* Events/RecoverBase
+      -- ****f* Events/Events.RecoverBase
       -- FUNCTION
       -- Recover abandoned base
       -- PARAMETERS
@@ -138,7 +138,7 @@ package Events is
       Test_Case => ("Test_RecoverBase", Robustness);
       -- ****
 
-      -- ****f* Events/GenerateEnemies
+      -- ****f* Events/Events.GenerateEnemies
       -- FUNCTION
       -- Create list of enemies ships
       -- PARAMETERS
