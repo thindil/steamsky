@@ -857,7 +857,12 @@ package body Ships.UI.Modules is
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1 -sticky we");
       end if;
-      configure(ModuleText, "-state disabled");
+      configure
+        (ModuleText,
+         "-state disabled -height" &
+         Positive'Image
+           (Positive'Value(Count(ModuleText, "-lines", "0.0", "end")) +
+            1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
       Focus(CloseButton);
