@@ -139,8 +139,8 @@ package Config is
    --                         ship docked
    -- ShowTooltips          - If true, show tooltips to player
    -- ShowLastMessages      - If true, show last messages window everywhere
-   -- MessagesPosition      - Position of last messages window in pixels from
-   --                         top of the game window
+   -- MessagesPosition      - Height of last messages window in pixels from
+   --                         bottom of the game window
    -- FullScreen            - If true, set the game window in full screen mode
    -- AutoCloseMessagesTime - Amount of seconds after which message box is
    --                         auto closed
