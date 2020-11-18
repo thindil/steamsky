@@ -100,34 +100,6 @@ package Game is
    package Attributes_Container is new Vectors(Positive, Attributes_Array);
    -- ****
 
-   -- ****s* Game/Skill_Record
-   -- FUNCTION
-   -- Data for skills
-   -- PARAMETERS
-   -- Name         - Name of skill
-   -- Attribute    - Attribute used with that skill
-   -- Description  - Description of skill
-   -- Tool         - Item type used as tool for training that skill
-   -- ToolsQuality - Required tools quality for training that skill at the
-   --                selected level. First value minimal level of skill,
-   --                second minimum quality of tool
-   -- SOURCE
-   type Skill_Record is record
-      Name: Unbounded_String;
-      Attribute: Positive;
-      Description: Unbounded_String;
-      Tool: Unbounded_String;
-      ToolsQuality: Attributes_Container.Vector;
-   end record;
-   -- ****
-
-   -- ****t* Game/SkillsData_Container
-   -- FUNCTION
-   -- Used to store skills data
-   -- SOURCE
-   package SkillsData_Container is new Vectors(Positive, Skill_Record);
-   -- ****
-
    -- ****s* Game/Attribute_Record
    -- FUNCTION
    -- Data for attributes
@@ -146,6 +118,34 @@ package Game is
    -- Used to store attributes data
    -- SOURCE
    package AttributesData_Container is new Vectors(Positive, Attribute_Record);
+   -- ****
+
+   -- ****s* Game/Skill_Record
+   -- FUNCTION
+   -- Data for skills
+   -- PARAMETERS
+   -- Name         - Name of skill
+   -- Attribute    - Attribute used with that skill
+   -- Description  - Description of skill
+   -- Tool         - Item type used as tool for training that skill
+   -- ToolsQuality - Required tools quality for training that skill at the
+   --                selected level. First value minimal level of skill,
+   --                second minimum quality of tool
+   -- SOURCE
+   type Skill_Record is record
+      Name: Unbounded_String;
+      Attribute: AttributesData_Container.Extended_Index;
+      Description: Unbounded_String;
+      Tool: Unbounded_String;
+      ToolsQuality: Attributes_Container.Vector;
+   end record;
+   -- ****
+
+   -- ****t* Game/SkillsData_Container
+   -- FUNCTION
+   -- Used to store skills data
+   -- SOURCE
+   package SkillsData_Container is new Vectors(Positive, Skill_Record);
    -- ****
 
    -- ****v* Game/Skills_List
@@ -245,63 +245,63 @@ package Game is
    -- FUNCTION
    -- Index of attribute used as bonus to character condition
    -- SOURCE
-   ConditionIndex: Positive;
+   ConditionIndex: AttributesData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/StrengthIndex
    -- FUNCTION
    -- Index of attribute used to count max character encumbrance
    -- SOURCE
-   StrengthIndex: Positive;
+   StrengthIndex: AttributesData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/PilotingSkill
    -- FUNCTION
    -- Index of skill used to piloting ship
    -- SOURCE
-   PilotingSkill: Positive;
+   PilotingSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/EngineeringSkill
    -- FUNCTION
    -- Index of skill used by engineer on ship
    -- SOURCE
-   EngineeringSkill: Positive;
+   EngineeringSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/GunnerySkill
    -- FUNCTION
    -- Index of skill used by gunners
    -- SOURCE
-   GunnerySkill: Positive;
+   GunnerySkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/TalkingSkill
    -- FUNCTION
    -- Index of skill used for talk in bases or with other ships
    -- SOURCE
-   TalkingSkill: Positive;
+   TalkingSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/PerceptionSkill
    -- FUNCTION
    -- Index of skill used for spoting
    -- SOURCE
-   PerceptionSkill: Positive;
+   PerceptionSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/DodgeSkill
    -- FUNCTION
    -- Index of skill used for dodge in character's combat
    -- SOURCE
-   DodgeSkill: Positive;
+   DodgeSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/UnarmedSkill
    -- FUNCTION
    -- Index of skill used for unarmed attacks in character's combat
    -- SOURCE
-   UnarmedSkill: Positive;
+   UnarmedSkill: SkillsData_Container.Extended_Index;
    -- ****
 
    -- ****v* Game/HeadArmor
