@@ -879,7 +879,8 @@ package body Maps.UI.Commands is
       if MessageBox
           ("-message {Are you sure want to quit?} -icon question -type yesno") =
         "yes" then
-         GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
+         GameSettings.MessagesPosition :=
+           GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
          EndGame(True);
          ShowMainMenu;
       end if;

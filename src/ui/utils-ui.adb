@@ -550,6 +550,7 @@ package body Utils.UI is
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
         Get_Widget(Paned & ".controls.messages");
+      PanedPosition: Natural;
    begin
       SubWindows := To_Unbounded_String(Panes(Paned));
       if Index(SubWindows, " ") = 0 then
@@ -560,7 +561,13 @@ package body Utils.UI is
       Forget(Paned, SubWindow);
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
-      SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+         PanedPosition := GameSettings.WindowHeight;
+      else
+         PanedPosition :=
+           GameSettings.WindowHeight - GameSettings.MessagesPosition;
+      end if;
+      SashPos(Paned, "0", Natural'Image(PanedPosition));
       if NewScreenName in "optionsframe" | "messagesframe" or
         not GameSettings.ShowLastMessages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);

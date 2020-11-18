@@ -123,7 +123,8 @@ package body Maps.UI is
          Delete(GameMenu, "6", "14");
          ShowStatistics;
       else
-         GameSettings.MessagesPosition := Natural'Value(SashPos(Paned, "0"));
+         GameSettings.MessagesPosition :=
+           GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
          EndGame(False);
          ShowMainMenu;
       end if;
@@ -835,6 +836,7 @@ package body Maps.UI is
       Header: constant Ttk_Frame := Get_Widget(".gameframe.header");
       MessagesFrame: constant Ttk_Frame :=
         Get_Widget(".gameframe.paned.controls.messages");
+      PanedPosition: Natural;
       use Log;
    begin
       GameMenu := Get_Widget(".gamemenu");
@@ -908,7 +910,13 @@ package body Maps.UI is
            (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
       end loop;
-      SashPos(Paned, "0", Natural'Image(GameSettings.MessagesPosition));
+      if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+         PanedPosition := GameSettings.WindowHeight;
+      else
+         PanedPosition :=
+           GameSettings.WindowHeight - GameSettings.MessagesPosition;
+      end if;
+      SashPos(Paned, "0", Natural'Image(PanedPosition));
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
            ".gameframe.paned") =
