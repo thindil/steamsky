@@ -861,13 +861,14 @@ package body Ships.UI.Modules is
         (ModuleText,
          "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(ModuleText, "-lines", "0.0", "end")) +
-            1));
+           (Positive'Value(Count(ModuleText, "-lines", "0.0", "end")) + 1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place
         (ModuleDialog, "-in .gameframe -relx 0.2 -rely 0.1");
+      Bind(CloseButton, "<Tab>", "{break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Module_Info_Command;
 
