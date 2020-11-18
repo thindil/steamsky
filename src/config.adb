@@ -53,7 +53,7 @@ package body Config is
          InterfaceTheme => To_Unbounded_String("steamsky"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
          AutoAskForEvents => False, ShowTooltips => True,
-         ShowLastMessages => True, MessagesPosition => 400,
+         ShowLastMessages => True, MessagesPosition => 200,
          FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
          TopicsPosition => 200, ShowNumbers => False);
       Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
