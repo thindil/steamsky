@@ -459,8 +459,10 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(ModuleCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack
+        (YScroll, " -side right -fill y -padx {0 5} -pady 5");
+      Tcl.Tk.Ada.Pack.Pack
+        (ModuleCanvas, "-expand true -fill both -padx 5 -pady 5");
       Tcl.Tk.Ada.Pack.Pack_Propagate(ModuleDialog, False);
       Autoscroll(YScroll);
       if Module.Durability < Module.MaxDurability then
