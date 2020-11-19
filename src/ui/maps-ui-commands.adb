@@ -217,13 +217,29 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
       MapView: constant Tk_Text :=
         Get_Widget(".gameframe.paned.mapframe.map", Interp);
+      PanedPosition: Positive;
+      SashPosition: constant Natural := Natural'Value(SashPos(Paned, "0"));
    begin
       GameSettings.WindowWidth :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
       GameSettings.WindowHeight :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
+      if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+         PanedPosition := GameSettings.WindowHeight;
+      else
+         PanedPosition :=
+           GameSettings.WindowHeight - GameSettings.MessagesPosition;
+      end if;
+      if SashPosition > 0 and then SashPosition /= PanedPosition then
+         GameSettings.MessagesPosition :=
+           GameSettings.WindowHeight - SashPosition;
+         PanedPosition := SashPosition;
+      end if;
+      SashPos(Paned, "0", Natural'Image(PanedPosition));
       configure
         (MapView,
          "-width [expr [winfo width $mapview] / [font measure MapFont {" &
