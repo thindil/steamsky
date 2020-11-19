@@ -28,14 +28,14 @@ with Game; use Game;
 package Factions is
 -- ****
 
-   -- ****t* Factions/NamesTypes
+   -- ****t* Factions/Factions.NamesTypes
    -- FUNCTION
    -- Types of names of members and bases factions
    -- SOURCE
    type NamesTypes is (STANDARD, ROBOTIC);
    -- ****
 
-   -- ****s* Factions/RelationsRecord
+   -- ****s* Factions/Factions.RelationsRecord
    -- FUNCTION
    -- Data structure for relations between factions
    -- PARAMETERS
@@ -49,7 +49,7 @@ package Factions is
    end record;
    -- ****
 
-   -- ****t* Factions/Relations_Container
+   -- ****t* Factions/Factions.Relations_Container
    -- FUNCTION
    -- Used to store relations data in faction
    -- SOURCE
@@ -57,7 +57,7 @@ package Factions is
       RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****s* Factions/CareerRecord
+   -- ****s* Factions/Factions.CareerRecord
    -- FUNCTION
    -- Data structure for player career in faction
    -- PARAMETERS
@@ -76,7 +76,7 @@ package Factions is
    end record;
    -- ****
 
-   -- ****t* Factions/Careers_Container
+   -- ****t* Factions/Factions.Careers_Container
    -- FUNCTION
    -- Used to store careers data in faction
    -- SOURCE
@@ -84,7 +84,7 @@ package Factions is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* Factions/BaseType_Container
+   -- ****t* Factions/Factions.BaseType_Container
    -- FUNCTION
    -- Used to store bases types data in faction
    -- SOURCE
@@ -92,7 +92,7 @@ package Factions is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****s* Factions/FactionRecord
+   -- ****s* Factions/Factions.FactionRecord
    -- FUNCTION
    -- Data structure for faction
    -- PARAMETERS
@@ -145,7 +145,7 @@ package Factions is
    end record;
    -- ****
 
-   -- ****t* Factions/Factions_Container
+   -- ****t* Factions/Factions.Factions_Container
    -- FUNCTION
    -- Used to store factions data
    -- SOURCE
@@ -153,12 +153,12 @@ package Factions is
       FactionRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* Factions/Factions_List
+   -- ****v* Factions/Factions.Factions_List
    -- SOURCE
    Factions_List: Factions_Container.Map;
    -- ****
 
-   -- ****f* Factions/LoadFactions
+   -- ****f* Factions/Factions.LoadFactions
    -- FUNCTION
    -- Load NPC factions from file
    -- PARAMETERS
@@ -167,7 +167,7 @@ package Factions is
    procedure LoadFactions(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Factions/GetReputation
+   -- ****f* Factions/Factions.GetReputation
    -- FUNCTION
    -- Get reputation between SourceFaction and TargetFaction
    -- PARAMETERS
@@ -184,7 +184,7 @@ package Factions is
       Test_Case => ("Test_GetReputation", Nominal);
       -- ****
 
-      -- ****f* Factions/IsFriendly
+      -- ****f* Factions/Factions.IsFriendly
       -- FUNCTION
       -- Check if TargetFaction is friendly for SourceFaction. Returns true if yes, otherwise false.
       -- PARAMETERS
@@ -201,7 +201,7 @@ package Factions is
       Test_Case => ("Test_IsFriendly", Nominal);
       -- ****
 
-      -- ****f* Factions/GetRandomFaction
+      -- ****f* Factions/Factions.GetRandomFaction
       -- FUNCTION
       -- Select random faction from list
       -- RESULT
