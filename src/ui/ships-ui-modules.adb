@@ -415,11 +415,21 @@ package body Ships.UI.Modules is
       ModuleInfo, ProgressBarStyle: Unbounded_String;
       ModuleDialog: constant Ttk_Frame :=
         Create(".moduledialog", "-style Dialog.TFrame");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (ModuleDialog & ".yscroll",
+           "-orient vertical -command [list .moduledialog.canvas yview]");
+      ModuleCanvas: constant Tk_Canvas :=
+        Create
+          (ModuleDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll & " set]");
+      ModuleFrame: constant Ttk_Frame := Create(ModuleCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (ModuleDialog & ".button",
+          (ModuleFrame & ".button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Height: Positive := 10;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -449,8 +459,12 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
+      Tcl.Tk.Ada.Pack.Pack(ModuleCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack_Propagate(ModuleDialog, False);
+      Autoscroll(YScroll);
       if Module.Durability < Module.MaxDurability then
-         Label := Create(ModuleDialog & ".damagelbl");
+         Label := Create(ModuleFrame & ".damagelbl");
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
          if DamagePercent < 1.0 and DamagePercent > 0.79 then
@@ -465,6 +479,7 @@ package body Ships.UI.Modules is
             configure(Label, "-text {Status: Destroyed}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
+         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          MaxValue :=
            Positive(Float(Modules_List(Module.ProtoIndex).Durability) * 1.5);
          if Module.MaxDurability = MaxValue then
@@ -473,7 +488,7 @@ package body Ships.UI.Modules is
          end if;
       end if;
       ModuleText :=
-        Create(ModuleDialog & ".info", "-wrap char -height 15 -width 40");
+        Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Insert
         (ModuleText, "end",
@@ -539,7 +554,7 @@ package body Ships.UI.Modules is
          when HULL =>
             Label :=
               Create
-                (ModuleDialog & ".modules",
+                (ModuleFrame & ".modules",
                  "-text {Modules installed:" &
                  Integer'Image(Module.InstalledModules) & " /" &
                  Integer'Image(Module.MaxModules) & "}");
@@ -550,10 +565,11 @@ package body Ships.UI.Modules is
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
+            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when CABIN =>
             AddOwnersInfo("Owner");
             if Module.Cleanliness /= Module.Quality then
-               Label := Create(ModuleDialog & ".cleanlbl");
+               Label := Create(ModuleFrame & ".cleanlbl");
                DamagePercent :=
                  1.0 - (Float(Module.Cleanliness) / Float(Module.Quality));
                if DamagePercent > 0.0 and DamagePercent < 0.2 then
@@ -580,7 +596,7 @@ package body Ships.UI.Modules is
                end if;
                ProgressBar :=
                  Create
-                   (ModuleDialog & ".clean",
+                   (ModuleFrame & ".clean",
                     "-orient horizontal -maximum 1.0 -value {" &
                     Float'Image(DamagePercent) & "}" &
                     To_String(ProgressBarStyle));
@@ -588,16 +604,18 @@ package body Ships.UI.Modules is
                Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -sticky w");
                Tcl.Tk.Ada.Grid.Grid
                  (ProgressBar, "-row 1 -column 1 -sticky we");
+               Height :=
+                 Height + Positive'Value(Winfo_Get(Label, "reqheight"));
             end if;
             ProgressBar :=
               Create
-                (ModuleDialog & ".quality",
+                (ModuleFrame & ".quality",
                  "-orient horizontal -style blue.Horizontal.TProgressbar -maximum 1.0 -value {" &
                  Float'Image(Float(Module.Quality) / 100.0) & "}");
             Add(ProgressBar, "Quality of the selected cabin");
             Label :=
               Create
-                (ModuleDialog & ".qualitylbl",
+                (ModuleFrame & ".qualitylbl",
                  "-text {" & GetCabinQuality(Module.Quality) & "}");
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
@@ -607,6 +625,7 @@ package body Ships.UI.Modules is
             end if;
             Tcl.Tk.Ada.Grid.Grid(Label, "-row 2 -sticky w");
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1 -sticky we");
+            Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
             Insert(ModuleText, "end", "{" & LF & "Strength:}");
             if Modules_List(Module.ProtoIndex).MType = GUN then
@@ -846,16 +865,17 @@ package body Ships.UI.Modules is
          end if;
          ProgressBar :=
            Create
-             (ModuleDialog & ".upgrade",
+             (ModuleFrame & ".upgrade",
               "-orient horizontal -maximum 1.0 -value {" &
               Float'Image(UpgradePercent) & "}" & To_String(ProgressBarStyle));
          Add(ProgressBar, "The progress of the current upgrade of the module");
          Label :=
            Create
-             (ModuleDialog & ".upgradelbl",
+             (ModuleFrame & ".upgradelbl",
               "-text {" & To_String(ModuleInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-row 3 -sticky w");
          Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 3 -column 1 -sticky we");
+         Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       end if;
       configure
         (ModuleText,
@@ -863,8 +883,35 @@ package body Ships.UI.Modules is
          Positive'Image
            (Positive'Value(Count(ModuleText, "-lines", "0.0", "end")) + 1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
+      if Height > 500 then
+         Height := 500;
+      end if;
+      configure
+        (ModuleFrame,
+         "-height" & Positive'Image(Height) & " -width " &
+         Winfo_Get(ModuleText, "reqwidth"));
+      Canvas_Create
+        (ModuleCanvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(ModuleFrame));
+      configure
+        (ModuleCanvas,
+         "-scrollregion [list " & BBox(ModuleCanvas, "all") & "]");
+      Height := Height + 20;
+      declare
+         Width: Positive;
+      begin
+         Width :=
+           Positive'Value(Winfo_Get(ModuleText, "reqwidth")) +
+           Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
+         configure
+           (ModuleDialog,
+            "-height" & Positive'Image(Height) & " -width" &
+            Positive'Image(Width));
+      end;
       Tcl.Tk.Ada.Place.Place
         (ModuleDialog, "-in .gameframe -relx 0.2 -rely 0.1");
       Bind(CloseButton, "<Tab>", "{break}");
