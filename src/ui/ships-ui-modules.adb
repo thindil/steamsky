@@ -24,6 +24,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
@@ -883,7 +884,8 @@ package body Ships.UI.Modules is
         (ModuleText,
          "-state disabled -height" &
          Positive'Image
-           (Positive'Value(Count(ModuleText, "-lines", "0.0", "end")) + 1));
+           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+            Positive'Value(Metrics("InterfaceFont", "-linespace"))));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
