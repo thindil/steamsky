@@ -23,6 +23,7 @@ with Trades; use Trades;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
+with Maps; use Maps;
 
 package body Bases.Ship is
 

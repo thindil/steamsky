@@ -21,7 +21,6 @@ with Game; use Game;
 with Crew; use Crew;
 with Factions; use Factions;
 with Items; use Items;
-with Maps; use Maps;
 with Missions; use Missions;
 with Ships; use Ships;
 
