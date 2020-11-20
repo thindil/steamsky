@@ -693,7 +693,7 @@ package body Utils.UI is
       InfoDialog := Create(".gameframe.info", "-style Dialog.TFrame");
       InfoLabel :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       if ParentName = ".gameframe" then
          InfoButton :=
            Create
@@ -706,7 +706,7 @@ package body Utils.UI is
               "-text Close -command {CloseDialog " & InfoDialog & " " &
               ParentName & "}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(InfoButton);
+      Tcl.Tk.Ada.Grid.Grid(InfoButton, "-pady {0 5}");
       Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(InfoButton);
       Bind(InfoButton, "<Tab>", "{break}");
