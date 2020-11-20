@@ -14,8 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -25,7 +23,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -33,7 +30,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Config; use Config;
 with Crew; use Crew;
 with Factions; use Factions;
@@ -55,13 +51,17 @@ package body Utils.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData);
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
       if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
          Tcl.Tk.Ada.Busy.Forget(Frame);
          Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Forget(Frame);
+      end if;
+      if Argc = 3 then
+         Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
          Tcl.Tk.Ada.Busy.Forget(Frame);
       end if;
       if TimerId /= Null_Unbounded_String then
@@ -672,56 +672,46 @@ package body Utils.UI is
       end if;
    end ShowInventoryItemInfo;
 
-   procedure ShowInfo(Text, ParentName: String := "") is
-      InfoDialog: constant Tk_Toplevel :=
-        Create
-          (ParentName & ".info",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      X, Y: Integer;
-      InfoLabel: constant Ttk_Label :=
-        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      InfoButton: constant Ttk_Button :=
-        Create
-          (InfoDialog & ".button",
-           "-text Close -command {CloseDialog " & InfoDialog & " " &
-           ParentName & "}");
-      DialogHeight: constant Positive :=
-        Positive'Value(Winfo_Get(InfoLabel, "reqheight")) +
-        Positive'Value(Winfo_Get(InfoButton, "reqheight")) + 10;
-      Parent: Ttk_Frame;
+   procedure ShowInfo(Text, ParentName: String := ".gameframe") is
+      InfoDialog: Ttk_Frame;
+      InfoLabel: Ttk_Label;
+      InfoButton: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      if ParentName'Length = 0 then
-         Parent := Get_Widget(".");
+      if ParentName = ".gameframe" then
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
       else
-         Parent := Get_Widget(ParentName);
+         Frame := Get_Widget(ParentName);
+         Tcl.Tk.Ada.Busy.Busy(Frame);
       end if;
-      Tcl.Tk.Ada.Busy.Busy(Parent);
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Wm_Set(InfoDialog, "transient", ParentName);
-      if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
-         Wm_Set(InfoDialog, "attributes", "-type dialog");
-      end if;
+      InfoDialog := Create(ParentName & ".info", "-style Dialog.TFrame");
+      InfoLabel :=
+        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we");
+      if ParentName = ".gameframe" then
+         InfoButton :=
+           Create
+             (InfoDialog & ".button",
+              "-text Close -command {CloseDialog " & InfoDialog & "}");
+      else
+         InfoButton :=
+           Create
+             (InfoDialog & ".button",
+              "-text Close -command {CloseDialog " & InfoDialog & " " &
+              ParentName & "}");
+      end if;
       Tcl.Tk.Ada.Grid.Grid(InfoButton);
-      X := (Positive'Value(Winfo_Get(InfoDialog, "vrootwidth")) - 310) / 2;
-      if X < 0 then
-         X := 0;
-      end if;
-      Y :=
-        (Positive'Value(Winfo_Get(InfoDialog, "vrootheight")) - DialogHeight) /
-        2;
-      if Y < 0 then
-         Y := 0;
-      end if;
-      Wm_Set
-        (InfoDialog, "geometry",
-         "310x" & Trim(Positive'Image(DialogHeight), Left) & "+" &
-         Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
-      Wm_Set(InfoDialog, "overrideredirect", "1");
+      Tcl.Tk.Ada.Place.Place
+        (InfoDialog, "-in " & ParentName & " -relx 0.3 -rely 0.3");
       Focus(InfoButton);
+      Bind(InfoButton, "<Tab>", "{break}");
+      Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
    end ShowInfo;
 
 end Utils.UI;
