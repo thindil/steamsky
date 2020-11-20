@@ -45,14 +45,14 @@ with Careers; use Careers;
 
 package body Game.SaveLoad is
 
-   -- ****iv* GSaveLoad/SaveData
+   -- ****iv* GSaveLoad/GSaveLoad.SaveData
    -- FUNCTION
    -- XML Structure for save/load the game data from file
    -- SOURCE
    SaveData: Document;
    -- ****
 
-   -- ****iv* GSaveLoad/SaveVersion
+   -- ****iv* GSaveLoad/GSaveLoad.SaveVersion
    -- FUNCTION
    -- Current version of the save game
    -- SOURCE
