@@ -17,6 +17,7 @@
 
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Game; use Game;
 
 -- ****h* Missions/Missions
 -- FUNCTION
@@ -59,10 +60,10 @@ package Missions is
    -- SOURCE
    type Mission_Data(MType: Missions_Types := Deliver) is record
       Time: Positive;
-      TargetX: Natural;
-      TargetY: Natural;
+      TargetX: Natural range 0 .. 1024;
+      TargetY: Natural range 0 .. 1024;
       Reward: Positive;
-      StartBase: Positive;
+      StartBase: BasesRange;
       Finished: Boolean;
       Multiplier: RewardMultiplier;
       case MType is
