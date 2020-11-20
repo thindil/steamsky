@@ -38,7 +38,7 @@ package Utils.UI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -147,9 +147,9 @@ package Utils.UI is
       -- Text       - Text of info to show
       -- ParentName - Name of the parent widget. If empty, then the main game
       --              window will be used as parent for widget. Default value
-      --              is empty
+      --              is .gameframe
       -- SOURCE
-   procedure ShowInfo(Text, ParentName: String := "");
+   procedure ShowInfo(Text, ParentName: String := ".gameframe");
    -- ****
 
 end Utils.UI;
