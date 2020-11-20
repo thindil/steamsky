@@ -672,7 +672,7 @@ package body Utils.UI is
       end if;
    end ShowInventoryItemInfo;
 
-   procedure ShowInfo(Text, ParentName: String := ".gameframe") is
+   procedure ShowInfo(Text: String; ParentName: String := ".gameframe") is
       InfoDialog: Ttk_Frame;
       InfoLabel: Ttk_Label;
       InfoButton: Ttk_Button;
