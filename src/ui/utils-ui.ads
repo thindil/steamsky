@@ -149,7 +149,8 @@ package Utils.UI is
       --              window will be used as parent for widget. Default value
       --              is .gameframe
       -- SOURCE
-   procedure ShowInfo(Text: String; ParentName: String := ".gameframe");
+   procedure ShowInfo(Text: String; ParentName: String := ".gameframe") with
+      Pre => Text'Length > 0 and ParentName'Length > 0;
    -- ****
 
 end Utils.UI;
