@@ -690,7 +690,7 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      InfoDialog := Create(ParentName & ".info", "-style Dialog.TFrame");
+      InfoDialog := Create(".gameframe.info", "-style Dialog.TFrame");
       InfoLabel :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we");
@@ -707,8 +707,7 @@ package body Utils.UI is
               ParentName & "}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(InfoButton);
-      Tcl.Tk.Ada.Place.Place
-        (InfoDialog, "-in " & ParentName & " -relx 0.3 -rely 0.3");
+      Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(InfoButton);
       Bind(InfoButton, "<Tab>", "{break}");
       Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
