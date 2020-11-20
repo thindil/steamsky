@@ -41,6 +41,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
+with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;

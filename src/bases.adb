@@ -24,6 +24,7 @@ with Goals; use Goals;
 with Crafts; use Crafts;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
+with Maps; use Maps;
 with Mobs; use Mobs;
 
 package body Bases is

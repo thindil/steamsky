@@ -18,6 +18,7 @@
 with Utils; use Utils;
 with Trades; use Trades;
 with BasesTypes; use BasesTypes;
+with Maps; use Maps;
 
 package body Bases.Cargo is
 

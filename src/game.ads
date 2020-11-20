@@ -419,6 +419,20 @@ package Game is
    subtype Extended_BaseRange is Natural range 0 .. 1024;
    -- ****
 
+   -- ****t* Game/MapXRange
+   -- FUNCTION
+   -- X axis size of the game map
+   -- SOURCE
+   subtype MapXRange is Positive range 1 .. 1024;
+   -- ****
+
+   -- ****t* Game/MapYRange
+   -- FUNCTION
+   -- Y axis size of the game map
+   -- SOURCE
+   subtype MapYRange is Positive range 1 .. 1024;
+   -- ****
+
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data

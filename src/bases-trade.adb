@@ -24,6 +24,7 @@ with Utils; use Utils;
 with Bases.Cargo; use Bases.Cargo;
 with Config; use Config;
 with BasesTypes; use BasesTypes;
+with Maps; use Maps;
 
 package body Bases.Trade is
 
