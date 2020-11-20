@@ -27,7 +27,6 @@ with Bases; use Bases;
 with Messages; use Messages;
 with Crew; use Crew;
 with Statistics; use Statistics;
-with Game; use Game;
 with Utils; use Utils;
 with Config; use Config;
 with Events; use Events;
