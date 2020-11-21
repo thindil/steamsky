@@ -289,7 +289,7 @@ package body OrdersMenu is
             when FullDocks =>
                Add
                  (OrdersMenu, "command",
-                  "-label {Wait (full docks} -underline 0");
+                  "-label {Wait (full docks)} -underline 0 -command ShowWait");
             when AttackOnBase =>
                Add
                  (OrdersMenu, "command",
