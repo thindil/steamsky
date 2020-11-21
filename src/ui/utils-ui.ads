@@ -61,7 +61,9 @@ package Utils.UI is
       -- ParentFrame - The parent frame of the message widget. Default is
       --               the game frame. Can be empty
       -- SOURCE
-   procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe");
+   procedure ShowMessage
+     (Text: String; ParentFrame: String := ".gameframe") with
+      Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
    -- ****f* UUI/AddCommand
@@ -72,7 +74,8 @@ package Utils.UI is
    -- AdaCommand - Ada function which will be invoked
    -- SOURCE
    procedure AddCommand
-     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc);
+     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) with
+      Pre => Name'Length > 0;
      -- ****
 
    -- ****f* UUI/AddCommands
@@ -123,7 +126,8 @@ package Utils.UI is
    -- PARAMETERS
    -- NewScreenName - Part of th name of the new Ttk_Frame to add
    -- SOURCE
-   procedure ShowScreen(NewScreenName: String);
+   procedure ShowScreen(NewScreenName: String) with
+      Pre => NewScreenName'Length > 0;
    -- ****
 
    -- ****f* UUI/ShowInventoryItemInfo
@@ -137,7 +141,7 @@ package Utils.UI is
    -- SOURCE
    procedure ShowInventoryItemInfo
      (Parent: String; ItemIndex: Positive; MemberIndex: Natural) with
-      Pre => MemberIndex <= PlayerShip.Crew.Last_Index;
+      Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
       -- ****f* UUI/ShowInfo
