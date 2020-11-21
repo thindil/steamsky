@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Don't show the game menu when there is any dialog
 - Crash on giving rest order to the crew members
 - Setting and remembering size of messages window
+- Wait order when docks in base are full
 
 ## [5.4] - 2020-11-01
 
