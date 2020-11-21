@@ -247,8 +247,8 @@ package body Utils.UI is
              (".gameframe.paned.lootframe.canvas.loot.item.dropframe.error");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
-      elsif CArgv.Arg(Argv, 1) = ".itemdialog.canvas.frame.amount" then
-         LabelName := To_Unbounded_String(".itemdialog.canvas.frame.errorlbl");
+      elsif CArgv.Arg(Argv, 1) = ".itemdialog.amount" then
+         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
       else
