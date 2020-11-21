@@ -18,8 +18,10 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -389,9 +391,9 @@ package body Ships.UI.Cargo is
    -- FUNCTION
    -- Show UI to drop the selected item from the ship cargo
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -410,106 +412,55 @@ package body Ships.UI.Cargo is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Argc, Interp);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ItemDialog: constant Tk_Toplevel :=
-        Create
-          (".itemdialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (ItemDialog & ".xscroll",
-           "-orient horizontal -command [list .itemdialog.canvas xview]");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (ItemDialog & ".yscroll",
-           "-orient vertical -command [list .itemdialog.canvas yview]");
-      ItemCanvas: constant Tk_Canvas :=
-        Create
-          (ItemDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
-      ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
+      ItemDialog: constant Ttk_Frame :=
+        Create(".itemdialog", "-style Dialog.TFrame");
       Button: Ttk_Button :=
         Create
-          (ItemFrame & ".dropbutton",
+          (ItemDialog & ".dropbutton",
            "-text Drop -command {DropItem " & CArgv.Arg(Argv, 1) & "}");
-      Height: Positive := 10;
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
-          (ItemFrame & ".amount",
+          (ItemDialog & ".amount",
            "-width 10 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
-           ItemFrame & ".amount" & Positive'Image(ItemIndex) & "}");
+           ItemDialog & ".amount" & Positive'Image(ItemIndex) & "}");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Wm_Set(ItemDialog, "title", "{Steam Sky - Drop Item}");
-      Wm_Set(ItemDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(ItemDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(ItemCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Label :=
         Create
-          (ItemFrame & ".title",
+          (ItemDialog & ".title",
            "-text {Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
            " from ship cargo} -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Label := Create(ItemFrame & ".amountlbl", "-text {Amount:}");
+      Label :=
+        Create(ItemDialog & ".amountlbl", "-text {Amount:} -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       Label :=
         Create
-          (ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 370");
+          (ItemDialog & ".errorlbl",
+           "-style Headerred.TLabel -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3");
       Button :=
         Create
-          (ItemFrame & ".cancelbutton",
-           "-text Cancel -command {destroy " & ItemDialog & "}");
+          (ItemDialog & ".cancelbutton",
+           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3");
-      Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
       Focus(Button);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure(ItemFrame, "-height" & Positive'Image(Height) & " -width 370");
-      Canvas_Create
-        (ItemCanvas, "window", "0 0 -anchor nw -window " & ItemFrame);
-      configure
-        (ItemCanvas, "-scrollregion [list " & BBox(ItemCanvas, "all") & "]");
-      Height := Height + 30;
-      declare
-         X, Y: Integer;
-      begin
-         X := (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - 400) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(ItemDialog, "vrootheight")) - Height) / 2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (ItemDialog, "geometry",
-            "400x" & Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind(ItemDialog, "<Escape>", "{destroy " & ItemDialog & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       return TCL_OK;
    end Show_Drop_Item_Command;
 
@@ -538,9 +489,9 @@ package body Ships.UI.Cargo is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       DropAmount, DropAmount2: Natural;
-      ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
+      ItemDialog: constant Ttk_Frame := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox :=
-        Get_Widget(ItemDialog & ".canvas.frame.amount", Interp);
+        Get_Widget(ItemDialog & ".amount", Interp);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       DropAmount := Natural'Value(Get(SpinBox));
@@ -578,7 +529,12 @@ package body Ships.UI.Cargo is
             Durability => PlayerShip.Cargo.Element(ItemIndex).Durability,
             Price => PlayerShip.Cargo.Element(ItemIndex).Price);
       end if;
-      Destroy(ItemDialog);
+      if Close_Dialog_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "CloseDialog" & ".itemdialog") =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       UpdateHeader;
       UpdateMessages;
       return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
