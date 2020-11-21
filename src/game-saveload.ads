@@ -22,21 +22,21 @@
 package Game.SaveLoad is
 -- ****
 
-   -- ****v* GSaveLoad/SaveName
+   -- ****v* GSaveLoad/GSaveLoad.SaveName
    -- FUNCTION
    -- Full path with file name for current savegame
    -- SOURCE
    SaveName: Unbounded_String;
    -- ****
 
-   -- ****e* GSaveLoad/SaveGame_Invalid_Data
+   -- ****e* GSaveLoad/GSaveLoad.SaveGame_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in savegame
    -- SOURCE
    SaveGame_Invalid_Data: exception;
    -- ****
 
-   -- ****f* GSaveLoad/SaveGame
+   -- ****f* GSaveLoad/GSaveLoad.SaveGame
    -- FUNCTION
    -- Save game to file
    -- PARAMETERS
@@ -46,14 +46,14 @@ package Game.SaveLoad is
    procedure SaveGame(PrettyPrint: Boolean := False);
    -- ****
 
-   -- ****f* GSaveLoad/LoadGame
+   -- ****f* GSaveLoad/GSaveLoad.LoadGame
    -- FUNCTION
    -- Load game from file
    -- SOURCE
    procedure LoadGame;
    -- ****
 
-   -- ****f* GSaveLoad/GenerateSaveName
+   -- ****f* GSaveLoad/GSaveLoad.GenerateSaveName
    -- FUNCTION
    -- Generate unique name for save game file
    -- PARAMETERS
