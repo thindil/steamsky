@@ -115,9 +115,17 @@ package body Utils.UI is
    end Update_Dialog_Command;
 
    procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
-      MessageDialog: Ttk_Frame;
-      MessageLabel: Ttk_Label;
-      MessageButton: Ttk_Button;
+      MessageDialog: constant Ttk_Frame :=
+        Create(ParentFrame & ".message", "-style Dialog.TFrame");
+      MessageLabel: constant Ttk_Label :=
+        Create
+          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
+      MessageButton: constant Ttk_Button :=
+        Create
+          (MessageDialog & ".button",
+           "-text {Close" &
+           Positive'Image(GameSettings.AutoCloseMessagesTime) &
+           "} -command {CloseDialog " & MessageDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -128,17 +136,6 @@ package body Utils.UI is
          TimerId := Null_Unbounded_String;
       end if;
       Tcl_Eval(Get_Context, "update");
-      MessageDialog :=
-        Create(ParentFrame & ".message", "-style Dialog.TFrame");
-      MessageLabel :=
-        Create
-          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      MessageButton :=
-        Create
-          (MessageDialog & ".button",
-           "-text {Close" &
-           Positive'Image(GameSettings.AutoCloseMessagesTime) &
-           "} -command {CloseDialog " & MessageDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
@@ -673,8 +670,10 @@ package body Utils.UI is
    end ShowInventoryItemInfo;
 
    procedure ShowInfo(Text: String; ParentName: String := ".gameframe") is
-      InfoDialog: Ttk_Frame;
-      InfoLabel: Ttk_Label;
+      InfoDialog: constant Ttk_Frame :=
+        Create(".info", "-style Dialog.TFrame");
+      InfoLabel: constant Ttk_Label :=
+        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       InfoButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
@@ -690,9 +689,6 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      InfoDialog := Create(".gameframe.info", "-style Dialog.TFrame");
-      InfoLabel :=
-        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       if ParentName = ".gameframe" then
          InfoButton :=
