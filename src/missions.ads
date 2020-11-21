@@ -60,8 +60,8 @@ package Missions is
    -- SOURCE
    type Mission_Data(MType: Missions_Types := Deliver) is record
       Time: Positive;
-      TargetX: Natural range 0 .. 1024;
-      TargetY: Natural range 0 .. 1024;
+      TargetX: Natural range 0 .. MapXRange'Last;
+      TargetY: Natural range 0 .. MapYRange'Last;
       Reward: Positive;
       StartBase: BasesRange;
       Finished: Boolean;
