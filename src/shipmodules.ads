@@ -75,7 +75,7 @@ package ShipModules is
       Description: Unbounded_String;
       MaxOwners: Natural;
       Speed: Integer;
-      Reputation: Integer range -100 .. 100;
+      Reputation: ReputationRange;
    end record;
    -- ****
 

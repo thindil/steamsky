@@ -56,7 +56,7 @@ package Crafts is
       Time: Positive;
       Difficulty: Positive;
       Tool: Unbounded_String;
-      Reputation: Integer range -100 .. 100;
+      Reputation: ReputationRange;
       ToolQuality: Positive;
    end record;
    -- ****

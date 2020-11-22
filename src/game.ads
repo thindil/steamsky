@@ -433,6 +433,13 @@ package Game is
    subtype MapYRange is Positive range 1 .. 1024;
    -- ****
 
+   -- ****t* Game/ReputationRange
+   -- FUNCTION
+   -- Range of the player's reputation level in bases
+   -- SOURCE
+   subtype ReputationRange is Integer range -100 .. 100;
+   -- ****
+
    -- ****e* Game/Data_Loading_Error
    -- FUNCTION
    -- Raised when error occurs during loading any game data
