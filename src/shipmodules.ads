@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Strings.Unbounded.Hash;
 with Ada.Containers.Hashed_Maps; use Ada.Containers;
 with DOM.Readers; use DOM.Readers;
+with Game; use Game;
 
 -- ****h* ShipModules/ShipModules
 -- FUNCTION
@@ -66,7 +67,7 @@ package ShipModules is
       MaxValue: Integer;
       Durability: Integer;
       RepairMaterial: Unbounded_String;
-      RepairSkill: Positive;
+      RepairSkill: SkillsData_Container.Extended_Index;
       Price: Natural;
       InstallTime: Positive;
       Unique: Boolean;
@@ -74,7 +75,7 @@ package ShipModules is
       Description: Unbounded_String;
       MaxOwners: Natural;
       Speed: Integer;
-      Reputation: Integer;
+      Reputation: Integer range -100 .. 100;
    end record;
    -- ****
 
