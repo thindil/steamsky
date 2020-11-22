@@ -329,7 +329,7 @@ package body Combat.UI is
          ComboBox :=
            Create
              (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
-              "-values [list " & GetCrewList(2) & "]");
+              "-values [list " & GetCrewList(2) & "] -width 10");
          if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
               Gunner then
@@ -356,7 +356,7 @@ package body Combat.UI is
          ComboBox :=
            Create
              (Widget_Image(Frame) & ".gunorder" & To_String(GunIndex),
-              "-values [list" & To_String(GunnerOrders) & "]");
+              "-values [list" & To_String(GunnerOrders) & "] -state readonly");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Bind
            (ComboBox, "<<ComboboxSelected>>",
@@ -495,6 +495,9 @@ package body Combat.UI is
       else
          Append(EnemyInfo, "Unknown");
       end if;
+      if Length(Enemy.Ship.Description) > 0 then
+         Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
+      end if;
       Label.Name :=
         New_String
           (".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
@@ -546,7 +549,7 @@ package body Combat.UI is
                 (Widget_Image(Frame) & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(ModuleName) & "}");
             Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Natural'Image(Row) & " -column 0");
+              (Label, "-row" & Natural'Image(Row) & " -column 0 -sticky w");
             DamagePercent :=
               ((Float(Enemy.Ship.Modules(I).Durability) /
                 Float(Enemy.Ship.Modules(I).MaxDurability)) *
@@ -1046,8 +1049,6 @@ package body Combat.UI is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
       CombatCanvas: constant Tk_Canvas := Get_Widget(CombatFrame & ".canvas");
-      Label: constant Ttk_Label :=
-        Get_Widget(CombatCanvas & ".combat.right.enemy.description");
       CombatStarted: Boolean;
       Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
    begin
@@ -1070,7 +1071,7 @@ package body Combat.UI is
                return;
             end if;
          end if;
-         if Winfo_Get(Label, "exists") = "0" then
+         if Winfo_Get(CombatFrame, "exists") = "0" then
             Tcl_EvalFile
               (Get_Context,
                To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
@@ -1089,7 +1090,6 @@ package body Combat.UI is
          end if;
          Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command ShowCombatUI");
-         configure(Label, "-text {" & To_String(Enemy.Ship.Description) & "}");
          for Member of PlayerShip.Crew loop
             if Member.Order = Rest
               and then
