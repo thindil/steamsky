@@ -20,7 +20,6 @@ with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with Game; use Game;
 with Log; use Log;
 with Items; use Items;
 
