@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Crash on giving rest order to the crew members
 - Setting and remembering size of messages window
 - Wait order when docks in base are full
+- Showing combat UI
 
 ## [5.4] - 2020-11-01
 
