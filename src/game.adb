@@ -485,7 +485,7 @@ package body Game is
       UpdateMissions(Minutes);
    end UpdateGame;
 
-   -- ****if* Game/LoadData
+   -- ****if* Game/Game.LoadData
    -- FUNCTION
    -- Load main the game data file
    -- PARAMETERS
