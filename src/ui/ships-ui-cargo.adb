@@ -438,8 +438,8 @@ package body Ships.UI.Cargo is
         Create
           (ItemDialog & ".title",
            "-text {Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
-           " from ship cargo} -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+           " from the ship's cargo} -wraplength 370 -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Label :=
         Create(ItemDialog & ".amountlbl", "-text {Amount:} -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Label);
@@ -448,15 +448,15 @@ package body Ships.UI.Cargo is
       Label :=
         Create
           (ItemDialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+           "-style Headerred.TLabel -wraplength 370 -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
            "-text Cancel -command {CloseDialog " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3 -pady {0 5}");
       Focus(Button);
       Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
