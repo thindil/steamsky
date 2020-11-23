@@ -251,10 +251,12 @@ package body Utils.UI is
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String("You will drop amount below low level of ");
-      else
-         LabelName := To_Unbounded_String(".itemdialog.canvas.frame.errorlbl");
+      elsif CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
+         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String("You will give amount below low level of ");
+      else
+         return TCL_ERROR;
       end if;
       CargoIndex := Natural'Value(CArgv.Arg(Argv, 2));
       Value := To_Unbounded_String(CArgv.Arg(Argv, 3));
