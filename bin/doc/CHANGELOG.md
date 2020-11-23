@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Setting and remembering size of messages window
 - Wait order when docks in base are full
 - Showing combat UI
+- Typo in info about daily payments
 
 ## [5.4] - 2020-11-01
 
