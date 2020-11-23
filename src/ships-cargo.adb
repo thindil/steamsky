@@ -24,7 +24,8 @@ package body Ships.Cargo is
    procedure UpdateCargo
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex, Price: Natural := 0) is
+      Durability: Items_Durability := Default_Item_Durability;
+      CargoIndex, Price: Natural := 0) is
       ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
       if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
