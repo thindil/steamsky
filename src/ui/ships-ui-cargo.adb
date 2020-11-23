@@ -20,7 +20,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -36,10 +35,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
@@ -188,9 +184,9 @@ package body Ships.UI.Cargo is
    -- Show UI to give the selected item from the ship cargo to the selected
    -- crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -209,67 +205,42 @@ package body Ships.UI.Cargo is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ItemDialog: constant Tk_Toplevel :=
-        Create
-          (".itemdialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (ItemDialog & ".xscroll",
-           "-orient horizontal -command [list .itemdialog.canvas xview]");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (ItemDialog & ".yscroll",
-           "-orient vertical -command [list .itemdialog.canvas yview]");
-      ItemCanvas: constant Tk_Canvas :=
-        Create
-          (ItemDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
-      ItemFrame: constant Ttk_Frame := Create(ItemCanvas & ".frame");
+      ItemDialog: constant Ttk_Frame :=
+        Create(".itemdialog", "-style Dialog.TFrame");
       Button: Ttk_Button :=
         Create
-          (ItemFrame & ".givebutton",
+          (ItemDialog & ".givebutton",
            "-text Give -command {GiveItem " & CArgv.Arg(Argv, 1) & "}");
-      Height: Positive := 10;
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
-          (ItemFrame & ".giveamount",
+          (ItemDialog & ".giveamount",
            "-width 15 -from 1.0 -to" &
            Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
-           ItemFrame & ".giveamount" & Positive'Image(ItemIndex) & "}");
+           ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
       CrewBox: constant Ttk_ComboBox :=
-        Create(ItemFrame & ".member", "-state readonly -width 14");
+        Create(ItemDialog & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Wm_Set(ItemDialog, "title", "{Steam Sky - Give Item}");
-      Wm_Set(ItemDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(ItemDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(ItemCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Label :=
         Create
-          (ItemFrame & ".title",
+          (ItemDialog & ".title",
            "-text {Give " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
-           " from ship cargo to the selected crew member} -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Label := Create(ItemFrame & ".amountlbl", "-text {Amount:}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+           " from the ship's cargo to the selected crew member} -wraplength 370");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+      Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
-      Label := Create(ItemFrame & ".memberlbl", "-text {To:}");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1 -pady {0 5}");
+      Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       for Member of PlayerShip.Crew loop
          Append(MembersNames, " " & Member.Name);
@@ -277,50 +248,23 @@ package body Ships.UI.Cargo is
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 2");
-      Height := Height + Positive'Value(Winfo_Get(CrewBox, "reqheight"));
       Label :=
         Create
-          (ItemFrame & ".errorlbl", "-style Headerred.TLabel -wraplength 370");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+          (ItemDialog & ".errorlbl",
+           "-style Headerred.TLabel -wraplength 370");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx {5 0} -pady 5");
       Button :=
         Create
-          (ItemFrame & ".cancelbutton",
-           "-text Cancel -command {destroy " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 4");
-      Height := Height + Positive'Value(Winfo_Get(Button, "reqheight"));
+          (ItemDialog & ".cancelbutton",
+           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button, "-column 1 -row 4 -padx {0 5} -pady 5 -sticky e");
       Focus(Button);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure(ItemFrame, "-height" & Positive'Image(Height) & " -width 370");
-      Canvas_Create
-        (ItemCanvas, "window", "0 0 -anchor nw -window " & ItemFrame);
-      configure
-        (ItemCanvas, "-scrollregion [list " & BBox(ItemCanvas, "all") & "]");
-      Height := Height + 30;
-      declare
-         X, Y: Integer;
-      begin
-         X := (Positive'Value(Winfo_Get(ItemDialog, "vrootwidth")) - 400) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(ItemDialog, "vrootheight")) - Height) / 2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (ItemDialog, "geometry",
-            "400x" & Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind(ItemDialog, "<Escape>", "{destroy " & ItemDialog & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       return TCL_OK;
    end Show_Give_Item_Command;
 
@@ -353,10 +297,8 @@ package body Ships.UI.Cargo is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Item: constant InventoryData := PlayerShip.Cargo(ItemIndex);
       ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
-      SpinBox: constant Ttk_SpinBox :=
-        Get_Widget(ItemDialog & ".canvas.frame.giveamount");
-      ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(ItemDialog & ".canvas.frame.member");
+      SpinBox: constant Ttk_SpinBox := Get_Widget(ItemDialog & ".giveamount");
+      ComboBox: constant Ttk_ComboBox := Get_Widget(ItemDialog & ".member");
    begin
       Amount := Natural'Value(Get(SpinBox));
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
