@@ -911,7 +911,7 @@ package body Crew is
                   else
                      Append(PayMessage, " her ");
                   end if;
-                  Append(PayMessage, " daily payment.");
+                  Append(PayMessage, "daily payment.");
                   AddMessage(To_String(PayMessage), TradeMessage);
                   UpdateMorale(PlayerShip, MemberIndex, GetRandom(1, 5));
                end if;
