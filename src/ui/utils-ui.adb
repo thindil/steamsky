@@ -55,18 +55,20 @@ package body Utils.UI is
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Forget(Frame);
+      if TimerId /= Null_Unbounded_String then
+         Cancel(To_String(TimerId));
+         TimerId := Null_Unbounded_String;
       end if;
       if Argc = 3 then
          Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
          Tcl.Tk.Ada.Busy.Forget(Frame);
+         Destroy(Dialog);
+         return TCL_OK;
       end if;
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
+      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
+         Tcl.Tk.Ada.Busy.Forget(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Forget(Frame);
       end if;
       Destroy(Dialog);
       return TCL_OK;
@@ -668,6 +670,7 @@ package body Utils.UI is
          ShowInfo(To_String(ItemInfo));
       else
          ShowInfo(To_String(ItemInfo), Parent);
+         Tcl_Eval(Get_Context, "raise .info");
       end if;
    end ShowInventoryItemInfo;
 
