@@ -103,8 +103,9 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(MemberCanvas, "-expand true -fill both");
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
+      Tcl.Tk.Ada.Pack.Pack
+        (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
       Autoscroll(YScroll);
       Label := Create(MemberFrame & ".name", "-text {Name}");
       Tcl.Tk.Ada.Grid.Grid(Label);
