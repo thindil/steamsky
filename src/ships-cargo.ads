@@ -40,7 +40,8 @@ package Ships.Cargo is
    procedure UpdateCargo
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex, Price: Natural := 0) with
+      Durability: Items_Durability := Default_Item_Durability;
+      CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index,
       Test_Case => ("Test_UpdateCargo", Nominal);
       -- ****
@@ -84,7 +85,7 @@ package Ships.Cargo is
       -- Amount of drinks or food, depends on IType on the player ship
       -- SOURCE
    function GetItemsAmount(IType: String) return Natural with
-      Pre => IType = "Drinks" or IType = "Food",
+      Pre => IType in "Drinks" | "Food",
       Test_Case => ("Test_GetItemsAmount", Nominal);
       -- ****
 
