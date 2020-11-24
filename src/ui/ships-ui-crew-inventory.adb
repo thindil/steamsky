@@ -197,11 +197,11 @@ package body Ships.UI.Crew.Inventory is
          if NewWidth > Width then
             Width := NewWidth;
          end if;
+         Bind(ItemButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       end loop;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 5");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
-      Bind(ItemButton, "<Tab>", "{focus " & CloseButton & ";break}");
       if Height > 500 then
          Height := 500;
       end if;
@@ -220,6 +220,8 @@ package body Ships.UI.Crew.Inventory is
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Tcl.Tk.Ada.Place.Place
         (MemberDialog, "-in .gameframe -relx 0.2 -rely 0.2");
+      Bind(ItemButton, "<Tab>", "{focus " & CloseButton & ";break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Member_Inventory_Command;
 
