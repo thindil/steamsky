@@ -240,6 +240,9 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1 -pady {0 5}");
+      Bind
+        (AmountBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       for Member of PlayerShip.Crew loop
@@ -248,6 +251,9 @@ package body Ships.UI.Cargo is
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 2");
+      Bind
+        (CrewBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label :=
         Create
           (ItemDialog & ".errorlbl",
@@ -255,6 +261,8 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -padx {5 0} -pady 5");
+      Bind
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
