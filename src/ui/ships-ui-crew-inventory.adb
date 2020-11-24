@@ -201,6 +201,7 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 5");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
+      Bind(ItemButton, "<Tab>", "{focus " & CloseButton & ";break}");
       if Height > 500 then
          Height := 500;
       end if;
