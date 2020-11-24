@@ -26,7 +26,7 @@ with DOM.Readers; use DOM.Readers;
 package Goals is
 -- ****
 
-   -- ****t* Goals/GoalTypes
+   -- ****t* Goals/Goals.GoalTypes
    -- FUNCTION
    -- Types of goals
    -- SOURCE
@@ -34,7 +34,7 @@ package Goals is
      (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
    -- ****
 
-   -- ****s* Goals/Goal_Data
+   -- ****s* Goals/Goals.Goal_Data
    -- FUNCTION
    -- Data structure for each goal
    -- PARAMETERS
@@ -53,28 +53,28 @@ package Goals is
    end record;
    -- ****
 
-   -- ****t* Goals/Goals_Container
+   -- ****t* Goals/Goals.Goals_Container
    -- FUNCTION
    -- Used to store goals data
    -- SOURCE
    package Goals_Container is new Vectors(Positive, Goal_Data);
    -- ****
 
-   -- ****v* Goals/Goals_List
+   -- ****v* Goals/Goals.Goals_List
    -- FUNCTION
    -- List of player goals available in game
    -- SOURCE
    Goals_List: Goals_Container.Vector;
    -- ****
 
-   -- ****v* Goals/CurrentGoal
+   -- ****v* Goals/Goals.CurrentGoal
    -- FUNCTION
    -- Player current goal
    -- SOURCE
    CurrentGoal: Goal_Data;
    -- ****
 
-   -- ****f* Goals/LoadGoals
+   -- ****f* Goals/Goals.LoadGoals
    -- FUNCTION
    -- Load player goals from files
    -- FUNCTION
@@ -83,7 +83,7 @@ package Goals is
    procedure LoadGoals(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Goals/GoalText
+   -- ****f* Goals/Goals.GoalText
    -- FUNCTION
    -- Get info about selected goal
    -- PARAMETERS
@@ -97,7 +97,7 @@ package Goals is
       Test_Case => ("Test_GoalText", Nominal);
       -- ****
 
-      -- ****f* Goals/ClearCurrentGoal
+      -- ****f* Goals/Goals.ClearCurrentGoal
       -- FUNCTION
       -- Reset current goal
       -- SOURCE
@@ -105,7 +105,7 @@ package Goals is
       Test_Case => ("Test_ClearCurrentGoal", Robustness);
       -- ****
 
-      -- ****f* Goals/UpdateGoal
+      -- ****f* Goals/Goals.UpdateGoal
       -- FUNCTION
       -- Update current goal
       -- PARAMETERS
