@@ -30,7 +30,8 @@ with Factions; use Factions;
 package body Ships.Crew is
 
    function GetSkillLevel
-     (Member: Member_Data; SkillIndex: Positive) return Natural is
+     (Member: Member_Data; SkillIndex: Skills_Container.Extended_Index)
+      return Skill_Range is
       SkillLevel: Integer := 0;
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural range 0 .. 151;
@@ -80,8 +81,8 @@ package body Ships.Crew is
    end GetSkillLevel;
 
    procedure Death
-     (MemberIndex: Positive; Reason: Unbounded_String; Ship: in out ShipRecord;
-      CreateBody: Boolean := True) is
+     (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
+      Ship: in out ShipRecord; CreateBody: Boolean := True) is
    begin
       if Ship = PlayerShip then
          if MemberIndex > 1 then
@@ -113,7 +114,8 @@ package body Ships.Crew is
       end loop;
    end Death;
 
-   procedure DeleteMember(MemberIndex: Positive; Ship: in out ShipRecord) is
+   procedure DeleteMember
+     (MemberIndex: Crew_Container.Extended_Index; Ship: in out ShipRecord) is
       TempValue: Integer;
    begin
       Ship.Crew.Delete(Index => MemberIndex);
@@ -159,8 +161,10 @@ package body Ships.Crew is
    end FindMember;
 
    procedure GiveOrders
-     (Ship: in out ShipRecord; MemberIndex: Positive; GivenOrder: Crew_Orders;
-      ModuleIndex: Natural := 0; CheckPriorities: Boolean := True) is
+     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+      GivenOrder: Crew_Orders;
+      ModuleIndex: Modules_Container.Extended_Index := 0;
+      CheckPriorities: Boolean := True) is
       MemberName: constant String := To_String(Ship.Crew(MemberIndex).Name);
       ToolsIndex: Inventory_Container.Extended_Index := 0;
       RequiredTool: Unbounded_String;
@@ -776,7 +780,8 @@ package body Ships.Crew is
    end UpdateOrders;
 
    procedure UpdateMorale
-     (Ship: in out ShipRecord; MemberIndex: Positive; Value: Integer) is
+     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+      Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Unbounded_String :=
         Ship.Crew(MemberIndex).Faction;
