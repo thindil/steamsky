@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Wait order when docks in base are full
 - Showing combat UI
 - Typo in info about daily payments
+- Game menu in combat
 
 ## [5.4] - 2020-11-01
 
