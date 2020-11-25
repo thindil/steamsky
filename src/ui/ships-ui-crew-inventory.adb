@@ -369,18 +369,18 @@ package body Ships.UI.Crew.Inventory is
            "-text {Move " &
            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
            " to ship cargo} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0} -pady {0 5}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
            "-text Cancel -command {CloseDialog " & ItemDialog &
            " .memberdialog;focus .memberdialog.canvas.frame.button}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
       Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Tcl_Eval(Interp, "raise " & ItemDialog);
