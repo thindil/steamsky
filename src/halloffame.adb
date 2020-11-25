@@ -29,7 +29,7 @@ with Statistics; use Statistics;
 
 package body HallOfFame is
 
-   -- ****iv* HallOfFame/HoFData
+   -- ****iv* HallOfFame/HallOfFame.HoFData
    -- FUNCTION
    -- XML structure for save or load hall of fame data from file
    -- SOURCE
