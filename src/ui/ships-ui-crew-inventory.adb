@@ -374,7 +374,12 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Bind
+        (AmountBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0} -pady {0 5}");
+      Bind
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
@@ -384,6 +389,8 @@ package body Ships.UI.Crew.Inventory is
       Focus(Button);
       Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Tcl_Eval(Interp, "raise " & ItemDialog);
+      Bind(Button, "<Tab>", "{focus " & ItemDialog & ".movebutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       return TCL_OK;
    end Show_Move_Item_Command;
 
