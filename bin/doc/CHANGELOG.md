@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Showing combat UI
 - Typo in info about daily payments
 - Game menu in combat
+- Crash on show/hide the game help
 
 ## [5.4] - 2020-11-01
 
