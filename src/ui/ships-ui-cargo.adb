@@ -395,6 +395,9 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Bind
+        (AmountBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label :=
         Create
           (ItemDialog & ".errorlbl",
@@ -402,6 +405,8 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
+      Bind
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
