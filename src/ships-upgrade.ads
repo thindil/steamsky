@@ -36,9 +36,13 @@ package Ships.Upgrade is
    -- ModuleIndex - Player ship index of module to upgrade
    -- UpgradeType - Type of upgrade to start
    -- SOURCE
-   procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) with
+   procedure StartUpgrading
+     (ModuleIndex: Modules_Container.Extended_Index;
+      UpgradeType: Positive) with
       Pre =>
-      (ModuleIndex <= PlayerShip.Modules.Last_Index and UpgradeType < 5),
+      (ModuleIndex in
+         PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index and
+       UpgradeType < 5),
       Test_Case => ("Test_StartUpgrading", Nominal);
       -- ****
 
