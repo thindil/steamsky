@@ -266,7 +266,7 @@ package body Help.UI is
       HelpWindow: constant Tk_Toplevel := Get_Widget(".help", Interp);
       X, Y: Integer;
       Paned: constant Ttk_PanedWindow :=
-        Get_Widget(HelpWindow & ".gameframe.paned", Interp);
+        Get_Widget(HelpWindow & ".paned", Interp);
       TopicsView: constant Ttk_Tree_View :=
         Get_Widget(Paned & ".topics.view", Interp);
    begin
@@ -331,7 +331,7 @@ package body Help.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       HelpWindow: Tk_Toplevel := Get_Widget(".help", Interp);
       Paned: constant Ttk_PanedWindow :=
-        Get_Widget(HelpWindow & ".gameframe.paned", Interp);
+        Get_Widget(HelpWindow & ".paned", Interp);
    begin
       GameSettings.TopicsPosition := Natural'Value(SashPos(Paned, "0"));
       Destroy(HelpWindow);
