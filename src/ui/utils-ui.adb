@@ -62,6 +62,7 @@ package body Utils.UI is
       if Argc = 3 then
          Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
          Tcl.Tk.Ada.Busy.Forget(Frame);
+         Focus(Frame);
          Destroy(Dialog);
          return TCL_OK;
       end if;
