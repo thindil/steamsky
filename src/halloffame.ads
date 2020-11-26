@@ -24,7 +24,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package HallOfFame is
 -- ****
 
-   -- ****s* HallOfFame/HallOfFame_Data
+   -- ****s* HallOfFame/HallOfFame.HallOfFame_Data
    -- FUNCTION
    -- Data structure for hall of fame
    -- PARAMETERS
@@ -39,7 +39,7 @@ package HallOfFame is
    end record;
    -- ****
 
-   -- ****v* HallOfFame/HallOfFame_Array
+   -- ****v* HallOfFame/HallOfFame.HallOfFame_Array
    -- FUNCTION
    -- Store all hall of fame entries
    -- SOURCE
@@ -49,14 +49,14 @@ package HallOfFame is
          DeathReason => Null_Unbounded_String));
    -- ****
 
-   -- ****f* HallOfFame/LoadHallOfFame
+   -- ****f* HallOfFame/HallOfFame.LoadHallOfFame
    -- FUNCTION
    -- Read hall of fame data from file
    -- SOURCE
    procedure LoadHallOfFame;
    -- ****
 
-   -- ****f* HallOfFame/UpdateHallOfFame
+   -- ****f* HallOfFame/HallOfFame.UpdateHallOfFame
    -- FUNCTION
    -- Check did new entry should enter hall of fame
    -- PARAMETERS
