@@ -1082,7 +1082,7 @@ package body Ships.UI.Crew is
    -- Show information about the selected crew member priorities
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -1102,33 +1102,15 @@ package body Ships.UI.Crew is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      MemberDialog: constant Tk_Toplevel :=
-        Create
-          (".memberdialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (MemberDialog & ".xscroll",
-           "-orient horizontal -command [list .memberdialog.canvas xview]");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (MemberDialog & ".yscroll",
-           "-orient vertical -command [list .memberdialog.canvas yview]");
-      MemberCanvas: constant Tk_Canvas :=
-        Create
-          (MemberDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
-      MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
+      MemberDialog: constant Ttk_Frame :=
+        Create(".memberdialog", "-style Dialog.TFrame");
       CloseButton: constant Ttk_Button :=
         Create
-          (MemberFrame & ".button",
+          (MemberDialog & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, Width, NewWidth: Positive := 10;
       Label: Ttk_Label;
       PrioritiesNames: constant array
         (Member.Orders'Range) of Unbounded_String :=
@@ -1144,34 +1126,24 @@ package body Ships.UI.Crew is
          To_Unbounded_String("Board enemy ship"),
          To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set
-        (MemberDialog, "title",
-         "{Steam Sky - " & To_String(Member.Name) & " Orders Priorities}");
-      Wm_Set(MemberDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(MemberDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(MemberCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
-      Label := Create(MemberFrame & ".name", "-text {Priority}");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Label := Create(MemberDialog & ".name", "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Label);
-      Label := Create(MemberFrame & ".level", "-text {Level}");
+      Label := Create(MemberDialog & ".level", "-text {Level}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       for I in Member.Orders'Range loop
          Label :=
            Create
-             (MemberFrame & ".name" & Trim(Positive'Image(I), Left),
+             (MemberDialog & ".name" & Trim(Positive'Image(I), Left),
               "-text {" & To_String(PrioritiesNames(I)) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
          ComboBox :=
            Create
-             (MemberFrame & ".level" & Trim(Positive'Image(I), Left),
+             (MemberDialog & ".level" & Trim(Positive'Image(I), Left),
               "-values [list None Normal Highest] -state readonly -width 8");
          Current(ComboBox, Natural'Image(Member.Orders(I)));
          Bind
@@ -1179,55 +1151,15 @@ package body Ships.UI.Crew is
             "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
             " current]" & Positive'Image(MemberIndex) & "}");
          Tcl.Tk.Ada.Grid.Grid(ComboBox, "-column 1 -row" & Positive'Image(I));
-         Height := Height + Positive'Value(Winfo_Get(ComboBox, "reqheight"));
-         NewWidth :=
-           Positive'Value(Winfo_Get(Label, "reqwidth")) +
-           Positive'Value(Winfo_Get(ComboBox, "reqwidth"));
-         if NewWidth > Width then
-            Width := NewWidth;
-         end if;
+         Bind(ComboBox, "<Escape>", "{" & CloseButton & " invoke;break}");
       end loop;
+      Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure
-        (MemberFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
-      Canvas_Create
-        (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
-      configure
-        (MemberCanvas,
-         "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
-      Height := Height + 30;
-      Width := Width + 30;
-      declare
-         X, Y: Integer;
-      begin
-         X :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootheight")) - Height) /
-           2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (MemberDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind(MemberDialog, "<Destroy>", "{CloseDialog " & MemberDialog & "}");
-         Bind(MemberDialog, "<Escape>", "{CloseDialog " & MemberDialog & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place
+        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.05");
+      Bind(CloseButton, "<Tab>", "{focus " & MemberDialog & ".level1;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Member_Priorities_Command;
 
