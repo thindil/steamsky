@@ -45,6 +45,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with Combat.UI; use Combat.UI;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -302,7 +303,11 @@ package body GameOptions is
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.ShortCut));
       end loop;
-      configure(CloseButton, "-command CloseOptions");
+      if cget(CloseButton, "-command") = "ShowCombatUI" then
+         configure(CloseButton, "-command {CloseOptions combat}");
+      else
+         configure(CloseButton, "-command {CloseOptions map}");
+      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
@@ -436,11 +441,13 @@ package body GameOptions is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- CloseOptions
+   -- CloseOptions oldscreen
+   -- Oldscreen is name of the screen to which the game should return.
+   -- Can be 'map' or 'combat'.
    -- SOURCE
    function Close_Options_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -453,7 +460,7 @@ package body GameOptions is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       RootName: constant String :=
@@ -596,8 +603,12 @@ package body GameOptions is
       Put_Line(KeysFile, To_String(FullScreenAccel));
       Close(KeysFile);
       SetKeys;
-      CreateGameMenu;
-      ShowSkyMap(True);
+      if CArgv.Arg(Argv, 1) = "map" then
+         CreateGameMenu;
+         ShowSkyMap(True);
+      else
+         ShowCombatUI(False);
+      end if;
       return TCL_OK;
    end Close_Options_Command;
 
