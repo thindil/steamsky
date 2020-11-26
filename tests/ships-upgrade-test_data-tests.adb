@@ -31,12 +31,14 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_StartUpgrading_50d3a9_d84296
-     (ModuleIndex, UpgradeType: Positive) is
+   procedure Wrap_Test_StartUpgrading_9699a2_bf0e24
+     (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
    begin
       begin
          pragma Assert
-           ((ModuleIndex <= PlayerShip.Modules.Last_Index and
+           ((ModuleIndex in
+               PlayerShip.Modules.First_Index ..
+                     PlayerShip.Modules.Last_Index and
              UpgradeType < 5));
          null;
       exception
@@ -56,18 +58,20 @@ package body Ships.Upgrade.Test_Data.Tests is
               (False,
                "ens_sloc(ships-upgrade.ads:0:):Test_StartUpgrading test commitment violated");
       end;
-   end Wrap_Test_StartUpgrading_50d3a9_d84296;
+   end Wrap_Test_StartUpgrading_9699a2_bf0e24;
 --  end read only
 
 --  begin read only
    procedure Test_StartUpgrading_test_startupgrading(Gnattest_T: in out Test);
-   procedure Test_StartUpgrading_50d3a9_d84296(Gnattest_T: in out Test) renames
+   procedure Test_StartUpgrading_9699a2_bf0e24(Gnattest_T: in out Test) renames
      Test_StartUpgrading_test_startupgrading;
---  id:2.2/50d3a9c354e40966/StartUpgrading/1/0/test_startupgrading/
+--  id:2.2/9699a2ac94abe86f/StartUpgrading/1/0/test_startupgrading/
    procedure Test_StartUpgrading_test_startupgrading
      (Gnattest_T: in out Test) is
-      procedure StartUpgrading(ModuleIndex, UpgradeType: Positive) renames
-        Wrap_Test_StartUpgrading_50d3a9_d84296;
+      procedure StartUpgrading
+        (ModuleIndex: Modules_Container.Extended_Index;
+         UpgradeType: Positive) renames
+        Wrap_Test_StartUpgrading_9699a2_bf0e24;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
