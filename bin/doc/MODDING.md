@@ -16,7 +16,7 @@ For example, to add a new item to game, create a file which looks like
 Below you will find more detailed information about the
 XML data structures used by the program.
 
-You may can edit the shipped files as well of course, but modification
+You can edit the shipped files as well of course, but modification
 you make there will be overwritten when you update the game.
 
 ## Items types
@@ -66,7 +66,7 @@ you make there will be overwritten when you update the game.
 * If editing *game.dat* file: just change the selected value of the attribute.
 * If editing your own file: you need to remove first selected attribute then add new.
 * To edit the attribute name, just edit value of the attribute `name`.
-* To change the attributes description, just edit the text between `attribute` tags.
+* To change the attribute's description, just edit the text between `attribute` tags.
 
 ### Adding a new attribute
 * To add a new attribute, just append a new line with tag `attribute` with
@@ -75,14 +75,14 @@ you make there will be overwritten when you update the game.
 
 ### Removing an existing attribute
 * In *game.dat* file: Just delete the selected attribute entry.
-* In own file: Append new line with tag `remove` which have attribute `name`
+* In own file: Append new line with tag `remove` and attribute `name`
   set to `attribute` and value with name of attribute which will be removed.
 
 ## Skills
 
 ### General information
 * Open the *game.dat* file in the *data* directory to add/remove/change skills, or
-  even better, create a new file in the modifications directory.
+  even better, create a new file in the modifications' directory.
 * Each skill starts with tag `skill`.
 * Attribute `name` is the name of the selected skill.
 * Attribute `attribute` is the name of the character's attribute (must be defined
@@ -99,9 +99,9 @@ you make there will be overwritten when you update the game.
   `quality` mean minimum required tool quality (at this moment, chance of the
   tool to break) required for that level of skill. Thus values level="50" and
   quality="5" means if skill is at level 50 or below use tools with quality
-  5 or less
+  5 or less.
 
-### Changing an existing skills
+### Changing an existing skill
 * If editing *game.dat* file: just change the selected value of the skill/s.
 * If editing a custom file: you need to remove the first selected skill and then add new.
 * To change a skill's name, edit the value of `name` attribute of the selected skill.
@@ -124,7 +124,7 @@ you make there will be overwritten when you update the game.
   set to `skill` and value with name of skill which will be removed.
 
 All changes below (to **Skills**) are made in *game.dat* file or custom file inside
-modification directory. Custom file must start with `data` tag. If you want
+modification directory. Custom file must start with `data` tag. If you want to
 overwrite default value in own file, just add new line with proper tag and
 attributes.
 
@@ -227,10 +227,11 @@ Value must be an existing skill name.
 
 ### General information
 * Default game items are in *items.dat* file which is in *data* directory.
-* If you want remove or update any existing item, you can do it in *items.dat*
-  file in *data* directory or in modification file (better option) add tag
-  `item` with attribute `index` which value will be index of selected item and
-  attribute `action`. Then if you modify an existing item, add changed values.
+* If you want to remove or update any existing item, you can do it in
+  *items.dat* file in *data* directory or in modification file (better option)
+  add tag `item` with attribute `index` which value is index of selected
+  item and attribute `action`. Then if you modify an existing item, add
+  changed values.
 
 ### Item data structure
 * Each item starts with tag `item`.
@@ -245,7 +246,7 @@ Value must be an existing skill name.
 * Attribute `type`: Item type of item (from *game.dat* file, entry
   *ItemsTypes*)
 * Attribute `showtype`: optional attribute. If you want to show item type in
-  game (for example in cargo or in trade screen) different than item type
+  game (for example in cargo or in trade screen) different from item type
   from *game.dat* file, you can set this parameter to any text value.
 * Attribute `price` is price of the item. If you want that item will be not
   possible to buy or sell in bases, set it price to 0.
@@ -273,9 +274,9 @@ Value must be an existing skill name.
 ### General information
 * Default game crafting recipes are in *recipes.dat* file which is in *data*
   directory.
-* If you want remove or update any existing recipe, you can do it in
+* If you want to remove or update any existing recipe, you can do it in
   *recipes.dat* file in *data* directory or in modification file (better
-  option) add tag `recipe` with attribute `index` which value will be index
+  option) add tag `recipe` with attribute `index` which value is index
   of selected recipe and attribute `action`. Then if you modify an existing
   recipe, add changed values.
 
@@ -290,8 +291,8 @@ Value must be an existing skill name.
 * Tag `material` contains data about material used to craft recipe. If you want
   to add more materials to recipe, just add new tag `material` with proper
   data.
-    - Attribute `type` is item type of material need for recipe.
-    - Attribute `amount` is amount of crafting materials needed for recipe. Zero
+    * Attribute `type` is item type of material need for recipe.
+    * Attribute `amount` is amount of crafting materials needed for recipe. Zero
       value for updating recipe means that this material should be removed.
 * Attribute `result`: Item index which will be produced by recipe (you can
   check this index in *items* directory).
@@ -305,7 +306,7 @@ Value must be an existing skill name.
 * Attribute `difficulty`: optional attribute. How complicated recipe is. Should
   be between 1 and 100.
 * Attribute `time`: optional attribute. How long in minutes take crafting selected
-  recipe. If not set, it take 15 minutes.
+  recipe. If not set, it takes 15 minutes.
 * Optional attribute `reputation`: Minimal reputation in bases needed to buy that
   recipe from them. Default value is -100 (available in all bases).
 * Optional attribute `toolquality`: Minimal quality of tool needed to craft
@@ -318,9 +319,9 @@ Value must be an existing skill name.
 ### General information
 * Default game ship modules are in *shipmodules.dat* file which is in *data*
   directory.
-* If you want remove or update any existing ship module, you can do it in
+* If you want to remove or update any existing ship module, you can do it in
   *shipmodules.dat* file in *data* directory or in modification file (better
-  option) add tag `module` with attribute `index` which value will be index of
+  option) add tag `module` with attribute `index` which value is index of
   selected ship module and attribute `action`. Then if you modify an existing ship
   module, add changed values.
 
@@ -351,7 +352,7 @@ Value must be an existing skill name.
   combat rounds of how long the harpoon is stuck in enemy ship. For `Cabin` it must
   be that same as "value" attribute.For any other type of modules should be 0
   (zero).
-* Attribute `durability`: Base durability of module. How many damage module can
+* Attribute `durability`: Base durability of module. How much damage module can
   take before will be destroyed.
 * Attribute `material`: Type of item which will be used to repair or upgrade
   module.
@@ -369,7 +370,7 @@ Value must be an existing skill name.
   types of modules) the module can have. Default value is 1.
 * Optional attribute `speed`: For guns, how many times in one combat round
   this gun shoots. Default value is 4. Values below 0 means that the gun shoot
-  shoot once in few rounds. For example, -3 mean the gun shoot once per 3
+  once in few rounds. For example, -3 mean the gun shoot once per 3
   rounds.
 * Optional attribute `reputation`: Minimal reputation in bases needed to
   buy that module from them. Default value is -100 (available in all bases).
@@ -379,28 +380,28 @@ Value must be an existing skill name.
 
 ### General information
 * Default game ships are in *ships.dat* file which is in *data* directory.
-* If you want remove or update any existing ship, you can do it in *ships.dat*
+* If you want to remove or update any existing ship, you can do it in *ships.dat*
   file in *data* directory or in modification file (better option) add tag
-  `ship` with attribute `index` which value will be index of selected ship and
+  `ship` with attribute `index` which value is index of selected ship and
   attribute `action`. Then if you modify an existing ship, add changed values.
 
 ### Ship data structure
 * Each ship is between `ship` tags.
-* Attribute `index` is a index (it can be a number or text) and must be unique.
+* Attribute `index` is an index (it can be a number or text) and must be unique.
   This value is used at this moment to set player ship and in Destroy types of
   goals.
 * Optional attribute `action`: What to do with this ship. Possible values
   are: "add" (add this ship, default option), "remove" (remove this ship)
   or "update" (update selected ship).
 * Attribute `name`: Type of ship. Will be visible during combat information.
-  If you want that ship will be used in friendly trader random event, you must
-  have word which you set in *game.dat* as *TraderNames* in ship name. Example:
-  if you use *trader* word, ship name can be *small poleis trader*.
+  If you want that ship will be used in friendly trader random event, you
+  have to use the word which you set in *game.dat* as *TraderNames* in ship name.
+  Example: if you use *trader* word, ship name can be *small poleis trader*.
 * Tags `module`: List of ship modules installed on selected ship.
-    - Attribute`index` is module index from files from *shipmodules* directory.
-    - Attribute `amount` is optional: If ship should have more than one that
+    * Attribute`index` is module index from files from *shipmodules* directory.
+    * Attribute `amount` is optional: If ship should have more than one that
       module, just add attribute `amount` with number of modules.
-    - Optional attribute `action`: What to do with this module. Possible values
+    * Optional attribute `action`: What to do with this module. Possible values
       are: "add" (add this module, default option) or "remove" (remove this
       module).
 * Attribute `accuracy`: Bonus to accuracy for ship.
@@ -410,9 +411,9 @@ Value must be an existing skill name.
 * Attribute `combatai`: Behavior of ship in combat (NPC ships only). Possible
   values are: Berserker - attacks all time, no matter how heavy damage it take.
   Attacker - aggressive but will be run away from combat when lost all
-  ammunition or weapons. Coward - try run from combat, attacks only in
+  ammunition or weapons. Coward - try to run from combat, attacks only in
   self-defense. Disarmer - same as Attacker but first aim for player ship
-  weapons before start destroying ship and it shoot with lower fire rate than
+  weapons before start destroying ship and it shoots with lower fire rate than
   others AI's. Additionally, each behavior determine when the enemy will start
   escaping from the combat, from fastest to longest: Disarmer, Attacker,
   Berserker.
@@ -429,12 +430,12 @@ Value must be an existing skill name.
   ship should be random, add attribute `minperception` for minimum value and
   `maxperception` for maximum value.
 * Tags `cargo`: List of items in cargo of ship.
-    - Attribute `index` is index of item from files from *items* directory. If
+    * Attribute `index` is index of item from files from *items* directory. If
       amount of that item should be constant, add attribute `amount` with
       proper value. If amount of that item should be random, add attributes
       `minamount` with minimum amount and attribute `maxamount` with maximum
       amount of that item.
-    - Optional attribute `action`: What to do with this item. Possible values
+    * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
 * Tag `description`: Description of ship (NPC ships only). Will be displayed
@@ -442,17 +443,17 @@ Value must be an existing skill name.
 * Attribute `owner`: Which fraction own ship. Possible values are: Poleis,
   Independent, Pirates, Undead, Drones, Inquisition.
 * Tags `recipes`: List of know recipes. (player ships only).
-    - Attribute `index` is recipe index from files from *recipes* directory.
-    - Optional attribute `action`: What to do with this recipe. Possible values
+    * Attribute `index` is recipe index from files from *recipes* directory.
+    * Optional attribute `action`: What to do with this recipe. Possible values
       are: "add" (add this recipe, default option) or "remove" (remove this
       recipe).
 * Tags `member`: List of crew members.
-    - Attribute `index` is mobile index from files form *mobs* directory. If
-      ship should have more than one that same mobile if crew, add attribute
+    * Attribute `index` is mobile index from files form *mobs* directory. If
+      ship should have more than one that same mobile in crew, add attribute
       `amount`. If ship should have more than one that same mobile and amount
       should be random, add attributes `minamount` for minimum amount of that
       mobile and attribute `maxamount` for maximum amount of that mobile.
-    - Optional attribute `action`: What to do with this memeber. Possible
+    * Optional attribute `action`: What to do with this memeber. Possible
       values are: "add" (add this member, default option), "remove" (remove
       this member) or "update" (update selected member).
 
@@ -460,9 +461,9 @@ Value must be an existing skill name.
 
 ### General information
 * Default game help entries are in *help.dat* file which is in *data* directory.
-* If you want remove or update any existing help topic, you can do it in
+* If you want to remove or update any existing help topic, you can do it in
   *help.dat* file in *data* directory or in modification file (better option)
-  add tag `entry` with attribute `index` which value will be index of selected
+  add tag `entry` with attribute `index` which value is index of selected
   help topic and attribute `action`. Then if you modify an existing help topic,
   add changed values.
 
@@ -475,7 +476,7 @@ Value must be an existing skill name.
 * Optional attribute `action`: What to do with this entry. Possible values
   are: "add" (add this entry, default option), "remove" (remove this entry)
   or "update" (update selected entry).
-* Text between tags `entry` is help entry text text visible when player select
+* Text between tags `entry` is help entry text visible when player selects
   this option from help menu.
 * Inside help text you can use special variables which later will be replaced
   by proper keys names. All  that variables have name `{GameKey [number]}`
@@ -509,7 +510,7 @@ Value must be an existing skill name.
   `{u}some text{/u}` for add underline for text, `{b}some text{/b}` to made
   bold characters and `{i}some text{/i}` for italic font.
 * Inside help text you can use special variables `diseaseimmune`, `nofatigue`,
-  `nomorale`, `naturalarmor`,`toxicattack`, `sentientships`, `fanaticism`,
+  `nomorale`, `naturalarmor`, `toxicattack`, `sentientships`, `fanaticism`,
   `loner` which later will be replaced by list of factions which have set
   selected flag.
 * Inside help text you can use special variables `shipyard`, `temple`,
