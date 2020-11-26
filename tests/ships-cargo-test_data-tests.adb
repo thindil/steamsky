@@ -32,7 +32,8 @@ package body Ships.Cargo.Test_Data.Tests is
    procedure Wrap_Test_UpdateCargo_87d3a7_53988c
      (Ship: in out ShipRecord;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
-      Durability: Natural := 100; CargoIndex, Price: Natural := 0) is
+      Durability: Items_Durability := Default_Item_Durability;
+      CargoIndex, Price: Natural := 0) is
    begin
       begin
          pragma Assert(CargoIndex <= Ship.Cargo.Last_Index);
@@ -66,7 +67,8 @@ package body Ships.Cargo.Test_Data.Tests is
       procedure UpdateCargo
         (Ship: in out ShipRecord;
          ProtoIndex: Unbounded_String := Null_Unbounded_String;
-         Amount: Integer; Durability: Natural := 100;
+         Amount: Integer;
+         Durability: Items_Durability := Default_Item_Durability;
          CargoIndex, Price: Natural := 0) renames
         Wrap_Test_UpdateCargo_87d3a7_53988c;
 --  end read only
@@ -183,11 +185,11 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetItemsAmount_df8553_104a2f
+   function Wrap_Test_GetItemsAmount_df8553_e4797c
      (IType: String) return Natural is
    begin
       begin
-         pragma Assert(IType = "Drinks" or IType = "Food");
+         pragma Assert(IType in "Drinks" | "Food");
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -196,7 +198,7 @@ package body Ships.Cargo.Test_Data.Tests is
                "req_sloc(ships-cargo.ads:0):Test_GetItemsAmount test requirement violated");
       end;
       declare
-         Test_GetItemsAmount_df8553_104a2f_Result: constant Natural :=
+         Test_GetItemsAmount_df8553_e4797c_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Ships.Cargo.GetItemsAmount
              (IType);
       begin
@@ -209,20 +211,20 @@ package body Ships.Cargo.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships-cargo.ads:0:):Test_GetItemsAmount test commitment violated");
          end;
-         return Test_GetItemsAmount_df8553_104a2f_Result;
+         return Test_GetItemsAmount_df8553_e4797c_Result;
       end;
-   end Wrap_Test_GetItemsAmount_df8553_104a2f;
+   end Wrap_Test_GetItemsAmount_df8553_e4797c;
 --  end read only
 
 --  begin read only
    procedure Test_GetItemsAmount_test_getitemsamount(Gnattest_T: in out Test);
-   procedure Test_GetItemsAmount_df8553_104a2f(Gnattest_T: in out Test) renames
+   procedure Test_GetItemsAmount_df8553_e4797c(Gnattest_T: in out Test) renames
      Test_GetItemsAmount_test_getitemsamount;
 --  id:2.2/df8553144fad6203/GetItemsAmount/1/0/test_getitemsamount/
    procedure Test_GetItemsAmount_test_getitemsamount
      (Gnattest_T: in out Test) is
       function GetItemsAmount(IType: String) return Natural renames
-        Wrap_Test_GetItemsAmount_df8553_104a2f;
+        Wrap_Test_GetItemsAmount_df8553_e4797c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
