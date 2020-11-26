@@ -110,7 +110,7 @@ package Ships is
       ProtoIndex: Unbounded_String;
       Weight: Natural;
       Durability: Integer;
-      MaxDurability: Integer;
+      MaxDurability: Natural;
       Owner: Natural_Container.Vector;
       UpgradeProgress: Integer;
       UpgradeAction: ShipUpgrade;
@@ -126,7 +126,7 @@ package Ships is
             GunIndex: Natural;
          when GUN =>
             Damage: Positive;
-            AmmoIndex: Natural;
+            AmmoIndex: Inventory_Container.Extended_Index;
          when HULL =>
             InstalledModules: Natural;
             MaxModules: Positive;
@@ -137,13 +137,13 @@ package Ships is
          when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM =>
             null;
          when TRAINING_ROOM =>
-            TrainedSkill: Natural;
+            TrainedSkill: SkillsData_Container.Extended_Index;
          when BATTERING_RAM =>
             Damage2: Positive;
             CoolingDown: Boolean;
          when HARPOON_GUN =>
             Duration: Positive;
-            HarpoonIndex: Natural;
+            HarpoonIndex: Inventory_Container.Extended_Index;
          when ANY =>
             Data: Data_Array;
       end case;
@@ -184,18 +184,18 @@ package Ships is
    -- SOURCE
    type ShipRecord is record
       Name: Unbounded_String;
-      SkyX: Integer;
-      SkyY: Integer;
+      SkyX: MapXRange;
+      SkyY: MapYRange;
       Speed: ShipSpeed;
       Modules: Modules_Container.Vector;
       Cargo: Inventory_Container.Vector;
       Crew: Crew_Container.Vector;
-      UpgradeModule: Natural;
-      DestinationX: Integer;
-      DestinationY: Integer;
-      RepairModule: Natural;
+      UpgradeModule: Modules_Container.Extended_Index;
+      DestinationX: Natural range 0 .. MapXRange'Last;
+      DestinationY: Natural range 0 .. MapYRange'Last;
+      RepairModule: Modules_Container.Extended_Index;
       Description: Unbounded_String;
-      HomeBase: Natural;
+      HomeBase: Extended_BaseRange;
    end record;
    -- ****
 
