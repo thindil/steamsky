@@ -148,7 +148,8 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
-      Tcl.Tk.Ada.Place.Place(WaitDialog, "-in .gameframe -relx 0.3 -rely 0.15");
+      Tcl.Tk.Ada.Place.Place
+        (WaitDialog, "-in .gameframe -relx 0.3 -rely 0.15");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus " & WaitDialog & ".wait1;break}");
       return TCL_OK;
