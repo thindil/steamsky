@@ -894,7 +894,7 @@ package body Maps.UI is
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
-            "{InvokeMenu" & Natural'Image(I - 1) & "}");
+            "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
