@@ -521,9 +521,9 @@ Value must be an existing skill name.
 
 ### General information
 * Default game goals are in *goals.dat* file which is in *data* directory.
-* If you want remove or update any existing goal, you can do it in *goals.dat*
+* If you want to remove or update any existing goal, you can do it in *goals.dat*
   file in *data* directory or in modification file (better option) add tag
-  `goal` with attribute `index` which value will be index of selected goal and
+  `goal` with attribute `index` which value is index of selected goal and
   attribute `action`. Then if you modify an existing goal, add changed values.
 
 ### Goal data structure
@@ -559,15 +559,15 @@ Value must be an existing skill name.
 
 ### General information
 * Default game mobiles are in *mobs.dat* file which is in *data* directory.
-* If you want remove or update any existing mobile, you can do it in *mobs.dat*
+* If you want to remove or update any existing mobile, you can do it in *mobs.dat*
   file in *data* directory or in modification file (better option) add tag
-  `mobile` with attribute `index` which value will be index of selected mobile
+  `mobile` with attribute `index` which value is index of selected mobile
   and attribute `action`. Then if you modify an existing mobile, add changed
   values.
 
 ### Mob data structure
 * Each mobile starts with tag `mobile`.
-* Attribute `index` is is a mobile index (it can be a number or text) and must be
+* Attribute `index` is a mobile index (it can be a number or text) and must be
   unique. At this moment this value is used to set crew on ships.
 * Optional attribute `action`: What to do with this mobile. Possible values
   are: "add" (add this mobile, default option), "remove" (remove this mobile)
@@ -576,13 +576,13 @@ Value must be an existing skill name.
   Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean, Rest,
   Defend, Boarding.
 * Tag `skill` define skill of mobile.
-    - Attribute `name` is name of skill (from *game.dat* from *data*
-      directory). If name is set to "WeaponSkill" it will be later replaced by
+    * Attribute `name` is name of skill (from *game.dat* from *data*
+      directory). When name is set to "WeaponSkill" it will be later replaced by
       proper weapon skill depending on mobile faction.
-    - Optional attribute `action`: What to do with this skill. Possible values
+    * Optional attribute `action`: What to do with this skill. Possible values
       are: "add" (add this skill, default option), "remove" (remove this skill)
       or "update" (update selected skill).
-    - If mobile should have constant level of skill, add attribute `level` with
+    * If mobile should have constant level of skill, add attribute `level` with
       level of selected skill. If mobile should have random level of skill, add
       attribute `minlevel` with minimum level of skill and attribute `maxlevel`
       with maximum level of skill.
@@ -590,7 +590,7 @@ Value must be an existing skill name.
   level of attribute, add attribute `level` with level of selected attribute.
   If mobile should have random level of attribute, add attributes `minlevel`
   with minimum level of attribute and attribute `maxlevel` with maximum level
-  of attribute. If you want update attribute of mob, you must add all
+  of attribute. When you want update attribute of mob, you must add all
   attributes values.
 * Tag `priority` define orders priorities of mobile. Attribute `name` can have
   value: Piloting, Engineering, Operating guns, Repair ship, Manufacturing,
@@ -598,22 +598,22 @@ Value must be an existing skill name.
   Board enemy ship. Attribute `value` can have value Normal or High (only
   one High per mobile).
 * Tag `item` define item in mobile inventory.
-    - Attribute `index` is index of item from files (from *items.dat* file from
+    * Attribute `index` is index of item from files (from *items.dat* file from
       *data* directory).
-    - If mobile should have constant amount of item, add attribute `amount`
+    * If mobile should have constant amount of item, add attribute `amount`
       with amount of item. If mobile should have random amount of item, add
       attribute `minamount` with minimum amount of item and attribute
       `maxamount` with maximum amount of item.
-    - Optional attribute `action`: What to do with this item. Possible values
+    * Optional attribute `action`: What to do with this item. Possible values
       are: "add" (add this item, default option), "remove" (remove this item)
       or "update" (update selected item).
 * Tag `equipment` define which items are used by mobile. If mob will not have
   set an item in equipment slot, it will be generated randomly based on its
   skills and faction. In that situation, here is small chance that mob will
   not have any equipment in selected slot.
-    - Attribute `index` is item index from inventory. Item index always starts
+    * Attribute `index` is item index from inventory. Item index always starts
       with 1.
-    - Attribute `slot` is name of equipment slot in which selected item is
+    * Attribute `slot` is name of equipment slot in which selected item is
       set. Possible values for `slot`: Weapon, Shield, Head, Torso, Arms,
       Legs, Tools.
 
@@ -621,9 +621,9 @@ Value must be an existing skill name.
 
 ### General information
 * Default game factions are in *factions.dat* file which is in *data* directory.
-* If you want remove or update any existing faction, you can do it in
+* If you want to remove or update any existing faction, you can do it in
   *factions.dat* file in *data* directory or in modification file (better
-  option) add tag `faction` with attribute `index` which value will be index
+  option) add tag `faction` with attribute `index` which value is index
   of selected recipe and attribute `action`. Then if you modify an existing
   recipe, add changed values.
 
@@ -642,7 +642,7 @@ Value must be an existing skill name.
 * Attribute `pluralmembername`: Plural of name of mobiles from this faction.
   Can be any text.
 * Attributes `spawn`: chance to that newly created sky base will be owned by
-  that faction. Value of this attributes is roll on dice with sum of `spawn`
+  that faction. Value of these attributes is roll on dice with sum of `spawn`
   attributes of all factions. For example if there will be 2 factions, one with
   `spawn` = 50 and second with `spawn` = 20 then if roll on dice 70 will be
   equal or lower to 50 it will be first faction base, when between 51 and 70 it
@@ -661,40 +661,40 @@ Value must be an existing skill name.
   faction. Must be valid skill name from *data/game.dat* file
 * Attribute `baseicon`: hexadecimal number of character used as base icon for
   this faction on map. Must be valid UTF-8 character from current map font.
-* Attribute `weaponskill`: Name of skill skill used by favorite weapon of that
+* Attribute `weaponskill`: Name of skill used by favorite weapon of that
   faction. Must be valid skill name from *data/game.dat* file.
 * Tags `relation`: Relation of this faction with other faction. All factions
   must have this tags for each faction (even for self).
-    - Optional attribute `action`: What to do with this relation. Possible
+    * Optional attribute `action`: What to do with this relation. Possible
       values are: "add" (add this relation, default option) or "update" (update
       this relation).
-    - Attribute `faction` is faction index to which relation will be set.
-    - Attributes `minreputation`, `maxreputation`, `reputation`: starting
+    * Attribute `faction` is faction index to which relation will be set.
+    * Attributes `minreputation`, `maxreputation`, `reputation`: starting
       reputation with selected faction. If it should have random reputation,
       use attribute `minreputation` for minimum level of reputation and
       `maxreputation` for maximum level of reputation. If it should be constant
       reputation, use attribute `reputation`. Minimum value is -100 and maximum
       is 100.
-    - Attribute `friendly`: did selected faction is friendly to this faction.
+    * Attribute `friendly`: did selected faction is friendly to this faction.
       Value `Y` means `Yes`, value `N` means `No`. Used mostly to generate
       enemy ships.
 * Tag `description`: In game description of item. Can have any value.
 * Tags `foodtype`: Types of items used as food by this faction members. If
   no `foodtype` tags inside faction, that faction members can't be hungry.
-    - Attribute `name`: Name of item type used as food. Must be valid item type
+    * Attribute `name`: Name of item type used as food. Must be valid item type
       from *data/game.dat* file.
-    - Optional attribute `action`: What to do with this food. Possible values
+    * Optional attribute `action`: What to do with this food. Possible values
       are: "add" (add this food, default option) or "remove" (remove this
       food).
 * Tags `drinktype`: Types of items used as drink by this faction members. If
   no `drinktype` tags inside faction, that faction members can't be hungry.
-    - Attribute `name`: Name of item type used as food. Must be valid item type
+    * Attribute `name`: Name of item type used as food. Must be valid item type
       from *data/game.dat* file.
-    - Optional attribute `action`: What to do with this drink. Possible values
+    * Optional attribute `action`: What to do with this drink. Possible values
       are: "add" (add this drink, default option) or "remove" (remove this
       drink).
 * Tags `flags`: Various info about faction (optional tag).
-    - Attribute `name`: Name of flag. Possible values: `nogender` faction don't
+    * Attribute `name`: Name of flag. Possible values: `nogender` faction don't
       have genders and use male names as default, `diseaseimmune` faction
       members cannot become ill, no disease event for this faction, `nofatigue`
       faction members don't get tired so, they can't rest and regenerate
@@ -706,30 +706,30 @@ Value must be an existing skill name.
       engineer (they are optional), `fanaticism` faction members gain faster
       morale and lose it slower than other factions, `loner` bases of that
       faction are not grouped near self.
-    - Optional attribute `action`: What to do with this flag. Possible values
+    * Optional attribute `action`: What to do with this flag. Possible values
       are: "add" (add this flag, default option) or "remove" (remove this
       flag).
 * Tags `career`: Available careers for player when choice this faction. Text
   between tags is description of career visible in new game setting. If faction
   don't have any available career then it is unavailable for player.
-    - Attribute `index`: Index of career. Must be an existing career index from
+    * Attribute `index`: Index of career. Must be an existing career index from
       *data/careers.dat* file.
-    - Optional attribute `action`: What to do with this career. Possible values
+    * Optional attribute `action`: What to do with this career. Possible values
       are: "add" (add this career, default option), "remove" (remove this
       career) or "update" (update selected career).
-    - Attribute `playerindex`: Index of mobile used for starting player
-      character, when he/she choice this career. Value must be an existing mobile
-      index from any mobiles file.
-    - Attribute `shipindex`: Index of ship used for starting player ship when
-      he/she choice this career. Value must be an existing ship index from any
-      ships file.
-    - Attribute `name`: optional attribute. Specific name of career for this
+    * Attribute `playerindex`: Index of mobile used for starting player
+      character, when he or she select this career. Value must be an existing
+      mobile index from any mobiles file.
+    * Attribute `shipindex`: Index of ship used for starting player ship when
+      he or she select this career. Value must be an existing ship index from
+      any ships file.
+    * Attribute `name`: optional attribute. Specific name of career for this
       faction. Will be show to player instead of default name.
 * Tags `basetype`: Available base types for this faction. If you don't add
   any that tag, all bases types available in the game will be available for
   that faction.
-    - Attribute `index`: Index of the base type from *data/bases.dat* file.
-    - Attribute `chance`: chance to that newly created sky base will be this
+    * Attribute `index`: Index of the base type from *data/bases.dat* file.
+    * Attribute `chance`: chance to that newly created sky base will be this
       type. Value of this attribute is roll on dice with sum of "chance"
       attributes of all bases types available for this faction. For example if
       there will be 2 base types, one with "chance" = 50 and second with
@@ -741,9 +741,9 @@ Value must be an existing skill name.
 
 ### General information
 * Default game stories are in *stories.dat* file which is in *data* directory.
-* If you want remove or update any existing story, you can do it in
+* If you want to remove or update any existing story, you can do it in
   *stories.dat* file in *data* directory or in modification file (better
-  option) add tag `story` with attribute `index` which value will be index of
+  option) add tag `story` with attribute `index` which value is index of
   selected ship and attribute `action`. Then if you modify an existing ship, add
   changed values.
 
@@ -765,25 +765,25 @@ story.
 * Attribute `finalstep`: Index of step which will be used as final step in
   story.
 * Tags `startdata`: contains data needed for story starting condition. For
-  "dropitem" it will be index of item which should drop, mob faction from which
+  "dropitem" it is index of item which should drop, mob faction from which
   item will be dropped, chance (1 to that number) for drop.
-    - Optional attribute `action`: What to do with this entry. Possible values
+    * Optional attribute `action`: What to do with this entry. Possible values
       are: "add" (add this entry, default option) or "remove" (remove this
       entry).
 * Tag `endtext`: text which will be show to player when he/she finish story.
 * Tags `forbiddenfaction`: If player is in that faction, he can't start this
   story.
-    - Optional attribute `action`: What to do with this entry. Possible values
+    * Optional attribute `action`: What to do with this entry. Possible values
       are: "add" (add this entry, default option) or "remove" (remove this
       entry).
 * Tag `step` contains data for step of story.
-    - Attribute `finish`: condition which must be met to finish this step.
+    * Attribute `finish`: condition which must be met to finish this step.
       Possible values are: `askinbase` - go to next step when player ask about
       something in any or selected base, `destroyship` - go to next step when
       player destroy selected ship, `explore` - go to next step when player
       search selected map field.
 * Tags `finishdata`: contains data needed for finish selected step.
-    - Attribute `name` is name of data. Possible values: `item` - item index
+    * Attribute `name` is name of data. Possible values: `item` - item index
       (for `askinbase` and `loot` steps), `base` - ask in any base (value
       `any`) or randomly selected (value `selected`) needed for `askinbase`
       steps. Names `faction` - index of faction to which ship belongs, `ship` -
@@ -797,13 +797,13 @@ story.
       progress to next, or value `random` for chance. Name `chance` is
       used by all steps and mean chance (1 to that number for `random`
       condition or Skill + roll from 1 to 100) that step will progress to next.
-    - Optional attribute `action`: What to do with this entry. Possible values
+    * Optional attribute `action`: What to do with this entry. Possible values
       are: "add" (add this entry, default option), "remove" (remove this entry)
       or "update" (update selected entry).
 * Tag `text`: text which will be show to player when step starts.
-    - Attribute `condition`: finish condition of previous step which was lead
+    * Attribute `condition`: finish condition of previous step which was lead
       to this one. Possible values: `any`, `askinbase` and `destroyship`.
-    - Optional attribute `action`: What to do with this text. Possible values
+    * Optional attribute `action`: What to do with this text. Possible values
       are: "add" (add this text, default option), "remove" (remove this text)
       or "update" (update selected text).
 * Tag `failtext`: text which will be show to player if step not progress to
@@ -813,9 +813,9 @@ story.
 
 ### General information
 * Default game careers are in *careers.dat* file which is in *data* directory.
-* If you want remove or update any existing career, you can do it in
+* If you want to remove or update any existing career, you can do it in
   *careers.dat* file in *data* directory or in modification file (better
-  option) add tag `career` with attribute `index` which value will be index
+  option) add tag `career` with attribute `index` which value is index
   of selected career and attribute `action`. Then if you modify an existing
   career, add changed values.
 
@@ -828,9 +828,9 @@ story.
 * Attribute `name` is name of career visible to player.
 * Each career can have bonuses to experience to certain skills. Each that
   skill is between `skill` tag.
-    - Attribute `name` is name of skill which will be have bonuses to
+    * Attribute `name` is name of skill which will be had bonuses to
       experience.
-    - Optional attribute `action`: What to do with this skill. Possible values
+    * Optional attribute `action`: What to do with this skill. Possible values
       are: "add" (add skill, default option) or "remove" (remove this skill
       from bonus list).
 
@@ -840,7 +840,7 @@ story.
 * Default base types are in *bases.dat* file which is in *data* directory.
 * If you want to remove or update any existing base type, you can do it in
   *bases.dat* file in *data* directory or in modification file (better option)
-  add tag `base` with attribute `index` which value will be index of
+  add tag `base` with attribute `index` which value is index of
   selected base type and attribute `action`. Then if you modify an existing
   base type, add changed values.
 
@@ -856,16 +856,16 @@ story.
   are: "add" (add this entry, default option), "remove" (remove this entry) or
   "update" (update selected entry).
 * Tag `item` is used to set prices for selected item in that base.
-   - Attribute `index`: Item index from "items.dat" file. Required.
-   - Attribute `sellprice`: Price for which item is sell in that type of base.
-     If you want make selected item buyable in that type of base, you must add
-     this attribute.
-   - Attribute `buyprice`: Price for which item will be bought in that type of
-     base. If you want item to have special price in selected type of base you
+   * Attribute `index`: Item index from "items.dat" file. Required.
+   * Attribute `sellprice`: Price for which item is sell in that type of base.
+     If you want to make selected item buyable in that type of base, you must
+     add this attribute.
+   * Attribute `buyprice`: Price for which item will be bought in that type of
+     base. When you want item to have special price in selected type of base you
      must add this attribute.
 * Tag `recipe` is used to set which recipes are available to buy in that type
   of bases.
-   - Attribute `index`: Index of the recipe to buy, from file "recipes.dat".
+   * Attribute `index`: Index of the recipe to buy, from file "recipes.dat".
      Required.
 * Tag `description`: In game description of selected type of bases. Will be
   presented to the player during selection of starting base in main menu.
@@ -875,8 +875,8 @@ story.
   and the player ship crew members morale, additionally, healing wounded crew
   members in that base is twice time cheaper, `blackmarket` - that base type
   have random cargo (and normal cargo too, if defined) for sale, additionally,
-  all sold items here can be buy again, `barracks` - that base type have more
-  recruits available and they are cheaper to hire plus they have lower daily
+  all sold items here can be bought again, `barracks` - that base type have more
+  recruits available, and they are cheaper to hire plus they have lower daily
   payment.
 
 ## Themes
@@ -971,13 +971,13 @@ story.
   current story even location on map. Optional.
 * Key `OverloadedIcon`: Hexadecimal number on UTF-8 character used to show
   warning about overloaded ship. Optional.
-* Key `CheckButtonUnchecked`: Name of image file used as a unchecked button
+* Key `CheckButtonUnchecked`: Name of image file used as an unchecked button
   (for example, in crew member inventory).
 * Key `CheckButtonChecked`: Name of image file used as a checked button
   (for example, in crew member inventory).
 
 ## Debugging
-If you want test your changes, you may run game in debug mode. In this mode
+If you want to test your changes, you may run game in debug mode. In this mode
 game create file *debug.log* in *data* directory. To start game in debug mode
 run it with parameter --debug=[debugtype]. Example:
 
@@ -988,7 +988,7 @@ At this moment available are three types of debug:
 * Option 'everything' means to log each debug message to a file. At this moment
   this means information about loading game data (ships/recipes/items/modules)
   and also some combat data. This option may be useful to check that the data
-  of new/added items, etc is correct. Additionally its spawns debug menu for modifying the
+  of new/added items, etc is correct. Additionally, its spawns debug menu for modifying the
   game data.
 * Option 'combat' means to log debug messages only from combat.
 * Option 'menu' spawns only debug menu after starting the game for modifying the
