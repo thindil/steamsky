@@ -13,7 +13,7 @@ proc InvokeMenu {shortcut} {
 menu .orders -tearoff false
 # Destination menu
 menu .destination -tearoff false
-pack [ttk::frame .gameframe] -fill both -expand true
+pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header
 grid [ttk::menubutton .gameframe.header.menubutton -text {Menu} -menu .gamemenu] -sticky w
@@ -33,7 +33,7 @@ grid [ttk::label .gameframe.header.repairs -style Headerred.TLabel -font Interfa
 grid [ttk::label .gameframe.header.upgrade -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 12 -padx 3
 grid [ttk::label .gameframe.header.clean -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 13 -padx 3
 grid [ttk::label .gameframe.header.crafting -style Headerred.TLabel -font InterfaceIcons] -row 0 -column 14 -padx 3
-grid .gameframe.header -sticky we -padx 5
+grid .gameframe.header -sticky we -padx 5 -pady {5 0}
 ttk::panedwindow .gameframe.paned
 # Game map
 .gameframe.paned add [ttk::frame .gameframe.paned.mapframe]
@@ -141,7 +141,7 @@ grid [ttk::button $bframe.sw -text {SW} -command {MoveShip sw} -width -6] -row 3
 grid [ttk::button $bframe.s -text {S} -command {MoveShip s} -width -6] -column 1 -row 3
 grid [ttk::button $bframe.se -text {SE} -command {MoveShip se} -width -6] -column 2 -row 3
 grid columnconfigure .gameframe.paned.controls .gameframe.paned.controls.messages -weight 1
-grid .gameframe.paned -sticky nwes
+grid .gameframe.paned -sticky nwes -padx 5 -pady {0 5}
 grid columnconfigure .gameframe .gameframe.paned -weight 1
 grid rowconfigure .gameframe .gameframe.paned -weight 1
 update
