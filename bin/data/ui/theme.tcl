@@ -187,7 +187,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
 
       # Main frames of the game
-      ttk::style configure Main.TFrame -relief solid -bordercolor black -borderwidth 1
+      ttk::style configure Main.TFrame -relief solid -borderwidth 1
 
       # Last messages frame
       ttk::style configure LastMessages.TFrame -relief solid -bordercolor $colors(-gray) -borderwidth 1
