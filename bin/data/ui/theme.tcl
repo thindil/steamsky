@@ -189,6 +189,9 @@ namespace eval ttk::theme::steamsky {
       # Main frames of the game
       ttk::style configure Main.TFrame -relief solid -bordercolor black -borderwidth 1
 
+      # Last messages frame
+      ttk::style configure LastMessages.TFrame -relief solid -bordercolor $colors(-gray) -borderwidth 1
+
       # Canvas setting
       option add *Canvas.highlightThickness 0
 
