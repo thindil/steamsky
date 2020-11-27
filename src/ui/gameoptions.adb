@@ -583,7 +583,7 @@ package body GameOptions is
             MenuAccelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
               (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
-               "{InvokeMenu" & Positive'Image(I) & "}");
+               "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
          else
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;

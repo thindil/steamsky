@@ -1,8 +1,12 @@
 # Game menu
 menu .gamemenu -tearoff false
-proc InvokeMenu {index} {
+proc InvokeMenu {shortcut} {
    if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {
-      .gamemenu invoke $index
+      for {set i 0} {$i <= [.gamemenu index last]} {incr i} {
+         if {[.gamemenu entrycget $i -accelerator] == $shortcut} {
+            .gamemenu invoke $i
+         }
+      }
    }
 }
 # Orders menu
