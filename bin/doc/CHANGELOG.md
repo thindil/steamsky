@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Game menu in combat
 - Crash on show/hide the game help
 - Close button in the game option returns to map instead of combat
+- Menu shortcuts in combat
 
 ## [5.4] - 2020-11-01
 
