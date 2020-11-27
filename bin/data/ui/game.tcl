@@ -113,8 +113,8 @@ grid rowconfigure .gameframe.paned.mapframe 0 -weight 1
 grid columnconfigure .gameframe.paned.mapframe 0 -weight 1
 # Last messages
 .gameframe.paned add [ttk::frame .gameframe.paned.controls]
-grid [ttk::frame .gameframe.paned.controls.messages] -sticky w
-pack [ttk::scrollbar .gameframe.paned.controls.messages.scroll -orient vertical -command [list .gameframe.paned.controls.messages.view yview]] -side right -fill y
+grid [ttk::frame .gameframe.paned.controls.messages -style LastMessages.TFrame] -sticky w
+pack [ttk::scrollbar .gameframe.paned.controls.messages.scroll -orient vertical -command [list .gameframe.paned.controls.messages.view yview]] -side right -fill y -padx {0 5} -pady 5
 set messagesview [text .gameframe.paned.controls.messages.view -wrap word -yscrollcommand [list .gameframe.paned.controls.messages.scroll set]]
 $messagesview tag configure yellow -foreground yellow
 $messagesview tag configure green -foreground #4e9a06
@@ -122,7 +122,7 @@ $messagesview tag configure red -foreground red
 $messagesview tag configure cyan -foreground cyan
 $messagesview tag configure blue -foreground #3465a4
 $messagesview tag configure gray -foreground {dim gray}
-pack $messagesview -side top -fill both
+pack $messagesview -side top -fill both -padx {5 0 } -pady 5
 bind .gameframe.paned.controls <Configure> {
    $messagesview configure -height [expr [winfo height .gameframe.paned.controls] / [font metrics InterfaceFont -linespace]]
 }
