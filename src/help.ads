@@ -26,7 +26,7 @@ with DOM.Readers; use DOM.Readers;
 package Help is
 -- ****
 
-   -- ****s* Help/Help_Data
+   -- ****s* Help/Help.Help_Data
    -- FUNCTION
    -- Data structure for help topic
    -- PARAMETERS
@@ -39,21 +39,21 @@ package Help is
    end record;
    -- ****
 
-   -- ****t* Help/Help_Container
+   -- ****t* Help/Help.Help_Container
    -- FUNCTION
    -- Used to store help data
    -- SOURCE
    package Help_Container is new Ordered_Maps(Unbounded_String, Help_Data);
    -- ****
 
-   -- ****v* Help/Help_List
+   -- ****v* Help/Help.Help_List
    -- FUNCTION
    -- List of all help topics
    -- SOURCE
    Help_List: Help_Container.Map;
    -- ****
 
-   -- ****f* Help/LoadHelp
+   -- ****f* Help/Help.LoadHelp
    -- FUNCTION
    -- Load help text from file
    -- PARAMETERS
