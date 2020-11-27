@@ -323,8 +323,8 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord with
+     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
       Test_Case => ("Test_CreateShip", Nominal);
       -- ****
@@ -397,8 +397,8 @@ package Ships is
       --               if module will be destroyed
       -- SOURCE
    procedure DamageModule
-     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
-      DeathReason: String) with
+     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+      Damage: Positive; DeathReason: String) with
       Pre => ModuleIndex in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index,
       Test_Case => ("Test_DamageModule", Nominal);

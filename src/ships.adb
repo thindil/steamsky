@@ -32,8 +32,8 @@ with Ships.Crew; use Ships.Crew;
 package body Ships is
 
    function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord is
+     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
@@ -947,8 +947,8 @@ package body Ships is
    end GetCabinQuality;
 
    procedure DamageModule
-     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
-      DeathReason: String) is
+     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+      Damage: Positive; DeathReason: String) is
       RealDamage: Natural := Damage;
       WeaponIndex: Natural;
       procedure RemoveGun(ModuleIndex2: Positive) is
