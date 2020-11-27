@@ -1132,15 +1132,15 @@ package body Ships.UI.Crew is
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Label := Create(MemberDialog & ".name", "-text {Priority}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Label := Create(MemberDialog & ".level", "-text {Level}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0 -pady {5 0}");
       for I in Member.Orders'Range loop
          Label :=
            Create
              (MemberDialog & ".name" & Trim(Positive'Image(I), Left),
               "-text {" & To_String(PrioritiesNames(I)) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx {5 0}");
          ComboBox :=
            Create
              (MemberDialog & ".level" & Trim(Positive'Image(I), Left),
@@ -1150,11 +1150,12 @@ package body Ships.UI.Crew is
            (ComboBox, "<<ComboboxSelected>>",
             "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
             " current]" & Positive'Image(MemberIndex) & "}");
-         Tcl.Tk.Ada.Grid.Grid(ComboBox, "-column 1 -row" & Positive'Image(I));
+         Tcl.Tk.Ada.Grid.Grid
+           (ComboBox, "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
          Bind(ComboBox, "<Escape>", "{" & CloseButton & " invoke;break}");
       end loop;
       Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2 -pady {0 5}");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place
         (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.05");
