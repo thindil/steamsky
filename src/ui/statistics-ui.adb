@@ -28,7 +28,6 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crafts; use Crafts;
-with Game; use Game;
 with Goals; use Goals;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
