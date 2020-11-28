@@ -22,6 +22,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -30,7 +31,6 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crafts; use Crafts;
 with Goals; use Goals;
 with Items; use Items;
-with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
@@ -46,6 +46,8 @@ package body Statistics.UI is
       StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
       Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.stats");
       TreeView: Ttk_Tree_View;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Get_Context);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -53,7 +55,8 @@ package body Statistics.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "stats.tcl");
          Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" then
-         ShowSkyMap(True);
+         Tcl_Eval(Get_Context, "InvokeButton " & CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return;
       end if;
       StatsText :=
