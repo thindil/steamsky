@@ -540,7 +540,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Pack.Pack
         (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
       Tcl.Tk.Ada.Pack.Pack
-        (MemberCanvas, "-expand true -fill both -pady 5 -padx {5 0}");
+        (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
       Autoscroll(YScroll);
       Frame := Create(MemberFrame & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", "general");
@@ -836,8 +836,6 @@ package body Ships.UI.Crew is
                  "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
                  ": " & GetSkillLevelName(Member.Skills(I)(2)) & "}");
             Tcl.Tk.Ada.Grid.Grid(MemberLabel);
-            NewHeight :=
-              NewHeight + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
             InfoButton :=
               Create
                 (ProgressFrame & ".button",
@@ -895,10 +893,13 @@ package body Ships.UI.Crew is
          end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton);
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight")) + 30;
       Focus(CloseButton);
       if Height > 500 then
          Height := 500;
+      end if;
+      if Width < 250 then
+         Width := 250;
       end if;
       configure
         (MemberFrame,
@@ -908,7 +909,8 @@ package body Ships.UI.Crew is
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
         (MemberCanvas,
-         "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
+         "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
+         Positive'Image(Width) & " -height" & Positive'Image(Height));
       Tcl.Tk.Ada.Place.Place
         (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind
