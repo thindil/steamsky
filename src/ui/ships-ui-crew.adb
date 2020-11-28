@@ -46,7 +46,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -509,15 +508,8 @@ package body Ships.UI.Crew is
       pragma Unreferenced(ClientData, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      MemberDialog: constant Tk_Toplevel :=
-        Create
-          (".memberdialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (MemberDialog & ".xscroll",
-           "-orient horizontal -command [list .memberdialog.canvas xview]");
+      MemberDialog: constant Ttk_Frame :=
+        Create(".memberdialog", "-style Dialog.TFrame");
       YScroll: constant Ttk_Scrollbar :=
         Create
           (MemberDialog & ".yscroll",
@@ -525,15 +517,14 @@ package body Ships.UI.Crew is
       MemberCanvas: constant Tk_Canvas :=
         Create
           (MemberDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
+           "-yscrollcommand [list " & YScroll & " set]");
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, NewHeight: Positive := 10;
-      Frame, ProgressFrame: Ttk_Frame;
+      ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
       Width, NewWidth: Positive;
@@ -541,20 +532,16 @@ package body Ships.UI.Crew is
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
       InfoButton: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set
-        (MemberDialog, "title",
-         "{Steam Sky - " & To_String(Member.Name) & " Info}");
-      Wm_Set(MemberDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(MemberDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(MemberCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Pack.Pack
+        (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
+      Tcl.Tk.Ada.Pack.Pack
+        (MemberCanvas, "-expand true -fill both -pady 5 -padx {5 0}");
       Autoscroll(YScroll);
-      Autoscroll(XScroll);
       Frame := Create(MemberFrame & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
@@ -562,6 +549,7 @@ package body Ships.UI.Crew is
           (Frame & ".general",
            " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
       Tcl.Tk.Ada.Grid.Grid(TabButton);
+      Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Height := Height + Positive'Value(Winfo_Get(TabButton, "reqheight"));
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          TabButton :=
@@ -569,11 +557,16 @@ package body Ships.UI.Crew is
              (Frame & ".stats",
               " -text Statistics -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
          Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
+         Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
          TabButton :=
            Create
              (Frame & ".skills",
               " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowMemberTab");
          Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 2 -row 0");
+         Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
+      else
+         Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Frame);
       -- General info about the selected crew member
@@ -907,9 +900,6 @@ package body Ships.UI.Crew is
       if Height > 500 then
          Height := 500;
       end if;
-      if Width < 230 then
-         Width := 230;
-      end if;
       configure
         (MemberFrame,
          "-height" & Positive'Image(Height) & " -width" &
@@ -919,32 +909,12 @@ package body Ships.UI.Crew is
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
-      Height := Height + 30;
-      Width := Width + 20;
-      declare
-         X, Y: Integer;
-      begin
-         X :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootwidth")) - Width) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(MemberDialog, "vrootheight")) - Height) /
-           2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (MemberDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Wm_Set(MemberDialog, "overrideredirect", "1");
-         Bind(MemberDialog, "<Escape>", "{CloseDialog " & MemberDialog & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place
+        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Bind
+        (CloseButton, "<Tab>",
+         "{focus " & MemberFrame & ".buttonbox.general;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Member_Info_Command;
 
