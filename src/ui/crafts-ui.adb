@@ -107,9 +107,9 @@ package body Crafts.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "crafts.tcl");
          Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         ShowSkyMap(True);
+         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
