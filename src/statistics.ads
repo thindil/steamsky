@@ -18,6 +18,7 @@
 with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Crew; use Crew;
+with Game; use Game;
 
 -- ****h* Statistics/Statistics
 -- FUNCTION
@@ -63,7 +64,7 @@ package Statistics is
    -- SOURCE
    type GameStats_Data is record
       DestroyedShips: Statistics_Container.Vector;
-      BasesVisited: Positive;
+      BasesVisited: BasesRange;
       MapVisited: Positive;
       DistanceTraveled: Natural;
       CraftingOrders: Statistics_Container.Vector;
