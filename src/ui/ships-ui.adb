@@ -80,9 +80,9 @@ package body Ships.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         ShowSkyMap(True);
+         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
