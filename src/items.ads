@@ -29,14 +29,14 @@ with Game; use Game;
 package Items is
 -- ****
 
-   -- ****v* Items/Items_Types
+   -- ****v* Items/Items.Items_Types
    -- FUNCTION
    -- Types of items
    -- SOURCE
    Items_Types: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****s* Items/Object_Data
+   -- ****s* Items/Items.Object_Data
    -- FUNCTION
    -- Data structure for objects prototypes
    -- PARAMETERS
@@ -62,7 +62,7 @@ package Items is
    end record;
    -- ****
 
-   -- ****t* Items/Objects_Container
+   -- ****t* Items/Items.Objects_Container
    -- FUNCTION
    -- Used to store items data
    -- SOURCE
@@ -70,21 +70,21 @@ package Items is
       Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****t* Items/Items_Durability
+   -- ****t* Items/Items.Items_Durability
    -- FUNCTION
    -- Used to mark items durability
    -- SOURCE
    subtype Items_Durability is Natural range 0 .. 101;
    -- ****
 
-   -- ****d* Items/Default_Item_Durability
+   -- ****d* Items/Items.Default_Item_Durability
    -- FUNCTION
    -- Default value for items durability
    -- SOURCE
    Default_Item_Durability: constant Items_Durability := 100;
    -- ****
 
-   -- ****s* Items/InventoryData
+   -- ****s* Items/Items.InventoryData
    -- FUNCTION
    -- Data structure for item in inventory
    -- PARAMETERS
@@ -103,70 +103,70 @@ package Items is
    end record;
    -- ****
 
-   -- ****t* Items/Inventory_Container
+   -- ****t* Items/Items.Inventory_Container
    -- FUNCTION
    -- Used to store inventory data
    -- SOURCE
    package Inventory_Container is new Vectors(Positive, InventoryData);
    -- ****
 
-   -- ****v* Items/Items_List
+   -- ****v* Items/Items.Items_List
    -- FUNCTION
    -- List of item available in game
    -- SOURCE
    Items_List: Objects_Container.Map;
    -- ****
 
-   -- ****v* Items/Tools_List
+   -- ****v* Items/Items.Tools_List
    -- FUNCTION
    -- List of all tools types in game
    -- SOURCE
    Tools_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Weapons_List
+   -- ****v* Items/Items.Weapons_List
    -- FUNCTION
    -- List of indexes of all weapons in game
    -- SOURCE
    Weapons_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/Shields_List
+   -- ****v* Items/Items.Shields_List
    -- FUNCTION
    -- List of indexes of all shields in game
    -- SOURCE
    Shields_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/HeadArmors_List
+   -- ****v* Items/Items.HeadArmors_List
    -- FUNCTION
    -- List of indexes of all head armors in game
    -- SOURCE
    HeadArmors_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/ChestArmors_List
+   -- ****v* Items/Items.ChestArmors_List
    -- FUNCTION
    -- List of indexes of all chest armors in game
    -- SOURCE
    ChestArmors_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/ArmsArmors_List
+   -- ****v* Items/Items.ArmsArmors_List
    -- FUNCTION
    -- List of indexes of all arms armors in game
    -- SOURCE
    ArmsArmors_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Items/LegsArmors_List
+   -- ****v* Items/Items.LegsArmors_List
    -- FUNCTION
    -- List of indexes of all legs armors in game
    -- SOURCE
    LegsArmors_List: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****f* Items/LoadItems
+   -- ****f* Items/Items.LoadItems
    -- FUNCTION
    -- Load items from files
    -- PARAMETERS
@@ -175,7 +175,7 @@ package Items is
    procedure LoadItems(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Items/FindProtoItem
+   -- ****f* Items/Items.FindProtoItem
    -- FUNCTION
    -- Search for map index of selected item
    -- PARAMETERS
@@ -189,7 +189,7 @@ package Items is
       Test_Case => ("Test_FindProtoItem", Nominal);
       -- ****
 
-      -- ****f* Items/GetItemDamage
+      -- ****f* Items/Items.GetItemDamage
       -- FUNCTION
       -- Get description of item damage
       -- PARAMETERS
@@ -205,7 +205,7 @@ package Items is
       Test_Case => ("Test_GetItemDamage", Robustness);
       -- ****
 
-      -- ****f* Items/GetItemName
+      -- ****f* Items/Items.GetItemName
       -- FUNCTION
       -- Get name of item in ship cargo or character inventory
       -- Item       - Item to get it name
@@ -222,7 +222,7 @@ package Items is
       Test_Case => ("Test_GetItemName", Robustness);
       -- ****
 
-      -- ****f* Items/DamageItem
+      -- ****f* Items/Items.DamageItem
       -- FUNCTION
       -- Check if item in ship cargo or character inventory was damaged
       -- PARAMETERS
@@ -242,7 +242,7 @@ package Items is
       Test_Case => ("Test_DamageItem", Nominal);
       -- ****
 
-      -- ****f* Items/FindItem
+      -- ****f* Items/Items.FindItem
       -- FUNCTION
       -- Find item in ship cargo or character inventory
       -- PARAMETERS
@@ -262,14 +262,14 @@ package Items is
       Test_Case => ("Test_FindItem", Robustness);
       -- ****
 
-      -- ****f* Items/SetToolsList
+      -- ****f* Items/Items.SetToolsList
       -- FUNCTION
       -- Fill tools types list
       -- SOURCE
    procedure SetToolsList;
    -- ****
 
-   -- ****f* Items/GetItemChanceToDamage
+   -- ****f* Items/Items.GetItemChanceToDamage
    -- FUNCTION
    -- Get item chance to damage info
    -- PARAMETERS
