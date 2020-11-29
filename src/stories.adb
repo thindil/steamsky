@@ -697,7 +697,7 @@ package body Stories is
       return Null_Unbounded_String;
    end GetStepData;
 
-   procedure GetStoryLocation(StoryX, StoryY: in out Positive) is
+   procedure GetStoryLocation(StoryX: out MapXRange; StoryY: out MapYRange) is
       Tokens: Slice_Set;
    begin
       if CurrentStory.Data /= Null_Unbounded_String then
