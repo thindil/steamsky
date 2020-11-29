@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,11 +32,11 @@
 <ul>
 <li>1. <a href="#robo49">ShipModules/ShipModules</a></li>
 <ul>
-<li>1.1. <a href="#robo126">ShipModules/BaseModules_Container</a></li>
-<li>1.2. <a href="#robo127">ShipModules/ModuleType</a></li>
-<li>1.3. <a href="#robo177">ShipModules/BaseModule_Data</a></li>
-<li>1.4. <a href="#robo302">ShipModules/Modules_List</a></li>
-<li>1.5. <a href="#robo522">ShipModules/LoadShipModules</a></li>
+<li>1.1. <a href="#robo131">ShipModules/BaseModules_Container</a></li>
+<li>1.2. <a href="#robo132">ShipModules/ModuleType</a></li>
+<li>1.3. <a href="#robo182">ShipModules/BaseModule_Data</a></li>
+<li>1.4. <a href="#robo307">ShipModules/Modules_List</a></li>
+<li>1.5. <a href="#robo527">ShipModules/LoadShipModules</a></li>
 </ul>
 </ul>
 <hr />
@@ -53,7 +53,7 @@
 
 <hr />
 <a name="ShipModules2fBaseModules5fContainer"></a>
-<a name="robo126"></a><h2>ShipModules/BaseModules_Container [ Types ]</h2>
+<a name="robo131"></a><h2>ShipModules/BaseModules_Container [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -61,12 +61,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> <strong>BaseModules_Container</strong> <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      <a href="#robo177">BaseModule_Data</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+      <a href="#robo182">BaseModule_Data</a><span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="ShipModules2fModuleType"></a>
-<a name="robo127"></a><h2>ShipModules/ModuleType [ Types ]</h2>
+<a name="robo132"></a><h2>ShipModules/ModuleType [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -81,7 +81,7 @@
 
 <hr />
 <a name="ShipModules2fBaseModule5fData"></a>
-<a name="robo177"></a><h2>ShipModules/BaseModule_Data [ Records ]</h2>
+<a name="robo182"></a><h2>ShipModules/BaseModule_Data [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -90,13 +90,13 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> <strong>BaseModule_Data</strong> <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      MType<span class="sign">:</span> <a href="#robo127">ModuleType</a><span class="sign">;</span>
+      MType<span class="sign">:</span> <a href="#robo132">ModuleType</a><span class="sign">;</span>
       Weight<span class="sign">:</span> Natural<span class="sign">;</span>
       Value<span class="sign">:</span> Integer<span class="sign">;</span>
       MaxValue<span class="sign">:</span> Integer<span class="sign">;</span>
       Durability<span class="sign">:</span> Integer<span class="sign">;</span>
       RepairMaterial<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      RepairSkill<span class="sign">:</span> Positive<span class="sign">;</span>
+      RepairSkill<span class="sign">:</span> SkillsData_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
       Price<span class="sign">:</span> Natural<span class="sign">;</span>
       InstallTime<span class="sign">:</span> Positive<span class="sign">;</span>
       Unique<span class="sign">:</span> Boolean<span class="sign">;</span>
@@ -104,7 +104,7 @@
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       MaxOwners<span class="sign">:</span> Natural<span class="sign">;</span>
       Speed<span class="sign">:</span> Integer<span class="sign">;</span>
-      Reputation<span class="sign">:</span> Integer<span class="sign">;</span>
+      Reputation<span class="sign">:</span> ReputationRange<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -128,19 +128,19 @@
 
 <hr />
 <a name="ShipModules2fModules5fList"></a>
-<a name="robo302"></a><h2>ShipModules/Modules_List [ Variables ]</h2>
+<a name="robo307"></a><h2>ShipModules/Modules_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of ship modules available in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>Modules_List</strong><span class="sign">:</span> <a href="#robo126">BaseModules_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
+<pre class="source">   <strong>Modules_List</strong><span class="sign">:</span> <a href="#robo131">BaseModules_Container</a><span class="sign">.</span>Map<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="ShipModules2fLoadShipModules"></a>
-<a name="robo522"></a><h2>ShipModules/LoadShipModules [ Subprograms ]</h2>
+<a name="robo527"></a><h2>ShipModules/LoadShipModules [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -155,7 +155,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
+<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
 </p>
 </div> <!-- footer -->
 </body>
