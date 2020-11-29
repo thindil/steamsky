@@ -713,6 +713,7 @@ package body Utils.UI is
       Focus(InfoButton);
       Bind(InfoButton, "<Tab>", "{break}");
       Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
+      Tcl_Eval(Get_Context, "raise " & InfoDialog);
    end ShowInfo;
 
 end Utils.UI;
