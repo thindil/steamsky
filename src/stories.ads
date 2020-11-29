@@ -167,7 +167,7 @@ package Stories is
    type CurrentStory_Data is record
       Index: Unbounded_String;
       Step: Positive;
-      CurrentStep: Integer;
+      CurrentStep: Integer range -3 .. Integer'Last;
       MaxSteps: Positive;
       ShowText: Boolean;
       Data: Unbounded_String;
@@ -298,9 +298,9 @@ package Stories is
       -- RESULT
       -- Parameters X and Y
       -- SOURCE
-   procedure GetStoryLocation(StoryX, StoryY: in out Positive) with
-      Pre => StoryX < 1025 and StoryY < 1025,
-      Test_Case => ("Test_GetStoryLocation", Nominal);
+   procedure GetStoryLocation
+     (StoryX: out MapXRange; StoryY: out MapYRange) with
+      Test_Case => ("Test_GetStoryLocation", Robustness);
       -- ****
 
 end Stories;
