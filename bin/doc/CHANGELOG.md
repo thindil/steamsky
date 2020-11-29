@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.5] - 2020-11-29
 
 ### Changed
 - Updated interface
