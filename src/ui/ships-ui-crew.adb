@@ -912,7 +912,7 @@ package body Ships.UI.Crew is
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
          Positive'Image(Width) & " -height" & Positive'Image(Height));
       Tcl.Tk.Ada.Place.Place
-        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind
         (CloseButton, "<Tab>",
          "{focus " & MemberFrame & ".buttonbox.general;break}");
