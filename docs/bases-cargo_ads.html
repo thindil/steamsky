@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,9 +32,9 @@
 <ul>
 <li>1. <a href="#robo1">Bases/BCargo</a></li>
 <ul>
-<li>1.1. <a href="#robo357">BCargo/FindBaseCargo</a></li>
-<li>1.2. <a href="#robo358">BCargo/GenerateCargo</a></li>
-<li>1.3. <a href="#robo359">BCargo/UpdateBaseCargo</a></li>
+<li>1.1. <a href="#robo362">BCargo/BCargo.FindBaseCargo</a></li>
+<li>1.2. <a href="#robo363">BCargo/BCargo.GenerateCargo</a></li>
+<li>1.3. <a href="#robo364">BCargo/BCargo.UpdateBaseCargo</a></li>
 </ul>
 </ul>
 <hr />
@@ -50,17 +50,17 @@
 </pre>
 
 <hr />
-<a name="BCargo2fFindBaseCargo"></a>
-<a name="robo357"></a><h2>BCargo/FindBaseCargo [ Subprograms ]</h2>
+<a name="BCargo2fBCargo2eFindBaseCargo"></a>
+<a name="robo362"></a><h2>BCargo/BCargo.FindBaseCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">BCargo</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Find index of item in base cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>FindBaseCargo</strong>
+<pre class="source">   <span class="keyword">function</span> FindBaseCargo
      <span class="sign">(</span>ProtoIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Durability<span class="sign">:</span> <a href="./items_ads.html#robo115">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> <a href="./items_ads.html#robo115">Items_Durability</a><span class="keyword">'Last</span><span class="sign">)</span>
+      Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Items_Durability<span class="keyword">'Last</span><span class="sign">)</span>
       <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_FindBaseCargo"</span><span class="sign">,</span> Robustness<span class="sign">);</span>
 </pre>
@@ -73,31 +73,31 @@
 </pre>
 
 <hr />
-<a name="BCargo2fGenerateCargo"></a>
-<a name="robo358"></a><h2>BCargo/GenerateCargo [ Subprograms ]</h2>
+<a name="BCargo2fBCargo2eGenerateCargo"></a>
+<a name="robo363"></a><h2>BCargo/BCargo.GenerateCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">BCargo</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate base cargo
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>GenerateCargo</strong> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> GenerateCargo <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GenerateCargo"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="BCargo2fUpdateBaseCargo"></a>
-<a name="robo359"></a><h2>BCargo/UpdateBaseCargo [ Subprograms ]</h2>
+<a name="BCargo2fBCargo2eUpdateBaseCargo"></a>
+<a name="robo364"></a><h2>BCargo/BCargo.UpdateBaseCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo1">BCargo</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update cargo in base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateBaseCargo</strong>
+<pre class="source">   <span class="keyword">procedure</span> UpdateBaseCargo
      <span class="sign">(</span>ProtoIndex<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span>
-      Durability<span class="sign">:</span> <a href="./items_ads.html#robo115">Items_Durability</a> <span class="sign">:</span><span class="sign">=</span> <a href="./items_ads.html#robo191">Default_Item_Durability</a><span class="sign">;</span>
-      CargoIndex<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
+      Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Default_Item_Durability<span class="sign">;</span>
+      CargoIndex<span class="sign">:</span> Inventory_Container<span class="sign">.</span>Extended_Index <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateBaseCargo"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -110,7 +110,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
+<p>Generated from ./src/bases-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
 </p>
 </div> <!-- footer -->
 </body>

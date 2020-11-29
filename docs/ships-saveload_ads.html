@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.4 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,8 +32,8 @@
 <ul>
 <li>1. <a href="#robo55">Ships/SSaveLoad</a></li>
 <ul>
-<li>1.1. <a href="#robo546">SSaveLoad/LoadPlayerShip</a></li>
-<li>1.2. <a href="#robo547">SSaveLoad/SavePlayerShip</a></li>
+<li>1.1. <a href="#robo551">SSaveLoad/LoadPlayerShip</a></li>
+<li>1.2. <a href="#robo552">SSaveLoad/SavePlayerShip</a></li>
 </ul>
 </ul>
 <hr />
@@ -50,37 +50,37 @@
 
 <hr />
 <a name="SSaveLoad2fLoadPlayerShip"></a>
-<a name="robo546"></a><h2>SSaveLoad/LoadPlayerShip [ Subprograms ]</h2>
+<a name="robo551"></a><h2>SSaveLoad/LoadPlayerShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SSaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load saved player ship from file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>LoadPlayerShip</strong><span class="sign">(</span><a href="./game-saveload_adb.html#robo264">SaveData</a><span class="sign">:</span> Document<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>LoadPlayerShip</strong><span class="sign">(</span>SaveData<span class="sign">:</span> Document<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./game-saveload_adb.html#robo264">SaveData</a> - XML structure from which player ship data will be loaded
+<pre> SaveData - XML structure from which player ship data will be loaded
 </pre>
 
 <hr />
 <a name="SSaveLoad2fSavePlayerShip"></a>
-<a name="robo547"></a><h2>SSaveLoad/SavePlayerShip [ Subprograms ]</h2>
+<a name="robo552"></a><h2>SSaveLoad/SavePlayerShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo55">SSaveLoad</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save player ship to file
  PAEAMETERS
- <a href="./game-saveload_adb.html#robo264">SaveData</a> - XML structure to which player ship data will be saved
+ SaveData - XML structure to which player ship data will be saved
  MainNode - XML main node to which player ship data will be saved
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>SavePlayerShip</strong><span class="sign">(</span><a href="./game-saveload_adb.html#robo264">SaveData</a><span class="sign">:</span> Document<span class="sign">;</span> MainNode<span class="sign">:</span> DOM<span class="sign">.</span>Core<span class="sign">.</span>Element<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <strong>SavePlayerShip</strong><span class="sign">(</span>SaveData<span class="sign">:</span> Document<span class="sign">;</span> MainNode<span class="sign">:</span> DOM<span class="sign">.</span>Core<span class="sign">.</span>Element<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ships-saveload.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 01 2020 06:34:07
+<p>Generated from ./src/ships-saveload.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
 </p>
 </div> <!-- footer -->
 </body>
