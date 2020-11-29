@@ -24,7 +24,7 @@ with Game; use Game;
 
 package body Log is
 
-   -- ****iv* Log/LogFile
+   -- ****iv* Log/Log.LogFile
    -- FUNCTION
    -- Debug log file
    -- SOURCE
