@@ -17,6 +17,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Bases; use Bases;
+with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Trades/Trades
@@ -110,7 +111,8 @@ package Trades is
    -- BaseItemIndex - Base or ship cargo index of item to buy
    -- Amount        - Amount of items to buy
    -- SOURCE
-   procedure BuyItems(BaseItemIndex: Positive; Amount: String) with
+   procedure BuyItems
+     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) with
       Test_Case => ("Test_BuyItems", Robustness);
       -- ****
 
@@ -121,8 +123,10 @@ package Trades is
       -- ItemIndex - Player ship cargo index of item to sell
       -- Amount    - Amount of items to sell
       -- SOURCE
-   procedure SellItems(ItemIndex: Positive; Amount: String) with
-      Pre => ItemIndex <= PlayerShip.Cargo.Last_Index,
+   procedure SellItems
+     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
+      Pre => ItemIndex in
+        PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index,
       Test_Case => ("Test_SellItems", Nominal);
       -- ****
 

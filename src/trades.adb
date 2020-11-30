@@ -18,7 +18,6 @@
 with Ada.Containers; use Ada.Containers;
 with Maps; use Maps;
 with Messages; use Messages;
-with Items; use Items;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Events; use Events;
@@ -30,7 +29,8 @@ with BasesTypes; use BasesTypes;
 
 package body Trades is
 
-   procedure BuyItems(BaseItemIndex: Positive; Amount: String) is
+   procedure BuyItems
+     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
       BuyAmount, Price: Positive;
       BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -117,7 +117,8 @@ package body Trades is
          raise Trade_Invalid_Amount;
    end BuyItems;
 
-   procedure SellItems(ItemIndex: Positive; Amount: String) is
+   procedure SellItems
+     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
       SellAmount: Positive;
       BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
