@@ -916,6 +916,7 @@ package body Ships.UI.Crew is
       Bind
         (CloseButton, "<Tab>",
          "{focus " & MemberFrame & ".buttonbox.general;break}");
+      Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Member_Info_Command;
