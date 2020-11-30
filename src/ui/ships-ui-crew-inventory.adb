@@ -222,6 +222,7 @@ package body Ships.UI.Crew.Inventory is
         (MemberDialog, "-in .gameframe -relx 0.2 -rely 0.2");
       Bind(ItemButton, "<Tab>", "{focus " & CloseButton & ";break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Member_Inventory_Command;
 
