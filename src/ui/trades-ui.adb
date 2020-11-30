@@ -45,7 +45,6 @@ with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
-with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Missions; use Missions;
