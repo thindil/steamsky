@@ -75,7 +75,7 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
-   -- ****if* Utils.UI/Update_Dialog_Command
+   -- ****if* UUI/Update_Dialog_Command
    -- FUNCTION
    -- Update countdown timer on the selected dialog. If timer reach 0, close
    -- dialog

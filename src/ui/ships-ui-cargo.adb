@@ -276,7 +276,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Give_Item_Command;
 
-   -- ****o* CUI2/Give_Item_Command
+   -- ****o* SUCargo/Give_Item_Command
    -- FUNCTION
    -- Give selected amount of the selected item from the ship's cargo to the
    -- selected crew member
