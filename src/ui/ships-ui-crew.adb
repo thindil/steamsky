@@ -523,7 +523,7 @@ package body Ships.UI.Crew is
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, NewHeight: Positive := 10;
+      Height, NewHeight: Positive;
       ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
@@ -550,7 +550,7 @@ package body Ships.UI.Crew is
            " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowMemberTab");
       Tcl.Tk.Ada.Grid.Grid(TabButton);
       Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Height := Height + Positive'Value(Winfo_Get(TabButton, "reqheight"));
+      Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          TabButton :=
            Create
@@ -754,6 +754,7 @@ package body Ships.UI.Crew is
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(MemberFrame & ".stats");
+         NewHeight := Positive'Value(Winfo_Get(TabButton, "reqheight"));
          for I in Member.Attributes.Iterate loop
             ProgressFrame :=
               Create
@@ -823,7 +824,7 @@ package body Ships.UI.Crew is
          end if;
          -- Skills of the selected crew member
          Frame := Create(MemberFrame & ".skills");
-         NewHeight := 10;
+         NewHeight := Positive'Value(Winfo_Get(TabButton, "reqheight"));
          for I in Member.Skills.Iterate loop
             ProgressFrame :=
               Create
@@ -893,7 +894,7 @@ package body Ships.UI.Crew is
          end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton);
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight")) + 30;
+      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
          Height := 500;
@@ -901,10 +902,6 @@ package body Ships.UI.Crew is
       if Width < 250 then
          Width := 250;
       end if;
-      configure
-        (MemberFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
       Canvas_Create
         (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
       configure
