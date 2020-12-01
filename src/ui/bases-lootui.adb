@@ -118,27 +118,24 @@ package body Bases.LootUI is
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
-         if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-            ItemType := Items_List(ProtoIndex).IType;
-         else
-            ItemType := Items_List(ProtoIndex).ShowType;
-         end if;
+         ItemType :=
+           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+              Items_List(ProtoIndex).IType
+            else Items_List(ProtoIndex).ShowType);
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
-         if PlayerShip.Cargo(I).Durability < 100 then
-            ItemDurability :=
+         ItemDurability :=
+           (if PlayerShip.Cargo(I).Durability < 100 then
               To_Unbounded_String
-                (GetItemDamage(PlayerShip.Cargo(I).Durability));
-         else
-            ItemDurability := Null_Unbounded_String;
-         end if;
-         BaseAmount := 0;
-         if BaseCargoIndex > 0 then
-            BaseAmount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-         end if;
+                (GetItemDamage(PlayerShip.Cargo(I).Durability))
+            else Null_Unbounded_String);
+         BaseAmount :=
+           (if BaseCargoIndex > 0 then
+              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
+            else 0);
          if FirstIndex = Null_Unbounded_String then
             FirstIndex :=
               To_Unbounded_String
@@ -155,21 +152,18 @@ package body Bases.LootUI is
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
             ProtoIndex := BaseCargo(I).ProtoIndex;
-            if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-               ItemType := Items_List(ProtoIndex).IType;
-            else
-               ItemType := Items_List(ProtoIndex).ShowType;
-            end if;
+            ItemType :=
+              (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+                 Items_List(ProtoIndex).IType
+               else Items_List(ProtoIndex).ShowType);
             if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
                Append(ItemsTypes, " {" & ItemType & "}");
             end if;
             ItemName := Items_List(ProtoIndex).Name;
-            if BaseCargo(I).Durability < 100 then
-               ItemDurability :=
-                 To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability));
-            else
-               ItemDurability := Null_Unbounded_String;
-            end if;
+            ItemDurability :=
+              (if BaseCargo(I).Durability < 100 then
+                 To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
+               else Null_Unbounded_String);
             BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
             if FirstIndex = Null_Unbounded_String then
                FirstIndex :=
@@ -502,18 +496,15 @@ package body Bases.LootUI is
       else
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
-      SpinBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
-         SpinBox.Name :=
-           New_String
-             (".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount");
-         if CArgv.Arg(Argv, 1) = "drop" then
-            Amount := Positive'Value(Get(SpinBox));
-         else
-            Amount :=
-              Natural'Value
-                (cget(Label, "-text")(5 .. cget(Label, "-text")'Length - 2));
-         end if;
+         SpinBox :=
+           Get_Widget
+             (".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount",
+              Interp);
+         Amount :=
+           (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(SpinBox))
+            else Natural'Value
+                (cget(Label, "-text")(5 .. cget(Label, "-text")'Length - 2)));
          if BaseCargoIndex > 0 then
             UpdateBaseCargo
               (CargoIndex => BaseCargoIndex, Amount => Amount,
@@ -532,14 +523,13 @@ package body Bases.LootUI is
             To_String(Items_List(ProtoIndex).Name) & ".",
             OrderMessage);
       else
-         SpinBox.Name :=
-           New_String
-             (".gameframe.paned.lootframe.canvas.loot.item.takeframe.amount");
-         if CArgv.Arg(Argv, 1) = "take" then
-            Amount := Positive'Value(Get(SpinBox));
-         else
-            Amount := SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-         end if;
+         SpinBox :=
+           Get_Widget
+             (".gameframe.paned.lootframe.canvas.loot.item.takeframe.amount",
+              Interp);
+         Amount :=
+           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(SpinBox))
+            else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowMessage
               ("You can't take that much " &
