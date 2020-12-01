@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Escape key behavior in inventory and crew member dialogs
-- Fixed position of messages window after leaving the last messages screen
+- Position of messages window after leaving the last messages screen
 - Some typos in changelog
+- Position of the game statistics
 
 ## [5.5] - 2020-11-29
 
