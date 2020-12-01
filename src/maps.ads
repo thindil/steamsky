@@ -26,7 +26,7 @@ with Missions; use Missions;
 package Maps is
 -- ****
 
-   -- ****s* Maps/SkyCell
+   -- ****s* Maps/Maps.SkyCell
    -- FUNCTION
    -- Data structure for cells in game map
    -- PARAMETERS
@@ -43,14 +43,14 @@ package Maps is
    end record;
    -- ****
 
-   -- ****v* Maps/SkyMap
+   -- ****v* Maps/Maps.SkyMap
    -- FUNCTION
    -- Game map
    -- SOURCE
    SkyMap: array(MapXRange, MapYRange) of SkyCell;
    -- ****
 
-   -- ****f* Maps/CountDistance
+   -- ****f* Maps/Maps.CountDistance
    -- FUNCTION
    -- Count distance (in map fields) between player ship and the destination
    -- point
@@ -65,7 +65,7 @@ package Maps is
       Test_Case => ("Test_CountDistance", Robustness);
       -- ****
 
-      -- ****f* Maps/NormalizeCoord
+      -- ****f* Maps/Maps.NormalizeCoord
       -- FUNCTION
       -- Normalize map coordinates
       -- PARAMETERS
