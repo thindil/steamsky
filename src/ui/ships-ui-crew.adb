@@ -521,9 +521,9 @@ package body Ships.UI.Crew is
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (MemberFrame & ".button",
+          (MemberDialog & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, NewHeight: Positive;
+      Height, NewHeight: Positive := 1;
       ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
       MemberLabel: Ttk_Label;
@@ -537,12 +537,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack
-        (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
-      Tcl.Tk.Ada.Pack.Pack
-        (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
-      Autoscroll(YScroll);
-      Frame := Create(MemberFrame & ".buttonbox");
+      Frame := Create(MemberDialog & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
         Create
@@ -568,7 +563,12 @@ package body Ships.UI.Crew is
       else
          Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Frame);
+      Tcl.Tk.Ada.Pack.Pack(Frame);
+      Tcl.Tk.Ada.Pack.Pack
+        (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
+      Tcl.Tk.Ada.Pack.Pack
+        (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
+      Autoscroll(YScroll);
       -- General info about the selected crew member
       Frame := Create(MemberFrame & ".general");
       if Member.Health < 100 then
@@ -754,7 +754,6 @@ package body Ships.UI.Crew is
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(MemberFrame & ".stats");
-         NewHeight := Positive'Value(Winfo_Get(TabButton, "reqheight"));
          for I in Member.Attributes.Iterate loop
             ProgressFrame :=
               Create
@@ -824,7 +823,7 @@ package body Ships.UI.Crew is
          end if;
          -- Skills of the selected crew member
          Frame := Create(MemberFrame & ".skills");
-         NewHeight := Positive'Value(Winfo_Get(TabButton, "reqheight"));
+         NewHeight := 1;
          for I in Member.Skills.Iterate loop
             ProgressFrame :=
               Create
@@ -893,8 +892,7 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton);
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
+      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-pady {0 5}");
       Focus(CloseButton);
       if Height > 500 then
          Height := 500;
@@ -946,12 +944,12 @@ package body Ships.UI.Crew is
       MemberFrame: constant Ttk_Frame :=
         Get_Widget(".memberdialog.canvas.frame", Interp);
       Frame: Ttk_Frame :=
-        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 1"), Interp);
+        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 0"), Interp);
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       Frame.Name :=
         New_String(MemberFrame & "." & Tcl_GetVar(Interp, "newtab"));
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-row 1");
+      Tcl.Tk.Ada.Grid.Grid(Frame);
       return TCL_OK;
    end Show_Member_Tab_Command;
 
