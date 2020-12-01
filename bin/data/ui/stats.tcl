@@ -3,6 +3,8 @@ set statscanvas [canvas .gameframe.paned.statsframe.canvas -yscrollcommand [list
 pack [ttk::scrollbar .gameframe.paned.statsframe.scrolly -orient vertical -command [list $statscanvas yview]] -side right -fill y
 pack $statscanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.statsframe.scrollx -orient horizontal -command [list $statscanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.statsframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.statsframe.scrollx
 set statsframe [ttk::frame $statscanvas.stats]
 grid [ttk::frame $statsframe.left] -sticky nwes
 grid [ttk::label $statsframe.left.stats]
