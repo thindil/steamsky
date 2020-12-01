@@ -45,7 +45,7 @@ All notable changes to this project will be documented in this file.
 - Disable menu keyboard shortcuts when entering the text
 - Moved known bases list to knowledge screen
 - Moved known events list to knowledge screen
-- Moved accepted missions list to knowlegde screen
+- Moved accepted missions list to knowledge screen
 - Moved know stories list to knowledge screen
 
 ### Removed
@@ -57,7 +57,7 @@ All notable changes to this project will be documented in this file.
 - Crash during boarding when attacker or defender are too tired
 - Crash on selling items when no enough profit to pay crew members
 - Showing orders keyboard shortcut in Firsts Steps in help
-- Crash in combat when enemy crew member has too low morale
+- Crash in combat when enemy crew member has low morale
 - Info about bases symbols on map in help
 - Look of setting menu shortcuts
 - Resizing of fonts in help tags
@@ -107,9 +107,9 @@ All notable changes to this project will be documented in this file.
 - Showing color messages on messages list
 - Auto-resizing of last messages widget
 - Update crew info in ship info on assign or unassign crew member to module
-- Showing module damamge in module info
+- Showing module damage in module info
 - Showing main menu when the player tries load invalid savegame
-- Crew members don't gain experience in begining of the game
+- Crew members don't gain experience in beginning of the game
 - Don't show crafting order when any workshop don't have set it
 - Can't find fonts on Linux
 - Crash on non-existing the game theme
