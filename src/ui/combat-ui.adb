@@ -188,7 +188,7 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their engine "),
          To_Unbounded_String("{Aim for their weapon "),
          To_Unbounded_String("{Aim for their hull "));
-      GunIndex, GunnerOrders, EnemyInfo: Unbounded_String;
+      GunIndex, GunnerOrders, EnemyInfo, ProgressBarStyle: Unbounded_String;
       HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
@@ -389,13 +389,22 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -column 0");
             DamagePercent :=
-              100.0 -
-              ((Float(Module.Durability) / Float(Module.MaxDurability)) *
-               100.0);
+              (Float(Module.Durability) / Float(Module.MaxDurability));
+            if DamagePercent = 1.0 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+            elsif DamagePercent > 0.24 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+            else
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style Horizontal.TProgressbar");
+            end if;
             ProgressBar :=
               Create
                 (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
-                 "-orient horizontal -value " & Float'Image(DamagePercent));
+                 "-orient horizontal -length 150 -maximum 1.0 -value" &
+                 Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
               (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
             Row := Row + 1;
@@ -552,12 +561,22 @@ package body Combat.UI is
               (Label, "-row" & Natural'Image(Row) & " -column 0 -sticky w");
             DamagePercent :=
               ((Float(Enemy.Ship.Modules(I).Durability) /
-                Float(Enemy.Ship.Modules(I).MaxDurability)) *
-               100.0);
+                Float(Enemy.Ship.Modules(I).MaxDurability)));
+            if DamagePercent = 1.0 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
+            elsif DamagePercent > 0.24 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
+            else
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style Horizontal.TProgressbar");
+            end if;
             ProgressBar :=
               Create
                 (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
-                 "-orient horizontal -value " & Float'Image(DamagePercent));
+                 "-orient horizontal -length 150 -maximum 1.0 -value" &
+                 Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
               (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
             Row := Row + 1;
