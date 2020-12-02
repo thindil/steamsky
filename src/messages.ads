@@ -26,7 +26,7 @@ with Game; use Game;
 package Messages is
 -- ****
 
-   -- ****t* Messages/Message_Type
+   -- ****t* Messages/Messages.Message_Type
    -- FUNCTION
    -- Types of messages
    -- SOURCE
@@ -35,14 +35,14 @@ package Messages is
       OtherMessage, MissionMessage);
    -- ****
 
-   -- ****t* Messages/Message_Color
+   -- ****t* Messages/Messages.Message_Color
    -- FUNCTION
    -- Colors of messages
    -- SOURCE
    type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
    -- ****
 
-   -- ****s* Messages/Message_Data
+   -- ****s* Messages/Messages.Message_Data
    -- FUNCTION
    -- Data structure for messages
    -- PARAMETERS
@@ -57,28 +57,28 @@ package Messages is
    end record;
    -- ****
 
-   -- ****t* Messages/Messages_Container
+   -- ****t* Messages/Messages.Messages_Container
    -- FUNCTION
    -- Used to store messages data
    -- SOURCE
    package Messages_Container is new Vectors(Positive, Message_Data);
    -- ****
 
-   -- ****v* Messages/Messages_List
+   -- ****v* Messages/Messages.Messages_List
    -- FUNCTION
    -- List of all messages
    -- SOURCE
    Messages_List: Messages_Container.Vector;
    -- ****
 
-   -- ****v* Messages/LastMessageIndex
+   -- ****v* Messages/Messages.LastMessageIndex
    -- FUNCTION
    -- Index of last message to show
    -- SOURCE
    LastMessageIndex: Natural := 0;
    -- ****
 
-   -- ****f* Messages/FormatedTime
+   -- ****f* Messages/Messages.FormatedTime
    -- FUNCTION
    -- Format game time
    -- PARAMETERS
@@ -90,7 +90,7 @@ package Messages is
       Test_Case => ("Test_FormattedTime", Robustness);
       -- ****
 
-      -- ****f* Messages/AddMessage
+      -- ****f* Messages/Messages.AddMessage
       -- FUNCTION
       -- Add new message to list
       -- PARAMETERS
@@ -104,7 +104,7 @@ package Messages is
       Test_Case => ("Test_AddMessage", Nominal);
       -- ****
 
-      -- ****f* Messages/GetMessage
+      -- ****f* Messages/Messages.GetMessage
       -- FUNCTION
       -- Get Nth message of selected type
       -- PARAMETERS
@@ -121,7 +121,7 @@ package Messages is
       Test_Case => ("Test_GetMessage", Robustness);
       -- ****
 
-      -- ****f* Messages/ClearMessages
+      -- ****f* Messages/Messages.ClearMessages
       -- FUNCTION
       -- Remove all messages
       -- SOURCE
@@ -129,7 +129,7 @@ package Messages is
       Test_Case => ("Test_ClearMessages", Robustness);
       -- ****
 
-      -- ****f* Messages/MessagesAmount
+      -- ****f* Messages/Messages.MessagesAmount
       -- FUNCTION
       -- Get amount of selected type messages
       -- PARAMETERS
@@ -141,7 +141,7 @@ package Messages is
       Test_Case => ("Test_MessagesAmount", Robustness);
       -- ****
 
-      -- ****f* Messages/RestoreMessage
+      -- ****f* Messages/Messages.RestoreMessage
       -- FUNCTION
       -- Restore message from save file
       -- PARAMETERS
@@ -155,7 +155,7 @@ package Messages is
       Pre => Message /= Null_Unbounded_String;
       -- ****
 
-      -- ****f* Messages/GetLastMessageIndex
+      -- ****f* Messages/Messages.GetLastMessageIndex
       -- FUNCTION
       -- Get last message index
       -- RESULT
