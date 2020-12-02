@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Escape key behavior in inventory and crew member dialogs
 - Position of messages window after leaving the last messages screen
