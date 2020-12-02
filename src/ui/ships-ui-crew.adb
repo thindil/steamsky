@@ -518,7 +518,6 @@ package body Ships.UI.Crew is
         Create
           (MemberDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
-      MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
           (MemberDialog & ".button",
@@ -563,14 +562,14 @@ package body Ships.UI.Crew is
       else
          Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
       end if;
-      Tcl.Tk.Ada.Pack.Pack(Frame);
+      Tcl.Tk.Ada.Pack.Pack(Frame, "-pady {5 0}");
       Tcl.Tk.Ada.Pack.Pack
         (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
       Autoscroll(YScroll);
       -- General info about the selected crew member
-      Frame := Create(MemberFrame & ".general");
+      Frame := Create(MemberCanvas & ".general");
       if Member.Health < 100 then
          if GameSettings.ShowNumbers then
             MemberLabel :=
@@ -753,7 +752,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(Frame);
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
-         Frame := Create(MemberFrame & ".stats");
+         Frame := Create(MemberCanvas & ".stats");
          for I in Member.Attributes.Iterate loop
             ProgressFrame :=
               Create
@@ -822,7 +821,7 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
          -- Skills of the selected crew member
-         Frame := Create(MemberFrame & ".skills");
+         Frame := Create(MemberCanvas & ".skills");
          NewHeight := 1;
          for I in Member.Skills.Iterate loop
             ProgressFrame :=
@@ -901,7 +900,8 @@ package body Ships.UI.Crew is
          Width := 250;
       end if;
       Canvas_Create
-        (MemberCanvas, "window", "0 0 -anchor nw -window " & MemberFrame);
+        (MemberCanvas, "window",
+         "0 0 -anchor nw -window " & MemberCanvas & ".general -tag info");
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
@@ -910,7 +910,7 @@ package body Ships.UI.Crew is
         (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind
         (CloseButton, "<Tab>",
-         "{focus " & MemberFrame & ".buttonbox.general;break}");
+         "{focus " & MemberDialog & ".buttonbox.general;break}");
       Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
@@ -941,15 +941,14 @@ package body Ships.UI.Crew is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MemberFrame: constant Ttk_Frame :=
-        Get_Widget(".memberdialog.canvas.frame", Interp);
-      Frame: Ttk_Frame :=
-        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(MemberFrame, "-row 0"), Interp);
+      MemberCanvas: constant Tk_Canvas :=
+        Get_Widget(".memberdialog.canvas", Interp);
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-      Frame.Name :=
-        New_String(MemberFrame & "." & Tcl_GetVar(Interp, "newtab"));
-      Tcl.Tk.Ada.Grid.Grid(Frame);
+      Delete(MemberCanvas, "info");
+      Canvas_Create
+        (MemberCanvas, "window",
+         "0 0 -anchor nw -window " & MemberCanvas & "." &
+         Tcl_GetVar(Interp, "newtab") & " -tag info");
       return TCL_OK;
    end Show_Member_Tab_Command;
 
