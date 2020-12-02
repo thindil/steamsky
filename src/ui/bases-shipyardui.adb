@@ -480,18 +480,15 @@ package body Bases.ShipyardUI is
          "{" & LF & "Installation time:" &
          Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes}");
       SetModuleInfo(True);
-      if MoneyIndex2 > 0 then
-         InstallInfo :=
+      InstallInfo :=
+        (if MoneyIndex2 > 0 then
            To_Unbounded_String
              (LF & "You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-              To_String(MoneyName) & ".");
-      else
-         InstallInfo :=
-           To_Unbounded_String
+              To_String(MoneyName) & ".")
+         else To_Unbounded_String
              (LF & "You don't have any " & To_String(MoneyName) &
-              " to install anything.");
-      end if;
+              " to install anything."));
       for Module of PlayerShip.Modules loop
          if Module.MType = HULL then
             UsedSpace := Module.InstalledModules;
@@ -693,18 +690,15 @@ package body Bases.ShipyardUI is
          MoneyIndex2: constant Natural :=
            FindItem(PlayerShip.Cargo, MoneyIndex);
       begin
-         if MoneyIndex2 > 0 then
-            RemoveInfo :=
+         RemoveInfo :=
+           (if MoneyIndex2 > 0 then
               To_Unbounded_String
                 (LF & "You have" &
                  Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-                 To_String(MoneyName) & ".");
-         else
-            RemoveInfo :=
-              To_Unbounded_String
+                 To_String(MoneyName) & ".")
+            else To_Unbounded_String
                 (LF & "You don't have any " & To_String(MoneyName) &
-                 " to install anything.");
-         end if;
+                 " to install anything."));
       end;
       for Module of PlayerShip.Modules loop
          if Module.MType = HULL then
