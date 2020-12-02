@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Some typos in changelog
 - Position of the game statistics
 - Showing player's ship damage in combat
+- Showing the enemy's ship's modules info when it is destroyed
 
 ## [5.5] - 2020-11-29
 
