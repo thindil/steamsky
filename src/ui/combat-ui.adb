@@ -531,6 +531,9 @@ package body Combat.UI is
                Destroy(Item);
             end loop;
          end loop;
+         if Enemy.Ship.Modules(1).Durability = 0 then
+            goto End_Of_Enemy_Modules_Loop;
+         end if;
          Row := 0;
          for I in Enemy.Ship.Modules.Iterate loop
             if Enemy.Distance > 1000 then
@@ -581,6 +584,7 @@ package body Combat.UI is
               (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
             Row := Row + 1;
          end loop;
+         <<End_Of_Enemy_Modules_Loop>>
       end;
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
