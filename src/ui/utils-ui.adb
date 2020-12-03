@@ -534,6 +534,7 @@ package body Utils.UI is
                Insert(MessagesView, "end", "{" & LF & "}");
             end if;
          end loop;
+         See(MessagesView, "end");
       else
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
