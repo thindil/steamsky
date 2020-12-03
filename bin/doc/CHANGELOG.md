@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing player's ship damage in combat
 - Showing the enemy's ship's modules info when it is destroyed
 - Scrolling last messages window when older messages showed as first
+- Font on help topics list
 
 ## [5.5] - 2020-11-29
 
