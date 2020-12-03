@@ -156,6 +156,7 @@ package body Combat.UI is
                end if;
             end if;
          end loop;
+         See(MessagesView, "end");
       else
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
