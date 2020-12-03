@@ -1417,15 +1417,8 @@ package body Ships.UI.Modules is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ModuleDialog: constant Tk_Toplevel :=
-        Create
-          (".moduledialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (ModuleDialog & ".xscroll",
-           "-orient horizontal -command [list .moduledialog.canvas xview]");
+      ModuleDialog: constant Ttk_Frame :=
+        Create(".moduledialog", "-style Dialog.TFrame");
       YScroll: constant Ttk_Scrollbar :=
         Create
           (ModuleDialog & ".yscroll",
@@ -1433,8 +1426,7 @@ package body Ships.UI.Modules is
       CrewCanvas: constant Tk_Canvas :=
         Create
           (ModuleDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
+           "-yscrollcommand [list " & YScroll & " set]");
       CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
@@ -1451,18 +1443,14 @@ package body Ships.UI.Modules is
            To_String(PlayerShip.Modules(ModuleIndex).Name) &
            "} -wraplength 250");
       Assigned: Natural := 0;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
-      Wm_Set(ModuleDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(ModuleDialog, "attributes", "-type dialog");
-      end if;
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
       Tcl.Tk.Ada.Pack.Pack(CrewCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
-      Autoscroll(XScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       for I in PlayerShip.Crew.Iterate loop
@@ -1510,42 +1498,16 @@ package body Ships.UI.Modules is
       if Height > 500 then
          Height := 500;
       end if;
-      configure
-        (CrewFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
       Canvas_Create
         (CrewCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
       configure
-        (CrewCanvas, "-scrollregion [list " & BBox(CrewCanvas, "all") & "]");
-      Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
-      Height := Height + Positive'Value(Winfo_Get(XScroll, "reqheight")) + 5;
-      declare
-         X, Y: Integer;
-      begin
-         X :=
-           (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - Width) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(ModuleDialog, "vrootheight")) - Height) /
-           2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (ModuleDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind
-           (ModuleDialog, "<Destroy>",
-            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+        (CrewCanvas,
+         "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
+         Positive'Image(Height) & " -width" & Positive'Image(Width));
+      Tcl.Tk.Ada.Place.Place
+        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
