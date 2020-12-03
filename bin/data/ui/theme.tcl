@@ -178,6 +178,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style map Treeview \
          -background [list selected $colors(-darkred)] \
          -foreground [list selected $colors(-goldenyellow)]
+      # Help topics list
+      ttk::style configure Help.Treeview -font HelpFont
 
       # Check button setting
       ttk::style configure TCheckbutton -padding 4
