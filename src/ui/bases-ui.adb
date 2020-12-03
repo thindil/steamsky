@@ -315,18 +315,18 @@ package body Bases.UI is
             To_String(MoneyName) & LF & "Repair time:" &
             To_String(FormattedTime) & "}");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
-         if Get_Price
-             (SkyBases(BaseIndex).BaseType,
-              Recipes_List(ItemIndex).ResultIndex) >
-           0 then
-            Cost :=
+         Cost :=
+           (if
+              Get_Price
+                (SkyBases(BaseIndex).BaseType,
+                 Recipes_List(ItemIndex).ResultIndex) >
+              0
+            then
               Get_Price
                 (SkyBases(BaseIndex).BaseType,
                  Recipes_List(ItemIndex).ResultIndex) *
-              Recipes_List(ItemIndex).Difficulty * 10;
-         else
-            Cost := Recipes_List(ItemIndex).Difficulty * 10;
-         end if;
+              Recipes_List(ItemIndex).Difficulty * 10
+            else Recipes_List(ItemIndex).Difficulty * 10);
          Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
          if Cost = 0 then
             Cost := 1;
