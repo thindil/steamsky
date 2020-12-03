@@ -943,12 +943,18 @@ package body Ships.UI.Crew is
       pragma Unreferenced(ClientData, Argc, Argv);
       MemberCanvas: constant Tk_Canvas :=
         Get_Widget(".memberdialog.canvas", Interp);
+      Frame: constant Ttk_Frame :=
+        Get_Widget(MemberCanvas & "." & Tcl_GetVar(Interp, "newtab"));
+      XPos: constant Natural :=
+        (Positive'Value(Winfo_Get(MemberCanvas, "reqwidth")) -
+         Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+        2;
    begin
       Delete(MemberCanvas, "info");
       Canvas_Create
         (MemberCanvas, "window",
-         "0 0 -anchor nw -window " & MemberCanvas & "." &
-         Tcl_GetVar(Interp, "newtab") & " -tag info");
+         Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " & Frame &
+         " -tag info");
       return TCL_OK;
    end Show_Member_Tab_Command;
 
