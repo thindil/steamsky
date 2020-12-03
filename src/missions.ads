@@ -26,21 +26,21 @@ with Game; use Game;
 package Missions is
 -- ****
 
-   -- ****t* Missions/Missions_Types
+   -- ****t* Missions/Missions.Missions_Types
    -- FUNCTION
    -- Types of missions
    -- SOURCE
    type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
    -- ****
 
-   -- ****t* Missions/RewardMultiplier
+   -- ****t* Missions/Missions.RewardMultiplier
    -- FUNCTION
    -- Used for count reward for finished missions
    -- SOURCE
    type RewardMultiplier is digits 2 range 0.0 .. 2.0;
    -- ****
 
-   -- ****s* Missions/Mission_Data(MType:
+   -- ****s* Missions/Missions.Mission_Data(MType:
    -- FUNCTION
    -- Data structure for missions
    -- PARAMETERS
@@ -79,35 +79,35 @@ package Missions is
    end record;
    -- ****
 
-   -- ****t* Missions/Mission_Container
+   -- ****t* Missions/Missions.Mission_Container
    -- FUNCTION
    -- Used to store data for missions
    -- SOURCE
    package Mission_Container is new Vectors(Positive, Mission_Data);
    -- ****
 
-   -- ****v* Missions/AcceptedMissions
+   -- ****v* Missions/Missions.AcceptedMissions
    -- FUNCTION
    -- List of missions accepted by player
    -- SOURCE
    AcceptedMissions: Mission_Container.Vector;
    -- ****
 
-   -- ****e* Missions/Missions_Accepting_Error
+   -- ****e* Missions/Missions.Missions_Accepting_Error
    -- FUNCTION
    -- Raised when mission can't be accepted
    -- SOURCE
    Missions_Accepting_Error: exception;
    -- ****
 
-   -- ****e* Missions/Missions_Finishing_Error
+   -- ****e* Missions/Missions.Missions_Finishing_Error
    -- FUNCTION
    -- Raised when mission can't be finished
    -- SOURCE
    Missions_Finishing_Error: exception;
    -- ****
 
-   -- ****f* Missions/GenerateMissions
+   -- ****f* Missions/Missions.GenerateMissions
    -- FUNCTION
    -- Generate if needed new missions in base
    -- SOURCE
@@ -115,7 +115,7 @@ package Missions is
       Test_Case => ("Test_GenerateMissions", Robustness);
       -- ****
 
-      -- ****f* Missions/AcceptMission
+      -- ****f* Missions/Missions.AcceptMission
       -- FUNCTION
       -- Accept selected mission from base
       -- PARAMETERS
@@ -126,7 +126,7 @@ package Missions is
       Test_Case => ("Test_AcceptMission", Nominal);
       -- ****
 
-      -- ****f* Missions/UpdateMissions
+      -- ****f* Missions/Missions.UpdateMissions
       -- FUNCTION
       -- Update accepted missions
       -- PARAMETERS
@@ -136,7 +136,7 @@ package Missions is
       Test_Case => ("Test_UpdateMissions", Robustness);
       -- ****
 
-      -- ****f* Missions/FinishMission
+      -- ****f* Missions/Missions.FinishMission
       -- FUNCTION
       -- Finish selected mission
       -- PARAMETERS
@@ -148,7 +148,7 @@ package Missions is
       Test_Case => ("Test_FinishMission", Nominal);
       -- ****
 
-      -- ****f* Missions/DeleteMission
+      -- ****f* Missions/Missions.DeleteMission
       -- FUNCTION
       -- Delete selected mission
       -- PARAMETERS
@@ -162,7 +162,7 @@ package Missions is
       Test_Case => ("Test_DeleteMission", Nominal);
       -- ****
 
-      -- ****f* Missions/UpdateMission
+      -- ****f* Missions/Missions.UpdateMission
       -- FUNCTION
       -- Update status of mission
       -- PARAMETERS
@@ -174,7 +174,7 @@ package Missions is
       Test_Case => ("Test_UpdateMission", Nominal);
       -- ****
 
-      -- ****f* Missions/AutoFinishMissions
+      -- ****f* Missions/Missions.AutoFinishMissions
       -- FUNCTION
       -- Finish all possible missions.
       -- RESULT
