@@ -1474,6 +1474,7 @@ package body Ships.UI.Modules is
          if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
             Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
          end if;
+         Bind(CrewButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       end loop;
       if Update_Assign_Crew_Command(ClientData, Interp, Argc, Argv) /=
         TCL_OK then
