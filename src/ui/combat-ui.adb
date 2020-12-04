@@ -260,12 +260,12 @@ package body Combat.UI is
       Item.Interp := Get_Context;
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".pilotorder");
+      ComboBox.Name := New_String(Frame & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineercrew");
+      ComboBox.Name := New_String(Frame & ".engineercrew");
       configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
-      ComboBox.Name := New_String(Widget_Image(Frame) & ".engineerorder");
+      ComboBox.Name := New_String(Frame & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
@@ -282,13 +282,11 @@ package body Combat.UI is
       for I in Guns.Iterate loop
          HaveAmmo := False;
          declare
-            AmmoIndex: Natural;
+            AmmoIndex: constant Natural :=
+              (if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
+                 PlayerShip.Modules(Guns(I)(1)).AmmoIndex
+               else PlayerShip.Modules(Guns(I)(1)).HarpoonIndex);
          begin
-            if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
-               AmmoIndex := PlayerShip.Modules(Guns(I)(1)).AmmoIndex;
-            else
-               AmmoIndex := PlayerShip.Modules(Guns(I)(1)).HarpoonIndex;
-            end if;
             if
               (AmmoIndex in
                  PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index)
@@ -322,14 +320,14 @@ package body Combat.UI is
              (Trim(Positive'Image(Guns_Container.To_Index(I)), Left));
          Label :=
            Create
-             (Widget_Image(Frame) & ".gunlabel" & To_String(GunIndex),
+             (Frame & ".gunlabel" & To_String(GunIndex),
               "-text {" & To_String(PlayerShip.Modules(Guns(I)(1)).Name) &
               ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Positive'Image(Guns_Container.To_Index(I) + 2));
          ComboBox :=
            Create
-             (Widget_Image(Frame) & ".guncrew" & To_String(GunIndex),
+             (Frame & ".guncrew" & To_String(GunIndex),
               "-values [list " & GetCrewList(2) & "] -width 10");
          if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
@@ -356,7 +354,7 @@ package body Combat.UI is
          end loop;
          ComboBox :=
            Create
-             (Widget_Image(Frame) & ".gunorder" & To_String(GunIndex),
+             (Frame & ".gunorder" & To_String(GunIndex),
               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Bind
@@ -385,7 +383,7 @@ package body Combat.UI is
          if Module.Durability < Module.MaxDurability then
             Label :=
               Create
-                (Widget_Image(Frame) & ".lbl" & Trim(Natural'Image(Row), Left),
+                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(Module.Name) & "}");
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -column 0");
@@ -403,7 +401,7 @@ package body Combat.UI is
             end if;
             ProgressBar :=
               Create
-                (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
+                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
                  "-orient horizontal -length 150 -maximum 1.0 -value" &
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
@@ -411,23 +409,17 @@ package body Combat.UI is
             Row := Row + 1;
          end if;
       end loop;
-      Append(EnemyInfo, "Name: ");
-      Append(EnemyInfo, EnemyName);
-      Append(EnemyInfo, LF);
-      Append(EnemyInfo, "Type: ");
-      Append(EnemyInfo, Enemy.Ship.Name);
-      Append(EnemyInfo, LF);
-      Append(EnemyInfo, "Home: ");
-      Append(EnemyInfo, SkyBases(Enemy.Ship.HomeBase).Name);
-      Append(EnemyInfo, LF);
+      Append(EnemyInfo, "Name: " & EnemyName & LF);
+      Append(EnemyInfo, "Type: " & Enemy.Ship.Name & LF);
+      Append(EnemyInfo, "Home: " & SkyBases(Enemy.Ship.HomeBase).Name & LF);
       Append(EnemyInfo, "Distance: ");
-      if Enemy.Distance >= 15000 then
+      if Enemy.Distance >= 15_000 then
          Append(EnemyInfo, "Escaped");
-      elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
+      elsif Enemy.Distance in 10_000 .. 15_000 then
          Append(EnemyInfo, "Long");
-      elsif Enemy.Distance < 10000 and Enemy.Distance >= 5000 then
+      elsif Enemy.Distance in 5_000 .. 10_000 then
          Append(EnemyInfo, "Medium");
-      elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
+      elsif Enemy.Distance in 1_000 .. 5_000 then
          Append(EnemyInfo, "Short");
       else
          Append(EnemyInfo, "Close");
@@ -559,7 +551,7 @@ package body Combat.UI is
             end if;
             Label :=
               Create
-                (Widget_Image(Frame) & ".lbl" & Trim(Natural'Image(Row), Left),
+                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(ModuleName) & "}");
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -column 0 -sticky w");
@@ -578,7 +570,7 @@ package body Combat.UI is
             end if;
             ProgressBar :=
               Create
-                (Widget_Image(Frame) & ".dmg" & Trim(Natural'Image(Row), Left),
+                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
                  "-orient horizontal -length 150 -maximum 1.0 -value" &
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
@@ -611,8 +603,7 @@ package body Combat.UI is
             for Member of PlayerShip.Crew loop
                CheckButton :=
                  Create
-                   (Widget_Image(Frame) & ".board" &
-                    Trim(Positive'Image(Row), Left),
+                   (Frame & ".board" & Trim(Positive'Image(Row), Left),
                     "-text {" & To_String(Member.Name) & "} -variable board" &
                     Trim(Positive'Image(Row), Left) &
                     " -command {SetBoarding" & Positive'Image(Row) & "}");
@@ -744,7 +735,7 @@ package body Combat.UI is
          end loop;
          Label :=
            Create
-             (Widget_Image(Frame) & ".name" &
+             (Frame & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(Enemy.Ship.Crew(I).Name) & "}");
          Add(Label, To_String(Tooltip));
@@ -752,7 +743,7 @@ package body Combat.UI is
            (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
          ProgressBar :=
            Create
-             (Widget_Image(Frame) & ".health" &
+             (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(Enemy.Ship.Crew(I).Health));
@@ -767,7 +758,7 @@ package body Combat.UI is
             To_Lower(Slice(OrderName, 2, Length(OrderName))));
          Label :=
            Create
-             (Widget_Image(Frame) & ".order" &
+             (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(OrderName) & "}");
          Add(Label, To_String(Tooltip));
@@ -804,7 +795,7 @@ package body Combat.UI is
          end loop;
          Label :=
            Create
-             (Widget_Image(Frame) & ".name" &
+             (Frame & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
          Add(Label, To_String(Tooltip));
@@ -812,7 +803,7 @@ package body Combat.UI is
            (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
          ProgressBar :=
            Create
-             (Widget_Image(Frame) & ".health" &
+             (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(PlayerShip.Crew(I).Health));
@@ -822,7 +813,7 @@ package body Combat.UI is
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
          ComboBox :=
            Create
-             (Widget_Image(Frame) & ".order" &
+             (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-values [list " & To_String(OrdersList) & "] -state readonly");
          Current
@@ -1007,13 +998,10 @@ package body Combat.UI is
               CArgv.Arg(Argv, 1));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 1));
          Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
-         if Current(ComboBox) = "0" then
-            Guns(GunIndex)(3) := 0;
-         else
-            Guns(GunIndex)(3) :=
-              Modules_List(PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
-                .Speed;
-         end if;
+         Guns(GunIndex)(3) :=
+           (if Current(ComboBox) = "0" then 0
+            else Modules_List(PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+                .Speed);
          AddMessage
            ("Order for " &
             To_String
@@ -1116,10 +1104,7 @@ package body Combat.UI is
          configure(Button, "-command ShowCombatUI");
          for Member of PlayerShip.Crew loop
             if Member.Order = Rest
-              and then
-              (Member.PreviousOrder = Pilot or
-               Member.PreviousOrder = Engineer or
-               Member.PreviousOrder = Gunner) then
+              and then Member.PreviousOrder in Pilot | Engineer | Gunner then
                Member.Order := Member.PreviousOrder;
                Member.OrderTime := 15;
                AddMessage
