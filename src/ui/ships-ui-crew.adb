@@ -567,6 +567,8 @@ package body Ships.UI.Crew is
         (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
+      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-pady {0 5}");
+      Focus(CloseButton);
       Autoscroll(YScroll);
       -- General info about the selected crew member
       Frame := Create(MemberCanvas & ".general");
@@ -891,8 +893,6 @@ package body Ships.UI.Crew is
             Width := NewWidth;
          end if;
       end if;
-      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-pady {0 5}");
-      Focus(CloseButton);
       if Height > 500 then
          Height := 500;
       end if;
@@ -902,6 +902,7 @@ package body Ships.UI.Crew is
       Canvas_Create
         (MemberCanvas, "window",
          "0 0 -anchor nw -window " & MemberCanvas & ".general -tag info");
+      Tcl_Eval(Interp, "update");
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
@@ -955,6 +956,10 @@ package body Ships.UI.Crew is
         (MemberCanvas, "window",
          Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " & Frame &
          " -tag info");
+      Tcl_Eval(Interp, "update");
+      configure
+        (MemberCanvas,
+         "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       return TCL_OK;
    end Show_Member_Tab_Command;
 
