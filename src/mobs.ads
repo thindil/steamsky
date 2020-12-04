@@ -31,7 +31,7 @@ with Game; use Game;
 package Mobs is
 -- ****
 
-   -- ****s* Mobs/MobInventoryRecord
+   -- ****s* Mobs/Mobs.MobInventoryRecord
    -- FUNCTION
    -- Data structure for mobs inventory
    -- PARAMETERS
@@ -46,14 +46,14 @@ package Mobs is
    end record;
    -- ****
 
-   -- ****t* Mobs/MobInventory_Container
+   -- ****t* Mobs/Mobs.MobInventory_Container
    -- FUNCTION
    -- Used for store mobiles inventories
    -- SOURCE
    package MobInventory_Container is new Vectors(Positive, MobInventoryRecord);
    -- ****
 
-   -- ****s* Mobs/ProtoMobRecord
+   -- ****s* Mobs/Mobs.ProtoMobRecord
    -- FUNCTION
    -- Data structure for mobs prototypes
    -- PARAMETERS
@@ -76,7 +76,7 @@ package Mobs is
    end record;
    -- ****
 
-   -- ****t* Mobs/ProtoMobs_Container
+   -- ****t* Mobs/Mobs.ProtoMobs_Container
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
@@ -84,21 +84,21 @@ package Mobs is
       ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* Mobs/ProtoMobs_List
+   -- ****v* Mobs/Mobs.ProtoMobs_List
    -- FUNCTION
    -- List of prototypes of all mobiles available in the game
    -- SOURCE
    ProtoMobs_List: ProtoMobs_Container.Map;
    -- ****
 
-   -- ****e* Mobs/Mobs_Invalid_Data
+   -- ****e* Mobs/Mobs.Mobs_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in mobs file
    -- SOURCE
    Mobs_Invalid_Data: exception;
    -- ****
 
-   -- ****f* Mobs/LoadMobs
+   -- ****f* Mobs/Mobs.LoadMobs
    -- FUNCTION
    -- Load mobs from files
    -- PARAMETERS
@@ -107,7 +107,7 @@ package Mobs is
    procedure LoadMobs(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Mobs/GenerateMob
+   -- ****f* Mobs/Mobs.GenerateMob
    -- FUNCTION
    -- Generate mob from selected prototype and faction.
    -- PARAMETERS
@@ -126,7 +126,7 @@ package Mobs is
       Test_Case => ("Test_GenearateMob", Nominal);
       -- ****
 
-      -- ****f* Mobs/GetRandomItem
+      -- ****f* Mobs/Mobs.GetRandomItem
       -- FUNCTION
       -- Get random item from the list based on mob skills and faction
       -- PARAMETERS
