@@ -1358,6 +1358,7 @@ package body Ships.UI.Modules is
              (".moduledialog.canvas.frame.crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
          State(CrewButton, "!disabled");
+         configure(CrewButton, "-takefocus 1");
       end loop;
       for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
          if Owner /= 0 then
@@ -1373,6 +1374,7 @@ package body Ships.UI.Modules is
             if Tcl_GetVar(Interp, To_String(ButtonName)) = "0" then
                CrewButton.Name := New_String(To_String(ButtonName));
                State(CrewButton, "disabled");
+               configure(CrewButton, "-takefocus 0");
             end if;
          end loop;
       end if;
@@ -1475,6 +1477,10 @@ package body Ships.UI.Modules is
             Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
          end if;
          Bind(CrewButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind
+           (CrewButton, "<Tab>",
+            "{focus [GetActiveButton" &
+            Positive'Image(Crew_Container.To_Index(I)) & "];break}");
       end loop;
       if Update_Assign_Crew_Command(ClientData, Interp, Argc, Argv) /=
         TCL_OK then
@@ -1510,6 +1516,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Place.Place
         (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
@@ -1732,6 +1739,56 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Cancel_Order_Command;
 
+   -- ****o* SUModules/Get_Active_Button_Command
+   -- FUNCTION
+   -- Get the next active button in assing crew dialog
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- GetActiveButton crewindex
+   -- Crewindex is the index of the crew member which is currently selected
+   -- or 0 for close button
+   -- SOURCE
+   function Get_Active_Button_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Get_Active_Button_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      CrewIndex: constant Natural := Natural'Value(CArgv.Arg(Argv, 1));
+      ButtonName: Unbounded_String;
+      Button: Ttk_CheckButton;
+   begin
+      for I in PlayerShip.Crew.Iterate loop
+         ButtonName :=
+           To_Unbounded_String
+             (".moduledialog.canvas.frame.crewbutton" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
+         Button := Get_Widget(To_String(ButtonName), Interp);
+         exit when InState(Button, "disabled") = "0" and
+           Crew_Container.To_Index(I) > CrewIndex;
+         ButtonName := Null_Unbounded_String;
+      end loop;
+      if ButtonName = Null_Unbounded_String then
+         ButtonName :=
+           To_Unbounded_String(".moduledialog.canvas.frame.button");
+      end if;
+      Button := Get_Widget(To_String(ButtonName), Interp);
+      Focus(Button);
+      return TCL_OK;
+   end Get_Active_Button_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowModuleMenu", Show_Module_Menu_Command'Access);
@@ -1747,6 +1804,7 @@ package body Ships.UI.Modules is
       AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
       AddCommand("ShowAssignSkill", Show_Assign_Skill_Command'Access);
       AddCommand("CancelOrder", Cancel_Order_Command'Access);
+      AddCommand("GetActiveButton", Get_Active_Button_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
