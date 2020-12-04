@@ -1501,6 +1501,7 @@ package body Ships.UI.Modules is
       Canvas_Create
         (CrewCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
+      Tcl_Eval(Interp, "update");
       configure
         (CrewCanvas,
          "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
