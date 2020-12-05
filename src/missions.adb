@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -520,12 +520,12 @@ package body Missions is
         (SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         0;
-      AcceptedMissions.Delete(Index => MissionIndex);
       if Mission.MType = Deliver then
          UpdateCargo(PlayerShip, Mission.ItemIndex, -1);
       elsif Mission.MType = Passenger then
          DeleteMember(Mission.Data, PlayerShip);
       end if;
+      AcceptedMissions.Delete(Index => MissionIndex);
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
             SkyMap

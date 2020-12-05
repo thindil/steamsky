@@ -1,4 +1,4 @@
---    Copyright 2017-2019 Bartek thindil Jasicki
+--    Copyright 2017-2020 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -37,6 +37,9 @@ package body Ships.Cargo is
          end loop;
       else
          ItemIndex := CargoIndex;
+      end if;
+      if ItemIndex = 0 and ProtoIndex = Null_Unbounded_String then
+         return;
       end if;
       if ItemIndex = 0 then
          Ship.Cargo.Append
