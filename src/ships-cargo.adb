@@ -39,6 +39,9 @@ package body Ships.Cargo is
       else
          ItemIndex := CargoIndex;
       end if;
+      if ItemIndex = 0 and ProtoIndex = Null_Unbounded_String then
+         return;
+      end if;
       if ItemIndex = 0 then
          Ship.Cargo.Append
            (New_Item =>
