@@ -15,7 +15,8 @@ All notable changes to this project will be documented in this file.
 - Showing the enemy's ship's modules info when it is destroyed
 - Scrolling last messages window when older messages showed as first
 - Font on help topics list
-- Scrolling the crew member info and assigning crew member to module
+- Scrolling the crew member info, assigning crew member to module and crew
+  members inventory info
 - Possible crash when ending delivery mission (issue #71)
 
 ## [5.5] - 2020-11-29
