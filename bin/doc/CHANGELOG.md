@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling last messages window when older messages showed as first
 - Font on help topics list
 - Scrolling the crew member info and assigning crew member to module
+- Possible crash when ending delivery mission (issue #71)
 
 ## [5.5] - 2020-11-29
 
