@@ -265,7 +265,7 @@ package body Crafts.UI is
       -- ****
       MaxAmount: Positive;
       MType: ModuleType;
-      RecipeIndex, ModulesList: Unbounded_String;
+      ModulesList: Unbounded_String;
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.amount");
       MaxLabel: constant Ttk_Label :=
@@ -274,12 +274,11 @@ package body Crafts.UI is
       ModulesBox: constant Ttk_ComboBox :=
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
+      RecipeIndex: constant Unbounded_String :=
+        (if Element(Index, 1) = '{' then
+           Unbounded_Slice(Index, 2, Length(Index) - 1)
+         else Index);
    begin
-      if Element(Index, 1) = '{' then
-         RecipeIndex := Unbounded_Slice(Index, 2, Length(Index) - 1);
-      else
-         RecipeIndex := Index;
-      end if;
       MaxAmount := CheckRecipe(RecipeIndex);
       Set(AmountBox, "1");
       configure
@@ -362,7 +361,7 @@ package body Crafts.UI is
       RecipesView: constant Ttk_Tree_View :=
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
-      WorkplaceName, RecipeIndex: Unbounded_String := Null_Unbounded_String;
+      WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
       HaveWorkplace, IsMaterial, HaveMaterials: Boolean := True;
@@ -377,8 +376,9 @@ package body Crafts.UI is
       ErrorLabel: constant Ttk_Label :=
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.item.error", Interp);
+      RecipeIndex: constant Unbounded_String :=
+        To_Unbounded_String(Selection(RecipesView));
    begin
-      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       configure(RecipeText, "-state normal");
       Delete(RecipeText, "1.0", "end");
       if Length(RecipeIndex) > 6
@@ -639,7 +639,8 @@ package body Crafts.UI is
       RecipesView: constant Ttk_Tree_View :=
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
-      RecipeIndex: Unbounded_String;
+      RecipeIndex: Unbounded_String :=
+        To_Unbounded_String(Selection(RecipesView));
       ModulesBox: constant Ttk_ComboBox :=
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
@@ -647,7 +648,6 @@ package body Crafts.UI is
         Get_Widget
           (".gameframe.paned.craftframe.canvas.craft.item.set.amount", Interp);
    begin
-      RecipeIndex := To_Unbounded_String(Selection(RecipesView));
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
