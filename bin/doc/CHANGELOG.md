@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typo in info about daily payments
 - Typos in README.md, MODDING.md, CONTRIBUTING.md and help
+- Possible crash when ending delivery mission (issue #71)
 
 ## [5.0.7] - 2020-10-10
 
