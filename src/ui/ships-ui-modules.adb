@@ -1432,7 +1432,7 @@ package body Ships.UI.Modules is
       CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
       CloseButton: constant Ttk_Button :=
         Create
-          (CrewFrame & ".button",
+          (ModuleDialog & ".button",
            "-text Close -command {CloseDialog " & Widget_Image(ModuleDialog) &
            "}");
       Height: Positive := 10;
@@ -1450,10 +1450,11 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack
-        (YScroll, " -side right -fill y -padx {0 5} -pady 5");
-      Tcl.Tk.Ada.Pack.Pack
-        (CrewCanvas, "-expand true -fill both -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
+      Focus(CloseButton);
       Autoscroll(YScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
@@ -1501,9 +1502,6 @@ package body Ships.UI.Modules is
       if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
          Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
       end if;
-      Tcl.Tk.Ada.Pack.Pack(CloseButton);
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
-      Focus(CloseButton);
       if Height > 500 then
          Height := 500;
       end if;
@@ -1783,8 +1781,7 @@ package body Ships.UI.Modules is
          ButtonName := Null_Unbounded_String;
       end loop;
       if ButtonName = Null_Unbounded_String then
-         ButtonName :=
-           To_Unbounded_String(".moduledialog.canvas.frame.button");
+         ButtonName := To_Unbounded_String(".moduledialog.button");
       end if;
       Button := Get_Widget(To_String(ButtonName), Interp);
       Focus(Button);
