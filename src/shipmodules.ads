@@ -28,7 +28,7 @@ with Game; use Game;
 package ShipModules is
 -- ****
 
-   -- ****t* ShipModules/ModuleType
+   -- ****t* ShipModules/ShipModules.ModuleType
    -- FUNCTION
    -- Types of ship modules
    -- SOURCE
@@ -38,7 +38,7 @@ package ShipModules is
       GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
    -- ****
 
-   -- ****s* ShipModules/BaseModule_Data
+   -- ****s* ShipModules/ShipModules.BaseModule_Data
    -- FUNCTION
    -- Data structure for prototypes of ship modules
    -- PARAMETERS
@@ -79,7 +79,7 @@ package ShipModules is
    end record;
    -- ****
 
-   -- ****t* ShipModules/BaseModules_Container
+   -- ****t* ShipModules/ShipModules.BaseModules_Container
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
@@ -87,14 +87,14 @@ package ShipModules is
       BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* ShipModules/Modules_List
+   -- ****v* ShipModules/ShipModules.Modules_List
    -- FUNCTION
    -- List of ship modules available in game
    -- SOURCE
    Modules_List: BaseModules_Container.Map;
    -- ****
 
-   -- ****f* ShipModules/LoadShipModules
+   -- ****f* ShipModules/ShipModules.LoadShipModules
    -- FUNCTION
    -- Load modules from files
    -- PARAMETERS
