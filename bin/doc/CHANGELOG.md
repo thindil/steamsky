@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling the crew member info, assigning crew member to module and crew
   members inventory info
 - Possible crash when ending delivery mission (issue #71)
+- Scrollbar position in crew member info dialog
 
 ## [5.5] - 2020-11-29
 
