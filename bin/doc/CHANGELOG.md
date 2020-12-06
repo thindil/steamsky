@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.0.8] - 2020-12-06
 
 ### Fixed
 - Typo in info about daily payments
