@@ -28,7 +28,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -562,12 +561,11 @@ package body Ships.UI.Crew is
       else
          Bind(TabButton, "<Tab>", "{focus " & CloseButton & ";break}");
       end if;
-      Tcl.Tk.Ada.Pack.Pack(Frame, "-pady {5 0}");
-      Tcl.Tk.Ada.Pack.Pack
-        (YScroll, " -side right -fill y -pady 5 -padx {0 5}");
-      Tcl.Tk.Ada.Pack.Pack
-        (MemberCanvas, "-expand true -fill both -pady 5 -padx 5");
-      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
       Autoscroll(YScroll);
       -- General info about the selected crew member
