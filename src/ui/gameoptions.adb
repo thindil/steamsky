@@ -480,31 +480,26 @@ package body GameOptions is
       end if;
       GameSettings.UndockSpeed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
-      if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
-         GameSettings.AutoCenter := True;
-      else
-         GameSettings.AutoCenter := False;
-      end if;
-      if Tcl_GetVar(Interp, RootName & ".general.autoreturn") = "1" then
-         GameSettings.AutoReturn := True;
-      else
-         GameSettings.AutoReturn := False;
-      end if;
-      if Tcl_GetVar(Interp, RootName & ".general.autofinish") = "1" then
-         GameSettings.AutoFinish := True;
-      else
-         GameSettings.AutoFinish := False;
-      end if;
-      if Tcl_GetVar(Interp, RootName & ".general.autoaskforbases") = "1" then
-         GameSettings.AutoAskForBases := True;
-      else
-         GameSettings.AutoAskForBases := False;
-      end if;
-      if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1" then
-         GameSettings.AutoAskForEvents := True;
-      else
-         GameSettings.AutoAskForEvents := False;
-      end if;
+      GameSettings.AutoCenter :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
+           True
+         else False);
+      GameSettings.AutoReturn :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autoreturn") = "1" then
+           True
+         else False);
+      GameSettings.AutoFinish :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autofinish") = "1" then
+           True
+         else False);
+      GameSettings.AutoAskForBases :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autoaskforbases") = "1"
+         then True
+         else False);
+      GameSettings.AutoAskForEvents :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1"
+         then True
+         else False);
       GameSettings.LowFuel := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.drinks");
       GameSettings.LowDrinks := Positive'Value(Get(SpinBox));
@@ -523,11 +518,9 @@ package body GameOptions is
       ComboBox.Name := New_String(RootName & ".general.autosave");
       GameSettings.AutoSave :=
         AutoSaveType'Val(Natural'Value(Current(ComboBox)));
-      if Tcl_GetVar(Interp, RootName & ".interface.animations") = "1" then
-         GameSettings.AnimationsEnabled := 1;
-      else
-         GameSettings.AnimationsEnabled := 0;
-      end if;
+      GameSettings.AnimationsEnabled :=
+        (if Tcl_GetVar(Interp, RootName & ".interface.animations") = "1" then 1
+         else 0);
       ComboBox.Name := New_String(RootName & ".interface.animationtype");
       GameSettings.AnimationType := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(RootName & ".interface.theme");
@@ -547,11 +540,10 @@ package body GameOptions is
          GameSettings.ShowTooltips := False;
          Disable;
       end if;
-      if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
-         GameSettings.ShowLastMessages := True;
-      else
-         GameSettings.ShowLastMessages := False;
-      end if;
+      GameSettings.ShowLastMessages :=
+        (if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
+           True
+         else False);
       if Tcl_GetVar(Interp, RootName & ".interface.fullscreen") = "1" then
          GameSettings.FullScreen := True;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
@@ -561,11 +553,10 @@ package body GameOptions is
       end if;
       SpinBox.Name := New_String(RootName & ".interface.closemessages");
       GameSettings.AutoCloseMessagesTime := Positive'Value(Get(SpinBox));
-      if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
-         GameSettings.ShowNumbers := True;
-      else
-         GameSettings.ShowNumbers := False;
-      end if;
+      GameSettings.ShowNumbers :=
+        (if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
+           True
+         else False);
       SpinBox.Name := New_String(RootName & ".interface.mapfont");
       GameSettings.MapFontSize := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".interface.helpfont");
