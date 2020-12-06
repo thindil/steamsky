@@ -257,43 +257,26 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GetStoryLocation_dd7372_c97b39
-     (StoryX, StoryY: in out Positive) is
+   procedure Wrap_Test_GetStoryLocation_eee8ee_b0f396
+     (StoryX: out MapXRange; StoryY: out MapYRange) is
    begin
-      begin
-         pragma Assert(StoryX < 1025 and StoryY < 1025);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "req_sloc(stories.ads:0):Test_GetStoryLocation test requirement violated");
-      end;
       GNATtest_Generated.GNATtest_Standard.Stories.GetStoryLocation
         (StoryX, StoryY);
-      begin
-         pragma Assert(True);
-         null;
-      exception
-         when System.Assertions.Assert_Failure =>
-            AUnit.Assertions.Assert
-              (False,
-               "ens_sloc(stories.ads:0:):Test_GetStoryLocation test commitment violated");
-      end;
-   end Wrap_Test_GetStoryLocation_dd7372_c97b39;
+   end Wrap_Test_GetStoryLocation_eee8ee_b0f396;
 --  end read only
 
 --  begin read only
    procedure Test_GetStoryLocation_test_getstorylocation
      (Gnattest_T: in out Test);
-   procedure Test_GetStoryLocation_dd7372_c97b39
+   procedure Test_GetStoryLocation_eee8ee_b0f396
      (Gnattest_T: in out Test) renames
      Test_GetStoryLocation_test_getstorylocation;
---  id:2.2/dd7372c22c1ac3e1/GetStoryLocation/1/0/test_getstorylocation/
+--  id:2.2/eee8eefa7464e271/GetStoryLocation/1/0/test_getstorylocation/
    procedure Test_GetStoryLocation_test_getstorylocation
      (Gnattest_T: in out Test) is
-      procedure GetStoryLocation(StoryX, StoryY: in out Positive) renames
-        Wrap_Test_GetStoryLocation_dd7372_c97b39;
+      procedure GetStoryLocation
+        (StoryX: out MapXRange; StoryY: out MapYRange) renames
+        Wrap_Test_GetStoryLocation_eee8ee_b0f396;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

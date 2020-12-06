@@ -34,7 +34,7 @@ package body Trades.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_BuyItems_295d66_69cd52
-     (BaseItemIndex: Positive; Amount: String) is
+     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
    begin
       GNATtest_Generated.GNATtest_Standard.Trades.BuyItems
         (BaseItemIndex, Amount);
@@ -47,7 +47,9 @@ package body Trades.Test_Data.Tests is
      Test_BuyItems_test_buyitems;
 --  id:2.2/295d66b8c191f255/BuyItems/1/0/test_buyitems/
    procedure Test_BuyItems_test_buyitems(Gnattest_T: in out Test) is
-      procedure BuyItems(BaseItemIndex: Positive; Amount: String) renames
+      procedure BuyItems
+        (BaseItemIndex: BaseCargo_Container.Extended_Index;
+         Amount: String) renames
         Wrap_Test_BuyItems_295d66_69cd52;
 --  end read only
 
@@ -70,11 +72,13 @@ package body Trades.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_SellItems_079195_da8da3
-     (ItemIndex: Positive; Amount: String) is
+   procedure Wrap_Test_SellItems_079195_3394dd
+     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
    begin
       begin
-         pragma Assert(ItemIndex <= PlayerShip.Cargo.Last_Index);
+         pragma Assert
+           (ItemIndex in
+              PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -92,17 +96,18 @@ package body Trades.Test_Data.Tests is
               (False,
                "ens_sloc(trades.ads:0:):Test_SellItems test commitment violated");
       end;
-   end Wrap_Test_SellItems_079195_da8da3;
+   end Wrap_Test_SellItems_079195_3394dd;
 --  end read only
 
 --  begin read only
    procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test);
-   procedure Test_SellItems_079195_da8da3(Gnattest_T: in out Test) renames
+   procedure Test_SellItems_079195_3394dd(Gnattest_T: in out Test) renames
      Test_SellItems_test_sellitems;
 --  id:2.2/0791958f8fd18173/SellItems/1/0/test_sellitems/
    procedure Test_SellItems_test_sellitems(Gnattest_T: in out Test) is
-      procedure SellItems(ItemIndex: Positive; Amount: String) renames
-        Wrap_Test_SellItems_079195_da8da3;
+      procedure SellItems
+        (ItemIndex: Inventory_Container.Extended_Index; Amount: String) renames
+        Wrap_Test_SellItems_079195_3394dd;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

@@ -29,9 +29,9 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CreateShip_d36d0c_13521c
-     (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord is
+   function Wrap_Test_CreateShip_c5e851_13521c
+     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
    begin
       begin
          pragma Assert
@@ -44,7 +44,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_CreateShip_d36d0c_13521c_Result: constant ShipRecord :=
+         Test_CreateShip_c5e851_13521c_Result: constant ShipRecord :=
            GNATtest_Generated.GNATtest_Standard.Ships.CreateShip
              (ProtoIndex, Name, X, Y, Speed, RandomUpgrades);
       begin
@@ -57,21 +57,22 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_CreateShip_d36d0c_13521c_Result;
+         return Test_CreateShip_c5e851_13521c_Result;
       end;
-   end Wrap_Test_CreateShip_d36d0c_13521c;
+   end Wrap_Test_CreateShip_c5e851_13521c;
 --  end read only
 
 --  begin read only
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test);
-   procedure Test_CreateShip_d36d0c_13521c(Gnattest_T: in out Test) renames
+   procedure Test_CreateShip_c5e851_13521c(Gnattest_T: in out Test) renames
      Test_CreateShip_test_createship;
---  id:2.2/d36d0cd7f65b1765/CreateShip/1/0/test_createship/
+--  id:2.2/c5e851ac0c40246a/CreateShip/1/0/test_createship/
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test) is
       function CreateShip
-        (ProtoIndex, Name: Unbounded_String; X, Y: Integer; Speed: ShipSpeed;
-         RandomUpgrades: Boolean := True) return ShipRecord renames
-        Wrap_Test_CreateShip_d36d0c_13521c;
+        (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+         Speed: ShipSpeed; RandomUpgrades: Boolean := True)
+         return ShipRecord renames
+        Wrap_Test_CreateShip_c5e851_13521c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -257,9 +258,9 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DamageModule_1d3bc9_8bb198
-     (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
-      DeathReason: String) is
+   procedure Wrap_Test_DamageModule_0d948a_8bb198
+     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+      Damage: Positive; DeathReason: String) is
    begin
       begin
          pragma Assert
@@ -283,19 +284,20 @@ package body Ships.Test_Data.Tests is
               (False,
                "ens_sloc(ships.ads:0:):Test_DamageModule test commitment violated");
       end;
-   end Wrap_Test_DamageModule_1d3bc9_8bb198;
+   end Wrap_Test_DamageModule_0d948a_8bb198;
 --  end read only
 
 --  begin read only
    procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test);
-   procedure Test_DamageModule_1d3bc9_8bb198(Gnattest_T: in out Test) renames
+   procedure Test_DamageModule_0d948a_8bb198(Gnattest_T: in out Test) renames
      Test_DamageModule_test_damagemodule;
---  id:2.2/1d3bc9384dbdb797/DamageModule/1/0/test_damagemodule/
+--  id:2.2/0d948a4ee9f63a43/DamageModule/1/0/test_damagemodule/
    procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test) is
       procedure DamageModule
-        (Ship: in out ShipRecord; ModuleIndex, Damage: Positive;
+        (Ship: in out ShipRecord;
+         ModuleIndex: Modules_Container.Extended_Index; Damage: Positive;
          DeathReason: String) renames
-        Wrap_Test_DamageModule_1d3bc9_8bb198;
+        Wrap_Test_DamageModule_0d948a_8bb198;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
