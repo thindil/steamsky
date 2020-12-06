@@ -25,7 +25,7 @@ package Stories.Test_Data.Tests is
    procedure Test_GetStepData_8e5120_5b2a80(Gnattest_T: in out Test);
    --  stories.ads:285:4:GetStepData:Test_GetStepData
 
-   procedure Test_GetStoryLocation_dd7372_c97b39(Gnattest_T: in out Test);
+   procedure Test_GetStoryLocation_eee8ee_b0f396(Gnattest_T: in out Test);
    --  stories.ads:301:4:GetStoryLocation:Test_GetStoryLocation
 
 end Stories.Test_Data.Tests;
