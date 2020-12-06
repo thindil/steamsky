@@ -22,7 +22,7 @@
 package Ships.Cargo is
 -- ****
 
-   -- ****f* SCargo/UpdateCargo
+   -- ****f* SCargo/SCargo.UpdateCargo
    -- FUNCTION
    -- Update selected item in ship cargo
    -- PARAMETERS
@@ -46,7 +46,7 @@ package Ships.Cargo is
       Test_Case => ("Test_UpdateCargo", Nominal);
       -- ****
 
-      -- ****f* SCargo/FreeCargo
+      -- ****f* SCargo/SCargo.FreeCargo
       -- FUNCTION
       -- Check how much is free space in cargo of selected ship
       -- PARAMETERS
@@ -63,7 +63,7 @@ package Ships.Cargo is
       Test_Case => ("Test_FreeCargo", Robustness);
       -- ****
 
-      -- ****f* SCargo/GetItemAmount
+      -- ****f* SCargo/SCargo.GetItemAmount
       -- FUNCTION
       -- Check how much selected items is in player ship cargo
       -- PARAMETERS
@@ -76,7 +76,7 @@ package Ships.Cargo is
       Test_Case => ("Test_GetItemAmount", Nominal);
       -- ****
 
-      -- ****f* SCargo/GetItemsAmount
+      -- ****f* SCargo/SCargo.GetItemsAmount
       -- FUNCTION
       -- Check amount of selected consumables on player ship
       -- PARAMETERS
