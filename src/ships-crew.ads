@@ -22,7 +22,7 @@
 package Ships.Crew is
 -- ****
 
-   -- ****f* SCrew/GetSkillLevel
+   -- ****f* SCrew/SCrew.GetSkillLevel
    -- FUNCTION
    -- Get level of skill of selected crew member
    -- PARAMETERS
@@ -38,7 +38,7 @@ package Ships.Crew is
       Test_Case => ("Test_GetSkillLevel", Nominal);
       -- ****
 
-      -- ****f* SCrew/Death
+      -- ****f* SCrew/SCrew.Death
       -- FUNCTION
       -- Handle crew member death
       -- PARAMETERS
@@ -59,7 +59,7 @@ package Ships.Crew is
       Test_Case => ("Test_Death", Nominal);
       -- ****
 
-      -- ****f* SCrew/DeleteMember
+      -- ****f* SCrew/SCrew.DeleteMember
       -- FUNCTION
       -- Delete selected member from crew list
       -- PARAMETERS
@@ -74,7 +74,7 @@ package Ships.Crew is
       Test_Case => ("Test_DeleteMember", Nominal);
       -- ****
 
-   -- ****f* SCrew/FindMember
+   -- ****f* SCrew/SCrew.FindMember
    -- FUNCTION
    -- Find index of first crew member with selected order
    -- PARAMETERS
@@ -89,7 +89,7 @@ package Ships.Crew is
       Test_Case => ("Test_FindMember", Robustness);
       -- ****
 
-      -- ****f* SCrew/GiveOrders
+      -- ****f* SCrew/SCrew.GiveOrders
       -- FUNCTION
       -- Change order for selected crew member
       -- PARAMETERS
@@ -114,7 +114,7 @@ package Ships.Crew is
       Test_Case => ("Test_GiveOrders", Nominal);
       -- ****
 
-      -- ****f* SCrew/UpdateOrders
+      -- ****f* SCrew/SCrew.UpdateOrders
       -- FUNCTION
       -- Update crew orders based on their orders priorities
       -- PARAMETERS
@@ -128,7 +128,7 @@ package Ships.Crew is
       Test_Case => ("Test_UpdateOrders", Robustness);
       -- ****
 
-      -- ****f* SCrew/UpdateMorale
+      -- ****f* SCrew/SCrew.UpdateMorale
       -- FUNCTION
       -- Update morale of selected crew member by value
       -- PARAMETERS
