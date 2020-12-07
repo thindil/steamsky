@@ -416,7 +416,7 @@ package body Knowledge.Bases is
             Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
             Add(ReputationBar, ReputationText);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
+         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w -padx {5 0}");
       end SetReputationText;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -505,8 +505,9 @@ package body Knowledge.Bases is
         Create
           (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(BaseLabel, "-row 0 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (BaseLabel, "-row 0 -columnspan 2 -padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2 -pady {0 5}");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place(BaseDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind(CloseButton, "<Tab>", "{focus " & CloseButton & ";break}");
