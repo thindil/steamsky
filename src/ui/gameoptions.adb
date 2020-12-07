@@ -252,12 +252,6 @@ package body GameOptions is
       OptionsFrame.Name :=
         New_String
           (Widget_Image(OptionsCanvas) & ".options.notebook.interface");
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".animations",
-         Trim(Natural'Image(GameSettings.AnimationsEnabled), Left));
-      ComboBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".animationtype");
-      Current(ComboBox, Natural'Image(GameSettings.AnimationType - 1));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
       Set
         (ComboBox,
@@ -518,11 +512,6 @@ package body GameOptions is
       ComboBox.Name := New_String(RootName & ".general.autosave");
       GameSettings.AutoSave :=
         AutoSaveType'Val(Natural'Value(Current(ComboBox)));
-      GameSettings.AnimationsEnabled :=
-        (if Tcl_GetVar(Interp, RootName & ".interface.animations") = "1" then 1
-         else 0);
-      ComboBox.Name := New_String(RootName & ".interface.animationtype");
-      GameSettings.AnimationType := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(RootName & ".interface.theme");
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(ComboBox) then

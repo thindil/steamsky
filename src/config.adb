@@ -47,8 +47,7 @@ package body Config is
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
          LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
-         WindowWidth => 800, WindowHeight => 600, AnimationsEnabled => 1,
-         AnimationType => 1, MessagesLimit => 500, SavedMessages => 10,
+         WindowWidth => 800, WindowHeight => 600, MessagesLimit => 500, SavedMessages => 10,
          HelpFontSize => 14, MapFontSize => 16, InterfaceFontSize => 14,
          InterfaceTheme => To_Unbounded_String("steamsky"),
          MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
@@ -126,14 +125,6 @@ package body Config is
                GameSettings.WindowWidth := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowHeight") then
                GameSettings.WindowHeight := Positive'Value(To_String(Value));
-            elsif FieldName = To_Unbounded_String("AnimationsEnabled") then
-               if Value = To_Unbounded_String("Yes") then
-                  GameSettings.AnimationsEnabled := 1;
-               else
-                  GameSettings.AnimationsEnabled := 0;
-               end if;
-            elsif FieldName = To_Unbounded_String("AnimationType") then
-               GameSettings.AnimationType := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MessagesLimit") then
                GameSettings.MessagesLimit := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("SavedMessages") then
@@ -262,14 +253,6 @@ package body Config is
       Put_Line
         (ConfigFile,
          "WindowHeight =" & Positive'Image(GameSettings.WindowHeight));
-      if GameSettings.AnimationsEnabled = 1 then
-         Put_Line(ConfigFile, "AnimationsEnabled = Yes");
-      else
-         Put_Line(ConfigFile, "AnimationsEnabled = No");
-      end if;
-      Put_Line
-        (ConfigFile,
-         "AnimationType =" & Positive'Image(GameSettings.AnimationType));
       Put_Line
         (ConfigFile,
          "MessagesLimit =" & Positive'Image(GameSettings.MessagesLimit));

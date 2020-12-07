@@ -124,9 +124,6 @@ package Config is
    -- AutoMoveStop          - When stop automoving of player ship
    -- WindowWidth           - Game window default width
    -- WindowHeight          - Game window default height
-   -- AnimationsEnabled     - If 1 then UI animations are enabled, disabled
-   --                         when 0
-   -- AnimationType         - Type of animation used to move between views
    -- MessagesLimit         - Max amount of messages showed in game
    -- SavedMessages         - Max amount fo messages saved to file
    -- HelpFontSize          - Size of font used in help
@@ -162,8 +159,6 @@ package Config is
       AutoMoveStop: AutoMoveBreak;
       WindowWidth: Positive;
       WindowHeight: Positive;
-      AnimationsEnabled: Natural;
-      AnimationType: Positive;
       MessagesLimit: Positive range 10 .. 5_000;
       SavedMessages: Positive range 5 .. 200;
       HelpFontSize: Positive range 2 .. 51;
