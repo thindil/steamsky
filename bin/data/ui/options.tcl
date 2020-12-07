@@ -257,7 +257,7 @@ $optionsframe.notebook add $mapoptions -text {Map keys}
 set ioptions [ttk::frame $optionsframe.notebook.interface]
 grid [ttk::label $ioptions.lbl3 -text {Interface theme:}]
 tooltip::tooltip $ioptions.lbl3 {Select UI theme.}
-grid [ttk::combobox $ioptions.theme -state readonly -width 10] -row 0 -column 1
+grid [ttk::combobox $ioptions.theme -state readonly -width 15] -row 0 -column 1
 tooltip::tooltip $ioptions.theme {Select UI theme.}
 grid [ttk::label $ioptions.lbl4 -text {Show tooltips:}]
 tooltip::tooltip $ioptions.lbl4 {Show help tooltips for various game elements.}
