@@ -255,54 +255,46 @@ bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $mapoptions -text {Map keys}
 # Interface options
 set ioptions [ttk::frame $optionsframe.notebook.interface]
-grid [ttk::label $ioptions.lbl1 -text {Animations enabled:}]
-tooltip::tooltip $ioptions.lbl1 {Did user interface should be animated or not.}
-grid [ttk::checkbutton $ioptions.animations] -row 0 -column 1
-tooltip::tooltip $ioptions.animations {Did user interface should be animated or not.}
-grid [ttk::label $ioptions.lbl2 -text {Type of animations:}]
-tooltip::tooltip $ioptions.lbl2 {Which animation should be used to move between screens.}
-grid [ttk::combobox $ioptions.animationtype -state readonly -values [list {Crossfade} {Slide right} {Slide left}] -width 10] -row 1 -column 1
-tooltip::tooltip $ioptions.animationtype {Which animation should be used to move between screens.}
 grid [ttk::label $ioptions.lbl3 -text {Interface theme:}]
 tooltip::tooltip $ioptions.lbl3 {Select UI theme.}
-grid [ttk::combobox $ioptions.theme -state readonly -width 10] -row 2 -column 1
+grid [ttk::combobox $ioptions.theme -state readonly -width 10] -row 0 -column 1
 tooltip::tooltip $ioptions.theme {Select UI theme.}
 grid [ttk::label $ioptions.lbl4 -text {Show tooltips:}]
 tooltip::tooltip $ioptions.lbl4 {Show help tooltips for various game elements.}
-grid [ttk::checkbutton $ioptions.showtooltips] -row 3 -column 1
+grid [ttk::checkbutton $ioptions.showtooltips] -row 1 -column 1
 tooltip::tooltip $ioptions.showtooltips {Show help tooltips for various game elements.}
 grid [ttk::label $ioptions.lbl5 -text {Show last messages:}]
 tooltip::tooltip $ioptions.lbl5 {Show last messages window in every place in the game.}
-grid [ttk::checkbutton $ioptions.showmessages] -row 4 -column 1
+grid [ttk::checkbutton $ioptions.showmessages] -row 2 -column 1
 tooltip::tooltip $ioptions.showmessages {Show last messages window in every place in the game.}
 grid [ttk::label $ioptions.lbl6 -text {Full screen mode:}]
 tooltip::tooltip $ioptions.lbl6 {Run the game in full screen mode.}
-grid [ttk::checkbutton $ioptions.fullscreen] -row 5 -column 1
+grid [ttk::checkbutton $ioptions.fullscreen] -row 3 -column 1
 tooltip::tooltip $ioptions.fullscreen {Run the game in full screen mode.}
 grid [ttk::label $ioptions.lbl7 -text {Full screen shortcut:}]
-grid [ttk::entry $ioptions.fullscreenkey] -row 6 -column 1
+grid [ttk::entry $ioptions.fullscreenkey] -row 4 -column 1
 bind $ioptions.fullscreenkey <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $ioptions.lbl8 -text {Close messages after:}]
 tooltip::tooltip $ioptions.lbl8 {Auto close game messages after that amount of seconds.}
-grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %S %s 60}] -row 7 -column 1
+grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %S %s 60}] -row 5 -column 1
 tooltip::tooltip $ioptions.closemessages {Auto close game messages after that amount of seconds.}
 grid [ttk::label $ioptions.lbl9 -text {Show numeric values:}]
 tooltip::tooltip $ioptions.lbl9 {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
-grid [ttk::checkbutton $ioptions.shownumbers] -row 8 -column 1
+grid [ttk::checkbutton $ioptions.shownumbers] -row 6 -column 1
 tooltip::tooltip $ioptions.shownumbers {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
 grid [ttk::label $ioptions.lbl10 -text {Size of map font:}]
 tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used to draw game map.}
-grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 9 -column 1
+grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 7 -column 1
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont {Size (in pixels) of font used to draw game map.}
 grid [ttk::label $ioptions.lbl11 -text {Size of help font:}]
 tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used mainly in help.}
-grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 10 -column 1
+grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 8 -column 1
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont {Size (in pixels) of font used mainly in help.}
 grid [ttk::label $ioptions.lbl12 -text {Size of interface font:}]
 tooltip::tooltip $ioptions.lbl12 {Size (in pixels) of font used in interface (for example, here).}
-grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 11 -column 1
+grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 9 -column 1
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
