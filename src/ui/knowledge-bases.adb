@@ -24,7 +24,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.Place; use Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -38,10 +38,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -360,7 +357,7 @@ package body Knowledge.Bases is
    -- Show information about the selected base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -380,39 +377,22 @@ package body Knowledge.Bases is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      BaseDialog: constant Tk_Toplevel :=
-        Create
-          (".basedialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (BaseDialog & ".xscroll",
-           "-orient horizontal -command [list .basedialog.canvas xview]");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (BaseDialog & ".yscroll",
-           "-orient vertical -command [list .basedialog.canvas yview]");
-      BaseCanvas: constant Tk_Canvas :=
-        Create
-          (BaseDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
-      BaseFrame: constant Ttk_Frame := Create(BaseCanvas & ".frame");
+      BaseDialog: constant Ttk_Frame :=
+        Create(".basedialog", "-style Dialog.TFrame");
       CloseButton: constant Ttk_Button :=
         Create
-          (BaseFrame & ".button",
+          (BaseDialog & ".button",
            "-text Close -command {CloseDialog " & BaseDialog & "}");
-      Height, Width: Positive := 10;
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       procedure SetReputationText(ReputationText: String) is
          ReputationBar: constant Ttk_ProgressBar :=
-           Create(BaseFrame & ".reputation", "-maximum 200.0 -length 150");
+           Create(BaseDialog & ".reputation", "-maximum 200.0 -length 150");
          ReputationLabel: constant Ttk_Label :=
-           Create(BaseFrame & ".reputationlabel");
+           Create(BaseDialog & ".reputationlabel");
          ProgressBarStyle: Unbounded_String;
       begin
          if SkyBases(BaseIndex).Reputation(1) < 0 then
@@ -435,27 +415,13 @@ package body Knowledge.Bases is
                To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
             Add(ReputationBar, ReputationText);
-            Width :=
-              Width + Positive'Value(Winfo_Get(ReputationBar, "reqwidth"));
          end if;
          Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w");
-         Width :=
-           Width + Positive'Value(Winfo_Get(ReputationLabel, "reqwidth"));
-         Height :=
-           Height + Positive'Value(Winfo_Get(ReputationLabel, "reqheight"));
       end SetReputationText;
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set(BaseDialog, "title", "{Steam Sky - Base Info}");
-      Wm_Set(BaseDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(BaseDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
-      Tcl.Tk.Ada.Pack.Pack(BaseCanvas, "-expand true -fill both");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       BaseInfo :=
         To_Unbounded_String
           ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
@@ -537,52 +503,14 @@ package body Knowledge.Bases is
       end if;
       BaseLabel :=
         Create
-          (BaseFrame & ".info",
+          (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(BaseLabel, "-row 0 -columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(BaseLabel, "reqheight"));
-      if Positive'Value(Winfo_Get(BaseLabel, "reqwidth")) + 10 > Width then
-         Width := 10 + Positive'Value(Winfo_Get(BaseLabel, "reqwidth"));
-      end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure
-        (BaseFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
-      Canvas_Create
-        (BaseCanvas, "window", "0 0 -anchor nw -window " & BaseFrame);
-      configure
-        (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
-      Height := Height + 20;
-      declare
-         X, Y: Integer;
-      begin
-         Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
-         X :=
-           (Positive'Value(Winfo_Get(BaseDialog, "vrootwidth")) - Width) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(BaseDialog, "vrootheight")) - Height) / 2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (BaseDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind(BaseDialog, "<Destroy>", "{CloseDialog " & BaseDialog & "}");
-         Bind(BaseDialog, "<Escape>", "{CloseDialog " & BaseDialog & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place(BaseDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Bind(CloseButton, "<Tab>", "{focus " & CloseButton & ";break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Base_Info_Command;
 
