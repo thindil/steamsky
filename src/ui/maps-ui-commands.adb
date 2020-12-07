@@ -140,11 +140,10 @@ package body Maps.UI.Commands is
       end loop;
       Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-      if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0 then
-         Button.Name := New_String(Widget_Image(ButtonsBox) & ".right");
-      else
-         Button.Name := New_String(Widget_Image(ButtonsBox) & ".left");
-      end if;
+      Button.Name :=
+        (if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0 then
+           New_String(Widget_Image(ButtonsBox) & ".right")
+         else New_String(Widget_Image(ButtonsBox) & ".left"));
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Show_Map_Buttons_Command;
@@ -228,12 +227,10 @@ package body Maps.UI.Commands is
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
       GameSettings.WindowHeight :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
-      if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
-         PanedPosition := GameSettings.WindowHeight;
-      else
-         PanedPosition :=
-           GameSettings.WindowHeight - GameSettings.MessagesPosition;
-      end if;
+      PanedPosition :=
+        (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+           GameSettings.WindowHeight
+         else GameSettings.WindowHeight - GameSettings.MessagesPosition);
       if SashPosition > 0 and then SashPosition /= PanedPosition then
          GameSettings.MessagesPosition :=
            GameSettings.WindowHeight - SashPosition;
@@ -507,73 +504,49 @@ package body Maps.UI.Commands is
          SpinBox.Name := New_String(".gameframe.movemapdialog.y");
          CenterY := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
-         if CenterY - (MapHeight / 3) < 1 then
-            CenterY := MapHeight / 3;
-         else
-            CenterY := CenterY - (MapHeight / 3);
-         end if;
+         CenterY :=
+           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
+            else CenterY - (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "s" then
-         if CenterY + (MapHeight / 3) > 1024 then
-            CenterY := 1024 - (MapHeight / 3);
-         else
-            CenterY := CenterY + (MapHeight / 3);
-         end if;
+         CenterY :=
+           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+            else CenterY + (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "w" then
-         if CenterX - (MapWidth / 3) < 1 then
-            CenterX := MapWidth / 3;
-         else
-            CenterX := CenterX - (MapWidth / 3);
-         end if;
+         CenterX :=
+           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
+            else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
-         if CenterX + (MapWidth / 3) > 1024 then
-            CenterX := 1024 - (MapWidth / 3);
-         else
-            CenterX := CenterX + (MapWidth / 3);
-         end if;
+         CenterX :=
+           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+            else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
-         if CenterY - (MapHeight / 3) < 1 then
-            CenterY := MapHeight / 3;
-         else
-            CenterY := CenterY - (MapHeight / 3);
-         end if;
-         if CenterX - (MapWidth / 3) < 1 then
-            CenterX := MapWidth / 3;
-         else
-            CenterX := CenterX - (MapWidth / 3);
-         end if;
+         CenterY :=
+           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
+            else CenterY - (MapHeight / 3));
+         CenterX :=
+           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
+            else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "ne" then
-         if CenterY - (MapHeight / 3) < 1 then
-            CenterY := MapHeight / 3;
-         else
-            CenterY := CenterY - (MapHeight / 3);
-         end if;
-         if CenterX + (MapWidth / 3) > 1024 then
-            CenterX := 1024 - (MapWidth / 3);
-         else
-            CenterX := CenterX + (MapWidth / 3);
-         end if;
+         CenterY :=
+           (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
+            else CenterY - (MapHeight / 3));
+         CenterX :=
+           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+            else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
-         if CenterY + (MapHeight / 3) > 1024 then
-            CenterY := 1024 - (MapHeight / 3);
-         else
-            CenterY := CenterY + (MapHeight / 3);
-         end if;
-         if CenterX - (MapWidth / 3) < 1 then
-            CenterX := MapWidth / 3;
-         else
-            CenterX := CenterX - (MapWidth / 3);
-         end if;
+         CenterY :=
+           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+            else CenterY + (MapHeight / 3));
+         CenterX :=
+           (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
+            else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "se" then
-         if CenterY + (MapHeight / 3) > 1024 then
-            CenterY := 1024 - (MapHeight / 3);
-         else
-            CenterY := CenterY + (MapHeight / 3);
-         end if;
-         if CenterX + (MapWidth / 3) > 1024 then
-            CenterX := 1024 - (MapWidth / 3);
-         else
-            CenterX := CenterX + (MapWidth / 3);
-         end if;
+         CenterY :=
+           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+            else CenterY + (MapHeight / 3));
+         CenterX :=
+           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+            else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
          CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
          CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
