@@ -582,11 +582,9 @@ package body Maps.UI.Commands is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
    begin
-      if CArgv.Arg(Argv, 1) = "raise" then
-         GameSettings.MapFontSize := GameSettings.MapFontSize + 1;
-      else
-         GameSettings.MapFontSize := GameSettings.MapFontSize - 1;
-      end if;
+      GameSettings.MapFontSize :=
+        (if CArgv.Arg(Argv, 1) = "raise" then GameSettings.MapFontSize + 1
+         else GameSettings.MapFontSize - 1);
       if GameSettings.MapFontSize < 3 then
          GameSettings.MapFontSize := 3;
       elsif GameSettings.MapFontSize > 50 then
