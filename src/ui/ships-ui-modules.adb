@@ -44,7 +44,6 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
-with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
@@ -1525,7 +1524,7 @@ package body Ships.UI.Modules is
    -- Show assign the skill UI
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -1546,38 +1545,20 @@ package body Ships.UI.Modules is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ModuleDialog: constant Tk_Toplevel :=
-        Create
-          (".moduledialog",
-           "-class Dialog -background [ttk::style lookup . -background] -relief solid -borderwidth 2");
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Interp);
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (ModuleDialog & ".xscroll",
-           "-orient horizontal -command [list .moduledialog.canvas xview]");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (ModuleDialog & ".yscroll",
-           "-orient vertical -command [list .moduledialog.canvas yview]");
-      SkillCanvas: constant Tk_Canvas :=
-        Create
-          (ModuleDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll &
-           " set] -xscrollcommand [list " & XScroll & " set]");
-      SkillFrame: constant Ttk_Frame := Create(SkillCanvas & ".frame");
+      ModuleDialog: constant Ttk_Frame :=
+        Create(".moduledialog", "-style Dialog.TFrame");
       CloseButton: constant Ttk_Button :=
         Create
-          (SkillFrame & ".button",
+          (ModuleDialog & ".button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      Height, Width: Positive := 10;
       InfoLabel: constant Ttk_Label :=
         Create
-          (SkillFrame & ".titlelabel",
+          (ModuleDialog & ".titlelabel",
            "-text {Assign skill to " &
            To_String(PlayerShip.Modules(ModuleIndex).Name) & "}");
-      SkillsFrame: constant Ttk_Frame := Create(SkillFrame & ".frame");
+      SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ScrollSkillY: constant Ttk_Scrollbar :=
         Create
           (SkillsFrame & ".scrolly",
@@ -1588,20 +1569,12 @@ package body Ships.UI.Modules is
            "-columns [list name tool] -show headings -yscrollcommand [list " &
            SkillsFrame & ".scrolly set]");
       ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(MainWindow);
-      Wm_Set(ModuleDialog, "title", "{Steam Sky - Assign crew}");
-      Wm_Set(ModuleDialog, "transient", ".");
-      if Tcl_GetVar(Interp, "tcl_platform(os)") = "Linux" then
-         Wm_Set(ModuleDialog, "attributes", "-type dialog");
-      end if;
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(SkillCanvas, "-expand true -fill both");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
-      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
       Tag_Configure(SkillsView, "gray", "-foreground gray");
@@ -1640,55 +1613,18 @@ package body Ships.UI.Modules is
         (SkillsView, "<<TreeviewSelect>>",
          "{AssignModule skill" & Positive'Image(ModuleIndex) & " [" &
          SkillsView & " focus]}");
+      Bind(SkillsView, "<Tab>", "{focus " & CloseButton & ";break}");
+      Bind(SkillsView, "<Escape>", "{" & CloseButton & " invoke;break}");
       Tcl.Tk.Ada.Pack.Pack(ScrollSkillY, "-side right -fill y");
       Tcl.Tk.Ada.Pack.Pack(SkillsView);
       Tcl.Tk.Ada.Pack.Pack(SkillsFrame);
-      Height := Height + Positive'Value(Winfo_Get(SkillsView, "reqheight"));
-      Width :=
-        Width + Positive'Value(Winfo_Get(SkillsView, "reqwidth")) +
-        Positive'Value(Winfo_Get(ScrollSkillY, "reqwidth")) + 5;
-      configure(InfoLabel, "-wraplength" & Positive'Image(Width - 10));
+      configure(InfoLabel, "-wraplength " & Winfo_Get(SkillsView, "reqwidth"));
       Tcl.Tk.Ada.Pack.Pack(CloseButton, "-side bottom");
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
-      if Height > 500 then
-         Height := 500;
-      end if;
-      configure
-        (SkillFrame,
-         "-height" & Positive'Image(Height) & " -width" &
-         Positive'Image(Width));
-      Canvas_Create
-        (SkillCanvas, "window", "0 0 -anchor nw -window " & SkillFrame);
-      configure
-        (SkillCanvas, "-scrollregion [list " & BBox(SkillCanvas, "all") & "]");
-      Width := Width + Positive'Value(Winfo_Get(YScroll, "reqwidth")) + 5;
-      Height := Height + Positive'Value(Winfo_Get(XScroll, "reqheight")) + 5;
-      declare
-         X, Y: Integer;
-      begin
-         X :=
-           (Positive'Value(Winfo_Get(ModuleDialog, "vrootwidth")) - Width) / 2;
-         if X < 0 then
-            X := 0;
-         end if;
-         Y :=
-           (Positive'Value(Winfo_Get(ModuleDialog, "vrootheight")) - Height) /
-           2;
-         if Y < 0 then
-            Y := 0;
-         end if;
-         Wm_Set
-           (ModuleDialog, "geometry",
-            Trim(Positive'Image(Width), Left) & "x" &
-            Trim(Positive'Image(Height), Left) & "+" &
-            Trim(Positive'Image(X), Left) & "+" &
-            Trim(Positive'Image(Y), Left));
-         Bind
-           (ModuleDialog, "<Destroy>",
-            "{CloseDialog " & Widget_Image(ModuleDialog) & "}");
-         Tcl_Eval(Interp, "update");
-      end;
+      Tcl.Tk.Ada.Place.Place
+        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Tab>", "{focus " & SkillsView & ";break}");
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
