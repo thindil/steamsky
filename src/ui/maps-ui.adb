@@ -935,6 +935,7 @@ package body Maps.UI is
       if not GameSettings.ShowLastMessages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
+      Tcl_SetVar(Get_Context, "shipname", To_String(PlayerShip.Name));
    end CreateGameUI;
 
    procedure ShowSkyMap(Clear: Boolean := False) is
