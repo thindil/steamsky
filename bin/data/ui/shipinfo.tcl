@@ -13,9 +13,7 @@ tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general in
 # Ship name
 grid [ttk::label $shipcanvas.frame.name] -columnspan 2 -sticky w
 grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Small.TButton -command {
-   if {[getstring::tk_getString .gs text "Enter a new name:"]} {
-      SetShipName $text
-   }
+   GetString {Enter a new name:}
 }] -column 2 -row 1 -sticky w
 tooltip::tooltip $shipcanvas.frame.rename {Set a new name for the ship}
 bind $shipcanvas.frame.name <Enter> SetShipName
