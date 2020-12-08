@@ -393,7 +393,8 @@ package body Utils.UI is
       OkButton: constant Ttk_Button :=
         Create
           (StringDialog & ".okbutton",
-           "-text {Ok} -command {CloseDialog " & StringDialog & "}");
+           "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
+           "; CloseDialog " & StringDialog & "}");
       CancelButton: constant Ttk_Button :=
         Create
           (StringDialog & ".closebutton",
@@ -414,6 +415,43 @@ package body Utils.UI is
       return TCL_OK;
    end Get_String_Command;
 
+   -- ****io* UUI/Set_Text_Variable_Command
+   -- FUNCTION
+   -- Set the selected Tcl text variable and the proper the Ada its equivalent
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetTextVariable variablename
+   -- Variablename is the name of variable to set
+   -- SOURCE
+   function Set_Text_Variable_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Text_Variable_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      TEntry: constant Ttk_Entry := Get_Widget(".getstring.entry", Interp);
+      Value: constant String := Get(TEntry);
+      VarName: constant String := CArgv.Arg(Argv, 1);
+   begin
+      Tcl_SetVar(Interp, VarName, Value);
+      if VarName = "shipname" then
+         PlayerShip.Name := To_Unbounded_String(Value);
+      end if;
+      return TCL_OK;
+   end Set_Text_Variable_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -422,6 +460,7 @@ package body Utils.UI is
       AddCommand("CheckAmount", Check_Amount_Command'Access);
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
       AddCommand("GetString", Get_String_Command'Access);
+      AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
