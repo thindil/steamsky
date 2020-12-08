@@ -29,14 +29,14 @@ with Game.SaveLoad; use Game.SaveLoad;
 
 package body Ships.Movement is
 
-   -- ****it* SMovement/SpeedType
+   -- ****it* SMovement/SMovement.SpeedType
    -- FUNCTION
    -- Used in counting ships speed
    -- SOURCE
    type SpeedType is digits 2;
    -- ****
 
-   -- ****if* SMovement/HaveOrderRequirements
+   -- ****if* SMovement/SMovement.HaveOrderRequirements
    -- FUNCTION
    -- Check if all requirements for movement orders are valid
    -- RESULT
