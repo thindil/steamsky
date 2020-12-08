@@ -24,11 +24,13 @@ with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Crew; use Crew;
@@ -352,6 +354,62 @@ package body Utils.UI is
           (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
 
+   -- ****if* UUI/Get_String_Command
+   -- FUNCTION
+   -- Get string value from the player, like new ship or module name
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- GetString title
+   -- Title is the title of dialog to show to the player
+   -- SOURCE
+   function Get_String_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Get_String_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      StringDialog: constant Ttk_Frame :=
+        Create(".getstring", "-style Dialog.TFrame");
+      StringLabel: constant Ttk_Label :=
+        Create
+          (StringDialog & ".text", "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
+      StringEntry: constant Ttk_Entry := Create(StringDialog & ".entry");
+      OkButton: constant Ttk_Button :=
+        Create
+          (StringDialog & ".okbutton",
+           "-text {Ok} -command {CloseDialog " & StringDialog & "}");
+      CancelButton: constant Ttk_Button :=
+        Create
+          (StringDialog & ".closebutton",
+           "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 2 -pady 5 -padx 5");
+      State(OkButton, "disabled");
+      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 2 -column 1 -pady 5 -padx 5");
+      Tcl.Tk.Ada.Place.Place
+        (StringDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Focus(StringEntry);
+      return TCL_OK;
+   end Get_String_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -359,6 +417,7 @@ package body Utils.UI is
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
       AddCommand("CheckAmount", Check_Amount_Command'Access);
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
+      AddCommand("GetString", Get_String_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
