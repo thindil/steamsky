@@ -384,8 +384,12 @@ package body Utils.UI is
         Create(".getstring", "-style Dialog.TFrame");
       StringLabel: constant Ttk_Label :=
         Create
-          (StringDialog & ".text", "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
-      StringEntry: constant Ttk_Entry := Create(StringDialog & ".entry");
+          (StringDialog & ".text",
+           "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
+      StringEntry: constant Ttk_Entry :=
+        Create
+          (StringDialog & ".entry",
+           "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
       OkButton: constant Ttk_Button :=
         Create
           (StringDialog & ".okbutton",
