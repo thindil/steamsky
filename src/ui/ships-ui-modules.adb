@@ -1574,7 +1574,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 5 -pady 5");
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
       Tag_Configure(SkillsView, "gray", "-foreground gray");
@@ -1617,9 +1617,9 @@ package body Ships.UI.Modules is
       Bind(SkillsView, "<Escape>", "{" & CloseButton & " invoke;break}");
       Tcl.Tk.Ada.Pack.Pack(ScrollSkillY, "-side right -fill y");
       Tcl.Tk.Ada.Pack.Pack(SkillsView);
-      Tcl.Tk.Ada.Pack.Pack(SkillsFrame);
+      Tcl.Tk.Ada.Pack.Pack(SkillsFrame, "-padx 5");
       configure(InfoLabel, "-wraplength " & Winfo_Get(SkillsView, "reqwidth"));
-      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-side bottom");
+      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-side bottom -pady 5");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place
         (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
