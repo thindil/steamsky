@@ -409,6 +409,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 2 -pady 5 -padx 5");
       State(OkButton, "disabled");
       Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 2 -column 1 -pady 5 -padx 5");
+      Bind(CancelButton, "<Tab>", "{focus .getstring.entry;break}");
       Tcl.Tk.Ada.Place.Place
         (StringDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(StringEntry);
