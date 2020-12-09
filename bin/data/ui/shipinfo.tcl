@@ -11,7 +11,8 @@ grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin general show}]
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
-grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -columnspan 2 -sticky w
+grid [ttk::label $shipcanvas.frame.namelbl -text {Name:}] -sticky w
+grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -column 1 -row 1 -sticky w
 grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Small.TButton -command {
    GetString {Enter a new name:} shipname
 }] -column 2 -row 1 -sticky w
