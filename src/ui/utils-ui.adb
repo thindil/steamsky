@@ -77,7 +77,7 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
-   -- ****if* UUI/Update_Dialog_Command
+   -- ****o* UUI/Update_Dialog_Command
    -- FUNCTION
    -- Update countdown timer on the selected dialog. If timer reach 0, close
    -- dialog
@@ -354,7 +354,7 @@ package body Utils.UI is
           (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
 
-   -- ****if* UUI/Get_String_Command
+   -- ****o* UUI/Get_String_Command
    -- FUNCTION
    -- Get string value from the player, like new ship or module name
    -- PARAMETERS
@@ -415,7 +415,7 @@ package body Utils.UI is
       return TCL_OK;
    end Get_String_Command;
 
-   -- ****io* UUI/Set_Text_Variable_Command
+   -- ****o* UUI/Set_Text_Variable_Command
    -- FUNCTION
    -- Set the selected Tcl text variable and the proper the Ada its equivalent
    -- PARAMETERS
