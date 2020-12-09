@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -452,6 +454,19 @@ package body Utils.UI is
       Tcl_SetVar(Interp, VarName, Value);
       if VarName = "shipname" then
          PlayerShip.Name := To_Unbounded_String(Value);
+      elsif VarName'Length > 10 and then VarName(1 .. 10) = "modulename" then
+         declare
+            ModuleIndex: constant Positive :=
+              Positive'Value(VarName(11 .. VarName'Last));
+            Button: constant Ttk_Button :=
+              Get_Widget
+                (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
+                 Trim(Positive'Image(ModuleIndex + 1), Left));
+         begin
+            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
+            Widgets.configure(Button, "-text $" & VarName);
+            Tcl_UnsetVar(Interp, VarName);
+         end;
       end if;
       return TCL_OK;
    end Set_Text_Variable_Command;
