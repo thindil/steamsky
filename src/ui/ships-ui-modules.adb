@@ -46,7 +46,6 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Crafts; use Crafts;
@@ -1245,51 +1244,6 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 
-   -- ****o* SUModules/Rename_Module_Command
-   -- FUNCTION
-   -- Change name of the selected player's ship module
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- RenameModule moduleindex
-   -- Moduleindex is the index of the module which name will be changed
-   -- SOURCE
-   function Rename_Module_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Rename_Module_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Button: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
-           Trim(Positive'Image(ModuleIndex + 1), Left),
-           Interp);
-   begin
-      if Tk_Get_String
-          (Interp, ".gs", "text",
-           "{Enter a new name for the " & cget(Button, "-text") & "}") =
-        "0" then
-         return TCL_OK;
-      end if;
-      PlayerShip.Modules(ModuleIndex).Name :=
-        To_Unbounded_String(Tcl_GetVar(Interp, "text"));
-      configure(Button, "-text $text");
-      return TCL_OK;
-   end Rename_Module_Command;
-
    -- ****o* SUModules/Update_Assign_Crew_Command
    -- FUNCTION
    -- Update assign the crew member UI
@@ -1735,7 +1689,6 @@ package body Ships.UI.Modules is
       AddCommand("StopUpgrading", Stop_Upgrading_Command'Access);
       AddCommand("SetRepair", Set_Repair_Command'Access);
       AddCommand("ResetDestination", Reset_Destination_Command'Access);
-      AddCommand("RenameModule", Rename_Module_Command'Access);
       AddCommand("ShowAssignCrew", Show_Assign_Crew_Command'Access);
       AddCommand("UpdateAssignCrew", Update_Assign_Crew_Command'Access);
       AddCommand("ShowAssignSkill", Show_Assign_Skill_Command'Access);
