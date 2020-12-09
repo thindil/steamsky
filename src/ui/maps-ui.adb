@@ -225,13 +225,11 @@ package body Maps.UI is
          or else (Winfo_Get(Frame, "ismapped") = "0")) then
          declare
             type SpeedType is digits 2;
-            Speed: SpeedType;
+            Speed: constant SpeedType :=
+              (if PlayerShip.Speed /= DOCKED then
+                 (SpeedType(RealSpeed(PlayerShip)) / 1000.0)
+               else (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0));
          begin
-            if PlayerShip.Speed /= DOCKED then
-               Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
-            else
-               Speed := (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
-            end if;
             if Speed < 0.5 then
                configure(Label, "-style Headerred.TLabel");
                Add
@@ -726,22 +724,17 @@ package body Maps.UI is
                StoryY := 0;
             end if;
             if X = StoryX and Y = StoryY then
-               if CurrentStory.CurrentStep = 0 then
-                  FinishCondition :=
+               FinishCondition :=
+                 (if CurrentStory.CurrentStep = 0 then
                     Stories_List(CurrentStory.Index).StartingStep
-                      .FinishCondition;
-               elsif CurrentStory.CurrentStep > 0 then
-                  FinishCondition :=
+                      .FinishCondition
+                  elsif CurrentStory.CurrentStep > 0 then
                     Stories_List(CurrentStory.Index).Steps
                       (CurrentStory.CurrentStep)
-                      .FinishCondition;
-               else
-                  FinishCondition :=
-                    Stories_List(CurrentStory.Index).FinalStep.FinishCondition;
-               end if;
-               if FinishCondition = ASKINBASE or
-                 FinishCondition = DESTROYSHIP or
-                 FinishCondition = EXPLORE then
+                      .FinishCondition
+                  else Stories_List(CurrentStory.Index).FinalStep
+                      .FinishCondition);
+               if FinishCondition in ASKINBASE | DESTROYSHIP | EXPLORE then
                   Append(MapInfoText, LF & "Story leads you here");
                end if;
             end if;
@@ -910,12 +903,10 @@ package body Maps.UI is
            (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
       end loop;
-      if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
-         PanedPosition := GameSettings.WindowHeight;
-      else
-         PanedPosition :=
-           GameSettings.WindowHeight - GameSettings.MessagesPosition;
-      end if;
+      PanedPosition :=
+        (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+           GameSettings.WindowHeight
+         else GameSettings.WindowHeight - GameSettings.MessagesPosition);
       SashPos(Paned, "0", Natural'Image(PanedPosition));
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
