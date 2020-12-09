@@ -22,7 +22,7 @@
 package Ships.Movement is
 -- ****
 
-   -- ****f* SMovement/MoveShip
+   -- ****f* SMovement/SMovement.MoveShip
    -- FUNCTION
    -- Move player ship
    -- PARAMETERS
@@ -38,7 +38,7 @@ package Ships.Movement is
       Test_Case => ("Test_MoveShip", Robustness);
       -- ****
 
-      -- ****f* SMovement/DockShip
+      -- ****f* SMovement/SMovement.DockShip
       -- FUNCTION
       -- Dock/Undock ship at base
       -- PARAMETERS
@@ -54,7 +54,7 @@ package Ships.Movement is
       Test_Case => ("Test_DockShip", Robustness);
       -- ****
 
-      -- ****f* SMovement/ChangeShipSpeed
+      -- ****f* SMovement/SMovement.ChangeShipSpeed
       -- FUNCTION
       -- Change speed of ship
       -- PARAMETERS
@@ -66,7 +66,7 @@ package Ships.Movement is
       Test_Case => ("Test_ChangeShipSpeed", Robustness);
       -- ****
 
-      -- ****f* SMovement/RealSpeed
+      -- ****f* SMovement/SMovement.RealSpeed
       -- FUNCTION
       -- Count real ship speed in meters per minute
       -- PARAMETERS
@@ -81,7 +81,7 @@ package Ships.Movement is
       Test_Case => ("Test_RealSpeed", Robustness);
       -- ****
 
-      -- ****f* SMovement/CountFuelNeeded
+      -- ****f* SMovement/SMovement.CountFuelNeeded
       -- FUNCTION
       -- Count amount of fuel needed by player ship to travel
       -- RESULT
@@ -91,7 +91,7 @@ package Ships.Movement is
       Test_Case => ("Test_CountFuelNeeded", Robustness);
       -- ****
 
-      -- ****f* SMovement/WaitInPlace
+      -- ****f* SMovement/SMovement.WaitInPlace
       -- FUNCTION
       -- Use fuel when ship wait in place
       -- PARAMETERS
