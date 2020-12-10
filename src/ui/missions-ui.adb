@@ -79,9 +79,7 @@ package body Missions.UI is
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.missionsview",
            Interp);
-      MissionIndex: Positive;
       MissionInfo: Unbounded_String;
-      Mission: Mission_Data;
       MissionText: constant Tk_Text :=
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.info.info.text",
@@ -99,13 +97,12 @@ package body Missions.UI is
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.info.reward",
            Interp);
+      MissionIndex: constant Positive :=
+        Positive'Value(Selection(MissionsView));
+      Mission: Mission_Data :=
+        (if BaseIndex = 0 then AcceptedMissions(MissionIndex)
+         else SkyBases(BaseIndex).Missions(MissionIndex));
    begin
-      MissionIndex := Positive'Value(Selection(MissionsView));
-      if BaseIndex = 0 then
-         Mission := AcceptedMissions(MissionIndex);
-      else
-         Mission := SkyBases(BaseIndex).Missions(MissionIndex);
-      end if;
       configure(MissionText, "-state normal");
       Delete(MissionText, "1.0", "end");
       case Mission.MType is
@@ -185,18 +182,14 @@ package body Missions.UI is
       State(Button, "!disabled");
       if BaseIndex > 0 then
          declare
-            Distance: Positive;
-         begin
-            if Mission.MType = Deliver or Mission.MType = Passenger then
-               Distance :=
+            Distance: constant Positive :=
+              (if Mission.MType in Deliver | Passenger then
                  Positive'Value
-                   (Set(MissionsView, Selection(MissionsView), "distance"));
-            else
-               Distance :=
-                 Positive'Value
+                   (Set(MissionsView, Selection(MissionsView), "distance"))
+               else Positive'Value
                    (Set(MissionsView, Selection(MissionsView), "distance")) *
-                 2;
-            end if;
+                 2);
+         begin
             TravelInfo(MissionInfo, Distance, True);
          end;
          configure(Button, "-text {Accept mission}");
@@ -288,9 +281,9 @@ package body Missions.UI is
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.missionsview",
            Interp);
-      MissionIndex: Positive;
+      MissionIndex: constant Positive :=
+        Positive'Value(Selection(MissionsView));
    begin
-      MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
          CenterX := AcceptedMissions(MissionIndex).TargetX;
          CenterY := AcceptedMissions(MissionIndex).TargetY;
@@ -384,9 +377,9 @@ package body Missions.UI is
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.missionsview",
            Interp);
-      MissionIndex: Positive;
+      MissionIndex: constant Positive :=
+        Positive'Value(Selection(MissionsView));
    begin
-      MissionIndex := Positive'Value(Selection(MissionsView));
       if BaseIndex = 0 then
          if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
            AcceptedMissions(MissionIndex).TargetY = PlayerShip.SkyY then
