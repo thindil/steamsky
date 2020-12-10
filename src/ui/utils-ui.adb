@@ -415,6 +415,7 @@ package body Utils.UI is
       Bind(CancelButton, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
+      Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
       Tcl.Tk.Ada.Place.Place
         (StringDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(StringEntry);
