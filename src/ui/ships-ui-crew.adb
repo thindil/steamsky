@@ -46,7 +46,6 @@ with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.GetString; use Tcl.Tklib.Ada.GetString;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
@@ -332,51 +331,6 @@ package body Ships.UI.Crew is
          UpdateMessages;
          return TCL_OK;
    end Order_For_All_Command;
-
-   -- ****o* SUCrew/Rename_Member_Command
-   -- FUNCTION
-   -- Change name of the selected player's ship crew member
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- RenameMember memberindex
-   -- Memberindex is the index of the crew member which name will be changed
-   -- SOURCE
-   function Rename_Member_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Rename_Member_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Button: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.shipinfoframe.crew.canvas.frame.name" &
-           Trim(Positive'Image(CrewIndex), Left),
-           Interp);
-   begin
-      if Tk_Get_String
-          (Interp, ".gs", "text",
-           "{Enter a new name for the " & cget(Button, "-text") & "}") =
-        "0" then
-         return TCL_OK;
-      end if;
-      PlayerShip.Crew(CrewIndex).Name :=
-        To_Unbounded_String(Tcl_GetVar(Interp, "text"));
-      configure(Button, "-text $text");
-      return TCL_OK;
-   end Rename_Member_Command;
 
    -- ****o* SUCrew/Dismiss_Command
    -- FUNCTION
@@ -1413,7 +1367,6 @@ package body Ships.UI.Crew is
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
-      AddCommand("RenameMember", Rename_Member_Command'Access);
       AddCommand("Dismiss", Dismiss_Command'Access);
       AddCommand("SetCrewOrder", Set_Crew_Order_Command'Access);
       AddCommand("ShowMemberInfo", Show_Member_Info_Command'Access);
