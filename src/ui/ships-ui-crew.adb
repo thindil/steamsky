@@ -1257,8 +1257,8 @@ package body Ships.UI.Crew is
       Delete(CrewMenu, "0", "end");
       Menu.Add
         (CrewMenu, "command",
-         "-label {Rename crew member} -command {RenameMember " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Rename crew member} -command {GetString {Enter a new name for the " &
+         To_String(Member.Name) & ":} crewname" & CArgv.Arg(Argv, 1) & "}");
       if
         ((Member.Tired = 100 or Member.Hunger = 100 or Member.Thirst = 100) and
          Member.Order /= Rest) or
