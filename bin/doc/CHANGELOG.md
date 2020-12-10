@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Zooming in and out map with the mouse wheel
+
 ### Changed
 - Updated interface
 
