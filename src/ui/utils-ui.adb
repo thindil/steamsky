@@ -468,6 +468,19 @@ package body Utils.UI is
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
+      elsif VarName'Length > 8 and then VarName(1 .. 8) = "crewname" then
+         declare
+            CrewIndex: constant Positive :=
+              Positive'Value(VarName(9 .. VarName'Last));
+            Button: constant Ttk_Button :=
+              Get_Widget
+                (".gameframe.paned.shipinfoframe.crew.canvas.frame.name" &
+                 Trim(Positive'Image(CrewIndex), Left));
+         begin
+            PlayerShip.Crew(CrewIndex).Name := To_Unbounded_String(Value);
+            Widgets.configure(Button, "-text $" & VarName);
+            Tcl_UnsetVar(Interp, VarName);
+         end;
       end if;
       return TCL_OK;
    end Set_Text_Variable_Command;
