@@ -22,7 +22,7 @@
 package Ships.Repairs is
 -- ****
 
-   -- ****f* SRepairs/RepairShip
+   -- ****f* SRepairs/SRepairs.RepairShip
    -- FUNCTION
    -- Repair ship modules
    -- PARAMETERS
