@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when ending delivery mission (issue #71)
 - Scrollbar position in crew member info dialog
 - Ending combat turn with space key
+- Showing the lists of gunners in combat
 
 ## [5.5] - 2020-11-29
 
