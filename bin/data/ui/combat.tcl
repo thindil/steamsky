@@ -6,6 +6,8 @@ pack [ttk::scrollbar .gameframe.paned.combatframe.scrollx -orient horizontal -co
 
 # Ship to ship combat
 set combatframe [ttk::frame $combatcanvas.combat]
+grid [ttk::button $combatframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
+bind . <space> {InvokeButton $combatframe.next}
 grid [ttk::frame $combatframe.left] -sticky nw
 grid [ttk::frame $combatframe.left.crew]
 grid [ttk::label $combatframe.left.crew.position -text {Position}]
@@ -20,13 +22,11 @@ grid [ttk::combobox $combatframe.left.crew.engineercrew -state readonly -width 1
 grid [ttk::combobox $combatframe.left.crew.engineerorder -state readonly -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] -row 2 -column 2
 bind $combatframe.left.crew.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}
 grid [ttk::labelframe $combatframe.left.damage -text {Ship damage:}] -sticky nw
-grid [ttk::frame $combatframe.right] -row 0 -column 1
+grid [ttk::frame $combatframe.right] -row 1 -column 1
 grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}]
 grid [ttk::label $combatframe.right.enemy.info -wraplength 350]
 grid [ttk::frame $combatframe.right.enemy.damage] -sticky w
 grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
-grid [ttk::button $combatframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
-bind . <space> {InvokeButton $combatframe.next}
 
 # Boarding combat
 set boardingframe [ttk::frame $combatcanvas.boarding]
