@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
   members inventory info
 - Possible crash when ending delivery mission (issue #71)
 - Scrollbar position in crew member info dialog
+- Ending combat turn with space key
 
 ## [5.5] - 2020-11-29
 
