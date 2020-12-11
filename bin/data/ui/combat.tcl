@@ -25,7 +25,7 @@ bind $combatframe.left.crew.engineercrew <space> {InvokeButton $combatframe.next
 grid [ttk::combobox $combatframe.left.crew.engineerorder -state readonly -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] -row 2 -column 2
 bind $combatframe.left.crew.engineerorder <space> {InvokeButton $combatframe.next}
 bind $combatframe.left.crew.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}
-grid [ttk::labelframe $combatframe.left.damage -text {Ship damage:}] -sticky nw
+grid [ttk::labelframe $combatframe.left.damage -text {Your ship damage:}] -sticky we -padx 5 -pady {5 0}
 grid [ttk::frame $combatframe.right] -row 1 -column 1
 grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}]
 grid [ttk::label $combatframe.right.enemy.info -wraplength 350]

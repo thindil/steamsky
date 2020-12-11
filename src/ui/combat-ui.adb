@@ -392,7 +392,7 @@ package body Combat.UI is
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(Module.Name) & "}");
             Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Natural'Image(Row) & " -column 0");
+              (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
             DamagePercent :=
               (Float(Module.Durability) / Float(Module.MaxDurability));
             if DamagePercent = 1.0 then
@@ -412,6 +412,8 @@ package body Combat.UI is
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
               (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+            Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
+            Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
             Row := Row + 1;
          end if;
       end loop;
