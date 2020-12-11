@@ -328,7 +328,7 @@ package body Combat.UI is
          ComboBox :=
            Create
              (Frame & ".guncrew" & To_String(GunIndex),
-              "-values [list " & GetCrewList(2) & "] -width 10");
+              "-values [list " & GetCrewList(2) & "] -width 10 -state readonly");
          if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
               Gunner then
