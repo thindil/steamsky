@@ -345,6 +345,9 @@ package body Combat.UI is
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 1");
+         Bind
+           (ComboBox, "<space>",
+            "{InvokeButton .gameframe.paned.combatframe.canvas.combat.next}");
          GunnerOrders := Null_Unbounded_String;
          for J in GunnersOrders'Range loop
             Append
@@ -357,6 +360,9 @@ package body Combat.UI is
              (Frame & ".gunorder" & To_String(GunIndex),
               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
+         Bind
+           (ComboBox, "<space>",
+            "{InvokeButton .gameframe.paned.combatframe.canvas.combat.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
