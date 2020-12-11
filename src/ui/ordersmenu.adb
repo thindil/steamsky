@@ -72,17 +72,14 @@ package body OrdersMenu is
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          declare
-            Step: Step_Data;
-         begin
-            if CurrentStory.CurrentStep = 0 then
-               Step := Stories_List(CurrentStory.Index).StartingStep;
-            elsif CurrentStory.CurrentStep > 0 then
-               Step :=
+            Step: constant Step_Data :=
+              (if CurrentStory.CurrentStep = 0 then
+                 Stories_List(CurrentStory.Index).StartingStep
+               elsif CurrentStory.CurrentStep > 0 then
                  Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep);
-            else
-               Step := Stories_List(CurrentStory.Index).FinalStep;
-            end if;
+                   (CurrentStory.CurrentStep)
+               else Stories_List(CurrentStory.Index).FinalStep);
+         begin
             case Step.FinishCondition is
                when ASKINBASE =>
                   if BaseIndex > 0 then
@@ -484,11 +481,9 @@ package body OrdersMenu is
       Message: Unbounded_String;
    begin
       if PlayerShip.Speed = DOCKED then
-         if Argc = 1 then
-            Message := To_Unbounded_String(DockShip(False));
-         else
-            Message := To_Unbounded_String(DockShip(False, True));
-         end if;
+         Message :=
+           (if Argc = 1 then To_Unbounded_String(DockShip(False))
+            else To_Unbounded_String(DockShip(False, True)));
          if Length(Message) > 0 then
             ShowMessage(To_String(Message));
             return TCL_OK;
