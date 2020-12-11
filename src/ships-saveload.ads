@@ -24,7 +24,7 @@ with DOM.Core; use DOM.Core;
 package Ships.SaveLoad is
 -- ****
 
-   -- ****f* SSaveLoad/SavePlayerShip
+   -- ****f* SSaveLoad/SSaveLoad.SavePlayerShip
    -- FUNCTION
    -- Save player ship to file
    -- PAEAMETERS
@@ -34,7 +34,7 @@ package Ships.SaveLoad is
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element);
    -- ****
 
-   -- ****f* SSaveLoad/LoadPlayerShip
+   -- ****f* SSaveLoad/SSaveLoad.LoadPlayerShip
    -- FUNCTION
    -- Load saved player ship from file
    -- PARAMETERS
