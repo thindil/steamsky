@@ -3,6 +3,8 @@ set combatcanvas [canvas .gameframe.paned.combatframe.canvas -yscrollcommand [li
 pack [ttk::scrollbar .gameframe.paned.combatframe.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack $combatcanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.combatframe.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.combatframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.combatframe.scrollx
 
 # Ship to ship combat
 set combatframe [ttk::frame $combatcanvas.combat]
