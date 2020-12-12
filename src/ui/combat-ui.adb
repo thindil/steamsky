@@ -324,11 +324,14 @@ package body Combat.UI is
               "-text {" & To_String(PlayerShip.Modules(Guns(I)(1)).Name) &
               ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Guns_Container.To_Index(I) + 2));
+           (Label,
+            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+            " -padx {5 0}");
          ComboBox :=
            Create
              (Frame & ".guncrew" & To_String(GunIndex),
-              "-values [list " & GetCrewList(2) & "] -width 10 -state readonly");
+              "-values [list " & GetCrewList(2) &
+              "] -width 10 -state readonly");
          if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
             if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
               Gunner then
@@ -369,7 +372,7 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
-            " -column 2");
+            " -column 2 -padx {0 5}");
       end loop;
       Frame.Name :=
         New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
