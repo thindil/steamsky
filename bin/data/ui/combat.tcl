@@ -9,7 +9,7 @@ set combatframe [ttk::frame $combatcanvas.combat]
 grid [ttk::button $combatframe.next -text {Next turn [Space]} -command NextTurn] -columnspan 2 -sticky we
 focus $combatframe.next
 grid [ttk::frame $combatframe.left] -sticky nw
-grid [ttk::frame $combatframe.left.crew]
+grid [ttk::labelframe $combatframe.left.crew -text {Your ship crew orders:}] -padx 5 -pady {0 5}
 grid [ttk::label $combatframe.left.crew.position -text {Position}]
 grid [ttk::label $combatframe.left.crew.name -text {Name}] -row 0 -column 1
 grid [ttk::label $combatframe.left.crew.order -text {Order}] -row 0 -column 2
