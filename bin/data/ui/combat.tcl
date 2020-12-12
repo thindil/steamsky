@@ -32,7 +32,7 @@ grid [ttk::labelframe $combatframe.left.damage -text {Your ship damage:}] -stick
 grid [ttk::frame $combatframe.right] -row 1 -column 1
 grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}]
 grid [ttk::label $combatframe.right.enemy.info -wraplength 350]
-grid [ttk::frame $combatframe.right.enemy.damage] -sticky w
+grid [ttk::labelframe $combatframe.right.status -text {Enemy ship status:}] -sticky we -padx 5 -pady {5 0}
 grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
 
 # Boarding combat

@@ -521,7 +521,7 @@ package body Combat.UI is
       begin
          Frame.Name :=
            New_String
-             (".gameframe.paned.combatframe.canvas.combat.right.enemy.damage");
+             (".gameframe.paned.combatframe.canvas.combat.right.status");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
