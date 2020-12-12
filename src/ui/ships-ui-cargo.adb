@@ -104,11 +104,10 @@ package body Ships.UI.Cargo is
       end loop;
       for I in PlayerShip.Cargo.Iterate loop
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
-         if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-            ItemType := Items_List(ProtoIndex).ShowType;
-         else
-            ItemType := Items_List(ProtoIndex).IType;
-         end if;
+         ItemType :=
+           (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+              Items_List(ProtoIndex).ShowType
+            else Items_List(ProtoIndex).IType);
          if Index(ItemsTypes, "{" & To_String(ItemType) & "}") = 0 then
             Append(ItemsTypes, " {" & To_String(ItemType) & "}");
          end if;
@@ -125,16 +124,12 @@ package body Ships.UI.Cargo is
          Add(CargoButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid
            (CargoButton, "-row" & Natural'Image(Row) & " -sticky w");
-         if PlayerShip.Cargo(I).Durability > 74 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Cargo(I).Durability > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if PlayerShip.Cargo(I).Durability > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Cargo(I).Durability > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          DurabilityBar :=
            Create
              (CargoInfoFrame & ".durability" & Trim(Natural'Image(Row), Left),
