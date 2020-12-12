@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Keyboard shortcut for the next turn in combat to Enter
 
 ### Removed
 - Setting for the animations
