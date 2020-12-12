@@ -22,14 +22,14 @@
 package Ships.Upgrade is
 -- ****
 
-   -- ****e* SUpgrade/Ship_Upgrade_Error
+   -- ****e* SUpgrade/SUpgrade.Ship_Upgrade_Error
    -- FUNCTION
    -- Raised when player can't start upgrading module
    -- SOURCE
    Ship_Upgrade_Error: exception;
    -- ****
 
-   -- ****f* SUpgrade/StartUpgrading
+   -- ****f* SUpgrade/SUpgrade.StartUpgrading
    -- FUNCTION
    -- Set upgrading order
    -- PARAMETERS
@@ -46,7 +46,7 @@ package Ships.Upgrade is
       Test_Case => ("Test_StartUpgrading", Nominal);
       -- ****
 
-      -- ****f* SUpgrade/UpgradeShip
+      -- ****f* SUpgrade/SUpgrade.UpgradeShip
       -- FUNCTION
       -- Upgrade selected module on ship
       -- PARAMETERS
