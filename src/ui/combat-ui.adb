@@ -517,7 +517,7 @@ package body Combat.UI is
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
          SpaceIndex: Natural;
-         ModuleName: Unbounded_String;
+         ModuleName, Font: Unbounded_String;
       begin
          Frame.Name :=
            New_String
@@ -558,12 +558,14 @@ package body Combat.UI is
                  Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
             end if;
             if Enemy.Ship.Modules(I).Durability = 0 then
-               Append(ModuleName, "(destroyed)");
+               Font := To_Unbounded_String(" -font OverstrikedFont");
+            else
+               Font := Null_Unbounded_String;
             end if;
             Label :=
               Create
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-                 "-text {" & To_String(ModuleName) & "}");
+                 "-text {" & To_String(ModuleName) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -column 0 -sticky w");
             DamagePercent :=
