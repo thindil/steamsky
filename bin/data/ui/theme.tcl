@@ -41,6 +41,8 @@ namespace eval ttk::theme::steamsky {
    font create ItalicHelpFont -family {Roboto} -size 14 -slant italic
    # Font used as icons for buttons/labels
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
+   # Overstriked font used for example in combat or crafting menu
+   font create OverstrikedFont -family {Amarante} -size 14 -overstrike true
 
 
    #

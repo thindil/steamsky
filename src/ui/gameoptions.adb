@@ -375,6 +375,9 @@ package body GameOptions is
          Font.Configure
            ("InterfaceIcons",
             "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         Font.Configure
+           ("OverstrikedFont",
+            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
       end if;
       return TCL_OK;
    end Set_Fonts_Command;
