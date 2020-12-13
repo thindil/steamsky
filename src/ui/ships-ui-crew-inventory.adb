@@ -118,19 +118,16 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(WeightLabel, "-column 4 -row 0");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
       for I in Member.Inventory.Iterate loop
-         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-            Label :=
+         Label :=
+           (if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
               Create
                 (MemberFrame & ".used" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {Yes}");
-         else
-            Label :=
-              Create
+                 "-text {Yes}")
+            else Create
                 (MemberFrame & ".used" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {No}");
-         end if;
+                 "-text {No}"));
          ItemButton :=
            Create
              (MemberFrame & ".name" &
@@ -141,16 +138,12 @@ package body Ships.UI.Crew.Inventory is
          Add(ItemButton, "Show available item's options");
          Tcl.Tk.Ada.Grid.Grid(ItemButton, "-sticky w");
          Height := Height + Positive'Value(Winfo_Get(ItemButton, "reqheight"));
-         if Member.Inventory(I).Durability > 74 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif Member.Inventory(I).Durability > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if Member.Inventory(I).Durability > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif Member.Inventory(I).Durability > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          DamageBar :=
            Create
              (MemberFrame & ".durability" &
