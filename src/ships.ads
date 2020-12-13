@@ -32,7 +32,7 @@ with Mobs; use Mobs;
 package Ships is
 -- ****
 
-   -- ****t* Ships/ShipSpeed
+   -- ****t* Ships/Ships.ShipSpeed
    -- FUNCTION
    -- Ship speed states
    -- SOURCE
@@ -40,28 +40,28 @@ package Ships is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
    -- ****
 
-   -- ****t* Ships/ShipCombatAi
+   -- ****t* Ships/Ships.ShipCombatAi
    -- FUNCTION
    -- NPC ships combat AI types
    -- SOURCE
    type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    -- ****
 
-   -- ****t* Ships/ShipUpgrade
+   -- ****t* Ships/Ships.ShipUpgrade
    -- FUNCTION
    -- Player ship types of module upgrades
    -- SOURCE
    type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    -- ****
 
-   -- ****t* Ships/Data_Array
+   -- ****t* Ships/Ships.Data_Array
    -- FUNCTION
    -- Used to store ship modules data
    -- SOURCE
    type Data_Array is array(1 .. 3) of Integer;
    -- ****
 
-   -- ****t* Ships/ModuleType2
+   -- ****t* Ships/Ships.ModuleType2
    -- FUNCTION
    -- Types of ships modules
    -- SOURCE
@@ -70,7 +70,7 @@ package Ships is
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    -- ****
 
-   -- ****s* Ships/ModuleData
+   -- ****s* Ships/Ships.ModuleData
    -- FUNCTION
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
    -- bays don't have any special fields
@@ -150,21 +150,21 @@ package Ships is
    end record;
    -- ****
 
-   -- ****t* Ships/Modules_Container
+   -- ****t* Ships/Ships.Modules_Container
    -- FUNCTION
    -- Used to store modules data in ships
    -- SOURCE
    package Modules_Container is new Vectors(Positive, ModuleData);
    -- ****
 
-   -- ****t* Ships/Crew_Container
+   -- ****t* Ships/Ships.Crew_Container
    -- FUNCTION
    -- Used to store crew data in ships
    -- SOURCE
    package Crew_Container is new Vectors(Positive, Member_Data);
    -- ****
 
-   -- ****s* Ships/ShipRecord
+   -- ****s* Ships/Ships.ShipRecord
    -- FUNCTION
    -- Data structure for ships
    -- PARAMETERS
@@ -199,7 +199,7 @@ package Ships is
    end record;
    -- ****
 
-   -- ****s* Ships/ProtoMember_Data
+   -- ****s* Ships/Ships.ProtoMember_Data
    -- FUNCTION
    -- Data structure for proto crew info
    -- PARAMETERS
@@ -215,14 +215,14 @@ package Ships is
    end record;
    -- ****
 
-   -- ****t* Ships/ProtoCrew_Container
+   -- ****t* Ships/Ships.ProtoCrew_Container
    -- FUNCTION
    -- Used to store crew info in ships prototypes
    -- SOURCE
    package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
    -- ****
 
-   -- ****s* Ships/ProtoShipData
+   -- ****s* Ships/Ships.ProtoShipData
    -- FUNCTION
    -- Data structure for ship prototypes
    -- PARAMETERS
@@ -257,7 +257,7 @@ package Ships is
    end record;
    -- ****
 
-   -- ****t* Ships/ProtoShips_Container
+   -- ****t* Ships/Ships.ProtoShips_Container
    -- FUNCTION
    -- Used to store prototype ships data
    -- SOURCE
@@ -265,49 +265,49 @@ package Ships is
       ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
-   -- ****v* Ships/ProtoShips_List
+   -- ****v* Ships/Ships.ProtoShips_List
    -- FUNCTION
    -- List of all prototypes of ships
    -- SOURCE
    ProtoShips_List: ProtoShips_Container.Map;
    -- ****
 
-   -- ****v* Ships/PlayerShip
+   -- ****v* Ships/Ships.PlayerShip
    -- FUNCTION
    -- The player ship
    -- SOURCE
    PlayerShip: ShipRecord;
    -- ****
 
-   -- ****v* Ships/ShipSyllablesStart
+   -- ****v* Ships/Ships.ShipSyllablesStart
    -- FUNCTION
    -- List of first syllables for generating ships names
    -- SOURCE
    ShipSyllablesStart: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Ships/ShipSyllablesMiddle
+   -- ****v* Ships/Ships.ShipSyllablesMiddle
    -- FUNCTION
    -- List of middle syllables for generating ships names
    -- SOURCE
    ShipSyllablesMiddle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Ships/ShipSyllablesEnd
+   -- ****v* Ships/Ships.ShipSyllablesEnd
    -- FUNCTION
    -- List of last syllables for generating ships names
    -- SOURCE
    ShipSyllablesEnd: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****e* Ships/Ships_Invalid_Data
+   -- ****e* Ships/Ships.Ships_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data in ships file
    -- SOURCE
    Ships_Invalid_Data: exception;
    -- ****
 
-   -- ****f* Ships/CreateShip
+   -- ****f* Ships/Ships.CreateShip
    -- FUNCTION
    -- Create new ship
    -- PARAMETERS
@@ -329,7 +329,7 @@ package Ships is
       Test_Case => ("Test_CreateShip", Nominal);
       -- ****
 
-      -- ****f* Ships/LoadShips
+      -- ****f* Ships/Ships.LoadShips
       -- FUNCTION
       -- Load ships from files
       -- PARAMETERS
@@ -338,7 +338,7 @@ package Ships is
    procedure LoadShips(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Ships/CountShipWeight
+   -- ****f* Ships/Ships.CountShipWeight
    -- FUNCTION
    -- Count weight of ship (with modules and cargo)
    -- PARAMETERS
@@ -350,7 +350,7 @@ package Ships is
       Test_Case => ("Test_CountShipWeight", Robustness);
       -- ****
 
-      -- ****f* Ships/GenerateShipName
+      -- ****f* Ships/Ships.GenerateShipName
       -- FUNCTION
       -- Generate random name for ship
       -- PARAMETERS
@@ -364,7 +364,7 @@ package Ships is
       Test_Case => ("Test_GenerateShipName", Nominal);
       -- ****
 
-      -- ****f* Ships/CountCombatValue
+      -- ****f* Ships/Ships.CountCombatValue
       -- FUNCTION
       -- Count combat value of player ship
       -- RESULT
@@ -374,7 +374,7 @@ package Ships is
       Test_Case => ("Test_CountCombatValue", Robustness);
       -- ****
 
-      -- ****f* Ships/GetCabinQuality
+      -- ****f* Ships/Ships.GetCabinQuality
       -- FUNCTION
       -- Get description of quality of selected cabin in player ship
       -- PARAMETERS
@@ -386,7 +386,7 @@ package Ships is
       Test_Case => ("Test_GetCabinQuality", Robustness);
       -- ****
 
-      -- ****f* Ships/DamageModule
+      -- ****f* Ships/Ships.DamageModule
       -- FUNCTION
       -- Damage the selected module
       -- PARAMETERS
