@@ -30,7 +30,7 @@ bind $combatframe.left.crew.engineerorder <Return> {InvokeButton $combatframe.ne
 bind $combatframe.left.crew.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}
 grid [ttk::labelframe $combatframe.left.damage -text {Your ship damage:}] -sticky we -padx 5 -pady {5 0}
 grid [ttk::frame $combatframe.right] -row 1 -column 1
-grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}]
+grid [ttk::labelframe $combatframe.right.enemy -text {Enemy info:}] -sticky we -padx 5 -pady {0 5}
 grid [ttk::label $combatframe.right.enemy.info -wraplength 350]
 grid [ttk::labelframe $combatframe.right.status -text {Enemy ship status:}] -sticky we -padx 5 -pady {5 0}
 grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
