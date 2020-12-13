@@ -78,11 +78,10 @@ package body Combat.UI is
          when 3 =>
             null;
          when others =>
-            if GunSpeed > 0 then
-               GunSpeed := Integer(Float'Ceiling(Float(GunSpeed) / 2.0));
-            else
-               GunSpeed := GunSpeed - 1;
-            end if;
+            GunSpeed :=
+              (if GunSpeed > 0 then
+                 Integer(Float'Ceiling(Float(GunSpeed) / 2.0))
+               else GunSpeed - 1);
       end case;
       if GunSpeed > 0 then
          Firerate :=
@@ -398,16 +397,12 @@ package body Combat.UI is
               (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
             DamagePercent :=
               (Float(Module.Durability) / Float(Module.MaxDurability));
-            if DamagePercent = 1.0 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-            elsif DamagePercent > 0.24 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-            else
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style Horizontal.TProgressbar");
-            end if;
+            ProgressBarStyle :=
+              (if DamagePercent = 1.0 then
+                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+               elsif DamagePercent > 0.24 then
+                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
             ProgressBar :=
               Create
                 (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
@@ -571,16 +566,12 @@ package body Combat.UI is
             DamagePercent :=
               ((Float(Enemy.Ship.Modules(I).Durability) /
                 Float(Enemy.Ship.Modules(I).MaxDurability)));
-            if DamagePercent = 1.0 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-            elsif DamagePercent > 0.24 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-            else
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style Horizontal.TProgressbar");
-            end if;
+            ProgressBarStyle :=
+              (if DamagePercent = 1.0 then
+                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+               elsif DamagePercent > 0.24 then
+                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
             ProgressBar :=
               Create
                 (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
@@ -1060,13 +1051,12 @@ package body Combat.UI is
            CArgv.Arg(Argv, 1),
            Interp);
    begin
-      if Natural'Value(Current(Combobox)) + 1 >
-        Natural(Enemy.Ship.Crew.Length) then
-         BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) := -1;
-      else
-         BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) :=
-           Natural'Value(Current(Combobox)) + 1;
-      end if;
+      BoardingOrders(Positive'Value(CArgv.Arg(Argv, 2))) :=
+        (if
+           Natural'Value(Current(Combobox)) + 1 >
+           Natural(Enemy.Ship.Crew.Length)
+         then -1
+         else Natural'Value(Current(Combobox)) + 1);
       return TCL_OK;
    end Set_Boarding_Order_Command;
 
