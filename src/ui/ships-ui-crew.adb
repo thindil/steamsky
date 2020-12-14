@@ -168,16 +168,12 @@ package body Ships.UI.Crew is
          Add(Label, "The current order for the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -column 1");
-         if PlayerShip.Crew(I).Health > 74 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Crew(I).Health > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if PlayerShip.Crew(I).Health > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Crew(I).Health > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
@@ -188,20 +184,18 @@ package body Ships.UI.Crew is
             "The current health level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
-         if PlayerShip.Crew(I).Tired -
-           PlayerShip.Crew(I).Attributes(ConditionIndex)(1) <
-           25 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Crew(I).Tired -
-           PlayerShip.Crew(I).Attributes(ConditionIndex)(1) >
-           24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if
+              PlayerShip.Crew(I).Tired -
+              PlayerShip.Crew(I).Attributes(ConditionIndex)(1) <
+              25
+            then To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif
+              PlayerShip.Crew(I).Tired -
+              PlayerShip.Crew(I).Attributes(ConditionIndex)(1) >
+              24
+            then To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".fatigue" & Trim(Natural'Image(Row), Left),
@@ -215,16 +209,12 @@ package body Ships.UI.Crew is
             "The current tired level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
-         if PlayerShip.Crew(I).Thirst < 25 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Crew(I).Thirst > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if PlayerShip.Crew(I).Thirst < 25 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Crew(I).Thirst > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
@@ -235,16 +225,12 @@ package body Ships.UI.Crew is
             "The current thirst level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
-         if PlayerShip.Crew(I).Hunger < 25 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Crew(I).Hunger > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if PlayerShip.Crew(I).Hunger < 25 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Crew(I).Hunger > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
@@ -255,16 +241,12 @@ package body Ships.UI.Crew is
             "The current hunger level of the selected crew member.");
          Tcl.Tk.Ada.Grid.Grid
            (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
-         if PlayerShip.Crew(I).Morale(1) > 49 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif PlayerShip.Crew(I).Morale(1) > 24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if PlayerShip.Crew(I).Morale(1) > 49 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Crew(I).Morale(1) > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
@@ -658,11 +640,9 @@ package body Ships.UI.Crew is
       if Factions_List(Member.Faction).Flags.Find_Index
           (To_Unbounded_String("nogender")) =
         UnboundedString_Container.No_Index then
-         if Member.Gender = 'M' then
-            MemberInfo := To_Unbounded_String("Male");
-         else
-            MemberInfo := To_Unbounded_String("Female");
-         end if;
+         MemberInfo :=
+           (if Member.Gender = 'M' then To_Unbounded_String("Male")
+            else To_Unbounded_String("Female"));
       end if;
       Append(MemberInfo, LF & "Faction: ");
       Append(MemberInfo, Factions_List(Member.Faction).Name);
