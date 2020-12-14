@@ -555,7 +555,8 @@ package body Combat.UI is
             end if;
             Font :=
               (if Enemy.Ship.Modules(I).Durability = 0 then
-                 To_Unbounded_String(" -font OverstrikedFont")
+                 To_Unbounded_String
+                   (" -font OverstrikedFont -style Gray.TLabel")
                else Null_Unbounded_String);
             Label :=
               Create
