@@ -553,11 +553,10 @@ package body Combat.UI is
                ModuleName :=
                  Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
             end if;
-            if Enemy.Ship.Modules(I).Durability = 0 then
-               Font := To_Unbounded_String(" -font OverstrikedFont");
-            else
-               Font := Null_Unbounded_String;
-            end if;
+            Font :=
+              (if Enemy.Ship.Modules(I).Durability = 0 then
+                 To_Unbounded_String(" -font OverstrikedFont")
+               else Null_Unbounded_String);
             Label :=
               Create
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
