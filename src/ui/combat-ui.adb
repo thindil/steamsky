@@ -188,7 +188,8 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their engine "),
          To_Unbounded_String("{Aim for their weapon "),
          To_Unbounded_String("{Aim for their hull "));
-      GunIndex, GunnerOrders, EnemyInfo, ProgressBarStyle: Unbounded_String;
+      GunIndex, GunnerOrders, EnemyInfo, ProgressBarStyle,
+      Font: Unbounded_String;
       HaveAmmo: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
@@ -389,10 +390,15 @@ package body Combat.UI is
       end loop;
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
+            Font :=
+              (if Module.Durability = 0 then
+                 To_Unbounded_String
+                   (" -font OverstrikedFont -style Gray.TLabel")
+               else Null_Unbounded_String);
             Label :=
               Create
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-                 "-text {" & To_String(Module.Name) & "}");
+                 "-text {" & To_String(Module.Name) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
             DamagePercent :=
@@ -512,7 +518,7 @@ package body Combat.UI is
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
          SpaceIndex: Natural;
-         ModuleName, Font: Unbounded_String;
+         ModuleName: Unbounded_String;
       begin
          Frame.Name :=
            New_String
