@@ -531,6 +531,7 @@ package body Combat.UI is
             end loop;
          end loop;
          if Enemy.Ship.Modules(1).Durability = 0 then
+            Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             goto End_Of_Enemy_Modules_Loop;
          end if;
          Row := 0;
@@ -1066,6 +1067,8 @@ package body Combat.UI is
       CombatCanvas: constant Tk_Canvas := Get_Widget(CombatFrame & ".canvas");
       CombatStarted: Boolean;
       Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
+      EnemyFrame: constant Ttk_Frame :=
+        Get_Widget(CombatCanvas & ".combat.right.status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if NewCombat then
@@ -1099,9 +1102,9 @@ package body Combat.UI is
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
          else
-            Button.Name :=
-              New_String(".gameframe.paned.combatframe.canvas.combat.next");
+            Button.Name := New_String(CombatCanvas & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
+            Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
          end if;
          Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command ShowCombatUI");
