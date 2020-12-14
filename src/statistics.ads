@@ -27,7 +27,7 @@ with Game; use Game;
 package Statistics is
 -- ****
 
-   -- ****s* Statistics/Statistics_Data
+   -- ****s* Statistics/Statistics.Statistics_Data
    -- FUNCTION
    -- Data for finished goals, destroyed ships and killed mobs
    -- PARAMETERS
@@ -40,14 +40,14 @@ package Statistics is
    end record;
    -- ****
 
-   -- ****t* Statistics/Statistics_Container
+   -- ****t* Statistics/Statistics.Statistics_Container
    -- FUNCTION
    -- Used to store game statistics data
    -- SOURCE
    package Statistics_Container is new Vectors(Positive, Statistics_Data);
    -- ****
 
-   -- ****s* Statistics/GameStats_Data
+   -- ****s* Statistics/Statistics.GameStats_Data
    -- FUNCTION
    -- Data for game statistics
    -- PARAMETERS
@@ -76,14 +76,14 @@ package Statistics is
    end record;
    -- ****
 
-   -- ****v* Statistics/GameStats
+   -- ****v* Statistics/Statistics.GameStats
    -- FUNCTION
    -- Game statistics
    -- SOURCE
    GameStats: GameStats_Data;
    -- ****
 
-   -- ****f* Statistics/UpdateDestroyedShips
+   -- ****f* Statistics/Statistics.UpdateDestroyedShips
    -- FUNCTION
    -- Add new destroyed ship to list
    -- PARAMETERS
@@ -94,7 +94,7 @@ package Statistics is
       Test_Case => ("Test_UpdateDestroyedShips", Nominal);
       -- ****
 
-      -- ****f* Statistics/ClearGameStats
+      -- ****f* Statistics/Statistics.ClearGameStats
       -- FUNCTION
       -- Clear game statistics
       -- SOURCE
@@ -102,7 +102,7 @@ package Statistics is
       Test_Case => ("Test_ClearGameStats", Robustness);
       -- ****
 
-      -- ****f* Statistics/UpdateFinishedGoals
+      -- ****f* Statistics/Statistics.UpdateFinishedGoals
       -- FUNCTION
       -- Add new finished goal to list
       -- PARAMETERS
@@ -113,7 +113,7 @@ package Statistics is
       Test_Case => ("Test_UpdateFinishedGoals", Nominal);
       -- ****
 
-      -- ****f* Statistics/UpdateFinishedMissions
+      -- ****f* Statistics/Statistics.UpdateFinishedMissions
       -- FUNCTION
       -- Add new finished mission to list
       -- PARAMETERS
@@ -124,7 +124,7 @@ package Statistics is
       Test_Case => ("Test_UpdateFinishedMissions", Nominal);
       -- ****
 
-      -- ****f* Statistics/UpdateCraftingOrders
+      -- ****f* Statistics/Statistics.UpdateCraftingOrders
       -- FUNCTION
       -- Add new finished crafting order to list
       -- PARAMETERS
@@ -135,7 +135,7 @@ package Statistics is
       Test_Case => ("Test_UpdateCraftingOrders", Nominal);
       -- ****
 
-      -- ****f* Statistics/UpdateKilledMobs
+      -- ****f* Statistics/Statistics.UpdateKilledMobs
       -- FUNCTION
       -- Add new killed mob to list
       -- PARAMETERS
@@ -148,7 +148,7 @@ package Statistics is
       Test_Case => ("Test_UpdateKilledMobs", Nominal);
       -- ****
 
-      -- ****f* Statistics/GetGamePoints
+      -- ****f* Statistics/Statistics.GetGamePoints
       -- FUNCTION
       -- Get amount of gained points multiplied by difficulty bonus
       -- RESULT
