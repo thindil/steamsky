@@ -580,6 +580,8 @@ package body Combat.UI is
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
               (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+            Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
+            Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
             Row := Row + 1;
          end loop;
          <<End_Of_Enemy_Modules_Loop>>
