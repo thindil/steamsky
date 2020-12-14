@@ -127,6 +127,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Headerred.TLabel -foreground red
       # Labels with green text
       ttk::style configure Headergreen.TLabel -foreground green
+      # Labels with gray text
+      ttk::style configure Gray.TLabel -foreground $colors(-gray)
 
       # Progressbar setting
       # Default progressbars
