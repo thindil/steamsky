@@ -389,9 +389,9 @@ package body Combat.UI is
                  "-text {Boarding party:} -command {SetBoardingParty}");
             BoardingParty, Defenders: Unbounded_String;
          begin
-            Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
             Button := Create(Frame & ".defending", "-text {Defenders:}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx {5 0} -pady {0 5}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -pady {0 5}");
             for Member of PlayerShip.Crew loop
                if Member.Order = Boarding then
                   Append(BoardingParty, Member.Name & ", ");
