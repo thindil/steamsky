@@ -418,7 +418,7 @@ package body Combat.UI is
             Label :=
               Create
                 (Frame & ".defenders",
-                 "-text {" & To_String(BoardingParty) & "} -wraplength 200");
+                 "-text {" & To_String(Defenders) & "} -wraplength 200");
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 4) &
