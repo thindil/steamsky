@@ -318,7 +318,7 @@ package body Stories is
       end loop;
    end LoadStories;
 
-   -- ****if* Stories/SelectBase
+   -- ****if* Stories/Stories.SelectBase
    -- Select name of the base for story
    -- PARAMETERS
    -- Value - Only value "any" matters
@@ -343,7 +343,7 @@ package body Stories is
       end loop;
    end SelectBase;
 
-   -- ****if* Stories/SelectLocation
+   -- ****if* Stories/Stories.SelectLocation
    -- FUNCTION
    -- Get the map location for story step
    -- PARAMETERS
@@ -386,7 +386,7 @@ package body Stories is
       return LocationData;
    end SelectLocation;
 
-   -- ****if* Stories/SelectEnemy
+   -- ****if* Stories/Stories.SelectEnemy
    -- FUNCTION
    -- Get enemy ship for selected story step
    -- PARAMETERS
@@ -411,7 +411,7 @@ package body Stories is
         Enemies(GetRandom(Enemies.First_Index, Enemies.Last_Index));
    end SelectEnemy;
 
-   -- ****if* Stories/SelectLoot
+   -- ****if* Stories/Stories.SelectLoot
    -- FUNCTION
    -- Get what item should be looted for this step
    -- PARAMETERS
