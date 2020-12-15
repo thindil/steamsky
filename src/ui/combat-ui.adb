@@ -382,9 +382,9 @@ package body Combat.UI is
               Create(Frame & ".boarding", "-text {Boarding party:}");
             BoardingParty, Defenders: Unbounded_String;
          begin
-            Tcl.Tk.Ada.Grid.Grid(Button);
+            Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
             Button := Create(Frame & ".defending", "-text {Defenders:}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx {5 0} -pady {0 5}");
             for Member of PlayerShip.Crew loop
                if Member.Order = Boarding then
                   Append(BoardingParty, Member.Name & ", ");
