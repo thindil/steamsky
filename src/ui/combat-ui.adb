@@ -24,7 +24,10 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -38,7 +41,9 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
@@ -379,7 +384,9 @@ package body Combat.UI is
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
          declare
             Button: Ttk_Button :=
-              Create(Frame & ".boarding", "-text {Boarding party:}");
+              Create
+                (Frame & ".boarding",
+                 "-text {Boarding party:} -command {SetBoardingParty}");
             BoardingParty, Defenders: Unbounded_String;
          begin
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
@@ -1113,6 +1120,111 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Order_Command;
 
+   -- ****o* CUI/Set_Boarding_Party_Command
+   -- FUNCTION
+   -- Set boarding party
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetBoardingParty
+   -- SOURCE
+   function Set_Boarding_Party_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Boarding_Party_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      CrewDialog: constant Ttk_Frame :=
+        Create(".boardingdialog", "-style Dialog.TFrame");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (CrewDialog & ".yscroll",
+           "-orient vertical -command [list .moduledialog.canvas yview]");
+      CrewCanvas: constant Tk_Canvas :=
+        Create
+          (CrewDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll & " set]");
+      CrewFrame: constant Ttk_Frame := Create(CrewCanvas & ".frame");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (CrewDialog & ".button",
+           "-text Close -command {CloseDialog " & Widget_Image(CrewDialog) &
+           "}");
+      Height: Positive := 10;
+      Width: Positive := 250;
+      CrewButton: Ttk_CheckButton;
+      InfoLabel: constant Ttk_Label :=
+        Create
+          (CrewFrame & ".titlelabel",
+           "-text {Assign a crew members to boarding party} -wraplength 250");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
+      Focus(CloseButton);
+      Autoscroll(YScroll);
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      for I in PlayerShip.Crew.Iterate loop
+         CrewButton :=
+           Create
+             (CrewFrame & ".crewbutton" &
+              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
+              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "} -command {SetBoarding" &
+              Positive'Image(Crew_Container.To_Index(I)) & "}");
+         if PlayerShip.Crew(I).Order /= Boarding then
+            Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
+         else
+            Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
+         end if;
+         Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
+         Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
+         if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
+            Width := Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10;
+         end if;
+         Bind(CrewButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         Bind
+           (CrewButton, "<Tab>",
+            "{focus [GetActiveButton" &
+            Positive'Image(Crew_Container.To_Index(I)) & "];break}");
+      end loop;
+      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
+         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
+      end if;
+      if Height > 500 then
+         Height := 500;
+      end if;
+      Canvas_Create
+        (CrewCanvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(CrewFrame));
+      Tcl_Eval(Interp, "update");
+      configure
+        (CrewCanvas,
+         "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
+         Positive'Image(Height) & " -width" & Positive'Image(Width));
+      Tcl.Tk.Ada.Place.Place(CrewDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
+      return TCL_OK;
+   end Set_Boarding_Party_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
@@ -1153,6 +1265,7 @@ package body Combat.UI is
             AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
+            AddCommand("SetBoardingParty", Set_Boarding_Party_Command'Access);
          else
             Button.Name := New_String(CombatCanvas & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
