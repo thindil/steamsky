@@ -213,13 +213,11 @@ package body Ships.UI.Modules is
             end if;
          when GUN | HARPOON_GUN =>
             declare
-               CurrentValue: Positive;
+               CurrentValue: constant Positive :=
+                 (if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                    PlayerShip.Modules(ModuleIndex).Damage
+                  else PlayerShip.Modules(ModuleIndex).Duration);
             begin
-               if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                  CurrentValue := PlayerShip.Modules(ModuleIndex).Damage;
-               else
-                  CurrentValue := PlayerShip.Modules(ModuleIndex).Duration;
-               end if;
                MaxValue :=
                  Natural
                    (Float
@@ -249,16 +247,14 @@ package body Ships.UI.Modules is
                "-label {Assign a crew member as gunner...} -command {ShowAssignCrew " &
                CArgv.Arg(Argv, 1) & "}");
             declare
-               AmmoIndex: Natural;
+               AmmoIndex: constant Natural :=
+                 (if PlayerShip.Modules(ModuleIndex).MType = GUN then
+                    PlayerShip.Modules(ModuleIndex).AmmoIndex
+                  else PlayerShip.Modules(ModuleIndex).HarpoonIndex);
                AmmoMenu: Tk_Menu :=
                  Get_Widget(Widget_Image(ModuleMenu) & ".ammomenu");
                NotEmpty: Boolean := False;
             begin
-               if PlayerShip.Modules(ModuleIndex).MType = GUN then
-                  AmmoIndex := PlayerShip.Modules(ModuleIndex).AmmoIndex;
-               else
-                  AmmoIndex := PlayerShip.Modules(ModuleIndex).HarpoonIndex;
-               end if;
                if Winfo_Get(AmmoMenu, "exists") = "0" then
                   AmmoMenu :=
                     Create
@@ -642,16 +638,12 @@ package body Ships.UI.Modules is
             Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
             HaveAmmo := False;
             declare
-               AmmoIndex: Natural;
+               AmmoIndex: constant Natural :=
+                 (if Module.MType = GUN then Module.AmmoIndex
+                  else Module.HarpoonIndex);
             begin
-               if Module.MType = GUN then
-                  AmmoIndex := Module.AmmoIndex;
-               else
-                  AmmoIndex := Module.HarpoonIndex;
-               end if;
-               if
-                 (AmmoIndex >= PlayerShip.Cargo.First_Index and
-                  AmmoIndex <= PlayerShip.Cargo.Last_Index)
+               if AmmoIndex in
+                   PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index
                  and then
                    Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
                    Items_Types(Modules_List(Module.ProtoIndex).Value) then
@@ -855,16 +847,12 @@ package body Ships.UI.Modules is
          end if;
          UpgradePercent :=
            1.0 - (Float(Module.UpgradeProgress) / Float(MaxUpgrade));
-         if UpgradePercent > 0.74 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif UpgradePercent > 0.24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if UpgradePercent > 0.74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif UpgradePercent > 0.24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (ModuleFrame & ".upgrade",
@@ -1536,11 +1524,10 @@ package body Ships.UI.Modules is
       for I in Skills_List.First_Index .. Skills_List.Last_Index loop
          if Skills_List(I).Tool /= Null_Unbounded_String then
             ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
-            if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
-               ToolName := Items_List(ProtoIndex).ShowType;
-            else
-               ToolName := Items_List(ProtoIndex).IType;
-            end if;
+            ToolName :=
+              (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
+                 Items_List(ProtoIndex).ShowType
+               else Items_List(ProtoIndex).IType);
          end if;
          Tags := Null_Unbounded_String;
          SkillName := Skills_List(I).Name;
