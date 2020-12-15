@@ -410,7 +410,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 3) &
-               " -column 1 -columnspan 2");
+               " -column 1 -columnspan 2 -sticky w");
             if Defenders /= Null_Unbounded_String then
                Defenders :=
                  Unbounded_Slice(Defenders, 1, Length(Defenders) - 2);
@@ -422,7 +422,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 4) &
-               " -column 1 -columnspan 2");
+               " -column 1 -columnspan 2 -sticky w");
          end;
       end if;
       Frame.Name :=
