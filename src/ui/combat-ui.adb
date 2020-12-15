@@ -374,6 +374,50 @@ package body Combat.UI is
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2 -padx {0 5}");
       end loop;
+      -- Show boarding/defending info
+      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+         declare
+            Button: Ttk_Button :=
+              Create(Frame & ".boarding", "-text {Boarding party:}");
+            BoardingParty, Defenders: Unbounded_String;
+         begin
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            Button := Create(Frame & ".defending", "-text {Defenders:}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w");
+            for Member of PlayerShip.Crew loop
+               if Member.Order = Boarding then
+                  Append(BoardingParty, Member.Name & ", ");
+               elsif Member.Order = Defend then
+                  Append(Defenders, Member.Name & ", ");
+               end if;
+            end loop;
+            if BoardingParty /= Null_Unbounded_String then
+               BoardingParty :=
+                 Unbounded_Slice(BoardingParty, 1, Length(BoardingParty) - 2);
+            end if;
+            Label :=
+              Create
+                (Frame & ".boardparty",
+                 "-text {" & To_String(BoardingParty) & "} -wraplength 200");
+            Tcl.Tk.Ada.Grid.Grid
+              (Label,
+               "-row" & Positive'Image(Positive(Guns.Length) + 3) &
+               " -column 1 -columnspan 2");
+            if Defenders /= Null_Unbounded_String then
+               Defenders :=
+                 Unbounded_Slice(Defenders, 1, Length(Defenders) - 2);
+            end if;
+            Label :=
+              Create
+                (Frame & ".defenders",
+                 "-text {" & To_String(BoardingParty) & "} -wraplength 200");
+            Tcl.Tk.Ada.Grid.Grid
+              (Label,
+               "-row" & Positive'Image(Positive(Guns.Length) + 4) &
+               " -column 1 -columnspan 2");
+         end;
+      end if;
       Frame.Name :=
         New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
