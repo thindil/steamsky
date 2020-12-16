@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Keyboard shortcut for the next turn in combat to Enter
+- Updated descriptions for harpoon guns
 
 ### Removed
 - Setting for the animations
