@@ -186,16 +186,12 @@ package body Ships.UI is
            (Float
               (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
             Float(MaxUpgrade));
-         if UpgradePercent > 0.74 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif UpgradePercent > 0.24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if UpgradePercent > 0.74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif UpgradePercent > 0.24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          configure
            (UpgradeProgress,
             "-value" & Float'Image(UpgradePercent) &
@@ -293,16 +289,12 @@ package body Ships.UI is
            (Button, "-row" & Natural'Image(Row) & " -sticky w");
          UpgradePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
-         if UpgradePercent = 1.0 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         elsif UpgradePercent > 0.24 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Horizontal.TProgressbar");
-         end if;
+         ProgressBarStyle :=
+           (if UpgradePercent = 1.0 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif UpgradePercent > 0.24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          UpgradeProgress :=
            Create
              (Widget_Image(ShipInfoFrame) & ".durability" &
