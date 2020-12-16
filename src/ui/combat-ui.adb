@@ -386,14 +386,17 @@ package body Combat.UI is
             Button: Ttk_Button :=
               Create
                 (Frame & ".boarding",
-                 "-text {Boarding party:} -command {SetBoardingParty}");
+                 "-text {Boarding party:} -command {SetCombatParty boarding}");
             BoardingParty, Defenders: Unbounded_String;
          begin
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
             Add
               (Button,
                "Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.");
-            Button := Create(Frame & ".defending", "-text {Defenders:}");
+            Button :=
+              Create
+                (Frame & ".defending",
+                 "-text {Defenders:} -command {SetCombatParty defenders}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -pady 5");
             Add(Button, "Set your ship's defenders against the enemy party.");
             for Member of PlayerShip.Crew loop
@@ -692,9 +695,9 @@ package body Combat.UI is
       UpdateMessages;
    end UpdateCombatUI;
 
-   -- ****if* CUI/Set_Boarding_Command
+   -- ****if* CUI/Set_Party_Order_Command
    -- FUNCTION
-   -- Set boarding order for the selected crew member
+   -- Set boarding or defending order for the selected crew member
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
@@ -703,36 +706,43 @@ package body Combat.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetBoarding MemberIndex
+   -- SetBoarding MemberIndex Order
    -- MemberIndex is a index of the player ship crew member which will get the
-   -- boarding order
+   -- order. Order is the order to give. Possible values are boarding or
+   -- defend.
    -- SOURCE
-   function Set_Boarding_Command
+   function Set_Party_Order_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Set_Boarding_Command
+   function Set_Party_Order_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       OrderIndex: Natural := 0;
+      Order: constant Crew_Orders :=
+        (if CArgv.Arg(Argv, 2) = "boarding" then Boarding else Defend);
    begin
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Boarding then
             OrderIndex := OrderIndex + 1;
          end if;
          if Crew_Container.To_Index(I) = MemberIndex then
-            if PlayerShip.Crew(I).Order /= Boarding then
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Boarding, 0);
-               BoardingOrders.Append(New_Item => 0);
+            if PlayerShip.Crew(I).Order /= Order then
+               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Order, 0);
+               if Order = Boarding then
+                  BoardingOrders.Append(New_Item => 0);
+               end if;
             else
                GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
-               BoardingOrders.Delete(Index => OrderIndex);
+               if Order = Boarding then
+                  BoardingOrders.Delete(Index => OrderIndex);
+               end if;
                OrderIndex := OrderIndex - 1;
             end if;
             exit;
@@ -740,7 +750,7 @@ package body Combat.UI is
       end loop;
       UpdateCombatUI;
       return TCL_OK;
-   end Set_Boarding_Command;
+   end Set_Party_Order_Command;
 
    -- ****if* CUI/ShowCombatFrame
    -- FUNCTION
@@ -1124,31 +1134,33 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Order_Command;
 
-   -- ****o* CUI/Set_Boarding_Party_Command
+   -- ****o* CUI/Set_Combat_Party_Command
    -- FUNCTION
-   -- Set boarding party
+   -- Set combat party (boarding or defenders)
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetBoardingParty
+   -- SetCombatParty partytype
+   -- Partytype is a type of party to set. Possible options are boarding or
+   -- defenders
    -- SOURCE
-   function Set_Boarding_Party_Command
+   function Set_Combat_Party_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Set_Boarding_Party_Command
+   function Set_Combat_Party_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
       CrewDialog: constant Ttk_Frame :=
         Create(".boardingdialog", "-style Dialog.TFrame");
       YScroll: constant Ttk_Scrollbar :=
@@ -1171,7 +1183,10 @@ package body Combat.UI is
       InfoLabel: constant Ttk_Label :=
         Create
           (CrewFrame & ".titlelabel",
-           "-text {Assign a crew members to boarding party} -wraplength 250");
+           "-text {Assign a crew members to " &
+           (if CArgv.Arg(Argv, 1) = "boarding" then "boarding party"
+            else "defenders") &
+           "} -wraplength 250");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -1191,8 +1206,9 @@ package body Combat.UI is
              (CrewFrame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(PlayerShip.Crew(I).Name) &
-              "} -command {SetBoarding" &
-              Positive'Image(Crew_Container.To_Index(I)) & "}");
+              "} -command {SetPartyOrder" &
+              Positive'Image(Crew_Container.To_Index(I)) & " " &
+              CArgv.Arg(Argv, 1) & "}");
          if PlayerShip.Crew(I).Order /= Boarding then
             Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          else
@@ -1227,7 +1243,7 @@ package body Combat.UI is
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
       return TCL_OK;
-   end Set_Boarding_Party_Command;
+   end Set_Combat_Party_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
@@ -1264,12 +1280,12 @@ package body Combat.UI is
             Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
             PilotOrder := 2;
             EngineerOrder := 3;
-            AddCommand("SetBoarding", Set_Boarding_Command'Access);
+            AddCommand("SetPartyOrder", Set_Party_Order_Command'Access);
             AddCommand("NextTurn", Next_Turn_Command'Access);
             AddCommand("ShowCombatUI", Show_Combat_UI_Command'Access);
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
-            AddCommand("SetBoardingParty", Set_Boarding_Party_Command'Access);
+            AddCommand("SetCombatParty", Set_Combat_Party_Command'Access);
          else
             Button.Name := New_String(CombatCanvas & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
