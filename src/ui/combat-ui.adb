@@ -390,8 +390,12 @@ package body Combat.UI is
             BoardingParty, Defenders: Unbounded_String;
          begin
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
+            Add
+              (Button,
+               "Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.");
             Button := Create(Frame & ".defending", "-text {Defenders:}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -pady 5");
+            Add(Button, "Set your ship's defenders against the enemy party.");
             for Member of PlayerShip.Crew loop
                if Member.Order = Boarding then
                   Append(BoardingParty, Member.Name & ", ");
