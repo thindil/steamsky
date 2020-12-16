@@ -29,21 +29,21 @@ with Game; use Game;
 package Stories is
 -- ****
 
-   -- ****t* Stories/StartConditionType
+   -- ****t* Stories/Stories.StartConditionType
    -- FUNCTION
    -- Types of conditions to start stories
    -- SOURCE
    type StartConditionType is (DROPITEM);
    -- ****
 
-   -- ****t* Stories/StepConditionType
+   -- ****t* Stories/Stories.StepConditionType
    -- FUNCTION
    -- Types of conditions to finish story step
    -- SOURCE
    type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
    -- ****
 
-   -- ****s* Stories/StepText_Data
+   -- ****s* Stories/Stories.StepText_Data
    -- FUNCTION
    -- Data structure for stories steps texts
    -- PARAMETERS
@@ -56,14 +56,14 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/StepTexts_Container
+   -- ****t* Stories/Stories.StepTexts_Container
    -- FUNCTION
    -- Used to store stories steps text data
    -- SOURCE
    package StepTexts_Container is new Vectors(Positive, StepText_Data);
    -- ****
 
-   -- ****s* Stories/StepFinish_Data
+   -- ****s* Stories/Stories.StepFinish_Data
    -- FUNCTION
    -- Structure for finish condition data
    -- PARAMETERS
@@ -76,14 +76,14 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/StepData_Container
+   -- ****t* Stories/Stories.StepData_Container
    -- FUNCTION
    -- Used to store stories steps data
    -- SOURCE
    package StepData_Container is new Vectors(Positive, StepFinish_Data);
    -- ****
 
-   -- ****s* Stories/Step_Data
+   -- ****s* Stories/Stories.Step_Data
    -- FUNCTION
    -- Data structure for stories steps
    -- PARAMETERS
@@ -105,14 +105,14 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/Steps_Container
+   -- ****t* Stories/Stories.Steps_Container
    -- FUNCTION
    -- Used to store stories steps
    -- SOURCE
    package Steps_Container is new Vectors(Positive, Step_Data);
    -- ****
 
-   -- ****s* Stories/Story_Data
+   -- ****s* Stories/Stories.Story_Data
    -- FUNCTION
    -- Data structure for stories
    -- PARAMETERS
@@ -142,7 +142,7 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/Stories_Container
+   -- ****t* Stories/Stories.Stories_Container
    -- FUNCTION
    -- Used to store stories
    -- SOURCE
@@ -175,7 +175,7 @@ package Stories is
    end record;
    -- ****
 
-   -- ****s* Stories/FinishedStory_Data
+   -- ****s* Stories/Stories.FinishedStory_Data
    -- FUNCTION
    -- Data structure for finished story/steps
    -- PARAMETERS
@@ -191,7 +191,7 @@ package Stories is
    end record;
    -- ****
 
-   -- ****t* Stories/FinishedStories_Container
+   -- ****t* Stories/Stories.FinishedStories_Container
    -- FUNCTIONS
    -- Used to store finished stories
    -- SOURCE
@@ -199,28 +199,28 @@ package Stories is
       FinishedStory_Data);
    -- ****
 
-   -- ****v* Stories/CurrentStory
+   -- ****v* Stories/Stories.CurrentStory
    -- FUNCTION
    -- Contains data about current story on which player is
    -- SOURCE
    CurrentStory: CurrentStory_Data;
    -- ****
 
-   -- ****v* Stories/Stories_List
+   -- ****v* Stories/Stories.Stories_List
    -- FUNCTION
    -- List of available stories in game
    -- SOURCE
    Stories_List: Stories_Container.Map;
    -- ****
 
-   -- ****v* Stories/FinishedStories
+   -- ****v* Stories/Stories.FinishedStories
    -- FUNCTION
    -- List of finished stories (or past data of current story)
    -- SOURCE
    FinishedStories: FinishedStories_Container.Vector;
    -- ****
 
-   -- ****f* Stories/LoadStories
+   -- ****f* Stories/Stories.LoadStories
    -- FUNCTION
    -- Load stories data from files
    -- PARAMETERS
@@ -229,7 +229,7 @@ package Stories is
    procedure LoadStories(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Stories/StartStory
+   -- ****f* Stories/Stories.StartStory
    -- FUNCTION
    -- Check if any story can starts
    -- PARAMETERS
@@ -242,7 +242,7 @@ package Stories is
       Test_Case => ("Test_StartStory", Nominal);
       -- ****
 
-      -- ****f* Stories/ClearCurrentStory
+      -- ****f* Stories/Stories.ClearCurrentStory
       -- FUNCTION
       -- Resets current story
       -- SOURCE
@@ -250,7 +250,7 @@ package Stories is
       Test_Case => ("Test_ClearCurrentStory", Robustness);
       -- ****
 
-      -- ****f* Stories/ProgressStory
+      -- ****f* Stories/Stories.ProgressStory
       -- FUNCTION
       -- Progress current story one step
       -- PARAMETERS
@@ -263,7 +263,7 @@ package Stories is
       Test_Case => ("Test_ProgressStory", Robustness);
       -- ****
 
-      -- ****f* Stories/GetCurrentStoryText
+      -- ****f* Stories/Stories.GetCurrentStoryText
       -- FUNCTION
       -- Get text of current step in story
       -- RESULT
@@ -273,7 +273,7 @@ package Stories is
       Test_Case => ("Tets_GetCurrentStoryText", Robustness);
       -- ****
 
-      -- ****f* Stories/GetStepData
+      -- ****f* Stories/Stories.GetStepData
       -- FUNCTION
       -- Get step finish data with selected name
       -- PARAMETERS
@@ -289,7 +289,7 @@ package Stories is
       Test_Case => ("Test_GetStepData", Nominal);
       -- ****
 
-      -- ****f* Stories/GetStoryLocation
+      -- ****f* Stories/Stories.GetStoryLocation
       -- FUNCTION
       -- Get target location of current story
       -- PARAMETERS
