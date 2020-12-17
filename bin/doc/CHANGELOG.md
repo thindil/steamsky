@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Keyboard shortcut for the next turn in combat to Enter
-- Updated descriptions for harpoon guns
+- Updated descriptions for harpoon guns and battering rams
 
 ### Removed
 - Setting for the animations
