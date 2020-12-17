@@ -1198,6 +1198,8 @@ package body Combat.UI is
            (if CArgv.Arg(Argv, 1) = "boarding" then "boarding party"
             else "defenders") &
            "} -wraplength 250");
+      Order: constant Crew_Orders :=
+        (if CArgv.Arg(Argv, 1) = "boarding" then Boarding else Defend);
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -1220,7 +1222,7 @@ package body Combat.UI is
               "} -command {SetPartyOrder" &
               Positive'Image(Crew_Container.To_Index(I)) & " " &
               CArgv.Arg(Argv, 1) & "}");
-         if PlayerShip.Crew(I).Order /= Boarding then
+         if PlayerShip.Crew(I).Order /= Order then
             Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          else
             Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
