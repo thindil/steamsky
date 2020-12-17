@@ -397,7 +397,7 @@ package body Combat.UI is
               Create
                 (Frame & ".defending",
                  "-text {Defenders:} -command {SetCombatParty defenders}");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w -padx 5 -pady 5");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady 5");
             Add(Button, "Set your ship's defenders against the enemy party.");
             for Member of PlayerShip.Crew loop
                if Member.Order = Boarding then
