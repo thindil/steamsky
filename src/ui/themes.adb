@@ -87,183 +87,170 @@ package body Themes is
          (Directory => True, others => False));
       while More_Entries(Directories) loop
          Get_Next_Entry(Directories, FoundDirectory);
-         if Simple_Name(FoundDirectory) /= "." and
-           Simple_Name(FoundDirectory) /= ".." then
-            Start_Search(Files, Full_Name(FoundDirectory), "*.cfg");
-            while More_Entries(Files) loop
-               Get_Next_Entry(Files, FoundFile);
-               Open(ConfigFile, In_File, Full_Name(FoundFile));
-               while not End_Of_File(ConfigFile) loop
-                  RawData := To_Unbounded_String(Get_Line(ConfigFile));
-                  if Length(RawData) > 0 then
-                     EqualIndex := Index(RawData, "=");
-                     FieldName := Head(RawData, EqualIndex - 2);
-                     Value :=
-                       Tail(RawData, (Length(RawData) - EqualIndex - 1));
-                     if FieldName = To_Unbounded_String("Name") then
-                        TempRecord.Name := Value;
-                     elsif FieldName = To_Unbounded_String("FileName") then
-                        TempRecord.FileName :=
-                          To_Unbounded_String
-                            (Full_Name(FoundDirectory) & Dir_Separator) &
-                          Value;
-                     elsif FieldName =
-                       To_Unbounded_String("EnemyShipIcon") then
-                        TempRecord.EnemyShipIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("AttackOnBaseIcon") then
-                        TempRecord.AttackOnBaseIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("DiseaseIcon") then
-                        TempRecord.DiseaseIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("DoublePriceIcon") then
-                        TempRecord.DoublePriceIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("FullDocksIcon") then
-                        TempRecord.FullDocksIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("EnemyPatrolIcon") then
-                        TempRecord.EnemyPatrolIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("TraderIcon") then
-                        TempRecord.TraderIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("FriendlyShipIcon") then
-                        TempRecord.FriendlyShipIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("DeliverIcon") then
-                        TempRecord.DeliverIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("DestroyIcon") then
-                        TempRecord.DestroyIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("PatrolIcon") then
-                        TempRecord.PatrolIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("ExploreIcon") then
-                        TempRecord.ExploreIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("PassengerIcon") then
-                        TempRecord.PassengerIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("PilotIcon") then
-                        TempRecord.PilotIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("EngineerIcon") then
-                        TempRecord.EngineerIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("GunnerIcon") then
-                        TempRecord.GunnerIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("CrewTraderIcon") then
-                        TempRecord.CrewTraderIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("RepairIcon") then
-                        TempRecord.RepairIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("UpgradeIcon") then
-                        TempRecord.UpgradeIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("CleanIcon") then
-                        TempRecord.CleanIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("ManufactureIcon") then
-                        TempRecord.ManufactureIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("MoveMapUpIcon") then
-                        TempRecord.MoveMapUpIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("MoveMapDownIcon") then
-                        TempRecord.MoveMapDownIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("MoveMapLeftIcon") then
-                        TempRecord.MoveMapLeftIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("MoveMapRightIcon") then
-                        TempRecord.MoveMapRightIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("NoFuelIcon") then
-                        TempRecord.NoFuelIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("NoFoodIcon") then
-                        TempRecord.NoFoodIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("NoDrinksIcon") then
-                        TempRecord.NoDrinksIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("NotVisitedBaseIcon") then
-                        TempRecord.NotVisitedBaseIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("EmptyMapIcon") then
-                        TempRecord.EmptyMapIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("TargetIcon") then
-                        TempRecord.TargetIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName = To_Unbounded_String("StoryIcon") then
-                        TempRecord.StoryIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     elsif FieldName =
-                       To_Unbounded_String("OverloadedIcon") then
-                        TempRecord.OverloadedIcon :=
-                          Wide_Character'Val
-                            (Natural'Value("16#" & To_String(Value) & "#"));
-                     end if;
-                  end if;
-               end loop;
-               Close(ConfigFile);
-               Themes_Container.Include
-                 (Themes_List, Simple_Name(FoundDirectory), TempRecord);
-               SetDefaultValues;
-            end loop;
-            End_Search(Files);
+         if Simple_Name(FoundDirectory) in "." | ".." then
+            goto End_Of_Load_Themes_Loop;
          end if;
+         Start_Search(Files, Full_Name(FoundDirectory), "*.cfg");
+         while More_Entries(Files) loop
+            Get_Next_Entry(Files, FoundFile);
+            Open(ConfigFile, In_File, Full_Name(FoundFile));
+            while not End_Of_File(ConfigFile) loop
+               RawData := To_Unbounded_String(Get_Line(ConfigFile));
+               if Length(RawData) = 0 then
+                  goto End_Of_Load_Config_Loop;
+               end if;
+               EqualIndex := Index(RawData, "=");
+               FieldName := Head(RawData, EqualIndex - 2);
+               Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
+               if FieldName = To_Unbounded_String("Name") then
+                  TempRecord.Name := Value;
+               elsif FieldName = To_Unbounded_String("FileName") then
+                  TempRecord.FileName :=
+                    To_Unbounded_String
+                      (Full_Name(FoundDirectory) & Dir_Separator) &
+                    Value;
+               elsif FieldName = To_Unbounded_String("EnemyShipIcon") then
+                  TempRecord.EnemyShipIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("AttackOnBaseIcon") then
+                  TempRecord.AttackOnBaseIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("DiseaseIcon") then
+                  TempRecord.DiseaseIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("DoublePriceIcon") then
+                  TempRecord.DoublePriceIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("FullDocksIcon") then
+                  TempRecord.FullDocksIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("EnemyPatrolIcon") then
+                  TempRecord.EnemyPatrolIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("TraderIcon") then
+                  TempRecord.TraderIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("FriendlyShipIcon") then
+                  TempRecord.FriendlyShipIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("DeliverIcon") then
+                  TempRecord.DeliverIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("DestroyIcon") then
+                  TempRecord.DestroyIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("PatrolIcon") then
+                  TempRecord.PatrolIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("ExploreIcon") then
+                  TempRecord.ExploreIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("PassengerIcon") then
+                  TempRecord.PassengerIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("PilotIcon") then
+                  TempRecord.PilotIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("EngineerIcon") then
+                  TempRecord.EngineerIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("GunnerIcon") then
+                  TempRecord.GunnerIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("CrewTraderIcon") then
+                  TempRecord.CrewTraderIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("RepairIcon") then
+                  TempRecord.RepairIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("UpgradeIcon") then
+                  TempRecord.UpgradeIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("CleanIcon") then
+                  TempRecord.CleanIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("ManufactureIcon") then
+                  TempRecord.ManufactureIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("MoveMapUpIcon") then
+                  TempRecord.MoveMapUpIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("MoveMapDownIcon") then
+                  TempRecord.MoveMapDownIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("MoveMapLeftIcon") then
+                  TempRecord.MoveMapLeftIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("MoveMapRightIcon") then
+                  TempRecord.MoveMapRightIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("NoFuelIcon") then
+                  TempRecord.NoFuelIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("NoFoodIcon") then
+                  TempRecord.NoFoodIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("NoDrinksIcon") then
+                  TempRecord.NoDrinksIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("NotVisitedBaseIcon") then
+                  TempRecord.NotVisitedBaseIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("EmptyMapIcon") then
+                  TempRecord.EmptyMapIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("TargetIcon") then
+                  TempRecord.TargetIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("StoryIcon") then
+                  TempRecord.StoryIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               elsif FieldName = To_Unbounded_String("OverloadedIcon") then
+                  TempRecord.OverloadedIcon :=
+                    Wide_Character'Val
+                      (Natural'Value("16#" & To_String(Value) & "#"));
+               end if;
+               <<End_Of_Load_Config_Loop>>
+            end loop;
+            Close(ConfigFile);
+            Themes_Container.Include
+              (Themes_List, Simple_Name(FoundDirectory), TempRecord);
+            SetDefaultValues;
+         end loop;
+         End_Search(Files);
+         <<End_Of_Load_Themes_Loop>>
       end loop;
       End_Search(Directories);
       if not Themes_List.Contains(To_String(GameSettings.InterfaceTheme)) then
@@ -278,74 +265,65 @@ package body Themes is
       Label.Interp := Get_Context;
       Button.Interp := Get_Context;
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
-            Label.Name := New_String(".gameframe.header.nofuel");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).NoFuelIcon) & "}");
-            Label.Name := New_String(".gameframe.header.nofood");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).NoFoodIcon) & "}");
-            Label.Name := New_String(".gameframe.header.nodrink");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).NoDrinksIcon) & "}");
-            Label.Name := New_String(".gameframe.header.overloaded");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
-            Label.Name := New_String(".gameframe.header.pilot");
-            configure
-              (Label, "-text {" & Encode("" & Themes_List(I).PilotIcon) & "}");
-            Label.Name := New_String(".gameframe.header.engineer");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).EngineerIcon) & "}");
-            Label.Name := New_String(".gameframe.header.gunner");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).GunnerIcon) & "}");
-            Label.Name := New_String(".gameframe.header.talk");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).CrewTraderIcon) & "}");
-            Label.Name := New_String(".gameframe.header.repairs");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).RepairIcon) & "}");
-            Label.Name := New_String(".gameframe.header.upgrade");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).UpgradeIcon) & "}");
-            Label.Name := New_String(".gameframe.header.clean");
-            configure
-              (Label, "-text {" & Encode("" & Themes_List(I).CleanIcon) & "}");
-            Label.Name := New_String(".gameframe.header.crafting");
-            configure
-              (Label,
-               "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
-            Button.Name :=
-              New_String(".gameframe.paned.mapframe.buttons.show");
-            configure
-              (Button,
-               "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
-            Button.Name :=
-              New_String(".gameframe.paned.mapframe.buttons.hide");
-            configure
-              (Button,
-               "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
-            Button.Name :=
-              New_String(".gameframe.paned.mapframe.buttons.left");
-            configure
-              (Button,
-               "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
-            Button.Name :=
-              New_String(".gameframe.paned.mapframe.buttons.right");
-            configure
-              (Button,
-               "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
+         if Themes_Container.Key(I) /= GameSettings.InterfaceTheme then
+            goto End_Of_Set_Theme_Loop;
          end if;
+         Label.Name := New_String(".gameframe.header.nofuel");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).NoFuelIcon) & "}");
+         Label.Name := New_String(".gameframe.header.nofood");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).NoFoodIcon) & "}");
+         Label.Name := New_String(".gameframe.header.nodrink");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).NoDrinksIcon) & "}");
+         Label.Name := New_String(".gameframe.header.overloaded");
+         configure
+           (Label,
+            "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
+         Label.Name := New_String(".gameframe.header.pilot");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).PilotIcon) & "}");
+         Label.Name := New_String(".gameframe.header.engineer");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).EngineerIcon) & "}");
+         Label.Name := New_String(".gameframe.header.gunner");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).GunnerIcon) & "}");
+         Label.Name := New_String(".gameframe.header.talk");
+         configure
+           (Label,
+            "-text {" & Encode("" & Themes_List(I).CrewTraderIcon) & "}");
+         Label.Name := New_String(".gameframe.header.repairs");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).RepairIcon) & "}");
+         Label.Name := New_String(".gameframe.header.upgrade");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).UpgradeIcon) & "}");
+         Label.Name := New_String(".gameframe.header.clean");
+         configure
+           (Label, "-text {" & Encode("" & Themes_List(I).CleanIcon) & "}");
+         Label.Name := New_String(".gameframe.header.crafting");
+         configure
+           (Label,
+            "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
+         Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
+         configure
+           (Button,
+            "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
+         Button.Name := New_String(".gameframe.paned.mapframe.buttons.hide");
+         configure
+           (Button,
+            "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
+         Button.Name := New_String(".gameframe.paned.mapframe.buttons.left");
+         configure
+           (Button,
+            "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
+         Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
+         configure
+           (Button,
+            "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
+         <<End_Of_Set_Theme_Loop>>
       end loop;
    end SetTheme;
 
