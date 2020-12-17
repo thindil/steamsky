@@ -27,84 +27,84 @@ with Ships; use Ships;
 package Trades is
 -- ****
 
-   -- ****v* Trades/TraderCargo
+   -- ****v* Trades/Trades.TraderCargo
    -- FUNCTION
    -- List of all cargo in trader ship
    -- SOURCE
    TraderCargo: BaseCargo_Container.Vector;
    -- ****
 
-   -- ****e* Trades/Trade_Cant_Buy
+   -- ****e* Trades/Trades.Trade_Cant_Buy
    -- FUNCTION
    -- Raised when items is not available to buy
    -- SOURCE
    Trade_Cant_Buy: exception;
    -- ****
 
-   -- ****e* Trades/Trade_Not_For_Sale_Now
+   -- ****e* Trades/Trades.Trade_Not_For_Sale_Now
    -- FUNCTION
    -- Raised when no items available at this time for sale
    -- SOURCE
    Trade_Not_For_Sale_Now: exception;
    -- ****
 
-   -- ****e* Trades/Trade_Buying_Too_Much
+   -- ****e* Trades/Trades.Trade_Buying_Too_Much
    -- FUNCTION
    -- Raised when player trying buy more than can
    -- SOURCE
    Trade_Buying_Too_Much: exception;
    -- ****
 
-   -- ****e* Trades/Trade_No_Free_Cargo
+   -- ****e* Trades/Trades.Trade_No_Free_Cargo
    -- FUNCTION
    -- Raised when no enough free cargo in ship
    -- SOURCE
    Trade_No_Free_Cargo: exception;
    -- ****
 
-   -- ****e* Trades/Trade_No_Money
+   -- ****e* Trades/Trades.Trade_No_Money
    -- FUNCTION
    -- Raised when player don't have money
    -- SOURCE
    Trade_No_Money: exception;
    -- ****
 
-   -- ****e* Trades/Trade_Not_Enough_Money
+   -- ****e* Trades/Trades.Trade_Not_Enough_Money
    -- FUNCTION
    -- Raised when player don't have enough money
    -- SOURCE
    Trade_Not_Enough_Money: exception;
    -- ****
 
-   -- ****e* Trades/Trade_Invalid_Amount
+   -- ****e* Trades/Trades.Trade_Invalid_Amount
    -- FUNCTION
    -- Raised when player enter invalid amount
    -- SOURCE
    Trade_Invalid_Amount: exception;
    -- ****
 
-   -- ****e* Trades/Trade_Too_Much_For_Sale
+   -- ****e* Trades/Trades.Trade_Too_Much_For_Sale
    -- FUNCTION
    -- Raised when player try sell more than have
    -- SOURCE
    Trade_Too_Much_For_Sale: exception;
    -- ****
 
-   -- ****e* Trades/Trade_No_Money_In_Base
+   -- ****e* Trades/Trades.Trade_No_Money_In_Base
    -- FUNCTION
    -- Raised when base don't have enough money for buy item
    -- SOURCE
    Trade_No_Money_In_Base: exception;
    -- ****
 
-   -- ****e* Trades/Trade_No_Trader
+   -- ****e* Trades/Trades.Trade_No_Trader
    -- FUNCTION
    -- Raised when no one is assigned to talk in bases duty
    -- SOURCE
    Trade_No_Trader: exception;
    -- ****
 
-   -- ****f* Trades/BuyItems
+   -- ****f* Trades/Trades.BuyItems
    -- FUNCTION
    -- Buy items from bases or trader
    -- PARAMETERS
@@ -116,7 +116,7 @@ package Trades is
       Test_Case => ("Test_BuyItems", Robustness);
       -- ****
 
-      -- ****f* Trades/SellItems
+      -- ****f* Trades/Trades.SellItems
       -- FUNCTION
       -- Sell items from bases or trader
       -- PARAMETERS
@@ -130,7 +130,7 @@ package Trades is
       Test_Case => ("Test_SellItems", Nominal);
       -- ****
 
-      -- ****f* Trades/GenerateTraderCargo
+      -- ****f* Trades/Trades.GenerateTraderCargo
       -- FUNCTION
       -- Generate list of cargo to trade
       -- PARAMETERS
