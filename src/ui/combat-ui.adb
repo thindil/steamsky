@@ -388,6 +388,15 @@ package body Combat.UI is
                 (Frame & ".boarding",
                  "-text {Boarding party:} -command {SetCombatParty boarding}");
             BoardingParty, Defenders: Unbounded_String;
+            LabelLength: constant Positive :=
+              Positive'Value
+                (Winfo_Get
+                   (Ttk_Label'(Get_Widget(Frame & ".engineercrew")),
+                    "reqwidth")) +
+              Positive'Value
+                (Winfo_Get
+                   (Ttk_Label'(Get_Widget(Frame & ".engineerorder")),
+                    "reqwidth"));
          begin
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
             Add
@@ -413,7 +422,8 @@ package body Combat.UI is
             Label :=
               Create
                 (Frame & ".boardparty",
-                 "-text {" & To_String(BoardingParty) & "} -wraplength 400");
+                 "-text {" & To_String(BoardingParty) & "} -wraplength" &
+                 Positive'Image(LabelLength));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 3) &
@@ -425,7 +435,8 @@ package body Combat.UI is
             Label :=
               Create
                 (Frame & ".defenders",
-                 "-text {" & To_String(Defenders) & "} -wraplength 400");
+                 "-text {" & To_String(Defenders) & "} -wraplength" &
+                 Positive'Image(LabelLength));
             Tcl.Tk.Ada.Grid.Grid
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 4) &
