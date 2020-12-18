@@ -490,6 +490,11 @@ package body Combat.UI is
             Row := Row + 1;
          end if;
       end loop;
+      if Winfo_Get(Frame, "children") = "" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+      else
+         Tcl.Tk.Ada.Grid.Grid(Frame);
+      end if;
       Append(EnemyInfo, "Name: " & EnemyName & LF);
       Append(EnemyInfo, "Type: " & Enemy.Ship.Name & LF);
       Append(EnemyInfo, "Home: " & SkyBases(Enemy.Ship.HomeBase).Name & LF);
