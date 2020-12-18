@@ -25,7 +25,7 @@ with Game; use Game;
 package Utils is
 -- ****
 
-   -- ****f* Utils/GetRandom
+   -- ****f* Utils/Utils.GetRandom
    -- FUNCTION
    -- Return random number from Min to Max range
    -- PARAMETERS
@@ -39,7 +39,7 @@ package Utils is
       Test_Case => ("Test_GetRandom", Nominal);
       -- ****
 
-      -- ****f* Utils/DaysDifference
+      -- ****f* Utils/Utils.DaysDifference
       -- FUNCTION
       -- Count days difference between selected date and current game date
       -- PARAMETERS
@@ -54,7 +54,7 @@ package Utils is
       Test_Case => ("Test_DaysDifference", Robustness);
       -- ****
 
-      -- ****f* Utils/GenerateRoboticName
+      -- ****f* Utils/Utils.GenerateRoboticName
       -- FUNCTION
       -- Generate robotic type name for bases, mobs, ships, etc
       -- RESULT
