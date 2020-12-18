@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Scrollbar position in crew member info dialog
 - Ending combat turn with space key
 - Showing the lists of gunners in combat
+- Crash in combat when the player's ship doesn't have installed guns
 
 ## [5.5] - 2020-11-29
 
