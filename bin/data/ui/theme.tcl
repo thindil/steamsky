@@ -202,8 +202,8 @@ namespace eval ttk::theme::steamsky {
       option add *Canvas.highlightThickness 0
 
       # Tooltips setting
-      set ::tooltip::labelOpts [list -highlightthickness 0 -relief solid -borderwidth 1 \
-         -background black -foreground $colors(-palegoldenrod)]
+      set ::tooltip::labelOpts [list -relief groove -borderwidth 2 \
+         -background black -foreground $colors(-palegoldenrod) -padx 5 -pady 5]
 
       # Dialog with getting string (like name of the ship, modules, etc)
       option add *TkSDialog.background [ttk::style lookup . -background]
