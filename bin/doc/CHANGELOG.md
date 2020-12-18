@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Zooming in and out map with the mouse wheel
+- Option to set defenders in combat screen
 
 ### Changed
 - Updated interface
