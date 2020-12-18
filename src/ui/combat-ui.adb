@@ -581,8 +581,8 @@ package body Combat.UI is
       if Length(Enemy.Ship.Description) > 0 then
          Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
       end if;
-      Label.Name :=
-        New_String
+      Label :=
+        Get_Widget
           (".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
