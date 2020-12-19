@@ -796,7 +796,7 @@ package body Combat.UI is
       -- ****
       OrdersList, OrderName, Tooltip: Unbounded_String;
       Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe.canvas.boarding.right.enemy");
+        Get_Widget(".gameframe.paned.combatframe.canvas.boarding.right");
       Label: Ttk_Label;
       Item: Ttk_Frame;
       Tokens: Slice_Set;
@@ -862,7 +862,7 @@ package body Combat.UI is
       end loop;
       Append(OrdersList, " {Back to the ship}");
       Frame.Name :=
-        New_String(".gameframe.paned.combatframe.canvas.boarding.left.crew");
+        New_String(".gameframe.paned.combatframe.canvas.boarding.left");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 1 .. (Rows - 1) loop
