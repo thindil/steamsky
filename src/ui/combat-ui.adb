@@ -781,8 +781,6 @@ package body Combat.UI is
       Canvas_Create
         (CombatCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
-      Add_Tag(CombatCanvas, "child", "all");
-      Tcl_Eval(Get_Context, "update");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
