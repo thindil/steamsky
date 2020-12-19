@@ -690,11 +690,9 @@ package body Utils.UI is
         Get_Widget(Paned & ".controls.messages");
    begin
       SubWindows := To_Unbounded_String(Panes(Paned));
-      if Index(SubWindows, " ") = 0 then
-         SubWindow := Get_Widget(To_String(SubWindows));
-      else
-         SubWindow := Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " ")));
-      end if;
+      SubWindow :=
+        (if Index(SubWindows, " ") = 0 then Get_Widget(To_String(SubWindows))
+         else Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " "))));
       Forget(Paned, SubWindow);
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
@@ -836,18 +834,15 @@ package body Utils.UI is
          TimerId := Null_Unbounded_String;
       end if;
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
-      if ParentName = ".gameframe" then
-         InfoButton :=
+      InfoButton :=
+        (if ParentName = ".gameframe" then
            Create
              (InfoDialog & ".button",
-              "-text Close -command {CloseDialog " & InfoDialog & "}");
-      else
-         InfoButton :=
-           Create
+              "-text Close -command {CloseDialog " & InfoDialog & "}")
+         else Create
              (InfoDialog & ".button",
               "-text Close -command {CloseDialog " & InfoDialog & " " &
-              ParentName & "}");
-      end if;
+              ParentName & "}"));
       Tcl.Tk.Ada.Grid.Grid(InfoButton, "-pady {0 5}");
       Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(InfoButton);
