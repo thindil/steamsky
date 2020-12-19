@@ -39,11 +39,11 @@ grid [ttk::labelframe $combatframe.right.boarding -text {Boarding party:}]
 set boardingframe [ttk::frame $combatcanvas.boarding]
 grid [ttk::button $boardingframe.next -text {Next turn [Enter]} -command NextTurn] -columnspan 2 -sticky we
 bind . <Return> {InvokeButton $boardingframe.next}
-grid [ttk::labelframe $boardingframe.left -text {Your crew:}]
+grid [ttk::labelframe $boardingframe.left -text {Your crew:}] -sticky n
 grid [ttk::label $boardingframe.left.name -text {Name}] -row 0 -column 0
 grid [ttk::label $boardingframe.left.health -text {Health}] -row 0 -column 1
 grid [ttk::label $boardingframe.left.order -text {Order}] -row 0 -column 2
-grid [ttk::labelframe $boardingframe.right -text {Enemy's crew:}] -row 1 -column 1
+grid [ttk::labelframe $boardingframe.right -text {Enemy's crew:}] -row 1 -column 1 -sticky n
 grid [ttk::label $boardingframe.right.name -text {Name}] -row 0 -column 0
 grid [ttk::label $boardingframe.right.health -text {Health}] -row 0 -column 1
 grid [ttk::label $boardingframe.right.order -text {Order}] -row 0 -column 2
