@@ -63,13 +63,6 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
 
-   -- ****ie* SUModules/SteamSky_ShipUI_Error
-   -- FUNCTION
-   -- Raised when there are any problems with ship UI
-   -- SOURCE
-   SteamSky_ShipUI_Error: exception;
-   -- ****
-
    -- ****if* SUModules/Show_Module_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected module options
@@ -1289,8 +1282,7 @@ package body Ships.UI.Modules is
               CArgv.Empty & "AssignModule" & "crew" & CArgv.Arg(Argv, 1) &
               CArgv.Arg(Argv, 2)) /=
            TCL_OK then
-            raise SteamSky_ShipUI_Error
-              with "Can't assign a crew member to module";
+            return TCL_ERROR;
          end if;
       end if;
       CrewButton.Interp := Interp;
@@ -1429,7 +1421,7 @@ package body Ships.UI.Modules is
       end loop;
       if Update_Assign_Crew_Command(ClientData, Interp, Argc, Argv) /=
         TCL_OK then
-         raise SteamSky_ShipUI_Error with "Can't set assign crew UI";
+         return TCL_ERROR;
       end if;
       InfoLabel :=
         Create
