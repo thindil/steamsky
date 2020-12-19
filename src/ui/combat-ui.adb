@@ -778,6 +778,7 @@ package body Combat.UI is
         Get_Widget(".gameframe.paned.combatframe.canvas");
       CombatFrame: constant Ttk_Frame := Get_Widget(CombatCanvas & FrameName);
    begin
+      Delete(CombatCanvas, "all");
       Canvas_Create
         (CombatCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
@@ -974,12 +975,10 @@ package body Combat.UI is
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
         Winfo_Get(Frame, "ismapped") = "1" then
-         Tcl.Tk.Ada.Widgets.Canvas.Delete(CombatCanvas, "child");
          ShowCombatFrame(".boarding");
       end if;
       if PlayerShip.Crew(1).Order /= Boarding and
         Winfo_Get(Frame, "ismapped") = "0" then
-         Tcl.Tk.Ada.Widgets.Canvas.Delete(CombatCanvas, "child");
          ShowCombatFrame(".combat");
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
