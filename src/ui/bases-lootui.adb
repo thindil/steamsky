@@ -49,7 +49,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.LootUI is
 
-   -- ****o* LUI/Show_Loot_Command
+   -- ****o* LUI/LUI.Show_Loot_Command
    -- FUNCTION
    -- Show information about looting
    -- PARAMETERS
@@ -204,14 +204,14 @@ package body Bases.LootUI is
       return TCL_OK;
    end Show_Loot_Command;
 
-   -- ****if* LUI/ItemIndex
+   -- ****if* LUI/LUI.ItemIndex
    -- FUNCTION
    -- Index of the currently selected item
    -- SOURCE
    ItemIndex: Integer;
    -- ****
 
-   -- ****o* LUI/Show_Loot_Item_Info_Command
+   -- ****o* LUI/LUI.Show_Loot_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -447,7 +447,7 @@ package body Bases.LootUI is
       return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
-   -- ****o* LUI/Loot_Item_Command
+   -- ****o* LUI/LUI.Loot_Item_Command
    -- FUNCTION
    -- Take or drop the selected item
    -- PARAMETERS
