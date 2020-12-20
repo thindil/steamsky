@@ -1134,7 +1134,7 @@ package body Combat.UI is
       pragma Unreferenced(ClientData, Argc);
       Combobox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.combatframe.canvas.boarding.left.crew.order" &
+          (".gameframe.paned.combatframe.canvas.boarding.left.order" &
            CArgv.Arg(Argv, 1),
            Interp);
    begin
