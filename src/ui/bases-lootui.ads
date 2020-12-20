@@ -20,7 +20,7 @@
 package Bases.LootUI is
 -- ****
 
-   -- ****f* LUI/AddCommands
+   -- ****f* LUI/LUI.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the looting
    -- SOURCE
