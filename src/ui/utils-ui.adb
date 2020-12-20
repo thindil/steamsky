@@ -153,6 +153,7 @@ package body Utils.UI is
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
+      Tcl_Eval(Get_Context, "raise " & MessageDialog);
    end ShowMessage;
 
    procedure AddCommand
