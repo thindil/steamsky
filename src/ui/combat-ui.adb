@@ -782,6 +782,7 @@ package body Combat.UI is
       Canvas_Create
         (CombatCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
+      Tcl_Eval(Get_Context, "update");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -975,11 +976,15 @@ package body Combat.UI is
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
         Winfo_Get(Frame, "ismapped") = "1" then
+         UpdateBoardingUI;
          ShowCombatFrame(".boarding");
+         return TCL_OK;
       end if;
       if PlayerShip.Crew(1).Order /= Boarding and
         Winfo_Get(Frame, "ismapped") = "0" then
+         UpdateCombatUI;
          ShowCombatFrame(".combat");
+         return TCL_OK;
       end if;
       if Winfo_Get(Frame, "ismapped") = "1" then
          UpdateCombatUI;
