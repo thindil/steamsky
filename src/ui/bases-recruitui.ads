@@ -20,7 +20,7 @@
 package Bases.RecruitUI is
 -- ****
 
-   -- ****f* RecruitUI/AddCommands
+   -- ****f* RecruitUI/RecruitUI.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to recruit new crew members in bases
    -- SOURCE
