@@ -910,9 +910,7 @@ package body Combat.UI is
              (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-values [list " & To_String(OrdersList) & "] -state readonly");
-         Current
-           (ComboBox,
-            Natural'Image(BoardingOrders(Crew_Container.To_Index(I))));
+         Current(ComboBox, Natural'Image(BoardingOrders(OrderIndex)));
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
