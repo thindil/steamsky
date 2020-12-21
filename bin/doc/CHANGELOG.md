@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Ending combat turn with space key
 - Showing the lists of gunners in combat
 - Crash in combat when the player's ship doesn't have installed guns
+- Crash on giving order to back to ship in boarding combat
 
 ## [5.5] - 2020-11-29
 
