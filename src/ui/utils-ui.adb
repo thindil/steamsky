@@ -153,7 +153,7 @@ package body Utils.UI is
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
-      Tcl_Eval(Get_Context, "raise " & MessageDialog);
+      Widget_Raise(MessageDialog);
    end ShowMessage;
 
    procedure AddCommand
@@ -849,7 +849,7 @@ package body Utils.UI is
       Focus(InfoButton);
       Bind(InfoButton, "<Tab>", "{break}");
       Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
-      Tcl_Eval(Get_Context, "raise " & InfoDialog);
+      Widget_Raise(InfoDialog);
    end ShowInfo;
 
 end Utils.UI;
