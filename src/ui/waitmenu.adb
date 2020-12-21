@@ -33,8 +33,6 @@ with Utils.UI; use Utils.UI;
 
 package body WaitMenu is
 
-   SteamSky_Wait_Error: exception;
-
    function Show_Wait_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
@@ -50,7 +48,7 @@ package body WaitMenu is
       if Winfo_Get(WaitDialog, "exists") = "1" then
          Button := Get_Widget(WaitDialog & ".frame.close");
          if Invoke(Button) /= "" then
-            raise SteamSky_Wait_Error with "Can't hide wait menu";
+            return TCL_ERROR;
          end if;
          return TCL_OK;
       end if;
@@ -241,7 +239,7 @@ package body WaitMenu is
       UpdateHeader;
       DrawMap;
       if Invoke(CloseButton) /= "" then
-         raise SteamSky_Wait_Error with "Can't hide wait menu";
+         return TCL_ERROR;
       end if;
       return TCL_OK;
    end Wait_Command;
