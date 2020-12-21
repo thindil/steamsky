@@ -333,7 +333,7 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData, Interp, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemDialog: constant Ttk_Frame :=
@@ -383,7 +383,7 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
       Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Tcl_Eval(Interp, "raise " & ItemDialog);
+      Widget_Raise(ItemDialog);
       Bind(Button, "<Tab>", "{focus " & ItemDialog & ".movebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       return TCL_OK;
