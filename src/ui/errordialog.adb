@@ -13,14 +13,13 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar; use Ada.Calendar;
-with Ada.Calendar.Formatting;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.Time_Stamp; use GNAT.Time_Stamp;
 with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -49,18 +48,12 @@ package body ErrorDialog is
          Create
            (ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
       end if;
-      Append(ErrorText, Ada.Calendar.Formatting.Image(Clock));
-      Append(ErrorText, LF);
-      Append(ErrorText, GameVersion);
-      Append(ErrorText, LF);
-      Append(ErrorText, "Exception: " & Exception_Name(An_Exception));
-      Append(ErrorText, LF);
-      Append(ErrorText, "Message: " & Exception_Message(An_Exception));
-      Append(ErrorText, LF);
-      Append(ErrorText, "-------------------------------------------------");
-      Append(ErrorText, LF);
-      Append(ErrorText, Symbolic_Traceback(An_Exception));
-      Append(ErrorText, LF);
+      Append(ErrorText, Current_Time & LF);
+      Append(ErrorText, GameVersion & LF);
+      Append(ErrorText, "Exception: " & Exception_Name(An_Exception) & LF);
+      Append(ErrorText, "Message: " & Exception_Message(An_Exception) & LF);
+      Append(ErrorText, "-------------------------------------------------" & LF);
+      Append(ErrorText, Symbolic_Traceback(An_Exception) & LF);
       Append(ErrorText, "-------------------------------------------------");
       Put_Line(ErrorFile, To_String(ErrorText));
       Close(ErrorFile);
