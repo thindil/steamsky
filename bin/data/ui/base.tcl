@@ -1,4 +1,3 @@
-# bin/data/ui/base.tcl
 # Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
