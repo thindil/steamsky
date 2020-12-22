@@ -734,10 +734,11 @@ package body Combat.UI is
         Get_Widget(".gameframe.paned.combatframe");
       ChildFrame: Ttk_Frame :=
         Get_Widget
-          (CombatFrame &
-           Tcl.Tk.Ada.Grid.Grid_Slaves(CombatFrame, "-row 0 -column 0"));
+          (Tcl.Tk.Ada.Grid.Grid_Slaves(CombatFrame, "-row 0 -column 0"));
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+      if Widget_Image(ChildFrame) /= "" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+      end if;
       ChildFrame := Get_Widget(CombatFrame & FrameName);
       Tcl.Tk.Ada.Grid.Grid(ChildFrame);
    end ShowCombatFrame;
