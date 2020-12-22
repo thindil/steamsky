@@ -182,7 +182,7 @@ package body Combat.UI is
       -- ****
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe.canvas.combat.left.crew");
+        Get_Widget(".gameframe.paned.combatframe.combat.crew.canvas.frame");
       Item: Ttk_Frame;
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
@@ -355,7 +355,7 @@ package body Combat.UI is
             " -column 1");
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.canvas.combat.next}");
+            "{InvokeButton .gameframe.paned.combatframe.combat.next}");
          GunnerOrders := Null_Unbounded_String;
          for J in GunnersOrders'Range loop
             Append
@@ -370,7 +370,7 @@ package body Combat.UI is
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.canvas.combat.next}");
+            "{InvokeButton .gameframe.paned.combatframe.combat.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
@@ -443,8 +443,7 @@ package body Combat.UI is
                " -column 1 -columnspan 2 -sticky w");
          end;
       end if;
-      Frame.Name :=
-        New_String(".gameframe.paned.combatframe.canvas.combat.left.damage");
+      Frame.Name := New_String(".gameframe.paned.combatframe.combat.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 0 .. (Rows - 1) loop
@@ -466,7 +465,7 @@ package body Combat.UI is
                else Null_Unbounded_String);
             Label :=
               Create
-                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
+                (Frame & ".canvas.frame.lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(Module.Name) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
@@ -480,7 +479,7 @@ package body Combat.UI is
                else To_Unbounded_String(" -style Horizontal.TProgressbar"));
             ProgressBar :=
               Create
-                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
+                (Frame & ".canvas.frame.dmg" & Trim(Natural'Image(Row), Left),
                  "-orient horizontal -length 150 -maximum 1.0 -value" &
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
@@ -587,8 +586,7 @@ package body Combat.UI is
          Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
       end if;
       Label :=
-        Get_Widget
-          (".gameframe.paned.combatframe.canvas.combat.right.enemy.info");
+        Get_Widget(".gameframe.paned.combatframe.combat.enemy.canvas.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       declare
          SpaceIndex: Natural;
@@ -596,7 +594,7 @@ package body Combat.UI is
       begin
          Frame.Name :=
            New_String
-             (".gameframe.paned.combatframe.canvas.combat.right.status");
+             (".gameframe.paned.combatframe.combat.status.canvas.frame");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -666,48 +664,48 @@ package body Combat.UI is
          end loop;
          <<End_Of_Enemy_Modules_Loop>>
       end;
-      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
-        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
-         Frame.Name :=
-           New_String
-             (".gameframe.paned.combatframe.canvas.combat.right.boarding");
-         Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-         Rows := Natural'Value(Slice(Tokens, 2));
-         for I in 0 .. (Rows - 1) loop
-            Create
-              (Tokens,
-               Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-               " ");
-            for J in 1 .. Slice_Count(Tokens) loop
-               Item := Get_Widget(Slice(Tokens, J));
-               Destroy(Item);
-            end loop;
-         end loop;
-         declare
-            CheckButton: Ttk_CheckButton;
-         begin
-            Row := 1;
-            for Member of PlayerShip.Crew loop
-               CheckButton :=
-                 Create
-                   (Frame & ".board" & Trim(Positive'Image(Row), Left),
-                    "-text {" & To_String(Member.Name) & "} -variable board" &
-                    Trim(Positive'Image(Row), Left) &
-                    " -command {SetBoarding" & Positive'Image(Row) & "}");
-               if Member.Order = Boarding then
-                  Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
-                     "1");
-               else
-                  Tcl_SetVar
-                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
-                     "0");
-               end if;
-               Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Positive'Image(Row));
-               Row := Row + 1;
-            end loop;
-         end;
-      end if;
+--      if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
+--        ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
+--         Frame.Name :=
+--           New_String
+--             (".gameframe.paned.combatframe.canvas.combat.right.boarding");
+--         Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+--         Rows := Natural'Value(Slice(Tokens, 2));
+--         for I in 0 .. (Rows - 1) loop
+--            Create
+--              (Tokens,
+--               Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+--               " ");
+--            for J in 1 .. Slice_Count(Tokens) loop
+--               Item := Get_Widget(Slice(Tokens, J));
+--               Destroy(Item);
+--            end loop;
+--         end loop;
+--         declare
+--            CheckButton: Ttk_CheckButton;
+--         begin
+--            Row := 1;
+--            for Member of PlayerShip.Crew loop
+--               CheckButton :=
+--                 Create
+--                   (Frame & ".board" & Trim(Positive'Image(Row), Left),
+--                    "-text {" & To_String(Member.Name) & "} -variable board" &
+--                    Trim(Positive'Image(Row), Left) &
+--                    " -command {SetBoarding" & Positive'Image(Row) & "}");
+--               if Member.Order = Boarding then
+--                  Tcl_SetVar
+--                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
+--                     "1");
+--               else
+--                  Tcl_SetVar
+--                    (Frame.Interp, "board" & Trim(Positive'Image(Row), Left),
+--                     "0");
+--               end if;
+--               Tcl.Tk.Ada.Grid.Grid(CheckButton, "-row" & Positive'Image(Row));
+--               Row := Row + 1;
+--            end loop;
+--         end;
+--      end if;
       UpdateMessages;
    end UpdateCombatUI;
 
@@ -774,18 +772,16 @@ package body Combat.UI is
    -- SOURCE
    procedure ShowCombatFrame(FrameName: String) is
       -- ****
-      CombatCanvas: constant Tk_Canvas :=
-        Get_Widget(".gameframe.paned.combatframe.canvas");
-      CombatFrame: constant Ttk_Frame := Get_Widget(CombatCanvas & FrameName);
+      CombatFrame: constant Ttk_Frame :=
+        Get_Widget(".gameframe.paned.combatframe");
+      ChildFrame: Ttk_Frame :=
+        Get_Widget
+          (CombatFrame &
+           Tcl.Tk.Ada.Grid.Grid_Slaves(CombatFrame, "-row 0 -column 0"));
    begin
-      Delete(CombatCanvas, "all");
-      Canvas_Create
-        (CombatCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(CombatFrame));
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (CombatCanvas,
-         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+      ChildFrame := Get_Widget(CombatFrame & FrameName);
+      Tcl.Tk.Ada.Grid.Grid(ChildFrame);
    end ShowCombatFrame;
 
    -- ****if* CUI/UpdateBoardingUI
@@ -1266,11 +1262,10 @@ package body Combat.UI is
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
-      CombatCanvas: constant Tk_Canvas := Get_Widget(CombatFrame & ".canvas");
       CombatStarted: Boolean;
       Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
       EnemyFrame: constant Ttk_Frame :=
-        Get_Widget(CombatCanvas & ".combat.right.status");
+        Get_Widget(CombatFrame & ".combat.status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if NewCombat then
@@ -1295,7 +1290,6 @@ package body Combat.UI is
             Tcl_EvalFile
               (Get_Context,
                To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
-            Bind(CombatFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
             PilotOrder := 2;
             EngineerOrder := 3;
             AddCommand("SetPartyOrder", Set_Party_Order_Command'Access);
@@ -1305,7 +1299,7 @@ package body Combat.UI is
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
             AddCommand("SetCombatParty", Set_Combat_Party_Command'Access);
          else
-            Button.Name := New_String(CombatCanvas & ".combat.next");
+            Button.Name := New_String(CombatFrame & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
          end if;
@@ -1325,11 +1319,6 @@ package body Combat.UI is
          Delete(GameMenu, "4");
       end if;
       UpdateCombatUI;
-      configure
-        (CombatCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
       ShowCombatFrame(".combat");
       ShowScreen("combatframe");
    end ShowCombatUI;
