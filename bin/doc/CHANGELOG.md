@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Keyboard shortcut for the next turn in combat to Enter
 - Updated descriptions for harpoon guns and battering rams
+- Updated README.md
 
 ### Removed
 - Setting for the animations
