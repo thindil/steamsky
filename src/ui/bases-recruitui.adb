@@ -48,7 +48,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
 
-   -- ****o* RecruitUI/Show_Recruit_Command
+   -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
    -- Show the selected base available recruits
    -- PARAMETERS
@@ -126,14 +126,14 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Command;
 
-   -- ****iv* RecruitUI/RecruitIndex
+   -- ****iv* RecruitUI/RecruitUI.RecruitIndex
    -- FUNCTION
    -- The index of currently selected recruit
    -- SOURCE
    RecruitIndex: Positive;
    -- ****
 
-   -- ****o* RecruitUI/Show_Recruit_Info_Command
+   -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
    -- Show information about the selected recruit
    -- PARAMETERS
@@ -346,7 +346,7 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
-   -- ****o* RecruitUI/Negotiate_Hire_Command
+   -- ****o* RecruitUI/RecruitUI.Negotiate_Hire_Command
    -- FUNCTION
    -- Show information about the selected recruit
    -- PARAMETERS
@@ -447,7 +447,7 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Negotiate_Hire_Command;
 
-   -- ****o* RecruitUI/Hire_Command
+   -- ****o* RecruitUI/RecruitUI.Hire_Command
    -- FUNCTION
    -- Hire the selected recruit
    -- PARAMETERS
