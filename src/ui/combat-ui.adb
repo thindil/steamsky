@@ -182,7 +182,7 @@ package body Combat.UI is
       -- ****
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe.combat.crew.canvas.frame");
+        Get_Widget(".gameframe.paned.combatframe.crew.canvas.frame");
       Item: Ttk_Frame;
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
@@ -356,7 +356,7 @@ package body Combat.UI is
             " -column 1");
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.combat.next}");
+            "{InvokeButton .gameframe.paned.combatframe.next}");
          GunnerOrders := Null_Unbounded_String;
          for J in GunnersOrders'Range loop
             Append
@@ -371,7 +371,7 @@ package body Combat.UI is
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.combat.next}");
+            "{InvokeButton .gameframe.paned.combatframe.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
@@ -445,14 +445,13 @@ package body Combat.UI is
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas :=
-        Get_Widget(".gameframe.paned.combatframe.combat.crew.canvas");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.crew.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      Frame.Name := New_String(".gameframe.paned.combatframe.combat.damage");
+      Frame.Name := New_String(".gameframe.paned.combatframe.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 0 .. (Rows - 1) loop
@@ -499,8 +498,7 @@ package body Combat.UI is
          end if;
       end loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas :=
-        Get_Widget(".gameframe.paned.combatframe.combat.damage.canvas");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.damage.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -602,12 +600,10 @@ package body Combat.UI is
       if Length(Enemy.Ship.Description) > 0 then
          Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
       end if;
-      Label :=
-        Get_Widget(".gameframe.paned.combatframe.combat.enemy.canvas.info");
+      Label := Get_Widget(".gameframe.paned.combatframe.enemy.canvas.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas :=
-        Get_Widget(".gameframe.paned.combatframe.combat.enemy.canvas");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.enemy.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -618,8 +614,7 @@ package body Combat.UI is
          ModuleName: Unbounded_String;
       begin
          Frame.Name :=
-           New_String
-             (".gameframe.paned.combatframe.combat.status.canvas.frame");
+           New_String(".gameframe.paned.combatframe.status.canvas.frame");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
          for I in 0 .. (Rows - 1) loop
@@ -690,8 +685,7 @@ package body Combat.UI is
          <<End_Of_Enemy_Modules_Loop>>
       end;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas :=
-        Get_Widget(".gameframe.paned.combatframe.combat.status.canvas");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.status.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -768,12 +762,28 @@ package body Combat.UI is
       ChildFrame: Ttk_Frame :=
         Get_Widget
           (Tcl.Tk.Ada.Grid.Grid_Slaves(CombatFrame, "-row 0 -column 0"));
+      CombatChildren: constant array(1 .. 5) of Unbounded_String :=
+        (To_Unbounded_String(".crew"), To_Unbounded_String(".damage"),
+         To_Unbounded_String(".enemy"), To_Unbounded_String(".status"),
+         To_Unbounded_String(".next"));
    begin
-      if Widget_Image(ChildFrame) /= "" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+      if FrameName = ".combat" then
+         if Widget_Image(ChildFrame) = CombatFrame & ".crew" then
+            return;
+         end if;
+         Tcl_Eval
+           (Get_Context, "grid remove [grid slaves " & CombatFrame & "]");
+         for CombatChild of CombatChildren loop
+            ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
+            Tcl.Tk.Ada.Grid.Grid(ChildFrame);
+         end loop;
+      else
+         if Widget_Image(ChildFrame) = CombatFrame & ".left" then
+            return;
+         end if;
+         Tcl_Eval
+           (Get_Context, "grid remove [grid slaves " & CombatFrame & "]");
       end if;
-      ChildFrame := Get_Widget(CombatFrame & FrameName);
-      Tcl.Tk.Ada.Grid.Grid(ChildFrame);
    end ShowCombatFrame;
 
    -- ****if* CUI/UpdateBoardingUI
