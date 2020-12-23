@@ -13,10 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ttk::frame .gameframe.paned.combatframe
+set combatframe [ttk::frame .gameframe.paned.combatframe]
 
 # Ship to ship combat
-set combatframe [ttk::frame .gameframe.paned.combatframe.combat]
 # Player ship crew orders
 grid [ttk::labelframe $combatframe.crew -text {Your ship crew orders:}] -padx 5 -pady {0 5}
 set combatcanvas [canvas $combatframe.crew.canvas -yscrollcommand [list $combatframe.crew.scrolly set] -xscrollcommand [list $combatframe.crew.scrollx set]]
