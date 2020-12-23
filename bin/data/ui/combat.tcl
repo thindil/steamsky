@@ -87,3 +87,9 @@ grid [ttk::labelframe $boardingframe.right -text {Enemy's crew:}] -row 1 -column
 grid [ttk::label $boardingframe.right.name -text {Name}] -row 0 -column 0
 grid [ttk::label $boardingframe.right.health -text {Health}] -row 0 -column 1
 grid [ttk::label $boardingframe.right.order -text {Order}] -row 0 -column 2
+
+# Configure main combat grid
+grid columnconfigure $combatframe 0 -weight 1
+grid columnconfigure $combatframe 1 -weight 1
+grid rowconfigure $combatframe 0 -weight 1
+grid rowconfigure $combatframe 1 -weight 1
