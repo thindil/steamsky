@@ -75,7 +75,8 @@ tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of kn
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.stories.scrolly
 ::autoscroll::autoscroll $knowledgeframe.stories.scrollx
-# Configure main ship info grid
+
+# Configure main knowledge info grid
 grid columnconfigure $knowledgeframe 0 -weight 1
 grid columnconfigure $knowledgeframe 1 -weight 1
 grid rowconfigure $knowledgeframe 0 -weight 1
