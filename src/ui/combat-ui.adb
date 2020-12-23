@@ -766,13 +766,16 @@ package body Combat.UI is
         (To_Unbounded_String(".crew"), To_Unbounded_String(".damage"),
          To_Unbounded_String(".enemy"), To_Unbounded_String(".status"),
          To_Unbounded_String(".next"));
+      BoardingChildren: constant array (1 .. 3) of Unbounded_String := (To_Unbounded_String(".left"), To_Unbounded_String(".right"), To_Unbounded_String(".next"));
    begin
       if FrameName = ".combat" then
-         if Widget_Image(ChildFrame) = CombatFrame & ".crew" then
+         if Widget_Image(ChildFrame) = CombatFrame & To_String(CombatChildren(1)) then
             return;
          end if;
-         Tcl_Eval
-           (Get_Context, "grid remove [grid slaves " & CombatFrame & "]");
+         for BoardingChild of BoardingChildren loop
+            ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
+            Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+         end loop;
          for CombatChild of CombatChildren loop
             ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
             Tcl.Tk.Ada.Grid.Grid(ChildFrame);
@@ -781,8 +784,14 @@ package body Combat.UI is
          if Widget_Image(ChildFrame) = CombatFrame & ".left" then
             return;
          end if;
-         Tcl_Eval
-           (Get_Context, "grid remove [grid slaves " & CombatFrame & "]");
+         for CombatChild of CombatChildren loop
+            ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
+            Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
+         end loop;
+         for BoardingChild of BoardingChildren loop
+            ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
+            Tcl.Tk.Ada.Grid.Grid(ChildFrame);
+         end loop;
       end if;
    end ShowCombatFrame;
 
