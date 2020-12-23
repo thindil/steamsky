@@ -37,7 +37,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
 
-   -- ****o* SchoolUI/Show_School_Command
+   -- ****o* SchoolUI/SchoolUI.Show_School_Command
    -- FUNCTION
    -- Show the selected base school
    -- PARAMETERS
@@ -111,14 +111,14 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_School_Command;
 
-      -- ****iv* SchoolUI/MemberIndex
+      -- ****iv* SchoolUI/SchoolUI.MemberIndex
       -- FUNCTION
       -- The currently selected crew member index
       -- SOURCE
    MemberIndex: Positive;
    -- ****
 
-   -- ****o* SchoolUI/Show_Training_Info_Command
+   -- ****o* SchoolUI/SchoolUI.Show_Training_Info_Command
    -- FUNCTION
    -- Show training costs for the selected crew member
    -- PARAMETERS
@@ -195,7 +195,7 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_Training_Info_Command;
 
-   -- ****o* SchoolUI/Train_Skill_Command
+   -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
    -- FUNCTION
    -- Train the selected skill
    -- PARAMETERS
