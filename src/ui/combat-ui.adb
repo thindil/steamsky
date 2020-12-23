@@ -199,6 +199,7 @@ package body Combat.UI is
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
       DamagePercent: Float;
+      CombatCanvas: Tk_Canvas;
       function GetCrewList(Position: Natural) return String is
          SkillIndex, SkillValue: Natural := 0;
          SkillString: Unbounded_String;
@@ -443,6 +444,14 @@ package body Combat.UI is
                " -column 1 -columnspan 2 -sticky w");
          end;
       end if;
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas :=
+        Get_Widget(".gameframe.paned.combatframe.combat.crew.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       Frame.Name := New_String(".gameframe.paned.combatframe.combat.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -489,6 +498,14 @@ package body Combat.UI is
             Row := Row + 1;
          end if;
       end loop;
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas :=
+        Get_Widget(".gameframe.paned.combatframe.combat.damage.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       if Winfo_Get(Frame, "children") = "" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       else
@@ -588,6 +605,14 @@ package body Combat.UI is
       Label :=
         Get_Widget(".gameframe.paned.combatframe.combat.enemy.canvas.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas :=
+        Get_Widget(".gameframe.paned.combatframe.combat.enemy.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       declare
          SpaceIndex: Natural;
          ModuleName: Unbounded_String;
@@ -664,6 +689,14 @@ package body Combat.UI is
          end loop;
          <<End_Of_Enemy_Modules_Loop>>
       end;
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas :=
+        Get_Widget(".gameframe.paned.combatframe.combat.status.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       UpdateMessages;
    end UpdateCombatUI;
 
