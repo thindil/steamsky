@@ -17,7 +17,7 @@ set combatframe [ttk::frame .gameframe.paned.combatframe]
 
 # Ship to ship combat
 # Player ship crew orders
-grid [ttk::labelframe $combatframe.crew -text {Your ship crew orders:}] -padx 5 -pady {0 5}
+grid [ttk::labelframe $combatframe.crew -text {Your ship crew orders:}] -padx 5 -pady {0 5} -sticky nwes
 set combatcanvas [canvas $combatframe.crew.canvas -yscrollcommand [list $combatframe.crew.scrolly set] -xscrollcommand [list $combatframe.crew.scrollx set]]
 pack [ttk::scrollbar $combatframe.crew.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.crew.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -42,7 +42,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.crew.scrolly
 ::autoscroll::autoscroll $combatframe.crew.scrollx
 # Player ship damage
-grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -sticky we -padx 5 -pady {5 0}
+grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 -pady {5 0} -sticky nwes
 set combatcanvas [canvas $combatframe.damage.canvas -yscrollcommand [list $combatframe.damage.scrolly set] -xscrollcommand [list $combatframe.damage.scrollx set]]
 pack [ttk::scrollbar $combatframe.damage.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.damage.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -52,7 +52,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.damage.scrolly
 ::autoscroll::autoscroll $combatframe.damage.scrollx
 # Enemy ship info
-grid [ttk::labelframe $combatframe.enemy -text {Enemy info:}] -sticky we -padx 5 -pady {0 5} -column 1 -row 0
+grid [ttk::labelframe $combatframe.enemy -text {Enemy info:}] -sticky nwes -padx 5 -pady {0 5} -column 1 -row 0
 set combatcanvas [canvas $combatframe.enemy.canvas -yscrollcommand [list $combatframe.enemy.scrolly set] -xscrollcommand [list $combatframe.enemy.scrollx set]]
 pack [ttk::scrollbar $combatframe.enemy.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.enemy.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -62,7 +62,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.info
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage
-grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] -sticky we -padx 5 -pady {5 0} -column 1 -row 1
+grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] -sticky nwes -padx 5 -pady {5 0} -column 1 -row 1
 set combatcanvas [canvas $combatframe.status.canvas -yscrollcommand [list $combatframe.status.scrolly set] -xscrollcommand [list $combatframe.status.scrollx set]]
 pack [ttk::scrollbar $combatframe.status.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.status.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -76,11 +76,11 @@ bind $combatframe.next <Return> {InvokeButton $combatframe.next}
 focus $combatframe.next
 
 # Boarding combat
-grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky n
+grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky nwes
 grid [ttk::label $combatframe.left.name -text {Name}] -row 0 -column 0
 grid [ttk::label $combatframe.left.health -text {Health}] -row 0 -column 1
 grid [ttk::label $combatframe.left.order -text {Order}] -row 0 -column 2
-grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 1 -column 1 -sticky n
+grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 1 -column 1 -sticky nwes
 grid [ttk::label $combatframe.right.name -text {Name}] -row 0 -column 0
 grid [ttk::label $combatframe.right.health -text {Health}] -row 0 -column 1
 grid [ttk::label $combatframe.right.order -text {Order}] -row 0 -column 2
