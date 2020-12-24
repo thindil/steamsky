@@ -195,7 +195,7 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their hull "));
       GunIndex, GunnerOrders, EnemyInfo, ProgressBarStyle,
       Font: Unbounded_String;
-      HaveAmmo: Boolean;
+      HaveAmmo, HasDamage: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
       DamagePercent: Float;
@@ -451,6 +451,7 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
+      -- Show player ship damage info if needed
       Frame.Name := New_String(".gameframe.paned.combatframe.damage");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -464,6 +465,7 @@ package body Combat.UI is
             Destroy(Item);
          end loop;
       end loop;
+      HasDamage := False;
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             Font :=
@@ -495,6 +497,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
             Row := Row + 1;
+            HasDamage := True;
          end if;
       end loop;
       Tcl_Eval(Get_Context, "update");
@@ -504,7 +507,7 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      if Winfo_Get(Frame, "children") = "" then
+      if not HasDamage then
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       else
          Tcl.Tk.Ada.Grid.Grid(Frame);
@@ -766,10 +769,13 @@ package body Combat.UI is
         (To_Unbounded_String(".crew"), To_Unbounded_String(".damage"),
          To_Unbounded_String(".enemy"), To_Unbounded_String(".status"),
          To_Unbounded_String(".next"));
-      BoardingChildren: constant array (1 .. 3) of Unbounded_String := (To_Unbounded_String(".left"), To_Unbounded_String(".right"), To_Unbounded_String(".next"));
+      BoardingChildren: constant array(1 .. 3) of Unbounded_String :=
+        (To_Unbounded_String(".left"), To_Unbounded_String(".right"),
+         To_Unbounded_String(".next"));
    begin
       if FrameName = ".combat" then
-         if Widget_Image(ChildFrame) = CombatFrame & To_String(CombatChildren(1)) then
+         if Widget_Image(ChildFrame) =
+           CombatFrame & To_String(CombatChildren(1)) then
             return;
          end if;
          for BoardingChild of BoardingChildren loop
