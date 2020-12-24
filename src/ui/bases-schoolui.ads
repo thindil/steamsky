@@ -20,7 +20,7 @@
 package Bases.SchoolUI is
 -- ****
 
-   -- ****f* SchoolUI/AddCommands
+   -- ****f* SchoolUI/SchoolUI.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to training skills in bases
    -- SOURCE
