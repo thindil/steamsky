@@ -76,17 +76,16 @@ bind $combatframe.next <Return> {InvokeButton $combatframe.next}
 focus $combatframe.next
 
 # Boarding combat
-set boardingframe [ttk::frame .gameframe.paned.combatframe.boarding]
-grid [ttk::button $boardingframe.next -text {Next turn [Enter]} -command NextTurn] -columnspan 2 -sticky we
-bind . <Return> {InvokeButton $boardingframe.next}
-grid [ttk::labelframe $boardingframe.left -text {Your crew:}] -sticky n
-grid [ttk::label $boardingframe.left.name -text {Name}] -row 0 -column 0
-grid [ttk::label $boardingframe.left.health -text {Health}] -row 0 -column 1
-grid [ttk::label $boardingframe.left.order -text {Order}] -row 0 -column 2
-grid [ttk::labelframe $boardingframe.right -text {Enemy's crew:}] -row 1 -column 1 -sticky n
-grid [ttk::label $boardingframe.right.name -text {Name}] -row 0 -column 0
-grid [ttk::label $boardingframe.right.health -text {Health}] -row 0 -column 1
-grid [ttk::label $boardingframe.right.order -text {Order}] -row 0 -column 2
+grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky n
+grid [ttk::label $combatframe.left.name -text {Name}] -row 0 -column 0
+grid [ttk::label $combatframe.left.health -text {Health}] -row 0 -column 1
+grid [ttk::label $combatframe.left.order -text {Order}] -row 0 -column 2
+grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 1 -column 1 -sticky n
+grid [ttk::label $combatframe.right.name -text {Name}] -row 0 -column 0
+grid [ttk::label $combatframe.right.health -text {Health}] -row 0 -column 1
+grid [ttk::label $combatframe.right.order -text {Order}] -row 0 -column 2
+grid remove $combatframe.left
+grid remove $combatframe.right
 
 # Configure main combat grid
 grid columnconfigure $combatframe 0 -weight 1
