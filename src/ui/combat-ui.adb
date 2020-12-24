@@ -452,7 +452,8 @@ package body Combat.UI is
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
       -- Show player ship damage info if needed
-      Frame.Name := New_String(".gameframe.paned.combatframe.damage");
+      Frame.Name :=
+        New_String(".gameframe.paned.combatframe.damage.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       for I in 0 .. (Rows - 1) loop
@@ -475,7 +476,7 @@ package body Combat.UI is
                else Null_Unbounded_String);
             Label :=
               Create
-                (Frame & ".canvas.frame.lbl" & Trim(Natural'Image(Row), Left),
+                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(Module.Name) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
@@ -489,7 +490,7 @@ package body Combat.UI is
                else To_Unbounded_String(" -style Horizontal.TProgressbar"));
             ProgressBar :=
               Create
-                (Frame & ".canvas.frame.dmg" & Trim(Natural'Image(Row), Left),
+                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
                  "-orient horizontal -length 150 -maximum 1.0 -value" &
                  Float'Image(DamagePercent) & To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
@@ -1083,7 +1084,7 @@ package body Combat.UI is
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name :=
            New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame..engineerorder");
+             (".gameframe.paned.combatframe.crew.canvas.frame.engineerorder");
          EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
