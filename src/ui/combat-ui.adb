@@ -1316,13 +1316,23 @@ package body Combat.UI is
            New_String
              (".gameframe.paned.combatframe.crew.canvas.frame.pilotcrew");
          CrewIndex := Positive'Value(Current(ComboBox));
-         GiveOrders(PlayerShip, CrewIndex, Pilot);
+         if CrewIndex > 0 then
+            GiveOrders(PlayerShip, CrewIndex, Pilot);
+         else
+            CrewIndex := FindMember(Pilot);
+            GiveOrders(PlayerShip, CrewIndex, Rest);
+         end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name :=
            New_String
              (".gameframe.paned.combatframe.crew.canvas.frame.engineercrew");
          CrewIndex := Positive'Value(Current(ComboBox));
-         GiveOrders(PlayerShip, CrewIndex, Engineer);
+         if CrewIndex > 0 then
+            GiveOrders(PlayerShip, CrewIndex, Engineer);
+         else
+            CrewIndex := FindMember(Engineer);
+            GiveOrders(PlayerShip, CrewIndex, Rest);
+         end if;
       else
          ComboBox.Name :=
            New_String
@@ -1330,9 +1340,14 @@ package body Combat.UI is
               CArgv.Arg(Argv, 2));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Positive'Value(Current(ComboBox));
-         GiveOrders(PlayerShip, CrewIndex, Gunner, Guns(GunIndex)(1));
+         if CrewIndex > 0 then
+            GiveOrders(PlayerShip, CrewIndex, Gunner, Guns(GunIndex)(1));
+         else
+            CrewIndex := PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1);
+            GiveOrders(PlayerShip, CrewIndex, Rest);
+         end if;
       end if;
-      UpdateMessages;
+      UpdateCombatUI;
       return TCL_OK;
    end Set_Combat_Position_Command;
 
