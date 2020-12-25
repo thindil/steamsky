@@ -1102,7 +1102,7 @@ package body Combat.UI is
       else
          ComboBox.Name :=
            New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame..gunorder" &
+             (".gameframe.paned.combatframe.crew.canvas.frame.gunorder" &
               CArgv.Arg(Argv, 1));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 1));
          Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
