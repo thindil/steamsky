@@ -49,7 +49,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.ShipyardUI is
 
-   -- ****if* ShipyardUI/GetModuleType
+   -- ****if* ShipyardUI/ShipyardUI.GetModuleType
    -- FUNCTION
    -- Get type of selected module
    -- PARAMETERS
@@ -70,7 +70,7 @@ package body Bases.ShipyardUI is
       return To_String(ModuleTypeName);
    end GetModuleType;
 
-   -- ****f* ShipyardUI/Show_Shipyard_Command
+   -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
    -- FUNCTION
    -- Show the selected base shipyard
    -- PARAMETERS
@@ -200,12 +200,12 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Shipyard_Command;
 
-   -- ****iv* ShipyardUI/ModuleIndex
+   -- ****iv* ShipyardUI/ShipyardUI.ModuleIndex
    -- SOURCE
    ModuleIndex: Unbounded_String;
    -- ****
 
-   -- ****if* ShipyardUI/SetModuleInfo
+   -- ****if* ShipyardUI/ShipyardUI.SetModuleInfo
    -- FUNCTION
    -- Show information about selected module
    -- PARAMETERS
@@ -413,7 +413,7 @@ package body Bases.ShipyardUI is
       end if;
    end SetModuleInfo;
 
-   -- ****f* ShipyardUI/Show_Install_Info_Command
+   -- ****f* ShipyardUI/ShipyardUI.Show_Install_Info_Command
    -- FUNCTION
    -- Show information about the selected module to install
    -- PARAMETERS
@@ -522,7 +522,7 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Install_Info_Command;
 
-   -- ****f* ShipyardUI/Manipulate_Module_Command
+   -- ****f* ShipyardUI/ShipyardUI.Manipulate_Module_Command
    -- FUNCTION
    -- Install or remove the selected module
    -- PARAMETERS
@@ -583,7 +583,7 @@ package body Bases.ShipyardUI is
          return TCL_OK;
    end Manipulate_Module_Command;
 
-   -- ****f* ShipyardUI/Show_Remove_Info_Command
+   -- ****f* ShipyardUI/ShipyardUI.Show_Remove_Info_Command
    -- FUNCTION
    -- Show information about the selected module to remove
    -- PARAMETERS
@@ -718,7 +718,7 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Remove_Info_Command;
 
-   -- ****if* ShipyardUI/Search_Shipyard_Command
+   -- ****if* ShipyardUI/ShipyardUI.Search_Shipyard_Command
    -- FUNCTION
    -- Show only this items which contains the selected sequence
    -- PARAMETERS
