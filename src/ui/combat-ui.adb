@@ -508,6 +508,7 @@ package body Combat.UI is
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
+      Frame.Name := New_String(".gameframe.paned.combatframe.damage");
       if not HasDamage then
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       else
