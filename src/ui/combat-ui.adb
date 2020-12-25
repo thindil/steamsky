@@ -788,7 +788,8 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid(ChildFrame);
          end loop;
       else
-         if Widget_Image(ChildFrame) = CombatFrame & ".left" then
+         if Widget_Image(ChildFrame) =
+           CombatFrame & To_String(BoardingChildren(1)) then
             return;
          end if;
          for CombatChild of CombatChildren loop
