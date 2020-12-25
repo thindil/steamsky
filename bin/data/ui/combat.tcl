@@ -29,12 +29,14 @@ grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
 grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 -sticky w -padx {5 0} -pady {0 5}
 grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] -row 1 -column 1 -pady {0 5}
 bind $combatcanvas.frame.pilotcrew <Return> {InvokeButton $combatframe.next}
+bind $combatcanvas.frame.pilotcrew <<ComboboxSelected>> {SetCombatPosition pilot}
 grid [ttk::combobox $combatcanvas.frame.pilotorder -state readonly -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 1 -column 2 -padx {0 5} -pady {0 5}
 bind $combatcanvas.frame.pilotorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotorder <<ComboboxSelected>> {SetCombatOrder pilot}
 grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 -sticky w -padx {5 0} -pady {5 0}
 grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] -row 2 -column 1 -pady {5 0}
 bind $combatcanvas.frame.engineercrew <Return> {InvokeButton $combatframe.next}
+bind $combatcanvas.frame.engineercrew <<ComboboxSelected>> {SetCombatPosition engineer}
 grid [ttk::combobox $combatcanvas.frame.engineerorder -state readonly -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] -row 2 -column 2 -padx {0 5} -pady {5 0}
 bind $combatcanvas.frame.engineerorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}

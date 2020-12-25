@@ -357,6 +357,9 @@ package body Combat.UI is
          Bind
            (ComboBox, "<Return>",
             "{InvokeButton .gameframe.paned.combatframe.next}");
+         Bind
+           (ComboBox, "<<ComboboxSelected>>",
+            "{SetCombatPosition gunner " & To_String(GunIndex) & "}");
          GunnerOrders := Null_Unbounded_String;
          for J in GunnersOrders'Range loop
             Append
@@ -1277,6 +1280,62 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Party_Command;
 
+   -- ****if* CUI/Set_Combat_Position_Command
+   -- FUNCTION
+   -- Set crew member position (pilot, engineer, gunner) in combat
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCombatPosition position
+   -- Position is the combat crew member position which will be set
+   -- SOURCE
+   function Set_Combat_Position_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Combat_Position_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ComboBox: Ttk_ComboBox;
+      GunIndex: Positive;
+      CrewIndex: Natural;
+   begin
+      ComboBox.Interp := Interp;
+      if CArgv.Arg(Argv, 1) = "pilot" then
+         ComboBox.Name :=
+           New_String
+             (".gameframe.paned.combatframe.crew.canvas.frame.pilotcrew");
+         CrewIndex := Positive'Value(Current(ComboBox));
+         GiveOrders(PlayerShip, CrewIndex, Pilot);
+      elsif CArgv.Arg(Argv, 1) = "engineer" then
+         ComboBox.Name :=
+           New_String
+             (".gameframe.paned.combatframe.crew.canvas.frame.engineercrew");
+         CrewIndex := Positive'Value(Current(ComboBox));
+         GiveOrders(PlayerShip, CrewIndex, Engineer);
+      else
+         ComboBox.Name :=
+           New_String
+             (".gameframe.paned.combatframe.crew.canvas.frame.gunorder" &
+              CArgv.Arg(Argv, 2));
+         GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
+         CrewIndex := Positive'Value(Current(ComboBox));
+         GiveOrders(PlayerShip, CrewIndex, Gunner, Guns(GunIndex)(1));
+      end if;
+      UpdateMessages;
+      return TCL_OK;
+   end Set_Combat_Position_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
@@ -1316,6 +1375,8 @@ package body Combat.UI is
             AddCommand("SetCombatOrder", Set_Combat_Order_Command'Access);
             AddCommand("SetBoardingOrder", Set_Boarding_Order_Command'Access);
             AddCommand("SetCombatParty", Set_Combat_Party_Command'Access);
+            AddCommand
+              ("SetCombatPosition", Set_Combat_Position_Command'Access);
          else
             Button.Name := New_String(CombatFrame & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
