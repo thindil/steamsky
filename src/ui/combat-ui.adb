@@ -268,11 +268,25 @@ package body Combat.UI is
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
+      if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientships")) and
+        FindMember(Pilot) = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+      else
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+      end if;
       ComboBox.Name := New_String(Frame & ".engineercrew");
       configure(ComboBox, "-values [list " & GetCrewList(1) & "]");
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
       ComboBox.Name := New_String(Frame & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
+      if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+          (To_Unbounded_String("sentientships")) and
+        FindMember(Engineer) = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+      else
+         Tcl.Tk.Ada.Grid.Grid(ComboBox);
+      end if;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
       for I in 3 .. (Rows - 1) loop
