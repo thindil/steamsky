@@ -44,7 +44,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.crew.scrolly
 ::autoscroll::autoscroll $combatframe.crew.scrollx
 # Player ship damage
-grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 -pady {5 0} -sticky nwes
+grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 -pady 5 -sticky nwes
 set combatcanvas [canvas $combatframe.damage.canvas -yscrollcommand [list $combatframe.damage.scrolly set] -xscrollcommand [list $combatframe.damage.scrollx set]]
 pack [ttk::scrollbar $combatframe.damage.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.damage.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -64,7 +64,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.info
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage
-grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] -sticky nwes -padx 5 -pady {5 0} -column 1 -row 1
+grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] -sticky nwes -padx 5 -pady 5 -column 1 -row 1
 set combatcanvas [canvas $combatframe.status.canvas -yscrollcommand [list $combatframe.status.scrolly set] -xscrollcommand [list $combatframe.status.scrollx set]]
 pack [ttk::scrollbar $combatframe.status.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.status.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
