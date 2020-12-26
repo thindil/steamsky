@@ -1124,9 +1124,7 @@ package body Ships.UI.Crew is
       ComboBox.Interp := Interp;
       for I in PlayerShip.Crew(MemberIndex).Orders'Range loop
          ComboBox.Name :=
-           New_String
-             (".memberdialog.canvas.frame.level" &
-              Trim(Positive'Image(I), Left));
+           New_String(".memberdialog.level" & Trim(Positive'Image(I), Left));
          Current
            (ComboBox, Natural'Image(PlayerShip.Crew(MemberIndex).Orders(I)));
       end loop;
