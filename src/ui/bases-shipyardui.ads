@@ -20,7 +20,7 @@
 package Bases.ShipyardUI is
 -- ****
 
-   -- ****f* ShipyardUI/AddCommands
+   -- ****f* ShipyardUI/ShipyardUI.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to installing/removing ship modules
    -- SOURCE
