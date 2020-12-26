@@ -89,6 +89,8 @@ grid [ttk::label $combatcanvas.frame.name -text {Name}]
 grid [ttk::label $combatcanvas.frame.health -text {Health}] -row 0 -column 1
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
+::autoscroll::autoscroll $combatframe.left.scrolly
+::autoscroll::autoscroll $combatframe.left.scrollx
 # Enemy defending party
 grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 0 -column 1 -sticky nwes -rowspan 2
 set combatcanvas [canvas $combatframe.right.canvas -yscrollcommand [list $combatframe.right.scrolly set] -xscrollcommand [list $combatframe.right.scrollx set]]
@@ -100,6 +102,8 @@ grid [ttk::label $combatcanvas.frame.name -text {Name}]
 grid [ttk::label $combatcanvas.frame.health -text {Health}] -row 0 -column 1
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
+::autoscroll::autoscroll $combatframe.right.scrolly
+::autoscroll::autoscroll $combatframe.right.scrollx
 grid remove $combatframe.left
 grid remove $combatframe.right
 
