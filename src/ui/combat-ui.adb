@@ -827,7 +827,7 @@ package body Combat.UI is
    -- SOURCE
    procedure UpdateBoardingUI is
       -- ****
-      OrdersList, OrderName, Tooltip: Unbounded_String;
+      OrdersList, OrderName: Unbounded_String;
       Frame: Ttk_Frame :=
         Get_Widget(".gameframe.paned.combatframe.right.canvas.frame");
       Label: Ttk_Label;
@@ -838,6 +838,7 @@ package body Combat.UI is
       ComboBox: Ttk_ComboBox;
       OrderIndex: Positive := 1;
       CombatCanvas: Tk_Canvas;
+      Button: Ttk_Button;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -853,29 +854,23 @@ package body Combat.UI is
       end loop;
       for I in Enemy.Ship.Crew.Iterate loop
          Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
-         Tooltip := To_Unbounded_String("Uses: ");
-         for Item of Enemy.Ship.Crew(I).Equipment loop
-            if Item /= 0 then
-               Append
-                 (Tooltip,
-                  LF & GetItemName(Enemy.Ship.Crew(I).Inventory(Item)));
-            end if;
-         end loop;
-         Label :=
+         Button :=
            Create
              (Frame & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(Enemy.Ship.Crew(I).Name) & "}");
-         Add(Label, To_String(Tooltip));
+              "-text {" & To_String(Enemy.Ship.Crew(I).Name) &
+              "} -command {ShowCombatInfo enemy" &
+              Positive'Image(Crew_Container.To_Index(I)) & "}");
+         Add(Button, "Show more information about the enemy's crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+           (Button, "-row" & Positive'Image(Crew_Container.To_Index(I)));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(Enemy.Ship.Crew(I).Health));
-         Add(ProgressBar, To_String(Tooltip));
+         Add(ProgressBar, "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
@@ -889,7 +884,7 @@ package body Combat.UI is
              (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
               "-text {" & To_String(OrderName) & "}");
-         Add(Label, To_String(Tooltip));
+         Add(Label, "Enemy's current order.");
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
@@ -920,29 +915,23 @@ package body Combat.UI is
          if PlayerShip.Crew(I).Order /= Boarding then
             goto End_Of_Loop;
          end if;
-         Tooltip := To_Unbounded_String("Uses: ");
-         for Item of PlayerShip.Crew(I).Equipment loop
-            if Item /= 0 then
-               Append
-                 (Tooltip,
-                  LF & GetItemName(PlayerShip.Crew(I).Inventory(Item)));
-            end if;
-         end loop;
-         Label :=
+         Button :=
            Create
              (Frame & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) & "}");
-         Add(Label, To_String(Tooltip));
+              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "} -command {ShowCombatInfo player" &
+              Positive'Image(Crew_Container.To_Index(I)) & "}");
+         Add(Button, "Show more information about the crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+           (Button, "-row" & Positive'Image(Crew_Container.To_Index(I)));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(PlayerShip.Crew(I).Health));
-         Add(ProgressBar, To_String(Tooltip));
+         Add(ProgressBar, "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
@@ -956,7 +945,7 @@ package body Combat.UI is
            (ComboBox, "<<ComboboxSelected>>",
             "{SetBoardingOrder" & Positive'Image(Crew_Container.To_Index(I)) &
             Positive'Image(OrderIndex) & "}");
-         Add(ComboBox, To_String(Tooltip));
+         Add(ComboBox, "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
@@ -1380,6 +1369,59 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Position_Command;
 
+   -- ****if* CUI/Show_Combat_Info_Command
+   -- FUNCTION
+   -- Show information about the selected mob in combat
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetCombatPosition player|enemy index
+   -- Position is the combat crew member position which will be set
+   -- SOURCE
+   function Show_Combat_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Combat_Info_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      CrewIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
+      Info: Unbounded_String;
+   begin
+      Info := To_Unbounded_String("Uses: ");
+      if CArgv.Arg(Argv, 1) = "player" then
+         for Item of PlayerShip.Crew(CrewIndex).Equipment loop
+            if Item /= 0 then
+               Append
+                 (Info,
+                  LF &
+                  GetItemName(PlayerShip.Crew(CrewIndex).Inventory(Item)));
+            end if;
+         end loop;
+      else
+         for Item of Enemy.Ship.Crew(CrewIndex).Equipment loop
+            if Item /= 0 then
+               Append
+                 (Info,
+                  LF &
+                  GetItemName(Enemy.Ship.Crew(CrewIndex).Inventory(Item)));
+            end if;
+         end loop;
+      end if;
+      ShowInfo(To_String(Info));
+      return TCL_OK;
+   end Show_Combat_Info_Command;
+
    procedure ShowCombatUI(NewCombat: Boolean := True) is
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
@@ -1421,6 +1463,7 @@ package body Combat.UI is
             AddCommand("SetCombatParty", Set_Combat_Party_Command'Access);
             AddCommand
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
+            AddCommand("ShowCombatInfo", Show_Combat_Info_Command'Access);
          else
             Button.Name := New_String(CombatFrame & ".combat.next");
             Tcl.Tk.Ada.Grid.Grid(Button);
