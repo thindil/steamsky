@@ -79,7 +79,7 @@ focus $combatframe.next
 
 # Boarding combat
 # Player boarding team
-grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky nwes -row 0 -column 0 -rowspan 2
+grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky nwes -row 0 -column 0 -rowspan 2 -padx 5 -pady 5
 set combatcanvas [canvas $combatframe.left.canvas -yscrollcommand [list $combatframe.left.scrolly set] -xscrollcommand [list $combatframe.left.scrollx set]]
 pack [ttk::scrollbar $combatframe.left.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.left.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
@@ -92,7 +92,7 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.left.scrolly
 ::autoscroll::autoscroll $combatframe.left.scrollx
 # Enemy defending party
-grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 0 -column 1 -sticky nwes -rowspan 2
+grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 0 -column 1 -sticky nwes -rowspan 2 -padx 5 -pady 5
 set combatcanvas [canvas $combatframe.right.canvas -yscrollcommand [list $combatframe.right.scrolly set] -xscrollcommand [list $combatframe.right.scrollx set]]
 pack [ttk::scrollbar $combatframe.right.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.right.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
