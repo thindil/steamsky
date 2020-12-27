@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.6] - 2020-12-27
 
 ### Added
 - Zooming in and out map with the mouse wheel
