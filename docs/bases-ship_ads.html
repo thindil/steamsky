@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -36,10 +36,10 @@
 <li>1.2. <a href="#robo335">Ship/Ship.BasesShip_Nothing_To_Repair</a></li>
 <li>1.3. <a href="#robo336">Ship/Ship.BasesShip_Removing_Error</a></li>
 <li>1.4. <a href="#robo337">Ship/Ship.BasesShip_Unique_Module</a></li>
-<li>1.5. <a href="#robo523">Ship/Ship.PayForDock</a></li>
-<li>1.6. <a href="#robo524">Ship/Ship.RepairCost</a></li>
-<li>1.7. <a href="#robo525">Ship/Ship.RepairShip</a></li>
-<li>1.8. <a href="#robo526">Ship/Ship.UpgradeShip</a></li>
+<li>1.5. <a href="#robo524">Ship/Ship.PayForDock</a></li>
+<li>1.6. <a href="#robo525">Ship/Ship.RepairCost</a></li>
+<li>1.7. <a href="#robo526">Ship/Ship.RepairShip</a></li>
+<li>1.8. <a href="#robo527">Ship/Ship.UpgradeShip</a></li>
 </ul>
 </ul>
 <hr />
@@ -104,7 +104,7 @@
 
 <hr />
 <a name="Ship2fShip2ePayForDock"></a>
-<a name="robo523"></a><h2>Ship/Ship.PayForDock [ Subprograms ]</h2>
+<a name="robo524"></a><h2>Ship/Ship.PayForDock [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo8">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -117,21 +117,21 @@
 
 <hr />
 <a name="Ship2fShip2eRepairCost"></a>
-<a name="robo524"></a><h2>Ship/Ship.RepairCost [ Subprograms ]</h2>
+<a name="robo525"></a><h2>Ship/Ship.RepairCost [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo8">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Count cost and time of repairs of player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> RepairCost<span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> <a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> RepairCost<span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span> ModuleIndex<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>ModuleIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_RepairCost"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Cost        - Overall cost of repair of player ship
  Time        - Time needed for repair of player ship
- <a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> - Index of module on player ship to repair or 0 to repair
+ ModuleIndex - Index of module on player ship to repair or 0 to repair
                all damage modules
 </pre>
 <p class="item_name">RESULT</p>
@@ -140,44 +140,44 @@
 
 <hr />
 <a name="Ship2fShip2eRepairShip"></a>
-<a name="robo525"></a><h2>Ship/Ship.RepairShip [ Subprograms ]</h2>
+<a name="robo526"></a><h2>Ship/Ship.RepairShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo8">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Repairs player ship in bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./ships-repairs_ads.html#robo550">RepairShip</a><span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a><span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./ships_ads.html#robo308">PlayerShip</a><span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> RepairShip<span class="sign">(</span>ModuleIndex<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>ModuleIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span>Modules<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_RepairShip"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> - Index of player ship module to repair or 0 to repair whole
+<pre> ModuleIndex - Index of player ship module to repair or 0 to repair whole
                ship
 </pre>
 
 <hr />
 <a name="Ship2fShip2eUpgradeShip"></a>
-<a name="robo526"></a><h2>Ship/Ship.UpgradeShip [ Subprograms ]</h2>
+<a name="robo527"></a><h2>Ship/Ship.UpgradeShip [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo8">Ship</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Install or remove modules on player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./ships-upgrade_ads.html#robo582">UpgradeShip</a><span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> <a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a><span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
+<pre class="source">   <span class="keyword">procedure</span> UpgradeShip<span class="sign">(</span>Install<span class="sign">:</span> Boolean<span class="sign">;</span> ModuleIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>ModuleIndex <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdgradeShip"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Install     - If True, perform module installation on player ship. On
                False, remove module
- <a href="./ui/bases-shipyardui_adb.html#robo313">ModuleIndex</a> - Index of prototype module to install or remove
+ ModuleIndex - Index of prototype module to install or remove
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
+<p>Generated from ./src/bases-ship.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:04
 </p>
 </div> <!-- footer -->
 </body>
