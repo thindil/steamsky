@@ -837,6 +837,7 @@ package body Combat.UI is
       ProgressBar: Ttk_ProgressBar;
       ComboBox: Ttk_ComboBox;
       OrderIndex: Positive := 1;
+      CombatCanvas: Tk_Canvas;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -893,6 +894,13 @@ package body Combat.UI is
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
       end loop;
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.right.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       Append(OrdersList, " {Back to the ship}");
       Frame.Name :=
         New_String(".gameframe.paned.combatframe.left.canvas.frame");
@@ -955,6 +963,13 @@ package body Combat.UI is
          OrderIndex := OrderIndex + 1;
          <<End_Of_Loop>>
       end loop;
+      Tcl_Eval(Get_Context, "update");
+      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.left.canvas");
+      configure
+        (CombatCanvas,
+         "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
+      Xview_Move_To(CombatCanvas, "0.0");
+      Yview_Move_To(CombatCanvas, "0.0");
       UpdateMessages;
    end UpdateBoardingUI;
 
