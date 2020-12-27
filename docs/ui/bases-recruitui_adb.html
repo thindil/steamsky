@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,34 +30,34 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo305">RecruitUI/RecruitIndex</a></li>
-<li>2. <a href="#robo695">RecruitUI/Hire_Command</a></li>
-<li>3. <a href="#robo696">RecruitUI/Negotiate_Hire_Command</a></li>
-<li>4. <a href="#robo697">RecruitUI/Show_Recruit_Command</a></li>
-<li>5. <a href="#robo698">RecruitUI/Show_Recruit_Info_Command</a></li>
+<li>1. <a href="#robo305">RecruitUI/RecruitUI.RecruitIndex</a></li>
+<li>2. <a href="#robo695">RecruitUI/RecruitUI.Hire_Command</a></li>
+<li>3. <a href="#robo696">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
+<li>4. <a href="#robo697">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
+<li>5. <a href="#robo698">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
 </ul>
 <hr />
-<a name="RecruitUI2fRecruitIndex"></a>
-<a name="robo305"></a><h2>RecruitUI/RecruitIndex [ Variables ]</h2>
+<a name="RecruitUI2fRecruitUI2eRecruitIndex"></a>
+<a name="robo305"></a><h2>RecruitUI/RecruitUI.RecruitIndex [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> The index of currently selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>RecruitIndex</strong><span class="sign">:</span> Positive<span class="sign">;</span>
+<pre class="source">   RecruitIndex<span class="sign">:</span> Positive<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="RecruitUI2fHire5fCommand"></a>
-<a name="robo695"></a><h2>RecruitUI/Hire_Command [ Commands ]</h2>
+<a name="RecruitUI2fRecruitUI2eHire5fCommand"></a>
+<a name="robo695"></a><h2>RecruitUI/RecruitUI.Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Hire the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Hire_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Hire_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -77,15 +77,15 @@
 </pre>
 
 <hr />
-<a name="RecruitUI2fNegotiate5fHire5fCommand"></a>
-<a name="robo696"></a><h2>RecruitUI/Negotiate_Hire_Command [ Commands ]</h2>
+<a name="RecruitUI2fRecruitUI2eNegotiate5fHire5fCommand"></a>
+<a name="robo696"></a><h2>RecruitUI/RecruitUI.Negotiate_Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Negotiate_Hire_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Negotiate_Hire_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -105,15 +105,15 @@
 </pre>
 
 <hr />
-<a name="RecruitUI2fShow5fRecruit5fCommand"></a>
-<a name="robo697"></a><h2>RecruitUI/Show_Recruit_Command [ Commands ]</h2>
+<a name="RecruitUI2fRecruitUI2eShow5fRecruit5fCommand"></a>
+<a name="robo697"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show the selected base available recruits
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Recruit_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Recruit_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -133,15 +133,15 @@
 </pre>
 
 <hr />
-<a name="RecruitUI2fShow5fRecruit5fInfo5fCommand"></a>
-<a name="robo698"></a><h2>RecruitUI/Show_Recruit_Info_Command [ Commands ]</h2>
+<a name="RecruitUI2fRecruitUI2eShow5fRecruit5fInfo5fCommand"></a>
+<a name="robo698"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about the selected recruit
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Recruit_Info_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Recruit_Info_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -162,7 +162,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
+<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:04
 </p>
 </div> <!-- footer -->
 </body>

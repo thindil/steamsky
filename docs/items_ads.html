@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -47,14 +47,14 @@
 <li>1.13. <a href="#robo281">Items/Items.Shields_List</a></li>
 <li>1.14. <a href="#robo282">Items/Items.Tools_List</a></li>
 <li>1.15. <a href="#robo283">Items/Items.Weapons_List</a></li>
-<li>1.16. <a href="#robo443">Items/Items.DamageItem</a></li>
-<li>1.17. <a href="#robo444">Items/Items.FindItem</a></li>
-<li>1.18. <a href="#robo445">Items/Items.FindProtoItem</a></li>
-<li>1.19. <a href="#robo446">Items/Items.GetItemChanceToDamage</a></li>
-<li>1.20. <a href="#robo447">Items/Items.GetItemDamage</a></li>
-<li>1.21. <a href="#robo448">Items/Items.GetItemName</a></li>
-<li>1.22. <a href="#robo449">Items/Items.LoadItems</a></li>
-<li>1.23. <a href="#robo450">Items/Items.SetToolsList</a></li>
+<li>1.16. <a href="#robo444">Items/Items.DamageItem</a></li>
+<li>1.17. <a href="#robo445">Items/Items.FindItem</a></li>
+<li>1.18. <a href="#robo446">Items/Items.FindProtoItem</a></li>
+<li>1.19. <a href="#robo447">Items/Items.GetItemChanceToDamage</a></li>
+<li>1.20. <a href="#robo448">Items/Items.GetItemDamage</a></li>
+<li>1.21. <a href="#robo449">Items/Items.GetItemName</a></li>
+<li>1.22. <a href="#robo450">Items/Items.LoadItems</a></li>
+<li>1.23. <a href="#robo451">Items/Items.SetToolsList</a></li>
 </ul>
 </ul>
 <hr />
@@ -285,7 +285,7 @@
 
 <hr />
 <a name="Items2fItems2eDamageItem"></a>
-<a name="robo443"></a><h2>Items/Items.DamageItem [ Subprograms ]</h2>
+<a name="robo444"></a><h2>Items/Items.DamageItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -293,17 +293,17 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> DamageItem
-     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo18">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Inventory_Container<span class="sign">.</span>Vector<span class="sign">;</span> <a href="./ui/trades-ui_adb.html#robo589">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span>
-      SkillLevel<span class="sign">,</span> <a href="./ui/bases-schoolui_adb.html#robo306">MemberIndex</a><span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/trades-ui_adb.html#robo589">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo18">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
+     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo18">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Inventory_Container<span class="sign">.</span>Vector<span class="sign">;</span> <a href="./ui/trades-ui_adb.html#robo590">ItemIndex</a><span class="sign">:</span> Positive<span class="sign">;</span>
+      SkillLevel<span class="sign">,</span> MemberIndex<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><a href="./ui/trades-ui_adb.html#robo590">ItemIndex</a> <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo18">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_DamageItem"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> <a href="./crew-inventory_ads.html#robo18">Inventory</a>   - <a href="./crew-inventory_ads.html#robo18">Inventory</a> in which selected item is
- <a href="./ui/trades-ui_adb.html#robo589">ItemIndex</a>   - <a href="./crew-inventory_ads.html#robo18">Inventory</a> index of selected item
+ <a href="./ui/trades-ui_adb.html#robo590">ItemIndex</a>   - <a href="./crew-inventory_ads.html#robo18">Inventory</a> index of selected item
  SkillLevel  - Level of skill character which uses that item. Default
                is 0
- <a href="./ui/bases-schoolui_adb.html#robo306">MemberIndex</a> - Index of crew member of player ship which uses that
+ MemberIndex - Index of crew member of player ship which uses that
                item. Default is 0
 </pre>
 <p class="item_name">RESULT</p>
@@ -312,7 +312,7 @@
 
 <hr />
 <a name="Items2fItems2eFindItem"></a>
-<a name="robo444"></a><h2>Items/Items.FindItem [ Subprograms ]</h2>
+<a name="robo445"></a><h2>Items/Items.FindItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -339,7 +339,7 @@
 
 <hr />
 <a name="Items2fItems2eFindProtoItem"></a>
-<a name="robo445"></a><h2>Items/Items.FindProtoItem [ Subprograms ]</h2>
+<a name="robo446"></a><h2>Items/Items.FindProtoItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -360,7 +360,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemChanceToDamage"></a>
-<a name="robo446"></a><h2>Items/Items.GetItemChanceToDamage [ Subprograms ]</h2>
+<a name="robo447"></a><h2>Items/Items.GetItemChanceToDamage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -379,7 +379,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemDamage"></a>
-<a name="robo447"></a><h2>Items/Items.GetItemDamage [ Subprograms ]</h2>
+<a name="robo448"></a><h2>Items/Items.GetItemDamage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -402,7 +402,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemName"></a>
-<a name="robo448"></a><h2>Items/Items.GetItemName [ Subprograms ]</h2>
+<a name="robo449"></a><h2>Items/Items.GetItemName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -425,7 +425,7 @@
 
 <hr />
 <a name="Items2fItems2eLoadItems"></a>
-<a name="robo449"></a><h2>Items/Items.LoadItems [ Subprograms ]</h2>
+<a name="robo450"></a><h2>Items/Items.LoadItems [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -440,7 +440,7 @@
 
 <hr />
 <a name="Items2fItems2eSetToolsList"></a>
-<a name="robo450"></a><h2>Items/Items.SetToolsList [ Subprograms ]</h2>
+<a name="robo451"></a><h2>Items/Items.SetToolsList [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo31">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -452,7 +452,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
+<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:04
 </p>
 </div> <!-- footer -->
 </body>

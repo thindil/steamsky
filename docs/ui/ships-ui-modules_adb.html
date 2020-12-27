@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.5 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,36 +30,23 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo339">SUModules/SteamSky_ShipUI_Error</a></li>
-<li>2. <a href="#robo580">SUModules/Show_Module_Menu_Command</a></li>
-<li>3. <a href="#robo727">SUModules/Assign_Module_Command</a></li>
-<li>4. <a href="#robo728">SUModules/Cancel_Order_Command</a></li>
-<li>5. <a href="#robo729">SUModules/Disable_Engine_Command</a></li>
-<li>6. <a href="#robo730">SUModules/Rename_Module_Command</a></li>
-<li>7. <a href="#robo731">SUModules/Reset_Destination_Command</a></li>
-<li>8. <a href="#robo732">SUModules/Set_Repair_Command</a></li>
-<li>9. <a href="#robo733">SUModules/Set_Upgrade_Command</a></li>
-<li>10. <a href="#robo734">SUModules/Show_Assign_Crew_Command</a></li>
-<li>11. <a href="#robo735">SUModules/Show_Assign_Skill_Command</a></li>
-<li>12. <a href="#robo736">SUModules/Show_Module_Info_Command</a></li>
-<li>13. <a href="#robo737">SUModules/Stop_Upgrading_Command</a></li>
-<li>14. <a href="#robo738">SUModules/Update_Assign_Crew_Command</a></li>
+<li>1. <a href="#robo581">SUModules/Show_Module_Menu_Command</a></li>
+<li>2. <a href="#robo727">SUModules/Assign_Module_Command</a></li>
+<li>3. <a href="#robo728">SUModules/Cancel_Order_Command</a></li>
+<li>4. <a href="#robo729">SUModules/Disable_Engine_Command</a></li>
+<li>5. <a href="#robo730">SUModules/Get_Active_Button_Command</a></li>
+<li>6. <a href="#robo731">SUModules/Reset_Destination_Command</a></li>
+<li>7. <a href="#robo732">SUModules/Set_Repair_Command</a></li>
+<li>8. <a href="#robo733">SUModules/Set_Upgrade_Command</a></li>
+<li>9. <a href="#robo734">SUModules/Show_Assign_Crew_Command</a></li>
+<li>10. <a href="#robo735">SUModules/Show_Assign_Skill_Command</a></li>
+<li>11. <a href="#robo736">SUModules/Show_Module_Info_Command</a></li>
+<li>12. <a href="#robo737">SUModules/Stop_Upgrading_Command</a></li>
+<li>13. <a href="#robo738">SUModules/Update_Assign_Crew_Command</a></li>
 </ul>
 <hr />
-<a name="SUModules2fSteamSky5fShipUI5fError"></a>
-<a name="robo339"></a><h2>SUModules/SteamSky_ShipUI_Error [ Exceptions ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Raised when there are any problems with ship UI
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <strong>SteamSky_ShipUI_Error</strong><span class="sign">:</span> <span class="keyword">exception</span><span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="SUModules2fShow5fModule5fMenu5fCommand"></a>
-<a name="robo580"></a><h2>SUModules/Show_Module_Menu_Command [ Subprograms ]</h2>
+<a name="robo581"></a><h2>SUModules/Show_Module_Menu_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -83,7 +70,7 @@
 </pre>
 <p class="item_name">COMMANDS</p>
 <pre> ShowModuleMenu moduleindex
- <a href="./bases-shipyardui_adb.html#robo313">ModuleIndex</a> is the index of the module's menu to show
+ ModuleIndex is the index of the module's menu to show
 </pre>
 
 <hr />
@@ -178,15 +165,15 @@
 </pre>
 
 <hr />
-<a name="SUModules2fRename5fModule5fCommand"></a>
-<a name="robo730"></a><h2>SUModules/Rename_Module_Command [ Commands ]</h2>
+<a name="SUModules2fGet5fActive5fButton5fCommand"></a>
+<a name="robo730"></a><h2>SUModules/Get_Active_Button_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo64">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Change name of the selected player's ship module
+<pre> Get the next active button in assing crew dialog
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Rename_Module_Command</strong>
+<pre class="source">   <span class="keyword">function</span> <strong>Get_Active_Button_Command</strong>
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -202,8 +189,9 @@
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> RenameModule moduleindex
- Moduleindex is the index of the module which name will be changed
+<pre> GetActiveButton crewindex
+ Crewindex is the index of the crew member which is currently selected
+ or 0 for close button
 </pre>
 
 <hr />
@@ -342,7 +330,7 @@
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
+ Interp     - Tcl interpreter in which command was executed. Unused
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
@@ -381,7 +369,7 @@
 </pre>
 <p class="item_name">COMMANDS</p>
 <pre> ShowModuleInfo moduleindex
- <a href="./bases-shipyardui_adb.html#robo313">ModuleIndex</a> is the index of the module to show
+ ModuleIndex is the index of the module to show
 </pre>
 
 <hr />
@@ -445,7 +433,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Nov 29 2020 06:40:50
+<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:03
 </p>
 </div> <!-- footer -->
 </body>
