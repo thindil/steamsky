@@ -44,7 +44,7 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
 
-   -- ****o* BUI/Show_Base_UI_Command
+   -- ****o* BUI/BUI.Show_Base_UI_Command
    -- FUNCTION
    -- Show the selected base action
    -- PARAMETERS
@@ -213,7 +213,7 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Base_UI_Command;
 
-   -- ****o* BUI/Show_Item_Info_Command
+   -- ****o* BUI/BUI.Show_Item_Info_Command
    -- FUNCTION
    -- Show the information about the selected item
    -- PARAMETERS
@@ -358,7 +358,7 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Item_Info_Command;
 
-   -- ****o* BUI/Base_Action_Command
+   -- ****o* BUI/BUI.Base_Action_Command
    -- FUNCTION
    -- Execute the selected action
    -- PARAMETERS
@@ -404,7 +404,7 @@ package body Bases.UI is
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Base_Action_Command;
 
-   -- ****o* BUI/Search_Recipes_Command
+   -- ****o* BUI/BUI.Search_Recipes_Command
    -- FUNCTION
    -- Show only this recipes which contains the selected sequence
    -- PARAMETERS
