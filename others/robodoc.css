@@ -30,25 +30,25 @@
 
 body
 {
-    background-color:    rgb(23,23,23);
-    color:               rgb(238,232,170);
-    font-family:         Arial, serif;
+    background-color:    #303536;
+    color:               #DDDDDD;
+    font-family: Verdana, serif;
     border-color:        rgb(226,199,143);
 }
 
 pre
 {
-    font-family:      monospace;
+    font:        Monospace;
     margin:      15px;
     padding:     5px;
     white-space: pre;
-    color:       #ebdbb2;
+    color:       #f8f8f2;
 }
 
 pre.source
 {
-    background-color: #1d2021;
-    border: dashed #aa9 1px;
+    background-color: black;
+    border: solid #DDDDDD 1px;
 }
 
 p
@@ -66,8 +66,8 @@ p.item_name
 #content
 {
     font-size:           100%;
-    color:               rgb(238,232,170);
-    background-color:    rgb(23,23,23);
+    color:               #DDDDDD;
+    background-color:    #1D2021;
     border-left-width:   0px; 
     border-right-width:  0px; 
     border-top-width:    0px; 
@@ -77,56 +77,51 @@ p.item_name
     border-top-style:    none; 
     border-bottom-style: none;
     padding:             40px 31px 14px 17px;
-    border-color:        rgb(0,0,0);
+    border-color:        #44475a;
     text-align:          justify;
 }
 
 #navigation
 {
-    background-color: rgb(98,84,55);
-    color:            rgb(230,221,202);
-    font-family:      "Times New Roman", serif;
+    background-color: #161819;
+    color:            #DDDDDD;
     font-style:       normal;
-    border-color:     rgb(0,0,0);
+    border-color:     #161819;
 }
 
 a.menuitem
 {
     font-size: 120%;
-    background-color:    rgb(0,0,0);
-    color:               rgb(195,165,100);
+    background-color:    #161819;
+    color:               #66a8c7;
     font-variant:        normal;
     text-transform:      none;
     font-weight:         normal;
     padding:             1px 8px 3px 1px;
-    margin-left:         5px; 
-    margin-right:        5px; 
-    margin-top:          5px; 
-    margin-bottom:       5px;
-    border-color:        rgb(159,126,57);
+    margin:              5px; 
+    border-color:        #282a36;
     text-align:          right;
 }
 
 #logo, #logo a
 {
     font-size: 130%;
-    background-color:   #3c3836;
-    color:              #fbf17c;
-    font-family:        Georgia, serif;
+    background-color:   #303536;
+    color:              #888888;
     font-style:         normal;
     font-variant:       normal;
     text-transform:     none;
     font-weight:        bold;
     padding:            20px 18px 20px 18px;
-    border-color:       rgb(255,255,255);
+    border-color:       #f8f8f2;
     text-align:         right;
 }
 
 #extra, #extra a
 {
     font-size: 128%;
-    background-color:    rgb(0,0,0);
-    color:               rgb(230,221,202);
+    background-color:    #282a36;
+    color:               #ffb86c;
     font-style:          normal;
     font-variant:        normal;
     text-transform:      none;
@@ -140,20 +135,19 @@ a.menuitem
     border-top-style:    none; 
     border-bottom-style: none;
     padding: 12px 12px 12px 12px;
-    border-color:        rgb(195,165,100);
+    border-color:        #ffb86c;
     text-align:          center;
 }
 
 #content a
 {
-    color:              #d79921;
+    color:              #66a8c7;
     text-decoration:    none;
 }
 
 #content a:hover, #content a:active
 {
-    color:              #282828;
-    background-color:   #d79921;
+    color:              white;
 }
 
 a.indexitem
@@ -163,8 +157,6 @@ a.indexitem
 
 h1, h2, h3, h4, h5, h6
 {
-    background-color: #3c3836;
-    font-family:      Arial, serif;
     font-style:       normal;
     font-variant:     normal;
     text-transform:   none;
@@ -203,13 +195,15 @@ h6
 
 #navigation a
 {
-    text-decoration: none;
+   text-decoration: none;
+   float: left;
+   display: block;
 }
 
 .menuitem:hover
 {
-    background-color:   rgb(195,165,100);
-    color:              rgb(0,0,0);
+    background-color:   #ff8000;
+    color:              #282a36;
 }
 
 #extra a
@@ -229,13 +223,17 @@ h6
 /* layout */
 #navigation
 {
-    width:       22%; 
-    position:    relative; 
-    top:         0; 
-    right:       0; 
-    float:       right; 
-    text-align:  center;
-    margin-left: 10px;
+    position:    fixed;
+    top:         0;
+    width:       100%;
+}
+
+#logo
+{
+   margin-top: 50px;
+   margin-left: auto;
+   margin-right: auto;
+   width: 50%;
 }
 
 .menuitem       {width: auto;}
@@ -245,8 +243,6 @@ h6
 
 div#footer
 {
-    background-color: #3c3836;
-    color:      #a89984;
     clear:      left;
     width:      100%;
     font-size:   71%;
@@ -254,10 +250,13 @@ div#footer
 
 div#footer a
 {
-    background-color: #3c3836;
-    color:            #a89984;
+    color:           #ff5555;
 }
 
+div#footer a:hover
+{
+    color:           #ffb86c;
+}
 div#footer p
 {
     margin:0;
@@ -266,32 +265,32 @@ div#footer p
 
 span.keyword
 {
-    color: #b16286;
+    color: #8be9fd;
 }
 
 span.comment
 {
-    color: #080;
+    color: #6272a4;
 }
 
 span.quote
 {
-    color: #cc241d;
+    color: #50fa7b;
 }
 
 span.squote
 {
-    color: #cc241d;
+    color: #ff79c6;
 }
 
 span.sign
 {
-    color: #d65d0e;
+    color: #ff5555;
 }
 
 span.line_number
 {
-    color: #808080;
+    color: #f1fa8c;
 }
 
 @media print
