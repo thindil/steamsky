@@ -14,14 +14,16 @@ There are currently 2 versions of the game:
 * 5.x: "development" version of game, future version 6.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *master* branch. **This** version.
+  Source code for this version is in the *trunk* branch. **This** version. If you
+  read this file on Github: **please don't send pull requests here**. All will
+  be automatically closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/repositories/steamsky) repository.
 
 ## Build game from sources
 
 ### Docker way
 
 You can use Docker images `adabuild` and `adabuildwin64` from the project
-[dockerada](https://github.com/thindil/dockerada). They contain all libraries
+[Docker Ada](https://www.laeran.pl/repositories/dockerada). They contain all libraries
 and compiler needed to build the game.
 
 To build the game for Linux, download `adabuild` image and type in console:
@@ -38,7 +40,7 @@ To build(works on Linux and Windows too) you need:
 
 * compiler - GCC with enabled Ada support or GNAT from:
 
-  https://www.adacore.com/download/
+  <https://www.adacore.com/download/>
 
   The game does not work with old compilers (like GCC 4.9) since it
   lacks full support for Ada 2012
@@ -46,16 +48,16 @@ To build(works on Linux and Windows too) you need:
 * XmlAda - if you use GNAT from AdaCore it is included in package. In other
   situation, you may need to download it from:
 
-  https://github.com/AdaCore/xmlada
+  <https://github.com/AdaCore/xmlada>
 
 * Tcl/Tk library. Should be available in every Linux distribution. For
   Windows, it is recommended to use MagicSplat version:
 
-  https://www.magicsplat.com/tcl-installer/index.html
+  <https://www.magicsplat.com/tcl-installer/index.html>
 
 * TASHY library with included binding to Tk and TkLib. You can get it from:
 
-   https://github.com/thindil/tashy
+   <https://www.laeran.pl/repositories/tashy>
 
    **Important:** To build this version of Steam Sky you will need the 8.6.11
    version of the library or above. Earlier versions will not work due to lack
@@ -91,7 +93,7 @@ To generate (or regenerate) code documentation, you need [ROBODoc](https://rfsbe
 If you have it, in main program directory (where this file is) enter terminal
 command: `others/generatedocs.tcl`. For more information about this script,
 please look [here](https://github.com/thindil/roboada#generatedocspy). This
-version of script have set all default settings for Hunter code. If you have
+version of script have set all default settings for Steam Sky code. If you have
 [Bob](https://github.com/thindil/bob) installed, you can type `bob docs`.
 
 ## Running Steam Sky
@@ -156,7 +158,7 @@ of the game, you can also use all of this starting parameters.
 ### Testing versions
 
 Here are available testing versions of the game. You can find them
-in [Actions](https://github.com/thindil/steamsky/actions?query=workflow%3A"Continuous+Integration+-+development+version").
+in [Github Actions](https://github.com/thindil/steamsky/actions?query=workflow%3A"Continuous+Integration+-+development+version").
 Just select option from the list of results to see Artifacts list.
 To use them, first you must download normal release. Then, for Linux: inside
 directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
@@ -182,7 +184,7 @@ For detailed information about contributing to the project
 see [CONTRIBUTING.md](bin/doc/CONTRIBUTING.md)
 
 ## Licenses
-The game is made available under the [GPLv3](bin/doc/COPYING) license.
+The game is available under the GPLv3 license.
 
 The XmlAda library distributed with the game are also under the GPLv3 license.
 
@@ -202,7 +204,7 @@ The Licensing for the fonts distributed with the game is as follows:
 
 The changelog and a copy of the GPLv3 license can be found in the [doc](bin/doc) directory.
 
-
+---
 That's all for now, as usual, I have probably forgotten about something important ;)
 
 Bartek thindil Jasicki
