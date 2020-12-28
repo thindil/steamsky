@@ -20,7 +20,7 @@
 package Bases.UI is
 -- ****
 
-   -- ****f* BUI/AddCommands
+   -- ****f* BUI/BUI.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to actions in bases
    -- SOURCE
