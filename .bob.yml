@@ -65,4 +65,8 @@ version: 2.0
    execute:
       - fossil sync
       - fossil git export
+      - cd ../5.0
+      - git push
    description: Update remove Fossil repository and its Git mirror
+   flags:
+      - unixpath
