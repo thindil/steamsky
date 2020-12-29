@@ -1,13 +1,10 @@
 ## Bugs reporting
 
 Bugs and game crashes are not the only problems, but typos too. If you find any bugs
-in the game, please report it at <https://github.com/thindil/steamsky/issues>
-or if you prefer, on mail <thindil@laeran.pl>
+in the game, please report it at options available at [contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact)
 
 ### Some general hints about reporting bugs
 
-* If you use Github issues, it is recommended to use the bug report template.
-  It contains advice for the desired information included in the report.
 * In the "Title" field try to write short but not a too vague description
   of the problem. Good example: "Game crashed when entering base". Bad example:
   "Game crashes often."
@@ -52,7 +49,7 @@ you can find at top of this file). General rule about propositions is
 same as for bugs reports - please, try to write as much information as
 possible. This help us better understand the purpose of your changes.
 
-List of things which I wish to add to the game, can be found [here](https://github.com/thindil/steamsky/projects/1)
+List of things which I wish to add to the game, can be found [here](https://www.laeran.pl/repositories/steamsky/wiki?name=To-Do)
 Please read carefully the description on how to discuss or how they will be
 implemented in the game.
 
@@ -119,13 +116,6 @@ documentation. Steam sky uses `-- ` for start all documentation lines.
 11 - Documentation footer. Steam Sky uses `-- ****` for closing documentation.
 
 How to generate the code documentation is described in main *README.md* file.
-
-### Code submission
-
-The Preferred way to submit your code is to clone repository and then open new pull
-proposal at <https://github.com/thindil/steamsky/compare>. But if you prefer,
-you can send your code by mail too (email address is at top of this file). In
-that situation, please append to your mail the patch file with changes.
 
 ## Additional debugging options
 
