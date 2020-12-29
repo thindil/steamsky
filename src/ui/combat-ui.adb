@@ -61,7 +61,7 @@ with Utils.UI; use Utils.UI;
 
 package body Combat.UI is
 
-   -- ****if* CUI/GetGunSpeed
+   -- ****if* CUI/CUI.GetGunSpeed
    -- FUNCTION
    -- Get information about fire rate of selected gun with selected order
    -- PARAMETERS
@@ -100,7 +100,7 @@ package body Combat.UI is
       return To_String(Firerate);
    end GetGunSpeed;
 
-   -- ****if* CUI/UpdateMessages
+   -- ****if* CUI/CUI.UpdateMessages
    -- FUNCTION
    -- Update in-game messages in combat
    -- SOURCE
@@ -174,7 +174,7 @@ package body Combat.UI is
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
    end UpdateMessages;
 
-   -- ****if* CUI/UpdateCombatUI
+   -- ****if* CUI/CUI.UpdateCombatUI
    -- FUNCTION
    -- Update information about combat: remove old UI and create new elements
    -- SOURCE
@@ -716,7 +716,7 @@ package body Combat.UI is
       UpdateMessages;
    end UpdateCombatUI;
 
-   -- ****if* CUI/Set_Party_Order_Command
+   -- ****if* CUI/CUI.Set_Party_Order_Command
    -- FUNCTION
    -- Set boarding or defending order for the selected crew member
    -- PARAMETERS
@@ -773,7 +773,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Party_Order_Command;
 
-   -- ****if* CUI/ShowCombatFrame
+   -- ****if* CUI/CUI.ShowCombatFrame
    -- FUNCTION
    -- Show ship to ship combat UI or boarding UI
    -- SOURCE
@@ -821,7 +821,7 @@ package body Combat.UI is
       end if;
    end ShowCombatFrame;
 
-   -- ****if* CUI/UpdateBoardingUI
+   -- ****if* CUI/CUI.UpdateBoardingUI
    -- FUNCTION
    -- Update information about boarding party: remove old UI and create new elements
    -- SOURCE
@@ -962,7 +962,7 @@ package body Combat.UI is
       UpdateMessages;
    end UpdateBoardingUI;
 
-   -- ****if* CUI/Next_Turn_Command
+   -- ****if* CUI/CUI.Next_Turn_Command
    -- FUNCTION
    -- Execute combat orders and go to next turn
    -- PARAMETERS
@@ -1027,7 +1027,7 @@ package body Combat.UI is
       return TCL_OK;
    end Next_Turn_Command;
 
-   -- ****if* CUI/Show_Combat_UI_Command
+   -- ****if* CUI/CUI.Show_Combat_UI_Command
    -- FUNCTION
    -- Show combat UI
    -- PARAMETERS
@@ -1057,7 +1057,7 @@ package body Combat.UI is
       return TCL_OK;
    end Show_Combat_UI_Command;
 
-   -- ****if* CUI/Set_Combat_Order_Command
+   -- ****if* CUI/CUI.Set_Combat_Order_Command
    -- FUNCTION
    -- Set combat order for the selected crew member
    -- PARAMETERS
@@ -1143,7 +1143,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Order_Command;
 
-   -- ****o* CUI/Set_Boarding_Order_Command
+   -- ****o* CUI/CUI.Set_Boarding_Order_Command
    -- FUNCTION
    -- Set boarding order for the selected player's ship crew member
    -- PARAMETERS
@@ -1185,7 +1185,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Boarding_Order_Command;
 
-   -- ****o* CUI/Set_Combat_Party_Command
+   -- ****o* CUI/CUI.Set_Combat_Party_Command
    -- FUNCTION
    -- Set combat party (boarding or defenders)
    -- PARAMETERS
@@ -1298,7 +1298,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Party_Command;
 
-   -- ****if* CUI/Set_Combat_Position_Command
+   -- ****if* CUI/CUI.Set_Combat_Position_Command
    -- FUNCTION
    -- Set crew member position (pilot, engineer, gunner) in combat
    -- PARAMETERS
@@ -1369,7 +1369,7 @@ package body Combat.UI is
       return TCL_OK;
    end Set_Combat_Position_Command;
 
-   -- ****if* CUI/Show_Combat_Info_Command
+   -- ****if* CUI/CUI.Show_Combat_Info_Command
    -- FUNCTION
    -- Show information about the selected mob in combat
    -- PARAMETERS
