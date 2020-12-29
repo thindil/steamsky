@@ -5,24 +5,21 @@ pack $tradecanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.tradeframe.scrollx -orient horizontal -command [list $tradecanvas xview]] -fill x
 set tradeframe [ttk::frame $tradecanvas.trade]
 # Type of items to show
-grid [ttk::frame $tradeframe.options]
+grid [ttk::frame $tradeframe.options] -sticky w
 grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
 grid [ttk::combobox $tradeframe.options.type -state readonly] -column 1 -row 0
 bind $tradeframe.options.type <<ComboboxSelected>> {ShowTrade [$tradeframe.options.type get]}
 grid [ttk::entry $tradeframe.options.search -validate key -validatecommand {SearchTrade %P}] -column 2 -row 0
 # Trade list
-grid [ttk::frame $tradeframe.trade] -sticky nwes
-set tradeview [ttk::treeview $tradeframe.trade.view -columns [list name type durability price profit owned available] -show headings -yscrollcommand [list $tradeframe.trade.scrolly set]]
-$tradeview heading name -text {Name}
-$tradeview heading type -text {Type}
-$tradeview heading durability -text {Durability}
-$tradeview heading price -text {Price}
-$tradeview heading profit -text {Profit}
-$tradeview heading owned -text {Owned}
-$tradeview heading available -text {Available}
-grid $tradeview -sticky nwes
-bind $tradeview <<TreeviewSelect>> ShowTradeItemInfo
-grid [ttk::scrollbar $tradeframe.trade.scrolly -orient vertical -command [list $tradeview yview]] -row 0 -column 1 -sticky ns
+set tradelist [ttk::frame $tradeframe.list]
+grid $tradelist -sticky nwes
+grid [ttk::label $tradelist.name -text Name]
+grid [ttk::label $tradelist.type -text Type] -row 0 -column 1
+grid [ttk::label $tradelist.durability -text Durability] -row 0 -column 2
+grid [ttk::label $tradelist.price -text Price] -row 0 -column 3
+grid [ttk::label $tradelist.profit -text Profit] -row 0 -column 4
+grid [ttk::label $tradelist.owned -text Owned] -row 0 -column 5
+grid [ttk::label $tradelist.available -text Available] -row 0 -column 6
 # Item info
 set itemframe [ttk::frame $tradeframe.item]
 grid [ttk::labelframe $itemframe.info -text {Item Info:}]
