@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 - Updated contributing guide
+- Updated modding guide
 
 ## [5.6] - 2020-12-27
 
