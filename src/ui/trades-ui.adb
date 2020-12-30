@@ -234,11 +234,21 @@ package body Trades.UI is
                  "-text {" & Positive'Image(Price) & "}");
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
+            if Profit > 0 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style Headergreen.TLabel");
+            elsif Profit < 0 then
+               ProgressBarStyle :=
+                 To_Unbounded_String(" -style Headerred.TLabel");
+            else
+               ProgressBarStyle := To_Unbounded_String(" -style TLabel");
+            end if;
             Label :=
               Create
                 (TradeFrame & ".profit" &
                  Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & Positive'Image(Profit) & "}");
+                 "-text {" & Integer'Image(Profit) & "}" &
+                 To_String(ProgressBarStyle));
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
             Label :=
@@ -331,7 +341,8 @@ package body Trades.UI is
             Label :=
               Create
                 (TradeFrame & ".profitb" & Trim(Positive'Image(I), Left),
-                 "-text {" & Positive'Image(Profit) & "}");
+                 "-text {" & Integer'Image(Profit) &
+                 "} -style Headerred.TLabel");
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
             Label :=
