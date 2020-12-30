@@ -8,6 +8,9 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Updated modding guide
 
+### Fixed
+- Showing profit info on trade screen
+
 ## [5.6] - 2020-12-27
 
 ### Added
