@@ -341,7 +341,7 @@ package body Trades.UI is
             Label :=
               Create
                 (TradeFrame & ".profitb" & Trim(Positive'Image(I), Left),
-                 "-text {" & Integer'Image(Profit) &
+                 "-text {" & Integer'Image(-(Price)) &
                  "} -style Headerred.TLabel");
             Tcl.Tk.Ada.Grid.Grid
               (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
