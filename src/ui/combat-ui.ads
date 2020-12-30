@@ -20,7 +20,7 @@
 package Combat.UI is
 -- ****
 
-   -- ****f* CUI/ShowCombatUI
+   -- ****f* CUI/CUI.ShowCombatUI
    -- FUNCTION
    -- Show combat UI to the player
    -- PARAMETERS
