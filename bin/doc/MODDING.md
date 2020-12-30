@@ -903,7 +903,7 @@ story.
 * Each configuration pair must be in one line.
 * Key `Name`: Name of theme. Will be displayed to player in game options when
   user will be selecting game theme.
-* Key `FileName`: Name of *.css* file for theme.
+* Key `FileName`: Name of *.tcl* file for theme.
 * Key `EnemyShipIcon`: Hexadecimal number on UTF-8 character used to show
   Enemy Ship event on map. Optional.
 * Key `AttackOnBaseIcon`: Hexadecimal number on UTF-8 character used to show
