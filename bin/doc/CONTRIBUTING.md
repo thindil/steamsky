@@ -117,6 +117,14 @@ documentation. Steam sky uses `-- ` for start all documentation lines.
 
 How to generate the code documentation is described in main *README.md* file.
 
+### Code submission
+A preferred way to submit your code is to use [tickets](https://www.laeran.pl/repositories/steamsky/ticket)
+on the project page. Please attach to that ticket file with diff changes,
+the best if done with command `fossil diff`. But any other diff program will
+work. In that situation, please add information which program was used to
+create the diff file. If you prefer you can also use other options from
+[contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact).
+
 ## Additional debugging options
 
 ### Code analysis
