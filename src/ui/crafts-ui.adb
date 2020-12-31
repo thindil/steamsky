@@ -45,7 +45,7 @@ with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
-   -- ****o* CUI4/Show_Crafting_Command
+   -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
    -- Show information about available crafting recipes
    -- PARAMETERS
@@ -257,7 +257,7 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Crafting_Command;
 
-   -- ****if* CUI4/ShowSetRecipe
+   -- ****if* CUI4/CUI4.ShowSetRecipe
    -- FUNCTION
    -- Show UI to set selected recipe as crafting order
    -- SOURCE
@@ -333,7 +333,7 @@ package body Crafts.UI is
             Exception_Message(An_Exception) & ".");
    end ShowSetRecipe;
 
-   -- ****o* CUI4/Show_Recipe_Info_Command
+   -- ****o* CUI4/CUI4.Show_Recipe_Info_Command
    -- FUNCTION
    -- Show information about the selected recipe
    -- PARAMETERS
@@ -611,7 +611,7 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Recipe_Info_Command;
 
-   -- ****o* CUI4/Set_Crafting_Command
+   -- ****o* CUI4/CUI4.Set_Crafting_Command
    -- FUNCTION
    -- Set the selected recipe as a crafting order in the selected workshop
    -- PARAMETERS
