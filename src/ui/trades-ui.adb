@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
@@ -171,7 +172,11 @@ package body Trades.UI is
          end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
-         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
+         if Argc = 3
+           and then
+             Index
+               (To_Lower(To_String(ItemName)), To_Lower(CArgv.Arg(Argv, 2))) =
+             0 then
             goto End_Of_Cargo_Loop;
          end if;
          if BaseCargoIndex = 0 then
