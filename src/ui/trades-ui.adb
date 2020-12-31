@@ -149,216 +149,217 @@ package body Trades.UI is
          BaseCargo := TraderCargo;
       end if;
       for I in PlayerShip.Cargo.Iterate loop
-         if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) > 0 then
-            ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
-            BaseCargoIndex :=
-              FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
-            if BaseCargoIndex > 0 then
-               IndexesList.Append(New_Item => BaseCargoIndex);
-            end if;
-            ItemType :=
-              (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-                 Items_List(ProtoIndex).IType
-               else Items_List(ProtoIndex).ShowType);
-            if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-               Append(ItemsTypes, " {" & ItemType & "}");
-            end if;
-            if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
-              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-               goto End_Of_Cargo_Loop;
-            end if;
-            ItemName :=
-              To_Unbounded_String
-                (GetItemName(PlayerShip.Cargo(I), False, False));
-            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
-               goto End_Of_Cargo_Loop;
-            end if;
-            if BaseCargoIndex = 0 then
-               Price := Get_Price(BaseType, ProtoIndex);
-            else
-               Price :=
-                 (if BaseIndex > 0 then
-                    SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price
-                  else TraderCargo(BaseCargoIndex).Price);
-            end if;
-            if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice
-                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-                  Price := Price * 2;
-               end if;
-            end if;
-            Profit := Price - PlayerShip.Cargo(I).Price;
-            BaseAmount := 0;
-            if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
-               BaseAmount :=
-                 (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Amount
-                  else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
-            end if;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String
-                   (Positive'Image(Inventory_Container.To_Index(I)));
-            end if;
-            ItemButton :=
-              Create
-                (TradeFrame & ".item" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & To_String(ItemName) & "}");
-            Add(ItemButton, "Show available item options");
-            Tcl.Tk.Ada.Grid.Grid
-              (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".type" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & To_String(ItemType) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 1 -sticky w");
-            ProgressBarStyle :=
-              (if PlayerShip.Cargo(I).Durability > 74 then
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-               elsif PlayerShip.Cargo(I).Durability > 24 then
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-            DurabilityBar :=
-              Create
-                (TradeFrame & ".durability" & Trim(Natural'Image(Row), Left),
-                 "-value {" & Natural'Image(PlayerShip.Cargo(I).Durability) &
-                 "}" & To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid
-              (DurabilityBar, "-row" & Positive'Image(Row) & " -column 2");
-            Label :=
-              Create
-                (TradeFrame & ".price" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & Positive'Image(Price) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
-            if Profit > 0 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style Headergreen.TLabel");
-            elsif Profit < 0 then
-               ProgressBarStyle :=
-                 To_Unbounded_String(" -style Headerred.TLabel");
-            else
-               ProgressBarStyle := To_Unbounded_String(" -style TLabel");
-            end if;
-            Label :=
-              Create
-                (TradeFrame & ".profit" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & Integer'Image(Profit) & "}" &
-                 To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".owned" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & Positive'Image(PlayerShip.Cargo(I).Amount) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 5 -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".available" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {" & Natural'Image(BaseAmount) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 6 -sticky w");
-            Row := Row + 1;
+         if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) = 0 then
+            goto End_Of_Cargo_Loop;
          end if;
+         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+         BaseCargoIndex :=
+           FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
+         if BaseCargoIndex > 0 then
+            IndexesList.Append(New_Item => BaseCargoIndex);
+         end if;
+         ItemType :=
+           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+              Items_List(ProtoIndex).IType
+            else Items_List(ProtoIndex).ShowType);
+         if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
+            Append(ItemsTypes, " {" & ItemType & "}");
+         end if;
+         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Cargo_Loop;
+         end if;
+         ItemName :=
+           To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
+         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
+            goto End_Of_Cargo_Loop;
+         end if;
+         if BaseCargoIndex = 0 then
+            Price := Get_Price(BaseType, ProtoIndex);
+         else
+            Price :=
+              (if BaseIndex > 0 then
+                 SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price
+               else TraderCargo(BaseCargoIndex).Price);
+         end if;
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               Price := Price * 2;
+            end if;
+         end if;
+         Profit := Price - PlayerShip.Cargo(I).Price;
+         BaseAmount := 0;
+         if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
+            BaseAmount :=
+              (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Amount
+               else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
+         end if;
+         if FirstIndex = Null_Unbounded_String then
+            FirstIndex :=
+              To_Unbounded_String
+                (Positive'Image(Inventory_Container.To_Index(I)));
+         end if;
+         ItemButton :=
+           Create
+             (TradeFrame & ".item" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & To_String(ItemName) & "}");
+         Add(ItemButton, "Show available item options");
+         Tcl.Tk.Ada.Grid.Grid
+           (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".type" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & To_String(ItemType) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 1 -sticky w");
+         ProgressBarStyle :=
+           (if PlayerShip.Cargo(I).Durability > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Cargo(I).Durability > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
+         DurabilityBar :=
+           Create
+             (TradeFrame & ".durability" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(PlayerShip.Cargo(I).Durability) &
+              "}" & To_String(ProgressBarStyle));
+         Tcl.Tk.Ada.Grid.Grid
+           (DurabilityBar, "-row" & Positive'Image(Row) & " -column 2");
+         Label :=
+           Create
+             (TradeFrame & ".price" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & Positive'Image(Price) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
+         if Profit > 0 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Headergreen.TLabel");
+         elsif Profit < 0 then
+            ProgressBarStyle :=
+              To_Unbounded_String(" -style Headerred.TLabel");
+         else
+            ProgressBarStyle := To_Unbounded_String(" -style TLabel");
+         end if;
+         Label :=
+           Create
+             (TradeFrame & ".profit" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & Integer'Image(Profit) & "}" &
+              To_String(ProgressBarStyle));
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".owned" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & Positive'Image(PlayerShip.Cargo(I).Amount) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 5 -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".available" &
+              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+              "-text {" & Natural'Image(BaseAmount) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 6 -sticky w");
+         Row := Row + 1;
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
-         if IndexesList.Find_Index(Item => I) = 0 and
-           Is_Buyable
+         if IndexesList.Find_Index(Item => I) > 0 or
+           not Is_Buyable
              (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
               BaseIndex => BaseIndex) then
-            ProtoIndex := BaseCargo(I).ProtoIndex;
-            ItemType :=
-              (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-                 Items_List(ProtoIndex).IType
-               else Items_List(ProtoIndex).ShowType);
-            if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-               Append(ItemsTypes, " {" & ItemType & "}");
-            end if;
-            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
-              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-               goto End_Of_Trader_Loop;
-            end if;
-            ItemName := Items_List(ProtoIndex).Name;
-            if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
-               goto End_Of_Trader_Loop;
-            end if;
-            Price :=
-              (if BaseIndex > 0 then SkyBases(BaseIndex).Cargo(I).Price
-               else TraderCargo(I).Price);
-            if EventIndex > 0 then
-               if Events_List(EventIndex).EType = DoublePrice
-                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-                  Price := Price * 2;
-               end if;
-            end if;
-            BaseAmount :=
-              (if BaseIndex = 0 then TraderCargo(I).Amount
-               else SkyBases(BaseIndex).Cargo(I).Amount);
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String(" b" & Trim(Positive'Image(I), Left));
-            end if;
-            ItemButton :=
-              Create
-                (TradeFrame & ".itemb" & Trim(Positive'Image(I), Left),
-                 "-text {" & To_String(ItemName) & "}");
-            Add(ItemButton, "Show available item options");
-            Tcl.Tk.Ada.Grid.Grid
-              (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".typeb" & Trim(Positive'Image(I), Left),
-                 "-text {" & To_String(ItemType) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 1 -sticky w");
-            ProgressBarStyle :=
-              (if BaseCargo(I).Durability > 74 then
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-               elsif BaseCargo(I).Durability > 24 then
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-            DurabilityBar :=
-              Create
-                (TradeFrame & ".durabilityb" & Trim(Natural'Image(Row), Left),
-                 "-value {" & Natural'Image(BaseCargo(I).Durability) & "}" &
-                 To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid
-              (DurabilityBar, "-row" & Positive'Image(Row) & " -column 2");
-            Label :=
-              Create
-                (TradeFrame & ".priceb" & Trim(Positive'Image(I), Left),
-                 "-text {" & Positive'Image(Price) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".profitb" & Trim(Positive'Image(I), Left),
-                 "-text {" & Integer'Image(-(Price)) &
-                 "} -style Headerred.TLabel");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".ownedb" & Trim(Positive'Image(I), Left),
-                 "-text { 0}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 5 -sticky w");
-            Label :=
-              Create
-                (TradeFrame & ".availableb" & Trim(Positive'Image(I), Left),
-                 "-text {" & Natural'Image(BaseAmount) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 6 -sticky w");
-            Row := Row + 1;
+            goto End_Of_Trader_Loop;
          end if;
+         ProtoIndex := BaseCargo(I).ProtoIndex;
+         ItemType :=
+           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+              Items_List(ProtoIndex).IType
+            else Items_List(ProtoIndex).ShowType);
+         if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
+            Append(ItemsTypes, " {" & ItemType & "}");
+         end if;
+         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Trader_Loop;
+         end if;
+         ItemName := Items_List(ProtoIndex).Name;
+         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
+            goto End_Of_Trader_Loop;
+         end if;
+         Price :=
+           (if BaseIndex > 0 then SkyBases(BaseIndex).Cargo(I).Price
+            else TraderCargo(I).Price);
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               Price := Price * 2;
+            end if;
+         end if;
+         BaseAmount :=
+           (if BaseIndex = 0 then TraderCargo(I).Amount
+            else SkyBases(BaseIndex).Cargo(I).Amount);
+         if FirstIndex = Null_Unbounded_String then
+            FirstIndex :=
+              To_Unbounded_String(" b" & Trim(Positive'Image(I), Left));
+         end if;
+         ItemButton :=
+           Create
+             (TradeFrame & ".itemb" & Trim(Positive'Image(I), Left),
+              "-text {" & To_String(ItemName) & "}");
+         Add(ItemButton, "Show available item options");
+         Tcl.Tk.Ada.Grid.Grid
+           (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".typeb" & Trim(Positive'Image(I), Left),
+              "-text {" & To_String(ItemType) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 1 -sticky w");
+         ProgressBarStyle :=
+           (if BaseCargo(I).Durability > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif BaseCargo(I).Durability > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
+         DurabilityBar :=
+           Create
+             (TradeFrame & ".durabilityb" & Trim(Natural'Image(Row), Left),
+              "-value {" & Natural'Image(BaseCargo(I).Durability) & "}" &
+              To_String(ProgressBarStyle));
+         Tcl.Tk.Ada.Grid.Grid
+           (DurabilityBar, "-row" & Positive'Image(Row) & " -column 2");
+         Label :=
+           Create
+             (TradeFrame & ".priceb" & Trim(Positive'Image(I), Left),
+              "-text {" & Positive'Image(Price) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".profitb" & Trim(Positive'Image(I), Left),
+              "-text {" & Integer'Image(-(Price)) &
+              "} -style Headerred.TLabel");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".ownedb" & Trim(Positive'Image(I), Left),
+              "-text { 0}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 5 -sticky w");
+         Label :=
+           Create
+             (TradeFrame & ".availableb" & Trim(Positive'Image(I), Left),
+              "-text {" & Natural'Image(BaseAmount) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Positive'Image(Row) & " -column 6 -sticky w");
+         Row := Row + 1;
          <<End_Of_Trader_Loop>>
       end loop;
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
