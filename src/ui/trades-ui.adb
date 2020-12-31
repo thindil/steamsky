@@ -320,7 +320,7 @@ package body Trades.UI is
          ItemButton :=
            Create
              (TradeFrame & ".item-" & Trim(Positive'Image(I), Left),
-              "-text {" & To_String(ItemName) & "} -command {ShowTradeMenu b" &
+              "-text {" & To_String(ItemName) & "} -command {ShowTradeMenu -" &
               Trim(Positive'Image(I), Left) & "}");
          Add(ItemButton, "Show available item options");
          Tcl.Tk.Ada.Grid.Grid
@@ -1023,6 +1023,7 @@ package body Trades.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if Winfo_Get(TradeMenu, "exists") = "0" then
@@ -1035,8 +1036,10 @@ package body Trades.UI is
            (TradeMenu, "command",
             "-label {Sell all owned} -command {TradeItem sellmax}");
       end if;
-      Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
-      Menu.Add(TradeMenu, "command", "-label {Buy max allowed}");
+      if MoneyIndex2 > 0 then
+         Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
+         Menu.Add(TradeMenu, "command", "-label {Buy max allowed}");
+      end if;
       Menu.Add(TradeMenu, "command", "-label {Show more info about the item}");
       Tk_Popup
         (TradeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
