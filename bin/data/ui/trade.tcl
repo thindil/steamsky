@@ -27,9 +27,6 @@ set itemframe [ttk::frame $tradeframe.item]
 grid [ttk::labelframe $itemframe.info -text {Item Info:}]
 grid [text $itemframe.info.text -wrap char -height 10 -width 40]
 # Item actions
-grid [ttk::label $itemframe.shipmoney]
-grid [ttk::label $itemframe.shipspace]
-grid [ttk::label $itemframe.basemoney]
 grid [ttk::frame $itemframe.buyframe]
 grid [ttk::button $itemframe.buyframe.buy -text {Buy} -command {TradeItem buy}]
 grid [ttk::label $itemframe.buyframe.amountlbl] -column 1 -row 0

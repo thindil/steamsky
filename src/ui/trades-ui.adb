@@ -504,9 +504,6 @@ package body Trades.UI is
       Frame: Ttk_Frame :=
         Get_Widget
           (".gameframe.paned.tradeframe.canvas.trade.item.sellframe", Interp);
-      Label: Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.tradeframe.canvas.trade.item.shipmoney", Interp);
    begin
       SelectedItem := To_Unbounded_String(Selection(TradeView));
       if SelectedItem = Null_Unbounded_String then
@@ -814,58 +811,6 @@ package body Trades.UI is
          end;
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-      end if;
-      if MoneyIndex2 > 0 then
-         configure
-           (Label,
-            "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(MoneyName) & ".}");
-      else
-         configure
-           (Label,
-            "-text {You don't have any " & To_String(MoneyName) &
-            " to buy anything.}");
-      end if;
-      Label.Name :=
-        New_String(".gameframe.paned.tradeframe.canvas.trade.item.shipspace");
-      declare
-         FreeSpace: Integer := FreeCargo(0);
-      begin
-         if FreeSpace < 0 then
-            FreeSpace := 0;
-         end if;
-         configure
-           (Label,
-            "-text {Free cargo space:" & Integer'Image(FreeSpace) & " kg}");
-      end;
-      Label.Name :=
-        New_String(".gameframe.paned.tradeframe.canvas.trade.item.basemoney");
-      if BaseIndex > 0 then
-         if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
-            configure
-              (Label,
-               "-text {Base don't have any " & To_String(MoneyName) &
-               "to buy anything.}");
-         else
-            configure
-              (Label,
-               "-text {Base have" &
-               Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) & " " &
-               To_String(MoneyName) & ".}");
-         end if;
-      else
-         if TraderCargo(1).Amount = 0 then
-            configure
-              (Label,
-               "-text {Ship don't have any " & To_String(MoneyName) &
-               "to buy anything.}");
-         else
-            configure
-              (Label,
-               "-text {Ship have" & Positive'Image(TraderCargo(1).Amount) &
-               " " & To_String(MoneyName) & ".}");
-         end if;
       end if;
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
