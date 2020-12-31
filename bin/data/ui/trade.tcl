@@ -10,6 +10,8 @@ grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
 grid [ttk::combobox $tradeframe.options.type -state readonly] -column 1 -row 0
 bind $tradeframe.options.type <<ComboboxSelected>> {ShowTrade [$tradeframe.options.type get]}
 grid [ttk::entry $tradeframe.options.search -validate key -validatecommand {SearchTrade %P}] -column 2 -row 0
+grid [ttk::label $tradeframe.options.playerinfo] -sticky w -columnspan 2
+grid [ttk::label $tradeframe.options.baseinfo] -sticky nw -column 2 -row 1
 # Trade list
 set tradelist [ttk::frame $tradeframe.list]
 grid $tradelist -sticky nwes

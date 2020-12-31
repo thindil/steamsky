@@ -96,8 +96,8 @@ package body Trades.UI is
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      ItemType, ProtoIndex, BaseType, FirstIndex, ItemName,
-      ProgressBarStyle: Unbounded_String;
+      ItemType, ProtoIndex, BaseType, FirstIndex, ItemName, ProgressBarStyle,
+      TradeInfo: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -115,6 +115,7 @@ package body Trades.UI is
       ItemButton: Ttk_Button;
       Row: Positive := 1;
       DurabilityBar: Ttk_ProgressBar;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -375,6 +376,63 @@ package body Trades.UI is
       if Argc = 1 then
          Current(ComboBox, "0");
       end if;
+      if MoneyIndex2 > 0 then
+         TradeInfo :=
+           To_Unbounded_String
+             ("You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+              To_String(MoneyName) & ".");
+      else
+         TradeInfo :=
+           To_Unbounded_String
+             ("You don't have any " & To_String(MoneyName) &
+              " to buy anything.");
+      end if;
+      declare
+         FreeSpace: Integer := FreeCargo(0);
+      begin
+         if FreeSpace < 0 then
+            FreeSpace := 0;
+         end if;
+         Append
+           (TradeInfo,
+            LF & "Free cargo space:" & Integer'Image(FreeSpace) & " kg.");
+      end;
+      Label.Name :=
+        New_String
+          (".gameframe.paned.tradeframe.canvas.trade.options.playerinfo");
+      configure(Label, "-text {" & To_String(TradeInfo) & "}");
+      TradeInfo := Null_Unbounded_String;
+      if BaseIndex > 0 then
+         if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
+            Append
+              (TradeInfo,
+               "Base don't have any " & To_String(MoneyName) &
+               "to buy anything.");
+         else
+            Append
+              (TradeInfo,
+               "Base have" &
+               Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) & " " &
+               To_String(MoneyName) & ".");
+         end if;
+      else
+         if TraderCargo(1).Amount = 0 then
+            Append
+              (TradeInfo,
+               "Ship don't have any " & To_String(MoneyName) &
+               "to buy anything.");
+         else
+            Append
+              (TradeInfo,
+               "Ship have" & Positive'Image(TraderCargo(1).Amount) & " " &
+               To_String(MoneyName) & ".");
+         end if;
+      end if;
+      Label.Name :=
+        New_String
+          (".gameframe.paned.tradeframe.canvas.trade.options.baseinfo");
+      configure(Label, "-text {" & To_String(TradeInfo) & "}");
       TradeFrame.Name := New_String(Widget_Image(TradeCanvas) & ".trade.item");
       Tcl.Tk.Ada.Grid.Grid(TradeFrame);
       Label.Name := New_String(Widget_Image(TradeFrame) & ".sellframe.error");
@@ -1028,7 +1086,9 @@ package body Trades.UI is
       Delete(TradeMenu, "0", "end");
       if ItemIndex > 0 then
          Menu.Add(TradeMenu, "command", "-label {Sell selected amount}");
-         Menu.Add(TradeMenu, "command", "-label {Sell all owned} -command {TradeItem sellmax}");
+         Menu.Add
+           (TradeMenu, "command",
+            "-label {Sell all owned} -command {TradeItem sellmax}");
       end if;
       Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
       Menu.Add(TradeMenu, "command", "-label {Buy max allowed}");
