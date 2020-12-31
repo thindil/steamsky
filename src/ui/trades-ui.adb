@@ -31,6 +31,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -209,7 +211,8 @@ package body Trades.UI is
            Create
              (TradeFrame & ".item" &
               Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & To_String(ItemName) & "}");
+              "-text {" & To_String(ItemName) & "} -command {ShowTradeMenu" &
+              Positive'Image(Inventory_Container.To_Index(I)) & "}");
          Add(ItemButton, "Show available item options");
          Tcl.Tk.Ada.Grid.Grid
            (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
@@ -315,8 +318,9 @@ package body Trades.UI is
          end if;
          ItemButton :=
            Create
-             (TradeFrame & ".itemb" & Trim(Positive'Image(I), Left),
-              "-text {" & To_String(ItemName) & "}");
+             (TradeFrame & ".item-" & Trim(Positive'Image(I), Left),
+              "-text {" & To_String(ItemName) & "} -command {ShowTradeMenu b" &
+              Trim(Positive'Image(I), Left) & "}");
          Add(ItemButton, "Show available item options");
          Tcl.Tk.Ada.Grid.Grid
            (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
@@ -987,12 +991,61 @@ package body Trades.UI is
            CArgv.Empty & "ShowTrade" & Get(TypeBox) & SearchText);
    end Search_Trade_Command;
 
+   -- ****o* TUI/Show_Trade_Menu_Command
+   -- FUNCTION
+   -- Show trade menu with buy/sell options for the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTradeMenu itemindex
+   -- ItemIndex is the index of the item which menu will be show. If index
+   -- starts with minus means item in base/trader cargo only. Otherwise it is
+   -- index in the player ship cargo.
+   -- SOURCE
+   function Show_Trade_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Trade_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
+   begin
+      ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
+      if Winfo_Get(TradeMenu, "exists") = "0" then
+         TradeMenu := Create(".trademenu", "-tearoff false");
+      end if;
+      Delete(TradeMenu, "0", "end");
+      if ItemIndex > 0 then
+         Menu.Add(TradeMenu, "command", "-label {Sell selected amount}");
+         Menu.Add(TradeMenu, "command", "-label {Sell all owned} -command {TradeItem sellmax}");
+      end if;
+      Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
+      Menu.Add(TradeMenu, "command", "-label {Buy max allowed}");
+      Menu.Add(TradeMenu, "command", "-label {Show more info about the item}");
+      Tk_Popup
+        (TradeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Trade_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowTrade", Show_Trade_Command'Access);
       AddCommand("ShowTradeItemInfo", Show_Trade_Item_Info_Command'Access);
       AddCommand("TradeItem", Trade_Item_Command'Access);
       AddCommand("SearchTrade", Search_Trade_Command'Access);
+      AddCommand("ShowTradeMenu", Show_Trade_Menu_Command'Access);
    end AddCommands;
 
 end Trades.UI;
