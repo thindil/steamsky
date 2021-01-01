@@ -1113,9 +1113,64 @@ package body Trades.UI is
                Natural'Image(MaxSellAmount) & "}");
          end;
       end if;
-      if MoneyIndex2 > 0 then
-         Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
-         Menu.Add(TradeMenu, "command", "-label {Buy max allowed}");
+      if ItemIndex < 0 and MoneyIndex2 > 0 and
+        Is_Buyable(BaseType, ProtoIndex) then
+         declare
+            MaxBuyAmount: Integer :=
+              PlayerShip.Cargo(MoneyIndex2).Amount / Price;
+            MaxPrice: Natural := MaxBuyAmount * Price;
+            Weight: Integer;
+         begin
+            if MaxBuyAmount > 0 then
+               CountPrice(MaxPrice, FindMember(Talk));
+               if MaxPrice < (MaxBuyAmount * Price) then
+                  MaxBuyAmount :=
+                    Natural
+                      (Float'Floor
+                         (Float(MaxBuyAmount) *
+                          ((Float(MaxBuyAmount) * Float(Price)) /
+                           Float(MaxPrice))));
+               end if;
+               if BaseIndex > 0
+                 and then MaxBuyAmount >
+                   SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Amount then
+                  MaxBuyAmount :=
+                    SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Amount;
+               elsif BaseIndex = 0
+                 and then MaxBuyAmount >
+                   TraderCargo(abs (ItemIndex)).Amount then
+                  MaxBuyAmount := TraderCargo(abs (ItemIndex)).Amount;
+               end if;
+               MaxPrice := MaxBuyAmount * Price;
+               CountPrice(MaxPrice, FindMember(Talk));
+               Weight :=
+                 FreeCargo
+                   (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+               while Weight < 0 loop
+                  MaxBuyAmount :=
+                    MaxBuyAmount + (Weight / Items_List(ProtoIndex).Weight) -
+                    1;
+                  if MaxBuyAmount < 0 then
+                     MaxBuyAmount := 0;
+                  end if;
+                  exit when MaxBuyAmount = 0;
+                  MaxPrice := MaxBuyAmount * Price;
+                  CountPrice(MaxPrice, FindMember(Talk));
+                  Weight :=
+                    FreeCargo
+                      (MaxPrice -
+                       (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+               end loop;
+               if MaxBuyAmount > 0 then
+                  Menu.Add
+                    (TradeMenu, "command", "-label {Buy selected amount}");
+                  Menu.Add
+                    (TradeMenu, "command",
+                     "-label {Buy" & Natural'Image(MaxBuyAmount) &
+                     " of them}");
+               end if;
+            end if;
+         end;
       end if;
       Menu.Add(TradeMenu, "command", "-label {Show more info about the item}");
       Tk_Popup
