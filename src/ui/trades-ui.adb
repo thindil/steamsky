@@ -850,9 +850,10 @@ package body Trades.UI is
          ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
          BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
       else
+         BaseCargoIndex2 := abs (ItemIndex);
          ProtoIndex :=
-           (if BaseIndex = 0 then TraderCargo(abs (ItemIndex)).ProtoIndex
-            else SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex);
+           (if BaseIndex = 0 then TraderCargo(BaseCargoIndex2).ProtoIndex
+            else SkyBases(BaseIndex).Cargo(BaseCargoIndex2).ProtoIndex);
       end if;
       if ItemIndex > 0 then
          if BaseCargoIndex2 > 0 then
@@ -866,8 +867,8 @@ package body Trades.UI is
       else
          Price :=
            (if BaseIndex > 0 then
-              SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Price
-            else TraderCargo(abs (ItemIndex)).Price);
+              SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Price
+            else TraderCargo(BaseCargoIndex2).Price);
       end if;
       declare
          EventIndex: constant Natural :=
@@ -931,7 +932,7 @@ package body Trades.UI is
                Natural'Image(MaxSellAmount) & "}");
          end;
       end if;
-      if ItemIndex < 0 and MoneyIndex2 > 0 and
+      if BaseCargoIndex2 > 0 and MoneyIndex2 > 0 and
         Is_Buyable(BaseType, ProtoIndex) then
          declare
             MaxBuyAmount: Integer :=
@@ -951,13 +952,13 @@ package body Trades.UI is
                end if;
                if BaseIndex > 0
                  and then MaxBuyAmount >
-                   SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Amount then
+                   SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Amount then
                   MaxBuyAmount :=
-                    SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Amount;
+                    SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Amount;
                elsif BaseIndex = 0
                  and then MaxBuyAmount >
-                   TraderCargo(abs (ItemIndex)).Amount then
-                  MaxBuyAmount := TraderCargo(abs (ItemIndex)).Amount;
+                   TraderCargo(BaseCargoIndex2).Amount then
+                  MaxBuyAmount := TraderCargo(BaseCargoIndex2).Amount;
                end if;
                MaxPrice := MaxBuyAmount * Price;
                CountPrice(MaxPrice, FindMember(Talk));
