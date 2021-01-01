@@ -36,8 +36,6 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -654,10 +652,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
-      Amount: Natural;
       ProtoIndex: Unbounded_String;
-      SpinBox: Ttk_SpinBox;
-      Label: Ttk_Label;
       TypeBox: Ttk_ComboBox;
    begin
       if ItemIndex < 0 then
@@ -676,32 +671,10 @@ package body Trades.UI is
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       end if;
       Trader := (if BaseIndex > 0 then "base" else "ship");
-      SpinBox.Interp := Interp;
-      Label.Interp := Interp;
       if CArgv.Arg(Argv, 1) in "buy" | "buymax" then
-         SpinBox.Name :=
-           New_String
-             (".gameframe.paned.tradeframe.canvas.trade.item.buyframe.amount");
-         Label.Name :=
-           New_String
-             (".gameframe.paned.tradeframe.canvas.trade.item.buyframe.amountlbl");
-         Amount :=
-           (if CArgv.Arg(Argv, 1) = "buy" then Positive'Value(Get(SpinBox))
-            else Natural'Value
-                (cget(Label, "-text")(5 .. cget(Label, "-text")'Length - 2)));
-         BuyItems(BaseCargoIndex, Natural'Image(Amount));
+         BuyItems(BaseCargoIndex, CArgv.Arg(Argv, 2));
       else
-         SpinBox.Name :=
-           New_String
-             (".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount");
-         Amount := Positive'Value(Get(SpinBox));
-         if CArgv.Arg(Argv, 1) = "sell" then
-            SellItems(CargoIndex, Natural'Image(Amount));
-         else
-            SellItems
-              (CargoIndex,
-               Positive'Image(PlayerShip.Cargo.Element(CargoIndex).Amount));
-         end if;
+         SellItems(CargoIndex, CArgv.Arg(Argv, 2));
       end if;
       UpdateHeader;
       UpdateMessages;
