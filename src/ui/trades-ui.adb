@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -96,7 +96,7 @@ package body Trades.UI is
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      ItemType, ProtoIndex, BaseType, FirstIndex, ItemName, ProgressBarStyle,
+      ItemType, ProtoIndex, BaseType, ItemName, ProgressBarStyle,
       TradeInfo: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
@@ -203,11 +203,6 @@ package body Trades.UI is
               (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Amount
                else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          end if;
-         if FirstIndex = Null_Unbounded_String then
-            FirstIndex :=
-              To_Unbounded_String
-                (Positive'Image(Inventory_Container.To_Index(I)));
-         end if;
          ItemButton :=
            Create
              (TradeFrame & ".item" &
@@ -313,10 +308,6 @@ package body Trades.UI is
          BaseAmount :=
            (if BaseIndex = 0 then TraderCargo(I).Amount
             else SkyBases(BaseIndex).Cargo(I).Amount);
-         if FirstIndex = Null_Unbounded_String then
-            FirstIndex :=
-              To_Unbounded_String(" b" & Trim(Positive'Image(I), Left));
-         end if;
          ItemButton :=
            Create
              (TradeFrame & ".item-" & Trim(Positive'Image(I), Left),
