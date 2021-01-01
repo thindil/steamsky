@@ -1015,17 +1015,103 @@ package body Trades.UI is
       pragma Unreferenced(ClientData, Argc);
       TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseCargoIndex2, Price: Natural;
+      ProtoIndex, BaseType: Unbounded_String;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if Winfo_Get(TradeMenu, "exists") = "0" then
          TradeMenu := Create(".trademenu", "-tearoff false");
       end if;
       Delete(TradeMenu, "0", "end");
+      BaseType :=
+        (if BaseIndex > 0 then SkyBases(BaseIndex).BaseType
+         else To_Unbounded_String("0"));
       if ItemIndex > 0 then
-         Menu.Add(TradeMenu, "command", "-label {Sell selected amount}");
-         Menu.Add
-           (TradeMenu, "command",
-            "-label {Sell all owned} -command {TradeItem sellmax}");
+         ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
+         BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
+      else
+         ProtoIndex :=
+           (if BaseIndex = 0 then TraderCargo(abs (ItemIndex)).ProtoIndex
+            else SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex);
+      end if;
+      if ItemIndex > 0 then
+         if BaseCargoIndex2 > 0 then
+            Price :=
+              (if BaseIndex > 0 then
+                 SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Price
+               else TraderCargo(BaseCargoIndex2).Price);
+         else
+            Price := Get_Price(BaseType, ProtoIndex);
+         end if;
+      else
+         Price :=
+           (if BaseIndex > 0 then
+              SkyBases(BaseIndex).Cargo(abs (ItemIndex)).Price
+            else TraderCargo(abs (ItemIndex)).Price);
+      end if;
+      declare
+         EventIndex: constant Natural :=
+           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      begin
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               Price := Price * 2;
+            end if;
+         end if;
+      end;
+      if ItemIndex > 0 then
+         declare
+            MaxSellAmount: Integer := PlayerShip.Cargo(ItemIndex).Amount;
+            MaxPrice: Natural := MaxSellAmount * Price;
+            Weight: Integer;
+         begin
+            CountPrice(MaxPrice, FindMember(Talk), False);
+            if BaseIndex > 0
+              and then MaxPrice > SkyBases(BaseIndex).Cargo(1).Amount then
+               MaxSellAmount :=
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(SkyBases(BaseIndex).Cargo(1).Amount) /
+                        Float(MaxPrice))));
+            elsif BaseIndex = 0 and then MaxPrice > TraderCargo(1).Amount then
+               MaxSellAmount :=
+                 Natural
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(TraderCargo(1).Amount) / Float(MaxPrice))));
+            end if;
+            MaxPrice := MaxSellAmount * Price;
+            if MaxPrice > 0 then
+               CountPrice(MaxPrice, FindMember(Talk), False);
+            end if;
+            Weight :=
+              FreeCargo
+                ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
+            while Weight < 0 loop
+               MaxSellAmount :=
+                 Integer
+                   (Float'Floor
+                      (Float(MaxSellAmount) *
+                       (Float(MaxPrice + Weight) / Float(MaxPrice))));
+               exit when MaxSellAmount < 1;
+               MaxPrice := MaxSellAmount * Price;
+               CountPrice(MaxPrice, FindMember(Talk), False);
+               Weight :=
+                 FreeCargo
+                   ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
+                    MaxPrice);
+            end loop;
+            Menu.Add(TradeMenu, "command", "-label {Sell selected amount}");
+            Menu.Add
+              (TradeMenu, "command",
+               "-label {Sell" & Natural'Image(MaxSellAmount) &
+               " of them} -command {TradeItem sellmax" &
+               Natural'Image(MaxSellAmount) & "}");
+         end;
       end if;
       if MoneyIndex2 > 0 then
          Menu.Add(TradeMenu, "command", "-label {Buy selected amount}");
