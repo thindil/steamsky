@@ -844,9 +844,7 @@ package body Utils.UI is
         Create(".itemdialog", "-style Dialog.TFrame");
       Button: Ttk_Button :=
         Create
-          (ItemDialog & ".dropbutton",
-           "-text Ok -command {" & Command &
-           Inventory_Container.Extended_Index'Image(ItemIndex) & "}");
+          (ItemDialog & ".dropbutton", "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
       AmountBox: constant Ttk_SpinBox :=
         Create
@@ -872,7 +870,7 @@ package body Utils.UI is
            "-text {Amount (max:" &
            Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
            "):} -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Tcl.Tk.Ada.Grid.Grid(Label, "-padx {5 0}");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Bind
