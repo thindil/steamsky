@@ -671,7 +671,7 @@ package body Trades.UI is
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       end if;
       Trader := (if BaseIndex > 0 then "base" else "ship");
-      if CArgv.Arg(Argv, 1) in "buy" | "buymax" then
+      if CArgv.Arg(Argv, 1) in "buy" then
          BuyItems(BaseCargoIndex, CArgv.Arg(Argv, 2));
       else
          SellItems(CargoIndex, CArgv.Arg(Argv, 2));
@@ -901,7 +901,7 @@ package body Trades.UI is
             Menu.Add
               (TradeMenu, "command",
                "-label {Sell" & Natural'Image(MaxSellAmount) &
-               " of them} -command {TradeItem sellmax" &
+               " of them} -command {TradeItem sell" &
                Natural'Image(MaxSellAmount) & "}");
          end;
       end if;
@@ -959,7 +959,7 @@ package body Trades.UI is
                   Menu.Add
                     (TradeMenu, "command",
                      "-label {Buy" & Natural'Image(MaxBuyAmount) &
-                     " of them} -command {TradeItem buymax" &
+                     " of them} -command {TradeItem buy" &
                      Natural'Image(MaxBuyAmount) & "}");
                end if;
             end if;
