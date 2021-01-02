@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -37,7 +37,6 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Crew; use Crew;
 with Factions; use Factions;
-with Items; use Items;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
@@ -241,30 +240,16 @@ package body Utils.UI is
       Amount: Integer;
       Label: Ttk_Label;
    begin
-      if CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount" then
-         LabelName :=
-           To_Unbounded_String
-             (".gameframe.paned.tradeframe.canvas.trade.item.sellframe.error");
-         WarningText :=
-           To_Unbounded_String("You will sell amount below low level of ");
-      elsif CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount" then
-         LabelName :=
-           To_Unbounded_String
-             (".gameframe.paned.lootframe.canvas.loot.item.dropframe.error");
-         WarningText :=
-           To_Unbounded_String("You will drop amount below low level of ");
-      elsif CArgv.Arg(Argv, 1) = ".itemdialog.amount" then
-         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
-         WarningText :=
-           To_Unbounded_String("You will drop amount below low level of ");
-      elsif CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
+      if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String("You will give amount below low level of ");
       else
-         return TCL_ERROR;
+         LabelName := To_Unbounded_String(".itemdialog.errorlbl");
+         WarningText :=
+           To_Unbounded_String
+             ("You will " & CArgv.Arg(Argv, 1) &
+              " amount below low level of ");
       end if;
       CargoIndex := Natural'Value(CArgv.Arg(Argv, 2));
       Value := To_Unbounded_String(CArgv.Arg(Argv, 3));
@@ -851,5 +836,66 @@ package body Utils.UI is
       Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
       Widget_Raise(InfoDialog);
    end ShowInfo;
+
+   procedure ShowManipulateItem
+     (Title, Command, Action: String;
+      ItemIndex: Inventory_Container.Extended_Index) is
+      ItemDialog: constant Ttk_Frame :=
+        Create(".itemdialog", "-style Dialog.TFrame");
+      Button: Ttk_Button :=
+        Create
+          (ItemDialog & ".dropbutton",
+           "-text Ok -command {" & Command &
+           Inventory_Container.Extended_Index'Image(ItemIndex) & "}");
+      Label: Ttk_Label;
+      AmountBox: constant Ttk_SpinBox :=
+        Create
+          (ItemDialog & ".amount",
+           "-width 10 -from 1.0 -to" &
+           Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
+           " -validate key -validatecommand {CheckAmount " & Action &
+           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
+           ItemDialog & ".amount" & Positive'Image(ItemIndex) & "}");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Label :=
+        Create
+          (ItemDialog & ".title",
+           "-text {" & Title & "} -wraplength 370 -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+      Label :=
+        Create
+          (ItemDialog & ".amountlbl",
+           "-text {Amount (max:" &
+           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+           "):} -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Set(AmountBox, "1");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
+      Bind
+        (AmountBox, "<Escape>",
+         "{" & ItemDialog & ".cancelbutton invoke;break}");
+      Label :=
+        Create
+          (ItemDialog & ".errorlbl",
+           "-style Headerred.TLabel -wraplength 370 -takefocus 0");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
+      Bind
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
+      Button :=
+        Create
+          (ItemDialog & ".cancelbutton",
+           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3 -pady {0 5}");
+      Focus(Button);
+      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+   end ShowManipulateItem;
 
 end Utils.UI;
