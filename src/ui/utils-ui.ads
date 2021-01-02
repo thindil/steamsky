@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -16,6 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl.Ada;
+with Items; use Items;
 with Ships; use Ships;
 
 -- ****h* Utils/UUI
@@ -155,6 +156,24 @@ package Utils.UI is
       -- SOURCE
    procedure ShowInfo(Text: String; ParentName: String := ".gameframe") with
       Pre => Text'Length > 0 and ParentName'Length > 0;
-   -- ****
+      -- ****
+
+      -- ****f* UUI/ShowManipulateItem
+      -- FUNCTION
+      -- Shw the dialog for manipulate items amount in cargo (like selling,
+      -- dropping, etc).
+      -- PARAMETERS
+      -- Title     - Title of the dialog
+      -- Command   - Tcl command which will be executed when the player hit
+      --             the button Ok
+      -- Action    - The name of action which the player is doing (like drop,
+      --             sell, ect)
+      -- ItemIndex - The index of the item which will be manipulated
+      -- SOURCE
+   procedure ShowManipulateItem
+     (Title, Command, Action: String;
+      ItemIndex: Inventory_Container.Extended_Index) with
+      Pre => Title'Length > 0 and Command'Length > 0;
+      -- ****
 
 end Utils.UI;

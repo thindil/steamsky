@@ -359,62 +359,11 @@ package body Ships.UI.Cargo is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Interp);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      ItemDialog: constant Ttk_Frame :=
-        Create(".itemdialog", "-style Dialog.TFrame");
-      Button: Ttk_Button :=
-        Create
-          (ItemDialog & ".dropbutton",
-           "-text Drop -command {DropItem " & CArgv.Arg(Argv, 1) & "}");
-      Label: Ttk_Label;
-      AmountBox: constant Ttk_SpinBox :=
-        Create
-          (ItemDialog & ".amount",
-           "-width 10 -from 1.0 -to" &
-           Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
-           " -validate key -validatecommand {CheckAmount %W" &
-           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
-           ItemDialog & ".amount" & Positive'Image(ItemIndex) & "}");
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Label :=
-        Create
-          (ItemDialog & ".title",
-           "-text {Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
-           " from the ship's cargo} -wraplength 370 -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
-      Label :=
-        Create
-          (ItemDialog & ".amountlbl",
-           "-text {Amount (max:" &
-           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
-           "):} -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Set(AmountBox, "1");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
-      Bind
-        (AmountBox, "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
-      Label :=
-        Create
-          (ItemDialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 370 -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
-      Bind
-        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
-      Button :=
-        Create
-          (ItemDialog & ".cancelbutton",
-           "-text Cancel -command {CloseDialog " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3 -pady {0 5}");
-      Focus(Button);
-      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
-      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      ShowManipulateItem
+        ("Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
+         " from the ship's cargo",
+         "DropItem", "drop", ItemIndex);
       return TCL_OK;
    end Show_Drop_Item_Command;
 
