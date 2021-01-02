@@ -36,6 +36,8 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -647,13 +649,14 @@ package body Trades.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
       ProtoIndex: Unbounded_String;
       TypeBox: Ttk_ComboBox;
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".itemdialog.amount", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -671,10 +674,24 @@ package body Trades.UI is
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       end if;
       Trader := (if BaseIndex > 0 then "base" else "ship");
-      if CArgv.Arg(Argv, 1) in "buy" then
-         BuyItems(BaseCargoIndex, CArgv.Arg(Argv, 2));
+      if Argc > 2 then
+         if CArgv.Arg(Argv, 1) in "buy" then
+            BuyItems(BaseCargoIndex, CArgv.Arg(Argv, 2));
+         else
+            SellItems(CargoIndex, CArgv.Arg(Argv, 2));
+         end if;
       else
-         SellItems(CargoIndex, CArgv.Arg(Argv, 2));
+         if CArgv.Arg(Argv, 1) in "buy" then
+            BuyItems(BaseCargoIndex, Get(AmountBox));
+         else
+            SellItems(CargoIndex, Get(AmountBox));
+         end if;
+         if Close_Dialog_Command
+             (ClientData, Interp, 2,
+              CArgv.Empty & "CloseDialog" & ".itemdialog") =
+           TCL_ERROR then
+            return TCL_ERROR;
+         end if;
       end if;
       UpdateHeader;
       UpdateMessages;
@@ -897,7 +914,9 @@ package body Trades.UI is
                    ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
                     MaxPrice);
             end loop;
-            Menu.Add(TradeMenu, "command", "-label {Sell selected amount}");
+            Menu.Add
+              (TradeMenu, "command",
+               "-label {Sell selected amount} -command {SellAmount}");
             Menu.Add
               (TradeMenu, "command",
                "-label {Sell" & Natural'Image(MaxSellAmount) &
@@ -972,6 +991,38 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Menu_Command;
 
+   -- ****o* TUI/Sell_Amount_Command
+   -- FUNCTION
+   -- Show dialog to enter amount of items to sell
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SellAmount
+   -- SOURCE
+   function Sell_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sell_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      ShowManipulateItem
+        ("Sell " & GetItemName(PlayerShip.Cargo(ItemIndex)), "TradeItem sell",
+         "sell", ItemIndex);
+      return TCL_OK;
+   end Sell_Amount_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowTrade", Show_Trade_Command'Access);
@@ -979,6 +1030,7 @@ package body Trades.UI is
       AddCommand("TradeItem", Trade_Item_Command'Access);
       AddCommand("SearchTrade", Search_Trade_Command'Access);
       AddCommand("ShowTradeMenu", Show_Trade_Menu_Command'Access);
+      AddCommand("SellAmount", Sell_Amount_Command'Access);
    end AddCommands;
 
 end Trades.UI;

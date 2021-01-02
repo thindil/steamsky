@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -363,7 +363,7 @@ package body Ships.UI.Cargo is
       ShowManipulateItem
         ("Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
          " from the ship's cargo",
-         "DropItem", "drop", ItemIndex);
+         "DropItem " & CArgv.Arg(Argv, 1), "drop", ItemIndex);
       return TCL_OK;
    end Show_Drop_Item_Command;
 
