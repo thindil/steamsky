@@ -959,7 +959,8 @@ package body Trades.UI is
                   Menu.Add
                     (TradeMenu, "command",
                      "-label {Buy" & Natural'Image(MaxBuyAmount) &
-                     " of them}");
+                     " of them} -command {TradeItem buymax" &
+                     Natural'Image(MaxBuyAmount) & "}");
                end if;
             end if;
          end;
