@@ -386,7 +386,11 @@ package body Ships.UI.Cargo is
            " from the ship's cargo} -wraplength 370 -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Label :=
-        Create(ItemDialog & ".amountlbl", "-text {Amount:} -takefocus 0");
+        Create
+          (ItemDialog & ".amountlbl",
+           "-text {Amount (max:" &
+           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+           "):} -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
