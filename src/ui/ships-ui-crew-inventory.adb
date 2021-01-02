@@ -365,7 +365,13 @@ package body Ships.UI.Crew.Inventory is
            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
            " to ship cargo} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
-      Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
+      Label :=
+        Create
+          (ItemDialog & ".amountlbl",
+           "-text {Amount (max:" &
+           Positive'Image
+             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
+           "):}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
