@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -52,7 +52,7 @@ with Utils.UI; use Utils.UI;
 
 package body DebugUI is
 
-   -- ****o* DebugUI/Refresh_Module_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Module_Command
    -- FUNCTION
    -- Refresh the information about selected module
    -- PARAMETERS
@@ -105,7 +105,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Module_Command;
 
-   -- ****o* DebugUI/Refresh_Member_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Member_Command
    -- FUNCTION
    -- Refresh the information about selected crew member
    -- PARAMETERS
@@ -234,7 +234,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Member_Command;
 
-   -- ****o* DebugUI/Refresh_Cargo_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Cargo_Command
    -- FUNCTION
    -- Refresh the information about the player ship cargo
    -- PARAMETERS
@@ -270,7 +270,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Cargo_Command;
 
-   -- ****o* DebugUI/Refresh_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Command
    -- FUNCTION
    -- Refresh the whole game information
    -- PARAMETERS
@@ -329,7 +329,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Command;
 
-   -- ****o* DebugUI/Refresh_Base_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Base_Command
    -- FUNCTION
    -- Refresh the information about the selected base
    -- PARAMETERS
@@ -393,7 +393,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Base_Command;
 
-   -- ****o* DebugUI/Refresh_Events_Command
+   -- ****o* DebugUI/DebugUI.Refresh_Events_Command
    -- FUNCTION
    -- Refresh the list of events
    -- PARAMETERS
@@ -489,7 +489,7 @@ package body DebugUI is
       return TCL_OK;
    end Refresh_Events_Command;
 
-   -- ****o* DebugUI/Save_Game_Command
+   -- ****o* DebugUI/DebugUI.Save_Game_Command
    -- FUNCTION
    -- Save the game
    -- PARAMETERS
@@ -519,7 +519,7 @@ package body DebugUI is
       return TCL_OK;
    end Save_Game_Command;
 
-   -- ****o* DebugUI/Move_Ship_Command
+   -- ****o* DebugUI/DebugUI.Move_Ship_Command
    -- FUNCTION
    -- Move the player ship
    -- PARAMETERS
@@ -553,7 +553,7 @@ package body DebugUI is
       return TCL_OK;
    end Move_Ship_Command;
 
-   -- ****o* DebugUI/Update_Module_Command
+   -- ****o* DebugUI/DebugUI.Update_Module_Command
    -- FUNCTION
    -- Update the selected module
    -- PARAMETERS
@@ -610,7 +610,7 @@ package body DebugUI is
       return TCL_OK;
    end Update_Module_Command;
 
-   -- ****o* DebugUI/Add_Skill_Command
+   -- ****o* DebugUI/DebugUI.Add_Skill_Command
    -- FUNCTION
    -- Add a new skill to the selected crew member
    -- PARAMETERS
@@ -654,7 +654,7 @@ package body DebugUI is
       return TCL_OK;
    end Add_Skill_Command;
 
-   -- ****o* DebugUI/Update_Member_Command
+   -- ****o* DebugUI/DebugUI.Update_Member_Command
    -- FUNCTION
    -- Update the selected crew member
    -- PARAMETERS
@@ -717,7 +717,7 @@ package body DebugUI is
       return TCL_OK;
    end Update_Member_Command;
 
-   -- ****o* DebugUI/Add_Item_Command
+   -- ****o* DebugUI/DebugUI.Add_Item_Command
    -- FUNCTION
    -- Add a new item to the player ship cargo
    -- PARAMETERS
@@ -761,7 +761,7 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
 
-   -- ****o* DebugUI/Update_Item_Command
+   -- ****o* DebugUI/DebugUI.Update_Item_Command
    -- FUNCTION
    -- Update the amount of an item in the player ship cargo
    -- PARAMETERS
@@ -798,7 +798,7 @@ package body DebugUI is
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
 
-   -- ****o* DebugUI/Update_Base_Command
+   -- ****o* DebugUI/DebugUI.Update_Base_Command
    -- FUNCTION
    -- Update the selected base
    -- PARAMETERS
@@ -865,7 +865,7 @@ package body DebugUI is
       return TCL_OK;
    end Update_Base_Command;
 
-   -- ****o* DebugUI/Add_Ship_Command
+   -- ****o* DebugUI/DebugUI.Add_Ship_Command
    -- FUNCTION
    -- Add a new ship based event to the game
    -- PARAMETERS
@@ -926,7 +926,7 @@ package body DebugUI is
       return TCL_OK;
    end Add_Ship_Command;
 
-   -- ****o* DebugUI/Toggle_Item_Entry_Command
+   -- ****o* DebugUI/DebugUI.Toggle_Item_Entry_Command
    -- FUNCTION
    -- Show or hide item entry for bases events
    -- PARAMETERS
@@ -968,7 +968,7 @@ package body DebugUI is
       return TCL_OK;
    end Toggle_Item_Entry_Command;
 
-   -- ****o* DebugUI/Add_Event_Command
+   -- ****o* DebugUI/DebugUI.Add_Event_Command
    -- FUNCTION
    -- Add a new base event to the game
    -- PARAMETERS
@@ -1052,7 +1052,7 @@ package body DebugUI is
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
    end Add_Event_Command;
 
-   -- ****o* DebugUI/Delete_Event_Command
+   -- ****o* DebugUI/DebugUI.Delete_Event_Command
    -- FUNCTION
    -- Remove the selected event from the game
    -- PARAMETERS
