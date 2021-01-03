@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 package DebugUI is
 -- ****
 
-   -- ****f* DebugUI/AddCommands
+   -- ****f* DebugUI/DebugUI.AddCommands
    -- FUNCTION
    -- Show debug ui to the player
    -- SOURCE
