@@ -30,7 +30,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -42,7 +41,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Cargo; use Bases.Cargo;
@@ -458,7 +456,7 @@ package body Trades.UI is
    -- Show information about the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -477,32 +475,19 @@ package body Trades.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      TradeView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.tradeframe.canvas.trade.trade.view", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType, SelectedItem: Unbounded_String;
+      BaseType: Unbounded_String;
       Price: Natural;
       ItemTypes: constant array(Positive range <>) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
-      ItemText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.tradeframe.canvas.trade.item.info.text", Interp);
    begin
-      SelectedItem := To_Unbounded_String(Selection(TradeView));
-      if SelectedItem = Null_Unbounded_String then
-         return TCL_OK;
-      end if;
-      if Element(SelectedItem, 1) = 'b' then
-         ItemIndex :=
-           -(Positive'Value(Slice(SelectedItem, 2, Length(SelectedItem))));
+      if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
       else
-         ItemIndex := Positive'Value(To_String(SelectedItem));
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > Natural(PlayerShip.Cargo.Length) then
@@ -617,10 +602,7 @@ package body Trades.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      configure(ItemText, "-state normal");
-      Delete(ItemText, "1.0", "end");
-      Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
-      configure(ItemText, "-state disabled");
+      ShowInfo(To_String(ItemInfo));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
@@ -986,7 +968,9 @@ package body Trades.UI is
             end if;
          end;
       end if;
-      Menu.Add(TradeMenu, "command", "-label {Show more info about the item}");
+      Menu.Add
+        (TradeMenu, "command",
+         "-label {Show more info about the item} -command ShowTradeItemInfo");
       Tk_Popup
         (TradeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
