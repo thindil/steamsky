@@ -234,11 +234,18 @@ package body Utils.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      CargoIndex: Natural;
-      LabelName, WarningText, Value: Unbounded_String;
+      pragma Unreferenced(ClientData);
+      CargoIndex: constant Natural := Natural'Value(CArgv.Arg(Argv, 2));
+      LabelName, WarningText: Unbounded_String;
       Amount: Integer;
       Label: Ttk_Label;
+      MaxValue: constant Positive :=
+        (if Argc > 4 then Positive'Value(CArgv.Arg(Argv, 4))
+         else PlayerShip.Cargo(CargoIndex).Amount);
+      Value: constant Integer :=
+        (if CArgv.Arg(Argv, 3)'Length > 0 then
+           Integer'Value(CArgv.Arg(Argv, 3))
+         else 0);
    begin
       if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
@@ -251,12 +258,12 @@ package body Utils.UI is
              ("You will " & CArgv.Arg(Argv, 1) &
               " amount below low level of ");
       end if;
-      CargoIndex := Natural'Value(CArgv.Arg(Argv, 2));
-      Value := To_Unbounded_String(CArgv.Arg(Argv, 3));
-      if Integer'Value(To_String(Value)) < 1 or
-        Integer'Value(To_String(Value)) >
-          PlayerShip.Cargo(CargoIndex).Amount then
+      if Value < 1 or Value > MaxValue then
          Tcl_SetResult(Interp, "0");
+         return TCL_OK;
+      end if;
+      if Argc > 4 then
+         Tcl_SetResult(Interp, "1");
          return TCL_OK;
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
@@ -264,7 +271,7 @@ package body Utils.UI is
         ".gameframe.paned.tradeframe.canvas.trade.item.sellframe.amount"
         and then Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
           FuelType then
-         Amount := GetItemAmount(FuelType) - Natural'Value(To_String(Value));
+         Amount := GetItemAmount(FuelType) - Value;
          if Amount <= GameSettings.LowFuel then
             Widgets.configure
               (Label, "-text {" & To_String(WarningText) & "fuel.}");
@@ -276,8 +283,7 @@ package body Utils.UI is
       for Member of PlayerShip.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
-            Amount :=
-              GetItemsAmount("Drinks") - Natural'Value(To_String(Value));
+            Amount := GetItemsAmount("Drinks") - Value;
             if Amount <= GameSettings.LowDrinks then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "drinks.}");
@@ -288,7 +294,7 @@ package body Utils.UI is
             exit;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
-            Amount := GetItemsAmount("Food") - Natural'Value(To_String(Value));
+            Amount := GetItemsAmount("Food") - Value;
             if Amount <= GameSettings.LowFood then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "food.}");
@@ -839,23 +845,36 @@ package body Utils.UI is
 
    procedure ShowManipulateItem
      (Title, Command, Action: String;
-      ItemIndex: Inventory_Container.Extended_Index) is
+      ItemIndex: Inventory_Container.Extended_Index;
+      MaxAmount: Natural := 0) is
       ItemDialog: constant Ttk_Frame :=
         Create(".itemdialog", "-style Dialog.TFrame");
       Button: Ttk_Button :=
         Create
           (ItemDialog & ".dropbutton", "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
-      AmountBox: constant Ttk_SpinBox :=
-        Create
-          (ItemDialog & ".amount",
-           "-width 10 -from 1.0 -to" &
-           Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
-           " -validate key -validatecommand {CheckAmount " & Action &
-           Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
-           ItemDialog & ".amount" & Positive'Image(ItemIndex) & "}");
+      AmountBox: Ttk_SpinBox;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
+      if MaxAmount = 0 then
+         AmountBox :=
+           Create
+             (ItemDialog & ".amount",
+              "-width 10 -from 1.0 -to" &
+              Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
+              " -validate key -validatecommand {CheckAmount " & Action &
+              Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
+              ItemDialog & ".amount" & Positive'Image(ItemIndex) & "}");
+      else
+         AmountBox :=
+           Create
+             (ItemDialog & ".amount",
+              "-width 10 -from 1.0 -to" & Float'Image(Float(MaxAmount)) &
+              " -validate key -validatecommand {CheckAmount " & Action &
+              Positive'Image(ItemIndex) & " %P" & Positive'Image(MaxAmount) &
+              "} -command {ValidateAmount " & ItemDialog & ".amount" &
+              Positive'Image(ItemIndex) & "}");
+      end if;
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -864,12 +883,20 @@ package body Utils.UI is
           (ItemDialog & ".title",
            "-text {" & Title & "} -wraplength 370 -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
-      Label :=
-        Create
-          (ItemDialog & ".amountlbl",
-           "-text {Amount (max:" &
-           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
-           "):} -takefocus 0");
+      if MaxAmount = 0 then
+         Label :=
+           Create
+             (ItemDialog & ".amountlbl",
+              "-text {Amount (max:" &
+              Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+              "):} -takefocus 0");
+      else
+         Label :=
+           Create
+             (ItemDialog & ".amountlbl",
+              "-text {Amount (max:" & Positive'Image(MaxAmount) &
+              "):} -takefocus 0");
+      end if;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx {5 0}");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
