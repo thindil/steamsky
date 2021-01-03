@@ -916,7 +916,7 @@ package body Trades.UI is
             end loop;
             Menu.Add
               (TradeMenu, "command",
-               "-label {Sell selected amount} -command {SellAmount}");
+               "-label {Sell selected amount} -command {TradeAmount sell}");
             Menu.Add
               (TradeMenu, "command",
                "-label {Sell" & Natural'Image(MaxSellAmount) &
@@ -974,7 +974,9 @@ package body Trades.UI is
                end loop;
                if MaxBuyAmount > 0 then
                   Menu.Add
-                    (TradeMenu, "command", "-label {Buy selected amount}");
+                    (TradeMenu, "command",
+                     "-label {Buy selected amount} -command {TradeAmount buy" &
+                     Natural'Image(MaxBuyAmount) & "}");
                   Menu.Add
                     (TradeMenu, "command",
                      "-label {Buy" & Natural'Image(MaxBuyAmount) &
@@ -991,9 +993,9 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Menu_Command;
 
-   -- ****o* TUI/Sell_Amount_Command
+   -- ****o* TUI/Trade_Amount_Command
    -- FUNCTION
-   -- Show dialog to enter amount of items to sell
+   -- Show dialog to enter amount of items to sell or buy
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
@@ -1002,26 +1004,35 @@ package body Trades.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SellAmount
+   -- TradeAmount action baseindex
+   -- Action which will be taken. Can be buy or sell. BaseIndex is the index
+   -- of the base from which item will be bought. If zero it mean buying from
+   -- trader ship.
    -- SOURCE
-   function Sell_Amount_Command
+   function Trade_Amount_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Sell_Amount_Command
+   function Trade_Amount_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      ShowManipulateItem
-        ("Sell " & GetItemName(PlayerShip.Cargo(ItemIndex)), "TradeItem sell",
-         "sell", ItemIndex);
+      if CArgv.Arg(Argv, 1) = "sell" then
+         ShowManipulateItem
+           ("Sell " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+            "TradeItem sell", "sell", ItemIndex);
+      else
+         ShowManipulateItem
+           ("Buy " & GetItemName(PlayerShip.Cargo(ItemIndex)), "TradeItem buy",
+            "buy", abs (ItemIndex), Natural'Value(CArgv.Arg(Argv, 2)));
+      end if;
       return TCL_OK;
-   end Sell_Amount_Command;
+   end Trade_Amount_Command;
 
    procedure AddCommands is
    begin
@@ -1030,7 +1041,7 @@ package body Trades.UI is
       AddCommand("TradeItem", Trade_Item_Command'Access);
       AddCommand("SearchTrade", Search_Trade_Command'Access);
       AddCommand("ShowTradeMenu", Show_Trade_Menu_Command'Access);
-      AddCommand("SellAmount", Sell_Amount_Command'Access);
+      AddCommand("TradeAmount", Trade_Amount_Command'Access);
    end AddCommands;
 
 end Trades.UI;
