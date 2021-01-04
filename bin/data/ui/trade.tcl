@@ -3,6 +3,8 @@ set tradecanvas [canvas .gameframe.paned.tradeframe.canvas -yscrollcommand [list
 pack [ttk::scrollbar .gameframe.paned.tradeframe.scrolly -orient vertical -command [list $tradecanvas yview]] -side right -fill y
 pack $tradecanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.tradeframe.scrollx -orient horizontal -command [list $tradecanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.tradeframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.tradeframe.scrollx
 set tradeframe [ttk::frame $tradecanvas.trade]
 # Type of items to show
 grid [ttk::frame $tradeframe.options] -sticky w
