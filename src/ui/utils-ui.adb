@@ -242,25 +242,31 @@ package body Utils.UI is
       MaxValue: constant Positive :=
         (if Argc > 4 then Positive'Value(CArgv.Arg(Argv, 4))
          else PlayerShip.Cargo(CargoIndex).Amount);
-      Value: constant Integer :=
+      Value: Integer :=
         (if CArgv.Arg(Argv, 3)'Length > 0 then
            Integer'Value(CArgv.Arg(Argv, 3))
          else 0);
+      SpinBox: Ttk_SpinBox;
    begin
       if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String("You will give amount below low level of ");
+         SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       else
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String
              ("You will " & CArgv.Arg(Argv, 1) &
               " amount below low level of ");
+         SpinBox := Get_Widget(".itemdialog.amount", Interp);
       end if;
-      if Value < 1 or Value > MaxValue then
-         Tcl_SetResult(Interp, "0");
-         return TCL_OK;
+      if Value < 1 then
+         Set(SpinBox, "1");
+         Value := 1;
+      elsif Value > MaxValue then
+         Set(SpinBox, Positive'Image(MaxValue));
+         Value := MaxValue;
       end if;
       if Argc > 4 then
          Tcl_SetResult(Interp, "1");
