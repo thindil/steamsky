@@ -422,10 +422,6 @@ package body Trades.UI is
         New_String
           (".gameframe.paned.tradeframe.canvas.trade.options.baseinfo");
       configure(Label, "-text {" & To_String(TradeInfo) & "}");
-      TradeFrame.Name := New_String(Widget_Image(TradeCanvas) & ".trade.item");
-      Tcl.Tk.Ada.Grid.Grid(TradeFrame);
-      Label.Name := New_String(Widget_Image(TradeFrame) & ".sellframe.error");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       TradeFrame.Name := New_String(Widget_Image(TradeCanvas) & ".trade");
       configure
