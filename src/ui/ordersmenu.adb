@@ -18,6 +18,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -41,6 +42,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
+with Trades; use Trades;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 with WaitMenu; use WaitMenu;
@@ -402,7 +404,12 @@ package body OrdersMenu is
                if HaveTrader then
                   Add
                     (OrdersMenu, "command",
-                     "-label {Trade} -underline 0 -command ShowTrade");
+                     "-label {Trade} -underline 0 -command {ShowTrader " &
+                     To_String
+                       (Events_List
+                          (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                          .ShipIndex) &
+                     "}");
                   Add
                     (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8");
@@ -426,7 +433,13 @@ package body OrdersMenu is
                     0 then
                      Add
                        (OrdersMenu, "command",
-                        "-label {Trade} -underline 0 -command ShowTrade");
+                        "-label {Trade} -underline 0 -command {ShowTrader " &
+                        To_String
+                          (Events_List
+                             (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                                .EventIndex)
+                             .ShipIndex) &
+                        "}");
                      Add
                        (OrdersMenu, "command",
                         "-label {Ask for bases} -underline 8");
@@ -702,6 +715,39 @@ package body OrdersMenu is
       return TCL_OK;
    end Set_As_Home_Command;
 
+   -- ****f* OrdersMenu/Show_Trader_Command
+   -- FUNCTION
+   -- Generate cargo for trader and show trading UI
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowTrader protoindex
+   -- Protoindex is the index of ship prototype on which trader cargo will be
+   -- generated
+   -- SOURCE
+   function Show_Trader_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Trader_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+   begin
+      GenerateTraderCargo(To_Unbounded_String(CArgv.Arg(Argv, 1)));
+      Tcl_Eval(Interp, "ShowTrade");
+      return TCL_OK;
+   end Show_Trader_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -711,6 +757,7 @@ package body OrdersMenu is
       AddCommand("Attack", Attack_Command'Access);
       AddCommand("Pray", Pray_Command'Access);
       AddCommand("SetAsHome", Set_As_Home_Command'Access);
+      AddCommand("ShowTrader", Show_Trader_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
