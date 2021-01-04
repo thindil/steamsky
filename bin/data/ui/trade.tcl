@@ -22,22 +22,3 @@ grid [ttk::label $tradelist.price -text Price] -row 0 -column 3
 grid [ttk::label $tradelist.profit -text Profit] -row 0 -column 4
 grid [ttk::label $tradelist.owned -text Owned] -row 0 -column 5
 grid [ttk::label $tradelist.available -text Available] -row 0 -column 6
-# Item info
-set itemframe [ttk::frame $tradeframe.item]
-grid [ttk::labelframe $itemframe.info -text {Item Info:}]
-grid [text $itemframe.info.text -wrap char -height 10 -width 40]
-# Item actions
-grid [ttk::frame $itemframe.buyframe]
-grid [ttk::button $itemframe.buyframe.buy -text {Buy} -command {TradeItem buy}]
-grid [ttk::label $itemframe.buyframe.amountlbl] -column 1 -row 0
-grid [ttk::spinbox $itemframe.buyframe.amount -from 1 -validate key] -column 2 -row 0
-grid [ttk::label $itemframe.buyframe.orlbl -text {or}] -column 3 -row 0
-grid [ttk::button $itemframe.buyframe.buymax -text {Buy max} -command {TradeItem buymax}] -column 4 -row 0
-grid [ttk::frame $itemframe.sellframe]
-grid [ttk::button $itemframe.sellframe.sell -text {Sell} -command {TradeItem sell}]
-grid [ttk::label $itemframe.sellframe.amountlbl] -column 1 -row 0
-grid [ttk::spinbox $itemframe.sellframe.amount -from 1 -validate key] -column 2 -row 0
-grid [ttk::label $itemframe.sellframe.orlbl -text {or}] -column 3 -row 0
-grid [ttk::button $itemframe.sellframe.sellmax -text {Sell all} -command {TradeItem sellall}] -column 4 -row 0
-grid [ttk::label $itemframe.sellframe.error -style Headerred.TLabel] -columnspan 4
-grid $itemframe -row 1 -column 1 -sticky nwes
