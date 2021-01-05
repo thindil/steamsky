@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TopLevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.TopLevel.MainWindow; use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
@@ -52,7 +54,8 @@ package body ErrorDialog is
       Append(ErrorText, GameVersion & LF);
       Append(ErrorText, "Exception: " & Exception_Name(An_Exception) & LF);
       Append(ErrorText, "Message: " & Exception_Message(An_Exception) & LF);
-      Append(ErrorText, "-------------------------------------------------" & LF);
+      Append
+        (ErrorText, "-------------------------------------------------" & LF);
       Append(ErrorText, Symbolic_Traceback(An_Exception) & LF);
       Append(ErrorText, "-------------------------------------------------");
       Put_Line(ErrorFile, To_String(ErrorText));
@@ -63,8 +66,14 @@ package body ErrorDialog is
 
          Interp: Tcl.Tcl_Interp := Get_Context;
          Text: Tk_Text;
+         MainWindow: Tk_TopLevel := Get_Main_Window(Interp);
       begin
-         Tcl_Eval(Interp, "destroy .");
+         begin
+            Destroy(MainWindow);
+         exception
+            when STORAGE_ERROR =>
+               null;
+         end;
          Interp := Tcl.Tcl_CreateInterp;
          if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
             Ada.Text_IO.Put_Line
