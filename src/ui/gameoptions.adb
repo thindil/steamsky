@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -54,7 +54,7 @@ with Utils.UI; use Utils.UI;
 
 package body GameOptions is
 
-   -- ****it* GameOptions/Accel_Data
+   -- ****it* GameOptions/GameOptions.Accel_Data
    -- FUNCTION
    -- Data for showing keyboard shortcuts
    -- PARAMETERS
@@ -67,7 +67,7 @@ package body GameOptions is
    end record;
    -- ****
 
-   -- ****iv* GameOptions/Accels
+   -- ****iv* GameOptions/GameOptions.Accels
    -- FUNCTION
    -- Array with data to show keyboard shortcuts
    -- SOURCE
@@ -125,7 +125,7 @@ package body GameOptions is
         (FullScreenAccel, To_Unbounded_String(".interface.fullscreenkey")));
    -- ****
 
-   -- ****o* GameOptions/Show_Options_Command
+   -- ****o* GameOptions/GameOptions.Show_Options_Command
    -- FUNCTION
    -- Show the game options to the player
    -- PARAMETERS
@@ -321,7 +321,7 @@ package body GameOptions is
       return TCL_OK;
    end Show_Options_Command;
 
-   -- ****o* GameOptions/Set_Fonts_Command
+   -- ****o* GameOptions/GameOptions.Set_Fonts_Command
    -- FUNCTION
    -- Set the selected font
    -- PARAMETERS
@@ -382,7 +382,7 @@ package body GameOptions is
       return TCL_OK;
    end Set_Fonts_Command;
 
-   -- ****o* GameOptions/Set_Default_Fonts_Command
+   -- ****o* GameOptions/GameOptions.Set_Default_Fonts_Command
    -- FUNCTION
    -- Set the default values for fonts
    -- PARAMETERS
@@ -431,7 +431,7 @@ package body GameOptions is
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
-   -- ****o* GameOptions/Close_Options_Command
+   -- ****o* GameOptions/GameOptions.Close_Options_Command
    -- FUNCTION
    -- Save all options and back to the map
    -- PARAMETERS
