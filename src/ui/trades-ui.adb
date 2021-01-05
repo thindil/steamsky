@@ -122,10 +122,12 @@ package body Trades.UI is
          Bind(TradeFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         configure(CloseButton, "-command ShowSkyMap");
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
+      configure(CloseButton, "-command {ShowSkyMap ShowTrade}");
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       TradeFrame.Name := New_String(TradeCanvas & ".trade");
       ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);

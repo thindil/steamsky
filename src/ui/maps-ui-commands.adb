@@ -954,7 +954,9 @@ package body Maps.UI.Commands is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowSkyMap
+   -- ShowSkyMap ?previouscommand?
+   -- Previouscommand is command to show previous screen. Some screens require
+   -- to do special actions when closing them
    -- SOURCE
    function Show_Sky_Map_Command
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
@@ -967,12 +969,16 @@ package body Maps.UI.Commands is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-      ShowSkyMap(True);
+      if Argc = 1 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         ShowSkyMap(True);
+      else
+         Tcl_Eval(Interp, CArgv.Arg(Argv, 1));
+      end if;
       return TCL_OK;
    end Show_Sky_Map_Command;
 
