@@ -1001,15 +1001,38 @@ package body Trades.UI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if CArgv.Arg(Argv, 1) = "sell" then
          ShowManipulateItem
            ("Sell " & GetItemName(PlayerShip.Cargo(ItemIndex)),
             "TradeItem sell", "sell", ItemIndex);
       else
-         ShowManipulateItem
-           ("Buy " & GetItemName(PlayerShip.Cargo(ItemIndex)), "TradeItem buy",
-            "buy", abs (ItemIndex), Natural'Value(CArgv.Arg(Argv, 2)));
+         if ItemIndex > 0 then
+            ShowManipulateItem
+              ("Buy " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+               "TradeItem buy", "buy", ItemIndex,
+               Natural'Value(CArgv.Arg(Argv, 2)));
+         else
+            if BaseIndex > 0 then
+               ShowManipulateItem
+                 ("Buy " &
+                  To_String
+                    (Items_List
+                       (SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
+                       .Name),
+                  "TradeItem buy", "buy", abs (ItemIndex),
+                  Natural'Value(CArgv.Arg(Argv, 2)));
+            else
+               ShowManipulateItem
+                 ("Buy " &
+                  To_String
+                    (Items_List(TraderCargo(abs (ItemIndex)).ProtoIndex).Name),
+                  "TradeItem buy", "buy", abs (ItemIndex),
+                  Natural'Value(CArgv.Arg(Argv, 2)));
+            end if;
+         end if;
       end if;
       return TCL_OK;
    end Trade_Amount_Command;
