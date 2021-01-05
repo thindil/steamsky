@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing profit info on trade screen
 - Crash on trying to trade with friendly ships
+- Crash on showing info about errors
 
 ## [5.6] - 2020-12-27
 
