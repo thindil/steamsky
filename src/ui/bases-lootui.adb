@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -414,8 +414,7 @@ package body Bases.LootUI is
                configure
                  (AmountBox,
                   "-to" & Natural'Image(MaxTakeAmount) &
-                  " -validatecommand {ValidateSpinbox %S %s" &
-                  Positive'Image(MaxTakeAmount) & "}");
+                  " -validatecommand {ValidateSpinbox %W %P}");
                configure
                  (AmountLabel,
                   "-text {(max" & Natural'Image(MaxTakeAmount) & "):}");

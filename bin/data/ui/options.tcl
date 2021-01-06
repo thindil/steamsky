@@ -52,15 +52,15 @@ grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1
 tooltip::tooltip $goptions.autoaskforevents {Auto ask for events when ship end docking to bases.}
 grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}]
 tooltip::tooltip $goptions.lbl8 {Amount of fuel below which you will see warning about low level of.}
-grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 7 -column 1
+grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 7 -column 1
 tooltip::tooltip $goptions.fuel {Amount of fuel below which you will see warning about low level of.}
 grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}]
 tooltip::tooltip $goptions.lbl9 {Amount of drinks below which you will see warning about low level of.}
-grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 8 -column 1
+grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 8 -column 1
 tooltip::tooltip $goptions.drinks {Amount of drinks below which you will see warning about low level of.}
 grid [ttk::label $goptions.lbl10 -text {Low level of food:}]
 tooltip::tooltip $goptions.lbl10 {Amount of food below which you will see warning about low level of.}
-grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %S %s 10000}] -row 9 -column 1
+grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 9 -column 1
 tooltip::tooltip $goptions.food {Amount of food below which you will see warning about low level of.}
 grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}]
 tooltip::tooltip $goptions.lbl11 {Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.}
@@ -68,11 +68,11 @@ grid [ttk::combobox $goptions.automovestop -state readonly -values [list {Never}
 tooltip::tooltip $goptions.automovestop {Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.}
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}]
 tooltip::tooltip $goptions.lbl12 {Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.}
-grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %S %s 5000}] -row 11 -column 1
+grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 11 -column 1
 tooltip::tooltip $goptions.messageslimit {Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.}
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}]
 tooltip::tooltip $goptions.lbl13 {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
-grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %S %s 20}] -row 12 -column 1
+grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 12 -column 1
 tooltip::tooltip $goptions.savedmessages {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
 grid [ttk::label $goptions.lbl14 -text {Messages order:}]
 tooltip::tooltip $goptions.lbl14 {In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.}
@@ -291,7 +291,7 @@ grid [ttk::entry $ioptions.fullscreenkey] -row 4 -column 1
 bind $ioptions.fullscreenkey <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $ioptions.lbl8 -text {Close messages after:}]
 tooltip::tooltip $ioptions.lbl8 {Auto close game messages after that amount of seconds.}
-grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %S %s 60}] -row 5 -column 1
+grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 5 -column 1
 tooltip::tooltip $ioptions.closemessages {Auto close game messages after that amount of seconds.}
 grid [ttk::label $ioptions.lbl9 -text {Show numeric values:}]
 tooltip::tooltip $ioptions.lbl9 {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
@@ -299,17 +299,17 @@ grid [ttk::checkbutton $ioptions.shownumbers] -row 6 -column 1
 tooltip::tooltip $ioptions.shownumbers {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
 grid [ttk::label $ioptions.lbl10 -text {Size of map font:}]
 tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used to draw game map.}
-grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 7 -column 1
+grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 7 -column 1
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont {Size (in pixels) of font used to draw game map.}
 grid [ttk::label $ioptions.lbl11 -text {Size of help font:}]
 tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used mainly in help.}
-grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 8 -column 1
+grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 8 -column 1
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont {Size (in pixels) of font used mainly in help.}
 grid [ttk::label $ioptions.lbl12 -text {Size of interface font:}]
 tooltip::tooltip $ioptions.lbl12 {Size (in pixels) of font used in interface (for example, here).}
-grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}] -row 9 -column 1
+grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 9 -column 1
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
