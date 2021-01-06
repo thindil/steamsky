@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ package body WaitMenu is
       AmountBox :=
         Create
           (WaitDialog & ".amount",
-           "-from 1.0 -to 1440.0 -width 6 -validate key -validatecommand {ValidateSpinbox %S %s 1440}");
+           "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
       Bind(AmountBox, "<Escape>", "{CloseDialog " & WaitDialog & "}");
       Set(AmountBox, "1");

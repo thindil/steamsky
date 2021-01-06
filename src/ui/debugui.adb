@@ -183,7 +183,7 @@ package body DebugUI is
            Create
              (".debugdialog.main.crew.stats.value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-              "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %S %s 50}");
+              "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}");
          Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,
@@ -216,7 +216,7 @@ package body DebugUI is
            Create
              (".debugdialog.main.crew.skills.value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %S %s 100}");
+              "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P}");
          Set(SpinBox, Positive'Image(Member.Skills(I)(2)));
          Tcl.Tk.Ada.Grid.Grid
            (SpinBox,

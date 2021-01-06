@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -284,8 +284,7 @@ package body Crafts.UI is
       configure
         (AmountBox,
          "-to" & Positive'Image(MaxAmount) &
-         " -validatecommand {ValidateSpinbox %S %s" &
-         Positive'Image(MaxAmount) & "}");
+         " -validatecommand {ValidateSpinbox %W %P}");
       if MaxAmount > 1 then
          configure
            (MaxLabel, "-text {max (" & Positive'Image(MaxAmount) & ")}");

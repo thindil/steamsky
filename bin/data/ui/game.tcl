@@ -65,12 +65,23 @@ $mapview tag configure red3 -foreground #732727
 $mapview tag configure green2 -foreground #73d216
 $mapview tag configure gray -foreground #1f2223
 $mapview tag configure black -foreground black
-# Move map dialog
-proc ValidateSpinbox {value currentvalue max} {
+proc ValidateSpinbox {widget value} {
    set newvalue [regsub -all {[^0-9]} $value {}]
-   if {$newvalue == "" || [expr $currentvalue + $newvalue] > $max} {
+   set minvalue [$widget cget -from]
+   if {$newvalue == ""} {
+      $widget set $minvalue
       return false
    }
+   if {$newvalue < $minvalue} {
+      $widget set $minvalue
+      return true
+   }
+   set maxvalue [$widget cget -to]
+   if {$newvalue > $maxvalue} {
+      $widget set $maxvalue
+      return true
+   }
+   $widget set $newvalue
    return true
 }
 # Move map buttons
@@ -94,10 +105,10 @@ grid [ttk::button $mframe.wait -text {...} -style Toolbutton -command {
    tk busy .gameframe.paned
    ttk::frame .gameframe.movemapdialog -style Dialog.TFrame
    grid [ttk::label .gameframe.movemapdialog.xlabel -text X: -takefocus 0] -pady {5 0}
-   grid [ttk::spinbox .gameframe.movemapdialog.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 0 -column 1 -pady {5 0}
+   grid [ttk::spinbox .gameframe.movemapdialog.x -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 0 -column 1 -pady {5 0}
    .gameframe.movemapdialog.x set 1
    grid [ttk::label .gameframe.movemapdialog.ylabel -text Y: -takefocus 0] -row 1
-   grid [ttk::spinbox .gameframe.movemapdialog.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %S %s 1024} -width 5] -row 1 -column 1
+   grid [ttk::spinbox .gameframe.movemapdialog.y -from 1.0 -to 1024.0 -increment 1.0 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1
    .gameframe.movemapdialog.y set 1
    grid [ttk::button .gameframe.movemapdialog.moveto -text {Move map to selected location} -command {MoveMap movemapto} -underline 0] -row 2 -columnspan 2 -sticky we -padx 5
    grid [ttk::button .gameframe.movemapdialog.centeronship -text {Center map on ship} -command {MoveMap centeronship} -underline 0] -row 3 -columnspan 2 -sticky we -padx 5
