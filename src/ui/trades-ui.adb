@@ -124,6 +124,9 @@ package body Trades.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          configure(CloseButton, "-command ShowSkyMap");
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+         if BaseIndex = 0 and EventIndex > 0 then
+            DeleteEvent(EventIndex);
+         end if;
          ShowSkyMap(True);
          return TCL_OK;
       end if;
