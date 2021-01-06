@@ -239,14 +239,13 @@ package body Utils.UI is
       LabelName, WarningText: Unbounded_String;
       Amount: Integer;
       Label: Ttk_Label;
-      MaxValue: constant Positive :=
-        (if Argc > 5 then Positive'Value(CArgv.Arg(Argv, 5))
-         else PlayerShip.Cargo(CargoIndex).Amount);
       Value: Integer :=
         (if CArgv.Arg(Argv, 3)'Length > 0 then
            Integer'Value(CArgv.Arg(Argv, 3))
          else 0);
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      MaxValue: constant Positive :=
+        Positive'Value(Widgets.cget(SpinBox, "-to"));
    begin
       if CArgv.Arg(Argv, 1) = ".itemdialog.giveamount" then
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
@@ -265,6 +264,10 @@ package body Utils.UI is
       elsif Value > MaxValue then
          Set(SpinBox, Positive'Image(MaxValue));
          Value := MaxValue;
+      end if;
+      if Argc > 4 and then CArgv.Arg(Argv, 4) = "buy" then
+         Tcl_SetResult(Interp, "1");
+         return TCL_OK;
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
       if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
@@ -863,8 +866,8 @@ package body Utils.UI is
          AmountBox :=
            Create
              (ItemDialog & ".amount",
-              "-width 10 -from 1.0 -to" &
-              Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
+              "-width 10 -from 1 -to" &
+              Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
               ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
@@ -873,12 +876,11 @@ package body Utils.UI is
          AmountBox :=
            Create
              (ItemDialog & ".amount",
-              "-width 10 -from 1.0 -to" & Float'Image(Float(MaxAmount)) &
+              "-width 10 -from 1 -to" & Positive'Image(MaxAmount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
               ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
-              Positive'Image(MaxAmount) & "} -command {ValidateAmount " &
-              ItemDialog & ".amount" & Positive'Image(ItemIndex) & " " &
-              Action & "}");
+              "} -command {ValidateAmount " & ItemDialog & ".amount" &
+              Positive'Image(ItemIndex) & " " & Action & "}");
       end if;
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
