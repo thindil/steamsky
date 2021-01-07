@@ -13,7 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -298,13 +300,19 @@ package body Messages.UI is
       end if;
       if GameSettings.MessagesOrder = OLDER_FIRST then
          for Message of Messages_List loop
-            if Index(Message.Message, SearchText, 1) > 0 then
+            if Index
+                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                 1) >
+              0 then
                ShowMessage(Message, MessagesView, MessagesType);
             end if;
          end loop;
       else
          for Message of reverse Messages_List loop
-            if Index(Message.Message, SearchText, 1) > 0 then
+            if Index
+                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                 1) >
+              0 then
                ShowMessage(Message, MessagesView, MessagesType);
             end if;
          end loop;
