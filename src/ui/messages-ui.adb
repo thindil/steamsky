@@ -210,10 +210,10 @@ package body Messages.UI is
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -230,7 +230,7 @@ package body Messages.UI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (".gameframe.paned.messagesframe.canvas.messages.options.types",
@@ -243,7 +243,8 @@ package body Messages.UI is
       end if;
       ClearMessages;
       Current(TypeBox, "0");
-      return TCL_OK;
+      return Show_Last_Messages_Command
+          (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Delete_Messages_Command;
 
    -- ****o* MUI2/Search_Messages_Command
