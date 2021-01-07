@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ with Utils.UI; use Utils.UI;
 
 package body Goals.UI is
 
-   -- ****o* GUI/Show_Goals_Command
+   -- ****o* GUI/GUI.Show_Goals_Command
    -- FUNCTION
    -- Show goals UI to the player
    -- PARAMETERS
@@ -76,7 +76,7 @@ package body Goals.UI is
       return TCL_OK;
    end Show_Goals_Command;
 
-   -- ****o* GUI/Set_Goal_Command
+   -- ****o* GUI/GUI.Set_Goal_Command
    -- FUNCTION
    -- Set selected goal as a current goal
    -- PARAMETERS
