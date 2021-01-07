@@ -14,11 +14,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ttk::frame .gameframe.paned.messagesframe
-set messagescanvas [canvas .gameframe.paned.messagesframe.canvas -yscrollcommand [list .gameframe.paned.messagesframe.scrolly set] -xscrollcommand [list .gameframe.paned.messagesframe.scrollx set]]
-pack [ttk::scrollbar .gameframe.paned.messagesframe.scrolly -orient vertical -command [list $messagescanvas yview]] -side right -fill y
+set messagescanvas [canvas .gameframe.paned.messagesframe.canvas -xscrollcommand [list .gameframe.paned.messagesframe.scrollx set]]
 pack $messagescanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.messagesframe.scrollx -orient horizontal -command [list $messagescanvas xview]] -fill x
-::autoscroll::autoscroll .gameframe.paned.messagesframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.messagesframe.scrollx
 set messagesframe [ttk::frame $messagescanvas.messages]
 # Messages options
@@ -31,11 +29,13 @@ tooltip::tooltip $messagesframe.options.search {Search for the selected text in 
 grid [ttk::button $messagesframe.options.delete -text {Delete all messages} -command DeleteMessages] -row 0 -column 2
 # Messages list
 grid [ttk::frame $messagesframe.list] -sticky nwes
-set messagesview2 [text $messagesframe.list.view]
+set messagesview2 [text $messagesframe.list.view -width 10 -height 20 -yscrollcommand [list $messagesframe.list.scrolly set]]
 $messagesview2 tag configure yellow -foreground yellow
 $messagesview2 tag configure green -foreground #4e9a06
 $messagesview2 tag configure red -foreground red
 $messagesview2 tag configure cyan -foreground cyan
 $messagesview2 tag configure blue -foreground #3465a4
 $messagesview2 tag configure gray -foreground {dim gray}
+pack [ttk::scrollbar $messagesframe.list.scrolly -orient vertical -command [list $messagesview2 yview]] -side right -fill y
 pack $messagesview2 -side top -fill both -expand true
+::autoscroll::autoscroll $messagesframe.list.scrolly
