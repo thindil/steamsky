@@ -237,6 +237,7 @@ package body WaitMenu is
          WaitInPlace(Positive'Value(Get(AmountBox)));
       end if;
       UpdateHeader;
+      UpdateMessages;
       DrawMap;
       if Invoke(CloseButton) /= "" then
          return TCL_ERROR;
