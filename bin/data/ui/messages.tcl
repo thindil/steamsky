@@ -18,13 +18,16 @@ set messagescanvas [canvas .gameframe.paned.messagesframe.canvas -yscrollcommand
 pack [ttk::scrollbar .gameframe.paned.messagesframe.scrolly -orient vertical -command [list $messagescanvas yview]] -side right -fill y
 pack $messagescanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.messagesframe.scrollx -orient horizontal -command [list $messagescanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.messagesframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.messagesframe.scrollx
 set messagesframe [ttk::frame $messagescanvas.messages]
 # Messages options
 grid [ttk::frame $messagesframe.options] -sticky w
-grid [ttk::combobox $messagesframe.options.types -values [list All Combat Trade Orders Craft Others Missions] -state readonly]
+grid [ttk::combobox $messagesframe.options.types -values [list All Combat Trade Orders Craft Others Missions] -state readonly -width 10]
 bind $messagesframe.options.types <<ComboboxSelected>> SelectMessages
 $messagesframe.options.types current 0
-grid [ttk::entry $messagesframe.options.search -validate key -validatecommand {SearchMessages %P}] -row 0 -column 1
+grid [ttk::entry $messagesframe.options.search -validate key -validatecommand {SearchMessages %P} -width 30] -row 0 -column 1
+tooltip::tooltip $messagesframe.options.search {Search for the selected text in the messages.}
 grid [ttk::button $messagesframe.options.delete -text {Delete all messages} -command DeleteMessages] -row 0 -column 2
 # Messages list
 grid [ttk::frame $messagesframe.list] -sticky nwes
