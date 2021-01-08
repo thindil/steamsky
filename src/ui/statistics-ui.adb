@@ -123,6 +123,14 @@ package body Statistics.UI is
                  (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
                "} {" & Positive'Image(Order.Amount) & "}]");
          end loop;
+         if GameStats.CraftingOrders.Length < 10 then
+            configure
+              (TreeView,
+               "-height" &
+               Positive'Image(Positive(GameStats.CraftingOrders.Length)));
+         else
+            configure(TreeView, "-height 10");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
@@ -187,6 +195,14 @@ package body Statistics.UI is
                      Positive'Image(FinishedMission.Amount) & "}]");
             end case;
          end loop;
+         if GameStats.FinishedMissions.Length < 10 then
+            configure
+              (TreeView,
+               "-height" &
+               Positive'Image(Positive(GameStats.FinishedMissions.Length)));
+         else
+            configure(TreeView, "-height 10");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
@@ -222,6 +238,14 @@ package body Statistics.UI is
                "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
                Positive'Image(Goal.Amount) & "}]");
          end loop;
+         if GameStats.FinishedGoals.Length < 10 then
+            configure
+              (TreeView,
+               "-height" &
+               Positive'Image(Positive(GameStats.FinishedGoals.Length)));
+         else
+            configure(TreeView, "-height 10");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
@@ -245,6 +269,14 @@ package body Statistics.UI is
             end loop;
             TotalDestroyed := TotalDestroyed + DestroyedShip.Amount;
          end loop;
+         if GameStats.DestroyedShips.Length < 10 then
+            configure
+              (TreeView,
+               "-height" &
+               Positive'Image(Positive(GameStats.DestroyedShips.Length)));
+         else
+            configure(TreeView, "-height 10");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
@@ -268,6 +300,14 @@ package body Statistics.UI is
                Positive'Image(KilledMob.Amount) & "}]");
             TotalDestroyed := TotalDestroyed + KilledMob.Amount;
          end loop;
+         if GameStats.KilledMobs.Length < 10 then
+            configure
+              (TreeView,
+               "-height" &
+               Positive'Image(Positive(GameStats.KilledMobs.Length)));
+         else
+            configure(TreeView, "-height 10");
+         end if;
          Tcl.Tk.Ada.Grid.Grid(TreeView);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
