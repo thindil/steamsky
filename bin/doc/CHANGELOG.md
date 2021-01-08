@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Crash on trying to trade with friendly ships
 - Crash on showing info about errors
 - Updating messages after wait action
+- Showing long goals names on button in the game statistics
 
 ## [5.6] - 2020-12-27
 
