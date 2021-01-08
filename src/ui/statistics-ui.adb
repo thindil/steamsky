@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -192,7 +192,11 @@ package body Statistics.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
       end if;
       Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goal");
-      configure(Label, "-text {" & GoalText(0) & "}");
+      if GoalText(0)'Length < 16 then
+         configure(Label, "-text {" & GoalText(0) & "}");
+      else
+         configure(Label, "-text {" & GoalText(0)(1 .. 18) & "...}");
+      end if;
       TotalFinished := 0;
       for FinishedGoal of GameStats.FinishedGoals loop
          TotalFinished := TotalFinished + FinishedGoal.Amount;
