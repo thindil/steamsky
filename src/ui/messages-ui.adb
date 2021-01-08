@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@ with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -37,7 +36,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
-with Maps.UI; use Maps.UI;
 with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
@@ -111,7 +109,9 @@ package body Messages.UI is
         Get_Widget(MessagesFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      MessagesType: Message_Type := Default;
+      MessagesType: constant Message_Type :=
+        (if Argc = 1 then Default
+         else Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1))));
       MessagesView: constant Tk_Text :=
         Get_Widget(MessagesCanvas & ".messages.list.view", Interp);
       TypeBox: constant Ttk_ComboBox :=
@@ -125,15 +125,11 @@ package body Messages.UI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "messages.tcl");
          Bind(MessagesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(MessagesCanvas, "ismapped") = "1" and Argc = 1 then
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & CloseButton);
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      if Argc > 1 then
-         MessagesType := Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1)));
-      else
+      if Argc = 1 then
          Current(TypeBox, "0");
       end if;
       Delete(SearchEntry, "0", "end");
