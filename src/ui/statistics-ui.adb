@@ -22,6 +22,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -31,6 +32,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crafts; use Crafts;
 with Goals; use Goals;
 with Items; use Items;
+with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
@@ -59,6 +61,7 @@ package body Statistics.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return;
       end if;
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       StatsText :=
         To_Unbounded_String("Points:" & Natural'Image(GetGamePoints));
       Append(StatsText, LF & "Time passed:");
@@ -110,7 +113,8 @@ package body Statistics.UI is
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
-      TreeView := Get_Widget(StatsFrame & ".left.craftsview");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.craftsframe");
+      TreeView := Get_Widget(StatsFrame & ".craftsview");
       if Children(TreeView, "{}") /= "{}" then
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
@@ -131,15 +135,15 @@ package body Statistics.UI is
          else
             configure(TreeView, "-height 10");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(TreeView);
+         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
       TotalFinished := 0;
       for FinishedMission of GameStats.FinishedMissions loop
          TotalFinished := TotalFinished + FinishedMission.Amount;
       end loop;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.missions");
+      Label.Name := New_String(StatsCanvas & ".stats.left.missions");
       declare
          MissionsPercent: Natural := 0;
       begin
@@ -159,8 +163,8 @@ package body Statistics.UI is
                   Ada.Strings.Left)) &
             "%)" & "}");
       end;
-      TreeView.Name :=
-        New_String(Widget_Image(StatsFrame) & ".left.missionsview");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.missionsframe");
+      TreeView.Name := New_String(StatsFrame & ".missionsview");
       if Children(TreeView, "{}") /= "{}" then
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
@@ -203,11 +207,11 @@ package body Statistics.UI is
          else
             configure(TreeView, "-height 10");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(TreeView);
+         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goal");
+      Label.Name := New_String(StatsCanvas & ".stats.left.goal");
       if GoalText(0)'Length < 16 then
          configure(Label, "-text {" & GoalText(0) & "}");
       else
@@ -217,11 +221,11 @@ package body Statistics.UI is
       for FinishedGoal of GameStats.FinishedGoals loop
          TotalFinished := TotalFinished + FinishedGoal.Amount;
       end loop;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.goals");
+      Label.Name := New_String(StatsCanvas & ".stats.left.goals");
       configure
         (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
-      TreeView.Name :=
-        New_String(Widget_Image(StatsFrame) & ".left.goalsview");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats.left.goalsframe");
+      TreeView.Name := New_String(StatsFrame & ".goalsview");
       if Children(TreeView, "{}") /= "{}" then
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
@@ -246,12 +250,12 @@ package body Statistics.UI is
          else
             configure(TreeView, "-height 10");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(TreeView);
+         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
-      TreeView.Name :=
-        New_String(Widget_Image(StatsFrame) & ".right.destroyedview");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats.right.destroyedframe");
+      TreeView.Name := New_String(StatsFrame & ".destroyedview");
       if GameStats.DestroyedShips.Length > 0 then
          if Children(TreeView, "{}") /= "{}" then
             Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
@@ -277,17 +281,17 @@ package body Statistics.UI is
          else
             configure(TreeView, "-height 10");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(TreeView);
+         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".right.destroyed");
+      Label.Name := New_String(StatsCanvas & ".stats.right.destroyed");
       configure
         (Label,
          "-text {Destroyed ships (Total:" & Natural'Image(TotalDestroyed) &
          ")}");
-      TreeView.Name :=
-        New_String(Widget_Image(StatsFrame) & ".right.killedview");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats.right.killedframe");
+      TreeView.Name := New_String(StatsFrame & ".killedview");
       TotalDestroyed := 0;
       if GameStats.KilledMobs.Length > 0 then
          if Children(TreeView, "{}") /= "{}" then
@@ -308,11 +312,11 @@ package body Statistics.UI is
          else
             configure(TreeView, "-height 10");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(TreeView);
+         Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
-         Tcl.Tk.Ada.Grid.Grid_Remove(TreeView);
+         Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".right.killed");
+      Label.Name := New_String(StatsCanvas & ".stats.right.killed");
       configure
         (Label,
          "-text {Killed enemies (Total:" & Natural'Image(TotalDestroyed) &
@@ -322,9 +326,9 @@ package body Statistics.UI is
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
+      StatsFrame := Get_Widget(StatsCanvas & ".stats");
       Canvas_Create
-        (StatsCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(StatsFrame));
+        (StatsCanvas, "window", "0 0 -anchor nw -window " & StatsFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (StatsCanvas, "-scrollregion [list " & BBox(StatsCanvas, "all") & "]");
