@@ -34,32 +34,40 @@ grid [ttk::scrollbar $statsframe.left.craftsframe.scrolly -orient vertical -comm
 ::autoscroll::autoscroll $statsframe.left.craftsframe.scrolly
 grid [ttk::label $statsframe.left.missions] -sticky w
 grid [ttk::frame $statsframe.left.missionsframe] -sticky w
-grid [ttk::treeview $statsframe.left.missionsframe.missionsview -show headings -columns [list name amount] -selectmode none]
+grid [ttk::treeview $statsframe.left.missionsframe.missionsview -show headings -columns [list name amount] -selectmode none -yscrollcommand [list $statsframe.left.missionsframe.scrolly set]]
 $statsframe.left.missionsframe.missionsview heading name -text {Name}
 $statsframe.left.missionsframe.missionsview column name -width 250
 $statsframe.left.missionsframe.missionsview heading amount -text {Amount}
 $statsframe.left.missionsframe.missionsview column amount -width 75 -anchor center
+grid [ttk::scrollbar $statsframe.left.missionsframe.scrolly -orient vertical -command [list $statsframe.left.missionsframe.missionsview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $statsframe.left.missionsframe.scrolly
 grid [ttk::button $statsframe.left.goal -text {Goals} -command {ShowGoals $statsframe.left.goal}] -sticky w
 grid [ttk::label $statsframe.left.goals] -sticky w
 grid [ttk::frame $statsframe.left.goalsframe] -sticky w
-grid [ttk::treeview $statsframe.left.goalsframe.goalsview -show headings -columns [list name amount] -selectmode none]
+grid [ttk::treeview $statsframe.left.goalsframe.goalsview -show headings -columns [list name amount] -selectmode none -yscrollcommand [list $statsframe.left.goalsframe.scrolly set]]
 $statsframe.left.goalsframe.goalsview heading name -text {Name}
 $statsframe.left.goalsframe.goalsview column name -width 250
 $statsframe.left.goalsframe.goalsview heading amount -text {Amount}
 $statsframe.left.goalsframe.goalsview column amount -width 75 -anchor center
+grid [ttk::scrollbar $statsframe.left.goalsframe.scrolly -orient vertical -command [list $statsframe.left.goalsframe.goalsview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $statsframe.left.goalsframe.scrolly
 grid [ttk::frame $statsframe.right] -row 0 -column 1 -sticky nwes -padx 5
 grid [ttk::label $statsframe.right.destroyed] -sticky w
 grid [ttk::frame $statsframe.right.destroyedframe] -sticky w
-grid [ttk::treeview $statsframe.right.destroyedframe.destroyedview -show headings -columns [list name amount] -selectmode none]
+grid [ttk::treeview $statsframe.right.destroyedframe.destroyedview -show headings -columns [list name amount] -selectmode none -yscrollcommand [list $statsframe.right.destroyedframe.scrolly set]]
 $statsframe.right.destroyedframe.destroyedview heading name -text {Name}
 $statsframe.right.destroyedframe.destroyedview column name -width 250
 $statsframe.right.destroyedframe.destroyedview heading amount -text {Amount}
 $statsframe.right.destroyedframe.destroyedview column amount -width 75 -anchor center
+grid [ttk::scrollbar $statsframe.right.destroyedframe.scrolly -orient vertical -command [list $statsframe.right.destroyedframe.destroyedview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $statsframe.right.destroyedframe.scrolly
 grid [ttk::label $statsframe.right.killed] -sticky w
 grid [ttk::frame $statsframe.right.killedframe] -sticky w
-grid [ttk::treeview $statsframe.right.killedframe.killedview -show headings -columns [list name amount] -selectmode none]
+grid [ttk::treeview $statsframe.right.killedframe.killedview -show headings -columns [list name amount] -selectmode none -yscrollcommand [list $statsframe.left.killedframe.scrolly set]]
 $statsframe.right.killedframe.killedview heading name -text {Name}
 $statsframe.right.killedframe.killedview column name -width 250
 $statsframe.right.killedframe.killedview heading amount -text {Amount}
 $statsframe.right.killedframe.killedview column amount -width 75 -anchor center
+grid [ttk::scrollbar $statsframe.right.killedframe.scrolly -orient vertical -command [list $statsframe.right.killedframe.destroyedview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $statsframe.right.killedframe.scrolly
 grid columnconfigure .gameframe.paned.statsframe 0 -weight 1
