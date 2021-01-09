@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ with Utils.UI; use Utils.UI;
 
 package body Help.UI is
 
-   -- ****o* HUI/Show_Topic_Command
+   -- ****o* HUI/HUI.Show_Topic_Command
    -- FUNCTION
    -- Show the content of the selected topic help
    -- PARAMETERS
@@ -237,7 +237,7 @@ package body Help.UI is
       return TCL_OK;
    end Show_Topic_Command;
 
-   -- ****o* HUI/Show_Help_Command
+   -- ****o* HUI/HUI.Show_Help_Command
    -- FUNCTION
    -- Show help window to the player
    -- PARAMETERS
@@ -304,7 +304,7 @@ package body Help.UI is
       return TCL_OK;
    end Show_Help_Command;
 
-   -- ****o* HUI/Close_Help_Command
+   -- ****o* HUI/HUI.Close_Help_Command
    -- FUNCTION
    -- Destroy help window and save sash position to the game configuration
    -- PARAMETERS
