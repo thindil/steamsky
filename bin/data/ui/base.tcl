@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,17 +18,21 @@ set basecanvas [canvas .gameframe.paned.baseframe.canvas -yscrollcommand [list .
 pack [ttk::scrollbar .gameframe.paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -side right -fill y
 pack $basecanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.baseframe.scrollx -orient horizontal -command [list $basecanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.baseframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.baseframe.scrollx
 set baseframe [ttk::frame $basecanvas.base]
-grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2
+grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2 -sticky w -padx 5 -pady 5
 # Items list
-grid [ttk::frame $baseframe.items] -sticky nwes
+grid [ttk::frame $baseframe.items] -sticky nwes -padx 5 -pady {5 0}
 set baseview [ttk::treeview $baseframe.items.view -yscrollcommand [list $baseframe.items.scrolly set]]
 $baseview heading #0 -text {Name}
+$baseview column #0 -width 250
 grid $baseview -sticky nwes
 grid [ttk::scrollbar $baseframe.items.scrolly -orient vertical -command [list $baseview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $baseframe.items.scrolly
 # Item info
 set infoframe [ttk::frame $baseframe.info]
 grid [ttk::label $infoframe.info]
 grid [ttk::label $infoframe.money]
 grid [ttk::button $infoframe.accept]
-grid $infoframe -column 1 -row 1
+grid $infoframe -column 1 -row 1 -sticky n -padx 5 -pady {5 0}
