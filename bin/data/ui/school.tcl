@@ -18,21 +18,27 @@ set schoolcanvas [canvas .gameframe.paned.schoolframe.canvas -yscrollcommand [li
 pack [ttk::scrollbar .gameframe.paned.schoolframe.scrolly -orient vertical -command [list $schoolcanvas yview]] -side right -fill y
 pack $schoolcanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.schoolframe.scrollx -orient horizontal -command [list $schoolcanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.schoolframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.schoolframe.scrollx
 set schoolframe [ttk::frame $schoolcanvas.school]
 # Crew members list
-grid [ttk::frame $schoolframe.crew] -sticky nwes
+grid [ttk::frame $schoolframe.crew] -sticky nwes -padx 5 -pady {5 0}
 set schoolview [ttk::treeview $schoolframe.crew.view -yscrollcommand [list $schoolframe.crew.scrolly set]]
-$schoolview heading #0 -text {Name}
+$schoolview heading #0 -text {Crew member}
 grid $schoolview -sticky nwes
 bind $schoolview <<TreeviewSelect>> ShowTrainingInfo
 grid [ttk::scrollbar $schoolframe.crew.scrolly -orient vertical -command [list $schoolview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $schoolframe.crew.scrolly
 # Skills list
 set schoolskillsframe [ttk::frame $schoolframe.skills]
 set schoolskillsview [ttk::treeview $schoolskillsframe.view -show headings -columns [list name price] -yscrollcommand [list $schoolskillsframe.scrolly set]]
 $schoolskillsview heading name -text {Name}
+$schoolskillsview column name -width 200
 $schoolskillsview heading price -text {Price}
-grid $schoolskillsview -sticky nwes
+$schoolskillsview column price -width 150 -anchor center
+grid $schoolskillsview -sticky nwes -padx 5 -pady {5 0}
 grid [ttk::scrollbar $schoolskillsframe.scrolly -orient vertical -command [list $schoolskillsview yview]] -row 0 -column 1 -sticky ns
+::autoscroll::autoscroll $schoolskillsframe.scrolly
 # Skills options
 grid [ttk::label $schoolskillsframe.money]
 grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command TrainSkill]
