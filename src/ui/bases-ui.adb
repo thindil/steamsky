@@ -188,7 +188,7 @@ package body Bases.UI is
         (ActionButton,
          "-text {Buy healing} -command {BaseAction " & CArgv.Arg(Argv, 1) &
          "}");
-      if FirstIndex = Null_Unbounded_String then
+      if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
