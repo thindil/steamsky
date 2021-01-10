@@ -16,7 +16,8 @@ All notable changes to this project will be documented in this file.
 - Crash on showing info about errors
 - Updating messages after wait action
 - Showing long goals names on button in the game statistics
-- Looking for crafting recipes to buy
+- Looking for crafting recipes to buy in bases
+- Button text for buying recipes or repairs in bases
 
 ## [5.6] - 2020-12-27
 
