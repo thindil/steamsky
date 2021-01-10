@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -45,6 +45,7 @@ package body Bases.Cargo is
               (ProtoIndex => MoneyIndex,
                Amount => (GetRandom(50, 200) * Population),
                Durability => Default_Item_Durability, Price => 0));
+         Add_Base_Cargo_Loop :
          for I in Items_List.Iterate loop
             if Is_Buyable
                 (SkyBases(BaseIndex).BaseType, Objects_Container.Key(I),
@@ -59,7 +60,7 @@ package body Bases.Cargo is
                          (SkyBases(BaseIndex).BaseType,
                           Objects_Container.Key(I))));
             end if;
-         end loop;
+         end loop Add_Base_Cargo_Loop;
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
              (To_Unbounded_String("blackmarket")) then
             declare
@@ -69,8 +70,10 @@ package body Bases.Cargo is
                   else GetRandom(1, 30));
                ItemIndex: Natural range 0 .. Positive(Items_List.Length);
             begin
+               Add_BlackMarket_Cargo_Loop :
                for I in 1 .. Amount loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
+                  Update_Item_Amount_Loop :
                   for J in Items_List.Iterate loop
                      ItemIndex := ItemIndex - 1;
                      if ItemIndex = 0 then
@@ -89,11 +92,11 @@ package body Bases.Cargo is
                                    Get_Price
                                      (SkyBases(BaseIndex).BaseType,
                                       Objects_Container.Key(J))));
-                           exit;
+                           exit Update_Item_Amount_Loop;
                         end if;
                      end if;
-                  end loop;
-               end loop;
+                  end loop Update_Item_Amount_Loop;
+               end loop Add_BlackMarket_Cargo_Loop;
             end;
          end if;
       else
@@ -109,6 +112,7 @@ package body Bases.Cargo is
                return MaxAmount;
             end GetMaxAmount;
          begin
+            Update_Cargo_Loop :
             for Item of SkyBases(BaseIndex).Cargo loop
                Roll := GetRandom(1, 100);
                if Roll < 30 and Item.Amount > 0 then
@@ -120,7 +124,7 @@ package body Bases.Cargo is
                      else Item.Amount +
                        GetRandom(1, GetMaxAmount(Item.Amount)));
                end if;
-            end loop;
+            end loop Update_Cargo_Loop;
          end;
       end if;
    end GenerateCargo;
@@ -169,6 +173,7 @@ package body Bases.Cargo is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin
+         Find_Cargo_Loop :
          for I in Cargo.Iterate loop
             if Durability < Items_Durability'Last then
                if Cargo(I).ProtoIndex = ProtoIndex and
@@ -180,7 +185,7 @@ package body Bases.Cargo is
                   return BaseCargo_Container.To_Index(I);
                end if;
             end if;
-         end loop;
+         end loop Find_Cargo_Loop;
          return 0;
       end FindCargo;
    begin
