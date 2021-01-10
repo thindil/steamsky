@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -13,9 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
@@ -164,8 +166,10 @@ package body Bases.UI is
                if Argc = 3
                  and then
                    Index
-                     (Items_List(Recipes_List(I).ResultIndex).Name,
-                      CArgv.Arg(Argv, 2)) =
+                     (To_Lower
+                        (To_String
+                           (Items_List(Recipes_List(I).ResultIndex).Name)),
+                      To_Lower(CArgv.Arg(Argv, 2))) =
                    0 then
                   goto End_Of_Recipes_Loop;
                end if;
