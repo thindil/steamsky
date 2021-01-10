@@ -80,7 +80,7 @@ package body Bases.UI is
       ActionButton: Ttk_Button;
       SearchEntry: Ttk_Entry;
       ItemsView: Ttk_Tree_View;
-      FirstIndex: Unbounded_String;
+      FirstIndex, ButtonText: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
@@ -123,6 +123,7 @@ package body Bases.UI is
          end loop;
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
+         ButtonText := To_Unbounded_String("Buy healing");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          for I in PlayerShip.Modules.Iterate loop
@@ -150,6 +151,7 @@ package body Bases.UI is
               (ItemsView,
                "{} end -id {-2} -text {Quickly repair the whole ship}");
          end if;
+         ButtonText := To_Unbounded_String("Buy repairs");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          for I in Recipes_List.Iterate loop
@@ -179,6 +181,7 @@ package body Bases.UI is
                <<End_Of_Recipes_Loop>>
             end if;
          end loop;
+         ButtonText := To_Unbounded_String("Buy recipe");
       end if;
       Unbind(ItemsView, "<<TreeviewSelect>>");
       Bind
@@ -186,8 +189,8 @@ package body Bases.UI is
          "{ShowItemInfo " & CArgv.Arg(Argv, 1) & "}");
       configure
         (ActionButton,
-         "-text {Buy healing} -command {BaseAction " & CArgv.Arg(Argv, 1) &
-         "}");
+         "-text {" & To_String(ButtonText) & "} -command {BaseAction " &
+         CArgv.Arg(Argv, 1) & "}");
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
