@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -34,6 +34,7 @@ package body Bases.SaveLoad is
          Set_Attribute(Node, Name, RawValue);
       end SaveNumber;
    begin
+      Save_Bases_Loop :
       for SkyBase of SkyBases loop
          BaseNode := Create_Element(SaveData, "base");
          BaseNode := Append_Child(MainNode, BaseNode);
@@ -67,6 +68,7 @@ package body Bases.SaveLoad is
          declare
             RecruitNode, RecruitDataNode: DOM.Core.Element;
          begin
+            Save_Recruits_Loop :
             for Recruit of SkyBase.Recruits loop
                RecruitNode := Create_Element(SaveData, "recruit");
                RecruitNode := Append_Child(BaseNode, RecruitNode);
@@ -76,25 +78,29 @@ package body Bases.SaveLoad is
                Set_Attribute
                  (RecruitNode, "price",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
+               Save_Skills_Loop :
                for Skill of Recruit.Skills loop
                   RecruitDataNode := Create_Element(SaveData, "skill");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   SaveNumber(Skill(1), "index", RecruitDataNode);
                   SaveNumber(Skill(2), "level", RecruitDataNode);
-               end loop;
+               end loop Save_Skills_Loop;
+               Save_Attributes_Loop :
                for Attribute of Recruit.Attributes loop
                   RecruitDataNode := Create_Element(SaveData, "attribute");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   SaveNumber(Attribute(1), "level", RecruitDataNode);
-               end loop;
+               end loop Save_Attributes_Loop;
+               Save_Inventory_Loop :
                for Item of Recruit.Inventory loop
                   RecruitDataNode := Create_Element(SaveData, "item");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   Set_Attribute(RecruitDataNode, "index", To_String(Item));
-               end loop;
+               end loop Save_Inventory_Loop;
+               Save_Equipment_Loop :
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
                      RecruitDataNode := Create_Element(SaveData, "equipment");
@@ -104,12 +110,12 @@ package body Bases.SaveLoad is
                      SaveNumber
                        (Recruit.Equipment(J), "index", RecruitDataNode);
                   end if;
-               end loop;
+               end loop Save_Equipment_Loop;
                SaveNumber(Recruit.Payment, "payment", RecruitNode);
                SaveNumber(Recruit.HomeBase, "homebase", RecruitNode);
                Set_Attribute
                  (RecruitNode, "faction", To_String(Recruit.Faction));
-            end loop;
+            end loop Save_Recruits_Loop;
          end;
          <<Save_AskForBases>>
          if SkyBase.AskedForBases then
@@ -142,6 +148,7 @@ package body Bases.SaveLoad is
          declare
             MissionNode: DOM.Core.Element;
          begin
+            Save_Missions_Loop :
             for Mission of SkyBase.Missions loop
                MissionNode := Create_Element(SaveData, "mission");
                MissionNode := Append_Child(BaseNode, MissionNode);
@@ -164,7 +171,7 @@ package body Bases.SaveLoad is
                SaveNumber(Mission.TargetX, "targetx", MissionNode);
                SaveNumber(Mission.TargetY, "targety", MissionNode);
                SaveNumber(Mission.Reward, "reward", MissionNode);
-            end loop;
+            end loop Save_Missions_Loop;
          end;
          <<Save_Cargo>>
          if SkyBase.Cargo.Is_Empty then
@@ -190,7 +197,7 @@ package body Bases.SaveLoad is
          end if;
          Set_Attribute(BaseNode, "owner", To_String(SkyBase.Owner));
          Set_Attribute(BaseNode, "size", Bases_Size'Image(SkyBase.Size));
-      end loop;
+      end loop Save_Bases_Loop;
    end SaveBases;
 
    procedure LoadBases(SaveData: Document) is
