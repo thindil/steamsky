@@ -154,16 +154,13 @@ package body Bases.SaveLoad is
                MissionNode := Append_Child(BaseNode, MissionNode);
                SaveNumber
                  (Missions_Types'Pos(Mission.MType), "type", MissionNode);
-               if Mission.MType = Deliver then
-                  RawValue := Mission.ItemIndex;
-               elsif Mission.MType = Passenger then
-                  RawValue := To_Unbounded_String(Integer'Image(Mission.Data));
-               elsif Mission.MType = Destroy then
-                  RawValue := Mission.ShipIndex;
-               else
-                  RawValue :=
-                    To_Unbounded_String(Integer'Image(Mission.Target));
-               end if;
+               RawValue :=
+                 (case Mission.MType is when Deliver => Mission.ItemIndex,
+                    when Passenger =>
+                      To_Unbounded_String(Integer'Image(Mission.Data)),
+                    when Destroy => Mission.ShipIndex,
+                    when others =>
+                      To_Unbounded_String(Integer'Image(Mission.Target)));
                Set_Attribute
                  (MissionNode, "target",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
