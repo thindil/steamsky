@@ -177,6 +177,7 @@ package body Bases.SaveLoad is
          declare
             ItemNode: DOM.Core.Element;
          begin
+            Save_Cargo_Loop :
             for Item of SkyBase.Cargo loop
                ItemNode := Create_Element(SaveData, "item");
                ItemNode := Append_Child(BaseNode, ItemNode);
@@ -184,7 +185,7 @@ package body Bases.SaveLoad is
                SaveNumber(Item.Amount, "amount", ItemNode);
                SaveNumber(Item.Durability, "durability", ItemNode);
                SaveNumber(Item.Price, "price", ItemNode);
-            end loop;
+            end loop Save_Cargo_Loop;
          end;
          <<Save_Known>>
          if SkyBase.Known then
@@ -208,6 +209,7 @@ package body Bases.SaveLoad is
    begin
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
+      Load_Bases_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          BaseIndex := I + 1;
          BaseNode := Item(NodesList, I);
@@ -234,6 +236,7 @@ package body Bases.SaveLoad is
             SkyBases(BaseIndex).AskedForBases := True;
          end if;
          BaseData := Child_Nodes(BaseNode);
+         Load_Base_Loop :
          for J in 0 .. Length(BaseData) - 1 loop
             ChildNode := Item(BaseData, J);
             NodeName := To_Unbounded_String(Node_Name(ChildNode));
@@ -276,6 +279,7 @@ package body Bases.SaveLoad is
                   Price := Positive'Value(Get_Attribute(ChildNode, "price"));
                   Payment := 20;
                   RecruitData := Child_Nodes(ChildNode);
+                  Load_Recruits_Loop :
                   for L in 0 .. Length(RecruitData) - 1 loop
                      RecruitNode := Item(RecruitData, L);
                      NodeName := To_Unbounded_String(Node_Name(RecruitNode));
@@ -316,7 +320,7 @@ package body Bases.SaveLoad is
                           To_Unbounded_String
                             (Get_Attribute(ChildNode, "faction"));
                      end if;
-                  end loop;
+                  end loop Load_Recruits_Loop;
                   SkyBases(BaseIndex).Recruits.Append
                     (New_Item =>
                        (Name => RecruitName, Gender => Gender(1),
@@ -430,11 +434,11 @@ package body Bases.SaveLoad is
                         Durability => Durability, Price => Price));
                end;
             end if;
-         end loop;
+         end loop Load_Base_Loop;
          SkyMap(SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY)
            .BaseIndex :=
            BaseIndex;
-      end loop;
+      end loop Load_Bases_Loop;
    end LoadBases;
 
 end Bases.SaveLoad;
