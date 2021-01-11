@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -187,7 +187,7 @@ package body Knowledge.Bases is
       Yview_Move_To(BasesCanvas, "0.0");
    end UpdateBasesList;
 
-   -- ****o* KBases/Show_Bases_Command
+   -- ****o* KBases/KBases.Show_Bases_Command
    -- FUNCTION
    -- Show the list of known bases to a player
    -- PARAMETERS
@@ -224,7 +224,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Bases_Command;
 
-   -- ****if* KBases/Show_Bases_Menu_Command
+   -- ****if* KBases/KBases.Show_Bases_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected base options
    -- PARAMETERS
@@ -277,7 +277,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Bases_Menu_Command;
 
-   -- ****if* KBases/Show_Base_Command
+   -- ****if* KBases/KBases.Show_Base_Command
    -- FUNCTION
    -- Show the selected base on map
    -- PARAMETERS
@@ -311,7 +311,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Base_Command;
 
-   -- ****if* KBases/Set_Base_Command
+   -- ****if* KBases/KBases.Set_Base_Command
    -- FUNCTION
    -- Set the selected base as the player's ship destination
    -- PARAMETERS
@@ -352,7 +352,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Set_Base_Command;
 
-   -- ****o* KBases/Show_Base_Info_Command
+   -- ****o* KBases/KBases.Show_Base_Info_Command
    -- FUNCTION
    -- Show information about the selected base
    -- PARAMETERS
