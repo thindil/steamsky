@@ -104,6 +104,9 @@ package body Bases.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
       else
          Tcl.Tk.Ada.Grid.Grid(SearchEntry);
+         if Argc < 3 then
+            Delete(SearchEntry, "0", "end");
+         end if;
       end if;
       ItemsView := Get_Widget(BaseFrame & ".items.view", Interp);
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
