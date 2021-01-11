@@ -129,6 +129,7 @@ package body Bases.UI is
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          ButtonText := To_Unbounded_String("Buy healing");
+         Heading(ItemsView, "#0", "-text Wounded");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          for I in PlayerShip.Modules.Iterate loop
@@ -157,6 +158,7 @@ package body Bases.UI is
                "{} end -id {-2} -text {Quickly repair the whole ship}");
          end if;
          ButtonText := To_Unbounded_String("Buy repairs");
+         Heading(ItemsView, "#0", "-text Damaged");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          for I in Recipes_List.Iterate loop
@@ -189,6 +191,7 @@ package body Bases.UI is
             end if;
          end loop;
          ButtonText := To_Unbounded_String("Buy recipe");
+         Heading(ItemsView, "#0", "-text Recipes");
       end if;
       Unbind(ItemsView, "<<TreeviewSelect>>");
       Bind
