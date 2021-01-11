@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -95,7 +95,7 @@ package body Missions.UI is
       CabinTaken: Boolean := False;
       MissionScale: constant Ttk_Scale :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.reward",
+          (".gameframe.paned.missionsframe.canvas.missions.info.reward.amount",
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
