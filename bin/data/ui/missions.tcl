@@ -21,22 +21,29 @@ pack [ttk::scrollbar .gameframe.paned.missionsframe.scrollx -orient horizontal -
 ::autoscroll::autoscroll .gameframe.paned.missionsframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.missionsframe.scrollx
 set missionsframe [ttk::frame $missionscanvas.missions]
-grid [ttk::treeview $missionsframe.missionsview -show headings -columns [list name distance]] -sticky n -padx 5 -pady 5
-$missionsframe.missionsview heading name -text {Name}
-$missionsframe.missionsview column name -width 250
-$missionsframe.missionsview heading distance -text {Distance}
-$missionsframe.missionsview column distance -width 100 -anchor center
-bind $missionsframe.missionsview <<TreeviewSelect>> ShowMissionInfo
+# List of missions
+grid [ttk::frame $missionsframe.missions] -sticky n -padx 5 -pady 5
+pack [ttk::scrollbar $missionsframe.missions.scrolly -orient vertical -command [list $missionsframe.missions.missionsview yview]] -side right -fill y
+pack [ttk::treeview $missionsframe.missions.missionsview -show headings -columns [list name distance] -yscrollcommand [list $missionsframe.missions.scrolly set]] -side top -fill both
+$missionsframe.missions.missionsview heading name -text {Name}
+$missionsframe.missions.missionsview column name -width 250
+$missionsframe.missions.missionsview heading distance -text {Distance}
+$missionsframe.missions.missionsview column distance -width 100 -anchor center
+bind $missionsframe.missions.missionsview <<TreeviewSelect>> ShowMissionInfo
+::autoscroll::autoscroll $missionsframe.missions.scrolly
+# Selected mission info
 grid [ttk::frame $missionsframe.info] -column 1 -row 0
 grid [ttk::labelframe $missionsframe.info.info -text {Mission Info:}] -padx 5 -pady 5
 grid [text $missionsframe.info.info.text -wrap char -height 10 -width 40] -padx 5 -pady 5
 $missionsframe.info.info.text tag configure red -foreground red
 $missionsframe.info.info.text tag configure yellow -foreground yellow
+# Setting reward for mission
 set reward 1.0
 grid [ttk::frame $missionsframe.info.reward] -sticky we
 grid [ttk::label $missionsframe.info.reward.label -text {Reward:}] -padx 5
 grid [ttk::scale $missionsframe.info.reward.amount -from 0.0 -to 2.0 -variable reward -command ShowMissionInfo -length 300] -column 1 -row 0 -padx 5
 tooltip::tooltip $missionsframe.info.reward "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation."
+# Show info about available missions and missions buttons actions
 grid [ttk::label $missionsframe.info.missioninfo]
 grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowMission}]
 grid [ttk::button $missionsframe.info.set -command {SetMission}]
