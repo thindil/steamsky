@@ -77,7 +77,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missionsview",
+          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
            Interp);
       MissionInfo: Unbounded_String;
       MissionText: constant Tk_Text :=
@@ -279,7 +279,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missionsview",
+          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
@@ -298,7 +298,7 @@ package body Missions.UI is
    procedure RefreshMissionsList(List: Mission_Container.Vector) is
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missionsview");
+          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview");
    begin
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       for I in List.First_Index .. List.Last_Index loop
@@ -375,7 +375,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missionsview",
+          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
