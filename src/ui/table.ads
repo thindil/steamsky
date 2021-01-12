@@ -54,7 +54,7 @@ package Table is
    type Headers_Array is array(Positive range <>) of Unbounded_String;
    -- ****
 
-   -- ****f* Table/Table.Create
+   -- ****f* Table/Table.CreateTable
    -- FUNCTION
    -- Create a new table and columns headers in it
    -- PARAMETERS
@@ -67,6 +67,19 @@ package Table is
    -- SOURCE
    function CreateTable
      (Parent: String; Headers: Headers_Array) return Table_Widget;
+   -- ****
+
+     -- ****f* Table/Table.ClearTable
+     -- FUNCTION
+     -- Clear data from the table
+     -- PARAMETERS
+     -- Table - The Table_Widget which will be cleared
+     -- OUTPUT
+     -- Cleared Table parameter Table_Widget
+     -- HISTORY
+     -- 5.7 - Added
+     -- SOURCE
+   procedure ClearTable(Table: in out Table_Widget);
    -- ****
 
 end Table;

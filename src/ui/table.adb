@@ -70,4 +70,12 @@ package body Table is
       return Table;
    end CreateTable;
 
+   procedure ClearTable(Table: in out Table_Widget) is
+   begin
+      for I in 1 .. Table.Row loop
+         Delete(Table.Canvas, "row" & Trim(Positive'Image(I), Left));
+      end loop;
+      Table.Row := 1;
+   end ClearTable;
+
 end Table;
