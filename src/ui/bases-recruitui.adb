@@ -107,6 +107,7 @@ package body Bases.RecruitUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      ClearTable(RecruitTable);
       configure
         (RecruitTable.Canvas,
          "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
