@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -18,11 +18,9 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -44,9 +42,17 @@ with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Bases.RecruitUI is
+
+   -- ****iv* RecruitUI/RecruitUI.RecruitTable
+   -- FUNCTION
+   -- Table with info about the available recruits
+   -- SOURCE
+   RecruitTable: Table_Widget (5);
+   -- ****
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
@@ -76,23 +82,23 @@ package body Bases.RecruitUI is
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
       RecruitFrame: Ttk_Frame := Get_Widget(Paned & ".recruitframe", Interp);
-      RecruitCanvas: constant Tk_Canvas :=
-        Get_Widget(RecruitFrame & ".canvas", Interp);
-      Label: constant Ttk_Label :=
-        Get_Widget(RecruitCanvas & ".recruit.recruit.info.info", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      RecruitsView: constant Ttk_Tree_View :=
-        Get_Widget(RecruitCanvas & ".recruit.recruits.view", Interp);
    begin
-      if Winfo_Get(Label, "exists") = "0" then
-         Tcl_EvalFile
-           (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "recruit.tcl");
-         Bind(RecruitFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-      elsif Winfo_Get(Label, "ismapped") = "1" and
+      if Winfo_Get(RecruitFrame, "exists") = "0" then
+         RecruitFrame := Create(Widget_Image(RecruitFrame));
+         RecruitTable :=
+           CreateTable
+             (Widget_Image(RecruitFrame),
+              (To_Unbounded_String("#"), To_Unbounded_String("Name"),
+               To_Unbounded_String("Gender"), To_Unbounded_String("Faction"),
+               To_Unbounded_String("Base cost")));
+         Bind
+           (RecruitFrame, "<Configure>",
+            "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
+      elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
         (Argc = 1 or SkyBases(BaseIndex).Recruits.Length = 0) then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -100,28 +106,10 @@ package body Bases.RecruitUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      Delete(RecruitsView, "[list " & Children(RecruitsView, "{}") & "]");
-      for I in SkyBases(BaseIndex).Recruits.Iterate loop
-         Insert
-           (RecruitsView,
-            "{} end -id" & Positive'Image(Recruit_Container.To_Index(I)) &
-            " -text {" & To_String(SkyBases(BaseIndex).Recruits(I).Name) &
-            "}");
-      end loop;
-      Selection_Set(RecruitsView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      RecruitFrame.Name := New_String(RecruitCanvas & ".recruit");
       configure
-        (RecruitCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
-      Canvas_Create
-        (RecruitCanvas, "window", "0 0 -anchor nw -window " & RecruitFrame);
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (RecruitCanvas,
-         "-scrollregion [list " & BBox(RecruitCanvas, "all") & "]");
+        (RecruitTable.Canvas,
+         "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
       ShowScreen("recruitframe");
       return TCL_OK;
    end Show_Recruit_Command;
