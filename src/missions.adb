@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -48,7 +48,7 @@ package body Missions is
       Enemies: UnboundedString_Container.Vector;
       MType: Missions_Types;
       DiffX, DiffY: Natural;
-      QualitiesArray: constant array(Positive range <>) of Positive :=
+      QualitiesArray: constant array(1 .. 10) of Positive :=
         (1, 11, 21, 31, 41, 51, 61, 71, 81, 91);
    begin
       if DaysDifference(SkyBases(BaseIndex).MissionsDate) < 7 or
