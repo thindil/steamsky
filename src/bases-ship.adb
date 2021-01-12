@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -41,11 +41,12 @@ package body Bases.Ship is
       if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
          raise Trade_Not_Enough_Money;
       end if;
+      Give_Rest_Order_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Repair then
             GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
          end if;
-      end loop;
+      end loop Give_Rest_Order_Loop;
       if ModuleIndex > 0 then
          PlayerShip.Modules(ModuleIndex).Durability :=
            PlayerShip.Modules(ModuleIndex).MaxDurability;
@@ -55,11 +56,12 @@ package body Bases.Ship is
             ".",
             TradeMessage);
       else
+         Repair_Whole_Ship_Loop :
          for Module of PlayerShip.Modules loop
             if Module.Durability < Module.MaxDurability then
                Module.Durability := Module.MaxDurability;
             end if;
-         end loop;
+         end loop Repair_Whole_Ship_Loop;
          AddMessage
            ("You bought an entire ship repair for" & Positive'Image(Cost) &
             " " & To_String(MoneyName) & ".",
@@ -88,6 +90,7 @@ package body Bases.Ship is
       if MoneyIndex2 = 0 then
          raise Trade_No_Money;
       end if;
+      Find_Hull_And_Turrets_Loop :
       for C in PlayerShip.Modules.Iterate loop
          case PlayerShip.Modules(C).MType is
             when HULL =>
@@ -103,7 +106,7 @@ package body Bases.Ship is
             when others =>
                null;
          end case;
-      end loop;
+      end loop Find_Hull_And_Turrets_Loop;
       if Install then
          Price := Modules_List(ModuleIndex).Price;
          CountPrice(Price, TraderIndex);
@@ -111,6 +114,7 @@ package body Bases.Ship is
             raise Trade_Not_Enough_Money
               with To_String(Modules_List(ModuleIndex).Name);
          end if;
+         Check_Unique_Module_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType =
               Modules_List(ModuleIndex).MType and
@@ -118,7 +122,7 @@ package body Bases.Ship is
                raise BasesShip_Unique_Module
                  with To_String(Modules_List(ModuleIndex).Name);
             end if;
-         end loop;
+         end loop Check_Unique_Module_Loop;
          if Modules_List(ModuleIndex).MType /= HULL then
             if Modules_List(ModuleIndex).Size >
               Modules_List(PlayerShip.Modules(HullIndex).ProtoIndex).Value then
@@ -140,13 +144,14 @@ package body Bases.Ship is
                  with "You don't have free turret with proprer size for this gun. Install new turret or remove old gun first.";
             end if;
          else
+            Check_Module_Size_Loop :
             for Module of PlayerShip.Modules loop
                if Modules_List(Module.ProtoIndex).Size >
                  Modules_List(ModuleIndex).Value then
                   raise BasesShip_Installation_Error
                     with "This hull don't allow to have installed that big modules what you currently have.";
                end if;
-            end loop;
+            end loop Check_Module_Size_Loop;
             if Modules_List(ModuleIndex).MaxValue < ModulesAmount then
                raise BasesShip_Installation_Error
                  with "This hull is too small for your ship. Remove some modules first.";
@@ -160,9 +165,10 @@ package body Bases.Ship is
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
+            Set_Empty_Owners_Loop :
             for I in 1 .. Modules_List(ModuleIndex).MaxOwners loop
                Owners.Append(0);
-            end loop;
+            end loop Set_Empty_Owners_Loop;
             case Modules_List(ModuleIndex).MType is
                when ALCHEMY_LAB .. GREENHOUSE =>
                   PlayerShip.Modules.Append
@@ -400,21 +406,23 @@ package body Bases.Ship is
          end if;
          if PlayerShip.UpgradeModule = ShipModuleIndex then
             PlayerShip.UpgradeModule := 0;
+            Remove_Upgrade_Order_Loop :
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
                   GiveOrders(PlayerShip, Crew_Container.To_Index(C), Rest);
                   exit;
                end if;
-            end loop;
+            end loop Remove_Upgrade_Order_Loop;
          end if;
          if PlayerShip.Modules(ShipModuleIndex).MType /= CABIN then
+            Give_Rest_Order_Loop :
             for Owner of PlayerShip.Modules(ShipModuleIndex).Owner loop
                if Owner > 0 then
                   GiveOrders
                     (Ship => PlayerShip, MemberIndex => Owner,
                      GivenOrder => Rest, CheckPriorities => False);
                end if;
-            end loop;
+            end loop Give_Rest_Order_Loop;
          end if;
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);
@@ -466,12 +474,13 @@ package body Bases.Ship is
             OtherMessage, RED);
          return;
       end if;
+      Count_Docking_Cost_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = HULL then
             DockingCost := Module.MaxModules;
             exit;
          end if;
-      end loop;
+      end loop Count_Docking_Cost_Loop;
       DockingCost :=
         Natural(Float(DockingCost) * Float(NewGameSettings.PricesBonus));
       if DockingCost = 0 then
@@ -510,6 +519,7 @@ package body Bases.Ship is
                   .RepairMaterial);
          Cost := Time * Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
       else
+         Count_Repair_Time_And_Cost_Loop :
          for Module of PlayerShip.Modules loop
             if Module.Durability < Module.MaxDurability then
                Time := Time + Module.MaxDurability - Module.Durability;
@@ -522,7 +532,7 @@ package body Bases.Ship is
                  ((Module.MaxDurability - Module.Durability) *
                   Items_List(ProtoIndex).Price);
             end if;
-         end loop;
+         end loop Count_Repair_Time_And_Cost_Loop;
          if ModuleIndex = -1 then
             Cost := Cost * 2;
             Time := Time / 2;
