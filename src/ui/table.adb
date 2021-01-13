@@ -109,6 +109,7 @@ package body Table is
       Bind
         (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
+      Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
