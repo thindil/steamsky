@@ -99,7 +99,7 @@ package body Table is
               "} -font InterfaceFont -fill [ttk::style lookup " &
               To_String(GameSettings.InterfaceTheme) &
               " -selectforeground] -justify center -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & " column" &
+              Trim(Positive'Image(Table.Row), Left) & "col" &
               Trim(Positive'Image(Column), Left) & "]"));
       Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
