@@ -20,6 +20,7 @@ with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 
 package body Table is
@@ -77,5 +78,40 @@ package body Table is
       end loop;
       Table.Row := 1;
    end ClearTable;
+
+   procedure AddButton
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False) is
+      X: Natural := 0;
+      ItemId: Unbounded_String;
+      Tokens: Slice_Set;
+   begin
+      for I in 1 .. Column - 1 loop
+         X := X + Table.Columns_Width(I);
+      end loop;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "text",
+              Trim(Natural'Image(X), Left) &
+              Positive'Image(Table.Row * Table.Row_Height) &
+              " -anchor nw -text {" & Text &
+              "} -font InterfaceFont -fill [ttk::style lookup " &
+              To_String(GameSettings.InterfaceTheme) &
+              " -selectforeground] -justify center -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & " column" &
+              Trim(Positive'Image(Column), Left) & "]"));
+      Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      X :=
+        (Positive'Value(Slice(Tokens, 3)) + 10) -
+        Positive'Value(Slice(Tokens, 1));
+      if X > Table.Columns_Width(Column) then
+         Table.Columns_Width(Column) := X;
+      end if;
+      if NewRow then
+         Table.Row := Table.Row + 1;
+      end if;
+   end AddButton;
 
 end Table;

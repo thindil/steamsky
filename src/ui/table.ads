@@ -82,4 +82,25 @@ package Table is
    procedure ClearTable(Table: in out Table_Widget);
    -- ****
 
+   -- ****f* Table/Table.AddButton
+   -- FUNCTION
+   -- Add button item to the selected Table_Widget
+   -- PARAMETERS
+   -- Table   - The Table_Widget in which button will be added
+   -- Text    - The text displayed on the button
+   -- Tooltip - The tooltip show when user hover mouse over button
+   -- Command - Tcl command which will be executed when button was clicked
+   -- Column  - The column in which the button will be added
+   -- NewRow  - If True, increase current number of row in the Table_Widget.
+   --           Default value is False.
+   -- OUTPUT
+   -- Updated Table parameter Table_Widget
+   -- HISTORY
+   -- 5.7 - Added
+   -- SOURCE
+   procedure AddButton
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False);
+   -- ****
+
 end Table;
