@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ with Utils.UI; use Utils.UI;
 
 package body Knowledge.Events is
 
-   -- ****if* KEvents/Show_Events_Menu_Command
+   -- ****if* KEvents/KEvents.Show_Events_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected event options
    -- PARAMETERS
@@ -88,7 +88,7 @@ package body Knowledge.Events is
       return TCL_OK;
    end Show_Events_Menu_Command;
 
-   -- ****if* KEvents/Show_Event_Command
+   -- ****if* KEvents/KEvents.Show_Event_Command
    -- FUNCTION
    -- Show the selected event on map
    -- PARAMETERS
@@ -122,7 +122,7 @@ package body Knowledge.Events is
       return TCL_OK;
    end Show_Event_Command;
 
-   -- ****if* KEvents/Set_Event_Command
+   -- ****if* KEvents/KEvents.Set_Event_Command
    -- FUNCTION
    -- Set the selected event as the player's ship destination
    -- PARAMETERS
@@ -163,7 +163,7 @@ package body Knowledge.Events is
       return TCL_OK;
    end Set_Event_Command;
 
-   -- ****o* KEvents/Show_Event_Info_Command
+   -- ****o* KEvents/KEvents.Show_Event_Info_Command
    -- FUNCTION
    -- Show information about the selected event
    -- PARAMETERS
