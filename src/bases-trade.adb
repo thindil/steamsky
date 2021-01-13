@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -79,12 +79,13 @@ package body Bases.Trade is
       Price := Cost;
       CountPrice(Price, TraderIndex);
       MoneyIndex2 := CheckMoney(Price, To_String(Recruit.Name));
+      Add_Recruit_Inventory_Loop :
       for Item of Recruit.Inventory loop
          Inventory.Append
            (New_Item =>
               (ProtoIndex => Item, Amount => 1, Name => Null_Unbounded_String,
                Durability => Default_Item_Durability, Price => 0));
-      end loop;
+      end loop Add_Recruit_Inventory_Loop;
       if Factions_List(SkyBases(BaseIndex).Owner).Flags.Contains
           (To_Unbounded_String("nomorale")) then
          Morale := 50;
@@ -192,13 +193,14 @@ package body Bases.Trade is
             TradeMessage);
          GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
       else
+         Give_Rest_Order_Loop :
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 then
                PlayerShip.Crew(I).Health := 100;
                GiveOrders
                  (PlayerShip, Crew_Container.To_Index(I), Rest, 0, False);
             end if;
-         end loop;
+         end loop Give_Rest_Order_Loop;
          AddMessage
            ("You paid for healing for all wounded crew members for" &
             Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
@@ -229,6 +231,7 @@ package body Bases.Trade is
                    Factions_List(PlayerShip.Crew(MemberIndex).Faction)
                      .HealingTools));
       else
+         Count_Heal_Cost_Loop :
          for Member of PlayerShip.Crew loop
             if Member.Health < 100 then
                Time := Time + (5 * (100 - Member.Health));
@@ -241,7 +244,7 @@ package body Bases.Trade is
                           Factions_List(Member.Faction).HealingTools))
                     .Price);
             end if;
-         end loop;
+         end loop Count_Heal_Cost_Loop;
       end if;
       Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
       if Cost = 0 then
@@ -265,6 +268,7 @@ package body Bases.Trade is
       SkillIndex: Skills_Container.Extended_Index) return Natural is
       Cost: Natural := Natural(100.0 * NewGameSettings.PricesBonus);
    begin
+      Count_Train_Cost_Loop :
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             if Skill(2) = 100 then
@@ -279,7 +283,7 @@ package body Bases.Trade is
             end if;
             exit;
          end if;
-      end loop;
+      end loop Count_Train_Cost_Loop;
       CountPrice(Cost, FindMember(Talk));
       return Cost;
    end TrainCost;
