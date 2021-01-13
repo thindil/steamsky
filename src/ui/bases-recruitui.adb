@@ -51,7 +51,7 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Table with info about the available recruits
    -- SOURCE
-   RecruitTable: Table_Widget (5);
+   RecruitTable: Table_Widget (4);
    -- ****
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
@@ -92,8 +92,8 @@ package body Bases.RecruitUI is
          RecruitTable :=
            CreateTable
              (Widget_Image(RecruitFrame),
-              (To_Unbounded_String("#"), To_Unbounded_String("Name"),
-               To_Unbounded_String("Gender"), To_Unbounded_String("Faction"),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
+               To_Unbounded_String("Faction"),
                To_Unbounded_String("Base cost")));
          Bind
            (RecruitFrame, "<Configure>",
@@ -108,6 +108,13 @@ package body Bases.RecruitUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ClearTable(RecruitTable);
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         AddButton
+           (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
+            "Show available options for recruit.",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
+            1, True);
+      end loop;
       configure
         (RecruitTable.Canvas,
          "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
