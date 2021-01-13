@@ -85,6 +85,9 @@ package body Table is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
+      Tag: constant String :=
+        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
+        Trim(Positive'Image(Column), Left);
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
@@ -98,10 +101,14 @@ package body Table is
               " -anchor nw -text {" & Text &
               "} -font InterfaceFont -fill [ttk::style lookup " &
               To_String(GameSettings.InterfaceTheme) &
-              " -selectforeground] -justify center -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & "col" &
-              Trim(Positive'Image(Column), Left) & "]"));
+              " -selectforeground] -justify center -tags [list " & Tag & "]"));
       Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      Bind
+        (Table.Canvas, Tag, "<Enter>",
+         "{" & Table.Canvas & " configure -cursor hand1}");
+      Bind
+        (Table.Canvas, Tag, "<Leave>",
+         "{" & Table.Canvas & " configure -cursor left_ptr}");
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
