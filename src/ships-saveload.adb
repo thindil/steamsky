@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -156,8 +156,7 @@ package body Ships.SaveLoad is
       end loop;
       declare
          StatNode: DOM.Core.Element;
-         AttributesNames: constant array
-           (Positive range <>) of Unbounded_String :=
+         AttributesNames: constant array(1 .. 14) of Unbounded_String :=
            (To_Unbounded_String("health"), To_Unbounded_String("tired"),
             To_Unbounded_String("hunger"), To_Unbounded_String("thirst"),
             To_Unbounded_String("order"), To_Unbounded_String("previousorder"),
