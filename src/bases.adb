@@ -187,13 +187,9 @@ package body Bases is
         SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
-      if SkyBases(BaseIndex).Population < 150 then
-         MaxRecruits := 5;
-      elsif SkyBases(BaseIndex).Population < 300 then
-         MaxRecruits := 10;
-      else
-         MaxRecruits := 15;
-      end if;
+      MaxRecruits :=
+        (if SkyBases(BaseIndex).Population < 150 then 5
+         elsif SkyBases(BaseIndex).Population < 300 then 10 else 15);
       if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
           (To_Unbounded_String("barracks")) then
          MaxRecruits := MaxRecruits * 2;
