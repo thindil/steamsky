@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -42,6 +42,7 @@ package body Bases is
       if BaseIndex = PlayerShip.HomeBase then
          NewPoints := NewPoints + Points;
       end if;
+      Reduce_Reputation_Loop :
       while NewPoints < 0 loop
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) - 1;
@@ -50,12 +51,13 @@ package body Bases is
             SkyBases(BaseIndex).Reputation(2) := NewPoints;
             return;
          end if;
-      end loop;
+      end loop Reduce_Reputation_Loop;
+      Raise_Reputation_Loop :
       while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 5) loop
          NewPoints := NewPoints - abs (SkyBases(BaseIndex).Reputation(1) * 5);
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) + 1;
-      end loop;
+      end loop Raise_Reputation_Loop;
       SkyBases(BaseIndex).Reputation(2) := NewPoints;
       if SkyBases(BaseIndex).Reputation(1) = 100 then
          UpdateGoal(REPUTATION, SkyBases(BaseIndex).Owner);
