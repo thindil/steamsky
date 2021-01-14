@@ -79,9 +79,9 @@ package body Table is
       Table.Row := 1;
    end ClearTable;
 
-   procedure AddButton
-     (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False) is
+   procedure AddText
+     (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
+      NewRow: Boolean := False) is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
@@ -98,17 +98,12 @@ package body Table is
               " -anchor nw -text {" & Text &
               "} -font InterfaceFont -fill [ttk::style lookup " &
               To_String(GameSettings.InterfaceTheme) &
-              " -selectforeground] -tags [list row" &
+              " -foreground] -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "col" &
               Trim(Positive'Image(Column), Left) & "]"));
-      Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
-      Bind
-        (Table.Canvas, To_String(ItemId), "<Enter>",
-         "{" & Table.Canvas & " configure -cursor hand1}");
-      Bind
-        (Table.Canvas, To_String(ItemId), "<Leave>",
-         "{" & Table.Canvas & " configure -cursor left_ptr}");
-      Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+      if Tooltip'Length > 0 then
+         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      end if;
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
@@ -119,6 +114,27 @@ package body Table is
       if NewRow then
          Table.Row := Table.Row + 1;
       end if;
+   end AddText;
+
+   procedure AddButton
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False) is
+      Tag: constant String :=
+        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
+        Trim(Positive'Image(Column), Left);
+   begin
+      AddText(Table, Text, Tooltip, Column, NewRow);
+      Item_Configure
+        (Table.Canvas, Tag,
+         "-fill [ttk::style lookup " & To_String(GameSettings.InterfaceTheme) &
+         " -selectforeground]");
+      Bind
+        (Table.Canvas, Tag, "<Enter>",
+         "{" & Table.Canvas & " configure -cursor hand1}");
+      Bind
+        (Table.Canvas, Tag, "<Leave>",
+         "{" & Table.Canvas & " configure -cursor left_ptr}");
+      Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
    end AddButton;
 
 end Table;
