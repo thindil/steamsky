@@ -82,6 +82,26 @@ package Table is
    procedure ClearTable(Table: in out Table_Widget);
    -- ****
 
+   -- ****f* Table/Table.AddText
+   -- FUNCTION
+   -- Add text item to the selected Table_Widget
+   -- PARAMETERS
+   -- Table   - The Table_Widget in which text will be added
+   -- Text    - The text displayed on the item
+   -- Tooltip - The tooltip show when user hover mouse over text
+   -- Column  - The column in which the text will be added
+   -- NewRow  - If True, increase current number of row in the Table_Widget.
+   --           Default value is False.
+   -- OUTPUT
+   -- Updated Table parameter Table_Widget
+   -- HISTORY
+   -- 5.7 - Added
+   -- SOURCE
+   procedure AddText
+     (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
+      NewRow: Boolean := False);
+   -- ****
+
    -- ****f* Table/Table.AddButton
    -- FUNCTION
    -- Add button item to the selected Table_Widget
