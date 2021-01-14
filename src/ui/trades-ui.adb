@@ -483,7 +483,7 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseType: Unbounded_String;
       Price: Natural;
-      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
       if ItemIndex < 0 then
