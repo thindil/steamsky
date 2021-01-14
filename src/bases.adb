@@ -205,6 +205,7 @@ package body Bases is
       if MaxSkillAmount < 5 then
          MaxSkillAmount := 5;
       end if;
+      Generate_Recruits_Loop :
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
          Attributes.Clear;
@@ -236,6 +237,7 @@ package body Bases is
          if GetRandom(1, 100) > 95 then
             MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
          end if;
+         Generate_Skills_Loop :
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
               (if J > 1 then
@@ -247,15 +249,16 @@ package body Bases is
                HighestSkill := SkillNumber;
             end if;
             SkillIndex := 0;
+            Get_Skill_Index_Loop :
             for C in Skills.Iterate loop
                if Skills(C)(1) = SkillNumber then
                   SkillIndex :=
                     (if Skills(C)(2) < SkillLevel then
                        Skills_Container.To_Index(C)
                      else -1);
-                  exit;
+                  exit Get_Skill_Index_Loop;
                end if;
-            end loop;
+            end loop Get_Skill_Index_Loop;
             if SkillIndex = 0 then
                Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
             elsif SkillIndex > 0 then
@@ -263,36 +266,41 @@ package body Bases is
                  (Index => SkillIndex,
                   New_Item => (SkillNumber, SkillLevel, 0));
             end if;
-         end loop;
+         end loop Generate_Skills_Loop;
+         Generate_Attributes_Loop :
          for J in Attributes_List.Iterate loop
             Attributes.Append
               (New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
-         end loop;
+         end loop Generate_Attributes_Loop;
+         Update_Price_With_Skills_Loop :
          for Skill of Skills loop
             Price := Price + Skill(2);
             Payment := Payment + Skill(2);
-         end loop;
+         end loop Update_Price_With_Skills_Loop;
+         Update_Price_With_Stats_Loop :
          for Stat of Attributes loop
             Price := Price + (Stat(1) * 2);
             Payment := Payment + (Stat(1) * 2);
-         end loop;
+         end loop Update_Price_With_Stats_Loop;
          AddInventory(Weapons_List, 1);
          AddInventory(Shields_List, 2);
          AddInventory(HeadArmors_List, 3);
          AddInventory(ChestArmors_List, 4);
          AddInventory(ArmsArmors_List, 5);
          AddInventory(LegsArmors_List, 6);
+         Add_Tool_Loop :
          for Recipe of Recipes_List loop
             if HighestSkill = Recipe.Skill then
+               Find_Tool_Loop :
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.Tool then
                      TempTools.Append(New_Item => Objects_Container.Key(J));
                   end if;
-               end loop;
+               end loop Find_Tool_Loop;
                AddInventory(TempTools, 7);
                exit;
             end if;
-         end loop;
+         end loop Add_Tool_Loop;
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
              (To_Unbounded_String("barracks")) then
             Price := Price / 2;
@@ -313,7 +321,7 @@ package body Bases is
                Attributes => Attributes, Inventory => Inventory,
                Equipment => Equipment, Payment => Payment,
                HomeBase => RecruitBase, Faction => RecruitFaction));
-      end loop;
+      end loop Generate_Recruits_Loop;
       SkyBases(BaseIndex).RecruitDate := GameDate;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
