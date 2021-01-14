@@ -363,13 +363,9 @@ package body Bases is
          ShipIndex :=
            (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
               .ShipIndex);
-         if ProtoShips_List(ShipIndex).Crew.Length < 5 then
-            Amount := 3;
-         elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
-            Amount := 5;
-         else
-            Amount := 10;
-         end if;
+         Amount :=
+           (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 3
+            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 5 else 10);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
             To_String
