@@ -137,4 +137,17 @@ package body Table is
       Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
    end AddButton;
 
+   procedure UpdateTable(Table: in out Table_Widget) is
+      Tag: Unbounded_String;
+      NewPos: Natural := 0;
+   begin
+      for I in 2 .. Table.Amount loop
+         Tag := To_Unbounded_String("header" & Trim(Natural'Image(I), Left));
+         NewPos := NewPos + Table.Columns_Width(I);
+         Coords
+           (Table.Canvas, To_String(Tag),
+            Trim(Positive'Image(NewPos), Left) & " 0");
+      end loop;
+   end UpdateTable;
+
 end Table;
