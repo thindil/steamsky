@@ -123,4 +123,15 @@ package Table is
       Column: Positive; NewRow: Boolean := False);
    -- ****
 
+   -- ****f* Table/Table.UpdateTable
+   -- FUNCTION
+   -- Update size and coordinates of all elements in the selected table
+   -- PARAMETERS
+   -- Table - The Table_Widget which elements will be resized if needed
+   -- HISTORY
+   -- 5.7 - Added
+   -- SOURCE
+   procedure UpdateTable(Table: in out Table_Widget);
+   -- ****
+
 end Table;
