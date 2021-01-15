@@ -401,13 +401,10 @@ package body Bases is
                Amount := 4;
             end if;
          else -- asking friendly ship
-            if ProtoShips_List(ShipIndex).Crew.Length < 5 then
-               Amount := 1;
-            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
-               Amount := 2;
-            else
-               Amount := 4;
-            end if;
+            Amount :=
+              (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
+               elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 2
+               else 4);
          end if;
          for I in SkyBases'Range loop
             if not SkyBases(I).Known then
