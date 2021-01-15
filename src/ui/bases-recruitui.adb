@@ -129,6 +129,7 @@ package body Bases.RecruitUI is
             Positive'Image(SkyBases(BaseIndex).Recruits(I).Price), "", 4,
             True);
       end loop;
+      UpdateTable(RecruitTable);
       configure
         (RecruitTable.Canvas,
          "-scrollregion [list " & BBox(RecruitTable.Canvas, "all") & "]");
