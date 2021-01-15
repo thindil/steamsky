@@ -54,7 +54,7 @@ package body Table is
            (Canvas, "text",
             Trim(Natural'Image(X), Left) & " 0 -anchor nw -text {" &
             To_String(Headers(I)) &
-            "} -font InterfaceFont -fill [ttk::style lookup " &
+            "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
             To_String(GameSettings.InterfaceTheme) &
             " -foreground] -tags [list header" &
             Trim(Positive'Image(I), Left) & "]");
