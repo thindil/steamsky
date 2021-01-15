@@ -243,7 +243,7 @@ package body Bases.LootUI is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       SelectedItem: Unbounded_String;
-      ItemTypes: constant array(Positive range <>) of Unbounded_String :=
+      ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
       ItemText: constant Tk_Text :=
         Get_Widget
