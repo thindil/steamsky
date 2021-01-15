@@ -111,9 +111,23 @@ package body Bases.RecruitUI is
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
          AddButton
            (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
-            "Show available options for recruit.",
+            "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            1, True);
+            1);
+         if SkyBases(BaseIndex).Recruits(I).Gender = 'M' then
+            AddText(RecruitTable, "Male", "", 2);
+         else
+            AddText(RecruitTable, "Female", "", 2);
+         end if;
+         AddText
+           (RecruitTable,
+            To_String
+              (Factions_List(SkyBases(BaseIndex).Recruits(I).Faction).Name),
+            "", 3);
+         AddText
+           (RecruitTable,
+            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price), "", 4,
+            True);
       end loop;
       configure
         (RecruitTable.Canvas,
