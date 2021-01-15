@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ with Utils.UI; use Utils.UI;
 
 package body Knowledge.Missions is
 
-   -- ****if* KMissions/Show_Missions_Menu_Command
+   -- ****if* KMissions/KMissions.Show_Missions_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected event options
    -- PARAMETERS
@@ -89,7 +89,7 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Show_Missions_Menu_Command;
 
-   -- ****if* KMissions/Show_Mission_Command
+   -- ****if* KMissions/KMissions.Show_Mission_Command
    -- FUNCTION
    -- Show the selected mission on map
    -- PARAMETERS
@@ -123,7 +123,7 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Show_Mission_Command;
 
-   -- ****if* KMissions/Set_Mission_Command
+   -- ****if* KMissions/KMissions.Set_Mission_Command
    -- FUNCTION
    -- Set the selected mission as the player's ship destination
    -- PARAMETERS
@@ -164,7 +164,7 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Set_Mission_Command;
 
-   -- ****o* KMissions/Show_Mission_Info_Command
+   -- ****o* KMissions/KMissions.Show_Mission_Info_Command
    -- FUNCTION
    -- Show information about the selected mission
    -- PARAMETERS
