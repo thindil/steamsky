@@ -406,27 +406,30 @@ package body Bases is
                elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 2
                else 4);
          end if;
+         Count_Unknown_Bases :
          for I in SkyBases'Range loop
             if not SkyBases(I).Known then
                UnknownBases := UnknownBases + 1;
             end if;
-            exit when UnknownBases >= Amount;
-         end loop;
+            exit Count_Unknown_Bases when UnknownBases >= Amount;
+         end loop Count_Unknown_Bases;
          if UnknownBases >= Amount then
+            Reveal_Random_Bases_Loop :
             loop
                TmpBaseIndex := GetRandom(1, 1024);
                if not SkyBases(TmpBaseIndex).Known then
                   SkyBases(TmpBaseIndex).Known := True;
                   Amount := Amount - 1;
                end if;
-               exit when Amount = 0;
-            end loop;
+               exit Reveal_Random_Bases_Loop when Amount = 0;
+            end loop Reveal_Random_Bases_Loop;
          else
+            Reveal_Bases_Loop :
             for I in SkyBases'Range loop
                if not SkyBases(I).Known then
                   SkyBases(I).Known := True;
                end if;
-            end loop;
+            end loop Reveal_Bases_Loop;
          end if;
       end if;
       GainExp(1, TalkingSkill, TraderIndex);
