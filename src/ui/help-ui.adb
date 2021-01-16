@@ -68,7 +68,7 @@ package body Help.UI is
          Name: Unbounded_String;
          Value: Unbounded_String;
       end record;
-      Variables: constant array(Positive range <>) of Variables_Data :=
+      Variables: constant array(1 .. 11) of Variables_Data :=
         (1 => (Name => To_Unbounded_String("MoneyName"), Value => MoneyName),
          2 =>
            (Name => To_Unbounded_String("FuelName"),
@@ -114,11 +114,11 @@ package body Help.UI is
          Tag: String(1 .. 1);
          TextTag: Unbounded_String;
       end record;
-      FontTags: constant array(Positive range <>) of FontTag :=
+      FontTags: constant array(1 .. 3) of FontTag :=
         (1 => (Tag => "b", TextTag => To_Unbounded_String("bold")),
          2 => (Tag => "u", TextTag => To_Unbounded_String("underline")),
          3 => (Tag => "i", TextTag => To_Unbounded_String("italic")));
-      FlagsTags: constant array(Positive range <>) of Unbounded_String :=
+      FlagsTags: constant array(1 .. 8) of Unbounded_String :=
         (To_Unbounded_String("diseaseimmune"),
          To_Unbounded_String("nofatigue"), To_Unbounded_String("nomorale"),
          To_Unbounded_String("naturalarmor"),
@@ -126,7 +126,7 @@ package body Help.UI is
          To_Unbounded_String("sentientships"),
          To_Unbounded_String("fanaticism"), To_Unbounded_String("loner"));
       FactionsWithFlag: Unbounded_String;
-      BasesFlags: constant array(Positive range <>) of Unbounded_String :=
+      BasesFlags: constant array(1 .. 4) of Unbounded_String :=
         (To_Unbounded_String("shipyard"), To_Unbounded_String("temple"),
          To_Unbounded_String("blackmarket"), To_Unbounded_String("barracks"));
       BasesWithFlag: Unbounded_String;
