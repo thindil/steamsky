@@ -661,13 +661,9 @@ package body Bases is
       if SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
-      if SkyBases(BaseIndex).Population < 150 then
-         Chance := 1;
-      elsif SkyBases(BaseIndex).Population < 300 then
-         Chance := 2;
-      else
-         Chance := 5;
-      end if;
+      Chance :=
+        (if SkyBases(BaseIndex).Population < 150 then 1
+         elsif SkyBases(BaseIndex).Population < 300 then 2 else 5);
       Chance := Chance + (DaysDifference(SkyBases(BaseIndex).Visited) / 10);
       if GetRandom(1, 100) > Chance then
          return;
