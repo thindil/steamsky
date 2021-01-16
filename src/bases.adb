@@ -455,13 +455,9 @@ package body Bases is
          return;
       end if;
       if BaseIndex > 0 then -- asking in base
-         if SkyBases(BaseIndex).Population < 150 then
-            MaxEvents := 5;
-         elsif SkyBases(BaseIndex).Population < 300 then
-            MaxEvents := 10;
-         else
-            MaxEvents := 15;
-         end if;
+         MaxEvents :=
+           (if SkyBases(BaseIndex).Population < 150 then 5
+            elsif SkyBases(BaseIndex).Population < 300 then 10 else 15);
          SkyBases(BaseIndex).AskedForEvents := GameDate;
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
@@ -473,13 +469,9 @@ package body Bases is
          ShipIndex :=
            Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
              .ShipIndex;
-         if ProtoShips_List(ShipIndex).Crew.Length < 5 then
-            MaxEvents := 1;
-         elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then
-            MaxEvents := 3;
-         else
-            MaxEvents := 5;
-         end if;
+         MaxEvents :=
+           (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
+            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 3 else 5);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
             To_String
