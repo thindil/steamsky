@@ -139,14 +139,27 @@ package body Table is
 
    procedure UpdateTable(Table: in out Table_Widget) is
       Tag: Unbounded_String;
-      NewPos: Natural := 0;
+      NewX: Natural := Table.Columns_Width(1);
+      NewY: Natural := 0;
    begin
-      for I in 2 .. Table.Amount loop
-         Tag := To_Unbounded_String("header" & Trim(Natural'Image(I), Left));
-         NewPos := NewPos + Table.Columns_Width(I);
+      for Column in 2 .. Table.Amount loop
+         Tag :=
+           To_Unbounded_String("header" & Trim(Natural'Image(Column), Left));
          Coords
            (Table.Canvas, To_String(Tag),
-            Trim(Positive'Image(NewPos), Left) & " 0");
+            Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+         for Row in 1 .. Table.Row loop
+            NewY := NewY + Table.Row_Height;
+            Tag :=
+              To_Unbounded_String
+                ("row" & Trim(Positive'Image(Row), Left) & "col" &
+                 Trim(Natural'Image(Column), Left));
+            Coords
+              (Table.Canvas, To_String(Tag),
+               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+         end loop;
+         NewX := NewX + Table.Columns_Width(Column);
+         NewY := 0;
       end loop;
    end UpdateTable;
 
