@@ -148,7 +148,8 @@ $messagesview tag configure red -foreground red
 $messagesview tag configure cyan -foreground cyan
 $messagesview tag configure blue -foreground #3465a4
 $messagesview tag configure gray -foreground {dim gray}
-pack $messagesview -side top -fill both -padx {5 0 } -pady 5
+pack $messagesview -side top -fill both -padx 5 -pady 5
+::autoscroll::autoscroll .gameframe.paned.controls.messages.scroll
 bind .gameframe.paned.controls <Configure> {
    $messagesview configure -height [expr [winfo height .gameframe.paned.controls] / [font metrics InterfaceFont -linespace]]
 }
