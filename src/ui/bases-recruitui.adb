@@ -26,6 +26,8 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -143,6 +145,53 @@ package body Bases.RecruitUI is
    -- SOURCE
    RecruitIndex: Positive;
    -- ****
+
+   -- ****o* RecruitUI/RecruitUI.Show_Recruit_Menu_Command
+   -- FUNCTION
+   -- Show menu with actions for the selected recruit
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowRecruitMenu recruitidex
+   -- RecruitIndex is a index of the recruit which menu will be shown
+   -- SOURCE
+   function Show_Recruit_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Recruit_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      RecruitMenu: Tk_Menu := Get_Widget(".recruitmenu", Interp);
+   begin
+      RecruitIndex := Positive'Value(CArgv.Arg(Argv, 1));
+      if Winfo_Get(RecruitMenu, "exists") = "0" then
+         RecruitMenu := Create(".recruitmenu", "-tearoff false");
+      end if;
+      Delete(RecruitMenu, "0", "end");
+      Menu.Add
+        (RecruitMenu, "command",
+         "-label {Show recruit details} -command {ShowRecruitInfo " &
+         CArgv.Arg(Argv, 1) & "}");
+      Menu.Add
+        (RecruitMenu, "command",
+         "-label {Start negotiations} -command {StartNegotiate " &
+         CArgv.Arg(Argv, 1) & "}");
+      Tk_Popup
+        (RecruitMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Recruit_Menu_Command;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Info_Command
    -- FUNCTION
@@ -536,6 +585,7 @@ package body Bases.RecruitUI is
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
+      AddCommand("ShowRecruitMenu", Show_Recruit_Menu_Command'Access);
       AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
       AddCommand("NegotiateHire", Negotiate_Hire_Command'Access);
       AddCommand("Hire", Hire_Command'Access);
