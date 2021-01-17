@@ -1,4 +1,4 @@
---    Copyright 2019-2020 Bartek thindil Jasicki
+--    Copyright 2019-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -46,6 +46,7 @@ package body BasesTypes is
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, Index), Name);
+         Read_Child_Node_Loop :
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
             Value :=
@@ -74,20 +75,22 @@ package body BasesTypes is
                Data.Append(New_Item => Value);
             else
                DeleteIndex := Data.First_Index;
+               Delete_Child_Data_Loop :
                while DeleteIndex <= Data.Last_Index loop
                   if Data(DeleteIndex) = Value then
                      Data.Delete(Index => DeleteIndex);
-                     exit;
+                     exit Delete_Child_Data_Loop;
                   end if;
                   DeleteIndex := DeleteIndex + 1;
-               end loop;
+               end loop Delete_Child_Data_Loop;
             end if;
-         end loop;
+         end loop Read_Child_Node_Loop;
       end AddChildNode;
    begin
       BasesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(BasesData, "base");
+      Read_Bases_Types_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Color => "ffffff",
@@ -134,6 +137,7 @@ package body BasesTypes is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Item(NodesList, I), "item");
+            Read_Items_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
@@ -172,7 +176,7 @@ package body BasesTypes is
                else
                   TempRecord.Trades.Delete(ItemIndex);
                end if;
-            end loop;
+            end loop Read_Items_Loop;
             AddChildNode(TempRecord.Recipes, "recipe", I);
             AddChildNode(TempRecord.Flags, "flag", I);
             if Action /= UPDATE then
@@ -192,7 +196,7 @@ package body BasesTypes is
             LogMessage
               ("Base type removed: " & To_String(BaseIndex), Everything);
          end if;
-      end loop;
+      end loop Read_Bases_Types_Loop;
    end LoadBasesTypes;
 
    function Is_Buyable
