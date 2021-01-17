@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -91,7 +91,7 @@ package body Game.SaveLoad is
          Name: Unbounded_String;
          Value: Bonus_Type;
       end record;
-      Difficulties: constant array(Positive range <>) of Difficulty_Data :=
+      Difficulties: constant array(1 .. 8) of Difficulty_Data :=
         ((To_Unbounded_String("enemydamagebonus"),
           NewGameSettings.EnemyDamageBonus),
          (To_Unbounded_String("playerdamagebonus"),
