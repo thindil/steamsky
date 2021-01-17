@@ -45,7 +45,7 @@ package body Table is
       Tokens: Slice_Set;
    begin
       Tcl.Tk.Ada.Pack.Pack(YScroll, "-side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both");
+      Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both -padx {5 0}");
       Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
       Autoscroll(YScroll);
       Autoscroll(XScroll);
