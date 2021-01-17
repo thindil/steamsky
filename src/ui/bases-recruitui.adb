@@ -53,7 +53,7 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Table with info about the available recruits
    -- SOURCE
-   RecruitTable: Table_Widget (4);
+   RecruitTable: Table_Widget (6);
    -- ****
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
@@ -88,6 +88,7 @@ package body Bases.RecruitUI is
         Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      HighestLevel, HighestIndex: Positive;
    begin
       if Winfo_Get(RecruitFrame, "exists") = "0" then
          RecruitFrame := Create(Widget_Image(RecruitFrame));
@@ -96,7 +97,9 @@ package body Bases.RecruitUI is
              (Widget_Image(RecruitFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
                To_Unbounded_String("Faction"),
-               To_Unbounded_String("Base cost")));
+               To_Unbounded_String("Base cost"),
+               To_Unbounded_String("Highest stat"),
+               To_Unbounded_String("Highest skill")));
          Bind
            (RecruitFrame, "<Configure>",
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
@@ -128,7 +131,30 @@ package body Bases.RecruitUI is
             "", 3);
          AddText
            (RecruitTable,
-            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price), "", 4,
+            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price), "", 4);
+         HighestLevel := 1;
+         HighestIndex := 1;
+         for J in SkyBases(BaseIndex).Recruits(I).Attributes.Iterate loop
+            if SkyBases(BaseIndex).Recruits(I).Attributes(J)(1) >
+              HighestLevel then
+               HighestLevel :=
+                 SkyBases(BaseIndex).Recruits(I).Attributes(J)(1);
+               HighestIndex := Attributes_Container.To_Index(J);
+            end if;
+         end loop;
+         AddText
+           (RecruitTable, To_String(Attributes_List(HighestIndex).Name), "",
+            5);
+         HighestLevel := 1;
+         HighestIndex := 1;
+         for J in SkyBases(BaseIndex).Recruits(I).Skills.Iterate loop
+            if SkyBases(BaseIndex).Recruits(I).Skills(J)(1) > HighestLevel then
+               HighestLevel := SkyBases(BaseIndex).Recruits(I).Skills(J)(1);
+               HighestIndex := Skills_Container.To_Index(J);
+            end if;
+         end loop;
+         AddText
+           (RecruitTable, To_String(Skills_List(HighestIndex).Name), "", 6,
             True);
       end loop;
       UpdateTable(RecruitTable);
