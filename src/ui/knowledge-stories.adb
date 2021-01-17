@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -39,7 +39,7 @@ with Utils.UI; use Utils.UI;
 
 package body Knowledge.Stories is
 
-   -- ****o* KStories/Show_Story_Command
+   -- ****o* KStories/KStories.Show_Story_Command
    -- FUNCTION
    -- Show the current story information
    -- PARAMETERS
@@ -187,7 +187,7 @@ package body Knowledge.Stories is
       return TCL_OK;
    end Show_Story_Command;
 
-   -- ****o* KStories/Show_Story_Location_Command
+   -- ****o* KStories/KStories.Show_Story_Location_Command
    -- FUNCTION
    -- Show the current story event on map
    -- PARAMETERS
@@ -221,7 +221,7 @@ package body Knowledge.Stories is
       return TCL_OK;
    end Show_Story_Location_Command;
 
-   -- ****o* KStories/Set_Story_Command
+   -- ****o* KStories/KStories.Set_Story_Command
    -- FUNCTION
    -- Set the current story event as the player's ship destination
    -- PARAMETERS
