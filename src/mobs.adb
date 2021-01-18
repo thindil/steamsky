@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,7 +35,7 @@ package body Mobs is
       TempAttributes: Attributes_Container.Vector;
       TempPriorities: constant Natural_Array(1 .. 12) := (others => 0);
       TempEquipment: constant Equipment_Array := (others => 0);
-      OrdersNames: constant array(Positive range <>) of Unbounded_String :=
+      OrdersNames: constant array(1 .. 11) of Unbounded_String :=
         (To_Unbounded_String("Piloting"), To_Unbounded_String("Engineering"),
          To_Unbounded_String("Operating guns"),
          To_Unbounded_String("Repair ship"),
@@ -46,7 +46,7 @@ package body Mobs is
          To_Unbounded_String("Cleaning ship"),
          To_Unbounded_String("Defend ship"),
          To_Unbounded_String("Board enemy ship"));
-      EquipmentNames: constant array(Positive range <>) of Unbounded_String :=
+      EquipmentNames: constant array(1 .. 7) of Unbounded_String :=
         (To_Unbounded_String("Weapon"), To_Unbounded_String("Shield"),
          To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
          To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
