@@ -1,4 +1,4 @@
---    Copyright 2018-2020 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -38,6 +38,7 @@ package body Careers is
       CareersData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(CareersData, "career");
+      Load_Careers_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord := (Name => Null_Unbounded_String, Skills => TmpSkills);
          CareerNode := Item(NodesList, I);
@@ -69,6 +70,7 @@ package body Careers is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(CareerNode, "skill");
+            Read_Skills_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                SkillName :=
                  To_Unbounded_String
@@ -89,15 +91,16 @@ package body Careers is
                   TempRecord.Skills.Append(New_Item => SkillName);
                else
                   DeleteIndex := TempRecord.Skills.First_Index;
+                  Remove_Skills_Loop :
                   while DeleteIndex <= TempRecord.Skills.Last_Index loop
                      if TempRecord.Skills(DeleteIndex) = SkillName then
                         TempRecord.Skills.Delete(Index => DeleteIndex);
-                        exit;
+                        exit Remove_Skills_Loop;
                      end if;
                      DeleteIndex := DeleteIndex + 1;
-                  end loop;
+                  end loop Remove_Skills_Loop;
                end if;
-            end loop;
+            end loop Read_Skills_Loop;
             if Action /= UPDATE then
                Careers_Container.Include
                  (Careers_List, CareerIndex, TempRecord);
@@ -110,14 +113,15 @@ package body Careers is
             end if;
          else
             Careers_Container.Exclude(Careers_List, CareerIndex);
+            Remove_Careers_Loop :
             for Faction of Factions_List loop
                Factions.Careers_Container.Exclude
                  (Faction.Careers, CareerIndex);
-            end loop;
+            end loop Remove_Careers_Loop;
             LogMessage
               ("Career removed: " & To_String(CareerIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Careers_Loop;
    end LoadCareers;
 
 end Careers;
