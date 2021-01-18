@@ -264,7 +264,7 @@ package body Bases.RecruitUI is
            "-yscrollcommand [list " & YScroll & " set]");
       CloseButton, InfoButton, Button: Ttk_Button;
       Height, NewHeight: Positive := 1;
-      Width, NewWidth: Positive := 1;
+      Width: Positive := 1;
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
@@ -351,7 +351,7 @@ package body Bases.RecruitUI is
       Height := Height + Positive'Value(Winfo_Get(RecruitLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Frame);
-      -- Statistics of the selected crew member
+      -- Statistics of the selected recruit
       Frame := Create(RecruitCanvas & ".stats");
       for I in Recruit.Attributes.Iterate loop
          ProgressFrame :=
@@ -394,42 +394,60 @@ package body Bases.RecruitUI is
       if NewHeight > Height then
          Height := NewHeight;
       end if;
---      LabelFrame.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills");
---      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
---      for I in 1 .. Slice_Count(Tokens) loop
---         Item.Name := New_String(Slice(Tokens, I));
---         Destroy(Item);
---      end loop;
---      for Skill of Recruit.Skills loop
---         Label :=
---           Create
---             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
---              Trim(Positive'Image(Skill(1)), Left),
---              "-text {" & To_String(Skills_List(Skill(1)).Name) & ": " &
---              GetSkillLevelName(Skill(2)) & "}");
---         Tcl.Tk.Ada.Grid.Grid(Label);
---         Add
---           (Label,
---            "Related statistic: " &
---            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
---            ". " & To_String(Skills_List(Skill(1)).Description));
---         ProgressBar :=
---           Create
---             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
---              Trim(Positive'Image(Skill(1)), Left),
---              "-value" & Positive'Image(Skill(2)));
---         Tcl.Tk.Ada.Grid.Grid
---           (ProgressBar, "-column 1 -row" & Natural'Image(Row));
---         Row := Row + 1;
---         Add
---           (ProgressBar,
---            "Related statistic: " &
---            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
---            ". " & To_String(Skills_List(Skill(1)).Description));
---      end loop;
---      Delete(EquipmentView, "[list " & Children(EquipmentView, "{}") & "]");
+      -- Skills of the selected recruit
+      Frame := Create(RecruitCanvas & ".skills");
+      NewHeight := 1;
+      for I in Recruit.Skills.Iterate loop
+         ProgressFrame :=
+           Create
+             (Frame & ".skillinfo" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
+         RecruitLabel :=
+           Create
+             (ProgressFrame & ".label" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              "-text {" & To_String(Skills_List(Recruit.Skills(I)(1)).Name) &
+              ": " & GetSkillLevelName(Recruit.Skills(I)(2)) & "}");
+         Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
+         declare
+            ToolQuality: Positive := 100;
+         begin
+            Tool_Quality_Loop :
+            for Quality of Skills_List(Skills_Container.To_Index(I))
+              .ToolsQuality loop
+               if Recruit.Skills(I)(2) <= Quality(1) then
+                  ToolQuality := Quality(2);
+                  exit Tool_Quality_Loop;
+               end if;
+            end loop Tool_Quality_Loop;
+            InfoButton :=
+              Create
+                (ProgressFrame & ".button",
+                 "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
+                 Positive'Image(Recruit.Skills(I)(1)) &
+                 Positive'Image(ToolQuality) & " .recruitdialog}");
+         end;
+         Tcl.Tklib.Ada.Tooltip.Add
+           (InfoButton, "Show detailed information about the selected skill.");
+         Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
+         NewHeight :=
+           NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+         ProgressBar :=
+           Create
+             (Frame & ".level" &
+              Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
+              "-value" & Positive'Image(Recruit.Skills(I)(2)) &
+              " -length 200");
+         Tcl.Tklib.Ada.Tooltip.Add
+           (ProgressBar, "The current level of the skill.");
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+         NewHeight :=
+           NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+      end loop;
+      if NewHeight > Height then
+         Height := NewHeight;
+      end if;
 --      for Item of Recruit.Inventory loop
 --         Insert
 --           (EquipmentView,
