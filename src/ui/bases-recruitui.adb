@@ -13,33 +13,34 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl; use Tcl;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
+use Tcl.Tk.Ada.Widgets.TtkButton.TtkRadioButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkLabelFrame; use Tcl.Tk.Ada.Widgets.TtkLabelFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -207,12 +208,10 @@ package body Bases.RecruitUI is
       Delete(RecruitMenu, "0", "end");
       Menu.Add
         (RecruitMenu, "command",
-         "-label {Show recruit details} -command {ShowRecruitInfo " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Show recruit details} -command {ShowRecruitInfo}");
       Menu.Add
         (RecruitMenu, "command",
-         "-label {Start negotiations} -command {StartNegotiate " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Start negotiations} -command {StartNegotiate}");
       Tk_Popup
         (RecruitMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
@@ -244,40 +243,93 @@ package body Bases.RecruitUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      RecruitsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.recruitframe.canvas.recruit.recruits.view",
-           Interp);
-      Recruit: Recruit_Data;
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      Label: Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.info",
-           Interp);
-      LabelFrame: Ttk_LabelFrame :=
-        Get_Widget
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats",
-           Interp);
-      Tokens: Slice_Set;
-      Item: Ttk_Frame;
+      Recruit: constant Recruit_Data :=
+        SkyBases(BaseIndex).Recruits(RecruitIndex);
+      RecruitDialog: constant Ttk_Frame :=
+        Create(".recruitdialog", "-style Dialog.TFrame");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (RecruitDialog & ".yscroll",
+           "-orient vertical -command [list " & RecruitDialog &
+           ".canvas yview]");
+      RecruitCanvas: constant Tk_Canvas :=
+        Create
+          (RecruitDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll & " set]");
+      CloseButton: Ttk_Button;
+      Height, NewHeight: Positive := 1;
+      Width, NewWidth: Positive := 1;
       ProgressBar: Ttk_ProgressBar;
-      Row: Natural := 0;
-      EquipmentView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.equipment.view",
-           Interp);
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      Cost: Positive;
-      Scale: Ttk_Scale;
-      HireButton: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.hire",
-           Interp);
+      TabButton: Ttk_RadioButton;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      RecruitLabel: Ttk_Label;
+      Button: Ttk_Button;
    begin
-      RecruitIndex := Positive'Value(Selection(RecruitsView));
-      Recruit := SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Create(RecruitDialog & ".buttonbox");
+      Tcl_SetVar(Interp, "newtab", "general");
+      TabButton :=
+        Create
+          (Frame & ".general",
+           " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowRecruitTab");
+      Tcl.Tk.Ada.Grid.Grid(TabButton);
+      Bind
+        (TabButton, "<Escape>",
+         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
+      TabButton :=
+        Create
+          (Frame & ".stats",
+           " -text Statistics -style Radio.Toolbutton -value stats -variable newtab -command ShowRecruitTab");
+      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
+      Bind
+        (TabButton, "<Escape>",
+         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      TabButton :=
+        Create
+          (Frame & ".skills",
+           " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowRecruitTab");
+      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 2 -row 0");
+      Bind
+        (TabButton, "<Escape>",
+         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      TabButton :=
+        Create
+          (Frame & ".inventory",
+           " -text Inventory -style Radio.Toolbutton -value inventory -variable newtab -command ShowRecruitTab");
+      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 3 -row 0");
+      Bind
+        (TabButton, "<Escape>",
+         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      Bind
+        (TabButton, "<Tab>",
+         "{focus " & RecruitDialog & ".buttonbox2.hirebutton;break}");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(RecruitCanvas, "-sticky nwes -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
+      Frame := Create(RecruitDialog & ".buttonbox2");
+      Button :=
+        Create
+          (RecruitDialog & ".buttonbox2.hirebutton",
+           "-text Hire -command {CloseDialog " & RecruitDialog &
+           ";StartNegotiate}");
+      Tcl.Tk.Ada.Grid.Grid(Button);
+      CloseButton :=
+        Create
+          (RecruitDialog & ".buttonbox2.button",
+           "-text Close -command {CloseDialog " & RecruitDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
+      Focus(CloseButton);
+      Autoscroll(YScroll);
+      -- General info about the selected recruit
+      Frame := Create(RecruitCanvas & ".general");
       if not Factions_List(Recruit.Faction).Flags.Contains
           (To_Unbounded_String("nogender")) then
          RecruitInfo :=
@@ -288,147 +340,169 @@ package body Bases.RecruitUI is
       Append(RecruitInfo, Factions_List(Recruit.Faction).Name);
       Append(RecruitInfo, LF & "Home base: ");
       Append(RecruitInfo, SkyBases(Recruit.HomeBase).Name);
-      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
-      Item.Interp := Interp;
-      for I in 1 .. Slice_Count(Tokens) loop
-         Item.Name := New_String(Slice(Tokens, I));
-         Destroy(Item);
-      end loop;
-      for I in Recruit.Attributes.Iterate loop
-         Label :=
-           Create
-             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
-              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-              "-text {" &
-              To_String
-                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
-              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Add
-           (Label,
-            To_String
-              (Attributes_List(Attributes_Container.To_Index(I)).Description));
-         ProgressBar :=
-           Create
-             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
-              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
-              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2));
-         Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar,
-            "-column 1 -row" &
-            Natural'Image(Attributes_Container.To_Index(I) - 1));
-         Add
-           (ProgressBar,
-            To_String
-              (Attributes_List(Attributes_Container.To_Index(I)).Description));
-      end loop;
-      LabelFrame.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
-      for I in 1 .. Slice_Count(Tokens) loop
-         Item.Name := New_String(Slice(Tokens, I));
-         Destroy(Item);
-      end loop;
-      for Skill of Recruit.Skills loop
-         Label :=
-           Create
-             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
-              Trim(Positive'Image(Skill(1)), Left),
-              "-text {" & To_String(Skills_List(Skill(1)).Name) & ": " &
-              GetSkillLevelName(Skill(2)) & "}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Add
-           (Label,
-            "Related statistic: " &
-            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
-            ". " & To_String(Skills_List(Skill(1)).Description));
-         ProgressBar :=
-           Create
-             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
-              Trim(Positive'Image(Skill(1)), Left),
-              "-value" & Positive'Image(Skill(2)));
-         Tcl.Tk.Ada.Grid.Grid
-           (ProgressBar, "-column 1 -row" & Natural'Image(Row));
-         Row := Row + 1;
-         Add
-           (ProgressBar,
-            "Related statistic: " &
-            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
-            ". " & To_String(Skills_List(Skill(1)).Description));
-      end loop;
-      Delete(EquipmentView, "[list " & Children(EquipmentView, "{}") & "]");
-      for Item of Recruit.Inventory loop
-         Insert
-           (EquipmentView,
-            "{} end -text {" & To_String(Items_List(Item).Name) & "}");
-      end loop;
-      Label.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.initialcost");
-      RecruitInfo := To_Unbounded_String("Starting offer:");
-      Append
-        (RecruitInfo,
-         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
-         To_String(MoneyName) & " each day.");
-      Cost := Recruit.Price;
-      CountPrice(Cost, FindMember(Talk));
-      Append
-        (RecruitInfo,
-         LF & "One time fee:" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & ".");
-      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
-      Label.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.dailylbl");
-      configure
-        (Label,
-         "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
-      Scale.Interp := Interp;
-      Scale.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.daily");
-      configure
-        (Scale,
-         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
-         Natural'Image(Recruit.Payment));
-      Label.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percentlbl");
-      configure(Label, "-text {Percent of profit from trades: 0}");
-      Scale.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
-      configure(Scale, "-value 0");
-      Cost := Recruit.Price;
-      CountPrice(Cost, FindMember(Talk));
-      Label.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.cost");
-      configure
-        (Label,
-         "-text {Hire for" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & "}");
-      Label.Name :=
-        New_String
-          (".gameframe.paned.recruitframe.canvas.recruit.recruit.money");
-      if MoneyIndex2 > 0 then
-         configure
-           (Label,
-            "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(MoneyName) & ".}");
-         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-            configure(HireButton, "-state disabled");
-         else
-            configure(HireButton, "-state !disabled");
-         end if;
-      else
-         configure
-           (Label, "-text {You don't have enough money to recruit anyone}");
-         configure(HireButton, "-state disabled");
+      RecruitLabel :=
+        Create
+          (Frame & ".label",
+           "-text {" & To_String(RecruitInfo) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(RecruitLabel, "-sticky w");
+      Height := Height + Positive'Value(Winfo_Get(RecruitLabel, "reqheight"));
+      Width := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
+      Tcl.Tk.Ada.Grid.Grid(Frame);
+--      for I in Recruit.Attributes.Iterate loop
+--         Label :=
+--           Create
+--             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
+--              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+--              "-text {" &
+--              To_String
+--                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+--              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
+--         Tcl.Tk.Ada.Grid.Grid(Label);
+--         Add
+--           (Label,
+--            To_String
+--              (Attributes_List(Attributes_Container.To_Index(I)).Description));
+--         ProgressBar :=
+--           Create
+--             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
+--              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+--              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (ProgressBar,
+--            "-column 1 -row" &
+--            Natural'Image(Attributes_Container.To_Index(I) - 1));
+--         Add
+--           (ProgressBar,
+--            To_String
+--              (Attributes_List(Attributes_Container.To_Index(I)).Description));
+--      end loop;
+--      LabelFrame.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills");
+--      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Slaves(LabelFrame), " ");
+--      for I in 1 .. Slice_Count(Tokens) loop
+--         Item.Name := New_String(Slice(Tokens, I));
+--         Destroy(Item);
+--      end loop;
+--      for Skill of Recruit.Skills loop
+--         Label :=
+--           Create
+--             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.label" &
+--              Trim(Positive'Image(Skill(1)), Left),
+--              "-text {" & To_String(Skills_List(Skill(1)).Name) & ": " &
+--              GetSkillLevelName(Skill(2)) & "}");
+--         Tcl.Tk.Ada.Grid.Grid(Label);
+--         Add
+--           (Label,
+--            "Related statistic: " &
+--            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+--            ". " & To_String(Skills_List(Skill(1)).Description));
+--         ProgressBar :=
+--           Create
+--             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills.levelbar" &
+--              Trim(Positive'Image(Skill(1)), Left),
+--              "-value" & Positive'Image(Skill(2)));
+--         Tcl.Tk.Ada.Grid.Grid
+--           (ProgressBar, "-column 1 -row" & Natural'Image(Row));
+--         Row := Row + 1;
+--         Add
+--           (ProgressBar,
+--            "Related statistic: " &
+--            To_String(Attributes_List(Skills_List(Skill(1)).Attribute).Name) &
+--            ". " & To_String(Skills_List(Skill(1)).Description));
+--      end loop;
+--      Delete(EquipmentView, "[list " & Children(EquipmentView, "{}") & "]");
+--      for Item of Recruit.Inventory loop
+--         Insert
+--           (EquipmentView,
+--            "{} end -text {" & To_String(Items_List(Item).Name) & "}");
+--      end loop;
+--      Label.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.initialcost");
+--      RecruitInfo := To_Unbounded_String("Starting offer:");
+--      Append
+--        (RecruitInfo,
+--         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
+--         To_String(MoneyName) & " each day.");
+--      Cost := Recruit.Price;
+--      CountPrice(Cost, FindMember(Talk));
+--      Append
+--        (RecruitInfo,
+--         LF & "One time fee:" & Positive'Image(Cost) & " " &
+--         To_String(MoneyName) & ".");
+--      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
+--      Label.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.dailylbl");
+--      configure
+--        (Label,
+--         "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
+--      Scale.Interp := Interp;
+--      Scale.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.daily");
+--      configure
+--        (Scale,
+--         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
+--         Natural'Image(Recruit.Payment));
+--      Label.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percentlbl");
+--      configure(Label, "-text {Percent of profit from trades: 0}");
+--      Scale.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
+--      configure(Scale, "-value 0");
+--      Cost := Recruit.Price;
+--      CountPrice(Cost, FindMember(Talk));
+--      Label.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.cost");
+--      configure
+--        (Label,
+--         "-text {Hire for" & Positive'Image(Cost) & " " &
+--         To_String(MoneyName) & "}");
+--      Label.Name :=
+--        New_String
+--          (".gameframe.paned.recruitframe.canvas.recruit.recruit.money");
+--      if MoneyIndex2 > 0 then
+--         configure
+--           (Label,
+--            "-text {You have" &
+--            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+--            To_String(MoneyName) & ".}");
+--         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+--            configure(HireButton, "-state disabled");
+--         else
+--            configure(HireButton, "-state !disabled");
+--         end if;
+--      else
+--         configure
+--           (Label, "-text {You don't have enough money to recruit anyone}");
+--         configure(HireButton, "-state disabled");
+--      end if;
+      if Height > 500 then
+         Height := 500;
       end if;
+      if Width < 350 then
+         Width := 350;
+      end if;
+      Canvas_Create
+        (RecruitCanvas, "window",
+         "0 0 -anchor nw -window " & RecruitCanvas & ".general -tag info");
+      Tcl_Eval(Interp, "update");
+      configure
+        (RecruitCanvas,
+         "-scrollregion [list " & BBox(RecruitCanvas, "all") & "] -width" &
+         Positive'Image(Width) & " -height" & Positive'Image(Height));
+      Tcl.Tk.Ada.Place.Place
+        (RecruitDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind
+        (CloseButton, "<Tab>",
+         "{focus " & RecruitDialog & ".buttonbox.general;break}");
+      Bind(RecruitDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
