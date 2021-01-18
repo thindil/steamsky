@@ -704,7 +704,8 @@ package body Ships.UI.Crew is
               Create
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
-                 Positive'Image(Attributes_Container.To_Index(I)) & "}");
+                 Positive'Image(Attributes_Container.To_Index(I)) &
+                 " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
                "Show detailed information about the selected statistic.");
@@ -774,7 +775,7 @@ package body Ships.UI.Crew is
                 (ProgressFrame & ".button",
                  "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewSkillInfo" &
                  Positive'Image(Member.Skills(I)(1)) & " " &
-                 CArgv.Arg(Argv, 1) & "}");
+                 CArgv.Arg(Argv, 1) & " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
                "Show detailed information about the selected skill.");
@@ -925,7 +926,7 @@ package body Ships.UI.Crew is
       ShowInfo
         (To_String
            (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Description),
-         ".memberdialog");
+         CArgv.Arg(Argv, 2));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
@@ -983,7 +984,7 @@ package body Ships.UI.Crew is
       end if;
       Append(MessageText, "." & LF);
       Append(MessageText, Skills_List(SkillIndex).Description);
-      ShowInfo(To_String(MessageText), ".memberdialog");
+      ShowInfo(To_String(MessageText), CArgv.Arg(Argv, 2));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
