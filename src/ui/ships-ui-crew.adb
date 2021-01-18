@@ -967,24 +967,39 @@ package body Ships.UI.Crew is
       if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;
-         for I in Items_List.Iterate loop
-            if Items_List(I).IType = Skills_List(SkillIndex).Tool
-              and then
-              (Items_List(I).Value.Length > 0
-               and then Items_List(I).Value(1) <=
-                 GetTrainingToolQuality
-                   (Positive'Value(CArgv.Arg(Argv, 2)), SkillIndex)) then
-               if Items_List(I).Value(1) > Quality then
-                  ItemIndex := Objects_Container.Key(I);
-                  Quality := Items_List(I).Value(1);
+         if CArgv.Arg(Argv, 3) = ".memberdialog" then
+            for I in Items_List.Iterate loop
+               if Items_List(I).IType = Skills_List(SkillIndex).Tool
+                 and then
+                 (Items_List(I).Value.Length > 0
+                  and then Items_List(I).Value(1) <=
+                    GetTrainingToolQuality
+                      (Positive'Value(CArgv.Arg(Argv, 2)), SkillIndex)) then
+                  if Items_List(I).Value(1) > Quality then
+                     ItemIndex := Objects_Container.Key(I);
+                     Quality := Items_List(I).Value(1);
+                  end if;
                end if;
-            end if;
-         end loop;
+            end loop;
+         else
+            for I in Items_List.Iterate loop
+               if Items_List(I).IType = Skills_List(SkillIndex).Tool
+                 and then
+                 (Items_List(I).Value.Length > 0
+                  and then Items_List(I).Value(1) <=
+                    Positive'Value(CArgv.Arg(Argv, 2))) then
+                  if Items_List(I).Value(1) > Quality then
+                     ItemIndex := Objects_Container.Key(I);
+                     Quality := Items_List(I).Value(1);
+                  end if;
+               end if;
+            end loop;
+         end if;
          Append(MessageText, Items_List(ItemIndex).Name);
       end if;
       Append(MessageText, "." & LF);
       Append(MessageText, Skills_List(SkillIndex).Description);
-      ShowInfo(To_String(MessageText), CArgv.Arg(Argv, 2));
+      ShowInfo(To_String(MessageText), CArgv.Arg(Argv, 3));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
