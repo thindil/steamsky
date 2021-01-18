@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv;
@@ -41,6 +43,7 @@ with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade; use Bases.Trade;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -259,14 +262,14 @@ package body Bases.RecruitUI is
         Create
           (RecruitDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
-      CloseButton: Ttk_Button;
+      CloseButton, InfoButton, Button: Ttk_Button;
       Height, NewHeight: Positive := 1;
       Width, NewWidth: Positive := 1;
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       RecruitLabel: Ttk_Label;
-      Button: Ttk_Button;
+      ProgressFrame: Ttk_Frame;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
@@ -348,34 +351,49 @@ package body Bases.RecruitUI is
       Height := Height + Positive'Value(Winfo_Get(RecruitLabel, "reqheight"));
       Width := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Frame);
---      for I in Recruit.Attributes.Iterate loop
---         Label :=
---           Create
---             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.label" &
---              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
---              "-text {" &
---              To_String
---                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
---              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
---         Tcl.Tk.Ada.Grid.Grid(Label);
---         Add
---           (Label,
---            To_String
---              (Attributes_List(Attributes_Container.To_Index(I)).Description));
---         ProgressBar :=
---           Create
---             (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.stats.levelbar" &
---              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
---              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2));
---         Tcl.Tk.Ada.Grid.Grid
---           (ProgressBar,
---            "-column 1 -row" &
---            Natural'Image(Attributes_Container.To_Index(I) - 1));
---         Add
---           (ProgressBar,
---            To_String
---              (Attributes_List(Attributes_Container.To_Index(I)).Description));
---      end loop;
+      -- Statistics of the selected crew member
+      Frame := Create(RecruitCanvas & ".stats");
+      for I in Recruit.Attributes.Iterate loop
+         ProgressFrame :=
+           Create
+             (Frame & ".statinfo" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
+         RecruitLabel :=
+           Create
+             (ProgressFrame & ".label",
+              "-text {" &
+              To_String
+                (Attributes_List(Attributes_Container.To_Index(I)).Name) &
+              ": " & GetAttributeLevelName(Recruit.Attributes(I)(1)) & "}");
+         Tcl.Tk.Ada.Grid.Grid(RecruitLabel);
+         InfoButton :=
+           Create
+             (ProgressFrame & ".button",
+              "-text ""[format %c 0xf05a]"" -style Header.Toolbutton -command {ShowCrewStatsInfo" &
+              Positive'Image(Attributes_Container.To_Index(I)) &
+              " .recruitdialog}");
+         Tcl.Tklib.Ada.Tooltip.Add
+           (InfoButton,
+            "Show detailed information about the selected statistic.");
+         Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
+         NewHeight :=
+           NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
+         Tcl.Tk.Ada.Grid.Grid(ProgressFrame);
+         ProgressBar :=
+           Create
+             (Frame & ".level" &
+              Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
+              "-value" & Positive'Image(Recruit.Attributes(I)(1) * 2) &
+              " -length 200");
+         Tcl.Tklib.Ada.Tooltip.Add
+           (ProgressBar, "The current level of the attribute.");
+         Tcl.Tk.Ada.Grid.Grid(ProgressBar);
+         NewHeight :=
+           NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
+      end loop;
+      if NewHeight > Height then
+         Height := NewHeight;
+      end if;
 --      LabelFrame.Name :=
 --        New_String
 --          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.skills");
@@ -682,6 +700,52 @@ package body Bases.RecruitUI is
       return Show_Recruit_Command(ClientData, Interp, 2, Argv);
    end Hire_Command;
 
+   -- ****o* RecruitUI/RecruitUI.Show_Recruit_Tab_Command
+   -- FUNCTION
+   -- Show the selected information about the selected recruit
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMemberTab
+   -- SOURCE
+   function Show_Recruit_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Recruit_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      RecruitCanvas: constant Tk_Canvas :=
+        Get_Widget(".recruitdialog.canvas", Interp);
+      Frame: constant Ttk_Frame :=
+        Get_Widget(RecruitCanvas & "." & Tcl_GetVar(Interp, "newtab"));
+      XPos: constant Natural :=
+        (Positive'Value(Winfo_Get(RecruitCanvas, "reqwidth")) -
+         Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+        2;
+   begin
+      Delete(RecruitCanvas, "info");
+      Canvas_Create
+        (RecruitCanvas, "window",
+         Trim(Positive'Image(XPos), Left) & " 0 -anchor nw -window " & Frame &
+         " -tag info");
+      Tcl_Eval(Interp, "update");
+      configure
+        (RecruitCanvas,
+         "-scrollregion [list " & BBox(RecruitCanvas, "all") & "]");
+      return TCL_OK;
+   end Show_Recruit_Tab_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
@@ -689,6 +753,7 @@ package body Bases.RecruitUI is
       AddCommand("ShowRecruitInfo", Show_Recruit_Info_Command'Access);
       AddCommand("NegotiateHire", Negotiate_Hire_Command'Access);
       AddCommand("Hire", Hire_Command'Access);
+      AddCommand("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;
