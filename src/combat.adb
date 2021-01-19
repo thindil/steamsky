@@ -217,6 +217,7 @@ package body Combat is
       EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
       Guns.Clear;
+      Set_Player_Guns_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if (PlayerShip.Modules(I).MType in GUN | HARPOON_GUN) and
            PlayerShip.Modules(I).Durability > 0 then
@@ -225,7 +226,7 @@ package body Combat is
                  (Modules_Container.To_Index(I), 1,
                   Modules_List(PlayerShip.Modules(I).ProtoIndex).Speed));
          end if;
-      end loop;
+      end loop Set_Player_Guns_Loop;
       if NewCombat then
          declare
             PlayerPerception: constant Natural :=
@@ -288,23 +289,25 @@ package body Combat is
          procedure RemoveGun(ModuleIndex: Positive) is
          begin
             if EnemyShip = PlayerShip then
+               Remove_Gun_Loop :
                for J in Guns.First_Index .. Guns.Last_Index loop
                   if Guns(J)(1) = ModuleIndex then
                      Guns.Delete(Index => J);
-                     exit;
+                     exit Remove_Gun_Loop;
                   end if;
-               end loop;
+               end loop Remove_Gun_Loop;
             end if;
          end RemoveGun;
          function FindEnemyModule(MType: ModuleType) return Natural is
          begin
+            Find_Enemy_Module_Loop :
             for I in EnemyShip.Modules.Iterate loop
                if Modules_List(EnemyShip.Modules(I).ProtoIndex).MType =
                  MType and
                  EnemyShip.Modules(I).Durability > 0 then
                   return Modules_Container.To_Index(I);
                end if;
-            end loop;
+            end loop Find_Enemy_Module_Loop;
             return 0;
          end FindEnemyModule;
       begin
