@@ -159,22 +159,20 @@ package body Combat is
          end loop Add_Enemy_Cargo_Loop;
       end;
       EnemyGuns.Clear;
+      Count_Enemy_Shooting_Speed_Loop :
       for I in EnemyShip.Modules.Iterate loop
          if (EnemyShip.Modules(I).MType in GUN | HARPOON_GUN) and
            EnemyShip.Modules(I).Durability > 0 then
             if Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed > 0 then
-               if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
-                  ShootingSpeed :=
+               ShootingSpeed :=
+                 (if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
                             (Modules_List(EnemyShip.Modules(I).ProtoIndex)
                                .Speed) /
-                          2.0));
-               else
-                  ShootingSpeed :=
-                    Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed;
-               end if;
+                          2.0))
+                  else Modules_List(EnemyShip.Modules(I).ProtoIndex).Speed);
             else
                ShootingSpeed :=
                  (if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
@@ -184,7 +182,7 @@ package body Combat is
             EnemyGuns.Append
               (New_Item => (Modules_Container.To_Index(I), 1, ShootingSpeed));
          end if;
-      end loop;
+      end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
         (Ship => EnemyShip, Accuracy => 0, Distance => 10000,
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
