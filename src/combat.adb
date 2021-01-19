@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -61,6 +61,7 @@ package body Combat is
       function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
          Result: Natural := 0;
       begin
+         Count_Spotter_Perception_Loop :
          for I in Spotter.Crew.Iterate loop
             case Spotter.Crew(I).Order is
                when Pilot =>
@@ -78,13 +79,14 @@ package body Combat is
                when others =>
                   null;
             end case;
-         end loop;
+         end loop Count_Spotter_Perception_Loop;
+         Count_Modules_Loop :
          for Module of Spotted.Modules loop
             if Module.MType = HULL then
                Result := Result + Module.MaxModules;
-               exit;
+               exit Count_Modules_Loop;
             end if;
-         end loop;
+         end loop Count_Modules_Loop;
          return Result;
       end CountPerception;
    begin
@@ -100,9 +102,10 @@ package body Combat is
       if Index(ProtoShips_List(EnemyIndex).Name, To_String(TradersName)) >
         0 then
          GenerateTraderCargo(EnemyIndex);
+         Update_Cargo_Loop :
          for Item of TraderCargo loop
             UpdateCargo(EnemyShip, Item.ProtoIndex, Item.Amount);
-         end loop;
+         end loop Update_Cargo_Loop;
          TraderCargo.Clear;
       end if;
       declare
@@ -110,26 +113,30 @@ package body Combat is
          ItemAmount: Positive;
          NewItemIndex: Unbounded_String;
       begin
+         Count_Free_Space_Loop :
          for Module of EnemyShip.Modules loop
             if Module.MType = CARGO_ROOM and Module.Durability > 0 then
                MinFreeSpace :=
                  MinFreeSpace + Modules_List(Module.ProtoIndex).MaxValue;
             end if;
-         end loop;
+         end loop Count_Free_Space_Loop;
          MinFreeSpace :=
            Natural
              (Float(MinFreeSpace) *
               (1.0 - (Float(GetRandom(20, 70)) / 100.0)));
+         Add_Enemy_Cargo_Loop :
          loop
-            exit when FreeCargo(0, EnemyShip) <= MinFreeSpace;
+            exit Add_Enemy_Cargo_Loop when FreeCargo(0, EnemyShip) <=
+              MinFreeSpace;
             ItemIndex := GetRandom(1, Positive(Items_List.Length));
+            Find_Item_Index_Loop :
             for I in Items_List.Iterate loop
                ItemIndex := ItemIndex - 1;
                if ItemIndex = 0 then
                   NewItemIndex := Objects_Container.Key(I);
-                  exit;
+                  exit Find_Item_Index_Loop;
                end if;
-            end loop;
+            end loop Find_Item_Index_Loop;
             if EnemyShip.Crew.Length < 5 then
                ItemAmount := GetRandom(1, 100);
             elsif EnemyShip.Crew.Length < 10 then
@@ -152,7 +159,7 @@ package body Combat is
                         Price => 0));
                end if;
             end if;
-         end loop;
+         end loop Add_Enemy_Cargo_Loop;
       end;
       EnemyGuns.Clear;
       for I in EnemyShip.Modules.Iterate loop
