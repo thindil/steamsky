@@ -338,6 +338,7 @@ package body Combat is
                if Ship = PlayerShip then
                   Shoots := 0;
                   if GunnerIndex > 0 then
+                     Count_Player_Shoots_Loop :
                      for Gun of Guns loop
                         if Gun(1) = Modules_Container.To_Index(K) then
                            GunnerOrder := Gun(2);
@@ -371,9 +372,9 @@ package body Combat is
                                  Natural'Image(Shoots),
                                  Log.Combat);
                            end if;
-                           exit;
+                           exit Count_Player_Shoots_Loop;
                         end if;
-                     end loop;
+                     end loop Count_Player_Shoots_Loop;
                      LogMessage
                        ("Shoots test3:" & Natural'Image(Shoots), Log.Combat);
                      if Ship.Crew(GunnerIndex).Order /= Gunner then
@@ -395,6 +396,7 @@ package body Combat is
                      end case;
                   end if;
                else
+                  Count_Enemy_Shoots_Loop :
                   for Gun of Enemy.Guns loop
                      if Gun(1) = Modules_Container.To_Index(K) then
                         if Gun(3) > 0 then
@@ -415,9 +417,9 @@ package body Combat is
                                      .Speed);
                            end if;
                         end if;
-                        exit;
+                        exit Count_Enemy_Shoots_Loop;
                      end if;
-                  end loop;
+                  end loop Count_Enemy_Shoots_Loop;
                   if Ship.Crew.Length > 0 and GunnerIndex = 0 then
                      Shoots := 0;
                   end if;
@@ -429,10 +431,12 @@ package body Combat is
                   AmmoIndex := AmmoIndex2;
                end if;
                if AmmoIndex = 0 then
+                  Find_Ammo_Index_Loop :
                   for I in Items_List.Iterate loop
                      if Items_List(I).IType =
                        Items_Types
                          (Modules_List(Ship.Modules(K).ProtoIndex).Value) then
+                        Get_Ammo_Index_Loop :
                         for J in Ship.Cargo.Iterate loop
                            if Ship.Cargo(J).ProtoIndex =
                              Objects_Container.Key(I) then
@@ -442,12 +446,12 @@ package body Combat is
                               elsif Ship.Modules(K).MType = GUN then
                                  Ship.Modules(K).AmmoIndex := AmmoIndex;
                               end if;
-                              exit;
+                              exit Get_Ammo_Index_Loop;
                            end if;
-                        end loop;
-                        exit when AmmoIndex > 0;
+                        end loop Get_Ammo_Index_Loop;
+                        exit Find_Ammo_Index_Loop when AmmoIndex > 0;
                      end if;
-                  end loop;
+                  end loop Find_Ammo_Index_Loop;
                end if;
                if AmmoIndex = 0 then
                   if Ship = PlayerShip then
@@ -522,6 +526,7 @@ package body Combat is
                   Log.Combat);
                LogMessage
                  ("Chance to hit:" & Integer'Image(HitChance), Log.Combat);
+               Shooting_Loop :
                for I in 1 .. Shoots loop
                   if Ship = PlayerShip then
                      ShootMessage :=
@@ -552,6 +557,7 @@ package body Combat is
                                     HitLocation := FindEnemyModule(ENGINE);
                                  when 5 =>
                                     HitLocation := 0;
+                                    Find_Hit_Weapon_Location_Loop :
                                     for J in EnemyShip.Modules.Iterate loop
                                        if
                                          (EnemyShip.Modules(J).MType =
@@ -562,9 +568,9 @@ package body Combat is
                                            0 then
                                           HitLocation :=
                                             Modules_Container.To_Index(J);
-                                          exit;
+                                          exit Find_Hit_Weapon_Location_Loop;
                                        end if;
-                                    end loop;
+                                    end loop Find_Hit_Weapon_Location_Loop;
                                     if HitLocation = 0 then
                                        HitLocation :=
                                          FindEnemyModule(BATTERING_RAM);
@@ -586,6 +592,7 @@ package body Combat is
                         else
                            if Enemy.CombatAI = DISARMER then
                               HitLocation := 1;
+                              Another_Weapon_Location_Loop :
                               for J in EnemyShip.Modules.Iterate loop
                                  if
                                    ((EnemyShip.Modules(J).MType = TURRET
@@ -598,9 +605,9 @@ package body Combat is
                                    EnemyShip.Modules(J).Durability > 0 then
                                     HitLocation :=
                                       Modules_Container.To_Index(J);
-                                    exit;
+                                    exit Another_Weapon_Location_Loop;
                                  end if;
-                              end loop;
+                              end loop Another_Weapon_Location_Loop;
                            else
                               HitLocation :=
                                 GetRandom
@@ -746,7 +753,7 @@ package body Combat is
                      EndCombat := True;
                   end if;
                   exit Attack_Loop when EndCombat;
-               end loop;
+               end loop Shooting_Loop;
             end if;
             <<End_Of_Attack_Loop>>
          end loop Attack_Loop;
