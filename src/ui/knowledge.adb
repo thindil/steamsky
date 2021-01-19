@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -377,7 +377,7 @@ package body Knowledge is
       return TCL_OK;
    end Show_Knowledge_Command;
 
-   -- ****o* Knowledge/Knowledge_Max_Min_Command
+   -- ****o* Knowledge/Knowledge.Knowledge_Max_Min_Command
    -- FUNCTION
    -- Maximize or minimize the selected section of knowledge info
    -- PARAMETERS
