@@ -310,6 +310,21 @@ package body Combat is
             end loop Find_Enemy_Module_Loop;
             return 0;
          end FindEnemyModule;
+         procedure FindHitWeapon is
+         begin
+            Find_Weapon_Location_Loop :
+            for J in EnemyShip.Modules.Iterate loop
+               if
+                 ((EnemyShip.Modules(J).MType = TURRET
+                   and then EnemyShip.Modules(J).GunIndex > 0) or
+                  Modules_List(EnemyShip.Modules(J).ProtoIndex).MType =
+                    BATTERING_RAM) and
+                 EnemyShip.Modules(J).Durability > 0 then
+                  HitLocation := Modules_Container.To_Index(J);
+                  return;
+               end if;
+            end loop Find_Weapon_Location_Loop;
+         end FindHitWeapon;
       begin
          if Ship = PlayerShip then
             LogMessage("Player's round.", Log.Combat);
@@ -557,20 +572,7 @@ package body Combat is
                                     HitLocation := FindEnemyModule(ENGINE);
                                  when 5 =>
                                     HitLocation := 0;
-                                    Find_Hit_Weapon_Location_Loop :
-                                    for J in EnemyShip.Modules.Iterate loop
-                                       if
-                                         (EnemyShip.Modules(J).MType =
-                                          TURRET and
-                                          EnemyShip.Modules(J).Durability > 0)
-                                         and then
-                                           EnemyShip.Modules(J).GunIndex >
-                                           0 then
-                                          HitLocation :=
-                                            Modules_Container.To_Index(J);
-                                          exit Find_Hit_Weapon_Location_Loop;
-                                       end if;
-                                    end loop Find_Hit_Weapon_Location_Loop;
+                                    FindHitWeapon;
                                     if HitLocation = 0 then
                                        HitLocation :=
                                          FindEnemyModule(BATTERING_RAM);
@@ -592,22 +594,7 @@ package body Combat is
                         else
                            if Enemy.CombatAI = DISARMER then
                               HitLocation := 1;
-                              Another_Weapon_Location_Loop :
-                              for J in EnemyShip.Modules.Iterate loop
-                                 if
-                                   ((EnemyShip.Modules(J).MType = TURRET
-                                     and then EnemyShip.Modules(J).GunIndex >
-                                       0) or
-                                    Modules_List
-                                        (EnemyShip.Modules(J).ProtoIndex)
-                                        .MType =
-                                      BATTERING_RAM) and
-                                   EnemyShip.Modules(J).Durability > 0 then
-                                    HitLocation :=
-                                      Modules_Container.To_Index(J);
-                                    exit Another_Weapon_Location_Loop;
-                                 end if;
-                              end loop Another_Weapon_Location_Loop;
+                              FindHitWeapon;
                            else
                               HitLocation :=
                                 GetRandom
