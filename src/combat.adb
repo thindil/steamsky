@@ -137,13 +137,10 @@ package body Combat is
                   exit Find_Item_Index_Loop;
                end if;
             end loop Find_Item_Index_Loop;
-            if EnemyShip.Crew.Length < 5 then
-               ItemAmount := GetRandom(1, 100);
-            elsif EnemyShip.Crew.Length < 10 then
-               ItemAmount := GetRandom(1, 500);
-            else
-               ItemAmount := GetRandom(1, 1000);
-            end if;
+            ItemAmount :=
+              (if EnemyShip.Crew.Length < 5 then GetRandom(1, 100)
+               elsif EnemyShip.Crew.Length < 10 then GetRandom(1, 500)
+               else GetRandom(1, 1000));
             CargoItemIndex := FindItem(EnemyShip.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
                EnemyShip.Cargo(CargoItemIndex).Amount :=
