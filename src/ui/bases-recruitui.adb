@@ -264,7 +264,7 @@ package body Bases.RecruitUI is
            "-yscrollcommand [list " & YScroll & " set]");
       CloseButton, InfoButton, Button: Ttk_Button;
       Height, NewHeight: Positive := 1;
-      Width: Positive := 1;
+      Width, NewWidth: Positive := 1;
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
@@ -448,76 +448,26 @@ package body Bases.RecruitUI is
       if NewHeight > Height then
          Height := NewHeight;
       end if;
---      for Item of Recruit.Inventory loop
---         Insert
---           (EquipmentView,
---            "{} end -text {" & To_String(Items_List(Item).Name) & "}");
---      end loop;
---      Label.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.info.initialcost");
---      RecruitInfo := To_Unbounded_String("Starting offer:");
---      Append
---        (RecruitInfo,
---         LF & "Payment:" & Natural'Image(Recruit.Payment) & " " &
---         To_String(MoneyName) & " each day.");
---      Cost := Recruit.Price;
---      CountPrice(Cost, FindMember(Talk));
---      Append
---        (RecruitInfo,
---         LF & "One time fee:" & Positive'Image(Cost) & " " &
---         To_String(MoneyName) & ".");
---      configure(Label, "-text {" & To_String(RecruitInfo) & "}");
---      Label.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.dailylbl");
---      configure
---        (Label,
---         "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
---      Scale.Interp := Interp;
---      Scale.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.daily");
---      configure
---        (Scale,
---         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
---         Natural'Image(Recruit.Payment));
---      Label.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percentlbl");
---      configure(Label, "-text {Percent of profit from trades: 0}");
---      Scale.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.percent");
---      configure(Scale, "-value 0");
---      Cost := Recruit.Price;
---      CountPrice(Cost, FindMember(Talk));
---      Label.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.cost");
---      configure
---        (Label,
---         "-text {Hire for" & Positive'Image(Cost) & " " &
---         To_String(MoneyName) & "}");
---      Label.Name :=
---        New_String
---          (".gameframe.paned.recruitframe.canvas.recruit.recruit.money");
---      if MoneyIndex2 > 0 then
---         configure
---           (Label,
---            "-text {You have" &
---            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
---            To_String(MoneyName) & ".}");
---         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
---            configure(HireButton, "-state disabled");
---         else
---            configure(HireButton, "-state !disabled");
---         end if;
---      else
---         configure
---           (Label, "-text {You don't have enough money to recruit anyone}");
---         configure(HireButton, "-state disabled");
---      end if;
+      -- Equipment of the selected recruit
+      Frame := Create(RecruitCanvas & ".inventory");
+      NewHeight := 1;
+      RecruitInfo := Null_Unbounded_String;
+      for Item of Recruit.Inventory loop
+         Append(RecruitInfo, Items_List(Item).Name & LF);
+      end loop;
+      RecruitLabel :=
+        Create
+          (Frame & ".label",
+           "-text {" & To_String(RecruitInfo) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(RecruitLabel, "-sticky w");
+      NewHeight := Positive'Value(Winfo_Get(RecruitLabel, "reqheight"));
+      if NewHeight > Height then
+         Height := NewHeight;
+      end if;
+      NewWidth := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
+      if NewWidth > Width then
+         Width := NewWidth;
+      end if;
       if Height > 500 then
          Height := 500;
       end if;
