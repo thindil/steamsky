@@ -1526,13 +1526,14 @@ package body Combat is
                   StartStory(FactionName, DROPITEM);
                end if;
             end if;
+            Give_Orders_Loop :
             for I in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(I).Order = Boarding then
                   GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
                elsif PlayerShip.Crew(I).Order = Defend then
                   GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
                end if;
-            end loop;
+            end loop Give_Orders_Loop;
          end;
          Enemy.Ship.Speed := FULL_STOP;
          PlayerShip.Speed := OldSpeed;
