@@ -1579,22 +1579,18 @@ package body Combat is
          end if;
          if CurrentStory.Index /= Null_Unbounded_String then
             declare
-               FinishCondition: StepConditionType;
-               Tokens: Slice_Set;
-            begin
-               if CurrentStory.CurrentStep = 0 then
-                  FinishCondition :=
+               FinishCondition: constant StepConditionType :=
+                 (if CurrentStory.CurrentStep = 0 then
                     Stories_List(CurrentStory.Index).StartingStep
-                      .FinishCondition;
-               elsif CurrentStory.CurrentStep > 0 then
-                  FinishCondition :=
+                      .FinishCondition
+                  elsif CurrentStory.CurrentStep > 0 then
                     Stories_List(CurrentStory.Index).Steps
                       (CurrentStory.CurrentStep)
-                      .FinishCondition;
-               else
-                  FinishCondition :=
-                    Stories_List(CurrentStory.Index).FinalStep.FinishCondition;
-               end if;
+                      .FinishCondition
+                  else Stories_List(CurrentStory.Index).FinalStep
+                      .FinishCondition);
+               Tokens: Slice_Set;
+            begin
                if FinishCondition /= DESTROYSHIP then
                   return;
                end if;
