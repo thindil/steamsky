@@ -320,7 +320,7 @@ package body Bases.RecruitUI is
       Button :=
         Create
           (RecruitDialog & ".buttonbox2.hirebutton",
-           "-text Hire -command {CloseDialog " & RecruitDialog &
+           "-text Negotiate -command {CloseDialog " & RecruitDialog &
            ";StartNegotiate}");
       Tcl.Tk.Ada.Grid.Grid(Button);
       CloseButton :=
