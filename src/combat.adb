@@ -1495,18 +1495,15 @@ package body Combat is
                AddMessage(To_String(Message) & ".", CombatMessage);
                if CurrentStory.Index /= Null_Unbounded_String then
                   declare
-                     Step: Step_Data;
+                     Step: constant Step_Data :=
+                       (if CurrentStory.CurrentStep = 0 then
+                          Stories_List(CurrentStory.Index).StartingStep
+                        elsif CurrentStory.CurrentStep > 0 then
+                          Stories_List(CurrentStory.Index).Steps
+                            (CurrentStory.CurrentStep)
+                        else Stories_List(CurrentStory.Index).FinalStep);
                      Tokens: Slice_Set;
                   begin
-                     if CurrentStory.CurrentStep = 0 then
-                        Step := Stories_List(CurrentStory.Index).StartingStep;
-                     elsif CurrentStory.CurrentStep > 0 then
-                        Step :=
-                          Stories_List(CurrentStory.Index).Steps
-                            (CurrentStory.CurrentStep);
-                     else
-                        Step := Stories_List(CurrentStory.Index).FinalStep;
-                     end if;
                      if Step.FinishCondition = LOOT then
                         Create(Tokens, To_String(CurrentStory.Data), ";");
                         if Slice(Tokens, 2) = "any" or
