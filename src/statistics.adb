@@ -1,4 +1,4 @@
---    Copyright 2016-2019 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -157,7 +157,7 @@ package body Statistics is
    function GetGamePoints return Natural is
       MalusIndexes: constant array(Positive range <>) of Positive :=
         (2, 4, 5, 6);
-      DifficultyValues: constant array(Positive range <>) of Bonus_Type :=
+      DifficultyValues: constant array(1 .. 7) of Bonus_Type :=
         (NewGameSettings.EnemyDamageBonus, NewGameSettings.PlayerDamageBonus,
          NewGameSettings.EnemyMeleeDamageBonus,
          NewGameSettings.PlayerMeleeDamageBonus,
