@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -25,7 +25,7 @@ with Tcl; use Tcl;
 package Knowledge is
 -- ****
 
-   -- ****o* Knowledge/Show_Knowledge_Command
+   -- ****o* Knowledge/Knowledge.Show_Knowledge_Command
    -- FUNCTION
    -- Show information about known by player things
    -- PARAMETERS
@@ -45,7 +45,7 @@ package Knowledge is
       Convention => C;
       -- ****
 
-   -- ****f* Knowledge/AddCommands
+   -- ****f* Knowledge/Knowledge.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the player's knowledge
    -- SOURCE
