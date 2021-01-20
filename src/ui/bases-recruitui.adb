@@ -474,9 +474,18 @@ package body Bases.RecruitUI is
       if Width < 350 then
          Width := 350;
       end if;
-      Canvas_Create
-        (RecruitCanvas, "window",
-         "0 0 -anchor nw -window " & RecruitCanvas & ".general -tag info");
+      Frame := Get_Widget(RecruitCanvas & ".general");
+      declare
+         XPos: constant Natural :=
+           (Positive'Value(Winfo_Get(RecruitCanvas, "reqwidth")) -
+            Positive'Value(Winfo_Get(Frame, "reqwidth"))) /
+           4;
+      begin
+         Canvas_Create
+           (RecruitCanvas, "window",
+            Trim(Natural'Image(XPos), Left) & " 0 -anchor nw -window " &
+            Frame & " -tag info");
+      end;
       Tcl_Eval(Interp, "update");
       configure
         (RecruitCanvas,
