@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -765,7 +765,7 @@ package body Game is
          Name: Unbounded_String;
          FileName: Unbounded_String;
       end record;
-      DataTypes: constant array(Positive range <>) of DataType_Record :=
+      DataTypes: constant array(1 .. 12) of DataType_Record :=
         ((To_Unbounded_String("data"), To_Unbounded_String("game.dat")),
          (To_Unbounded_String("help"), To_Unbounded_String("help.dat")),
          (To_Unbounded_String("items"), To_Unbounded_String("items.dat")),
