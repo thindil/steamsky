@@ -735,40 +735,76 @@ package body Bases.RecruitUI is
         Create
           (NegotiateDialog & ".contract",
            "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      Recruit: constant Recruit_Data :=
+        SkyBases(BaseIndex).Recruits(RecruitIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      Cost: Positive;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned", Interp);
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Label :=
-        Create(NegotiateDialog & ".dailylbl", "-text {Daily payment: }");
+        Create
+          (NegotiateDialog & ".dailylbl",
+           "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Scale :=
         Create(NegotiateDialog & ".daily", "-from 0 -command NegotiateHire");
       Tcl.Tk.Ada.Grid.Grid(Scale);
+      configure
+        (Scale,
+         "-to" & Natural'Image(Recruit.Payment * 2) & " -value" &
+         Natural'Image(Recruit.Payment));
       Label :=
         Create
           (NegotiateDialog & ".percentlbl",
-           "-text {Percent of profit from trades: 0%}");
+           "-text {Percent of profit from trades: 0}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Scale :=
         Create
           (NegotiateDialog & ".percent",
            "-from 0 -to 10 -command NegotiateHire");
       Tcl.Tk.Ada.Grid.Grid(Scale);
+      configure(Scale, "-value 0");
       Label :=
         Create(NegotiateDialog & ".contractlbl", "-text {Contract time:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
       Tcl.Tk.Ada.Grid.Grid(ContractBox);
       Bind(ContractBox, "<<ComboboxSelected>>", "{NegotiateHire}");
       Current(ContractBox, "0");
-      Label := Create(NegotiateDialog & ".money");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Label := Create(NegotiateDialog & ".cost");
-      Tcl.Tk.Ada.Grid.Grid(Label);
       Frame := Create(NegotiateDialog & ".buttonbox");
       HireButton :=
         Create
-          (NegotiateDialog & ".buttonbox.hirebutton", "-text Hire -command {Hire}");
+          (NegotiateDialog & ".buttonbox.hirebutton",
+           "-text Hire -command {Hire}");
+      Label := Create(NegotiateDialog & ".money");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      Cost := Recruit.Price;
+      CountPrice(Cost, FindMember(Talk));
+      if MoneyIndex2 > 0 then
+         configure
+           (Label,
+            "-text {You have" &
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(MoneyName) & ".}");
+         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+            configure(HireButton, "-state disabled");
+         else
+            configure(HireButton, "-state !disabled");
+         end if;
+      else
+         configure
+           (Label, "-text {You don't have enough money to recruit anyone}");
+         configure(HireButton, "-state disabled");
+      end if;
+      Label := Create(NegotiateDialog & ".cost");
+      Tcl.Tk.Ada.Grid.Grid(Label);
+      configure
+        (Label,
+         "-text {Hire for" & Positive'Image(Cost) & " " &
+         To_String(MoneyName) & "}");
       Tcl.Tk.Ada.Grid.Grid(HireButton);
       CloseButton :=
         Create
