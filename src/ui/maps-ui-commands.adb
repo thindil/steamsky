@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -62,7 +62,7 @@ package body Maps.UI.Commands is
       To_Unbounded_String("hide"), To_Unbounded_String("left"),
       To_Unbounded_String("right"));
 
-   -- ****o* MapCommands/Hide_Map_Buttons_Command
+   -- ****o* MapCommands/MapCommands.Hide_Map_Buttons_Command
    -- FUNCTION
    -- Hide map movement buttons
    -- PARAMETERS
@@ -102,7 +102,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Hide_Map_Buttons_Command;
 
-   -- ****o* MapCommands/Show_Map_Buttons_Command
+   -- ****o* MapCommands/MapCommands.Show_Map_Buttons_Command
    -- FUNCTION
    -- Show map movement buttons
    -- PARAMETERS
@@ -148,7 +148,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Map_Buttons_Command;
 
-   -- ****o* MapCommands/Move_Map_Buttons_Command
+   -- ****o* MapCommands/MapCommands.Move_Map_Buttons_Command
    -- FUNCTION
    -- Move map movement buttons left of right
    -- PARAMETERS
@@ -191,7 +191,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Buttons_Command;
 
-   -- ****o* MapCommands/Draw_Map_Command
+   -- ****o* MapCommands/MapCommands.Draw_Map_Command
    -- FUNCTION
    -- Draw the sky map
    -- PARAMETERS
@@ -251,21 +251,21 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Draw_Map_Command;
 
-   -- ****iv* MapCommands/MapX
+   -- ****iv* MapCommands/MapCommands.MapX
    -- FUNCTION
    -- Current map cell X coordinate (where mouse is hovering)
    -- SOURCE
    MapX: Natural := 0;
    -- ****
 
-   -- ****iv* MapCommands/MapY
+   -- ****iv* MapCommands/MapCommands.MapY
    -- FUNCTION
    -- Current map cell Y coordinate (where mouse is hovering)
    -- SOURCE
    MapY: Natural := 0;
    -- ****
 
-   -- ****o* MapCommands/Update_Map_Info_Command
+   -- ****o* MapCommands/MapCommands.Update_Map_Info_Command
    -- FUNCTION
    -- Update map cell info
    -- PARAMETERS
@@ -327,7 +327,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Update_Map_Info_Command;
 
-   -- ****o* MapCommands/Move_Map_Info_Command
+   -- ****o* MapCommands/MapCommands.Move_Map_Info_Command
    -- FUNCTION
    -- Move map info frame when mouse enter it
    -- PARAMETERS
@@ -363,7 +363,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Map_Info_Command;
 
-   -- ****o* MapCommands/Show_Destination_Menu_Command
+   -- ****o* MapCommands/MapCommands.Show_Destination_Menu_Command
    -- FUNCTION
    -- Create and show destination menu
    -- PARAMETERS
@@ -421,7 +421,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
-   -- ****o* MapCommands/Set_Destination_Command
+   -- ****o* MapCommands/MapCommands.Set_Destination_Command
    -- FUNCTION
    -- Set current map cell as destination for the player's ship
    -- PARAMETERS
@@ -460,7 +460,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Set_Destination_Command;
 
-   -- ****o* MapCommands/Move_Map_Command
+   -- ****o* MapCommands/MapCommands.Move_Map_Command
    -- FUNCTION
    -- Move map in the selected direction
    -- PARAMETERS
@@ -557,7 +557,7 @@ package body Maps.UI.Commands is
            Empty & "CloseDialog" & ".gameframe.movemapdialog");
    end Move_Map_Command;
 
-   -- ****o* MapCommands/Zoom_Map_Command
+   -- ****o* MapCommands/MapCommands.Zoom_Map_Command
    -- FUNCTION
    -- Zoom the sky map
    -- PARAMETERS
@@ -597,7 +597,7 @@ package body Maps.UI.Commands is
       return Draw_Map_Command(ClientData, Interp, Argc, Argv);
    end Zoom_Map_Command;
 
-   -- ****o* MapCommands/Move_Command
+   -- ****o* MapCommands/MapCommands.Move_Command
    -- FUNCTION
    -- Move the player ship in the selected location and check what happens
    -- PARAMETERS
@@ -834,7 +834,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Ship_Command;
 
-   -- ****o* MapCommands/Quit_Game_Command
+   -- ****o* MapCommands/MapCommands.Quit_Game_Command
    -- FUNCTION
    -- Ask player if he/she wants to quit from the game and if yes, save it and
    -- show main menu
@@ -874,7 +874,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Quit_Game_Command;
 
-   -- ****o* MapCommands/Resign_Game_Command
+   -- ****o* MapCommands/MapCommands.Resign_Game_Command
    -- FUNCTION
    -- Resing from the game - if player resigned, kill he/she character and
    -- follow as for death of the player's character
@@ -910,7 +910,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Resign_Game_Command;
 
-   -- ****o* MapCommands/Show_Stats_Command
+   -- ****o* MapCommands/MapCommands.Show_Stats_Command
    -- FUNCTION
    -- Show the player's game statistics
    -- PARAMETERS
@@ -943,7 +943,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Stats_Command;
 
-   -- ****o* MapCommands/Show_Sky_Map_Command
+   -- ****o* MapCommands/MapCommands.Show_Sky_Map_Command
    -- FUNCTION
    -- Show sky map
    -- PARAMETERS
@@ -982,7 +982,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Sky_Map_Command;
 
-   -- ****o* MapCommands/Move_Mouse_Command
+   -- ****o* MapCommands/MapCommands.Move_Mouse_Command
    -- FUNCTION
    -- Move mouse cursor with keyboard
    -- PARAMETERS
@@ -1060,7 +1060,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Move_Mouse_Command;
 
-   -- ****o* MapCommands/Toggle_Full_Screen_Command
+   -- ****o* MapCommands/MapCommands.Toggle_Full_Screen_Command
    -- FUNCTION
    -- Toggle the game full screen mode
    -- PARAMETERS
