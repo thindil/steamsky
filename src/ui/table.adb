@@ -73,8 +73,13 @@ package body Table is
 
    procedure ClearTable(Table: in out Table_Widget) is
    begin
-      for I in 1 .. Table.Row loop
-         Delete(Table.Canvas, "row" & Trim(Positive'Image(I), Left));
+      for Row in 1 .. Table.Row loop
+         for Column in 1 .. Table.Amount loop
+            Delete
+              (Table.Canvas,
+               "row" & Trim(Positive'Image(Row), Left) & "col" &
+               Trim(Positive'Image(Column), Left));
+         end loop;
       end loop;
       Table.Row := 1;
    end ClearTable;
