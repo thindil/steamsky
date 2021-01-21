@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -57,6 +57,7 @@ package body Config is
          FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
          TopicsPosition => 200, ShowNumbers => False);
       Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
+      Read_Config_File_Loop :
       while not End_Of_File(ConfigFile) loop
          RawData := To_Unbounded_String(Get_Line(ConfigFile));
          if Length(RawData) > 0 then
@@ -166,7 +167,7 @@ package body Config is
                GameSettings.ShowNumbers := LoadBoolean;
             end if;
          end if;
-      end loop;
+      end loop Read_Config_File_Loop;
       Close(ConfigFile);
    exception
       when Ada.Directories.Name_Error =>
