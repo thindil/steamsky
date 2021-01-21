@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Updated contributing guide
 - Updated modding guide
 - Updated interface
-- Redesigned trade screen
+- Redesigned trade and hire recruits screen
 
 ### Fixed
 - Showing profit info on trade screen
