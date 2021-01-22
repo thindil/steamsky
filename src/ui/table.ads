@@ -38,12 +38,14 @@ package Table is
    -- Columns_Width - The array with the width for each column in the table
    -- Row           - The current row of the table
    -- Row_Height    - The height of each row
+   -- Scrollbars    - If true, the table was created with the scrollbars
    -- SOURCE
    type Table_Widget(Amount: Positive) is record
       Canvas: Tk_Canvas;
       Columns_Width: Width_Array(1 .. Amount) := (others => 1);
       Row: Positive := 1;
       Row_Height: Positive := 1;
+      Scrollbars: Boolean := True;
    end record;
    -- ****
 
