@@ -150,7 +150,11 @@ package body Bases.ShipyardUI is
                goto End_Of_Loop;
             end if;
             if Argc = 3
-              and then Index(Modules_List(I).Name, CArgv.Arg(Argv, 2)) = 0 then
+              and then
+                Index
+                  (To_Lower(To_String(Modules_List(I).Name)),
+                   To_Lower(CArgv.Arg(Argv, 2))) =
+                0 then
                goto End_Of_Loop;
             end if;
             case Modules_List(I).MType is
