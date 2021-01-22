@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -50,6 +50,7 @@ package body Crafts is
       RecipesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(RecipesData, "recipe");
+      Load_Recipes_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
@@ -83,36 +84,39 @@ package body Crafts is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (RecipeNode, "material");
+            Read_Materials_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "type"));
                if Amount > 0 then
                   MaterialAdded := False;
+                  Check_Added_Materials_Loop :
                   for K in
                     TempRecord.MaterialTypes.First_Index ..
                       TempRecord.MaterialTypes.Last_Index loop
                      if TempRecord.MaterialTypes(K) = Value then
                         TempRecord.MaterialAmounts(K) := Amount;
                         MaterialAdded := True;
-                        exit;
+                        exit Check_Added_Materials_Loop;
                      end if;
-                  end loop;
+                  end loop Check_Added_Materials_Loop;
                   if not MaterialAdded then
                      TempRecord.MaterialTypes.Append(New_Item => Value);
                      TempRecord.MaterialAmounts.Append(New_Item => Amount);
                   end if;
                else
                   DeleteIndex := TempRecord.MaterialTypes.First_Index;
+                  Delete_Materials_Loop :
                   while DeleteIndex <= TempRecord.MaterialTypes.Last_Index loop
                      if TempRecord.MaterialTypes(DeleteIndex) = Value then
                         TempRecord.MaterialTypes.Delete(Index => DeleteIndex);
-                        exit;
+                        exit Delete_Materials_Loop;
                      end if;
                      DeleteIndex := DeleteIndex + 1;
-                  end loop;
+                  end loop Delete_Materials_Loop;
                end if;
-            end loop;
+            end loop Read_Materials_Loop;
             Value := To_Unbounded_String(Get_Attribute(RecipeNode, "result"));
             if Value /= Null_Unbounded_String then
                ItemIndex := Value;
@@ -184,7 +188,7 @@ package body Crafts is
             LogMessage
               ("Recipe removed: " & To_String(RecipeIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Recipes_Loop;
    end LoadRecipes;
 
    -- ****if* Crafts/Crafts.SetRecipeData
@@ -209,13 +213,14 @@ package body Crafts is
          Recipe.ResultIndex := ItemIndex;
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
+         Set_Recipe_Skill_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
                Recipe.Skill := ProtoRecipe.Skill;
                Recipe.Time := ProtoRecipe.Difficulty * 15;
-               exit;
+               exit Set_Recipe_Skill_Loop;
             end if;
-         end loop;
+         end loop Set_Recipe_Skill_Loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := AlchemyTools;
          Recipe.ToolQuality := 100;
@@ -226,6 +231,7 @@ package body Crafts is
          Recipe.MaterialTypes.Append(New_Item => Items_List(ItemIndex).IType);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.Workplace := ALCHEMY_LAB;
+         Set_Recipe_Data_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = ItemIndex then
                Recipe.Skill := ProtoRecipe.Skill;
@@ -240,9 +246,9 @@ package body Crafts is
                if Recipe.ResultAmount = ProtoRecipe.MaterialAmounts(1) then
                   Recipe.ResultAmount := Recipe.ResultAmount - 1;
                end if;
-               exit;
+               exit Set_Recipe_Data_Loop;
             end if;
-         end loop;
+         end loop Set_Recipe_Data_Loop;
          Recipe.Tool := AlchemyTools;
          Recipe.ToolQuality := 100;
          return Recipe;
@@ -282,13 +288,14 @@ package body Crafts is
       declare
          HaveWorkshop: Boolean := False;
       begin
+         Check_For_Workshop_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = MType and
               Module.Durability > 0 then
                HaveWorkshop := True;
-               exit;
+               exit Check_For_Workshop_Loop;
             end if;
-         end loop;
+         end loop Check_For_Workshop_Loop;
          if not HaveWorkshop then
             raise Crafting_No_Workshop with To_String(RecipeName);
          end if;
@@ -296,28 +303,32 @@ package body Crafts is
       -- Check for materials
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "Study" then
+         Study_Materials_Loop :
          for I in PlayerShip.Cargo.Iterate loop
             if Items_List(PlayerShip.Cargo(I).ProtoIndex).Name =
               Items_List(Recipe.ResultIndex).Name then
                MaterialIndexes.Append
                  (New_Item => Inventory_Container.To_Index(I));
-               exit;
+               exit Study_Materials_Loop;
             end if;
-         end loop;
+         end loop Study_Materials_Loop;
          MaxAmount := 1;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         Deconstruct_Materials_Loop :
          for I in PlayerShip.Cargo.Iterate loop
             if PlayerShip.Cargo(I).ProtoIndex =
               Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
                MaterialIndexes.Append
                  (New_Item => Inventory_Container.To_Index(I));
                MaxAmount := PlayerShip.Cargo(I).Amount;
-               exit;
+               exit Deconstruct_Materials_Loop;
             end if;
-         end loop;
+         end loop Deconstruct_Materials_Loop;
       else
+         Find_Materials_Loop :
          for J in Recipe.MaterialTypes.Iterate loop
+            Check_Player_Cargo_Loop :
             for I in PlayerShip.Cargo.Iterate loop
                if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
                  Recipe.MaterialTypes(J) and
@@ -335,10 +346,10 @@ package body Crafts is
                        Recipe.MaterialAmounts
                          (UnboundedString_Container.To_Index(J));
                   end if;
-                  exit;
+                  exit Check_Player_Cargo_Loop;
                end if;
-            end loop;
-         end loop;
+            end loop Check_Player_Cargo_Loop;
+         end loop Find_Materials_Loop;
       end if;
       if MaterialIndexes.Length < Recipe.MaterialTypes.Length then
          raise Crafting_No_Materials with To_String(RecipeName);
@@ -365,13 +376,14 @@ package body Crafts is
       declare
          SpaceNeeded: Integer := 0;
       begin
+         Count_Needed_Space_Loop :
          for I in MaterialIndexes.Iterate loop
             SpaceNeeded :=
               SpaceNeeded +
               Items_List(PlayerShip.Cargo(MaterialIndexes(I)).ProtoIndex)
                   .Weight *
                 Recipe.MaterialAmounts(Positive_Container.To_Index(I));
-         end loop;
+         end loop Count_Needed_Space_Loop;
          if FreeCargo
              (SpaceNeeded -
               (Items_List(Recipe.ResultIndex).Weight * Recipe.ResultAmount)) <
