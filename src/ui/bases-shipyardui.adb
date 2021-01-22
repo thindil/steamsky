@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -44,6 +44,7 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
 with Ships.Crew; use Ships.Crew;
+with Table; use Table;
 with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
@@ -69,6 +70,13 @@ package body Bases.ShipyardUI is
       end loop;
       return To_String(ModuleTypeName);
    end GetModuleType;
+
+   -- ****iv* ShipyardUI/ShipyardUI.InstallTable
+   -- FUNCTION
+   -- Table with info about the available modules
+   -- SOURCE
+   InstallTable: Table_Widget (5);
+   -- ****
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
    -- FUNCTION
@@ -102,7 +110,6 @@ package body Bases.ShipyardUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ModuleSize: Integer;
-      FirstIndex: Unbounded_String;
       ModuleTypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (ShipyardCanvas & ".shipyard.notebook.install.options.modules",
@@ -113,6 +120,15 @@ package body Bases.ShipyardUI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipyard.tcl");
          Bind(ShipyardFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         ShipyardFrame :=
+           Get_Widget(ShipyardCanvas & ".shipyard.notebook.install", Interp);
+         InstallTable :=
+           CreateTable
+             (Widget_Image(ShipyardFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
+               To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
+               To_Unbounded_String("Base cost")),
+              False);
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -124,9 +140,7 @@ package body Bases.ShipyardUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       ShipyardFrame.Name :=
         New_String(Widget_Image(ShipyardCanvas) & ".shipyard.notebook");
-      ModulesView :=
-        Get_Widget(ShipyardFrame & ".install.modules.view", Interp);
-      Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
+      ClearTable(InstallTable);
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
            SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
@@ -145,22 +159,23 @@ package body Bases.ShipyardUI is
                when others =>
                   ModuleSize := Modules_List(I).Size;
             end case;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex := BaseModules_Container.Key(I);
-            end if;
-            Insert
-              (ModulesView,
-               "{} end -id {" & To_String(BaseModules_Container.Key(I)) &
-               "} -values [list {" & To_String(Modules_List(I).Name) & "} {" &
-               GetModuleType(BaseModules_Container.Key(I)) & "} {" &
-               Integer'Image(ModuleSize) & "} {" &
-               To_String(Modules_List(I).RepairMaterial) & "}]");
+            AddButton
+              (InstallTable, To_String(Modules_List(I).Name),
+               "Show available options for module", "", 1);
+            AddText
+              (InstallTable, GetModuleType(BaseModules_Container.Key(I)), "",
+               2);
+            AddText(InstallTable, Integer'Image(ModuleSize), "", 3);
+            AddText
+              (InstallTable, To_String(Modules_List(I).RepairMaterial), "", 4);
+            AddText
+              (InstallTable, Positive'Image(Modules_List(I).Price), "", 5,
+               True);
          end if;
          <<End_Of_Loop>>
       end loop;
-      Selection_Set(ModulesView, "[list {" & To_String(FirstIndex) & "}]");
-      ModulesView.Name :=
-        New_String(Widget_Image(ShipyardFrame) & ".remove.modules.view");
+      UpdateTable(InstallTable);
+      ModulesView := Get_Widget(ShipyardFrame & ".remove.modules.view");
       Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
