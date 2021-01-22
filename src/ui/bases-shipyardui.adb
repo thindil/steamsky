@@ -30,6 +30,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -165,7 +167,10 @@ package body Bases.ShipyardUI is
             end case;
             AddButton
               (InstallTable, To_String(Modules_List(I).Name),
-               "Show available options for module", "", 1);
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               To_String(BaseModules_Container.Key(I)) & "} install",
+               1);
             AddText
               (InstallTable, GetModuleType(BaseModules_Container.Key(I)), "",
                2);
@@ -774,6 +779,58 @@ package body Bases.ShipyardUI is
            CArgv.Empty & "ShowShipyard" & Current(TypeBox) & SearchText);
    end Search_Shipyard_Command;
 
+   -- ****o* ShipyardUI/ShipyardUI.Show_Module_Menu_Command
+   -- FUNCTION
+   -- Show menu with actions for the selected module
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowModuleMenu moduleindex actiontype
+   -- ModuleIndex is a index of the module which menu will be shown,
+   -- actiontype is action related to the module. Can be install or remove.
+   -- SOURCE
+   function Show_Module_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Module_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      RecruitMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
+   begin
+      ModuleIndex := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      if Winfo_Get(RecruitMenu, "exists") = "0" then
+         RecruitMenu := Create(".modulemenu", "-tearoff false");
+      end if;
+      Delete(RecruitMenu, "0", "end");
+      Menu.Add
+        (RecruitMenu, "command",
+         "-label {Show module details} -command {ShowModuleInfo}");
+      if CArgv.Arg(Argv, 2) = "install" then
+         Menu.Add
+           (RecruitMenu, "command",
+            "-label {Install module} -command {ManipulateModule install}");
+      else
+         Menu.Add
+           (RecruitMenu, "command",
+            "-label {Remove module} -command {ManipulateModule remove}");
+      end if;
+      Tk_Popup
+        (RecruitMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Module_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
@@ -781,6 +838,7 @@ package body Bases.ShipyardUI is
       AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
       AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
       AddCommand("SearchShipyard", Search_Shipyard_Command'Access);
+      AddCommand("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;
