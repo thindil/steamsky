@@ -16,6 +16,7 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -26,29 +27,40 @@ with Config; use Config;
 package body Table is
 
    function CreateTable
-     (Parent: String; Headers: Headers_Array) return Table_Widget is
-      Canvas: constant Tk_Canvas :=
-        Create
-          (Parent & ".table",
-           "-yscrollcommand [list " & Parent &
-           ".scrolly set] -xscrollcommand [list " & Parent & ".scrollx set]");
+     (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
+      return Table_Widget is
+      Canvas: Tk_Canvas;
       YScroll: constant Ttk_Scrollbar :=
         Create
           (Parent & ".scrolly",
-           "-orient vertical -command [list " & Canvas & " yview]");
+           "-orient vertical -command [list " & Parent & ".table yview]");
       XScroll: constant Ttk_Scrollbar :=
         Create
           (Parent & ".scrollx",
-           "-orient horizontal -command [list " & Canvas & " xview]");
+           "-orient horizontal -command [list " & Parent & ".table xview]");
       Table: Table_Widget (Headers'Length);
       X: Natural := 0;
       Tokens: Slice_Set;
+      Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
-      Tcl.Tk.Ada.Pack.Pack(YScroll, "-side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both -padx {5 0}");
-      Tcl.Tk.Ada.Pack.Pack(XScroll, "-fill x");
-      Autoscroll(YScroll);
-      Autoscroll(XScroll);
+      if With_Scrollbars then
+         Canvas :=
+           Create
+             (Parent & ".table",
+              "-yscrollcommand [list " & Parent &
+              ".scrolly set] -xscrollcommand [list " & Parent &
+              ".scrollx set]");
+         Tcl.Tk.Ada.Pack.Pack(YScroll, "-side right -fill y");
+         Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both -padx {5 0}");
+         Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
+         Autoscroll(XScroll);
+         Autoscroll(YScroll);
+      else
+         Canvas := Create(Parent & ".table");
+         Tcl.Tk.Ada.Grid.Grid(Canvas, "-sticky nwes -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Column_Configure(Master, Canvas, "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
+      end if;
       for I in Headers'Range loop
          Canvas_Create
            (Canvas, "text",
