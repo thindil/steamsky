@@ -58,15 +58,18 @@ package Table is
    -- FUNCTION
    -- Create a new table and columns headers in it
    -- PARAMETERS
-   -- Parent  - The Tk path for the parent widget
-   -- Headers - The titles for the table headers
+   -- Parent          - The Tk path for the parent widget
+   -- Headers         - The titles for the table headers
+   -- With_Scrollbars - If True add table with scrollbars. Default value is
+   --                   True.
    -- RESULT
    -- The newly created Table_Widget
    -- HISTORY
    -- 5.7 - Added
    -- SOURCE
    function CreateTable
-     (Parent: String; Headers: Headers_Array) return Table_Widget;
+     (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
+      return Table_Widget;
    -- ****
 
      -- ****f* Table/Table.ClearTable
