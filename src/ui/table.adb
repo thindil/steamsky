@@ -55,11 +55,13 @@ package body Table is
          Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
          Autoscroll(XScroll);
          Autoscroll(YScroll);
+         Table.Scrollbars := True;
       else
          Canvas := Create(Parent & ".table");
          Tcl.Tk.Ada.Grid.Grid(Canvas, "-sticky nwes -padx {5 0}");
          Tcl.Tk.Ada.Grid.Column_Configure(Master, Canvas, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
+         Table.Scrollbars := False;
       end if;
       for I in Headers'Range loop
          Canvas_Create
@@ -178,6 +180,19 @@ package body Table is
          NewX := NewX + Table.Columns_Width(Column);
          NewY := 0;
       end loop;
+      -- if no scrollbars, resize the table
+      if not Table.Scrollbars then
+         declare
+            Tokens: Slice_Set;
+         begin
+            Create(Tokens, BBox(Table.Canvas, "all"), " ");
+            configure
+              (Table.Canvas,
+               "-height [expr " & Slice(Tokens, 4) & " - " & Slice(Tokens, 2) &
+               "] -width [expr " & Slice(Tokens, 3) & " - " &
+               Slice(Tokens, 1) & "]");
+         end;
+      end if;
    end UpdateTable;
 
 end Table;
