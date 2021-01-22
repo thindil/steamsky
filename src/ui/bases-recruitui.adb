@@ -187,7 +187,7 @@ package body Bases.RecruitUI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowRecruitMenu recruitidex
+   -- ShowRecruitMenu recruitindex
    -- RecruitIndex is a index of the recruit which menu will be shown
    -- SOURCE
    function Show_Recruit_Menu_Command
