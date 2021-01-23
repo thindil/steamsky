@@ -485,7 +485,8 @@ package body Bases.ShipyardUI is
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleDialog: constant Ttk_Frame :=
         Create(".moduledialog", "-style Dialog.TFrame");
-      ModuleText: constant Tk_Text := Create(ModuleDialog & ".info");
+      ModuleText: constant Tk_Text :=
+        Create(ModuleDialog & ".info", "-height 10 -width 40");
       MoneyLabel: constant Ttk_Label := Create(ModuleDialog & ".money");
       InstallButton, CloseButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
@@ -496,7 +497,7 @@ package body Bases.ShipyardUI is
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      configure(ModuleText, "-state normal -height 10 -width 40");
+      configure(ModuleText, "-state normal");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Install cost:}");
@@ -669,7 +670,8 @@ package body Bases.ShipyardUI is
       ModuleDialog: constant Ttk_Frame :=
         Create(".moduledialog", "-style Dialog.TFrame");
       DamageBar: constant Ttk_ProgressBar := Create(ModuleDialog & ".damage");
-      ModuleText: constant Tk_Text := Create(ModuleDialog & ".info");
+      ModuleText: constant Tk_Text :=
+        Create(ModuleDialog & ".info", "-height 10 -width 40");
       Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
       RemoveButton, CloseButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
@@ -692,6 +694,7 @@ package body Bases.ShipyardUI is
          Cost := 1;
       end if;
       CountPrice(Cost, FindMember(Talk), False);
+      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Remove gain:" & Positive'Image(Cost) & "}");
@@ -703,10 +706,7 @@ package body Bases.ShipyardUI is
               .InstallTime) &
          " minutes}");
       SetModuleInfo(False);
-      if Damage = 0.0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(DamageBar);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      else
+      if Damage > 0.0 then
          configure(DamageBar, "-value" & Float'Image(Damage));
          if Damage < 0.2 then
             configure(Label, "-text {Damage: Slightly damaged}");
@@ -732,7 +732,8 @@ package body Bases.ShipyardUI is
               To_String
                 (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
                    .Description) &
-              "}");
+              "} -wraplength 450");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
       end if;
       declare
          MoneyIndex2: constant Natural :=
@@ -762,14 +763,13 @@ package body Bases.ShipyardUI is
         Create
           (ModuleDialog & ".money", "-text {" & To_String(RemoveInfo) & "}");
       configure(ModuleText, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
       RemoveButton :=
         Create
           (ModuleDialog & ".buttonbox.install",
-           "-text Install -command {CloseDialog " & ModuleDialog &
-           ";ManipulateModule install}");
+           "-text Remove -command {CloseDialog " & ModuleDialog &
+           ";ManipulateModule remove}");
       Tcl.Tk.Ada.Grid.Grid(RemoveButton, "-padx {0 5}");
       CloseButton :=
         Create
