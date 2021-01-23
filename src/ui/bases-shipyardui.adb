@@ -25,7 +25,9 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -251,9 +253,7 @@ package body Bases.ShipyardUI is
          Weight := Modules_List(ModuleIndex).Weight;
          MaxOwners := Modules_List(ModuleIndex).MaxOwners;
          Speed := Modules_List(ModuleIndex).Speed;
-         ModuleText :=
-           Get_Widget
-             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info");
+         ModuleText := Get_Widget(".moduledialog.info");
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
@@ -458,30 +458,19 @@ package body Bases.ShipyardUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ModulesView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.modules.view",
-           Interp);
       InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
-      ModuleText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.info.info",
-           Interp);
-      MoneyLabel: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.money",
-           Interp);
-      InstallButton: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.info.install",
-           Interp);
+      ModuleDialog: constant Ttk_Frame :=
+        Create(".moduledialog", "-style Dialog.TFrame");
+      ModuleText: constant Tk_Text := Create(ModuleDialog & ".info");
+      MoneyLabel: constant Ttk_Label := Create(ModuleDialog & ".money");
+      InstallButton, CloseButton: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      if Selection(ModulesView) = "" then
-         return TCL_OK;
-      end if;
-      ModuleIndex := To_Unbounded_String(Selection(ModulesView));
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
@@ -527,6 +516,16 @@ package body Bases.ShipyardUI is
          end if;
       end loop;
       configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
+      configure(ModuleText, "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(ModuleText);
+      Tcl.Tk.Ada.Grid.Grid(MoneyLabel);
+      Frame := Create(ModuleDialog & ".buttonbox");
+      InstallButton :=
+        Create
+          (ModuleDialog & ".buttonbox.install",
+           "-text Negotiate -command {CloseDialog " & ModuleDialog &
+           ";ManipulateModule install}");
+      Tcl.Tk.Ada.Grid.Grid(InstallButton);
       if MoneyIndex2 = 0 then
          configure(InstallButton, "-state disabled");
       else
@@ -542,7 +541,18 @@ package body Bases.ShipyardUI is
             configure(InstallButton, "-state !disabled");
          end if;
       end if;
-      configure(ModuleText, "-state disabled");
+      CloseButton :=
+        Create
+          (ModuleDialog & ".buttonbox.button",
+           "-text Close -command {CloseDialog " & ModuleDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
+      Focus(CloseButton);
+      Tcl.Tk.Ada.Place.Place
+        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind(CloseButton, "<Tab>", "{focus " & InstallButton & ";break}");
+      Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Install_Info_Command;
 
@@ -813,14 +823,17 @@ package body Bases.ShipyardUI is
          RecruitMenu := Create(".modulemenu", "-tearoff false");
       end if;
       Delete(RecruitMenu, "0", "end");
-      Menu.Add
-        (RecruitMenu, "command",
-         "-label {Show module details} -command {ShowModuleInfo}");
       if CArgv.Arg(Argv, 2) = "install" then
+         Menu.Add
+           (RecruitMenu, "command",
+            "-label {Show module details} -command {ShowInstallInfo}");
          Menu.Add
            (RecruitMenu, "command",
             "-label {Install module} -command {ManipulateModule install}");
       else
+         Menu.Add
+           (RecruitMenu, "command",
+            "-label {Show module details} -command {ShowRemoveInfo}");
          Menu.Add
            (RecruitMenu, "command",
             "-label {Remove module} -command {ManipulateModule remove}");
