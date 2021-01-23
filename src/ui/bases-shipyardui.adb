@@ -524,9 +524,9 @@ package body Bases.ShipyardUI is
       InstallButton :=
         Create
           (ModuleDialog & ".buttonbox.install",
-           "-text Negotiate -command {CloseDialog " & ModuleDialog &
+           "-text Install -command {CloseDialog " & ModuleDialog &
            ";ManipulateModule install}");
-      Tcl.Tk.Ada.Grid.Grid(InstallButton);
+      Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
       if MoneyIndex2 = 0 then
          configure(InstallButton, "-state disabled");
       else
@@ -546,7 +546,7 @@ package body Bases.ShipyardUI is
         Create
           (ModuleDialog & ".buttonbox.button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place
