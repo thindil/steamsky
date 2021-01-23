@@ -41,7 +41,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Maps; use Maps;
@@ -328,9 +327,7 @@ package body Bases.ShipyardUI is
              .MaxOwners;
          Speed :=
            Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Speed;
-         ModuleText :=
-           Get_Widget
-             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info");
+         ModuleText := Get_Widget(".moduledialog.info");
       end if;
       case MType is
          when HULL =>
@@ -667,26 +664,19 @@ package body Bases.ShipyardUI is
       RemoveInfo: Unbounded_String;
       Cost: Natural;
       Damage: Float;
-      ShipModuleIndex: Natural;
-      DamageBar: constant Ttk_ProgressBar :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damage",
-           Interp);
-      ModulesView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.modules.view",
-           Interp);
-      ModuleText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.info",
-           Interp);
-      Label: Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.damagelbl",
-           Interp);
+      ShipModuleIndex: constant Natural :=
+        Natural'Value(To_String(ModuleIndex));
+      ModuleDialog: constant Ttk_Frame :=
+        Create(".moduledialog", "-style Dialog.TFrame");
+      DamageBar: constant Ttk_ProgressBar := Create(ModuleDialog & ".damage");
+      ModuleText: constant Tk_Text := Create(ModuleDialog & ".info");
+      Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
+      RemoveButton, CloseButton: Ttk_Button;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
-      ShipModuleIndex := Natural'Value(Selection(ModulesView));
-      ModuleIndex := To_Unbounded_String(Selection(ModulesView));
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
       Damage :=
         1.0 -
         Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
@@ -735,16 +725,14 @@ package body Bases.ShipyardUI is
       if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
           .Description /=
         Null_Unbounded_String then
-         Label.Name :=
-           New_String
-             (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.info.description");
-         configure
-           (Label,
-            "-text {" & LF &
-            To_String
-              (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
-                 .Description) &
-            "}");
+         Label :=
+           Create
+             (ModuleDialog & ".description",
+              "-text {" & LF &
+              To_String
+                (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                   .Description) &
+              "}");
       end if;
       declare
          MoneyIndex2: constant Natural :=
@@ -770,11 +758,31 @@ package body Bases.ShipyardUI is
             exit;
          end if;
       end loop;
-      Label.Name :=
-        New_String
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.remove.info.money");
-      configure(Label, "-text {" & To_String(RemoveInfo) & "}");
+      Label :=
+        Create
+          (ModuleDialog & ".money", "-text {" & To_String(RemoveInfo) & "}");
       configure(ModuleText, "-state disabled");
+      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5 -pady {0 5}");
+      Frame := Create(ModuleDialog & ".buttonbox");
+      RemoveButton :=
+        Create
+          (ModuleDialog & ".buttonbox.install",
+           "-text Install -command {CloseDialog " & ModuleDialog &
+           ";ManipulateModule install}");
+      Tcl.Tk.Ada.Grid.Grid(RemoveButton, "-padx {0 5}");
+      CloseButton :=
+        Create
+          (ModuleDialog & ".buttonbox.button",
+           "-text Close -command {CloseDialog " & ModuleDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
+      Focus(CloseButton);
+      Tcl.Tk.Ada.Place.Place
+        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
+      Bind(CloseButton, "<Tab>", "{focus " & RemoveButton & ";break}");
+      Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
    end Show_Remove_Info_Command;
 
