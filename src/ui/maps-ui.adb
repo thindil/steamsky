@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -386,7 +386,7 @@ package body Maps.UI is
       end if;
    end UpdateHeader;
 
-   -- ****iv* MUI/MapView
+   -- ****iv* MUI/MUI.MapView
    -- FUNCTION
    -- Text widget with the sky map
    -- SOURCE
