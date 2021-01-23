@@ -82,6 +82,13 @@ package body Bases.ShipyardUI is
    InstallTable: Table_Widget (5);
    -- ****
 
+   -- ****iv* ShipyardUI/ShipyardUI.RemoveTable
+   -- FUNCTION
+   -- Table with info about the installed modules
+   -- SOURCE
+   RemoveTable: Table_Widget (5);
+   -- ****
+
    -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
    -- FUNCTION
    -- Show the selected base shipyard
@@ -110,7 +117,6 @@ package body Bases.ShipyardUI is
         Get_Widget(ShipyardFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      ModulesView: Ttk_Tree_View;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ModuleSize: Integer;
@@ -133,6 +139,15 @@ package body Bases.ShipyardUI is
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Base cost")),
               False);
+         ShipyardFrame :=
+           Get_Widget(ShipyardCanvas & ".shipyard.notebook.remove", Interp);
+         RemoveTable :=
+           CreateTable
+             (Widget_Image(ShipyardFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
+               To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
+               To_Unbounded_String("Base price")),
+              False);
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -142,8 +157,7 @@ package body Bases.ShipyardUI is
          Current(ModuleTypeBox, "0");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
-      ShipyardFrame.Name :=
-        New_String(Widget_Image(ShipyardCanvas) & ".shipyard.notebook");
+      ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard.notebook");
       ClearTable(InstallTable);
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
@@ -186,26 +200,37 @@ package body Bases.ShipyardUI is
          <<End_Of_Loop>>
       end loop;
       UpdateTable(InstallTable);
-      ModulesView := Get_Widget(ShipyardFrame & ".remove.modules.view");
-      Delete(ModulesView, "[list " & Children(ModulesView, "{}") & "]");
+      ClearTable(RemoveTable);
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
-            Insert
-              (ModulesView,
-               "{} end -id" & Positive'Image(Modules_Container.To_Index(I)) &
-               " -values [list {" & To_String(PlayerShip.Modules(I).Name) &
-               "} {" & GetModuleType(PlayerShip.Modules(I).ProtoIndex) &
-               "} {" &
+            AddButton
+              (RemoveTable, To_String(PlayerShip.Modules(I).Name),
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
+               1);
+            AddText
+              (RemoveTable, GetModuleType(PlayerShip.Modules(I).ProtoIndex),
+               "", 2);
+            AddText
+              (RemoveTable,
                Integer'Image
-                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Size) &
-               "} {" &
+                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Size),
+               "", 3);
+            AddText
+              (RemoveTable,
                To_String
                  (Modules_List(PlayerShip.Modules(I).ProtoIndex)
-                    .RepairMaterial) &
-               "}]");
+                    .RepairMaterial),
+               "", 4);
+            AddText
+              (RemoveTable,
+               Positive'Image
+                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Price),
+               "", 5, True);
          end if;
       end loop;
-      Selection_Set(ModulesView, "[list 2]");
+      UpdateTable(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipyardFrame.Name :=
         New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
