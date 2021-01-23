@@ -474,7 +474,8 @@ package body Bases.ShipyardUI is
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
-      configure(ModuleText, "-state normal");
+      configure(ModuleText, "-state normal -height 10 -width 40");
+      Tag_Configure(ModuleText, "red", "-foreground red");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Install cost:}");
       if MoneyIndex2 = 0
@@ -517,8 +518,8 @@ package body Bases.ShipyardUI is
       end loop;
       configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
       configure(ModuleText, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(ModuleText);
-      Tcl.Tk.Ada.Grid.Grid(MoneyLabel);
+      Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(MoneyLabel, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
       InstallButton :=
         Create
