@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -75,13 +75,14 @@ package body Crew.Inventory is
             if NewAmount = 0 then
                PlayerShip.Crew(MemberIndex).Inventory.Delete
                  (Index => ItemIndex);
+               Update_Item_Index_Loop :
                for Item of PlayerShip.Crew(MemberIndex).Equipment loop
                   if Item = ItemIndex then
                      Item := 0;
                   elsif Item > ItemIndex then
                      Item := Item - 1;
                   end if;
-               end loop;
+               end loop Update_Item_Index_Loop;
             else
                PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount :=
                  NewAmount;
@@ -95,30 +96,33 @@ package body Crew.Inventory is
       FreeSpace: Integer :=
         50 + PlayerShip.Crew(MemberIndex).Attributes(StrengthIndex)(1);
    begin
+      Count_Free_Inventory_Space_Loop :
       for Item of PlayerShip.Crew(MemberIndex).Inventory loop
          FreeSpace :=
            FreeSpace - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
-      end loop;
+      end loop Count_Free_Inventory_Space_Loop;
       return FreeSpace + Amount;
    end FreeInventory;
 
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) is
    begin
+      Take_Off_Item_Loop :
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
             PlayerShip.Crew(MemberIndex).Equipment(I) := 0;
-            exit;
+            exit Take_Off_Item_Loop;
          end if;
-      end loop;
+      end loop Take_Off_Item_Loop;
    end TakeOffItem;
 
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean is
    begin
+      Check_Item_Usage_Loop :
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
             return True;
          end if;
-      end loop;
+      end loop Check_Item_Usage_Loop;
       return False;
    end ItemIsUsed;
 
