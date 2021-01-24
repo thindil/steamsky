@@ -540,7 +540,10 @@ package body Bases.ShipyardUI is
          end if;
       end loop;
       configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
-      configure(ModuleText, "-state disabled");
+      configure
+        (ModuleText,
+         "-state disabled -height [expr " &
+         Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(MoneyLabel, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
@@ -762,7 +765,10 @@ package body Bases.ShipyardUI is
       Label :=
         Create
           (ModuleDialog & ".money", "-text {" & To_String(RemoveInfo) & "}");
-      configure(ModuleText, "-state disabled");
+      configure
+        (ModuleText,
+         "-state disabled -height [expr " &
+         Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
       RemoveButton :=
