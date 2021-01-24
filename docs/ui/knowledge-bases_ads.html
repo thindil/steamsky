@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -32,13 +32,13 @@
 <ul>
 <li>1. <a href="#robo32">Knowledge/KBases</a></li>
 <ul>
-<li>1.1. <a href="#robo452">KBases/AddCommands</a></li>
-<li>1.2. <a href="./knowledge-bases_adb.html#robo453">KBases/Set_Base_Command</a></li>
-<li>1.3. <a href="./knowledge-bases_adb.html#robo454">KBases/Show_Base_Command</a></li>
-<li>1.4. <a href="./knowledge-bases_adb.html#robo455">KBases/Show_Bases_Menu_Command</a></li>
-<li>1.5. <a href="#robo456">KBases/UpdateBasesList</a></li>
-<li>1.6. <a href="./knowledge-bases_adb.html#robo640">KBases/Show_Base_Info_Command</a></li>
-<li>1.7. <a href="./knowledge-bases_adb.html#robo641">KBases/Show_Bases_Command</a></li>
+<li>1.1. <a href="#robo459">KBases/KBases.AddCommands</a></li>
+<li>1.2. <a href="./knowledge-bases_adb.html#robo460">KBases/KBases.Set_Base_Command</a></li>
+<li>1.3. <a href="./knowledge-bases_adb.html#robo461">KBases/KBases.Show_Base_Command</a></li>
+<li>1.4. <a href="./knowledge-bases_adb.html#robo462">KBases/KBases.Show_Bases_Menu_Command</a></li>
+<li>1.5. <a href="#robo463">KBases/KBases.UpdateBasesList</a></li>
+<li>1.6. <a href="./knowledge-bases_adb.html#robo654">KBases/KBases.Show_Base_Info_Command</a></li>
+<li>1.7. <a href="./knowledge-bases_adb.html#robo655">KBases/KBases.Show_Bases_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -54,27 +54,27 @@
 </pre>
 
 <hr />
-<a name="KBases2fAddCommands"></a>
-<a name="robo452"></a><h2>KBases/AddCommands [ Subprograms ]</h2>
+<a name="KBases2fKBases2eAddCommands"></a>
+<a name="robo459"></a><h2>KBases/KBases.AddCommands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo32">KBases</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the list of known bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddCommands</strong><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./utils-ui_ads.html#robo608">AddCommands</a><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="KBases2fUpdateBasesList"></a>
-<a name="robo456"></a><h2>KBases/UpdateBasesList [ Subprograms ]</h2>
+<a name="KBases2fKBases2eUpdateBasesList"></a>
+<a name="robo463"></a><h2>KBases/KBases.UpdateBasesList [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo32">KBases</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update and show list of known bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateBasesList</strong><span class="sign">(</span>BaseName<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> UpdateBasesList<span class="sign">(</span>BaseName<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> BaseName - Name of the base to find on list
@@ -82,7 +82,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:04
+<p>Generated from ./src/ui/knowledge-bases.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
 </p>
 </div> <!-- footer -->
 </body>

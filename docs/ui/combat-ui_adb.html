@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.6 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,30 +30,30 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo393">CUI/GetGunSpeed</a></li>
-<li>2. <a href="#robo394">CUI/Next_Turn_Command</a></li>
-<li>3. <a href="#robo395">CUI/Set_Combat_Order_Command</a></li>
-<li>4. <a href="#robo396">CUI/Set_Combat_Position_Command</a></li>
-<li>5. <a href="#robo397">CUI/Set_Party_Order_Command</a></li>
-<li>6. <a href="#robo398">CUI/Show_Combat_Info_Command</a></li>
-<li>7. <a href="#robo399">CUI/Show_Combat_UI_Command</a></li>
-<li>8. <a href="#robo400">CUI/ShowCombatFrame</a></li>
-<li>9. <a href="#robo402">CUI/UpdateBoardingUI</a></li>
-<li>10. <a href="#robo403">CUI/UpdateCombatUI</a></li>
-<li>11. <a href="#robo404">CUI/UpdateMessages</a></li>
-<li>12. <a href="#robo608">CUI/Set_Boarding_Order_Command</a></li>
-<li>13. <a href="#robo609">CUI/Set_Combat_Party_Command</a></li>
+<li>1. <a href="#robo400">CUI/CUI.GetGunSpeed</a></li>
+<li>2. <a href="#robo401">CUI/CUI.Next_Turn_Command</a></li>
+<li>3. <a href="#robo402">CUI/CUI.Set_Combat_Order_Command</a></li>
+<li>4. <a href="#robo403">CUI/CUI.Set_Combat_Position_Command</a></li>
+<li>5. <a href="#robo404">CUI/CUI.Set_Party_Order_Command</a></li>
+<li>6. <a href="#robo405">CUI/CUI.Show_Combat_Info_Command</a></li>
+<li>7. <a href="#robo406">CUI/CUI.Show_Combat_UI_Command</a></li>
+<li>8. <a href="#robo407">CUI/CUI.ShowCombatFrame</a></li>
+<li>9. <a href="#robo409">CUI/CUI.UpdateBoardingUI</a></li>
+<li>10. <a href="#robo410">CUI/CUI.UpdateCombatUI</a></li>
+<li>11. <a href="#robo411">CUI/CUI.UpdateMessages</a></li>
+<li>12. <a href="#robo622">CUI/CUI.Set_Boarding_Order_Command</a></li>
+<li>13. <a href="#robo623">CUI/CUI.Set_Combat_Party_Command</a></li>
 </ul>
 <hr />
-<a name="CUI2fGetGunSpeed"></a>
-<a name="robo393"></a><h2>CUI/GetGunSpeed [ Subprograms ]</h2>
+<a name="CUI2fCUI2eGetGunSpeed"></a>
+<a name="robo400"></a><h2>CUI/CUI.GetGunSpeed [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Get information about fire rate of selected gun with selected order
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>GetGunSpeed</strong><span class="sign">(</span>Position<span class="sign">:</span> Natural<span class="sign">;</span> Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">function</span> GetGunSpeed<span class="sign">(</span>Position<span class="sign">:</span> Natural<span class="sign">;</span> Index<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Position - Number of gun to check
@@ -64,15 +64,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fNext5fTurn5fCommand"></a>
-<a name="robo394"></a><h2>CUI/Next_Turn_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eNext5fTurn5fCommand"></a>
+<a name="robo401"></a><h2>CUI/CUI.Next_Turn_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Execute combat orders and go to next turn
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Next_Turn_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Next_Turn_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -92,15 +92,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fSet5fCombat5fOrder5fCommand"></a>
-<a name="robo395"></a><h2>CUI/Set_Combat_Order_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eSet5fCombat5fOrder5fCommand"></a>
+<a name="robo402"></a><h2>CUI/CUI.Set_Combat_Order_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set combat order for the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Combat_Order_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Combat_Order_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -122,15 +122,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fSet5fCombat5fPosition5fCommand"></a>
-<a name="robo396"></a><h2>CUI/Set_Combat_Position_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eSet5fCombat5fPosition5fCommand"></a>
+<a name="robo403"></a><h2>CUI/CUI.Set_Combat_Position_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set crew member position (pilot, engineer, gunner) in combat
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Combat_Position_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Combat_Position_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -151,15 +151,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fSet5fParty5fOrder5fCommand"></a>
-<a name="robo397"></a><h2>CUI/Set_Party_Order_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eSet5fParty5fOrder5fCommand"></a>
+<a name="robo404"></a><h2>CUI/CUI.Set_Party_Order_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set boarding or defending order for the selected crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Party_Order_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Party_Order_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -182,15 +182,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fShow5fCombat5fInfo5fCommand"></a>
-<a name="robo398"></a><h2>CUI/Show_Combat_Info_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eShow5fCombat5fInfo5fCommand"></a>
+<a name="robo405"></a><h2>CUI/CUI.Show_Combat_Info_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about the selected mob in combat
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Combat_Info_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Combat_Info_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -211,15 +211,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fShow5fCombat5fUI5fCommand"></a>
-<a name="robo399"></a><h2>CUI/Show_Combat_UI_Command [ Subprograms ]</h2>
+<a name="CUI2fCUI2eShow5fCombat5fUI5fCommand"></a>
+<a name="robo406"></a><h2>CUI/CUI.Show_Combat_UI_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show combat UI
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Combat_UI_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Combat_UI_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -235,67 +235,67 @@
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
-<pre> <a href="./combat-ui_ads.html#robo401">ShowCombatUI</a>
+<pre> ShowCombatUI
 </pre>
 
 <hr />
-<a name="CUI2fShowCombatFrame"></a>
-<a name="robo400"></a><h2>CUI/ShowCombatFrame [ Subprograms ]</h2>
+<a name="CUI2fCUI2eShowCombatFrame"></a>
+<a name="robo407"></a><h2>CUI/CUI.ShowCombatFrame [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show ship to ship combat UI or boarding UI
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>ShowCombatFrame</strong><span class="sign">(</span>FrameName<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">procedure</span> ShowCombatFrame<span class="sign">(</span>FrameName<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="CUI2fUpdateBoardingUI"></a>
-<a name="robo402"></a><h2>CUI/UpdateBoardingUI [ Subprograms ]</h2>
+<a name="CUI2fCUI2eUpdateBoardingUI"></a>
+<a name="robo409"></a><h2>CUI/CUI.UpdateBoardingUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update information about boarding party: remove old UI and create new elements
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateBoardingUI</strong> <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">procedure</span> UpdateBoardingUI <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="CUI2fUpdateCombatUI"></a>
-<a name="robo403"></a><h2>CUI/UpdateCombatUI [ Subprograms ]</h2>
+<a name="CUI2fCUI2eUpdateCombatUI"></a>
+<a name="robo410"></a><h2>CUI/CUI.UpdateCombatUI [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update information about combat: remove old UI and create new elements
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateCombatUI</strong> <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">procedure</span> UpdateCombatUI <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="CUI2fUpdateMessages"></a>
-<a name="robo404"></a><h2>CUI/UpdateMessages [ Subprograms ]</h2>
+<a name="CUI2fCUI2eUpdateMessages"></a>
+<a name="robo411"></a><h2>CUI/CUI.UpdateMessages [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update in-game messages in combat
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>UpdateMessages</strong> <span class="keyword">is</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./utils-ui_ads.html#robo616">UpdateMessages</a> <span class="keyword">is</span>
 </pre>
 
 <hr />
-<a name="CUI2fSet5fBoarding5fOrder5fCommand"></a>
-<a name="robo608"></a><h2>CUI/Set_Boarding_Order_Command [ Commands ]</h2>
+<a name="CUI2fCUI2eSet5fBoarding5fOrder5fCommand"></a>
+<a name="robo622"></a><h2>CUI/CUI.Set_Boarding_Order_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set boarding order for the selected player's ship crew member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Boarding_Order_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Boarding_Order_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -317,15 +317,15 @@
 </pre>
 
 <hr />
-<a name="CUI2fSet5fCombat5fParty5fCommand"></a>
-<a name="robo609"></a><h2>CUI/Set_Combat_Party_Command [ Commands ]</h2>
+<a name="CUI2fCUI2eSet5fCombat5fParty5fCommand"></a>
+<a name="robo623"></a><h2>CUI/CUI.Set_Combat_Party_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./combat-ui_ads.html#robo13">CUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set combat party (boarding or defenders)
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Combat_Party_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Combat_Party_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -348,7 +348,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Dec 27 2020 06:36:04
+<p>Generated from ./src/ui/combat-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
 </p>
 </div> <!-- footer -->
 </body>
