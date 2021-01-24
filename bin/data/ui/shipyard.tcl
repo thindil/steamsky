@@ -18,6 +18,8 @@ set shipyardcanvas [canvas .gameframe.paned.shipyardframe.canvas -yscrollcommand
 pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrolly -orient vertical -command [list $shipyardcanvas yview]] -side right -fill y
 pack $shipyardcanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrollx -orient horizontal -command [list $shipyardcanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrollx
 set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
 grid [ttk::notebook $shipyardframe.notebook] -sticky nwes
 # Install modules
