@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+                      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" href="../robodoc.css" type="text/css" />
+<title>./src/ui/table.ads</title>
+<!-- Source: ./src/ui/table.ads -->
+<!-- Generated with ROBODoc Version 4.99.43 (Feb  8 2020) -->
+</head>
+<body>
+<div id="logo">
+<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+</div> <!-- logo -->
+<div id="navigation">
+<a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
+<a class="menuitem" href="../sources.html#top">Source files</a>
+<a class="menuitem" href="../index.html#top">Index</a>
+<a class="menuitem" href="../robo_constants.html#top">Constants</a>
+<a class="menuitem" href="../robo_exceptions.html#top">Exceptions</a>
+<a class="menuitem" href="../robo_subprograms.html#top">Subprograms</a>
+<a class="menuitem" href="../robo_packages.html#top">Packages</a>
+<a class="menuitem" href="../robo_commands.html#top">Commands</a>
+<a class="menuitem" href="../robo_records.html#top">Records</a>
+<a class="menuitem" href="../robo_types.html#top">Types</a>
+<a class="menuitem" href="../robo_variables.html#top">Variables</a>
+</div> <!-- navigation -->
+<div id="content">
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li>1. <a href="#robo65">Table/Table</a></li>
+<ul>
+<li>1.1. <a href="#robo152">Table/Table.Headers_Array</a></li>
+<li>1.2. <a href="#robo153">Table/Table.Width_Array</a></li>
+<li>1.3. <a href="#robo198">Table/Table.Table_Widget</a></li>
+<li>1.4. <a href="#robo592">Table/Table.AddButton</a></li>
+<li>1.5. <a href="#robo593">Table/Table.AddText</a></li>
+<li>1.6. <a href="#robo594">Table/Table.ClearTable</a></li>
+<li>1.7. <a href="#robo595">Table/Table.CreateTable</a></li>
+<li>1.8. <a href="#robo596">Table/Table.UpdateTable</a></li>
+</ul>
+</ul>
+<hr />
+<a name="Table2fTable"></a>
+<a name="robo65"></a><h2>Table/Table [ Packages ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Provides code for create and manipulate more advanced table widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source"><span class="keyword">package</span> <strong>Table</strong> <span class="keyword">is</span>
+</pre>
+
+<hr />
+<a name="Table2fTable2eHeaders5fArray"></a>
+<a name="robo152"></a><h2>Table/Table.Headers_Array [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store the titles for columns in the selected table
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Headers_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> <span class="keyword">of</span> Unbounded_String<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Table2fTable2eWidth5fArray"></a>
+<a name="robo153"></a><h2>Table/Table.Width_Array [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Used to store width of Table_Widget columns
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Width_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> <span class="keyword">of</span> Positive<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Table2fTable2eTable5fWidget"></a>
+<a name="robo198"></a><h2>Table/Table.Table_Widget [ Records ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Store data for each created table
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Table_Widget<span class="sign">(</span>Amount<span class="sign">:</span> Positive<span class="sign">)</span> <span class="keyword">is</span> <span class="keyword">record</span>
+      Canvas<span class="sign">:</span> Tk_Canvas<span class="sign">;</span>
+      Columns_Width<span class="sign">:</span> Width_Array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> Amount<span class="sign">)</span> <span class="sign">:</span><span class="sign">=</span> <span class="sign">(</span><span class="keyword">others</span> <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">)</span><span class="sign">;</span>
+      Row<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
+      Row_Height<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
+      Scrollbars<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">;</span>
+   <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Canvas        - Tk_Canvas which is used as table
+ Columns_Width - The array with the width for each column in the table
+ Row           - The current row of the table
+ Row_Height    - The height of each row
+ Scrollbars    - If true, the table was created with the scrollbars
+</pre>
+
+<hr />
+<a name="Table2fTable2eAddButton"></a>
+<a name="robo592"></a><h2>Table/Table.AddButton [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Add button item to the selected Table_Widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> AddButton
+     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span>
+      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo65">Table</a>   - The Table_Widget in which button will be added
+ Text    - The text displayed on the button
+ Tooltip - The tooltip show when user hover mouse over button
+ Command - Tcl command which will be executed when button was clicked
+ Column  - The column in which the button will be added
+ NewRow  - If True, increase current number of row in the Table_Widget.
+           Default value is False.
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.7 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eAddText"></a>
+<a name="robo593"></a><h2>Table/Table.AddText [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Add text item to the selected Table_Widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> AddText
+     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">:</span> String<span class="sign">;</span> Column<span class="sign">:</span> Positive<span class="sign">;</span>
+      NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo65">Table</a>   - The Table_Widget in which text will be added
+ Text    - The text displayed on the item
+ Tooltip - The tooltip show when user hover mouse over text
+ Column  - The column in which the text will be added
+ NewRow  - If True, increase current number of row in the Table_Widget.
+           Default value is False.
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.7 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eClearTable"></a>
+<a name="robo594"></a><h2>Table/Table.ClearTable [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Clear data from the table
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> ClearTable<span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo65">Table</a> - The Table_Widget which will be cleared
+</pre>
+<p class="item_name">OUTPUT</p>
+<pre> Cleared <a href="#robo65">Table</a> parameter Table_Widget
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.7 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eCreateTable"></a>
+<a name="robo595"></a><h2>Table/Table.CreateTable [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Create a new table and columns headers in it
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> CreateTable
+     <span class="sign">(</span>Parent<span class="sign">:</span> String<span class="sign">;</span> Headers<span class="sign">:</span> Headers_Array<span class="sign">;</span> With_Scrollbars<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
+      <span class="keyword">return</span> Table_Widget<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Parent          - The Tk path for the parent widget
+ Headers         - The titles for the table headers
+ With_Scrollbars - If True add table with scrollbars. Default value is
+                   True.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The newly created Table_Widget
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.7 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eUpdateTable"></a>
+<a name="robo596"></a><h2>Table/Table.UpdateTable [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update size and coordinates of all elements in the selected table
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> UpdateTable<span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo65">Table</a> - The Table_Widget which elements will be resized if needed
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.7 - Added
+</pre>
+
+</div> <!-- content -->
+<div id="footer">
+<p>Generated from ./src/ui/table.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+</p>
+</div> <!-- footer -->
+</body>
+</html>
+
