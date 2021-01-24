@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ with Ships; use Ships;
 package Maps.UI is
 -- ****
 
-   -- ****v* MUI/MenuAccelerators
+   -- ****v* MUI/MUI.MenuAccelerators
    -- FUNCTION
    -- Array with the game menu default accelerators
    -- SOURCE
@@ -37,7 +37,7 @@ package Maps.UI is
       To_Unbounded_String("x"));
    -- ****
 
-   -- ****v* MUI/MapAccelerators
+   -- ****v* MUI/MUI.MapAccelerators
    -- FUNCTION
    -- Array with default map keyboard accelerators
    -- SOURCE
@@ -70,63 +70,63 @@ package Maps.UI is
       To_Unbounded_String("Control-3"), To_Unbounded_String("Control-4"));
    -- ****
 
-   -- ****v* MUI/FullScreenAccel
+   -- ****v* MUI/MUI.FullScreenAccel
    -- FUNCTION
    -- Keyboard shortcut for switching full screen mode
    -- SOURCE
    FullScreenAccel: Unbounded_String := To_Unbounded_String("Control-f");
    -- ****
 
-   -- ****iv* MUI/CenterX
+   -- ****iv* MUI/MUI.CenterX
    -- FUNCTION
    -- Coordinates of the center point of the map
    -- SOURCE
    CenterX, CenterY: Positive;
    -- ****
 
-   -- ****iv* MUI/GameMenu
+   -- ****iv* MUI/MUI.GameMenu
    -- FUNCTION
    -- The main game menu
    -- SOURCE
    GameMenu: Tk_Menu;
    -- ****
 
-   -- ****v* MUI/DefaultFontsSizes
+   -- ****v* MUI/MUI.DefaultFontsSizes
    -- FUNCTION
    -- Default sizes of the game fonts
    -- SOURCE
    DefaultFontsSizes: array(1 .. 3) of Positive;
    -- ****
 
-   -- ****f* MUI/CreateGameMenu
+   -- ****f* MUI/MUI.CreateGameMenu
    -- FUNCTION
    -- Create the main game menu. Clear old elements and add all default
    -- SOURCE
    procedure CreateGameMenu;
    -- ****
 
-   -- ****f* MUI/UpdateHeader
+   -- ****f* MUI/MUI.UpdateHeader
    -- FUNCTION
    -- Update the game information on the UI header (time, crew, etc)
    -- SOURCE
    procedure UpdateHeader;
    -- ****
 
-   -- ****f* MUI/DrawMap
+   -- ****f* MUI/MUI.DrawMap
    -- FUNCTION
    -- Draw map on the screen
    -- SOURCE
    procedure DrawMap;
    -- ****
 
-   -- ****f* MUI/CreateGameUI
+   -- ****f* MUI/MUI.CreateGameUI
    -- FUNCTION
    -- Create the game UI and show sky map to the player
    -- SOURCE
    procedure CreateGameUI;
    -- ****
 
-   -- ****f* MUI/ShowSkyMap
+   -- ****f* MUI/MUI.ShowSkyMap
    -- FUNCTION
    -- Show sky map - draw map, update header, etc
    -- PARAMETERS
@@ -136,7 +136,7 @@ package Maps.UI is
    procedure ShowSkyMap(Clear: Boolean := False);
    -- ****
 
-   -- ****f* MUI/SetKeys
+   -- ****f* MUI/MUI.SetKeys
    -- FUNCTION
    -- Set keyboard shortcuts
    -- SOURCE
@@ -145,21 +145,21 @@ package Maps.UI is
 
 private
 
-   -- ****v* MUI/StartX
+   -- ****v* MUI/MUI.StartX_(private)
    -- FUNCTION
    -- Top left map coordinate
    -- SOURCE
    StartX, StartY: Integer;
    -- ****
 
-   -- ****f* MUI/DeathConfirm
+   -- ****f* MUI/MUI.DeathConfirm_(private)
    -- FUNCTION
    -- Show stats or go to main menu on player character death
    -- SOURCE
    procedure DeathConfirm;
    -- ****
 
-   -- ****f* MUI/UpdateMapInfo
+   -- ****f* MUI/MUI.UpdateMapInfo_(private)
    -- FUNCTION
    -- Update information about map cell
    -- PARAMETERS
@@ -170,7 +170,7 @@ private
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
-   -- ****f* MUI/UpdateMoveButtons
+   -- ****f* MUI/MUI.UpdateMoveButtons_(private)
    -- FUNCTION
    -- Updated the player ship movement buttons
    -- SOURCE
