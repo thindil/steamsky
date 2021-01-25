@@ -165,7 +165,7 @@ package body Bases.ShipyardUI is
                 ModuleType'Pos(Modules_List(I).MType) then
                goto End_Of_Loop;
             end if;
-            if Argc = 3
+            if Argc = 3 and then CArgv.Arg(Argv, 2)'Length > 0
               and then
                 Index
                   (To_Lower(To_String(Modules_List(I).Name)),
@@ -784,43 +784,6 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Remove_Info_Command;
 
-   -- ****if* ShipyardUI/ShipyardUI.Search_Shipyard_Command
-   -- FUNCTION
-   -- Show only this items which contains the selected sequence
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- SOURCE
-   function Search_Shipyard_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Search_Shipyard_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.install.options.modules",
-           Interp);
-      SearchText: constant String := CArgv.Arg(Argv, 1);
-   begin
-      if SearchText'Length = 0 then
-         return Show_Shipyard_Command
-             (ClientData, Interp, 2,
-              CArgv.Empty & "ShowShipyard" & Current(TypeBox));
-      end if;
-      return Show_Shipyard_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & "ShowShipyard" & Current(TypeBox) & SearchText);
-   end Search_Shipyard_Command;
-
    -- ****o* ShipyardUI/ShipyardUI.Show_Module_Menu_Command
    -- FUNCTION
    -- Show menu with actions for the selected module
@@ -936,7 +899,6 @@ package body Bases.ShipyardUI is
       AddCommand("ShowInstallInfo", Show_Install_Info_Command'Access);
       AddCommand("ManipulateModule", Manipulate_Module_Command'Access);
       AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
-      AddCommand("SearchShipyard", Search_Shipyard_Command'Access);
       AddCommand("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
       AddCommand("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
    end AddCommands;
