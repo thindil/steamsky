@@ -121,8 +121,7 @@ package body Bases.ShipyardUI is
       ModuleSize: Integer;
       ModuleTypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (ShipyardCanvas & ".shipyard.notebook.install.options.modules",
-           Interp);
+          (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -130,7 +129,7 @@ package body Bases.ShipyardUI is
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipyard.tcl");
          Bind(ShipyardFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          ShipyardFrame :=
-           Get_Widget(ShipyardCanvas & ".shipyard.notebook.install", Interp);
+           Get_Widget(ShipyardCanvas & ".shipyard.install", Interp);
          InstallTable :=
            CreateTable
              (Widget_Image(ShipyardFrame),
@@ -139,7 +138,7 @@ package body Bases.ShipyardUI is
                To_Unbounded_String("Base cost")),
               False);
          ShipyardFrame :=
-           Get_Widget(ShipyardCanvas & ".shipyard.notebook.remove", Interp);
+           Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
          RemoveTable :=
            CreateTable
              (Widget_Image(ShipyardFrame),
@@ -156,7 +155,7 @@ package body Bases.ShipyardUI is
          Current(ModuleTypeBox, "0");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
-      ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard.notebook");
+      ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard");
       ClearTable(InstallTable);
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
@@ -247,6 +246,7 @@ package body Bases.ShipyardUI is
          "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
       ShowScreen("shipyardframe");
       Tcl_SetResult(Interp, "1");
+      Tcl_Eval(Get_Context, "ShowShipyardTab");
       return TCL_OK;
    end Show_Shipyard_Command;
 
@@ -815,7 +815,7 @@ package body Bases.ShipyardUI is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.shipyardframe.canvas.shipyard.notebook.install.options.modules",
+          (".gameframe.paned.shipyardframe.canvas.shipyard.install.options.modules",
            Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
@@ -884,6 +884,55 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Module_Menu_Command;
 
+   -- ****o* ShipyardUI/ShipyardUI.Show_Shipyard_Tab_Command
+   -- FUNCTION
+   -- Show the install or remove modules options in shipyard
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowShipyardTab
+   -- SOURCE
+   function Show_Shipyard_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Shipyard_Tab_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      ShipyardCanvas: constant Tk_Canvas :=
+        Get_Widget(".gameframe.paned.shipyardframe.canvas", Interp);
+      ShipyardFrame: constant Ttk_Frame :=
+        Get_Widget(ShipyardCanvas & ".shipyard");
+      Frame: Ttk_Frame;
+   begin
+      if Tcl_GetVar(Interp, "newtab") = "install" then
+         Frame := Get_Widget(ShipyardFrame & ".remove");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+         Frame := Get_Widget(ShipyardFrame & ".install");
+         Tcl.Tk.Ada.Grid.Grid(Frame);
+      else
+         Frame := Get_Widget(ShipyardFrame & ".install");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+         Frame := Get_Widget(ShipyardFrame & ".remove");
+         Tcl.Tk.Ada.Grid.Grid(Frame);
+      end if;
+      Tcl_Eval(Interp, "update");
+      configure
+        (ShipyardCanvas,
+         "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
+      return TCL_OK;
+   end Show_Shipyard_Tab_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
@@ -892,6 +941,7 @@ package body Bases.ShipyardUI is
       AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
       AddCommand("SearchShipyard", Search_Shipyard_Command'Access);
       AddCommand("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
+      AddCommand("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;

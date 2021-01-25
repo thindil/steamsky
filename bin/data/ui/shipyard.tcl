@@ -21,16 +21,17 @@ pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrollx -orient horizontal -
 ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrollx
 set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
-grid [ttk::notebook $shipyardframe.notebook] -sticky nwes
+set newtab install
+grid [ttk::frame $shipyardframe.tabs] -pady 5
+grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} -state selected -style Radio.Toolbutton -value install -variable newtab -command ShowShipyardTab] -padx 5
+grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} -style Radio.Toolbutton -value remove -variable newtab -command ShowShipyardTab] -row 0 -column 1 -padx 5
 # Install modules
-set sinstall [ttk::frame $shipyardframe.notebook.install]
-grid [ttk::frame $sinstall.options] -sticky we -columnspan 2
+set sinstall [ttk::frame $shipyardframe.install]
+grid [ttk::frame $sinstall.options] -sticky we
 grid [ttk::label $sinstall.options.label -text "Show modules:"]
 grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1
 $sinstall.options.modules current 0
 bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current]}
 grid [ttk::entry $sinstall.options.search -validate key -validatecommand {SearchShipyard %P}] -row 0 -column 2
-$shipyardframe.notebook add $sinstall -text {Install}
 # Remove modules
-set sremove [ttk::frame $shipyardframe.notebook.remove]
-$shipyardframe.notebook add $sremove -text {Remove}
+set sremove [ttk::frame $shipyardframe.remove]
