@@ -930,6 +930,7 @@ package body Bases.ShipyardUI is
       configure
         (ShipyardCanvas,
          "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Shipyard_Tab_Command;
 
