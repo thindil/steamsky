@@ -31,7 +31,7 @@ grid [ttk::frame $sinstall.options] -sticky we
 grid [ttk::label $sinstall.options.label -text "Show modules:"]
 grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1
 $sinstall.options.modules current 0
-bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current]}
-grid [ttk::entry $sinstall.options.search -validate key -validatecommand {SearchShipyard %P}] -row 0 -column 2
+bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current] [$sinstall.options.search get]}
+grid [ttk::entry $sinstall.options.search -validate key -validatecommand {ShowShipyard [$sinstall.options.modules current] %P}] -row 0 -column 2
 # Remove modules
 set sremove [ttk::frame $shipyardframe.remove]
