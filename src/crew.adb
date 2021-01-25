@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -70,12 +70,13 @@ package body Crew is
       -- Gain experience in associated attribute
       GainExpInAttribute(AttributeIndex);
       -- Gain experience in skill
+      Experience_In_Skill_Loop:
       for I in PlayerShip.Crew(CrewIndex).Skills.Iterate loop
          if PlayerShip.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
             SkillIndex := Skills_Container.To_Index(I);
-            exit;
+            exit Experience_In_Skill_Loop;
          end if;
-      end loop;
+      end loop Experience_In_Skill_Loop;
       if SkillIndex > 0 then
          if PlayerShip.Crew(CrewIndex).Skills(SkillIndex)(2) =
            Skill_Range'Last then
@@ -171,15 +172,17 @@ package body Crew is
 
    function FindCabin(MemberIndex: Positive) return Natural is
    begin
+      Find_Cabin_Loop:
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).MType = CABIN then
+            Check_Owner_Loop:
             for Owner of PlayerShip.Modules(I).Owner loop
                if Owner = MemberIndex then
                   return Modules_Container.To_Index(I);
                end if;
-            end loop;
+            end loop Check_Owner_Loop;
          end if;
-      end loop;
+      end loop Find_Cabin_Loop;
       return 0;
    end FindCabin;
 
@@ -267,24 +270,26 @@ package body Crew is
                     and then (Module.Owner(1) in I | 0) then
                      BackToWork := True;
                      Module.Owner(1) := I;
-                     exit;
+                     exit Module_Loop;
                   elsif
                     (Member.PreviousOrder = Craft and Module.MType = WORKSHOP)
                     and then Module.CraftingIndex /= Null_Unbounded_String then
+                    Module_Is_Owner_Loop:
                      for Owner of Module.Owner loop
                         if Owner = I then
                            BackToWork := True;
                            Owner := I;
                            exit Module_Loop;
                         end if;
-                     end loop;
+                     end loop Module_Is_Owner_Loop;
+                     Module_Empty_Owner_Loop:
                      for Owner of Module.Owner loop
                         if Owner = 0 then
                            BackToWork := True;
                            Owner := I;
                            exit Module_Loop;
                         end if;
-                     end loop;
+                     end loop Module_Empty_Owner_Loop;
                   end if;
                end loop Module_Loop;
             end if;
@@ -329,6 +334,7 @@ package body Crew is
                      Modules_Loop :
                      for Module of PlayerShip.Modules loop
                         if Module.MType = CABIN and Module.Durability > 0 then
+                           Find_Cabin_Owner_Loop:
                            for Owner of Module.Owner loop
                               if Owner = 0 then
                                  Owner := I;
@@ -338,7 +344,7 @@ package body Crew is
                                     OtherMessage);
                                  exit Modules_Loop;
                               end if;
-                           end loop;
+                           end loop Find_Cabin_Owner_Loop;
                         end if;
                      end loop Modules_Loop;
                   end if;
@@ -354,10 +360,11 @@ package body Crew is
          NormalizeStat(TiredLevel, 150);
          Member.Tired := TiredLevel;
          if HungerLevel > 80 then
+            Find_Food_Loop:
             for FoodType of Factions_List(Member.Faction).FoodTypes loop
                ConsumeResult := Consume(FoodType);
-               exit when ConsumeResult > 0;
-            end loop;
+               exit Find_Food_Loop when ConsumeResult > 0;
+            end loop Find_Food_Loop;
             HungerLevel :=
               (if HungerLevel - ConsumeResult < Skill_Range'First then
                  Skill_Range'First
@@ -373,10 +380,11 @@ package body Crew is
          NormalizeStat(HungerLevel);
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
+            Find_Drink_Loop:
             for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
                ConsumeResult := Consume(DrinksType);
-               exit when ConsumeResult > 0;
-            end loop;
+               exit Find_Drink_Loop when ConsumeResult > 0;
+            end loop Find_Drink_Loop;
             ThirstLevel :=
               (if ThirstLevel - ConsumeResult < Skill_Range'First then
                  Skill_Range'First
@@ -405,10 +413,12 @@ package body Crew is
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
+      Update_Crew_Loop:
       while I <= PlayerShip.Crew.Last_Index loop
          CurrentMinutes := Minutes;
          OrderTime := PlayerShip.Crew(I).OrderTime;
          Times := 0;
+         Update_Current_Minutes_Loop:
          while CurrentMinutes > 0 loop
             if CurrentMinutes >= OrderTime then
                CurrentMinutes := CurrentMinutes - OrderTime;
@@ -418,7 +428,7 @@ package body Crew is
                OrderTime := OrderTime - CurrentMinutes;
                CurrentMinutes := 0;
             end if;
-         end loop;
+         end loop Update_Current_Minutes_Loop;
          HealthLevel := PlayerShip.Crew(I).Health;
          HungerLevel := PlayerShip.Crew(I).Hunger;
          ThirstLevel := PlayerShip.Crew(I).Thirst;
@@ -498,14 +508,15 @@ package body Crew is
                   end if;
                when Heal =>
                   HaveMedicalRoom := False;
+                  Heal_Module_Loop:
                   for Module of PlayerShip.Modules loop
                      if Modules_List(Module.ProtoIndex).MType =
                        MEDICAL_ROOM and
                        Module.Durability > 0 and Module.Owner.Contains(I) then
                         HaveMedicalRoom := True;
-                        exit;
+                        exit Heal_Module_Loop;
                      end if;
-                  end loop;
+                  end loop Heal_Module_Loop;
                   for Member of PlayerShip.Crew loop
                      if Member.Name /= PlayerShip.Crew(I).Name and
                        Member.Health < 100 then
@@ -773,7 +784,7 @@ package body Crew is
               (Index => I, Process => UpdateMember'Access);
             I := I + 1;
          end if;
-      end loop;
+      end loop Update_Crew_Loop;
    end UpdateCrew;
 
    procedure WaitForRest is
