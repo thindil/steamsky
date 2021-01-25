@@ -236,14 +236,6 @@ package body Bases.ShipyardUI is
         (ShipyardCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
-      Tcl_Eval(Get_Context, "update");
-      Canvas_Create
-        (ShipyardCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(ShipyardFrame));
-      Tcl_Eval(Get_Context, "update");
-      configure
-        (ShipyardCanvas,
-         "-scrollregion [list " & BBox(ShipyardCanvas, "all") & "]");
       ShowScreen("shipyardframe");
       Tcl_SetResult(Interp, "1");
       Tcl_Eval(Get_Context, "ShowShipyardTab");
