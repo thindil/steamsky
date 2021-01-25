@@ -926,6 +926,10 @@ package body Bases.ShipyardUI is
          Frame := Get_Widget(ShipyardFrame & ".remove");
          Tcl.Tk.Ada.Grid.Grid(Frame);
       end if;
+      Delete(ShipyardCanvas, "all");
+      Canvas_Create
+        (ShipyardCanvas, "window",
+         "0 0 -anchor nw -window " & Widget_Image(ShipyardFrame));
       Tcl_Eval(Interp, "update");
       configure
         (ShipyardCanvas,
