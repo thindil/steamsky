@@ -40,7 +40,7 @@ with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
 
-   -- ****if* MUI2/ShowMessage
+   -- ****if* MUI2/MUI2.ShowMessage
    -- FUNCTION
    -- Show the selected message to a player
    -- PARAMETERS
@@ -76,7 +76,7 @@ package body Messages.UI is
       end if;
    end ShowMessage;
 
-   -- ****o* MUI2/Show_Last_Messages_Command
+   -- ****o* MUI2/MUI2.Show_Last_Messages_Command
    -- FUNCTION
    -- Show the list of last messages to a player
    -- PARAMETERS
@@ -168,7 +168,7 @@ package body Messages.UI is
       return TCL_OK;
    end Show_Last_Messages_Command;
 
-   -- ****o* MUI2/Select_Messages_Command
+   -- ****o* MUI2/MUI2.Select_Messages_Command
    -- FUNCTION
    -- Show only messages of the selected type
    -- PARAMETERS
@@ -202,7 +202,7 @@ package body Messages.UI is
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Select_Messages_Command;
 
-   -- ****o* MUI2/Delete_Messages_Command
+   -- ****o* MUI2/MUI2.Delete_Messages_Command
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
@@ -243,7 +243,7 @@ package body Messages.UI is
           (ClientData, Interp, 2, Argv & Current(TypeBox));
    end Delete_Messages_Command;
 
-   -- ****o* MUI2/Search_Messages_Command
+   -- ****o* MUI2/MUI2.Search_Messages_Command
    -- FUNCTION
    -- Show only this messages which contains the selected sequence
    -- PARAMETERS
