@@ -26,6 +26,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -564,11 +566,66 @@ package body Bases.LootUI is
       return Show_Loot_Command(ClientData, Interp, Argc, Argv);
    end Loot_Item_Command;
 
+   -- ****o* LUI/LUI.Show_Module_Menu_Command
+   -- FUNCTION
+   -- Show menu with actions for the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowLootItemMenu itemindex
+   -- ItemIndex is a index of the item which menu will be shown.
+   -- SOURCE
+   function Show_Item_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Item_Menu_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
+   begin
+      ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
+      if Winfo_Get(ItemMenu, "exists") = "0" then
+         ItemMenu := Create(".modulemenu", "-tearoff false");
+      end if;
+      Delete(ItemMenu, "0", "end");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Show item details} -command {ShowLootItemInfo}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Take selected amount} -command {LootAmount take}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Take all available} -command {LootItem takeall}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Drop selected amount} -command {LootAmount drop}");
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Drop all owned} -command {LootItem dropall}");
+      Tk_Popup
+        (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Item_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLoot", Show_Loot_Command'Access);
       AddCommand("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
       AddCommand("LootItem", Loot_Item_Command'Access);
+      AddCommand("ShowLootItemMenu", Show_Item_Menu_Command'Access);
    end AddCommands;
 
 end Bases.LootUI;
