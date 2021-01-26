@@ -811,30 +811,30 @@ package body Bases.ShipyardUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      RecruitMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
+      ModuleMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
    begin
       ModuleIndex := To_Unbounded_String(CArgv.Arg(Argv, 1));
-      if Winfo_Get(RecruitMenu, "exists") = "0" then
-         RecruitMenu := Create(".modulemenu", "-tearoff false");
+      if Winfo_Get(ModuleMenu, "exists") = "0" then
+         ModuleMenu := Create(".modulemenu", "-tearoff false");
       end if;
-      Delete(RecruitMenu, "0", "end");
+      Delete(ModuleMenu, "0", "end");
       if CArgv.Arg(Argv, 2) = "install" then
          Menu.Add
-           (RecruitMenu, "command",
+           (ModuleMenu, "command",
             "-label {Show module details} -command {ShowInstallInfo}");
          Menu.Add
-           (RecruitMenu, "command",
+           (ModuleMenu, "command",
             "-label {Install module} -command {ManipulateModule install}");
       else
          Menu.Add
-           (RecruitMenu, "command",
+           (ModuleMenu, "command",
             "-label {Show module details} -command {ShowRemoveInfo}");
          Menu.Add
-           (RecruitMenu, "command",
+           (ModuleMenu, "command",
             "-label {Remove module} -command {ManipulateModule remove}");
       end if;
       Tk_Popup
-        (RecruitMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+        (ModuleMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Module_Menu_Command;
