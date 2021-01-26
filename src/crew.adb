@@ -70,7 +70,7 @@ package body Crew is
       -- Gain experience in associated attribute
       GainExpInAttribute(AttributeIndex);
       -- Gain experience in skill
-      Experience_In_Skill_Loop:
+      Experience_In_Skill_Loop :
       for I in PlayerShip.Crew(CrewIndex).Skills.Iterate loop
          if PlayerShip.Crew(CrewIndex).Skills(I)(1) = SkillNumber then
             SkillIndex := Skills_Container.To_Index(I);
@@ -172,10 +172,10 @@ package body Crew is
 
    function FindCabin(MemberIndex: Positive) return Natural is
    begin
-      Find_Cabin_Loop:
+      Find_Cabin_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).MType = CABIN then
-            Check_Owner_Loop:
+            Check_Owner_Loop :
             for Owner of PlayerShip.Modules(I).Owner loop
                if Owner = MemberIndex then
                   return Modules_Container.To_Index(I);
@@ -274,7 +274,7 @@ package body Crew is
                   elsif
                     (Member.PreviousOrder = Craft and Module.MType = WORKSHOP)
                     and then Module.CraftingIndex /= Null_Unbounded_String then
-                    Module_Is_Owner_Loop:
+                     Module_Is_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = I then
                            BackToWork := True;
@@ -282,7 +282,7 @@ package body Crew is
                            exit Module_Loop;
                         end if;
                      end loop Module_Is_Owner_Loop;
-                     Module_Empty_Owner_Loop:
+                     Module_Empty_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
                            BackToWork := True;
@@ -334,7 +334,7 @@ package body Crew is
                      Modules_Loop :
                      for Module of PlayerShip.Modules loop
                         if Module.MType = CABIN and Module.Durability > 0 then
-                           Find_Cabin_Owner_Loop:
+                           Find_Cabin_Owner_Loop :
                            for Owner of Module.Owner loop
                               if Owner = 0 then
                                  Owner := I;
@@ -360,7 +360,7 @@ package body Crew is
          NormalizeStat(TiredLevel, 150);
          Member.Tired := TiredLevel;
          if HungerLevel > 80 then
-            Find_Food_Loop:
+            Find_Food_Loop :
             for FoodType of Factions_List(Member.Faction).FoodTypes loop
                ConsumeResult := Consume(FoodType);
                exit Find_Food_Loop when ConsumeResult > 0;
@@ -380,7 +380,7 @@ package body Crew is
          NormalizeStat(HungerLevel);
          Member.Hunger := HungerLevel;
          if ThirstLevel > 40 then
-            Find_Drink_Loop:
+            Find_Drink_Loop :
             for DrinksType of Factions_List(Member.Faction).DrinksTypes loop
                ConsumeResult := Consume(DrinksType);
                exit Find_Drink_Loop when ConsumeResult > 0;
@@ -413,12 +413,12 @@ package body Crew is
       end UpdateMember;
    begin
       I := PlayerShip.Crew.First_Index;
-      Update_Crew_Loop:
+      Update_Crew_Loop :
       while I <= PlayerShip.Crew.Last_Index loop
          CurrentMinutes := Minutes;
          OrderTime := PlayerShip.Crew(I).OrderTime;
          Times := 0;
-         Update_Current_Minutes_Loop:
+         Update_Current_Minutes_Loop :
          while CurrentMinutes > 0 loop
             if CurrentMinutes >= OrderTime then
                CurrentMinutes := CurrentMinutes - OrderTime;
@@ -508,7 +508,7 @@ package body Crew is
                   end if;
                when Heal =>
                   HaveMedicalRoom := False;
-                  Heal_Module_Loop:
+                  Heal_Module_Loop :
                   for Module of PlayerShip.Modules loop
                      if Modules_List(Module.ProtoIndex).MType =
                        MEDICAL_ROOM and
@@ -517,6 +517,7 @@ package body Crew is
                         exit Heal_Module_Loop;
                      end if;
                   end loop Heal_Module_Loop;
+                  Heal_Loop :
                   for Member of PlayerShip.Crew loop
                      if Member.Name /= PlayerShip.Crew(I).Name and
                        Member.Health < 100 then
@@ -573,6 +574,7 @@ package body Crew is
                            end if;
                         end if;
                         if HealAmount > 0 then
+                           Heal_Crew_Loop :
                            for J in PlayerShip.Crew.Iterate loop
                               if PlayerShip.Crew(J).Health < 100 and
                                 Crew_Container.To_Index(J) /= I then
@@ -593,9 +595,9 @@ package body Crew is
                                    (Times,
                                     Factions_List(Member.Faction).HealingSkill,
                                     I);
-                                 exit;
+                                 exit Heal_Crew_Loop;
                               end if;
-                           end loop;
+                           end loop Heal_Crew_Loop;
                         else
                            if ToolIndex = 0 then
                               AddMessage
@@ -616,8 +618,9 @@ package body Crew is
                            end if;
                         end if;
                      end if;
-                  end loop;
+                  end loop Heal_Loop;
                   HealAmount := 1;
+                  Update_Heal_Amount_Loop :
                   for J in PlayerShip.Crew.Iterate loop
                      if PlayerShip.Crew(J).Health < 100 and
                        Crew_Container.To_Index(J) /= I then
@@ -639,9 +642,9 @@ package body Crew is
                               HealAmount := -1;
                            end if;
                         end if;
-                        exit;
+                        exit Update_Heal_Amount_Loop;
                      end if;
-                  end loop;
+                  end loop Update_Heal_Amount_Loop;
                   if HealAmount > 0 then
                      AddMessage
                        (To_String(PlayerShip.Crew(I).Name) &
@@ -655,6 +658,7 @@ package body Crew is
                   ToolIndex := FindTools(I, CleaningTools, Clean);
                   NeedCleaning := False;
                   if ToolIndex > 0 then
+                     Update_Clean_Tools_Loop :
                      for Module of PlayerShip.Modules loop
                         if Module.MType = CABIN
                           and then Module.Cleanliness < Module.Quality then
@@ -665,16 +669,17 @@ package body Crew is
                            DamageItem
                              (Inventory => PlayerShip.Crew(I).Inventory,
                               ItemIndex => ToolIndex, MemberIndex => I);
-                           exit;
+                           exit Update_Clean_Tools_Loop;
                         end if;
-                     end loop;
+                     end loop Update_Clean_Tools_Loop;
+                     Check_Dirty_Modules_Loop :
                      for Module of PlayerShip.Modules loop
                         if Module.MType = CABIN
                           and then Module.Cleanliness < Module.Quality then
                            NeedCleaning := True;
-                           exit;
+                           exit Check_Dirty_Modules_Loop;
                         end if;
-                     end loop;
+                     end loop Check_Dirty_Modules_Loop;
                   end if;
                   if not NeedCleaning then
                      if ToolIndex = 0 then
@@ -682,12 +687,13 @@ package body Crew is
                           ("You can't continue cleaning the ship because you don't have any cleaning tools.",
                            OrderMessage, RED);
                      end if;
+                     Remove_Clean_Order_Loop :
                      for J in PlayerShip.Crew.Iterate loop
                         if PlayerShip.Crew(J).Order = Clean then
                            GiveOrders
                              (PlayerShip, Crew_Container.To_Index(J), Rest);
                         end if;
-                     end loop;
+                     end loop Remove_Clean_Order_Loop;
                   end if;
                when Talk =>
                   if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex =
@@ -712,6 +718,7 @@ package body Crew is
                          (I, Skills_List(SkillIndex).Tool, Train,
                           GetTrainingToolQuality(I, SkillIndex));
                      if ToolIndex > 0 then
+                        Update_Train_Tool_Loop :
                         for J in 1 .. Times loop
                            GainExp(GetRandom(1, 5), SkillIndex, I);
                            DamageItem
@@ -719,8 +726,8 @@ package body Crew is
                               ItemIndex => ToolIndex, MemberIndex => I);
                            ToolIndex :=
                              FindTools(I, Skills_List(SkillIndex).Tool, Train);
-                           exit when ToolIndex = 0;
-                        end loop;
+                           exit Update_Train_Tool_Loop when ToolIndex = 0;
+                        end loop Update_Train_Tool_Loop;
                         AddMessage
                           (To_String(PlayerShip.Crew(I).Name) &
                            " trained a little " &
@@ -793,6 +800,7 @@ package body Crew is
       Damage: DamageFactor := 0.0;
       CabinBonus: Natural;
    begin
+      Wait_For_Rest_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Tired > 0 and
            PlayerShip.Crew(I).Order = Rest then
@@ -825,7 +833,7 @@ package body Crew is
                TimeNeeded := TempTimeNeeded;
             end if;
          end if;
-      end loop;
+      end loop Wait_For_Rest_Loop;
       if TimeNeeded > 0 then
          UpdateGame(TimeNeeded);
          WaitInPlace(TimeNeeded);
@@ -897,6 +905,7 @@ package body Crew is
       MoneyNeeded: Natural;
    begin
       MemberIndex := 1;
+      Daily_Payment_Loop :
       for Member of PlayerShip.Crew loop
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
@@ -938,8 +947,9 @@ package body Crew is
             end if;
          end if;
          MemberIndex := MemberIndex + 1;
-      end loop;
+      end loop Daily_Payment_Loop;
       MemberIndex := 1;
+      Update_Contracts_Loop :
       while MemberIndex <= PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(MemberIndex).ContractLength > 0 then
             PlayerShip.Crew(MemberIndex).ContractLength :=
@@ -965,7 +975,7 @@ package body Crew is
             end if;
          end if;
          MemberIndex := MemberIndex + 1;
-      end loop;
+      end loop Update_Contracts_Loop;
    end DailyPayment;
 
    function GetTrainingToolQuality
@@ -975,12 +985,13 @@ package body Crew is
       Skill_Loop :
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
+            Tool_Quality_Loop :
             for Quality of Skills_List(SkillIndex).ToolsQuality loop
                if Skill(2) <= Quality(1) then
                   ToolQuality := Quality(2);
                   exit Skill_Loop;
                end if;
-            end loop;
+            end loop Tool_Quality_Loop;
          end if;
       end loop Skill_Loop;
       return ToolQuality;
