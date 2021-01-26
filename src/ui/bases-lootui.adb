@@ -14,8 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -45,9 +43,17 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Bases.LootUI is
+
+   -- ****iv* LUI/LUI.LootTable
+   -- FUNCTION
+   -- Table with info about the available items to loot
+   -- SOURCE
+   LootTable: Table_Widget (5);
+   -- ****
 
    -- ****o* LUI/LUI.Show_Loot_Command
    -- FUNCTION
@@ -79,13 +85,11 @@ package body Bases.LootUI is
       LootFrame: Ttk_Frame := Get_Widget(Paned & ".lootframe", Interp);
       LootCanvas: constant Tk_Canvas :=
         Get_Widget(LootFrame & ".canvas", Interp);
-      Label: Ttk_Label :=
+      Label: constant Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      ItemsView: Ttk_Tree_View;
-      ItemDurability, ItemType, ProtoIndex, FirstIndex,
-      ItemName: Unbounded_String;
+      ItemDurability, ItemType, ProtoIndex, ItemName: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
@@ -99,6 +103,14 @@ package body Bases.LootUI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "loot.tcl");
          Bind(LootFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         LootFrame := Get_Widget(LootCanvas & ".loot");
+         LootTable :=
+           CreateTable
+             (Widget_Image(LootFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
+               To_Unbounded_String("Durability"), To_Unbounded_String("Owned"),
+               To_Unbounded_String("Available")),
+              False);
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -106,11 +118,10 @@ package body Bases.LootUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
-      LootFrame.Name := New_String(Widget_Image(LootCanvas) & ".loot");
+      LootFrame.Name := New_String(LootCanvas & ".loot");
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
-      ItemsView := Get_Widget(LootFrame & ".loot.view", Interp);
-      Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       BaseCargo := SkyBases(BaseIndex).Cargo;
+      ClearTable(LootTable);
       for I in PlayerShip.Cargo.Iterate loop
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
@@ -127,27 +138,24 @@ package body Bases.LootUI is
          end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
+         AddButton
+           (LootTable, To_String(ItemName), "Show available options for item",
+            "ShowLootItemMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            1);
+         AddText(LootTable, To_String(ItemType), "", 2);
          ItemDurability :=
            (if PlayerShip.Cargo(I).Durability < 100 then
               To_Unbounded_String
                 (GetItemDamage(PlayerShip.Cargo(I).Durability))
             else Null_Unbounded_String);
+         AddText(LootTable, To_String(ItemDurability), "", 3);
+         AddText(LootTable, Natural'Image(PlayerShip.Cargo(I).Amount), "", 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
             else 0);
-         if FirstIndex = Null_Unbounded_String then
-            FirstIndex :=
-              To_Unbounded_String
-                (Positive'Image(Inventory_Container.To_Index(I)));
-         end if;
-         Insert
-           (ItemsView,
-            "{} end -id" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -values [list {" & To_String(ItemName) & "} {" &
-            To_String(ItemType) & "} {" & To_String(ItemDurability) & "} {" &
-            Natural'Image(PlayerShip.Cargo(I).Amount) & "} {" &
-            Natural'Image(BaseAmount) & "}]");
+         AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
@@ -160,42 +168,39 @@ package body Bases.LootUI is
                Append(ItemsTypes, " {" & ItemType & "}");
             end if;
             ItemName := Items_List(ProtoIndex).Name;
+            AddButton
+              (LootTable, To_String(ItemName),
+               "Show available options for item",
+               "ShowLootItemMenu" & Positive'Image(I), 1);
+            AddText(LootTable, To_String(ItemType), "", 2);
             ItemDurability :=
               (if BaseCargo(I).Durability < 100 then
                  To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
                else Null_Unbounded_String);
+            AddText(LootTable, To_String(ItemDurability), "", 3);
+            AddText(LootTable, "0", "", 4);
             BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
-            if FirstIndex = Null_Unbounded_String then
-               FirstIndex :=
-                 To_Unbounded_String(" b" & Trim(Positive'Image(I), Left));
-            end if;
-            Insert
-              (ItemsView,
-               "{} end -id b" & Trim(Positive'Image(I), Left) &
-               " -values [list {" & To_String(ItemName) & "} {" &
-               To_String(ItemType) & "} {" & To_String(ItemDurability) &
-               "} {0} {" & Positive'Image(BaseAmount) & "}]");
+            AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
          end if;
       end loop;
-      Selection_Set(ItemsView, "[list" & To_String(FirstIndex) & "]");
+      UpdateTable(LootTable);
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (LootTable.Canvas,
+         "-scrollregion [list " & BBox(LootTable.Canvas, "all") & "]");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
       if Argc = 1 then
          Current(ComboBox, "0");
       end if;
-      LootFrame.Name := New_String(Widget_Image(LootCanvas) & ".loot.item");
-      Tcl.Tk.Ada.Grid.Grid(LootFrame);
-      Label.Name := New_String(Widget_Image(LootFrame) & ".dropframe.error");
-      Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      LootFrame.Name := New_String(Widget_Image(LootCanvas) & ".loot");
+      LootFrame.Name := New_String(LootCanvas & ".loot");
       configure
         (LootCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (LootCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(LootFrame));
+        (LootCanvas, "window", "0 0 -anchor nw -window " & LootFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (LootCanvas, "-scrollregion [list " & BBox(LootCanvas, "all") & "]");
