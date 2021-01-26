@@ -20,7 +20,7 @@ pack $lootcanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.lootframe.scrollx -orient horizontal -command [list $lootcanvas xview]] -fill x
 set lootframe [ttk::frame $lootcanvas.loot]
 # Type of items to show
-grid [ttk::frame $lootframe.options]
+grid [ttk::frame $lootframe.options] -sticky w -padx 5 -pady 5
 grid [ttk::label $lootframe.options.typelabel -text {Type:}]
 grid [ttk::combobox $lootframe.options.type -state readonly] -column 1 -row 0
 bind $lootframe.options.type <<ComboboxSelected>> {ShowLoot [$lootframe.options.type get]}
