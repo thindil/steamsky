@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Redesigned installing and removing module screen in shipyard bases
+
 ### Fixed
 - Showing the selected modules type in shipyard with the current search text
 
