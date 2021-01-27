@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -42,8 +42,7 @@ package body Events is
       procedure GainPerception is
       begin
          for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Order = Pilot or
-              PlayerShip.Crew(I).Order = Gunner then
+            if PlayerShip.Crew(I).Order in Pilot | Gunner then
                GainExp(1, PerceptionSkill, Crew_Container.To_Index(I));
             end if;
          end loop;
