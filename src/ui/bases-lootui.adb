@@ -64,7 +64,7 @@ package body Bases.LootUI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -81,7 +81,7 @@ package body Bases.LootUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
       LootFrame: Ttk_Frame := Get_Widget(Paned & ".lootframe", Interp);
@@ -138,6 +138,10 @@ package body Bases.LootUI is
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
+         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Cargo_Loop;
+         end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
          AddButton
@@ -158,6 +162,7 @@ package body Bases.LootUI is
               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
             else 0);
          AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
+         <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) = 0 then
@@ -168,6 +173,10 @@ package body Bases.LootUI is
                else Items_List(ProtoIndex).ShowType);
             if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
                Append(ItemsTypes, " {" & ItemType & "}");
+            end if;
+            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+               goto End_Of_Base_Cargo_Loop;
             end if;
             ItemName := Items_List(ProtoIndex).Name;
             AddButton
@@ -184,6 +193,7 @@ package body Bases.LootUI is
             BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
             AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
          end if;
+         <<End_Of_Base_Cargo_Loop>>
       end loop;
       UpdateTable(LootTable);
       Tcl_Eval(Get_Context, "update");
