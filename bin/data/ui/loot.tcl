@@ -18,6 +18,8 @@ set lootcanvas [canvas .gameframe.paned.lootframe.canvas -yscrollcommand [list .
 pack [ttk::scrollbar .gameframe.paned.lootframe.scrolly -orient vertical -command [list $lootcanvas yview]] -side right -fill y
 pack $lootcanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.lootframe.scrollx -orient horizontal -command [list $lootcanvas xview]] -fill x
+::autoscroll::autoscroll .gameframe.paned.lootframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.lootframe.scrollx
 set lootframe [ttk::frame $lootcanvas.loot]
 # Type of items to show
 grid [ttk::frame $lootframe.options] -sticky w -padx 5 -pady 5
