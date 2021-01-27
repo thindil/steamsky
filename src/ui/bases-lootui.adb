@@ -173,7 +173,7 @@ package body Bases.LootUI is
             AddButton
               (LootTable, To_String(ItemName),
                "Show available options for item",
-               "ShowLootItemMenu" & Positive'Image(I), 1);
+               "ShowLootItemMenu " & Integer'Image(-(I)), 1);
             AddText(LootTable, To_String(ItemType), "", 2);
             ItemDurability :=
               (if BaseCargo(I).Durability < 100 then
@@ -593,27 +593,41 @@ package body Bases.LootUI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
+      BaseCargoIndex, CargoIndex: Natural := 0;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
+      if ItemIndex < 0 then
+         BaseCargoIndex := abs (ItemIndex);
+      else
+         CargoIndex := ItemIndex;
+      end if;
+      if CargoIndex > 0 and then BaseCargoIndex = 0 then
+         BaseCargoIndex :=
+           FindBaseCargo(PlayerShip.Cargo(CargoIndex).ProtoIndex);
+      end if;
       if Winfo_Get(ItemMenu, "exists") = "0" then
-         ItemMenu := Create(".modulemenu", "-tearoff false");
+         ItemMenu := Create(".itemmenu", "-tearoff false");
       end if;
       Delete(ItemMenu, "0", "end");
       Menu.Add
         (ItemMenu, "command",
          "-label {Show item details} -command {ShowLootItemInfo}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Take selected amount} -command {LootAmount take}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Take all available} -command {LootItem takeall}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Drop selected amount} -command {LootAmount drop}");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Drop all owned} -command {LootItem dropall}");
+      if CargoIndex > 0 then
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Take selected amount} -command {LootAmount take}");
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Take all available} -command {LootItem takeall}");
+      end if;
+      if BaseCargoIndex > 0 then
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Drop selected amount} -command {LootAmount drop}");
+         Menu.Add
+           (ItemMenu, "command",
+            "-label {Drop all owned} -command {LootItem dropall}");
+      end if;
       Tk_Popup
         (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
