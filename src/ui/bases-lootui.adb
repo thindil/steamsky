@@ -165,34 +165,34 @@ package body Bases.LootUI is
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
-         if IndexesList.Find_Index(Item => I) = 0 then
-            ProtoIndex := BaseCargo(I).ProtoIndex;
-            ItemType :=
-              (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
-                 Items_List(ProtoIndex).IType
-               else Items_List(ProtoIndex).ShowType);
-            if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
-               Append(ItemsTypes, " {" & ItemType & "}");
-            end if;
-            if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
-              and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
-               goto End_Of_Base_Cargo_Loop;
-            end if;
-            ItemName := Items_List(ProtoIndex).Name;
-            AddButton
-              (LootTable, To_String(ItemName),
-               "Show available options for item",
-               "ShowLootItemMenu " & Integer'Image(-(I)), 1);
-            AddText(LootTable, To_String(ItemType), "", 2);
-            ItemDurability :=
-              (if BaseCargo(I).Durability < 100 then
-                 To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
-               else Null_Unbounded_String);
-            AddText(LootTable, To_String(ItemDurability), "", 3);
-            AddText(LootTable, "0", "", 4);
-            BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
-            AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
+         if IndexesList.Find_Index(Item => I) > 0 then
+            goto End_Of_Base_Cargo_Loop;
          end if;
+         ProtoIndex := BaseCargo(I).ProtoIndex;
+         ItemType :=
+           (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
+              Items_List(ProtoIndex).IType
+            else Items_List(ProtoIndex).ShowType);
+         if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
+            Append(ItemsTypes, " {" & ItemType & "}");
+         end if;
+         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+           and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Base_Cargo_Loop;
+         end if;
+         ItemName := Items_List(ProtoIndex).Name;
+         AddButton
+           (LootTable, To_String(ItemName), "Show available options for item",
+            "ShowLootItemMenu " & Integer'Image(-(I)), 1);
+         AddText(LootTable, To_String(ItemType), "", 2);
+         ItemDurability :=
+           (if BaseCargo(I).Durability < 100 then
+              To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
+            else Null_Unbounded_String);
+         AddText(LootTable, To_String(ItemDurability), "", 3);
+         AddText(LootTable, "0", "", 4);
+         BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
+         AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
          <<End_Of_Base_Cargo_Loop>>
       end loop;
       UpdateTable(LootTable);
