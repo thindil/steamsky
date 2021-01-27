@@ -43,14 +43,14 @@ with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
 
-   -- ****iv* MUI3/BaseIndex
+   -- ****iv* MUI3/MIU3.BaseIndex
    -- FUNCTION
    -- Index of the base in which available missions will be show
    -- SOURCE
    BaseIndex: Natural;
    -- ****
 
-   -- ****o* MUI3/Show_Mission_Info_Command
+   -- ****o* MUI3/MIU3.Show_Mission_Info_Command
    -- FUNCTION
    -- Show information about the selected mission
    -- PARAMETERS
@@ -252,7 +252,7 @@ package body Missions.UI is
       return TCL_OK;
    end Show_Mission_Info_Command;
 
-   -- ****o* MUI3/Show_Mission_Command
+   -- ****o* MUI3/MIU3.Show_Mission_Command
    -- FUNCTION
    -- Show mission on map
    -- PARAMETERS
@@ -348,7 +348,7 @@ package body Missions.UI is
       Selection_Set(MissionsView, "[list 1]");
    end RefreshMissionsList;
 
-   -- ****o* MUI3/Set_Mission_Command
+   -- ****o* MUI3/MIU3.Set_Mission_Command
    -- FUNCTION
    -- Set mission as the player's ship destination or accept it in a base
    -- PARAMETERS
@@ -399,7 +399,7 @@ package body Missions.UI is
       return TCL_OK;
    end Set_Mission_Command;
 
-   -- ****o* MUI3/Show_Base_Missions_Command
+   -- ****o* MUI3/MIU3.Show_Base_Missions_Command
    -- FUNCTION
    -- Show the list of available missions in the base
    -- PARAMETERS
