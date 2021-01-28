@@ -25,7 +25,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -36,7 +35,6 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
@@ -228,12 +226,12 @@ package body Bases.LootUI is
    ItemIndex: Integer;
    -- ****
 
-   -- ****o* LUI/LUI.Show_Loot_Item_Info_Command
+   -- ****o* TUI/Show_Trade_Loot_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -252,36 +250,17 @@ package body Bases.LootUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      LootView: constant Ttk_Tree_View :=
-        Get_Widget(".gameframe.paned.lootframe.canvas.loot.loot.view", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
       ItemInfo, ProtoIndex: Unbounded_String;
-      CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
+      CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      SelectedItem: Unbounded_String;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
-      ItemText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.lootframe.canvas.loot.item.info.text", Interp);
-      Frame: Ttk_Frame :=
-        Get_Widget
-          (".gameframe.paned.lootframe.canvas.loot.item.dropframe", Interp);
-      Label: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.lootframe.canvas.loot.item.shipspace", Interp);
    begin
-      SelectedItem := To_Unbounded_String(Selection(LootView));
-      if SelectedItem = Null_Unbounded_String then
-         return TCL_OK;
-      end if;
-      if Element(SelectedItem, 1) = 'b' then
-         ItemIndex :=
-           -(Positive'Value(Slice(SelectedItem, 2, Length(SelectedItem))));
+      if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
       else
-         ItemIndex := Positive'Value(To_String(SelectedItem));
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > Natural(PlayerShip.Cargo.Length) then
@@ -290,14 +269,9 @@ package body Bases.LootUI is
       if BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
-      if CargoIndex > 0 then
-         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
-         if BaseCargoIndex = 0 then
-            BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
-         end if;
-      else
-         ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
-      end if;
+      ProtoIndex :=
+        (if CargoIndex > 0 then PlayerShip.Cargo(CargoIndex).ProtoIndex
+         else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
@@ -361,105 +335,7 @@ package body Bases.LootUI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      configure(ItemText, "-state normal");
-      Delete(ItemText, "1.0", "end");
-      Insert(ItemText, "end", "{" & To_String(ItemInfo) & "}");
-      configure(ItemText, "-state disabled");
-      if CargoIndex > 0 then
-         declare
-            MaxDropAmount: constant Integer :=
-              PlayerShip.Cargo(CargoIndex).Amount;
-            AmountBox: constant Ttk_SpinBox :=
-              Get_Widget(Frame & ".amount", Interp);
-            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
-         begin
-            Set(AmountBox, "1");
-            if MaxDropAmount > 0 then
-               configure(AmountBox, "-to" & Natural'Image(MaxDropAmount));
-               configure
-                 (AmountBox,
-                  "-to" & Natural'Image(MaxDropAmount) &
-                  " -validatecommand {CheckAmount %W" &
-                  Positive'Image(ItemIndex) &
-                  " %P} -command {ValidateAmount " & Widget_Image(AmountBox) &
-                  Positive'Image(ItemIndex) & "}");
-               configure
-                 (AmountLabel,
-                  "-text {(max" & Natural'Image(MaxDropAmount) & "):}");
-               Tcl.Tk.Ada.Grid.Grid(Frame);
-               if MaxDropAmount > 1
-                 and then MaxDropAmount =
-                   PlayerShip.Cargo(CargoIndex).Amount then
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".orlbl");
-                  Tcl.Tk.Ada.Grid.Grid(AmountLabel);
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".dropmax");
-                  Tcl.Tk.Ada.Grid.Grid(AmountLabel);
-               else
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".orlbl");
-                  Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".dropmax");
-                  Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-               end if;
-            end if;
-         end;
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-      end if;
-      Frame.Name :=
-        New_String(".gameframe.paned.lootframe.canvas.loot.item.takeframe");
-      if BaseCargoIndex = 0 then
-         BaseCargoIndex := BaseCargoIndex2;
-      end if;
-      if BaseCargoIndex > 0 then
-         if SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount > 0 then
-            Tcl.Tk.Ada.Grid.Grid(Frame);
-         end if;
-         declare
-            MaxTakeAmount: constant Integer :=
-              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount;
-            AmountBox: constant Ttk_SpinBox :=
-              Get_Widget(Frame & ".amount", Interp);
-            AmountLabel: Ttk_Label := Get_Widget(Frame & ".amountlbl", Interp);
-         begin
-            if MaxTakeAmount > 0 then
-               Set(AmountBox, "1");
-               configure(AmountBox, "-to" & Natural'Image(MaxTakeAmount));
-               configure
-                 (AmountBox,
-                  "-to" & Natural'Image(MaxTakeAmount) &
-                  " -validatecommand {ValidateSpinbox %W %P}");
-               configure
-                 (AmountLabel,
-                  "-text {(max" & Natural'Image(MaxTakeAmount) & "):}");
-               if MaxTakeAmount = 1 then
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".orlbl");
-                  Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-                  AmountLabel.Name :=
-                    New_String(Widget_Image(Frame) & ".takemax");
-                  Tcl.Tk.Ada.Grid.Grid_Remove(AmountLabel);
-               end if;
-            else
-               Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-            end if;
-         end;
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-      end if;
-      declare
-         FreeSpace: Integer := FreeCargo(0);
-      begin
-         if FreeSpace < 0 then
-            FreeSpace := 0;
-         end if;
-         configure
-           (Label,
-            "-text {Free cargo space:" & Integer'Image(FreeSpace) & " kg}");
-      end;
+      ShowInfo(To_String(ItemInfo));
       return TCL_OK;
    end Show_Loot_Item_Info_Command;
 
