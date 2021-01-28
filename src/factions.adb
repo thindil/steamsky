@@ -1,4 +1,4 @@
---    Copyright 2018-2019 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -60,6 +60,7 @@ package body Factions is
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
              (Item(NodesList, Index), Name);
+         Load_Items_Loop :
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
             Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
@@ -77,20 +78,22 @@ package body Factions is
                Data.Append(New_Item => Value);
             else
                DeleteIndex := Data.First_Index;
+               Delete_Item_Loop :
                while DeleteIndex <= Data.Last_Index loop
                   if Data(DeleteIndex) = Value then
                      Data.Delete(Index => DeleteIndex);
-                     exit;
+                     exit Delete_Item_Loop;
                   end if;
                   DeleteIndex := DeleteIndex + 1;
-               end loop;
+               end loop Delete_Item_Loop;
             end if;
-         end loop;
+         end loop Load_Items_Loop;
       end AddChildNode;
    begin
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
+      Load_Factions_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
@@ -209,6 +212,7 @@ package body Factions is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (FactionNode, "relation");
+            Load_Relations_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                RelationIndex :=
@@ -239,7 +243,7 @@ package body Factions is
                else
                   TempRecord.Relations(RelationIndex) := TmpRelation;
                end if;
-            end loop;
+            end loop Load_Relations_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (FactionNode, "description");
@@ -254,6 +258,7 @@ package body Factions is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (FactionNode, "career");
+            Load_Careers_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
@@ -291,10 +296,11 @@ package body Factions is
                           (TempRecord.Careers, CareerIndex, TmpCareer);
                   end case;
                end if;
-            end loop;
+            end loop Load_Careers_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (FactionNode, "basetype");
+            Load_Bases_Types_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
@@ -322,7 +328,7 @@ package body Factions is
                            TmpBaseTypeChance);
                   end case;
                end if;
-            end loop;
+            end loop Load_Bases_Types_Loop;
             if Action /= UPDATE then
                if TempRecord.BasesTypes.Length = 0 then
                   for I in BasesTypes_List.Iterate loop
@@ -346,7 +352,7 @@ package body Factions is
             LogMessage
               ("Faction removed: " & To_String(FactionIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Factions_Loop;
    end LoadFactions;
 
    function GetReputation
@@ -378,12 +384,13 @@ package body Factions is
    begin
       FactionIndex := GetRandom(1, Positive(Factions_List.Length));
       CurrentIndex := 1;
+      Get_Random_Faction_Loop :
       for J in Factions_List.Iterate loop
          if CurrentIndex = FactionIndex then
             return Factions_Container.Key(J);
          end if;
          CurrentIndex := CurrentIndex + 1;
-      end loop;
+      end loop Get_Random_Faction_Loop;
       return Null_Unbounded_String;
    end GetRandomFaction;
 
