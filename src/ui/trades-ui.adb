@@ -603,7 +603,9 @@ package body Trades.UI is
       BaseCargoIndex, CargoIndex: Natural := 0;
       Trader: String(1 .. 4);
       ProtoIndex: Unbounded_String;
-      TypeBox: Ttk_ComboBox;
+      TypeBox: constant Ttk_ComboBox :=
+        Get_Widget
+          (".gameframe.paned.tradeframe.canvas.trade.options.type", Interp);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
    begin
@@ -644,9 +646,6 @@ package body Trades.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      TypeBox.Interp := Interp;
-      TypeBox.Name :=
-        New_String(".gameframe.paned.tradeframe.canvas.trade.options.type");
       return Show_Trade_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & Get(TypeBox));
    exception
