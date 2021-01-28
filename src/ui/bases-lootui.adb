@@ -345,7 +345,7 @@ package body Bases.LootUI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -364,16 +364,17 @@ package body Bases.LootUI is
      (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Amount: Natural;
       ProtoIndex: Unbounded_String;
-      SpinBox: Ttk_SpinBox;
-      Label: constant Ttk_Label :=
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(".itemdialog.amount", Interp);
+      TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.lootframe.canvas.loot.item.dropframe.amountlbl",
-           Interp);
+          (".gameframe.paned.lootframe.canvas.loot.options.type", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -389,14 +390,9 @@ package body Bases.LootUI is
          ProtoIndex := SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex;
       end if;
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
-         SpinBox :=
-           Get_Widget
-             (".gameframe.paned.lootframe.canvas.loot.item.dropframe.amount",
-              Interp);
          Amount :=
-           (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(SpinBox))
-            else Natural'Value
-                (cget(Label, "-text")(5 .. cget(Label, "-text")'Length - 2)));
+           (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(AmountBox))
+            else PlayerShip.Cargo(CargoIndex).Amount);
          if BaseCargoIndex > 0 then
             UpdateBaseCargo
               (CargoIndex => BaseCargoIndex, Amount => Amount,
@@ -415,12 +411,8 @@ package body Bases.LootUI is
             To_String(Items_List(ProtoIndex).Name) & ".",
             OrderMessage);
       else
-         SpinBox :=
-           Get_Widget
-             (".gameframe.paned.lootframe.canvas.loot.item.takeframe.amount",
-              Interp);
          Amount :=
-           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(SpinBox))
+           (if CArgv.Arg(Argv, 1) = "take" then Positive'Value(Get(AmountBox))
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowMessage
@@ -447,9 +439,18 @@ package body Bases.LootUI is
             To_String(Items_List(ProtoIndex).Name) & ".",
             OrderMessage);
       end if;
+      if CArgv.Arg(Argv, 1) in "take" | "drop" then
+         if Close_Dialog_Command
+             (ClientData, Interp, 2,
+              CArgv.Empty & "CloseDialog" & ".itemdialog") =
+           TCL_ERROR then
+            return TCL_ERROR;
+         end if;
+      end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Loot_Command(ClientData, Interp, Argc, Argv);
+      return Show_Loot_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowLoot" & Get(TypeBox));
    end Loot_Item_Command;
 
    -- ****o* LUI/LUI.Show_Module_Menu_Command
@@ -480,6 +481,8 @@ package body Bases.LootUI is
       pragma Unreferenced(ClientData, Argc);
       ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
       BaseCargoIndex, CargoIndex: Natural := 0;
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if ItemIndex < 0 then
@@ -495,18 +498,21 @@ package body Bases.LootUI is
          ItemMenu := Create(".itemmenu", "-tearoff false");
       end if;
       Delete(ItemMenu, "0", "end");
-      if CargoIndex > 0 then
+      if BaseCargoIndex > 0 then
          Menu.Add
            (ItemMenu, "command",
-            "-label {Take selected amount} -command {LootAmount take}");
+            "-label {Take selected amount} -command {LootAmount take" &
+            Natural'Image(SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount) &
+            "}");
          Menu.Add
            (ItemMenu, "command",
             "-label {Take all available} -command {LootItem takeall}");
       end if;
-      if BaseCargoIndex > 0 then
+      if CargoIndex > 0 then
          Menu.Add
            (ItemMenu, "command",
-            "-label {Drop selected amount} -command {LootAmount drop}");
+            "-label {Drop selected amount} -command {LootAmount drop" &
+            Natural'Image(PlayerShip.Cargo(CargoIndex).Amount) & "}");
          Menu.Add
            (ItemMenu, "command",
             "-label {Drop all owned} -command {LootItem dropall}");
@@ -520,12 +526,67 @@ package body Bases.LootUI is
       return TCL_OK;
    end Show_Item_Menu_Command;
 
+   -- ****o* LUI/Loot_Amount_Command
+   -- FUNCTION
+   -- Show dialog to enter amount of items to drop or take
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- LootAmount action baseindex
+   -- Action which will be taken. Can be take or drop. BaseIndex is the index
+   -- of the base from which item will be take.
+   -- SOURCE
+   function Loot_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Loot_Amount_Command
+     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
+      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+      return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      BaseIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+   begin
+      if CArgv.Arg(Argv, 1) = "drop" then
+         ShowManipulateItem
+           ("Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+            "LootItem drop", "drop", ItemIndex);
+      else
+         if ItemIndex > 0 then
+            ShowManipulateItem
+              ("Take " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+               "LootItem take", "take", ItemIndex,
+               Natural'Value(CArgv.Arg(Argv, 2)));
+         else
+            ShowManipulateItem
+              ("Take " &
+               To_String
+                 (Items_List
+                    (SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
+                    .Name),
+               "LootItem take", "take", abs (ItemIndex),
+               Natural'Value(CArgv.Arg(Argv, 2)));
+         end if;
+      end if;
+      return TCL_OK;
+   end Loot_Amount_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowLoot", Show_Loot_Command'Access);
       AddCommand("ShowLootItemInfo", Show_Loot_Item_Info_Command'Access);
       AddCommand("LootItem", Loot_Item_Command'Access);
       AddCommand("ShowLootItemMenu", Show_Item_Menu_Command'Access);
+      AddCommand("LootAmount", Loot_Amount_Command'Access);
    end AddCommands;
 
 end Bases.LootUI;
