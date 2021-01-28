@@ -495,9 +495,6 @@ package body Bases.LootUI is
          ItemMenu := Create(".itemmenu", "-tearoff false");
       end if;
       Delete(ItemMenu, "0", "end");
-      Menu.Add
-        (ItemMenu, "command",
-         "-label {Show item details} -command {ShowLootItemInfo}");
       if CargoIndex > 0 then
          Menu.Add
            (ItemMenu, "command",
@@ -514,6 +511,9 @@ package body Bases.LootUI is
            (ItemMenu, "command",
             "-label {Drop all owned} -command {LootItem dropall}");
       end if;
+      Menu.Add
+        (ItemMenu, "command",
+         "-label {Show item details} -command {ShowLootItemInfo}");
       Tk_Popup
         (ItemMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
