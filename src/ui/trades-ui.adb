@@ -478,11 +478,9 @@ package body Trades.UI is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       ItemInfo, ProtoIndex: Unbounded_String;
-      CargoIndex, BaseCargoIndex, BaseCargoIndex2: Natural := 0;
+      CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      BaseType: Unbounded_String;
-      Price: Natural;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
    begin
@@ -494,9 +492,6 @@ package body Trades.UI is
       if CargoIndex > Natural(PlayerShip.Cargo.Length) then
          return TCL_OK;
       end if;
-      BaseType :=
-        (if BaseIndex > 0 then SkyBases(BaseIndex).BaseType
-         else To_Unbounded_String("0"));
       if BaseIndex = 0 and BaseCargoIndex > Natural(TraderCargo.Length) then
          return TCL_OK;
       elsif BaseIndex > 0
@@ -506,40 +501,11 @@ package body Trades.UI is
       end if;
       if CargoIndex > 0 then
          ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
-         if BaseCargoIndex = 0 then
-            BaseCargoIndex2 := FindBaseCargo(ProtoIndex);
-         end if;
       else
          ProtoIndex :=
            (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).ProtoIndex
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       end if;
-      if BaseCargoIndex = 0 then
-         if BaseCargoIndex2 > 0 then
-            Price :=
-              (if BaseIndex > 0 then
-                 SkyBases(BaseIndex).Cargo(BaseCargoIndex2).Price
-               else TraderCargo(BaseCargoIndex2).Price);
-         else
-            Price := Get_Price(BaseType, ProtoIndex);
-         end if;
-      else
-         Price :=
-           (if BaseIndex > 0 then
-              SkyBases(BaseIndex).Cargo(BaseCargoIndex).Price
-            else TraderCargo(BaseCargoIndex).Price);
-      end if;
-      declare
-         EventIndex: constant Natural :=
-           SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
-      begin
-         if EventIndex > 0 then
-            if Events_List(EventIndex).EType = DoublePrice
-              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
-               Price := Price * 2;
-            end if;
-         end if;
-      end;
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
