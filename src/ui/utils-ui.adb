@@ -265,7 +265,7 @@ package body Utils.UI is
          Set(SpinBox, Positive'Image(MaxValue));
          Value := MaxValue;
       end if;
-      if Argc > 4 and then CArgv.Arg(Argv, 4) = "buy" then
+      if Argc > 4 and then CArgv.Arg(Argv, 4) in "buy" | "take" then
          Tcl_SetResult(Interp, "1");
          return TCL_OK;
       end if;
