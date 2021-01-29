@@ -226,10 +226,14 @@ package body Table is
              (Table.Canvas, "rectangle",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 5) &
-              Positive'Image(X + 104) &
+              Positive'Image(X + 102) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 5)) &
-              " -fill black -tags [list progressbar" &
+              " -fill [ttk::style lookup " &
+              To_String(GameSettings.InterfaceTheme) &
+              " -troughcolor] -outline [ttk::style lookup " &
+              To_String(GameSettings.InterfaceTheme) &
+              " -bordercolor] -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
       Canvas_Create
