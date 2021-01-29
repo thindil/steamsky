@@ -148,12 +148,7 @@ package body Bases.LootUI is
             Positive'Image(Inventory_Container.To_Index(I)),
             1);
          AddText(LootTable, To_String(ItemType), "", 2);
-         ItemDurability :=
-           (if PlayerShip.Cargo(I).Durability < 100 then
-              To_Unbounded_String
-                (GetItemDamage(PlayerShip.Cargo(I).Durability))
-            else To_Unbounded_String("Full"));
-         AddText(LootTable, To_String(ItemDurability), "", 3);
+         AddProgressBar(LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability, "", 3);
          AddText(LootTable, Natural'Image(PlayerShip.Cargo(I).Amount), "", 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
