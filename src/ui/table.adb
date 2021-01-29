@@ -160,7 +160,6 @@ package body Table is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1);
       NewY: Natural := 0;
-      Tokens: Slice_Set;
    begin
       for Column in 2 .. Table.Amount loop
          Tag :=
@@ -174,31 +173,24 @@ package body Table is
               To_Unbounded_String
                 ("row" & Trim(Positive'Image(Row), Left) & "col" &
                  Trim(Natural'Image(Column), Left));
-            Coords
-              (Table.Canvas, To_String(Tag),
-               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+            MoveTo
+              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
+               Trim(Positive'Image(NewY), Left));
             Tag :=
               To_Unbounded_String
                 ("progressbar" & Trim(Positive'Image(Row), Left) & "back" &
                  Trim(Natural'Image(Column), Left));
-            Coords
-              (Table.Canvas, To_String(Tag),
-               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY + 5) &
-               Positive'Image(NewX + 104) &
-               Positive'Image(NewY + Table.Row_Height - 5));
+            MoveTo
+              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
+               Trim(Positive'Image(NewY + 5), Left));
             Tag :=
               To_Unbounded_String
                 ("progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
                  Trim(Natural'Image(Column), Left));
-            Create(Tokens, Coords(Table.Canvas, To_String(Tag)), " ");
---            Coords
---              (Table.Canvas, To_String(Tag),
---               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY + 7) &
---               Positive'Image
---                 (NewX +
---                  (Natural'Value(Slice(Tokens, 3)) -
---                   Natural'Value(Slice(Tokens, 1)))) &
---               Positive'Image(NewY + Table.Row_Height - 7));
+            MoveTo
+              (Table.Canvas, To_String(Tag),
+               Trim(Positive'Image(NewX + 2), Left),
+               Trim(Positive'Image(NewY + 7), Left));
          end loop;
          NewX := NewX + Table.Columns_Width(Column);
          NewY := 0;
