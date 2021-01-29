@@ -152,7 +152,7 @@ package body Bases.LootUI is
            (if PlayerShip.Cargo(I).Durability < 100 then
               To_Unbounded_String
                 (GetItemDamage(PlayerShip.Cargo(I).Durability))
-            else Null_Unbounded_String);
+            else To_Unbounded_String("Full"));
          AddText(LootTable, To_String(ItemDurability), "", 3);
          AddText(LootTable, Natural'Image(PlayerShip.Cargo(I).Amount), "", 4);
          BaseAmount :=
@@ -186,7 +186,7 @@ package body Bases.LootUI is
          ItemDurability :=
            (if BaseCargo(I).Durability < 100 then
               To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
-            else Null_Unbounded_String);
+            else To_Unbounded_String("Full"));
          AddText(LootTable, To_String(ItemDurability), "", 3);
          AddText(LootTable, "0", "", 4);
          BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
