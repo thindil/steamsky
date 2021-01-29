@@ -160,6 +160,7 @@ package body Table is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1);
       NewY: Natural := 0;
+      Tokens: Slice_Set;
    begin
       for Column in 2 .. Table.Amount loop
          Tag :=
@@ -176,6 +177,28 @@ package body Table is
             Coords
               (Table.Canvas, To_String(Tag),
                Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+            Tag :=
+              To_Unbounded_String
+                ("progressbar" & Trim(Positive'Image(Row), Left) & "back" &
+                 Trim(Natural'Image(Column), Left));
+            Coords
+              (Table.Canvas, To_String(Tag),
+               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY + 5) &
+               Positive'Image(NewX + 104) &
+               Positive'Image(NewY + Table.Row_Height - 5));
+            Tag :=
+              To_Unbounded_String
+                ("progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
+                 Trim(Natural'Image(Column), Left));
+            Create(Tokens, Coords(Table.Canvas, To_String(Tag)), " ");
+--            Coords
+--              (Table.Canvas, To_String(Tag),
+--               Trim(Positive'Image(NewX), Left) & Positive'Image(NewY + 7) &
+--               Positive'Image
+--                 (NewX +
+--                  (Natural'Value(Slice(Tokens, 3)) -
+--                   Natural'Value(Slice(Tokens, 1)))) &
+--               Positive'Image(NewY + Table.Row_Height - 7));
          end loop;
          NewX := NewX + Table.Columns_Width(Column);
          NewY := 0;
@@ -211,12 +234,23 @@ package body Table is
              (Table.Canvas, "rectangle",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 5) &
-              Positive'Image(X + 100) &
+              Positive'Image(X + 104) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 5)) &
-              " -fill green -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) & "col" &
+              " -fill black -tags [list progressbar" &
+              Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
+      Canvas_Create
+        (Table.Canvas, "rectangle",
+         Trim(Natural'Image(X + 2), Left) &
+         Positive'Image((Table.Row * Table.Row_Height) + 7) &
+         Positive'Image
+           (X + Positive((Float(Value) / Float(MaxValue)) * Float(MaxValue))) &
+         Positive'Image
+           ((Table.Row * Table.Row_Height) + (Table.Row_Height - 7)) &
+         " -fill green -tags [list progressbar" &
+         Trim(Positive'Image(Table.Row), Left) & "bar" &
+         Trim(Positive'Image(Column), Left) & "]");
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
