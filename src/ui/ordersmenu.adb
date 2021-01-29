@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -465,7 +465,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Show_Orders_Command;
 
-   -- ****o* OrdersMenu/Docking_Command
+   -- ****o* OrdersMenu/OrdersMenu.Docking_Command
    -- FUNCTION
    -- Dock or undock from the sky base
    -- PARAMETERS
@@ -522,7 +522,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Docking_Command;
 
-   -- ****o* OrdersMenu/Ask_For_Bases_Command
+   -- ****o* OrdersMenu/OrdersMenu.Ask_For_Bases_Command
    -- FUNCTION
    -- Ask for bases in the currently visited base
    -- PARAMETERS
@@ -553,7 +553,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Bases_Command;
 
-   -- ****o* OrdersMenu/Ask_For_Events_Command
+   -- ****o* OrdersMenu/OrdersMenu.Ask_For_Events_Command
    -- FUNCTION
    -- Ask for events in the currently visited base
    -- PARAMETERS
@@ -584,7 +584,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Ask_For_Events_Command;
 
-   -- ****o* OrdersMenu/Attack_Command
+   -- ****o* OrdersMenu/OrdersMenu.Attack_Command
    -- FUNCTION
    -- Start the combat
    -- PARAMETERS
@@ -614,7 +614,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Attack_Command;
 
-   -- ****f* OrdersMenu/Pray_Command
+   -- ****f* OrdersMenu/OrdersMenu.Pray_Command
    -- FUNCTION
    -- Pray in the selected base
    -- PARAMETERS
@@ -651,7 +651,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Pray_Command;
 
-   -- ****f* OrdersMenu/Set_As_Home_Command
+   -- ****f* OrdersMenu/OrdersMenu.Set_As_Home_Command
    -- FUNCTION
    -- Set the selected base as a home base
    -- PARAMETERS
@@ -715,7 +715,7 @@ package body OrdersMenu is
       return TCL_OK;
    end Set_As_Home_Command;
 
-   -- ****f* OrdersMenu/Show_Trader_Command
+   -- ****f* OrdersMenu/OrdersMenu.Show_Trader_Command
    -- FUNCTION
    -- Generate cargo for trader and show trading UI
    -- PARAMETERS
