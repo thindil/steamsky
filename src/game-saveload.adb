@@ -69,6 +69,7 @@ package body Game.SaveLoad is
          StatName: String) is
          StatNode: DOM.Core.Element;
       begin
+         Save_Statistics_Loop :
          for Statistic of StatisticsVector loop
             StatNode := Create_Element(SaveData, StatName);
             StatNode := Append_Child(CategoryNode, StatNode);
@@ -77,7 +78,7 @@ package body Game.SaveLoad is
             Set_Attribute
               (StatNode, "amount",
                To_String(Trim(RawValue, Ada.Strings.Left)));
-         end loop;
+         end loop Save_Statistics_Loop;
       end SaveStatistics;
       procedure SaveNumber
         (Value: Integer; Name: String;
@@ -121,12 +122,13 @@ package body Game.SaveLoad is
       LogMessage("Saving game difficulty settings...", Everything, False);
       CategoryNode := Create_Element(SaveData, "difficulty");
       CategoryNode := Append_Child(MainNode, CategoryNode);
+      Save_Difficulty_Loop :
       for Difficulty of Difficulties loop
          RawValue := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
          Set_Attribute
            (CategoryNode, To_String(Difficulty.Name),
             To_String(Trim(RawValue, Ada.Strings.Left)));
-      end loop;
+      end loop Save_Difficulty_Loop;
       LogMessage("done.", Everything, True, False);
       -- Save game date
       LogMessage("Saving game time...", Everything, False);
@@ -143,7 +145,9 @@ package body Game.SaveLoad is
       declare
          FieldNode: DOM.Core.Element;
       begin
+         Save_Map_X_Loop :
          for X in SkyMap'Range loop
+            Save_Map_Y_Loop :
             for Y in 1 .. 1024 loop
                if SkyMap(X, Y).Visited then
                   FieldNode := Create_Element(SaveData, "field");
@@ -151,8 +155,8 @@ package body Game.SaveLoad is
                   SaveNumber(X, "x", FieldNode);
                   SaveNumber(Y, "y", FieldNode);
                end if;
-            end loop;
-         end loop;
+            end loop Save_Map_Y_Loop;
+         end loop Save_Map_X_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Save bases
@@ -168,11 +172,12 @@ package body Game.SaveLoad is
       declare
          RecipeNode: DOM.Core.Element;
       begin
+         Save_Known_Recipes_Loop :
          for Recipe of Known_Recipes loop
             RecipeNode := Create_Element(SaveData, "recipe");
             RecipeNode := Append_Child(MainNode, RecipeNode);
             Set_Attribute(RecipeNode, "index", To_String(Recipe));
-         end loop;
+         end loop Save_Known_Recipes_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Save messages
@@ -189,6 +194,7 @@ package body Game.SaveLoad is
          end if;
          if Messages > 0 then
             StartLoop := MessagesAmount - Messages + 1;
+            Save_Messages_Loop :
             for I in StartLoop .. MessagesAmount loop
                Message := GetMessage(I);
                MessageNode := Create_Element(SaveData, "message");
@@ -200,7 +206,7 @@ package body Game.SaveLoad is
                MessageText :=
                  Create_Text_Node(SaveData, To_String(Message.Message));
                MessageText := Append_Child(MessageNode, MessageText);
-            end loop;
+            end loop Save_Messages_Loop;
          end if;
       end;
       LogMessage("done.", Everything, True, False);
@@ -209,6 +215,7 @@ package body Game.SaveLoad is
       declare
          EventNode: DOM.Core.Element;
       begin
+         Save_Events_Loop :
          for Event of Events_List loop
             EventNode := Create_Element(SaveData, "event");
             EventNode := Append_Child(MainNode, EventNode);
@@ -227,7 +234,7 @@ package body Game.SaveLoad is
             end case;
             Set_Attribute
               (EventNode, "data", To_String(Trim(RawValue, Ada.Strings.Left)));
-         end loop;
+         end loop Save_Events_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Save game statistics
@@ -295,22 +302,25 @@ package body Game.SaveLoad is
          StepText: Text;
       begin
          LogMessage("Saving finished stories...", Everything, False);
+         Save_Finished_Stories_Loop :
          for FinishedStory of FinishedStories loop
             CategoryNode := Create_Element(SaveData, "finishedstory");
             CategoryNode := Append_Child(MainNode, CategoryNode);
             Set_Attribute
               (CategoryNode, "index", To_String(FinishedStory.Index));
             SaveNumber(FinishedStory.StepsAmount, "stepsamount");
+            Save_Story_Steps_Loop :
             for Step of FinishedStory.StepsTexts loop
                StepNode := Create_Element(SaveData, "steptext");
                StepNode := Append_Child(CategoryNode, StepNode);
                StepText := Create_Text_Node(SaveData, To_String(Step));
                StepText := Append_Child(StepNode, StepText);
-            end loop;
-         end loop;
+            end loop Save_Story_Steps_Loop;
+         end loop Save_Finished_Stories_Loop;
          LogMessage("done.", Everything, True, False);
       end;
       -- Save missions accepted by player
+      Save_Missions_Loop :
       for Mission of AcceptedMissions loop
          CategoryNode := Create_Element(SaveData, "acceptedmission");
          CategoryNode := Append_Child(MainNode, CategoryNode);
@@ -344,7 +354,7 @@ package body Game.SaveLoad is
               (CategoryNode, "multiplier",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
-      end loop;
+      end loop Save_Missions_Loop;
       -- Save player career
       LogMessage("Saving player career...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
