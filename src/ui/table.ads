@@ -139,4 +139,25 @@ package Table is
    procedure UpdateTable(Table: in out Table_Widget);
    -- ****
 
+   -- ****f* Table/Table.AddProgressBar
+   -- FUNCTION
+   -- Add progress bar item to the selected Table_Widget
+   -- PARAMETERS
+   -- Table    - The Table_Widget in which progress bar will be added
+   -- Value    - The current value of the progress bar
+   -- MaxValue - The maximum value of the progress bar
+   -- Tooltip  - The tooltip show when user hover mouse over progress bar
+   -- Column   - The column in which the progress bar will be added
+   -- NewRow   - If True, increase current number of row in the Table_Widget.
+   --            Default value is False.
+   -- OUTPUT
+   -- Updated Table parameter Table_Widget
+   -- HISTORY
+   -- 5.7 - Added
+   -- SOURCE
+   procedure AddProgressBar
+     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+      Tooltip: String; Column: Positive; NewRow: Boolean := False);
+   -- ****
+
 end Table;
