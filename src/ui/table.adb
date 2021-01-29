@@ -18,6 +18,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
+with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
@@ -216,6 +217,13 @@ package body Table is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
+      Length: constant Natural :=
+        Natural((Float(Value) / Float(MaxValue)) * Float(MaxValue));
+      Color: constant String :=
+        (if Length > 74 then "green"
+         elsif Length > 24 then
+           Style_Lookup(To_String(GameSettings.InterfaceTheme), "-focuscolor")
+         else "red");
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
@@ -240,11 +248,10 @@ package body Table is
         (Table.Canvas, "rectangle",
          Trim(Natural'Image(X + 2), Left) &
          Positive'Image((Table.Row * Table.Row_Height) + 7) &
-         Positive'Image
-           (X + Positive((Float(Value) / Float(MaxValue)) * Float(MaxValue))) &
+         Positive'Image(X + Length) &
          Positive'Image
            ((Table.Row * Table.Row_Height) + (Table.Row_Height - 7)) &
-         " -fill green -tags [list progressbar" &
+         " -fill " & Color & " -tags [list progressbar" &
          Trim(Positive'Image(Table.Row), Left) & "bar" &
          Trim(Positive'Image(Column), Left) & "]");
       if Tooltip'Length > 0 then
