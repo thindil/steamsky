@@ -195,4 +195,41 @@ package body Table is
       end if;
    end UpdateTable;
 
+   procedure AddProgressBar
+     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+      Tooltip: String; Column: Positive; NewRow: Boolean := False) is
+      X: Natural := 0;
+      ItemId: Unbounded_String;
+      Tokens: Slice_Set;
+   begin
+      for I in 1 .. Column - 1 loop
+         X := X + Table.Columns_Width(I);
+      end loop;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "rectangle",
+              Trim(Natural'Image(X), Left) &
+              Positive'Image((Table.Row * Table.Row_Height) + 5) &
+              Positive'Image(X + 100) &
+              Positive'Image
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 5)) &
+              " -fill green -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & "col" &
+              Trim(Positive'Image(Column), Left) & "]"));
+      if Tooltip'Length > 0 then
+         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      end if;
+      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      X :=
+        (Positive'Value(Slice(Tokens, 3)) + 10) -
+        Positive'Value(Slice(Tokens, 1));
+      if X > Table.Columns_Width(Column) then
+         Table.Columns_Width(Column) := X;
+      end if;
+      if NewRow then
+         Table.Row := Table.Row + 1;
+      end if;
+   end AddProgressBar;
+
 end Table;
