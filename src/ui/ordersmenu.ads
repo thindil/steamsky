@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ with Tcl; use Tcl;
 package OrdersMenu is
 -- ****
 
-   -- ****o* OrdersMenu/Show_Orders_Command
+   -- ****o* OrdersMenu/OrdersMenu.Show_Orders_Command
    -- FUNCTION
    -- Add available options and show orders menu to the player
    -- PARAMETERS
@@ -44,7 +44,7 @@ package OrdersMenu is
       Convention => C;
       -- ****
 
-   -- ****f* OrdersMenu/AddCommands
+   -- ****f* OrdersMenu/OrdersMenu.AddCommands
    -- FUNCTION
    -- Add Tcl commands to the game
    -- SOURCE
