@@ -244,16 +244,21 @@ package body Table is
               " -bordercolor] -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
-      Canvas_Create
-        (Table.Canvas, "rectangle",
-         Trim(Natural'Image(X + 2), Left) &
-         Positive'Image((Table.Row * Table.Row_Height) + 7) &
-         Positive'Image(X + Length) &
-         Positive'Image
-           ((Table.Row * Table.Row_Height) + (Table.Row_Height - 7)) &
-         " -fill " & Color & " -tags [list progressbar" &
-         Trim(Positive'Image(Table.Row), Left) & "bar" &
-         Trim(Positive'Image(Column), Left) & "]");
+      if Tooltip'Length > 0 then
+         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      end if;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "rectangle",
+              Trim(Natural'Image(X + 2), Left) &
+              Positive'Image((Table.Row * Table.Row_Height) + 7) &
+              Positive'Image(X + Length) &
+              Positive'Image
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 7)) &
+              " -fill " & Color & " -tags [list progressbar" &
+              Trim(Positive'Image(Table.Row), Left) & "bar" &
+              Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
