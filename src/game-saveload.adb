@@ -676,6 +676,7 @@ package body Game.SaveLoad is
          StoryIndex: Unbounded_String;
       begin
          LogMessage("Loading finished stories...", Everything, False);
+         Load_Finished_Stories_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             StoryIndex :=
@@ -684,17 +685,18 @@ package body Game.SaveLoad is
               Positive'Value(Get_Attribute(SavedNode, "stepsamount"));
             TempTexts.Clear;
             ChildNodes := Child_Nodes(SavedNode);
+            Load_Stories_Text_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempTexts.Append
                  (New_Item =>
                     (To_Unbounded_String
                        (Node_Value(First_Child(Item(ChildNodes, J))))));
-            end loop;
+            end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
                  (Index => StoryIndex, StepsAmount => StepsAmount,
                   StepsTexts => TempTexts));
-         end loop;
+         end loop Load_Finished_Stories_Loop;
          LogMessage("done.", Everything, True, False);
       end;
       NodesList :=
@@ -710,6 +712,7 @@ package body Game.SaveLoad is
          Multiplier: RewardMultiplier;
       begin
          LogMessage("Loading accepted missions...", Everything, False);
+         Load_Missions_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             MType :=
@@ -792,7 +795,7 @@ package body Game.SaveLoad is
                  .MissionIndex :=
                  MIndex;
             end if;
-         end loop;
+         end loop Load_Missions_Loop;
       end;
       -- Load player career
       LogMessage("Loading player career...", Everything, False);
