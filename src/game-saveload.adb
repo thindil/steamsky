@@ -443,12 +443,13 @@ package body Game.SaveLoad is
       declare
          X, Y: Positive;
       begin
+         Load_Map_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             X := Natural'Value(Get_Attribute(SavedNode, "x"));
             Y := Natural'Value(Get_Attribute(SavedNode, "y"));
             SkyMap(X, Y).Visited := True;
-         end loop;
+         end loop Load_Map_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Load sky bases
@@ -464,11 +465,12 @@ package body Game.SaveLoad is
       Known_Recipes.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "recipe");
+      Load_Known_Recipes_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          Known_Recipes.Append
            (New_Item =>
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
-      end loop;
+      end loop Load_Known_Recipes_Loop;
       LogMessage("done.", Everything, True, False);
       -- Load messages
       LogMessage("Loading messages...", Everything, False);
@@ -480,6 +482,7 @@ package body Game.SaveLoad is
          MType: Message_Type;
          Color: Message_Color;
       begin
+         Load_Messages_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             Text := To_Unbounded_String(Node_Value(First_Child(SavedNode)));
@@ -490,7 +493,7 @@ package body Game.SaveLoad is
               Message_Color'Val
                 (Integer'Value(Get_Attribute(SavedNode, "color")));
             RestoreMessage(Text, MType, Color);
-         end loop;
+         end loop Load_Messages_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Load events
@@ -503,6 +506,7 @@ package body Game.SaveLoad is
          X, Y, Time: Integer;
          Data: Unbounded_String;
       begin
+         Load_Events_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             EType :=
@@ -559,7 +563,7 @@ package body Game.SaveLoad is
             SkyMap(Events_List(I + 1).SkyX, Events_List(I + 1).SkyY)
               .EventIndex :=
               I + 1;
-         end loop;
+         end loop Load_Events_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Load game statistics
@@ -582,6 +586,7 @@ package body Game.SaveLoad is
          GameStats.Points :=
            Positive'Value(Get_Attribute(SavedNode, "points"));
          ChildNodes := Child_Nodes(SavedNode);
+         Load_Statistics_Loop :
          for I in 0 .. Length(ChildNodes) - 1 loop
             NodeName := To_Unbounded_String(Node_Name(Item(ChildNodes, I)));
             if To_String(NodeName) /= "#text" then
@@ -607,7 +612,7 @@ package body Game.SaveLoad is
                GameStats.KilledMobs.Append
                  (New_Item => (Index => StatIndex, Amount => StatAmount));
             end if;
-         end loop;
+         end loop Load_Statistics_Loop;
       end;
       LogMessage("done.", Everything, True, False);
       -- Load current goal
@@ -638,14 +643,15 @@ package body Game.SaveLoad is
          elsif Get_Attribute(SavedNode, "currentstep") = "finish" then
             CurrentStory.CurrentStep := -1;
          else
+            Load_Story_Steps_Loop :
             for I in Stories_List(CurrentStory.Index).Steps.Iterate loop
                if Stories_List(CurrentStory.Index).Steps(I).Index =
                  To_Unbounded_String
                    (Get_Attribute(SavedNode, "currentstep")) then
                   CurrentStory.CurrentStep := Steps_Container.To_Index(I);
-                  exit;
+                  exit Load_Story_Steps_Loop;
                end if;
-            end loop;
+            end loop Load_Story_Steps_Loop;
          end if;
          CurrentStory.MaxSteps :=
            Positive'Value(Get_Attribute(SavedNode, "maxsteps"));
