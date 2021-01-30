@@ -729,18 +729,13 @@ package body Game.SaveLoad is
             TargetY := Natural'Value(Get_Attribute(SavedNode, "targety"));
             Reward := Positive'Value(Get_Attribute(SavedNode, "reward"));
             StartBase := Natural'Value(Get_Attribute(SavedNode, "startbase"));
-            if Get_Attribute(SavedNode, "multiplier") /= "" then
-               Multiplier :=
-                 RewardMultiplier'Value
-                   (Get_Attribute(SavedNode, "multiplier"));
-            else
-               Multiplier := 1.0;
-            end if;
-            if Get_Attribute(Item(NodesList, I), "finished") = "Y" then
-               Finished := True;
-            else
-               Finished := False;
-            end if;
+            Multiplier :=
+              (if Get_Attribute(SavedNode, "multiplier") /= "" then
+                 RewardMultiplier'Value(Get_Attribute(SavedNode, "multiplier"))
+               else 1.0);
+            Finished :=
+              (if Get_Attribute(Item(NodesList, I), "finished") = "Y" then True
+               else False);
             case MType is
                when Deliver =>
                   AcceptedMissions.Append
