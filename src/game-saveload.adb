@@ -655,11 +655,9 @@ package body Game.SaveLoad is
          end if;
          CurrentStory.MaxSteps :=
            Positive'Value(Get_Attribute(SavedNode, "maxsteps"));
-         if Get_Attribute(SavedNode, "showtext") = "Y" then
-            CurrentStory.ShowText := True;
-         else
-            CurrentStory.ShowText := False;
-         end if;
+         CurrentStory.ShowText :=
+           (if Get_Attribute(SavedNode, "showtext") = "Y" then True
+            else False);
          if Get_Attribute(SavedNode, "data") /= "" then
             CurrentStory.Data :=
               To_Unbounded_String(Get_Attribute(SavedNode, "data"));
