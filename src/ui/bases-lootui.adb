@@ -148,7 +148,14 @@ package body Bases.LootUI is
             Positive'Image(Inventory_Container.To_Index(I)),
             1);
          AddText(LootTable, To_String(ItemType), "", 2);
-         AddProgressBar(LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability, "", 3);
+         ItemDurability :=
+           (if PlayerShip.Cargo(I).Durability < 100 then
+              To_Unbounded_String
+                (GetItemDamage(PlayerShip.Cargo(I).Durability))
+            else To_Unbounded_String("Unused"));
+         AddProgressBar
+           (LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability,
+            To_String(ItemDurability), 3);
          AddText(LootTable, Natural'Image(PlayerShip.Cargo(I).Amount), "", 4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
@@ -181,8 +188,10 @@ package body Bases.LootUI is
          ItemDurability :=
            (if BaseCargo(I).Durability < 100 then
               To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
-            else To_Unbounded_String("Full"));
-         AddText(LootTable, To_String(ItemDurability), "", 3);
+            else To_Unbounded_String("Unused"));
+         AddProgressBar
+           (LootTable, BaseCargo(I).Durability, Default_Item_Durability,
+            To_String(ItemDurability), 3);
          AddText(LootTable, "0", "", 4);
          BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
          AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
