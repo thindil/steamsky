@@ -124,6 +124,7 @@ package body Bases.ShipyardUI is
           (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
       Cost: Natural;
       Damage: Float;
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -196,7 +197,12 @@ package body Bases.ShipyardUI is
               (InstallTable, To_String(Modules_List(I).RepairMaterial), "", 4);
             Cost := Modules_List(I).Price;
             CountPrice(Cost, FindMember(Talk));
-            AddText(InstallTable, Natural'Image(Cost), "", 5, True);
+            if MoneyIndex2 > 0
+              and then Cost < PlayerShip.Cargo(MoneyIndex2).Amount then
+               AddText(InstallTable, Natural'Image(Cost), "", 5, True);
+            else
+               AddText(InstallTable, Natural'Image(Cost), "", 5, True, "red");
+            end if;
          end if;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
