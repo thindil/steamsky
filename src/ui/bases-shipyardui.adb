@@ -122,6 +122,8 @@ package body Bases.ShipyardUI is
       ModuleTypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
+      Cost: Natural;
+      Damage: Float;
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -135,7 +137,7 @@ package body Bases.ShipyardUI is
              (Widget_Image(ShipyardFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
-               To_Unbounded_String("Base cost")),
+               To_Unbounded_String("Cost")),
               False);
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
@@ -144,7 +146,7 @@ package body Bases.ShipyardUI is
              (Widget_Image(ShipyardFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
-               To_Unbounded_String("Base price")),
+               To_Unbounded_String("Price")),
               False);
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -157,6 +159,7 @@ package body Bases.ShipyardUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard");
       ClearTable(InstallTable);
+      Load_Install_Modules_Loop :
       for I in Modules_List.Iterate loop
          if Modules_List(I).Price > 0 and
            SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
@@ -191,14 +194,15 @@ package body Bases.ShipyardUI is
             AddText(InstallTable, Integer'Image(ModuleSize), "", 3);
             AddText
               (InstallTable, To_String(Modules_List(I).RepairMaterial), "", 4);
-            AddText
-              (InstallTable, Positive'Image(Modules_List(I).Price), "", 5,
-               True);
+            Cost := Modules_List(I).Price;
+            CountPrice(Cost, FindMember(Talk));
+            AddText(InstallTable, Natural'Image(Cost), "", 5, True);
          end if;
          <<End_Of_Loop>>
-      end loop;
+      end loop Load_Install_Modules_Loop;
       UpdateTable(InstallTable);
       ClearTable(RemoveTable);
+      Load_Remove_Modules_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
             AddButton
@@ -221,13 +225,22 @@ package body Bases.ShipyardUI is
                  (Modules_List(PlayerShip.Modules(I).ProtoIndex)
                     .RepairMaterial),
                "", 4);
-            AddText
-              (RemoveTable,
-               Positive'Image
-                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Price),
-               "", 5, True);
+            Damage :=
+              1.0 -
+              Float(PlayerShip.Modules(I).Durability) /
+                Float(PlayerShip.Modules(I).MaxDurability);
+            Cost :=
+              Modules_List(PlayerShip.Modules(I).ProtoIndex).Price -
+              Integer
+                (Float(Modules_List(PlayerShip.Modules(I).ProtoIndex).Price) *
+                 Damage);
+            if Cost = 0 then
+               Cost := 1;
+            end if;
+            CountPrice(Cost, FindMember(Talk), False);
+            AddText(RemoveTable, Natural'Image(Cost), "", 5, True);
          end if;
-      end loop;
+      end loop Load_Remove_Modules_Loop;
       UpdateTable(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipyardFrame.Name :=
