@@ -101,10 +101,14 @@ package body Table is
 
    procedure AddText
      (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
-      NewRow: Boolean := False) is
+      NewRow: Boolean := False; Color: String := "") is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
+      Text_Color: constant String :=
+        (if Color'Length > 0 then Color
+         else Style_Lookup
+             (To_String(GameSettings.InterfaceTheme), "-foreground"));
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
@@ -115,10 +119,8 @@ package body Table is
              (Table.Canvas, "text",
               Trim(Natural'Image(X), Left) &
               Positive'Image(Table.Row * Table.Row_Height) &
-              " -anchor nw -text {" & Text &
-              "} -font InterfaceFont -fill [ttk::style lookup " &
-              To_String(GameSettings.InterfaceTheme) &
-              " -foreground] -tags [list row" &
+              " -anchor nw -text {" & Text & "} -font InterfaceFont -fill " &
+              Text_Color & " -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "col" &
               Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
