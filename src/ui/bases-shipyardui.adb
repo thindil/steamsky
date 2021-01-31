@@ -125,6 +125,7 @@ package body Bases.ShipyardUI is
       Cost: Natural;
       Damage: Float;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MaxSize: Positive;
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -158,6 +159,13 @@ package body Bases.ShipyardUI is
          Current(ModuleTypeBox, "0");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
+      Find_Max_Module_Size_Loop :
+      for Module of PlayerShip.Modules loop
+         if Module.MType = HULL then
+            MaxSize := Modules_List(Module.ProtoIndex).Value;
+            exit Find_Max_Module_Size_Loop;
+         end if;
+      end loop Find_Max_Module_Size_Loop;
       ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard");
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
@@ -192,13 +200,19 @@ package body Bases.ShipyardUI is
             AddText
               (InstallTable, GetModuleType(BaseModules_Container.Key(I)), "",
                2);
-            AddText(InstallTable, Integer'Image(ModuleSize), "", 3);
+            if ModuleSize <= MaxSize then
+               AddText(InstallTable, Integer'Image(ModuleSize), "", 3);
+            else
+               AddText
+                 (InstallTable, Integer'Image(ModuleSize), "", 3, False,
+                  "red");
+            end if;
             AddText
               (InstallTable, To_String(Modules_List(I).RepairMaterial), "", 4);
             Cost := Modules_List(I).Price;
             CountPrice(Cost, FindMember(Talk));
             if MoneyIndex2 > 0
-              and then Cost < PlayerShip.Cargo(MoneyIndex2).Amount then
+              and then Cost <= PlayerShip.Cargo(MoneyIndex2).Amount then
                AddText(InstallTable, Natural'Image(Cost), "", 5, True);
             else
                AddText(InstallTable, Natural'Image(Cost), "", 5, True, "red");
