@@ -816,14 +816,16 @@ package body Game.SaveLoad is
    procedure GenerateSaveName(RenameSave: Boolean := False) is
       OldSaveName: constant String := To_String(SaveName);
    begin
+      Generate_Save_Name_Loop :
       loop
          SaveName :=
            SaveDirectory & PlayerShip.Crew(1).Name & To_Unbounded_String("_") &
            PlayerShip.Name &
            To_Unbounded_String
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
-         exit when not Exists(To_String(SaveName)) and SaveName /= OldSaveName;
-      end loop;
+         exit Generate_Save_Name_Loop when not Exists(To_String(SaveName)) and
+           SaveName /= OldSaveName;
+      end loop Generate_Save_Name_Loop;
       if RenameSave then
          if Exists(OldSaveName) then
             Rename(OldSaveName, To_String(SaveName));
