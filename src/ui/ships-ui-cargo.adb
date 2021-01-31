@@ -47,7 +47,7 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
 
-   -- ****o* SUCargo/Show_Cargo_Command
+   -- ****o* SUCargo/SUCargo.Show_Cargo_Command
    -- FUNCTION
    -- Show the cargo of the player ship
    -- PARAMETERS
@@ -174,7 +174,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Command;
 
-   -- ****o* SUCargo/Show_Give_Item_Command
+   -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
    -- FUNCTION
    -- Show UI to give the selected item from the ship cargo to the selected
    -- crew member
@@ -271,7 +271,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Give_Item_Command;
 
-   -- ****o* SUCargo/Give_Item_Command
+   -- ****o* SUCargo/SUCargo.Give_Item_Command
    -- FUNCTION
    -- Give selected amount of the selected item from the ship's cargo to the
    -- selected crew member
@@ -332,7 +332,7 @@ package body Ships.UI.Cargo is
       return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
    end Give_Item_Command;
 
-   -- ****o* SUCargo/Show_Drop_Item_Command
+   -- ****o* SUCargo/SUCargo.Show_Drop_Item_Command
    -- FUNCTION
    -- Show UI to drop the selected item from the ship cargo
    -- PARAMETERS
@@ -367,7 +367,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Drop_Item_Command;
 
-   -- ****o* SUCargo/Drop_Item_Command
+   -- ****o* SUCargo/SUCargo.Drop_Item_Command
    -- FUNCTION
    -- Drop selected amount of the selected item from the ship's cargo
    -- PARAMETERS
@@ -443,7 +443,7 @@ package body Ships.UI.Cargo is
       return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
    end Drop_Item_Command;
 
-   -- ****o* SUCargo/Show_Cargo_Item_Info_Command
+   -- ****o* SUCargo/SUCargo.Show_Cargo_Item_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected item in the player ship
    -- cargo
@@ -474,7 +474,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Item_Info_Command;
 
-   -- ****if* SUCargo/Show_Cargo_Menu_Command
+   -- ****if* SUCargo/SUCargo.Show_Cargo_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected item options
    -- PARAMETERS
