@@ -97,6 +97,8 @@ package Table is
    -- Column  - The column in which the text will be added
    -- NewRow  - If True, increase current number of row in the Table_Widget.
    --           Default value is False.
+   -- Color   - The color of the text which will be added. If empty, use
+   --           default interface color. Default value is empty
    -- OUTPUT
    -- Updated Table parameter Table_Widget
    -- HISTORY
@@ -104,7 +106,7 @@ package Table is
    -- SOURCE
    procedure AddText
      (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
-      NewRow: Boolean := False);
+      NewRow: Boolean := False; Color: String := "");
    -- ****
 
    -- ****f* Table/Table.AddButton
