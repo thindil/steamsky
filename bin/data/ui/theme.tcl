@@ -79,7 +79,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure . \
          -background $colors(-verydarkorange) \
          -foreground $colors(-palegoldenrod) \
-         -troughcolor $colors(-verydarkorange) \
+         -troughcolor $colors(-almostblackred) \
          -selectbackground $colors(-darkred) \
          -selectforeground $colors(-goldenyellow) \
          -fieldbackground $colors(-verydarkorange) \
