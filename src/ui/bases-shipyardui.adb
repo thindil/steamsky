@@ -293,6 +293,7 @@ package body Bases.ShipyardUI is
       ShipModuleIndex, Size: Positive;
       Speed: Integer;
       ModuleText: Tk_Text;
+      Added: Boolean := False;
    begin
       if Installing then
          MType := Modules_List(ModuleIndex).MType;
@@ -435,16 +436,21 @@ package body Bases.ShipyardUI is
             null;
       end case;
       if MType not in HULL | ARMOR then
-         Insert
-           (ModuleText, "end", "{" & LF & "Size:" & Natural'Image(Size) & "}");
+         Insert(ModuleText, "end", "{" & LF & "Size:}");
          if Installing then
             for Module of PlayerShip.Modules loop
                if Module.MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
-                  Insert(ModuleText, "end", "{ (too big)} [list red]");
+                  Insert
+                    (ModuleText, "end",
+                     "{" & Natural'Image(Size) & " (too big)} [list red]");
+                  Added := True;
                   exit;
                end if;
             end loop;
+         end if;
+         if not Added then
+            Insert(ModuleText, "end", "{" & Natural'Image(Size) & "}");
          end if;
       end if;
       if Weight > 0 then
