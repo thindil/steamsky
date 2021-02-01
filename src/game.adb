@@ -171,15 +171,10 @@ package body Game is
                   exit Set_Base_Faction_Loop;
                end if;
             end loop Set_Base_Faction_Loop;
-            if BasePopulation = 0 then
-               BaseSize := Bases_Size'Val(GetRandom(0, 2));
-            elsif BasePopulation < 150 then
-               BaseSize := Small;
-            elsif BasePopulation < 300 then
-               BaseSize := Medium;
-            else
-               BaseSize := Big;
-            end if;
+            BaseSize :=
+              (if BasePopulation = 0 then Bases_Size'Val(GetRandom(0, 2))
+               elsif BasePopulation < 150 then Small
+               elsif BasePopulation < 300 then Medium else Big);
             SkyBases(I) :=
               (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
                SkyX => 1, SkyY => 1, BaseType => BaseType,
