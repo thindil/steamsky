@@ -70,13 +70,14 @@ package body Game is
             NewGameSettings.PlayerCareer := To_Unbounded_String("random");
             Roll := GetRandom(1, Positive(Factions_List.Length));
             Index := 1;
+            Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
                if Index = Roll then
                   NewGameSettings.PlayerFaction := Factions_Container.Key(I);
-                  exit;
+                  exit Get_Player_Faction_Loop;
                end if;
                Index := Index + 1;
-            end loop;
+            end loop Get_Player_Faction_Loop;
          end if;
          -- Set player career if random option was selected
          if NewGameSettings.PlayerCareer = To_Unbounded_String("random") then
@@ -87,15 +88,16 @@ package body Game is
                    (Factions_List(NewGameSettings.PlayerFaction).Careers
                       .Length));
             Index := 1;
+            Get_Player_Career_Loop :
             for I in Factions_List(NewGameSettings.PlayerFaction).Careers
               .Iterate loop
                if Index = Roll then
                   NewGameSettings.PlayerCareer :=
                     Factions.Careers_Container.Key(I);
-                  exit;
+                  exit Get_Player_Career_Loop;
                end if;
                Index := Index + 1;
-            end loop;
+            end loop Get_Player_Career_Loop;
          end if;
       end;
       -- Set Game time
@@ -124,14 +126,17 @@ package body Game is
          BasesArray: Bases_Container.Map;
          Attempts: Positive range 1 .. 251;
       begin
+         Count_Spawn_Chance_Loop :
          for I in Factions_List.Iterate loop
             MaxSpawnRoll := MaxSpawnRoll + Factions_List(I).SpawnChance;
             Bases_Container.Include
               (BasesArray, Factions_Container.Key(I),
                Positive_Container.Empty_Vector);
-         end loop;
+         end loop Count_Spawn_Chance_Loop;
+         Set_Bases_Loop :
          for I in SkyBases'Range loop
             FactionRoll := GetRandom(1, MaxSpawnRoll);
+            Set_Base_Faction_Loop :
             for J in Factions_List.Iterate loop
                if FactionRoll > Factions_List(J).SpawnChance then
                   FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
@@ -148,22 +153,24 @@ package body Game is
                       (NewGameSettings.PlayerFaction,
                        Factions_Container.Key(J));
                   MaxBaseSpawnRoll := 0;
+                  Count_Max_Spawn_Chance_Loop :
                   for SpawnChance of Factions_List(J).BasesTypes loop
                      MaxBaseSpawnRoll := MaxBaseSpawnRoll + SpawnChance;
-                  end loop;
+                  end loop Count_Max_Spawn_Chance_Loop;
                   BaseTypeRoll := GetRandom(1, MaxBaseSpawnRoll);
+                  Get_Base_Type_Loop :
                   for K in Factions_List(J).BasesTypes.Iterate loop
                      if BaseTypeRoll > Factions_List(J).BasesTypes(K) then
                         BaseTypeRoll :=
                           BaseTypeRoll - Factions_List(J).BasesTypes(K);
                      else
                         BaseType := BaseType_Container.Key(K);
-                        exit;
+                        exit Get_Base_Type_Loop;
                      end if;
-                  end loop;
-                  exit;
+                  end loop Get_Base_Type_Loop;
+                  exit Set_Base_Faction_Loop;
                end if;
-            end loop;
+            end loop Set_Base_Faction_Loop;
             if BasePopulation = 0 then
                BaseSize := Bases_Size'Val(GetRandom(0, 2));
             elsif BasePopulation < 150 then
@@ -194,7 +201,7 @@ package body Game is
                end loop;
             end if;
             BasesArray(BaseOwner).Append(I);
-         end loop;
+         end loop Set_Bases_Loop;
          for FactionBases of BasesArray loop
             for I in FactionBases.Iterate loop
                Attempts := 1;
