@@ -187,19 +187,22 @@ package body Game is
             if Factions_List(BaseOwner).Flags.Contains
                 (To_Unbounded_String("loner")) then
                FactionRoll := GetRandom(1, MaxSpawnRoll);
+               Get_Faction_Loop :
                for J in Factions_List.Iterate loop
                   if FactionRoll > Factions_List(J).SpawnChance then
                      FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
                   else
                      BaseOwner := Factions_Container.Key(J);
                   end if;
-               end loop;
+               end loop Get_Faction_Loop;
             end if;
             BasesArray(BaseOwner).Append(I);
          end loop Set_Bases_Loop;
+         Place_Bases_Loop :
          for FactionBases of BasesArray loop
             for I in FactionBases.Iterate loop
                Attempts := 1;
+               Count_Base_Position_Loop :
                loop
                   ValidLocation := True;
                   if Positive_Container.To_Index(I) =
@@ -248,44 +251,49 @@ package body Game is
                         Attempts := 1;
                      end if;
                   end if;
+                  Check_X_Coordinate_Loop :
                   for J in -5 .. 5 loop
                      TempX := PosX + J;
                      NormalizeCoord(TempX);
+                     Check_Y_Coordinate_Loop :
                      for K in -5 .. 5 loop
                         TempY := PosY + K;
                         NormalizeCoord(TempY, False);
                         if SkyMap(TempX, TempY).BaseIndex > 0 then
                            ValidLocation := False;
-                           exit;
+                           exit Check_Y_Coordinate_Loop;
                         end if;
-                     end loop;
-                     exit when ValidLocation = False;
-                  end loop;
+                     end loop Check_Y_Coordinate_Loop;
+                     exit Check_X_Coordinate_Loop when ValidLocation = False;
+                  end loop Check_X_Coordinate_Loop;
                   if SkyMap(PosX, PosY).BaseIndex > 0 then
                      ValidLocation := False;
                   end if;
                   exit when ValidLocation;
-               end loop;
+               end loop Count_Base_Position_Loop;
                SkyMap(PosX, PosY) :=
                  (BaseIndex => FactionBases(I), Visited => False,
                   EventIndex => 0, MissionIndex => 0);
                SkyBases(FactionBases(I)).SkyX := PosX;
                SkyBases(FactionBases(I)).SkyY := PosY;
             end loop;
-         end loop;
+         end loop Place_Bases_Loop;
       end;
       -- Place player ship in random large base
+      Place_Player_Loop :
       loop
          RandomBase := GetRandom(1, 1024);
          if NewGameSettings.StartingBase = To_Unbounded_String("Any") then
-            exit when SkyBases(RandomBase).Population > 299 and
+            exit Place_Player_Loop when SkyBases(RandomBase).Population >
+              299 and
               SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
          else
-            exit when SkyBases(RandomBase).Population > 299 and
+            exit Place_Player_Loop when SkyBases(RandomBase).Population >
+              299 and
               SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
               SkyBases(RandomBase).BaseType = NewGameSettings.StartingBase;
          end if;
-      end loop;
+      end loop Place_Player_Loop;
       -- Create player ship
       PlayerShip :=
         CreateShip
@@ -309,6 +317,7 @@ package body Game is
             then 50
             else 100);
       begin
+         Player_Inventory_Loop :
          for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
             Amount :=
               (if ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount > 0 then
@@ -322,7 +331,7 @@ package body Game is
                     ProtoMobs_List(PlayerIndex2).Inventory(I).ProtoIndex,
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
-         end loop;
+         end loop Player_Inventory_Loop;
          PlayerShip.Crew.Prepend
            (New_Item =>
               (Name => NewGameSettings.PlayerName,
@@ -343,14 +352,17 @@ package body Game is
       declare
          CabinAssigned: Boolean := False;
       begin
+         PlayerShip_Modules_Loop :
          for Module of PlayerShip.Modules loop
+            Module_Owner_Loop :
             for Owner of Module.Owner loop
                if Owner > 0 then
                   Owner := Owner + 1;
                end if;
-            end loop;
+            end loop Module_Owner_Loop;
             if Modules_List(Module.ProtoIndex).MType = CABIN and
               not CabinAssigned then
+               Assign_Cabin_Loop :
                for I in Module.Owner.Iterate loop
                   if Module.Owner(I) = 0 then
                      Module.Owner(I) := 1;
@@ -360,11 +372,11 @@ package body Game is
                           To_Unbounded_String("'s Cabin");
                      end if;
                      CabinAssigned := True;
-                     exit;
+                     exit Assign_Cabin_Loop;
                   end if;
-               end loop;
+               end loop Assign_Cabin_Loop;
             end if;
-         end loop;
+         end loop PlayerShip_Modules_Loop;
       end;
       -- Set current map field/sky base info
       SkyBases(Integer(RandomBase)).Visited := GameDate;
@@ -396,11 +408,12 @@ package body Game is
       TiredPoints: Natural := 0;
       NeedCleaning: Boolean := False;
    begin
+      Tired_Points_Loop :
       for I in 1 .. Minutes loop
          if ((GameDate.Minutes + I) rem 15) = 0 then
             TiredPoints := TiredPoints + 1;
          end if;
-      end loop;
+      end loop Tired_Points_Loop;
       -- Update game time
       AddedMinutes := Minutes rem 60;
       AddedHours := Minutes / 60;
@@ -413,12 +426,13 @@ package body Game is
       if GameDate.Hour > 23 then
          GameDate.Hour := GameDate.Hour - 24;
          GameDate.Day := GameDate.Day + 1;
+         Get_Dirty_Loop :
          for Module of PlayerShip.Modules loop
             if Module.MType = CABIN and then Module.Cleanliness > 0 then
                Module.Cleanliness := Module.Cleanliness - 1;
                NeedCleaning := True;
             end if;
-         end loop;
+         end loop Get_Dirty_Loop;
          if NeedCleaning then
             UpdateOrders(PlayerShip);
          end if;
