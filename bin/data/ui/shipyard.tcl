@@ -27,9 +27,9 @@ grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} -stat
 grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} -style Radio.Toolbutton -value remove -variable newtab -command ShowShipyardTab] -row 0 -column 1 -padx 5
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
-grid [ttk::frame $sinstall.options] -sticky we
+grid [ttk::frame $sinstall.options] -sticky we -pady {0 5}
 grid [ttk::label $sinstall.options.label -text "Show modules:"]
-grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1
+grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1 -padx {0 5}
 $sinstall.options.modules current 0
 bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current] [$sinstall.options.search get]}
 grid [ttk::entry $sinstall.options.search -validate key -validatecommand {ShowShipyard [$sinstall.options.modules current] %P}] -row 0 -column 2
