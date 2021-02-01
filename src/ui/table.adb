@@ -40,7 +40,7 @@ package body Table is
           (Parent & ".scrollx",
            "-orient horizontal -command [list " & Parent & ".table xview]");
       Table: Table_Widget (Headers'Length);
-      X: Natural := 0;
+      X: Natural := 5;
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
@@ -67,7 +67,7 @@ package body Table is
       for I in Headers'Range loop
          Canvas_Create
            (Canvas, "text",
-            Trim(Natural'Image(X), Left) & " 0 -anchor nw -text {" &
+            Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
             To_String(Headers(I)) &
             "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
             To_String(GameSettings.InterfaceTheme) &
@@ -82,6 +82,15 @@ package body Table is
             Table.Row_Height := Positive'Value(Slice(Tokens, 4)) + 5;
          end if;
       end loop;
+      Canvas_Create
+        (Canvas, "rectangle",
+         "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
+         " -fill [ttk::style lookup " &
+         To_String(GameSettings.InterfaceTheme) &
+         " -bordercolor] -outline [ttk::style lookup " &
+         To_String(GameSettings.InterfaceTheme) &
+         " -troughcolor] -width 2 -tags [list headerback]");
+      Lower(Canvas, "headerback");
       Table.Canvas := Canvas;
       return Table;
    end CreateTable;
@@ -162,7 +171,7 @@ package body Table is
    procedure UpdateTable(Table: in out Table_Widget) is
       Tag: Unbounded_String;
       NewX: Natural := Table.Columns_Width(1);
-      NewY: Natural := 0;
+      NewY: Natural := 2;
    begin
       for Column in 2 .. Table.Amount loop
          Tag :=
@@ -196,21 +205,25 @@ package body Table is
                Trim(Positive'Image(NewY + 7), Left));
          end loop;
          NewX := NewX + Table.Columns_Width(Column);
-         NewY := 0;
+         NewY := 2;
       end loop;
-      -- if no scrollbars, resize the table
-      if not Table.Scrollbars then
-         declare
-            Tokens: Slice_Set;
-         begin
-            Create(Tokens, BBox(Table.Canvas, "all"), " ");
+      declare
+         Tokens: Slice_Set;
+      begin
+         Create(Tokens, BBox(Table.Canvas, "all"), " ");
+            -- if no scrollbars, resize the table
+         if not Table.Scrollbars then
             configure
               (Table.Canvas,
                "-height [expr " & Slice(Tokens, 4) & " - " & Slice(Tokens, 2) &
                "] -width [expr " & Slice(Tokens, 3) & " - " &
-               Slice(Tokens, 1) & "]");
-         end;
-      end if;
+               Slice(Tokens, 1) & " + 5]");
+         end if;
+         Coords
+           (Table.Canvas, "headerback",
+            "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
+            Positive'Image(Table.Row_Height - 3));
+      end;
    end UpdateTable;
 
    procedure AddProgressBar
