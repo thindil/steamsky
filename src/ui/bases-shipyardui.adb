@@ -568,7 +568,7 @@ package body Bases.ShipyardUI is
       configure
         (ModuleText,
          "-state disabled -height [expr " &
-         Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
+         Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       Frame := Create(ModuleDialog & ".buttonbox");
       InstallButton :=
@@ -773,7 +773,7 @@ package body Bases.ShipyardUI is
       configure
         (ModuleText,
          "-state disabled -height [expr " &
-         Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
+         Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
       Frame := Create(ModuleDialog & ".buttonbox");
       RemoveButton :=
         Create
