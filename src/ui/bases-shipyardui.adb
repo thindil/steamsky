@@ -122,10 +122,13 @@ package body Bases.ShipyardUI is
       ModuleTypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
-      Cost: Natural;
+      Cost, UsedSpace: Natural;
       Damage: Float;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
-      MaxSize: Positive;
+      MaxSize, AllSpace: Positive;
+      InstallInfo: Unbounded_String;
+      MoneyLabel: constant Ttk_Label :=
+        Get_Widget(ShipyardCanvas & ".shipyard.moneyinfo", Interp);
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -163,10 +166,26 @@ package body Bases.ShipyardUI is
       for Module of PlayerShip.Modules loop
          if Module.MType = HULL then
             MaxSize := Modules_List(Module.ProtoIndex).Value;
+            UsedSpace := Module.InstalledModules;
+            AllSpace := Module.MaxModules;
             exit Find_Max_Module_Size_Loop;
          end if;
       end loop Find_Max_Module_Size_Loop;
       ShipyardFrame.Name := New_String(ShipyardCanvas & ".shipyard");
+      InstallInfo :=
+        (if MoneyIndex2 > 0 then
+           To_Unbounded_String
+             ("You have" &
+              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+              To_String(MoneyName) & ".")
+         else To_Unbounded_String
+             (LF & "You don't have any " & To_String(MoneyName) &
+              " to install anything."));
+      Append
+        (InstallInfo,
+         LF & "You have used" & Natural'Image(UsedSpace) &
+         " modules space from max" & Natural'Image(AllSpace) & " allowed.");
+      configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
       for I in Modules_List.Iterate loop
@@ -511,14 +530,12 @@ package body Bases.ShipyardUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      InstallInfo: Unbounded_String;
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleDialog: constant Ttk_Frame :=
         Create(".moduledialog", "-style Dialog.TFrame");
       ModuleText: constant Tk_Text :=
         Create(ModuleDialog & ".info", "-height 10 -width 40");
-      MoneyLabel: constant Ttk_Label := Create(ModuleDialog & ".money");
       InstallButton, CloseButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
    begin
@@ -548,35 +565,11 @@ package body Bases.ShipyardUI is
          "{" & LF & "Installation time:" &
          Positive'Image(Modules_List(ModuleIndex).InstallTime) & " minutes}");
       SetModuleInfo(True);
-      InstallInfo :=
-        (if MoneyIndex2 > 0 then
-           To_Unbounded_String
-             (LF & "You have" &
-              Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-              To_String(MoneyName) & ".")
-         else To_Unbounded_String
-             (LF & "You don't have any " & To_String(MoneyName) &
-              " to install anything."));
-      for Module of PlayerShip.Modules loop
-         if Module.MType = HULL then
-            UsedSpace := Module.InstalledModules;
-            AllSpace := Module.MaxModules;
-            MaxSize := Modules_List(Module.ProtoIndex).Value;
-            Append
-              (InstallInfo,
-               LF & "You have used" & Natural'Image(UsedSpace) &
-               " modules space from max" & Natural'Image(AllSpace) &
-               " allowed.");
-            exit;
-         end if;
-      end loop;
-      configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
       configure
         (ModuleText,
          "-state disabled -height [expr " &
          Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(MoneyLabel, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
       InstallButton :=
         Create
@@ -584,6 +577,15 @@ package body Bases.ShipyardUI is
            "-text Install -command {CloseDialog " & ModuleDialog &
            ";ManipulateModule install}");
       Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
+      Find_Hull_Loop :
+      for Module of PlayerShip.Modules loop
+         if Module.MType = HULL then
+            MaxSize := Modules_List(Module.ProtoIndex).Value;
+            UsedSpace := Module.InstalledModules;
+            AllSpace := Module.MaxModules;
+            exit Find_Hull_Loop;
+         end if;
+      end loop Find_Hull_Loop;
       if MoneyIndex2 = 0 then
          configure(InstallButton, "-state disabled");
       else
@@ -696,7 +698,6 @@ package body Bases.ShipyardUI is
       Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      RemoveInfo: Unbounded_String;
       Cost: Natural;
       Damage: Float;
       ShipModuleIndex: constant Natural :=
@@ -769,38 +770,10 @@ package body Bases.ShipyardUI is
               "} -wraplength 450");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
       end if;
-      declare
-         MoneyIndex2: constant Natural :=
-           FindItem(PlayerShip.Cargo, MoneyIndex);
-      begin
-         RemoveInfo :=
-           (if MoneyIndex2 > 0 then
-              To_Unbounded_String
-                (LF & "You have" &
-                 Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-                 To_String(MoneyName) & ".")
-            else To_Unbounded_String
-                (LF & "You don't have any " & To_String(MoneyName) &
-                 " to install anything."));
-      end;
-      for Module of PlayerShip.Modules loop
-         if Module.MType = HULL then
-            Append
-              (RemoveInfo,
-               LF & "You have used" & Natural'Image(Module.InstalledModules) &
-               " modules space from max" & Natural'Image(Module.MaxModules) &
-               " allowed.");
-            exit;
-         end if;
-      end loop;
-      Label :=
-        Create
-          (ModuleDialog & ".money", "-text {" & To_String(RemoveInfo) & "}");
       configure
         (ModuleText,
          "-state disabled -height [expr " &
          Count(ModuleText, "-lines", "1.0", "end") & " + 1]");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5 -pady {0 5}");
       Frame := Create(ModuleDialog & ".buttonbox");
       RemoveButton :=
         Create

@@ -25,6 +25,7 @@ set newtab install
 grid [ttk::frame $shipyardframe.tabs] -pady 5
 grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} -state selected -style Radio.Toolbutton -value install -variable newtab -command ShowShipyardTab] -padx 5
 grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} -style Radio.Toolbutton -value remove -variable newtab -command ShowShipyardTab] -row 0 -column 1 -padx 5
+grid [ttk::label $shipyardframe.moneyinfo -wraplength 500] -sticky w
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
 grid [ttk::frame $sinstall.options] -sticky we -pady {0 5}
