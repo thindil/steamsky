@@ -108,6 +108,29 @@ package body Table is
       Table.Row := 1;
    end ClearTable;
 
+   procedure AddDarkerBackground
+     (Table: Table_Widget; X: Natural; NewRow: Boolean) is
+      ItemId: Unbounded_String;
+   begin
+      if not NewRow or else (NewRow and Table.Row rem 2 = 0) then
+         return;
+      end if;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "rectangle",
+              Trim(Natural'Image(X), Left) &
+              Positive'Image((Table.Row * Table.Row_Height)) &
+              Positive'Image(X + 10) &
+              Positive'Image
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
+              " -fill [ttk::style lookup " &
+              To_String(GameSettings.InterfaceTheme) &
+              " -troughcolor] -width 0 -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & "]"));
+      Lower(Table.Canvas, To_String(ItemId));
+   end AddDarkerBackground;
+
    procedure AddText
      (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
       NewRow: Boolean := False; Color: String := "") is
@@ -122,6 +145,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
+      AddDarkerBackground(Table, X, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -223,6 +247,18 @@ package body Table is
            (Table.Canvas, "headerback",
             "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
             Positive'Image(Table.Row_Height - 3));
+         NewY := 0;
+         Resize_Background_Loop :
+         for Row in 2 .. Table.Row loop
+            NewY := NewY + Table.Row_Height;
+            Tag :=
+              To_Unbounded_String("row" & Trim(Positive'Image(Row), Left));
+            Coords
+              (Table.Canvas, To_String(Tag),
+               "0" & Positive'Image(NewY - Table.Row_Height) &
+               Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
+               Positive'Image(NewY));
+         end loop Resize_Background_Loop;
       end;
    end UpdateTable;
 
@@ -243,6 +279,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
+      AddDarkerBackground(Table, X, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
