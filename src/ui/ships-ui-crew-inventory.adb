@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
 
-   -- ****o* SUCI/Show_Member_Inventory_Command
+   -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
    -- FUNCTION
    -- Show inventory of the selected crew member
    -- PARAMETERS
@@ -220,7 +220,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Member_Inventory_Command;
 
-   -- ****o* SUCI/Set_Use_Item_Command
+   -- ****o* SUCI/SUCI.Set_Use_Item_Command
    -- FUNCTION
    -- Set if item is used by a crew member or not
    -- PARAMETERS
@@ -307,7 +307,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Set_Use_Item_Command;
 
-   -- ****o* SUCI/Show_Move_Item_Command
+   -- ****o* SUCI/SUCI.Show_Move_Item_Command
    -- FUNCTION
    -- Show UI to move the selected item to the ship cargo
    -- PARAMETERS
@@ -395,7 +395,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Move_Item_Command;
 
-   -- ****o* SUCI/Move_Item_Command
+   -- ****o* SUCI/SUCI.Move_Item_Command
    -- FUNCTION
    -- Move the selected item to the ship cargo
    -- PARAMETERS
@@ -476,7 +476,7 @@ package body Ships.UI.Crew.Inventory is
       return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Move_Item_Command;
 
-   -- ****o* SUCI/Validate_Move_Amount_Command
+   -- ****o* SUCI/SUCI.Validate_Move_Amount_Command
    -- FUNCTION
    -- Validate amount of the item to move
    -- PARAMETERS
@@ -516,7 +516,7 @@ package body Ships.UI.Crew.Inventory is
          return TCL_OK;
    end Validate_Move_Amount_Command;
 
-   -- ****o* SUCI/Show_Inventory_Item_Info_Command
+   -- ****o* SUCI/SUCI.Show_Inventory_Item_Info_Command
    -- FUNCTION
    -- Show detailed information about the selected item in crew member
    -- inventory
@@ -549,7 +549,7 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Inventory_Item_Info_Command;
 
-   -- ****if* SUCI/Show_Inventory_Menu_Command
+   -- ****if* SUCI/SUCI.Show_Inventory_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected item options
    -- PARAMETERS
