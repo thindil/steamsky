@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Showing the selected modules type in shipyard with the current search text
 - Showing the selected type of items in loot screen
+- Showing longer description for modules in shipyard
 
 ## [5.7] - 2021-01-24
 
