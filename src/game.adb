@@ -519,17 +519,19 @@ package body Game is
       function FindAttributeIndex
         (AttributeName: Unbounded_String) return Natural is
       begin
+         Find_Attribute_Loop :
          for J in
            Attributes_List.First_Index .. Attributes_List.Last_Index loop
             if Attributes_List(J).Name = AttributeName then
                return J;
             end if;
-         end loop;
+         end loop Find_Attribute_Loop;
          return 0;
       end FindAttributeIndex;
    begin
       GameData := Get_Tree(Reader);
       NodesList := Child_Nodes(First_Child(GameData));
+      Load_Game_Data_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          DataNode := Item(NodesList, I);
          NodeName := To_Unbounded_String(Node_Name(DataNode));
@@ -647,12 +649,13 @@ package body Game is
             if Length(ChildNodes) > 0 then
                TmpSkill.ToolsQuality.Clear;
             end if;
+            Load_Skills_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                TmpSkill.ToolsQuality.Append
                  ((Integer'Value(Get_Attribute(Item(ChildNodes, J), "level")),
                    Integer'Value
                      (Get_Attribute(Item(ChildNodes, J), "quality"))));
-            end loop;
+            end loop Load_Skills_Loop;
             if TmpSkill.ToolsQuality.Length = 0 then
                TmpSkill.ToolsQuality.Append((100, 100));
             end if;
@@ -733,19 +736,20 @@ package body Game is
                end if;
             elsif Get_Attribute(DataNode, "name") = "itemtype" then
                DeleteIndex := 0;
+               Load_Item_Types_Loop :
                for J in Items_Types.First_Index .. Items_Types.Last_Index loop
                   if Items_Types(J) =
                     To_Unbounded_String(Get_Attribute(DataNode, "value")) then
                      DeleteIndex := J;
-                     exit;
+                     exit Load_Item_Types_Loop;
                   end if;
-               end loop;
+               end loop Load_Item_Types_Loop;
                if DeleteIndex > 0 then
                   Items_Types.Delete(Index => DeleteIndex);
                end if;
             end if;
          end if;
-      end loop;
+      end loop Load_Game_Data_Loop;
    end LoadData;
 
    procedure EndGame(Save: Boolean) is
@@ -768,11 +772,12 @@ package body Game is
 
    function FindSkillIndex(SkillName: Unbounded_String) return Natural is
    begin
+      Find_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
             return SkillsData_Container.To_Index(I);
          end if;
-      end loop;
+      end loop Find_Skill_Loop;
       return 0;
    end FindSkillIndex;
 
@@ -847,13 +852,14 @@ package body Game is
       begin
          if FileName = "" then
             Start_Search(Files, DataName, "*.dat");
+            Load_Data_Files_Loop :
             while More_Entries(Files) loop
                Get_Next_Entry(Files, FoundFile);
                Open(Full_Name(FoundFile), DataFile);
                LocalFileName := To_Unbounded_String(Full_Name(FoundFile));
                LoadDataFile("");
                Close(DataFile);
-            end loop;
+            end loop Load_Data_Files_Loop;
             End_Search(Files);
          else
             Open(To_String(DataDirectory) & FileName, DataFile);
@@ -867,21 +873,23 @@ package body Game is
          return "";
       end if;
       -- Load standard game data
+      Load_Standard_Data_Loop :
       for I in DataTypes'Range loop
          LoadSelectedData
            (To_String(DataTypes(I).Name), To_String(DataTypes(I).FileName));
-      end loop;
+      end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
         (Directories, To_String(ModsDirectory), "",
          (Directory => True, others => False));
+      Load_Modifications_Loop :
       while More_Entries(Directories) loop
          Get_Next_Entry(Directories, FoundDirectory);
          if Simple_Name(FoundDirectory) /= "." and
            Simple_Name(FoundDirectory) /= ".." then
             LoadSelectedData(Full_Name(FoundDirectory), "");
          end if;
-      end loop;
+      end loop Load_Modifications_Loop;
       End_Search(Directories);
       SetToolsList;
       return "";
