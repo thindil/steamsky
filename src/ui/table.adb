@@ -251,7 +251,7 @@ package body Table is
               Positive'Image((Table.Row * Table.Row_Height) + 5) &
               Positive'Image(X + 102) &
               Positive'Image
-                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 5)) &
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 10)) &
               " -fill [ttk::style lookup " &
               To_String(GameSettings.InterfaceTheme) &
               " -troughcolor] -outline [ttk::style lookup " &
@@ -270,7 +270,7 @@ package body Table is
               Positive'Image((Table.Row * Table.Row_Height) + 7) &
               Positive'Image(X + Length) &
               Positive'Image
-                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 7)) &
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
               " -fill " & Color & " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "bar" &
               Trim(Positive'Image(Column), Left) & "]"));
