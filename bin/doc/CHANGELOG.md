@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned installing and removing module screen in shipyard bases
 - Redesigned looting bases screen
 - Updated interface
+- Updated contributing guide
 
 ### Fixed
 - Showing the selected modules type in shipyard with the current search text
