@@ -1,7 +1,7 @@
 ## Bugs reporting
 
 Bugs and game crashes are not the only problems, but typos too. If you find any bugs
-in the game, please report it at options available at [contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact)
+in the game, please report it at options available at [contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact).
 
 ### Some general hints about reporting bugs
 
@@ -44,10 +44,10 @@ discussion about a new feature, just I'm afraid, it may take a long time to
 implement it into the game.
 
 If you want to talk/propose changes to any existing features/mechanics in the game,
-feel free to contact me via issues tracker or mail (addresses that
-you can find at top of this file). General rule about propositions is
-same as for bugs reports - please, try to write as much information as
-possible. This help us better understand the purpose of your changes.
+feel free to contact with me via options available at [contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact).
+General rule about propositions is same as for bugs reports - please, try to
+write as much information as possible. This help us better understand the
+purpose of your changes.
 
 List of things which I wish to add to the game, can be found [here](https://www.laeran.pl/repositories/steamsky/wiki?name=To-Do)
 Please read carefully the description on how to discuss or how they will be
@@ -59,11 +59,11 @@ implemented in the game.
 
 If you want start helping in the development of the gane, please consider starting with
 something easy like fixing bugs. Before you begin to add new feature to
-the game, please contact with me by issues tracker or mail, addresses are
-at top of this file. Same as with features proposition - your code may
-"collide" with my work and at this moment you may just lose time by working on
-it. So it is better that we first discuss your proposition. In any other case,
-fell free to fix and or improve my code.
+the game, please contact with me options available at [contact page](https://www.laeran.pl/repositories/steamsky/wiki?name=Contact).
+Same as with features proposition - your code may "collide" with my work and
+at this moment you may just lose time by working on it. So it is better that
+we first discuss your proposition. In any other case, fell free to fix and or
+improve my code.
 
 ### Coding standard
 
@@ -79,7 +79,7 @@ and for unit tests:
 
 `gnatpp -P tests/prettytests.gpr`
 
-If you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+If you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
 
 `bob pretty`
 
@@ -135,7 +135,7 @@ the game with mode `analyze` (in the main project directory, where
 
 `gprbuild -XMode=analyze`
 
-or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
 
 `bob analyze`
 
@@ -149,7 +149,7 @@ command:
 
 `gprof bin/steamsky gmon.out` for generate report for the code profiling
 
-or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
 
 `bob gprof`
 
@@ -161,7 +161,7 @@ skeletons code for tests units (in the main project directory, where
 
 `gnattest -P steamsky.gpr`
 
-or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
 
 `bob createtests`
 
@@ -175,7 +175,7 @@ First, you must build all tests. How to do it, is described in main
 *README.md* file. Then, in console, in the main project directory, type:
 `others/tests.sh [amount]`
 
-or, if you prefer (and you have installed), use [Bob](https://github.com/thindil/bob):
+or, if you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
 
 `bob tests [amount]`
 
