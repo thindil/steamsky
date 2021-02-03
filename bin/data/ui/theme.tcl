@@ -17,7 +17,7 @@ package require Tk 8.6.0
 
 namespace eval ttk::theme::steamsky {
 
-   variable version 0.2
+   variable version 1.0
    package provide ttk::theme::steamsky $version
 
    #
@@ -26,16 +26,17 @@ namespace eval ttk::theme::steamsky {
 
    variable colors
    array set colors {
-      -verydarkorange "#1a130c"
-      -palegoldenrod  "#eee8aa"
-      -gray           "#7f8c8d"
-      -darkred        "#600000"
-      -goldenyellow   "#ffdf00"
-      -blue           "#458588"
-      -pink           "#b16286"
-      -darkorange     "#372412"
-      -almostblackred "#120d0d"
-      -darkyellow     "#7d7800"
+      -verydarkorange    "#1a130c"
+      -palegoldenrod     "#eee8aa"
+      -gray              "#7f8c8d"
+      -darkred           "#600000"
+      -goldenyellow      "#ffdf00"
+      -blue              "#458588"
+      -pink              "#b16286"
+      -darkorange        "#372412"
+      -almostblackred    "#120d0d"
+      -darkyellow        "#7d7800"
+      -almostblackorange "#291913"
    }
 
    #
@@ -105,19 +106,19 @@ namespace eval ttk::theme::steamsky {
       #
 
       # Button setting
-      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow)
+      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
       ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TButton -background [list active $colors(-darkred)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
-      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow)
+      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
       ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
       # Small buttons settings (like minimize/maximize buttons)
-      ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons
+      ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
 
       # Flat buttons setting
       # Default flat button
