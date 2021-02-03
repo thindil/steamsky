@@ -23,7 +23,7 @@ pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 # Minimize/maximize button
-grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin general show}]
+grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin general show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
 grid [ttk::label $shipcanvas.frame.namelbl -text {Name:}] -sticky w
