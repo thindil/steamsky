@@ -103,6 +103,15 @@ package body Table is
               (Table.Canvas,
                "row" & Trim(Positive'Image(Row), Left) & "col" &
                Trim(Positive'Image(Column), Left));
+            Delete(Table.Canvas, "row" & Trim(Positive'Image(Row), Left));
+            Delete
+              (Table.Canvas,
+               "progressbar" & Trim(Positive'Image(Row), Left) & "back" &
+               Trim(Positive'Image(Column), Left));
+            Delete
+              (Table.Canvas,
+               "progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
+               Trim(Positive'Image(Column), Left));
          end loop;
       end loop;
       Table.Row := 1;
