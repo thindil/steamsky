@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -44,6 +44,7 @@ package body Goals is
       GoalsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(GoalsData, "goal");
+      Load_Goals_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Index => Null_Unbounded_String, GType => RANDOM, Amount => 0,
@@ -56,12 +57,13 @@ package body Goals is
               DataAction'Value(Get_Attribute(GoalNode, "action"))
             else ADD);
          GoalIndex := 0;
+         Get_Goal_Index_Loop :
          for J in Goals_List.Iterate loop
             if Goals_List(J).Index = TempRecord.Index then
                GoalIndex := Goals_Container.To_Index(J);
-               exit;
+               exit Get_Goal_Index_Loop;
             end if;
-         end loop;
+         end loop Get_Goal_Index_Loop;
          if Action in UPDATE | REMOVE then
             if GoalIndex = 0 then
                raise Data_Loading_Error
@@ -108,7 +110,7 @@ package body Goals is
             LogMessage
               ("Goal removed: " & To_String(TempRecord.Index), Everything);
          end if;
-      end loop;
+      end loop Load_Goals_Loop;
    end LoadGoals;
 
    function GoalText(Index: Goals_Container.Extended_Index) return String is
@@ -193,13 +195,14 @@ package body Goals is
                  (Text, InsertPosition,
                   GetFactionName(Goal.TargetIndex, NAME) & " ");
             when DESTROY =>
+               Destroy_Ship_Loop :
                for I in ProtoShips_List.Iterate loop
                   if ProtoShips_Container.Key(I) = Goal.TargetIndex then
                      Append(Text, ": " & To_String(ProtoShips_List(I).Name));
                      Added := True;
-                     exit;
+                     exit Destroy_Ship_Loop;
                   end if;
-               end loop;
+               end loop Destroy_Ship_Loop;
                if not Added then
                   InsertPosition := Length(Text) - 3;
                   if Goal.Amount > 1 then
