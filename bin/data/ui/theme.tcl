@@ -87,9 +87,9 @@ namespace eval ttk::theme::steamsky {
          -font InterfaceFont \
          -borderwidth 1 \
          -focuscolor $colors(-goldenyellow) \
-         -bordercolor $colors(-darkorange) \
-         -lightcolor $colors(-verydarkorange) \
-         -darkcolor $colors(-verydarkorange)
+         -bordercolor $colors(-verydarkorange) \
+         -lightcolor $colors(-darkorange) \
+         -darkcolor black
 
       ttk::style map . -foreground [list disabled $colors(-gray)]
 
@@ -106,19 +106,19 @@ namespace eval ttk::theme::steamsky {
       #
 
       # Button setting
-      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
+      ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange)
       ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TButton -background [list active $colors(-darkred)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
-      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
+      ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) -background $colors(-almostblackorange)
       ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
       # Small buttons settings (like minimize/maximize buttons)
-      ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons -background $colors(-almostblackorange) -darkcolor black -lightcolor $colors(-darkorange) -bordercolor $colors(-verydarkorange)
+      ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons -background $colors(-almostblackorange)
 
       # Flat buttons setting
       # Default flat button
@@ -148,7 +148,7 @@ namespace eval ttk::theme::steamsky {
 
       # Progressbar setting
       # Default progressbars
-      ttk::style configure TProgressbar -background red -troughcolor $colors(-almostblackred)
+      ttk::style configure TProgressbar -background red -troughcolor $colors(-almostblackred) -bordercolor $colors(-darkorange) -borderwidth 0
       # Green horizontal progress bar
       ttk::style configure green.Horizontal.TProgressbar -background green
       # Blue horizontal progress bar
@@ -209,7 +209,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
 
       # Main frames of the game
-      ttk::style configure Main.TFrame -relief solid -borderwidth 1
+      ttk::style configure Main.TFrame -relief solid -borderwidth 1 -bordercolor $colors(-darkorange)
 
       # Last messages frame
       ttk::style configure LastMessages.TFrame -relief solid -bordercolor $colors(-gray) -borderwidth 1
@@ -233,7 +233,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray)
 
       # Dialogs (like messages, move map options, etc)
-      ttk::style configure Dialog.TFrame -relief solid
+      ttk::style configure Dialog.TFrame -relief solid -bordercolor $colors(-darkorange)
 
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
