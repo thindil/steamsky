@@ -87,7 +87,7 @@ package body Table is
          "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
          " -fill [ttk::style lookup " &
          To_String(GameSettings.InterfaceTheme) &
-         " -bordercolor] -outline [ttk::style lookup " &
+         " -lightcolor] -outline [ttk::style lookup " &
          To_String(GameSettings.InterfaceTheme) &
          " -troughcolor] -width 2 -tags [list headerback]");
       Lower(Canvas, "headerback");
@@ -302,7 +302,7 @@ package body Table is
               To_String(GameSettings.InterfaceTheme) &
               " -troughcolor] -outline [ttk::style lookup " &
               To_String(GameSettings.InterfaceTheme) &
-              " -bordercolor] -tags [list progressbar" &
+              " -lightcolor] -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
