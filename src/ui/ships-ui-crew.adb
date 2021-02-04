@@ -1,5 +1,4 @@
--- /home/thindil/Projekty/steamsky/steamsky/src/ui/ships-ui-crew.adb
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -269,7 +268,7 @@ package body Ships.UI.Crew is
       Yview_Move_To(ShipCanvas, "0.0");
    end UpdateCrewInfo;
 
-   -- ****o* SUCrew/Order_For_All_Command
+   -- ****o* SUCrew/SUCrew.Order_For_All_Command
    -- FUNCTION
    -- Set the selected order for the whole crew
    -- PARAMETERS
@@ -314,7 +313,7 @@ package body Ships.UI.Crew is
          return TCL_OK;
    end Order_For_All_Command;
 
-   -- ****o* SUCrew/Dismiss_Command
+   -- ****o* SUCrew/SUCrew.Dismiss_Command
    -- FUNCTION
    -- Dismiss the selected crew member
    -- PARAMETERS
@@ -367,7 +366,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Dismiss_Command;
 
-   -- ****o* SUCrew/Set_Crew_Order_Command
+   -- ****o* SUCrew/SUCrew.Set_Crew_Order_Command
    -- FUNCTION
    -- Set order for the selected crew member
    -- PARAMETERS
@@ -415,7 +414,7 @@ package body Ships.UI.Crew is
          return TCL_OK;
    end Set_Crew_Order_Command;
 
-   -- ****o* SUCrew/Show_Member_Info_Command
+   -- ****o* SUCrew/SUCrew.Show_Member_Info_Command
    -- FUNCTION
    -- Show information about the selected crew member
    -- PARAMETERS
@@ -850,7 +849,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Info_Command;
 
-   -- ****o* SUCrew/Show_Member_Tab_Command
+   -- ****o* SUCrew/SUCrew.Show_Member_Tab_Command
    -- FUNCTION
    -- Show the selected information about the selected crew member
    -- PARAMETERS
@@ -896,7 +895,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Tab_Command;
 
-   -- ****o* SUCrew/Show_Crew_Stats_Info_Command
+   -- ****o* SUCrew/SUCrew.Show_Crew_Stats_Info_Command
    -- FUNCTION
    -- Show the detailed information about the selected crew member statistic
    -- PARAMETERS
@@ -930,7 +929,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
-   -- ****o* SUCrew/Show_Crew_Skill_Info_Command
+   -- ****o* SUCrew/SUCrew.Show_Crew_Skill_Info_Command
    -- FUNCTION
    -- Show the detailed information about the selected crew member skill
    -- PARAMETERS
@@ -1003,7 +1002,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 
-   -- ****o* SUCrew/Show_Member_Priorities_Command
+   -- ****o* SUCrew/SUCrew.Show_Member_Priorities_Command
    -- FUNCTION
    -- Show information about the selected crew member priorities
    -- PARAMETERS
@@ -1090,7 +1089,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Priorities_Command;
 
-   -- ****o* SUCrew/Set_Priority_Command
+   -- ****o* SUCrew/SUCrew.Set_Priority_Command
    -- FUNCTION
    -- Set the selected priority of the selected crew member
    -- PARAMETERS
@@ -1147,7 +1146,7 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Set_Priority_Command;
 
-   -- ****o* SUCrew/Show_Member_Menu_Command
+   -- ****o* SUCrew/SUCrew.Show_Member_Menu_Command
    -- FUNCTION
    -- Show the menu with options for the selected crew member
    -- PARAMETERS
