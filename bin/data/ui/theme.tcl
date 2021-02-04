@@ -108,7 +108,7 @@ namespace eval ttk::theme::steamsky {
       # Button setting
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange)
       ttk::style map TButton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
-      ttk::style map TButton -background [list active $colors(-darkred)]
+      ttk::style map TButton -background [list active $colors(-darkred) disabled $colors(-verydarkorange)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
