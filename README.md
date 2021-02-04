@@ -72,7 +72,7 @@ this file is) to compile:
 
 * If you prefer using console: In the main source code directory type `gprbuild`
   for debug mode build or for release mode: `gprbuild -XMode=release`. If you
-  have installed [Bob](https://github.com/thindil/bob) you can type `bob debug`
+  have installed [Bob](https://www.laeran.pl/repositories/bob) you can type `bob debug`
   for build in debug mode or `bob release` to prepare release for the program.
   If you want to only build release version of the game, use only `gprbuild -XMode=release`
   command.
@@ -84,7 +84,7 @@ file is):
 
 * From console: type `gprbuild -P test_driver.gpr`
 
-Or if you have [Bob](https://github.com/thindil/bob) installed, type `bob tests 1`.
+Or if you have [Bob](https://www.laeran.pl/repositories/bob) installed, type `bob tests 1`.
 It will also run tests once.
 
 ## Generating code documentation
@@ -94,7 +94,7 @@ If you have it, in main program directory (where this file is) enter terminal
 command: `others/generatedocs.tcl`. For more information about this script,
 please look [here](https://github.com/thindil/roboada#generatedocspy). This
 version of script have set all default settings for Steam Sky code. If you have
-[Bob](https://github.com/thindil/bob) installed, you can type `bob docs`.
+[Bob](https://www.laeran.pl/repositories/bob) installed, you can type `bob docs`.
 
 ## Running Steam Sky
 
