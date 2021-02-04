@@ -29,7 +29,7 @@ namespace eval ttk::theme::steamsky {
       -verydarkorange    "#1a130c"
       -palegoldenrod     "#eee8aa"
       -gray              "#7f8c8d"
-      -darkred           "#600000"
+      -darkred           "#500000"
       -goldenyellow      "#ffdf00"
       -blue              "#458588"
       -pink              "#b16286"
@@ -107,23 +107,25 @@ namespace eval ttk::theme::steamsky {
 
       # Button setting
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange)
-      ttk::style map TButton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
+      ttk::style map TButton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       ttk::style map TButton -background [list active $colors(-darkred)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
       ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) -background $colors(-almostblackorange)
-      ttk::style map TMenubutton -foreground [list active $colors(-goldenyellow) disabled $colors(-gray)]
+      ttk::style map TMenubutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       option add *TMenubutton.cursor hand1
 
       # Small buttons settings (like minimize/maximize buttons)
       ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons -background $colors(-almostblackorange)
+      ttk::style map Small.TButton -font [list active InterfaceIcons]
 
       # Flat buttons setting
       # Default flat button
       ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow)
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list selected sunken]
+      ttk::style map Toolbutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       # Flat button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
       # Flat button for female gender
