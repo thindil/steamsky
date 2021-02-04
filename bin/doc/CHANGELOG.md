@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned looting bases screen
 - Updated interface
 - Updated contributing guide
+- Updated README.md
 
 ### Fixed
 - Showing the selected modules type in shipyard with the current search text
