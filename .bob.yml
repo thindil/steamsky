@@ -63,7 +63,7 @@ version: 2.0
 - command:
    name: push
    execute:
-      - fossil sync
+      - fossil push
       - fossil git export --force
       - cd ../5.0
       - git push
