@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 package Ships.UI.Crew is
 -- ****
 
-   -- ****f* SUCrew/UpdateCrewInfo
+   -- ****f* SUCrew/SUCrew.UpdateCrewInfo
    -- FUNCTION
    -- Update information about the player ship crew members
    -- SOURCE
    procedure UpdateCrewInfo;
    -- ****
 
-   -- ****f* SUCrew/AddCommands
+   -- ****f* SUCrew/SUCrew.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the player's ship crew members information
    -- SOURCE
