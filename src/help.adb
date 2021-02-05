@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,6 +36,7 @@ package body Help is
       HelpData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
+      Load_Help_Data :
       for I in 0 .. Length(NodesList) - 1 loop
          TmpHelp :=
            (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
@@ -77,7 +78,7 @@ package body Help is
             Help_Container.Exclude(Help_List, HelpTitle);
             LogMessage("Help removed: " & To_String(HelpTitle), Everything);
          end if;
-      end loop;
+      end loop Load_Help_Data;
    end LoadHelp;
 
 end Help;
