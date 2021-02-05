@@ -117,6 +117,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TMenubutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       ttk::style map TMenubutton -background [list active $colors(-darkred)]
       ttk::style map TMenubutton -bordercolor [list active $colors(-palegoldenrod)]
+      ttk::style map TMenubutton -arrowcolor [list active $colors(-palegoldenrod)]
       option add *TMenubutton.cursor hand1
 
       # Small buttons settings (like minimize/maximize buttons)
@@ -167,10 +168,12 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
 
       # Spinbox setting
-      ttk::style configure TSpinbox -arrowcolor $colors(-palegoldenrod) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
+      ttk::style configure TSpinbox -arrowcolor $colors(-goldenyellow) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
+      ttk::style map TSpinbox -arrowcolor [list active $colors(-palegoldenrod)]
 
       # Scrollbar setting
-      ttk::style configure TScrollbar -arrowcolor $colors(-palegoldenrod)
+      ttk::style configure TScrollbar -arrowcolor $colors(-goldenyellow)
+      ttk::style map TScrollbar -arrowcolor [list active $colors(-palegoldenrod)]
       bind TScrollbar <Motion> {
          if {[%W cget -orient] == "horizontal"} {
             %W configure -cursor sb_h_double_arrow
