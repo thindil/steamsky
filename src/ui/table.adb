@@ -85,11 +85,9 @@ package body Table is
       Canvas_Create
         (Canvas, "rectangle",
          "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
-         " -fill [ttk::style lookup " &
-         To_String(GameSettings.InterfaceTheme) &
-         " -lightcolor] -outline [ttk::style lookup " &
-         To_String(GameSettings.InterfaceTheme) &
-         " -troughcolor] -width 2 -tags [list headerback]");
+         " -fill " & Style_Lookup("Table", "-headercolor") & " -outline " &
+         Style_Lookup("Table", "-rowcolor") &
+         " -width 2 -tags [list headerback]");
       Lower(Canvas, "headerback");
       Table.Canvas := Canvas;
       return Table;
@@ -280,10 +278,11 @@ package body Table is
       Length: constant Natural :=
         Natural((Float(Value) / Float(MaxValue)) * Float(MaxValue));
       Color: constant String :=
-        (if Length > 74 then "green"
+        (if Length > 74 then
+           Style_Lookup("green.Horizontal.TProgressbar", "-background")
          elsif Length > 24 then
-           Style_Lookup(To_String(GameSettings.InterfaceTheme), "-focuscolor")
-         else "red");
+           Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
+         else Style_Lookup("TProgressbar", "-background"));
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
@@ -298,11 +297,9 @@ package body Table is
               Positive'Image(X + 102) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 10)) &
-              " -fill [ttk::style lookup " &
-              To_String(GameSettings.InterfaceTheme) &
-              " -troughcolor] -outline [ttk::style lookup " &
-              To_String(GameSettings.InterfaceTheme) &
-              " -lightcolor] -tags [list progressbar" &
+              " -fill " & Style_Lookup("TProgressbar", "-troughcolor") &
+              " -outline " & Style_Lookup("TProgressbar", "-bordercolor") &
+              " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
