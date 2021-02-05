@@ -211,6 +211,7 @@ namespace eval ttk::theme::steamsky {
 
       # Check button setting
       ttk::style configure TCheckbutton -padding 4
+      option add *TCheckbutton.cursor hand1
 
       # Info frames (like modules, items, etc)
       ttk::style configure TLabelframe.Label -foreground green
