@@ -203,6 +203,9 @@ namespace eval ttk::theme::steamsky {
       # Help topics list
       ttk::style configure Help.Treeview -font HelpFont
 
+      # Table widget (like looting, shipyard) screen
+      ttk::style configure Table -headercolor $colors(-darkorange) -rowcolor $colors(-almostblackred)
+
       # Check button setting
       ttk::style configure TCheckbutton -padding 4
 
