@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,6 +43,7 @@ package body Items is
       ItemsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ItemsData, "item");
+      Load_Items_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Weight => 1,
@@ -93,14 +94,15 @@ package body Items is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ItemNode, "trade");
+            Set_Buyable_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                if Get_Attribute(ChildNode, "buyable") = "N" then
                   TempRecord.Price :=
                     Natural'Value(Get_Attribute(ChildNode, "price"));
-                  exit;
+                  exit Set_Buyable_Loop;
                end if;
-            end loop;
+            end loop Set_Buyable_Loop;
             if Get_Attribute(ItemNode, "price")'Length > 0 then
                TempRecord.Price :=
                  Natural'Value(Get_Attribute(ItemNode, "price"));
@@ -110,12 +112,13 @@ package body Items is
             if Length(ChildNodes) > 0 then
                TempRecord.Value.Clear;
             end if;
+            Set_Value_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempRecord.Value.Append
                  (New_Item =>
                     Integer'Value
                       (Get_Attribute(Item(ChildNodes, J), "value")));
-            end loop;
+            end loop Set_Value_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (ItemNode, "description");
@@ -146,7 +149,8 @@ package body Items is
             Objects_Container.Exclude(Items_List, ItemIndex);
             LogMessage("Item removed: " & To_String(ItemIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Items_Loop;
+      Set_Items_Lists_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).IType = WeaponType then
             Weapons_List.Append(New_Item => Objects_Container.Key(I));
@@ -161,17 +165,18 @@ package body Items is
          elsif Items_List(I).IType = LegsArmor then
             LegsArmors_List.Append(New_Item => Objects_Container.Key(I));
          end if;
-      end loop;
+      end loop Set_Items_Lists_Loop;
    end LoadItems;
 
    function FindProtoItem
      (ItemType: Unbounded_String) return Unbounded_String is
    begin
+      Find_Proto_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).IType = ItemType then
             return Objects_Container.Key(I);
          end if;
-      end loop;
+      end loop Find_Proto_Loop;
       return Null_Unbounded_String;
    end FindProtoItem;
 
