@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -269,39 +269,39 @@ grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar se
 grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
 ttk::frame .newgamemenu.canvas.player
 grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}]
-grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1
+grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1]
-grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName player}] -row 0 -column 2
+grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName player}] -row 0 -column 2 -padx {5 0}
 tooltip::tooltip .newgamemenu.canvas.player.randomplayer "Select a random name for the character,\nbased on the character gender"
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
 grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1
-grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1
+grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1 -pady 3
 grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male -style Male.Toolbutton -value M -variable playergender -text "[format %c 0xf222]" -command {SetInfo player 2}]
 tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
 grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female -style Female.Toolbutton -value F -variable playergender -text "[format %c 0xf221]" -command {SetInfo player 2}] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.gender.female Female
 grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -row 2
-grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1
+grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
-grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName ship}] -row 2 -column 2
+grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName ship}] -row 2 -column 2 -padx {5 0}
 tooltip::tooltip .newgamemenu.canvas.player.randomship "Select a random name for the ship"
 grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3
-grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 -columnspan 2
+grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
 bind .newgamemenu.canvas.player.goal <FocusIn> {SetInfo player 4}
 grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4
-grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 16] -row 4 -column 1 -columnspan 2
+grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 16] -row 4 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $playertooltips 5]
 bind .newgamemenu.canvas.player.faction <FocusIn> SetFaction
 bind .newgamemenu.canvas.player.faction <<ComboboxSelected>> SetFaction
 grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5
-grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 16] -row 5 -column 1 -columnspan 2
+grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 16] -row 5 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.career [lindex $playertooltips 6]
 bind .newgamemenu.canvas.player.career <FocusIn> {SetCareer}
 bind .newgamemenu.canvas.player.career <<ComboboxSelected>> SetCareer
 grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6
-grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] -row 6 -column 1 -columnspan 2
+grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] -row 6 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
 bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
