@@ -187,15 +187,11 @@ package body Items is
       DamageText: Unbounded_String;
    begin
       DamagePercent := 1.0 - (Float(ItemDurability) / 100.0);
-      if DamagePercent < 0.2 then
-         DamageText := To_Unbounded_String("Slightly used");
-      elsif DamagePercent < 0.5 then
-         DamageText := To_Unbounded_String("Damaged");
-      elsif DamagePercent < 0.8 then
-         DamageText := To_Unbounded_String("Heavily damaged");
-      else
-         DamageText := To_Unbounded_String("Almost destroyed");
-      end if;
+      DamageText :=
+        (if DamagePercent < 0.2 then To_Unbounded_String("Slightly used")
+         elsif DamagePercent < 0.5 then To_Unbounded_String("Damaged")
+         elsif DamagePercent < 0.8 then To_Unbounded_String("Heavily damaged")
+         else To_Unbounded_String("Almost destroyed"));
       if ToLower then
          DamageText := To_Unbounded_String(To_Lower(To_String(DamageText)));
       end if;
