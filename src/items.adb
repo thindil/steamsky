@@ -253,7 +253,9 @@ package body Items is
          end if;
          return;
       end if;
+      Update_Inventory_Loop :
       while I <= Inventory.Last_Index loop
+         Find_Item_Loop :
          for J in Inventory.First_Index .. Inventory.Last_Index loop
             if Inventory(I).ProtoIndex = Inventory(J).ProtoIndex and
               Inventory(I).Durability = Inventory(J).Durability and I /= J then
@@ -275,11 +277,11 @@ package body Items is
                      InventoryIndex => I);
                end if;
                I := I - 1;
-               exit;
+               exit Find_Item_Loop;
             end if;
-         end loop;
+         end loop Find_Item_Loop;
          I := I + 1;
-      end loop;
+      end loop Update_Inventory_Loop;
    end DamageItem;
 
    function FindItem
@@ -289,6 +291,7 @@ package body Items is
       Quality: Positive := 100) return Natural is
    begin
       if ProtoIndex /= Null_Unbounded_String then
+         Find_Item_With_Proto_Loop :
          for I in Inventory.Iterate loop
             if Inventory(I).ProtoIndex = ProtoIndex
               and then
@@ -303,8 +306,9 @@ package body Items is
                   return Inventory_Container.To_Index(I);
                end if;
             end if;
-         end loop;
+         end loop Find_Item_With_Proto_Loop;
       elsif ItemType /= Null_Unbounded_String then
+         Find_Item_Loop :
          for I in Inventory.Iterate loop
             if Items_List(Inventory(I).ProtoIndex).IType = ItemType
               and then
@@ -319,7 +323,7 @@ package body Items is
                   return Inventory_Container.To_Index(I);
                end if;
             end if;
-         end loop;
+         end loop Find_Item_Loop;
       end if;
       return 0;
    end FindItem;
@@ -332,18 +336,20 @@ package body Items is
       Tools_List.Append(New_Item => RepairTools);
       Tools_List.Append(New_Item => CleaningTools);
       Tools_List.Append(New_Item => AlchemyTools);
+      Recipes_Loop :
       for Recipe of Recipes_List loop
          if Tools_List.Find_Index(Item => Recipe.Tool) =
            UnboundedString_Container.No_Index then
             Tools_List.Append(New_Item => Recipe.Tool);
          end if;
-      end loop;
+      end loop Recipes_Loop;
+      Skills_Loop :
       for Skill of Skills_List loop
          if Tools_List.Find_Index(Item => Skill.Tool) =
            UnboundedString_Container.No_Index then
             Tools_List.Append(New_Item => Skill.Tool);
          end if;
-      end loop;
+      end loop Skills_Loop;
    end SetToolsList;
 
    function GetItemChanceToDamage(ItemData: Natural) return String is
