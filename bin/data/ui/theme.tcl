@@ -192,8 +192,11 @@ namespace eval ttk::theme::steamsky {
       }
 
       # Combobox setting
-      ttk::style configure TCombobox -arrowcolor $colors(-goldenyellow) -relief flat -padding 4 -foreground $colors(-goldenyellow)
+      ttk::style configure TCombobox -arrowcolor $colors(-goldenyellow) -padding 4 -foreground $colors(-goldenyellow) -selectbackground $colors(-verydarkorange)
+      ttk::style map TCombobox -arrowcolor [list active $colors(-palegoldenrod)]
       option add *TCombobox*Listbox.cursor hand1
+      option add *TCombobox*Listbox.highlightThickness 1
+      option add *TCombobox*Listbox.highlightColor $colors(-darkorange)
       bind TCombobox <Motion> {
          %W configure -cursor hand1
       }
