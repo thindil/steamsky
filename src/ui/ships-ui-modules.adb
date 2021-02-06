@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -63,7 +63,7 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
 
-   -- ****if* SUModules/Show_Module_Menu_Command
+   -- ****if* SUModules/SUModules.Show_Module_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected module options
    -- PARAMETERS
@@ -366,7 +366,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Module_Menu_Command;
 
-   -- ****o* SUModules/Show_Module_Info_Command
+   -- ****o* SUModules/SUModules.Show_Module_Info_Command
    -- FUNCTION
    -- Show information about the selected module and set option for it
    -- PARAMETERS
@@ -903,7 +903,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Module_Info_Command;
 
-   -- ****o* SUModules/Set_Upgrade_Command
+   -- ****o* SUModules/SUModules.Set_Upgrade_Command
    -- FUNCTION
    -- Set the selected upgrade for the selected module
    -- PARAMETERS
@@ -938,7 +938,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
 
-   -- ****o* SUModules/Assign_Module_Command
+   -- ****o* SUModules/SUModules.Assign_Module_Command
    -- FUNCTION
    -- Assign member, ammo or skill to module
    -- PARAMETERS
@@ -1052,7 +1052,7 @@ package body Ships.UI.Modules is
          return TCL_OK;
    end Assign_Module_Command;
 
-   -- ****o* SUModules/Disable_Engine_Command
+   -- ****o* SUModules/SUModules.Disable_Engine_Command
    -- FUNCTION
    -- Enable or disable selected engine
    -- PARAMETERS
@@ -1112,7 +1112,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Disable_Engine_Command;
 
-   -- ****o* SUModules/Stop_Upgrading_Command
+   -- ****o* SUModules/SUModules.Stop_Upgrading_Command
    -- FUNCTION
    -- Stop the current ship upgrade
    -- PARAMETERS
@@ -1150,7 +1150,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Stop_Upgrading_Command;
 
-   -- ****o* SUModules/Set_Repair_Command
+   -- ****o* SUModules/SUModules.Set_Repair_Command
    -- FUNCTION
    -- Set or remove the repair priority from the selected module
    -- PARAMETERS
@@ -1194,7 +1194,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Repair_Command;
 
-   -- ****o* SUModules/Reset_Destination_Command
+   -- ****o* SUModules/SUModules.Reset_Destination_Command
    -- FUNCTION
    -- Reset the current destination point for the player's ship
    -- PARAMETERS
@@ -1225,7 +1225,7 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 
-   -- ****o* SUModules/Update_Assign_Crew_Command
+   -- ****o* SUModules/SUModules.Update_Assign_Crew_Command
    -- FUNCTION
    -- Update assign the crew member UI
    -- PARAMETERS
@@ -1326,7 +1326,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Update_Assign_Crew_Command;
 
-   -- ****o* SUModules/Show_Assign_Crew_Command
+   -- ****o* SUModules/SUModules.Show_Assign_Crew_Command
    -- FUNCTION
    -- Show assign the crew member UI
    -- PARAMETERS
@@ -1454,7 +1454,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
-   -- ****o* SUModules/Show_Assign_Skill_Command
+   -- ****o* SUModules/SUModules.Show_Assign_Skill_Command
    -- FUNCTION
    -- Show assign the skill UI
    -- PARAMETERS
@@ -1562,7 +1562,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
-   -- ****o* SUModules/Cancel_Order_Command
+   -- ****o* SUModules/SUModules.Cancel_Order_Command
    -- FUNCTION
    -- Cancel the current crafting order
    -- PARAMETERS
@@ -1609,7 +1609,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Cancel_Order_Command;
 
-   -- ****o* SUModules/Get_Active_Button_Command
+   -- ****o* SUModules/SUModules.Get_Active_Button_Command
    -- FUNCTION
    -- Get the next active button in assing crew dialog
    -- PARAMETERS
