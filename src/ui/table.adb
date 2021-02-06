@@ -141,7 +141,7 @@ package body Table is
    procedure AddText
      (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
       NewRow: Boolean := False; Color: String := "") is
-      X: Natural := 0;
+      X: Natural := 5;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Text_Color: constant String :=
@@ -158,7 +158,7 @@ package body Table is
           (Canvas_Create
              (Table.Canvas, "text",
               Trim(Natural'Image(X), Left) &
-              Positive'Image(Table.Row * Table.Row_Height) &
+              Positive'Image((Table.Row * Table.Row_Height) + 2) &
               " -anchor nw -text {" & Text & "} -font InterfaceFont -fill " &
               Text_Color & " -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "col" &
