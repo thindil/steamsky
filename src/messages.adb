@@ -74,6 +74,7 @@ package body Messages is
       if MessageIndex < 1 then
          Index := 1;
          if Integer(Messages_List.Length) + MessageIndex > 0 then
+            Get_Reverse_Message_Loop :
             for Message of reverse Messages_List loop
                if Message.MType = MType or MType = Default then
                   Index := Index - 1;
@@ -81,12 +82,13 @@ package body Messages is
                if Index = MessageIndex then
                   return Message;
                end if;
-            end loop;
+            end loop Get_Reverse_Message_Loop;
          end if;
          return (Message => Null_Unbounded_String, MType => Default,
             Color => WHITE);
       end if;
       Index := 0;
+      Get_Message_Loop :
       for Message of Messages_List loop
          if Message.MType = MType or MType = Default then
             Index := Index + 1;
@@ -94,7 +96,7 @@ package body Messages is
          if Index = MessageIndex then
             return Message;
          end if;
-      end loop;
+      end loop Get_Message_Loop;
       return (Message => Null_Unbounded_String, MType => Default,
          Color => WHITE);
    end GetMessage;
@@ -110,11 +112,12 @@ package body Messages is
       if MType = Default then
          return Natural(Messages_List.Length);
       else
+         Count_Messages_Loop :
          for Message of Messages_List loop
             if Message.MType = MType then
                Amount := Amount + 1;
             end if;
-         end loop;
+         end loop Count_Messages_Loop;
          return Amount;
       end if;
    end MessagesAmount;
