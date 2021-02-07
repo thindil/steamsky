@@ -38,11 +38,10 @@ package body Messages is
             when 4 =>
                Result := Result & RawImage;
             when 5 =>
-               if TimeArray(5) < 10 then
-                  Result := Result & ":0" & Trim(RawImage, Ada.Strings.Left);
-               else
-                  Result := Result & ":" & Trim(RawImage, Ada.Strings.Left);
-               end if;
+               Result :=
+                 (if TimeArray(5) < 10 then
+                    Result & ":0" & Trim(RawImage, Ada.Strings.Left)
+                  else Result & ":" & Trim(RawImage, Ada.Strings.Left));
          end case;
       end loop Format_Time_Loop;
       return To_String(Result);
