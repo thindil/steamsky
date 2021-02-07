@@ -1,4 +1,4 @@
---    Copyright 2016-2018 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -25,6 +25,7 @@ package body Messages is
       TimeArray: constant Natural_Array(1 .. 5) :=
         (Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minutes);
    begin
+      Format_Time_Loop :
       for I in TimeArray'Range loop
          RawImage := To_Unbounded_String(Natural'Image(TimeArray(I)));
          case I is
@@ -43,7 +44,7 @@ package body Messages is
                   Result := Result & ":" & Trim(RawImage, Ada.Strings.Left);
                end if;
          end case;
-      end loop;
+      end loop Format_Time_Loop;
       return To_String(Result);
    end FormatedTime;
 
