@@ -244,7 +244,7 @@ proc SetPoints {{difficulty Custom}} {
    return true
 }
 ttk::frame .newgamemenu -style Main.TFrame
-grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady 2
+grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady {5 2}
 grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Radio.Toolbutton -value player -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
@@ -306,8 +306,8 @@ tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
 bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
 ttk::frame .newgamemenu.canvas.difficulty
-grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}]
-grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0
+grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}] -sticky e -padx {0 5}
+grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0 -pady 3
 bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
    set level [.newgamemenu.canvas.difficulty.difficultylevel get]
    switch $level {
@@ -366,36 +366,36 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
 }
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
 bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> {SetInfo difficulty 1}
-grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 1
+grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 1 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemydamage [lindex $difficultytooltips 2]
 bind .newgamemenu.canvas.difficulty.enemydamage <FocusIn> {SetInfo difficulty 2}
-grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 2
+grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.playerdamage [lindex $difficultytooltips 3]
 bind .newgamemenu.canvas.difficulty.playerdamage <FocusIn> {SetInfo difficulty 3}
-grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 3
+grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 3 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemymeleedamage [lindex $difficultytooltips 4]
 bind .newgamemenu.canvas.difficulty.enemymeleedamage <FocusIn> {SetInfo difficulty 4}
-grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 4
+grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 4 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.playermeleedamage [lindex $difficultytooltips 5]
 bind .newgamemenu.canvas.difficulty.playermeleedamage <FocusIn> {SetInfo difficulty 5}
-grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 5
+grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 5 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.experience [lindex $difficultytooltips 6]
 bind .newgamemenu.canvas.difficulty.experience <FocusIn> {SetInfo difficulty 6}
-grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 6
+grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 6 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.reputation [lindex $difficultytooltips 7]
 bind .newgamemenu.canvas.difficulty.reputation <FocusIn> {SetInfo difficulty 7}
-grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 7
+grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 7 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade [lindex $difficultytooltips 8]
 bind .newgamemenu.canvas.difficulty.upgrade <FocusIn> {SetInfo difficulty 8}
-grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bases:}] -row 8
-grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 8
+grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bases:}] -row 8 -sticky e -padx {0 5}
+grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 8 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.prices [lindex $difficultytooltips 9]
 bind .newgamemenu.canvas.difficulty.prices <FocusIn> {SetInfo difficulty 9}
 grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random -command {
@@ -408,7 +408,7 @@ grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random -command {
    .newgamemenu.canvas.difficulty.upgrade set [expr { int(499 * rand()) + 1 }]
    .newgamemenu.canvas.difficulty.prices set [expr { int(499 * rand()) + 1 }]
    SetPoints
-}] -row 9 -columnspan 2 -sticky we
+}] -row 9 -columnspan 2 -sticky we -pady 3 -padx 5
 tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
 bind .newgamemenu.canvas.difficulty.random <FocusIn> {SetInfo difficulty 10}
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 10
@@ -430,7 +430,7 @@ grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0
    bind . <Escape> {}
    pack forget .newgamemenu
    NewGame
-}] -sticky e
+}] -sticky e -padx 3 -pady 3
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
@@ -439,6 +439,6 @@ grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 
    bind . <Escape> {}
    pack forget .newgamemenu
    pack .mainmenu -fill both -expand true
-}] -column 1 -row 0 -sticky w
+}] -column 1 -row 0 -sticky w -padx 3 -pady 3
 grid columnconfigure .newgamemenu .newgamemenu.info -weight 3
 grid rowconfigure .newgamemenu .newgamemenu.info -weight 3
