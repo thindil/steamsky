@@ -55,26 +55,18 @@ package body Missions is
         SkyBases(BaseIndex).Population = 0 then
          return;
       end if;
-      case SkyBases(BaseIndex).Population is
-         when 1 .. 149 =>
-            MissionsAmount := GetRandom(1, 5);
-         when 150 .. 299 =>
-            MissionsAmount := GetRandom(1, 10);
-         when others =>
-            MissionsAmount := GetRandom(1, 15);
-      end case;
-      case SkyBases(BaseIndex).Reputation(1) is
-         when 1 .. 25 =>
-            MissionsAmount := MissionsAmount + 1;
-         when 26 .. 50 =>
-            MissionsAmount := MissionsAmount + 3;
-         when 51 .. 75 =>
-            MissionsAmount := MissionsAmount + 5;
-         when 76 .. 100 =>
-            MissionsAmount := MissionsAmount + 10;
-         when others =>
-            null;
-      end case;
+      MissionsAmount :=
+        (case SkyBases(BaseIndex).Population is
+           when 1 .. 149 => GetRandom(1, 5),
+           when 150 .. 299 => GetRandom(1, 10),
+           when others => GetRandom(1, 15));
+      MissionsAmount :=
+        (case SkyBases(BaseIndex).Reputation(1) is
+           when 1 .. 25 => MissionsAmount + 1,
+           when 26 .. 50 => MissionsAmount + 3,
+           when 51 .. 75 => MissionsAmount + 5,
+           when 76 .. 100 => MissionsAmount + 10,
+           when others => MissionsAmount);
       for I in Items_List.Iterate loop
          if Items_List(I).IType = MissionItemsType then
             MissionsItems.Append(New_Item => Objects_Container.Key(I));
