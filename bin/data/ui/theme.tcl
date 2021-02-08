@@ -165,10 +165,10 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure experience.Horizontal.TProgressbar -background $colors(-darkyellow) -troughcolor $colors(-verydarkorange) -bordercolor $colors(-verydarkorange)
 
       # Entry setting
-      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
+      ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4 -lightcolor black -bordercolor $colors(-darkorange)
 
       # Spinbox setting
-      ttk::style configure TSpinbox -arrowcolor $colors(-goldenyellow) -relief flat -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred)
+      ttk::style configure TSpinbox -arrowcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
       ttk::style map TSpinbox -arrowcolor [list active $colors(-palegoldenrod)]
 
       # Scrollbar setting
@@ -235,11 +235,6 @@ namespace eval ttk::theme::steamsky {
       # Tooltips setting
       set ::tooltip::labelOpts [list -relief groove -borderwidth 2 \
          -background black -foreground $colors(-palegoldenrod) -padx 5 -pady 5]
-
-      # Dialog with getting string (like name of the ship, modules, etc)
-      option add *TkSDialog.background [ttk::style lookup . -background]
-      option add *TkSDialog*Button.foreground $colors(-goldenyellow)
-      option add *TkSDialog*Entry.foreground $colors(-goldenyellow)
 
       # Map info label
       ttk::style configure MapInfo.TLabel -background black
