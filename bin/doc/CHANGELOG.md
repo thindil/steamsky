@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Showing the selected modules type in shipyard with the current search text
 - Showing the selected type of items in loot screen
 - Showing longer description for modules in shipyard
+- Possible crash on accepting missions in bases
 
 ## [5.7] - 2021-01-24
 
