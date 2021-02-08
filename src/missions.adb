@@ -234,7 +234,7 @@ package body Missions is
             if Mission.StartBase = BaseIndex then
                MissionsLimit := MissionsLimit - 1;
             end if;
-            exit when MissionsLimit = 0;
+            exit when MissionsLimit <= 0;
          end loop;
          if MissionsLimit < 1 then
             raise Missions_Accepting_Error
