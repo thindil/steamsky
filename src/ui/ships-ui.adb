@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -323,7 +323,7 @@ package body Ships.UI is
       return TCL_OK;
    end Show_Ship_Info_Command;
 
-   -- ****o* SUI2/Set_Ship_Name_Command
+   -- ****o* SUI2/SUI2.Set_Ship_Name_Command
    -- FUNCTION
    -- Change name of the player's ship
    -- PARAMETERS
@@ -361,7 +361,7 @@ package body Ships.UI is
       return TCL_OK;
    end Set_Ship_Name_Command;
 
-   -- ****o* SUI2/Ship_Max_Min_Command
+   -- ****o* SUI2/SUI2.Ship_Max_Min_Command
    -- FUNCTION
    -- Maximize or minimize the selected section of ship info
    -- PARAMETERS
