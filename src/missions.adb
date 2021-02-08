@@ -225,20 +225,11 @@ package body Missions is
            with "Your reputation in this base is too low to receive any mission.";
       end if;
       declare
-         MissionsLimit: Integer;
+         MissionsLimit: Integer :=
+           (case SkyBases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+              when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
+              when others => 0);
       begin
-         case SkyBases(BaseIndex).Reputation(1) is
-            when 0 .. 25 =>
-               MissionsLimit := 1;
-            when 26 .. 50 =>
-               MissionsLimit := 3;
-            when 51 .. 75 =>
-               MissionsLimit := 5;
-            when 76 .. 100 =>
-               MissionsLimit := 10;
-            when others =>
-               MissionsLimit := 0;
-         end case;
          for Mission of AcceptedMissions loop
             if Mission.StartBase = BaseIndex then
                MissionsLimit := MissionsLimit - 1;
