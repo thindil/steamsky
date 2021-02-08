@@ -80,12 +80,14 @@ package body Missions is
       NormalizeCoord(MinY, False);
       MaxY := PlayerShip.SkyY + 100;
       NormalizeCoord(MaxY, False);
+      Find_Bases_In_Range_Loop :
       for I in SkyBases'Range loop
          if I /= BaseIndex and SkyBases(I).SkyX in MinX .. MaxX and
            SkyBases(I).SkyY in MinY .. MaxY and SkyBases(I).Population > 0 then
             BasesInRange.Append(New_Item => I);
          end if;
-      end loop;
+      end loop Find_Bases_In_Range_Loop;
+      Get_Random_Bases_Loop :
       while MissionsAmount > Positive(BasesInRange.Length) loop
          TmpBaseIndex := GetRandom(1, 1024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
@@ -93,9 +95,10 @@ package body Missions is
            SkyBases(TmpBaseIndex).Population > 0 then
             BasesInRange.Append(New_Item => TmpBaseIndex);
          end if;
-      end loop;
+      end loop Get_Random_Bases_Loop;
       SkyBases(BaseIndex).Missions.Clear;
       GenerateEnemies(Enemies);
+      Generate_Missions_Loop :
       for I in 1 .. MissionsAmount loop
          <<Start_Of_Loop>>
          MType :=
@@ -118,18 +121,23 @@ package body Missions is
                   ShipIndex =>
                     Enemies
                       (GetRandom(Enemies.First_Index, Enemies.Last_Index)));
+               Find_Mission_Location_Loop :
                loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
-                  exit when SkyMap(MissionX, MissionY).BaseIndex = 0 and
+                  exit Find_Mission_Location_Loop when SkyMap
+                      (MissionX, MissionY)
+                      .BaseIndex =
+                    0 and
                     MissionX /= PlayerShip.SkyX and
                     MissionY /= PlayerShip.SkyY;
-               end loop;
+               end loop Find_Mission_Location_Loop;
             when Patrol =>
                Mission :=
                  (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
                   Multiplier => 1.0, Target => 1);
+               Find_Patrol_Mission_Location_Loop :
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
@@ -137,9 +145,9 @@ package body Missions is
                     MissionX /= PlayerShip.SkyX and
                     MissionY /= PlayerShip.SkyY then
                      Mission.Target := 0;
-                     exit;
+                     exit Find_Patrol_Mission_Location_Loop;
                   end if;
-               end loop;
+               end loop Find_Patrol_Mission_Location_Loop;
                if Mission.Target = 1 then
                   goto Start_Of_Loop;
                end if;
@@ -148,14 +156,15 @@ package body Missions is
                  (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
                   Reward => 1, StartBase => 1, Finished => False,
                   Multiplier => 1.0, Target => 1);
+               Find_Explore_Location_Loop :
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
                   if not SkyMap(MissionX, MissionY).Visited then
                      Mission.Target := 0;
-                     exit;
+                     exit Find_Explore_Location_Loop;
                   end if;
-               end loop;
+               end loop Find_Explore_Location_Loop;
                if Mission.Target = 1 then
                   goto Start_Of_Loop;
                end if;
@@ -169,14 +178,15 @@ package body Missions is
                       (GetRandom(QualitiesArray'First, QualitiesArray'Last)));
          end case;
          if Mission.MType in Deliver | Passenger then
+            Find_Base_Mission_Loop :
             loop
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
                MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
                MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
-               exit when MissionX /= PlayerShip.SkyX and
+               exit Find_Base_Mission_Loop when MissionX /= PlayerShip.SkyX and
                  MissionY /= PlayerShip.SkyY;
-            end loop;
+            end loop Find_Base_Mission_Loop;
          end if;
          Mission.TargetX := MissionX;
          Mission.TargetY := MissionY;
@@ -199,7 +209,7 @@ package body Missions is
          Mission.StartBase := BaseIndex;
          Mission.Finished := False;
          SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
-      end loop;
+      end loop Generate_Missions_Loop;
       SkyBases(BaseIndex).MissionsDate := GameDate;
    end GenerateMissions;
 
