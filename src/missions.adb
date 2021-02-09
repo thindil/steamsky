@@ -256,12 +256,13 @@ package body Missions is
                if (Module.MType = CABIN and not HaveCabin)
                  and then Module.Quality >= Mission.Data then
                   HaveCabin := True;
+                  Cabin_Owner_Loop :
                   for Owner of Module.Owner loop
                      if Owner > 0 then
                         HaveCabin := False;
-                        exit;
+                        exit Cabin_Owner_Loop;
                      end if;
-                  end loop;
+                  end loop Cabin_Owner_Loop;
                   exit when HaveCabin;
                end if;
             end loop Modules_Loop;
@@ -345,14 +346,15 @@ package body Missions is
                      HomeBase => PassengerBase,
                      Faction => SkyBases(PassengerBase).Owner));
             end;
+            Find_Cabin_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN
                  and then
                  (Module.Quality >= Mission.Data and Module.Owner(1) = 0) then
                   Module.Owner(1) := PlayerShip.Crew.Last_Index;
-                  exit;
+                  exit Find_Cabin_Loop;
                end if;
-            end loop;
+            end loop Find_Cabin_Loop;
             Mission.Data := PlayerShip.Crew.Last_Index;
       end case;
       SkyBases(BaseIndex).Missions.Delete(Index => MissionIndex);
@@ -369,6 +371,7 @@ package body Missions is
       Time: Integer;
       I: Mission_Container.Extended_Index := AcceptedMissions.First_Index;
    begin
+      Update_Missions_Loop :
       while I <= AcceptedMissions.Last_Index loop
          Time := AcceptedMissions(I).Time - Minutes;
          if Time < 1 then
@@ -377,7 +380,7 @@ package body Missions is
             AcceptedMissions(I).Time := Time;
             I := I + 1;
          end if;
-      end loop;
+      end loop Update_Missions_Loop;
    end UpdateMissions;
 
    procedure FinishMission(MissionIndex: Positive) is
@@ -514,6 +517,7 @@ package body Missions is
          DeleteMember(Mission.Data, PlayerShip);
       end if;
       AcceptedMissions.Delete(Index => MissionIndex);
+      Update_Map_Loop :
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
             SkyMap
@@ -526,7 +530,7 @@ package body Missions is
               .MissionIndex :=
               I;
          end if;
-      end loop;
+      end loop Update_Map_Loop;
    end DeleteMission;
 
    procedure UpdateMission(MissionIndex: Positive) is
@@ -591,6 +595,7 @@ package body Missions is
       if FindMember(Talk) = 0 then
          return "";
       end if;
+      Finish_Missions_Loop :
       while I <= AcceptedMissions.Last_Index loop
          if
            (AcceptedMissions(I).Finished and
@@ -601,7 +606,7 @@ package body Missions is
             I := I - 1;
          end if;
          I := I + 1;
-      end loop;
+      end loop Finish_Missions_Loop;
       return "";
    exception
       when An_Exception : Missions_Finishing_Error =>
