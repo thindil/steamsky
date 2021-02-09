@@ -530,7 +530,7 @@ package body Bases.Ship is
                Cost :=
                  Cost +
                  ((Module.MaxDurability - Module.Durability) *
-                  Items_List(ProtoIndex).Price);
+                  Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex));
             end if;
          end loop Count_Repair_Time_And_Cost_Loop;
          if ModuleIndex = -1 then
