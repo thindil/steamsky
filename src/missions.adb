@@ -242,11 +242,10 @@ package body Missions is
               with "You can't take any more missions from this base. ";
          end if;
       end;
-      if Mission.MType = Deliver then
-         if FreeCargo((0 - Items_List(Mission.ItemIndex).Weight)) < 0 then
-            raise Missions_Accepting_Error
-              with "You don't have enough cargo space for take this mission.";
-         end if;
+      if Mission.MType = Deliver
+        and then FreeCargo((0 - Items_List(Mission.ItemIndex).Weight)) < 0 then
+         raise Missions_Accepting_Error
+           with "You don't have enough cargo space for take this mission.";
       end if;
       if Mission.MType = Passenger then
          declare
