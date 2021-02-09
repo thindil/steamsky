@@ -230,12 +230,13 @@ package body Missions is
               when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
               when others => 0);
       begin
+         Count_Missions_Limit_Loop :
          for Mission of AcceptedMissions loop
             if Mission.StartBase = BaseIndex then
                MissionsLimit := MissionsLimit - 1;
             end if;
-            exit when MissionsLimit <= 0;
-         end loop;
+            exit Count_Missions_Limit_Loop when MissionsLimit <= 0;
+         end loop Count_Missions_Limit_Loop;
          if MissionsLimit < 1 then
             raise Missions_Accepting_Error
               with "You can't take any more missions from this base. ";
