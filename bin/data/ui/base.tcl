@@ -25,7 +25,7 @@ grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes
 # Items list
 grid [ttk::frame $baseframe.items] -sticky nwes -padx 5 -pady {5 0}
 set baseview [ttk::treeview $baseframe.items.view -yscrollcommand [list $baseframe.items.scrolly set]]
-$baseview column #0 -width 250
+$baseview column #0 -width 400
 grid $baseview -sticky nwes
 grid [ttk::scrollbar $baseframe.items.scrolly -orient vertical -command [list $baseview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $baseframe.items.scrolly
