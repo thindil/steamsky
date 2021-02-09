@@ -124,17 +124,17 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Small.TButton -padding {6 2} -width 0 -font InterfaceIcons -background $colors(-almostblackorange)
       ttk::style map Small.TButton -font [list active InterfaceIcons]
 
-      # Flat buttons setting
-      # Default flat button
-      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -background $colors(-almostblackorange)
+      # Icon and switch buttons setting
+      # Default icon and switch button
+      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -lightcolor $colors(-darkorange) -darkcolor black -relief raised
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list active raised selected sunken]
       ttk::style map Toolbutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       ttk::style map Toolbutton -bordercolor [list active $colors(-palegoldenrod)]
-      # Flat button for male gender
+      # Icon button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
-      # Flat button for female gender
+      # Icon button for female gender
       ttk::style configure Female.Toolbutton -foreground $colors(-pink) -font InterfaceIcons
-      # Not needed state header button (ship info in right top corner)
+      # Icon button for generate random names for player and ship
       ttk::style configure Header.Toolbutton -font InterfaceIcons
 
       # Radiobutton setting
