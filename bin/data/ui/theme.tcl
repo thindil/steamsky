@@ -245,7 +245,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure MapInfo.TLabel -background black
       ttk::style configure MapInfoRed.TLabel -background black -foreground red
       ttk::style configure MapInfoGreen.TLabel -background black -foreground green
-      ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray)
+      ttk::style configure MapInfo.TFrame -bordercolor $colors(-gray) -background black
 
       # Dialogs (like messages, move map options, etc)
       ttk::style configure Dialog.TFrame -relief solid -bordercolor $colors(-darkorange)
