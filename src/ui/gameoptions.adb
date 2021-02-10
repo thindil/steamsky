@@ -347,6 +347,15 @@ package body GameOptions is
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      HelpFonts: constant array(1 .. 4) of Unbounded_String :=
+        (To_Unbounded_String("HelpFont"), To_Unbounded_String("BoldHelpFont"),
+         To_Unbounded_String("UnderlineHelpFont"),
+         To_Unbounded_String("ItalicHelpFont"));
+      InterfaceFonts: constant array(1 .. 4) of Unbounded_String :=
+        (To_Unbounded_String("InterfaceFont"),
+         To_Unbounded_String("InterfaceIcons"),
+         To_Unbounded_String("OverstrikedFont"),
+         To_Unbounded_String("UnderlineFont"));
    begin
       if CArgv.Arg(Argv, 1) =
         ".gameframe.paned.optionsframe.canvas.options.notebook.interface.mapfont" then
@@ -356,31 +365,18 @@ package body GameOptions is
       elsif CArgv.Arg(Argv, 1) =
         ".gameframe.paned.optionsframe.canvas.options.notebook.interface.helpfont" then
          GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
-         Font.Configure
-           ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
-         Font.Configure
-           ("BoldHelpFont",
-            "-size" & Positive'Image(GameSettings.HelpFontSize));
-         Font.Configure
-           ("UnderlineHelpFont",
-            "-size" & Positive'Image(GameSettings.HelpFontSize));
-         Font.Configure
-           ("ItalicHelpFont",
-            "-size" & Positive'Image(GameSettings.HelpFontSize));
+         for FontName of HelpFonts loop
+            Font.Configure
+              (To_String(FontName),
+               "-size" & Positive'Image(GameSettings.HelpFontSize));
+         end loop;
       else
          GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
-         Font.Configure
-           ("InterfaceFont",
-            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
-         Font.Configure
-           ("InterfaceIcons",
-            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
-         Font.Configure
-           ("OverstrikedFont",
-            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
-         Font.Configure
-           ("UnderlineFont",
-            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         for FontName of InterfaceFonts loop
+            Font.Configure
+              (To_String(FontName),
+               "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         end loop;
       end if;
       return TCL_OK;
    end Set_Fonts_Command;
