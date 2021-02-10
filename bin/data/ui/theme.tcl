@@ -250,6 +250,10 @@ namespace eval ttk::theme::steamsky {
       # Dialogs (like messages, move map options, etc)
       ttk::style configure Dialog.TFrame -relief solid -bordercolor $colors(-darkorange)
 
+      # Menus setting
+      option add *Menu.relief raised
+      option add *Menu.activeBorderWidth 0
+
       # Texts views (like messages, modules info, etc)
       tk_setPalette background [ttk::style lookup . -background] \
          foreground [ttk::style lookup . -foreground] \
