@@ -81,8 +81,8 @@ bind . <Alt-q> {InvokeButton .mainmenu.quit}
 # About menu
 ttk::frame .aboutmenu -style Main.TFrame
 grid [ttk::label .aboutmenu.about -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
-grid [ttk::button .aboutmenu.website -text {Website} -style Toolbutton -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
-grid [ttk::button .aboutmenu.mail -text {(c)2016-2021 Bartek thindil Jasicki} -style Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] -row 2 -columnspan 3
+grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
+grid [ttk::button .aboutmenu.mail -text {(c)2016-2021 Bartek thindil Jasicki} -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] -row 2 -columnspan 3
 grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true

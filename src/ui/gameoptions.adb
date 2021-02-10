@@ -378,6 +378,9 @@ package body GameOptions is
          Font.Configure
            ("OverstrikedFont",
             "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         Font.Configure
+           ("UnderlineFont",
+            "-size" & Positive'Image(GameSettings.InterfaceFontSize));
       end if;
       return TCL_OK;
    end Set_Fonts_Command;
