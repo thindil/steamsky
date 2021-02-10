@@ -216,11 +216,9 @@ package body Mobs is
                for K in OrdersNames'Range loop
                   if OrdersNames(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "name")) then
-                     if Get_Attribute(ChildNode, "value") = "Normal" then
-                        TempRecord.Priorities(K) := 1;
-                     else
-                        TempRecord.Priorities(K) := 2;
-                     end if;
+                     TempRecord.Priorities(K) :=
+                       (if Get_Attribute(ChildNode, "value") = "Normal" then 1
+                        else 2);
                      exit Set_Priorities_Loop;
                   end if;
                end loop Set_Priorities_Loop;
