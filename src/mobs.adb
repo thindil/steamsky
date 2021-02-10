@@ -229,6 +229,7 @@ package body Mobs is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "item");
+            Load_Items_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
@@ -274,6 +275,7 @@ package body Mobs is
                                 (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
+                     Update_Items_Loop :
                      for Item of TempRecord.Inventory loop
                         if Item.ProtoIndex = ItemIndex then
                            if Get_Attribute(ChildNode, "amount")'Length /=
@@ -302,41 +304,44 @@ package body Mobs is
                                  Integer'Value
                                    (Get_Attribute(ChildNode, "maxamount")));
                            end if;
-                           exit;
+                           exit Update_Items_Loop;
                         end if;
-                     end loop;
+                     end loop Update_Items_Loop;
                   when REMOVE =>
                      declare
                         DeleteIndex: Natural := 0;
                      begin
+                        Remove_Items_Loop :
                         for K in
                           TempRecord.Inventory.First_Index ..
                             TempRecord.Inventory.Last_Index loop
                            if TempRecord.Inventory(K).ProtoIndex =
                              ItemIndex then
                               DeleteIndex := K;
-                              exit;
+                              exit Remove_Items_Loop;
                            end if;
-                        end loop;
+                        end loop Remove_Items_Loop;
                         if DeleteIndex > 0 then
                            TempRecord.Inventory.Delete(DeleteIndex);
                         end if;
                      end;
                end case;
-            end loop;
+            end loop Load_Items_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "equipment");
+            Equipment_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
+               Update_Equipment_Loop :
                for K in EquipmentNames'Range loop
                   if EquipmentNames(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "slot")) then
                      TempRecord.Equipment(K) :=
                        Positive'Value(Get_Attribute(ChildNode, "index"));
-                     exit;
+                     exit Update_Equipment_Loop;
                   end if;
-               end loop;
-            end loop;
+               end loop Update_Equipment_Loop;
+            end loop Equipment_Loop;
             if Action /= UPDATE then
                ProtoMobs_Container.Include
                  (ProtoMobs_List, MobIndex, TempRecord);
@@ -369,6 +374,7 @@ package body Mobs is
          Mob.Gender := 'F';
       end if;
       Mob.Name := GenerateMemberName(Mob.Gender, Mob.Faction);
+      Skills_Loop :
       for Skill of ProtoMob.Skills loop
          SkillIndex :=
            (if Skill(1) = Positive(Skills_List.Length) + 1 then
@@ -386,7 +392,8 @@ package body Mobs is
          if Mob.Skills(Mob.Skills.Last_Index)(2) > HighestSkillLevel then
             HighestSkillLevel := Mob.Skills(Mob.Skills.Last_Index)(2);
          end if;
-      end loop;
+      end loop Skills_Loop;
+      Attributes_Loop :
       for Attribute of ProtoMob.Attributes loop
          if Attribute(2) = 0 then
             Mob.Attributes.Append(New_Item => Attribute);
@@ -394,7 +401,8 @@ package body Mobs is
             Mob.Attributes.Append
               (New_Item => (GetRandom(Attribute(1), Attribute(2)), 0));
          end if;
-      end loop;
+      end loop Attributes_Loop;
+      Inventory_Loop :
       for I in ProtoMob.Inventory.Iterate loop
          Amount :=
            (if ProtoMob.Inventory(I).MaxAmount > 0 then
@@ -407,12 +415,13 @@ package body Mobs is
               (ProtoIndex => ProtoMob.Inventory(I).ProtoIndex,
                Amount => Amount, Name => Null_Unbounded_String,
                Durability => 100, Price => 0));
-      end loop;
+      end loop Inventory_Loop;
       Mob.Equipment := ProtoMob.Equipment;
       declare
          ItemsList: UnboundedString_Container.Vector;
          ItemIndex: Unbounded_String;
       begin
+         Equipment_Loop :
          for I in 1 .. 6 loop
             case I is
                when 1 =>
@@ -445,7 +454,7 @@ package body Mobs is
                   Mob.Equipment(I) := Mob.Inventory.Last_Index;
                end if;
             end if;
-         end loop;
+         end loop Equipment_Loop;
       end;
       Mob.Orders := ProtoMob.Priorities;
       Mob.Order := ProtoMob.Order;
