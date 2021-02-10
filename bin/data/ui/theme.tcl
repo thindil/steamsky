@@ -52,13 +52,15 @@ namespace eval ttk::theme::steamsky {
    # Font used to show the bold text in help
    font create BoldHelpFont -family {Roboto} -size 14 -weight bold
    # Font used to show the underlined text in help
-   font create UnderlineHelpFont -family {Roboto} -underline true
+   font create UnderlineHelpFont -family {Roboto} -underline true -size 14
    # Font used to show the italic text in help
    font create ItalicHelpFont -family {Roboto} -size 14 -slant italic
    # Font used as icons for buttons/labels
    font create InterfaceIcons -family {Font Awesome 5 Free Solid} -size 14
    # Overstriked font used for example in combat or crafting menu
    font create OverstrikedFont -family {Amarante} -size 14 -overstrike true
+   # Underlined font uset for buttons with URL's links
+   font create UnderlineFont -family {Amarante} -underline true -size 14
 
 
    #
@@ -140,6 +142,9 @@ namespace eval ttk::theme::steamsky {
       # Radiobutton setting
       ttk::style configure TRadiobutton -padding 4
       option add *TRadiobutton.cursor hand1
+
+      # Link button setting
+      ttk::style configure Link.Toolbutton -relief flat -font UnderlineFont -background $colors(-verydarkorange)
 
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
