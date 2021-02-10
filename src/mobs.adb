@@ -60,6 +60,7 @@ package body Mobs is
       MobsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(MobsData, "mobile");
+      Load_Mobs_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Skills => TempSkills, Attributes => TempAttributes, Order => Rest,
@@ -89,6 +90,7 @@ package body Mobs is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "skill");
+            Load_Skills_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ChildIndex :=
@@ -169,20 +171,22 @@ package body Mobs is
                         end if;
                      end loop;
                   when REMOVE =>
+                     Remove_Skill_Loop :
                      for K in TempRecord.Skills.Iterate loop
                         if TempRecord.Skills(K)(1) = ChildIndex then
                            DeleteIndex := Skills_Container.To_Index(K);
-                           exit;
+                           exit Remove_Skill_Loop;
                         end if;
-                     end loop;
+                     end loop Remove_Skill_Loop;
                      TempRecord.Skills.Delete(Index => DeleteIndex);
                end case;
-            end loop;
+            end loop Load_Skills_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "attribute");
             if Length(ChildNodes) > 0 and Action = UPDATE then
                TempRecord.Attributes.Clear;
             end if;
+            Load_Attributes_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                if Get_Attribute(ChildNode, "level") /= "" then
@@ -202,11 +206,13 @@ package body Mobs is
                        (Integer'Value(Get_Attribute(ChildNode, "minlevel")),
                         Integer'Value(Get_Attribute(ChildNode, "maxlevel"))));
                end if;
-            end loop;
+            end loop Load_Attributes_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(MobNode, "priority");
+            Load_Orders_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
+               Set_Priorities_Loop :
                for K in OrdersNames'Range loop
                   if OrdersNames(K) =
                     To_Unbounded_String(Get_Attribute(ChildNode, "name")) then
@@ -215,10 +221,10 @@ package body Mobs is
                      else
                         TempRecord.Priorities(K) := 2;
                      end if;
-                     exit;
+                     exit Set_Priorities_Loop;
                   end if;
-               end loop;
-            end loop;
+               end loop Set_Priorities_Loop;
+            end loop Load_Orders_Loop;
             if Get_Attribute(MobNode, "order")'Length > 0 then
                TempRecord.Order :=
                  Crew_Orders'Value(Get_Attribute(MobNode, "order"));
@@ -345,7 +351,7 @@ package body Mobs is
             ProtoMobs_Container.Exclude(ProtoMobs_List, MobIndex);
             LogMessage("Mob removed: " & To_String(MobIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Mobs_Loop;
    end LoadMobs;
 
    function GenerateMob
