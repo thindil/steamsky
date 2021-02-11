@@ -186,10 +186,6 @@ package body Table is
         Trim(Positive'Image(Column), Left);
    begin
       AddText(Table, Text, Tooltip, Column, NewRow);
-      Item_Configure
-        (Table.Canvas, Tag,
-         "-fill [ttk::style lookup " & To_String(GameSettings.InterfaceTheme) &
-         " -selectforeground]");
       Bind
         (Table.Canvas, Tag, "<Enter>",
          "{" & Table.Canvas & " configure -cursor hand1}");
