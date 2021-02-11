@@ -423,20 +423,10 @@ package body Mobs is
       begin
          Equipment_Loop :
          for I in 1 .. 6 loop
-            case I is
-               when 1 =>
-                  ItemsList := Weapons_List;
-               when 2 =>
-                  ItemsList := Shields_List;
-               when 3 =>
-                  ItemsList := HeadArmors_List;
-               when 4 =>
-                  ItemsList := ChestArmors_List;
-               when 5 =>
-                  ItemsList := ArmsArmors_List;
-               when 6 =>
-                  ItemsList := LegsArmors_List;
-            end case;
+            ItemsList :=
+              (case I is when 1 => Weapons_List, when 2 => Shields_List,
+                 when 3 => HeadArmors_List, when 4 => ChestArmors_List,
+                 when 5 => ArmsArmors_List, when 6 => LegsArmors_List);
             if Mob.Equipment(I) = 0 then
                ItemIndex := Null_Unbounded_String;
                if GetRandom(1, 100) < 95 then
