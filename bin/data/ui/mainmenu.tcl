@@ -38,6 +38,7 @@ pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
    pack .newgamemenu -fill both -expand true
    .newgamemenu.buttonsbox.player invoke
 }]
+tooltip::tooltip .mainmenu.newgame {Set and start a new game}
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
    bind . <Alt-d> {InvokeButton .loadmenu.delete}
    bind . <Alt-l> {InvokeButton .loadmenu.load}
@@ -48,6 +49,7 @@ ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
    focus .loadmenu.load
    ShowLoadGame
 }
+tooltip::tooltip .mainmenu.loadgame {Load one of the previously saved games}
 ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
    bind . <Alt-b> {InvokeButton .hofmenu.back}
    bind . <Escape> {InvokeButton .hofmenu.back}
@@ -55,6 +57,7 @@ ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
    pack .hofmenu -fill both -expand true
    ShowHallOfFame
 }
+tooltip::tooltip .mainmenu.halloffame {Show your previous the bests scores in the game}
 pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
    bind . <Alt-s> {InvokeButton .newsmenu.showall}
    bind . <Alt-b> {InvokeButton .newsmenu.back}
@@ -63,6 +66,7 @@ pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
    pack .newsmenu -fill both -expand true
    ShowNews false
 }]
+tooltip::tooltip .mainmenu.news {The list of changes to the game}
 pack [ttk::button .mainmenu.about -text {About} -underline 0 -command {
    bind . <Alt-s> {InvokeButton .aboutmenu.showlicense}
    bind . <Alt-b> {InvokeButton .aboutmenu.back}
@@ -70,7 +74,9 @@ pack [ttk::button .mainmenu.about -text {About} -underline 0 -command {
    pack forget .mainmenu
    pack .aboutmenu -fill both -expand true
 }]
+tooltip::tooltip .mainmenu.about {General information about the game}
 pack [ttk::button .mainmenu.quit -text {Quit} -command exit -underline 0]
+tooltip::tooltip .mainmenu.quit {Quit from the game}
 bind . <Alt-n> {InvokeButton .mainmenu.newgame}
 bind . <Alt-l> {InvokeButton .mainmenu.loadgame}
 bind . <Alt-h> {InvokeButton .mainmenu.halloffame}
