@@ -216,23 +216,40 @@ package body Bases.ShipyardUI is
                "ShowShipyardModuleMenu {" &
                To_String(BaseModules_Container.Key(I)) & "} install",
                1);
-            AddText
-              (InstallTable, GetModuleType(BaseModules_Container.Key(I)), "",
+            AddButton
+              (InstallTable, GetModuleType(BaseModules_Container.Key(I)),
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               To_String(BaseModules_Container.Key(I)) & "} install",
                2);
             if ModuleSize <= MaxSize then
-               AddText(InstallTable, Integer'Image(ModuleSize), "", 3);
+               AddButton
+                 (InstallTable, Integer'Image(ModuleSize),
+                  "Show available options for module",
+                  "ShowShipyardModuleMenu {" &
+                  To_String(BaseModules_Container.Key(I)) & "} install",
+                  3);
             else
                AddText
                  (InstallTable, Integer'Image(ModuleSize), "", 3, False,
                   "red");
             end if;
-            AddText
-              (InstallTable, To_String(Modules_List(I).RepairMaterial), "", 4);
+            AddButton
+              (InstallTable, To_String(Modules_List(I).RepairMaterial),
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               To_String(BaseModules_Container.Key(I)) & "} install",
+               4);
             Cost := Modules_List(I).Price;
             CountPrice(Cost, FindMember(Talk));
             if MoneyIndex2 > 0
               and then Cost <= PlayerShip.Cargo(MoneyIndex2).Amount then
-               AddText(InstallTable, Natural'Image(Cost), "", 5, True);
+               AddButton
+                 (InstallTable, Natural'Image(Cost),
+                  "Show available options for module",
+                  "ShowShipyardModuleMenu {" &
+                  To_String(BaseModules_Container.Key(I)) & "} install",
+                  5, True);
             else
                AddText(InstallTable, Natural'Image(Cost), "", 5, True, "red");
             end if;
@@ -250,20 +267,29 @@ package body Bases.ShipyardUI is
                "ShowShipyardModuleMenu {" &
                Positive'Image(Modules_Container.To_Index(I)) & "} remove",
                1);
-            AddText
+            AddButton
               (RemoveTable, GetModuleType(PlayerShip.Modules(I).ProtoIndex),
-               "", 2);
-            AddText
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
+               2);
+            AddButton
               (RemoveTable,
                Integer'Image
                  (Modules_List(PlayerShip.Modules(I).ProtoIndex).Size),
-               "", 3);
-            AddText
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
+               3);
+            AddButton
               (RemoveTable,
                To_String
                  (Modules_List(PlayerShip.Modules(I).ProtoIndex)
                     .RepairMaterial),
-               "", 4);
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
+               4);
             Damage :=
               1.0 -
               Float(PlayerShip.Modules(I).Durability) /
@@ -277,7 +303,12 @@ package body Bases.ShipyardUI is
                Cost := 1;
             end if;
             CountPrice(Cost, FindMember(Talk), False);
-            AddText(RemoveTable, Natural'Image(Cost), "", 5, True);
+            AddButton
+              (RemoveTable, Natural'Image(Cost),
+               "Show available options for module",
+               "ShowShipyardModuleMenu {" &
+               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
+               5, True);
          end if;
       end loop Load_Remove_Modules_Loop;
       UpdateTable(RemoveTable);
