@@ -147,7 +147,11 @@ package body Bases.LootUI is
             "ShowLootItemMenu" &
             Positive'Image(Inventory_Container.To_Index(I)),
             1);
-         AddText(LootTable, To_String(ItemType), "", 2);
+         AddButton
+           (LootTable, To_String(ItemType), "Show available options for item",
+            "ShowLootItemMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            2);
          ItemDurability :=
            (if PlayerShip.Cargo(I).Durability < 100 then
               To_Unbounded_String
@@ -156,12 +160,22 @@ package body Bases.LootUI is
          AddProgressBar
            (LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability,
             To_String(ItemDurability), 3);
-         AddText(LootTable, Natural'Image(PlayerShip.Cargo(I).Amount), "", 4);
+         AddButton
+           (LootTable, Natural'Image(PlayerShip.Cargo(I).Amount),
+            "Show available options for item",
+            "ShowLootItemMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            4);
          BaseAmount :=
            (if BaseCargoIndex > 0 then
               SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount
             else 0);
-         AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
+         AddButton
+           (LootTable, Natural'Image(BaseAmount),
+            "Show available options for item",
+            "ShowLootItemMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            5, True);
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
@@ -184,7 +198,9 @@ package body Bases.LootUI is
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu " & Integer'Image(-(I)), 1);
-         AddText(LootTable, To_String(ItemType), "", 2);
+         AddButton
+           (LootTable, To_String(ItemType), "Show available options for item",
+            "ShowLootItemMenu" & Integer'Image(-(I)), 2);
          ItemDurability :=
            (if BaseCargo(I).Durability < 100 then
               To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
@@ -192,9 +208,14 @@ package body Bases.LootUI is
          AddProgressBar
            (LootTable, BaseCargo(I).Durability, Default_Item_Durability,
             To_String(ItemDurability), 3);
-         AddText(LootTable, "0", "", 4);
+         AddButton
+           (LootTable, "0", "Show available options for item",
+            "ShowLootItemMenu" & Integer'Image(-(I)), 4);
          BaseAmount := SkyBases(BaseIndex).Cargo(I).Amount;
-         AddText(LootTable, Natural'Image(BaseAmount), "", 5, True);
+         AddButton
+           (LootTable, Natural'Image(BaseAmount),
+            "Show available options for item",
+            "ShowLootItemMenu" & Integer'Image(-(I)), 5, True);
          <<End_Of_Base_Cargo_Loop>>
       end loop;
       UpdateTable(LootTable);
