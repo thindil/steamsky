@@ -208,7 +208,7 @@ package body Bases.Ship.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
 
-      Cost, Time: Natural := 0;
+      Cost, Time, OverallCost, OverallTime: Natural := 0;
 
    begin
 
@@ -216,6 +216,9 @@ package body Bases.Ship.Test_Data.Tests is
       RepairCost(Cost, Time, 1);
       Assert(Cost > 0, "Failed to count player ship repair costs.");
       Assert(Time > 0, "Failed to count player ship repair time.");
+      RepairCost(OverallCost, OverallTime, 0);
+      Assert(Cost = OverallCost, "Failed to count player ship overall repair costs.");
+      Assert(Time = OverallTime, "Failed to count player ship overall repair time.");
 
 --  begin read only
    end Test_RepairCost_test_repaircost;
