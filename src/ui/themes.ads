@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,14 +24,14 @@ with Ada.Strings.Hash;
 package Themes is
 -- ****
 
-   -- ****t* Themes/FontTypes
+   -- ****t* Themes/Themes.FontTypes
    -- FUNCTION
    -- Types of font available in game
    -- SOURCE
    type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
    -- ****
 
-   -- ****t* Themes/ThemeRecord
+   -- ****t* Themes/Themes.ThemeRecord
    -- FUNCTION
    -- Data structure for themes settings
    -- PARAMETERS
@@ -112,7 +112,7 @@ package Themes is
    end record;
    -- ****
 
-   -- ****t* Themes/Themes_Container
+   -- ****t* Themes/Themes.Themes_Container
    -- FUNCTION
    -- Used to store themes data
    -- SOURCE
@@ -120,21 +120,21 @@ package Themes is
      (String, ThemeRecord, Ada.Strings.Hash, "=");
    -- ****
 
-   -- ****v* Themes/Themes_List
+   -- ****v* Themes/Themes.Themes_List
    -- FUNCTION
    -- List of all available themes
    -- SOURCE
    Themes_List: Themes_Container.Map;
    -- ****
 
-   -- ****f* Themes/LoadThemes
+   -- ****f* Themes/Themes.LoadThemes
    -- FUNCTION
    -- Load data for all themes
    -- SOURCE
    procedure LoadThemes;
    -- ****
 
-   -- ****f* Themes/SetTheme
+   -- ****f* Themes/Themes.SetTheme
    -- FUNCTION
    -- Set values for the current theme
    -- SOURCE
