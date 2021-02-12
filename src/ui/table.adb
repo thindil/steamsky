@@ -24,7 +24,6 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
-with ada.text_io;
 
 package body Table is
 
@@ -114,10 +113,9 @@ package body Table is
          end loop;
       end loop;
       Table.Row := 1;
-      Ada.Text_IO.Put_Line("cleared");
    end ClearTable;
 
-   procedure AddBackground(Table: Table_Widget; X: Natural; NewRow: Boolean) is
+   procedure AddBackground(Table: Table_Widget; NewRow: Boolean) is
       ItemId, Color: Unbounded_String;
    begin
       if not NewRow then
@@ -131,14 +129,11 @@ package body Table is
          else To_Unbounded_String
              (Style_Lookup
                 (To_String(GameSettings.InterfaceTheme), "-background")));
-      Ada.Text_IO.Put_Line(To_String(Color) & " " & Natural'Image(X));
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
              (Table.Canvas, "rectangle",
-              Trim(Natural'Image(0), Left) &
-              Positive'Image((Table.Row * Table.Row_Height)) &
-              Positive'Image(X + 10) &
+              " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
               " -fill " & To_String(Color) & " -width 0 -tags [list row" &
@@ -160,7 +155,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddBackground(Table, X, NewRow);
+      AddBackground(Table, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -258,9 +253,9 @@ package body Table is
            (Table.Canvas, "headerback",
             "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
             Positive'Image(Table.Row_Height - 3));
-         NewY := 0;
+         NewY := Table.Row_Height;
          Resize_Background_Loop :
-         for Row in 2 .. Table.Row loop
+         for Row in 1 .. Table.Row loop
             NewY := NewY + Table.Row_Height;
             Tag :=
               To_Unbounded_String("row" & Trim(Positive'Image(Row), Left));
@@ -291,7 +286,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddBackground(Table, X, NewRow);
+      AddBackground(Table, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
