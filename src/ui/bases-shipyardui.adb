@@ -230,9 +230,12 @@ package body Bases.ShipyardUI is
                   To_String(BaseModules_Container.Key(I)) & "} install",
                   3);
             else
-               AddText
-                 (InstallTable, Integer'Image(ModuleSize), "", 3, False,
-                  "red");
+               AddButton
+                 (InstallTable, Integer'Image(ModuleSize),
+                  "Show available options for module",
+                  "ShowShipyardModuleMenu {" &
+                  To_String(BaseModules_Container.Key(I)) & "} install",
+                  3, False, "red");
             end if;
             AddButton
               (InstallTable, To_String(Modules_List(I).RepairMaterial),
@@ -251,7 +254,12 @@ package body Bases.ShipyardUI is
                   To_String(BaseModules_Container.Key(I)) & "} install",
                   5, True);
             else
-               AddText(InstallTable, Natural'Image(Cost), "", 5, True, "red");
+               AddButton
+                 (InstallTable, Natural'Image(Cost),
+                  "Show available options for module",
+                  "ShowShipyardModuleMenu {" &
+                  To_String(BaseModules_Container.Key(I)) & "} install",
+                  5, True, "red");
             end if;
          end if;
          <<End_Of_Loop>>
