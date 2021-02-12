@@ -180,12 +180,12 @@ package body Table is
 
    procedure AddButton
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False) is
+      Column: Positive; NewRow: Boolean := False; Color: String := "") is
       Tag: constant String :=
         "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
         Trim(Positive'Image(Column), Left);
    begin
-      AddText(Table, Text, Tooltip, Column, NewRow);
+      AddText(Table, Text, Tooltip, Column, NewRow, Color);
       Bind
         (Table.Canvas, Tag, "<Enter>",
          "{" & Table.Canvas & " configure -cursor hand1}");
