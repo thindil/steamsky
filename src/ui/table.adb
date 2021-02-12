@@ -24,6 +24,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with ada.text_io;
 
 package body Table is
 
@@ -113,30 +114,37 @@ package body Table is
          end loop;
       end loop;
       Table.Row := 1;
+      Ada.Text_IO.Put_Line("cleared");
    end ClearTable;
 
-   procedure AddDarkerBackground
-     (Table: Table_Widget; X: Natural; NewRow: Boolean) is
-      ItemId: Unbounded_String;
+   procedure AddBackground(Table: Table_Widget; X: Natural; NewRow: Boolean) is
+      ItemId, Color: Unbounded_String;
    begin
-      if not NewRow or else (NewRow and Table.Row rem 2 = 0) then
+      if not NewRow then
          return;
       end if;
+      Color :=
+        (if Table.Row rem 2 > 0 then
+           To_Unbounded_String
+             (Style_Lookup
+                (To_String(GameSettings.InterfaceTheme), "-troughcolor"))
+         else To_Unbounded_String
+             (Style_Lookup
+                (To_String(GameSettings.InterfaceTheme), "-background")));
+      Ada.Text_IO.Put_Line(To_String(Color) & " " & Natural'Image(X));
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
              (Table.Canvas, "rectangle",
-              Trim(Natural'Image(X), Left) &
+              Trim(Natural'Image(0), Left) &
               Positive'Image((Table.Row * Table.Row_Height)) &
               Positive'Image(X + 10) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
-              " -fill [ttk::style lookup " &
-              To_String(GameSettings.InterfaceTheme) &
-              " -troughcolor] -width 0 -tags [list row" &
+              " -fill " & To_String(Color) & " -width 0 -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "]"));
       Lower(Table.Canvas, To_String(ItemId));
-   end AddDarkerBackground;
+   end AddBackground;
 
    procedure AddText
      (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
@@ -152,7 +160,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddDarkerBackground(Table, X, NewRow);
+      AddBackground(Table, X, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -283,7 +291,7 @@ package body Table is
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddDarkerBackground(Table, X, NewRow);
+      AddBackground(Table, X, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
