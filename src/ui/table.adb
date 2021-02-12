@@ -115,20 +115,18 @@ package body Table is
       Table.Row := 1;
    end ClearTable;
 
-   procedure AddBackground(Table: Table_Widget; NewRow: Boolean) is
-      ItemId, Color: Unbounded_String;
+   function AddBackground
+     (Table: Table_Widget; NewRow: Boolean) return String is
+      ItemId: Unbounded_String;
+      Color: constant String :=
+        (if Table.Row rem 2 > 0 then
+           Style_Lookup(To_String(GameSettings.InterfaceTheme), "-troughcolor")
+         else Style_Lookup
+             (To_String(GameSettings.InterfaceTheme), "-background"));
    begin
       if not NewRow then
-         return;
+         return Color;
       end if;
-      Color :=
-        (if Table.Row rem 2 > 0 then
-           To_Unbounded_String
-             (Style_Lookup
-                (To_String(GameSettings.InterfaceTheme), "-troughcolor"))
-         else To_Unbounded_String
-             (Style_Lookup
-                (To_String(GameSettings.InterfaceTheme), "-background")));
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -136,9 +134,21 @@ package body Table is
               " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
-              " -fill " & To_String(Color) & " -width 0 -tags [list row" &
+              " -fill " & Color & " -width 0 -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "]"));
       Lower(Table.Canvas, To_String(ItemId));
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Enter>",
+         "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
+         " -fill " &
+         Style_Lookup
+           (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
+         "}");
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Leave>",
+         "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
+         " -fill " & Color & "}");
+      return Color;
    end AddBackground;
 
    procedure AddText
@@ -151,11 +161,11 @@ package body Table is
         (if Color'Length > 0 then Color
          else Style_Lookup
              (To_String(GameSettings.InterfaceTheme), "-foreground"));
+      Background_Color: constant String := AddBackground(Table, NewRow);
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddBackground(Table, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -169,6 +179,18 @@ package body Table is
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Enter>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " &
+         Style_Lookup
+           (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
+         "}");
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Leave>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " & Background_Color &
+         "}");
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
@@ -282,11 +304,11 @@ package body Table is
          elsif Length > 24 then
            Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
          else Style_Lookup("TProgressbar", "-background"));
+      Background_Color: constant String := AddBackground(Table, NewRow);
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop;
-      AddBackground(Table, NewRow);
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -301,6 +323,18 @@ package body Table is
               " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Enter>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " &
+         Style_Lookup
+           (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
+         "}");
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Leave>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " & Background_Color &
+         "}");
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
@@ -316,6 +350,18 @@ package body Table is
               " -fill " & Color & " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "bar" &
               Trim(Positive'Image(Column), Left) & "]"));
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Enter>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " &
+         Style_Lookup
+           (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
+         "}");
+      Bind
+        (Table.Canvas, To_String(ItemId), "<Leave>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " & Background_Color &
+         "}");
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
