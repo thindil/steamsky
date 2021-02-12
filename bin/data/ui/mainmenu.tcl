@@ -88,22 +88,27 @@ bind . <Alt-q> {InvokeButton .mainmenu.quit}
 ttk::frame .aboutmenu -style Main.TFrame
 grid [ttk::label .aboutmenu.about -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
 grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
+tooltip::tooltip .aboutmenu.website {Visit the game website: https://thindil.itch.io/steam-sky}
 grid [ttk::button .aboutmenu.mail -text {(c)2016-2021 Bartek thindil Jasicki} -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] -row 2 -columnspan 3
+tooltip::tooltip .aboutmenu.mail {Send a mail to the game creator}
 grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true
    ShowFile CONTRIBUTING.md
 }] -row 3 -sticky e
+tooltip::tooltip .aboutmenu.getinvolved {Guide how to help with creating the game, report bugs, etc}
 grid [ttk::button .aboutmenu.modify -text {Modify game} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true
    ShowFile MODDING.md
 }] -row 3 -column 1
+tooltip::tooltip .aboutmenu.modify {Guide how to modify the game}
 grid [ttk::button .aboutmenu.readme -text {README} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true
    ShowFile README.md
 }] -row 3 -column 2 -sticky w
+tooltip::tooltip .aboutmenu.readme {Some technical information about the game}
 grid [ttk::label .aboutmenu.license -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} -wraplength 590] -row 4 -columnspan 3 -padx 2
 grid [ttk::label .aboutmenu.license2 -text {Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.} -wraplength 590] -row 5 -columnspan 3
 grid [ttk::button .aboutmenu.showlicense -text {Show full license} -underline 0 -command {
@@ -111,6 +116,7 @@ grid [ttk::button .aboutmenu.showlicense -text {Show full license} -underline 0 
    pack .showfilemenu -fill both -expand true
    ShowFile COPYING
 }] -row 6 -column 1 -sticky e
+tooltip::tooltip .aboutmenu.showlicense {Show full legal text of GNU GPLv3 license}
 grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
@@ -118,6 +124,7 @@ grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -comman
    pack forget .aboutmenu
    pack .mainmenu -fill both -expand true
 }] -row 6 -column 2 -sticky e
+tooltip::tooltip .aboutmenu.back {Back to the main menu}
 
 # Show file content
 ttk::frame .showfilemenu -style Main.TFrame
