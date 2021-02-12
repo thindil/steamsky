@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -38,6 +38,7 @@ package body ShipModules is
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
+      Load_Modules_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
@@ -98,12 +99,13 @@ package body ShipModules is
                TempRecord.RepairMaterial :=
                  To_Unbounded_String(Get_Attribute(ModuleNode, "material"));
                MaterialExists := False;
+               Check_Materials_Loop :
                for Material of Items_Types loop
                   if Material = TempRecord.RepairMaterial then
                      MaterialExists := True;
-                     exit;
+                     exit Check_Materials_Loop;
                   end if;
-               end loop;
+               end loop Check_Materials_Loop;
                if not MaterialExists then
                   raise Data_Loading_Error
                     with "Can't " & To_Lower(DataAction'Image(Action)) &
@@ -171,7 +173,7 @@ package body ShipModules is
             LogMessage
               ("Module removed: " & To_String(ModuleIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Modules_Loop;
    end LoadShipModules;
 
 end ShipModules;
