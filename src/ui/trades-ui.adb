@@ -58,7 +58,7 @@ with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
 
-   -- ****o* TUI/Show_Trade_Command
+   -- ****o* TUI/TUI.Show_Trade_Command
    -- FUNCTION
    -- Show information about trading
    -- PARAMETERS
@@ -445,14 +445,14 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Command;
 
-   -- ****if* TUI/ItemIndex
+   -- ****if* TUI/TUI.ItemIndex
    -- FUNCTION
    -- Index of the currently selected item
    -- SOURCE
    ItemIndex: Integer;
    -- ****
 
-   -- ****o* TUI/Show_Trade_Item_Info_Command
+   -- ****o* TUI/TUI.Show_Trade_Item_Info_Command
    -- FUNCTION
    -- Show information about the selected item
    -- PARAMETERS
@@ -573,7 +573,7 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
-   -- ****o* TUI/Trade_Item_Command
+   -- ****o* TUI/TUI.Trade_Item_Command
    -- FUNCTION
    -- Buy or sell the selected item
    -- PARAMETERS
@@ -702,7 +702,7 @@ package body Trades.UI is
          return TCL_OK;
    end Trade_Item_Command;
 
-   -- ****o* TUI/Search_Trade_Command
+   -- ****o* TUI/TUI.Search_Trade_Command
    -- FUNCTION
    -- Show only this items which contains the selected sequence
    -- PARAMETERS
@@ -741,7 +741,7 @@ package body Trades.UI is
            CArgv.Empty & "ShowTrade" & Get(TypeBox) & SearchText);
    end Search_Trade_Command;
 
-   -- ****o* TUI/Show_Trade_Menu_Command
+   -- ****o* TUI/TUI.Show_Trade_Menu_Command
    -- FUNCTION
    -- Show trade menu with buy/sell options for the selected item
    -- PARAMETERS
@@ -943,7 +943,7 @@ package body Trades.UI is
       return TCL_OK;
    end Show_Trade_Menu_Command;
 
-   -- ****o* TUI/Trade_Amount_Command
+   -- ****o* TUI/TUI.Trade_Amount_Command
    -- FUNCTION
    -- Show dialog to enter amount of items to sell or buy
    -- PARAMETERS
