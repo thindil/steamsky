@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -47,6 +47,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crew; use Crew;
@@ -186,11 +187,13 @@ package body MainMenu.Commands is
          configure
            (AllNewsButton,
             "-text {Show all changes} -command {ShowNews true}");
+         Add(AllNewsButton, "Show all changes to the game since previous big stable version");
       else
          AllNews := True;
          configure
            (AllNewsButton,
             "-text {Show only newest changes} -command {ShowNews false}");
+         Add(AllNewsButton, "Show only changes to the game since previous relese");
       end if;
       configure(TextView, "-state normal");
       Delete(TextView, "1.0", "end");

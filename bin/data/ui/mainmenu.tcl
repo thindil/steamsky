@@ -134,6 +134,7 @@ pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
    pack forget .showfilemenu
    pack .mainmenu -fill both -expand true
 }] -side bottom -anchor e -pady 2 -padx 2
+tooltip::tooltip .showfilemenu.back {Back to the main menu}
 pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y -pady 2 -padx 2
 pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true -pady 2 -padx 2
 ::autoscroll::autoscroll .showfilemenu.scroll
@@ -144,6 +145,7 @@ grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -fon
 grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns -pady 2 -padx 2
 ::autoscroll::autoscroll .newsmenu.scroll
 grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e -pady 2
+tooltip::tooltip .newsmenu.showall {Show all changes to the game since previous big stable version}
 grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
@@ -151,6 +153,7 @@ grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
    pack forget .newsmenu
    pack .mainmenu -fill both -expand true
 }] -row 1 -column 1 -sticky e -pady 2 -padx 2
+tooltip::tooltip .newsmenu.back {Back to the main menu}
 grid columnconfigure .newsmenu 0 -weight 1
 grid rowconfigure .newsmenu 0 -weight 1
 
