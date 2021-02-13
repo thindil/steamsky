@@ -159,7 +159,10 @@ package body Bases.LootUI is
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability,
-            To_String(ItemDurability), 3);
+            To_String(ItemDurability),
+            "ShowLootItemMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            3);
          AddButton
            (LootTable, Natural'Image(PlayerShip.Cargo(I).Amount),
             "Show available options for item",
@@ -207,7 +210,8 @@ package body Bases.LootUI is
             else To_Unbounded_String("Unused"));
          AddProgressBar
            (LootTable, BaseCargo(I).Durability, Default_Item_Durability,
-            To_String(ItemDurability), 3);
+            To_String(ItemDurability),
+            "ShowLootItemMenu" & Integer'Image(-(I)), 3);
          AddButton
            (LootTable, "0", "Show available options for item",
             "ShowLootItemMenu" & Integer'Image(-(I)), 4);
