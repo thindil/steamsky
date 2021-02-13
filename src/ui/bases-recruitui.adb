@@ -124,18 +124,31 @@ package body Bases.RecruitUI is
             "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
             1);
          if SkyBases(BaseIndex).Recruits(I).Gender = 'M' then
-            AddText(RecruitTable, "Male", "", 2);
+            AddButton
+              (RecruitTable, "Male", "Show available options for recruit",
+               "ShowRecruitMenu" &
+               Positive'Image(Recruit_Container.To_Index(I)),
+               2);
          else
-            AddText(RecruitTable, "Female", "", 2);
+            AddButton
+              (RecruitTable, "Female", "Show available options for recruit",
+               "ShowRecruitMenu" &
+               Positive'Image(Recruit_Container.To_Index(I)),
+               2);
          end if;
-         AddText
+         AddButton
            (RecruitTable,
             To_String
               (Factions_List(SkyBases(BaseIndex).Recruits(I).Faction).Name),
-            "", 3);
-         AddText
+            "Show available options for recruit",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
+            3);
+         AddButton
            (RecruitTable,
-            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price), "", 4);
+            Positive'Image(SkyBases(BaseIndex).Recruits(I).Price),
+            "Show available options for recruit",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
+            4);
          HighestLevel := 1;
          HighestIndex := 1;
          for J in SkyBases(BaseIndex).Recruits(I).Attributes.Iterate loop
@@ -146,8 +159,10 @@ package body Bases.RecruitUI is
                HighestIndex := Attributes_Container.To_Index(J);
             end if;
          end loop;
-         AddText
-           (RecruitTable, To_String(Attributes_List(HighestIndex).Name), "",
+         AddButton
+           (RecruitTable, To_String(Attributes_List(HighestIndex).Name),
+            "Show available options for recruit",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
             5);
          HighestLevel := 1;
          HighestIndex := 1;
@@ -157,9 +172,11 @@ package body Bases.RecruitUI is
                HighestIndex := Skills_Container.To_Index(J);
             end if;
          end loop;
-         AddText
-           (RecruitTable, To_String(Skills_List(HighestIndex).Name), "", 6,
-            True);
+         AddButton
+           (RecruitTable, To_String(Skills_List(HighestIndex).Name),
+            "Show available options for recruit",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
+            6, True);
       end loop;
       UpdateTable(RecruitTable);
       configure
