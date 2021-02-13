@@ -78,15 +78,17 @@ package body Ships.Cargo is
      (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin
+      Count_Cargo_Size_Loop :
       for Module of Ship.Modules loop
          if Module.MType = CARGO_ROOM and Module.Durability > 0 then
             FreeCargo := FreeCargo + Modules_List(Module.ProtoIndex).MaxValue;
          end if;
-      end loop;
+      end loop Count_Cargo_Size_Loop;
+      Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
          FreeCargo :=
            FreeCargo - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
-      end loop;
+      end loop Count_Cargo_Weight_Loop;
       FreeCargo := FreeCargo + Amount;
       return FreeCargo;
    end FreeCargo;
@@ -94,11 +96,12 @@ package body Ships.Cargo is
    function GetItemAmount(ItemType: Unbounded_String) return Natural is
       Amount: Natural := 0;
    begin
+      Get_Item_Amount_Loop :
       for Item of PlayerShip.Cargo loop
          if Items_List(Item.ProtoIndex).IType = ItemType then
             Amount := Amount + Item.Amount;
          end if;
-      end loop;
+      end loop Get_Item_Amount_Loop;
       return Amount;
    end GetItemAmount;
 
@@ -106,29 +109,35 @@ package body Ships.Cargo is
       ItemsAmount: Natural;
    begin
       if IType = "Drinks" then
+         Get_Drinks_Amount_Loop :
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
                ItemsAmount := GameSettings.LowDrinks + 1;
             else
                ItemsAmount := 0;
+               Get_Selected_Drinks_Amount_Loop :
                for DrinkType of Factions_List(Member.Faction).DrinksTypes loop
                   ItemsAmount := ItemsAmount + GetItemAmount(DrinkType);
-               end loop;
-               exit when ItemsAmount < GameSettings.LowDrinks;
+               end loop Get_Selected_Drinks_Amount_Loop;
+               exit Get_Drinks_Amount_Loop when ItemsAmount <
+                 GameSettings.LowDrinks;
             end if;
-         end loop;
+         end loop Get_Drinks_Amount_Loop;
       else
+         Get_Items_Amount_Loop :
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).FoodTypes.Length = 0 then
                ItemsAmount := GameSettings.LowFood + 1;
             else
                ItemsAmount := 0;
+               Get_Food_Amount_Loop :
                for FoodType of Factions_List(Member.Faction).FoodTypes loop
                   ItemsAmount := ItemsAmount + GetItemAmount(FoodType);
-               end loop;
-               exit when ItemsAmount < GameSettings.LowFood;
+               end loop Get_Food_Amount_Loop;
+               exit Get_Items_Amount_Loop when ItemsAmount <
+                 GameSettings.LowFood;
             end if;
-         end loop;
+         end loop Get_Items_Amount_Loop;
       end if;
       return ItemsAmount;
    end GetItemsAmount;
