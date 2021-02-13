@@ -151,9 +151,12 @@ package body Table is
       return Color;
    end AddBackground;
 
-   procedure AddText
-     (Table: in out Table_Widget; Text, Tooltip: String; Column: Positive;
-      NewRow: Boolean := False; Color: String := "") is
+   procedure AddButton
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False; Color: String := "") is
+      Tag: constant String :=
+        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
+        Trim(Positive'Image(Column), Left);
       X: Natural := 5;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
@@ -201,16 +204,6 @@ package body Table is
       if NewRow then
          Table.Row := Table.Row + 1;
       end if;
-   end AddText;
-
-   procedure AddButton
-     (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False; Color: String := "") is
-      Tag: constant String :=
-        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
-        Trim(Positive'Image(Column), Left);
-   begin
-      AddText(Table, Text, Tooltip, Column, NewRow, Color);
       Bind
         (Table.Canvas, Tag, "<Enter>",
          "{" & Table.Canvas & " configure -cursor hand1}");
