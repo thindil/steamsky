@@ -129,6 +129,8 @@ package Table is
    -- Value    - The current value of the progress bar
    -- MaxValue - The maximum value of the progress bar
    -- Tooltip  - The tooltip show when user hover mouse over progress bar
+   -- Command  - Tcl command which will be executed when the row in which the
+   --            the progress bar is was clicked
    -- Column   - The column in which the progress bar will be added
    -- NewRow   - If True, increase current number of row in the Table_Widget.
    --            Default value is False.
@@ -139,7 +141,7 @@ package Table is
    -- SOURCE
    procedure AddProgressBar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
-      Tooltip: String; Column: Positive; NewRow: Boolean := False);
+      Tooltip, Command: String; Column: Positive; NewRow: Boolean := False);
    -- ****
 
 end Table;
