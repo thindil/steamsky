@@ -177,6 +177,7 @@ grid [ttk::button .hofmenu.back -text {Back to menu} -command {
    pack forget .hofmenu
    pack .mainmenu -fill both -expand true
 }] -row 2 -column 0 -columnspan 2 -sticky e -pady 2 -padx 2
+tooltip::tooltip .hofmenu.back {Back to the main menu}
 grid columnconfigure .hofmenu 0 -weight 1
 grid rowconfigure .hofmenu 0 -weight 1
 
@@ -190,11 +191,13 @@ grid [ttk::treeview .loadmenu.view -yscrollcommand {.loadmenu.yscroll set} -xscr
 .loadmenu.view heading lastsaved -text {Last saved}
 bind .loadmenu.view <Return> {InvokeButton .loadmenu.load}
 .loadmenu.view tag bind itemrow <Double-1> {InvokeButton .loadmenu.load}
+tooltip::tooltip .loadmenu.view {Double click on the selected save game to start it}
 grid [ttk::scrollbar .loadmenu.yscroll -orient vertical -command [list .loadmenu.view yview]] -column 3 -row 0 -sticky ns -padx 2 -pady 2
 ::autoscroll::autoscroll .loadmenu.yscroll
 grid [ttk::scrollbar .loadmenu.xscroll -orient horizontal -command [list .loadmenu.view xview]] -column 0 -row 1 -columnspan 3 -sticky we
 ::autoscroll::autoscroll .loadmenu.xscroll
 grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 2 -column 0 -sticky e -pady 2 -padx 2
+tooltip::tooltip .loadmenu.delete {Delete the selected saved game}
 grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Alt-l> {}
@@ -203,6 +206,7 @@ grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
    pack forget .loadmenu
    LoadGame
 }] -row 2 -column 1 -sticky e -pady 2 -padx 2
+tooltip::tooltip .loadmenu.load {Start the selected saved game}
 grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command {
    bind . <Alt-b> {}
    bind . <Alt-l> {}
@@ -211,6 +215,7 @@ grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command
    pack forget .loadmenu
    pack .mainmenu -fill both -expand true
 }] -row 2 -column 2 -sticky e -padx 2 -pady 2
+tooltip::tooltip .loadmenu.back {Back to the main menu}
 grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
 
