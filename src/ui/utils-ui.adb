@@ -43,7 +43,7 @@ with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
 
-   -- ****iv* UUI/TimerId
+   -- ****iv* UUI/UUI.TimerId
    -- FUNCTION
    -- Id of timer for auto close command
    -- SOURCE
@@ -78,7 +78,7 @@ package body Utils.UI is
       return TCL_OK;
    end Close_Dialog_Command;
 
-   -- ****o* UUI/Update_Dialog_Command
+   -- ****o* UUI/UUI.Update_Dialog_Command
    -- FUNCTION
    -- Update countdown timer on the selected dialog. If timer reach 0, close
    -- dialog
@@ -173,7 +173,7 @@ package body Utils.UI is
       end if;
    end AddCommand;
 
-   -- ****o* UUI/Resize_Canvas_Command
+   -- ****o* UUI/UUI.Resize_Canvas_Command
    -- PARAMETERS
    -- Resize the selected canvas
    -- ClientData - Custom data send to the command. Unused
@@ -208,7 +208,7 @@ package body Utils.UI is
       return TCL_OK;
    end Resize_Canvas_Command;
 
-   -- ****o* UUI/Check_Amount_Command
+   -- ****o* UUI/UUI.Check_Amount_Command
    -- PARAMETERS
    -- Check amount of the item, if it is not below low level warning or if
    -- entered amount is a proper number
@@ -315,7 +315,7 @@ package body Utils.UI is
          return TCL_OK;
    end Check_Amount_Command;
 
-   -- ****o* UUI/Validate_Amount_Command
+   -- ****o* UUI/UUI.Validate_Amount_Command
    -- PARAMETERS
    -- Validate amount of the item when button to increase or decrease the
    -- amount was pressed
@@ -354,7 +354,7 @@ package body Utils.UI is
           (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
 
-   -- ****o* UUI/Get_String_Command
+   -- ****o* UUI/UUI.Get_String_Command
    -- FUNCTION
    -- Get string value from the player, like new ship or module name
    -- PARAMETERS
@@ -420,7 +420,7 @@ package body Utils.UI is
       return TCL_OK;
    end Get_String_Command;
 
-   -- ****o* UUI/Set_Text_Variable_Command
+   -- ****o* UUI/UUI.Set_Text_Variable_Command
    -- FUNCTION
    -- Set the selected Tcl text variable and the proper the Ada its equivalent
    -- PARAMETERS
