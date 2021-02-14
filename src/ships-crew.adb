@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,6 +36,7 @@ package body Ships.Crew is
       Damage: DamageFactor := 0.0;
       BaseSkillLevel: Natural range 0 .. 151;
    begin
+      Get_Skill_Loop :
       for Skill of Member.Skills loop
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
@@ -76,7 +77,7 @@ package body Ships.Crew is
             end if;
             return SkillLevel;
          end if;
-      end loop;
+      end loop Get_Skill_Loop;
       return SkillLevel;
    end GetSkillLevel;
 
@@ -119,24 +120,28 @@ package body Ships.Crew is
       TempValue: Integer;
    begin
       Ship.Crew.Delete(Index => MemberIndex);
+      Module_Loop :
       for Module of Ship.Modules loop
+         Owners_Loop :
          for Owner of Module.Owner loop
             if Owner = MemberIndex then
                Owner := 0;
             elsif Owner > MemberIndex then
                Owner := Owner - 1;
             end if;
-         end loop;
-      end loop;
+         end loop Owners_Loop;
+      end loop Module_Loop;
       if Ship = PlayerShip then
+         Delete_Missions_Loop :
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
             if AcceptedMissions(I).MType = Passenger
               and then AcceptedMissions(I).Data = MemberIndex then
                DeleteMission(I);
-               exit;
+               exit Delete_Missions_Loop;
             end if;
-         end loop;
+         end loop Delete_Missions_Loop;
+         Update_Missions_Loop :
          for Mission of AcceptedMissions loop
             if Mission.MType = Passenger
               and then Mission.Data > MemberIndex then
@@ -144,7 +149,7 @@ package body Ships.Crew is
                TempValue := TempValue - 1;
                Mission.Data := TempValue;
             end if;
-         end loop;
+         end loop Update_Missions_Loop;
       end if;
    end DeleteMember;
 
@@ -152,11 +157,12 @@ package body Ships.Crew is
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
       return Natural is
    begin
+      Find_Member_Loop :
       for I in Crew.Iterate loop
          if Crew(I).Order = Order then
             return Crew_Container.To_Index(I);
          end if;
-      end loop;
+      end loop Find_Member_Loop;
       return 0;
    end FindMember;
 
@@ -173,15 +179,17 @@ package body Ships.Crew is
    begin
       if GivenOrder = Ship.Crew(MemberIndex).Order then
          if GivenOrder in Craft | Gunner then
+            Give_Orders_Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if Modules_Container.To_Index(I) = ModuleIndex then
+                  Owners_Loop :
                   for Owner of Ship.Modules(I).Owner loop
                      if Owner = MemberIndex then
                         return;
                      end if;
-                  end loop;
+                  end loop Owners_Loop;
                end if;
-            end loop;
+            end loop Give_Orders_Modules_Loop;
          else
             return;
          end if;
@@ -203,23 +211,25 @@ package body Ships.Crew is
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
       end if;
       if GivenOrder in Pilot | Engineer | Upgrading | Talk then
+         Give_Crew_Orders_Loop :
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
             if Ship.Crew(I).Order = GivenOrder then
                GiveOrders(PlayerShip, I, Rest, 0, False);
-               exit;
+               exit Give_Crew_Orders_Loop;
             end if;
-         end loop;
+         end loop Give_Crew_Orders_Loop;
       elsif (GivenOrder in Gunner | Craft | Train) or
         (GivenOrder = Heal and ModuleIndex > 0) then
          declare
             FreePosition: Boolean := False;
          begin
+            Free_Position_Loop :
             for Owner of Ship.Modules(ModuleIndex).Owner loop
                if Owner = 0 then
                   FreePosition := True;
-                  exit;
+                  exit Free_Position_Loop;
                end if;
-            end loop;
+            end loop Free_Position_Loop;
             if not FreePosition then
                GiveOrders
                  (PlayerShip, Ship.Modules(ModuleIndex).Owner(1), Rest, 0,
@@ -252,17 +262,18 @@ package body Ships.Crew is
                            False);
                      end if;
                      ModuleIndex2 := Modules_Container.To_Index(I);
-                     exit;
+                     exit Modules_Loop;
                   end if;
                else
                   if Ship.Modules(I).MType = CABIN and
                     Ship.Modules(I).Durability > 0 then
+                     Cabin_Owners_Loop :
                      for Owner of Ship.Modules(I).Owner loop
                         if MemberIndex = Owner then
                            ModuleIndex2 := Modules_Container.To_Index(I);
                            exit Modules_Loop;
                         end if;
-                     end loop;
+                     end loop Cabin_Owners_Loop;
                   end if;
                end if;
             end loop Modules_Loop;
