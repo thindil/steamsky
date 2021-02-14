@@ -316,6 +316,40 @@ package body Table is
          else Style_Lookup("TProgressbar", "-background"));
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
+      procedure Add_Bindings is
+      begin
+         if Command'Length > 0 then
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Style_Lookup
+                 (To_String(GameSettings.InterfaceTheme),
+                  "-selectbackground") &
+               ";" & Table.Canvas & " configure -cursor hand1}");
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & ";" & Table.Canvas &
+               " configure -cursor left_ptr}");
+            Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+         else
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Style_Lookup
+                 (To_String(GameSettings.InterfaceTheme),
+                  "-selectbackground") &
+               "}");
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & "}");
+         end if;
+      end Add_Bindings;
    begin
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
@@ -334,35 +368,7 @@ package body Table is
               " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "back" &
               Trim(Positive'Image(Column), Left) & "]"));
-      if Command'Length > 0 then
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Enter>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Style_Lookup
-              (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
-            ";" & Table.Canvas & " configure -cursor hand1}");
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Leave>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Background_Color & ";" & Table.Canvas &
-            " configure -cursor left_ptr}");
-         Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
-      else
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Enter>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Style_Lookup
-              (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
-            "}");
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Leave>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Background_Color & "}");
-      end if;
+      Add_Bindings;
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
@@ -378,35 +384,7 @@ package body Table is
               " -fill " & Color & " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "bar" &
               Trim(Positive'Image(Column), Left) & "]"));
-      if Command'Length > 0 then
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Enter>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Style_Lookup
-              (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
-            ";" & Table.Canvas & " configure -cursor hand1}");
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Leave>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Background_Color & ";" & Table.Canvas &
-            " configure -cursor left_ptr}");
-         Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
-      else
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Enter>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Style_Lookup
-              (To_String(GameSettings.InterfaceTheme), "-selectbackground") &
-            "}");
-         Bind
-           (Table.Canvas, To_String(ItemId), "<Leave>",
-            "{" & Table.Canvas & " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) & " -fill " &
-            Background_Color & "}");
-      end if;
+      Add_Bindings;
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
