@@ -239,18 +239,11 @@ package body Ships.Crew is
       end if;
       if ModuleIndex = 0 and (GivenOrder in Pilot | Engineer | Rest) then
          declare
-            MType: ModuleType := ENGINE;
+            MType: constant ModuleType :=
+              (case GivenOrder is when Pilot => COCKPIT,
+                 when Engineer => ENGINE, when Rest => CABIN,
+                 when others => ENGINE);
          begin
-            case GivenOrder is
-               when Pilot =>
-                  MType := COCKPIT;
-               when Engineer =>
-                  MType := ENGINE;
-               when Rest =>
-                  MType := CABIN;
-               when others =>
-                  null;
-            end case;
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if MType /= CABIN then
