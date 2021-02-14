@@ -292,6 +292,7 @@ package body Ships.Crew is
                Modules_Loop2 :
                for Module of Ship.Modules loop
                   if Module.MType = CABIN and Module.Durability > 0 then
+                     Owners_Loop2 :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
                            Owner := MemberIndex;
@@ -301,7 +302,7 @@ package body Ships.Crew is
                               OtherMessage);
                            exit Modules_Loop2;
                         end if;
-                     end loop;
+                     end loop Owners_Loop2;
                   end if;
                end loop Modules_Loop2;
             when others =>
@@ -311,12 +312,13 @@ package body Ships.Crew is
       Modules_Loop3 :
       for Module of Ship.Modules loop
          if Module.MType /= CABIN then
+            Owners_Loop3 :
             for Owner of Module.Owner loop
                if Owner = MemberIndex then
                   Owner := 0;
                   exit Modules_Loop3;
                end if;
-            end loop;
+            end loop Owners_Loop3;
          end if;
       end loop Modules_Loop3;
       if ToolsIndex > 0 and
