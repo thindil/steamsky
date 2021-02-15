@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -32,7 +32,9 @@ pack [ttk::frame .gameframe -style Main.TFrame] -fill both -expand true
 # Game header
 ttk::frame .gameframe.header
 grid [ttk::menubutton .gameframe.header.menubutton -text {Menu} -menu .gamemenu] -sticky w
+tooltip::tooltip .gameframe.header.menubutton "The main game menu. Show info about the ships,\nits crew and allow to quit the game"
 ttk::button .gameframe.header.closebutton -text {Close [Escape]} -command {ShowSkyMap}
+tooltip::tooltip .gameframe.header.closebutton {Back to the game map}
 grid [ttk::label .gameframe.header.time -text {1600-03-01}] -row 0 -column 2
 tooltip::tooltip .gameframe.header.time {The game time}
 grid columnconfigure .gameframe.header .gameframe.header.time -weight 1
@@ -149,6 +151,7 @@ $messagesview tag configure cyan -foreground cyan
 $messagesview tag configure blue -foreground #3465a4
 $messagesview tag configure gray -foreground {dim gray}
 pack $messagesview -side top -fill both -padx 5 -pady 5
+tooltip::tooltip $messagesview "The last game messages. You can see more of them\nIn Menu->Last messages screen"
 ::autoscroll::autoscroll .gameframe.paned.controls.messages.scroll
 bind .gameframe.paned.controls <Configure> {
    $messagesview configure -height [expr [winfo height .gameframe.paned.controls] / [font metrics InterfaceFont -linespace]]
