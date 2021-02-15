@@ -277,6 +277,7 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state select
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
    ::autoscroll::autoscroll .newgamemenu.scrollbar
 }] -sticky e
+tooltip::tooltip .newgamemenu.buttonsbox.player {Show settings for your character.}
 grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
@@ -286,6 +287,7 @@ grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -styl
    set windowid [.newgamemenu.canvas create window 0 0 -anchor nw -window .newgamemenu.canvas.difficulty]
    .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
 }] -column 1 -row 0 -sticky w
+tooltip::tooltip .newgamemenu.buttonsbox.difficulty {Show settings for the game difficulty.}
 grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1 -padx 2
 grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
 ttk::frame .newgamemenu.canvas.player
@@ -452,6 +454,7 @@ grid [ttk::button .newgamemenu.buttonsbox2.start -text {Start game} -underline 0
    pack forget .newgamemenu
    NewGame
 }] -sticky e -padx 3 -pady 3
+tooltip::tooltip .newgamemenu.buttonsbox2.start {Start the game.}
 grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
@@ -461,5 +464,6 @@ grid [ttk::button .newgamemenu.buttonsbox2.back -text {Back to menu} -underline 
    pack forget .newgamemenu
    pack .mainmenu -fill both -expand true
 }] -column 1 -row 0 -sticky w -padx 3 -pady 3
+tooltip::tooltip .newgamemenu.buttonsbox2.back {Back to the main menu.}
 grid columnconfigure .newgamemenu .newgamemenu.info -weight 3
 grid rowconfigure .newgamemenu .newgamemenu.info -weight 3
