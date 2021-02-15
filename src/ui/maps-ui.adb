@@ -785,7 +785,7 @@ package body Maps.UI is
             State(Button, "disabled");
             Add
               (Button,
-               "You must give order 'Undock' from Ship Orders first to move ship.");
+               "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
          end loop;
       else
          Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
