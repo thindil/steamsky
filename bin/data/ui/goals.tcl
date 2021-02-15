@@ -39,7 +39,14 @@ bind $view <Double-1> {$selectbutton invoke}
 bind $view <Return> {$selectbutton invoke}
 grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical -command [list $view yview]] -column 1 -row 0 -sticky ns
 grid $selectbutton -row 2 -columnspan 2 -sticky we
-grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog}] -row 3 -columnspan 2 -sticky we
-bind .goalsdialog <Escape> {.goalsdialog.closebutton invoke}
+if {[winfo exists .gameframe] && [winfo ismapped .gameframe]} {
+   set parent .gameframe
+} else {
+   set parent .
+}
+grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog $parent}] -row 3 -columnspan 2 -sticky we
 ::autoscroll::autoscroll .goalsdialog.yscroll
-place .goalsdialog -in . -relx 0.1 -rely 0.1
+place .goalsdialog -in $parent -relx 0.1 -rely 0.1
+focus .goalsdialog.closebutton
+tk busy $parent
+raise .goalsdialog
