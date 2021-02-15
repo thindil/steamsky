@@ -27,7 +27,9 @@ grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship general info}
 # Ship name
 grid [ttk::label $shipcanvas.frame.namelbl -text {Name:}] -sticky w
+tooltip::tooltip $shipcanvas.frame.namelbl {The name of your ship}
 grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -column 1 -row 1 -sticky w
+tooltip::tooltip $shipcanvas.frame.name {The name of your ship}
 grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Small.TButton -command {
    GetString {Enter a new name:} shipname
 }] -column 2 -row 1 -sticky w
@@ -41,18 +43,22 @@ grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -st
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
 # Repair priority
 grid [ttk::label $shipcanvas.frame.repairlabel] -columnspan 2 -sticky we
+tooltip::tooltip $shipcanvas.frame.repairlabel {If damaged, the module will be repaired as the first}
 grid [ttk::button $shipcanvas.frame.cancelpriority -text "[format %c 0xf05e]" -style Small.TButton -command {SetRepair remove}] -row 4 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelpriority {Remove the repair priority}
 # Ship destination
 grid [ttk::label $shipcanvas.frame.destinationlabel] -columnspan 2 -sticky we
+tooltip::tooltip $shipcanvas.frame.destinationlabel {The current travel destination of your ship}
 grid [ttk::button $shipcanvas.frame.canceldestination -text "[format %c 0xf05e]" -style Small.TButton -command {ResetDestination}] -row 5 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.canceldestination {Reset the ship destination}
 # Ship home base
 grid [ttk::label $shipcanvas.frame.homelabel] -columnspan 2 -sticky we
+tooltip::tooltip $shipcanvas.frame.homelabel {Your ship the current home base}
 grid [ttk::button $shipcanvas.frame.showhome -text "[format %c 0xf06e]" -style Small.TButton -command {ShowShipInfo;update;MoveMap centeronhome}] -row 6 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.showhome {Show the home base on map}
 # Ship weight
 grid [ttk::label $shipcanvas.frame.weight] -columnspan 2 -sticky we
+tooltip::tooltip $shipcanvas.frame.weight "The ship weight. The more heavy is ship, the slower it fly\nand need stronger engines"
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.general.scrolly
 ::autoscroll::autoscroll $shipinfoframe.general.scrollx
