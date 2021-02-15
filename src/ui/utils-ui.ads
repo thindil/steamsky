@@ -26,14 +26,14 @@ with Ships; use Ships;
 package Utils.UI is
 -- ****
 
-   -- ****t* UUI/CreateCommands
+   -- ****t* UUI/UUI.CreateCommands
    -- FUNCTION
    -- Used to add new Tcl commands to interpreter
    -- SOURCE
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
    -- ****
 
-   -- ****o* UUI/Close_Dialog_Command
+   -- ****o* UUI/UUI.Close_Dialog_Command
    -- FUNCTION
    -- Close the selected dialog
    -- PARAMETERS
@@ -54,7 +54,7 @@ package Utils.UI is
       Convention => C;
       -- ****
 
-      -- ****f* UUI/ShowMessage
+      -- ****f* UUI/UUI.ShowMessage
       -- FUNCTION
       -- Show the selected message to a player
       -- PARAMETERS
@@ -67,7 +67,7 @@ package Utils.UI is
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
-   -- ****f* UUI/AddCommand
+   -- ****f* UUI/UUI.AddCommand
    -- FUNCTION
    -- Add the selected command to Tcl interpreter
    -- PARAMETERS
@@ -79,14 +79,14 @@ package Utils.UI is
       Pre => Name'Length > 0;
      -- ****
 
-   -- ****f* UUI/AddCommands
+   -- ****f* UUI/UUI.AddCommands
    -- FUNCTION
    -- Add various, UI related Tcl commands
    -- SOURCE
    procedure AddCommands;
    -- ****
 
-   -- ****f* UUI/MinutesToDate
+   -- ****f* UUI/UUI.MinutesToDate
    -- FUNCTION
    -- Convert minutes to game date and add it to text
    -- PARAMETERS
@@ -99,7 +99,7 @@ package Utils.UI is
      (Minutes: Natural; InfoText: in out Unbounded_String);
    -- ****
 
-   -- ****f* UUI/TravelInfo
+   -- ****f* UUI/UUI.TravelInfo
    -- FUNCTION
    -- Add info about travel eta and approx fuel usage
    -- PARAMETERS
@@ -114,14 +114,14 @@ package Utils.UI is
       ShowFuelName: Boolean := False);
    -- ****
 
-   -- ****f* UUI/UpdateMessages
+   -- ****f* UUI/UUI.UpdateMessages
    -- FUNCTION
    -- Update game messages
    -- SOURCE
    procedure UpdateMessages;
    -- ****
 
-   -- ****f* UUI/ShowScreen
+   -- ****f* UUI/UUI.ShowScreen
    -- FUNCTION
    -- Remove an old screen from the window and add a new to it
    -- PARAMETERS
@@ -131,7 +131,7 @@ package Utils.UI is
       Pre => NewScreenName'Length > 0;
    -- ****
 
-   -- ****f* UUI/ShowInventoryItemInfo
+   -- ****f* UUI/UUI.ShowInventoryItemInfo
    -- FUNCTION
    -- Show info about selected item in ship cargo or crew member inventory
    -- PARAMETERS
@@ -145,7 +145,7 @@ package Utils.UI is
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
-      -- ****f* UUI/ShowInfo
+      -- ****f* UUI/UUI.ShowInfo
       -- FUNCTION
       -- Show the selected info to a player
       -- PARAMETERS
@@ -158,7 +158,7 @@ package Utils.UI is
       Pre => Text'Length > 0 and ParentName'Length > 0;
       -- ****
 
-      -- ****f* UUI/ShowManipulateItem
+      -- ****f* UUI/UUI.ShowManipulateItem
       -- FUNCTION
       -- Shw the dialog for manipulate items amount in cargo (like selling,
       -- dropping, etc).
