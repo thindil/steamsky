@@ -45,6 +45,10 @@ if {[winfo exists .gameframe] && [winfo ismapped .gameframe]} {
    set parent .
 }
 grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog $parent}] -row 3 -columnspan 2 -sticky we
+bind .goalsdialog.closebutton <Escape> {.goalsdialog.closebutton invoke;break}
+bind .goalsdialog.closebutton <Tab> {focus $view;break}
+bind $selectbutton <Escape> {.goalsdialog.closebutton invoke;break}
+bind $view <Escape> {.goalsdialog.closebutton invoke;break}
 ::autoscroll::autoscroll .goalsdialog.yscroll
 place .goalsdialog -in $parent -relx 0.1 -rely 0.1
 focus .goalsdialog.closebutton
