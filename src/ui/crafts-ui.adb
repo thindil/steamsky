@@ -286,8 +286,7 @@ package body Crafts.UI is
          "-to" & Positive'Image(MaxAmount) &
          " -validatecommand {ValidateSpinbox %W %P}");
       if MaxAmount > 1 then
-         configure
-           (MaxLabel, "-text {max (" & Positive'Image(MaxAmount) & ")}");
+         configure(MaxLabel, "-text {max" & Positive'Image(MaxAmount) & "}");
          Tcl.Tk.Ada.Grid.Grid(MaxLabel);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(MaxLabel);
