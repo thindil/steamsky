@@ -29,13 +29,3 @@ bind $tradeframe.options.type <<ComboboxSelected>> {ShowTrade [$tradeframe.optio
 grid [ttk::entry $tradeframe.options.search -validate key -validatecommand {SearchTrade %P}] -column 2 -row 0
 grid [ttk::label $tradeframe.options.playerinfo -wraplength 300] -sticky nw -columnspan 2
 grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw -column 2 -row 1
-# Trade list
-set tradelist [ttk::frame $tradeframe.list]
-grid $tradelist -sticky nwes
-grid [ttk::label $tradelist.name -text Name]
-grid [ttk::label $tradelist.type -text Type] -row 0 -column 1
-grid [ttk::label $tradelist.durability -text Durability] -row 0 -column 2
-grid [ttk::label $tradelist.price -text Price] -row 0 -column 3
-grid [ttk::label $tradelist.profit -text Profit] -row 0 -column 4
-grid [ttk::label $tradelist.owned -text Owned] -row 0 -column 5
-grid [ttk::label $tradelist.available -text Available] -row 0 -column 6
