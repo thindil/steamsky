@@ -21,7 +21,6 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.String_Split; use GNAT.String_Split;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -54,9 +53,17 @@ with Maps.UI; use Maps.UI;
 with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
+
+   -- ****iv* TUI/TUI.LootTable
+   -- FUNCTION
+   -- Table with info about the available items to trade
+   -- SOURCE
+   TradeTable: Table_Widget (7);
+   -- ****
 
    -- ****o* TUI/TUI.Show_Trade_Command
    -- FUNCTION
@@ -94,8 +101,8 @@ package body Trades.UI is
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
-      ItemType, ProtoIndex, BaseType, ItemName, ProgressBarStyle,
-      TradeInfo: Unbounded_String;
+      ItemType, ProtoIndex, BaseType, ItemName, ProgressBarStyle, TradeInfo,
+      ItemDurability: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       Price: Positive;
       ComboBox: Ttk_ComboBox;
@@ -107,9 +114,6 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       Profit: Integer;
-      Tokens: Slice_Set;
-      Rows: Natural := 0;
-      Item: Ttk_Frame;
       ItemButton: Ttk_Button;
       Row: Positive := 1;
       DurabilityBar: Ttk_ProgressBar;
@@ -120,6 +124,15 @@ package body Trades.UI is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "trade.tcl");
          Bind(TradeFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         TradeFrame := Get_Widget(TradeCanvas & ".trade");
+         TradeTable :=
+           CreateTable
+             (Widget_Image(TradeFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
+               To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
+               To_Unbounded_String("Profit"), To_Unbounded_String("Owned"),
+               To_Unbounded_String("Available")),
+              False);
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          configure(CloseButton, "-command ShowSkyMap");
@@ -134,20 +147,7 @@ package body Trades.UI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       TradeFrame.Name := New_String(TradeCanvas & ".trade");
       ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);
-      TradeFrame.Name := New_String(TradeCanvas & ".trade.list");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(TradeFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (TradeFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      ClearTable(TradeTable);
       if BaseIndex > 0 then
          BaseType := SkyBases(BaseIndex).BaseType;
          BaseCargo := SkyBases(BaseIndex).Cargo;
@@ -206,74 +206,67 @@ package body Trades.UI is
               (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Amount
                else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          end if;
-         ItemButton :=
-           Create
-             (TradeFrame & ".item" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & To_String(ItemName) & "} -command {ShowTradeMenu" &
-              Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Add(ItemButton, "Show available item options");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemButton, "-row" & Positive'Image(Row) & " -sticky w");
-         Label :=
-           Create
-             (TradeFrame & ".type" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & To_String(ItemType) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Row) & " -column 1 -sticky w");
-         ProgressBarStyle :=
-           (if PlayerShip.Cargo(I).Durability > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Cargo(I).Durability > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         DurabilityBar :=
-           Create
-             (TradeFrame & ".durability" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Cargo(I).Durability) &
-              "}" & To_String(ProgressBarStyle));
-         Tcl.Tk.Ada.Grid.Grid
-           (DurabilityBar, "-row" & Positive'Image(Row) & " -column 2");
-         Label :=
-           Create
-             (TradeFrame & ".price" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & Positive'Image(Price) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Row) & " -column 3 -sticky w");
+         AddButton
+           (TradeTable, To_String(ItemName), "Show available options for item",
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            1);
+         AddButton
+           (TradeTable, To_String(ItemType), "Show available options for item",
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            2);
+         ItemDurability :=
+           (if PlayerShip.Cargo(I).Durability < 100 then
+              To_Unbounded_String
+                (GetItemDamage(PlayerShip.Cargo(I).Durability))
+            else To_Unbounded_String("Unused"));
+         AddProgressBar
+           (TradeTable, PlayerShip.Cargo(I).Durability,
+            Default_Item_Durability, To_String(ItemDurability),
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            3);
+         AddButton
+           (TradeTable, Positive'Image(Price),
+            "Show available options for item",
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            4);
          if Profit > 0 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Headergreen.TLabel");
+            AddButton
+              (TradeTable, Positive'Image(Profit),
+               "Show available options for item",
+               "ShowTradeMenu" &
+               Positive'Image(Inventory_Container.To_Index(I)),
+               5, False, "green");
          elsif Profit < 0 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style Headerred.TLabel");
+            AddButton
+              (TradeTable, Positive'Image(Profit),
+               "Show available options for item",
+               "ShowTradeMenu" &
+               Positive'Image(Inventory_Container.To_Index(I)),
+               5, False, "red");
          else
-            ProgressBarStyle := To_Unbounded_String(" -style TLabel");
+            AddButton
+              (TradeTable, Positive'Image(Profit),
+               "Show available options for item",
+               "ShowTradeMenu" &
+               Positive'Image(Inventory_Container.To_Index(I)),
+               5);
          end if;
-         Label :=
-           Create
-             (TradeFrame & ".profit" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & Integer'Image(Profit) & "}" &
-              To_String(ProgressBarStyle));
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Row) & " -column 4 -sticky w");
-         Label :=
-           Create
-             (TradeFrame & ".owned" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & Positive'Image(PlayerShip.Cargo(I).Amount) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Row) & " -column 5 -sticky w");
-         Label :=
-           Create
-             (TradeFrame & ".available" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & Natural'Image(BaseAmount) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Positive'Image(Row) & " -column 6 -sticky w");
-         Row := Row + 1;
+         AddButton
+           (TradeTable, Positive'Image(PlayerShip.Cargo(I).Amount),
+            "Show available options for item",
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            6);
+         AddButton
+           (TradeTable, Positive'Image(BaseAmount),
+            "Show available options for item",
+            "ShowTradeMenu" &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            7, True);
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
@@ -366,6 +359,8 @@ package body Trades.UI is
          Row := Row + 1;
          <<End_Of_Trader_Loop>>
       end loop;
+      UpdateTable(TradeTable);
+      Tcl_Eval(Get_Context, "update");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
       if Argc = 1 then
          Current(ComboBox, "0");
