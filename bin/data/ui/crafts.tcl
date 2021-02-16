@@ -44,7 +44,8 @@ update
 grid [ttk::frame $recipeframe.set] -sticky w -pady 5
 grid [ttk::button $recipeframe.set.button -text Craft -command SetCrafting]
 tooltip::tooltip $recipeframe.set.button "Set the recipe for craft. After this, you will have to\nassign crew member to the work"
-grid [ttk::label $recipeframe.set.maxamount] -column 1 -row 0
+grid [ttk::button $recipeframe.set.maxamount -command {$recipeframe.set.amount set [lindex [split [$recipeframe.set.maxamount cget -text]] 1]}] -column 1 -row 0
+tooltip::tooltip $recipeframe.set.maxamount "Set the maximum amount of how many times the recipe\nwill be made"
 grid [ttk::spinbox $recipeframe.set.amount -from 1 -increment 1 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -column 2 -row 0
 tooltip::tooltip $recipeframe.set.amount {Set how many times the recipe should be crafted}
 grid [ttk::label $recipeframe.set.label -text {in workshop:}]
