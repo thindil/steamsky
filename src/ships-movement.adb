@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -46,6 +46,7 @@ package body Ships.Movement is
       -- ****
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
+      Find_Modules_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = COCKPIT and Module.Durability > 0 then
             HaveCockpit := True;
@@ -53,8 +54,8 @@ package body Ships.Movement is
            and then (Module.Durability > 1 and not Module.Disabled) then
             HaveEngine := True;
          end if;
-         exit when HaveEngine and HaveCockpit;
-      end loop;
+         exit Find_Modules_Loop when HaveEngine and HaveCockpit;
+      end loop Find_Modules_Loop;
       if not HaveEngine then
          return "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
@@ -66,14 +67,15 @@ package body Ships.Movement is
          HavePilot := True;
          HaveEngineer := True;
       end if;
+      Find_Members_Loop :
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
             HavePilot := True;
          elsif Member.Order = Engineer then
             HaveEngineer := True;
          end if;
-         exit when HavePilot and HaveEngineer;
-      end loop;
+         exit Find_Members_Loop when HavePilot and HaveEngineer;
+      end loop Find_Members_Loop;
       if not HavePilot then
          return "You don't have a pilot on duty.";
       end if;
@@ -94,11 +96,12 @@ package body Ships.Movement is
       begin
          MemberIndex := FindMember(Order);
          if MemberIndex = 0 then
+            Find_Member_Loop :
             for Member of PlayerShip.Crew loop
                if Member.PreviousOrder = Order then
                   return True;
                end if;
-            end loop;
+            end loop Find_Member_Loop;
          end if;
          return False;
       end NeedRest;
@@ -223,6 +226,7 @@ package body Ships.Movement is
             declare
                MemberIndex: Positive := 1;
             begin
+               Resign_Crew_Member_Loop :
                while MemberIndex <= PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(MemberIndex).ContractLength = 0 then
                      DeleteMember(MemberIndex, PlayerShip);
@@ -238,15 +242,16 @@ package body Ships.Movement is
                      DeleteMember(MemberIndex, PlayerShip);
                      SkyBases(BaseIndex).Population :=
                        SkyBases(BaseIndex).Population + 1;
+                     Drop_Morale_Loop :
                      for I in PlayerShip.Crew.Iterate loop
                         UpdateMorale
                           (PlayerShip, Crew_Container.To_Index(I),
                            GetRandom(-5, -1));
-                     end loop;
+                     end loop Drop_Morale_Loop;
                   else
                      MemberIndex := MemberIndex + 1;
                   end if;
-               end loop;
+               end loop Resign_Crew_Member_Loop;
             end;
             if GameSettings.AutoAskForBases then
                AskForBases;
@@ -287,12 +292,13 @@ package body Ships.Movement is
                      return "You can't undock from this base because you don't have any " &
                        To_String(MoneyName) & " to pay for docking.";
                   end if;
+                  Count_Cost_Loop :
                   for Module of PlayerShip.Modules loop
                      if Module.MType = HULL then
                         DockingCost := Module.MaxModules;
-                        exit;
+                        exit Count_Cost_Loop;
                      end if;
-                  end loop;
+                  end loop Count_Cost_Loop;
                   DockingCost :=
                     Natural
                       (Float(DockingCost) *
@@ -386,13 +392,14 @@ package body Ships.Movement is
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
       HaveEngine: Boolean := False;
    begin
+      Find_Engine_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE
            and then (Module.Durability > 0 and not Module.Disabled) then
             HaveEngine := True;
-            exit;
+            exit Find_Engine_Loop;
          end if;
-      end loop;
+      end loop Find_Engine_Loop;
       if not HaveEngine then
          return "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
@@ -420,6 +427,7 @@ package body Ships.Movement is
       declare
          Damage: DamageFactor := 0.0;
       begin
+         Find_Engine_Loop :
          for Module of Ship.Modules loop
             if Module.MType = ENGINE and then not Module.Disabled then
                BaseSpeed := Module.Power * 10;
@@ -431,13 +439,14 @@ package body Ships.Movement is
                  Speed +
                  (BaseSpeed - Natural(Float(BaseSpeed) * Float(Damage)));
             end if;
-         end loop;
+         end loop Find_Engine_Loop;
       end;
       Speed :=
         Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
+            Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Order = Pilot then
                   Speed :=
@@ -454,17 +463,18 @@ package body Ships.Movement is
                        (Float(GetSkillLevel(Ship.Crew(I), EngineeringSkill)) /
                         300.0));
                end if;
-            end loop;
+            end loop Sentinent_Ship_Speed_Loop;
          else
+            Normal_Ship_Speed_Loop :
             for Module of Ship.Modules loop
                if Module.MType = HULL then
                   Speed :=
                     Speed +
                     Natural
                       (Float(Speed) * (Float(Module.MaxModules * 2) / 300.0));
-                  exit;
+                  exit Normal_Ship_Speed_Loop;
                end if;
-            end loop;
+            end loop Normal_Ship_Speed_Loop;
          end if;
       end if;
       if Ship = PlayerShip and (Ship.Speed in DOCKED | FULL_STOP) and
@@ -497,6 +507,7 @@ package body Ships.Movement is
       if Speed in DOCKED | FULL_STOP then
          Speed := GameSettings.UndockSpeed;
       end if;
+      Count_Fuel_Needed_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE and then not Module.Disabled then
             case Speed is
@@ -510,7 +521,7 @@ package body Ships.Movement is
                   null;
             end case;
          end if;
-      end loop;
+      end loop Count_Fuel_Needed_Loop;
       return FuelNeeded;
    end CountFuelNeeded;
 
@@ -521,11 +532,12 @@ package body Ships.Movement is
       if PlayerShip.Speed = DOCKED then
          return;
       end if;
+      Needed_Fuel_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE and then not Module.Disabled then
             BaseFuelNeeded := BaseFuelNeeded - 1;
          end if;
-      end loop;
+      end loop Needed_Fuel_Loop;
       FuelNeeded := BaseFuelNeeded * (Minutes / 10);
       if GetRandom(1, 10) < (Minutes rem 10) then
          FuelNeeded := FuelNeeded + BaseFuelNeeded;
