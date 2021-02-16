@@ -29,6 +29,7 @@ $craftview column #0 -width 300 -minwidth 300
 $craftview tag configure gray -foreground gray -font OverstrikedFont
 grid $craftview -sticky nwes
 bind $craftview <<TreeviewSelect>> ShowRecipeInfo
+tooltip::tooltip $craftview {Select the recipe to craft}
 grid [ttk::scrollbar $craftframe.list.scrolly -orient vertical -command [list $craftview yview]] -row 0 -column 1 -sticky ns
 grid columnconfigure $craftframe 0 -weight 1
 grid rowconfigure $craftframe 0 -weight 1
@@ -42,8 +43,11 @@ update
 # Recipe actions
 grid [ttk::frame $recipeframe.set] -sticky w -pady 5
 grid [ttk::button $recipeframe.set.button -text Craft -command SetCrafting]
+tooltip::tooltip $recipeframe.set.button "Set the recipe for craft. After this, you will have to\nassign crew member to the work"
 grid [ttk::label $recipeframe.set.maxamount] -column 1 -row 0
 grid [ttk::spinbox $recipeframe.set.amount -from 1 -increment 1 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -column 2 -row 0
+tooltip::tooltip $recipeframe.set.amount {Set how many times the recipe should be crafted}
 grid [ttk::label $recipeframe.set.label -text {in workshop:}]
 grid [ttk::combobox $recipeframe.set.workshop -state readonly] -column 1 -row 1 -columnspan 2
+tooltip::tooltip $recipeframe.set.workshop {Select the workshop in which the recipe will be crafted}
 grid [ttk::label $recipeframe.error -style Headerred.TLabel -wraplength [winfo reqwidth $recipeframe]] -sticky w
