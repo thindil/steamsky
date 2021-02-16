@@ -153,7 +153,7 @@ package body WaitMenu is
       return TCL_OK;
    end Show_Wait_Command;
 
-   -- ****o* WaitMenu/Wait_Command
+   -- ****o* WaitMenu/WaitMenu.Wait_Command
    -- FUNCTION
    -- Wait the selected amount of time
    -- PARAMETERS
