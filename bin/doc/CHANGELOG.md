@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Showing longer description for modules in shipyard
 - Possible crash on accepting missions in bases
 - Cost of the player's ship repairs in Industrial base
+- Typos in knowledge screen
 
 ## [5.7] - 2021-01-24
 
