@@ -65,8 +65,8 @@ with Utils.UI; use Utils.UI;
 package body MainMenu.Commands is
 
    function Open_Link_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
@@ -106,15 +106,15 @@ package body MainMenu.Commands is
    -- will be show
    -- SOURCE
    function Show_File_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_File_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TextView: constant Tk_Text := Get_Widget(".showfilemenu.text", Interp);
@@ -165,15 +165,15 @@ package body MainMenu.Commands is
    -- If boolean is true, show all news, otherwise only recent
    -- SOURCE
    function Show_News_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_News_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TextView: constant Tk_Text := Get_Widget(".newsmenu.text", Interp);
@@ -232,15 +232,15 @@ package body MainMenu.Commands is
    -- ShowHallOfFame
    -- SOURCE
    function Show_Hall_Of_Fame_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Hall_Of_Fame_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       HofView: constant Ttk_Tree_View := Get_Widget(".hofmenu.view", Interp);
@@ -272,15 +272,15 @@ package body MainMenu.Commands is
    -- ShowLoadGame
    -- SOURCE
    function Show_Load_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Load_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
@@ -324,15 +324,15 @@ package body MainMenu.Commands is
    -- DeleteGame
    -- SOURCE
    function Delete_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
@@ -411,15 +411,15 @@ package body MainMenu.Commands is
    -- LoadGame
    -- SOURCE
    function Load_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Load_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
@@ -457,15 +457,15 @@ package body MainMenu.Commands is
    -- SetFaction
    -- SOURCE
    function Set_Faction_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Faction_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, Values: Unbounded_String;
@@ -567,15 +567,15 @@ package body MainMenu.Commands is
    -- SetCareer
    -- SOURCE
    function Set_Career_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Career_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, CareerName: Unbounded_String;
@@ -629,15 +629,15 @@ package body MainMenu.Commands is
    -- SetBase
    -- SOURCE
    function Set_Base_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Base_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       BaseName: Unbounded_String;
@@ -684,15 +684,15 @@ package body MainMenu.Commands is
    -- player or ship
    -- SOURCE
    function Random_Name_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Random_Name_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ComboBox: constant Ttk_ComboBox :=
@@ -738,15 +738,15 @@ package body MainMenu.Commands is
    -- NewGame
    -- SOURCE
    function New_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function New_Game_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       ComboBox: Ttk_ComboBox :=
@@ -837,15 +837,15 @@ package body MainMenu.Commands is
    -- ShowMainMenu
    -- SOURCE
    function Show_Main_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Main_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
