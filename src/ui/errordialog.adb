@@ -25,8 +25,8 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TopLevel; use Tcl.Tk.Ada.Widgets.Toplevel;
-with Tcl.Tk.Ada.Widgets.TopLevel.MainWindow; use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow; use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Game; use Game;
 with Game.SaveLoad; use Game.SaveLoad;
@@ -66,12 +66,12 @@ package body ErrorDialog is
 
          Interp: Tcl.Tcl_Interp := Get_Context;
          Text: Tk_Text;
-         MainWindow: Tk_TopLevel := Get_Main_Window(Interp);
+         MainWindow: Tk_Toplevel := Get_Main_Window(Interp);
       begin
          begin
             Destroy(MainWindow);
          exception
-            when STORAGE_ERROR =>
+            when Storage_Error =>
                null;
          end;
          Interp := Tcl.Tcl_CreateInterp;

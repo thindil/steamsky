@@ -269,7 +269,7 @@ package body Game is
                   if SkyMap(PosX, PosY).BaseIndex > 0 then
                      ValidLocation := False;
                   end if;
-                  exit when ValidLocation;
+                  exit Count_Base_Position_Loop when ValidLocation;
                end loop Count_Base_Position_Loop;
                SkyMap(PosX, PosY) :=
                  (BaseIndex => FactionBases(I), Visited => False,
