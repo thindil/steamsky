@@ -35,7 +35,8 @@ project steamsky is
                "-gnatVa",
                "-gnatU",
                "-gnatf",
-               "-gnateE");
+               "-gnateE",
+               "-gnaty3aAbCdefhIklnOprSux");
          when "release" =>
             for Default_Switches ("ada") use ("-O2",
                "-ffunction-sections",
