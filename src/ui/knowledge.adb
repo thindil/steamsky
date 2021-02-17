@@ -121,7 +121,7 @@ package body Knowledge is
          Label :=
            Create
              (KnowledgeFrame & ".nomissions",
-              "-text {You didn't accepted any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
+              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label);
       else
          Label := Create(KnowledgeFrame & ".name", "-text {Name}");
@@ -215,7 +215,7 @@ package body Knowledge is
          Label :=
            Create
              (KnowledgeFrame & ".noevents",
-              "-text {You dont know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
+              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label);
       else
          Label := Create(KnowledgeFrame & ".name", "-text {Name}");
@@ -326,7 +326,7 @@ package body Knowledge is
          Label :=
            Create
              (KnowledgeFrame & ".nostories",
-              "-text {You didn't discovered any story yet.} -wraplength 400");
+              "-text {You didn't discover any story yet.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label);
       else
          declare
