@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -34,6 +34,7 @@ package body Ships.Repairs is
          PointsIndex := 0;
          RepairNeeded := True;
          RepairStopped := False;
+         Repair_Module_Loop :
          for J in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(J).Order /= Repair then
                goto End_Of_Loop;
@@ -122,17 +123,19 @@ package body Ships.Repairs is
                      Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                        .RepairSkill),
                   Crew_Container.To_Index(J));
-               exit when not RepairNeeded;
+               exit Repair_Module_Loop when not RepairNeeded;
             end if;
             <<End_Of_Loop>>
-         end loop;
+         end loop Repair_Module_Loop;
       end RepairModule;
    begin
+      Count_Repair_Workers_Loop :
       for Member of PlayerShip.Crew loop
          if Member.Order = Repair then
             CurrentMinutes := Minutes;
             OrderTime := Member.OrderTime;
             RepairPoints := 0;
+            Count_Repair_Points_Loop :
             while CurrentMinutes > 0 loop
                if CurrentMinutes >= OrderTime then
                   CurrentMinutes := CurrentMinutes - OrderTime;
@@ -142,11 +145,11 @@ package body Ships.Repairs is
                   OrderTime := OrderTime - CurrentMinutes;
                   CurrentMinutes := 0;
                end if;
-            end loop;
+            end loop Count_Repair_Points_Loop;
             CrewRepairPoints.Append(New_Item => RepairPoints);
             Member.OrderTime := OrderTime;
          end if;
-      end loop;
+      end loop Count_Repair_Workers_Loop;
       if CrewRepairPoints.Length = 0 then
          return;
       end if;
@@ -167,11 +170,12 @@ package body Ships.Repairs is
          if not RepairNeeded then
             AddMessage("All repairs have been finished.", OrderMessage, GREEN);
          end if;
+         Give_Orders_Loop :
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order = Repair then
                GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
             end if;
-         end loop;
+         end loop Give_Orders_Loop;
       end if;
    end RepairShip;
 
