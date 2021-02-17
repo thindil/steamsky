@@ -22,11 +22,13 @@ set messagesframe [ttk::frame $messagescanvas.messages]
 # Messages options
 grid [ttk::frame $messagesframe.options] -sticky w
 grid [ttk::combobox $messagesframe.options.types -values [list All Combat Trade Orders Craft Others Missions] -state readonly -width 10]
+tooltip::tooltip $messagesframe.options.types {Select the type of messages to show}
 bind $messagesframe.options.types <<ComboboxSelected>> SelectMessages
 $messagesframe.options.types current 0
 grid [ttk::entry $messagesframe.options.search -validate key -validatecommand {SearchMessages %P} -width 30] -row 0 -column 1
-tooltip::tooltip $messagesframe.options.search {Search for the selected text in the messages.}
+tooltip::tooltip $messagesframe.options.search {Search for the selected text in the messages}
 grid [ttk::button $messagesframe.options.delete -text {Delete all messages} -command DeleteMessages] -row 0 -column 2
+tooltip::tooltip $messagesframe.options.delete {Clear all messages}
 # Messages list
 grid [ttk::frame $messagesframe.list] -sticky nwes
 set messagesview2 [text $messagesframe.list.view -width 10 -height 10 -yscrollcommand [list $messagesframe.list.scrolly set]]
