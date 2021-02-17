@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ with Tcl; use Tcl;
 package WaitMenu is
 -- ****
 
-   -- ****o* WaitMenu/Show_Wait_Command
+   -- ****o* WaitMenu/WaitMenu.Show_Wait_Command
    -- FUNCTION
    -- Show available wait orders to the player
    -- PARAMETERS
@@ -44,7 +44,7 @@ package WaitMenu is
       Convention => C;
       -- ****
 
-   -- ****f* WaitMenu/AddCommands
+   -- ****f* WaitMenu/WaitMenu.AddCommands
    -- FUNCTION
    -- Add Tcl commands related to the waiting
    -- SOURCE
