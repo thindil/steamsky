@@ -302,18 +302,14 @@ package body Table is
 
    procedure AddProgressBar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
-      Tooltip, Command: String; Column: Positive; NewRow: Boolean := False) is
+      Tooltip, Command: String; Column: Positive;
+      NewRow, InvertColors: Boolean := False) is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Length: constant Natural :=
         Natural((Float(Value) / Float(MaxValue)) * Float(MaxValue));
-      Color: constant String :=
-        (if Length > 74 then
-           Style_Lookup("green.Horizontal.TProgressbar", "-background")
-         elsif Length > 24 then
-           Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
-         else Style_Lookup("TProgressbar", "-background"));
+      Color: Unbounded_String;
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
       procedure Add_Bindings is
@@ -372,6 +368,23 @@ package body Table is
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
+      if not InvertColors then
+         Color :=
+           To_Unbounded_String
+             (if Length > 74 then
+                Style_Lookup("green.Horizontal.TProgressbar", "-background")
+              elsif Length > 24 then
+                Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
+              else Style_Lookup("TProgressbar", "-background"));
+      else
+         Color :=
+           To_Unbounded_String
+             (if Length < 25 then
+                Style_Lookup("green.Horizontal.TProgressbar", "-background")
+              elsif Length > 24 and Length < 75 then
+                Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
+              else Style_Lookup("TProgressbar", "-background"));
+      end if;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -381,7 +394,7 @@ package body Table is
               Positive'Image(X + Length) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
-              " -fill " & Color & " -tags [list progressbar" &
+              " -fill " & To_String(Color) & " -tags [list progressbar" &
               Trim(Positive'Image(Table.Row), Left) & "bar" &
               Trim(Positive'Image(Column), Left) & "]"));
       Add_Bindings;
