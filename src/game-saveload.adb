@@ -146,9 +146,9 @@ package body Game.SaveLoad is
          FieldNode: DOM.Core.Element;
       begin
          Save_Map_X_Loop :
-         for X in SkyMap'Range loop
+         for X in SkyMap'Range(1) loop
             Save_Map_Y_Loop :
-            for Y in 1 .. 1024 loop
+            for Y in SkyMap'Range(2) loop
                if SkyMap(X, Y).Visited then
                   FieldNode := Create_Element(SaveData, "field");
                   FieldNode := Append_Child(MainNode, FieldNode);
