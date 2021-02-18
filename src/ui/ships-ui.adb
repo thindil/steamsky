@@ -13,11 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
@@ -33,7 +30,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
 with Factions; use Factions;
@@ -44,20 +40,26 @@ with ShipModules; use ShipModules;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
+   -- ****iv* SUI2/SUI2.TradeTable
+   -- FUNCTION
+   -- Table with info about the available items to trade
+   -- SOURCE
+   ModulesTable: Table_Widget (2);
+   -- ****
+
    function Show_Ship_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
       ShipInfoFrame: Ttk_Frame := Get_Widget(Paned & ".shipinfoframe", Interp);
       Label: Ttk_Label;
-      Item: Ttk_Frame;
       UpgradeInfo, ProgressBarStyle: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
@@ -65,11 +67,9 @@ package body Ships.UI is
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       CancelButton: Ttk_Button;
-      Tokens: Slice_Set;
-      Rows, Row: Natural := 0;
+      Row: Natural := 0;
       ShipCanvas: Tk_Canvas :=
         Get_Widget(Paned & ".shipinfoframe.general.canvas");
-      Button: Ttk_Button;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
           (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo",
@@ -79,6 +79,12 @@ package body Ships.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
+         ShipInfoFrame := Get_Widget(ShipInfoFrame & ".modules.canvas.frame");
+         ModulesTable :=
+           CreateTable
+             (Widget_Image(ShipInfoFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
+              False);
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & CloseButton);
@@ -260,53 +266,20 @@ package body Ships.UI is
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
       -- Setting ship modules info
-      ShipInfoFrame.Name := New_String(Widget_Image(Paned) & ".shipinfoframe");
-      ShipInfoFrame.Name :=
-        New_String(Widget_Image(ShipInfoFrame) & ".modules.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(ShipInfoFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 2 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (ShipInfoFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Interp;
-            Item.Name := New_String(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
       Row := 2;
+      ClearTable(ModulesTable);
       for Module of PlayerShip.Modules loop
-         Button :=
-           Create
-             (ShipInfoFrame & ".name" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Module.Name) &
-              "} -command {ShowModuleMenu" & Positive'Image(Row - 1) & "}");
-         Add(Button, "Show available module's options");
-         Tcl.Tk.Ada.Grid.Grid
-           (Button, "-row" & Natural'Image(Row) & " -sticky w");
-         UpgradePercent :=
-           (Float(Module.Durability) / Float(Module.MaxDurability));
-         ProgressBarStyle :=
-           (if UpgradePercent = 1.0 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif UpgradePercent > 0.24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (Widget_Image(ShipInfoFrame) & ".durability" &
-              Trim(Natural'Image(Row), Left),
-              "-value {" & Float'Image(UpgradePercent) &
-              "} -maximum 1.0 -length 150" & To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress, "The current durability of the selected module.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 1");
+         AddButton
+           (ModulesTable, To_String(Module.Name),
+            "Show available module's options",
+            "ShowModuleMenu" & Positive'Image(Row - 1), 1);
+         AddProgressBar
+           (ModulesTable, Module.Durability, Module.MaxDurability,
+            "Show available module's options",
+            "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
          Row := Row + 1;
       end loop;
+      UpdateTable(ModulesTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Name := New_String(Paned & ".shipinfoframe.modules.canvas");
       configure
@@ -338,16 +311,14 @@ package body Ships.UI is
    -- Shipname is the new name for the player's ship
    -- SOURCE
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       NameEntry: constant Ttk_Label :=
         Get_Widget
@@ -376,16 +347,14 @@ package body Ships.UI is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       type Frame_Info is record
          Name: Unbounded_String;

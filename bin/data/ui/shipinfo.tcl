@@ -69,6 +69,7 @@ pack [ttk::scrollbar $shipinfoframe.modules.scrolly -orient vertical -command [l
 pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
 pack $shipcanvas -side top -fill both -expand true
 ttk::frame $shipcanvas.frame
+$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
