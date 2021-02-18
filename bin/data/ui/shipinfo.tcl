@@ -72,9 +72,6 @@ ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
-grid [ttk::label $shipcanvas.frame.name -text {Name}]
-grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 1
-$shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
 ::autoscroll::autoscroll $shipinfoframe.modules.scrollx
 # Crew info
