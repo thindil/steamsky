@@ -29,15 +29,19 @@ grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w
 grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]
 grid [ttk::combobox $knowledgecanvas.frame.options.types -state readonly -width 10] -row 0 -column 1
 bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases}
+tooltip::tooltip $knowledgecanvas.frame.options.types {Show only the selected type bases}
 grid [ttk::label $knowledgecanvas.frame.options.statuslbl -text {Status:}] -row 0 -column 2
 grid [ttk::combobox $knowledgecanvas.frame.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}] -width 10] -row 0 -column 3
 bind $knowledgecanvas.frame.options.status <<ComboboxSelected>> {ShowBases}
+tooltip::tooltip $knowledgecanvas.frame.options.status {Show only the selected status bases}
 $knowledgecanvas.frame.options.status current 0
 grid [ttk::label $knowledgecanvas.frame.options.ownerlbl -text {Owner:}] -row 0 -column 4
 grid [ttk::combobox $knowledgecanvas.frame.options.owner -state readonly -width 10] -row 0 -column 5
 bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases}
+tooltip::tooltip $knowledgecanvas.frame.options.owner {Show only the selected owner bases}
 grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}]
 grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
+tooltip::tooltip $knowledgecanvas.frame.options.search {Search for a base with the selected name}
 # List of bases
 grid [ttk::label $knowledgecanvas.frame.name -text {Name}]
 grid [ttk::label $knowledgecanvas.frame.distance -text {Distance}] -column 1 -row 2
