@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -59,7 +59,7 @@ package Bases.Ship is
    -- SOURCE
    procedure RepairShip(ModuleIndex: Integer) with
       Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
-      Test_Case => ("Test_RepairShip", Nominal);
+      Test_Case => (Name => "Test_RepairShip", Mode => Nominal);
       -- ****
 
       -- ****f* Ship/Ship.UpgradeShip
@@ -72,7 +72,7 @@ package Bases.Ship is
       -- SOURCE
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) with
       Pre => (ModuleIndex /= Null_Unbounded_String),
-      Test_Case => ("Test_UpdgradeShip", Nominal);
+      Test_Case => (Name => "Test_UpdgradeShip", Mode => Nominal);
       -- ****
 
       -- ****f* Ship/Ship.PayForDock
@@ -80,7 +80,7 @@ package Bases.Ship is
       -- Pay daily fee for docking
       -- SOURCE
    procedure PayForDock with
-      Test_Case => ("Test_PayForDock", Robustness);
+      Test_Case => (Name => "Test_PayForDock", Mode => Robustness);
       -- ****
 
       -- ****f* Ship/Ship.RepairCost
@@ -96,7 +96,7 @@ package Bases.Ship is
       -- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
       Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
-      Test_Case => ("Test_RepairCost", Nominal);
+      Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
       -- ****
 
 end Bases.Ship;

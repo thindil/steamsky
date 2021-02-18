@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -27,7 +27,7 @@ package Bases.Cargo is
    -- Generate base cargo
    -- SOURCE
    procedure GenerateCargo with
-      Test_Case => ("Test_GenerateCargo", Robustness);
+      Test_Case => (Name => "Test_GenerateCargo", Mode => Robustness);
       -- ****
 
    -- ****f* BCargo/BCargo.UpdateBaseCargo
@@ -44,7 +44,7 @@ package Bases.Cargo is
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex: Inventory_Container.Extended_Index := 0) with
-      Test_Case => ("Test_UpdateBaseCargo", Robustness);
+      Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
       -- ****
 
       -- ****f* BCargo/BCargo.FindBaseCargo
@@ -60,7 +60,7 @@ package Bases.Cargo is
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
-      Test_Case => ("Test_FindBaseCargo", Robustness);
+      Test_Case => (Name => "Test_FindBaseCargo", Mode => Robustness);
       -- ****
 
 end Bases.Cargo;

@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -187,7 +187,7 @@ package Bases is
    -- Points    - Amount of reputation points to gain or lose
    -- SOURCE
    procedure GainRep(BaseIndex: BasesRange; Points: Integer) with
-      Test_Case => ("Test_GainRep", Robustness);
+      Test_Case => (Name => "Test_GainRep", Mode => Robustness);
       -- ****
 
       -- ****f* Bases/Bases.CountPrice
@@ -206,7 +206,7 @@ package Bases is
      (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
       Pre => TraderIndex <= PlayerShip.Crew.Last_Index,
-      Test_Case => ("Test_CountPrice", Nominal);
+      Test_Case => (Name => "Test_CountPrice", Mode => Nominal);
       -- ****
 
       -- ****f* Bases/Bases.GenerateBaseName
@@ -220,7 +220,7 @@ package Bases is
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains(Factions_List, FactionIndex),
-      Test_Case => ("Test_GenerateBaseName", Nominal);
+      Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
       -- ****
 
       -- ****f* Bases/Bases.GenerateRecruits
@@ -228,7 +228,7 @@ package Bases is
       -- Generate if needed new recruits in base
       -- SOURCE
    procedure GenerateRecruits with
-      Test_Case => ("Test_GenerateRecruits", Robustness);
+      Test_Case => (Name => "Test_GenerateRecruits", Mode => Robustness);
       -- ****
 
       -- ****f* Bases/Bases.AskForBases
@@ -236,7 +236,7 @@ package Bases is
       -- Ask in base for direction for other bases
       -- SOURCE
    procedure AskForBases with
-      Test_Case => ("Test_AskForBases", Robustness);
+      Test_Case => (Name => "Test_AskForBases", Mode => Robustness);
       -- ****
 
       -- ****f* Bases/Bases.AskForEvents
@@ -244,7 +244,7 @@ package Bases is
       -- Ask in base for direction for random events
       -- SOURCE
    procedure AskForEvents with
-      Test_Case => ("Test_AskForEvents", Robustness);
+      Test_Case => (Name => "Test_AskForEvents", Mode => Robustness);
       -- ****
 
       -- ****f* Bases/Bases.UpdatePopulation
@@ -252,7 +252,7 @@ package Bases is
       -- Update base population if needed
       -- SOURCE
    procedure UpdatePopulation with
-      Test_Case => ("Test_UpdatePopulation", Robustness);
+      Test_Case => (Name => "Test_UpdatePopulation", Mode => Robustness);
       -- ****
 
       -- ****f* Bases/Bases.UpdatePrices
@@ -260,7 +260,7 @@ package Bases is
       -- Random changes of items prices in base
       -- SOURCE
    procedure UpdatePrices with
-      Test_Case => ("Test_UpdatePrices", Robustness);
+      Test_Case => (Name => "Test_UpdatePrices", Mode => Robustness);
       -- ****
 
 end Bases;
