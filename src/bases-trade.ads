@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -59,7 +59,7 @@ package Bases.Trade is
    procedure HireRecruit
      (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
       DailyPayment, TradePayment: Natural; ContractLenght: Integer) with
-      Test_Case => ("Test_HireRecruit", Robustness);
+      Test_Case => (Name => "Test_HireRecruit", Mode => Robustness);
       -- ****
 
       -- ****f* BTrade/BTrade.BuyRecipe
@@ -70,7 +70,7 @@ package Bases.Trade is
       -- SOURCE
    procedure BuyRecipe(RecipeIndex: Unbounded_String) with
       Pre => (RecipeIndex /= Null_Unbounded_String),
-      Test_Case => ("Test_BuyRecipe", Nominal);
+      Test_Case => (Name => "Test_BuyRecipe", Mode => Nominal);
       -- ****
 
       -- ****f* BTrade/BTrade.HealWounded
@@ -82,7 +82,7 @@ package Bases.Trade is
       -- SOURCE
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
       Pre => (MemberIndex <= PlayerShip.Crew.Last_Index),
-      Test_Case => ("Test_HealWounded", Nominal);
+      Test_Case => (Name => "Test_HealWounded", Mode => Nominal);
       -- ****
 
       -- ****f* BTrade/BTrade.HealCost
@@ -100,7 +100,7 @@ package Bases.Trade is
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) with
       Pre => (MemberIndex <= PlayerShip.Crew.Last_Index),
-      Test_Case => ("Test_HealCost", Nominal);
+      Test_Case => (Name => "Test_HealCost", Mode => Nominal);
       -- ****
 
       -- ****f* BTrade/BTrade.TrainCost
@@ -119,7 +119,7 @@ package Bases.Trade is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
-      Test_Case => ("Test_TrainCost", Nominal);
+      Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
 
       -- ****f* BTrade/BTrade.TrainSkill
@@ -135,7 +135,7 @@ package Bases.Trade is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
-      Test_Case => ("Test_TrainSkill", Nominal);
+      Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
       -- ****
 
 end Bases.Trade;

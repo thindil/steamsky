@@ -1,4 +1,4 @@
---    Copyright 2019-2020 Bartek thindil Jasicki
+--    Copyright 2019-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -109,7 +109,7 @@ package BasesTypes is
       BaseIndex: Extended_BaseRange := 0) return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),
-      Test_Case => ("Test_Is_Buyable", Nominal);
+      Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);
       -- ****
 
       -- ****f* BasesTypes/BasesTypes.Get_Price
@@ -125,7 +125,7 @@ package BasesTypes is
      (BaseType, ItemIndex: Unbounded_String) return Natural with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),
-      Test_Case => ("Test_Get_Price", Nominal);
+      Test_Case => (Name => "Test_Get_Price", Mode => Nominal);
       -- ****
 
 end BasesTypes;
