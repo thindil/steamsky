@@ -56,7 +56,7 @@ with Utils.UI; use Utils.UI;
 
 package body Trades.UI is
 
-   -- ****iv* TUI/TUI.LootTable
+   -- ****iv* TUI/TUI.TradeTable
    -- FUNCTION
    -- Table with info about the available items to trade
    -- SOURCE
