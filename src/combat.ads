@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -154,7 +154,7 @@ package Combat is
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex),
-      Test_Case => ("Test_StartCombat", Nominal);
+      Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****
 
       -- ****f* Combat/Combat.CombatTurn
@@ -162,7 +162,7 @@ package Combat is
       -- Count damage/ships actions, etc
       -- SOURCE
    procedure CombatTurn with
-      Test_Case => ("Test_CombatTurn", Robustness);
+      Test_Case => (Name => "Test_CombatTurn", Mode => Robustness);
       -- ****
 
 end Combat;

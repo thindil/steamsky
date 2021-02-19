@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -118,7 +118,7 @@ package Crafts is
    -- Minutes - How many in game minutes passed
    -- SOURCE
    procedure Manufacturing(Minutes: Positive) with
-      Test_Case => ("Test_Manufacturing", Robustness);
+      Test_Case => (Name => "Test_Manufacturing", Mode => Robustness);
       -- ****
 
       -- ****f* Crafts/Crafts.CheckRecipe
@@ -132,7 +132,7 @@ package Crafts is
       -- SOURCE
    function CheckRecipe(RecipeIndex: Unbounded_String) return Positive with
       Pre => RecipeIndex /= Null_Unbounded_String,
-      Test_Case => ("Test_CheckRecipe", Nominal);
+      Test_Case => (Name => "Test_CheckRecipe", Mode => Nominal);
       -- ****
 
       -- ****f* Crafts/Crafts.SetRecipe
@@ -149,7 +149,7 @@ package Crafts is
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
        RecipeIndex /= Null_Unbounded_String),
-      Test_Case => ("Test_SetRecipe", Nominal);
+      Test_Case => (Name => "Test_SetRecipe", Mode => Nominal);
       -- ****
 
 end Crafts;
