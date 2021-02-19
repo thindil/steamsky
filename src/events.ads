@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -96,7 +96,7 @@ package Events is
    -- Return true if combat starts, otherwise false
    -- SOURCE
    function CheckForEvent return Boolean with
-      Test_Case => ("Test_CheckForEvent", Robustness);
+      Test_Case => (Name => "Test_CheckForEvent", Mode => Robustness);
       -- ****
 
       -- ****f* Events/Events.UpdateEvents
@@ -106,7 +106,7 @@ package Events is
       -- Minutes - Amount of in-game minutes which passed
       -- SOURCE
    procedure UpdateEvents(Minutes: Positive) with
-      Test_Case => ("Test_UpdateEvents", Robustness);
+      Test_Case => (Name => "Test_UpdateEvents", Mode => Robustness);
       -- ****
 
       -- ****f* Events/Events.DeleteEvent
@@ -117,7 +117,7 @@ package Events is
       -- SOURCE
    procedure DeleteEvent(EventIndex: Positive) with
       Pre => EventIndex <= Events_List.Last_Index,
-      Test_Case => ("Test_DeleteEvent", Nominal);
+      Test_Case => (Name => "Test_DeleteEvent", Mode => Nominal);
       -- ****
 
       -- ****f* Events/Events.GenerateTraders
@@ -125,7 +125,7 @@ package Events is
       -- Create list of traders needed for trader event
       -- SOURCE
    procedure GenerateTraders with
-      Test_Case => ("Test_GenerateTraders", Robustness);
+      Test_Case => (Name => "Test_GenerateTraders", Mode => Robustness);
       -- ****
 
       -- ****f* Events/Events.RecoverBase
@@ -135,7 +135,7 @@ package Events is
       -- BaseIndex - Index of the base where recovery happened
       -- SOURCE
    procedure RecoverBase(BaseIndex: BasesRange) with
-      Test_Case => ("Test_RecoverBase", Robustness);
+      Test_Case => (Name => "Test_RecoverBase", Mode => Robustness);
       -- ****
 
       -- ****f* Events/Events.GenerateEnemies
@@ -152,7 +152,7 @@ package Events is
       Owner: Unbounded_String := To_Unbounded_String("Any");
       WithTraders: Boolean := True) with
       Pre => Owner /= Null_Unbounded_String,
-      Test_Case => ("Test_GenerateEnemies", Nominal);
+      Test_Case => (Name => "Test_GenerateEnemies", Mode => Nominal);
       -- ****
 
 end Events;

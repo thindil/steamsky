@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -46,7 +46,7 @@ package Crew.Inventory is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
-      Test_Case => ("Test_UpdateInventory", Nominal);
+      Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
       -- ****f* Inventory/Inventory.FreeInventory
@@ -62,7 +62,7 @@ package Crew.Inventory is
    function FreeInventory
      (MemberIndex: Positive; Amount: Integer) return Integer with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index,
-      Test_Case => ("Test_FreeInventory", Nominal);
+      Test_Case => (Name => "Test_FreeInventory", Mode => Nominal);
       -- ****
 
       -- ****f* Inventory/Inventory.TakeOffItem
@@ -77,7 +77,7 @@ package Crew.Inventory is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
-      Test_Case => ("Test_TakeOffItem", Nominal);
+      Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
       -- ****
 
       -- ****f* Inventory/Inventory.ItemIsUsed
@@ -91,7 +91,7 @@ package Crew.Inventory is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
-      Test_Case => ("Test_ItemIsUsed", Nominal);
+      Test_Case => (Name => "Test_ItemIsUsed", Mode => Nominal);
       -- ****
 
       -- ****f* Inventory/Inventory.FindTools
@@ -113,7 +113,7 @@ package Crew.Inventory is
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and
        ItemType /= Null_Unbounded_String),
-      Test_Case => ("Test_FindTools", Nominal);
+      Test_Case => (Name => "Test_FindTools", Mode => Nominal);
       -- ****
 
 end Crew.Inventory;

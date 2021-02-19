@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -208,7 +208,7 @@ package Crew is
    -- SOURCE
    procedure GainExp(Amount: Natural; SkillNumber, CrewIndex: Positive) with
       Pre => SkillNumber <= Skills_List.Last_Index,
-      Test_Case => ("Test_GainExp", Nominal);
+      Test_Case => (Name => "Test_GainExp", Mode => Nominal);
       -- ****
 
       -- ****f* Crew/Crew.GenerateMemberName
@@ -226,7 +226,7 @@ package Crew is
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /= Null_Unbounded_String),
-      Test_Case => ("Test_GenerateMemberName", Nominal);
+      Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
       -- ****
 
       -- ****f* Crew/Crew.FindCabin
@@ -239,7 +239,7 @@ package Crew is
       -- have any cabin assigned
       -- SOURCE
    function FindCabin(MemberIndex: Positive) return Natural with
-      Test_Case => ("Test_FindCabin", Robustness);
+      Test_Case => (Name => "Test_FindCabin", Mode => Robustness);
       -- ****
 
       -- ****f* Crew/Crew.UpdateCrew
@@ -252,7 +252,7 @@ package Crew is
    -- SOURCE
    procedure UpdateCrew
      (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) with
-      Test_Case => ("Test_UpdateCrew", Robustness);
+      Test_Case => (Name => "Test_UpdateCrew", Mode => Robustness);
       -- ****
 
       -- ****f* Crew/Crew.WaitForRest
@@ -260,7 +260,7 @@ package Crew is
       -- Wait until whole crew is rested
       -- SOURCE
    procedure WaitForRest with
-      Test_Case => ("Test_WaitForRest", Robustness);
+      Test_Case => (Name => "Test_WaitForRest", Mode => Robustness);
       -- ****
 
       -- ****f* Crew/Crew.GetSkillLevelName
@@ -272,7 +272,7 @@ package Crew is
       -- Name (as words) of skill level
       -- SOURCE
    function GetSkillLevelName(SkillLevel: Skill_Range) return String with
-      Test_Case => ("Test_GetSkillLevelName", Nominal);
+      Test_Case => (Name => "Test_GetSkillLevelName", Mode => Nominal);
       -- ****
 
       -- ****f* Crew/Crew.GetAttributeLevelName
@@ -285,7 +285,7 @@ package Crew is
       -- SOURCE
    function GetAttributeLevelName(AttributeLevel: Positive) return String with
       Pre => (AttributeLevel <= 50),
-      Test_Case => ("Test_GetAttributeLevelName", Nominal);
+      Test_Case => (Name => "Test_GetAttributeLevelName", Mode => Nominal);
       -- ****
 
       -- ****f* Crew/Crew.DailyPayment
@@ -293,7 +293,7 @@ package Crew is
    -- Daily payment and upgrade contracts length for player ship crew members
    -- SOURCE
    procedure DailyPayment with
-      Test_Case => ("Test_DailyPayment", Robustness);
+      Test_Case => (Name => "Test_DailyPayment", Mode => Robustness);
       -- ****
 
       -- ****f* Crew/Crew.GetTrainingToolQuality
@@ -310,7 +310,7 @@ package Crew is
    function GetTrainingToolQuality
      (MemberIndex, SkillIndex: Positive) return Positive with
       Pre => SkillIndex <= Skills_List.Last_Index,
-      Test_Case => ("Test_GetTrainingToolQuality", Nominal);
+      Test_Case => (Name => "Test_GetTrainingToolQuality", Mode => Nominal);
       -- ****
 
 end Crew;
