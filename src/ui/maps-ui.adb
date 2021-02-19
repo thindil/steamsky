@@ -664,9 +664,7 @@ package body Maps.UI is
                when None | BaseRecovery =>
                   null;
             end case;
-            if
-              (Events_List(EventIndex).EType = DoublePrice or
-               Events_List(EventIndex).EType = FriendlyShip) then
+            if Events_List(EventIndex).EType in DoublePrice | FriendlyShip then
                configure
                  (EventInfo,
                   "-text {" & To_String(EventInfoText) &

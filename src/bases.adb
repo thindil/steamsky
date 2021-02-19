@@ -298,7 +298,7 @@ package body Bases is
                   end if;
                end loop Find_Tool_Loop;
                AddInventory(TempTools, 7);
-               exit;
+               exit Add_Tool_Loop;
             end if;
          end loop Add_Tool_Loop;
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains

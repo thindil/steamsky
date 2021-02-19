@@ -69,15 +69,15 @@ package body Bases.LootUI is
    -- ShowLoot
    -- SOURCE
    function Show_Loot_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Loot_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
@@ -269,15 +269,15 @@ package body Bases.LootUI is
    -- ShowLootItemInfo
    -- SOURCE
    function Show_Loot_Item_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Loot_Item_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       ItemInfo, ProtoIndex: Unbounded_String;
@@ -383,15 +383,15 @@ package body Bases.LootUI is
    -- actiontype can be: drop, dropall, take, takeall
    -- SOURCE
    function Loot_Item_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Loot_Item_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
@@ -497,15 +497,15 @@ package body Bases.LootUI is
    -- ItemIndex is a index of the item which menu will be shown.
    -- SOURCE
    function Show_Item_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Item_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
@@ -571,15 +571,15 @@ package body Bases.LootUI is
    -- of the base from which item will be take.
    -- SOURCE
    function Loot_Amount_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Loot_Amount_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Natural :=
