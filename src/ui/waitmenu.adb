@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
@@ -24,6 +25,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crew; use Crew;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -34,9 +36,8 @@ with Utils.UI; use Utils.UI;
 package body WaitMenu is
 
    function Show_Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       WaitDialog: Ttk_Frame := Get_Widget(".gameframe.wait", Interp);
       Button: Ttk_Button;
@@ -62,10 +63,12 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-sticky we -columnspan 3 -padx 5 -pady {5 0}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+      Add(Button, "Wait in place for 1 minute");
       Button :=
         Create
           (WaitDialog & ".wait5", "-text {Wait 5 minutes} -command {Wait 5}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
+      Add(Button, "Wait in place for 5 minutes");
       Button :=
         Create
           (WaitDialog & ".wait10",
@@ -77,21 +80,28 @@ package body WaitMenu is
           (WaitDialog & ".wait15",
            "-text {Wait 15 minutes} -command {Wait 15}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
+      Add(Button, "Wait in place for 15 minutes");
       Button :=
         Create
           (WaitDialog & ".wait30",
            "-text {Wait 30 minutes} -command {Wait 30}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+      Add(Button, "Wait in place for 30 minutes");
       Button :=
         Create
           (WaitDialog & ".wait1h", "-text {Wait 1 hour} -command {Wait 60}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
+      Add(Button, "Wait in place for 1 hour");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
       Button :=
         Create(WaitDialog & ".wait", "-text Wait  -command {Wait amount}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-padx {5 0}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+      Add
+        (Button,
+         "Wait in place for the selected amount of minutes:" & LF &
+         "from 1 to 1440 (the whole day)");
       AmountBox :=
         Create
           (WaitDialog & ".amount",
@@ -99,6 +109,10 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
       Bind(AmountBox, "<Escape>", "{CloseDialog " & WaitDialog & "}");
       Set(AmountBox, "1");
+      Add
+        (AmountBox,
+         "Wait in place for the selected amount of minutes:" & LF &
+         "from 1 to 1440 (the whole day)");
       AmountLabel :=
         Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
@@ -130,6 +144,7 @@ package body WaitMenu is
               "-text {Wait until crew is rested} -command {Wait rest}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
          Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+         Add(Button, "Wait in place until the whole ship's crew is rested.");
       end if;
       if NeedHealing then
          Button :=
@@ -138,6 +153,10 @@ package body WaitMenu is
               "-text {Wait until crew is healed} -command {Wait heal}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
          Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+         Add
+           (Button,
+            "Wait in place until the whole ship's crew is healed." & LF &
+            "Can take a large amount of time.");
       end if;
       Button :=
         Create
@@ -146,6 +165,7 @@ package body WaitMenu is
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & "}");
+      Add(Button, "Close dialog \[Escape\]");
       Tcl.Tk.Ada.Place.Place
         (WaitDialog, "-in .gameframe -relx 0.3 -rely 0.15");
       Focus(Button);
@@ -167,16 +187,14 @@ package body WaitMenu is
    -- Wait
    -- SOURCE
    function Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Wait_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TimeNeeded: Natural := 0;
       CloseButton: constant Ttk_Button :=
