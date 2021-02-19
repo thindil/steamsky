@@ -308,7 +308,9 @@ package body Table is
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Length: constant Natural :=
-        Natural((Float(Value) / Float(MaxValue)) * Float(MaxValue));
+        Natural
+          (100.0 +
+           ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0));
       Color: Unbounded_String;
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
