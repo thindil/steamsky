@@ -494,6 +494,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Workshop_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -519,7 +520,7 @@ package body Ships.SaveLoad is
                               end case;
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Workshop_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => WORKSHOP, Name => Name,
@@ -547,6 +548,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Training_Room_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -556,7 +558,7 @@ package body Ships.SaveLoad is
                                   (Get_Attribute(ModuleNode, "value"));
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Training_Room_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => TRAINING_ROOM, Name => Name,
@@ -573,6 +575,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Turret_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -582,7 +585,7 @@ package body Ships.SaveLoad is
                                   (Get_Attribute(ModuleNode, "value"));
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Turret_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => TURRET, Name => Name,
@@ -599,6 +602,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -616,7 +620,7 @@ package body Ships.SaveLoad is
                               end case;
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Gun_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => GUN, Name => Name,
@@ -642,6 +646,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Hull_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -659,7 +664,7 @@ package body Ships.SaveLoad is
                               end case;
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Hull_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => HULL, Name => Name,
@@ -686,6 +691,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Battering_Ram_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -695,7 +701,7 @@ package body Ships.SaveLoad is
                                   (Get_Attribute(ModuleNode, "value"));
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Battering_Ram_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => BATTERING_RAM, Name => Name,
@@ -712,6 +718,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
+                        Load_Harpoon_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -729,7 +736,7 @@ package body Ships.SaveLoad is
                               end case;
                               DataIndex := DataIndex + 1;
                            end if;
-                        end loop;
+                        end loop Load_Harpoon_Gun_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
                              (MType => HARPOON_GUN, Name => Name,
@@ -816,6 +823,7 @@ package body Ships.SaveLoad is
                Morale(2) :=
                  Natural'Value(Get_Attribute(ChildNode, "moralepoints"));
                Loyalty := Natural'Value(Get_Attribute(ChildNode, "loyalty"));
+               Load_Crew_Loop :
                for K in 0 .. Length(MemberData) - 1 loop
                   MemberNode := Item(MemberData, K);
                   if Node_Name(MemberNode) = "skill" then
@@ -865,7 +873,7 @@ package body Ships.SaveLoad is
                        Natural'Value(Get_Attribute(MemberNode, "index"));
                      EquipmentIndex := EquipmentIndex + 1;
                   end if;
-               end loop;
+               end loop Load_Crew_Loop;
                HomeBase :=
                  (if Get_Attribute(ChildNode, "homebase") /= "" then
                     Natural'Value(Get_Attribute(ChildNode, "homebase"))
