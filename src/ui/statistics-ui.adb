@@ -215,7 +215,7 @@ package body Statistics.UI is
       if GoalText(0)'Length < 16 then
          configure(Label, "-text {" & GoalText(0) & "}");
       else
-         configure(Label, "-text {" & GoalText(0)(1 .. 18) & "...}");
+         configure(Label, "-text {" & GoalText(0)(1 .. 17) & "...}");
       end if;
       TotalFinished := 0;
       for FinishedGoal of GameStats.FinishedGoals loop
