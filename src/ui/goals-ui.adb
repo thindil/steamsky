@@ -121,8 +121,8 @@ package body Goals.UI is
       if SelectedGoal > 0 then
          ButtonText := To_Unbounded_String(GoalText(SelectedGoal));
          Add(GoalButton, To_String(ButtonText));
-         if Length(ButtonText) > 15 then
-            ButtonText := Unbounded_Slice(ButtonText, 1, 18) & "...";
+         if Length(ButtonText) > 16 then
+            ButtonText := Unbounded_Slice(ButtonText, 1, 17) & "...";
          end if;
          configure(GoalButton, "-text {" & To_String(ButtonText) & "}");
       else
