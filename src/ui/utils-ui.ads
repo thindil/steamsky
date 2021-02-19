@@ -48,8 +48,8 @@ package Utils.UI is
    -- Dialogname is name of the dialog to close
    -- SOURCE
    function Close_Dialog_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
@@ -77,12 +77,12 @@ package Utils.UI is
    procedure AddCommand
      (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) with
       Pre => Name'Length > 0;
-     -- ****
+      -- ****
 
-   -- ****f* UUI/UUI.AddCommands
-   -- FUNCTION
-   -- Add various, UI related Tcl commands
-   -- SOURCE
+      -- ****f* UUI/UUI.AddCommands
+      -- FUNCTION
+      -- Add various, UI related Tcl commands
+      -- SOURCE
    procedure AddCommands;
    -- ****
 
