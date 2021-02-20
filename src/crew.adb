@@ -783,7 +783,7 @@ package body Crew is
                   DeathReason := To_Unbounded_String("debugging");
                end if;
                Death(I, DeathReason, PlayerShip);
-               exit when I = 1;
+               exit Update_Crew_Loop when I = 1;
             end if;
          end if;
          if HealthLevel > Skill_Range'First then

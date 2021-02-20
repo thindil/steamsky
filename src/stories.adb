@@ -1,4 +1,4 @@
---    Copyright 2018-2020 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -359,7 +359,7 @@ package body Stories is
    begin
       Value := GetStepData(StepData, "x");
       if Value = To_Unbounded_String("random") then
-         LocationX := GetRandom(SkyMap'First, SkyMap'Last);
+         LocationX := GetRandom(SkyMap'First(1), SkyMap'Last(1));
          LocationData := To_Unbounded_String(Integer'Image(LocationX));
          Append(LocationData, ";");
       else
@@ -371,7 +371,7 @@ package body Stories is
       Value := GetStepData(StepData, "y");
       if Value = To_Unbounded_String("random") then
          loop
-            LocationY := GetRandom(SkyMap'First, SkyMap'Last);
+            LocationY := GetRandom(SkyMap'First(2), SkyMap'Last(2));
             exit when SkyMap(LocationX, LocationY).BaseIndex = 0 and
               LocationY /= PlayerShip.SkyY;
          end loop;
