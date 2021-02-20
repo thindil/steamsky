@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash on accepting missions in bases
 - Cost of the player's ship repairs in Industrial base
 - Typos in knowledge screen
+- Crash on showing the current player's goal
 
 ## [5.7] - 2021-01-24
 
