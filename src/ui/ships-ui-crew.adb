@@ -54,24 +54,28 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew.Inventory;
+with Table; use Table;
 with Themes; use Themes;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew is
 
+   -- ****iv* SUCrew/SUCrew.CrewTable
+   -- FUNCTION
+   -- Table with info about the available items to trade
+   -- SOURCE
+   CrewTable: Table_Widget (7);
+   -- ****
+
    procedure UpdateCrewInfo is
-      Label: Ttk_Label;
       CrewInfoFrame, Item, ButtonsFrame: Ttk_Frame;
-      UpgradeProgress: Ttk_ProgressBar;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ShipCanvas: Tk_Canvas;
-      ProgressBarStyle: Unbounded_String;
-      CrewButton: Ttk_Button;
-      Row: Positive := 1;
       NeedRepair, NeedClean: Boolean := False;
       Button: Ttk_Button;
+      TiredLevel: Integer;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
@@ -113,7 +117,6 @@ package body Ships.UI.Crew is
               "} -style Header.Toolbutton -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button);
-         Row := 2;
       end if;
       if NeedRepair then
          Button :=
@@ -127,137 +130,61 @@ package body Ships.UI.Crew is
               "} -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
-         Row := 2;
       end if;
       Tcl.Tk.Ada.Grid.Grid(ButtonsFrame, "-sticky w");
-      Label := Create(CrewInfoFrame & ".name", "-text {Name}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row));
-      Label := Create(CrewInfoFrame & ".order", "-text {Order}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 1");
-      Label := Create(CrewInfoFrame & ".health", "-text {Health}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 2");
-      Label := Create(CrewInfoFrame & ".tired", "-text {Fatigue}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 3");
-      Label := Create(CrewInfoFrame & ".thirst", "-text {Thirst}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 4");
-      Label := Create(CrewInfoFrame & ".hunger", "-text {Hunger}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 5");
-      Label := Create(CrewInfoFrame & ".morale", "-text {Morale}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-row" & Natural'Image(Row) & " -column 6");
-      Row := Row + 1;
+      CrewTable :=
+        CreateTable
+          (Widget_Image(CrewInfoFrame),
+           (To_Unbounded_String("Name"), To_Unbounded_String("Order"),
+            To_Unbounded_String("Health"), To_Unbounded_String("Fatigue"),
+            To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
+            To_Unbounded_String("Morale")),
+           False);
       for I in PlayerShip.Crew.Iterate loop
-         CrewButton :=
-           Create
-             (CrewInfoFrame & ".name" &
-              Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) &
-              "} -command {ShowMemberMenu" &
-              Positive'Image(Crew_Container.To_Index(I)) & "}");
-         Add(CrewButton, "Show available crew member's options");
-         Tcl.Tk.Ada.Grid.Grid
-           (CrewButton, "-row" & Natural'Image(Row) & " -sticky w");
-         Label :=
-           Create
-             (CrewInfoFrame & ".order" & Trim(Natural'Image(Row), Left),
-              "-text {" & Crew_Orders'Image(PlayerShip.Crew(I).Order)(1) &
-              To_Lower
-                (Crew_Orders'Image(PlayerShip.Crew(I).Order)
-                   (2 .. Crew_Orders'Image(PlayerShip.Crew(I).Order)'Last)) &
-              "}");
-         Add(Label, "The current order for the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label, "-row" & Natural'Image(Row) & " -column 1");
-         ProgressBarStyle :=
-           (if PlayerShip.Crew(I).Health > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Crew(I).Health > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (CrewInfoFrame & ".health" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Crew(I).Health) & "}" &
-              To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress,
-            "The current health level of the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 2");
-         ProgressBarStyle :=
-           (if
-              PlayerShip.Crew(I).Tired -
-              PlayerShip.Crew(I).Attributes(ConditionIndex)(1) <
-              25
-            then To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif
-              PlayerShip.Crew(I).Tired -
-              PlayerShip.Crew(I).Attributes(ConditionIndex)(1) >
-              24
-            then To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (CrewInfoFrame & ".fatigue" & Trim(Natural'Image(Row), Left),
-              "-value {" &
-              Integer'Image
-                (PlayerShip.Crew(I).Tired -
-                 PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) &
-              "}" & To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress,
-            "The current tired level of the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 3");
-         ProgressBarStyle :=
-           (if PlayerShip.Crew(I).Thirst < 25 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Crew(I).Thirst > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (CrewInfoFrame & ".thirst" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Crew(I).Thirst) & "}" &
-              To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress,
-            "The current thirst level of the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 4");
-         ProgressBarStyle :=
-           (if PlayerShip.Crew(I).Hunger < 25 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Crew(I).Hunger > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (CrewInfoFrame & ".hunger" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Crew(I).Hunger) & "}" &
-              To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress,
-            "The current hunger level of the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 5");
-         ProgressBarStyle :=
-           (if PlayerShip.Crew(I).Morale(1) > 49 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Crew(I).Morale(1) > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         UpgradeProgress :=
-           Create
-             (CrewInfoFrame & ".morale" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Crew(I).Morale(1)) & "}" &
-              To_String(ProgressBarStyle));
-         Add
-           (UpgradeProgress,
-            "The current morale level of the selected crew member.");
-         Tcl.Tk.Ada.Grid.Grid
-           (UpgradeProgress, "-row" & Natural'Image(Row) & " -column 6");
-         Row := Row + 1;
+         AddButton
+           (CrewTable, To_String(PlayerShip.Crew(I).Name),
+            "Show available crew member's options",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 1);
+         AddButton
+           (CrewTable,
+            Crew_Orders'Image(PlayerShip.Crew(I).Order)(1) &
+            To_Lower
+              (Crew_Orders'Image(PlayerShip.Crew(I).Order)
+                 (2 .. Crew_Orders'Image(PlayerShip.Crew(I).Order)'Last)),
+            "The current order for the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 2);
+         AddProgressBar
+           (CrewTable, PlayerShip.Crew(I).Health, Skill_Range'Last,
+            "The current health level of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 3);
+         TiredLevel :=
+           PlayerShip.Crew(I).Tired -
+           PlayerShip.Crew(I).Attributes(ConditionIndex)(1);
+         if TiredLevel < 0 then
+            TiredLevel := 0;
+         end if;
+         AddProgressBar
+           (CrewTable, TiredLevel, Skill_Range'Last,
+            "The current tired level of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 4,
+            False, True);
+         AddProgressBar
+           (CrewTable, PlayerShip.Crew(I).Thirst, Skill_Range'Last,
+            "The current thirst level of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 5,
+            False, True);
+         AddProgressBar
+           (CrewTable, PlayerShip.Crew(I).Hunger, Skill_Range'Last,
+            "The current hunger level of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 6,
+            False, True);
+         AddProgressBar
+           (CrewTable, PlayerShip.Crew(I).Morale(1), Skill_Range'Last,
+            "The current morale level of the selected crew member",
+            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 7,
+            True);
       end loop;
+      UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Get_Context;
       ShipCanvas.Name :=
@@ -284,16 +211,14 @@ package body Ships.UI.Crew is
    -- player ship crew
    -- SOURCE
    function Order_For_All_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Order_For_All_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
       for I in PlayerShip.Crew.Iterate loop
@@ -329,16 +254,14 @@ package body Ships.UI.Crew is
    -- dismissed
    -- SOURCE
    function Dismiss_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Dismiss_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -384,16 +307,14 @@ package body Ships.UI.Crew is
    -- which will be assigned to the crew member
    -- SOURCE
    function Set_Crew_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Crew_Order_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp);
       ModuleIndex: Natural := 0;
    begin
@@ -429,16 +350,14 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show
    -- SOURCE
    function Show_Member_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
@@ -863,16 +782,14 @@ package body Ships.UI.Crew is
    -- ShowMemberTab
    -- SOURCE
    function Show_Member_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MemberCanvas: constant Tk_Canvas :=
         Get_Widget(".memberdialog.canvas", Interp);
@@ -910,16 +827,14 @@ package body Ships.UI.Crew is
    -- Statindex is the index of statistic which info will be show
    -- SOURCE
    function Show_Crew_Stats_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crew_Stats_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
       ShowInfo
@@ -945,16 +860,14 @@ package body Ships.UI.Crew is
    -- Memberindex is the index of the crew member which skill will be show.
    -- SOURCE
    function Show_Crew_Skill_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crew_Skill_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       SkillIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MessageText, ItemIndex: Unbounded_String;
@@ -1017,16 +930,14 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show
    -- SOURCE
    function Show_Member_Priorities_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Priorities_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
@@ -1107,16 +1018,14 @@ package body Ships.UI.Crew is
    -- be set
    -- SOURCE
    function Set_Priority_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Priority_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ComboBox: Ttk_ComboBox;
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
@@ -1161,16 +1070,14 @@ package body Ships.UI.Crew is
    -- MemberIndex is the index of the crew member to show menu
    -- SOURCE
    function Show_Member_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Member_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CrewMenu: Tk_Menu := Get_Widget(".membermenu", Interp);
       Member: constant Member_Data :=
