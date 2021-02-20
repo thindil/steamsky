@@ -410,7 +410,7 @@ package body Bases.Ship is
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
                   GiveOrders(PlayerShip, Crew_Container.To_Index(C), Rest);
-                  exit;
+                  exit Remove_Upgrade_Order_Loop;
                end if;
             end loop Remove_Upgrade_Order_Loop;
          end if;
@@ -478,7 +478,7 @@ package body Bases.Ship is
       for Module of PlayerShip.Modules loop
          if Module.MType = HULL then
             DockingCost := Module.MaxModules;
-            exit;
+            exit Count_Docking_Cost_Loop;
          end if;
       end loop Count_Docking_Cost_Loop;
       DockingCost :=

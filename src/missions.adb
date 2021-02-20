@@ -263,7 +263,7 @@ package body Missions is
                         exit Cabin_Owner_Loop;
                      end if;
                   end loop Cabin_Owner_Loop;
-                  exit when HaveCabin;
+                  exit Modules_Loop when HaveCabin;
                end if;
             end loop Modules_Loop;
             if not HaveCabin then
