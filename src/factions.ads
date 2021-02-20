@@ -1,4 +1,4 @@
---    Copyright 2018-2020 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -181,7 +181,7 @@ package Factions is
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction)),
-      Test_Case => ("Test_GetReputation", Nominal);
+      Test_Case => (Name => "Test_GetReputation", Mode => Nominal);
       -- ****
 
       -- ****f* Factions/Factions.IsFriendly
@@ -198,7 +198,7 @@ package Factions is
       Pre =>
       (Factions_Container.Contains(Factions_List, SourceFaction) and
        Factions_Container.Contains(Factions_List, TargetFaction)),
-      Test_Case => ("Test_IsFriendly", Nominal);
+      Test_Case => (Name => "Test_IsFriendly", Mode => Nominal);
       -- ****
 
       -- ****f* Factions/Factions.GetRandomFaction
@@ -208,7 +208,7 @@ package Factions is
       -- Random index of faction
       -- SOURCE
    function GetRandomFaction return Unbounded_String with
-      Test_Case => ("Test_GetRandomFaction", Robustness);
+      Test_Case => (Name => "Test_GetRandomFaction", Mode => Robustness);
       -- ****
 
 end Factions;

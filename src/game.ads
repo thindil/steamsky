@@ -462,7 +462,7 @@ package Game is
    -- InCombat - Did player is in combat currently. Default false
    -- SOURCE
    procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) with
-      Test_Case => ("Test_UpdateGame", Robustness);
+      Test_Case => (Name => "Test_UpdateGame", Mode => Robustness);
       -- ****
 
       -- ****f* Game/Game.EndGame
@@ -472,7 +472,7 @@ package Game is
       -- Save - Did game should be saved to file or not
       -- SOURCE
    procedure EndGame(Save: Boolean) with
-      Test_Case => ("Test_EndGame", Robustness);
+      Test_Case => (Name => "Test_EndGame", Mode => Robustness);
       -- ****
 
       -- ****f* Game/Game.FindSkillIndex
@@ -485,7 +485,7 @@ package Game is
       -- SOURCE
    function FindSkillIndex(SkillName: Unbounded_String) return Natural with
       Pre => SkillName /= Null_Unbounded_String,
-      Test_Case => ("Test_FindSkillIndex", Nominal);
+      Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
       -- ****
 
       -- ****f* Game/Game.LoadGameData
