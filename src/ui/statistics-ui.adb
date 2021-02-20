@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crafts; use Crafts;
 with Goals; use Goals;
 with Items; use Items;
@@ -103,6 +104,13 @@ package body Statistics.UI is
          LF & "Distance traveled:" &
          Natural'Image(GameStats.DistanceTraveled));
       configure(Label, "-text {" & To_String(StatsText) & "}");
+      Add
+        (Label,
+         "Points - the amount of points gained in this game" & LF &
+         "Time passed - in game time which was passed since it started" & LF &
+         "Bases visited - the amount of sky bases visited and total percentage of all bases" &
+         LF & "Map discovered - the amount of unique map's fields visited" &
+         LF & "Distance traveled - the total amount of map's fields visited");
       StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
       TotalFinished := 0;
       for CraftingOrder of GameStats.CraftingOrders loop
@@ -113,6 +121,7 @@ package body Statistics.UI is
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
          "}");
+      Add(Label, "The total amount of crafting orders finished in this game");
       StatsFrame := Get_Widget(StatsCanvas & ".stats.left.craftsframe");
       TreeView := Get_Widget(StatsFrame & ".craftsview");
       if Children(TreeView, "{}") /= "{}" then
@@ -162,6 +171,7 @@ package body Statistics.UI is
                  (To_Unbounded_String(Natural'Image(MissionsPercent)),
                   Ada.Strings.Left)) &
             "%)" & "}");
+         Add(Label, "The total amount of missions finished in this game");
       end;
       StatsFrame := Get_Widget(StatsCanvas & ".stats.left.missionsframe");
       TreeView.Name := New_String(StatsFrame & ".missionsview");
@@ -217,6 +227,7 @@ package body Statistics.UI is
       else
          configure(Label, "-text {" & GoalText(0)(1 .. 17) & "...}");
       end if;
+      Add(Label, "The current goal: " & GoalText(0));
       TotalFinished := 0;
       for FinishedGoal of GameStats.FinishedGoals loop
          TotalFinished := TotalFinished + FinishedGoal.Amount;
@@ -224,6 +235,7 @@ package body Statistics.UI is
       Label.Name := New_String(StatsCanvas & ".stats.left.goals");
       configure
         (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
+      Add(Label, "The total amount of goals finished in this game");
       StatsFrame := Get_Widget(StatsCanvas & ".stats.left.goalsframe");
       TreeView.Name := New_String(StatsFrame & ".goalsview");
       if Children(TreeView, "{}") /= "{}" then
@@ -290,6 +302,7 @@ package body Statistics.UI is
         (Label,
          "-text {Destroyed ships (Total:" & Natural'Image(TotalDestroyed) &
          ")}");
+      Add(Label, "The total amount of destroyed ships in this game");
       StatsFrame := Get_Widget(StatsCanvas & ".stats.right.killedframe");
       TreeView.Name := New_String(StatsFrame & ".killedview");
       TotalDestroyed := 0;
@@ -321,6 +334,9 @@ package body Statistics.UI is
         (Label,
          "-text {Killed enemies (Total:" & Natural'Image(TotalDestroyed) &
          ")}");
+      Add
+        (Label,
+         "The total amount of enemies killed in melee combat in this game");
       configure
         (StatsCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
