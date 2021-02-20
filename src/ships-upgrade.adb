@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -197,6 +197,7 @@ package body Ships.Upgrade is
                   .RepairMaterial);
       begin
          if MaterialIndex = 0 then
+            Materials_Loop :
             for Item of Items_List loop
                if Item.IType =
                  Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
@@ -206,7 +207,7 @@ package body Ships.Upgrade is
                     " to upgrade " &
                     To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
                end if;
-            end loop;
+            end loop Materials_Loop;
          end if;
       end;
       PlayerShip.UpgradeModule := ModuleIndex;
@@ -276,6 +277,7 @@ package body Ships.Upgrade is
          GiveOrders(PlayerShip, WorkerIndex, Rest);
          return;
       end if;
+      Count_Time_Loop :
       while CurrentMinutes > 0 loop
          if CurrentMinutes >= OrderTime then
             CurrentMinutes := CurrentMinutes - OrderTime;
@@ -285,7 +287,7 @@ package body Ships.Upgrade is
             OrderTime := OrderTime - CurrentMinutes;
             CurrentMinutes := 0;
          end if;
-      end loop;
+      end loop Count_Time_Loop;
       PlayerShip.Crew(WorkerIndex).OrderTime := OrderTime;
       if Times = 0 then
          return;
@@ -297,6 +299,7 @@ package body Ships.Upgrade is
           10) *
          Times) +
         Times;
+      Upgrade_Loop :
       while UpgradePoints > 0 and UpgradedModule.UpgradeProgress > 0 loop
          ResultAmount := UpgradePoints;
          if ResultAmount > UpgradedModule.UpgradeProgress then
@@ -309,7 +312,7 @@ package body Ships.Upgrade is
                To_String(UpgradedModule.Name),
                OrderMessage, RED);
             GiveOrders(PlayerShip, WorkerIndex, Rest);
-            exit;
+            exit Upgrade_Loop;
          end if;
          if UpgradeTools = 0 then
             AddMessage
@@ -317,7 +320,7 @@ package body Ships.Upgrade is
                To_String(UpgradedModule.Name),
                OrderMessage, RED);
             GiveOrders(PlayerShip, WorkerIndex, Rest);
-            exit;
+            exit Upgrade_Loop;
          end if;
          if UpgradedModule.UpgradeAction = MAX_VALUE then
             case UpgradedModule.MType is
@@ -628,7 +631,7 @@ package body Ships.Upgrade is
          else
             UpgradedModule.UpgradeProgress := UpgradeProgress;
          end if;
-      end loop;
+      end loop Upgrade_Loop;
       PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
    end UpgradeShip;
 
