@@ -370,6 +370,13 @@ package body Table is
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
+      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      X :=
+        (Positive'Value(Slice(Tokens, 3)) + 10) -
+        Positive'Value(Slice(Tokens, 1));
+      if X > Table.Columns_Width(Column) then
+         Table.Columns_Width(Column) := X;
+      end if;
       if not InvertColors then
          Color :=
            To_Unbounded_String
@@ -402,13 +409,6 @@ package body Table is
       Add_Bindings;
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
-      end if;
-      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
-      X :=
-        (Positive'Value(Slice(Tokens, 3)) + 10) -
-        Positive'Value(Slice(Tokens, 1));
-      if X > Table.Columns_Width(Column) then
-         Table.Columns_Width(Column) := X;
       end if;
       if NewRow then
          Table.Row := Table.Row + 1;
