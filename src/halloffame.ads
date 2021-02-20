@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -67,7 +67,7 @@ package HallOfFame is
       Pre =>
       (PlayerName /= Null_Unbounded_String and
        DeathReason /= Null_Unbounded_String),
-      Test_Case => ("Test_UpdateHallOfFame", Nominal);
+      Test_Case => (Name => "Test_UpdateHallOfFame", Mode => Nominal);
       -- ****
 
 end HallOfFame;

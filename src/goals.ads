@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -94,7 +94,7 @@ package Goals is
    -- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index,
-      Test_Case => ("Test_GoalText", Nominal);
+      Test_Case => (Name => "Test_GoalText", Mode => Nominal);
       -- ****
 
       -- ****f* Goals/Goals.ClearCurrentGoal
@@ -102,7 +102,7 @@ package Goals is
       -- Reset current goal
       -- SOURCE
    procedure ClearCurrentGoal with
-      Test_Case => ("Test_ClearCurrentGoal", Robustness);
+      Test_Case => (Name => "Test_ClearCurrentGoal", Mode => Robustness);
       -- ****
 
       -- ****f* Goals/Goals.UpdateGoal
@@ -116,7 +116,7 @@ package Goals is
    procedure UpdateGoal
      (GType: GoalTypes; TargetIndex: Unbounded_String;
       Amount: Positive := 1) with
-      Test_Case => ("Test_UpdateGoal", Robustness);
+      Test_Case => (Name => "Test_UpdateGoal", Mode => Robustness);
       -- ****
 
 end Goals;
