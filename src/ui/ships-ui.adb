@@ -45,7 +45,7 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
 
-   -- ****iv* SUI2/SUI2.TradeTable
+   -- ****iv* SUI2/SUI2.ModulesTable
    -- FUNCTION
    -- Table with info about the available items to trade
    -- SOURCE
