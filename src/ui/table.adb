@@ -31,20 +31,22 @@ package body Table is
      (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
       return Table_Widget is
       Canvas: Tk_Canvas;
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (Parent & ".scrolly",
-           "-orient vertical -command [list " & Parent & ".table yview]");
-      XScroll: constant Ttk_Scrollbar :=
-        Create
-          (Parent & ".scrollx",
-           "-orient horizontal -command [list " & Parent & ".table xview]");
+      YScroll: Ttk_Scrollbar;
+      XScroll: Ttk_Scrollbar;
       Table: Table_Widget (Headers'Length);
       X: Natural := 5;
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
       if With_Scrollbars then
+         YScroll :=
+           Create
+             (Parent & ".scrolly",
+              "-orient vertical -command [list " & Parent & ".table yview]");
+         XScroll :=
+           Create
+             (Parent & ".scrollx",
+              "-orient horizontal -command [list " & Parent & ".table xview]");
          Canvas :=
            Create
              (Parent & ".table",
