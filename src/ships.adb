@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -54,6 +54,7 @@ package body Ships is
          if RandomUpgrades then
             UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
          end if;
+         Set_Modules_Loop :
          for Module of ProtoShip.Modules loop
             TempModule := Modules_List(Module);
             if UpgradesAmount > 0 then
@@ -119,9 +120,10 @@ package body Ships is
             end if;
             Owners.Clear;
             if TempModule.MaxOwners > 0 then
+               Set_Module_Owners_Loop :
                for I in 1 .. TempModule.MaxOwners loop
                   Owners.Append(0);
-               end loop;
+               end loop Set_Module_Owners_Loop;
             end if;
             case TempModule.MType is
                when ENGINE =>
@@ -257,7 +259,7 @@ package body Ships is
                when ANY =>
                   null;
             end case;
-         end loop;
+         end loop Set_Modules_Loop;
       end;
       -- Set ship name
       NewName :=
@@ -266,16 +268,19 @@ package body Ships is
       declare
          Member: Member_Data;
       begin
+         Set_Crew_Loop :
          for ProtoMember of ProtoShip.Crew loop
             Amount :=
               (if ProtoMember.MaxAmount = 0 then ProtoMember.MinAmount
                else GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount));
+            Add_Crew_Member_Loop :
             for I in 1 .. Amount loop
                Member := GenerateMob(ProtoMember.ProtoIndex, ProtoShip.Owner);
                ShipCrew.Append(New_Item => Member);
                Modules_Loop :
                for Module of ShipModules loop
                   if Module.MType = CABIN then
+                     Set_Cabin_Name_Loop :
                      for I in Module.Owner.Iterate loop
                         if Module.Owner(I) = 0 then
                            Module.Owner(I) := ShipCrew.Last_Index;
@@ -285,26 +290,28 @@ package body Ships is
                            end if;
                            exit Modules_Loop;
                         end if;
-                     end loop;
+                     end loop Set_Cabin_Name_Loop;
                   end if;
                end loop Modules_Loop;
+               Set_Module_Owner_Loop :
                for Module of ShipModules loop
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
                        ((Module.MType in GUN | HARPOON_GUN) and
                         Member.Order = Gunner) then
                         Module.Owner(1) := ShipCrew.Last_Index;
-                        exit;
+                        exit Set_Module_Owner_Loop;
                      elsif Module.MType = COCKPIT and Member.Order = Pilot then
                         Module.Owner(1) := ShipCrew.Last_Index;
-                        exit;
+                        exit Set_Module_Owner_Loop;
                      end if;
                   end if;
-               end loop;
-            end loop;
-         end loop;
+               end loop Set_Module_Owner_Loop;
+            end loop Add_Crew_Member_Loop;
+         end loop Set_Crew_Loop;
       end;
       -- Set ship cargo
+      Set_Cargo_Loop :
       for I in ProtoShip.Cargo.Iterate loop
          Amount :=
            (if ProtoShip.Cargo(I).MaxAmount > 0 then
@@ -315,7 +322,7 @@ package body Ships is
            (New_Item =>
               (ProtoIndex => ProtoShip.Cargo(I).ProtoIndex, Amount => Amount,
                Name => Null_Unbounded_String, Durability => 100, Price => 0));
-      end loop;
+      end loop Set_Cargo_Loop;
       TmpShip :=
         (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
          Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
