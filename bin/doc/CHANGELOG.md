@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.8] - 2021-02-21
 
 ### Changed
 - Redesigned installing and removing module screen in shipyard bases
