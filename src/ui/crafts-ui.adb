@@ -59,16 +59,14 @@ package body Crafts.UI is
    -- ShowCrafting
    -- SOURCE
    function Show_Crafting_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crafting_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
@@ -116,11 +114,10 @@ package body Crafts.UI is
       for Item of PlayerShip.Cargo loop
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex then
-               if
-                 (Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
-                  Positive_Container.No_Index and
-                  Studies.Find_Index(Item => Item.ProtoIndex) =
-                    Positive_Container.No_Index) then
+               if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
+                 Positive_Container.No_Index and
+                 Studies.Find_Index(Item => Item.ProtoIndex) =
+                   Positive_Container.No_Index then
                   Studies.Append(New_Item => Item.ProtoIndex);
                end if;
                if Recipes_List(J).MaterialAmounts(1) > 1 and
@@ -345,16 +342,14 @@ package body Crafts.UI is
    -- ShowRecipeInfo
    -- SOURCE
    function Show_Recipe_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recipe_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: constant Ttk_Tree_View :=
         Get_Widget
@@ -623,16 +618,14 @@ package body Crafts.UI is
    -- SetCrafting
    -- SOURCE
    function Set_Crafting_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Crafting_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecipesView: constant Ttk_Tree_View :=
         Get_Widget

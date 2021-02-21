@@ -98,15 +98,15 @@ package body Bases.ShipyardUI is
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Shipyard_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Shipyard_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
@@ -558,15 +558,15 @@ package body Bases.ShipyardUI is
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Install_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Install_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Cost: Positive;
@@ -665,15 +665,15 @@ package body Bases.ShipyardUI is
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Manipulate_Module_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Manipulate_Module_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
@@ -726,15 +726,15 @@ package body Bases.ShipyardUI is
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
    function Show_Remove_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Remove_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Cost: Natural;
@@ -851,15 +851,15 @@ package body Bases.ShipyardUI is
    -- actiontype is action related to the module. Can be install or remove.
    -- SOURCE
    function Show_Module_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Module_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ModuleMenu: Tk_Menu := Get_Widget(".modulemenu", Interp);
@@ -904,15 +904,15 @@ package body Bases.ShipyardUI is
    -- ShowShipyardTab
    -- SOURCE
    function Show_Shipyard_Tab_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Shipyard_Tab_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       ShipyardCanvas: constant Tk_Canvas :=
