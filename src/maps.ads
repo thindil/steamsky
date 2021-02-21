@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -62,7 +62,7 @@ package Maps is
    -- SOURCE
    function CountDistance
      (DestinationX: MapXRange; DestinationY: MapYRange) return Natural with
-      Test_Case => ("Test_CountDistance", Robustness);
+      Test_Case => (Name => "Test_CountDistance", Mode => Robustness);
       -- ****
 
       -- ****f* Maps/Maps.NormalizeCoord
@@ -76,7 +76,7 @@ package Maps is
       -- SOURCE
    procedure NormalizeCoord
      (Coord: in out Integer; IsXAxis: Boolean := True) with
-      Test_Case => ("Test_NormalizeCoord", Robustness);
+      Test_Case => (Name => "Test_NormalizeCoord", Mode => Robustness);
       -- ****
 
 end Maps;

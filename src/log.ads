@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -57,7 +57,7 @@ package Log is
      (Message: String; MessageType: Debug_Types;
       NewLine, TimeStamp: Boolean := True) with
       Pre => Message'Length > 0,
-      Test_Case => ("Test_LogMessage", Nominal);
+      Test_Case => (Name => "Test_LogMessage", Mode => Nominal);
       -- ****
 
       -- ****f* Log/Log.EndLogging

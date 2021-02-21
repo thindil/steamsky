@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -87,7 +87,7 @@ package Messages is
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
    function FormatedTime(Time: Date_Record := GameDate) return String with
-      Test_Case => ("Test_FormattedTime", Robustness);
+      Test_Case => (Name => "Test_FormattedTime", Mode => Robustness);
       -- ****
 
       -- ****f* Messages/Messages.AddMessage
@@ -101,7 +101,7 @@ package Messages is
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
       Pre => Message'Length > 0,
-      Test_Case => ("Test_AddMessage", Nominal);
+      Test_Case => (Name => "Test_AddMessage", Mode => Nominal);
       -- ****
 
       -- ****f* Messages/Messages.GetMessage
@@ -118,7 +118,7 @@ package Messages is
    function GetMessage
      (MessageIndex: Integer; MType: Message_Type := Default)
       return Message_Data with
-      Test_Case => ("Test_GetMessage", Robustness);
+      Test_Case => (Name => "Test_GetMessage", Mode => Robustness);
       -- ****
 
       -- ****f* Messages/Messages.ClearMessages
@@ -126,7 +126,7 @@ package Messages is
       -- Remove all messages
       -- SOURCE
    procedure ClearMessages with
-      Test_Case => ("Test_ClearMessages", Robustness);
+      Test_Case => (Name => "Test_ClearMessages", Mode => Robustness);
       -- ****
 
       -- ****f* Messages/Messages.MessagesAmount
@@ -138,7 +138,7 @@ package Messages is
       -- Amount of messages of selected type
       -- SOURCE
    function MessagesAmount(MType: Message_Type := Default) return Natural with
-      Test_Case => ("Test_MessagesAmount", Robustness);
+      Test_Case => (Name => "Test_MessagesAmount", Mode => Robustness);
       -- ****
 
       -- ****f* Messages/Messages.RestoreMessage
@@ -162,7 +162,7 @@ package Messages is
       -- List index of the last message
       -- SOURCE
    function GetLastMessageIndex return Natural with
-      Test_Case => ("Test_GetLastMessageIndex", Robustness);
+      Test_Case => (Name => "Test_GetLastMessageIndex", Mode => Robustness);
       -- ****
 
 end Messages;
