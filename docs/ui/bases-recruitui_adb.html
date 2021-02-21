@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,19 +30,19 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo309">RecruitUI/RecruitUI.RecruitIndex</a></li>
-<li>2. <a href="#robo310">RecruitUI/RecruitUI.RecruitTable</a></li>
-<li>3. <a href="#robo709">RecruitUI/RecruitUI.Hire_Command</a></li>
-<li>4. <a href="#robo710">RecruitUI/RecruitUI.Negotiate_Command</a></li>
-<li>5. <a href="#robo711">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
-<li>6. <a href="#robo712">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
-<li>7. <a href="#robo713">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
-<li>8. <a href="#robo714">RecruitUI/RecruitUI.Show_Recruit_Menu_Command</a></li>
-<li>9. <a href="#robo715">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
+<li>1. <a href="#robo310">RecruitUI/RecruitUI.RecruitIndex</a></li>
+<li>2. <a href="#robo311">RecruitUI/RecruitUI.RecruitTable</a></li>
+<li>3. <a href="#robo713">RecruitUI/RecruitUI.Hire_Command</a></li>
+<li>4. <a href="#robo714">RecruitUI/RecruitUI.Negotiate_Command</a></li>
+<li>5. <a href="#robo715">RecruitUI/RecruitUI.Negotiate_Hire_Command</a></li>
+<li>6. <a href="#robo716">RecruitUI/RecruitUI.Show_Recruit_Command</a></li>
+<li>7. <a href="#robo717">RecruitUI/RecruitUI.Show_Recruit_Info_Command</a></li>
+<li>8. <a href="#robo718">RecruitUI/RecruitUI.Show_Recruit_Menu_Command</a></li>
+<li>9. <a href="#robo719">RecruitUI/RecruitUI.Show_Recruit_Tab_Command</a></li>
 </ul>
 <hr />
 <a name="RecruitUI2fRecruitUI2eRecruitIndex"></a>
-<a name="robo309"></a><h2>RecruitUI/RecruitUI.RecruitIndex [ Variables ]</h2>
+<a name="robo310"></a><h2>RecruitUI/RecruitUI.RecruitIndex [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -54,7 +54,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eRecruitTable"></a>
-<a name="robo310"></a><h2>RecruitUI/RecruitUI.RecruitTable [ Variables ]</h2>
+<a name="robo311"></a><h2>RecruitUI/RecruitUI.RecruitTable [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -66,7 +66,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eHire5fCommand"></a>
-<a name="robo709"></a><h2>RecruitUI/RecruitUI.Hire_Command [ Commands ]</h2>
+<a name="robo713"></a><h2>RecruitUI/RecruitUI.Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -74,8 +74,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Hire_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -94,7 +94,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eNegotiate5fCommand"></a>
-<a name="robo710"></a><h2>RecruitUI/RecruitUI.Negotiate_Command [ Commands ]</h2>
+<a name="robo714"></a><h2>RecruitUI/RecruitUI.Negotiate_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -102,8 +102,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Negotiate_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -122,7 +122,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eNegotiate5fHire5fCommand"></a>
-<a name="robo711"></a><h2>RecruitUI/RecruitUI.Negotiate_Hire_Command [ Commands ]</h2>
+<a name="robo715"></a><h2>RecruitUI/RecruitUI.Negotiate_Hire_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -130,8 +130,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Negotiate_Hire_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -150,7 +150,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fCommand"></a>
-<a name="robo712"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Command [ Commands ]</h2>
+<a name="robo716"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -158,8 +158,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -178,7 +178,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fInfo5fCommand"></a>
-<a name="robo713"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Info_Command [ Commands ]</h2>
+<a name="robo717"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -186,8 +186,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -206,7 +206,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fMenu5fCommand"></a>
-<a name="robo714"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Menu_Command [ Commands ]</h2>
+<a name="robo718"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -214,8 +214,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Menu_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -235,7 +235,7 @@
 
 <hr />
 <a name="RecruitUI2fRecruitUI2eShow5fRecruit5fTab5fCommand"></a>
-<a name="robo715"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Tab_Command [ Commands ]</h2>
+<a name="robo719"></a><h2>RecruitUI/RecruitUI.Show_Recruit_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-recruitui_ads.html#robo6">RecruitUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -243,8 +243,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Recruit_Tab_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -263,7 +263,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+<p>Generated from ./src/ui/bases-recruitui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
 </p>
 </div> <!-- footer -->
 </body>

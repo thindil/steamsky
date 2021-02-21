@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,26 +30,71 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo478">LUI/LUI.ItemIndex</a></li>
-<li>2. <a href="#robo663">LUI/LUI.Loot_Item_Command</a></li>
-<li>3. <a href="#robo664">LUI/LUI.Show_Loot_Command</a></li>
-<li>4. <a href="#robo665">LUI/LUI.Show_Loot_Item_Info_Command</a></li>
+<li>1. <a href="#robo290">LUI/LUI.LootTable</a></li>
+<li>2. <a href="#robo482">LUI/LUI.ItemIndex</a></li>
+<li>3. <a href="#robo666">LUI/Loot_Amount_Command</a></li>
+<li>4. <a href="#robo667">LUI/LUI.Loot_Item_Command</a></li>
+<li>5. <a href="#robo668">LUI/LUI.Show_Loot_Command</a></li>
+<li>6. <a href="#robo669">LUI/LUI.Show_Module_Menu_Command</a></li>
+<li>7. <a href="#robo762">TUI/Show_Trade_Loot_Info_Command</a></li>
 </ul>
 <hr />
+<a name="LUI2fLUI2eLootTable"></a>
+<a name="robo290"></a><h2>LUI/LUI.LootTable [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <a href="./table_ads.html#robo65">Table</a> with info about the available items to loot
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   LootTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>5<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
 <a name="LUI2fLUI2eItemIndex"></a>
-<a name="robo478"></a><h2>LUI/LUI.ItemIndex [ Subprograms ]</h2>
+<a name="robo482"></a><h2>LUI/LUI.ItemIndex [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of the currently selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <a href="./trades-ui_adb.html#robo603">ItemIndex</a><span class="sign">:</span> Integer<span class="sign">;</span>
+<pre class="source">   ItemIndex<span class="sign">:</span> Integer<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="LUI2fLoot5fAmount5fCommand"></a>
+<a name="robo666"></a><h2>LUI/Loot_Amount_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show dialog to enter amount of items to drop or take
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Loot_Amount_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> LootAmount action baseindex
+ Action which will be taken. Can be take or drop. BaseIndex is the index
+ of the base from which item will be take.
 </pre>
 
 <hr />
 <a name="LUI2fLUI2eLoot5fItem5fCommand"></a>
-<a name="robo663"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
+<a name="robo667"></a><h2>LUI/LUI.Loot_Item_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -57,15 +102,15 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Loot_Item_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command.
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
+ Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
@@ -78,7 +123,7 @@
 
 <hr />
 <a name="LUI2fLUI2eShow5fLoot5fCommand"></a>
-<a name="robo664"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
+<a name="robo668"></a><h2>LUI/LUI.Show_Loot_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -86,8 +131,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Loot_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -95,7 +140,7 @@
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
  Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
 <pre> This function always return TCL_OK
@@ -105,23 +150,52 @@
 </pre>
 
 <hr />
-<a name="LUI2fLUI2eShow5fLoot5fItem5fInfo5fCommand"></a>
-<a name="robo665"></a><h2>LUI/LUI.Show_Loot_Item_Info_Command [ Commands ]</h2>
+<a name="LUI2fLUI2eShow5fModule5fMenu5fCommand"></a>
+<a name="robo669"></a><h2>LUI/LUI.Show_Module_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-lootui_ads.html#robo5">LUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Show information about the selected item
+<pre> Show menu with actions for the selected item
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Loot_Item_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+<pre class="source">   <span class="keyword">function</span> Show_Item_Menu_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ClientData - Custom data send to the command. Unused
  Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ShowLootItemMenu itemindex
+ ItemIndex is a index of the item which menu will be shown.
+</pre>
+
+<hr />
+<a name="TUI2fShow5fTrade5fLoot5fInfo5fCommand"></a>
+<a name="robo762"></a><h2>TUI/Show_Trade_Loot_Info_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./trades-ui_ads.html#robo67">TUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show information about the selected item
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Show_Loot_Item_Info_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
+      <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
  Argc       - Number of arguments passed to the command. Unused
  Argv       - Values of arguments passed to the command. Unused
 </pre>
@@ -134,7 +208,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+<p>Generated from ./src/ui/bases-lootui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
 </p>
 </div> <!-- footer -->
 </body>

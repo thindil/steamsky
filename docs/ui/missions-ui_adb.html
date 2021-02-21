@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,34 +30,34 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo308">MUI3/BaseIndex</a></li>
-<li>2. <a href="#robo700">MUI3/Set_Mission_Command</a></li>
-<li>3. <a href="#robo701">MUI3/Show_Base_Missions_Command</a></li>
-<li>4. <a href="#robo702">MUI3/Show_Mission_Command</a></li>
-<li>5. <a href="#robo703">MUI3/Show_Mission_Info_Command</a></li>
+<li>1. <a href="#robo309">MUI3/MIU3.BaseIndex</a></li>
+<li>2. <a href="#robo704">MUI3/MIU3.Set_Mission_Command</a></li>
+<li>3. <a href="#robo705">MUI3/MIU3.Show_Base_Missions_Command</a></li>
+<li>4. <a href="#robo706">MUI3/MIU3.Show_Mission_Command</a></li>
+<li>5. <a href="#robo707">MUI3/MIU3.Show_Mission_Info_Command</a></li>
 </ul>
 <hr />
-<a name="MUI32fBaseIndex"></a>
-<a name="robo308"></a><h2>MUI3/BaseIndex [ Variables ]</h2>
+<a name="MUI32fMIU32eBaseIndex"></a>
+<a name="robo309"></a><h2>MUI3/MIU3.BaseIndex [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo45">MUI3</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of the base in which available missions will be show
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <strong>BaseIndex</strong><span class="sign">:</span> Natural<span class="sign">;</span>
+<pre class="source">   BaseIndex<span class="sign">:</span> Natural<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="MUI32fSet5fMission5fCommand"></a>
-<a name="robo700"></a><h2>MUI3/Set_Mission_Command [ Commands ]</h2>
+<a name="MUI32fMIU32eSet5fMission5fCommand"></a>
+<a name="robo704"></a><h2>MUI3/MIU3.Set_Mission_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo45">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set mission as the player's ship destination or accept it in a base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Set_Mission_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Set_Mission_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -77,15 +77,15 @@
 </pre>
 
 <hr />
-<a name="MUI32fShow5fBase5fMissions5fCommand"></a>
-<a name="robo701"></a><h2>MUI3/Show_Base_Missions_Command [ Commands ]</h2>
+<a name="MUI32fMIU32eShow5fBase5fMissions5fCommand"></a>
+<a name="robo705"></a><h2>MUI3/MIU3.Show_Base_Missions_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo45">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show the list of available missions in the base
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Base_Missions_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Base_Missions_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -105,15 +105,15 @@
 </pre>
 
 <hr />
-<a name="MUI32fShow5fMission5fCommand"></a>
-<a name="robo702"></a><h2>MUI3/Show_Mission_Command [ Commands ]</h2>
+<a name="MUI32fMIU32eShow5fMission5fCommand"></a>
+<a name="robo706"></a><h2>MUI3/MIU3.Show_Mission_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo45">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show mission on map
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Mission_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Mission_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -133,15 +133,15 @@
 </pre>
 
 <hr />
-<a name="MUI32fShow5fMission5fInfo5fCommand"></a>
-<a name="robo703"></a><h2>MUI3/Show_Mission_Info_Command [ Commands ]</h2>
+<a name="MUI32fMIU32eShow5fMission5fInfo5fCommand"></a>
+<a name="robo707"></a><h2>MUI3/MIU3.Show_Mission_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./missions-ui_ads.html#robo45">MUI3</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show information about the selected mission
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> <strong>Show_Mission_Info_Command</strong>
+<pre class="source">   <span class="keyword">function</span> Show_Mission_Info_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> <span class="keyword">in</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> <span class="keyword">in</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
       Argc<span class="sign">:</span> <span class="keyword">in</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span> Argv<span class="sign">:</span> <span class="keyword">in</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span>
       <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
@@ -162,7 +162,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/missions-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+<p>Generated from ./src/ui/missions-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
 </p>
 </div> <!-- footer -->
 </body>
