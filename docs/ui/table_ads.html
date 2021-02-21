@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -35,11 +35,11 @@
 <li>1.1. <a href="#robo152">Table/Table.Headers_Array</a></li>
 <li>1.2. <a href="#robo153">Table/Table.Width_Array</a></li>
 <li>1.3. <a href="#robo198">Table/Table.Table_Widget</a></li>
-<li>1.4. <a href="#robo592">Table/Table.AddButton</a></li>
-<li>1.5. <a href="#robo593">Table/Table.AddText</a></li>
-<li>1.6. <a href="#robo594">Table/Table.ClearTable</a></li>
-<li>1.7. <a href="#robo595">Table/Table.CreateTable</a></li>
-<li>1.8. <a href="#robo596">Table/Table.UpdateTable</a></li>
+<li>1.4. <a href="#robo595">Table/Table.AddButton</a></li>
+<li>1.5. <a href="#robo596">Table/Table.AddProgressBar</a></li>
+<li>1.6. <a href="#robo597">Table/Table.ClearTable</a></li>
+<li>1.7. <a href="#robo598">Table/Table.CreateTable</a></li>
+<li>1.8. <a href="#robo599">Table/Table.UpdateTable</a></li>
 </ul>
 </ul>
 <hr />
@@ -105,7 +105,7 @@
 
 <hr />
 <a name="Table2fTable2eAddButton"></a>
-<a name="robo592"></a><h2>Table/Table.AddButton [ Subprograms ]</h2>
+<a name="robo595"></a><h2>Table/Table.AddButton [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -114,7 +114,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> AddButton
      <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span>
-      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span> Color<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> <a href="#robo65">Table</a>   - The Table_Widget in which button will be added
@@ -124,6 +124,8 @@
  Column  - The column in which the button will be added
  NewRow  - If True, increase current number of row in the Table_Widget.
            Default value is False.
+ Color   - The color of the text on button which will be added. If empty,
+           use default interface color. Default value is empty.
 </pre>
 <p class="item_name">OUTPUT</p>
 <pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
@@ -133,25 +135,30 @@
 </pre>
 
 <hr />
-<a name="Table2fTable2eAddText"></a>
-<a name="robo593"></a><h2>Table/Table.AddText [ Subprograms ]</h2>
+<a name="Table2fTable2eAddProgressBar"></a>
+<a name="robo596"></a><h2>Table/Table.AddProgressBar [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> Add text item to the selected Table_Widget
+<pre> Add progress bar item to the selected Table_Widget
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> AddText
-     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">:</span> String<span class="sign">;</span> Column<span class="sign">:</span> Positive<span class="sign">;</span>
-      NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> AddProgressBar
+     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Value<span class="sign">:</span> Natural<span class="sign">;</span> MaxValue<span class="sign">:</span> Positive<span class="sign">;</span>
+      Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span> Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">,</span> InvertColors<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a>   - The Table_Widget in which text will be added
- Text    - The text displayed on the item
- Tooltip - The tooltip show when user hover mouse over text
- Column  - The column in which the text will be added
- NewRow  - If True, increase current number of row in the Table_Widget.
-           Default value is False.
+<pre> <a href="#robo65">Table</a>        - The Table_Widget in which progress bar will be added
+ Value        - The current value of the progress bar
+ MaxValue     - The maximum value of the progress bar
+ Tooltip      - The tooltip show when user hover mouse over progress bar
+ Command      - Tcl command which will be executed when the row in which the
+                the progress bar is was clicked
+ Column       - The column in which the progress bar will be added
+ NewRow       - If True, increase current number of row in the Table_Widget.
+                Default value is False.
+ InvertColors - Invert colors of the progress bar (small amount green, max
+                red instead of small amount red and max green)
 </pre>
 <p class="item_name">OUTPUT</p>
 <pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
@@ -162,7 +169,7 @@
 
 <hr />
 <a name="Table2fTable2eClearTable"></a>
-<a name="robo594"></a><h2>Table/Table.ClearTable [ Subprograms ]</h2>
+<a name="robo597"></a><h2>Table/Table.ClearTable [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -183,7 +190,7 @@
 
 <hr />
 <a name="Table2fTable2eCreateTable"></a>
-<a name="robo595"></a><h2>Table/Table.CreateTable [ Subprograms ]</h2>
+<a name="robo598"></a><h2>Table/Table.CreateTable [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -209,7 +216,7 @@
 
 <hr />
 <a name="Table2fTable2eUpdateTable"></a>
-<a name="robo596"></a><h2>Table/Table.UpdateTable [ Subprograms ]</h2>
+<a name="robo599"></a><h2>Table/Table.UpdateTable [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -227,7 +234,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/table.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+<p>Generated from ./src/ui/table.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
 </p>
 </div> <!-- footer -->
 </body>

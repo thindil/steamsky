@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.7 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,16 +32,16 @@
 <ul>
 <li>1. <a href="#robo3">Bases/BTrade</a></li>
 <ul>
-<li>1.1. <a href="#robo328">BTrade/BTrade.Trade_Already_Known</a></li>
-<li>1.2. <a href="#robo329">BTrade/BTrade.Trade_Cant_Heal</a></li>
-<li>1.3. <a href="#robo330">BTrade/BTrade.Trade_Cant_Train</a></li>
-<li>1.4. <a href="#robo373">BTrade/BTrade.BuyRecipe</a></li>
-<li>1.5. <a href="./bases-trade_adb.html#robo374">BTrade/BTrade.CheckMoney</a></li>
-<li>1.6. <a href="#robo375">BTrade/BTrade.HealCost</a></li>
-<li>1.7. <a href="#robo376">BTrade/BTrade.HealWounded</a></li>
-<li>1.8. <a href="#robo377">BTrade/BTrade.HireRecruit</a></li>
-<li>1.9. <a href="#robo378">BTrade/BTrade.TrainCost</a></li>
-<li>1.10. <a href="#robo379">BTrade/BTrade.TrainSkill</a></li>
+<li>1.1. <a href="#robo332">BTrade/BTrade.Trade_Already_Known</a></li>
+<li>1.2. <a href="#robo333">BTrade/BTrade.Trade_Cant_Heal</a></li>
+<li>1.3. <a href="#robo334">BTrade/BTrade.Trade_Cant_Train</a></li>
+<li>1.4. <a href="#robo377">BTrade/BTrade.BuyRecipe</a></li>
+<li>1.5. <a href="./bases-trade_adb.html#robo378">BTrade/BTrade.CheckMoney</a></li>
+<li>1.6. <a href="#robo379">BTrade/BTrade.HealCost</a></li>
+<li>1.7. <a href="#robo380">BTrade/BTrade.HealWounded</a></li>
+<li>1.8. <a href="#robo381">BTrade/BTrade.HireRecruit</a></li>
+<li>1.9. <a href="#robo382">BTrade/BTrade.TrainCost</a></li>
+<li>1.10. <a href="#robo383">BTrade/BTrade.TrainSkill</a></li>
 </ul>
 </ul>
 <hr />
@@ -59,7 +59,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eTrade5fAlready5fKnown"></a>
-<a name="robo328"></a><h2>BTrade/BTrade.Trade_Already_Known [ Exceptions ]</h2>
+<a name="robo332"></a><h2>BTrade/BTrade.Trade_Already_Known [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -71,7 +71,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eTrade5fCant5fHeal"></a>
-<a name="robo329"></a><h2>BTrade/BTrade.Trade_Cant_Heal [ Exceptions ]</h2>
+<a name="robo333"></a><h2>BTrade/BTrade.Trade_Cant_Heal [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -83,7 +83,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eTrade5fCant5fTrain"></a>
-<a name="robo330"></a><h2>BTrade/BTrade.Trade_Cant_Train [ Exceptions ]</h2>
+<a name="robo334"></a><h2>BTrade/BTrade.Trade_Cant_Train [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -95,7 +95,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eBuyRecipe"></a>
-<a name="robo373"></a><h2>BTrade/BTrade.BuyRecipe [ Subprograms ]</h2>
+<a name="robo377"></a><h2>BTrade/BTrade.BuyRecipe [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -104,7 +104,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> BuyRecipe<span class="sign">(</span>RecipeIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>RecipeIndex <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_BuyRecipe"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_BuyRecipe"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> RecipeIndex - Index of the recipe from base recipes list to buy
@@ -112,7 +112,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eHealCost"></a>
-<a name="robo375"></a><h2>BTrade/BTrade.HealCost [ Subprograms ]</h2>
+<a name="robo379"></a><h2>BTrade/BTrade.HealCost [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -123,7 +123,7 @@
      <span class="sign">(</span>Cost<span class="sign">,</span> Time<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Natural<span class="sign">;</span>
       MemberIndex<span class="sign">:</span> Crew_Container<span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HealCost"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_HealCost"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Cost        - Overall cost of heal wounded player ship crew member(s)
@@ -137,7 +137,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eHealWounded"></a>
-<a name="robo376"></a><h2>BTrade/BTrade.HealWounded [ Subprograms ]</h2>
+<a name="robo380"></a><h2>BTrade/BTrade.HealWounded [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -146,7 +146,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> HealWounded<span class="sign">(</span>MemberIndex<span class="sign">:</span> Crew_Container<span class="sign">.</span>Extended_Index<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HealWounded"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_HealWounded"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> MemberIndex - Index of player ship crew member to heal or 0 for heal
@@ -155,7 +155,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eHireRecruit"></a>
-<a name="robo377"></a><h2>BTrade/BTrade.HireRecruit [ Subprograms ]</h2>
+<a name="robo381"></a><h2>BTrade/BTrade.HireRecruit [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -165,7 +165,7 @@
 <pre class="source">   <span class="keyword">procedure</span> HireRecruit
      <span class="sign">(</span>RecruitIndex<span class="sign">:</span> Recruit_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span> Cost<span class="sign">:</span> Positive<span class="sign">;</span>
       DailyPayment<span class="sign">,</span> TradePayment<span class="sign">:</span> Natural<span class="sign">;</span> ContractLenght<span class="sign">:</span> Integer<span class="sign">)</span> <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_HireRecruit"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_HireRecruit"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> RecruitIndex   - Index of recruit, from base recruits list to hire
@@ -179,7 +179,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eTrainCost"></a>
-<a name="robo378"></a><h2>BTrade/BTrade.TrainCost [ Subprograms ]</h2>
+<a name="robo382"></a><h2>BTrade/BTrade.TrainCost [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -192,7 +192,7 @@
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
        SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> Skills_List<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_TrainCost"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_TrainCost"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> MemberIndex - Index of player ship crew member which will be training
@@ -205,7 +205,7 @@
 
 <hr />
 <a name="BTrade2fBTrade2eTrainSkill"></a>
-<a name="robo379"></a><h2>BTrade/BTrade.TrainSkill [ Subprograms ]</h2>
+<a name="robo383"></a><h2>BTrade/BTrade.TrainSkill [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo3">BTrade</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -218,7 +218,7 @@
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
       <span class="sign">(</span>MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span><a href="./crew_ads.html#robo17">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span>
        SkillIndex <span class="sign">&lt;</span><span class="sign">=</span> Skills_List<span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_TrainSkill"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_TrainSkill"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> MemberIndex - Index of playership crew member which train
@@ -227,7 +227,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-trade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jan 24 2021 06:31:16
+<p>Generated from ./src/bases-trade.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
 </p>
 </div> <!-- footer -->
 </body>
