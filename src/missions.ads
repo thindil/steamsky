@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -112,7 +112,7 @@ package Missions is
    -- Generate if needed new missions in base
    -- SOURCE
    procedure GenerateMissions with
-      Test_Case => ("Test_GenerateMissions", Robustness);
+      Test_Case => (Name => "Test_GenerateMissions", Mode => Robustness);
       -- ****
 
       -- ****f* Missions/Missions.AcceptMission
@@ -123,7 +123,7 @@ package Missions is
       --                accept
       -- SOURCE
    procedure AcceptMission(MissionIndex: Positive) with
-      Test_Case => ("Test_AcceptMission", Nominal);
+      Test_Case => (Name => "Test_AcceptMission", Mode => Nominal);
       -- ****
 
       -- ****f* Missions/Missions.UpdateMissions
@@ -133,7 +133,7 @@ package Missions is
       -- Minutes - Amount of passed minutes
       -- SOURCE
    procedure UpdateMissions(Minutes: Positive) with
-      Test_Case => ("Test_UpdateMissions", Robustness);
+      Test_Case => (Name => "Test_UpdateMissions", Mode => Robustness);
       -- ****
 
       -- ****f* Missions/Missions.FinishMission
@@ -145,7 +145,7 @@ package Missions is
       -- SOURCE
    procedure FinishMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index,
-      Test_Case => ("Test_FinishMission", Nominal);
+      Test_Case => (Name => "Test_FinishMission", Mode => Nominal);
       -- ****
 
       -- ****f* Missions/Missions.DeleteMission
@@ -159,7 +159,7 @@ package Missions is
    procedure DeleteMission
      (MissionIndex: Positive; Failed: Boolean := True) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index,
-      Test_Case => ("Test_DeleteMission", Nominal);
+      Test_Case => (Name => "Test_DeleteMission", Mode => Nominal);
       -- ****
 
       -- ****f* Missions/Missions.UpdateMission
@@ -171,7 +171,7 @@ package Missions is
       -- SOURCE
    procedure UpdateMission(MissionIndex: Positive) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index,
-      Test_Case => ("Test_UpdateMission", Nominal);
+      Test_Case => (Name => "Test_UpdateMission", Mode => Nominal);
       -- ****
 
       -- ****f* Missions/Missions.AutoFinishMissions
@@ -182,7 +182,7 @@ package Missions is
       -- what goes wrong
       -- SOURCE
    function AutoFinishMissions return String with
-      Test_Case => ("Test_AutoFinishMissions", Robustness);
+      Test_Case => (Name => "Test_AutoFinishMissions", Mode => Robustness);
       -- ****
 
 end Missions;

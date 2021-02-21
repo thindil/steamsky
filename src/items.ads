@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -186,7 +186,7 @@ package Items is
    function FindProtoItem
      (ItemType: Unbounded_String) return Unbounded_String with
       Pre => (ItemType /= Null_Unbounded_String),
-      Test_Case => ("Test_FindProtoItem", Nominal);
+      Test_Case => (Name => "Test_FindProtoItem", Mode => Nominal);
       -- ****
 
       -- ****f* Items/Items.GetItemDamage
@@ -202,7 +202,7 @@ package Items is
    function GetItemDamage
      (ItemDurability: Items_Durability; ToLower: Boolean := False)
       return String with
-      Test_Case => ("Test_GetItemDamage", Robustness);
+      Test_Case => (Name => "Test_GetItemDamage", Mode => Robustness);
       -- ****
 
       -- ****f* Items/Items.GetItemName
@@ -219,7 +219,7 @@ package Items is
    function GetItemName
      (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
       return String with
-      Test_Case => ("Test_GetItemName", Robustness);
+      Test_Case => (Name => "Test_GetItemName", Mode => Robustness);
       -- ****
 
       -- ****f* Items/Items.DamageItem
@@ -239,7 +239,7 @@ package Items is
      (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) with
       Pre => (ItemIndex <= Inventory.Last_Index),
-      Test_Case => ("Test_DamageItem", Nominal);
+      Test_Case => (Name => "Test_DamageItem", Mode => Nominal);
       -- ****
 
       -- ****f* Items/Items.FindItem
@@ -259,7 +259,7 @@ package Items is
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
-      Test_Case => ("Test_FindItem", Robustness);
+      Test_Case => (Name => "Test_FindItem", Mode => Robustness);
       -- ****
 
       -- ****f* Items/Items.SetToolsList
@@ -278,7 +278,7 @@ package Items is
    -- String with chance to damage level description
    -- SOURCE
    function GetItemChanceToDamage(ItemData: Natural) return String with
-      Test_Case => ("Test_GetItemChanceToDamage", Robustness);
+      Test_Case => (Name => "Test_GetItemChanceToDamage", Mode => Robustness);
       -- ****
 
 end Items;
