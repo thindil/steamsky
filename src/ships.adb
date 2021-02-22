@@ -329,25 +329,28 @@ package body Ships is
          GunAssigned: Boolean;
       begin
          Amount := 0;
+         Count_Modules_Loop :
          for I in TmpShip.Modules.Iterate loop
             if TmpShip.Modules(I).MType = TURRET then
+               Count_Guns_Loop :
                for J in TmpShip.Modules.Iterate loop
                   if TmpShip.Modules(J).MType in GUN | HARPOON_GUN then
                      GunAssigned := False;
+                     Check_Assigned_Guns_Loop :
                      for K in TmpShip.Modules.Iterate loop
                         if TmpShip.Modules(K).MType = TURRET
                           and then TmpShip.Modules(K).GunIndex =
                             Modules_Container.To_Index(J) then
                            GunAssigned := True;
-                           exit;
+                           exit Check_Assigned_Guns_Loop;
                         end if;
-                     end loop;
+                     end loop Check_Assigned_Guns_Loop;
                      if not GunAssigned then
                         TmpShip.Modules(I).GunIndex :=
                           Modules_Container.To_Index(J);
                      end if;
                   end if;
-               end loop;
+               end loop Count_Guns_Loop;
             elsif TmpShip.Modules(I).MType = HULL then
                HullIndex := Modules_Container.To_Index(I);
             end if;
@@ -356,13 +359,14 @@ package body Ships is
                Amount :=
                  Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
             end if;
-         end loop;
+         end loop Count_Modules_Loop;
          TmpShip.Modules(HullIndex).InstalledModules := Amount;
       end;
       -- Set known crafting recipes
+      Set_Known_Recipes_Loop :
       for Recipe of ProtoShip.KnownRecipes loop
          Known_Recipes.Append(New_Item => Recipe);
-      end loop;
+      end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
       if SkyMap(X, Y).BaseIndex > 0 then
          TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;
@@ -378,34 +382,37 @@ package body Ships is
             NormalizeCoord(EndX);
             EndY := Y + 100;
             NormalizeCoord(EndY, False);
-            Bases_Loop :
+            Bases_X_Loop :
             for SkyX in StartX .. EndX loop
+               Bases_Y_Loop :
                for SkyY in StartY .. EndY loop
                   if SkyMap(SkyX, SkyY).BaseIndex > 0 then
                      if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
                        ProtoShip.Owner then
                         TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
-                        exit Bases_Loop;
+                        exit Bases_X_Loop;
                      end if;
                   end if;
-               end loop;
-            end loop Bases_Loop;
+               end loop Bases_Y_Loop;
+            end loop Bases_X_Loop;
             if TmpShip.HomeBase = 0 then
+               Set_Home_Base_Loop :
                for I in SkyBases'Range loop
                   if SkyBases(I).Owner = ProtoShip.Owner then
                      TmpShip.HomeBase := I;
-                     exit;
+                     exit Set_Home_Base_Loop;
                   end if;
-               end loop;
+               end loop Set_Home_Base_Loop;
             end if;
          end;
       end if;
       -- Set home base for crew members
+      Set_Home_For_Members_Loop :
       for Member of TmpShip.Crew loop
          Member.HomeBase :=
            (if GetRandom(1, 100) < 99 then TmpShip.HomeBase
             else GetRandom(SkyBases'First, SkyBases'Last));
-      end loop;
+      end loop Set_Home_For_Members_Loop;
       return TmpShip;
    end CreateShip;
 
@@ -424,6 +431,7 @@ package body Ships is
       TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
+         Count_Ammo_Value_Loop :
          for I in TempRecord.Cargo.Iterate loop
             if Items_List(TempRecord.Cargo(I).ProtoIndex).IType =
               Items_Types(ItemTypeIndex) then
@@ -432,12 +440,13 @@ package body Ships is
                  (Items_List(TempRecord.Cargo(I).ProtoIndex).Value(1) *
                   Multiple);
             end if;
-         end loop;
+         end loop Count_Ammo_Value_Loop;
       end CountAmmoValue;
    begin
       ShipsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
+      Load_Proto_Ships_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Modules => TempModules,
@@ -476,6 +485,7 @@ package body Ships is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "module");
+            Load_Modules_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ModuleAmount :=
@@ -500,16 +510,17 @@ package body Ships is
                     (New_Item => ModuleIndex,
                      Count => Count_Type(ModuleAmount));
                else
+                  Find_Delete_Module_Loop :
                   for K in TempRecord.Modules.Iterate loop
                      if TempRecord.Modules(K) = ModuleIndex then
                         DeleteIndex := UnboundedString_Container.To_Index(K);
-                        exit;
+                        exit Find_Delete_Module_Loop;
                      end if;
-                  end loop;
+                  end loop Find_Delete_Module_Loop;
                   TempRecord.Modules.Delete
                     (Index => DeleteIndex, Count => Count_Type(ModuleAmount));
                end if;
-            end loop;
+            end loop Load_Modules_Loop;
             if Get_Attribute(ShipNode, "accuracy") /= "" then
                TempRecord.Accuracy(1) :=
                  Integer'Value(Get_Attribute(ShipNode, "accuracy"));
@@ -831,7 +842,7 @@ package body Ships is
             ProtoShips_Container.Exclude(ProtoShips_List, ShipIndex);
             LogMessage("Ship removed: " & To_String(ShipIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Proto_Ships_Loop;
    end LoadShips;
 
    function CountShipWeight(Ship: ShipRecord) return Positive is
