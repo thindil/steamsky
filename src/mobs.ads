@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -123,7 +123,7 @@ package Mobs is
       Pre =>
       (ProtoMobs_List.Contains(MobIndex) and
        Factions_List.Contains(FactionIndex)),
-      Test_Case => ("Test_GenearateMob", Nominal);
+      Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
       -- ****
 
       -- ****f* Mobs/Mobs.GetRandomItem
@@ -145,7 +145,7 @@ package Mobs is
       Pre =>
       (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
        Factions_List.Contains(FactionIndex)),
-      Test_Case => ("Test_GetRandomItem", Nominal);
+      Test_Case => (Name => "Test_GetRandomItem", Mode => Nominal);
       -- ****
 
 end Mobs;

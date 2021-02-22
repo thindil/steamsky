@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,7 +43,7 @@ package Ships.Cargo is
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index,
-      Test_Case => ("Test_UpdateCargo", Nominal);
+      Test_Case => (Name => "Test_UpdateCargo", Mode => Nominal);
       -- ****
 
       -- ****f* SCargo/SCargo.FreeCargo
@@ -60,7 +60,7 @@ package Ships.Cargo is
       -- SOURCE
    function FreeCargo
      (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer with
-      Test_Case => ("Test_FreeCargo", Robustness);
+      Test_Case => (Name => "Test_FreeCargo", Mode => Robustness);
       -- ****
 
       -- ****f* SCargo/SCargo.GetItemAmount
@@ -73,7 +73,7 @@ package Ships.Cargo is
       -- SOURCE
    function GetItemAmount(ItemType: Unbounded_String) return Natural with
       Pre => ItemType /= Null_Unbounded_String,
-      Test_Case => ("Test_GetItemAmount", Nominal);
+      Test_Case => (Name => "Test_GetItemAmount", Mode => Nominal);
       -- ****
 
       -- ****f* SCargo/SCargo.GetItemsAmount
@@ -86,7 +86,7 @@ package Ships.Cargo is
       -- SOURCE
    function GetItemsAmount(IType: String) return Natural with
       Pre => IType in "Drinks" | "Food",
-      Test_Case => ("Test_GetItemsAmount", Nominal);
+      Test_Case => (Name => "Test_GetItemsAmount", Mode => Nominal);
       -- ****
 
 end Ships.Cargo;

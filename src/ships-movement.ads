@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,7 +35,7 @@ package Ships.Movement is
    -- SOURCE
    function MoveShip
      (X, Y: Integer; Message: in out Unbounded_String) return Natural with
-      Test_Case => ("Test_MoveShip", Robustness);
+      Test_Case => (Name => "Test_MoveShip", Mode => Robustness);
       -- ****
 
       -- ****f* SMovement/SMovement.DockShip
@@ -51,7 +51,7 @@ package Ships.Movement is
       -- SOURCE
    function DockShip
      (Docking: Boolean; Escape: Boolean := False) return String with
-      Test_Case => ("Test_DockShip", Robustness);
+      Test_Case => (Name => "Test_DockShip", Mode => Robustness);
       -- ****
 
       -- ****f* SMovement/SMovement.ChangeShipSpeed
@@ -63,7 +63,7 @@ package Ships.Movement is
       -- Empty string if speed was changed, otherwise message what goes wrong
       -- SOURCE
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String with
-      Test_Case => ("Test_ChangeShipSpeed", Robustness);
+      Test_Case => (Name => "Test_ChangeShipSpeed", Mode => Robustness);
       -- ****
 
       -- ****f* SMovement/SMovement.RealSpeed
@@ -78,7 +78,7 @@ package Ships.Movement is
       -- SOURCE
    function RealSpeed
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural with
-      Test_Case => ("Test_RealSpeed", Robustness);
+      Test_Case => (Name => "Test_RealSpeed", Mode => Robustness);
       -- ****
 
       -- ****f* SMovement/SMovement.CountFuelNeeded
@@ -88,7 +88,7 @@ package Ships.Movement is
       -- Amount of fuel needed by player ship to travel
       -- SOURCE
    function CountFuelNeeded return Integer with
-      Test_Case => ("Test_CountFuelNeeded", Robustness);
+      Test_Case => (Name => "Test_CountFuelNeeded", Mode => Robustness);
       -- ****
 
       -- ****f* SMovement/SMovement.WaitInPlace
@@ -98,7 +98,7 @@ package Ships.Movement is
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
    procedure WaitInPlace(Minutes: Positive) with
-      Test_Case => ("Test_WaitInPlace", Robustness);
+      Test_Case => (Name => "Test_WaitInPlace", Mode => Robustness);
       -- ****
 
 end Ships.Movement;
