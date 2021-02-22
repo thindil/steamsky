@@ -46,14 +46,15 @@ package body Ships is
    begin
       -- Set ship modules
       declare
-         UpgradesAmount, WeightGain: Natural := 0;
+         WeightGain: Natural := 0;
          MaxValue: Positive;
          TempModule: BaseModule_Data;
          Roll: Positive range 1 .. 100;
+         UpgradesAmount: Natural :=
+           (if RandomUpgrades then
+              GetRandom(0, Positive(ProtoShip.Modules.Length))
+            else 0);
       begin
-         if RandomUpgrades then
-            UpgradesAmount := GetRandom(0, Positive(ProtoShip.Modules.Length));
-         end if;
          Set_Modules_Loop :
          for Module of ProtoShip.Modules loop
             TempModule := Modules_List(Module);
