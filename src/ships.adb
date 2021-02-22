@@ -332,8 +332,7 @@ package body Ships is
          for I in TmpShip.Modules.Iterate loop
             if TmpShip.Modules(I).MType = TURRET then
                for J in TmpShip.Modules.Iterate loop
-                  if TmpShip.Modules(J).MType = GUN or
-                    TmpShip.Modules(J).MType = HARPOON_GUN then
+                  if TmpShip.Modules(J).MType in GUN | HARPOON_GUN then
                      GunAssigned := False;
                      for K in TmpShip.Modules.Iterate loop
                         if TmpShip.Modules(K).MType = TURRET
