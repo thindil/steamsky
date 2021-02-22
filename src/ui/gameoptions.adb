@@ -139,15 +139,15 @@ package body GameOptions is
    -- ShowOptions
    -- SOURCE
    function Show_Options_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Options_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Paned: constant Ttk_PanedWindow :=
@@ -335,15 +335,15 @@ package body GameOptions is
    -- SetFonts
    -- SOURCE
    function Set_Fonts_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Fonts_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
@@ -395,15 +395,15 @@ package body GameOptions is
    -- SetDefaultFonts
    -- SOURCE
    function Set_Default_Fonts_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Default_Fonts_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       SpinBox: Ttk_SpinBox;
@@ -446,15 +446,15 @@ package body GameOptions is
    -- Can be 'map' or 'combat'.
    -- SOURCE
    function Close_Options_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Close_Options_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CloseButton: constant Ttk_Button :=
