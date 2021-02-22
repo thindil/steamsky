@@ -58,67 +58,62 @@ package body Ships is
          Set_Modules_Loop :
          for Module of ProtoShip.Modules loop
             TempModule := Modules_List(Module);
-            if UpgradesAmount > 0 then
-               WeightGain :=
-                 Modules_List(Module).Weight / Modules_List(Module).Durability;
-               if WeightGain < 1 then
-                  WeightGain := 1;
-               end if;
-               if GetRandom(1, 100) > 50 then
-                  Roll := GetRandom(1, 100);
-                  case Roll is
-                     when 1 .. 50 => -- Upgrade durability of module
-                        MaxValue :=
-                          Positive
-                            (Float(Modules_List(Module).Durability) * 1.5);
-                        TempModule.Durability :=
-                          GetRandom(Modules_List(Module).Durability, MaxValue);
-                        TempModule.Weight :=
-                          TempModule.Weight +
-                          (WeightGain *
-                           (TempModule.Durability -
-                            Modules_List(Module).Durability));
-                     when 51 ..
-                           75 => -- Upgrade value (depends on module) of module
-                        if Modules_List(Module).MType = ENGINE then
-                           WeightGain := WeightGain * 10;
-                           MaxValue :=
-                             Positive(Float(Modules_List(Module).Value) / 2.0);
-                           TempModule.Value :=
-                             GetRandom(MaxValue, Modules_List(Module).Value);
-                           TempModule.Weight :=
-                             TempModule.Weight +
-                             (WeightGain *
-                              (Modules_List(Module).Value - TempModule.Value));
-                        end if;
-                     when 76 ..
-                           100 => -- Upgrade max_value (depends on module) of module
-                        case Modules_List(Module).MType is
-                           when HULL =>
-                              WeightGain := WeightGain * 10;
-                           when ENGINE =>
-                              WeightGain := 1;
-                           when others =>
-                              null;
-                        end case;
-                        if TempModule.MType in ENGINE | CABIN | GUN |
-                              BATTERING_RAM | HULL | HARPOON_GUN then
-                           MaxValue :=
-                             Positive
-                               (Float(Modules_List(Module).MaxValue) * 1.5);
-                           TempModule.MaxValue :=
-                             GetRandom
-                               (Modules_List(Module).MaxValue, MaxValue);
-                           TempModule.Weight :=
-                             TempModule.Weight +
-                             (WeightGain *
-                              (TempModule.MaxValue -
-                               Modules_List(Module).MaxValue));
-                        end if;
-                  end case;
-                  UpgradesAmount := UpgradesAmount - 1;
-               end if;
+            if UpgradesAmount = 0 or GetRandom(1, 100) < 51 then
+               goto End_Of_Setting_Upgrades;
             end if;
+            WeightGain :=
+              Modules_List(Module).Weight / Modules_List(Module).Durability;
+            if WeightGain < 1 then
+               WeightGain := 1;
+            end if;
+            Roll := GetRandom(1, 100);
+            case Roll is
+               when 1 .. 50 => -- Upgrade durability of module
+                  MaxValue :=
+                    Positive(Float(Modules_List(Module).Durability) * 1.5);
+                  TempModule.Durability :=
+                    GetRandom(Modules_List(Module).Durability, MaxValue);
+                  TempModule.Weight :=
+                    TempModule.Weight +
+                    (WeightGain *
+                     (TempModule.Durability -
+                      Modules_List(Module).Durability));
+               when 51 .. 75 => -- Upgrade value (depends on module) of module
+                  if Modules_List(Module).MType = ENGINE then
+                     WeightGain := WeightGain * 10;
+                     MaxValue :=
+                       Positive(Float(Modules_List(Module).Value) / 2.0);
+                     TempModule.Value :=
+                       GetRandom(MaxValue, Modules_List(Module).Value);
+                     TempModule.Weight :=
+                       TempModule.Weight +
+                       (WeightGain *
+                        (Modules_List(Module).Value - TempModule.Value));
+                  end if;
+               when 76 ..
+                     100 => -- Upgrade max_value (depends on module) of module
+                  case Modules_List(Module).MType is
+                     when HULL =>
+                        WeightGain := WeightGain * 10;
+                     when ENGINE =>
+                        WeightGain := 1;
+                     when others =>
+                        null;
+                  end case;
+                  if TempModule.MType in ENGINE | CABIN | GUN | BATTERING_RAM |
+                        HULL | HARPOON_GUN then
+                     MaxValue :=
+                       Positive(Float(Modules_List(Module).MaxValue) * 1.5);
+                     TempModule.MaxValue :=
+                       GetRandom(Modules_List(Module).MaxValue, MaxValue);
+                     TempModule.Weight :=
+                       TempModule.Weight +
+                       (WeightGain *
+                        (TempModule.MaxValue - Modules_List(Module).MaxValue));
+                  end if;
+            end case;
+            UpgradesAmount := UpgradesAmount - 1;
+            <<End_Of_Setting_Upgrades>>
             Owners.Clear;
             if TempModule.MaxOwners > 0 then
                Set_Module_Owners_Loop :
