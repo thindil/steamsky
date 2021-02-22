@@ -217,8 +217,12 @@ package body Bases.Ship.Test_Data.Tests is
       Assert(Cost > 0, "Failed to count player ship repair costs.");
       Assert(Time > 0, "Failed to count player ship repair time.");
       RepairCost(OverallCost, OverallTime, 0);
-      Assert(Cost = OverallCost, "Failed to count player ship overall repair costs.");
-      Assert(Time = OverallTime, "Failed to count player ship overall repair time.");
+      Assert
+        (Cost = OverallCost,
+         "Failed to count player ship overall repair costs.");
+      Assert
+        (Time = OverallTime,
+         "Failed to count player ship overall repair time.");
 
 --  begin read only
    end Test_RepairCost_test_repaircost;

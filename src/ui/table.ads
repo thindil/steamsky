@@ -143,7 +143,8 @@ package Table is
    -- SOURCE
    procedure AddProgressBar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
-      Tooltip, Command: String; Column: Positive; NewRow, InvertColors: Boolean := False);
+      Tooltip, Command: String; Column: Positive;
+      NewRow, InvertColors: Boolean := False);
    -- ****
 
 end Table;
