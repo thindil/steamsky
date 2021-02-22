@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -29,7 +29,7 @@ package Ships.Repairs is
    -- Minutes - Amount of passed in-game minutes
    -- SOURCE
    procedure RepairShip(Minutes: Positive) with
-      Test_Case => ("Test_RepairShip", Robustness);
+      Test_Case => (Name => "Test_RepairShip", Mode => Robustness);
       -- ****
 
 end Ships.Repairs;

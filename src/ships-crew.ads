@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,7 +35,7 @@ package Ships.Crew is
      (Member: Member_Data; SkillIndex: SkillsData_Container.Extended_Index)
       return Skill_Range with
       Pre => SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
-      Test_Case => ("Test_GetSkillLevel", Nominal);
+      Test_Case => (Name => "Test_GetSkillLevel", Mode => Nominal);
       -- ****
 
       -- ****f* SCrew/SCrew.Death
@@ -56,7 +56,7 @@ package Ships.Crew is
       Pre =>
       (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String),
-      Test_Case => ("Test_Death", Nominal);
+      Test_Case => (Name => "Test_Death", Mode => Nominal);
       -- ****
 
       -- ****f* SCrew/SCrew.DeleteMember
@@ -71,7 +71,7 @@ package Ships.Crew is
    procedure DeleteMember
      (MemberIndex: Crew_Container.Extended_Index; Ship: in out ShipRecord) with
       Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
-      Test_Case => ("Test_DeleteMember", Nominal);
+      Test_Case => (Name => "Test_DeleteMember", Mode => Nominal);
       -- ****
 
    -- ****f* SCrew/SCrew.FindMember
@@ -86,7 +86,7 @@ package Ships.Crew is
    function FindMember
      (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
       return Crew_Container.Extended_Index with
-      Test_Case => ("Test_FindMember", Robustness);
+      Test_Case => (Name => "Test_FindMember", Mode => Robustness);
       -- ****
 
       -- ****f* SCrew/SCrew.GiveOrders
@@ -111,7 +111,7 @@ package Ships.Crew is
       Pre =>
       (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
        ModuleIndex <= Ship.Modules.Last_Index),
-      Test_Case => ("Test_GiveOrders", Nominal);
+      Test_Case => (Name => "Test_GiveOrders", Mode => Nominal);
       -- ****
 
       -- ****f* SCrew/SCrew.UpdateOrders
@@ -125,7 +125,7 @@ package Ships.Crew is
       -- SOURCE
    procedure UpdateOrders
      (Ship: in out ShipRecord; Combat: Boolean := False) with
-      Test_Case => ("Test_UpdateOrders", Robustness);
+      Test_Case => (Name => "Test_UpdateOrders", Mode => Robustness);
       -- ****
 
       -- ****f* SCrew/SCrew.UpdateMorale
@@ -142,7 +142,7 @@ package Ships.Crew is
      (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
       Value: Integer) with
       Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
-      Test_Case => ("Test_UpdateMorale", Nominal);
+      Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);
       -- ****
 
 end Ships.Crew;
