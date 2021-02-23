@@ -79,15 +79,15 @@ package body Trades.UI is
    -- looking for in items names
    -- SOURCE
    function Show_Trade_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trade_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
@@ -427,15 +427,15 @@ package body Trades.UI is
    -- ShowTradeItemInfo
    -- SOURCE
    function Show_Trade_Item_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trade_Item_Info_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       ItemInfo, ProtoIndex: Unbounded_String;
@@ -549,15 +549,15 @@ package body Trades.UI is
    -- Tradetype is type of trade action. Can be buy, buymax, sell, sellmax
    -- SOURCE
    function Trade_Item_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Trade_Item_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -677,15 +677,15 @@ package body Trades.UI is
    -- SearchTrade
    -- SOURCE
    function Search_Trade_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Search_Trade_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
@@ -719,15 +719,15 @@ package body Trades.UI is
    -- index in the player ship cargo.
    -- SOURCE
    function Show_Trade_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trade_Menu_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
@@ -921,15 +921,15 @@ package body Trades.UI is
    -- trader ship.
    -- SOURCE
    function Trade_Amount_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Trade_Amount_Command
-     (ClientData: in Integer; Interp: in Tcl.Tcl_Interp;
-      Argc: in Interfaces.C.int; Argv: in CArgv.Chars_Ptr_Ptr)
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
       return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Natural :=
