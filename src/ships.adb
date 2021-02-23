@@ -912,6 +912,7 @@ package body Ships is
       CombatValue: Natural := 0;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
+         Count_Ammo_Value_Loop :
          for Item of PlayerShip.Cargo loop
             if Items_List(Item.ProtoIndex).IType =
               Items_Types(ItemTypeIndex) then
@@ -919,9 +920,10 @@ package body Ships is
                  CombatValue +
                  (Items_List(Item.ProtoIndex).Value(1) * Multiple);
             end if;
-         end loop;
+         end loop Count_Ammo_Value_Loop;
       end CountAmmoValue;
    begin
+      Count_Combat_Value_Loop :
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when BATTERING_RAM =>
@@ -943,7 +945,7 @@ package body Ships is
             when others =>
                null;
          end case;
-      end loop;
+      end loop Count_Combat_Value_Loop;
       return CombatValue;
    end CountCombatValue;
 
@@ -1007,11 +1009,12 @@ package body Ships is
             when GUN =>
                RemoveGun(ModuleIndex);
             when CABIN =>
+               Kill_Owners_Loop :
                for Owner of Ship.Modules(ModuleIndex).Owner loop
                   if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
                      Death(Owner, To_Unbounded_String(DeathReason), Ship);
                   end if;
-               end loop;
+               end loop Kill_Owners_Loop;
             when others =>
                if Ship.Modules(ModuleIndex).Owner.Length > 0 then
                   if Ship.Modules(ModuleIndex).Owner(1) > 0
