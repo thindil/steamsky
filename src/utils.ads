@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,7 +36,7 @@ package Utils is
    -- SOURCE
    function GetRandom(Min, Max: Integer) return Integer with
       Pre => Min <= Max,
-      Test_Case => ("Test_GetRandom", Nominal);
+      Test_Case => (Name => "Test_GetRandom", Mode => Nominal);
       -- ****
 
       -- ****f* Utils/Utils.DaysDifference
@@ -51,7 +51,7 @@ package Utils is
      ((GameDate.Day + (30 * GameDate.Month) + (GameDate.Year * 360)) -
       (DateToCompare.Day + (30 * DateToCompare.Month) +
        (DateToCompare.Year * 360))) with
-      Test_Case => ("Test_DaysDifference", Robustness);
+      Test_Case => (Name => "Test_DaysDifference", Mode => Robustness);
       -- ****
 
       -- ****f* Utils/Utils.GenerateRoboticName

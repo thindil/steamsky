@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -43,7 +43,7 @@ package Ships.Upgrade is
       (ModuleIndex in
          PlayerShip.Modules.First_Index .. PlayerShip.Modules.Last_Index and
        UpgradeType < 5),
-      Test_Case => ("Test_StartUpgrading", Nominal);
+      Test_Case => (Name => "Test_StartUpgrading", Mode => Nominal);
       -- ****
 
       -- ****f* SUpgrade/SUpgrade.UpgradeShip
@@ -53,7 +53,7 @@ package Ships.Upgrade is
       -- Minutes - Amount of passed in-game minutes
       -- SOURCE
    procedure UpgradeShip(Minutes: Positive) with
-      Test_Case => ("Test_UpgradeShip", Robustness);
+      Test_Case => (Name => "Test_UpgradeShip", Mode => Robustness);
       -- ****
 
 end Ships.Upgrade;

@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -326,7 +326,7 @@ package Ships is
      (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
       Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
-      Test_Case => ("Test_CreateShip", Nominal);
+      Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
 
       -- ****f* Ships/Ships.LoadShips
@@ -347,7 +347,7 @@ package Ships is
    -- Ship weight in kilograms
    -- SOURCE
    function CountShipWeight(Ship: ShipRecord) return Positive with
-      Test_Case => ("Test_CountShipWeight", Robustness);
+      Test_Case => (Name => "Test_CountShipWeight", Mode => Robustness);
       -- ****
 
       -- ****f* Ships/Ships.GenerateShipName
@@ -361,7 +361,7 @@ package Ships is
    function GenerateShipName
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String,
-      Test_Case => ("Test_GenerateShipName", Nominal);
+      Test_Case => (Name => "Test_GenerateShipName", Mode => Nominal);
       -- ****
 
       -- ****f* Ships/Ships.CountCombatValue
@@ -371,7 +371,7 @@ package Ships is
       -- Numeric level of combat value of player ship
       -- SOURCE
    function CountCombatValue return Natural with
-      Test_Case => ("Test_CountCombatValue", Robustness);
+      Test_Case => (Name => "Test_CountCombatValue", Mode => Robustness);
       -- ****
 
       -- ****f* Ships/Ships.GetCabinQuality
@@ -383,7 +383,7 @@ package Ships is
       -- Description of cabin quality
       -- SOURCE
    function GetCabinQuality(Quality: Natural) return String with
-      Test_Case => ("Test_GetCabinQuality", Robustness);
+      Test_Case => (Name => "Test_GetCabinQuality", Mode => Robustness);
       -- ****
 
       -- ****f* Ships/Ships.DamageModule
@@ -401,7 +401,7 @@ package Ships is
       Damage: Positive; DeathReason: String) with
       Pre => ModuleIndex in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index,
-      Test_Case => ("Test_DamageModule", Nominal);
+      Test_Case => (Name => "Test_DamageModule", Mode => Nominal);
       -- ****
 
 end Ships;

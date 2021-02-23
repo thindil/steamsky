@@ -1,4 +1,4 @@
---    Copyright 2018-2020 Bartek thindil Jasicki
+--    Copyright 2018-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -239,7 +239,7 @@ package Stories is
    procedure StartStory
      (FactionName: Unbounded_String; Condition: StartConditionType) with
       Pre => FactionName /= Null_Unbounded_String,
-      Test_Case => ("Test_StartStory", Nominal);
+      Test_Case => (Name => "Test_StartStory", Mode => Nominal);
       -- ****
 
       -- ****f* Stories/Stories.ClearCurrentStory
@@ -247,7 +247,7 @@ package Stories is
       -- Resets current story
       -- SOURCE
    procedure ClearCurrentStory with
-      Test_Case => ("Test_ClearCurrentStory", Robustness);
+      Test_Case => (Name => "Test_ClearCurrentStory", Mode => Robustness);
       -- ****
 
       -- ****f* Stories/Stories.ProgressStory
@@ -260,7 +260,7 @@ package Stories is
       -- True if story goes to next step, otherwise false
       -- SOURCE
    function ProgressStory(NextStep: Boolean := False) return Boolean with
-      Test_Case => ("Test_ProgressStory", Robustness);
+      Test_Case => (Name => "Test_ProgressStory", Mode => Robustness);
       -- ****
 
       -- ****f* Stories/Stories.GetCurrentStoryText
@@ -270,7 +270,7 @@ package Stories is
       -- Text of current step in current story
       -- SOURCE
    function GetCurrentStoryText return Unbounded_String with
-      Test_Case => ("Tets_GetCurrentStoryText", Robustness);
+      Test_Case => (Name => "Tets_GetCurrentStoryText", Mode => Robustness);
       -- ****
 
       -- ****f* Stories/Stories.GetStepData
@@ -286,7 +286,7 @@ package Stories is
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String with
       Pre => Name /= "",
-      Test_Case => ("Test_GetStepData", Nominal);
+      Test_Case => (Name => "Test_GetStepData", Mode => Nominal);
       -- ****
 
       -- ****f* Stories/Stories.GetStoryLocation
@@ -300,7 +300,7 @@ package Stories is
       -- SOURCE
    procedure GetStoryLocation
      (StoryX: out MapXRange; StoryY: out MapYRange) with
-      Test_Case => ("Test_GetStoryLocation", Robustness);
+      Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
       -- ****
 
 end Stories;

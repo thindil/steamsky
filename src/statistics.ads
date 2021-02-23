@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -91,7 +91,7 @@ package Statistics is
    -- SOURCE
    procedure UpdateDestroyedShips(ShipName: Unbounded_String) with
       Pre => ShipName /= Null_Unbounded_String,
-      Test_Case => ("Test_UpdateDestroyedShips", Nominal);
+      Test_Case => (Name => "Test_UpdateDestroyedShips", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.ClearGameStats
@@ -99,7 +99,7 @@ package Statistics is
       -- Clear game statistics
       -- SOURCE
    procedure ClearGameStats with
-      Test_Case => ("Test_ClearGameStats", Robustness);
+      Test_Case => (Name => "Test_ClearGameStats", Mode => Robustness);
       -- ****
 
       -- ****f* Statistics/Statistics.UpdateFinishedGoals
@@ -110,7 +110,7 @@ package Statistics is
       -- SOURCE
    procedure UpdateFinishedGoals(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String,
-      Test_Case => ("Test_UpdateFinishedGoals", Nominal);
+      Test_Case => (Name => "Test_UpdateFinishedGoals", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.UpdateFinishedMissions
@@ -121,7 +121,7 @@ package Statistics is
       -- SOURCE
    procedure UpdateFinishedMissions(MType: Unbounded_String) with
       Pre => MType /= Null_Unbounded_String,
-      Test_Case => ("Test_UpdateFinishedMissions", Nominal);
+      Test_Case => (Name => "Test_UpdateFinishedMissions", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.UpdateCraftingOrders
@@ -132,7 +132,7 @@ package Statistics is
       -- SOURCE
    procedure UpdateCraftingOrders(Index: Unbounded_String) with
       Pre => Index /= Null_Unbounded_String,
-      Test_Case => ("Test_UpdateCraftingOrders", Nominal);
+      Test_Case => (Name => "Test_UpdateCraftingOrders", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.UpdateKilledMobs
@@ -145,7 +145,7 @@ package Statistics is
    procedure UpdateKilledMobs
      (Mob: Member_Data; FractionName: Unbounded_String) with
       Pre => FractionName /= Null_Unbounded_String,
-      Test_Case => ("Test_UpdateKilledMobs", Nominal);
+      Test_Case => (Name => "Test_UpdateKilledMobs", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.GetGamePoints
@@ -155,7 +155,7 @@ package Statistics is
       -- Amount of gained points by player in this game
       -- SOURCE
    function GetGamePoints return Natural with
-      Test_Case => ("Test_GetGamePoints", Robustness);
+      Test_Case => (Name => "Test_GetGamePoints", Mode => Robustness);
       -- ****
 
 end Statistics;
