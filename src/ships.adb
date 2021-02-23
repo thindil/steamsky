@@ -587,7 +587,7 @@ package body Ships is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "cargo");
-            Load_Cargo_Loop:
+            Load_Cargo_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
@@ -630,7 +630,7 @@ package body Ships is
                                 (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
-                     Update_Cargo_Loop:
+                     Update_Cargo_Loop :
                      for Item of TempRecord.Cargo loop
                         if Item.ProtoIndex = ItemIndex then
                            if Get_Attribute(ChildNode, "amount")'Length /=
@@ -664,7 +664,7 @@ package body Ships is
                      declare
                         DeleteIndex: Natural := 0;
                      begin
-                        Find_Delete_Cargo_Loop:
+                        Find_Delete_Cargo_Loop :
                         for K in
                           TempRecord.Cargo.First_Index ..
                             TempRecord.Cargo.Last_Index loop
@@ -685,7 +685,7 @@ package body Ships is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "recipe");
-            Load_Known_Recipes_Loop:
+            Load_Known_Recipes_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                RecipeIndex :=
                  To_Unbounded_String
@@ -704,7 +704,7 @@ package body Ships is
                if SubAction = ADD then
                   TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
                else
-                  Find_Delete_Recipe_Loop:
+                  Find_Delete_Recipe_Loop :
                   for K in TempRecord.KnownRecipes.Iterate loop
                      if TempRecord.KnownRecipes(K) = RecipeIndex then
                         DeleteIndex := UnboundedString_Container.To_Index(K);
@@ -716,7 +716,7 @@ package body Ships is
             end loop Load_Known_Recipes_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "member");
-            Load_Crew_Loop:
+            Load_Crew_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                MobIndex :=
@@ -762,7 +762,7 @@ package body Ships is
                         TempRecord.Crew.Append(New_Item => (MobIndex, 1, 0));
                      end if;
                   when UPDATE =>
-                     Update_Crew_Loop:
+                     Update_Crew_Loop :
                      for Member of TempRecord.Crew loop
                         if Member.ProtoIndex = MobIndex then
                            if Get_Attribute(ChildNode, "amount") /= "" then
@@ -795,7 +795,7 @@ package body Ships is
                         end if;
                      end loop Update_Crew_Loop;
                   when REMOVE =>
-                     Find_Delete_Crew_Loop:
+                     Find_Delete_Crew_Loop :
                      for K in TempRecord.Crew.Iterate loop
                         if TempRecord.Crew(K).ProtoIndex = MobIndex then
                            DeleteIndex := ProtoCrew_Container.To_Index(K);
@@ -813,7 +813,7 @@ package body Ships is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
-            Count_Combat_Value_Loop:
+            Count_Combat_Value_Loop :
             for ModuleIndex of TempRecord.Modules loop
                case Modules_List(ModuleIndex).MType is
                   when HULL | GUN | BATTERING_RAM =>
@@ -858,11 +858,11 @@ package body Ships is
       Weight: Natural := 0;
       CargoWeight: Positive;
    begin
-      Count_Ship_Weight_Loop:
+      Count_Ship_Weight_Loop :
       for Module of Ship.Modules loop
          Weight := Weight + Module.Weight;
       end loop Count_Ship_Weight_Loop;
-      Count_Cargo_Weight_Loop:
+      Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
          CargoWeight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
          Weight := Weight + CargoWeight;
@@ -874,34 +874,36 @@ package body Ships is
      (Owner: Unbounded_String) return Unbounded_String is
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
-      Generate_Ship_Name_Loop:
+      Generate_Ship_Name_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_Container.Key(I) = Owner then
-            if Factions_List(I).NamesType = ROBOTIC then
-               NewName := GenerateRoboticName;
-            else
-               NewName :=
-                 ShipSyllablesStart
-                   (GetRandom
-                      (ShipSyllablesStart.First_Index,
-                       ShipSyllablesStart.Last_Index));
-               if GetRandom(1, 100) < 51 then
-                  Append
-                    (NewName,
-                     ShipSyllablesMiddle
-                       (GetRandom
-                          (ShipSyllablesMiddle.First_Index,
-                           ShipSyllablesMiddle.Last_Index)));
-               end if;
+         if Factions_Container.Key(I) /= Owner then
+            goto End_Of_Generate_Name_Loop;
+         end if;
+         if Factions_List(I).NamesType = ROBOTIC then
+            NewName := GenerateRoboticName;
+         else
+            NewName :=
+              ShipSyllablesStart
+                (GetRandom
+                   (ShipSyllablesStart.First_Index,
+                    ShipSyllablesStart.Last_Index));
+            if GetRandom(1, 100) < 51 then
                Append
                  (NewName,
-                  ShipSyllablesEnd
+                  ShipSyllablesMiddle
                     (GetRandom
-                       (ShipSyllablesEnd.First_Index,
-                        ShipSyllablesEnd.Last_Index)));
+                       (ShipSyllablesMiddle.First_Index,
+                        ShipSyllablesMiddle.Last_Index)));
             end if;
-            exit Generate_Ship_Name_Loop;
+            Append
+              (NewName,
+               ShipSyllablesEnd
+                 (GetRandom
+                    (ShipSyllablesEnd.First_Index,
+                     ShipSyllablesEnd.Last_Index)));
          end if;
+         exit Generate_Ship_Name_Loop;
+         <<End_Of_Generate_Name_Loop>>
       end loop Generate_Ship_Name_Loop;
       return NewName;
    end GenerateShipName;
