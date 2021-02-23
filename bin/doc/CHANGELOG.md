@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Hiding enemy ship's info after combat
+
 ## [5.8] - 2021-02-21
 
 ### Changed
