@@ -1004,6 +1004,8 @@ package body Combat.UI is
          if Winfo_Get(Frame, "ismapped") = "1" then
             ShowCombatFrame(".combat");
          end if;
+         Frame.Name := New_String(Widget_Image(CombatFrame) & ".status");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
          CreateGameMenu;
          return TCL_OK;
       end if;
