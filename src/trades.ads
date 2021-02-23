@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -113,7 +113,7 @@ package Trades is
    -- SOURCE
    procedure BuyItems
      (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) with
-      Test_Case => ("Test_BuyItems", Robustness);
+      Test_Case => ("Test_BuyItems", Mode => Robustness);
       -- ****
 
       -- ****f* Trades/Trades.SellItems
@@ -127,7 +127,7 @@ package Trades is
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
       Pre => ItemIndex in
         PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index,
-      Test_Case => ("Test_SellItems", Nominal);
+      Test_Case => ("Test_SellItems", Mode => Nominal);
       -- ****
 
       -- ****f* Trades/Trades.GenerateTraderCargo
@@ -139,7 +139,7 @@ package Trades is
       -- SOURCE
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex),
-      Test_Case => ("Test_GenerateTraderCargo", Nominal);
+      Test_Case => ("Test_GenerateTraderCargo", Mode => Nominal);
       -- ****
 
 end Trades;
