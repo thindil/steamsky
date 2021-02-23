@@ -587,6 +587,7 @@ package body Ships is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "cargo");
+            Load_Cargo_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
@@ -629,6 +630,7 @@ package body Ships is
                                 (Get_Attribute(ChildNode, "maxamount"))));
                      end if;
                   when UPDATE =>
+                     Update_Cargo_Loop:
                      for Item of TempRecord.Cargo loop
                         if Item.ProtoIndex = ItemIndex then
                            if Get_Attribute(ChildNode, "amount")'Length /=
@@ -655,33 +657,35 @@ package body Ships is
                                  Integer'Value
                                    (Get_Attribute(ChildNode, "maxamount")));
                            end if;
-                           exit;
+                           exit Update_Cargo_Loop;
                         end if;
-                     end loop;
+                     end loop Update_Cargo_Loop;
                   when REMOVE =>
                      declare
                         DeleteIndex: Natural := 0;
                      begin
+                        Find_Delete_Cargo_Loop:
                         for K in
                           TempRecord.Cargo.First_Index ..
                             TempRecord.Cargo.Last_Index loop
                            if TempRecord.Cargo(K).ProtoIndex = ItemIndex then
                               DeleteIndex := K;
-                              exit;
+                              exit Find_Delete_Cargo_Loop;
                            end if;
-                        end loop;
+                        end loop Find_Delete_Cargo_Loop;
                         if DeleteIndex > 0 then
                            TempRecord.Cargo.Delete(DeleteIndex);
                         end if;
                      end;
                end case;
-            end loop;
+            end loop Load_Cargo_Loop;
             if Get_Attribute(ShipNode, "owner") /= "" then
                TempRecord.Owner :=
                  To_Unbounded_String(Get_Attribute(ShipNode, "owner"));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "recipe");
+            Load_Known_Recipes_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                RecipeIndex :=
                  To_Unbounded_String
@@ -700,17 +704,19 @@ package body Ships is
                if SubAction = ADD then
                   TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
                else
+                  Find_Delete_Recipe_Loop:
                   for K in TempRecord.KnownRecipes.Iterate loop
                      if TempRecord.KnownRecipes(K) = RecipeIndex then
                         DeleteIndex := UnboundedString_Container.To_Index(K);
-                        exit;
+                        exit Find_Delete_Recipe_Loop;
                      end if;
-                  end loop;
+                  end loop Find_Delete_Recipe_Loop;
                   TempRecord.KnownRecipes.Delete(Index => DeleteIndex);
                end if;
-            end loop;
+            end loop Load_Known_Recipes_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(ShipNode, "member");
+            Load_Crew_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                MobIndex :=
@@ -756,6 +762,7 @@ package body Ships is
                         TempRecord.Crew.Append(New_Item => (MobIndex, 1, 0));
                      end if;
                   when UPDATE =>
+                     Update_Crew_Loop:
                      for Member of TempRecord.Crew loop
                         if Member.ProtoIndex = MobIndex then
                            if Get_Attribute(ChildNode, "amount") /= "" then
@@ -784,19 +791,20 @@ package body Ships is
                               Member.MinAmount := 1;
                               Member.MaxAmount := 0;
                            end if;
-                           exit;
+                           exit Update_Crew_Loop;
                         end if;
-                     end loop;
+                     end loop Update_Crew_Loop;
                   when REMOVE =>
+                     Find_Delete_Crew_Loop:
                      for K in TempRecord.Crew.Iterate loop
                         if TempRecord.Crew(K).ProtoIndex = MobIndex then
                            DeleteIndex := ProtoCrew_Container.To_Index(K);
-                           exit;
+                           exit Find_Delete_Crew_Loop;
                         end if;
-                     end loop;
+                     end loop Find_Delete_Crew_Loop;
                      TempRecord.Crew.Delete(Index => DeleteIndex);
                end case;
-            end loop;
+            end loop Load_Crew_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (ShipNode, "description");
@@ -805,6 +813,7 @@ package body Ships is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
+            Count_Combat_Value_Loop:
             for ModuleIndex of TempRecord.Modules loop
                case Modules_List(ModuleIndex).MType is
                   when HULL | GUN | BATTERING_RAM =>
@@ -828,7 +837,7 @@ package body Ships is
                   when others =>
                      null;
                end case;
-            end loop;
+            end loop Count_Combat_Value_Loop;
             TempRecord.CombatValue := TempRecord.CombatValue - 1;
             if Action /= UPDATE then
                ProtoShips_Container.Include
@@ -849,13 +858,15 @@ package body Ships is
       Weight: Natural := 0;
       CargoWeight: Positive;
    begin
+      Count_Ship_Weight_Loop:
       for Module of Ship.Modules loop
          Weight := Weight + Module.Weight;
-      end loop;
+      end loop Count_Ship_Weight_Loop;
+      Count_Cargo_Weight_Loop:
       for Item of Ship.Cargo loop
          CargoWeight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
          Weight := Weight + CargoWeight;
-      end loop;
+      end loop Count_Cargo_Weight_Loop;
       return Weight;
    end CountShipWeight;
 
@@ -863,6 +874,7 @@ package body Ships is
      (Owner: Unbounded_String) return Unbounded_String is
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
+      Generate_Ship_Name_Loop:
       for I in Factions_List.Iterate loop
          if Factions_Container.Key(I) = Owner then
             if Factions_List(I).NamesType = ROBOTIC then
@@ -888,9 +900,9 @@ package body Ships is
                        (ShipSyllablesEnd.First_Index,
                         ShipSyllablesEnd.Last_Index)));
             end if;
-            exit;
+            exit Generate_Ship_Name_Loop;
          end if;
-      end loop;
+      end loop Generate_Ship_Name_Loop;
       return NewName;
    end GenerateShipName;
 
