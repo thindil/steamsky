@@ -54,16 +54,14 @@ package body Knowledge.Missions is
    -- MissionIndex is the index of the mission's menu to show
    -- SOURCE
    function Show_Missions_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Missions_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       EventMenu: Tk_Menu := Get_Widget(".missionslistmenu", Interp);
    begin
@@ -104,16 +102,14 @@ package body Knowledge.Missions is
    -- Missionindex is the index of the event to show
    -- SOURCE
    function Show_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
@@ -138,16 +134,14 @@ package body Knowledge.Missions is
    -- Missionindex is the index of the mission to show
    -- SOURCE
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
@@ -179,16 +173,14 @@ package body Knowledge.Missions is
    -- Missionindex is the index of the mission to show
    -- SOURCE
    function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MissionInfo: Unbounded_String;

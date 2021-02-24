@@ -50,9 +50,8 @@ with WaitMenu; use WaitMenu;
 package body OrdersMenu is
 
    function Show_Orders_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
@@ -481,16 +480,14 @@ package body OrdersMenu is
    -- otherwise normal docking or undocking operation
    -- SOURCE
    function Docking_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Docking_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message: Unbounded_String;
    begin
       if PlayerShip.Speed = DOCKED then
@@ -536,16 +533,14 @@ package body OrdersMenu is
    -- AskForBases
    -- SOURCE
    function Ask_For_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ask_For_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       AskForBases;
@@ -567,16 +562,14 @@ package body OrdersMenu is
    -- AskForEvents
    -- SOURCE
    function Ask_For_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ask_For_Events_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       AskForEvents;
@@ -598,16 +591,14 @@ package body OrdersMenu is
    -- Attack
    -- SOURCE
    function Attack_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Attack_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       ShowCombatUI;
@@ -628,16 +619,14 @@ package body OrdersMenu is
    -- Pray
    -- SOURCE
    function Pray_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Pray_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       for I in PlayerShip.Crew.Iterate loop
@@ -665,16 +654,14 @@ package body OrdersMenu is
    -- SetAsHome
    -- SOURCE
    function Set_As_Home_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_As_Home_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1000;
@@ -731,16 +718,14 @@ package body OrdersMenu is
    -- generated
    -- SOURCE
    function Show_Trader_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trader_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
       GenerateTraderCargo(To_Unbounded_String(CArgv.Arg(Argv, 1)));

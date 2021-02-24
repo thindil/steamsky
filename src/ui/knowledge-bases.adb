@@ -203,16 +203,14 @@ package body Knowledge.Bases is
    -- names
    -- SOURCE
    function Show_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Bases_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
    begin
       if Argc > 1 then
@@ -239,16 +237,14 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base's menu to show
    -- SOURCE
    function Show_Bases_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Bases_Menu_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       BaseMenu: Tk_Menu := Get_Widget(".baseslistmenu", Interp);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
@@ -292,16 +288,14 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base to show
    -- SOURCE
    function Show_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
@@ -326,16 +320,14 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base to show
    -- SOURCE
    function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
@@ -367,16 +359,14 @@ package body Knowledge.Bases is
    -- BaseIndex is the index of the base to show
    -- SOURCE
    function Show_Base_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int with
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int; Argv: CArgv.Chars_Ptr_Ptr)
-      return Interfaces.C.int is
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       BaseDialog: constant Ttk_Frame :=
