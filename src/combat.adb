@@ -1486,10 +1486,9 @@ package body Combat is
                        To_Unbounded_String(" ") &
                        Items_List(Item.ProtoIndex).Name;
                      FreeSpace := FreeCargo(0);
-                     if Item = Enemy.Ship.Cargo.Last_Element or
-                       FreeSpace = 0 then
-                        exit;
-                     end if;
+                     exit Looting_Loop when Item =
+                       Enemy.Ship.Cargo.Last_Element or
+                       FreeSpace = 0;
                   end if;
                end loop Looting_Loop;
                AddMessage(To_String(Message) & ".", CombatMessage);
