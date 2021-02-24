@@ -1429,8 +1429,7 @@ package body Combat.UI is
       CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
       CombatStarted: Boolean;
       Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
-      EnemyFrame: constant Ttk_Frame :=
-        Get_Widget(CombatFrame & ".combat.status");
+      EnemyFrame: constant Ttk_Frame := Get_Widget(CombatFrame & ".status");
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       if NewCombat then
@@ -1467,7 +1466,7 @@ package body Combat.UI is
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
             AddCommand("ShowCombatInfo", Show_Combat_Info_Command'Access);
          else
-            Button.Name := New_String(CombatFrame & ".combat.next");
+            Button.Name := New_String(CombatFrame & ".next");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
          end if;
