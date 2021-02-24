@@ -281,7 +281,7 @@ package body Bases.Trade is
             if Cost = 0 then
                Cost := 1;
             end if;
-            exit;
+            exit Count_Train_Cost_Loop;
          end if;
       end loop Count_Train_Cost_Loop;
       CountPrice(Cost, FindMember(Talk));
