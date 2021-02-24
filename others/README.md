@@ -19,4 +19,6 @@ Various files which are not necessary needed for development:
                       script from the main project directory, not from this.
                       If you don't enter amount how many times repeat tests,
                       they will run only once.
+* rules.aru         - configuration file with rules for check code with
+                      AdaControl.
 * steamsky.appdata.xml - AppStream metadata for the AppImage.
