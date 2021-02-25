@@ -1,0 +1,30 @@
+name: Continuous Integration - development version
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+
+  tests:
+
+    runs-on: ubuntu-latest
+
+    container: ghcr.io/thindil/adabuild
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Run AdaControl
+      run: |
+         cd obj
+         adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv
+         cd ..
+
+    - name: Upload the log
+      uses: actions/upload-artifact@v2
+      with:
+         name: adacontrol.log
+         path: adacontrol.log
+
