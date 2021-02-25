@@ -12,7 +12,7 @@ check Naming_Convention (Enumeration, case_sensitive "^[A-Z]*(_[A-Z0-9]*)*$");
 check Naming_Convention (Loop_Name, case_sensitive "_Loop$");
 check Naming_Convention (Block_Name, case_sensitive "_Block$");
 -- Only for existing projects, allow old style of names in packages
-check Naming_Convention (Package, case_sensitive "^[A-Z]*[A-Za-z0-9]*$");
+check Naming_Convention (Package, case_sensitive "^[A-Z]*[A-Za-z0-9_]*$");
 check Naming_Convention (others all, case_sensitive "^[A-Z][a-z0-9]*(_[A-Z0-9][a-z0-9]*)*$");
 check Object_Declarations (min_integer_span, 8);
 check Positional_Associations;
