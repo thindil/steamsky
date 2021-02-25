@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -66,16 +66,18 @@ procedure SteamSky is
 begin
    Set_Directory(Dir_Name(Command_Name));
    -- Command line arguments
+   Command_Line_Loop :
    for I in 1 .. Argument_Count loop
       if Argument(I)'Length > 8 then
          if Argument(I)(1 .. 8) = "--debug=" then
+            Set_Debug_Mode_Loop :
             for J in Debug_Types loop
                if To_Upper(Argument(I)(9 .. (Argument(I)'Last))) =
                  Debug_Types'Image(J) then
                   DebugMode := J;
-                  exit;
+                  exit Set_Debug_Mode_Loop;
                end if;
-            end loop;
+            end loop Set_Debug_Mode_Loop;
          elsif Argument(I)(1 .. 8) = "--datadi" then
             DataDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
@@ -108,7 +110,7 @@ begin
             end if;
          end if;
       end if;
-   end loop;
+   end loop Command_Line_Loop;
 
    Create_Path(To_String(SaveDirectory));
    Create_Path(To_String(ModsDirectory));
