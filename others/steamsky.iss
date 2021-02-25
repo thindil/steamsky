@@ -18,13 +18,14 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={userpf}\{#MyAppName}
+DefaultDirName={autopf}\{#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=steamsky-{#MyAppVersion}-64-bit
 Compression=lzma
 SolidCompression=yes
 ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
+WizardStyle=modern
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -34,17 +35,17 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "Z:\home\thindil\steamsky\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "Z:\home\thindil\steamsky\share\fonts\Amarante-Regular.ttf"; DestDir: "{fonts}"; FontInstall: "Amarante"; Flags: onlyifdoesntexist uninsneveruninstall
-Source: "Z:\home\thindil\steamsky\share\fonts\Font Awesome 5 Free-Solid-900.otf"; DestDir: "{fonts}"; FontInstall: "Font Awesome 5 Free Solid"; Flags: onlyifdoesntexist uninsneveruninstall
-Source: "Z:\home\thindil\steamsky\share\fonts\Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"; DestDir: "{fonts}"; FontInstall: "Hack NF"; Flags: onlyifdoesntexist uninsneveruninstall
-Source: "Z:\home\thindil\steamsky\share\fonts\Roboto-Regular.ttf"; DestDir: "{fonts}"; FontInstall: "Roboto"; Flags: onlyifdoesntexist uninsneveruninstall
-Source: "Z:\home\thindil\steamsky\share\fonts\Rye-Regular.ttf"; DestDir: "{fonts}"; FontInstall: "Rye"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Z:\home\thindil\steamsky\share\fonts\Amarante-Regular.ttf"; DestDir: "{autofonts}"; FontInstall: "Amarante"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Z:\home\thindil\steamsky\share\fonts\Font Awesome 5 Free-Solid-900.otf"; DestDir: "{autofonts}"; FontInstall: "Font Awesome 5 Free Solid"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Z:\home\thindil\steamsky\share\fonts\Hack Bold Nerd Font Complete Mono Windows Compatible.ttf"; DestDir: "{autofonts}"; FontInstall: "Hack NF"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Z:\home\thindil\steamsky\share\fonts\Roboto-Regular.ttf"; DestDir: "{autofonts}"; FontInstall: "Roboto"; Flags: onlyifdoesntexist uninsneveruninstall
+Source: "Z:\home\thindil\steamsky\share\fonts\Rye-Regular.ttf"; DestDir: "{autofonts}"; FontInstall: "Rye"; Flags: onlyifdoesntexist uninsneveruninstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 ; NOTE2: If you build installer by self, change Source directory to proper value
 
 [Icons]
-Name: "{commonprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
