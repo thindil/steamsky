@@ -52,9 +52,7 @@ procedure SteamSky is
          Append(Source => Path, New_Item => Dir_Separator);
       end if;
       if not Exists(Name => To_String(Source => Path))
-        and then
-        (PathName /= "Save" and PathName /= "Modifications" and
-         PathName /= "Themes") then
+        and then PathName not in "Save" | "Modifications" | "Themes" then
          Put_Line
            ("Directory " & To_String(Path) &
             " does not exist. You must use an existing directory as " &
