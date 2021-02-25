@@ -47,10 +47,11 @@ procedure SteamSky is
    function UpdatePath
      (Path: in out Unbounded_String; PathName: String) return Boolean is
    begin
-      if Element(Path, Length(Path)) /= Dir_Separator then
-         Append(Path, Dir_Separator);
+      if Element(Source => Path, Index => Length(Source => Path)) /=
+        Dir_Separator then
+         Append(Source => Path, New_Item => Dir_Separator);
       end if;
-      if not Exists(To_String(Path))
+      if not Exists(Name => To_String(Source => Path))
         and then
         (PathName /= "Save" and PathName /= "Modifications" and
          PathName /= "Themes") then
