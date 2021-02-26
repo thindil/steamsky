@@ -159,7 +159,7 @@ package Utils.UI is
 
       -- ****f* UUI/UUI.ShowManipulateItem
       -- FUNCTION
-      -- Shw the dialog for manipulate items amount in cargo (like selling,
+      -- Show the dialog for manipulate items amount in cargo (like selling,
       -- dropping, etc).
       -- PARAMETERS
       -- Title     - Title of the dialog
@@ -177,6 +177,18 @@ package Utils.UI is
       ItemIndex: Inventory_Container.Extended_Index;
       MaxAmount: Natural := 0) with
       Pre => Title'Length > 0 and Command'Length > 0;
+      -- ****
+
+      -- ****f* UUI/UUI.ShowQuestion
+      -- FUNCTION
+      -- Show the dialog with question to the player
+      -- PARAMETERS
+      -- Question - The question which will be the player asked for
+      -- HISTORY
+      -- 5.9 - Added
+      -- SOURCE
+   procedure ShowQuestion(Question: String) with
+      Pre => Question'Length > 0;
       -- ****
 
 end Utils.UI;

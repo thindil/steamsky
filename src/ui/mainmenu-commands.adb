@@ -332,11 +332,8 @@ package body MainMenu.Commands is
       LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
       ItemIndex, Items: Unbounded_String;
    begin
-      if MessageBox
-          ("-message {Are you sure you want delete this savegame?} -icon question -type yesno") /=
-        "yes" then
-         return TCL_OK;
-      end if;
+      ShowQuestion("Are you sure you want delete this savegame?");
+      return TCL_OK;
       ItemIndex := To_Unbounded_String(Selection(LoadView));
       Delete_File(To_String(SaveDirectory & ItemIndex));
       Delete(LoadView, To_String(ItemIndex));
