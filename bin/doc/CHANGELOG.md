@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Hiding enemy ship's info after combat
 - Crash on entering the ships combat again
+- Crash when trying to load configuration file from older game versions
 
 ## [5.8] - 2021-02-21
 
