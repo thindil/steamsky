@@ -57,6 +57,7 @@ package body Stories is
       StoriesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
+      Load_Stories_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
@@ -114,6 +115,7 @@ package body Stories is
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (StoryNode, "startdata");
+            Load_Start_Data_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
@@ -125,21 +127,23 @@ package body Stories is
                   when ADD =>
                      TempRecord.StartData.Append(New_Item => Value);
                   when REMOVE =>
+                     Find_Delete_Start_Index_Loop :
                      for K in TempRecord.StartData.Iterate loop
                         if TempRecord.StartData(K) = Value then
                            DeleteIndex :=
                              UnboundedString_Container.To_Index(K);
-                           exit;
+                           exit Find_Delete_Start_Index_Loop;
                         end if;
-                     end loop;
+                     end loop Find_Delete_Start_Index_Loop;
                      TempRecord.StartData.Delete(Index => DeleteIndex);
                   when UPDATE =>
                      null;
                end case;
-            end loop;
+            end loop Load_Start_Data_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (StoryNode, "forbiddenfaction");
+            Load_Forbidden_Faction_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
@@ -151,20 +155,22 @@ package body Stories is
                   when ADD =>
                      TempRecord.ForbiddenFactions.Append(New_Item => Value);
                   when REMOVE =>
+                     Find_Delete_Forbidden_Index_Loop :
                      for K in TempRecord.ForbiddenFactions.Iterate loop
                         if TempRecord.ForbiddenFactions(K) = Value then
                            DeleteIndex :=
                              UnboundedString_Container.To_Index(K);
-                           exit;
+                           exit Find_Delete_Forbidden_Index_Loop;
                         end if;
-                     end loop;
+                     end loop Find_Delete_Forbidden_Index_Loop;
                      TempRecord.ForbiddenFactions.Delete(Index => DeleteIndex);
                   when UPDATE =>
                      null;
                end case;
-            end loop;
+            end loop Load_Forbidden_Faction_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(StoryNode, "step");
+            Load_Steps_Data_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempStep :=
                  (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
@@ -177,12 +183,13 @@ package body Stories is
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
                     DataAction'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
+               Find_Step_Index_Loop :
                for K in TempRecord.Steps.Iterate loop
                   if TempRecord.Steps(K).Index = TempStep.Index then
                      StepIndex := Steps_Container.To_Index(K);
-                     exit;
+                     exit Find_Step_Index_Loop;
                   end if;
-               end loop;
+               end loop Find_Step_Index_Loop;
                if SubAction /= REMOVE then
                   if SubAction = UPDATE then
                      TempStep := TempRecord.Steps(StepIndex);
@@ -195,6 +202,7 @@ package body Stories is
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
                       (ChildNode, "finishdata");
+                  Load_Finish_Data_Loop :
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
@@ -221,18 +229,20 @@ package body Stories is
                               end if;
                            end loop;
                         when REMOVE =>
+                           Find_Delete_Finish_Index_Loop :
                            for L in TempStep.FinishData.Iterate loop
                               if TempStep.FinishData(L).Name = Value then
                                  DeleteIndex := StepData_Container.To_Index(L);
-                                 exit;
+                                 exit Find_Delete_Finish_Index_Loop;
                               end if;
-                           end loop;
+                           end loop Find_Delete_Finish_Index_Loop;
                            TempStep.FinishData.Delete(Index => DeleteIndex);
                      end case;
-                  end loop;
+                  end loop Load_Finish_Data_Loop;
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
                       (Item(ChildNodes, J), "text");
+                  Load_Step_Text_Loop :
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
@@ -252,27 +262,29 @@ package body Stories is
                                    To_Unbounded_String
                                      (Node_Value(First_Child(StepNode)))));
                         when UPDATE =>
+                           Load_Update_Text_Loop :
                            for Text of TempStep.Texts loop
                               if Text.Condition =
                                 StepConditionType'Value(To_String(Value)) then
                                  Text.Text :=
                                    To_Unbounded_String
                                      (Node_Value(First_Child(StepNode)));
-                                 exit;
+                                 exit Load_Update_Text_Loop;
                               end if;
-                           end loop;
+                           end loop Load_Update_Text_Loop;
                         when REMOVE =>
+                           Find_Delete_Text_Index_Loop :
                            for L in TempStep.Texts.Iterate loop
                               if TempStep.Texts(L).Condition =
                                 StepConditionType'Value(To_String(Value)) then
                                  DeleteIndex :=
                                    StepTexts_Container.To_Index(L);
-                                 exit;
+                                 exit Find_Delete_Text_Index_Loop;
                               end if;
-                           end loop;
+                           end loop Find_Delete_Text_Index_Loop;
                            TempStep.Texts.Delete(Index => DeleteIndex);
                      end case;
-                  end loop;
+                  end loop Load_Step_Text_Loop;
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
                       (Item(ChildNodes, J), "failtext");
@@ -295,7 +307,7 @@ package body Stories is
                else
                   TempRecord.Steps.Delete(Index => StepIndex);
                end if;
-            end loop;
+            end loop Load_Steps_Data_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(StoryNode, "endtext");
             if Length(ChildNodes) > 0 then
@@ -315,7 +327,7 @@ package body Stories is
             Stories_Container.Exclude(Stories_List, StoryIndex);
             LogMessage("Story removed: " & To_String(StoryIndex), Everything);
          end if;
-      end loop;
+      end loop Load_Stories_Loop;
    end LoadStories;
 
    -- ****if* Stories/Stories.SelectBase
@@ -332,6 +344,7 @@ package body Stories is
       if Value = "any" then
          return Null_Unbounded_String;
       end if;
+      Select_Base_Loop :
       loop
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known and
@@ -340,7 +353,7 @@ package body Stories is
             PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
             return SkyBases(BaseIndex).Name;
          end if;
-      end loop;
+      end loop Select_Base_Loop;
    end SelectBase;
 
    -- ****if* Stories/Stories.SelectLocation
