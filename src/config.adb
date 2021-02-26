@@ -102,8 +102,13 @@ package body Config is
                NewGameSettings.PricesBonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("DifficultyLevel") then
-               NewGameSettings.DifficultyLevel :=
-                 Difficulty_Type'Value(To_String(Value));
+               if To_String(Value) in "VERY_EASY" | "EASY" | "NORMAL" |
+                     "HARD" | "VERY_HARD" | "CUSTOM" then
+                  NewGameSettings.DifficultyLevel :=
+                    Difficulty_Type'Value(To_String(Value));
+               else
+                  NewGameSettings.DifficultyLevel := NORMAL;
+               end if;
             elsif FieldName = To_Unbounded_String("AutoRest") then
                GameSettings.AutoRest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
