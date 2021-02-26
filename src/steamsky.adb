@@ -54,33 +54,36 @@ procedure SteamSky is
       if not Exists(Name => To_String(Source => Path))
         and then PathName not in "Save" | "Modifications" | "Themes" then
          Put_Line
-           ("Directory " & To_String(Path) &
-            " does not exist. You must use an existing directory as " &
-            To_Lower(PathName) & " directory.");
+           (Item =>
+              "Directory " & To_String(Source => Path) &
+              " does not exist. You must use an existing directory as " &
+              To_Lower(Item => PathName) & " directory.");
          return False;
       end if;
       return True;
    end UpdatePath;
 
 begin
-   Set_Directory(Dir_Name(Command_Name));
+   Set_Directory(Directory => Dir_Name(Path => Command_Name));
    -- Command line arguments
    Command_Line_Loop :
    for I in 1 .. Argument_Count loop
-      if Argument(I)'Length > 8 then
-         if Argument(I)(1 .. 8) = "--debug=" then
+      if Argument(Number => I)'Length > 8 then
+         if Argument(Number => I)(1 .. 8) = "--debug=" then
             Set_Debug_Mode_Loop :
             for J in Debug_Types loop
-               if To_Upper(Argument(I)(9 .. (Argument(I)'Last))) =
+               if To_Upper
+                   (Argument(Number => I)(9 .. (Argument(Number => I)'Last))) =
                  Debug_Types'Image(J) then
                   DebugMode := J;
                   exit Set_Debug_Mode_Loop;
                end if;
             end loop Set_Debug_Mode_Loop;
-         elsif Argument(I)(1 .. 8) = "--datadi" then
+         elsif Argument(Number => I)(1 .. 8) = "--datadi" then
             DataDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if not UpdatePath(DataDirectory, "Data") then
+              To_Unbounded_String
+                (Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
+            if not UpdatePath(Path => DataDirectory, PathName => "Data") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--savedi" then
