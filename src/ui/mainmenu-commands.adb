@@ -30,7 +30,6 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
@@ -327,31 +326,9 @@ package body MainMenu.Commands is
    function Delete_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
-      LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
-      ItemIndex, Items: Unbounded_String;
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowQuestion("Are you sure you want delete this savegame?");
-      return TCL_OK;
-      ItemIndex := To_Unbounded_String(Selection(LoadView));
-      Delete_File(To_String(SaveDirectory & ItemIndex));
-      Delete(LoadView, To_String(ItemIndex));
-      Items := To_Unbounded_String(Children(LoadView, "{}"));
-      if Items = Null_Unbounded_String then
-         Unbind_From_Main_Window(Interp, "<Alt-b>");
-         Unbind_From_Main_Window(Interp, "<Alt-l>");
-         Unbind_From_Main_Window(Interp, "<Alt-d>");
-         Unbind_From_Main_Window(Interp, "<Escape>");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
-         ShowMainMenu;
-      else
-         ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
-         if ItemIndex = Null_Unbounded_String then
-            ItemIndex := Items;
-         end if;
-         Selection_Set(LoadView, To_String(ItemIndex));
-      end if;
+      ShowQuestion("Are you sure you want delete this savegame?", "deletesave");
       return TCL_OK;
    end Delete_Game_Command;
 
