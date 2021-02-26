@@ -917,4 +917,47 @@ package body Utils.UI is
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
    end ShowManipulateItem;
 
+   procedure ShowQuestion(Question: String) is
+      QuestionDialog: constant Ttk_Frame :=
+        Create(".questiondialog", "-style Dialog.TFrame");
+      Label: constant Ttk_Label :=
+        Create
+          (QuestionDialog & ".question",
+           "-text {" & Question & "} -wraplength 370 -takefocus 0");
+      Button: Ttk_Button :=
+        Create
+          (QuestionDialog & ".yesbutton",
+           "-text Yes -command {CloseQuestion " & QuestionDialog & " yes}");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      In_Game: Boolean := True;
+   begin
+      if Winfo_Get(Frame, "exists") = "1" then
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+      else
+         Frame := Get_Widget(".");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+         In_Game := False;
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5}");
+      Bind
+        (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
+      Button :=
+        Create
+          (QuestionDialog & ".nobutton",
+           "-text No -command {CloseQuestion " & QuestionDialog & " no}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5}");
+      Focus(Button);
+      if In_Game then
+         Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+      else
+         Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in . -relx 0.3 -rely 0.3");
+      end if;
+      Bind(Button, "<Tab>", "{focus .questiondialog.yesbutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Widget_Raise(QuestionDialog);
+   end ShowQuestion;
+
 end Utils.UI;
