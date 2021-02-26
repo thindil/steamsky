@@ -1,4 +1,4 @@
-name: Continuous Integration - development version
+name: AdaControl tests - temporary workflow
 
 on:
   push:
@@ -18,6 +18,7 @@ jobs:
 
     - name: Run AdaControl
       run: |
+         mkdir obj
          cd obj
          adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv
          cd ..
