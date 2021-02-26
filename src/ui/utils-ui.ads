@@ -184,10 +184,11 @@ package Utils.UI is
       -- Show the dialog with question to the player
       -- PARAMETERS
       -- Question - The question which will be the player asked for
+      -- Result   - The value set for Ok button
       -- HISTORY
       -- 5.9 - Added
       -- SOURCE
-   procedure ShowQuestion(Question: String) with
+   procedure ShowQuestion(Question,Result: String) with
       Pre => Question'Length > 0;
       -- ****
 

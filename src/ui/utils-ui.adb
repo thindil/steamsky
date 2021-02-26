@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -22,9 +23,12 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -32,11 +36,13 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with Crew; use Crew;
 with Factions; use Factions;
+with MainMenu; use MainMenu;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
@@ -470,6 +476,58 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Text_Variable_Command;
 
+   -- ****o* UUI/UUI.Process_Question_Command
+   -- FUNCTION
+   -- Process question from dialog when the player answer Yes there
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ProcessQuestion answer
+   -- Answer is the answer set for the selected question
+   -- SOURCE
+   function Process_Question_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Process_Question_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Result: constant String := CArgv.Arg(Argv, 1);
+      Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
+      LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
+      ItemIndex, Items: Unbounded_String;
+   begin
+      if Result = "deletesave" then
+         ItemIndex := To_Unbounded_String(Selection(LoadView));
+         Delete_File(To_String(SaveDirectory & ItemIndex));
+         Delete(LoadView, To_String(ItemIndex));
+         Items := To_Unbounded_String(Children(LoadView, "{}"));
+         if Items = Null_Unbounded_String then
+            Unbind_From_Main_Window(Interp, "<Alt-b>");
+            Unbind_From_Main_Window(Interp, "<Alt-l>");
+            Unbind_From_Main_Window(Interp, "<Alt-d>");
+            Unbind_From_Main_Window(Interp, "<Escape>");
+            Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
+            ShowMainMenu;
+         else
+            ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
+            if ItemIndex = Null_Unbounded_String then
+               ItemIndex := Items;
+            end if;
+            Selection_Set(LoadView, To_String(ItemIndex));
+         end if;
+      end if;
+      return TCL_OK;
+   end Process_Question_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -479,6 +537,7 @@ package body Utils.UI is
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
       AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
+      AddCommand("ProcessQuestion", Process_Question_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
@@ -917,7 +976,7 @@ package body Utils.UI is
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
    end ShowManipulateItem;
 
-   procedure ShowQuestion(Question: String) is
+   procedure ShowQuestion(Question, Result: String) is
       QuestionDialog: constant Ttk_Frame :=
         Create(".questiondialog", "-style Dialog.TFrame");
       Label: constant Ttk_Label :=
@@ -927,7 +986,8 @@ package body Utils.UI is
       Button: Ttk_Button :=
         Create
           (QuestionDialog & ".yesbutton",
-           "-text Yes -command {CloseQuestion " & QuestionDialog & " yes}");
+           "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
+           Result & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       In_Game: Boolean := True;
    begin
@@ -944,14 +1004,22 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5}");
       Bind
         (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
-      Button :=
-        Create
-          (QuestionDialog & ".nobutton",
-           "-text No -command {CloseQuestion " & QuestionDialog & " no}");
+      if not In_Game then
+         Button :=
+           Create
+             (QuestionDialog & ".nobutton",
+              "-text No -command {CloseDialog " & QuestionDialog & " .}");
+      else
+         Button :=
+           Create
+             (QuestionDialog & ".nobutton",
+              "-text No -command {CloseDialog " & QuestionDialog & "}");
+      end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5}");
       Focus(Button);
       if In_Game then
-         Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+         Tcl.Tk.Ada.Place.Place
+           (QuestionDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       else
          Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in . -relx 0.3 -rely 0.3");
       end if;
