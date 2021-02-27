@@ -39,12 +39,16 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
 with Config; use Config;
 with Crew; use Crew;
 with Factions; use Factions;
+with Maps; use Maps;
+with Maps.UI; use Maps.UI;
 with MainMenu; use MainMenu;
 with Messages; use Messages;
 with Ships.Cargo; use Ships.Cargo;
+with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 
 package body Utils.UI is
@@ -501,29 +505,63 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Result: constant String := CArgv.Arg(Argv, 1);
-      Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
-      LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
-      ItemIndex, Items: Unbounded_String;
    begin
       if Result = "deletesave" then
-         ItemIndex := To_Unbounded_String(Selection(LoadView));
-         Delete_File(To_String(SaveDirectory & ItemIndex));
-         Delete(LoadView, To_String(ItemIndex));
-         Items := To_Unbounded_String(Children(LoadView, "{}"));
-         if Items = Null_Unbounded_String then
-            Unbind_From_Main_Window(Interp, "<Alt-b>");
-            Unbind_From_Main_Window(Interp, "<Alt-l>");
-            Unbind_From_Main_Window(Interp, "<Alt-d>");
-            Unbind_From_Main_Window(Interp, "<Escape>");
-            Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
-            ShowMainMenu;
-         else
-            ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
-            if ItemIndex = Null_Unbounded_String then
-               ItemIndex := Items;
+         declare
+            Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
+            LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
+            ItemIndex, Items: Unbounded_String;
+         begin
+            ItemIndex := To_Unbounded_String(Selection(LoadView));
+            Delete_File(To_String(SaveDirectory & ItemIndex));
+            Delete(LoadView, To_String(ItemIndex));
+            Items := To_Unbounded_String(Children(LoadView, "{}"));
+            if Items = Null_Unbounded_String then
+               Unbind_From_Main_Window(Interp, "<Alt-b>");
+               Unbind_From_Main_Window(Interp, "<Alt-l>");
+               Unbind_From_Main_Window(Interp, "<Alt-d>");
+               Unbind_From_Main_Window(Interp, "<Escape>");
+               Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
+               ShowMainMenu;
+            else
+               ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
+               if ItemIndex = Null_Unbounded_String then
+                  ItemIndex := Items;
+               end if;
+               Selection_Set(LoadView, To_String(ItemIndex));
             end if;
-            Selection_Set(LoadView, To_String(ItemIndex));
-         end if;
+         end;
+      elsif Result = "sethomebase" then
+         declare
+            TraderIndex: constant Natural := FindMember(Talk);
+            Price: Positive := 1000;
+            MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+         begin
+            if MoneyIndex2 = 0 then
+               ShowMessage
+                  ("You don't have any " & To_String(MoneyName) &
+                  " for change ship home base.");
+               return TCL_OK;
+            end if;
+            CountPrice(Price, TraderIndex);
+            if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+               ShowMessage
+                  ("You don't have enough " & To_String(MoneyName) &
+                  " for change ship home base.");
+               return TCL_OK;
+            end if;
+            PlayerShip.HomeBase :=
+               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+            UpdateCargo
+               (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
+            AddMessage
+               ("You changed your ship home base to: " &
+               To_String(SkyBases(PlayerShip.HomeBase).Name),
+               OtherMessage);
+            GainExp(1, TalkingSkill, TraderIndex);
+            UpdateGame(10);
+            ShowSkyMap;
+         end;
       end if;
       return TCL_OK;
    end Process_Question_Command;
