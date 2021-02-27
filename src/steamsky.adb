@@ -36,7 +36,7 @@ with HallOfFame; use HallOfFame;
 with MainMenu; use MainMenu;
 with Themes; use Themes;
 
-procedure SteamSky is
+procedure Steamsky is
 
    use type Interfaces.C.int;
 
@@ -44,24 +44,24 @@ procedure SteamSky is
    Argv: CArgv.Chars_Ptr_Ptr;
    Interp: Tcl.Tcl_Interp;
 
-   function UpdatePath
-     (Path: in out Unbounded_String; PathName: String) return Boolean is
+   function Update_Path
+     (Path: in out Unbounded_String; Path_Name: String) return Boolean is
    begin
       if Element(Source => Path, Index => Length(Source => Path)) /=
         Dir_Separator then
          Append(Source => Path, New_Item => Dir_Separator);
       end if;
       if not Exists(Name => To_String(Source => Path))
-        and then PathName not in "Save" | "Modifications" | "Themes" then
+        and then Path_Name not in "Save" | "Modifications" | "Themes" then
          Put_Line
            (Item =>
               "Directory " & To_String(Source => Path) &
               " does not exist. You must use an existing directory as " &
-              To_Lower(Item => PathName) & " directory.");
+              To_Lower(Item => Path_Name) & " directory.");
          return False;
       end if;
       return True;
-   end UpdatePath;
+   end Update_Path;
 
 begin
    Set_Directory(Directory => Dir_Name(Path => Command_Name));
@@ -73,7 +73,9 @@ begin
             Set_Debug_Mode_Loop :
             for J in Debug_Types loop
                if To_Upper
-                   (Argument(Number => I)(9 .. (Argument(Number => I)'Last))) =
+                   (Item =>
+                      Argument(Number => I)
+                        (9 .. (Argument(Number => I)'Last))) =
                  Debug_Types'Image(J) then
                   DebugMode := J;
                   exit Set_Debug_Mode_Loop;
@@ -82,32 +84,38 @@ begin
          elsif Argument(Number => I)(1 .. 8) = "--datadi" then
             DataDirectory :=
               To_Unbounded_String
-                (Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
-            if not UpdatePath(Path => DataDirectory, PathName => "Data") then
+                (Source =>
+                   Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
+            if not Update_Path(Path => DataDirectory, Path_Name => "Data") then
                return;
             end if;
-         elsif Argument(I)(1 .. 8) = "--savedi" then
+         elsif Argument(Number => I)(1 .. 8) = "--savedi" then
             SaveDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if not UpdatePath(SaveDirectory, "Save") then
+              To_Unbounded_String
+                (Source =>
+                   Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
+            if not Update_Path(Path => SaveDirectory, Path_Name => "Save") then
                return;
             end if;
-         elsif Argument(I)(1 .. 8) = "--docdir" then
+         elsif Argument(Number => I)(1 .. 8) = "--docdir" then
             DocDirectory :=
-              To_Unbounded_String(Argument(I)(10 .. (Argument(I)'Last)));
-            if not UpdatePath(DocDirectory, "Documentation") then
+              To_Unbounded_String
+                (Source =>
+                   Argument(Number => I)(10 .. (Argument(Number => I)'Last)));
+            if not Update_Path
+                (Path => DocDirectory, Path_Name => "Documentation") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--modsdi" then
             ModsDirectory :=
               To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if not UpdatePath(ModsDirectory, "Modifications") then
+            if not Update_Path(ModsDirectory, "Modifications") then
                return;
             end if;
          elsif Argument(I)(1 .. 8) = "--themes" then
             ThemesDirectory :=
               To_Unbounded_String(Argument(I)(13 .. (Argument(I)'Last)));
-            if not UpdatePath(ModsDirectory, "Themes") then
+            if not Update_Path(ModsDirectory, "Themes") then
                return;
             end if;
          end if;
@@ -179,4 +187,4 @@ begin
 exception
    when An_Exception : others =>
       SaveException(An_Exception);
-end SteamSky;
+end Steamsky;
