@@ -547,24 +547,19 @@ package body Stories is
    end ClearCurrentStory;
 
    function ProgressStory(NextStep: Boolean := False) return Boolean is
-      Step: Step_Data;
-      MaxRandom: Positive;
+      Step: Step_Data :=
+        (if CurrentStory.CurrentStep = 0 then
+           Stories_List(CurrentStory.Index).StartingStep
+         elsif CurrentStory.CurrentStep > 0 then
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
+         else Stories_List(CurrentStory.Index).FinalStep);
+      MaxRandom: constant Positive :=
+        (if Step.FinishCondition = DESTROYSHIP and NextStep then 1
+         else Positive'Value
+             (To_String(GetStepData(Step.FinishData, "chance"))));
       FinishCondition: Unbounded_String;
       Chance: Natural;
    begin
-      if CurrentStory.CurrentStep = 0 then
-         Step := Stories_List(CurrentStory.Index).StartingStep;
-      elsif CurrentStory.CurrentStep > 0 then
-         Step :=
-           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
-      else
-         Step := Stories_List(CurrentStory.Index).FinalStep;
-      end if;
-      MaxRandom :=
-        Positive'Value(To_String(GetStepData(Step.FinishData, "chance")));
-      if Step.FinishCondition = DESTROYSHIP and NextStep then
-         MaxRandom := 1;
-      end if;
       FinishCondition := GetStepData(Step.FinishData, "condition");
       if FinishCondition = To_Unbounded_String("random")
         and then GetRandom(1, MaxRandom) > 1 then
