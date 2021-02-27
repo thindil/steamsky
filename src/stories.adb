@@ -580,21 +580,23 @@ package body Stories is
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
+               Count_Explore_Chance_Loop :
                for Member of PlayerShip.Crew loop
                   if Member.Order = Pilot or Member.Order = Gunner then
                      Chance :=
                        Chance +
                        GetSkillLevel(Member, FindSkillIndex(FinishCondition));
                   end if;
-               end loop;
+               end loop Count_Explore_Chance_Loop;
             when LOOT =>
+               Count_Loot_Chance_Loop :
                for Member of PlayerShip.Crew loop
                   if Member.Order = Boarding then
                      Chance :=
                        Chance +
                        GetSkillLevel(Member, FindSkillIndex(FinishCondition));
                   end if;
-               end loop;
+               end loop Count_Loot_Chance_Loop;
             when ANY =>
                null;
          end case;
@@ -618,6 +620,7 @@ package body Stories is
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
+               Count_Explore_Experience_Loop :
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Order = Pilot or
                     PlayerShip.Crew(I).Order = Gunner then
@@ -625,26 +628,28 @@ package body Stories is
                        (10, FindSkillIndex(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
-               end loop;
+               end loop Count_Explore_Experience_Loop;
             when LOOT =>
+               Count_Loot_Experience_Loop :
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Order = Boarding then
                      GainExp
                        (10, FindSkillIndex(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
-               end loop;
+               end loop Count_Loot_Experience_Loop;
             when ANY =>
                null;
          end case;
       end if;
       UpdateGame(30);
+      Update_Finished_Stories_Loop :
       for FinishedStory of FinishedStories loop
          if FinishedStory.Index = CurrentStory.Index then
             FinishedStory.StepsTexts.Append(New_Item => GetCurrentStoryText);
-            exit;
+            exit Update_Finished_Stories_Loop;
          end if;
-      end loop;
+      end loop Update_Finished_Stories_Loop;
       CurrentStory.Step := CurrentStory.Step + 1;
       CurrentStory.FinishedStep := Step.FinishCondition;
       CurrentStory.ShowText := True;
