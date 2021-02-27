@@ -383,11 +383,14 @@ package body Stories is
       PlayerShip.DestinationX := LocationX;
       Value := GetStepData(StepData, "y");
       if Value = To_Unbounded_String("random") then
+         Random_Location_Loop :
          loop
             LocationY := GetRandom(SkyMap'First(2), SkyMap'Last(2));
-            exit when SkyMap(LocationX, LocationY).BaseIndex = 0 and
+            exit Random_Location_Loop when SkyMap(LocationX, LocationY)
+                .BaseIndex =
+              0 and
               LocationY /= PlayerShip.SkyY;
-         end loop;
+         end loop Random_Location_Loop;
          Append(LocationData, Integer'Image(LocationY));
          Append(LocationData, ";");
       else
@@ -459,24 +462,27 @@ package body Stories is
       if CurrentStory.Index /= Null_Unbounded_String then
          return;
       end if;
+      Find_Faction_Index_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = FactionName then
             FactionIndex := Factions_Container.Key(I);
-            exit;
+            exit Find_Faction_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Faction_Index_Loop;
       if FactionIndex = Null_Unbounded_String then
          return;
       end if;
+      Check_Stories_Loop :
       for I in Stories_List.Iterate loop
          CanStart := True;
+         Check_Faction_Loop :
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
               To_Lower(To_String(PlayerShip.Crew(1).Faction)) then
                CanStart := False;
-               exit;
+               exit Check_Faction_Loop;
             end if;
-         end loop;
+         end loop Check_Faction_Loop;
          if CanStart then
             case Condition is
                when DROPITEM =>
@@ -529,7 +535,7 @@ package body Stories is
                   end if;
             end case;
          end if;
-      end loop;
+      end loop Check_Stories_Loop;
    end StartStory;
 
    procedure ClearCurrentStory is
