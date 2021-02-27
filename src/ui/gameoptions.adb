@@ -160,6 +160,14 @@ package body GameOptions is
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
+      procedure Set_Path(Path: Unbounded_String; LabelName: String) is
+      begin
+         Label.Name :=
+           New_String
+             (Widget_Image(OptionsCanvas) & ".options.notebook.info." &
+              LabelName);
+         configure(Label, "-text {" & To_String(Path) & " }");
+      end Set_Path;
    begin
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
@@ -168,22 +176,10 @@ package body GameOptions is
            (Get_Context,
             To_String(DataDirectory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Label.Name :=
-           New_String
-             (Widget_Image(OptionsCanvas) & ".options.notebook.info.data");
-         configure(Label, "-text {" & To_String(DataDirectory) & "}");
-         Label.Name :=
-           New_String
-             (Widget_Image(OptionsCanvas) & ".options.notebook.info.save");
-         configure(Label, "-text {" & To_String(SaveDirectory) & "}");
-         Label.Name :=
-           New_String
-             (Widget_Image(OptionsCanvas) & ".options.notebook.info.docs");
-         configure(Label, "-text {" & To_String(DocDirectory) & "}");
-         Label.Name :=
-           New_String
-             (Widget_Image(OptionsCanvas) & ".options.notebook.info.mods");
-         configure(Label, "-text {" & To_String(ModsDirectory) & "}");
+         Set_Path(DataDirectory, "data");
+         Set_Path(SaveDirectory, "save");
+         Set_Path(DocDirectory, "docs");
+         Set_Path(ModsDirectory, "mods");
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop;
