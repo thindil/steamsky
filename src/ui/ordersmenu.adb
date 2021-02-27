@@ -19,7 +19,6 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -38,7 +37,6 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
-with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
@@ -665,40 +663,12 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       TraderIndex: constant Natural := FindMember(Talk);
       Price: Positive := 1000;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
    begin
       CountPrice(Price, TraderIndex);
-      if MessageBox
-          ("-message {Are you sure want to change your home base (it cost" &
-           Positive'Image(Price) & " " & To_String(MoneyName) &
-           ")?} -icon question -type yesno") /=
-        "yes" then
-         return TCL_OK;
-      end if;
-      if MoneyIndex2 = 0 then
-         ShowMessage
-           ("You don't have any " & To_String(MoneyName) &
-            " for change ship home base.");
-         return TCL_OK;
-      end if;
-      CountPrice(Price, TraderIndex);
-      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
-         ShowMessage
-           ("You don't have enough " & To_String(MoneyName) &
-            " for change ship home base.");
-         return TCL_OK;
-      end if;
-      PlayerShip.HomeBase :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Price));
-      AddMessage
-        ("You changed your ship home base to: " &
-         To_String(SkyBases(PlayerShip.HomeBase).Name),
-         OtherMessage);
-      GainExp(1, TalkingSkill, TraderIndex);
-      UpdateGame(10);
-      ShowSkyMap;
+      ShowQuestion
+        ("Are you sure want to change your home base (it cost" &
+         Positive'Image(Price) & " " & To_String(MoneyName) & ")?",
+         "sethomebase");
       return TCL_OK;
    end Set_As_Home_Command;
 
