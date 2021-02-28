@@ -28,7 +28,6 @@ with GNAT.OS_Lib; use GNAT.OS_Lib;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -328,7 +327,8 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowQuestion("Are you sure you want delete this savegame?", "deletesave");
+      ShowQuestion
+        ("Are you sure you want delete this savegame?", "deletesave");
       return TCL_OK;
    end Delete_Game_Command;
 
@@ -399,12 +399,9 @@ package body MainMenu.Commands is
    exception
       when An_Exception : SaveGame_Invalid_Data =>
          ShowMainMenu;
-         if MessageBox
-             ("-message {Can't load this game. Reason: " &
-              Exception_Message(An_Exception) & "} -icon error -type ok") =
-           "ok" then
-            return TCL_OK;
-         end if;
+         ShowMessage
+           ("Can't load this game. Reason: " & Exception_Message(An_Exception),
+            ".mainmenu");
          return TCL_OK;
    end Load_Game_Command;
 
