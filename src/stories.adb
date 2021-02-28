@@ -685,17 +685,14 @@ package body Stories is
    end ProgressStory;
 
    function GetCurrentStoryText return Unbounded_String is
-      StepTexts: StepTexts_Container.Vector;
-   begin
-      if CurrentStory.CurrentStep = 0 then
-         StepTexts := Stories_List(CurrentStory.Index).StartingStep.Texts;
-      elsif CurrentStory.CurrentStep > 0 then
-         StepTexts :=
+      StepTexts: constant StepTexts_Container.Vector :=
+        (if CurrentStory.CurrentStep = 0 then
+           Stories_List(CurrentStory.Index).StartingStep.Texts
+         elsif CurrentStory.CurrentStep > 0 then
            Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
-             .Texts;
-      else
-         StepTexts := Stories_List(CurrentStory.Index).FinalStep.Texts;
-      end if;
+             .Texts
+         else Stories_List(CurrentStory.Index).FinalStep.Texts);
+   begin
       for Text of StepTexts loop
          if Text.Condition = CurrentStory.FinishedStep then
             return Text.Text;
