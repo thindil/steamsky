@@ -74,8 +74,7 @@ begin
             for J in Debug_Types loop
                if To_Upper
                    (Item =>
-                      Argument(Number => I)
-                        (9 .. (Argument(Number => I)'Last))) =
+                      Argument(Number => I)(9 .. Argument(Number => I)'Last)) =
                  Debug_Types'Image(J) then
                   DebugMode := J;
                   exit Set_Debug_Mode_Loop;
@@ -85,7 +84,7 @@ begin
             DataDirectory :=
               To_Unbounded_String
                 (Source =>
-                   Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
+                   Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path(Path => DataDirectory, Path_Name => "Data") then
                return;
             end if;
@@ -93,7 +92,7 @@ begin
             SaveDirectory :=
               To_Unbounded_String
                 (Source =>
-                   Argument(Number => I)(11 .. (Argument(Number => I)'Last)));
+                   Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path(Path => SaveDirectory, Path_Name => "Save") then
                return;
             end if;
@@ -101,30 +100,36 @@ begin
             DocDirectory :=
               To_Unbounded_String
                 (Source =>
-                   Argument(Number => I)(10 .. (Argument(Number => I)'Last)));
+                   Argument(Number => I)(10 .. Argument(Number => I)'Last));
             if not Update_Path
                 (Path => DocDirectory, Path_Name => "Documentation") then
                return;
             end if;
-         elsif Argument(I)(1 .. 8) = "--modsdi" then
+         elsif Argument(Number => I)(1 .. 8) = "--modsdi" then
             ModsDirectory :=
-              To_Unbounded_String(Argument(I)(11 .. (Argument(I)'Last)));
-            if not Update_Path(ModsDirectory, "Modifications") then
+              To_Unbounded_String
+                (Source =>
+                   Argument(Number => I)(11 .. Argument(Number => I)'Last));
+            if not Update_Path
+                (Path => ModsDirectory, Path_Name => "Modifications") then
                return;
             end if;
-         elsif Argument(I)(1 .. 8) = "--themes" then
+         elsif Argument(Number => I)(1 .. 8) = "--themes" then
             ThemesDirectory :=
-              To_Unbounded_String(Argument(I)(13 .. (Argument(I)'Last)));
-            if not Update_Path(ModsDirectory, "Themes") then
+              To_Unbounded_String
+                (Source =>
+                   Argument(Number => I)(13 .. Argument(Number => I)'Last));
+            if not Update_Path
+                (Path => ModsDirectory, Path_Name => "Themes") then
                return;
             end if;
          end if;
       end if;
    end loop Command_Line_Loop;
 
-   Create_Path(To_String(SaveDirectory));
-   Create_Path(To_String(ModsDirectory));
-   Create_Path(To_String(ThemesDirectory));
+   Create_Path(New_Directory => To_String(Source => SaveDirectory));
+   Create_Path(New_Directory => To_String(Source => ModsDirectory));
+   Create_Path(New_Directory => To_String(Source => ThemesDirectory));
 
    StartLogging;
 
