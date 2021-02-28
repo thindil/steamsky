@@ -693,11 +693,12 @@ package body Stories is
              .Texts
          else Stories_List(CurrentStory.Index).FinalStep.Texts);
    begin
+      Current_Story_Text_Loop :
       for Text of StepTexts loop
          if Text.Condition = CurrentStory.FinishedStep then
             return Text.Text;
          end if;
-      end loop;
+      end loop Current_Story_Text_Loop;
       return Null_Unbounded_String;
    end GetCurrentStoryText;
 
@@ -705,11 +706,12 @@ package body Stories is
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String is
    begin
+      Get_Step_Data_Loop :
       for Data of FinishData loop
          if Data.Name = To_Unbounded_String(Name) then
             return Data.Value;
          end if;
-      end loop;
+      end loop Get_Step_Data_Loop;
       return Null_Unbounded_String;
    end GetStepData;
 
@@ -719,13 +721,14 @@ package body Stories is
       if CurrentStory.Data /= Null_Unbounded_String then
          Create(Tokens, To_String(CurrentStory.Data), ";");
          if Slice_Count(Tokens) < 3 then
+            Get_Story_Location_Loop :
             for I in SkyBases'Range loop
                if SkyBases(I).Name = CurrentStory.Data then
                   StoryX := SkyBases(I).SkyX;
                   StoryY := SkyBases(I).SkyY;
-                  exit;
+                  exit Get_Story_Location_Loop;
                end if;
-            end loop;
+            end loop Get_Story_Location_Loop;
          else
             StoryX := Integer'Value(Slice(Tokens, 1));
             StoryY := Integer'Value(Slice(Tokens, 2));
