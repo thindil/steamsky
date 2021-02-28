@@ -141,9 +141,11 @@ package body Utils.UI is
            "} -command {CloseDialog " & MessageDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+         Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+      end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
