@@ -171,35 +171,35 @@ package body Trades is
       CountPrice(Profit, TraderIndex, False);
       Pay_Trade_Profit_Loop :
       for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Payment(2) > 0 then
-            if Profit < 1 then
+         if PlayerShip.Crew(I).Payment(2) = 0 then
+            goto End_Of_Loop;
+         end if;
+         if Profit < 1 then
+            UpdateMorale
+              (PlayerShip, Crew_Container.To_Index(I), GetRandom(-25, -5));
+            AddMessage
+              (To_String(PlayerShip.Crew(I).Name) &
+               " is sad because doesn't get own part of profit.",
+               TradeMessage, RED);
+            Profit := 0;
+            goto End_Of_Loop;
+         end if;
+         Profit :=
+           Profit -
+           Positive
+             (Float'Ceiling
+                (Float(Profit) *
+                 (Float(PlayerShip.Crew(I).Payment(2)) / 100.0)));
+         if Profit < 1 then
+            if Profit < 0 then
                UpdateMorale
-                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-25, -5));
+                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-12, -2));
                AddMessage
                  (To_String(PlayerShip.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",
                   TradeMessage, RED);
-               Profit := 0;
-               goto End_Of_Loop;
             end if;
-            Profit :=
-              Profit -
-              Positive
-                (Float'Ceiling
-                   (Float(Profit) *
-                    (Float(PlayerShip.Crew(I).Payment(2)) / 100.0)));
-            if Profit < 1 then
-               if Profit < 0 then
-                  UpdateMorale
-                    (PlayerShip, Crew_Container.To_Index(I),
-                     GetRandom(-12, -2));
-                  AddMessage
-                    (To_String(PlayerShip.Crew(I).Name) &
-                     " is sad because doesn't get own part of profit.",
-                     TradeMessage, RED);
-               end if;
-               Profit := 0;
-            end if;
+            Profit := 0;
          end if;
          <<End_Of_Loop>>
       end loop Pay_Trade_Profit_Loop;
