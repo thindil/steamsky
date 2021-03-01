@@ -40,7 +40,7 @@ procedure Steamsky is
 
    use type Interfaces.C.int;
 
-   Argc: CArgv.CNatural;
+   Argc: CArgv.CNatural := 0;
    Argv: CArgv.Chars_Ptr_Ptr;
    Interp: Tcl.Tcl_Interp;
 
@@ -141,12 +141,12 @@ begin
 
    --  Get command-line arguments and put them into C-style "argv"
    --------------------------------------------------------------
-   CArgv.Create(Argc, Argv);
+   CArgv.Create(Argc => Argc, Argv => Argv);
 
    --  Tcl needs to know the path name of the executable
    --  otherwise Tcl.Tcl_Init below will fail.
    ----------------------------------------------------
-   Tcl.Tcl_FindExecutable(Argv.all);
+   Tcl.Tcl_FindExecutable(argv0 => Argv.all);
 
    --  Create one Tcl interpreter
    -----------------------------
@@ -154,31 +154,31 @@ begin
 
    --  Initialize Tcl
    -----------------
-   if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
+   if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
       Ada.Text_IO.Put_Line
-        ("Steam Sky: Tcl.Tcl_Init failed: " &
-         Tcl.Ada.Tcl_GetStringResult(Interp));
+        (Item => "Steam Sky: Tcl.Tcl_Init failed: " &
+         Tcl.Ada.Tcl_GetStringResult(interp => Interp));
       return;
    end if;
 
    --  Initialize Tk
    ----------------
-   if Tcl.Tk.Tk_Init(Interp) = Tcl.TCL_ERROR then
+   if Tcl.Tk.Tk_Init(interp => Interp) = Tcl.TCL_ERROR then
       Ada.Text_IO.Put_Line
-        ("Steam Sky: Tcl.Tk.Tk_Init failed: " &
-         Tcl.Ada.Tcl_GetStringResult(Interp));
+        (Item => "Steam Sky: Tcl.Tk.Tk_Init failed: " &
+         Tcl.Ada.Tcl_GetStringResult(interp => Interp));
       return;
    end if;
 
    --  Set the Tk context so that we may use shortcut Tk
    --  calls that require reference to the interpreter.
    ----------------------------------------------------
-   Set_Context(Interp);
+   Set_Context(Interp => Interp);
 
    -- Load required Tcl packages
-   Tooltip_Init(Interp);
-   Tcl.Ada.Tcl_Eval(Interp, "package require tksvg");
-   Autoscroll_Init(Interp);
+   Tooltip_Init(Interp => Interp);
+   Tcl.Ada.Tcl_Eval(interp => Interp, strng => "package require tksvg");
+   Autoscroll_Init(Interp => Interp);
 
    -- Create and show the main game menu
    CreateMainMenu;
@@ -191,5 +191,5 @@ begin
    EndLogging;
 exception
    when An_Exception : others =>
-      SaveException(An_Exception);
+      Save_Exception(An_Exception => An_Exception);
 end Steamsky;
