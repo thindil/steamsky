@@ -540,27 +540,29 @@ package body Utils.UI is
          declare
             TraderIndex: constant Natural := FindMember(Talk);
             Price: Positive := 1000;
-            MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+            MoneyIndex2: constant Natural :=
+              FindItem(PlayerShip.Cargo, MoneyIndex);
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
-                  ("You don't have any " & To_String(MoneyName) &
+                 ("You don't have any " & To_String(MoneyName) &
                   " for change ship home base.");
                return TCL_OK;
             end if;
             CountPrice(Price, TraderIndex);
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowMessage
-                  ("You don't have enough " & To_String(MoneyName) &
+                 ("You don't have enough " & To_String(MoneyName) &
                   " for change ship home base.");
                return TCL_OK;
             end if;
             PlayerShip.HomeBase :=
-               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             UpdateCargo
-               (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
+              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+               Amount => -(Price));
             AddMessage
-               ("You changed your ship home base to: " &
+              ("You changed your ship home base to: " &
                To_String(SkyBases(PlayerShip.HomeBase).Name),
                OtherMessage);
             GainExp(1, TalkingSkill, TraderIndex);
@@ -586,6 +588,16 @@ package body Utils.UI is
             else
                ShowSkyMap;
             end if;
+         end;
+      elsif Result = "quit" then
+         declare
+            Paned: constant Ttk_PanedWindow :=
+              Get_Widget(".gameframe.paned", Interp);
+         begin
+            GameSettings.MessagesPosition :=
+              GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
+            EndGame(True);
+            ShowMainMenu;
          end;
       end if;
       return TCL_OK;
