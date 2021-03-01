@@ -218,15 +218,16 @@ package body Trades is
          if Profit > TraderCargo(1).Amount then
             raise Trade_No_Money_In_Base with ItemName;
          end if;
+         Update_Trader_Cargo_Loop :
          for I in TraderCargo.Iterate loop
             if TraderCargo(I).ProtoIndex = ProtoIndex and
               TraderCargo(I).Durability =
                 PlayerShip.Cargo(ItemIndex).Durability then
                TraderCargo(I).Amount := TraderCargo(I).Amount + SellAmount;
                CargoAdded := True;
-               exit;
+               exit Update_Trader_Cargo_Loop;
             end if;
-         end loop;
+         end loop Update_Trader_Cargo_Loop;
          if not CargoAdded then
             TraderCargo.Append
               (New_Item =>
@@ -275,12 +276,13 @@ package body Trades is
       NewItemIndex: Unbounded_String;
    begin
       TraderCargo.Clear;
+      Add_Items_To_Cargo_Loop :
       for Item of TraderShip.Cargo loop
          TraderCargo.Append
            (New_Item =>
               (ProtoIndex => Item.ProtoIndex, Amount => Item.Amount,
                Durability => 100, Price => Items_List(Item.ProtoIndex).Price));
-      end loop;
+      end loop Add_Items_To_Cargo_Loop;
       if TraderShip.Crew.Length < 5 then
          CargoAmount := GetRandom(1, 3);
       elsif TraderShip.Crew.Length < 10 then
