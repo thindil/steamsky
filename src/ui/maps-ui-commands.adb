@@ -762,25 +762,15 @@ package body Maps.UI.Commands is
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
-            if MessageBox
-                ("-message {You don't have pilot on duty. Did you want to wait until your pilot rest?} -icon question -type yesno") =
-              "yes" then
-               WaitForRest;
-               StartsCombat := CheckForEvent;
-               if not StartsCombat and GameSettings.AutoFinish then
-                  Message := To_Unbounded_String(AutoFinishMissions);
-               end if;
-            end if;
+            ShowQuestion
+              ("You don't have pilot on duty. Did you want to wait until your pilot rest?",
+               "nopilot");
+            return TCL_OK;
          when 7 => -- Ship moved, but engineer needs rest, confirm
-            if MessageBox
-                ("-message {You don't have engineer on duty. Did you want to wait until your engineer rest?} -icon question -type yesno") =
-              "yes" then
-               WaitForRest;
-               StartsCombat := CheckForEvent;
-               if not StartsCombat and GameSettings.AutoFinish then
-                  Message := To_Unbounded_String(AutoFinishMissions);
-               end if;
-            end if;
+            ShowQuestion
+              ("You don't have engineer on duty. Did you want to wait until your engineer rest?",
+               "nopilot");
+            return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
             StartsCombat := CheckForEvent;
             if not StartsCombat then
