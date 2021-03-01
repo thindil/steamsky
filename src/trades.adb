@@ -270,7 +270,10 @@ package body Trades is
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_STOP);
-      CargoAmount: Natural range 0 .. 10;
+      CargoAmount: Natural range 0 .. 10 :=
+        (if TraderShip.Crew.Length < 5 then GetRandom(1, 3)
+         elsif TraderShip.Crew.Length < 10 then GetRandom(1, 5)
+         else GetRandom(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
       ItemAmount: Positive range 1 .. 1000;
       NewItemIndex: Unbounded_String;
@@ -283,21 +286,11 @@ package body Trades is
               (ProtoIndex => Item.ProtoIndex, Amount => Item.Amount,
                Durability => 100, Price => Items_List(Item.ProtoIndex).Price));
       end loop Add_Items_To_Cargo_Loop;
-      if TraderShip.Crew.Length < 5 then
-         CargoAmount := GetRandom(1, 3);
-      elsif TraderShip.Crew.Length < 10 then
-         CargoAmount := GetRandom(1, 5);
-      else
-         CargoAmount := GetRandom(1, 10);
-      end if;
       while CargoAmount > 0 loop
-         if TraderShip.Crew.Length < 5 then
-            ItemAmount := GetRandom(1, 100);
-         elsif TraderShip.Crew.Length < 10 then
-            ItemAmount := GetRandom(1, 500);
-         else
-            ItemAmount := GetRandom(1, 1000);
-         end if;
+         ItemAmount :=
+           (if TraderShip.Crew.Length < 5 then GetRandom(1, 100)
+            elsif TraderShip.Crew.Length < 10 then GetRandom(1, 500)
+            else GetRandom(1, 1000));
          ItemIndex := GetRandom(1, Positive(Items_List.Length));
          for I in Items_List.Iterate loop
             ItemIndex := ItemIndex - 1;
