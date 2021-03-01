@@ -41,7 +41,6 @@ with Combat.UI; use Combat.UI;
 with Config; use Config;
 with Crew; use Crew;
 with Factions; use Factions;
-with MainMenu; use MainMenu;
 with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
@@ -808,7 +807,7 @@ package body Maps.UI.Commands is
    -- show main menu
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -825,18 +824,9 @@ package body Maps.UI.Commands is
    function Quit_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      if MessageBox
-          ("-message {Are you sure want to quit?} -icon question -type yesno") =
-        "yes" then
-         GameSettings.MessagesPosition :=
-           GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
-         EndGame(True);
-         ShowMainMenu;
-      end if;
+      ShowQuestion("Are you sure want to quit?", "quit");
       return TCL_OK;
    end Quit_Game_Command;
 
