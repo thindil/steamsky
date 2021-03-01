@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -140,12 +140,13 @@ package body Trades is
       if BaseIndex > 0 then
          BaseItemIndex := FindBaseCargo(ProtoIndex);
       else
+         Find_Base_Index_Loop :
          for I in TraderCargo.Iterate loop
             if TraderCargo(I).ProtoIndex = ProtoIndex then
                BaseItemIndex := BaseCargo_Container.To_Index(I);
-               exit;
+               exit Find_Base_Index_Loop;
             end if;
-         end loop;
+         end loop Find_Base_Index_Loop;
       end if;
       if BaseItemIndex = 0 then
          Price := Get_Price(SkyBases(BaseIndex).BaseType, ProtoIndex);
@@ -168,6 +169,7 @@ package body Trades is
                  (Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
       CountPrice(Profit, TraderIndex, False);
+      Pay_Trade_Profit_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Payment(2) > 0 then
             if Profit < 1 then
@@ -200,7 +202,7 @@ package body Trades is
             end if;
          end if;
          <<End_Of_Loop>>
-      end loop;
+      end loop Pay_Trade_Profit_Loop;
       if FreeCargo((Items_List(ProtoIndex).Weight * SellAmount) - Profit) <
         0 then
          raise Trade_No_Free_Cargo;
