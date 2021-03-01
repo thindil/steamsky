@@ -38,9 +38,9 @@ with Utils.UI; use Utils.UI;
 
 package body ErrorDialog is
 
-   procedure SaveException(An_Exception: Exception_Occurrence) is
+   procedure Save_Exception(An_Exception: Exception_Occurrence) is
       ErrorFile: File_Type;
-      ErrorText: Unbounded_String;
+      ErrorText: Unbounded_String := Null_Unbounded_String;
    begin
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
@@ -99,6 +99,6 @@ package body ErrorDialog is
          configure(Text, "-state disabled");
          Tcl.Tk.Tk_MainLoop;
       end;
-   end SaveException;
+   end Save_Exception;
 
 end ErrorDialog;

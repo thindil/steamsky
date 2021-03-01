@@ -22,13 +22,13 @@ with Ada.Exceptions; use Ada.Exceptions;
 package ErrorDialog is
 -- ****
 
-   -- ****f* ErrorDialog/ErrorDialog.SaveException
+   -- ****f* ErrorDialog/ErrorDialog.Save_Exception
    -- FUNCTION
    -- Save all information about the game crash and show UI with information
    -- PARAMETERS
    -- An_Exception - Data of an exception which caused the game crash
    -- SOURCE
-   procedure SaveException(An_Exception: Exception_Occurrence);
+   procedure Save_Exception(An_Exception: Exception_Occurrence);
    -- ****
 
 end ErrorDialog;
