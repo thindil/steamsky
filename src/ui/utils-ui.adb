@@ -40,13 +40,16 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with Combat.UI; use Combat.UI;
 with Config; use Config;
 with Crew; use Crew;
+with Events; use Events;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with MainMenu; use MainMenu;
 with Messages; use Messages;
+with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
@@ -563,6 +566,26 @@ package body Utils.UI is
             GainExp(1, TalkingSkill, TraderIndex);
             UpdateGame(10);
             ShowSkyMap;
+         end;
+      elsif Result = "nopilot" then
+         WaitForRest;
+         declare
+            StartsCombat: constant Boolean := CheckForEvent;
+            Message: Unbounded_String := Null_Unbounded_String;
+         begin
+            if not StartsCombat and GameSettings.AutoFinish then
+               Message := To_Unbounded_String(AutoFinishMissions);
+            end if;
+            if Message /= Null_Unbounded_String then
+               ShowMessage(To_String(Message));
+            end if;
+            CenterX := PlayerShip.SkyX;
+            CenterY := PlayerShip.SkyY;
+            if StartsCombat then
+               ShowCombatUI;
+            else
+               ShowSkyMap;
+            end if;
          end;
       end if;
       return TCL_OK;
