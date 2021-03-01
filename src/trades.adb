@@ -286,19 +286,21 @@ package body Trades is
               (ProtoIndex => Item.ProtoIndex, Amount => Item.Amount,
                Durability => 100, Price => Items_List(Item.ProtoIndex).Price));
       end loop Add_Items_To_Cargo_Loop;
+      Generate_Cargo_Loop :
       while CargoAmount > 0 loop
          ItemAmount :=
            (if TraderShip.Crew.Length < 5 then GetRandom(1, 100)
             elsif TraderShip.Crew.Length < 10 then GetRandom(1, 500)
             else GetRandom(1, 1000));
          ItemIndex := GetRandom(1, Positive(Items_List.Length));
+         Find_Item_Index_Loop :
          for I in Items_List.Iterate loop
             ItemIndex := ItemIndex - 1;
             if ItemIndex = 0 then
                NewItemIndex := Objects_Container.Key(I);
-               exit;
+               exit Find_Item_Index_Loop;
             end if;
-         end loop;
+         end loop Find_Item_Index_Loop;
          CargoItemIndex := FindItem(TraderShip.Cargo, NewItemIndex);
          if CargoItemIndex > 0 then
             TraderCargo(CargoItemIndex).Amount :=
@@ -323,7 +325,7 @@ package body Trades is
             end if;
          end if;
          CargoAmount := CargoAmount - 1;
-      end loop;
+      end loop Generate_Cargo_Loop;
    end GenerateTraderCargo;
 
 end Trades;
