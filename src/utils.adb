@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -35,21 +35,23 @@ package body Utils is
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
+      First_Name_Part_Loop :
       for I in 1 .. LettersAmount loop
          Append
            (NewName,
             Letters'Val
               (GetRandom
                  (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
-      end loop;
+      end loop First_Name_Part_Loop;
       Append(NewName, '-');
+      Second_Name_Part_Loop :
       for I in 1 .. NumbersAmount loop
          Append
            (NewName,
             Numbers'Val
               (GetRandom
                  (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
-      end loop;
+      end loop Second_Name_Part_Loop;
       return NewName;
    end GenerateRoboticName;
 
