@@ -185,10 +185,11 @@ package Utils.UI is
       -- PARAMETERS
       -- Question - The question which will be the player asked for
       -- Result   - The value set for Ok button
+      -- In_Game  - The question in show during game
       -- HISTORY
       -- 5.9 - Added
       -- SOURCE
-   procedure ShowQuestion(Question,Result: String) with
+   procedure ShowQuestion(Question,Result: String; In_Game: Boolean := True) with
       Pre => Question'Length > 0;
       -- ****
 

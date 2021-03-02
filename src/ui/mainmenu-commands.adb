@@ -328,7 +328,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       ShowQuestion
-        ("Are you sure you want delete this savegame?", "deletesave");
+        ("Are you sure you want delete this savegame?", "deletesave", False);
       return TCL_OK;
    end Delete_Game_Command;
 

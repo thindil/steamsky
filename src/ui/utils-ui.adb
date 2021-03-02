@@ -464,7 +464,7 @@ package body Utils.UI is
                 (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
                  Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
-            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
+--            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
@@ -1051,7 +1051,7 @@ package body Utils.UI is
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
    end ShowManipulateItem;
 
-   procedure ShowQuestion(Question, Result: String) is
+   procedure ShowQuestion(Question, Result: String; In_Game: Boolean := True) is
       QuestionDialog: constant Ttk_Frame :=
         Create(".questiondialog", "-style Dialog.TFrame");
       Label: constant Ttk_Label :=
@@ -1064,16 +1064,14 @@ package body Utils.UI is
            "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
            Result & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
-      In_Game: Boolean := True;
    begin
-      if Winfo_Get(Frame, "exists") = "1" then
+      if In_Game then
          Tcl.Tk.Ada.Busy.Busy(Frame);
          Frame := Get_Widget(".gameframe.paned");
          Tcl.Tk.Ada.Busy.Busy(Frame);
       else
          Frame := Get_Widget(".");
          Tcl.Tk.Ada.Busy.Busy(Frame);
-         In_Game := False;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5} -padx 5");
