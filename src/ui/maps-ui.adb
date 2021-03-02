@@ -23,7 +23,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -56,7 +55,6 @@ with Help.UI; use Help.UI;
 with Items; use Items;
 with Knowledge; use Knowledge;
 with Log;
-with MainMenu; use MainMenu;
 with Maps.UI.Commands;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
@@ -66,7 +64,6 @@ with OrdersMenu;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
-with Statistics.UI; use Statistics.UI;
 with Stories; use Stories;
 with Trades.UI;
 with Themes; use Themes;
@@ -107,28 +104,6 @@ package body Maps.UI is
             "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
       end loop;
    end CreateGameMenu;
-
-   procedure DeathConfirm is
-      Button: Ttk_Button := Get_Widget(".gameframe.header.menubutton");
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
-   begin
-      if MessageBox
-          ("-message {You are dead. Would you like to see your game statistics?} -icon question -type yesno") =
-        "yes" then
-         Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name := New_String(".gameframe.header.closebutton");
-         configure(Button, "-command ShowMainMenu");
-         Tcl.Tk.Ada.Grid.Grid(Button);
-         Delete(GameMenu, "3", "4");
-         Delete(GameMenu, "6", "14");
-         ShowStatistics;
-      else
-         GameSettings.MessagesPosition :=
-           GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
-         EndGame(False);
-         ShowMainMenu;
-      end if;
-   end DeathConfirm;
 
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
@@ -382,7 +357,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       if PlayerShip.Crew(1).Health = 0 then
-         DeathConfirm;
+         ShowQuestion("You are dead. Would you like to see your game statistics?", "showstats");
       end if;
    end UpdateHeader;
 

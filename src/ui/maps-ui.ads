@@ -143,13 +143,6 @@ package Maps.UI is
    procedure SetKeys;
    -- ****
 
-   -- ****f* MUI/MUI.DeathConfirm
-   -- FUNCTION
-   -- Show stats or go to main menu on player character death
-   -- SOURCE
-   procedure DeathConfirm;
-   -- ****
-
 private
 
    -- ****v* MUI/MUI.StartX_(private)
