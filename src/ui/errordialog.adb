@@ -39,28 +39,40 @@ with Utils.UI; use Utils.UI;
 package body ErrorDialog is
 
    procedure Save_Exception(An_Exception: Exception_Occurrence) is
-      ErrorFile: File_Type;
-      ErrorText: Unbounded_String := Null_Unbounded_String;
+      Error_File: File_Type;
+      Error_Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
       end if;
-      if Exists(To_String(SaveDirectory) & "error.log") then
-         Open(ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
+      if Exists(Name => To_String(Source => SaveDirectory) & "error.log") then
+         Open
+           (File => Error_File, Mode => Append_File,
+            Name => To_String(Source => SaveDirectory) & "error.log");
       else
          Create
-           (ErrorFile, Append_File, To_String(SaveDirectory) & "error.log");
+           (File => Error_File, Mode => Append_File,
+            Name => To_String(Source => SaveDirectory) & "error.log");
       end if;
-      Append(ErrorText, Current_Time & LF);
-      Append(ErrorText, GameVersion & LF);
-      Append(ErrorText, "Exception: " & Exception_Name(An_Exception) & LF);
-      Append(ErrorText, "Message: " & Exception_Message(An_Exception) & LF);
+      Append(Source => Error_Text, New_Item => Current_Time & LF);
+      Append(Source => Error_Text, New_Item => GameVersion & LF);
       Append
-        (ErrorText, "-------------------------------------------------" & LF);
-      Append(ErrorText, Symbolic_Traceback(An_Exception) & LF);
-      Append(ErrorText, "-------------------------------------------------");
-      Put_Line(ErrorFile, To_String(ErrorText));
-      Close(ErrorFile);
+        (Source => Error_Text,
+         New_Item => "Exception: " & Exception_Name(X => An_Exception) & LF);
+      Append
+        (Source => Error_Text,
+         New_Item => "Message: " & Exception_Message(X => An_Exception) & LF);
+      Append
+        (Source => Error_Text,
+         New_Item => "-------------------------------------------------" & LF);
+      Append
+        (Source => Error_Text,
+         New_Item => Symbolic_Traceback(E => An_Exception) & LF);
+      Append
+        (Source => Error_Text,
+         New_Item => "-------------------------------------------------");
+      Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
+      Close(File => Error_File);
       EndLogging;
       declare
          use type Interfaces.C.int;
@@ -95,7 +107,7 @@ package body ErrorDialog is
             "errordialog.tcl");
          AddCommand("OpenLink", Open_Link_Command'Access);
          Text := Get_Widget(".technical.text", Interp);
-         Insert(Text, "end", "{" & To_String(ErrorText) & "}");
+         Insert(Text, "end", "{" & To_String(Error_Text) & "}");
          configure(Text, "-state disabled");
          Tcl.Tk.Tk_MainLoop;
       end;
