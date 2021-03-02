@@ -1076,7 +1076,7 @@ package body Utils.UI is
          In_Game := False;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5} -padx 5");
       Bind
         (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
       if not In_Game then
@@ -1090,7 +1090,7 @@ package body Utils.UI is
              (QuestionDialog & ".nobutton",
               "-text No -command {CloseDialog " & QuestionDialog & "}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5} -padx 5");
       Focus(Button);
       if In_Game then
          Tcl.Tk.Ada.Place.Place
