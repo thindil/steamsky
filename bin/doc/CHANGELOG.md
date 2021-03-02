@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to load configuration file from older game versions
 - Crash when trying to enter the game settings on Windows (Github issue #73)
 - Crash on showing messages in main menu
+- Showing the game statistics on resign from the game
 
 ## [5.8] - 2021-02-21
 
