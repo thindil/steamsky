@@ -603,7 +603,9 @@ package body Utils.UI is
          end;
       elsif Result = "resign" then
          Death(1, To_Unbounded_String("resignation"), PlayerShip);
-         ShowQuestion("You are dead. Would you like to see your game statistics?", "showstats");
+         ShowQuestion
+           ("You are dead. Would you like to see your game statistics?",
+            "showstats");
       elsif Result = "showstats" then
          declare
             Button: Ttk_Button := Get_Widget(".gameframe.header.menubutton");
@@ -1114,12 +1116,6 @@ package body Utils.UI is
            Create
              (QuestionDialog & ".nobutton",
               "-text No -command {CloseDialog " & QuestionDialog & "}");
-         if Result = "showstats" then
-            Widgets.configure
-              (Button,
-               "-command {CloseDialog " & QuestionDialog &
-               "; ProcessQuestion mainmenu}");
-         end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5} -padx 5");
       Focus(Button);
@@ -1132,6 +1128,17 @@ package body Utils.UI is
       Bind(Button, "<Tab>", "{focus .questiondialog.yesbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Widget_Raise(QuestionDialog);
+      if Result = "showstats" then
+         Widgets.configure
+           (Button,
+            "-command {CloseDialog " & QuestionDialog &
+            "; ProcessQuestion mainmenu}");
+         Button := Get_Widget(QuestionDialog & ".yesbutton");
+         Widgets.configure
+           (Button,
+            "-command {CloseDialog " & QuestionDialog &
+            "; ProcessQuestion showstats}");
+      end if;
    end ShowQuestion;
 
 end Utils.UI;
