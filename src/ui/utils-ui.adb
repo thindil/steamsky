@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -53,6 +54,7 @@ with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
+with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
 
@@ -601,7 +603,28 @@ package body Utils.UI is
          end;
       elsif Result = "resign" then
          Death(1, To_Unbounded_String("resignation"), PlayerShip);
-         DeathConfirm;
+         ShowQuestion("You are dead. Would you like to see your game statistics?", "showstats");
+      elsif Result = "showstats" then
+         declare
+            Button: Ttk_Button := Get_Widget(".gameframe.header.menubutton");
+         begin
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            Button.Name := New_String(".gameframe.header.closebutton");
+            Widgets.configure(Button, "-command ShowMainMenu");
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            Delete(GameMenu, "3", "4");
+            Delete(GameMenu, "6", "14");
+            ShowStatistics;
+         end;
+      elsif Result = "mainmenu" then
+         declare
+            Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
+         begin
+            GameSettings.MessagesPosition :=
+              GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
+            EndGame(False);
+            ShowMainMenu;
+         end;
       end if;
       return TCL_OK;
    end Process_Question_Command;
@@ -1054,7 +1077,8 @@ package body Utils.UI is
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
    end ShowManipulateItem;
 
-   procedure ShowQuestion(Question, Result: String; In_Game: Boolean := True) is
+   procedure ShowQuestion
+     (Question, Result: String; In_Game: Boolean := True) is
       QuestionDialog: constant Ttk_Frame :=
         Create(".questiondialog", "-style Dialog.TFrame");
       Label: constant Ttk_Label :=
@@ -1090,6 +1114,12 @@ package body Utils.UI is
            Create
              (QuestionDialog & ".nobutton",
               "-text No -command {CloseDialog " & QuestionDialog & "}");
+         if Result = "showstats" then
+            Widgets.configure
+              (Button,
+               "-command {CloseDialog " & QuestionDialog &
+               "; ProcessQuestion mainmenu}");
+         end if;
       end if;
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5} -padx 5");
       Focus(Button);
