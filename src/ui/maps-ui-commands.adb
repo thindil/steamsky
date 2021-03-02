@@ -21,7 +21,6 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -855,12 +854,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      if MessageBox
-          ("-message {Are you sure want to resign from game?} -icon question -type yesno") =
-        "yes" then
-         Death(1, To_Unbounded_String("resignation"), PlayerShip);
-         DeathConfirm;
-      end if;
+      ShowQuestion("Are you sure want to resign from game?", "resign");
       return TCL_OK;
    end Resign_Game_Command;
 

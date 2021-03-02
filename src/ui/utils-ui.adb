@@ -599,6 +599,9 @@ package body Utils.UI is
             EndGame(True);
             ShowMainMenu;
          end;
+      elsif Result = "resign" then
+         Death(1, To_Unbounded_String("resignation"), PlayerShip);
+         DeathConfirm;
       end if;
       return TCL_OK;
    end Process_Question_Command;
