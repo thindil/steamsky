@@ -613,7 +613,7 @@ package body Utils.UI is
             Tcl.Tk.Ada.Grid.Grid(Button);
             Button.Name := New_String(".gameframe.header.closebutton");
             Widgets.configure(Button, "-command ShowMainMenu");
-            Tcl.Tk.Ada.Grid.Grid(Button);
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
             Delete(GameMenu, "3", "4");
             Delete(GameMenu, "6", "14");
             ShowStatistics;
