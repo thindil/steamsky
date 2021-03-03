@@ -24,6 +24,7 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -357,7 +358,9 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       if PlayerShip.Crew(1).Health = 0 then
-         ShowQuestion("You are dead. Would you like to see your game statistics?", "showstats");
+         ShowQuestion
+           ("You are dead. Would you like to see your game statistics?",
+            "showstats");
       end if;
    end UpdateHeader;
 
@@ -795,13 +798,14 @@ package body Maps.UI is
    end UpdateMoveButtons;
 
    procedure CreateGameUI is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
+      GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
+      Paned: constant Ttk_PanedWindow := Get_Widget(GameFrame & ".paned");
       Button: constant Ttk_Button :=
-        Get_Widget(".gameframe.paned.mapframe.buttons.hide");
+        Get_Widget(Paned & ".mapframe.buttons.hide");
       SteamSky_Map_Error: exception;
-      Header: constant Ttk_Frame := Get_Widget(".gameframe.header");
+      Header: constant Ttk_Frame := Get_Widget(GameFrame & ".header");
       MessagesFrame: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.controls.messages");
+        Get_Widget(Paned & ".controls.messages");
       PanedPosition: Natural;
       use Log;
    begin
@@ -856,6 +860,8 @@ package body Maps.UI is
          if Log.DebugMode = Log.Menu then
             ShowDebugUI;
          end if;
+      else
+         Tcl.Tk.Ada.Pack.Pack(GameFrame, "-fill both -expand true");
       end if;
       Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
       if GameSettings.FullScreen then
