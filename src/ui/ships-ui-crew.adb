@@ -25,7 +25,6 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -263,29 +262,12 @@ package body Ships.UI.Crew is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      if MessageBox
-          ("-message {Are you sure want to dismiss " &
-           To_String(PlayerShip.Crew(MemberIndex).Name) &
-           "?} -icon question -type yesno") /=
-        "yes" then
-         return TCL_OK;
-      end if;
-      AddMessage
-        ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
-         OrderMessage);
-      DeleteMember(MemberIndex, PlayerShip);
-      SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
-      for I in PlayerShip.Crew.Iterate loop
-         UpdateMorale
-           (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
-      end loop;
-      UpdateCrewInfo;
-      UpdateHeader;
-      UpdateMessages;
+      ShowQuestion
+        ("Are you sure want to dismiss " &
+         To_String(PlayerShip.Crew(MemberIndex).Name) & "?",
+         CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Dismiss_Command;
 
