@@ -54,6 +54,7 @@ with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
+with Ships.UI.Crew; use Ships.UI.Crew;
 with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
@@ -466,7 +467,7 @@ package body Utils.UI is
                 (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
                  Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
---            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
+            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
@@ -626,6 +627,25 @@ package body Utils.UI is
               GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
             EndGame(False);
             ShowMainMenu;
+         end;
+      else
+         declare
+            BaseIndex: constant Positive :=
+               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+               MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+         begin
+            AddMessage
+               ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+               OrderMessage);
+            DeleteMember(MemberIndex, PlayerShip);
+            SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+            for I in PlayerShip.Crew.Iterate loop
+               UpdateMorale
+                  (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
+            end loop;
+            UpdateCrewInfo;
+            UpdateHeader;
+            UpdateMessages;
          end;
       end if;
       return TCL_OK;
