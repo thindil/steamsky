@@ -120,6 +120,7 @@ package body Bases.LootUI is
       ComboBox := Get_Widget(LootFrame & ".options.type", Interp);
       BaseCargo := SkyBases(BaseIndex).Cargo;
       ClearTable(LootTable);
+      Add_Player_Cargo_Loop :
       for I in PlayerShip.Cargo.Iterate loop
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
@@ -178,7 +179,8 @@ package body Bases.LootUI is
             Positive'Image(Inventory_Container.To_Index(I)),
             5, True);
          <<End_Of_Cargo_Loop>>
-      end loop;
+      end loop Add_Player_Cargo_Loop;
+      Add_Base_Cargo_Loop :
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if IndexesList.Find_Index(Item => I) > 0 then
             goto End_Of_Base_Cargo_Loop;
@@ -219,7 +221,7 @@ package body Bases.LootUI is
             "Show available options for item",
             "ShowLootItemMenu" & Integer'Image(-(I)), 5, True);
          <<End_Of_Base_Cargo_Loop>>
-      end loop;
+      end loop Add_Base_Cargo_Loop;
       UpdateTable(LootTable);
       Tcl_Eval(Get_Context, "update");
       configure
@@ -329,6 +331,7 @@ package body Bases.LootUI is
                null;
          end case;
       end if;
+      Show_Weapon_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
             Append
@@ -339,9 +342,9 @@ package body Bases.LootUI is
               (ItemInfo,
                LF & "Strength:" &
                Integer'Image(Items_List(ProtoIndex).Value(2)));
-            exit;
+            exit Show_Weapon_Info_Loop;
          end if;
-      end loop;
+      end loop Show_Weapon_Info_Loop;
       if Tools_List.Contains(Items_List(ProtoIndex).IType) then
          Append
            (ItemInfo,
