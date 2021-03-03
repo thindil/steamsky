@@ -79,36 +79,42 @@ package body ErrorDialog is
 
          Interp: Tcl.Tcl_Interp := Get_Context;
          Text: Tk_Text;
-         MainWindow: Tk_Toplevel := Get_Main_Window(Interp);
+         MainWindow: Tk_Toplevel := Get_Main_Window(Interp => Interp);
       begin
          begin
-            Destroy(MainWindow);
+            Destroy(Widgt => MainWindow);
          exception
             when Storage_Error =>
                null;
          end;
          Interp := Tcl.Tcl_CreateInterp;
-         if Tcl.Tcl_Init(Interp) = Tcl.TCL_ERROR then
+         if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
             Ada.Text_IO.Put_Line
-              ("Steam Sky: Tcl.Tcl_Init failed: " &
-               Tcl.Ada.Tcl_GetStringResult(Interp));
+              (Item =>
+                 "Steam Sky: Tcl.Tcl_Init failed: " &
+                 Tcl.Ada.Tcl_GetStringResult(interp => Interp));
             return;
          end if;
-         if Tcl.Tk.Tk_Init(Interp) = Tcl.TCL_ERROR then
+         if Tcl.Tk.Tk_Init(interp => Interp) = Tcl.TCL_ERROR then
             Ada.Text_IO.Put_Line
-              ("Steam Sky: Tcl.Tk.Tk_Init failed: " &
-               Tcl.Ada.Tcl_GetStringResult(Interp));
+              (Item =>
+                 "Steam Sky: Tcl.Tk.Tk_Init failed: " &
+                 Tcl.Ada.Tcl_GetStringResult(interp => Interp));
             return;
          end if;
-         Set_Context(Interp);
+         Set_Context(Interp => Interp);
          Tcl_EvalFile
-           (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator &
-            "errordialog.tcl");
-         AddCommand("OpenLink", Open_Link_Command'Access);
-         Text := Get_Widget(".technical.text", Interp);
-         Insert(Text, "end", "{" & To_String(Error_Text) & "}");
-         configure(Text, "-state disabled");
+           (interp => Get_Context,
+            fileName =>
+              To_String(Source => DataDirectory) & "ui" & Dir_Separator &
+              "errordialog.tcl");
+         AddCommand
+           (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
+         Text := Get_Widget(pathName => ".technical.text", Interp => Interp);
+         Insert
+           (TextWidget => Text, Index => "end",
+            Text => "{" & To_String(Error_Text) & "}");
+         configure(Widgt => Text, options => "-state disabled");
          Tcl.Tk.Tk_MainLoop;
       end;
    end Save_Exception;
