@@ -23,7 +23,6 @@ with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -202,10 +201,10 @@ package body Messages.UI is
    -- FUNCTION
    -- Delete all messages
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -220,21 +219,10 @@ package body Messages.UI is
    function Delete_Messages_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      TypeBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types",
-           Interp);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      if MessageBox
-          ("-message {Are you sure you want to clear all messages?} -icon question -type yesno") /=
-        "yes" then
-         return TCL_OK;
-      end if;
-      ClearMessages;
-      Current(TypeBox, "0");
-      return Show_Last_Messages_Command
-          (ClientData, Interp, 2, Argv & Current(TypeBox));
+      ShowQuestion("Are you sure you want to clear all messages?", "messages");
+      return TCL_OK;
    end Delete_Messages_Command;
 
    -- ****o* MUI2/MUI2.Search_Messages_Command

@@ -32,6 +32,8 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -628,20 +630,34 @@ package body Utils.UI is
             EndGame(False);
             ShowMainMenu;
          end;
+      elsif Result = "messages" then
+         declare
+            TypeBox: constant Ttk_ComboBox :=
+              Get_Widget
+                (".gameframe.paned.messagesframe.canvas.messages.options.types",
+                 Get_Context);
+         begin
+            ClearMessages;
+            Current(TypeBox, "0");
+            Tcl_Eval(Get_Context, "ShowLastMessages");
+         end;
       else
          declare
             BaseIndex: constant Positive :=
-               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-               MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+            MemberIndex: constant Positive :=
+              Positive'Value(CArgv.Arg(Argv, 1));
          begin
             AddMessage
-               ("You dismissed " & To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+              ("You dismissed " &
+               To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
                OrderMessage);
             DeleteMember(MemberIndex, PlayerShip);
-            SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population + 1;
+            SkyBases(BaseIndex).Population :=
+              SkyBases(BaseIndex).Population + 1;
             for I in PlayerShip.Crew.Iterate loop
                UpdateMorale
-                  (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
+                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
             end loop;
             UpdateCrewInfo;
             UpdateHeader;
