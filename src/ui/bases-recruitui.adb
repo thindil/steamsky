@@ -115,6 +115,7 @@ package body Bases.RecruitUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ClearTable(RecruitTable);
+      Load_Recruits_Loop :
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
          AddButton
            (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
@@ -149,6 +150,7 @@ package body Bases.RecruitUI is
             4);
          HighestLevel := 1;
          HighestIndex := 1;
+         Get_Highest_Attribute_Level_Loop :
          for J in SkyBases(BaseIndex).Recruits(I).Attributes.Iterate loop
             if SkyBases(BaseIndex).Recruits(I).Attributes(J)(1) >
               HighestLevel then
@@ -156,7 +158,7 @@ package body Bases.RecruitUI is
                  SkyBases(BaseIndex).Recruits(I).Attributes(J)(1);
                HighestIndex := Attributes_Container.To_Index(J);
             end if;
-         end loop;
+         end loop Get_Highest_Attribute_Level_Loop;
          AddButton
            (RecruitTable, To_String(Attributes_List(HighestIndex).Name),
             "Show available options for recruit",
@@ -164,18 +166,19 @@ package body Bases.RecruitUI is
             5);
          HighestLevel := 1;
          HighestIndex := 1;
+         Get_Highest_Skill_Level_Loop :
          for J in SkyBases(BaseIndex).Recruits(I).Skills.Iterate loop
             if SkyBases(BaseIndex).Recruits(I).Skills(J)(1) > HighestLevel then
                HighestLevel := SkyBases(BaseIndex).Recruits(I).Skills(J)(1);
                HighestIndex := Skills_Container.To_Index(J);
             end if;
-         end loop;
+         end loop Get_Highest_Skill_Level_Loop;
          AddButton
            (RecruitTable, To_String(Skills_List(HighestIndex).Name),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
             6, True);
-      end loop;
+      end loop Load_Recruits_Loop;
       UpdateTable(RecruitTable);
       configure
         (RecruitTable.Canvas,
@@ -364,6 +367,7 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(Frame);
       -- Statistics of the selected recruit
       Frame := Create(RecruitCanvas & ".stats");
+      Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes.Iterate loop
          ProgressFrame :=
            Create
@@ -401,13 +405,14 @@ package body Bases.RecruitUI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
          NewHeight :=
            NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-      end loop;
+      end loop Show_Recruit_Stats_Loop;
       if NewHeight > Height then
          Height := NewHeight;
       end if;
       -- Skills of the selected recruit
       Frame := Create(RecruitCanvas & ".skills");
       NewHeight := 1;
+      Show_Recruit_Skills_Loop :
       for I in Recruit.Skills.Iterate loop
          ProgressFrame :=
            Create
@@ -455,7 +460,7 @@ package body Bases.RecruitUI is
          Tcl.Tk.Ada.Grid.Grid(ProgressBar);
          NewHeight :=
            NewHeight + Positive'Value(Winfo_Get(ProgressBar, "reqheight"));
-      end loop;
+      end loop Show_Recruit_Skills_Loop;
       if NewHeight > Height then
          Height := NewHeight;
       end if;
@@ -463,9 +468,10 @@ package body Bases.RecruitUI is
       Frame := Create(RecruitCanvas & ".inventory");
       NewHeight := 1;
       RecruitInfo := Null_Unbounded_String;
+      Show_Recruit_Equipment_Loop :
       for Item of Recruit.Inventory loop
          Append(RecruitInfo, Items_List(Item).Name & LF);
-      end loop;
+      end loop Show_Recruit_Equipment_Loop;
       RecruitLabel :=
         Create
           (Frame & ".label",
