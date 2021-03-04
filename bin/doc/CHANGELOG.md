@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file.
   the game
 - Showing the game after reloading it (quit to main menu and load or start the
   game again)
+- Crash on damaged engines during fly (Github issue #74)
 
 ## [5.8] - 2021-02-21
 
