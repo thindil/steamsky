@@ -74,19 +74,21 @@ package body ErrorDialog is
       Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
       Close(File => Error_File);
       EndLogging;
+      Show_Error_Dialog_Block :
       declare
          use type Interfaces.C.int;
 
          Interp: Tcl.Tcl_Interp := Get_Context;
-         Text: Tk_Text;
-         MainWindow: Tk_Toplevel := Get_Main_Window(Interp => Interp);
       begin
+         Destroy_Main_Window_Block :
+         declare
+            Main_Window: Tk_Toplevel := Get_Main_Window(Interp => Interp);
          begin
-            Destroy(Widgt => MainWindow);
+            Destroy(Widgt => Main_Window);
          exception
             when Storage_Error =>
                null;
-         end;
+         end Destroy_Main_Window_Block;
          Interp := Tcl.Tcl_CreateInterp;
          if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
             Ada.Text_IO.Put_Line
@@ -110,13 +112,18 @@ package body ErrorDialog is
               "errordialog.tcl");
          AddCommand
            (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
-         Text := Get_Widget(pathName => ".technical.text", Interp => Interp);
-         Insert
-           (TextWidget => Text, Index => "end",
-            Text => "{" & To_String(Error_Text) & "}");
-         configure(Widgt => Text, options => "-state disabled");
+         Show_Error_Message_Block :
+         declare
+            Text_View: constant Tk_Text :=
+              Get_Widget(pathName => ".technical.text", Interp => Interp);
+         begin
+            Insert
+              (TextWidget => Text_View, Index => "end",
+               Text => "{" & To_String(Source => Error_Text) & "}");
+            configure(Widgt => Text_View, options => "-state disabled");
+         end Show_Error_Message_Block;
          Tcl.Tk.Tk_MainLoop;
-      end;
+      end Show_Error_Dialog_Block;
    end Save_Exception;
 
 end ErrorDialog;
