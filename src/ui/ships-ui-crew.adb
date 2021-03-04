@@ -62,7 +62,7 @@ package body Ships.UI.Crew is
 
    -- ****iv* SUCrew/SUCrew.CrewTable
    -- FUNCTION
-   -- Table with info about the available items to trade
+   -- Table with info about the player's ship crew
    -- SOURCE
    CrewTable: Table_Widget (7);
    -- ****
