@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Hiding enemy ship's info after combat
 - Crash on entering the ships combat again
