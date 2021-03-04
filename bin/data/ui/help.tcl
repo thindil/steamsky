@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ grid rowconfigure .help .help.paned -weight 1
 .help.paned add [ttk::frame .help.paned.topics]
 pack [ttk::scrollbar .help.paned.topics.scroll -orient vertical -command [list .help.paned.topics.view yview]] -side right -fill y
 pack [ttk::treeview .help.paned.topics.view -show tree -yscrollcommand [list .help.paned.topics.scroll set] -style Help.Treeview] -side top -fill both
+tooltip::tooltip .help.paned.topics.view {Click on the help topic to see it content}
 .help.paned add [ttk::frame .help.paned.content]
 pack [ttk::scrollbar .help.paned.content.scroll -orient vertical -command [list .help.paned.content.view yview]] -side right -fill y
 set helpview [text .help.paned.content.view -wrap word -yscrollcommand [list .help.paned.content.scroll set] -font HelpFont -width 70]
