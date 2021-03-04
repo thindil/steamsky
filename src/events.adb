@@ -34,7 +34,8 @@ package body Events is
    function CheckForEvent return Boolean is
       TimePassed: Integer;
       CrewIndex: Crew_Container.Extended_Index := 0;
-      Roll, Roll2: Positive range 1 .. 100;
+      Roll: Positive range 1 .. 100;
+      Roll2: Integer range -20 .. 120;
       Engines: Positive_Container.Vector;
       BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
