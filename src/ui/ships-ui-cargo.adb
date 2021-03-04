@@ -13,8 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -34,18 +32,24 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships.Cargo; use Ships.Cargo;
 with Stories; use Stories;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Cargo is
+
+   -- ****iv* SUCargo/SUCargo.CargoTable
+   -- FUNCTION
+   -- Table with info about the player ship cargo
+   -- SOURCE
+   CargoTable: Table_Widget (5);
+   -- ****
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Command
    -- FUNCTION
@@ -77,19 +81,15 @@ package body Ships.UI.Cargo is
       Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
-      Row: Positive := 3;
-      ItemType, ProtoIndex, ProgressBarStyle: Unbounded_String;
+      ItemType, ProtoIndex: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
-      CargoButton: Ttk_Button;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
-      DurabilityBar: Ttk_ProgressBar;
-      ItemLabel: Ttk_Label;
       ItemsType: constant String := Get(TypeBox);
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 3 .. (Rows - 1) loop
+      for I in 2 .. (Rows - 1) loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves
@@ -100,6 +100,13 @@ package body Ships.UI.Cargo is
             Destroy(Item);
          end loop;
       end loop;
+      CargoTable :=
+        CreateTable
+          (Widget_Image(CargoInfoFrame),
+           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
+            To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
+            To_Unbounded_String("Weight")),
+           False);
       for I in PlayerShip.Cargo.Iterate loop
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          ItemType :=
@@ -112,57 +119,37 @@ package body Ships.UI.Cargo is
          if ItemsType /= "All" and then To_String(ItemType) /= ItemsType then
             goto End_Of_Loop;
          end if;
-         CargoButton :=
-           Create
-             (CargoInfoFrame & ".name" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & GetItemName(PlayerShip.Cargo(I)) &
-              "} -command {ShowCargoMenu" &
-              Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Add(CargoButton, "Show available item's options");
-         Tcl.Tk.Ada.Grid.Grid
-           (CargoButton, "-row" & Natural'Image(Row) & " -sticky w");
-         ProgressBarStyle :=
-           (if PlayerShip.Cargo(I).Durability > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Cargo(I).Durability > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         DurabilityBar :=
-           Create
-             (CargoInfoFrame & ".durability" & Trim(Natural'Image(Row), Left),
-              "-value {" & Natural'Image(PlayerShip.Cargo(I).Durability) &
-              "}" & To_String(ProgressBarStyle));
-         Add(DurabilityBar, "The current durability of the selected item.");
-         Tcl.Tk.Ada.Grid.Grid
-           (DurabilityBar, "-row" & Natural'Image(Row) & " -column 1");
-         ItemLabel :=
-           Create
-             (CargoInfoFrame & ".type" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(ItemType) & "}");
-         Add(ItemLabel, "The type of the selected item.");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemLabel, "-row" & Natural'Image(Row) & " -column 2");
-         ItemLabel :=
-           Create
-             (CargoInfoFrame & ".amount" & Trim(Natural'Image(Row), Left),
-              "-text {" & Positive'Image(PlayerShip.Cargo(I).Amount) & "}");
-         Add(ItemLabel, "The amount of the selected item.");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemLabel, "-row" & Natural'Image(Row) & " -column 3");
-         ItemLabel :=
-           Create
-             (CargoInfoFrame & ".weight" & Trim(Natural'Image(Row), Left),
-              "-text {" &
-              Positive'Image
-                (PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight) &
-              " kg}");
-         Add(ItemLabel, "The total weight of the selected item.");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemLabel, "-row" & Natural'Image(Row) & " -column 4");
+         AddButton
+           (CargoTable, GetItemName(PlayerShip.Cargo(I)),
+            "Show available item's options",
+            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            1);
+         AddProgressBar
+           (CargoTable, PlayerShip.Cargo(I).Durability,
+            Default_Item_Durability,
+            "The current durability of the selected crew member",
+            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            2);
+         AddButton
+           (CargoTable, To_String(ItemType), "The type of the selected item",
+            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            3);
+         AddButton
+           (CargoTable, Positive'Image(PlayerShip.Cargo(I).Amount),
+            "The amount of the selected item",
+            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            4);
+         AddButton
+           (CargoTable,
+            Positive'Image
+              (PlayerShip.Cargo(I).Amount * Items_List(ProtoIndex).Weight) &
+            " kg",
+            "The total weight of the selected item",
+            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            5, True);
          <<End_Of_Loop>>
-         Row := Row + 1;
       end loop;
+      UpdateTable(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
       Tcl_Eval(Get_Context, "update");
       configure

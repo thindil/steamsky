@@ -103,11 +103,6 @@ grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}]
 grid [ttk::combobox $shipcanvas.frame.selecttype.combo -state readonly] -row 0 -column 1
 bind $shipcanvas.frame.selecttype.combo <<ComboboxSelected>> ShowCargo
 tooltip::tooltip $shipcanvas.frame.selecttype {Show only items with the selected type}
-grid [ttk::label $shipcanvas.frame.name -text {Name}]
-grid [ttk::label $shipcanvas.frame.durability -text {Durability}] -column 1 -row 2
-grid [ttk::label $shipcanvas.frame.type -text {Type}] -column 2 -row 2
-grid [ttk::label $shipcanvas.frame.amount -text {Amount}] -column 3 -row 2
-grid [ttk::label $shipcanvas.frame.weight -text {Weight}] -column 4 -row 2
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 ::autoscroll::autoscroll $shipinfoframe.cargo.scrolly
 ::autoscroll::autoscroll $shipinfoframe.cargo.scrollx
