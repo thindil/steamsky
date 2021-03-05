@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Finished redesign of the ship info screen
 
 ### Fixed
 - Hiding enemy ship's info after combat
