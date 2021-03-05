@@ -211,22 +211,42 @@ package body Combat is
          else GetRandom
              (ProtoShips_List(EnemyIndex).Loot(1),
               ProtoShips_List(EnemyIndex).Loot(2)));
-      PilotOrder := 2;
-      EngineerOrder := 3;
+      if PilotOrder = 0 then
+         PilotOrder := 2;
+         EngineerOrder := 3;
+      end if;
       EndCombat := False;
       EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
-      Guns.Clear;
-      Set_Player_Guns_Loop :
-      for I in PlayerShip.Modules.Iterate loop
-         if (PlayerShip.Modules(I).MType in GUN | HARPOON_GUN) and
-           PlayerShip.Modules(I).Durability > 0 then
-            Guns.Append
-              (New_Item =>
-                 (Modules_Container.To_Index(I), 1,
-                  Modules_List(PlayerShip.Modules(I).ProtoIndex).Speed));
+      declare
+         Old_Guns_List: constant Guns_Container.Vector := Guns;
+         Same_Lists: Boolean := True;
+      begin
+         Guns.Clear;
+         Set_Player_Guns_Loop :
+         for I in PlayerShip.Modules.Iterate loop
+            if (PlayerShip.Modules(I).MType in GUN | HARPOON_GUN) and
+              PlayerShip.Modules(I).Durability > 0 then
+               Guns.Append
+                 (New_Item =>
+                    (Modules_Container.To_Index(I), 1,
+                     Modules_List(PlayerShip.Modules(I).ProtoIndex).Speed));
+            end if;
+         end loop Set_Player_Guns_Loop;
+         if Old_Guns_List.Length > 0 and
+           Old_Guns_List.Length = Guns.Length then
+            Compare_Lists_Loop :
+            for I in Guns.First_Index .. Guns.Last_Index loop
+               if Guns(I)(1) /= Old_Guns_List(I)(1) then
+                  Same_Lists := False;
+                  exit Compare_Lists_Loop;
+               end if;
+            end loop Compare_Lists_Loop;
+            if Same_Lists then
+               Guns := Old_Guns_List;
+            end if;
          end if;
-      end loop Set_Player_Guns_Loop;
+      end;
       if NewCombat then
          declare
             PlayerPerception: constant Natural :=

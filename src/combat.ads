@@ -38,7 +38,7 @@ package Combat is
    -- FUNCTION
    -- Orders for crew members
    -- SOURCE
-   PilotOrder, EngineerOrder: Positive;
+   PilotOrder, EngineerOrder: Natural := 0;
    -- ****
 
    -- ****t* Combat/Combat.GunsInfoArray
