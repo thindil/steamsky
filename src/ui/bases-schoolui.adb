@@ -84,12 +84,13 @@ package body Bases.SchoolUI is
       SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
+      Load_Crew_Loop :
       for I in PlayerShip.Crew.Iterate loop
          Insert
            (CrewView,
             "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
             " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
-      end loop;
+      end loop Load_Crew_Loop;
       Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
@@ -155,6 +156,7 @@ package body Bases.SchoolUI is
    begin
       MemberIndex := Positive'Value(Selection(CrewView));
       Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
+      Load_Skills_List_Loop :
       for I in Skills_List.Iterate loop
          Cost := TrainCost(MemberIndex, SkillsData_Container.To_Index(I));
          if Cost > 0 then
@@ -168,7 +170,7 @@ package body Bases.SchoolUI is
                " -values [list {" & To_String(Skills_List(I).Name) & "}" &
                Natural'Image(Cost) & "]");
          end if;
-      end loop;
+      end loop Load_Skills_List_Loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       if MoneyIndex2 > 0 then
          configure
