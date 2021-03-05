@@ -19,6 +19,7 @@ with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Interfaces.C;
 with GNAT.Directory_Operations;
+with GNAT.OS_Lib;
 with GNAT.Time_Stamp;
 with GNAT.Traceback.Symbolic;
 with Tcl;
@@ -42,6 +43,7 @@ package body ErrorDialog is
       use Ada.Directories;
       use Ada.Strings.Unbounded;
       use Ada.Text_IO;
+      use GNAT.OS_Lib;
       use GNAT.Time_Stamp;
       use GNAT.Traceback.Symbolic;
       use Game;
@@ -75,9 +77,15 @@ package body ErrorDialog is
       Append
         (Source => Error_Text,
          New_Item => "-------------------------------------------------" & LF);
-      Append
-        (Source => Error_Text,
-         New_Item => Symbolic_Traceback(E => An_Exception) & LF);
+      if Directory_Separator = '/' then
+         Append
+           (Source => Error_Text,
+            New_Item => Symbolic_Traceback(E => An_Exception) & LF);
+      else
+         Append
+           (Source => Error_Text,
+            New_Item => Exception_Information(X => An_Exception) & LF);
+      end if;
       Append
         (Source => Error_Text,
          New_Item => "-------------------------------------------------");
