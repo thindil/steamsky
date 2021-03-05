@@ -13,32 +13,42 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Directories; use Ada.Directories;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Characters.Latin_1;
+with Ada.Directories;
+with Ada.Strings.Unbounded;
+with Ada.Text_IO;
 with Interfaces.C;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.Time_Stamp; use GNAT.Time_Stamp;
-with GNAT.Traceback.Symbolic; use GNAT.Traceback.Symbolic;
-with Tcl; use Tcl;
-with Tcl.Ada; use Tcl.Ada;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
+with GNAT.Directory_Operations;
+with GNAT.Time_Stamp;
+with GNAT.Traceback.Symbolic;
+with Tcl;
+with Tcl.Ada;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Game; use Game;
-with Game.SaveLoad; use Game.SaveLoad;
-with Log; use Log;
-with MainMenu.Commands; use MainMenu.Commands;
-with Ships; use Ships;
-with Utils.UI; use Utils.UI;
+with Tcl.Tk.Ada.Widgets.Text;
+with Game;
+with Game.SaveLoad;
+with Log;
+with MainMenu.Commands;
+with Ships;
+with Utils.UI;
 
 package body ErrorDialog is
 
    procedure Save_Exception(An_Exception: Exception_Occurrence) is
+      use Ada.Characters.Latin_1;
+      use Ada.Directories;
+      use Ada.Strings.Unbounded;
+      use Ada.Text_IO;
+      use GNAT.Time_Stamp;
+      use GNAT.Traceback.Symbolic;
+      use Game;
+      use Game.SaveLoad;
+      use Log;
+      use Ships;
+
       Error_File: File_Type;
       Error_Text: Unbounded_String := Null_Unbounded_String;
    begin
@@ -77,6 +87,15 @@ package body ErrorDialog is
       Show_Error_Dialog_Block :
       declare
          use type Interfaces.C.int;
+         use GNAT.Directory_Operations;
+         use Tcl;
+         use Tcl.Ada;
+         use Tcl.Tk.Ada;
+         use Tcl.Tk.Ada.Widgets;
+         use Tcl.Tk.Ada.Widgets.Toplevel;
+         use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+         use MainMenu.Commands;
+         use Utils.UI;
 
          Interp: Tcl.Tcl_Interp := Get_Context;
       begin
@@ -114,6 +133,8 @@ package body ErrorDialog is
            (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
          Show_Error_Message_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.Text;
+
             Text_View: constant Tk_Text :=
               Get_Widget(pathName => ".technical.text", Interp => Interp);
          begin
