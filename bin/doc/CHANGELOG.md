@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Missing option to remember combat orders (Github issue #74)
+
 ### Changed
 - Updated interface
 - Finished redesign of the ship info screen
