@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+# Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,16 +28,20 @@ grid [ttk::label $combatcanvas.frame.name -text {Name}] -row 0 -column 1
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
 grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 -sticky w -padx {5 0} -pady {0 5}
 grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] -row 1 -column 1 -pady {0 5}
+tooltip::tooltip $combatcanvas.frame.pilotcrew "Select the crew member which will be the pilot during the combat.\nThe sign + after name means that this crew member has\npiloting skill, the sign ++ after name means that his/her\npiloting skill is the best in the crew"
 bind $combatcanvas.frame.pilotcrew <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotcrew <<ComboboxSelected>> {SetCombatPosition pilot}
 grid [ttk::combobox $combatcanvas.frame.pilotorder -state readonly -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 1 -column 2 -padx {0 5} -pady {0 5}
+tooltip::tooltip $combatcanvas.frame.pilotorder "Select the order for the pilot"
 bind $combatcanvas.frame.pilotorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotorder <<ComboboxSelected>> {SetCombatOrder pilot}
 grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 -sticky w -padx {5 0} -pady {5 0}
 grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] -row 2 -column 1 -pady {5 0}
+tooltip::tooltip $combatcanvas.frame.engineercrew "Select the crew member which will be the engineer during the combat.\nThe sign + after name means that this crew member has\nengineering skill, the sign ++ after name means that his/her\nengineering skill is the best in the crew"
 bind $combatcanvas.frame.engineercrew <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.engineercrew <<ComboboxSelected>> {SetCombatPosition engineer}
 grid [ttk::combobox $combatcanvas.frame.engineerorder -state readonly -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] -row 2 -column 2 -padx {0 5} -pady {5 0}
+tooltip::tooltip $combatcanvas.frame.engineerorder "Set the ship speed. The faster ship move the harder is\nto hit it, but also it is harder to hit the enemy"
 bind $combatcanvas.frame.engineerorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
