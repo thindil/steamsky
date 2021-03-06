@@ -510,7 +510,7 @@ package body Combat.UI is
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(Module.Name) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Natural'Image(Row) & " -sticky w -padx {5 0}");
+              (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
             DamagePercent :=
               (Float(Module.Durability) / Float(Module.MaxDurability));
             ProgressBarStyle :=
@@ -697,7 +697,8 @@ package body Combat.UI is
                 (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
                  "-text {" & To_String(ModuleName) & "}" & To_String(Font));
             Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Natural'Image(Row) & " -column 0 -sticky w");
+              (Label,
+               "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
             DamagePercent :=
               ((Float(Enemy.Ship.Modules(I).Durability) /
                 Float(Enemy.Ship.Modules(I).MaxDurability)));
