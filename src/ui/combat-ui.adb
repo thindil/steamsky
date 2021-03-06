@@ -374,6 +374,14 @@ package body Combat.UI is
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatPosition gunner " & To_String(GunIndex) & "}");
+         Add
+           (ComboBox,
+            "Select the crew member which will be the operate the gun during" &
+            LF &
+            "the combat. The sign + after name means that this crew member" &
+            LF &
+            "has gunnery skill, the sign ++ after name means that his/her" &
+            LF & "gunnery skill is the best in the crew");
          GunnerOrders := Null_Unbounded_String;
          for J in GunnersOrders'Range loop
             Append
@@ -396,6 +404,11 @@ package body Combat.UI is
            (ComboBox,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -column 2 -padx {0 5}");
+         Add
+           (ComboBox,
+            "Select the order for the gunner. Shooting in the selected" & LF &
+            "part of enemy ship is less precise but always hit the" & LF &
+            "selected part.");
       end loop;
       -- Show boarding/defending info
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
@@ -419,7 +432,8 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
             Add
               (Button,
-               "Set your boarding party. If you join it, you will be able\nto give orders them, but not your gunners or engineer.");
+               "Set your boarding party. If you join it, you will be able" &
+               LF & "to give orders them, but not your gunners or engineer.");
             Button :=
               Create
                 (Frame & ".defending",
