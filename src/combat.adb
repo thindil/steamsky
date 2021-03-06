@@ -626,6 +626,7 @@ package body Combat is
                         while EnemyShip.Modules(HitLocation).Durability =
                           0 loop
                            HitLocation := HitLocation - 1;
+                           exit Attack_Loop when HitLocation = 0;
                         end loop Get_Hit_Location_Loop;
                      end if;
                      ShootMessage :=
