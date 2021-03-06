@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Showing the game after reloading it (quit to main menu and load or start the
   game again)
 - Crash on damaged engines during fly (Github issue #74)
+- Crash after victory in combat (Github issue #75)
 
 ## [5.8] - 2021-02-21
 
