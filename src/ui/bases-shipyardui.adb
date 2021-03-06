@@ -461,6 +461,7 @@ package body Bases.ShipyardUI is
                "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
             Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
             MAmount := 0;
+            Ammunition_Info_Loop:
             for Item of Items_List loop
                if Item.IType = Items_Types(Value) then
                   if MAmount > 0 then
@@ -469,7 +470,7 @@ package body Bases.ShipyardUI is
                   Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
                   MAmount := MAmount + 1;
                end if;
-            end loop;
+            end loop Ammunition_Info_Loop;
             if MType = GUN then
                Insert(ModuleText, "end", "{" & LF & "}");
                if Speed > 0 then
@@ -493,6 +494,7 @@ package body Bases.ShipyardUI is
       if MType not in HULL | ARMOR then
          Insert(ModuleText, "end", "{" & LF & "Size:}");
          if Installing then
+            Check_Module_Size_Loop:
             for Module of PlayerShip.Modules loop
                if Module.MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
@@ -500,9 +502,9 @@ package body Bases.ShipyardUI is
                     (ModuleText, "end",
                      "{" & Natural'Image(Size) & " (too big)} [list red]");
                   Added := True;
-                  exit;
+                  exit Check_Module_Size_Loop;
                end if;
-            end loop;
+            end loop Check_Module_Size_Loop;
          end if;
          if not Added then
             Insert(ModuleText, "end", "{" & Natural'Image(Size) & "}");
@@ -516,6 +518,7 @@ package body Bases.ShipyardUI is
       if Installing then
          Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
          MAmount := 0;
+         Repair_Materials_Loop:
          for Item of Items_List loop
             if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
                if MAmount > 0 then
@@ -524,7 +527,7 @@ package body Bases.ShipyardUI is
                Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
                MAmount := MAmount + 1;
             end if;
-         end loop;
+         end loop Repair_Materials_Loop;
          Insert
            (ModuleText, "end",
             "{" & LF & "Repair/Upgrade skill: " &
