@@ -16,6 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv; use CArgv;
 with Tcl.Ada;
+with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Items; use Items;
 with Ships; use Ships;
 
@@ -189,8 +190,24 @@ package Utils.UI is
       -- HISTORY
       -- 5.9 - Added
       -- SOURCE
-   procedure ShowQuestion(Question,Result: String; In_Game: Boolean := True) with
+   procedure ShowQuestion
+     (Question, Result: String; In_Game: Boolean := True) with
       Pre => Question'Length > 0;
       -- ****
+
+      -- ****f* UUI/UUI.Delete_Widgets
+      -- FUNCTION
+      -- Remove widgets from the selected frame
+      -- PARAMETERS
+      -- Start_Index - The first row from which widgets will be removed
+      -- End_Index   - The last row in which widgets will be removed
+      -- Frame       - The fram from which widgets will be removed
+      -- HISTORY
+      -- 5.9 - Added
+      -- SOURCE
+   procedure Delete_Widgets
+     (Start_Index: Natural; End_Index: Positive; Frame: Tk_Widget'Class) with
+     Pre => Start_Index < End_Index;
+   -- ****
 
 end Utils.UI;

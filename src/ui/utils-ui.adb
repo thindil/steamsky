@@ -18,6 +18,7 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
+with GNAT.String_Split; use GNAT.String_Split;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -25,7 +26,6 @@ with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -1176,5 +1176,24 @@ package body Utils.UI is
             "; ProcessQuestion showstats}");
       end if;
    end ShowQuestion;
+
+   procedure Delete_Widgets
+     (Start_Index: Natural; End_Index: Positive; Frame: Tk_Widget'Class) is
+      Tokens: Slice_Set;
+      Item: Ttk_Frame;
+   begin
+      Delete_Widgets_Loop :
+      for I in Start_Index .. End_Index loop
+         Create
+           (Tokens,
+            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
+            " ");
+         Delete_Row_Loop :
+         for J in 1 .. Slice_Count(Tokens) loop
+            Item := Get_Widget(Slice(Tokens, J));
+            Destroy(Item);
+         end loop Delete_Row_Loop;
+      end loop Delete_Widgets_Loop;
+   end Delete_Widgets;
 
 end Utils.UI;
