@@ -151,6 +151,7 @@ package body Combat.UI is
            Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime));
       end if;
       if GameSettings.MessagesOrder = OLDER_FIRST then
+         Show_Older_Messages_First_Loop :
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             if (GetLastMessageIndex + I + 1) >= MessagesStarts then
@@ -159,17 +160,20 @@ package body Combat.UI is
                   Insert(MessagesView, "end", "{" & LF & "}");
                end if;
             end if;
-         end loop;
+         end loop Show_Older_Messages_First_Loop;
          See(MessagesView, "end");
       else
+         Show_New_Messages_First_Loop :
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
-            exit when (GetLastMessageIndex + I + 1) < MessagesStarts;
+            exit Show_New_Messages_First_Loop when
+              (GetLastMessageIndex + I + 1) <
+              MessagesStarts;
             ShowMessage;
             if I > LoopStart then
                Insert(MessagesView, "end", "{" & LF & "}");
             end if;
-         end loop;
+         end loop Show_New_Messages_First_Loop;
       end if;
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
    end UpdateMessages;
@@ -205,6 +209,7 @@ package body Combat.UI is
          SkillString: Unbounded_String;
          CrewList: Unbounded_String := To_Unbounded_String("Nobody");
       begin
+         Get_Highest_Skills_Loop :
          for I in
            PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
             case Position is
@@ -230,7 +235,8 @@ package body Combat.UI is
                        GetSkillLevel(PlayerShip.Crew(I), GunnerySkill);
                   end if;
             end case;
-         end loop;
+         end loop Get_Highest_Skills_Loop;
+         Mark_Skills_Loop :
          for I in
            PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
             if PlayerShip.Crew(I).Skills.Length > 0 then
@@ -259,7 +265,7 @@ package body Combat.UI is
                  (CrewList,
                   " {" & PlayerShip.Crew(I).Name & SkillString & "}");
             end if;
-         end loop;
+         end loop Mark_Skills_Loop;
          return To_String(CrewList);
       end GetCrewList;
    begin
@@ -289,16 +295,19 @@ package body Combat.UI is
       end if;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
+      Clear_Guns_Info_Loop :
       for I in 3 .. (Rows - 1) loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
+         Delete_Widgets_Loop :
          for J in 1 .. Slice_Count(Tokens) loop
             Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
-         end loop;
-      end loop;
+         end loop Delete_Widgets_Loop;
+      end loop Clear_Guns_Info_Loop;
+      Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          HaveAmmo := False;
          declare
@@ -321,6 +330,7 @@ package body Combat.UI is
          end;
          if not HaveAmmo then
             AmmoAmount := 0;
+            Find_Ammo_Loop :
             for J in Items_List.Iterate loop
                if Items_List(J).IType =
                  Items_Types
@@ -333,7 +343,7 @@ package body Combat.UI is
                        AmmoAmount + PlayerShip.Cargo(AmmoIndex).Amount;
                   end if;
                end if;
-            end loop;
+            end loop Find_Ammo_Loop;
          end if;
          GunIndex :=
            To_Unbounded_String
@@ -383,12 +393,13 @@ package body Combat.UI is
             "has gunnery skill, the sign ++ after name means that his/her" &
             LF & "gunnery skill is the best in the crew");
          GunnerOrders := Null_Unbounded_String;
+         Show_Gun_Orders_Loop :
          for J in GunnersOrders'Range loop
             Append
               (GunnerOrders,
                " " & GunnersOrders(J) &
                GetGunSpeed(Guns_Container.To_Index(I), J) & "}");
-         end loop;
+         end loop Show_Gun_Orders_Loop;
          ComboBox :=
            Create
              (Frame & ".gunorder" & To_String(GunIndex),
@@ -409,7 +420,7 @@ package body Combat.UI is
             "Select the order for the gunner. Shooting in the selected" & LF &
             "part of enemy ship is less precise but always hit the" & LF &
             "selected part.");
-      end loop;
+      end loop Show_Guns_Info_Loop;
       -- Show boarding/defending info
       if (HarpoonDuration > 0 or Enemy.HarpoonDuration > 0) and
         ProtoShips_List(EnemyShipIndex).Crew.Length > 0 then
@@ -440,13 +451,14 @@ package body Combat.UI is
                  "-text {Defenders:} -command {SetCombatParty defenders}");
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady 5");
             Add(Button, "Set your ship's defenders against the enemy party.");
+            Set_Boarding_And_Defenders_Loop :
             for Member of PlayerShip.Crew loop
                if Member.Order = Boarding then
                   Append(BoardingParty, Member.Name & ", ");
                elsif Member.Order = Defend then
                   Append(Defenders, Member.Name & ", ");
                end if;
-            end loop;
+            end loop Set_Boarding_And_Defenders_Loop;
             if BoardingParty /= Null_Unbounded_String then
                BoardingParty :=
                  Unbounded_Slice(BoardingParty, 1, Length(BoardingParty) - 2);
@@ -487,6 +499,7 @@ package body Combat.UI is
         New_String(".gameframe.paned.combatframe.damage.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
+      Clear_Damage_Info_Loop :
       for I in 0 .. (Rows - 1) loop
          Create
            (Tokens,
@@ -496,7 +509,7 @@ package body Combat.UI is
             Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);
          end loop;
-      end loop;
+      end loop Clear_Damage_Info_Loop;
       HasDamage := False;
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
