@@ -264,13 +264,8 @@ package body Bases.UI is
       ActionButton: constant Ttk_Button :=
         Get_Widget
           (".gameframe.paned.baseframe.canvas.base.info.accept", Interp);
-   begin
-      if Selection(ItemsView) = "" then
-         return TCL_OK;
-      end if;
-      ItemIndex := To_Unbounded_String(Selection(ItemsView));
-      if CArgv.Arg(Argv, 1) = "heal" then
-         HealCost(Cost, Time, Natural'Value(To_String(ItemIndex)));
+      procedure Format_Time is
+      begin
          if Time < 60 then
             FormattedTime :=
               To_Unbounded_String(Natural'Image(Time) & " minute");
@@ -292,6 +287,15 @@ package body Bases.UI is
                end if;
             end if;
          end if;
+      end Format_Time;
+   begin
+      if Selection(ItemsView) = "" then
+         return TCL_OK;
+      end if;
+      ItemIndex := To_Unbounded_String(Selection(ItemsView));
+      if CArgv.Arg(Argv, 1) = "heal" then
+         HealCost(Cost, Time, Natural'Value(To_String(ItemIndex)));
+         Format_Time;
          configure
            (InfoLabel,
             "-text {Heal cost:" & Natural'Image(Cost) & " " &
@@ -300,27 +304,7 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "repair" then
          RepairCost(Cost, Time, Integer'Value(To_String(ItemIndex)));
          CountPrice(Cost, FindMember(Talk));
-         if Time < 60 then
-            FormattedTime :=
-              To_Unbounded_String(Natural'Image(Time) & " minute");
-            if Time > 1 then
-               Append(FormattedTime, "s");
-            end if;
-         else
-            FormattedTime :=
-              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
-            if (Time / 60) > 1 then
-               Append(FormattedTime, "s");
-            end if;
-            if (Time mod 60) > 0 then
-               Append
-                 (FormattedTime,
-                  " and" & Positive'Image(Time mod 60) & " minute");
-               if (Time mod 60) > 1 then
-                  Append(FormattedTime, "s");
-               end if;
-            end if;
-         end if;
+         Format_Time;
          configure
            (InfoLabel,
             "-text {Repair cost:" & Natural'Image(Cost) & " " &
