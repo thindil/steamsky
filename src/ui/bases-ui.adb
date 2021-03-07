@@ -111,6 +111,7 @@ package body Bases.UI is
       ActionButton := Get_Widget(BaseFrame & ".info.accept", Interp);
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
+         Show_Wounded_Crew_Loop :
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health < 100 then
                if FirstIndex = Null_Unbounded_String then
@@ -123,13 +124,14 @@ package body Bases.UI is
                   "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
                   " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
             end if;
-         end loop;
+         end loop Show_Wounded_Crew_Loop;
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          ButtonText := To_Unbounded_String("Buy healing");
          Heading(ItemsView, "#0", "-text Wounded");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
+         Show_Damaged_Modules_Loop :
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).Durability <
               PlayerShip.Modules(I).MaxDurability then
@@ -144,7 +146,7 @@ package body Bases.UI is
                   Positive'Image(Modules_Container.To_Index(I)) & " -text {" &
                   To_String(PlayerShip.Modules(I).Name) & "}");
             end if;
-         end loop;
+         end loop Show_Damaged_Modules_Loop;
          Insert
            (ItemsView, "{} end -id 0 -text {Slowly repair the whole ship}");
          if SkyBases(BaseIndex).Population > 149 then
@@ -159,6 +161,7 @@ package body Bases.UI is
          Heading(ItemsView, "#0", "-text Damaged");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
+         Show_Available_Recipes_Loop :
          for I in Recipes_List.Iterate loop
             if BasesTypes_List(BaseType).Recipes.Contains
                 (Recipes_Container.Key(I)) and
@@ -187,7 +190,7 @@ package body Bases.UI is
                     (Items_List(Recipes_List(I).ResultIndex).Name & "}"));
                <<End_Of_Recipes_Loop>>
             end if;
-         end loop;
+         end loop Show_Available_Recipes_Loop;
          ButtonText := To_Unbounded_String("Buy recipe");
          Heading(ItemsView, "#0", "-text Recipes");
       end if;
