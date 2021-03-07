@@ -295,18 +295,7 @@ package body Combat.UI is
       end if;
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Positive'Value(Slice(Tokens, 2));
-      Clear_Guns_Info_Loop :
-      for I in 3 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-            " ");
-         Delete_Widgets_Loop :
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop Delete_Widgets_Loop;
-      end loop Clear_Guns_Info_Loop;
+      Delete_Widgets(3, (Rows - 1), Frame);
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          HaveAmmo := False;
@@ -499,17 +488,7 @@ package body Combat.UI is
         New_String(".gameframe.paned.combatframe.damage.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Clear_Damage_Info_Loop :
-      for I in 0 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop Clear_Damage_Info_Loop;
+      Delete_Widgets(0, Rows - 1, Frame);
       HasDamage := False;
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
