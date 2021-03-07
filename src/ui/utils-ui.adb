@@ -1178,10 +1178,13 @@ package body Utils.UI is
    end ShowQuestion;
 
    procedure Delete_Widgets
-     (Start_Index: Natural; End_Index: Positive; Frame: Tk_Widget'Class) is
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
       Tokens: Slice_Set;
       Item: Ttk_Frame;
    begin
+      if End_Index < Start_Index then
+         return;
+      end if;
       Delete_Widgets_Loop :
       for I in Start_Index .. End_Index loop
          Create
