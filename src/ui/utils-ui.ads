@@ -206,8 +206,7 @@ package Utils.UI is
       -- 5.9 - Added
       -- SOURCE
    procedure Delete_Widgets
-     (Start_Index: Natural; End_Index: Positive; Frame: Tk_Widget'Class) with
-     Pre => Start_Index < End_Index;
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
    -- ****
 
 end Utils.UI;
