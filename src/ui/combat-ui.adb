@@ -490,6 +490,7 @@ package body Combat.UI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(0, Rows - 1, Frame);
       HasDamage := False;
+      Show_Player_Ship_Damage_Loop :
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             Font :=
@@ -523,7 +524,7 @@ package body Combat.UI is
             Row := Row + 1;
             HasDamage := True;
          end if;
-      end loop;
+      end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.damage.canvas");
       configure
