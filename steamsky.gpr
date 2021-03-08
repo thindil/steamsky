@@ -14,7 +14,12 @@ project steamsky is
    Mode : Mode_Type := external ("Mode", "debug");
 
    package Builder is
-      for Default_Switches("ada") use ("-j0", "-gnat2012", "-g");
+      case Mode is
+         when "release" =>
+            for Default_Switches("ada") use ("-j0", "-gnat2012");
+         when others =>
+            for Default_Switches("ada") use ("-j0", "-gnat2012", "-g");
+      end case;
       for Global_Configuration_Pragmas use "gnat.adc";
    end Builder;
 
@@ -41,7 +46,8 @@ project steamsky is
          when "release" =>
             for Default_Switches ("ada") use ("-O2",
                "-ffunction-sections",
-               "-fdata-sections");
+               "-fdata-sections",
+               "-s");
          when "analyze" =>
             for Default_Switches ("ada") use ("-pg",
                "-fprofile-arcs",
@@ -54,7 +60,7 @@ project steamsky is
          when "debug" =>
             for Default_Switches ("ada") use ("-no-pie");
          when "release" =>
-            for Default_Switches ("ada") use ("-Wl,--gc-sections");
+            for Default_Switches ("ada") use ("-Wl,--gc-sections", "-s");
          when "analyze" =>
             for Default_Switches ("ada") use ("-no-pie",
                "-pg",
