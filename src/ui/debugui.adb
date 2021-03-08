@@ -132,7 +132,6 @@ package body DebugUI is
         Get_Widget(".debugdialog.main.crew.health", Interp);
       MemberFrame: Ttk_Frame :=
         Get_Widget(".debugdialog.main.crew.stats", Interp);
-      Item: Ttk_Frame;
       Rows: Natural := 0;
       Tokens: Slice_Set;
       Label: Ttk_Label;
@@ -154,17 +153,7 @@ package body DebugUI is
       Set(SpinBox, Positive'Image(Member.Loyalty));
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (MemberFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J), Interp);
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, MemberFrame);
       for I in Member.Attributes.Iterate loop
          Label :=
            Create
@@ -189,17 +178,7 @@ package body DebugUI is
       MemberFrame.Name := New_String(".debugdialog.main.crew.skills");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (MemberFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J), Interp);
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, MemberFrame);
       for I in Member.Skills.Iterate loop
          Label :=
            Create
