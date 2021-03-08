@@ -100,7 +100,6 @@ package body ErrorDialog is
          use Tcl.Ada;
          use Tcl.Tk.Ada;
          use Tcl.Tk.Ada.Widgets;
-         use Tcl.Tk.Ada.Widgets.Toplevel;
          use MainMenu.Commands;
          use Utils.UI;
 
@@ -108,6 +107,7 @@ package body ErrorDialog is
       begin
          Destroy_Main_Window_Block :
          declare
+            use Tcl.Tk.Ada.Widgets.Toplevel;
             use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 
             Main_Window: Tk_Toplevel := Get_Main_Window(Interp => Interp);
