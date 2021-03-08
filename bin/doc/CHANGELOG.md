@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
   game again)
 - Crash on damaged engines during fly (Github issue #74)
 - Crash after victory in combat (Github issue #75)
+- Crash when player ship crew member die in melee combat
 
 ## [5.8] - 2021-02-21
 
