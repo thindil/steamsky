@@ -563,14 +563,16 @@ package body Combat.UI is
             declare
                EnemyStatus: Unbounded_String := To_Unbounded_String("Ok");
             begin
+               Check_Enemy_Ship_Status_Loop :
                for Module of Enemy.Ship.Modules loop
                   if Module.Durability < Module.MaxDurability then
                      EnemyStatus := To_Unbounded_String("Damaged");
-                     exit;
+                     exit Check_Enemy_Ship_Status_Loop;
                   end if;
-               end loop;
+               end loop Check_Enemy_Ship_Status_Loop;
                Append(EnemyInfo, EnemyStatus);
             end;
+            Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
                   case Modules_List(Module.ProtoIndex).MType is
@@ -586,7 +588,7 @@ package body Combat.UI is
                         null;
                   end case;
                end if;
-            end loop;
+            end loop Check_Enemy_Status_Loop;
          end if;
       else
          Append(EnemyInfo, "Unknown");
