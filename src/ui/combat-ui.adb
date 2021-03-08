@@ -492,38 +492,39 @@ package body Combat.UI is
       HasDamage := False;
       Show_Player_Ship_Damage_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
-            Font :=
-              (if Module.Durability = 0 then
-                 To_Unbounded_String
-                   (" -font OverstrikedFont -style Gray.TLabel")
-               else Null_Unbounded_String);
-            Label :=
-              Create
-                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-                 "-text {" & To_String(Module.Name) & "}" & To_String(Font));
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
-            DamagePercent :=
-              (Float(Module.Durability) / Float(Module.MaxDurability));
-            ProgressBarStyle :=
-              (if DamagePercent = 1.0 then
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-               elsif DamagePercent > 0.24 then
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-            ProgressBar :=
-              Create
-                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
-                 "-orient horizontal -length 150 -maximum 1.0 -value" &
-                 Float'Image(DamagePercent) & To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid
-              (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
-            Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
-            Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
-            Row := Row + 1;
-            HasDamage := True;
+         if Module.Durability = Module.MaxDurability then
+            goto End_Of_Player_Ship_Damage_Loop;
          end if;
+         Font :=
+           (if Module.Durability = 0 then
+              To_Unbounded_String(" -font OverstrikedFont -style Gray.TLabel")
+            else Null_Unbounded_String);
+         Label :=
+           Create
+             (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
+              "-text {" & To_String(Module.Name) & "}" & To_String(Font));
+         Tcl.Tk.Ada.Grid.Grid
+           (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
+         DamagePercent :=
+           (Float(Module.Durability) / Float(Module.MaxDurability));
+         ProgressBarStyle :=
+           (if DamagePercent = 1.0 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif DamagePercent > 0.24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
+         ProgressBar :=
+           Create
+             (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
+              "-orient horizontal -length 150 -maximum 1.0 -value" &
+              Float'Image(DamagePercent) & To_String(ProgressBarStyle));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+         Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
+         Row := Row + 1;
+         HasDamage := True;
+         <<End_Of_Player_Ship_Damage_Loop>>
       end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.damage.canvas");
