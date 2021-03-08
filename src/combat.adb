@@ -1033,6 +1033,8 @@ package body Combat is
             end if;
             AttackDone := False;
             if PlayerAttack then
+               exit Attackers_Attacks_Loop when OrderIndex >
+                 BoardingOrders.Last_Index;
                if BoardingOrders(OrderIndex) in
                    Defenders.First_Index .. Defenders.Last_Index then
                   DefenderIndex := BoardingOrders(OrderIndex);
