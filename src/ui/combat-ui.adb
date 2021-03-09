@@ -17,6 +17,7 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Strings.Maps; use Ada.Strings.Maps;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -640,7 +641,6 @@ package body Combat.UI is
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
       declare
-         SpaceIndex: Natural;
          ModuleName: Unbounded_String;
       begin
          Frame.Name :=
@@ -663,11 +663,7 @@ package body Combat.UI is
                Replace_Slice
                  (ModuleName, 2, Length(ModuleName),
                   To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
-               SpaceIndex := Index(ModuleName, "_");
-               while SpaceIndex > 0 loop
-                  Replace_Element(ModuleName, SpaceIndex, ' ');
-                  SpaceIndex := Index(ModuleName, "_");
-               end loop;
+               Translate(ModuleName, To_Mapping("_", " "));
             else
                ModuleName :=
                  Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
