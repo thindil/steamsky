@@ -67,7 +67,7 @@ package body ErrorDialog is
             Name => To_String(Source => SaveDirectory) & "error.log");
       end if;
       Append(Source => Error_Text, New_Item => Current_Time & LF);
-      Append(Source => Error_Text, New_Item => GameVersion & LF);
+      Append(Source => Error_Text, New_Item => Game_Version & LF);
       Append
         (Source => Error_Text,
          New_Item => "Exception: " & Exception_Name(X => An_Exception) & LF);

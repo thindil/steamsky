@@ -322,7 +322,7 @@ package body Bases is
                Equipment => Equipment, Payment => Payment,
                HomeBase => RecruitBase, Faction => RecruitFaction));
       end loop Generate_Recruits_Loop;
-      SkyBases(BaseIndex).RecruitDate := GameDate;
+      SkyBases(BaseIndex).RecruitDate := Game_Date;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
    end GenerateRecruits;
 
@@ -458,7 +458,7 @@ package body Bases is
          MaxEvents :=
            (if SkyBases(BaseIndex).Population < 150 then 5
             elsif SkyBases(BaseIndex).Population < 300 then 10 else 15);
-         SkyBases(BaseIndex).AskedForEvents := GameDate;
+         SkyBases(BaseIndex).AskedForEvents := Game_Date;
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked for recent events known at base '" &

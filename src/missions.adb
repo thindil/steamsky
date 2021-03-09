@@ -210,7 +210,7 @@ package body Missions is
          Mission.Finished := False;
          SkyBases(BaseIndex).Missions.Append(New_Item => Mission);
       end loop Generate_Missions_Loop;
-      SkyBases(BaseIndex).MissionsDate := GameDate;
+      SkyBases(BaseIndex).MissionsDate := Game_Date;
    end GenerateMissions;
 
    procedure AcceptMission(MissionIndex: Positive) is

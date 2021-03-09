@@ -44,47 +44,50 @@ package Game is
    end record;
    -- ****
 
-   -- ****v* Game/Game.GameDate
+   -- ****v* Game/Game.Game_Date
    -- FUNCTION
    -- Current in game date
    -- SOURCE
-   GameDate: Date_Record;
+   Game_Date: Date_Record;
    -- ****
 
-   -- ****d* Game/Game.GameVersion
+   -- ****d* Game/Game.Game_Version
    -- FUNCTION
    -- Current the game version
    -- SOURCE
-   GameVersion: constant String := "Version: 5.9";
+   Game_Version: constant String := "Version: 5.9";
    -- ****
 
    -- ****t* Game/Game.UnboundedString_Container
    -- FUNCTION
    -- Used to store Unbounded_String values as list
    -- SOURCE
-   package UnboundedString_Container is new Vectors(Positive,
-      Unbounded_String);
+   package UnboundedString_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Unbounded_String);
    -- ****
 
    -- ****t* Game/Game.Positive_Container
    -- FUNCTION
    -- Used to store Positive values as list
    -- SOURCE
-   package Positive_Container is new Vectors(Positive, Positive);
+   package Positive_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Positive);
    -- ****
 
    -- ****t* Game/Game.Natural_Container
    -- FUNCTION
    -- Used to store Natural values as list
    -- SOURCE
-   package Natural_Container is new Vectors(Positive, Natural);
+   package Natural_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Natural);
    -- ****
 
    -- ****t* Game/Game.Integer_Container
    -- FUNCTION
    -- Used to store Integer values as list
    -- SOURCE
-   package Integer_Container is new Vectors(Positive, Integer);
+   package Integer_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Integer);
    -- ****
 
    -- ****t* Game/Game.Attributes_Array
@@ -97,7 +100,8 @@ package Game is
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
-   package Attributes_Container is new Vectors(Positive, Attributes_Array);
+   package Attributes_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Attributes_Array);
    -- ****
 
    -- ****s* Game/Game.Attribute_Record
@@ -117,27 +121,28 @@ package Game is
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Vectors(Positive, Attribute_Record);
+   package AttributesData_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Attribute_Record);
    -- ****
 
    -- ****s* Game/Game.Skill_Record
    -- FUNCTION
    -- Data for skills
    -- PARAMETERS
-   -- Name         - Name of skill
-   -- Attribute    - Attribute used with that skill
-   -- Description  - Description of skill
-   -- Tool         - Item type used as tool for training that skill
-   -- ToolsQuality - Required tools quality for training that skill at the
-   --                selected level. First value minimal level of skill,
-   --                second minimum quality of tool
+   -- Name          - Name of skill
+   -- Attribute     - Attribute used with that skill
+   -- Description   - Description of skill
+   -- Tool          - Item type used as tool for training that skill
+   -- Tools_Quality - Required tools quality for training that skill at the
+   --                 selected level. First value minimal level of skill,
+   --                 second minimum quality of tool
    -- SOURCE
    type Skill_Record is record
       Name: Unbounded_String;
       Attribute: AttributesData_Container.Extended_Index;
       Description: Unbounded_String;
       Tool: Unbounded_String;
-      ToolsQuality: Attributes_Container.Vector;
+      Tools_Quality: Attributes_Container.Vector;
    end record;
    -- ****
 
@@ -145,7 +150,8 @@ package Game is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package SkillsData_Container is new Vectors(Positive, Skill_Record);
+   package SkillsData_Container is new Vectors(Index_Type => Positive,
+      Element_Type => Skill_Record);
    -- ****
 
    -- ****v* Game/Game.Skills_List
@@ -155,25 +161,25 @@ package Game is
    Skills_List: SkillsData_Container.Vector;
    -- ****
 
-   -- ****v* Game/Game.RepairTools
+   -- ****v* Game/Game.Repair_Tools
    -- FUNCTION
    -- Name of item type used as tool in repairing/upgrading ship
    -- SOURCE
-   RepairTools: Unbounded_String;
+   Repair_Tools: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.CleaningTools
+   -- ****v* Game/Game.Cleaning_Tools
    -- FUNCTION
    -- Name of item type used as tool in cleaning ship
    -- SOURCE
-   CleaningTools: Unbounded_String;
+   Cleaning_Tools: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.AlchemyTools
+   -- ****v* Game/Game.Alchemy_Tools
    -- FUNCTION
    -- Name of item type used as alchemy tools (mainly in deconstructing orders)
    -- SOURCE
-   AlchemyTools: Unbounded_String;
+   Alchemy_Tools: Unbounded_String;
    -- ****
 
    -- ****v* Game/Game.CorpseIndex

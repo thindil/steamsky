@@ -655,7 +655,7 @@ package body Crew is
                      GiveOrders(PlayerShip, I, Rest);
                   end if;
                when Clean =>
-                  ToolIndex := FindTools(I, CleaningTools, Clean);
+                  ToolIndex := FindTools(I, Cleaning_Tools, Clean);
                   NeedCleaning := False;
                   if ToolIndex > 0 then
                      Update_Clean_Tools_Loop :
@@ -986,7 +986,7 @@ package body Crew is
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             Tool_Quality_Loop :
-            for Quality of Skills_List(SkillIndex).ToolsQuality loop
+            for Quality of Skills_List(SkillIndex).Tools_Quality loop
                if Skill(2) <= Quality(1) then
                   ToolQuality := Quality(2);
                   exit Skill_Loop;

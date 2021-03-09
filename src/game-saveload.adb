@@ -134,11 +134,11 @@ package body Game.SaveLoad is
       LogMessage("Saving game time...", Everything, False);
       CategoryNode := Create_Element(SaveData, "gamedate");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      SaveNumber(GameDate.Year, "year");
-      SaveNumber(GameDate.Month, "month");
-      SaveNumber(GameDate.Day, "day");
-      SaveNumber(GameDate.Hour, "hour");
-      SaveNumber(GameDate.Minutes, "minutes");
+      SaveNumber(Game_Date.Year, "year");
+      SaveNumber(Game_Date.Month, "month");
+      SaveNumber(Game_Date.Day, "day");
+      SaveNumber(Game_Date.Hour, "hour");
+      SaveNumber(Game_Date.Minutes, "minutes");
       LogMessage("done.", Everything, True, False);
       -- Save map
       LogMessage("Saving map...", Everything, False);
@@ -425,11 +425,11 @@ package body Game.SaveLoad is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "gamedate");
       SavedNode := Item(NodesList, 0);
-      GameDate.Year := Natural'Value(Get_Attribute(SavedNode, "year"));
-      GameDate.Month := Natural'Value(Get_Attribute(SavedNode, "month"));
-      GameDate.Day := Natural'Value(Get_Attribute(SavedNode, "day"));
-      GameDate.Hour := Natural'Value(Get_Attribute(SavedNode, "hour"));
-      GameDate.Minutes := Natural'Value(Get_Attribute(SavedNode, "minutes"));
+      Game_Date.Year := Natural'Value(Get_Attribute(SavedNode, "year"));
+      Game_Date.Month := Natural'Value(Get_Attribute(SavedNode, "month"));
+      Game_Date.Day := Natural'Value(Get_Attribute(SavedNode, "day"));
+      Game_Date.Hour := Natural'Value(Get_Attribute(SavedNode, "hour"));
+      Game_Date.Minutes := Natural'Value(Get_Attribute(SavedNode, "minutes"));
       LogMessage("done.", Everything, True, False);
       -- Load sky map
       LogMessage("Loading map...", Everything, False);

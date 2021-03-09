@@ -452,13 +452,13 @@ package body Ships.UI.Crew.Inventory is
         (PlayerShip.Crew(MemberIndex).Order = Clean and
          FindItem
              (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-              ItemType => CleaningTools) =
+              ItemType => Cleaning_Tools) =
            0) or
         ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
           PlayerShip.Crew(MemberIndex).Order = Repair) and
          FindItem
              (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-              ItemType => RepairTools) =
+              ItemType => Repair_Tools) =
            0) then
          GiveOrders(PlayerShip, MemberIndex, Rest);
       end if;

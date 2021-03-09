@@ -193,7 +193,7 @@ package body Crafts.UI is
             FirstIndex := Known_Recipes(I);
          end if;
       end loop;
-      CheckTool(AlchemyTools);
+      CheckTool(Alchemy_Tools);
       if CanCraft then
          CanCraft := False;
          for Module of PlayerShip.Modules loop
@@ -394,7 +394,7 @@ package body Crafts.UI is
             end if;
          end loop;
          Recipe.Difficulty := 1;
-         Recipe.Tool := AlchemyTools;
+         Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
@@ -422,7 +422,7 @@ package body Crafts.UI is
                exit;
             end if;
          end loop;
-         Recipe.Tool := AlchemyTools;
+         Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
       else
          Recipe := Recipes_List(RecipeIndex);

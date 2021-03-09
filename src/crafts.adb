@@ -222,7 +222,7 @@ package body Crafts is
             end if;
          end loop Set_Recipe_Skill_Loop;
          Recipe.Difficulty := 1;
-         Recipe.Tool := AlchemyTools;
+         Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
          return Recipe;
       elsif Length(RecipeIndex) > 12
@@ -249,7 +249,7 @@ package body Crafts is
                exit Set_Recipe_Data_Loop;
             end if;
          end loop Set_Recipe_Data_Loop;
-         Recipe.Tool := AlchemyTools;
+         Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
          return Recipe;
       end if;
