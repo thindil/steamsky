@@ -187,7 +187,6 @@ package body Combat.UI is
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
         Get_Widget(".gameframe.paned.combatframe.crew.canvas.frame");
-      Item: Ttk_Frame;
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
@@ -269,7 +268,6 @@ package body Combat.UI is
          return To_String(CrewList);
       end GetCrewList;
    begin
-      Item.Interp := Get_Context;
       configure(ComboBox, "-values [list " & GetCrewList(0) & "]");
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
@@ -649,20 +647,10 @@ package body Combat.UI is
            New_String(".gameframe.paned.combatframe.status.canvas.frame");
          Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
          Rows := Natural'Value(Slice(Tokens, 2));
-         for I in 0 .. (Rows - 1) loop
-            Create
-              (Tokens,
-               Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-               " ");
-            for J in 1 .. Slice_Count(Tokens) loop
-               Item.Interp := Get_Context;
-               Item.Name := New_String(Slice(Tokens, J));
-               Destroy(Item);
-            end loop;
-         end loop;
+         Delete_Widgets(0, Rows - 1, Frame);
          if Enemy.Ship.Modules(1).Durability = 0 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-            goto End_Of_Enemy_Modules_Loop;
+            goto End_Of_Enemy_Modules_Block;
          end if;
          Row := 0;
          for I in Enemy.Ship.Modules.Iterate loop
@@ -715,7 +703,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
             Row := Row + 1;
          end loop;
-         <<End_Of_Enemy_Modules_Loop>>
+         <<End_Of_Enemy_Modules_Block>>
       end;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.status.canvas");
