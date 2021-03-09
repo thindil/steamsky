@@ -743,6 +743,7 @@ package body Combat.UI is
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv, 2) = "boarding" then Boarding else Defend);
    begin
+      Give_Boarding_Orders_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Boarding then
             OrderIndex := OrderIndex + 1;
@@ -760,9 +761,9 @@ package body Combat.UI is
                end if;
                OrderIndex := OrderIndex - 1;
             end if;
-            exit;
+            exit Give_Boarding_Orders_Loop;
          end if;
-      end loop;
+      end loop Give_Boarding_Orders_Loop;
       UpdateCombatUI;
       return TCL_OK;
    end Set_Party_Order_Command;
@@ -791,27 +792,31 @@ package body Combat.UI is
            CombatFrame & To_String(CombatChildren(1)) then
             return;
          end if;
+         Hide_Boarding_UI_Loop :
          for BoardingChild of BoardingChildren loop
             ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
             Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
-         end loop;
+         end loop Hide_Boarding_UI_Loop;
+         Show_Combat_UI_Loop :
          for CombatChild of CombatChildren loop
             ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
             Tcl.Tk.Ada.Grid.Grid(ChildFrame);
-         end loop;
+         end loop Show_Combat_UI_Loop;
       else
          if Widget_Image(ChildFrame) =
            CombatFrame & To_String(BoardingChildren(1)) then
             return;
          end if;
+         Hide_Combat_UI_Loop :
          for CombatChild of CombatChildren loop
             ChildFrame := Get_Widget(CombatFrame & To_String(CombatChild));
             Tcl.Tk.Ada.Grid.Grid_Remove(ChildFrame);
-         end loop;
+         end loop Hide_Combat_UI_Loop;
+         Show_Boarding_UI_Loop :
          for BoardingChild of BoardingChildren loop
             ChildFrame := Get_Widget(CombatFrame & To_String(BoardingChild));
             Tcl.Tk.Ada.Grid.Grid(ChildFrame);
-         end loop;
+         end loop Show_Boarding_UI_Loop;
       end if;
    end ShowCombatFrame;
 
