@@ -653,6 +653,7 @@ package body Combat.UI is
             goto End_Of_Enemy_Modules_Block;
          end if;
          Row := 0;
+         Show_Enemy_Ship_Status_Loop :
          for I in Enemy.Ship.Modules.Iterate loop
             if Enemy.Distance > 1000 then
                ModuleName :=
@@ -702,7 +703,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
             Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
             Row := Row + 1;
-         end loop;
+         end loop Show_Enemy_Ship_Status_Loop;
          <<End_Of_Enemy_Modules_Block>>
       end;
       Tcl_Eval(Get_Context, "update");
