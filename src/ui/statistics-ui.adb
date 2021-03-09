@@ -68,8 +68,9 @@ package body Statistics.UI is
       Append(StatsText, LF & "Time passed:");
       declare
          MinutesDiff: constant Natural :=
-           (Game_Date.Minutes + (Game_Date.Hour * 60) + (Game_Date.Day * 1440) +
-            (Game_Date.Month * 43200) + (Game_Date.Year * 518400)) -
+           (Game_Date.Minutes + (Game_Date.Hour * 60) +
+            (Game_Date.Day * 1440) + (Game_Date.Month * 43200) +
+            (Game_Date.Year * 518400)) -
            829571520;
       begin
          MinutesToDate(MinutesDiff, StatsText);

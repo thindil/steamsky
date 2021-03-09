@@ -156,8 +156,9 @@ begin
    -----------------
    if Tcl.Tcl_Init(interp => Interp) = Tcl.TCL_ERROR then
       Ada.Text_IO.Put_Line
-        (Item => "Steam Sky: Tcl.Tcl_Init failed: " &
-         Tcl.Ada.Tcl_GetStringResult(interp => Interp));
+        (Item =>
+           "Steam Sky: Tcl.Tcl_Init failed: " &
+           Tcl.Ada.Tcl_GetStringResult(interp => Interp));
       return;
    end if;
 
@@ -165,8 +166,9 @@ begin
    ----------------
    if Tcl.Tk.Tk_Init(interp => Interp) = Tcl.TCL_ERROR then
       Ada.Text_IO.Put_Line
-        (Item => "Steam Sky: Tcl.Tk.Tk_Init failed: " &
-         Tcl.Ada.Tcl_GetStringResult(interp => Interp));
+        (Item =>
+           "Steam Sky: Tcl.Tk.Tk_Init failed: " &
+           Tcl.Ada.Tcl_GetStringResult(interp => Interp));
       return;
    end if;
 
