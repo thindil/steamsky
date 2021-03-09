@@ -461,7 +461,7 @@ package body Bases.ShipyardUI is
                "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
             Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
             MAmount := 0;
-            Ammunition_Info_Loop:
+            Ammunition_Info_Loop :
             for Item of Items_List loop
                if Item.IType = Items_Types(Value) then
                   if MAmount > 0 then
@@ -494,7 +494,7 @@ package body Bases.ShipyardUI is
       if MType not in HULL | ARMOR then
          Insert(ModuleText, "end", "{" & LF & "Size:}");
          if Installing then
-            Check_Module_Size_Loop:
+            Check_Module_Size_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = HULL
                  and then Size > Modules_List(Module.ProtoIndex).Value then
@@ -518,7 +518,7 @@ package body Bases.ShipyardUI is
       if Installing then
          Insert(ModuleText, "end", "{" & LF & "Repair/Upgrade material: }");
          MAmount := 0;
-         Repair_Materials_Loop:
+         Repair_Materials_Loop :
          for Item of Items_List loop
             if Item.IType = Modules_List(ModuleIndex).RepairMaterial then
                if MAmount > 0 then
