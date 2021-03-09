@@ -78,7 +78,6 @@ package body Ships.UI.Cargo is
         Get_Widget(".gameframe.paned.shipinfoframe.cargo.canvas", Interp);
       CargoInfoFrame: constant Ttk_Frame :=
         Get_Widget(ShipCanvas & ".frame", Interp);
-      Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ItemType, ProtoIndex: Unbounded_String;
@@ -89,17 +88,7 @@ package body Ships.UI.Cargo is
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 2 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (CargoInfoFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(2, Rows - 1, CargoInfoFrame);
       CargoTable :=
         CreateTable
           (Widget_Image(CargoInfoFrame),
