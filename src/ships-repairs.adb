@@ -69,7 +69,7 @@ package body Ships.Repairs is
                   return;
                end if;
                ToolsIndex :=
-                 FindTools(Crew_Container.To_Index(J), RepairTools, Repair);
+                 FindTools(Crew_Container.To_Index(J), Repair_Tools, Repair);
                if ToolsIndex = 0 then
                   if PointsIndex = 1 then
                      AddMessage

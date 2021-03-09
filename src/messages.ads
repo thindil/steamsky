@@ -86,7 +86,7 @@ package Messages is
    -- RESULT
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
-   function FormatedTime(Time: Date_Record := GameDate) return String with
+   function FormatedTime(Time: Date_Record := Game_Date) return String with
       Test_Case => (Name => "Test_FormattedTime", Mode => Robustness);
       -- ****
 

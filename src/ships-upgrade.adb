@@ -244,7 +244,7 @@ package body Ships.Upgrade is
              (Inventory => PlayerShip.Cargo,
               ItemType =>
                 Modules_List(UpgradedModule.ProtoIndex).RepairMaterial);
-         UpgradeTools := FindTools(WorkerIndex, RepairTools, Upgrading);
+         UpgradeTools := FindTools(WorkerIndex, Repair_Tools, Upgrading);
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin

@@ -430,7 +430,7 @@ package body Bases.RecruitUI is
          begin
             Tool_Quality_Loop :
             for Quality of Skills_List(Skills_Container.To_Index(I))
-              .ToolsQuality loop
+              .Tools_Quality loop
                if Recruit.Skills(I)(2) <= Quality(1) then
                   ToolQuality := Quality(2);
                   exit Tool_Quality_Loop;

@@ -349,7 +349,7 @@ package body Ships.Crew is
       if GivenOrder in Upgrading | Repair | Clean |
             Train then -- Check for tools
          if GivenOrder = Clean then
-            RequiredTool := CleaningTools;
+            RequiredTool := Cleaning_Tools;
          elsif GivenOrder = Train then
             RequiredTool :=
               Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
@@ -357,7 +357,7 @@ package body Ships.Crew is
               GetTrainingToolQuality
                 (MemberIndex, Ship.Modules(ModuleIndex).TrainedSkill);
          else
-            RequiredTool := RepairTools;
+            RequiredTool := Repair_Tools;
          end if;
          if RequiredTool /= Null_Unbounded_String then
             if ToolsIndex = 0 then
@@ -699,7 +699,7 @@ package body Ships.Crew is
          UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.UpgradeModule > 0 and
-        FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
+        FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0 then
          if FindItem
              (Inventory => Ship.Cargo,
               ItemType =>
@@ -715,7 +715,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedClean and
-         FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0)
+         FindItem(Inventory => Ship.Cargo, ItemType => Cleaning_Tools) > 0)
         and then UpdatePosition(Clean) then
          UpdateOrders(Ship);
       end if;
@@ -724,7 +724,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedRepairs and
-         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0)
+         FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0)
         and then UpdatePosition(Repair) then
          UpdateOrders(Ship);
       end if;
@@ -752,7 +752,7 @@ package body Ships.Crew is
          UpdateOrders(Ship);
       end if;
       if not HaveUpgrade and Ship.UpgradeModule > 0 and
-        FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0 then
+        FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0 then
          if FindItem
              (Inventory => Ship.Cargo,
               ItemType =>
@@ -769,7 +769,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedClean and
-         FindItem(Inventory => Ship.Cargo, ItemType => CleaningTools) > 0)
+         FindItem(Inventory => Ship.Cargo, ItemType => Cleaning_Tools) > 0)
         and then UpdatePosition(Clean, False) then
          UpdateOrders(Ship);
       end if;
@@ -778,7 +778,7 @@ package body Ships.Crew is
       end if;
       if
         (NeedRepairs and
-         FindItem(Inventory => Ship.Cargo, ItemType => RepairTools) > 0)
+         FindItem(Inventory => Ship.Cargo, ItemType => Repair_Tools) > 0)
         and then UpdatePosition(Repair, False) then
          UpdateOrders(Ship);
       end if;

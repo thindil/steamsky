@@ -333,9 +333,9 @@ package body Items is
       if Tools_List.Length > 0 then
          return;
       end if;
-      Tools_List.Append(New_Item => RepairTools);
-      Tools_List.Append(New_Item => CleaningTools);
-      Tools_List.Append(New_Item => AlchemyTools);
+      Tools_List.Append(New_Item => Repair_Tools);
+      Tools_List.Append(New_Item => Cleaning_Tools);
+      Tools_List.Append(New_Item => Alchemy_Tools);
       Recipes_Loop :
       for Recipe of Recipes_List loop
          if Tools_List.Find_Index(Item => Recipe.Tool) =

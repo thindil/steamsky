@@ -101,7 +101,7 @@ package body Game is
          end if;
       end;
       -- Set Game time
-      GameDate :=
+      Game_Date :=
         (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
       -- Generate world
       SkyMap :=
@@ -379,7 +379,7 @@ package body Game is
          end loop PlayerShip_Modules_Loop;
       end;
       -- Set current map field/sky base info
-      SkyBases(Integer(RandomBase)).Visited := GameDate;
+      SkyBases(Integer(RandomBase)).Visited := Game_Date;
       SkyBases(Integer(RandomBase)).Known := True;
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits;
@@ -410,22 +410,22 @@ package body Game is
    begin
       Tired_Points_Loop :
       for I in 1 .. Minutes loop
-         if ((GameDate.Minutes + I) rem 15) = 0 then
+         if ((Game_Date.Minutes + I) rem 15) = 0 then
             TiredPoints := TiredPoints + 1;
          end if;
       end loop Tired_Points_Loop;
       -- Update game time
       AddedMinutes := Minutes rem 60;
       AddedHours := Minutes / 60;
-      GameDate.Minutes := GameDate.Minutes + AddedMinutes;
-      if GameDate.Minutes > 59 then
-         GameDate.Minutes := GameDate.Minutes - 60;
-         GameDate.Hour := GameDate.Hour + 1;
+      Game_Date.Minutes := Game_Date.Minutes + AddedMinutes;
+      if Game_Date.Minutes > 59 then
+         Game_Date.Minutes := Game_Date.Minutes - 60;
+         Game_Date.Hour := Game_Date.Hour + 1;
       end if;
-      GameDate.Hour := GameDate.Hour + AddedHours;
-      if GameDate.Hour > 23 then
-         GameDate.Hour := GameDate.Hour - 24;
-         GameDate.Day := GameDate.Day + 1;
+      Game_Date.Hour := Game_Date.Hour + AddedHours;
+      if Game_Date.Hour > 23 then
+         Game_Date.Hour := Game_Date.Hour - 24;
+         Game_Date.Day := Game_Date.Day + 1;
          Get_Dirty_Loop :
          for Module of PlayerShip.Modules loop
             if Module.MType = CABIN and then Module.Cleanliness > 0 then
@@ -444,16 +444,16 @@ package body Game is
             SaveGame;
          end if;
       end if;
-      if GameDate.Day > 30 then
-         GameDate.Day := 1;
-         GameDate.Month := GameDate.Month + 1;
+      if Game_Date.Day > 30 then
+         Game_Date.Day := 1;
+         Game_Date.Month := Game_Date.Month + 1;
          if GameSettings.AutoSave = MONTHLY then
             SaveGame;
          end if;
       end if;
-      if GameDate.Month > 12 then
-         GameDate.Month := 1;
-         GameDate.Year := GameDate.Year + 1;
+      if Game_Date.Month > 12 then
+         Game_Date.Month := 1;
+         Game_Date.Year := Game_Date.Year + 1;
          if GameSettings.AutoSave = YEARLY then
             SaveGame;
          end if;
@@ -473,7 +473,7 @@ package body Game is
             GameStats.Points := GameStats.Points + 1;
             UpdateGoal(VISIT, SkyBases(BaseIndex).Owner);
          end if;
-         SkyBases(BaseIndex).Visited := GameDate;
+         SkyBases(BaseIndex).Visited := Game_Date;
          if not SkyBases(BaseIndex).Known then
             SkyBases(BaseIndex).Known := True;
             AddMessage
@@ -604,13 +604,13 @@ package body Game is
               (New_Item =>
                  To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "repairtools" then
-            RepairTools :=
+            Repair_Tools :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "cleaningtools" then
-            CleaningTools :=
+            Cleaning_Tools :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "alchemytools" then
-            AlchemyTools :=
+            Alchemy_Tools :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "corpseindex" then
             CorpseIndex :=
@@ -647,17 +647,17 @@ package body Game is
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (DataNode, "toolquality");
             if Length(ChildNodes) > 0 then
-               TmpSkill.ToolsQuality.Clear;
+               TmpSkill.Tools_Quality.Clear;
             end if;
             Load_Skills_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
-               TmpSkill.ToolsQuality.Append
+               TmpSkill.Tools_Quality.Append
                  ((Integer'Value(Get_Attribute(Item(ChildNodes, J), "level")),
                    Integer'Value
                      (Get_Attribute(Item(ChildNodes, J), "quality"))));
             end loop Load_Skills_Loop;
-            if TmpSkill.ToolsQuality.Length = 0 then
-               TmpSkill.ToolsQuality.Append((100, 100));
+            if TmpSkill.Tools_Quality.Length = 0 then
+               TmpSkill.Tools_Quality.Append((100, 100));
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name

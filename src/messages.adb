@@ -19,7 +19,7 @@ with Config; use Config;
 
 package body Messages is
 
-   function FormatedTime(Time: Date_Record := GameDate) return String is
+   function FormatedTime(Time: Date_Record := Game_Date) return String is
       Result: Unbounded_String := To_Unbounded_String("");
       RawImage: Unbounded_String;
       TimeArray: constant Natural_Array(1 .. 5) :=
