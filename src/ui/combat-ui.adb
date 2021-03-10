@@ -841,16 +841,7 @@ package body Combat.UI is
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, Frame);
       for I in Enemy.Ship.Crew.Iterate loop
          Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
          Button :=
@@ -1438,7 +1429,7 @@ package body Combat.UI is
          if Winfo_Get(CombatFrame, "exists") = "0" then
             Tcl_EvalFile
               (Get_Context,
-               To_String(DataDirectory) & "ui" & Dir_Separator & "combat.tcl");
+               To_String(Data_Directory) & "ui" & Dir_Separator & "combat.tcl");
             PilotOrder := 2;
             EngineerOrder := 3;
             AddCommand("SetPartyOrder", Set_Party_Order_Command'Access);
