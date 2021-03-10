@@ -30,7 +30,7 @@ package body Messages.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_FormatedTime_5bb1ad_45f0f1
-     (Time: Date_Record := GameDate) return String is
+     (Time: Date_Record := Game_Date) return String is
    begin
       declare
          Test_FormatedTime_5bb1ad_45f0f1_Result: constant String :=
@@ -48,7 +48,7 @@ package body Messages.Test_Data.Tests is
 --  id:2.2/5bb1ad5dbd52690f/FormatedTime/1/0/test_formattedtime/
    procedure Test_FormatedTime_test_formattedtime(Gnattest_T: in out Test) is
       function FormatedTime
-        (Time: Date_Record := GameDate) return String renames
+        (Time: Date_Record := Game_Date) return String renames
         Wrap_Test_FormatedTime_5bb1ad_45f0f1;
 --  end read only
 

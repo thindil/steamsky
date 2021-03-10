@@ -12,12 +12,12 @@ package body Game.Test_Data is
    procedure Set_Up(Gnattest_T: in out Test) is
       pragma Unreferenced(Gnattest_T);
    begin
-      if DataDirectory = To_Unbounded_String("../../bin/data/") then
+      if Data_Directory = To_Unbounded_String("../../bin/data/") then
          return;
       end if;
-      DataDirectory := To_Unbounded_String("../../bin/data/");
-      SaveDirectory := To_Unbounded_String("../../bin/data/saves/");
-      Create_Path(To_String(SaveDirectory));
+      Data_Directory := To_Unbounded_String("../../bin/data/");
+      Save_Directory := To_Unbounded_String("../../bin/data/saves/");
+      Create_Path(To_String(Save_Directory));
       DocDirectory := To_Unbounded_String("../../bin/doc/");
       ModsDirectory := To_Unbounded_String("../../bin/data/mods/");
       ThemesDirectory := To_Unbounded_String("../../bin/data/themes/");
