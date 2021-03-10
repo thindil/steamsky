@@ -75,7 +75,8 @@ package body Knowledge is
       if Winfo_Get(KnowledgeFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator & "knowledge.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator &
+            "knowledge.tcl");
          Append(ComboValues, " {Any}");
          for BaseType of BasesTypes_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");

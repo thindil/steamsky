@@ -581,8 +581,8 @@ package body Bases.RecruitUI is
       CountPrice(Cost, FindMember(Talk));
       configure
         (Label,
-         "-text {Hire for" & Natural'Image(Cost) & " " & To_String(Money_Name) &
-         "}");
+         "-text {Hire for" & Natural'Image(Cost) & " " &
+         To_String(Money_Name) & "}");
       Label.Name := New_String(".negotiatedialog.dailylbl");
       configure
         (Label, "-text {Daily payment:" & Natural'Image(DailyPayment) & "}");

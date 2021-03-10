@@ -326,8 +326,8 @@ package body Ships.Movement is
                   AddMessage
                     ("Ship undocked from base " &
                      To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
-                     Positive'Image(DockingCost) & " " & To_String(Money_Name) &
-                     " of docking fee.",
+                     Positive'Image(DockingCost) & " " &
+                     To_String(Money_Name) & " of docking fee.",
                      OrderMessage);
                end;
             else

@@ -684,7 +684,8 @@ package body Bases.ShipyardUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have " & To_String(Money_Name) & " to pay for modules.");
+           ("You don't have " & To_String(Money_Name) &
+            " to pay for modules.");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          ShowMessage

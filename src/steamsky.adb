@@ -85,7 +85,8 @@ begin
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
-            if not Update_Path(Path => Data_Directory, Path_Name => "Data") then
+            if not Update_Path
+                (Path => Data_Directory, Path_Name => "Data") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--savedi" then
@@ -93,7 +94,8 @@ begin
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
-            if not Update_Path(Path => Save_Directory, Path_Name => "Save") then
+            if not Update_Path
+                (Path => Save_Directory, Path_Name => "Save") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--docdir" then
