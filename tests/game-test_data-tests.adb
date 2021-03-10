@@ -51,12 +51,12 @@ package body Game.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Minutes: constant Natural := GameDate.Minutes;
+      Minutes: constant Natural := Game_Date.Minutes;
 
    begin
 
       UpdateGame(1);
-      Assert(Minutes + 1 = GameDate.Minutes, "Failed to update game time.");
+      Assert(Minutes + 1 = Game_Date.Minutes, "Failed to update game time.");
 
 --  begin read only
    end Test_UpdateGame_test_updategame;
