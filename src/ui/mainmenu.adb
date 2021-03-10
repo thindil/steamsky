@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -71,7 +71,7 @@ package body MainMenu is
 
    procedure CreateMainMenu is
       UI_Directory: constant String :=
-        To_String(DataDirectory) & "ui" & Dir_Separator;
+        To_String(Data_Directory) & "ui" & Dir_Separator;
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       Icon: constant Tk_Photo :=
         Create
@@ -230,7 +230,7 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(GameFrame);
       end if;
       Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
-      Start_Search(Files, To_String(SaveDirectory), "*.sav");
+      Start_Search(Files, To_String(Save_Directory), "*.sav");
       if not More_Entries(Files) then
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Button.Name := New_String(".mainmenu.newgame");
@@ -241,7 +241,7 @@ package body MainMenu is
       end if;
       End_Search(Files);
       Button.Name := New_String(".mainmenu.halloffame");
-      if not Exists(To_String(SaveDirectory) & "halloffame.dat") then
+      if not Exists(To_String(Save_Directory) & "halloffame.dat") then
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
       else
          Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");

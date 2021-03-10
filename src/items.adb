@@ -128,7 +128,7 @@ package body Items is
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
             if ItemIndex = MoneyIndex then
-               MoneyName := TempRecord.Name;
+               Money_Name := TempRecord.Name;
             end if;
             -- Backward compatibility, all ammunitions are normal by default
             if Length(TempRecord.IType) > 4

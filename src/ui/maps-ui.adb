@@ -124,7 +124,7 @@ package body Maps.UI is
       end if;
       Label.Name := New_String(".gameframe.header.nofuel");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      ItemAmount := GetItemAmount(FuelType);
+      ItemAmount := GetItemAmount(Fuel_Type);
       if ItemAmount = 0 then
          configure(Label, "-style Headerred.TLabel");
          Add
@@ -815,7 +815,7 @@ package body Maps.UI is
          declare
             KeysFile: File_Type;
          begin
-            Open(KeysFile, In_File, To_String(SaveDirectory) & "keys.cfg");
+            Open(KeysFile, In_File, To_String(Save_Directory) & "keys.cfg");
             for Key of MenuAccelerators loop
                Key := To_Unbounded_String(Get_Line(KeysFile));
             end loop;
@@ -830,7 +830,7 @@ package body Maps.UI is
          end;
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "game.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
          SetTheme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;

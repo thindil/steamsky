@@ -283,7 +283,7 @@ package body MainMenu.Commands is
       Selected: Boolean := False;
    begin
       Delete(LoadView, "[list " & Children(LoadView, "{}") & "]");
-      Start_Search(Files, To_String(SaveDirectory), "*.sav");
+      Start_Search(Files, To_String(Save_Directory), "*.sav");
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
@@ -392,7 +392,7 @@ package body MainMenu.Commands is
       if Selection(LoadView) = "" then
          return TCL_OK;
       end if;
-      SaveName := SaveDirectory & Selection(LoadView);
+      SaveName := Save_Directory & Selection(LoadView);
       LoadGame;
       StartGame;
       return TCL_OK;

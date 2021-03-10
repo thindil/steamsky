@@ -323,7 +323,7 @@ package body OrdersMenu is
                           (OrdersMenu, "command",
                            "-label {Dock (" &
                            Trim(Positive'Image(DockingCost), Left) & " " &
-                           To_String(MoneyName) &
+                           To_String(Money_Name) &
                            ")} -underline 0 -command {Docking}");
                      end;
                   end if;
@@ -426,7 +426,7 @@ package body OrdersMenu is
                                .EventIndex)
                             .ShipIndex)
                          .Name,
-                       To_String(TradersName)) >
+                       To_String(Traders_Name)) >
                     0 then
                      Add
                        (OrdersMenu, "command",
@@ -667,7 +667,7 @@ package body OrdersMenu is
       CountPrice(Price, TraderIndex);
       ShowQuestion
         ("Are you sure want to change your home base (it cost" &
-         Positive'Image(Price) & " " & To_String(MoneyName) & ")?",
+         Positive'Image(Price) & " " & To_String(Money_Name) & ")?",
          "sethomebase");
       return TCL_OK;
    end Set_As_Home_Command;

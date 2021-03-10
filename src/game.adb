@@ -613,18 +613,18 @@ package body Game is
             Alchemy_Tools :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "corpseindex" then
-            CorpseIndex :=
+            Corpse_Index :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "missionitemstype" then
-            MissionItemsType :=
+            Mission_Items_Type :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "fueltype" then
-            FuelType := To_Unbounded_String(Get_Attribute(DataNode, "value"));
+            Fuel_Type := To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "moneyindex" then
             MoneyIndex :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "tradersname" then
-            TradersName :=
+            Traders_Name :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "attribute" then
             Attributes_List.Append
@@ -862,7 +862,7 @@ package body Game is
             end loop Load_Data_Files_Loop;
             End_Search(Files);
          else
-            Open(To_String(DataDirectory) & FileName, DataFile);
+            Open(To_String(Data_Directory) & FileName, DataFile);
             LocalFileName := To_Unbounded_String(FileName);
             LoadDataFile(DataName);
             Close(DataFile);

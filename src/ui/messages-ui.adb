@@ -119,7 +119,7 @@ package body Messages.UI is
       if Winfo_Get(MessagesCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "messages.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
          Bind(MessagesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(MessagesCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl_Eval(Interp, "InvokeButton " & CloseButton);

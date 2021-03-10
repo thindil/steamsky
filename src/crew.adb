@@ -910,7 +910,7 @@ package body Crew is
          if Member.Payment(1) > 0 then
             if MoneyIndex2 = 0 and HaveMoney then
                AddMessage
-                 ("You don't have any " & To_String(MoneyName) &
+                 ("You don't have any " & To_String(Money_Name) &
                   " to pay your crew members.",
                   TradeMessage, RED);
                HaveMoney := False;
@@ -922,7 +922,7 @@ package body Crew is
                     (Ship => PlayerShip, ProtoIndex => MoneyIndex,
                      Amount => (0 - MoneyNeeded));
                   AddMessage
-                    ("You don't have enough " & To_String(MoneyName) &
+                    ("You don't have enough " & To_String(Money_Name) &
                      " to pay your crew members.",
                      TradeMessage, RED);
                   HaveMoney := False;

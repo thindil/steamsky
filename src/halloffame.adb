@@ -45,7 +45,7 @@ package body HallOfFame is
       if HallOfFame_Array(1).Name /= Null_Unbounded_String then
          return;
       end if;
-      Open(To_String(SaveDirectory) & "halloffame.dat", HoFFile);
+      Open(To_String(Save_Directory) & "halloffame.dat", HoFFile);
       Parse(Reader, HoFFile);
       Close(HoFFile);
       HoFData := Get_Tree(Reader);
@@ -110,7 +110,7 @@ package body HallOfFame is
            (EntryNode, "deathreason",
             To_String(HallOfFame_Array(I).DeathReason));
       end loop Update_Hall_Of_Fame_Loop;
-      Create(HoFFile, Out_File, To_String(SaveDirectory) & "halloffame.dat");
+      Create(HoFFile, Out_File, To_String(Save_Directory) & "halloffame.dat");
       Write(Stream => Stream(HoFFile), N => HoFData, Pretty_Print => True);
       Close(HoFFile);
    end UpdateHallOfFame;

@@ -115,7 +115,7 @@ package body Trades.UI is
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "trade.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "trade.tcl");
          Bind(TradeFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          TradeFrame := Get_Widget(TradeCanvas & ".trade");
          TradeTable :=
@@ -334,11 +334,11 @@ package body Trades.UI is
            To_Unbounded_String
              ("You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-              To_String(MoneyName) & ".");
+              To_String(Money_Name) & ".");
       else
          TradeInfo :=
            To_Unbounded_String
-             ("You don't have any " & To_String(MoneyName) &
+             ("You don't have any " & To_String(Money_Name) &
               " to buy anything.");
       end if;
       declare
@@ -360,26 +360,26 @@ package body Trades.UI is
          if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
             Append
               (TradeInfo,
-               "Base don't have any " & To_String(MoneyName) &
+               "Base don't have any " & To_String(Money_Name) &
                "to buy anything.");
          else
             Append
               (TradeInfo,
                "Base have" &
                Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) & " " &
-               To_String(MoneyName) & ".");
+               To_String(Money_Name) & ".");
          end if;
       else
          if TraderCargo(1).Amount = 0 then
             Append
               (TradeInfo,
-               "Ship don't have any " & To_String(MoneyName) &
+               "Ship don't have any " & To_String(Money_Name) &
                "to buy anything.");
          else
             Append
               (TradeInfo,
                "Ship have" & Positive'Image(TraderCargo(1).Amount) & " " &
-               To_String(MoneyName) & ".");
+               To_String(Money_Name) & ".");
          end if;
       end if;
       Label.Name :=
@@ -625,12 +625,12 @@ package body Trades.UI is
          return TCL_OK;
       when An_Exception : Trade_No_Money =>
          ShowMessage
-           ("You don't have any " & To_String(MoneyName) & " to buy " &
+           ("You don't have any " & To_String(Money_Name) & " to buy " &
             Exception_Message(An_Exception) & ".");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " & To_String(MoneyName) &
+           ("You don't have enough " & To_String(Money_Name) &
             " to buy so much " & Exception_Message(An_Exception) & ".");
          return TCL_OK;
       when Trade_Invalid_Amount =>
@@ -649,7 +649,7 @@ package body Trades.UI is
          ShowMessage
            ("You can't sell so much " & Exception_Message(An_Exception) &
             " because " & Trader & " don't have that much " &
-            To_String(MoneyName) & " to buy it.");
+            To_String(Money_Name) & " to buy it.");
          return TCL_OK;
       when Trade_No_Trader =>
          ShowMessage

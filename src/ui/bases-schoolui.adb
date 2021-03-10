@@ -72,7 +72,7 @@ package body Bases.SchoolUI is
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "school.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -177,11 +177,11 @@ package body Bases.SchoolUI is
            (MoneyLabel,
             "-text {You have" &
             Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(MoneyName) & ".}");
+            To_String(Money_Name) & ".}");
       else
          configure
            (MoneyLabel,
-            "-text {You don't have any " & To_String(MoneyName) &
+            "-text {You don't have any " & To_String(Money_Name) &
             " to pay for learning.}");
       end if;
       if Children(SkillsView, "{}") /= "{}" then
@@ -227,12 +227,12 @@ package body Bases.SchoolUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have any " & To_String(MoneyName) &
+           ("You don't have any " & To_String(Money_Name) &
             " to pay for learning.");
          return TCL_OK;
       when Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " & To_String(MoneyName) &
+           ("You don't have enough " & To_String(Money_Name) &
             " to pay for learning this skill.");
          return TCL_OK;
       when Trade_Cant_Train =>

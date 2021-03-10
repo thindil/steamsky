@@ -55,7 +55,7 @@ package body Statistics.UI is
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "stats.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
          Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" then
          Tcl_Eval(Get_Context, "InvokeButton " & CloseButton);

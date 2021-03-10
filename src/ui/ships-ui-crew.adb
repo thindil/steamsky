@@ -566,7 +566,7 @@ package body Ships.UI.Crew is
             Append
               (MemberInfo,
                LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
-               To_String(MoneyName) & " each day");
+               To_String(Money_Name) & " each day");
             if Member.Payment(2) > 0 then
                Append
                  (MemberInfo,

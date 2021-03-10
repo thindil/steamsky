@@ -57,14 +57,14 @@ package body ErrorDialog is
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
       end if;
-      if Exists(Name => To_String(Source => SaveDirectory) & "error.log") then
+      if Exists(Name => To_String(Source => Save_Directory) & "error.log") then
          Open
            (File => Error_File, Mode => Append_File,
-            Name => To_String(Source => SaveDirectory) & "error.log");
+            Name => To_String(Source => Save_Directory) & "error.log");
       else
          Create
            (File => Error_File, Mode => Append_File,
-            Name => To_String(Source => SaveDirectory) & "error.log");
+            Name => To_String(Source => Save_Directory) & "error.log");
       end if;
       Append(Source => Error_Text, New_Item => Current_Time & LF);
       Append(Source => Error_Text, New_Item => Game_Version & LF);
@@ -136,7 +136,7 @@ package body ErrorDialog is
          Tcl_EvalFile
            (interp => Get_Context,
             fileName =>
-              To_String(Source => DataDirectory) & "ui" & Dir_Separator &
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
               "errordialog.tcl");
          AddCommand
            (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);

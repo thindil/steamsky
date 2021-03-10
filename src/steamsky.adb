@@ -81,19 +81,19 @@ begin
                end if;
             end loop Set_Debug_Mode_Loop;
          elsif Argument(Number => I)(1 .. 8) = "--datadi" then
-            DataDirectory :=
+            Data_Directory :=
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
-            if not Update_Path(Path => DataDirectory, Path_Name => "Data") then
+            if not Update_Path(Path => Data_Directory, Path_Name => "Data") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--savedi" then
-            SaveDirectory :=
+            Save_Directory :=
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
-            if not Update_Path(Path => SaveDirectory, Path_Name => "Save") then
+            if not Update_Path(Path => Save_Directory, Path_Name => "Save") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--docdir" then
@@ -127,7 +127,7 @@ begin
       end if;
    end loop Command_Line_Loop;
 
-   Create_Path(New_Directory => To_String(Source => SaveDirectory));
+   Create_Path(New_Directory => To_String(Source => Save_Directory));
    Create_Path(New_Directory => To_String(Source => ModsDirectory));
    Create_Path(New_Directory => To_String(Source => ThemesDirectory));
 

@@ -99,7 +99,7 @@ package body Bases.LootUI is
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "loot.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "loot.tcl");
          Bind(LootFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          LootFrame := Get_Widget(LootCanvas & ".loot");
          LootTable :=

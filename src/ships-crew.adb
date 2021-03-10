@@ -103,7 +103,7 @@ package body Ships.Crew is
       if CreateBody then
          Ship.Cargo.Append
            (New_Item =>
-              (ProtoIndex => CorpseIndex, Amount => 1,
+              (ProtoIndex => Corpse_Index, Amount => 1,
                Name =>
                  Ship.Crew(MemberIndex).Name &
                  To_Unbounded_String("'s corpse"),

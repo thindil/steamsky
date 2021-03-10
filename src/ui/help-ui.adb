@@ -67,10 +67,10 @@ package body Help.UI is
          Value: Unbounded_String;
       end record;
       Variables: constant array(1 .. 11) of Variables_Data :=
-        (1 => (Name => To_Unbounded_String("MoneyName"), Value => MoneyName),
+        (1 => (Name => To_Unbounded_String("MoneyName"), Value => Money_Name),
          2 =>
            (Name => To_Unbounded_String("FuelName"),
-            Value => Items_List(FindProtoItem(ItemType => FuelType)).Name),
+            Value => Items_List(FindProtoItem(ItemType => Fuel_Type)).Name),
          3 =>
            (Name => To_Unbounded_String("StrengthName"),
             Value => Attributes_List(StrengthIndex).Name),
@@ -267,7 +267,7 @@ package body Help.UI is
         Get_Widget(Paned & ".topics.view", Interp);
    begin
       Tcl_EvalFile
-        (Interp, To_String(DataDirectory) & "ui" & Dir_Separator & "help.tcl");
+        (Interp, To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
          GameSettings.WindowWidth) /

@@ -78,7 +78,7 @@ package body Ships.UI is
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "shipinfo.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
          ShipInfoFrame := Get_Widget(ShipInfoFrame & ".modules.canvas.frame");
          ModulesTable :=
            CreateTable

@@ -174,10 +174,10 @@ package body GameOptions is
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "options.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Set_Path(DataDirectory, "data");
-         Set_Path(SaveDirectory, "save");
+         Set_Path(Data_Directory, "data");
+         Set_Path(Save_Directory, "save");
          Set_Path(DocDirectory, "docs");
          Set_Path(ModsDirectory, "mods");
          for Theme of Themes_List loop
@@ -563,7 +563,7 @@ package body GameOptions is
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
-      Create(KeysFile, Append_File, To_String(SaveDirectory) & "keys.cfg");
+      Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
       for Key of MenuAccelerators loop
          Put_Line(KeysFile, To_String(Key));
       end loop;
