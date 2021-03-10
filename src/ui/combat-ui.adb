@@ -841,7 +841,7 @@ package body Combat.UI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
-      Show_Enemy_Crew_Loop:
+      Show_Enemy_Crew_Loop :
       for I in Enemy.Ship.Crew.Iterate loop
          Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
          Button :=
@@ -891,7 +891,8 @@ package body Combat.UI is
         New_String(".gameframe.paned.combatframe.left.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(1 , Rows - 1, Frame);
+      Delete_Widgets(1, Rows - 1, Frame);
+      Show_Boarding_Party_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order /= Boarding then
             goto End_Of_Loop;
@@ -932,7 +933,7 @@ package body Combat.UI is
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
          OrderIndex := OrderIndex + 1;
          <<End_Of_Loop>>
-      end loop;
+      end loop Show_Boarding_Party_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.left.canvas");
       configure
@@ -1226,6 +1227,7 @@ package body Combat.UI is
       Autoscroll(YScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      Show_Player_Ship_Crew_Loop :
       for I in PlayerShip.Crew.Iterate loop
          CrewButton :=
            Create
@@ -1250,7 +1252,7 @@ package body Combat.UI is
            (CrewButton, "<Tab>",
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
-      end loop;
+      end loop Show_Player_Ship_Crew_Loop;
       if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
          Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
       end if;
@@ -1369,6 +1371,7 @@ package body Combat.UI is
    begin
       Info := To_Unbounded_String("Uses: ");
       if CArgv.Arg(Argv, 1) = "player" then
+         Show_Player_Crew_Equipment_Loop :
          for Item of PlayerShip.Crew(CrewIndex).Equipment loop
             if Item /= 0 then
                Append
@@ -1376,8 +1379,9 @@ package body Combat.UI is
                   LF &
                   GetItemName(PlayerShip.Crew(CrewIndex).Inventory(Item)));
             end if;
-         end loop;
+         end loop Show_Player_Crew_Equipment_Loop;
       else
+         Show_Enemy_Crew_Equipment_Loop :
          for Item of Enemy.Ship.Crew(CrewIndex).Equipment loop
             if Item /= 0 then
                Append
@@ -1385,7 +1389,7 @@ package body Combat.UI is
                   LF &
                   GetItemName(Enemy.Ship.Crew(CrewIndex).Inventory(Item)));
             end if;
-         end loop;
+         end loop Show_Enemy_Crew_Equipment_Loop;
       end if;
       ShowInfo(To_String(Info));
       return TCL_OK;
@@ -1440,6 +1444,7 @@ package body Combat.UI is
          end if;
          Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command ShowCombatUI");
+         Back_To_Work_Loop :
          for Member of PlayerShip.Crew loop
             if Member.Order = Rest
               and then Member.PreviousOrder in Pilot | Engineer | Gunner then
@@ -1449,7 +1454,7 @@ package body Combat.UI is
                  (To_String(Member.Name) & " back to work for combat.",
                   OrderMessage);
             end if;
-         end loop;
+         end loop Back_To_Work_Loop;
          Delete(GameMenu, "1");
          Delete(GameMenu, "4");
       end if;
