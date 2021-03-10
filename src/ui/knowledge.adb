@@ -59,7 +59,6 @@ package body Knowledge is
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
       KnowledgeFrame: Ttk_Frame := Get_Widget(Paned & ".knowledgeframe");
-      Item: Ttk_Frame;
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       Tokens: Slice_Set;
@@ -76,7 +75,7 @@ package body Knowledge is
       if Winfo_Get(KnowledgeFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "knowledge.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "knowledge.tcl");
          Append(ComboValues, " {Any}");
          for BaseType of BasesTypes_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");
@@ -105,17 +104,7 @@ package body Knowledge is
         New_String(Paned & ".knowledgeframe.missions.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (KnowledgeFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J), Interp);
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
       if AcceptedMissions.Length = 0 then
          Label :=
            Create
@@ -199,17 +188,7 @@ package body Knowledge is
         New_String(Paned & ".knowledgeframe.events.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (KnowledgeFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J), Interp);
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
       if Events_List.Length = 0 then
          Label :=
            Create
@@ -310,17 +289,7 @@ package body Knowledge is
         New_String(Paned & ".knowledgeframe.stories.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (KnowledgeFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J), Interp);
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
       if FinishedStories.Length = 0 then
          Label :=
            Create
