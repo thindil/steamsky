@@ -830,7 +830,6 @@ package body Combat.UI is
       Frame: Ttk_Frame :=
         Get_Widget(".gameframe.paned.combatframe.right.canvas.frame");
       Label: Ttk_Label;
-      Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
@@ -892,16 +891,7 @@ package body Combat.UI is
         New_String(".gameframe.paned.combatframe.left.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1 , Rows - 1, Frame);
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order /= Boarding then
             goto End_Of_Loop;
