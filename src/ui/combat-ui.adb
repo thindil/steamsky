@@ -842,6 +842,7 @@ package body Combat.UI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
+      Show_Enemy_Crew_Loop:
       for I in Enemy.Ship.Crew.Iterate loop
          Append(OrdersList, "{Attack " & Enemy.Ship.Crew(I).Name & "} ");
          Button :=
@@ -878,7 +879,7 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
-      end loop;
+      end loop Show_Enemy_Crew_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.right.canvas");
       configure
