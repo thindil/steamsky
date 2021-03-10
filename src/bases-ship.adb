@@ -52,8 +52,8 @@ package body Bases.Ship is
            PlayerShip.Modules(ModuleIndex).MaxDurability;
          AddMessage
            ("You bought " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            " repair for" & Positive'Image(Cost) & " " & To_String(Money_Name) &
-            ".",
+            " repair for" & Positive'Image(Cost) & " " &
+            To_String(Money_Name) & ".",
             TradeMessage);
       else
          Repair_Whole_Ship_Loop :
@@ -470,7 +470,8 @@ package body Bases.Ship is
       if MoneyIndex2 = 0 then
          GainRep(BaseIndex, -10);
          AddMessage
-           ("You don't have " & To_String(Money_Name) & " for pay for docking!",
+           ("You don't have " & To_String(Money_Name) &
+            " for pay for docking!",
             OtherMessage, RED);
          return;
       end if;
@@ -495,8 +496,8 @@ package body Bases.Ship is
          Amount => -(DockingCost));
       UpdateBaseCargo(MoneyIndex, DockingCost);
       AddMessage
-        ("You pay" & Positive'Image(DockingCost) & " " & To_String(Money_Name) &
-         " docking fee.",
+        ("You pay" & Positive'Image(DockingCost) & " " &
+         To_String(Money_Name) & " docking fee.",
          OtherMessage);
       if TraderIndex > 0 then
          GainExp(1, TalkingSkill, TraderIndex);

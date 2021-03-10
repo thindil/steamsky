@@ -1429,7 +1429,8 @@ package body Combat.UI is
          if Winfo_Get(CombatFrame, "exists") = "0" then
             Tcl_EvalFile
               (Get_Context,
-               To_String(Data_Directory) & "ui" & Dir_Separator & "combat.tcl");
+               To_String(Data_Directory) & "ui" & Dir_Separator &
+               "combat.tcl");
             PilotOrder := 2;
             EngineerOrder := 3;
             AddCommand("SetPartyOrder", Set_Party_Order_Command'Access);

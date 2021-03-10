@@ -267,7 +267,8 @@ package body Help.UI is
         Get_Widget(Paned & ".topics.view", Interp);
    begin
       Tcl_EvalFile
-        (Interp, To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
+        (Interp,
+         To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
          GameSettings.WindowWidth) /
