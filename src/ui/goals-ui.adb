@@ -62,7 +62,7 @@ package body Goals.UI is
    begin
       Tcl_EvalFile
         (Interp,
-         To_String(DataDirectory) & "ui" & Dir_Separator & "goals.tcl");
+         To_String(Data_Directory) & "ui" & Dir_Separator & "goals.tcl");
       for I in Goals_List.Iterate loop
          Insert
            (GoalsView,

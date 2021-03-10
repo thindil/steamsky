@@ -581,7 +581,7 @@ package body Bases.RecruitUI is
       CountPrice(Cost, FindMember(Talk));
       configure
         (Label,
-         "-text {Hire for" & Natural'Image(Cost) & " " & To_String(MoneyName) &
+         "-text {Hire for" & Natural'Image(Cost) & " " & To_String(Money_Name) &
          "}");
       Label.Name := New_String(".negotiatedialog.dailylbl");
       configure
@@ -797,7 +797,7 @@ package body Bases.RecruitUI is
            (Label,
             "-text {You have" &
             Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(MoneyName) & ".}");
+            To_String(Money_Name) & ".}");
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             configure(HireButton, "-state disabled");
          else
@@ -813,7 +813,7 @@ package body Bases.RecruitUI is
       configure
         (Label,
          "-text {Hire for" & Positive'Image(Cost) & " " &
-         To_String(MoneyName) & "}");
+         To_String(Money_Name) & "}");
       Tcl.Tk.Ada.Grid.Grid(HireButton);
       CloseButton :=
         Create

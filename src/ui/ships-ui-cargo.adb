@@ -366,7 +366,7 @@ package body Ships.UI.Cargo is
       DropAmount := Natural'Value(Get(SpinBox));
       DropAmount2 := DropAmount;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
-        MissionItemsType then
+        Mission_Items_Type then
          for J in 1 .. DropAmount2 loop
             for I in
               AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop

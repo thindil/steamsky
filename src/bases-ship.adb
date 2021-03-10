@@ -52,7 +52,7 @@ package body Bases.Ship is
            PlayerShip.Modules(ModuleIndex).MaxDurability;
          AddMessage
            ("You bought " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
-            " repair for" & Positive'Image(Cost) & " " & To_String(MoneyName) &
+            " repair for" & Positive'Image(Cost) & " " & To_String(Money_Name) &
             ".",
             TradeMessage);
       else
@@ -64,7 +64,7 @@ package body Bases.Ship is
          end loop Repair_Whole_Ship_Loop;
          AddMessage
            ("You bought an entire ship repair for" & Positive'Image(Cost) &
-            " " & To_String(MoneyName) & ".",
+            " " & To_String(Money_Name) & ".",
             TradeMessage);
       end if;
       UpdateCargo
@@ -338,7 +338,7 @@ package body Bases.Ship is
          AddMessage
            ("You installed " & To_String(Modules_List(ModuleIndex).Name) &
             " on your ship for" & Positive'Image(Price) & " " &
-            To_String(MoneyName) & ".",
+            To_String(Money_Name) & ".",
             TradeMessage);
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
@@ -436,7 +436,7 @@ package body Bases.Ship is
            ("You removed " &
             To_String(PlayerShip.Modules(ShipModuleIndex).Name) &
             " from your ship and received" & Positive'Image(Price) & " " &
-            To_String(MoneyName) & ".",
+            To_String(Money_Name) & ".",
             TradeMessage);
          PlayerShip.Modules.Delete(ShipModuleIndex);
          if PlayerShip.RepairModule > ShipModuleIndex then
@@ -470,7 +470,7 @@ package body Bases.Ship is
       if MoneyIndex2 = 0 then
          GainRep(BaseIndex, -10);
          AddMessage
-           ("You don't have " & To_String(MoneyName) & " for pay for docking!",
+           ("You don't have " & To_String(Money_Name) & " for pay for docking!",
             OtherMessage, RED);
          return;
       end if;
@@ -495,7 +495,7 @@ package body Bases.Ship is
          Amount => -(DockingCost));
       UpdateBaseCargo(MoneyIndex, DockingCost);
       AddMessage
-        ("You pay" & Positive'Image(DockingCost) & " " & To_String(MoneyName) &
+        ("You pay" & Positive'Image(DockingCost) & " " & To_String(Money_Name) &
          " docking fee.",
          OtherMessage);
       if TraderIndex > 0 then

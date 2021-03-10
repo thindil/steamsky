@@ -127,7 +127,7 @@ package body Events is
                   end if;
                   GainExp(1, PilotingSkill, CrewIndex);
                   UpdateCargo
-                    (PlayerShip, FindProtoItem(ItemType => FuelType),
+                    (PlayerShip, FindProtoItem(ItemType => Fuel_Type),
                      CountFuelNeeded);
                   UpdateGame(TimePassed);
                end if;
@@ -423,7 +423,7 @@ package body Events is
    begin
       Count_Traders_Loop :
       for I in ProtoShips_List.Iterate loop
-         if Index(ProtoShips_List(I).Name, To_String(TradersName)) > 0 then
+         if Index(ProtoShips_List(I).Name, To_String(Traders_Name)) > 0 then
             Traders.Append(New_Item => ProtoShips_Container.Key(I));
          end if;
       end loop Count_Traders_Loop;
@@ -489,7 +489,7 @@ package body Events is
              (PlayerShip.Crew(1).Faction, ProtoShips_List(I).Owner) and
            not PlayerShips.Contains(ProtoShips_Container.Key(I)) and
            (WithTraders or
-            Index(ProtoShips_List(I).Name, To_String(TradersName)) = 0) then
+            Index(ProtoShips_List(I).Name, To_String(Traders_Name)) = 0) then
             Enemies.Append(New_Item => ProtoShips_Container.Key(I));
          end if;
       end loop Generate_Enemies_Loop;

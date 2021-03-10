@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -36,10 +36,10 @@ package body Log is
       if DebugMode = None then
          return;
       end if;
-      if Exists(To_String(SaveDirectory) & "debug.log") then
-         Open(LogFile, Append_File, To_String(SaveDirectory) & "debug.log");
+      if Exists(To_String(Save_Directory) & "debug.log") then
+         Open(LogFile, Append_File, To_String(Save_Directory) & "debug.log");
       else
-         Create(LogFile, Append_File, To_String(SaveDirectory) & "debug.log");
+         Create(LogFile, Append_File, To_String(Save_Directory) & "debug.log");
       end if;
       LogMessage
         ("Start game in debug mode: " & Debug_Types'Image(DebugMode) & ".",

@@ -99,7 +99,7 @@ package body Combat is
           (EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
            FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
-      if Index(ProtoShips_List(EnemyIndex).Name, To_String(TradersName)) >
+      if Index(ProtoShips_List(EnemyIndex).Name, To_String(Traders_Name)) >
         0 then
          GenerateTraderCargo(EnemyIndex);
          Update_Cargo_Loop :
@@ -1139,7 +1139,7 @@ package body Combat is
          end if;
       end MeleeCombat;
    begin
-      if FindItem(Inventory => PlayerShip.Cargo, ItemType => FuelType) = 0 then
+      if FindItem(Inventory => PlayerShip.Cargo, ItemType => Fuel_Type) = 0 then
          AddMessage
            ("Ship fall from sky due to lack of fuel.", OtherMessage, RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
@@ -1478,7 +1478,7 @@ package body Combat is
             if LootAmount > 0 then
                AddMessage
                  ("You looted" & Integer'Image(LootAmount) & " " &
-                  To_String(MoneyName) & " from " & To_String(EnemyName) & ".",
+                  To_String(Money_Name) & " from " & To_String(EnemyName) & ".",
                   CombatMessage);
                UpdateCargo(PlayerShip, MoneyIndex, LootAmount);
             end if;

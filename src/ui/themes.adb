@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -78,7 +78,7 @@ package body Themes is
       SetDefaultValues;
       TempRecord.Name := To_Unbounded_String("Default theme");
       TempRecord.FileName :=
-        DataDirectory &
+        Data_Directory &
         To_Unbounded_String("ui" & Dir_Separator & "theme.tcl");
       Themes_Container.Include(Themes_List, "steamsky", TempRecord);
       SetDefaultValues;

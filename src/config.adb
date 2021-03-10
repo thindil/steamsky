@@ -56,7 +56,7 @@ package body Config is
          ShowLastMessages => True, MessagesPosition => 213,
          FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
          TopicsPosition => 200, ShowNumbers => False);
-      Open(ConfigFile, In_File, To_String(SaveDirectory) & "game.cfg");
+      Open(ConfigFile, In_File, To_String(Save_Directory) & "game.cfg");
       Read_Config_File_Loop :
       while not End_Of_File(ConfigFile) loop
          RawData := To_Unbounded_String(Get_Line(ConfigFile));
@@ -190,7 +190,7 @@ package body Config is
          end if;
       end SaveBoolean;
    begin
-      Create(ConfigFile, Append_File, To_String(SaveDirectory) & "game.cfg");
+      Create(ConfigFile, Append_File, To_String(Save_Directory) & "game.cfg");
       Put_Line
         (ConfigFile, "PlayerName = " & To_String(NewGameSettings.PlayerName));
       Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);

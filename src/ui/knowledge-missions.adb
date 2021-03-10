@@ -224,7 +224,7 @@ package body Knowledge.Missions is
          LF & "Base reward:" &
          Natural'Image
            (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-         " " & To_String(MoneyName));
+         " " & To_String(Money_Name));
       ShowInfo(To_String(MissionInfo));
       return TCL_OK;
    end Show_Mission_Info_Command;

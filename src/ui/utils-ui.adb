@@ -284,8 +284,8 @@ package body Utils.UI is
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
       if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
-        FuelType then
-         Amount := GetItemAmount(FuelType) - Value;
+        Fuel_Type then
+         Amount := GetItemAmount(Fuel_Type) - Value;
          if Amount <= GameSettings.LowFuel then
             Widgets.configure
               (Label, "-text {" & To_String(WarningText) & "fuel.}");
@@ -523,7 +523,7 @@ package body Utils.UI is
             ItemIndex, Items: Unbounded_String;
          begin
             ItemIndex := To_Unbounded_String(Selection(LoadView));
-            Delete_File(To_String(SaveDirectory & ItemIndex));
+            Delete_File(To_String(Save_Directory & ItemIndex));
             Delete(LoadView, To_String(ItemIndex));
             Items := To_Unbounded_String(Children(LoadView, "{}"));
             if Items = Null_Unbounded_String then
@@ -550,14 +550,14 @@ package body Utils.UI is
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
-                 ("You don't have any " & To_String(MoneyName) &
+                 ("You don't have any " & To_String(Money_Name) &
                   " for change ship home base.");
                return TCL_OK;
             end if;
             CountPrice(Price, TraderIndex);
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowMessage
-                 ("You don't have enough " & To_String(MoneyName) &
+                 ("You don't have enough " & To_String(Money_Name) &
                   " for change ship home base.");
                return TCL_OK;
             end if;
@@ -810,7 +810,7 @@ package body Utils.UI is
          " ");
       if ShowFuelName then
          Append
-           (InfoText, Items_List(FindProtoItem(ItemType => FuelType)).Name);
+           (InfoText, Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
       end if;
    end TravelInfo;
 

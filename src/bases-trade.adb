@@ -111,7 +111,7 @@ package body Bases.Trade is
       GainRep(BaseIndex, 1);
       AddMessage
         ("You hired " & To_String(Recruit.Name) & " for" &
-         Positive'Image(Price) & " " & To_String(MoneyName) & ".",
+         Positive'Image(Price) & " " & To_String(Money_Name) & ".",
          TradeMessage);
       SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
@@ -162,7 +162,7 @@ package body Bases.Trade is
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought the recipe for " & RecipeName & " for" &
-         Positive'Image(Cost) & " of " & To_String(MoneyName) & ".",
+         Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
          TradeMessage);
       GainExp(1, TalkingSkill, TraderIndex);
       GainRep(BaseIndex, 1);
@@ -189,7 +189,7 @@ package body Bases.Trade is
          AddMessage
            ("You paid for healing " &
             To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
-            Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
+            Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
             TradeMessage);
          GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
       else
@@ -203,7 +203,7 @@ package body Bases.Trade is
          end loop Give_Rest_Order_Loop;
          AddMessage
            ("You paid for healing for all wounded crew members for" &
-            Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
+            Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
             TradeMessage);
       end if;
       UpdateCargo
@@ -306,7 +306,7 @@ package body Bases.Trade is
         ("You purchased a training session in " &
          To_String(Skills_List(SkillIndex).Name) & " for " &
          To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
-         Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
+         Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
          TradeMessage);
       GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
       GainedExp :=

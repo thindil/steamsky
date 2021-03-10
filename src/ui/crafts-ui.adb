@@ -102,7 +102,7 @@ package body Crafts.UI is
       if Winfo_Get(CraftsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "crafts.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "crafts.tcl");
          Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");

@@ -130,7 +130,7 @@ package body Bases.ShipyardUI is
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "shipyard.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "shipyard.tcl");
          Bind(ShipyardFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.install", Interp);
@@ -174,9 +174,9 @@ package body Bases.ShipyardUI is
            To_Unbounded_String
              ("You have" &
               Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-              To_String(MoneyName) & ".")
+              To_String(Money_Name) & ".")
          else To_Unbounded_String
-             (LF & "You don't have any " & To_String(MoneyName) &
+             (LF & "You don't have any " & To_String(Money_Name) &
               " to install anything."));
       Append
         (InstallInfo,
@@ -590,12 +590,12 @@ package body Bases.ShipyardUI is
         or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
          Insert
            (ModuleText, "end",
-            "{" & Positive'Image(Cost) & " " & To_String(MoneyName) &
+            "{" & Positive'Image(Cost) & " " & To_String(Money_Name) &
             "} [list red]");
       else
          Insert
            (ModuleText, "end",
-            "{" & Positive'Image(Cost) & " " & To_String(MoneyName) & "}");
+            "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
       end if;
       Insert
         (ModuleText, "end",
@@ -684,11 +684,11 @@ package body Bases.ShipyardUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have " & To_String(MoneyName) & " to pay for modules.");
+           ("You don't have " & To_String(Money_Name) & " to pay for modules.");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " & To_String(MoneyName) & " to pay for " &
+           ("You don't have enough " & To_String(Money_Name) & " to pay for " &
             Exception_Message(An_Exception) & ".");
          return TCL_OK;
       when An_Exception : BasesShip_Unique_Module =>
@@ -702,12 +702,12 @@ package body Bases.ShipyardUI is
          return TCL_OK;
       when Trade_No_Free_Cargo =>
          ShowMessage
-           ("You don't have enough free space for " & To_String(MoneyName) &
+           ("You don't have enough free space for " & To_String(Money_Name) &
             " in ship cargo.");
          return TCL_OK;
       when Trade_No_Money_In_Base =>
          ShowMessage
-           ("Base don't have enough " & To_String(MoneyName) &
+           ("Base don't have enough " & To_String(Money_Name) &
             " for buy this module.");
          return TCL_OK;
    end Manipulate_Module_Command;

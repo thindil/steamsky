@@ -1032,7 +1032,7 @@ package body DebugUI is
    begin
       Tcl_EvalFile
         (Get_Context,
-         To_String(DataDirectory) & "ui" & Dir_Separator & "debug.tcl");
+         To_String(Data_Directory) & "ui" & Dir_Separator & "debug.tcl");
       AddCommand("Refresh", Refresh_Command'Access);
       AddCommand("RefreshModule", Refresh_Module_Command'Access);
       AddCommand("RefreshMember", Refresh_Member_Command'Access);

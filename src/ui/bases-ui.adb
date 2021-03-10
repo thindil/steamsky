@@ -88,7 +88,7 @@ package body Bases.UI is
       if Winfo_Get(BaseCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "base.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "base.tcl");
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -299,7 +299,7 @@ package body Bases.UI is
          configure
            (InfoLabel,
             "-text {Heal cost:" & Natural'Image(Cost) & " " &
-            To_String(MoneyName) & LF & "Heal time:" &
+            To_String(Money_Name) & LF & "Heal time:" &
             To_String(FormattedTime) & "}");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          RepairCost(Cost, Time, Integer'Value(To_String(ItemIndex)));
@@ -308,7 +308,7 @@ package body Bases.UI is
          configure
            (InfoLabel,
             "-text {Repair cost:" & Natural'Image(Cost) & " " &
-            To_String(MoneyName) & LF & "Repair time:" &
+            To_String(Money_Name) & LF & "Repair time:" &
             To_String(FormattedTime) & "}");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Cost :=
@@ -331,7 +331,7 @@ package body Bases.UI is
          configure
            (InfoLabel,
             "-text {Base price:" & Positive'Image(Cost) & " " &
-            To_String(MoneyName) & "}");
+            To_String(Money_Name) & "}");
       end if;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
       InfoLabel.Name :=
@@ -341,7 +341,7 @@ package body Bases.UI is
            (InfoLabel,
             "-text {You have" &
             Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(MoneyName) & ".}");
+            To_String(Money_Name) & ".}");
          if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
             configure(ActionButton, "-state disabled");
          else

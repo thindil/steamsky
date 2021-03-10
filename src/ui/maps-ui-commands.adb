@@ -723,7 +723,7 @@ package body Maps.UI.Commands is
                  Get_Widget(".message", Interp);
             begin
                if Winfo_Get(MessageDialog, "exists") = "0" then
-                  if GetItemAmount(FuelType) <= GameSettings.LowFuel then
+                  if GetItemAmount(Fuel_Type) <= GameSettings.LowFuel then
                      ShowMessage("Your fuel level is dangerously low.");
                      Result := 4;
                      exit;

@@ -106,7 +106,7 @@ package body Trades is
       GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
         ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
-         " for" & Positive'Image(Cost) & " " & To_String(MoneyName) & ".",
+         " for" & Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
          TradeMessage);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
@@ -254,7 +254,7 @@ package body Trades is
       GainExp(1, TalkingSkill, TraderIndex);
       AddMessage
         ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
-         Positive'Image(Profit) & " " & To_String(MoneyName) & ".",
+         Positive'Image(Profit) & " " & To_String(Money_Name) & ".",
          TradeMessage);
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;

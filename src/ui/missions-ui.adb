@@ -176,7 +176,7 @@ package body Missions.UI is
          LF & "Base reward:" &
          Natural'Image
            (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-         " " & To_String(MoneyName));
+         " " & To_String(Money_Name));
       State(Button, "!disabled");
       if BaseIndex > 0 then
          declare
@@ -429,7 +429,7 @@ package body Missions.UI is
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(DataDirectory) & "ui" & Dir_Separator & "missions.tcl");
+            To_String(Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
          Bind(MissionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          AddCommand("ShowMissionInfo", Show_Mission_Info_Command'Access);
          AddCommand("ShowMission", Show_Mission_Command'Access);

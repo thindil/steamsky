@@ -182,25 +182,25 @@ package Game is
    Alchemy_Tools: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.CorpseIndex
+   -- ****v* Game/Game.Corpse_Index
    -- FUNCTION
    -- Index of item used to create mobs corpses
    -- SOURCE
-   CorpseIndex: Unbounded_String;
+   Corpse_Index: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.MissionItemsType
+   -- ****v* Game/Game.Mission_Items_Type
    -- FUNCTION
    -- Name of item type used for delivery missions
    -- SOURCE
-   MissionItemsType: Unbounded_String;
+   Mission_Items_Type: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.FuelType
+   -- ****v* Game/Game.Fuel_Type
    -- FUNCTION
    -- Name of item type used as fuel for ships
    -- SOURCE
-   FuelType: Unbounded_String;
+   Fuel_Type: Unbounded_String;
    -- ****
 
    -- ****v* Game/Game.MoneyIndex
@@ -210,34 +210,35 @@ package Game is
    MoneyIndex: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.MoneyName
+   -- ****v* Game/Game.Money_Name
    -- FUNCTION
    -- Name of money (taken from MoneyIndex)
    -- SOURCE
-   MoneyName: Unbounded_String;
+   Money_Name: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.SaveDirectory
+   -- ****v* Game/Game.Save_Directory
    -- FUNCTION
    -- Path to directory where are savegame and logs
    -- SOURCE
-   SaveDirectory: Unbounded_String :=
-     To_Unbounded_String("data" & Dir_Separator & "saves" & Dir_Separator);
+   Save_Directory: Unbounded_String :=
+     To_Unbounded_String
+       (Source => "data" & Dir_Separator & "saves" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.DataDirectory
+   -- ****v* Game/Game.Data_Directory
    -- FUNCTION
    -- Path to directory where are game data files
    -- SOURCE
-   DataDirectory: Unbounded_String :=
-     To_Unbounded_String("data" & Dir_Separator);
+   Data_Directory: Unbounded_String :=
+     To_Unbounded_String(Source => "data" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.TradersName
+   -- ****v* Game/Game.Traders_Name
    -- FUNCTION
    -- Word used in ships names for traders ships (for events)
    -- SOURCE
-   TradersName: Unbounded_String;
+   Traders_Name: Unbounded_String;
    -- ****
 
    -- ****v* Game/Game.Attributes_List
