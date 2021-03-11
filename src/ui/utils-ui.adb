@@ -546,7 +546,7 @@ package body Utils.UI is
             TraderIndex: constant Natural := FindMember(Talk);
             Price: Positive := 1000;
             MoneyIndex2: constant Natural :=
-              FindItem(PlayerShip.Cargo, MoneyIndex);
+              FindItem(PlayerShip.Cargo, Money_Index);
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
@@ -570,7 +570,7 @@ package body Utils.UI is
               ("You changed your ship home base to: " &
                To_String(SkyBases(PlayerShip.HomeBase).Name),
                OtherMessage);
-            GainExp(1, TalkingSkill, TraderIndex);
+            GainExp(1, Talking_Skill, TraderIndex);
             UpdateGame(10);
             ShowSkyMap;
          end;
@@ -759,11 +759,11 @@ package body Utils.UI is
             Tired := (MinutesDiff / 15) + PlayerShip.Crew(I).Tired;
             if
               (Tired /
-               (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1))) >
+               (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1))) >
               Rests then
                Rests :=
                  (Tired /
-                  (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)));
+                  (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)));
             end if;
             if Rests > 0 then
                CabinIndex := FindCabin(Crew_Container.To_Index(I));
@@ -782,7 +782,7 @@ package body Utils.UI is
                      CabinBonus := 1;
                   end if;
                   TempTime :=
-                    ((80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) /
+                    ((80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) /
                      CabinBonus) *
                     15;
                   if TempTime = 0 then
@@ -790,7 +790,7 @@ package body Utils.UI is
                   end if;
                else
                   TempTime :=
-                    (80 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) *
+                    (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) *
                     15;
                end if;
                TempTime := TempTime + 15;
@@ -904,7 +904,8 @@ package body Utils.UI is
      (Parent: String; ItemIndex: Positive; MemberIndex: Natural) is
       ProtoIndex, ItemInfo: Unbounded_String;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
-        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
+        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
+         Shield_Type);
    begin
       if MemberIndex > 0 then
          ProtoIndex :=
@@ -930,7 +931,7 @@ package body Utils.UI is
       Append
         (ItemInfo,
          "Weight:" & Positive'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = WeaponType then
+      if Items_List(ProtoIndex).IType = Weapon_Type then
          Append
            (ItemInfo,
             LF & "Skill: " &

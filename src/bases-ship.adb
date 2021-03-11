@@ -30,7 +30,7 @@ package body Bases.Ship is
    procedure RepairShip(ModuleIndex: Integer) is
       Cost, Time: Natural := 0;
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(PlayerShip.Cargo, MoneyIndex);
+        FindItem(PlayerShip.Cargo, Money_Index);
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       RepairCost(Cost, Time, ModuleIndex);
@@ -69,15 +69,15 @@ package body Bases.Ship is
       end if;
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(MoneyIndex, Cost);
-      GainExp(1, TalkingSkill, TraderIndex);
+      UpdateBaseCargo(Money_Index, Cost);
+      GainExp(1, Talking_Skill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
       UpdateGame(Time);
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(PlayerShip.Cargo, MoneyIndex);
+        FindItem(PlayerShip.Cargo, Money_Index);
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
       HullIndex, ShipModuleIndex: Modules_Container.Extended_Index;
       FreeTurretIndex: Modules_Container.Extended_Index := 0;
@@ -160,8 +160,8 @@ package body Bases.Ship is
          end if;
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
-         UpdateBaseCargo(MoneyIndex, Price);
-         GainExp(1, TalkingSkill, TraderIndex);
+         UpdateBaseCargo(Money_Index, Price);
+         GainExp(1, Talking_Skill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          UpdateGame(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
@@ -426,8 +426,8 @@ package body Bases.Ship is
          end if;
          UpdateCargo
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);
-         UpdateBaseCargo(MoneyIndex, Price);
-         GainExp(1, TalkingSkill, TraderIndex);
+         UpdateBaseCargo(Money_Index, Price);
+         GainExp(1, Talking_Skill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
          UpdateGame
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
@@ -460,7 +460,7 @@ package body Bases.Ship is
       BaseIndex: constant Extended_BaseRange :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(PlayerShip.Cargo, MoneyIndex);
+        FindItem(PlayerShip.Cargo, Money_Index);
       DockingCost: Natural;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
@@ -494,13 +494,13 @@ package body Bases.Ship is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2,
          Amount => -(DockingCost));
-      UpdateBaseCargo(MoneyIndex, DockingCost);
+      UpdateBaseCargo(Money_Index, DockingCost);
       AddMessage
         ("You pay" & Positive'Image(DockingCost) & " " &
          To_String(Money_Name) & " docking fee.",
          OtherMessage);
       if TraderIndex > 0 then
-         GainExp(1, TalkingSkill, TraderIndex);
+         GainExp(1, Talking_Skill, TraderIndex);
       end if;
    end PayForDock;
 

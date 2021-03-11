@@ -203,11 +203,11 @@ package Game is
    Fuel_Type: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.MoneyIndex
+   -- ****v* Game/Game.Money_Index
    -- FUNCTION
    -- Index of item used as money
    -- SOURCE
-   MoneyIndex: Unbounded_String;
+   Money_Index: Unbounded_String;
    -- ****
 
    -- ****v* Game/Game.Money_Name
@@ -248,140 +248,142 @@ package Game is
    Attributes_List: AttributesData_Container.Vector;
    -- ****
 
-   -- ****v* Game/Game.ConditionIndex
+   -- ****v* Game/Game.Condition_Index
    -- FUNCTION
    -- Index of attribute used as bonus to character condition
    -- SOURCE
-   ConditionIndex: AttributesData_Container.Extended_Index;
+   Condition_Index: AttributesData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.StrengthIndex
+   -- ****v* Game/Game.Strength_Index
    -- FUNCTION
    -- Index of attribute used to count max character encumbrance
    -- SOURCE
-   StrengthIndex: AttributesData_Container.Extended_Index;
+   Strength_Index: AttributesData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.PilotingSkill
+   -- ****v* Game/Game.Piloting_Skill
    -- FUNCTION
    -- Index of skill used to piloting ship
    -- SOURCE
-   PilotingSkill: SkillsData_Container.Extended_Index;
+   Piloting_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.EngineeringSkill
+   -- ****v* Game/Game.Engineering_Skill
    -- FUNCTION
    -- Index of skill used by engineer on ship
    -- SOURCE
-   EngineeringSkill: SkillsData_Container.Extended_Index;
+   Engineering_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.GunnerySkill
+   -- ****v* Game/Game.Gunnery_Skill
    -- FUNCTION
    -- Index of skill used by gunners
    -- SOURCE
-   GunnerySkill: SkillsData_Container.Extended_Index;
+   Gunnery_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.TalkingSkill
+   -- ****v* Game/Game.Talking_Skill
    -- FUNCTION
    -- Index of skill used for talk in bases or with other ships
    -- SOURCE
-   TalkingSkill: SkillsData_Container.Extended_Index;
+   Talking_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.PerceptionSkill
+   -- ****v* Game/Game.Perception_Skill
    -- FUNCTION
    -- Index of skill used for spoting
    -- SOURCE
-   PerceptionSkill: SkillsData_Container.Extended_Index;
+   Perception_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.DodgeSkill
+   -- ****v* Game/Game.Dodge_Skill
    -- FUNCTION
    -- Index of skill used for dodge in character's combat
    -- SOURCE
-   DodgeSkill: SkillsData_Container.Extended_Index;
+   Dodge_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.UnarmedSkill
+   -- ****v* Game/Game.Unarmed_Skill
    -- FUNCTION
    -- Index of skill used for unarmed attacks in character's combat
    -- SOURCE
-   UnarmedSkill: SkillsData_Container.Extended_Index;
+   Unarmed_Skill: SkillsData_Container.Extended_Index;
    -- ****
 
-   -- ****v* Game/Game.HeadArmor
+   -- ****v* Game/Game.Head_Armor
    -- FUNCTION
    -- Name of item type used as characters head armor
    -- SOURCE
-   HeadArmor: Unbounded_String;
+   Head_Armor: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.ChestArmor
+   -- ****v* Game/Game.Chest_Armor
    -- FUNCTION
    -- Name of item type used as characters torso armor
    -- SOURCE
-   ChestArmor: Unbounded_String;
+   Chest_Armor: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.ArmsArmor
+   -- ****v* Game/Game.Arms_Armor
    -- FUNCTION
    -- Name of item type used as characters arms armor
    -- SOURCE
-   ArmsArmor: Unbounded_String;
+   Arms_Armor: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.LegsArmor
+   -- ****v* Game/Game.Legs_Armor
    -- FUNCTION
    -- Name of item type used as characters legs armor
    -- SOURCE
-   LegsArmor: Unbounded_String;
+   Legs_Armor: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.ShieldType
+   -- ****v* Game/Game.Shield_Type
    -- FUNCTION
    -- Name of item type used as characters shield
    -- SOURCE
-   ShieldType: Unbounded_String;
+   Shield_Type: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.WeaponType
+   -- ****v* Game/Game.Weapon_Type
    -- FUNCTION
    -- Name of item type used as characters weapon
    -- SOURCE
-   WeaponType: Unbounded_String;
+   Weapon_Type: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.DocDirectory
+   -- ****v* Game/Game.Doc_Directory
    -- FUNCTION
    -- Path to directory where documentation is
    -- SOURCE
-   DocDirectory: Unbounded_String :=
-     To_Unbounded_String("doc" & Dir_Separator);
+   Doc_Directory: Unbounded_String :=
+     To_Unbounded_String(Source => "doc" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.ModsDirectory
+   -- ****v* Game/Game.Mods_Directory
    -- FUNCTION
    -- Path to directory where are game modifications
    -- SOURCE
-   ModsDirectory: Unbounded_String :=
-     To_Unbounded_String("data" & Dir_Separator & "mods" & Dir_Separator);
+   Mods_Directory: Unbounded_String :=
+     To_Unbounded_String
+       (Source => "data" & Dir_Separator & "mods" & Dir_Separator);
    -- ****
 
-   -- ****v* Game/Game.PlayerCareer
+   -- ****v* Game/Game.Player_Career
    -- FUNCTION
    -- Index of career selected by player during starting game
    -- SOURCE
-   PlayerCareer: Unbounded_String;
+   Player_Career: Unbounded_String;
    -- ****
 
-   -- ****v* Game/Game.ThemesDirectory
+   -- ****v* Game/Game.Themes_Directory
    -- FUNCTION
    -- Path to directory where are ui themes
    -- SOURCE
-   ThemesDirectory: Unbounded_String :=
-     To_Unbounded_String("data" & Dir_Separator & "themes" & Dir_Separator);
+   Themes_Directory: Unbounded_String :=
+     To_Unbounded_String
+       (Source => "data" & Dir_Separator & "themes" & Dir_Separator);
    -- ****
 
    -- ****t* Game/Game.DataAction

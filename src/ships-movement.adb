@@ -282,7 +282,7 @@ package body Ships.Movement is
             if SkyBases(BaseIndex).Population > 0 then
                declare
                   MoneyIndex2: constant Inventory_Container.Extended_Index :=
-                    FindItem(PlayerShip.Cargo, MoneyIndex);
+                    FindItem(PlayerShip.Cargo, Money_Index);
                   DockingCost: Natural;
                   FuelIndex: Inventory_Container.Extended_Index;
                   TraderIndex: constant Crew_Container.Extended_Index :=
@@ -315,7 +315,7 @@ package body Ships.Movement is
                     (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                      Amount => (0 - DockingCost));
                   if TraderIndex > 0 then
-                     GainExp(1, TalkingSkill, TraderIndex);
+                     GainExp(1, Talking_Skill, TraderIndex);
                   end if;
                   FuelIndex :=
                     FindItem
@@ -453,14 +453,14 @@ package body Ships.Movement is
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(GetSkillLevel(Ship.Crew(I), PilotingSkill)) /
+                       (Float(GetSkillLevel(Ship.Crew(I), Piloting_Skill)) /
                         300.0));
                elsif Ship.Crew(I).Order = Engineer then
                   Speed :=
                     Speed +
                     Natural
                       (Float(Speed) *
-                       (Float(GetSkillLevel(Ship.Crew(I), EngineeringSkill)) /
+                       (Float(GetSkillLevel(Ship.Crew(I), Engineering_Skill)) /
                         300.0));
                end if;
             end loop Sentinent_Ship_Speed_Loop;

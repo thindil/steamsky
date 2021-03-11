@@ -110,7 +110,7 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       Profit: Integer;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -439,7 +439,8 @@ package body Trades.UI is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
-        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
+        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
+         Shield_Type);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -466,7 +467,7 @@ package body Trades.UI is
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = WeaponType then
+      if Items_List(ProtoIndex).IType = Weapon_Type then
          Append
            (ItemInfo,
             LF & "Skill: " &
@@ -721,7 +722,7 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       BaseCargoIndex2, Price: Natural;

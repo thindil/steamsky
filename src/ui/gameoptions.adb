@@ -178,8 +178,8 @@ package body GameOptions is
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
          Set_Path(Data_Directory, "data");
          Set_Path(Save_Directory, "save");
-         Set_Path(DocDirectory, "docs");
-         Set_Path(ModsDirectory, "mods");
+         Set_Path(Doc_Directory, "docs");
+         Set_Path(Mods_Directory, "mods");
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop;

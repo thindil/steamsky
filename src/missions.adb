@@ -362,7 +362,7 @@ package body Missions is
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex :=
         AcceptedMissions.Last_Index;
       AddMessage(To_String(AcceptMessage), MissionMessage);
-      GainExp(1, TalkingSkill, TraderIndex);
+      GainExp(1, Talking_Skill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
       UpdateGame(5);
    end AcceptMission;
@@ -491,7 +491,7 @@ package body Missions is
          begin
             CountPrice(RewardAmount, TraderIndex, False);
             if TraderIndex > 0 then
-               GainExp(1, TalkingSkill, TraderIndex);
+               GainExp(1, Talking_Skill, TraderIndex);
             end if;
             FreeSpace := FreeCargo((0 - RewardAmount));
             if FreeSpace < 0 then
@@ -502,7 +502,7 @@ package body Missions is
                  ("You received" & Integer'Image(RewardAmount) & " " &
                   To_String(Money_Name) & " for finishing your mission.",
                   MissionMessage);
-               UpdateCargo(PlayerShip, MoneyIndex, RewardAmount);
+               UpdateCargo(PlayerShip, Money_Index, RewardAmount);
             end if;
          end;
       end if;

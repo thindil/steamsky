@@ -118,13 +118,13 @@ package body MainMenu.Commands is
    begin
       configure(TextView, "-state normal");
       Delete(TextView, "1.0", "end");
-      if not Exists(To_String(DocDirectory) & FileName) then
+      if not Exists(To_String(Doc_Directory) & FileName) then
          Insert
            (TextView, "end",
             "{Can't find file to load. Did '" & FileName & "' file is in '" &
-            To_String(DocDirectory) & "' directory?}");
+            To_String(Doc_Directory) & "' directory?}");
       else
-         Open(ShowFile, In_File, To_String(DocDirectory) & FileName);
+         Open(ShowFile, In_File, To_String(Doc_Directory) & FileName);
          while not End_Of_File(ShowFile) loop
             Insert(TextView, "end", "{" & Get_Line(ShowFile) & LF & "}");
          end loop;
@@ -194,13 +194,13 @@ package body MainMenu.Commands is
       end if;
       configure(TextView, "-state normal");
       Delete(TextView, "1.0", "end");
-      if not Exists(To_String(DocDirectory) & "CHANGELOG.md") then
+      if not Exists(To_String(Doc_Directory) & "CHANGELOG.md") then
          Insert
            (TextView, "end",
             "{Can't find changelog file. Did 'CHANGELOG.md' file is in '" &
-            To_String(DocDirectory) & "' directory?}");
+            To_String(Doc_Directory) & "' directory?}");
       else
-         Open(ChangesFile, In_File, To_String(DocDirectory) & "CHANGELOG.md");
+         Open(ChangesFile, In_File, To_String(Doc_Directory) & "CHANGELOG.md");
          Set_Line(ChangesFile, 6);
          while not End_Of_File(ChangesFile) loop
             FileText := To_Unbounded_String(Get_Line(ChangesFile));

@@ -359,7 +359,7 @@ package body Game.SaveLoad is
       LogMessage("Saving player career...", Everything, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      Set_Attribute(CategoryNode, "index", To_String(PlayerCareer));
+      Set_Attribute(CategoryNode, "index", To_String(Player_Career));
       LogMessage("done.", Everything, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write
@@ -798,10 +798,10 @@ package body Game.SaveLoad is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playercareer");
       if Length(NodesList) > 0 then
          SavedNode := Item(NodesList, 0);
-         PlayerCareer :=
+         Player_Career :=
            To_Unbounded_String(Get_Attribute(SavedNode, "index"));
       else
-         PlayerCareer := Careers_Container.Key(Careers_List.First);
+         Player_Career := Careers_Container.Key(Careers_List.First);
       end if;
       LogMessage("done.", Everything, True, False);
       Free(Reader);

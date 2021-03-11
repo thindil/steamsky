@@ -127,7 +127,7 @@ package body Items is
                  To_Unbounded_String
                    (Node_Value(First_Child(Item(ChildNodes, 0))));
             end if;
-            if ItemIndex = MoneyIndex then
+            if ItemIndex = Money_Index then
                Money_Name := TempRecord.Name;
             end if;
             -- Backward compatibility, all ammunitions are normal by default
@@ -152,17 +152,17 @@ package body Items is
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :
       for I in Items_List.Iterate loop
-         if Items_List(I).IType = WeaponType then
+         if Items_List(I).IType = Weapon_Type then
             Weapons_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = ShieldType then
+         elsif Items_List(I).IType = Shield_Type then
             Shields_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = HeadArmor then
+         elsif Items_List(I).IType = Head_Armor then
             HeadArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = ChestArmor then
+         elsif Items_List(I).IType = Chest_Armor then
             ChestArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = ArmsArmor then
+         elsif Items_List(I).IType = Arms_Armor then
             ArmsArmors_List.Append(New_Item => Objects_Container.Key(I));
-         elsif Items_List(I).IType = LegsArmor then
+         elsif Items_List(I).IType = Legs_Armor then
             LegsArmors_List.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop Set_Items_Lists_Loop;

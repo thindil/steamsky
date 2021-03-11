@@ -254,7 +254,7 @@ package body Ships.UI.Crew.Inventory is
           (".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2), Interp);
    begin
       if not ItemIsUsed(MemberIndex, ItemIndex) then
-         if ItemType = WeaponType then
+         if ItemType = Weapon_Type then
             if Items_List
                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
                 .Value
@@ -267,7 +267,7 @@ package body Ships.UI.Crew.Inventory is
                return TCL_OK;
             end if;
             PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
-         elsif ItemType = ShieldType then
+         elsif ItemType = Shield_Type then
             if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
                if Items_List
                    (PlayerShip.Crew(MemberIndex).Inventory
@@ -283,13 +283,13 @@ package body Ships.UI.Crew.Inventory is
                end if;
             end if;
             PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
-         elsif ItemType = HeadArmor then
+         elsif ItemType = Head_Armor then
             PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
-         elsif ItemType = ChestArmor then
+         elsif ItemType = Chest_Armor then
             PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
-         elsif ItemType = ArmsArmor then
+         elsif ItemType = Arms_Armor then
             PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
-         elsif ItemType = LegsArmor then
+         elsif ItemType = Legs_Armor then
             PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
          elsif Tools_List.Find_Index(Item => ItemType) /=
            UnboundedString_Container.No_Index then

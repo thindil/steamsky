@@ -66,15 +66,15 @@ package body Combat is
             case Spotter.Crew(I).Order is
                when Pilot =>
                   Result :=
-                    Result + GetSkillLevel(Spotter.Crew(I), PerceptionSkill);
+                    Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = PlayerShip then
-                     GainExp(1, PerceptionSkill, Crew_Container.To_Index(I));
+                     GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when Gunner =>
                   Result :=
-                    Result + GetSkillLevel(Spotter.Crew(I), PerceptionSkill);
+                    Result + GetSkillLevel(Spotter.Crew(I), Perception_Skill);
                   if Spotter = PlayerShip then
-                     GainExp(1, PerceptionSkill, Crew_Container.To_Index(I));
+                     GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
                   end if;
                when others =>
                   null;
@@ -546,7 +546,7 @@ package body Combat is
                if GunnerIndex > 0 then
                   HitChance :=
                     HitChance +
-                    GetSkillLevel(Ship.Crew(GunnerIndex), GunnerySkill);
+                    GetSkillLevel(Ship.Crew(GunnerIndex), Gunnery_Skill);
                end if;
                if HitChance < -48 then
                   HitChance := -48;
@@ -757,7 +757,7 @@ package body Combat is
                        (Ship => Ship, CargoIndex => AmmoIndex, Amount => -1);
                   end if;
                   if Ship = PlayerShip and GunnerIndex > 0 then
-                     GainExp(2, GunnerySkill, GunnerIndex);
+                     GainExp(2, Gunnery_Skill, GunnerIndex);
                   end if;
                   if PlayerShip.Crew(1).Health = 0 then -- player is dead
                      EndCombat := True;
@@ -800,7 +800,7 @@ package body Combat is
                  To_Unbounded_String(")") & To_Unbounded_String(" attacks ") &
                  Defender.Name);
          begin
-            BaseDamage := Attacker.Attributes(StrengthIndex)(1);
+            BaseDamage := Attacker.Attributes(Strength_Index)(1);
             if Attacker.Equipment(1) > 0 then
                BaseDamage :=
                  BaseDamage +
@@ -840,11 +840,11 @@ package body Combat is
                HitChance := AttackSkill + GetRandom(1, 50);
             else
                HitChance :=
-                 GetSkillLevel(Attacker, UnarmedSkill) + GetRandom(1, 50);
+                 GetSkillLevel(Attacker, Unarmed_Skill) + GetRandom(1, 50);
             end if;
             HitChance :=
               HitChance -
-              (GetSkillLevel(Defender, DodgeSkill) + GetRandom(1, 50));
+              (GetSkillLevel(Defender, Dodge_Skill) + GetRandom(1, 50));
             Count_Hit_Chance_Loop :
             for I in 3 .. 6 loop
                if Defender.Equipment(I) > 0 then
@@ -876,7 +876,7 @@ package body Combat is
             if Attacker.Equipment(1) = 0 then
                declare
                   DamageBonus: Natural :=
-                    GetSkillLevel(Attacker, UnarmedSkill) / 200;
+                    GetSkillLevel(Attacker, Unarmed_Skill) / 200;
                begin
                   if DamageBonus = 0 then
                      DamageBonus := 1;
@@ -921,7 +921,7 @@ package body Combat is
                  AttackMessage & To_Unbounded_String(" and misses.");
                MessageColor := (if PlayerAttack then BLUE else CYAN);
                if not PlayerAttack then
-                  GainExp(2, DodgeSkill, DefenderIndex);
+                  GainExp(2, Dodge_Skill, DefenderIndex);
                   Defender.Skills := PlayerShip.Crew(DefenderIndex).Skills;
                   Defender.Attributes :=
                     PlayerShip.Crew(DefenderIndex).Attributes;
@@ -952,7 +952,7 @@ package body Combat is
                           (3),
                         AttackerIndex);
                   else
-                     GainExp(2, UnarmedSkill, AttackerIndex);
+                     GainExp(2, Unarmed_Skill, AttackerIndex);
                   end if;
                   Attacker.Skills := PlayerShip.Crew(AttackerIndex).Skills;
                   Attacker.Attributes :=
@@ -1170,10 +1170,10 @@ package body Combat is
          case PlayerShip.Crew(I).Order is
             when Pilot =>
                PilotIndex := Crew_Container.To_Index(I);
-               GainExp(2, PilotingSkill, PilotIndex);
+               GainExp(2, Piloting_Skill, PilotIndex);
             when Engineer =>
                EngineerIndex := Crew_Container.To_Index(I);
-               GainExp(2, EngineeringSkill, EngineerIndex);
+               GainExp(2, Engineering_Skill, EngineerIndex);
             when others =>
                null;
          end case;
@@ -1197,7 +1197,7 @@ package body Combat is
          end case;
          EvadeBonus :=
            EvadeBonus +
-           GetSkillLevel(PlayerShip.Crew(PilotIndex), PilotingSkill);
+           GetSkillLevel(PlayerShip.Crew(PilotIndex), Piloting_Skill);
       else
          AccuracyBonus := 20;
          EvadeBonus := -10;
@@ -1206,7 +1206,7 @@ package body Combat is
       if EnemyPilotIndex > 0 then
          AccuracyBonus :=
            AccuracyBonus -
-           GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), PilotingSkill);
+           GetSkillLevel(Enemy.Ship.Crew(EnemyPilotIndex), Piloting_Skill);
       end if;
       if EngineerIndex > 0 or
         Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
@@ -1482,7 +1482,7 @@ package body Combat is
                   To_String(Money_Name) & " from " & To_String(EnemyName) &
                   ".",
                   CombatMessage);
-               UpdateCargo(PlayerShip, MoneyIndex, LootAmount);
+               UpdateCargo(PlayerShip, Money_Index, LootAmount);
             end if;
             FreeSpace := FreeCargo(0);
             if WasBoarded and FreeSpace > 0 then
@@ -1498,7 +1498,7 @@ package body Combat is
                      LootAmount := LootAmount + FreeSpace;
                   end if;
                   if Items_List(Item.ProtoIndex).Price = 0 and
-                    Item.ProtoIndex /= MoneyIndex then
+                    Item.ProtoIndex /= Money_Index then
                      LootAmount := 0;
                   end if;
                   if LootAmount > 0 then

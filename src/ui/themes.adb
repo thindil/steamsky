@@ -83,7 +83,7 @@ package body Themes is
       Themes_Container.Include(Themes_List, "steamsky", TempRecord);
       SetDefaultValues;
       Start_Search
-        (Directories, To_String(ThemesDirectory), "",
+        (Directories, To_String(Themes_Directory), "",
          (Directory => True, others => False));
       while More_Entries(Directories) loop
          Get_Next_Entry(Directories, FoundDirectory);
