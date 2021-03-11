@@ -58,7 +58,6 @@ package body Knowledge.Bases is
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(BasesFrame & ".options.search");
-      Item: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
@@ -69,17 +68,7 @@ package body Knowledge.Bases is
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 3 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (BasesFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item := Get_Widget(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(3, Rows - 1, BasesFrame);
       if BaseName'Length = 0 then
          Delete(SearchEntry, "0", "end");
       end if;
