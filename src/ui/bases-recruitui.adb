@@ -541,7 +541,7 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Recruit: constant Recruit_Data :=
@@ -748,7 +748,7 @@ package body Bases.RecruitUI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       Cost: Positive;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);

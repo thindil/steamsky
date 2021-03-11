@@ -394,7 +394,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      PlayerCareer := NewGameSettings.PlayerCareer;
+      Player_Career := NewGameSettings.PlayerCareer;
       -- Add welcoming message
       AddMessage
         ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
@@ -621,7 +621,7 @@ package body Game is
          elsif To_String(NodeName) = "fueltype" then
             Fuel_Type := To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "moneyindex" then
-            MoneyIndex :=
+            Money_Index :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "tradersname" then
             Traders_Name :=
@@ -669,54 +669,57 @@ package body Game is
             end if;
             Skills_List.Append(New_Item => TmpSkill);
          elsif To_String(NodeName) = "conditionname" then
-            ConditionIndex :=
+            Condition_Index :=
               FindAttributeIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "strengthname" then
-            StrengthIndex :=
+            Strength_Index :=
               FindAttributeIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "pilotingskill" then
-            PilotingSkill :=
+            Piloting_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "engineeringskill" then
-            EngineeringSkill :=
+            Engineering_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "gunneryskill" then
-            GunnerySkill :=
+            Gunnery_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "talkingskill" then
-            TalkingSkill :=
+            Talking_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "perceptionskill" then
-            PerceptionSkill :=
+            Perception_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "headarmor" then
-            HeadArmor := To_Unbounded_String(Get_Attribute(DataNode, "value"));
+            Head_Armor :=
+              To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "chestarmor" then
-            ChestArmor :=
+            Chest_Armor :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "armsarmor" then
-            ArmsArmor := To_Unbounded_String(Get_Attribute(DataNode, "value"));
+            Arms_Armor :=
+              To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "legsarmor" then
-            LegsArmor := To_Unbounded_String(Get_Attribute(DataNode, "value"));
+            Legs_Armor :=
+              To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "shieldtype" then
-            ShieldType :=
+            Shield_Type :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "weapontype" then
-            WeaponType :=
+            Weapon_Type :=
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "dodgeskill" then
-            DodgeSkill :=
+            Dodge_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "unarmedskill" then
-            UnarmedSkill :=
+            Unarmed_Skill :=
               FindSkillIndex
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "remove" then
@@ -880,7 +883,7 @@ package body Game is
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
-        (Directories, To_String(ModsDirectory), "",
+        (Directories, To_String(Mods_Directory), "",
          (Directory => True, others => False));
       Load_Modifications_Loop :
       while More_Entries(Directories) loop

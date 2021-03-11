@@ -65,7 +65,7 @@ package body Trades is
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
       end if;
@@ -78,7 +78,7 @@ package body Trades is
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       if BaseIndex > 0 then
-         UpdateBaseCargo(MoneyIndex, Cost);
+         UpdateBaseCargo(Money_Index, Cost);
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount + Cost;
       end if;
@@ -103,7 +103,7 @@ package body Trades is
             TraderCargo.Delete(Index => BaseItemIndex);
          end if;
       end if;
-      GainExp(1, TalkingSkill, TraderIndex);
+      GainExp(1, Talking_Skill, TraderIndex);
       AddMessage
         ("You bought" & Positive'Image(BuyAmount) & " " & To_String(ItemName) &
          " for" & Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
@@ -240,9 +240,9 @@ package body Trades is
         (Ship => PlayerShip, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
          Price => PlayerShip.Cargo.Element(ItemIndex).Price);
-      UpdateCargo(PlayerShip, MoneyIndex, Profit);
+      UpdateCargo(PlayerShip, Money_Index, Profit);
       if BaseIndex > 0 then
-         UpdateBaseCargo(MoneyIndex, (0 - Profit));
+         UpdateBaseCargo(Money_Index, (0 - Profit));
          GainRep(BaseIndex, 1);
          if Items_List(ProtoIndex).Reputation >
            SkyBases(BaseIndex).Reputation(1) then
@@ -251,7 +251,7 @@ package body Trades is
       else
          TraderCargo(1).Amount := TraderCargo(1).Amount - Profit;
       end if;
-      GainExp(1, TalkingSkill, TraderIndex);
+      GainExp(1, Talking_Skill, TraderIndex);
       AddMessage
         ("You sold" & Positive'Image(SellAmount) & " " & ItemName & " for" &
          Positive'Image(Profit) & " " & To_String(Money_Name) & ".",

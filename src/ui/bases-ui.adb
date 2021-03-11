@@ -333,7 +333,7 @@ package body Bases.UI is
             "-text {Base price:" & Positive'Image(Cost) & " " &
             To_String(Money_Name) & "}");
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
       InfoLabel.Name :=
         New_String(".gameframe.paned.baseframe.canvas.base.info.money");
       if MoneyIndex2 > 0 then

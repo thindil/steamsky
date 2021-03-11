@@ -171,7 +171,7 @@ package body Bases.SchoolUI is
                Natural'Image(Cost) & "]");
          end if;
       end loop Load_Skills_List_Loop;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
       if MoneyIndex2 > 0 then
          configure
            (MoneyLabel,

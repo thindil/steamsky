@@ -121,7 +121,7 @@ package body Bases.ShipyardUI is
           (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
       Cost, UsedSpace: Natural;
       Damage: Float;
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       MaxSize, AllSpace: Positive;
       InstallInfo: Unbounded_String;
       MoneyLabel: constant Ttk_Label :=
@@ -581,7 +581,7 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
       configure(ModuleText, "-state normal");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Delete(ModuleText, "1.0", "end");

@@ -41,7 +41,7 @@ package body Bases.Trade is
    function CheckMoney
      (Price: Positive; Message: String := "") return Positive is
       -- ****
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, MoneyIndex);
+      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
    begin
       if MoneyIndex2 = 0 then
          if Message /= "" then
@@ -107,7 +107,7 @@ package body Bases.Trade is
             Faction => Recruit.Faction));
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
-      GainExp(1, TalkingSkill, TraderIndex);
+      GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
         ("You hired " & To_String(Recruit.Name) & " for" &
@@ -158,13 +158,13 @@ package body Bases.Trade is
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(MoneyIndex, Cost);
+      UpdateBaseCargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
         ("You bought the recipe for " & RecipeName & " for" &
          Positive'Image(Cost) & " of " & To_String(Money_Name) & ".",
          TradeMessage);
-      GainExp(1, TalkingSkill, TraderIndex);
+      GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(5);
    end BuyRecipe;
@@ -208,8 +208,8 @@ package body Bases.Trade is
       end if;
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(MoneyIndex, Cost);
-      GainExp(1, TalkingSkill, TraderIndex);
+      UpdateBaseCargo(Money_Index, Cost);
+      GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
       UpdateGame(Time);
    end HealWounded;
@@ -320,9 +320,9 @@ package body Bases.Trade is
       GainExp(GainedExp, SkillIndex, MemberIndex);
       UpdateCargo
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(MoneyIndex, Cost);
+      UpdateBaseCargo(Money_Index, Cost);
       if TraderIndex > 0 then
-         GainExp(5, TalkingSkill, TraderIndex);
+         GainExp(5, Talking_Skill, TraderIndex);
       end if;
       GainRep(BaseIndex, 5);
       UpdateGame(60);

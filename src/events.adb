@@ -45,7 +45,7 @@ package body Events is
          Gain_Perception_Loop :
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Order in Pilot | Gunner then
-               GainExp(1, PerceptionSkill, Crew_Container.To_Index(I));
+               GainExp(1, Perception_Skill, Crew_Container.To_Index(I));
             end if;
          end loop Gain_Perception_Loop;
       end GainPerception;
@@ -83,7 +83,7 @@ package body Events is
                   end case;
                   if Roll2 >
                     GetSkillLevel
-                      (PlayerShip.Crew(CrewIndex), EngineeringSkill) then
+                      (PlayerShip.Crew(CrewIndex), Engineering_Skill) then
                      AddMessage
                        ("One of your engines is taking damage.", OtherMessage,
                         RED);
@@ -111,7 +111,7 @@ package body Events is
                         " has prevented engine damage.",
                         OtherMessage, GREEN);
                   end if;
-                  GainExp(1, EngineeringSkill, CrewIndex);
+                  GainExp(1, Engineering_Skill, CrewIndex);
                end if;
             when 6 .. 20 => -- Bad weather
                CrewIndex := FindMember(Pilot);
@@ -121,11 +121,11 @@ package body Events is
                      OtherMessage, RED);
                   TimePassed :=
                     60 -
-                    GetSkillLevel(PlayerShip.Crew(CrewIndex), PilotingSkill);
+                    GetSkillLevel(PlayerShip.Crew(CrewIndex), Piloting_Skill);
                   if TimePassed < 1 then
                      TimePassed := 1;
                   end if;
-                  GainExp(1, PilotingSkill, CrewIndex);
+                  GainExp(1, Piloting_Skill, CrewIndex);
                   UpdateCargo
                     (PlayerShip, FindProtoItem(ItemType => Fuel_Type),
                      CountFuelNeeded);

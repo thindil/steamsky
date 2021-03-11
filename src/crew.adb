@@ -56,7 +56,7 @@ package body Crew is
    begin
       NewAmount :=
         (if
-           Careers_List(PlayerCareer).Skills.Contains
+           Careers_List(Player_Career).Skills.Contains
              (Skills_List(SkillNumber).Name)
          then Amount + (Amount / 2)
          else Amount);
@@ -66,7 +66,7 @@ package body Crew is
          return;
       end if;
       -- Gain experience in condition assigned attribute
-      GainExpInAttribute(ConditionIndex);
+      GainExpInAttribute(Condition_Index);
       -- Gain experience in associated attribute
       GainExpInAttribute(AttributeIndex);
       -- Gain experience in skill
@@ -303,7 +303,7 @@ package body Crew is
             end if;
             Member.PreviousOrder := Rest;
          end if;
-         if TiredLevel > (80 + Member.Attributes(ConditionIndex)(1)) and
+         if TiredLevel > (80 + Member.Attributes(Condition_Index)(1)) and
            Member.Order /= Rest and not InCombat then
             declare
                CanRest: Boolean := True;
@@ -481,24 +481,24 @@ package body Crew is
                TiredLevel := TiredLevel + Times;
             end if;
             if TiredLevel >
-              (100 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) then
+              (100 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) then
                TiredLevel :=
-                 (100 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1));
+                 (100 + PlayerShip.Crew(I).Attributes(Condition_Index)(1));
             end if;
             if TiredLevel >=
-              (50 + PlayerShip.Crew(I).Attributes(ConditionIndex)(1)) then
+              (50 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) then
                UpdateMorale(PlayerShip, I, ((Times / 5) * (-1)));
             end if;
             case PlayerShip.Crew(I).Order is
                when Pilot =>
                   if PlayerShip.Speed /= DOCKED then
-                     GainExp(Times, PilotingSkill, I);
+                     GainExp(Times, Piloting_Skill, I);
                   else
                      TiredLevel := PlayerShip.Crew(I).Tired;
                   end if;
                when Engineer =>
                   if PlayerShip.Speed /= DOCKED then
-                     GainExp(Times, EngineeringSkill, I);
+                     GainExp(Times, Engineering_Skill, I);
                   else
                      TiredLevel := PlayerShip.Crew(I).Tired;
                   end if;
@@ -898,7 +898,7 @@ package body Crew is
 
    procedure DailyPayment is
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
-        FindItem(PlayerShip.Cargo, MoneyIndex);
+        FindItem(PlayerShip.Cargo, Money_Index);
       PayMessage: Unbounded_String;
       MemberIndex: Crew_Container.Extended_Index;
       HaveMoney: Boolean := True;
@@ -919,7 +919,7 @@ package body Crew is
                if PlayerShip.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
                   MoneyNeeded := PlayerShip.Cargo(MoneyIndex2).Amount;
                   UpdateCargo
-                    (Ship => PlayerShip, ProtoIndex => MoneyIndex,
+                    (Ship => PlayerShip, ProtoIndex => Money_Index,
                      Amount => (0 - MoneyNeeded));
                   AddMessage
                     ("You don't have enough " & To_String(Money_Name) &

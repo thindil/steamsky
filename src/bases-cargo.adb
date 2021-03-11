@@ -42,7 +42,7 @@ package body Bases.Cargo is
       if SkyBases(BaseIndex).Cargo.Length = 0 then
          SkyBases(BaseIndex).Cargo.Append
            (New_Item =>
-              (ProtoIndex => MoneyIndex,
+              (ProtoIndex => Money_Index,
                Amount => (GetRandom(50, 200) * Population),
                Durability => Default_Item_Durability, Price => 0));
          Add_Base_Cargo_Loop :

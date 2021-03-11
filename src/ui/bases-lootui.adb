@@ -283,7 +283,8 @@ package body Bases.LootUI is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
-        (WeaponType, ChestArmor, HeadArmor, ArmsArmor, LegsArmor, ShieldType);
+        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
+         Shield_Type);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
@@ -302,7 +303,7 @@ package body Bases.LootUI is
       Append
         (ItemInfo,
          "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
-      if Items_List(ProtoIndex).IType = WeaponType then
+      if Items_List(ProtoIndex).IType = Weapon_Type then
          Append
            (ItemInfo,
             LF & "Skill: " &
