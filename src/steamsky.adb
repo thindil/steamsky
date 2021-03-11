@@ -99,30 +99,30 @@ begin
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--docdir" then
-            DocDirectory :=
+            Doc_Directory :=
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(10 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => DocDirectory, Path_Name => "Documentation") then
+                (Path => Doc_Directory, Path_Name => "Documentation") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--modsdi" then
-            ModsDirectory :=
+            Mods_Directory :=
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => ModsDirectory, Path_Name => "Modifications") then
+                (Path => Mods_Directory, Path_Name => "Modifications") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--themes" then
-            ThemesDirectory :=
+            Themes_Directory :=
               To_Unbounded_String
                 (Source =>
                    Argument(Number => I)(13 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => ModsDirectory, Path_Name => "Themes") then
+                (Path => Themes_Directory, Path_Name => "Themes") then
                return;
             end if;
          end if;
@@ -130,8 +130,8 @@ begin
    end loop Command_Line_Loop;
 
    Create_Path(New_Directory => To_String(Source => Save_Directory));
-   Create_Path(New_Directory => To_String(Source => ModsDirectory));
-   Create_Path(New_Directory => To_String(Source => ThemesDirectory));
+   Create_Path(New_Directory => To_String(Source => Mods_Directory));
+   Create_Path(New_Directory => To_String(Source => Themes_Directory));
 
    StartLogging;
 
