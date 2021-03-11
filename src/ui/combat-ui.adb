@@ -214,25 +214,25 @@ package body Combat.UI is
            PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
             case Position is
                when 0 =>
-                  if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                  if GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), PilotingSkill);
+                       GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill);
                   end if;
                when 1 =>
-                  if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                  if GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill);
+                       GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill);
                   end if;
                when others =>
-                  if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) >
+                  if GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), GunnerySkill);
+                       GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill);
                   end if;
             end case;
          end loop Get_Highest_Skills_Loop;
@@ -243,17 +243,17 @@ package body Combat.UI is
                SkillString := Null_Unbounded_String;
                case Position is
                   when 0 =>
-                     if GetSkillLevel(PlayerShip.Crew(I), PilotingSkill) >
+                     if GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
                   when 1 =>
-                     if GetSkillLevel(PlayerShip.Crew(I), EngineeringSkill) >
+                     if GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
                   when others =>
-                     if GetSkillLevel(PlayerShip.Crew(I), GunnerySkill) >
+                     if GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
@@ -837,6 +837,7 @@ package body Combat.UI is
       OrderIndex: Positive := 1;
       CombatCanvas: Tk_Canvas;
       Button: Ttk_Button;
+      ProgressBarStyle: Unbounded_String;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -853,17 +854,27 @@ package body Combat.UI is
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Add(Button, "Show more information about the enemy's crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Button, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+           (Button,
+            "-row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx {5 0}");
+         ProgressBarStyle :=
+           (if Enemy.Ship.Crew(I).Health > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif Enemy.Ship.Crew(I).Health > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
-              Natural'Image(Enemy.Ship.Crew(I).Health));
+              Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
+              To_String(ProgressBarStyle));
          Add(ProgressBar, "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
-            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
+            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx 5");
          OrderName :=
            To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
          Replace_Slice
@@ -877,7 +888,8 @@ package body Combat.UI is
          Add(Label, "Enemy's current order.");
          Tcl.Tk.Ada.Grid.Grid
            (Label,
-            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
+            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx {0 5}");
       end loop Show_Enemy_Crew_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(".gameframe.paned.combatframe.right.canvas");
@@ -906,22 +918,33 @@ package body Combat.UI is
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Add(Button, "Show more information about the crew member.");
          Tcl.Tk.Ada.Grid.Grid
-           (Button, "-row" & Positive'Image(Crew_Container.To_Index(I)));
+           (Button,
+            "-row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx {5 0}");
+         ProgressBarStyle :=
+           (if PlayerShip.Crew(I).Health > 74 then
+              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+            elsif PlayerShip.Crew(I).Health > 24 then
+              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
-              Natural'Image(PlayerShip.Crew(I).Health));
+              Natural'Image(PlayerShip.Crew(I).Health) & " -length 150" &
+              To_String(ProgressBarStyle));
          Add(ProgressBar, "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
-            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)));
+            "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx 5");
          ComboBox :=
            Create
              (Frame & ".order" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-values [list " & To_String(OrdersList) & "] -state readonly");
+              "-values [list " & To_String(OrdersList) &
+              "] -state readonly -width 15");
          Current(ComboBox, Natural'Image(BoardingOrders(OrderIndex)));
          Bind
            (ComboBox, "<<ComboboxSelected>>",
@@ -930,7 +953,8 @@ package body Combat.UI is
          Add(ComboBox, "The crew member current order.");
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox,
-            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)));
+            "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
+            " -padx {0 5}");
          OrderIndex := OrderIndex + 1;
          <<End_Of_Loop>>
       end loop Show_Boarding_Party_Loop;
