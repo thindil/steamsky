@@ -18,9 +18,9 @@ package body Game.Test_Data is
       Data_Directory := To_Unbounded_String("../../bin/data/");
       Save_Directory := To_Unbounded_String("../../bin/data/saves/");
       Create_Path(To_String(Save_Directory));
-      DocDirectory := To_Unbounded_String("../../bin/doc/");
-      ModsDirectory := To_Unbounded_String("../../bin/data/mods/");
-      ThemesDirectory := To_Unbounded_String("../../bin/data/themes/");
+      Doc_Directory := To_Unbounded_String("../../bin/doc/");
+      Mods_Directory := To_Unbounded_String("../../bin/data/mods/");
+      Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
       LoadConfig;
       declare
          Message: constant String := LoadGameData;
