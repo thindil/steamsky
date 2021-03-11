@@ -68,7 +68,7 @@ package body Ships.UI.Crew is
    -- ****
 
    procedure UpdateCrewInfo is
-      CrewInfoFrame, Item, ButtonsFrame: Ttk_Frame;
+      CrewInfoFrame, ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ShipCanvas: Tk_Canvas;
@@ -81,18 +81,7 @@ package body Ships.UI.Crew is
         New_String(".gameframe.paned.shipinfoframe.crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      for I in 1 .. (Rows - 1) loop
-         Create
-           (Tokens,
-            Tcl.Tk.Ada.Grid.Grid_Slaves
-              (CrewInfoFrame, "-row" & Positive'Image(I)),
-            " ");
-         for J in 1 .. Slice_Count(Tokens) loop
-            Item.Interp := Get_Context;
-            Item.Name := New_String(Slice(Tokens, J));
-            Destroy(Item);
-         end loop;
-      end loop;
+      Delete_Widgets(1, Rows - 1, CrewInfoFrame);
       ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
@@ -158,7 +147,7 @@ package body Ships.UI.Crew is
             "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 3);
          TiredLevel :=
            PlayerShip.Crew(I).Tired -
-           PlayerShip.Crew(I).Attributes(ConditionIndex)(1);
+           PlayerShip.Crew(I).Attributes(Condition_Index)(1);
          if TiredLevel < 0 then
             TiredLevel := 0;
          end if;
@@ -430,7 +419,7 @@ package body Ships.UI.Crew is
          Height :=
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
-      TiredPoints := Member.Tired - Member.Attributes(ConditionIndex)(1);
+      TiredPoints := Member.Tired - Member.Attributes(Condition_Index)(1);
       if TiredPoints < 0 then
          TiredPoints := 0;
       end if;
