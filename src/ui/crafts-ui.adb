@@ -86,16 +86,17 @@ package body Crafts.UI is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
             CanCraft := False;
+            Check_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType = ToolNeeded then
                   CargoIndex :=
                     FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
                   if CargoIndex > 0 then
                      CanCraft := True;
-                     exit;
+                     exit Check_Tool_Loop;
                   end if;
                end if;
-            end loop;
+            end loop Check_Tool_Loop;
          end if;
       end CheckTool;
    begin
@@ -111,7 +112,9 @@ package body Crafts.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
+      Find_Possible_Recipes_Loop :
       for Item of PlayerShip.Cargo loop
+         Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex then
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
@@ -125,19 +128,21 @@ package body Crafts.UI is
                   Deconstructs.Append(New_Item => Item.ProtoIndex);
                end if;
             end if;
-         end loop;
-      end loop;
+         end loop Add_Recipes_Loop;
+      end loop Find_Possible_Recipes_Loop;
       Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
+      Show_Recipes_Loop :
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          CanCraft := False;
          Recipe := Recipes_List(Known_Recipes(I));
+         Find_Workshop_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
               and then Module.Durability > 0 then
                CanCraft := True;
-               exit;
+               exit Find_Workshop_Loop;
             end if;
-         end loop;
+         end loop Find_Workshop_Loop;
          if CanCraft then
             CheckTool(Recipe.Tool);
          end if;
@@ -148,9 +153,11 @@ package body Crafts.UI is
                       Recipe.MaterialTypes.Last_Index) of Boolean :=
                  (others => False);
             begin
+               Find_Materials_Loop :
                for K in
                  Recipe.MaterialTypes.First_Index ..
                    Recipe.MaterialTypes.Last_Index loop
+                  Find_Cargo_Index_Loop :
                   for J in Items_List.Iterate loop
                      if Items_List(J).IType = Recipe.MaterialTypes(K) then
                         CargoIndex :=
@@ -161,15 +168,16 @@ package body Crafts.UI is
                            Materials(K) := True;
                         end if;
                      end if;
-                  end loop;
-               end loop;
+                  end loop Find_Cargo_Index_Loop;
+               end loop Find_Materials_Loop;
                CanCraft := True;
+               Set_Can_Craft_Loop :
                for I in Materials'Range loop
                   if not Materials(I) then
                      CanCraft := False;
-                     exit;
+                     exit Set_Can_Craft_Loop;
                   end if;
-               end loop;
+               end loop Set_Can_Craft_Loop;
             end;
          end if;
          if CanCraft then
@@ -192,18 +200,20 @@ package body Crafts.UI is
          if FirstIndex = Null_Unbounded_String then
             FirstIndex := Known_Recipes(I);
          end if;
-      end loop;
+      end loop Show_Recipes_Loop;
       CheckTool(Alchemy_Tools);
       if CanCraft then
          CanCraft := False;
+         Find_Alchemy_Lab_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
               and then Module.Durability > 0 then
                CanCraft := True;
-               exit;
+               exit Find_Alchemy_Lab_Loop;
             end if;
-         end loop;
+         end loop Find_Alchemy_Lab_Loop;
       end if;
+      Set_Study_Recipes_Loop :
       for I in Studies.First_Index .. Studies.Last_Index loop
          if CanCraft then
             Insert
@@ -218,7 +228,8 @@ package body Crafts.UI is
                "} -text {Study " & To_String(Items_List(Studies(I)).Name) &
                "} -tag [list gray]");
          end if;
-      end loop;
+      end loop Set_Study_Recipes_Loop;
+      Set_Deconstruct_Recipes_Loop :
       for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
          if CanCraft then
             Insert
@@ -234,7 +245,7 @@ package body Crafts.UI is
                To_String(Items_List(Deconstructs(I)).Name) &
                "} -tag [list gray]");
          end if;
-      end loop;
+      end loop Set_Deconstruct_Recipes_Loop;
       Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
@@ -303,11 +314,12 @@ package body Crafts.UI is
       else
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
+      Show_Workshops_List_Loop :
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = MType then
             Append(ModulesList, " {" & Module.Name & "}");
          end if;
-      end loop;
+      end loop Show_Workshops_List_Loop;
       configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
       Current(ModulesBox, "0");
    exception
