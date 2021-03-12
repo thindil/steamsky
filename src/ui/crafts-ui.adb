@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C; use Interfaces.C;
@@ -568,14 +567,11 @@ package body Crafts.UI is
       end loop Have_Workplace_Loop;
       if WorkplaceName = Null_Unbounded_String then
          Find_Workshop_Name_Loop :
-         for Module of Modules_List loop
-            if Module.MType = Recipe.Workplace then
+         for I in Modules_List.Iterate loop
+            if Modules_List(I).MType = Recipe.Workplace then
                WorkplaceName :=
-                 To_Unbounded_String(To_Lower(ModuleType'Image(Module.MType)));
-               while Index(WorkplaceName, "_", 1) > 0 loop
-                  Replace_Element
-                    (WorkplaceName, Index(WorkplaceName, "_", 1), ' ');
-               end loop;
+                 To_Unbounded_String
+                   (GetModuleType(BaseModules_Container.Key(I)));
                exit Find_Workshop_Name_Loop;
             end if;
          end loop Find_Workshop_Name_Loop;
