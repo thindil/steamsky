@@ -398,13 +398,14 @@ package body Crafts.UI is
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
+         Set_Study_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
                Recipe.Skill := ProtoRecipe.Skill;
                Recipe.Time := ProtoRecipe.Difficulty * 15;
-               exit;
+               exit Set_Study_Recipe_Loop;
             end if;
-         end loop;
+         end loop Set_Study_Recipe_Loop;
          Recipe.Difficulty := 1;
          Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
@@ -420,6 +421,7 @@ package body Crafts.UI is
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
+         Set_Deconstruct_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
                Recipe.Skill := ProtoRecipe.Skill;
@@ -431,9 +433,9 @@ package body Crafts.UI is
                  Positive
                    (Float'Ceiling
                       (Float(ProtoRecipe.MaterialAmounts.Element(1)) * 0.8));
-               exit;
+               exit Set_Deconstruct_Recipe_Loop;
             end if;
-         end loop;
+         end loop Set_Deconstruct_Recipe_Loop;
          Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
       else
@@ -449,11 +451,13 @@ package body Crafts.UI is
                 Recipe.MaterialTypes.Last_Index) of Boolean :=
            (others => False);
       begin
+         Check_Materials_Loop :
          for I in
            Recipe.MaterialTypes.First_Index ..
              Recipe.MaterialTypes.Last_Index loop
             Insert(RecipeText, "end", "{" & LF & "-}");
             MAmount := 0;
+            Find_Materials_Loop :
             for J in Items_List.Iterate loop
                IsMaterial := False;
                if Length(RecipeIndex) > 6
@@ -506,19 +510,21 @@ package body Crafts.UI is
                   end if;
                   MAmount := MAmount + 1;
                end if;
-            end loop;
-         end loop;
+            end loop Find_Materials_Loop;
+         end loop Check_Materials_Loop;
          HaveMaterials := True;
+         Have_Materials_Loop :
          for I in Materials'Range loop
             if not Materials(I) then
                HaveMaterials := False;
-               exit;
+               exit Have_Materials_Loop;
             end if;
-         end loop;
+         end loop Have_Materials_Loop;
       end;
       if Recipe.Tool /= To_Unbounded_String("None") then
          Insert(RecipeText, "end", "{" & LF & "Tool: }");
          MAmount := 0;
+         Check_Tool_Loop :
          for I in Items_List.Iterate loop
             if Items_List(I).IType = Recipe.Tool
               and then
@@ -544,22 +550,24 @@ package body Crafts.UI is
                end if;
                MAmount := MAmount + 1;
             end if;
-         end loop;
+         end loop Check_Tool_Loop;
       else
          HaveTool := True;
       end if;
       Insert(RecipeText, "end", "{" & LF & "Workplace: }");
       HaveWorkplace := False;
+      Have_Workplace_Loop :
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
             WorkplaceName := Module.Name;
             if Module.Durability > 0 then
                HaveWorkplace := True;
-               exit;
+               exit Have_Workplace_Loop;
             end if;
          end if;
-      end loop;
+      end loop Have_Workplace_Loop;
       if WorkplaceName = Null_Unbounded_String then
+         Find_Workshop_Name_Loop :
          for Module of Modules_List loop
             if Module.MType = Recipe.Workplace then
                WorkplaceName :=
@@ -568,9 +576,9 @@ package body Crafts.UI is
                   Replace_Element
                     (WorkplaceName, Index(WorkplaceName, "_", 1), ' ');
                end loop;
-               exit;
+               exit Find_Workshop_Name_Loop;
             end if;
-         end loop;
+         end loop Find_Workshop_Name_Loop;
       end if;
       if not HaveWorkplace then
          Insert
