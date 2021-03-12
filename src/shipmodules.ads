@@ -111,7 +111,9 @@ package ShipModules is
    -- RETURNS
    -- Formatted type of module
    -- SOURCE
-   function GetModuleType(ModuleIndex: Unbounded_String) return String;
+   function GetModuleType(ModuleIndex: Unbounded_String) return String with
+      Pre => Length(ModuleIndex) > 0,
+      Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
 
 end ShipModules;
