@@ -103,4 +103,15 @@ package ShipModules is
    procedure LoadShipModules(Reader: Tree_Reader);
    -- ****
 
+   -- ****f* ShipModules/ShipModules.GetModuleType
+   -- FUNCTION
+   -- Get type of selected module (replace all underscore with spaces)
+   -- PARAMETERS
+   -- ModuleIndex - Index of module in prototypes list
+   -- RETURNS
+   -- Formatted type of module
+   -- SOURCE
+   function GetModuleType(ModuleIndex: Unbounded_String) return String;
+   -- ****
+
 end ShipModules;

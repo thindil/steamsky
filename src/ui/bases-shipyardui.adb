@@ -18,7 +18,6 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Maps; use Ada.Strings.Maps;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -53,25 +52,6 @@ with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Bases.ShipyardUI is
-
-   -- ****if* ShipyardUI/ShipyardUI.GetModuleType
-   -- FUNCTION
-   -- Get type of selected module
-   -- PARAMETERS
-   -- ModuleIndex - Index of module in prototypes list
-   -- RETURNS
-   -- Formatted type of module
-   -- SOURCE
-   function GetModuleType(ModuleIndex: Unbounded_String) return String is
-      -- ****
-      ModuleTypeName: Unbounded_String :=
-        To_Unbounded_String
-          (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
-   begin
-      Replace_Element(ModuleTypeName, 1, To_Upper(Element(ModuleTypeName, 1)));
-      Translate(ModuleTypeName, To_Mapping("_", " "));
-      return To_String(ModuleTypeName);
-   end GetModuleType;
 
    -- ****iv* ShipyardUI/ShipyardUI.InstallTable
    -- FUNCTION
