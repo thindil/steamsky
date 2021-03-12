@@ -1000,7 +1000,6 @@ package body Combat.UI is
       UpdateHeader;
       if EndCombat then
          UpdateCombatUI;
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          Button.Name := New_String(".gameframe.header.closebutton");
          configure(Button, "-command {ShowSkyMap}");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
@@ -1011,6 +1010,8 @@ package body Combat.UI is
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".status");
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
          CreateGameMenu;
+         Button := Get_Widget(CombatFrame & ".next", Interp);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
          return TCL_OK;
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
