@@ -32,7 +32,7 @@ package body Maps.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_CountDistance_ecd188_2a2146
-     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural is
+     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural is
    begin
       declare
          Test_CountDistance_ecd188_2a2146_Result: constant Natural :=
@@ -51,7 +51,7 @@ package body Maps.Test_Data.Tests is
 --  id:2.2/ecd188bba777e9d6/CountDistance/1/0/test_countdistance/
    procedure Test_CountDistance_test_countdistance(Gnattest_T: in out Test) is
       function CountDistance
-        (DestinationX: MapXRange; DestinationY: MapYRange)
+        (DestinationX: Map_X_Range; DestinationY: Map_Y_Range)
          return Natural renames
         Wrap_Test_CountDistance_ecd188_2a2146;
 --  end read only
@@ -62,10 +62,10 @@ package body Maps.Test_Data.Tests is
 
    begin
 
-      if X > MapXRange'Last then
+      if X > Map_X_Range'Last then
          X := PlayerShip.SkyX - 1;
       end if;
-      if Y > MapYRange'Last then
+      if Y > Map_Y_Range'Last then
          Y := PlayerShip.SkyY - 1;
       end if;
       Assert

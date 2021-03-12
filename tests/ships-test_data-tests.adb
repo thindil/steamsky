@@ -30,7 +30,7 @@ package body Ships.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_CreateShip_c5e851_13521c
-     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
    begin
       begin
@@ -69,7 +69,7 @@ package body Ships.Test_Data.Tests is
 --  id:2.2/c5e851ac0c40246a/CreateShip/1/0/test_createship/
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test) is
       function CreateShip
-        (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+        (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
          Speed: ShipSpeed; RandomUpgrades: Boolean := True)
          return ShipRecord renames
         Wrap_Test_CreateShip_c5e851_13521c;

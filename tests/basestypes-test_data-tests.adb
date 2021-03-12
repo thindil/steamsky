@@ -31,7 +31,7 @@ package body BasesTypes.Test_Data.Tests is
 --  begin read only
    function Wrap_Test_Is_Buyable_e4fcaf_0acf10
      (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Extended_BaseRange := 0) return Boolean is
+      BaseIndex: Extended_Base_Range := 0) return Boolean is
    begin
       begin
          pragma Assert
@@ -71,7 +71,7 @@ package body BasesTypes.Test_Data.Tests is
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test) is
       function Is_Buyable
         (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-         BaseIndex: Extended_BaseRange := 0) return Boolean renames
+         BaseIndex: Extended_Base_Range := 0) return Boolean renames
         Wrap_Test_Is_Buyable_e4fcaf_0acf10;
 --  end read only
 

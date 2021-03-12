@@ -23,7 +23,7 @@ package body Game.Test_Data is
       Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
       LoadConfig;
       declare
-         Message: constant String := LoadGameData;
+         Message: constant String := Load_Game_Data;
       begin
          if Message'Length > 0 then
             Put_Line(Message);
@@ -32,7 +32,7 @@ package body Game.Test_Data is
       NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
       NewGameSettings.PlayerCareer := To_Unbounded_String("general");
       NewGameSettings.StartingBase := To_Unbounded_String("1");
-      NewGame;
+      New_Game;
    end Set_Up;
 
    procedure Tear_Down(Gnattest_T: in out Test) is

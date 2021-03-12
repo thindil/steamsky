@@ -33,7 +33,7 @@ package body Bases.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_GainRep_6338e6_901e58
-     (BaseIndex: BasesRange; Points: Integer) is
+     (BaseIndex: Bases_Range; Points: Integer) is
    begin
       GNATtest_Generated.GNATtest_Standard.Bases.GainRep(BaseIndex, Points);
    end Wrap_Test_GainRep_6338e6_901e58;
@@ -45,7 +45,7 @@ package body Bases.Test_Data.Tests is
      Test_GainRep_test_gainrep;
 --  id:2.2/6338e6483a422dde/GainRep/1/0/test_gainrep/
    procedure Test_GainRep_test_gainrep(Gnattest_T: in out Test) is
-      procedure GainRep(BaseIndex: BasesRange; Points: Integer) renames
+      procedure GainRep(BaseIndex: Bases_Range; Points: Integer) renames
         Wrap_Test_GainRep_6338e6_901e58;
 --  end read only
 

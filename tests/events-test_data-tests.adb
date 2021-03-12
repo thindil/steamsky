@@ -172,7 +172,7 @@ package body Events.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_RecoverBase_904011_a032fd(BaseIndex: BasesRange) is
+   procedure Wrap_Test_RecoverBase_904011_a032fd(BaseIndex: Bases_Range) is
    begin
       GNATtest_Generated.GNATtest_Standard.Events.RecoverBase(BaseIndex);
    end Wrap_Test_RecoverBase_904011_a032fd;
@@ -184,7 +184,7 @@ package body Events.Test_Data.Tests is
      Test_RecoverBase_test_recoverbase;
 --  id:2.2/904011d165b5f6d4/RecoverBase/1/0/test_recoverbase/
    procedure Test_RecoverBase_test_recoverbase(Gnattest_T: in out Test) is
-      procedure RecoverBase(BaseIndex: BasesRange) renames
+      procedure RecoverBase(BaseIndex: Bases_Range) renames
         Wrap_Test_RecoverBase_904011_a032fd;
 --  end read only
 
