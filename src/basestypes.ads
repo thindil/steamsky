@@ -106,7 +106,7 @@ package BasesTypes is
    -- SOURCE
    function Is_Buyable
      (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Extended_BaseRange := 0) return Boolean with
+      BaseIndex: Extended_Base_Range := 0) return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),
       Test_Case => (Name => "Test_Is_Buyable", Mode => Nominal);

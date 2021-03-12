@@ -58,7 +58,7 @@ package Items is
       Value: Integer_Container.Vector;
       ShowType: Unbounded_String;
       Description: Unbounded_String;
-      Reputation: ReputationRange;
+      Reputation: Reputation_Range;
    end record;
    -- ****
 

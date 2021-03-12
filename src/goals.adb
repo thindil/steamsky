@@ -37,7 +37,7 @@ package body Goals is
       TempRecord: Goal_Data;
       NodesList: Node_List;
       GoalsData: Document;
-      Action: DataAction;
+      Action: Data_Action;
       GoalIndex: Natural;
       GoalNode: Node;
    begin
@@ -54,7 +54,7 @@ package body Goals is
            To_Unbounded_String(Get_Attribute(GoalNode, "index"));
          Action :=
            (if Get_Attribute(GoalNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(GoalNode, "action"))
+              Data_Action'Value(Get_Attribute(GoalNode, "action"))
             else ADD);
          GoalIndex := 0;
          Get_Goal_Index_Loop :
@@ -67,7 +67,7 @@ package body Goals is
          if Action in UPDATE | REMOVE then
             if GoalIndex = 0 then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " goal '" & To_String(TempRecord.Index) &
                  "', there is no goal with that index.";
             end if;

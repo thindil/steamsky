@@ -32,7 +32,7 @@ package body Trades is
    procedure BuyItems
      (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
       BuyAmount, Price: Positive;
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
@@ -111,7 +111,7 @@ package body Trades is
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
       end if;
-      UpdateGame(5);
+      Update_Game(5);
    exception
       when Constraint_Error =>
          raise Trade_Invalid_Amount;
@@ -120,7 +120,7 @@ package body Trades is
    procedure SellItems
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
       SellAmount: Positive;
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ProtoIndex: constant Unbounded_String :=
         PlayerShip.Cargo(ItemIndex).ProtoIndex;
@@ -259,7 +259,7 @@ package body Trades is
       if BaseIndex = 0 and EventIndex > 0 then
          Events_List(EventIndex).Time := Events_List(EventIndex).Time + 5;
       end if;
-      UpdateGame(5);
+      Update_Game(5);
    exception
       when Constraint_Error =>
          raise Trade_Invalid_Amount;

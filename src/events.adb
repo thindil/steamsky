@@ -37,7 +37,7 @@ package body Events is
       Roll: Positive range 1 .. 100;
       Roll2: Integer range -20 .. 120;
       Engines: Positive_Container.Vector;
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Enemies: UnboundedString_Container.Vector;
       procedure GainPerception is
@@ -129,7 +129,7 @@ package body Events is
                   UpdateCargo
                     (PlayerShip, FindProtoItem(ItemType => Fuel_Type),
                      CountFuelNeeded);
-                  UpdateGame(TimePassed);
+                  Update_Game(TimePassed);
                end if;
             when 21 .. 23 => -- Friendly trader
                Events_List.Append
@@ -342,7 +342,7 @@ package body Events is
       NewTime: Integer;
       EventsAmount: constant Natural := Natural(Events_List.Length);
       PopulationLost: Positive range 1 .. 10;
-      BaseIndex: BasesRange;
+      BaseIndex: Bases_Range;
    begin
       if EventsAmount = 0 then
          return;
@@ -438,7 +438,7 @@ package body Events is
       end loop Count_Friendly_Loop;
    end GenerateTraders;
 
-   procedure RecoverBase(BaseIndex: BasesRange) is
+   procedure RecoverBase(BaseIndex: Bases_Range) is
       MaxSpawnChance: Natural := 0;
       FactionRoll: Positive;
    begin

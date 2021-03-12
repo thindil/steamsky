@@ -633,7 +633,7 @@ package body OrdersMenu is
       AddMessage
         ("You and your crew were praying for some time. Now you all feel a bit better.",
          OrderMessage);
-      UpdateGame(30);
+      Update_Game(30);
       ShowSkyMap;
       return TCL_OK;
    end Pray_Command;

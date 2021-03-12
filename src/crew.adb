@@ -195,7 +195,7 @@ package body Crew is
       CabinIndex: Modules_Container.Extended_Index;
       Times, RestAmount, I: Natural;
       OrderTime, CurrentMinutes, HealAmount: Integer;
-      Damage: DamageFactor := 0.0;
+      Damage: Damage_Factor := 0.0;
       NeedCleaning, HaveMedicalRoom: Boolean := False;
       SkillIndex: Skills_Container.Extended_Index;
       function Consume(ItemType: Unbounded_String) return Natural is
@@ -443,7 +443,7 @@ package body Crew is
                if CabinIndex > 0 then
                   Damage :=
                     1.0 -
-                    DamageFactor
+                    Damage_Factor
                       (Float(PlayerShip.Modules(CabinIndex).Durability) /
                        Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                   RestAmount :=
@@ -797,7 +797,7 @@ package body Crew is
    procedure WaitForRest is
       CabinIndex: Modules_Container.Extended_Index := 0;
       TimeNeeded, TempTimeNeeded: Natural := 0;
-      Damage: DamageFactor := 0.0;
+      Damage: Damage_Factor := 0.0;
       CabinBonus: Natural;
    begin
       Wait_For_Rest_Loop :
@@ -810,7 +810,7 @@ package body Crew is
             if CabinIndex > 0 then
                Damage :=
                  1.0 -
-                 DamageFactor
+                 Damage_Factor
                    (Float(PlayerShip.Modules(CabinIndex).Durability) /
                     Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                CabinBonus :=
@@ -835,7 +835,7 @@ package body Crew is
          end if;
       end loop Wait_For_Rest_Loop;
       if TimeNeeded > 0 then
-         UpdateGame(TimeNeeded);
+         Update_Game(TimeNeeded);
          WaitInPlace(TimeNeeded);
       end if;
    end WaitForRest;

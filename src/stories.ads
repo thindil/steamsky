@@ -299,7 +299,7 @@ package Stories is
       -- Parameters X and Y
       -- SOURCE
    procedure GetStoryLocation
-     (StoryX: out MapXRange; StoryY: out MapYRange) with
+     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) with
       Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
       -- ****
 

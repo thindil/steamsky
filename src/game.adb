@@ -55,7 +55,7 @@ with BasesTypes; use BasesTypes;
 
 package body Game is
 
-   procedure NewGame is
+   procedure New_Game is
       RandomBase: Positive;
    begin
       -- Save game configuration
@@ -216,9 +216,9 @@ package body Game is
                        .Contains
                        (To_Unbounded_String("loner"))) then
                      PosX :=
-                       GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                       GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
                      PosY :=
-                       GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                       GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
                   else
                      PosX :=
                        GetRandom
@@ -245,9 +245,11 @@ package body Game is
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
                         PosX :=
-                          GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                          GetRandom
+                            (Bases_Range'First + 5, Bases_Range'Last - 5);
                         PosY :=
-                          GetRandom(BasesRange'First + 5, BasesRange'Last - 5);
+                          GetRandom
+                            (Bases_Range'First + 5, Bases_Range'Last - 5);
                         Attempts := 1;
                      end if;
                   end if;
@@ -399,11 +401,11 @@ package body Game is
       AddMessage
         ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
          OtherMessage);
-   end NewGame;
+   end New_Game;
 
-   procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) is
+   procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
       AddedHours, AddedMinutes: Natural;
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       TiredPoints: Natural := 0;
       NeedCleaning: Boolean := False;
@@ -459,7 +461,7 @@ package body Game is
          end if;
       end if;
       -- Update crew
-      UpdateCrew(Minutes, TiredPoints, InCombat);
+      UpdateCrew(Minutes, TiredPoints, In_Combat);
       -- Repair ship (if needed)
       Ships.Repairs.RepairShip(Minutes);
       -- Craft items
@@ -499,7 +501,7 @@ package body Game is
       UpdateEvents(Minutes);
       -- Update accepted missions
       UpdateMissions(Minutes);
-   end UpdateGame;
+   end Update_Game;
 
    -- ****if* Game/Game.LoadData
    -- FUNCTION
@@ -507,7 +509,7 @@ package body Game is
    -- PARAMETERS
    -- Reader - XML Reader from which data will be read
    -- SOURCE
-   procedure LoadData(Reader: Tree_Reader) is
+   procedure Load_Data(Reader: Tree_Reader) is
       -- ****
       GameData: Document;
       NodesList, ChildNodes: Node_List;
@@ -678,23 +680,23 @@ package body Game is
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "pilotingskill" then
             Piloting_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "engineeringskill" then
             Engineering_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "gunneryskill" then
             Gunnery_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "talkingskill" then
             Talking_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "perceptionskill" then
             Perception_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "headarmor" then
             Head_Armor :=
@@ -716,16 +718,16 @@ package body Game is
               To_Unbounded_String(Get_Attribute(DataNode, "value"));
          elsif To_String(NodeName) = "dodgeskill" then
             Dodge_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "unarmedskill" then
             Unarmed_Skill :=
-              FindSkillIndex
+              Find_Skill_Index
                 (To_Unbounded_String(Get_Attribute(DataNode, "value")));
          elsif To_String(NodeName) = "remove" then
             if Get_Attribute(DataNode, "name") = "skill" then
                DeleteIndex :=
-                 FindSkillIndex
+                 Find_Skill_Index
                    (To_Unbounded_String(Get_Attribute(DataNode, "value")));
                if DeleteIndex > 0 then
                   Skills_List.Delete(Index => DeleteIndex);
@@ -753,9 +755,9 @@ package body Game is
             end if;
          end if;
       end loop Load_Game_Data_Loop;
-   end LoadData;
+   end Load_Data;
 
-   procedure EndGame(Save: Boolean) is
+   procedure End_Game(Save: Boolean) is
    begin
       if Save then
          SaveGame;
@@ -771,20 +773,20 @@ package body Game is
       ClearCurrentGoal;
       AcceptedMissions.Clear;
       SaveConfig;
-   end EndGame;
+   end End_Game;
 
-   function FindSkillIndex(SkillName: Unbounded_String) return Natural is
+   function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is
    begin
       Find_Skill_Loop :
       for I in Skills_List.Iterate loop
-         if Skills_List(I).Name = SkillName then
+         if Skills_List(I).Name = Skill_Name then
             return SkillsData_Container.To_Index(I);
          end if;
       end loop Find_Skill_Loop;
       return 0;
-   end FindSkillIndex;
+   end Find_Skill_Index;
 
-   function LoadGameData return String is
+   function Load_Game_Data return String is
       type DataType_Record is record
          Name: Unbounded_String;
          FileName: Unbounded_String;
@@ -845,7 +847,7 @@ package body Game is
                elsif To_String(DataType) = "stories" then
                   LoadStories(Reader);
                elsif To_String(DataType) = "data" then
-                  LoadData(Reader);
+                  Load_Data(Reader);
                elsif To_String(DataType) = "careers" then
                   LoadCareers(Reader);
                end if;
@@ -900,6 +902,6 @@ package body Game is
       when An_Exception : others =>
          LogMessage(Exception_Message(An_Exception), Everything);
          return Exception_Message(An_Exception);
-   end LoadGameData;
+   end Load_Game_Data;
 
 end Game;

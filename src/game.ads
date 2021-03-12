@@ -386,11 +386,11 @@ package Game is
        (Source => "data" & Dir_Separator & "themes" & Dir_Separator);
    -- ****
 
-   -- ****t* Game/Game.DataAction
+   -- ****t* Game/Game.Data_Action
    -- FUNCTION
    -- Possible actions to do when loading game data
    -- SOURCE
-   type DataAction is (ADD, UPDATE, REMOVE);
+   type Data_Action is (ADD, UPDATE, REMOVE);
    -- ****
 
    -- ****t* Game/Game.Natural_Array
@@ -400,11 +400,11 @@ package Game is
    type Natural_Array is array(Positive range <>) of Natural;
    -- ****
 
-   -- ****t* Game/Game.DamageFactor
+   -- ****t* Game/Game.Damage_Factor
    -- FUNCTION
    -- Used mostly for count percentage of damage of modules
    -- SOURCE
-   type DamageFactor is digits 2 range 0.0 .. 1.0;
+   type Damage_Factor is digits 2 range 0.0 .. 1.0;
    -- ****
 
    -- ****t* Game/Game.Reputation_Array
@@ -414,39 +414,39 @@ package Game is
    type Reputation_Array is array(1 .. 2) of Integer;
    -- ****
 
-   -- ****t* Game/Game.BasesRange
+   -- ****t* Game/Game.Bases_Range
    -- FUNCTION
    -- Amount of sky bases
    -- SOURCE
-   subtype BasesRange is Positive range 1 .. 1024;
+   subtype Bases_Range is Positive range 1 .. 1024;
    -- ****
 
-   -- ****t* Game/Game.Extended_BaseRange
+   -- ****t* Game/Game.Extended_Base_Range
    -- FUNCTION
    -- Amount of sky bases starting from 0
    -- SOURCE
-   subtype Extended_BaseRange is Natural range 0 .. 1024;
+   subtype Extended_Base_Range is Natural range 0 .. 1024;
    -- ****
 
-   -- ****t* Game/Game.MapXRange
+   -- ****t* Game/Game.Map_X_Range
    -- FUNCTION
    -- X axis size of the game map
    -- SOURCE
-   subtype MapXRange is Positive range 1 .. 1024;
+   subtype Map_X_Range is Positive range 1 .. 1024;
    -- ****
 
-   -- ****t* Game/Game.MapYRange
+   -- ****t* Game/Game.Map_Y_Range
    -- FUNCTION
    -- Y axis size of the game map
    -- SOURCE
-   subtype MapYRange is Positive range 1 .. 1024;
+   subtype Map_Y_Range is Positive range 1 .. 1024;
    -- ****
 
-   -- ****t* Game/Game.ReputationRange
+   -- ****t* Game/Game.Reputation_Range
    -- FUNCTION
    -- Range of the player's reputation level in bases
    -- SOURCE
-   subtype ReputationRange is Integer range -100 .. 100;
+   subtype Reputation_Range is Integer range -100 .. 100;
    -- ****
 
    -- ****e* Game/Game.Data_Loading_Error
@@ -456,35 +456,35 @@ package Game is
    Data_Loading_Error: exception;
    -- ****
 
-   -- ****f* Game/Game.NewGame
+   -- ****f* Game/Game.New_Game
    -- FUNCTION
    -- Start new game: create map, place ship, crew, etc
    -- SOURCE
-   procedure NewGame;
+   procedure New_Game;
    -- ****
 
-   -- ****f* Game/Game.UpdateGame
+   -- ****f* Game/Game.Update_Game
    -- FUNCTION
    -- Game ticks (update time, crew, ship, etc)
    -- PARAMETERS
    -- Minutes  - Amount of in-game minutes passed
    -- InCombat - Did player is in combat currently. Default false
    -- SOURCE
-   procedure UpdateGame(Minutes: Positive; InCombat: Boolean := False) with
+   procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) with
       Test_Case => (Name => "Test_UpdateGame", Mode => Robustness);
       -- ****
 
-      -- ****f* Game/Game.EndGame
+      -- ****f* Game/Game.End_Game
       -- FUNCTION
       -- Save (or not) game and clear all temporary data
       -- PARAMETERS
       -- Save - Did game should be saved to file or not
       -- SOURCE
-   procedure EndGame(Save: Boolean) with
+   procedure End_Game(Save: Boolean) with
       Test_Case => (Name => "Test_EndGame", Mode => Robustness);
       -- ****
 
-      -- ****f* Game/Game.FindSkillIndex
+      -- ****f* Game/Game.Find_Skill_Index
       -- FUNCTION
       -- Find index of selected skill
       -- PARAMETERS
@@ -492,19 +492,19 @@ package Game is
       -- RESULT
       -- Index of selected skill or 0 if skill was not found
       -- SOURCE
-   function FindSkillIndex(SkillName: Unbounded_String) return Natural with
-      Pre => SkillName /= Null_Unbounded_String,
+   function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural with
+      Pre => Skill_Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
       -- ****
 
-      -- ****f* Game/Game.LoadGameData
+      -- ****f* Game/Game.Load_Game_Data
       -- FUNCTION
       -- Load game data from files
       -- RESULT
       -- Empty string if everything was ok, otherwise message with info what
       -- goes wrong
       -- SOURCE
-   function LoadGameData return String;
+   function Load_Game_Data return String;
    -- ****
 
 end Game;

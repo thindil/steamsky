@@ -301,7 +301,7 @@ package body Combat is
          Shoots: Natural;
          GunnerOrder: Positive;
          HitChance, HitLocation, CurrentAccuracyBonus: Integer;
-         Damage: DamageFactor := 0.0;
+         Damage: Damage_Factor := 0.0;
          WeaponDamage: Integer;
          EnemyNameOwner: constant Unbounded_String :=
            EnemyName & To_Unbounded_String(" (") & FactionName &
@@ -634,7 +634,7 @@ package body Combat is
                        To_Unbounded_String(".");
                      Damage :=
                        1.0 -
-                       DamageFactor
+                       Damage_Factor
                          (Float(Ship.Modules(K).Durability) /
                           Float(Ship.Modules(K).MaxDurability));
                      if Ship.Modules(K).MType = HARPOON_GUN then
@@ -783,7 +783,7 @@ package body Combat is
               (To_Unbounded_String("head"), To_Unbounded_String("torso"),
                To_Unbounded_String("leg"), To_Unbounded_String("arm"));
             AttackSkill, BaseDamage: Natural;
-            Wounds: DamageFactor := 0.0;
+            Wounds: Damage_Factor := 0.0;
             MessageColor: Message_Color;
             Attacker: Member_Data :=
               (if PlayerAttack2 then PlayerShip.Crew(AttackerIndex)
@@ -810,15 +810,15 @@ package body Combat is
                    (2);
             end if;
          -- Count damage based on attacker wounds, fatigue, hunger and thirst
-            Wounds := 1.0 - DamageFactor(Float(Attacker.Health) / 100.0);
+            Wounds := 1.0 - Damage_Factor(Float(Attacker.Health) / 100.0);
             Damage :=
               (BaseDamage - Integer(Float(BaseDamage) * Float(Wounds)));
             if Attacker.Thirst > 40 then
-               Wounds := 1.0 - DamageFactor(Float(Attacker.Thirst) / 100.0);
+               Wounds := 1.0 - Damage_Factor(Float(Attacker.Thirst) / 100.0);
                Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
             end if;
             if Attacker.Hunger > 80 then
-               Wounds := 1.0 - DamageFactor(Float(Attacker.Hunger) / 100.0);
+               Wounds := 1.0 - Damage_Factor(Float(Attacker.Hunger) / 100.0);
                Damage := Damage - (Integer(Float(BaseDamage) * Float(Wounds)));
             end if;
             Damage :=
@@ -1460,7 +1460,7 @@ package body Combat is
              0 then -- Set defenders/boarding party on player ship
             UpdateOrders(PlayerShip, True);
          end if;
-         UpdateGame(1, True);
+         Update_Game(1, True);
       elsif PlayerShip.Crew(1).Health > 0 then
          declare
             WasBoarded: Boolean := False;

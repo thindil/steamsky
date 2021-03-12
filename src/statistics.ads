@@ -64,7 +64,7 @@ package Statistics is
    -- SOURCE
    type GameStats_Data is record
       DestroyedShips: Statistics_Container.Vector;
-      BasesVisited: BasesRange;
+      BasesVisited: Bases_Range;
       MapVisited: Positive;
       DistanceTraveled: Natural;
       CraftingOrders: Statistics_Container.Vector;

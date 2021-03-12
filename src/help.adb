@@ -29,7 +29,7 @@ package body Help is
       TmpHelp: Help_Data;
       NodesList: Node_List;
       HelpData: Document;
-      Action: DataAction;
+      Action: Data_Action;
       HelpIndex, HelpTitle: Unbounded_String;
       HelpNode: Node;
    begin
@@ -43,14 +43,14 @@ package body Help is
          HelpNode := Item(NodesList, I);
          Action :=
            (if Get_Attribute(HelpNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(HelpNode, "action"))
+              Data_Action'Value(Get_Attribute(HelpNode, "action"))
             else ADD);
          HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
          HelpTitle := To_Unbounded_String(Get_Attribute(HelpNode, "title"));
          if Action in UPDATE | REMOVE then
             if not Help_Container.Contains(Help_List, HelpTitle) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " help '" & To_String(HelpTitle) &
                  "', there no help with that title.";
             end if;

@@ -770,7 +770,7 @@ package body MainMenu.Commands is
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
       NewGameSettings.PricesBonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
-      NewGame;
+      New_Game;
       StartGame;
       return TCL_OK;
    end New_Game_Command;

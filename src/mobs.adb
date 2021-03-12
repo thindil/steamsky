@@ -51,7 +51,7 @@ package body Mobs is
          To_Unbounded_String("Head"), To_Unbounded_String("Torso"),
          To_Unbounded_String("Arms"), To_Unbounded_String("Legs"),
          To_Unbounded_String("Tool"));
-      Action, SubAction: DataAction;
+      Action, SubAction: Data_Action;
       MobNode, ChildNode: Node;
       ChildIndex: Natural;
       DeleteIndex: Positive;
@@ -70,12 +70,12 @@ package body Mobs is
          MobIndex := To_Unbounded_String(Get_Attribute(MobNode, "index"));
          Action :=
            (if Get_Attribute(MobNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(MobNode, "action"))
+              Data_Action'Value(Get_Attribute(MobNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not ProtoMobs_Container.Contains(ProtoMobs_List, MobIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " mob '" & To_String(MobIndex) &
                  "', there is no mob with that index.";
             end if;
@@ -94,21 +94,21 @@ package body Mobs is
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ChildIndex :=
-                 FindSkillIndex
+                 Find_Skill_Index
                    (To_Unbounded_String(Get_Attribute(ChildNode, "name")));
                if Get_Attribute(ChildNode, "name") = "WeaponSkill" then
                   ChildIndex := Natural(Skills_List.Length) + 1;
                end if;
                if ChildIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " mob '" & To_String(MobIndex) &
                     "', there no skill named '" &
                     Get_Attribute(ChildNode, "name") & "'.";
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
@@ -125,7 +125,7 @@ package body Mobs is
                             (Get_Attribute(ChildNode, "maxlevel")) then
                            raise Data_Loading_Error
                              with "Can't " &
-                             To_Lower(DataAction'Image(Action)) & " mob '" &
+                             To_Lower(Data_Action'Image(Action)) & " mob '" &
                              To_String(MobIndex) &
                              " invalid range for skill '" &
                              Get_Attribute(ChildNode, "name") & "'";
@@ -155,7 +155,7 @@ package body Mobs is
                                   (Get_Attribute(ChildNode, "maxlevel")) then
                                  raise Data_Loading_Error
                                    with "Can't " &
-                                   To_Lower(DataAction'Image(Action)) &
+                                   To_Lower(Data_Action'Image(Action)) &
                                    " mob '" & To_String(MobIndex) &
                                    " invalid range for skill '" &
                                    Get_Attribute(ChildNode, "name") & "'";
@@ -197,7 +197,7 @@ package body Mobs is
                   if Integer'Value(Get_Attribute(ChildNode, "minlevel")) >
                     Integer'Value(Get_Attribute(ChildNode, "maxlevel")) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(DataAction'Image(Action)) &
+                       with "Can't " & To_Lower(Data_Action'Image(Action)) &
                        " mob '" & To_String(MobIndex) &
                        " invalid range for attribute.";
                   end if;
@@ -236,14 +236,14 @@ package body Mobs is
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                if not Objects_Container.Contains(Items_List, ItemIndex) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " mob '" & To_String(MobIndex) &
                     "', there is no item with index '" &
                     Get_Attribute(ChildNode, "index") & "'.";
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
@@ -261,7 +261,7 @@ package body Mobs is
                             (Get_Attribute(ChildNode, "maxamount")) then
                            raise Data_Loading_Error
                              with "Can't " &
-                             To_Lower(DataAction'Image(Action)) & " mob '" &
+                             To_Lower(Data_Action'Image(Action)) & " mob '" &
                              To_String(MobIndex) &
                              " invalid range for amount of '" &
                              Get_Attribute(ChildNode, "index") & "'.";
@@ -292,7 +292,7 @@ package body Mobs is
                                   (Get_Attribute(ChildNode, "maxamount")) then
                                  raise Data_Loading_Error
                                    with "Can't " &
-                                   To_Lower(DataAction'Image(Action)) &
+                                   To_Lower(Data_Action'Image(Action)) &
                                    " mob '" & To_String(MobIndex) &
                                    " invalid range for amount of '" &
                                    Get_Attribute(ChildNode, "index") & "'.";

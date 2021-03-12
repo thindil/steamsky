@@ -36,7 +36,7 @@ package Maps is
    -- MissionIndex - If accepted mission is in cell > 0
    -- SOURCE
    type SkyCell is record
-      BaseIndex: Extended_BaseRange;
+      BaseIndex: Extended_Base_Range;
       Visited: Boolean;
       EventIndex: Events_Container.Extended_Index;
       MissionIndex: Mission_Container.Extended_Index;
@@ -47,7 +47,7 @@ package Maps is
    -- FUNCTION
    -- Game map
    -- SOURCE
-   SkyMap: array(MapXRange, MapYRange) of SkyCell;
+   SkyMap: array(Map_X_Range, Map_Y_Range) of SkyCell;
    -- ****
 
    -- ****f* Maps/Maps.CountDistance
@@ -61,7 +61,7 @@ package Maps is
    -- Distance between player ship and destination point
    -- SOURCE
    function CountDistance
-     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural with
+     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural with
       Test_Case => (Name => "Test_CountDistance", Mode => Robustness);
       -- ****
 

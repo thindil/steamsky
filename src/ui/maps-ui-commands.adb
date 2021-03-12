@@ -624,7 +624,7 @@ package body Maps.UI.Commands is
         "waitormove" then -- Move to destination or wait 1 game minute
          if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
             Result := 1;
-            UpdateGame(1);
+            Update_Game(1);
             WaitInPlace(1);
          else
             if PlayerShip.DestinationX > PlayerShip.SkyX then

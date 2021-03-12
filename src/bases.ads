@@ -58,7 +58,7 @@ package Bases is
       Inventory: UnboundedString_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Positive;
-      HomeBase: BasesRange;
+      HomeBase: Bases_Range;
       Faction: Unbounded_String;
    end record;
    -- ****
@@ -126,8 +126,8 @@ package Bases is
    type BaseRecord is record
       Name: Unbounded_String;
       Visited: Date_Record;
-      SkyX: MapXRange;
-      SkyY: MapYRange;
+      SkyX: Map_X_Range;
+      SkyY: Map_Y_Range;
       BaseType: Unbounded_String;
       Population: Natural;
       RecruitDate: Date_Record;
@@ -148,7 +148,7 @@ package Bases is
    -- FUNCTION
    -- List of sky bases
    -- SOURCE
-   SkyBases: array(BasesRange) of BaseRecord;
+   SkyBases: array(Bases_Range) of BaseRecord;
    -- ****
 
    -- ****v* Bases/Bases.BaseSyllablesPre
@@ -186,7 +186,7 @@ package Bases is
    -- BaseIndex - Index of the base in which player gained or lose reputation
    -- Points    - Amount of reputation points to gain or lose
    -- SOURCE
-   procedure GainRep(BaseIndex: BasesRange; Points: Integer) with
+   procedure GainRep(BaseIndex: Bases_Range; Points: Integer) with
       Test_Case => (Name => "Test_GainRep", Mode => Robustness);
       -- ****
 

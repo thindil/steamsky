@@ -203,7 +203,7 @@ package body Bases.SaveLoad is
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       NodesList, BaseData: Node_List;
-      BaseIndex: BasesRange;
+      BaseIndex: Bases_Range;
       NodeName: Unbounded_String;
       BaseNode, ChildNode: Node;
    begin
@@ -259,7 +259,7 @@ package body Bases.SaveLoad is
                   RecruitData: Node_List;
                   RecruitName, RecruitFaction: Unbounded_String;
                   Gender: String(1 .. 1);
-                  HomeBase: BasesRange;
+                  HomeBase: Bases_Range;
                   Price, Payment: Positive;
                   Skills: Skills_Container.Vector;
                   Attributes: Attributes_Container.Vector;
@@ -312,7 +312,7 @@ package body Bases.SaveLoad is
                      end if;
                      if Get_Attribute(ChildNode, "homebase") /= "" then
                         HomeBase :=
-                          BasesRange'Value
+                          Bases_Range'Value
                             (Get_Attribute(ChildNode, "homebase"));
                      end if;
                      if Get_Attribute(ChildNode, "faction") /= "" then

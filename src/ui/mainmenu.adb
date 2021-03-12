@@ -115,7 +115,7 @@ package body MainMenu is
       Font.Configure
         ("InterfaceFont",
          "-size" & Positive'Image(GameSettings.InterfaceFontSize));
-      DataError := To_Unbounded_String(LoadGameData);
+      DataError := To_Unbounded_String(Load_Game_Data);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
          return;

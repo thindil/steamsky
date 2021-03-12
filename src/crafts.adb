@@ -44,7 +44,7 @@ package body Crafts is
       RecipeIndex, ItemIndex, Value: Unbounded_String;
       RecipeNode, ChildNode: Node;
       MaterialAdded: Boolean;
-      Action: DataAction;
+      Action: Data_Action;
       SkillIndex: Skills_Container.Extended_Index;
    begin
       RecipesData := Get_Tree(Reader);
@@ -63,12 +63,12 @@ package body Crafts is
            To_Unbounded_String(Get_Attribute(RecipeNode, "index"));
          Action :=
            (if Get_Attribute(RecipeNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(RecipeNode, "action"))
+              Data_Action'Value(Get_Attribute(RecipeNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Recipes_Container.Contains(Recipes_List, RecipeIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " recipe '" & To_String(RecipeIndex) &
                  "', there is no recipe with that index.";
             end if;
@@ -139,7 +139,7 @@ package body Crafts is
             end if;
             Value := To_Unbounded_String(Get_Attribute(RecipeNode, "skill"));
             if Value /= Null_Unbounded_String then
-               SkillIndex := FindSkillIndex(Value);
+               SkillIndex := Find_Skill_Index(Value);
                if SkillIndex = 0 then
                   raise Data_Loading_Error
                     with "Can't add recipe '" & To_String(RecipeIndex) &
@@ -400,7 +400,7 @@ package body Crafts is
       Recipe: Craft_Data;
       MaterialIndexes: UnboundedString_Container.Vector;
       WorkTime, CurrentMinutes, RecipeTime: Integer;
-      Damage: DamageFactor := 0.0;
+      Damage: Damage_Factor := 0.0;
       RecipeName: Unbounded_String;
       HaveMaterial: Boolean;
       CraftingMaterial: Natural;
@@ -597,7 +597,7 @@ package body Crafts is
                            100.0)));
                   Damage :=
                     1.0 -
-                    DamageFactor
+                    Damage_Factor
                       (Float(Module.Durability) / Float(Module.MaxDurability));
                   ResultAmount :=
                     ResultAmount -

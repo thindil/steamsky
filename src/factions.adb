@@ -42,14 +42,14 @@ package body Factions is
       TmpCareer: Factions.CareerRecord;
       FactionNode, ChildNode: Node;
       DeleteIndex: Positive;
-      Action, SubAction: DataAction;
+      Action, SubAction: Data_Action;
       TmpBaseTypeChance: Positive;
       TmpBasesTypes: BaseType_Container.Map;
-      function GetAction(CurrentNode: Node) return DataAction is
+      function GetAction(CurrentNode: Node) return Data_Action is
       begin
          return
            (if Get_Attribute(CurrentNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(CurrentNode, "action"))
+              Data_Action'Value(Get_Attribute(CurrentNode, "action"))
             else ADD);
       end GetAction;
       procedure AddChildNode
@@ -69,7 +69,7 @@ package body Factions is
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
                     "', no items with type '" & To_String(Value) & "'.";
                end if;
@@ -113,7 +113,7 @@ package body Factions is
             if not Factions_Container.Contains
                 (Factions_List, FactionIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " faction '" & To_String(FactionIndex) &
                  "', there no faction with that index.";
             end if;
@@ -155,7 +155,7 @@ package body Factions is
                  Natural'Value(Get_Attribute(FactionNode, "maxpopulation"));
                if TempRecord.Population(2) < TempRecord.Population(1) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
                     "', invalid range for faction's population.";
                end if;
@@ -171,7 +171,7 @@ package body Factions is
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
                     "', no items with type '" & To_String(Value) & "'.";
                end if;
@@ -181,10 +181,10 @@ package body Factions is
                Value :=
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "healingskill"));
-               SkillIndex := FindSkillIndex(Value);
+               SkillIndex := Find_Skill_Index(Value);
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
@@ -200,10 +200,10 @@ package body Factions is
                Value :=
                  To_Unbounded_String
                    (Get_Attribute(FactionNode, "weaponskill"));
-               SkillIndex := FindSkillIndex(Value);
+               SkillIndex := Find_Skill_Index(Value);
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " faction '" & To_String(FactionIndex) &
                     "', no skill named '" & To_String(Value) & "'.";
                end if;
@@ -226,7 +226,7 @@ package body Factions is
                      Integer'Value(Get_Attribute(ChildNode, "maxreputation")));
                   if TmpRelation.Reputation(2) < TmpRelation.Reputation(1) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(DataAction'Image(Action)) &
+                       with "Can't " & To_Lower(Data_Action'Image(Action)) &
                        " faction '" & To_String(FactionIndex) &
                        "', invalid range for faction's reputation with '" &
                        To_String(RelationIndex) & "'.";
