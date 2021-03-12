@@ -16,6 +16,7 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Strings.Maps; use Ada.Strings.Maps;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -175,5 +176,15 @@ package body ShipModules is
          end if;
       end loop Load_Modules_Loop;
    end LoadShipModules;
+
+   function GetModuleType(ModuleIndex: Unbounded_String) return String is
+      ModuleTypeName: Unbounded_String :=
+        To_Unbounded_String
+          (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
+   begin
+      Replace_Element(ModuleTypeName, 1, To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
+      Translate(ModuleTypeName, To_Mapping("_", " "));
+      return To_String(ModuleTypeName);
+   end GetModuleType;
 
 end ShipModules;

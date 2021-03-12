@@ -17,7 +17,6 @@ with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Strings.Maps; use Ada.Strings.Maps;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -658,12 +657,7 @@ package body Combat.UI is
             if Enemy.Distance > 1000 then
                ModuleName :=
                  To_Unbounded_String
-                   (ModuleType'Image
-                      (Modules_List(Enemy.Ship.Modules(I).ProtoIndex).MType));
-               Replace_Slice
-                 (ModuleName, 2, Length(ModuleName),
-                  To_Lower(Slice(ModuleName, 2, Length(ModuleName))));
-               Translate(ModuleName, To_Mapping("_", " "));
+                   (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex));
             else
                ModuleName :=
                  Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
