@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Crash after victory in combat (Github issue #75)
 - Crash when player ship crew member die in melee combat
 - Setting themes directory via command line arguments
+- Hide next turn button after finishing boarding combat
 
 ## [5.8] - 2021-02-21
 
