@@ -15,7 +15,7 @@ package body Ships.Movement.Test_Data is
       NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
       NewGameSettings.PlayerCareer := To_Unbounded_String("general");
       NewGameSettings.StartingBase := To_Unbounded_String("1");
-      NewGame;
+      New_Game;
    end Set_Up;
 
    procedure Tear_Down(Gnattest_T: in out Test) is

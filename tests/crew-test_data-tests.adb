@@ -213,7 +213,7 @@ package body Crew.Test_Data.Tests is
       NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
       NewGameSettings.PlayerCareer := To_Unbounded_String("general");
       NewGameSettings.StartingBase := To_Unbounded_String("1");
-      NewGame;
+      New_Game;
       Assert(True, "This tests can only crash.");
 
 --  begin read only

@@ -258,7 +258,7 @@ package body Stories.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_GetStoryLocation_eee8ee_b0f396
-     (StoryX: out MapXRange; StoryY: out MapYRange) is
+     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) is
    begin
       GNATtest_Generated.GNATtest_Standard.Stories.GetStoryLocation
         (StoryX, StoryY);
@@ -275,7 +275,7 @@ package body Stories.Test_Data.Tests is
    procedure Test_GetStoryLocation_test_getstorylocation
      (Gnattest_T: in out Test) is
       procedure GetStoryLocation
-        (StoryX: out MapXRange; StoryY: out MapYRange) renames
+        (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) renames
         Wrap_Test_GetStoryLocation_eee8ee_b0f396;
 --  end read only
 

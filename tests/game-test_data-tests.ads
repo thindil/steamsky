@@ -10,14 +10,14 @@ package Game.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_UpdateGame_93bf31_5306b6(Gnattest_T: in out Test);
-   --  game.ads:471:4:UpdateGame:Test_UpdateGame
+   procedure Test_Update_Game_25a566_5306b6(Gnattest_T: in out Test);
+   --  game.ads:473:4:Update_Game:Test_UpdateGame
 
-   procedure Test_EndGame_2a7140_745ef4(Gnattest_T: in out Test);
-   --  game.ads:481:4:EndGame:Test_EndGame
+   procedure Test_End_Game_29871f_745ef4(Gnattest_T: in out Test);
+   --  game.ads:483:4:End_Game:Test_EndGame
 
-   procedure Test_FindSkillIndex_f70bc5_c869df(Gnattest_T: in out Test);
-   --  game.ads:493:4:FindSkillIndex:Test_FindSkillIndex
+   procedure Test_Find_Skill_Index_2a5948_bcc9a6(Gnattest_T: in out Test);
+   --  game.ads:495:4:Find_Skill_Index:Test_FindSkillIndex
 
 end Game.Test_Data.Tests;
 --  end read only
