@@ -184,18 +184,18 @@ package Ships is
    -- SOURCE
    type ShipRecord is record
       Name: Unbounded_String;
-      SkyX: MapXRange;
-      SkyY: MapYRange;
+      SkyX: Map_X_Range;
+      SkyY: Map_Y_Range;
       Speed: ShipSpeed;
       Modules: Modules_Container.Vector;
       Cargo: Inventory_Container.Vector;
       Crew: Crew_Container.Vector;
       UpgradeModule: Modules_Container.Extended_Index;
-      DestinationX: Natural range 0 .. MapXRange'Last;
-      DestinationY: Natural range 0 .. MapYRange'Last;
+      DestinationX: Natural range 0 .. Map_X_Range'Last;
+      DestinationY: Natural range 0 .. Map_Y_Range'Last;
       RepairModule: Modules_Container.Extended_Index;
       Description: Unbounded_String;
-      HomeBase: Extended_BaseRange;
+      HomeBase: Extended_Base_Range;
    end record;
    -- ****
 
@@ -323,7 +323,7 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);

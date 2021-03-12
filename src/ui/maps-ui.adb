@@ -539,7 +539,7 @@ package body Maps.UI is
       end if;
       if SkyMap(X, Y).BaseIndex > 0 then
          declare
-            BaseIndex: constant BasesRange := SkyMap(X, Y).BaseIndex;
+            BaseIndex: constant Bases_Range := SkyMap(X, Y).BaseIndex;
          begin
             if SkyBases(BaseIndex).Known then
                Append(MapInfoText, LF);

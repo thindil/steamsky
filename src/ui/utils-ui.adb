@@ -571,7 +571,7 @@ package body Utils.UI is
                To_String(SkyBases(PlayerShip.HomeBase).Name),
                OtherMessage);
             GainExp(1, Talking_Skill, TraderIndex);
-            UpdateGame(10);
+            Update_Game(10);
             ShowSkyMap;
          end;
       elsif Result = "nopilot" then
@@ -601,7 +601,7 @@ package body Utils.UI is
          begin
             GameSettings.MessagesPosition :=
               GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
-            EndGame(True);
+            End_Game(True);
             ShowMainMenu;
          end;
       elsif Result = "resign" then
@@ -627,7 +627,7 @@ package body Utils.UI is
          begin
             GameSettings.MessagesPosition :=
               GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
-            EndGame(False);
+            End_Game(False);
             ShowMainMenu;
          end;
       elsif Result = "messages" then
@@ -727,7 +727,7 @@ package body Utils.UI is
         (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
       MinutesDiff: Integer;
       Rests, CabinIndex, RestTime: Natural := 0;
-      Damage: DamageFactor := 0.0;
+      Damage: Damage_Factor := 0.0;
       Tired, CabinBonus, TempTime: Natural;
    begin
       if Speed = 0.0 then
@@ -770,7 +770,7 @@ package body Utils.UI is
                if CabinIndex > 0 then
                   Damage :=
                     1.0 -
-                    DamageFactor
+                    Damage_Factor
                       (Float(PlayerShip.Modules(CabinIndex).Durability) /
                        Float(PlayerShip.Modules(CabinIndex).MaxDurability));
                   CabinBonus :=

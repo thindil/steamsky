@@ -29,7 +29,7 @@ package body ShipModules is
       NodesList: Node_List;
       ModulesData: Document;
       TempRecord: BaseModule_Data;
-      Action: DataAction;
+      Action: Data_Action;
       ModuleNode: Node;
       SkillIndex: Natural;
       MaterialExists: Boolean;
@@ -52,13 +52,13 @@ package body ShipModules is
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
          Action :=
            (if Get_Attribute(ModuleNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(ModuleNode, "action"))
+              Data_Action'Value(Get_Attribute(ModuleNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BaseModules_Container.Contains
                 (Modules_List, ModuleIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " ship module '" & To_String(ModuleIndex) &
                  "', there is no ship module with that index.";
             end if;
@@ -108,7 +108,7 @@ package body ShipModules is
                end loop Check_Materials_Loop;
                if not MaterialExists then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " ship module '" & To_String(ModuleIndex) &
                     "', there is no item type '" &
                     Get_Attribute(ModuleNode, "material") & "'.";
@@ -116,11 +116,11 @@ package body ShipModules is
             end if;
             if Get_Attribute(ModuleNode, "skill")'Length > 0 then
                SkillIndex :=
-                 FindSkillIndex
+                 Find_Skill_Index
                    (To_Unbounded_String(Get_Attribute(ModuleNode, "skill")));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " ship module '" & To_String(ModuleIndex) &
                     "', there is no skill named '" &
                     Get_Attribute(ModuleNode, "skill") & "'.";

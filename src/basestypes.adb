@@ -35,7 +35,7 @@ package body BasesTypes is
       TmpFlags: UnboundedString_Container.Vector;
       BaseNode, ChildNode: Node;
       BaseIndex, ItemIndex: Unbounded_String;
-      Action, SubAction: DataAction;
+      Action, SubAction: Data_Action;
       BuyPrice, SellPrice: Natural;
       procedure AddChildNode
         (Data: in out UnboundedString_Container.Vector; Name: String;
@@ -55,18 +55,18 @@ package body BasesTypes is
                else To_Unbounded_String(Get_Attribute(ChildNode, "index")));
             SubAction :=
               (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                 DataAction'Value(Get_Attribute(ChildNode, "action"))
+                 Data_Action'Value(Get_Attribute(ChildNode, "action"))
                else ADD);
             if Name = "recipe" then
                if not Recipes_List.Contains(Value) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " base type '" & To_String(BaseIndex) &
                     "', no recipe with index '" & To_String(Value) & "'.";
                end if;
                if Data.Contains(Value) and SubAction = ADD then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " base type '" & To_String(BaseIndex) & "', recipe '" &
                     To_String(Value) & "' already added.";
                end if;
@@ -100,13 +100,13 @@ package body BasesTypes is
          BaseIndex := To_Unbounded_String(Get_Attribute(BaseNode, "index"));
          Action :=
            (if Get_Attribute(BaseNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(BaseNode, "action"))
+              Data_Action'Value(Get_Attribute(BaseNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
                 (BasesTypes_List, BaseIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " base type '" & To_String(BaseIndex) &
                  "', there no base type with that index.";
             end if;
@@ -144,18 +144,18 @@ package body BasesTypes is
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                if not Items_List.Contains(ItemIndex) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " base type '" & To_String(BaseIndex) &
                     "', no item with index '" & To_String(ItemIndex) & "'.";
                end if;
                if SubAction = ADD
                  and then TempRecord.Trades.Contains(ItemIndex) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     " base type '" & To_String(BaseIndex) &
                     "', item with index '" & To_String(ItemIndex) &
                     "' already added.";
@@ -201,7 +201,7 @@ package body BasesTypes is
 
    function Is_Buyable
      (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
-      BaseIndex: Extended_BaseRange := 0) return Boolean is
+      BaseIndex: Extended_Base_Range := 0) return Boolean is
    begin
       if BaseIndex > 0
         and then SkyBases(BaseIndex).Reputation(1) <

@@ -32,7 +32,7 @@ with Ships.Crew; use Ships.Crew;
 package body Ships is
 
    function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X: MapXRange; Y: MapYRange;
+     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
@@ -424,7 +424,7 @@ package body Ships is
       TempCargo: MobInventory_Container.Vector;
       TempCrew: ProtoCrew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
-      Action, SubAction: DataAction;
+      Action, SubAction: Data_Action;
       ShipNode, ChildNode: Node;
       ItemIndex, RecipeIndex, MobIndex, ModuleIndex,
       ShipIndex: Unbounded_String;
@@ -460,13 +460,13 @@ package body Ships is
          ShipIndex := To_Unbounded_String(Get_Attribute(ShipNode, "index"));
          Action :=
            (if Get_Attribute(ShipNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(ShipNode, "action"))
+              Data_Action'Value(Get_Attribute(ShipNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not ProtoShips_Container.Contains
                 (ProtoShips_List, ShipIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " ship '" & To_String(ShipIndex) &
                  "', there is no ship with that index.";
             end if;
@@ -503,7 +503,7 @@ package body Ships is
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                if SubAction = ADD then
                   TempRecord.Modules.Append
@@ -600,7 +600,7 @@ package body Ships is
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
@@ -699,7 +699,7 @@ package body Ships is
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                if SubAction = ADD then
                   TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
@@ -730,7 +730,7 @@ package body Ships is
                end if;
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>

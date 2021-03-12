@@ -47,8 +47,8 @@ package Events is
    -- Data      - Various data for event (for example index of enemy ship)
    -- SOURCE
    type EventData(EType: Events_Types := None) is record
-      SkyX: BasesRange;
-      SkyY: BasesRange;
+      SkyX: Map_X_Range;
+      SkyY: Map_Y_Range;
       Time: Positive;
       case EType is
          when DoublePrice =>
@@ -134,7 +134,7 @@ package Events is
       -- PARAMETERS
       -- BaseIndex - Index of the base where recovery happened
       -- SOURCE
-   procedure RecoverBase(BaseIndex: BasesRange) with
+   procedure RecoverBase(BaseIndex: Bases_Range) with
       Test_Case => (Name => "Test_RecoverBase", Mode => Robustness);
       -- ****
 

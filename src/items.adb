@@ -38,7 +38,7 @@ package body Items is
       TempValue: Integer_Container.Vector;
       ItemNode, ChildNode: Node;
       ItemIndex: Unbounded_String;
-      Action: DataAction;
+      Action: Data_Action;
    begin
       ItemsData := Get_Tree(Reader);
       NodesList :=
@@ -54,12 +54,12 @@ package body Items is
          ItemIndex := To_Unbounded_String(Get_Attribute(ItemNode, "index"));
          Action :=
            (if Get_Attribute(ItemNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(ItemNode, "action"))
+              Data_Action'Value(Get_Attribute(ItemNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Objects_Container.Contains(Items_List, ItemIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " item '" & To_String(ItemIndex) &
                  "', there is no item with that index.";
             end if;

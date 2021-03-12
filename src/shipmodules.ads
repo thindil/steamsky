@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -75,7 +75,7 @@ package ShipModules is
       Description: Unbounded_String;
       MaxOwners: Natural;
       Speed: Integer;
-      Reputation: ReputationRange;
+      Reputation: Reputation_Range;
    end record;
    -- ****
 

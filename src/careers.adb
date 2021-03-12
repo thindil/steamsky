@@ -33,7 +33,7 @@ package body Careers is
       TmpSkills: UnboundedString_Container.Vector;
       DeleteIndex: Positive;
       CareerNode: Node;
-      Action, SkillAction: DataAction;
+      Action, SkillAction: Data_Action;
    begin
       CareersData := Get_Tree(Reader);
       NodesList :=
@@ -46,12 +46,12 @@ package body Careers is
            To_Unbounded_String(Get_Attribute(CareerNode, "index"));
          Action :=
            (if Get_Attribute(CareerNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(CareerNode, "action"))
+              Data_Action'Value(Get_Attribute(CareerNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Careers_Container.Contains(Careers_List, CareerIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " career '" & To_String(CareerIndex) &
                  "', there is no career with that index.";
             end if;
@@ -78,12 +78,12 @@ package body Careers is
                SkillAction :=
                  (if Get_Attribute(Item(ChildNodes, J), "action")'Length > 0
                   then
-                    DataAction'Value
+                    Data_Action'Value
                       (Get_Attribute(Item(ChildNodes, J), "action"))
                   else ADD);
-               if FindSkillIndex(SkillName) = 0 then
+               if Find_Skill_Index(SkillName) = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(DataAction'Image(Action)) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
                     "career '" & To_String(CareerIndex) & "', skill '" &
                     To_String(SkillName) & "' not exists";
                end if;

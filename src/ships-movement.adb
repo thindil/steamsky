@@ -176,7 +176,7 @@ package body Ships.Movement is
                null;
          end case;
          GameStats.DistanceTraveled := GameStats.DistanceTraveled + 1;
-         UpdateGame(TimePassed);
+         Update_Game(TimePassed);
          FuelIndex :=
            FindItem(Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
          if FuelIndex = 0 then
@@ -207,7 +207,7 @@ package body Ships.Movement is
 
    function DockShip
      (Docking: Boolean; Escape: Boolean := False) return String is
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String;
    begin
@@ -266,7 +266,7 @@ package body Ships.Movement is
                OrderMessage);
          end if;
          PlayerShip.Speed := DOCKED;
-         UpdateGame(10);
+         Update_Game(10);
       else
          PlayerShip.Speed := GameSettings.UndockSpeed;
          declare
@@ -380,7 +380,7 @@ package body Ships.Movement is
          end if;
          if PlayerShip.Crew(1).Health > 0 then
             PlayerShip.Speed := GameSettings.UndockSpeed;
-            UpdateGame(5);
+            Update_Game(5);
             if GameSettings.AutoSave = UNDOCK then
                SaveGame;
             end if;
@@ -425,7 +425,7 @@ package body Ships.Movement is
          end if;
       end if;
       declare
-         Damage: DamageFactor := 0.0;
+         Damage: Damage_Factor := 0.0;
       begin
          Find_Engine_Loop :
          for Module of Ship.Modules loop
@@ -433,7 +433,7 @@ package body Ships.Movement is
                BaseSpeed := Module.Power * 10;
                Damage :=
                  1.0 -
-                 DamageFactor
+                 Damage_Factor
                    (Float(Module.Durability) / Float(Module.MaxDurability));
                Speed :=
                  Speed +

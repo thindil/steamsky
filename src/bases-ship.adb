@@ -72,7 +72,7 @@ package body Bases.Ship is
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
       GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
-      UpdateGame(Time);
+      Update_Game(Time);
    end RepairShip;
 
    procedure UpgradeShip(Install: Boolean; ModuleIndex: Unbounded_String) is
@@ -83,7 +83,7 @@ package body Bases.Ship is
       FreeTurretIndex: Modules_Container.Extended_Index := 0;
       ModulesAmount: Positive;
       Price: Natural := 0;
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Owners: Natural_Container.Vector;
    begin
@@ -163,7 +163,7 @@ package body Bases.Ship is
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
-         UpdateGame(Modules_List(ModuleIndex).InstallTime);
+         Update_Game(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
             Set_Empty_Owners_Loop :
             for I in 1 .. Modules_List(ModuleIndex).MaxOwners loop
@@ -343,11 +343,11 @@ package body Bases.Ship is
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          declare
-            Damage: DamageFactor := 0.0;
+            Damage: Damage_Factor := 0.0;
          begin
             Damage :=
               1.0 -
-              DamageFactor
+              Damage_Factor
                 (Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
                  Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability));
             Price :=
@@ -429,7 +429,7 @@ package body Bases.Ship is
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
          GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
-         UpdateGame
+         Update_Game
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime);
          AddMessage
@@ -457,7 +457,7 @@ package body Bases.Ship is
    end UpgradeShip;
 
    procedure PayForDock is
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
         FindItem(PlayerShip.Cargo, Money_Index);
@@ -506,7 +506,7 @@ package body Bases.Ship is
 
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
       ProtoIndex: Unbounded_String;
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if ModuleIndex > 0 then

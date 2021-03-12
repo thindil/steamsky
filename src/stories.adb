@@ -44,7 +44,7 @@ package body Stories is
       StartStep, FinalStep, Value, StoryIndex: Unbounded_String;
       TempTexts: StepTexts_Container.Vector;
       TempData: StepData_Container.Vector;
-      Action, SubAction, SubSubAction: DataAction;
+      Action, SubAction, SubSubAction: Data_Action;
       StoryNode, ChildNode, StepNode: Node;
       DeleteIndex, StepIndex: Positive;
    begin
@@ -68,12 +68,12 @@ package body Stories is
          StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
          Action :=
            (if Get_Attribute(StoryNode, "action")'Length > 0 then
-              DataAction'Value(Get_Attribute(StoryNode, "action"))
+              Data_Action'Value(Get_Attribute(StoryNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Stories_Container.Contains(Stories_List, StoryIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(DataAction'Image(Action)) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " story '" & To_String(StoryIndex) &
                  "', there no story with that index.";
             end if;
@@ -121,7 +121,7 @@ package body Stories is
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
@@ -149,7 +149,7 @@ package body Stories is
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
@@ -181,7 +181,7 @@ package body Stories is
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                SubAction :=
                  (if Get_Attribute(ChildNode, "action")'Length > 0 then
-                    DataAction'Value(Get_Attribute(ChildNode, "action"))
+                    Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                Find_Step_Index_Loop :
                for K in TempRecord.Steps.Iterate loop
@@ -207,7 +207,7 @@ package body Stories is
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
                        (if Get_Attribute(StepNode, "action")'Length > 0 then
-                          DataAction'Value(Get_Attribute(StepNode, "action"))
+                          Data_Action'Value(Get_Attribute(StepNode, "action"))
                         else ADD);
                      Value :=
                        To_Unbounded_String(Get_Attribute(StepNode, "name"));
@@ -247,7 +247,7 @@ package body Stories is
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
                        (if Get_Attribute(StepNode, "action")'Length > 0 then
-                          DataAction'Value(Get_Attribute(StepNode, "action"))
+                          Data_Action'Value(Get_Attribute(StepNode, "action"))
                         else ADD);
                      Value :=
                        To_Unbounded_String
@@ -339,7 +339,7 @@ package body Stories is
    -- SOURCE
    function SelectBase(Value: String) return Unbounded_String is
       -- ****
-      BaseIndex: BasesRange;
+      BaseIndex: Bases_Range;
    begin
       if Value = "any" then
          return Null_Unbounded_String;
@@ -563,7 +563,7 @@ package body Stories is
       FinishCondition := GetStepData(Step.FinishData, "condition");
       if FinishCondition = To_Unbounded_String("random")
         and then GetRandom(1, MaxRandom) > 1 then
-         UpdateGame(10);
+         Update_Game(10);
          return False;
       else
          Chance := 0;
@@ -576,7 +576,7 @@ package body Stories is
                      Chance :=
                        GetSkillLevel
                          (PlayerShip.Crew(TraderIndex),
-                          FindSkillIndex(FinishCondition));
+                          Find_Skill_Index(FinishCondition));
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
@@ -585,7 +585,8 @@ package body Stories is
                   if Member.Order = Pilot or Member.Order = Gunner then
                      Chance :=
                        Chance +
-                       GetSkillLevel(Member, FindSkillIndex(FinishCondition));
+                       GetSkillLevel
+                         (Member, Find_Skill_Index(FinishCondition));
                   end if;
                end loop Count_Explore_Chance_Loop;
             when LOOT =>
@@ -594,7 +595,8 @@ package body Stories is
                   if Member.Order = Boarding then
                      Chance :=
                        Chance +
-                       GetSkillLevel(Member, FindSkillIndex(FinishCondition));
+                       GetSkillLevel
+                         (Member, Find_Skill_Index(FinishCondition));
                   end if;
                end loop Count_Loot_Chance_Loop;
             when ANY =>
@@ -602,7 +604,7 @@ package body Stories is
          end case;
          Chance := Chance + GetRandom(1, 100);
          if Chance < MaxRandom then
-            UpdateGame(10);
+            Update_Game(10);
             return False;
          end if;
       end if;
@@ -616,7 +618,8 @@ package body Stories is
                   TraderIndex: constant Natural := FindMember(Talk);
                begin
                   if TraderIndex > 0 then
-                     GainExp(10, FindSkillIndex(FinishCondition), TraderIndex);
+                     GainExp
+                       (10, Find_Skill_Index(FinishCondition), TraderIndex);
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
@@ -625,7 +628,7 @@ package body Stories is
                   if PlayerShip.Crew(I).Order = Pilot or
                     PlayerShip.Crew(I).Order = Gunner then
                      GainExp
-                       (10, FindSkillIndex(FinishCondition),
+                       (10, Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Explore_Experience_Loop;
@@ -634,7 +637,7 @@ package body Stories is
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Order = Boarding then
                      GainExp
-                       (10, FindSkillIndex(FinishCondition),
+                       (10, Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Loot_Experience_Loop;
@@ -642,7 +645,7 @@ package body Stories is
                null;
          end case;
       end if;
-      UpdateGame(30);
+      Update_Game(30);
       Update_Finished_Stories_Loop :
       for FinishedStory of FinishedStories loop
          if FinishedStory.Index = CurrentStory.Index then
@@ -715,7 +718,8 @@ package body Stories is
       return Null_Unbounded_String;
    end GetStepData;
 
-   procedure GetStoryLocation(StoryX: out MapXRange; StoryY: out MapYRange) is
+   procedure GetStoryLocation
+     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) is
       Tokens: Slice_Set;
    begin
       if CurrentStory.Data /= Null_Unbounded_String then

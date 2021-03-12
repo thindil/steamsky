@@ -23,7 +23,7 @@ with Maps; use Maps;
 package body Bases.Cargo is
 
    procedure GenerateCargo is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Population: constant Positive :=
         (if SkyBases(BaseIndex).Population > 0 then
@@ -133,7 +133,7 @@ package body Bases.Cargo is
      (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex: Inventory_Container.Extended_Index := 0) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ItemIndex: constant Natural range 0 ..
           Natural(SkyBases(BaseIndex).Cargo.Length) :=
@@ -169,7 +169,7 @@ package body Bases.Cargo is
    function FindBaseCargo
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin

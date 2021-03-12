@@ -203,22 +203,22 @@ package body WaitMenu is
         Get_Widget(".gameframe.wait.amount", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "1" then
-         UpdateGame(1);
+         Update_Game(1);
          WaitInPlace(1);
       elsif CArgv.Arg(Argv, 1) = "5" then
-         UpdateGame(5);
+         Update_Game(5);
          WaitInPlace(5);
       elsif CArgv.Arg(Argv, 1) = "10" then
-         UpdateGame(10);
+         Update_Game(10);
          WaitInPlace(10);
       elsif CArgv.Arg(Argv, 1) = "15" then
-         UpdateGame(15);
+         Update_Game(15);
          WaitInPlace(15);
       elsif CArgv.Arg(Argv, 1) = "30" then
-         UpdateGame(30);
+         Update_Game(30);
          WaitInPlace(30);
       elsif CArgv.Arg(Argv, 1) = "60" then
-         UpdateGame(60);
+         Update_Game(60);
          WaitInPlace(60);
       elsif CArgv.Arg(Argv, 1) = "rest" then
          WaitForRest;
@@ -245,13 +245,13 @@ package body WaitMenu is
             end if;
          end loop;
          if TimeNeeded > 0 then
-            UpdateGame(TimeNeeded);
+            Update_Game(TimeNeeded);
             WaitInPlace(TimeNeeded);
          else
             return TCL_OK;
          end if;
       elsif CArgv.Arg(Argv, 1) = "amount" then
-         UpdateGame(Positive'Value(Get(AmountBox)));
+         Update_Game(Positive'Value(Get(AmountBox)));
          WaitInPlace(Positive'Value(Get(AmountBox)));
       end if;
       UpdateHeader;

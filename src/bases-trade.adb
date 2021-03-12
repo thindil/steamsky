@@ -63,7 +63,7 @@ package body Bases.Trade is
    procedure HireRecruit
      (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
       DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Price: Natural;
@@ -115,11 +115,11 @@ package body Bases.Trade is
          TradeMessage);
       SkyBases(BaseIndex).Recruits.Delete(Index => RecruitIndex);
       SkyBases(BaseIndex).Population := SkyBases(BaseIndex).Population - 1;
-      UpdateGame(5);
+      Update_Game(5);
    end HireRecruit;
 
    procedure BuyRecipe(RecipeIndex: Unbounded_String) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Cost: Natural;
@@ -166,11 +166,11 @@ package body Bases.Trade is
          TradeMessage);
       GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
-      UpdateGame(5);
+      Update_Game(5);
    end BuyRecipe;
 
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
@@ -211,13 +211,13 @@ package body Bases.Trade is
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
-      UpdateGame(Time);
+      Update_Game(Time);
    end HealWounded;
 
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
    begin
       if MemberIndex > 0 then
@@ -294,7 +294,7 @@ package body Bases.Trade is
       Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
@@ -325,7 +325,7 @@ package body Bases.Trade is
          GainExp(5, Talking_Skill, TraderIndex);
       end if;
       GainRep(BaseIndex, 5);
-      UpdateGame(60);
+      Update_Game(60);
    end TrainSkill;
 
 end Bases.Trade;

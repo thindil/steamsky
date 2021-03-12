@@ -33,7 +33,7 @@ package body Ships.Crew is
      (Member: Member_Data; SkillIndex: Skills_Container.Extended_Index)
       return Skill_Range is
       SkillLevel: Integer := 0;
-      Damage: DamageFactor := 0.0;
+      Damage: Damage_Factor := 0.0;
       BaseSkillLevel: Natural range 0 .. 151;
    begin
       Get_Skill_Loop :
@@ -41,23 +41,23 @@ package body Ships.Crew is
          if Skill(1) = SkillIndex then
             BaseSkillLevel :=
               Skill(2) + Member.Attributes(Skills_List(Skill(1)).Attribute)(1);
-            Damage := 1.0 - DamageFactor(Float(Member.Health) / 100.0);
+            Damage := 1.0 - Damage_Factor(Float(Member.Health) / 100.0);
             SkillLevel :=
               SkillLevel +
               (BaseSkillLevel -
                Integer(Float(BaseSkillLevel) * Float(Damage)));
             if Member.Thirst > 40 then
-               Damage := 1.0 - DamageFactor(Float(Member.Thirst) / 100.0);
+               Damage := 1.0 - Damage_Factor(Float(Member.Thirst) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
             if Member.Hunger > 80 then
-               Damage := 1.0 - DamageFactor(Float(Member.Hunger) / 100.0);
+               Damage := 1.0 - Damage_Factor(Float(Member.Hunger) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
             if Member.Morale(1) < 25 then
-               Damage := DamageFactor(Float(Member.Morale(1)) / 100.0);
+               Damage := Damage_Factor(Float(Member.Morale(1)) / 100.0);
                SkillLevel :=
                  SkillLevel - (Integer(Float(BaseSkillLevel) * Float(Damage)));
             end if;
@@ -68,7 +68,7 @@ package body Ships.Crew is
                SkillLevel := 100;
             end if;
             if Member.Morale(1) > 90 then
-               Damage := DamageFactor(Float(SkillLevel) / 100.0);
+               Damage := Damage_Factor(Float(SkillLevel) / 100.0);
                SkillLevel :=
                  SkillLevel + (Integer(Float(BaseSkillLevel) * Float(Damage)));
                if SkillLevel > 100 then

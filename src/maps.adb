@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -21,10 +21,10 @@ with Ships; use Ships;
 package body Maps is
 
    function CountDistance
-     (DestinationX: MapXRange; DestinationY: MapYRange) return Natural is
-      DiffX: Natural range 0 .. MapXRange'Last;
-      DiffY: Natural range 0 .. MapYRange'Last;
-      Distance: Float range 0.0 .. Float(MapXRange'Last * MapYRange'Last);
+     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural is
+      DiffX: Natural range 0 .. Map_X_Range'Last;
+      DiffY: Natural range 0 .. Map_Y_Range'Last;
+      Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
    begin
       DiffX := abs (PlayerShip.SkyX - DestinationX);
       DiffY := abs (PlayerShip.SkyY - DestinationY);

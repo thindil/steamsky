@@ -40,7 +40,7 @@ package body Missions is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MissionX, MissionY: Positive range 1 .. 1024;
       MissionsAmount: Positive range 1 .. 26;
-      TmpBaseIndex: BasesRange;
+      TmpBaseIndex: Bases_Range;
       Mission: Mission_Data;
       MissionsItems: UnboundedString_Container.Vector;
       BasesInRange: Positive_Container.Vector;
@@ -214,7 +214,7 @@ package body Missions is
    end GenerateMissions;
 
    procedure AcceptMission(MissionIndex: Positive) is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
@@ -294,7 +294,7 @@ package body Missions is
          when Passenger =>
             Append(AcceptMessage, "'Transport passenger to base'.");
             declare
-               PassengerBase: BasesRange;
+               PassengerBase: Bases_Range;
                Gender: Character;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
@@ -364,7 +364,7 @@ package body Missions is
       AddMessage(To_String(AcceptMessage), MissionMessage);
       GainExp(1, Talking_Skill, TraderIndex);
       GameStats.AcceptedMissions := GameStats.AcceptedMissions + 1;
-      UpdateGame(5);
+      Update_Game(5);
    end AcceptMission;
 
    procedure UpdateMissions(Minutes: Positive) is
@@ -393,7 +393,7 @@ package body Missions is
             raise Missions_Finishing_Error with To_String(Message);
          end if;
       end if;
-      UpdateGame(5);
+      Update_Game(5);
       if MissionsAmount > Natural(AcceptedMissions.Length) then
          return;
       end if;

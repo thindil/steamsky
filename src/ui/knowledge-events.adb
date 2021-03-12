@@ -183,7 +183,7 @@ package body Knowledge.Events is
       pragma Unreferenced(ClientData, Interp, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       EventInfo: Unbounded_String;
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(Events_List(EventIndex).SkyX, Events_List(EventIndex).SkyY)
           .BaseIndex;
    begin

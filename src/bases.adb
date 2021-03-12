@@ -29,7 +29,7 @@ with Mobs; use Mobs;
 
 package body Bases is
 
-   procedure GainRep(BaseIndex: BasesRange; Points: Integer) is
+   procedure GainRep(BaseIndex: Bases_Range; Points: Integer) is
       NewPoints: Integer;
    begin
       if SkyBases(BaseIndex).Reputation(1) = -100 or
@@ -144,9 +144,9 @@ package body Bases is
    end GenerateBaseName;
 
    procedure GenerateRecruits is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      RecruitBase: BasesRange;
+      RecruitBase: Bases_Range;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
       Gender: Character;
@@ -329,13 +329,13 @@ package body Bases is
    procedure AskForBases is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      TmpBaseIndex: Extended_BaseRange;
+      TmpBaseIndex: Extended_Base_Range;
       ShipIndex: Unbounded_String;
-      UnknownBases: Extended_BaseRange := 0;
+      UnknownBases: Extended_Base_Range := 0;
       TraderIndex: constant Natural := FindMember(Talk);
       Amount: Natural range 0 .. 40;
       Radius: Integer range -40 .. 40;
-      TempX, TempY: Integer range -40 .. BasesRange'Last + 40;
+      TempX, TempY: Integer range -40 .. Bases_Range'Last + 40;
    begin
       if TraderIndex = 0 then
          return;
@@ -433,11 +433,11 @@ package body Bases is
          end if;
       end if;
       GainExp(1, Talking_Skill, TraderIndex);
-      UpdateGame(30);
+      Update_Game(30);
    end AskForBases;
 
    procedure AskForEvents is
-      BaseIndex: constant Extended_BaseRange :=
+      BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
@@ -447,7 +447,7 @@ package body Bases is
       NewItemIndex, ShipIndex: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
       MaxEvents, EventsAmount: Positive range 1 .. 15;
-      TmpBaseIndex: BasesRange;
+      TmpBaseIndex: Bases_Range;
       EventX, EventY: Positive range 1 .. 1024;
       ItemIndex: Integer;
    begin
@@ -617,11 +617,11 @@ package body Bases is
          end if;
       end loop Generate_Events_Loop;
       GainExp(1, Talking_Skill, TraderIndex);
-      UpdateGame(30);
+      Update_Game(30);
    end AskForEvents;
 
    procedure UpdatePopulation is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       PopulationDiff: Integer;
    begin
@@ -653,7 +653,7 @@ package body Bases is
    end UpdatePopulation;
 
    procedure UpdatePrices is
-      BaseIndex: constant BasesRange :=
+      BaseIndex: constant Bases_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Roll: Positive range 1 .. 100;
       Chance: Positive;
