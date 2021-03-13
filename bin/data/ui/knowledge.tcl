@@ -43,12 +43,6 @@ grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}]
 grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
 tooltip::tooltip $knowledgecanvas.frame.options.search {Search for a base with the selected name}
 # List of bases
-grid [ttk::label $knowledgecanvas.frame.name -text {Name}]
-grid [ttk::label $knowledgecanvas.frame.distance -text {Distance}] -column 1 -row 2
-grid [ttk::label $knowledgecanvas.frame.population -text {Population}] -column 2 -row 2
-grid [ttk::label $knowledgecanvas.frame.size -text {Size}] -column 3 -row 2
-grid [ttk::label $knowledgecanvas.frame.owner -text {Owner}] -column 4 -row 2
-grid [ttk::label $knowledgecanvas.frame.type -text {Type}] -column 5 -row 2
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
 ::autoscroll::autoscroll $knowledgeframe.bases.scrolly
 ::autoscroll::autoscroll $knowledgeframe.bases.scrollx
