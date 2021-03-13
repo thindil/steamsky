@@ -47,10 +47,18 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
+with Table; use Table;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
+
+   -- ****iv* KBases/KBases.CargoTable
+   -- FUNCTION
+   -- Table with info about the know bases
+   -- SOURCE
+   BasesTable: Table_Widget (6);
+   -- ****
 
    procedure UpdateBasesList(BaseName: String := "") is
       BasesCanvas: constant Tk_Canvas :=
@@ -62,13 +70,17 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
-      BaseButton: Ttk_Button;
-      Row: Positive := 3;
-      BaseLabel: Ttk_Label;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(3, Rows - 1, BasesFrame);
+      Delete_Widgets(2, Rows - 1, BasesFrame);
+      BasesTable :=
+        CreateTable
+          (Widget_Image(BasesFrame),
+           (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+            To_Unbounded_String("Population"), To_Unbounded_String("Size"),
+            To_Unbounded_String("Owner"), To_Unbounded_String("Type")),
+           False);
       if BaseName'Length = 0 then
          Delete(SearchEntry, "0", "end");
       end if;
@@ -101,74 +113,65 @@ package body Knowledge.Bases is
                BasesOwner /= To_Unbounded_String("Any")) then
                goto End_Of_Loop;
             end if;
-            BaseButton :=
-              Create
-                (BasesFrame & ".name" & Trim(Positive'Image(I), Left),
-                 "-text {" & To_String(SkyBases(I).Name) &
-                 "} -command {ShowBasesMenu" & Positive'Image(I) & "}");
-            Add(BaseButton, "Show available base's options");
-            Tcl.Tk.Ada.Grid.Grid
-              (BaseButton, "-row" & Natural'Image(Row) & " -sticky w");
-            BaseLabel :=
-              Create
-                (BasesFrame & ".distance" & Trim(Positive'Image(I), Left),
-                 "-text {" &
-                 Natural'Image
-                   (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)) &
-                 "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (BaseLabel, "-row" & Natural'Image(Row) & " -column 1");
+            AddButton
+              (BasesTable, To_String(SkyBases(I).Name),
+               "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 1);
+            AddButton
+              (BasesTable,
+               Natural'Image
+                 (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)),
+               "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
+               2);
             if SkyBases(I).Visited.Year > 0 then
-               BaseLabel :=
-                 Create
-                   (BasesFrame & ".population" &
-                    Trim(Positive'Image(I), Left));
                if SkyBases(I).Population = 0 then
-                  configure(BaseLabel, "-text {empty}");
+                  AddButton
+                    (BasesTable, "empty", "The population size of the base",
+                     "ShowBasesMenu" & Positive'Image(I), 3);
                elsif SkyBases(I).Population < 150 then
-                  configure(BaseLabel, "-text {small}");
+                  AddButton
+                    (BasesTable, "small", "The population size of the base",
+                     "ShowBasesMenu" & Positive'Image(I), 3);
                elsif SkyBases(I).Population < 300 then
-                  configure(BaseLabel, "-text {medium}");
+                  AddButton
+                    (BasesTable, "medium", "The population size of the base",
+                     "ShowBasesMenu" & Positive'Image(I), 3);
                else
-                  configure(BaseLabel, "-text {large}");
+                  AddButton
+                    (BasesTable, "large", "The population size of the base",
+                     "ShowBasesMenu" & Positive'Image(I), 3);
                end if;
-               Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 2");
-               BaseLabel :=
-                 Create
-                   (BasesFrame & ".size" & Trim(Positive'Image(I), Left),
-                    "-text {" & To_Lower(Bases_Size'Image(SkyBases(I).Size)) &
-                    "}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 3");
-               BaseLabel :=
-                 Create
-                   (BasesFrame & ".owner" & Trim(Positive'Image(I), Left),
-                    "-text {" &
-                    To_String(Factions_List(SkyBases(I).Owner).Name) & "}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 4");
-               BaseLabel :=
-                 Create
-                   (BasesFrame & ".type" & Trim(Positive'Image(I), Left),
-                    "-text {" &
-                    To_String(BasesTypes_List(SkyBases(I).BaseType).Name) &
-                    "}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel, "-row" & Natural'Image(Row) & " -column 5");
+               AddButton
+                 (BasesTable, To_Lower(Bases_Size'Image(SkyBases(I).Size)),
+                  "The size of the base", "ShowBasesMenu" & Positive'Image(I),
+                  4);
+               AddButton
+                 (BasesTable, To_String(Factions_List(SkyBases(I).Owner).Name),
+                  "The faction which own the base",
+                  "ShowBasesMenu" & Positive'Image(I), 5);
+               AddButton
+                 (BasesTable,
+                  To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
+                  "The type of the base", "ShowBasesMenu" & Positive'Image(I),
+                  6, True);
             else
-               BaseLabel :=
-                 Create
-                   (BasesFrame & ".population" & Trim(Positive'Image(I), Left),
-                    "-text {not visited yet}");
-               Tcl.Tk.Ada.Grid.Grid
-                 (BaseLabel,
-                  "-row" & Natural'Image(Row) & " -column 2 -columnspan 5");
+               AddButton
+                 (BasesTable, "not", "Show available base's options",
+                  "ShowBasesMenu" & Positive'Image(I), 3);
+               AddButton
+                 (BasesTable, "visited", "Show available base's options",
+                  "ShowBasesMenu" & Positive'Image(I), 4);
+               AddButton
+                 (BasesTable, "yet", "Show available base's options",
+                  "ShowBasesMenu" & Positive'Image(I), 5);
+               AddButton
+                 (BasesTable, "", "Show available base's options",
+                  "ShowBasesMenu" & Positive'Image(I), 6, True);
             end if;
-            Row := Row + 1;
          end if;
          <<End_Of_Loop>>
       end loop;
+      UpdateTable(BasesTable);
       Tcl_Eval(Get_Context, "update");
       configure
         (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
