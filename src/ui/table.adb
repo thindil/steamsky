@@ -423,10 +423,18 @@ package body Table is
       X: Natural := 0;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
-      Length: constant Natural :=
-        Natural
-          (100.0 +
-           ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0));
+      Length: constant Integer :=
+        (if Value in Natural'Range then
+           Integer
+             (100.0 +
+              ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0)) /
+           2
+         else -
+           (Integer
+              (100.0 +
+               ((Float(Value) - Float(abs (MinValue))) /
+                Float(abs (MinValue)) * 100.0)) /
+            2));
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
       Color: constant String :=
@@ -502,9 +510,9 @@ package body Table is
         To_Unbounded_String
           (Canvas_Create
              (Table.Canvas, "rectangle",
-              Trim(Natural'Image(X + 2), Left) &
+              Trim(Natural'Image(X + 52), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 7) &
-              Positive'Image(X + Length) &
+              Positive'Image(X + 52 + Length) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
               " -fill " & Color & " -tags [list progressbar" &
