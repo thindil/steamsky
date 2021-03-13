@@ -417,4 +417,106 @@ package body Table is
       end if;
    end AddProgressBar;
 
+   procedure AddDualProgressBar
+     (Table: in out Table_Widget; Value, MinValue: Integer; MaxValue: Positive;
+      Tooltip, Command: String; Column: Positive; NewRow: Boolean := False) is
+      X: Natural := 0;
+      ItemId: Unbounded_String;
+      Tokens: Slice_Set;
+      Length: constant Natural :=
+        Natural
+          (100.0 +
+           ((Float(Value) - Float(MaxValue)) / Float(MaxValue) * 100.0));
+      Background_Color: constant String :=
+        AddBackground(Table, NewRow, Command);
+      Color: constant String :=
+        (if Value > 24 then
+           Style_Lookup("green.Horizontal.TProgressbar", "-background")
+         elsif Value in -24 .. 24 then
+           Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
+         else Style_Lookup("TProgressbar", "-background"));
+      procedure Add_Bindings is
+      begin
+         if Command'Length > 0 then
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Style_Lookup
+                 (To_String(GameSettings.InterfaceTheme),
+                  "-selectbackground") &
+               ";" & Table.Canvas & " configure -cursor hand1}");
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & ";" & Table.Canvas &
+               " configure -cursor left_ptr}");
+            Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+         else
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Style_Lookup
+                 (To_String(GameSettings.InterfaceTheme),
+                  "-selectbackground") &
+               "}");
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & "}");
+         end if;
+      end Add_Bindings;
+   begin
+      for I in 1 .. Column - 1 loop
+         X := X + Table.Columns_Width(I);
+      end loop;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "rectangle",
+              Trim(Natural'Image(X), Left) &
+              Positive'Image((Table.Row * Table.Row_Height) + 5) &
+              Positive'Image(X + 102) &
+              Positive'Image
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 10)) &
+              " -fill " & Style_Lookup("TProgressbar", "-troughcolor") &
+              " -outline " & Style_Lookup("TProgressbar", "-bordercolor") &
+              " -tags [list progressbar" &
+              Trim(Positive'Image(Table.Row), Left) & "back" &
+              Trim(Positive'Image(Column), Left) & "]"));
+      Add_Bindings;
+      if Tooltip'Length > 0 then
+         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      end if;
+      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
+      X :=
+        (Positive'Value(Slice(Tokens, 3)) + 10) -
+        Positive'Value(Slice(Tokens, 1));
+      if X > Table.Columns_Width(Column) then
+         Table.Columns_Width(Column) := X;
+      end if;
+      ItemId :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Table.Canvas, "rectangle",
+              Trim(Natural'Image(X + 2), Left) &
+              Positive'Image((Table.Row * Table.Row_Height) + 7) &
+              Positive'Image(X + Length) &
+              Positive'Image
+                ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
+              " -fill " & Color & " -tags [list progressbar" &
+              Trim(Positive'Image(Table.Row), Left) & "bar" &
+              Trim(Positive'Image(Column), Left) & "]"));
+      Add_Bindings;
+      if Tooltip'Length > 0 then
+         Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
+      end if;
+      if NewRow then
+         Table.Row := Table.Row + 1;
+      end if;
+   end AddDualProgressBar;
+
 end Table;
