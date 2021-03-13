@@ -659,6 +659,7 @@ package body Crafts.UI is
          RecipeIndex :=
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
+      Set_Module_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
@@ -666,9 +667,9 @@ package body Crafts.UI is
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
             UpdateMessages;
-            exit;
+            exit Set_Module_Loop;
          end if;
-      end loop;
+      end loop Set_Module_Loop;
       return TCL_OK;
    end Set_Crafting_Command;
 
