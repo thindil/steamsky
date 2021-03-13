@@ -57,7 +57,7 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Table with info about the know bases
    -- SOURCE
-   BasesTable: Table_Widget (6);
+   BasesTable: Table_Widget (7);
    -- ****
 
    procedure UpdateBasesList(BaseName: String := "") is
@@ -79,7 +79,8 @@ package body Knowledge.Bases is
           (Widget_Image(BasesFrame),
            (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
             To_Unbounded_String("Population"), To_Unbounded_String("Size"),
-            To_Unbounded_String("Owner"), To_Unbounded_String("Type")),
+            To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
+            To_Unbounded_String("Reputation")),
            False);
       if BaseName'Length = 0 then
          Delete(SearchEntry, "0", "end");
@@ -153,20 +154,65 @@ package body Knowledge.Bases is
                  (BasesTable,
                   To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
                   "The type of the base", "ShowBasesMenu" & Positive'Image(I),
-                  6, True);
+                  6);
+               case SkyBases(I).Reputation(1) is
+                  when -100 .. -75 =>
+                     AddButton
+                       (BasesTable, "Hated", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when -74 .. -50 =>
+                     AddButton
+                       (BasesTable, "Outlaw", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when -49 .. -25 =>
+                     AddButton
+                       (BasesTable, "Hostile", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when -24 .. -1 =>
+                     AddButton
+                       (BasesTable, "Unfriendly",
+                        "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when 0 =>
+                     AddButton
+                       (BasesTable, "Unknown", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when 1 .. 25 =>
+                     AddButton
+                       (BasesTable, "Visitor", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when 26 .. 50 =>
+                     AddButton
+                       (BasesTable, "Trader", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when 51 .. 75 =>
+                     AddButton
+                       (BasesTable, "Friend", "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when 76 .. 100 =>
+                     AddButton
+                       (BasesTable, "Well known",
+                        "Your reputation in the base",
+                        "ShowBasesMenu" & Positive'Image(I), 7, True);
+                  when others =>
+                     null;
+               end case;
             else
                AddButton
                  (BasesTable, "not", "Show available base's options",
                   "ShowBasesMenu" & Positive'Image(I), 3);
                AddButton
-                 (BasesTable, "visited", "Show available base's options",
+                 (BasesTable, "", "Show available base's options",
                   "ShowBasesMenu" & Positive'Image(I), 4);
                AddButton
-                 (BasesTable, "yet", "Show available base's options",
+                 (BasesTable, "visited", "Show available base's options",
                   "ShowBasesMenu" & Positive'Image(I), 5);
                AddButton
                  (BasesTable, "", "Show available base's options",
-                  "ShowBasesMenu" & Positive'Image(I), 6, True);
+                  "ShowBasesMenu" & Positive'Image(I), 6);
+               AddButton
+                 (BasesTable, "yet", "Show available base's options",
+                  "ShowBasesMenu" & Positive'Image(I), 7, True);
             end if;
          end if;
          <<End_Of_Loop>>
