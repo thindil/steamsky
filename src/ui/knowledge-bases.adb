@@ -452,8 +452,8 @@ package body Knowledge.Bases is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       BaseInfo :=
         To_Unbounded_String
-          ("X:" & Positive'Image(SkyBases(BaseIndex).SkyX) & " Y:" &
-           Positive'Image(SkyBases(BaseIndex).SkyY));
+          ("Coordinates X:" & Positive'Image(SkyBases(BaseIndex).SkyX) &
+           " Y:" & Positive'Image(SkyBases(BaseIndex).SkyY));
       Append
         (BaseInfo,
          LF & "Last visited: " & FormatedTime(SkyBases(BaseIndex).Visited));
