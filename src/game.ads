@@ -44,6 +44,14 @@ package Game is
    end record;
    -- ****
 
+   -- ****d* Game/Game.Start_Date
+   -- FUNCTION
+   -- The default start date for in-game time
+   -- SOURCE
+   Start_Date: constant Date_Record :=
+     (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 1);
+   -- ****
+
    -- ****v* Game/Game.Game_Date
    -- FUNCTION
    -- Current in game date
@@ -97,6 +105,13 @@ package Game is
    type Attributes_Array is array(1 .. 2) of Natural;
    -- ****
 
+   -- ****d* Game/Game.Empty_Attributes_Array
+   -- FUNCTION
+   -- Empty attributes array constant
+   -- SOURCE
+   Empty_Attributes_Array: constant Attributes_Array := (others => 0);
+   -- ****
+
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
@@ -115,6 +130,14 @@ package Game is
       Name: Unbounded_String;
       Description: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* Game/Game.Empty_Atribute_Record
+   -- FUNCTION
+   -- Empty attributes record constant
+   -- SOURCE
+   Empty_Atribute_Record: constant Attribute_Record :=
+     Attribute_Record'(others => <>);
    -- ****
 
    -- ****t* Game/Game.AttributesData_Container
@@ -144,6 +167,16 @@ package Game is
       Tool: Unbounded_String;
       Tools_Quality: Attributes_Container.Vector;
    end record;
+   -- ****
+
+   -- ****d* Game/Game.Empty_Skill
+   -- FUNCTION
+   -- Empty skill data constant
+   -- SOURCE
+   Empty_Skill: constant Skill_Record :=
+     (Name => Null_Unbounded_String, Attribute => 0,
+      Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
+      Tools_Quality => Attributes_Container.Empty_Vector);
    -- ****
 
    -- ****t* Game/Game.SkillsData_Container
@@ -393,11 +426,25 @@ package Game is
    type Data_Action is (ADD, UPDATE, REMOVE);
    -- ****
 
+   -- ****d* Game/Game.Default_Data_Action
+   -- FUNCTION
+   -- Default data action when loading the game data
+   -- SOURCE
+   Default_Data_Action: constant Data_Action := ADD;
+   -- ****
+
    -- ****t* Game/Game.Natural_Array
    -- FUNCTION
    -- General purpose array of Natural
    -- SOURCE
    type Natural_Array is array(Positive range <>) of Natural;
+   -- ****
+
+   -- ****d* Game/Game.Default_Natural_Array
+   -- FUNCTION
+   -- Default Natural_Array array constant
+   -- SOURCE
+   Default_Natural_Array: Natural_Array(1 .. 2) := (others => 0);
    -- ****
 
    -- ****t* Game/Game.Damage_Factor
@@ -407,11 +454,25 @@ package Game is
    type Damage_Factor is digits 2 range 0.0 .. 1.0;
    -- ****
 
+   -- ****d* Game/Game.No_Damage
+   -- FUNCTION
+   -- Constant for no damage for Damage_Factor type
+   -- SOURCE
+   No_Damage: constant Damage_Factor := 0.0;
+   -- ****
+
    -- ****t* Game/Game.Reputation_Array
    -- FUNCTION
    -- Data structure for reputation, 1 = level, 2 = points to next level
    -- SOURCE
    type Reputation_Array is array(1 .. 2) of Integer;
+   -- ****
+
+   -- ****d* Game/Default_Reputation
+   -- FUNCTION
+   -- Default reputation values
+   -- SOURCE
+   Default_Reputation: constant Reputation_Array := (others => 0);
    -- ****
 
    -- ****t* Game/Game.Bases_Range
