@@ -154,6 +154,7 @@ package body DebugUI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
+      Show_Stats_Loop :
       for I in Member.Attributes.Iterate loop
          Label :=
            Create
@@ -174,11 +175,12 @@ package body DebugUI is
            (SpinBox,
             "-column 1 -row" &
             Positive'Image(Attributes_Container.To_Index(I)));
-      end loop;
+      end loop Show_Stats_Loop;
       MemberFrame.Name := New_String(".debugdialog.main.crew.skills");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
+      Show_Skills_Loop :
       for I in Member.Skills.Iterate loop
          Label :=
            Create
@@ -197,12 +199,13 @@ package body DebugUI is
            (SpinBox,
             "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
          SkillsIndexes.Append(Member.Skills(I)(1));
-      end loop;
+      end loop Show_Skills_Loop;
+      Show_Add_Skills_Loop :
       for I in Skills_List.Iterate loop
          if not SkillsIndexes.Contains(SkillsData_Container.To_Index(I)) then
             Append(SkillsList, " " & Skills_List(I).Name);
          end if;
-      end loop;
+      end loop Show_Add_Skills_Loop;
       ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
       configure(ComboBox, "-values [list" & To_String(SkillsList) & "]");
       Current(ComboBox, "0");
@@ -274,25 +277,28 @@ package body DebugUI is
       Set(SpinBox, Positive'Image(PlayerShip.SkyX));
       SpinBox.Name := New_String(".debugdialog.main.ship.y");
       Set(SpinBox, Positive'Image(PlayerShip.SkyY));
+      Update_Modules_Loop :
       for Module of PlayerShip.Modules loop
          Append(ValuesList, " {" & Module.Name & "}");
-      end loop;
+      end loop Update_Modules_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshModule");
       ComboBox.Name := New_String(".debugdialog.main.crew.member");
       ValuesList := Null_Unbounded_String;
+      Update_Members_Loop :
       for Member of PlayerShip.Crew loop
          Append(ValuesList, " {" & Member.Name & "}");
-      end loop;
+      end loop Update_Members_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshMember");
       ComboBox.Name := New_String(".debugdialog.main.cargo.update");
       ValuesList := Null_Unbounded_String;
+      Update_Cargo_Loop :
       for Item of PlayerShip.Cargo loop
          Append(ValuesList, " {" & GetItemName(Item, False, False) & "}");
-      end loop;
+      end loop Update_Cargo_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Current(ComboBox, "0");
       Tcl_Eval(Get_Context, "RefreshCargo");
@@ -333,12 +339,13 @@ package body DebugUI is
         Get_Widget(".debugdialog.main.bases.population", Interp);
    begin
       BaseName := To_Unbounded_String(Get(NameEntry));
+      Find_Base_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
             BaseIndex := I;
-            exit;
+            exit Find_Base_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Base_Index_Loop;
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
@@ -399,6 +406,7 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(EventsButton);
          Tcl.Tk.Ada.Grid.Grid(EventsBox);
       end if;
+      Update_Events_Loop :
       for Event of Events_List loop
          case Event.EType is
             when EnemyShip =>
@@ -450,7 +458,7 @@ package body DebugUI is
             when others =>
                null;
          end case;
-      end loop;
+      end loop Update_Events_Loop;
       configure(EventsBox, "-values [list" & To_String(ValuesList) & "]");
       Current(EventsBox, "0");
       return TCL_OK;
@@ -550,14 +558,15 @@ package body DebugUI is
    begin
       ModuleIndex := Natural'Value(Current(ModuleBox)) + 1;
       Value := To_Unbounded_String(Get(ModuleEntry));
+      Update_Proto_Index_Loop :
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
             Value := Null_Unbounded_String;
             PlayerShip.Modules(ModuleIndex).ProtoIndex :=
               BaseModules_Container.Key(I);
-            exit;
+            exit Update_Proto_Index_Loop;
          end if;
-      end loop;
+      end loop Update_Proto_Index_Loop;
       PlayerShip.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(".debugdialog.main.ship.dur");
       PlayerShip.Modules(ModuleIndex).Durability :=
