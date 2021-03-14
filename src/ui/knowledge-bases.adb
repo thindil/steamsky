@@ -60,6 +60,41 @@ package body Knowledge.Bases is
    BasesTable: Table_Widget (7);
    -- ****
 
+   -- ****if* KBases/KBases.Get_Reputation_Text
+   -- FUNCTION
+   -- Get the name of the reputation level in the selected base
+   -- PARAMETERS
+   -- Reputation_Level - The numerical level of reputation in a base
+   -- RESULT
+   -- The name of the reputation level in the selected base
+   -- SOURCE
+   function Get_Reputation_Text(Reputation_Level: Integer) return String is
+      -- ****
+   begin
+      case Reputation_Level is
+         when -100 .. -75 =>
+            return "Hated";
+         when -74 .. -50 =>
+            return "Outlaw";
+         when -49 .. -25 =>
+            return "Hostile";
+         when -24 .. -1 =>
+            return "Unfriendly";
+         when 0 =>
+            return "Unknown";
+         when 1 .. 25 =>
+            return "Visitor";
+         when 26 .. 50 =>
+            return "Trader";
+         when 51 .. 75 =>
+            return "Friend";
+         when 76 .. 100 =>
+            return "Well known";
+         when others =>
+            return "";
+      end case;
+   end Get_Reputation_Text;
+
    procedure UpdateBasesList(BaseName: String := "") is
       BasesCanvas: constant Tk_Canvas :=
         Get_Widget(".gameframe.paned.knowledgeframe.bases.canvas");
@@ -155,48 +190,10 @@ package body Knowledge.Bases is
                   To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
                   "The type of the base", "ShowBasesMenu" & Positive'Image(I),
                   6);
-               case SkyBases(I).Reputation(1) is
-                  when -100 .. -75 =>
-                     AddButton
-                       (BasesTable, "Hated", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when -74 .. -50 =>
-                     AddButton
-                       (BasesTable, "Outlaw", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when -49 .. -25 =>
-                     AddButton
-                       (BasesTable, "Hostile", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when -24 .. -1 =>
-                     AddButton
-                       (BasesTable, "Unfriendly",
-                        "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when 0 =>
-                     AddButton
-                       (BasesTable, "Unknown", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when 1 .. 25 =>
-                     AddButton
-                       (BasesTable, "Visitor", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when 26 .. 50 =>
-                     AddButton
-                       (BasesTable, "Trader", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when 51 .. 75 =>
-                     AddButton
-                       (BasesTable, "Friend", "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when 76 .. 100 =>
-                     AddButton
-                       (BasesTable, "Well known",
-                        "Your reputation in the base",
-                        "ShowBasesMenu" & Positive'Image(I), 7, True);
-                  when others =>
-                     null;
-               end case;
+               AddButton
+                 (BasesTable, Get_Reputation_Text(SkyBases(I).Reputation(1)),
+                  "Your reputation in the base",
+                  "ShowBasesMenu" & Positive'Image(I), 7, True);
             else
                AddButton
                  (BasesTable, "not", "Show available base's options",
@@ -504,28 +501,8 @@ package body Knowledge.Bases is
             Append(BaseInfo, LF & "You can't take missions at this base.");
          end if;
       end;
-      case SkyBases(BaseIndex).Reputation(1) is
-         when -100 .. -75 =>
-            SetReputationText("Hated");
-         when -74 .. -50 =>
-            SetReputationText("Outlaw");
-         when -49 .. -25 =>
-            SetReputationText("Hostile");
-         when -24 .. -1 =>
-            SetReputationText("Unfriendly");
-         when 0 =>
-            SetReputationText("Unknown");
-         when 1 .. 25 =>
-            SetReputationText("Visitor");
-         when 26 .. 50 =>
-            SetReputationText("Trader");
-         when 51 .. 75 =>
-            SetReputationText("Friend");
-         when 76 .. 100 =>
-            SetReputationText("Well known");
-         when others =>
-            null;
-      end case;
+      SetReputationText
+        (Get_Reputation_Text(SkyBases(BaseIndex).Reputation(1)));
       if BaseIndex = PlayerShip.HomeBase then
          Append(BaseInfo, LF & "It is your home base.");
       end if;
