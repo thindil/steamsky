@@ -433,19 +433,14 @@ package Game is
    Default_Data_Action: constant Data_Action := ADD;
    -- ****
 
+   --## rule off TYPE_INITIAL_VALUES
    -- ****t* Game/Game.Natural_Array
    -- FUNCTION
    -- General purpose array of Natural
    -- SOURCE
    type Natural_Array is array(Positive range <>) of Natural;
    -- ****
-
-   -- ****d* Game/Game.Default_Natural_Array
-   -- FUNCTION
-   -- Default Natural_Array array constant
-   -- SOURCE
-   Default_Natural_Array: Natural_Array(1 .. 2) := (others => 0);
-   -- ****
+   --## rule on TYPE_INITIAL_VALUES
 
    -- ****t* Game/Game.Damage_Factor
    -- FUNCTION
