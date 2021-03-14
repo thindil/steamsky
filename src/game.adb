@@ -56,14 +56,17 @@ with BasesTypes; use BasesTypes;
 package body Game is
 
    procedure New_Game is
-      RandomBase: Positive;
+      Random_Base: Positive := Positive'First;
    begin
       -- Save game configuration
       SaveConfig;
       -- Set game statistics
       ClearGameStats;
       declare
-         Roll, Index: Positive range 1 .. Positive(Factions_List.Length);
+         Roll,
+         Index: Positive range Positive'First ..
+             Positive(Factions_List.Length) :=
+           Positive'First;
       begin
          -- Set player faction if random option was selected
          if NewGameSettings.PlayerFaction = To_Unbounded_String("random") then
@@ -116,10 +119,10 @@ package body Game is
          TempX, TempY, BaseReputation, PosX, PosY: Integer;
          TmpRecruits: Recruit_Container.Vector;
          TmpMissions: Mission_Container.Vector;
-         BasePopulation, BaseTypeRoll: Natural;
+         Base_Population, Base_Type_Roll: Natural;
          TmpCargo: BaseCargo_Container.Vector;
-         BaseSize: Bases_Size;
-         BaseOwner, BaseType: Unbounded_String;
+         Base_Size: Bases_Size;
+         Base_Owner, Base_Type: Unbounded_String;
          package Bases_Container is new Hashed_Maps(Unbounded_String,
             Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
             Positive_Container."=");
@@ -141,8 +144,8 @@ package body Game is
                if FactionRoll > Factions_List(J).SpawnChance then
                   FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
                else
-                  BaseOwner := Factions_Container.Key(J);
-                  BasePopulation :=
+                  Base_Owner := Factions_Container.Key(J);
+                  Base_Population :=
                     (if Factions_List(J).Population(2) = 0 then
                        Factions_List(J).Population(1)
                      else GetRandom
@@ -157,34 +160,34 @@ package body Game is
                   for SpawnChance of Factions_List(J).BasesTypes loop
                      MaxBaseSpawnRoll := MaxBaseSpawnRoll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
-                  BaseTypeRoll := GetRandom(1, MaxBaseSpawnRoll);
+                  Base_Type_Roll := GetRandom(1, MaxBaseSpawnRoll);
                   Get_Base_Type_Loop :
                   for K in Factions_List(J).BasesTypes.Iterate loop
-                     if BaseTypeRoll > Factions_List(J).BasesTypes(K) then
-                        BaseTypeRoll :=
-                          BaseTypeRoll - Factions_List(J).BasesTypes(K);
+                     if Base_Type_Roll > Factions_List(J).BasesTypes(K) then
+                        Base_Type_Roll :=
+                          Base_Type_Roll - Factions_List(J).BasesTypes(K);
                      else
-                        BaseType := BaseType_Container.Key(K);
+                        Base_Type := BaseType_Container.Key(K);
                         exit Get_Base_Type_Loop;
                      end if;
                   end loop Get_Base_Type_Loop;
                   exit Set_Base_Faction_Loop;
                end if;
             end loop Set_Base_Faction_Loop;
-            BaseSize :=
-              (if BasePopulation = 0 then Bases_Size'Val(GetRandom(0, 2))
-               elsif BasePopulation < 150 then Small
-               elsif BasePopulation < 300 then Medium else Big);
+            Base_Size :=
+              (if Base_Population = 0 then Bases_Size'Val(GetRandom(0, 2))
+               elsif Base_Population < 150 then Small
+               elsif Base_Population < 300 then Medium else Big);
             SkyBases(I) :=
-              (Name => GenerateBaseName(BaseOwner), Visited => (others => 0),
-               SkyX => 1, SkyY => 1, BaseType => BaseType,
-               Population => BasePopulation, RecruitDate => (others => 0),
+              (Name => GenerateBaseName(Base_Owner), Visited => (others => 0),
+               SkyX => 1, SkyY => 1, BaseType => Base_Type,
+               Population => Base_Population, RecruitDate => (others => 0),
                Recruits => TmpRecruits, Known => False, AskedForBases => False,
                AskedForEvents => (others => 0),
                Reputation => (BaseReputation, 0),
                MissionsDate => (others => 0), Missions => TmpMissions,
-               Owner => BaseOwner, Cargo => TmpCargo, Size => BaseSize);
-            if Factions_List(BaseOwner).Flags.Contains
+               Owner => Base_Owner, Cargo => TmpCargo, Size => Base_Size);
+            if Factions_List(Base_Owner).Flags.Contains
                 (To_Unbounded_String("loner")) then
                FactionRoll := GetRandom(1, MaxSpawnRoll);
                Get_Faction_Loop :
@@ -192,11 +195,11 @@ package body Game is
                   if FactionRoll > Factions_List(J).SpawnChance then
                      FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
                   else
-                     BaseOwner := Factions_Container.Key(J);
+                     Base_Owner := Factions_Container.Key(J);
                   end if;
                end loop Get_Faction_Loop;
             end if;
-            BasesArray(BaseOwner).Append(I);
+            BasesArray(Base_Owner).Append(I);
          end loop Set_Bases_Loop;
          Place_Bases_Loop :
          for FactionBases of BasesArray loop
@@ -284,16 +287,16 @@ package body Game is
       -- Place player ship in random large base
       Place_Player_Loop :
       loop
-         RandomBase := GetRandom(1, 1024);
+         Random_Base := GetRandom(1, 1024);
          if NewGameSettings.StartingBase = To_Unbounded_String("Any") then
-            exit Place_Player_Loop when SkyBases(RandomBase).Population >
+            exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction;
+              SkyBases(Random_Base).Owner = NewGameSettings.PlayerFaction;
          else
-            exit Place_Player_Loop when SkyBases(RandomBase).Population >
+            exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(RandomBase).Owner = NewGameSettings.PlayerFaction and
-              SkyBases(RandomBase).BaseType = NewGameSettings.StartingBase;
+              SkyBases(Random_Base).Owner = NewGameSettings.PlayerFaction and
+              SkyBases(Random_Base).BaseType = NewGameSettings.StartingBase;
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
@@ -302,8 +305,8 @@ package body Game is
           (Factions_List(NewGameSettings.PlayerFaction).Careers
              (NewGameSettings.PlayerCareer)
              .ShipIndex,
-           NewGameSettings.ShipName, SkyBases(Integer(RandomBase)).SkyX,
-           SkyBases(Integer(RandomBase)).SkyY, DOCKED, False);
+           NewGameSettings.ShipName, SkyBases(Integer(Random_Base)).SkyX,
+           SkyBases(Integer(Random_Base)).SkyY, DOCKED, False);
       -- Add player to ship
       declare
          PlayerIndex2: constant Unbounded_String :=
@@ -348,7 +351,7 @@ package body Game is
                Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
                Payment => (others => 0), ContractLength => -1,
                Morale => (PlayerMorale, 0), Loyalty => 100,
-               HomeBase => RandomBase,
+               HomeBase => Random_Base,
                Faction => NewGameSettings.PlayerFaction));
       end;
       declare
@@ -381,8 +384,8 @@ package body Game is
          end loop PlayerShip_Modules_Loop;
       end;
       -- Set current map field/sky base info
-      SkyBases(Integer(RandomBase)).Visited := Game_Date;
-      SkyBases(Integer(RandomBase)).Known := True;
+      SkyBases(Integer(Random_Base)).Visited := Game_Date;
+      SkyBases(Integer(Random_Base)).Known := True;
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits;
       GenerateMissions;
