@@ -168,6 +168,10 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure yellow.Horizontal.TProgressbar -background $colors(-goldenyellow)
       # Experience progressbars
       ttk::style configure experience.Horizontal.TProgressbar -background $colors(-darkyellow) -troughcolor $colors(-verydarkorange) -bordercolor $colors(-verydarkorange)
+      # Dual progressbar (like reputation in bases)
+      ttk::style configure ProgressBar.TFrame -relief solid -bordercolor $colors(-darkorange) -background $colors(-almostblackred)
+      ttk::style configure GreenProgressBar.TFrame -background green
+      ttk::style configure RedProgressBar.TFrame -background red
 
       # Entry setting
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4 -lightcolor black -bordercolor $colors(-darkorange)
