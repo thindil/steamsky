@@ -52,7 +52,7 @@ with Utils.UI; use Utils.UI;
 
 package body Knowledge.Bases is
 
-   -- ****iv* KBases/KBases.CargoTable
+   -- ****iv* KBases/KBases.BasesTable
    -- FUNCTION
    -- Table with info about the know bases
    -- SOURCE
