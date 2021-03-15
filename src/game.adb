@@ -62,6 +62,7 @@ package body Game is
       SaveConfig;
       -- Set game statistics
       ClearGameStats;
+      Set_Faction_Career_Block :
       declare
          Roll,
          Index: Positive range Positive'First ..
@@ -69,65 +70,70 @@ package body Game is
            Positive'First;
       begin
          -- Set player faction if random option was selected
-         if NewGameSettings.PlayerFaction = To_Unbounded_String("random") then
-            NewGameSettings.PlayerCareer := To_Unbounded_String("random");
-            Roll := GetRandom(1, Positive(Factions_List.Length));
+         if NewGameSettings.PlayerFaction =
+           To_Unbounded_String(Source => "random") then
+            NewGameSettings.PlayerCareer :=
+              To_Unbounded_String(Source => "random");
+            Roll := GetRandom(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
                if Index = Roll then
-                  NewGameSettings.PlayerFaction := Factions_Container.Key(I);
+                  NewGameSettings.PlayerFaction :=
+                    Factions_Container.Key(Position => I);
                   exit Get_Player_Faction_Loop;
                end if;
                Index := Index + 1;
             end loop Get_Player_Faction_Loop;
          end if;
          -- Set player career if random option was selected
-         if NewGameSettings.PlayerCareer = To_Unbounded_String("random") then
+         if NewGameSettings.PlayerCareer =
+           To_Unbounded_String(Source => "random") then
             Roll :=
               GetRandom
-                (1,
-                 Positive
-                   (Factions_List(NewGameSettings.PlayerFaction).Careers
-                      .Length));
+                (Min => 1,
+                 Max =>
+                   Positive
+                     (Factions_List(NewGameSettings.PlayerFaction).Careers
+                        .Length));
             Index := 1;
             Get_Player_Career_Loop :
             for I in Factions_List(NewGameSettings.PlayerFaction).Careers
               .Iterate loop
                if Index = Roll then
                   NewGameSettings.PlayerCareer :=
-                    Factions.Careers_Container.Key(I);
+                    Factions.Careers_Container.Key(Position => I);
                   exit Get_Player_Career_Loop;
                end if;
                Index := Index + 1;
             end loop Get_Player_Career_Loop;
          end if;
-      end;
+      end Set_Faction_Career_Block;
       -- Set Game time
-      Game_Date :=
-        (Year => 1600, Month => 3, Day => 1, Hour => 8, Minutes => 0);
+      Game_Date := Start_Date;
       -- Generate world
       SkyMap :=
         (others =>
            (others =>
               (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
+      Generate_Bases_Block :
       declare
          MaxSpawnRoll, MaxBaseSpawnRoll: Natural := 0;
-         FactionRoll: Positive;
+         FactionRoll: Positive := 1;
          ValidLocation: Boolean;
-         TempX, TempY, BaseReputation, PosX, PosY: Integer;
+         TempX, TempY, BaseReputation, PosX, PosY: Integer := 0;
          TmpRecruits: Recruit_Container.Vector;
          TmpMissions: Mission_Container.Vector;
-         Base_Population, Base_Type_Roll: Natural;
+         Base_Population, Base_Type_Roll: Natural := 0;
          TmpCargo: BaseCargo_Container.Vector;
-         Base_Size: Bases_Size;
-         Base_Owner, Base_Type: Unbounded_String;
+         Base_Size: Bases_Size := Small;
+         Base_Owner, Base_Type: Unbounded_String := Null_Unbounded_String;
          package Bases_Container is new Hashed_Maps(Unbounded_String,
             Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
             Positive_Container."=");
-         BasesArray: Bases_Container.Map;
-         Attempts: Positive range 1 .. 251;
+         BasesArray: Bases_Container.Map := Bases_Container.Empty_Map;
+         Attempts: Positive range 1 .. 251 := 1;
       begin
          Count_Spawn_Chance_Loop :
          for I in Factions_List.Iterate loop
@@ -283,7 +289,7 @@ package body Game is
                SkyBases(FactionBases(I)).SkyY := PosY;
             end loop;
          end loop Place_Bases_Loop;
-      end;
+      end Generate_Bases_Block;
       -- Place player ship in random large base
       Place_Player_Loop :
       loop
