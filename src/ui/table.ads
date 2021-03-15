@@ -147,29 +147,4 @@ package Table is
       NewRow, InvertColors: Boolean := False);
    -- ****
 
-   -- ****f* Table/Table.AddDualProgressBar
-   -- FUNCTION
-   -- Add dual progress bar (with positive and negative values) item to the
-   -- selected Table_Widget
-   -- PARAMETERS
-   -- Table        - The Table_Widget in which progress bar will be added
-   -- Value        - The current value of the progress bar
-   -- MinValue     - The mininum value of the progress bar
-   -- MaxValue     - The maximum value of the progress bar
-   -- Tooltip      - The tooltip show when user hover mouse over progress bar
-   -- Command      - Tcl command which will be executed when the row in which the
-   --                the progress bar is was clicked
-   -- Column       - The column in which the progress bar will be added
-   -- NewRow       - If True, increase current number of row in the Table_Widget.
-   --                Default value is False.
-   -- OUTPUT
-   -- Updated Table parameter Table_Widget
-   -- HISTORY
-   -- 5.9 - Added
-   -- SOURCE
-   procedure AddDualProgressBar
-     (Table: in out Table_Widget; Value, MinValue: Integer; MaxValue: Positive;
-      Tooltip, Command: String; Column: Positive; NewRow: Boolean := False);
-   -- ****
-
 end Table;
