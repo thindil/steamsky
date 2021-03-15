@@ -611,14 +611,15 @@ package body DebugUI is
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
+      Add_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
             PlayerShip.Crew(MemberIndex).Skills.Append
               ((SkillsData_Container.To_Index(I), 1, 0));
             Tcl_Eval(Interp, "RefreshMember");
-            exit;
+            exit Add_Skill_Loop;
          end if;
-      end loop;
+      end loop Add_Skill_Loop;
       return TCL_OK;
    end Add_Skill_Command;
 
@@ -664,6 +665,7 @@ package body DebugUI is
         Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(".debugdialog.main.crew.loyalty");
       PlayerShip.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
+      Update_Stats_Loop :
       for I in PlayerShip.Crew(MemberIndex).Attributes.Iterate loop
          SpinBox.Name :=
            New_String
@@ -671,7 +673,8 @@ package body DebugUI is
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Attributes(I)(1) :=
            Positive'Value(Get(SpinBox));
-      end loop;
+      end loop Update_Stats_Loop;
+      Update_Skills_Loop :
       for I in PlayerShip.Crew(MemberIndex).Skills.Iterate loop
          SpinBox.Name :=
            New_String
@@ -679,7 +682,7 @@ package body DebugUI is
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Skills(I)(2) :=
            Positive'Value(Get(SpinBox));
-      end loop;
+      end loop Update_Skills_Loop;
       return TCL_OK;
    end Update_Member_Command;
 
@@ -712,12 +715,13 @@ package body DebugUI is
       ItemIndex, ItemName: Unbounded_String;
    begin
       ItemName := To_Unbounded_String(Get(ItemEntry));
+      Find_Index_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
             ItemIndex := Objects_Container.Key(I);
-            exit;
+            exit Find_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Index_Loop;
       if ItemIndex = Null_Unbounded_String then
          return TCL_OK;
       end if;
@@ -793,28 +797,31 @@ package body DebugUI is
         Get_Widget(".debugdialog.main.bases.population", Interp);
    begin
       BaseName := To_Unbounded_String(Get(BaseEntry));
+      Find_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
             BaseIndex := I;
-            exit;
+            exit Find_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Index_Loop;
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
+      Update_Base_Type_Loop :
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             SkyBases(BaseIndex).BaseType := BasesTypes_Container.Key(I);
-            exit;
+            exit Update_Base_Type_Loop;
          end if;
-      end loop;
+      end loop Update_Base_Type_Loop;
       BaseCombo.Name := New_String(".debugdialog.main.bases.owner");
+      Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
-            exit;
+            exit Update_Base_Owner_Loop;
          end if;
-      end loop;
+      end loop Update_Base_Owner_Loop;
       BaseCombo.Name := New_String(".debugdialog.main.bases.size");
       SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
       SkyBases(BaseIndex).Population := Natural'Value(Get(BaseBox));
@@ -859,6 +866,7 @@ package body DebugUI is
       NpcShipY := Positive'Value(Get(ShipBox));
       ShipBox.Name := New_String(".debugdialog.main.world.duration");
       Duration := Positive'Value(Get(ShipBox));
+      Add_Ship_Event_Loop :
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Name = ShipName then
             if Traders.Contains(ProtoShips_Container.Key(I)) then
@@ -880,7 +888,7 @@ package body DebugUI is
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
          end if;
-      end loop;
+      end loop Add_Ship_Event_Loop;
       return TCL_OK;
    end Add_Ship_Command;
 
@@ -957,12 +965,13 @@ package body DebugUI is
       Added: Boolean := True;
    begin
       EventName := To_Unbounded_String(Get(EventEntry));
+      Find_Base_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = EventName then
             BaseIndex := I;
-            exit;
+            exit Find_Base_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Base_Index_Loop;
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
@@ -977,6 +986,7 @@ package body DebugUI is
             EventBox.Name := New_String(".debugdialog.main.world.item");
             EventName := To_Unbounded_String(Get(EventBox));
             Added := False;
+            Find_Item_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).Name = EventName then
                   Events_List.Append
@@ -986,9 +996,9 @@ package body DebugUI is
                         Positive'Value(Get(DurationBox)),
                         Objects_Container.Key(I)));
                   Added := True;
-                  exit;
+                  exit Find_Item_Loop;
                end if;
-            end loop;
+            end loop Find_Item_Loop;
          when 2 =>
             Events_List.Append
               (New_Item =>
