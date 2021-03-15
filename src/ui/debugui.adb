@@ -1006,7 +1006,6 @@ package body DebugUI is
                   Positive'Value(Get(DurationBox)), 1));
          when others =>
             null;
-            null;
       end case;
       if not Added then
          return TCL_OK;
