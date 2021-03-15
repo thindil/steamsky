@@ -1069,15 +1069,17 @@ package body DebugUI is
       AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
       AddCommand("DebugAddEvent", Add_Event_Command'Access);
       AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
+      Load_Bases_Types_Loop :
       for BaseType of BasesTypes_List loop
          Append(ValuesList, " " & BaseType.Name);
-      end loop;
+      end loop Load_Bases_Types_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(".debugdialog.main.bases.owner");
+      Load_Factions_Loop :
       for Faction of Factions_List loop
          Append(ValuesList, " " & Faction.Name);
-      end loop;
+      end loop Load_Factions_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
