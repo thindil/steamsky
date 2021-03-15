@@ -37,7 +37,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -414,31 +413,39 @@ package body Knowledge.Bases is
       BaseInfo: Unbounded_String;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       procedure SetReputationText(ReputationText: String) is
-         ReputationBar: constant Ttk_ProgressBar :=
-           Create(BaseDialog & ".reputation", "-maximum 200.0 -length 150");
+         ReputationBar: constant Ttk_Frame :=
+           Create
+             (BaseDialog & ".reputation",
+              "-width 204 -height 24 -style ProgressBar.TFrame");
          ReputationLabel: constant Ttk_Label :=
            Create(BaseDialog & ".reputationlabel");
-         ProgressBarStyle: Unbounded_String;
+         ReputationProgress: constant Ttk_Frame :=
+           Create(ReputationBar & ".reputation", "-height 18");
       begin
-         if SkyBases(BaseIndex).Reputation(1) < 0 then
-            ProgressBarStyle := Null_Unbounded_String;
-         elsif SkyBases(BaseIndex).Reputation(1) < 20 then
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar");
-         else
-            ProgressBarStyle :=
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar");
-         end if;
          if SkyBases(BaseIndex).Reputation(1) = 0 then
             configure(ReputationLabel, "-text {Reputation: Unknown}");
          else
             configure(ReputationLabel, "-text {Reputation:}");
+            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1 -padx 5");
+            Tcl.Tk.Ada.Grid.Grid_Propagate(ReputationBar, "off");
             configure
-              (ReputationBar,
-               "-value" &
-               Integer'Image((SkyBases(BaseIndex).Reputation(1)) + 100) &
-               To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1");
+              (ReputationProgress,
+               "-width" &
+               Positive'Image(abs (SkyBases(BaseIndex).Reputation(1))));
+            if SkyBases(BaseIndex).Reputation(1) > 0 then
+               configure(ReputationProgress, "-style GreenProgressBar.TFrame");
+               Tcl.Tk.Ada.Grid.Grid
+                 (ReputationProgress, "-padx {100 0} -pady 3");
+            else
+               configure(ReputationProgress, "-style RedProgressBar.TFrame");
+               Tcl.Tk.Ada.Grid.Grid
+                 (ReputationProgress,
+                  "-padx {" &
+                  Trim
+                    (Positive'Image(100 + SkyBases(BaseIndex).Reputation(1)),
+                     Left) &
+                  " 0} -pady 3");
+            end if;
             Add(ReputationBar, ReputationText);
          end if;
          Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w -padx {5 0}");
@@ -511,7 +518,7 @@ package body Knowledge.Bases is
           (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
-        (BaseLabel, "-row 0 -columnspan 2 -padx 5 -pady {5 0}");
+        (BaseLabel, "-row 0 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2 -pady {0 5}");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place(BaseDialog, "-in .gameframe -relx 0.3 -rely 0.3");
