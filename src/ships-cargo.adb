@@ -40,7 +40,8 @@ package body Ships.Cargo is
       else
          ItemIndex := CargoIndex;
       end if;
-      if ItemIndex = 0 and ProtoIndex = Null_Unbounded_String then
+      if ItemIndex = 0 and
+        (ProtoIndex = Null_Unbounded_String or Amount < 0) then
          return;
       end if;
       if ItemIndex = 0 then
