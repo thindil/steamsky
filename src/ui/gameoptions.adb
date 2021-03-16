@@ -463,11 +463,9 @@ package body GameOptions is
    begin
       configure(CloseButton, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-      if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then
-         GameSettings.AutoRest := True;
-      else
-         GameSettings.AutoRest := False;
-      end if;
+      GameSettings.AutoRest :=
+        (if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then True
+         else False);
       GameSettings.UndockSpeed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
       GameSettings.AutoCenter :=
