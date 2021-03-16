@@ -507,13 +507,14 @@ package body GameOptions is
       GameSettings.AutoSave :=
         AutoSaveType'Val(Natural'Value(Current(ComboBox)));
       ComboBox.Name := New_String(RootName & ".interface.theme");
+      Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(ComboBox) then
             GameSettings.InterfaceTheme :=
               To_Unbounded_String(Themes_Container.Key(I));
-            exit;
+            exit Set_Theme_Loop;
          end if;
-      end loop;
+      end loop Set_Theme_Loop;
       Theme_Use(To_String(GameSettings.InterfaceTheme));
       SetTheme;
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
@@ -548,6 +549,7 @@ package body GameOptions is
       GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
       SaveConfig;
       KeyEntry.Interp := Interp;
+      Set_Accelerators_Loop :
       for I in 1 .. (Accels'Last - 1) loop
          Unbind_From_Main_Window
            (Interp, "<" & To_String(Accels(I).ShortCut) & ">");
@@ -561,19 +563,21 @@ package body GameOptions is
          else
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;
-      end loop;
+      end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
         (Interp, "<" & To_String(Accels(Accels'Last).ShortCut) & ">");
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
+      Save_Menu_Accelerators_Loop :
       for Key of MenuAccelerators loop
          Put_Line(KeysFile, To_String(Key));
-      end loop;
+      end loop Save_Menu_Accelerators_Loop;
+      Save_Map_Accelerators_Loop :
       for Key of MapAccelerators loop
          Put_Line(KeysFile, To_String(Key));
-      end loop;
+      end loop Save_Map_Accelerators_Loop;
       Put_Line(KeysFile, To_String(FullScreenAccel));
       Close(KeysFile);
       SetKeys;
