@@ -87,7 +87,8 @@ package body Ships.Cargo.Test_Data.Tests is
         (Amount = PlayerShip.Cargo(1).Amount,
          "Failed to add some items to player ship cargo.");
       UpdateCargo(PlayerShip, Null_Unbounded_String, -1);
-      Assert(True, "This test can only crash.");
+      UpdateCargo(PlayerShip, To_Unbounded_String("40"), -1);
+      Assert(True, "This tests can only crash");
 
 --  begin read only
    end Test_UpdateCargo_test_updatecargo;
