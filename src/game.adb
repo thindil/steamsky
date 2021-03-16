@@ -119,36 +119,41 @@ package body Game is
                MissionIndex => 0)));
       Generate_Bases_Block :
       declare
-         MaxSpawnRoll, MaxBaseSpawnRoll: Natural := 0;
-         FactionRoll: Positive := 1;
-         ValidLocation: Boolean;
-         TempX, TempY, BaseReputation, PosX, PosY: Integer := 0;
-         TmpRecruits: Recruit_Container.Vector;
-         TmpMissions: Mission_Container.Vector;
+         Max_Spawn_Roll, Max_Base_Spawn_Roll: Natural := 0;
+         Faction_Roll: Positive := 1;
+         Valid_Location: Boolean := False;
+         Temp_X, Temp_Y, Base_Reputation, Pos_X, Pos_Y: Integer := 0;
+         Tmp_Recruits: constant Recruit_Container.Vector :=
+           Recruit_Container.Empty_Vector;
+         Tmp_Missions: constant Mission_Container.Vector :=
+           Mission_Container.Empty_Vector;
          Base_Population, Base_Type_Roll: Natural := 0;
-         TmpCargo: BaseCargo_Container.Vector;
+         Tmp_Cargo: constant BaseCargo_Container.Vector :=
+           BaseCargo_Container.Empty_Vector;
          Base_Size: Bases_Size := Small;
          Base_Owner, Base_Type: Unbounded_String := Null_Unbounded_String;
-         package Bases_Container is new Hashed_Maps(Unbounded_String,
-            Positive_Container.Vector, Ada.Strings.Unbounded.Hash, "=",
-            Positive_Container."=");
-         BasesArray: Bases_Container.Map := Bases_Container.Empty_Map;
+         package Bases_Container is new Hashed_Maps
+           (Key_Type => Unbounded_String,
+            Element_Type => Positive_Container.Vector,
+            Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=",
+            "=" => Positive_Container."=");
+         Bases_Array: Bases_Container.Map := Bases_Container.Empty_Map;
          Attempts: Positive range 1 .. 251 := 1;
       begin
          Count_Spawn_Chance_Loop :
          for I in Factions_List.Iterate loop
-            MaxSpawnRoll := MaxSpawnRoll + Factions_List(I).SpawnChance;
+            Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).SpawnChance;
             Bases_Container.Include
-              (BasesArray, Factions_Container.Key(I),
+              (Bases_Array, Factions_Container.Key(I),
                Positive_Container.Empty_Vector);
          end loop Count_Spawn_Chance_Loop;
          Set_Bases_Loop :
          for I in SkyBases'Range loop
-            FactionRoll := GetRandom(1, MaxSpawnRoll);
+            Faction_Roll := GetRandom(1, Max_Spawn_Roll);
             Set_Base_Faction_Loop :
             for J in Factions_List.Iterate loop
-               if FactionRoll > Factions_List(J).SpawnChance then
-                  FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+               if Faction_Roll > Factions_List(J).SpawnChance then
+                  Faction_Roll := Faction_Roll - Factions_List(J).SpawnChance;
                else
                   Base_Owner := Factions_Container.Key(J);
                   Base_Population :=
@@ -157,16 +162,16 @@ package body Game is
                      else GetRandom
                          (Factions_List(J).Population(1),
                           Factions_List(J).Population(2)));
-                  BaseReputation :=
+                  Base_Reputation :=
                     GetReputation
                       (NewGameSettings.PlayerFaction,
                        Factions_Container.Key(J));
-                  MaxBaseSpawnRoll := 0;
+                  Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
                   for SpawnChance of Factions_List(J).BasesTypes loop
-                     MaxBaseSpawnRoll := MaxBaseSpawnRoll + SpawnChance;
+                     Max_Base_Spawn_Roll := Max_Base_Spawn_Roll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
-                  Base_Type_Roll := GetRandom(1, MaxBaseSpawnRoll);
+                  Base_Type_Roll := GetRandom(1, Max_Base_Spawn_Roll);
                   Get_Base_Type_Loop :
                   for K in Factions_List(J).BasesTypes.Iterate loop
                      if Base_Type_Roll > Factions_List(J).BasesTypes(K) then
@@ -188,32 +193,33 @@ package body Game is
               (Name => GenerateBaseName(Base_Owner), Visited => (others => 0),
                SkyX => 1, SkyY => 1, BaseType => Base_Type,
                Population => Base_Population, RecruitDate => (others => 0),
-               Recruits => TmpRecruits, Known => False, AskedForBases => False,
-               AskedForEvents => (others => 0),
-               Reputation => (BaseReputation, 0),
-               MissionsDate => (others => 0), Missions => TmpMissions,
-               Owner => Base_Owner, Cargo => TmpCargo, Size => Base_Size);
+               Recruits => Tmp_Recruits, Known => False,
+               AskedForBases => False, AskedForEvents => (others => 0),
+               Reputation => (Base_Reputation, 0),
+               MissionsDate => (others => 0), Missions => Tmp_Missions,
+               Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
                 (To_Unbounded_String("loner")) then
-               FactionRoll := GetRandom(1, MaxSpawnRoll);
+               Faction_Roll := GetRandom(1, Max_Spawn_Roll);
                Get_Faction_Loop :
                for J in Factions_List.Iterate loop
-                  if FactionRoll > Factions_List(J).SpawnChance then
-                     FactionRoll := FactionRoll - Factions_List(J).SpawnChance;
+                  if Faction_Roll > Factions_List(J).SpawnChance then
+                     Faction_Roll :=
+                       Faction_Roll - Factions_List(J).SpawnChance;
                   else
                      Base_Owner := Factions_Container.Key(J);
                   end if;
                end loop Get_Faction_Loop;
             end if;
-            BasesArray(Base_Owner).Append(I);
+            Bases_Array(Base_Owner).Append(I);
          end loop Set_Bases_Loop;
          Place_Bases_Loop :
-         for FactionBases of BasesArray loop
+         for FactionBases of Bases_Array loop
             for I in FactionBases.Iterate loop
                Attempts := 1;
                Count_Base_Position_Loop :
                loop
-                  ValidLocation := True;
+                  Valid_Location := True;
                   if Positive_Container.To_Index(I) =
                     FactionBases.First_Index or
                     (Factions_List
@@ -224,12 +230,12 @@ package body Game is
                      Factions_List(SkyBases(FactionBases(I)).Owner).Flags
                        .Contains
                        (To_Unbounded_String("loner"))) then
-                     PosX :=
+                     Pos_X :=
                        GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
-                     PosY :=
+                     Pos_Y :=
                        GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
                   else
-                     PosX :=
+                     Pos_X :=
                        GetRandom
                          (SkyBases
                             (FactionBases(Positive_Container.To_Index(I) - 1))
@@ -239,8 +245,8 @@ package body Game is
                             (FactionBases(Positive_Container.To_Index(I) - 1))
                             .SkyX +
                           20);
-                     NormalizeCoord(PosX);
-                     PosY :=
+                     NormalizeCoord(Pos_X);
+                     Pos_Y :=
                        GetRandom
                          (SkyBases
                             (FactionBases(Positive_Container.To_Index(I) - 1))
@@ -250,13 +256,13 @@ package body Game is
                             (FactionBases(Positive_Container.To_Index(I) - 1))
                             .SkyY +
                           20);
-                     NormalizeCoord(PosY);
+                     NormalizeCoord(Pos_Y);
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
-                        PosX :=
+                        Pos_X :=
                           GetRandom
                             (Bases_Range'First + 5, Bases_Range'Last - 5);
-                        PosY :=
+                        Pos_Y :=
                           GetRandom
                             (Bases_Range'First + 5, Bases_Range'Last - 5);
                         Attempts := 1;
@@ -264,29 +270,29 @@ package body Game is
                   end if;
                   Check_X_Coordinate_Loop :
                   for J in -5 .. 5 loop
-                     TempX := PosX + J;
-                     NormalizeCoord(TempX);
+                     Temp_X := Pos_X + J;
+                     NormalizeCoord(Temp_X);
                      Check_Y_Coordinate_Loop :
                      for K in -5 .. 5 loop
-                        TempY := PosY + K;
-                        NormalizeCoord(TempY, False);
-                        if SkyMap(TempX, TempY).BaseIndex > 0 then
-                           ValidLocation := False;
+                        Temp_Y := Pos_Y + K;
+                        NormalizeCoord(Temp_Y, False);
+                        if SkyMap(Temp_X, Temp_Y).BaseIndex > 0 then
+                           Valid_Location := False;
                            exit Check_Y_Coordinate_Loop;
                         end if;
                      end loop Check_Y_Coordinate_Loop;
-                     exit Check_X_Coordinate_Loop when ValidLocation = False;
+                     exit Check_X_Coordinate_Loop when Valid_Location = False;
                   end loop Check_X_Coordinate_Loop;
-                  if SkyMap(PosX, PosY).BaseIndex > 0 then
-                     ValidLocation := False;
+                  if SkyMap(Pos_X, Pos_Y).BaseIndex > 0 then
+                     Valid_Location := False;
                   end if;
-                  exit Count_Base_Position_Loop when ValidLocation;
+                  exit Count_Base_Position_Loop when Valid_Location;
                end loop Count_Base_Position_Loop;
-               SkyMap(PosX, PosY) :=
+               SkyMap(Pos_X, Pos_Y) :=
                  (BaseIndex => FactionBases(I), Visited => False,
                   EventIndex => 0, MissionIndex => 0);
-               SkyBases(FactionBases(I)).SkyX := PosX;
-               SkyBases(FactionBases(I)).SkyY := PosY;
+               SkyBases(FactionBases(I)).SkyX := Pos_X;
+               SkyBases(FactionBases(I)).SkyY := Pos_Y;
             end loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
