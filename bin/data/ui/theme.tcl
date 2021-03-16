@@ -146,6 +146,9 @@ namespace eval ttk::theme::steamsky {
       # Link button setting
       ttk::style configure Link.Toolbutton -relief flat -font UnderlineFont -background $colors(-verydarkorange)
 
+      # Map moving buttons
+      ttk::style configure Map.Toolbutton -relief flat -background $colors(-verydarkorange)
+
       # Separator setting
       ttk::style configure TSeparator -background $colors(-verydarkorange)
 
