@@ -180,9 +180,10 @@ package body GameOptions is
          Set_Path(Save_Directory, "save");
          Set_Path(Doc_Directory, "docs");
          Set_Path(Mods_Directory, "mods");
+         Load_Themes_Loop :
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
-         end loop;
+         end loop Load_Themes_Loop;
          ComboBox.Name :=
            New_String
              (".gameframe.paned.optionsframe.canvas.options.notebook.interface.theme");
@@ -278,19 +279,22 @@ package body GameOptions is
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook");
+      Load_Menu_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Accels(I).ShortCut := MenuAccelerators(I);
-      end loop;
+      end loop Load_Menu_Accelerators_Loop;
+      Load_Map_Accelerators_Loop :
       for I in MapAccelerators'Range loop
          Accels(I + 11).ShortCut := MapAccelerators(I);
-      end loop;
+      end loop Load_Map_Accelerators_Loop;
       Accels(Accels'Last).ShortCut := FullScreenAccel;
+      Load_Accelerators_Loop :
       for Accel of Accels loop
          KeyEntry.Name :=
            New_String(Widget_Image(OptionsFrame) & To_String(Accel.EntryName));
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.ShortCut));
-      end loop;
+      end loop Load_Accelerators_Loop;
       if cget(CloseButton, "-command") = "ShowCombatUI" then
          configure(CloseButton, "-command {CloseOptions combat}");
       else
@@ -357,11 +361,12 @@ package body GameOptions is
       elsif CArgv.Arg(Argv, 1) =
         ".gameframe.paned.optionsframe.canvas.options.notebook.interface.helpfont" then
          GameSettings.HelpFontSize := Positive'Value(Get(SpinBox));
+         Set_Fonts_Loop :
          for FontName of HelpFonts loop
             Font.Configure
               (To_String(FontName),
                "-size" & Positive'Image(GameSettings.HelpFontSize));
-         end loop;
+         end loop Set_Fonts_Loop;
       else
          GameSettings.InterfaceFontSize := Positive'Value(Get(SpinBox));
          for FontName of InterfaceFonts loop
@@ -405,6 +410,7 @@ package body GameOptions is
          To_Unbounded_String("HelpFont"));
    begin
       SpinBox.Interp := Interp;
+      Set_Default_Fonts_Loop :
       for I in SpinBoxNames'Range loop
          SpinBox.Name :=
            New_String
@@ -414,7 +420,7 @@ package body GameOptions is
          Font.Configure
            (To_String(FontNames(I)),
             "-size" & Positive'Image(DefaultFontsSizes(I)));
-      end loop;
+      end loop Set_Default_Fonts_Loop;
       Font.Configure
         ("InterfaceIcons", "-size" & Positive'Image(DefaultFontsSizes(2)));
       return TCL_OK;
