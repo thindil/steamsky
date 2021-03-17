@@ -34,7 +34,7 @@ bind $missionsframe.missions.missionsview <<TreeviewSelect>> ShowMissionInfo
 # Selected mission info
 grid [ttk::frame $missionsframe.info] -column 1 -row 0
 grid [ttk::labelframe $missionsframe.info.info -text {Mission Info:}] -padx 5 -pady 5
-grid [text $missionsframe.info.info.text -wrap char -height 10 -width 40] -padx 5 -pady 5
+grid [text $missionsframe.info.info.text -wrap char -height 10 -width 34] -padx 5 -pady 5
 $missionsframe.info.info.text tag configure red -foreground red
 $missionsframe.info.info.text tag configure yellow -foreground yellow
 # Setting reward for mission
@@ -44,6 +44,6 @@ grid [ttk::label $missionsframe.info.reward.label -text {Reward:}] -padx 5
 grid [ttk::scale $missionsframe.info.reward.amount -from 0.0 -to 2.0 -variable reward -command ShowMissionInfo -length 300] -column 1 -row 0 -padx 5
 tooltip::tooltip $missionsframe.info.reward "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation."
 # Show info about available missions and missions buttons actions
-grid [ttk::label $missionsframe.info.missioninfo]
+grid [ttk::label $missionsframe.info.missioninfo] -sticky w -padx 5
 grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowMission}]
 grid [ttk::button $missionsframe.info.set -command {SetMission}]
