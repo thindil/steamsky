@@ -243,6 +243,8 @@ package body Bases.LootUI is
       Tcl_Eval(Get_Context, "update");
       configure
         (LootCanvas, "-scrollregion [list " & BBox(LootCanvas, "all") & "]");
+      Xview_Move_To(LootCanvas, "0.0");
+      Yview_Move_To(LootCanvas, "0.0");
       ShowScreen("lootframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
