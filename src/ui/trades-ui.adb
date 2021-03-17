@@ -310,7 +310,7 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 4);
          AddButton
-           (TradeTable, Positive'Image(Profit),
+           (TradeTable, Integer'Image(-(Price)),
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 5, False,
             "red");
@@ -399,6 +399,8 @@ package body Trades.UI is
       Tcl_Eval(Get_Context, "update");
       configure
         (TradeCanvas, "-scrollregion [list " & BBox(TradeCanvas, "all") & "]");
+      Xview_Move_To(TradeCanvas, "0.0");
+      Yview_Move_To(TradeCanvas, "0.0");
       ShowScreen("tradeframe");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
