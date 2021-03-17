@@ -63,13 +63,14 @@ package body Goals.UI is
       Tcl_EvalFile
         (Interp,
          To_String(Data_Directory) & "ui" & Dir_Separator & "goals.tcl");
+      Load_Goals_Loop :
       for I in Goals_List.Iterate loop
          Insert
            (GoalsView,
             GoalTypes'Image(Goals_List(I).GType) & " end -id {" &
             Trim(Positive'Image(Goals_Container.To_Index(I)), Left) &
             "} -text {" & GoalText(Goals_Container.To_Index(I)) & "}");
-      end loop;
+      end loop Load_Goals_Loop;
       configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Show_Goals_Command;
