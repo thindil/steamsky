@@ -304,6 +304,8 @@ package body Bases.ShipyardUI is
         (ShipyardCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
          cget(Paned, "-width"));
+      Xview_Move_To(ShipyardCanvas, "0.0");
+      Yview_Move_To(ShipyardCanvas, "0.0");
       ShowScreen("shipyardframe");
       Tcl_SetResult(Interp, "1");
       Tcl_Eval(Get_Context, "ShowShipyardTab");
