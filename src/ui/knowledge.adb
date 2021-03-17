@@ -48,9 +48,17 @@ with Stories; use Stories;
 with Knowledge.Stories;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge is
+
+   -- ****iv* Knowledge/Knowledge.EventsTable
+   -- FUNCTION
+   -- Table with info about the known events
+   -- SOURCE
+   EventsTable: Table_Widget (2);
+   -- ****
 
    function Show_Knowledge_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -197,85 +205,65 @@ package body Knowledge is
               "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         Label := Create(KnowledgeFrame & ".name", "-text {Name}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Label := Create(KnowledgeFrame & ".distance", "-text {Distance}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -column 1");
          Row := 2;
+         EventsTable :=
+           CreateTable
+             (Widget_Image(KnowledgeFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance")),
+              False);
          for Event of Events_List loop
             case Event.EType is
                when EnemyShip =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Enemy ship spotted} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Enemy ship spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when FullDocks =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Full docks in base} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Full docks in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when AttackOnBase =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Base is under attack} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Base is under attack",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when Disease =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Disease in base} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Disease in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when EnemyPatrol =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Enemy patrol} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Enemy patrol",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when DoublePrice =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Double price in base} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Double price in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when Trader =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Friendly trader spotted} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Friendly trader spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when FriendlyShip =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Friendly ship spotted} -command {ShowEventMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (EventsTable, "Friendly ship spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
                when None | BaseRecovery =>
                   null;
             end case;
-            Add(Button, "Show available event's options");
-            Tcl.Tk.Ada.Grid.Grid
-              (Button, "-row" & Positive'Image(Row) & " -sticky w");
-            Label :=
-              Create
-                (KnowledgeFrame & ".distance" &
-                 Trim(Positive'Image(Row), Left),
-                 "-text {" &
-                 Natural'Image(CountDistance(Event.SkyX, Event.SkyY)) & "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 1");
+            AddButton
+              (EventsTable,
+               Natural'Image(CountDistance(Event.SkyX, Event.SkyY)),
+               "The distance to the event",
+               "ShowEventMenu" & Positive'Image(Row - 1), 2, True);
             Row := Row + 1;
          end loop;
+         UpdateTable(EventsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
       KnowledgeCanvas.Name :=
