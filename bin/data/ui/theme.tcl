@@ -231,6 +231,13 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure TCheckbutton -padding 4
       option add *TCheckbutton.cursor hand1
 
+      # Scale (like setting reward for missions)
+      ttk::style configure TScale -troughrelief sunken -bordercolor black
+      ttk::style map TScale -foreground [list active $colors(-palegoldenrod)]
+      ttk::style map TScale -background [list active $colors(-darkred)]
+      ttk::style map TScale -bordercolor [list active $colors(-palegoldenrod)]
+      option add *TScale.cursor hand1
+
       # Info frames (like modules, items, etc)
       ttk::style configure TLabelframe.Label -foreground green
       ttk::style configure TLabelframe -relief raised -bordercolor darkgreen
