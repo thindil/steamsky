@@ -143,58 +143,59 @@ package body Game is
          Count_Spawn_Chance_Loop :
          for I in Factions_List.Iterate loop
             Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).SpawnChance;
-            Bases_Container.Include
-              (Bases_Array, Factions_Container.Key(I),
-               Positive_Container.Empty_Vector);
+            Bases_Array.Include
+              (Key => Factions_Container.Key(Position => I),
+               New_Item => Positive_Container.Empty_Vector);
          end loop Count_Spawn_Chance_Loop;
          Set_Bases_Loop :
          for I in SkyBases'Range loop
-            Faction_Roll := GetRandom(1, Max_Spawn_Roll);
+            Faction_Roll := GetRandom(Min => 1, Max => Max_Spawn_Roll);
             Set_Base_Faction_Loop :
             for J in Factions_List.Iterate loop
-               if Faction_Roll > Factions_List(J).SpawnChance then
-                  Faction_Roll := Faction_Roll - Factions_List(J).SpawnChance;
-               else
-                  Base_Owner := Factions_Container.Key(J);
+               if Faction_Roll <= Factions_List(J).SpawnChance then
+                  Base_Owner := Factions_Container.Key(Position => J);
                   Base_Population :=
                     (if Factions_List(J).Population(2) = 0 then
                        Factions_List(J).Population(1)
                      else GetRandom
-                         (Factions_List(J).Population(1),
-                          Factions_List(J).Population(2)));
+                         (Min => Factions_List(J).Population(1),
+                          Max => Factions_List(J).Population(2)));
                   Base_Reputation :=
                     GetReputation
-                      (NewGameSettings.PlayerFaction,
-                       Factions_Container.Key(J));
+                      (SourceFaction => NewGameSettings.PlayerFaction,
+                       TargetFaction => Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
                   for SpawnChance of Factions_List(J).BasesTypes loop
                      Max_Base_Spawn_Roll := Max_Base_Spawn_Roll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
-                  Base_Type_Roll := GetRandom(1, Max_Base_Spawn_Roll);
+                  Base_Type_Roll :=
+                    GetRandom(Min => 1, Max => Max_Base_Spawn_Roll);
                   Get_Base_Type_Loop :
                   for K in Factions_List(J).BasesTypes.Iterate loop
-                     if Base_Type_Roll > Factions_List(J).BasesTypes(K) then
-                        Base_Type_Roll :=
-                          Base_Type_Roll - Factions_List(J).BasesTypes(K);
-                     else
-                        Base_Type := BaseType_Container.Key(K);
+                     if Base_Type_Roll <= Factions_List(J).BasesTypes(K) then
+                        Base_Type := BaseType_Container.Key(Position => K);
                         exit Get_Base_Type_Loop;
                      end if;
+                     Base_Type_Roll :=
+                       Base_Type_Roll - Factions_List(J).BasesTypes(K);
                   end loop Get_Base_Type_Loop;
                   exit Set_Base_Faction_Loop;
                end if;
+               Faction_Roll := Faction_Roll - Factions_List(J).SpawnChance;
             end loop Set_Base_Faction_Loop;
             Base_Size :=
-              (if Base_Population = 0 then Bases_Size'Val(GetRandom(0, 2))
+              (if Base_Population = 0 then
+                 Bases_Size'Val(GetRandom(Min => 0, Max => 2))
                elsif Base_Population < 150 then Small
                elsif Base_Population < 300 then Medium else Big);
             SkyBases(I) :=
-              (Name => GenerateBaseName(Base_Owner), Visited => (others => 0),
-               SkyX => 1, SkyY => 1, BaseType => Base_Type,
-               Population => Base_Population, RecruitDate => (others => 0),
-               Recruits => Tmp_Recruits, Known => False,
-               AskedForBases => False, AskedForEvents => (others => 0),
+              (Name => GenerateBaseName(FactionIndex => Base_Owner),
+               Visited => (others => 0), SkyX => 1, SkyY => 1,
+               BaseType => Base_Type, Population => Base_Population,
+               RecruitDate => (others => 0), Recruits => Tmp_Recruits,
+               Known => False, AskedForBases => False,
+               AskedForEvents => (others => 0),
                Reputation => (Base_Reputation, 0),
                MissionsDate => (others => 0), Missions => Tmp_Missions,
                Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
