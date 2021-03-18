@@ -37,7 +37,7 @@ tooltip::tooltip $shipcanvas.frame.rename {Set a new name for the ship}
 bind $shipcanvas.frame.name <Enter> SetShipName
 # Upgrade progress
 grid [ttk::label $shipcanvas.frame.upgradelabel -text {Upgrade:}] -sticky w -columnspan 3
-grid [ttk::progressbar $shipcanvas.frame.upgrade -orient horizontal -maximum 1.0] -sticky we -columnspan 2
+grid [ttk::progressbar $shipcanvas.frame.upgrade -orient horizontal -maximum 1.0] -sticky we -columnspan 2 -padx 5
 tooltip::tooltip $shipcanvas.frame.upgrade {The current ship's upgrade progress}
 grid [ttk::button $shipcanvas.frame.cancelupgrade -text "[format %c 0xf04d]" -style Small.TButton -command StopUpgrading] -row 3 -column 2 -sticky w
 tooltip::tooltip $shipcanvas.frame.cancelupgrade {Stop the current upgrade}
