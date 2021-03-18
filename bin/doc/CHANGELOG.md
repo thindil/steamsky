@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Hide next turn button after finishing boarding combat
 - Crash on finishing deliver item missions
 - Showing profit in trade screen
+- Counting max sell amount in trade
 
 ## [5.8] - 2021-02-21
 
