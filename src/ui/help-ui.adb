@@ -135,13 +135,15 @@ package body Help.UI is
    begin
       configure(HelpView, "-state normal");
       Delete(HelpView, "1.0", "end");
+      Find_Help_Text_Loop :
       for Help of Help_List loop
          if Help.Index = To_Unbounded_String(Selection(TopicsView)) then
             NewText := Help.Text;
-            exit;
+            exit Find_Help_Text_Loop;
          end if;
-      end loop;
+      end loop Find_Help_Text_Loop;
       OldIndex := 1;
+      Replace_Help_Text_Loop :
       loop
          StartIndex := Index(NewText, "{", OldIndex);
          if StartIndex > 0 then
@@ -152,18 +154,20 @@ package body Help.UI is
             Insert
               (HelpView, "end",
                "{" & Slice(NewText, OldIndex, Length(NewText)) & "}");
-            exit;
+            exit Replace_Help_Text_Loop;
          end if;
          EndIndex := Index(NewText, "}", StartIndex) - 1;
          TagText := Unbounded_Slice(NewText, StartIndex + 1, EndIndex);
+         Insert_Variables_Loop :
          for I in Variables'Range loop
             if TagText = Variables(I).Name then
                Insert
                  (HelpView, "end",
                   "{" & To_String(Variables(I).Value) & "} [list special]");
-               exit;
+               exit Insert_Variables_Loop;
             end if;
-         end loop;
+         end loop Insert_Variables_Loop;
+         Insert_Keys_Loop :
          for I in AccelNames'Range loop
             if TagText =
               To_Unbounded_String("GameKey") &
@@ -171,9 +175,10 @@ package body Help.UI is
                Insert
                  (HelpView, "end",
                   "{'" & To_String(AccelNames(I)) & "'} [list special]");
-               exit;
+               exit Insert_Keys_Loop;
             end if;
-         end loop;
+         end loop Insert_Keys_Loop;
+         Insert_Tags_Loop :
          for I in FontTags'Range loop
             if TagText = To_Unbounded_String(FontTags(I).Tag) then
                StartIndex := Index(NewText, "{", EndIndex) - 1;
@@ -182,12 +187,14 @@ package body Help.UI is
                   "{" & Slice(NewText, EndIndex + 2, StartIndex) & "} [list " &
                   To_String(FontTags(I).TextTag) & "]");
                EndIndex := Index(NewText, "}", StartIndex) - 1;
-               exit;
+               exit Insert_Tags_Loop;
             end if;
-         end loop;
+         end loop Insert_Tags_Loop;
+         Insert_Factions_Flags_Loop :
          for I in FlagsTags'Range loop
             if TagText = FlagsTags(I) then
                FactionsWithFlag := Null_Unbounded_String;
+               Create_Factions_List_Loop :
                for Faction of Factions_List loop
                   if Faction.Flags.Contains(TagText) then
                      if FactionsWithFlag /= Null_Unbounded_String then
@@ -195,23 +202,26 @@ package body Help.UI is
                      end if;
                      Append(FactionsWithFlag, Faction.Name);
                   end if;
-               end loop;
+               end loop Create_Factions_List_Loop;
+               Insert_Factions_Loop :
                while Ada.Strings.Unbounded.Count(FactionsWithFlag, " and ") >
                  1 loop
                   Replace_Slice
                     (FactionsWithFlag, Index(FactionsWithFlag, " and "),
                      Index(FactionsWithFlag, " and ") + 4, ", ");
-               end loop;
+               end loop Insert_Factions_Loop;
                Insert
                  (HelpView, "end", "{" & To_String(FactionsWithFlag) & "}");
-               exit;
+               exit Insert_Factions_Flags_Loop;
             end if;
-         end loop;
+         end loop Insert_Factions_Flags_Loop;
+         Insert_Bases_Flags_Loop :
          for BaseFlag of BasesFlags loop
             if TagText /= BaseFlag then
                goto Bases_Flags_Loop_End;
             end if;
             BasesWithFlag := Null_Unbounded_String;
+            Create_Bases_List_Loop :
             for BaseType of BasesTypes_List loop
                if BaseType.Flags.Contains(TagText) then
                   if BasesWithFlag /= Null_Unbounded_String then
@@ -219,18 +229,19 @@ package body Help.UI is
                   end if;
                   Append(BasesWithFlag, BaseType.Name);
                end if;
-            end loop;
+            end loop Create_Bases_List_Loop;
+            Insert_Bases_Loop :
             while Ada.Strings.Unbounded.Count(BasesWithFlag, " and ") > 1 loop
                Replace_Slice
                  (BasesWithFlag, Index(BasesWithFlag, " and "),
                   Index(BasesWithFlag, " and ") + 4, ", ");
-            end loop;
+            end loop Insert_Bases_Loop;
             Insert(HelpView, "end", "{" & To_String(BasesWithFlag) & "}");
-            exit;
+            exit Insert_Bases_Flags_Loop;
             <<Bases_Flags_Loop_End>>
-         end loop;
+         end loop Insert_Bases_Flags_Loop;
          OldIndex := EndIndex + 2;
-      end loop;
+      end loop Replace_Help_Text_Loop;
       configure(HelpView, "-state disabled");
       return TCL_OK;
    end Show_Topic_Command;
