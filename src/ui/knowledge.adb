@@ -36,14 +36,17 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
+with Items; use Items;
 with Knowledge.Bases;
 with Knowledge.Events;
 with Missions; use Missions;
 with Knowledge.Missions;
+with Ships; use Ships;
 with Stories; use Stories;
 with Knowledge.Stories;
 with Maps; use Maps;
@@ -57,7 +60,7 @@ package body Knowledge is
    -- FUNCTION
    -- Table with info about the known events
    -- SOURCE
-   EventsTable: Table_Widget (2);
+   EventsTable: Table_Widget (3);
    -- ****
 
    function Show_Knowledge_Command
@@ -209,7 +212,8 @@ package body Knowledge is
          EventsTable :=
            CreateTable
              (Widget_Image(KnowledgeFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance")),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Details")),
               False);
          for Event of Events_List loop
             case Event.EType is
@@ -260,7 +264,34 @@ package body Knowledge is
               (EventsTable,
                Natural'Image(CountDistance(Event.SkyX, Event.SkyY)),
                "The distance to the event",
-               "ShowEventMenu" & Positive'Image(Row - 1), 2, True);
+               "ShowEventMenu" & Positive'Image(Row - 1), 2);
+            case Event.EType is
+               when DoublePrice =>
+                  AddButton
+                    (EventsTable,
+                     To_String(Items_List(Event.ItemIndex).Name) & " in " &
+                     To_String
+                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                          .Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
+                  AddButton
+                    (EventsTable,
+                     To_String
+                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                          .Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when EnemyShip | Trader | FriendlyShip =>
+                  AddButton
+                    (EventsTable,
+                     To_String(ProtoShips_List(Event.ShipIndex).Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when None | BaseRecovery =>
+                  null;
+            end case;
             Row := Row + 1;
          end loop;
          UpdateTable(EventsTable);
