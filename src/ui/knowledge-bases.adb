@@ -107,6 +107,9 @@ package body Knowledge.Bases is
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
+      if BasesTable.Row > 1 then
+         ClearTable(BasesTable);
+      end if;
       Delete_Widgets(2, Rows - 1, BasesFrame);
       BasesTable :=
         CreateTable

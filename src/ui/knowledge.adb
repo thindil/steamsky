@@ -200,6 +200,9 @@ package body Knowledge is
         New_String(Paned & ".knowledgeframe.events.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
+      if EventsTable.Row > 1 then
+         ClearTable(EventsTable);
+      end if;
       Delete_Widgets(1, Rows - 1, KnowledgeFrame);
       if Events_List.Length = 0 then
          Label :=
