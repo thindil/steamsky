@@ -125,91 +125,88 @@ package body Knowledge.Bases is
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
       for I in SkyBases'Range loop
-         if SkyBases(I).Known then
-            if BaseName'Length > 0
-              and then
-                Index
-                  (To_Lower(To_String(SkyBases(I).Name)), To_Lower(BaseName),
-                   1) =
-                0 then
-               goto End_Of_Loop;
-            end if;
-            if BasesStatus = To_Unbounded_String("Only not visited") and
-              SkyBases(I).Visited.Year /= 0 then
-               goto End_Of_Loop;
-            end if;
-            if BasesStatus = To_Unbounded_String("Only visited") and
-              SkyBases(I).Visited.Year = 0 then
-               goto End_Of_Loop;
-            end if;
-            if SkyBases(I).Visited.Year = 0
-              and then
-              (BasesType /= To_Unbounded_String("Any") or
-               BasesOwner /= To_Unbounded_String("Any")) then
-               goto End_Of_Loop;
-            end if;
-            AddButton
-              (BasesTable, To_String(SkyBases(I).Name),
-               "Show available base's options",
-               "ShowBasesMenu" & Positive'Image(I), 1);
-            AddButton
-              (BasesTable,
-               Natural'Image
-                 (CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)),
-               "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
-               2);
-            if SkyBases(I).Visited.Year > 0 then
-               if SkyBases(I).Population = 0 then
-                  AddButton
-                    (BasesTable, "empty", "The population size of the base",
-                     "ShowBasesMenu" & Positive'Image(I), 3);
-               elsif SkyBases(I).Population < 150 then
-                  AddButton
-                    (BasesTable, "small", "The population size of the base",
-                     "ShowBasesMenu" & Positive'Image(I), 3);
-               elsif SkyBases(I).Population < 300 then
-                  AddButton
-                    (BasesTable, "medium", "The population size of the base",
-                     "ShowBasesMenu" & Positive'Image(I), 3);
-               else
-                  AddButton
-                    (BasesTable, "large", "The population size of the base",
-                     "ShowBasesMenu" & Positive'Image(I), 3);
-               end if;
+         if not SkyBases(I).Known then
+            goto End_Of_Loop;
+         end if;
+         if BaseName'Length > 0
+           and then
+             Index
+               (To_Lower(To_String(SkyBases(I).Name)), To_Lower(BaseName), 1) =
+             0 then
+            goto End_Of_Loop;
+         end if;
+         if BasesStatus = To_Unbounded_String("Only not visited") and
+           SkyBases(I).Visited.Year /= 0 then
+            goto End_Of_Loop;
+         end if;
+         if BasesStatus = To_Unbounded_String("Only visited") and
+           SkyBases(I).Visited.Year = 0 then
+            goto End_Of_Loop;
+         end if;
+         if SkyBases(I).Visited.Year = 0
+           and then
+           (BasesType /= To_Unbounded_String("Any") or
+            BasesOwner /= To_Unbounded_String("Any")) then
+            goto End_Of_Loop;
+         end if;
+         AddButton
+           (BasesTable, To_String(SkyBases(I).Name),
+            "Show available base's options",
+            "ShowBasesMenu" & Positive'Image(I), 1);
+         AddButton
+           (BasesTable,
+            Natural'Image(CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY)),
+            "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
+            2);
+         if SkyBases(I).Visited.Year > 0 then
+            if SkyBases(I).Population = 0 then
                AddButton
-                 (BasesTable, To_Lower(Bases_Size'Image(SkyBases(I).Size)),
-                  "The size of the base", "ShowBasesMenu" & Positive'Image(I),
-                  4);
+                 (BasesTable, "empty", "The population size of the base",
+                  "ShowBasesMenu" & Positive'Image(I), 3);
+            elsif SkyBases(I).Population < 150 then
                AddButton
-                 (BasesTable, To_String(Factions_List(SkyBases(I).Owner).Name),
-                  "The faction which own the base",
-                  "ShowBasesMenu" & Positive'Image(I), 5);
+                 (BasesTable, "small", "The population size of the base",
+                  "ShowBasesMenu" & Positive'Image(I), 3);
+            elsif SkyBases(I).Population < 300 then
                AddButton
-                 (BasesTable,
-                  To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
-                  "The type of the base", "ShowBasesMenu" & Positive'Image(I),
-                  6);
-               AddButton
-                 (BasesTable, Get_Reputation_Text(SkyBases(I).Reputation(1)),
-                  "Your reputation in the base",
-                  "ShowBasesMenu" & Positive'Image(I), 7, True);
+                 (BasesTable, "medium", "The population size of the base",
+                  "ShowBasesMenu" & Positive'Image(I), 3);
             else
                AddButton
-                 (BasesTable, "not", "Show available base's options",
+                 (BasesTable, "large", "The population size of the base",
                   "ShowBasesMenu" & Positive'Image(I), 3);
-               AddButton
-                 (BasesTable, "", "Show available base's options",
-                  "ShowBasesMenu" & Positive'Image(I), 4);
-               AddButton
-                 (BasesTable, "visited", "Show available base's options",
-                  "ShowBasesMenu" & Positive'Image(I), 5);
-               AddButton
-                 (BasesTable, "", "Show available base's options",
-                  "ShowBasesMenu" & Positive'Image(I), 6);
-               AddButton
-                 (BasesTable, "yet", "Show available base's options",
-                  "ShowBasesMenu" & Positive'Image(I), 7, True);
             end if;
+            AddButton
+              (BasesTable, To_Lower(Bases_Size'Image(SkyBases(I).Size)),
+               "The size of the base", "ShowBasesMenu" & Positive'Image(I), 4);
+            AddButton
+              (BasesTable, To_String(Factions_List(SkyBases(I).Owner).Name),
+               "The faction which own the base",
+               "ShowBasesMenu" & Positive'Image(I), 5);
+            AddButton
+              (BasesTable,
+               To_String(BasesTypes_List(SkyBases(I).BaseType).Name),
+               "The type of the base", "ShowBasesMenu" & Positive'Image(I), 6);
+            AddButton
+              (BasesTable, Get_Reputation_Text(SkyBases(I).Reputation(1)),
+               "Your reputation in the base",
+               "ShowBasesMenu" & Positive'Image(I), 7, True);
+         else
+            AddButton
+              (BasesTable, "not", "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 3);
+            AddButton
+              (BasesTable, "", "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 4);
+            AddButton
+              (BasesTable, "visited", "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 5);
+            AddButton
+              (BasesTable, "", "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 6);
+            AddButton
+              (BasesTable, "yet", "Show available base's options",
+               "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
          <<End_Of_Loop>>
       end loop;
