@@ -818,7 +818,8 @@ package body Trades.UI is
             end loop;
             Menu.Add
               (TradeMenu, "command",
-               "-label {Sell selected amount} -command {TradeAmount sell}");
+               "-label {Sell selected amount} -command {TradeAmount sell " &
+               Natural'Image(MaxSellAmount) & "}");
             Menu.Add
               (TradeMenu, "command",
                "-label {Sell" & Natural'Image(MaxSellAmount) &
@@ -929,7 +930,8 @@ package body Trades.UI is
       if CArgv.Arg(Argv, 1) = "sell" then
          ShowManipulateItem
            ("Sell " & GetItemName(PlayerShip.Cargo(ItemIndex)),
-            "TradeItem sell", "sell", ItemIndex);
+            "TradeItem sell", "sell", ItemIndex,
+            Natural'Value(CArgv.Arg(Argv, 2)));
       else
          if ItemIndex > 0 then
             ShowManipulateItem
