@@ -196,56 +196,67 @@ package body Game is
                RecruitDate => (others => 0), Recruits => Tmp_Recruits,
                Known => False, AskedForBases => False,
                AskedForEvents => (others => 0),
-               Reputation => (Base_Reputation, 0),
+               Reputation => (1 => Base_Reputation, 2 => 0),
                MissionsDate => (others => 0), Missions => Tmp_Missions,
                Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
-                (To_Unbounded_String("loner")) then
-               Faction_Roll := GetRandom(1, Max_Spawn_Roll);
+                (To_Unbounded_String(Source => "loner")) then
+               Faction_Roll := GetRandom(Min => 1, Max => Max_Spawn_Roll);
                Get_Faction_Loop :
                for J in Factions_List.Iterate loop
                   if Faction_Roll > Factions_List(J).SpawnChance then
                      Faction_Roll :=
                        Faction_Roll - Factions_List(J).SpawnChance;
                   else
-                     Base_Owner := Factions_Container.Key(J);
+                     Base_Owner := Factions_Container.Key(Position => J);
                   end if;
                end loop Get_Faction_Loop;
             end if;
-            Bases_Array(Base_Owner).Append(I);
+            Bases_Array(Base_Owner).Append(New_Item => I);
          end loop Set_Bases_Loop;
          Place_Bases_Loop :
          for FactionBases of Bases_Array loop
+            Place_Faction_Bases_Loop :
             for I in FactionBases.Iterate loop
                Attempts := 1;
                Count_Base_Position_Loop :
                loop
                   Valid_Location := True;
-                  if Positive_Container.To_Index(I) =
+                  if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
                     (Factions_List
                        (SkyBases(FactionBases(FactionBases.First_Index)).Owner)
                        .Flags
                        .Contains
-                       (To_Unbounded_String("loner")) and
+                       (Item => To_Unbounded_String(Source => "loner")) and
                      Factions_List(SkyBases(FactionBases(I)).Owner).Flags
                        .Contains
-                       (To_Unbounded_String("loner"))) then
+                       (Item => To_Unbounded_String(Source => "loner"))) then
                      Pos_X :=
-                       GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
+                       GetRandom
+                         (Min => Bases_Range'First + 5,
+                          Max => Bases_Range'Last - 5);
                      Pos_Y :=
-                       GetRandom(Bases_Range'First + 5, Bases_Range'Last - 5);
+                       GetRandom
+                         (Min => Bases_Range'First + 5,
+                          Max => Bases_Range'Last - 5);
                   else
                      Pos_X :=
                        GetRandom
-                         (SkyBases
-                            (FactionBases(Positive_Container.To_Index(I) - 1))
-                            .SkyX -
-                          20,
-                          SkyBases
-                            (FactionBases(Positive_Container.To_Index(I) - 1))
-                            .SkyX +
-                          20);
+                         (Min =>
+                            SkyBases
+                              (FactionBases
+                                 (Positive_Container.To_Index(Position => I) -
+                                  1))
+                              .SkyX -
+                            20,
+                          Max =>
+                            SkyBases
+                              (FactionBases
+                                 (Positive_Container.To_Index(Position => I) -
+                                  1))
+                              .SkyX +
+                            20);
                      NormalizeCoord(Pos_X);
                      Pos_Y :=
                        GetRandom
@@ -294,7 +305,7 @@ package body Game is
                   EventIndex => 0, MissionIndex => 0);
                SkyBases(FactionBases(I)).SkyX := Pos_X;
                SkyBases(FactionBases(I)).SkyY := Pos_Y;
-            end loop;
+            end loop Place_Faction_Bases_Loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
       -- Place player ship in random large base
