@@ -15,7 +15,6 @@
 
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -35,7 +34,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
@@ -61,6 +59,13 @@ package body Knowledge is
    -- Table with info about the known events
    -- SOURCE
    EventsTable: Table_Widget (3);
+   -- ****
+
+   -- ****iv* Knowledge/Knowledge.MissionsTable
+   -- FUNCTION
+   -- Table with info about the known events
+   -- SOURCE
+   MissionsTable: Table_Widget (2);
    -- ****
 
    function Show_Knowledge_Command
@@ -116,6 +121,9 @@ package body Knowledge is
         New_String(Paned & ".knowledgeframe.missions.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
+      if MissionsTable.Row > 1 then
+         ClearTable(MissionsTable);
+      end if;
       Delete_Widgets(1, Rows - 1, KnowledgeFrame);
       if AcceptedMissions.Length = 0 then
          Label :=
@@ -124,68 +132,52 @@ package body Knowledge is
               "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
          Tcl.Tk.Ada.Grid.Grid(Label);
       else
-         Label := Create(KnowledgeFrame & ".name", "-text {Name}");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-         Label := Create(KnowledgeFrame & ".distance", "-text {Distance}");
-         Tcl.Tk.Ada.Grid.Grid(Label, "-row 1 -column 1");
          Row := 2;
+         MissionsTable :=
+           CreateTable
+             (Widget_Image(KnowledgeFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance")),
+              False);
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
             case AcceptedMissions(I).MType is
                when Deliver =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Deliver item to base} -command {ShowMissionMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (MissionsTable, "Deliver item to base",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                when Patrol =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Patrol area} -command {ShowMissionMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (MissionsTable, "Patrol area",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                when Destroy =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Destroy ship} -command {ShowMissionMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (MissionsTable, "Destroy ship",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                when Explore =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Explore area} -command {ShowMissionMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (MissionsTable, "Explore area",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                when Passenger =>
-                  Button :=
-                    Create
-                      (KnowledgeFrame & ".name" &
-                       Trim(Positive'Image(Row), Left),
-                       "-text {Transport passenger to base} -command {ShowMissionMenu" &
-                       Positive'Image(Row - 1) & "}");
+                  AddButton
+                    (MissionsTable, "Transport passenger to base",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
             end case;
-            Add(Button, "Show available mission's options");
-            Tcl.Tk.Ada.Grid.Grid
-              (Button, "-row" & Positive'Image(Row) & " -sticky w");
-            Label :=
-              Create
-                (KnowledgeFrame & ".distance" &
-                 Trim(Positive'Image(Row), Left),
-                 "-text {" &
-                 Natural'Image
-                   (CountDistance
-                      (AcceptedMissions(I).TargetX,
-                       AcceptedMissions(I).TargetY)) &
-                 "}");
-            Tcl.Tk.Ada.Grid.Grid
-              (Label, "-row" & Positive'Image(Row) & " -column 1");
+            AddButton
+              (MissionsTable,
+               Natural'Image
+                 (CountDistance
+                    (AcceptedMissions(I).TargetX,
+                     AcceptedMissions(I).TargetY)),
+               "The distance to the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 2, True);
             Row := Row + 1;
          end loop;
-         null;
+         UpdateTable(MissionsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
       KnowledgeCanvas.Name :=
