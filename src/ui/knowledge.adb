@@ -65,7 +65,7 @@ package body Knowledge is
    -- FUNCTION
    -- Table with info about the known events
    -- SOURCE
-   MissionsTable: Table_Widget (2);
+   MissionsTable: Table_Widget (4);
    -- ****
 
    function Show_Knowledge_Command
@@ -83,7 +83,7 @@ package body Knowledge is
         Get_Widget(KnowledgeFrame & ".bases.canvas", Interp);
       ComboBox: Ttk_ComboBox :=
         Get_Widget(KnowledgeCanvas & ".frame.options.types");
-      ComboValues: Unbounded_String;
+      ComboValues, Mission_Time: Unbounded_String;
       Row: Positive;
       Label: Ttk_Label;
       Button: Ttk_Button;
@@ -136,7 +136,9 @@ package body Knowledge is
          MissionsTable :=
            CreateTable
              (Widget_Image(KnowledgeFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance")),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Time limit"),
+               To_Unbounded_String("Base reward")),
               False);
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
@@ -174,7 +176,22 @@ package body Knowledge is
                     (AcceptedMissions(I).TargetX,
                      AcceptedMissions(I).TargetY)),
                "The distance to the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 2, True);
+               "ShowMissionMenu" & Positive'Image(Row - 1), 2);
+            Mission_Time := Null_Unbounded_String;
+            MinutesToDate(AcceptedMissions(I).Time, Mission_Time);
+            AddButton
+              (MissionsTable, To_String(Mission_Time),
+               "The time limit for finish and return the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            AddButton
+              (MissionsTable,
+               Natural'Image
+                 (Natural
+                    (Float(AcceptedMissions(I).Reward) *
+                     Float(AcceptedMissions(I).Multiplier))) &
+               " " & To_String(Money_Name),
+               "The base money reward for the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 4, True);
             Row := Row + 1;
          end loop;
          UpdateTable(MissionsTable);
