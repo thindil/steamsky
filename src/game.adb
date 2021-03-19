@@ -200,7 +200,7 @@ package body Game is
                MissionsDate => (others => 0), Missions => Tmp_Missions,
                Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
-                (To_Unbounded_String(Source => "loner")) then
+                (Item => To_Unbounded_String(Source => "loner")) then
                Faction_Roll := GetRandom(Min => 1, Max => Max_Spawn_Roll);
                Get_Faction_Loop :
                for J in Factions_List.Iterate loop
@@ -257,18 +257,22 @@ package body Game is
                                   1))
                               .SkyX +
                             20);
-                     NormalizeCoord(Pos_X);
+                     NormalizeCoord(Coord => Pos_X);
                      Pos_Y :=
                        GetRandom
-                         (SkyBases
-                            (FactionBases(Positive_Container.To_Index(I) - 1))
-                            .SkyY -
-                          20,
-                          SkyBases
-                            (FactionBases(Positive_Container.To_Index(I) - 1))
-                            .SkyY +
-                          20);
-                     NormalizeCoord(Pos_Y);
+                         (Min =>
+                            SkyBases
+                              (FactionBases
+                                 (Positive_Container.To_Index(I) - 1))
+                              .SkyY -
+                            20,
+                          Max =>
+                            SkyBases
+                              (FactionBases
+                                 (Positive_Container.To_Index(I) - 1))
+                              .SkyY +
+                            20);
+                     NormalizeCoord(Coord => Pos_Y);
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
                         Pos_X :=
