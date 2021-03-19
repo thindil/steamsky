@@ -816,15 +816,17 @@ package body Trades.UI is
                    ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
                     MaxPrice);
             end loop;
-            Menu.Add
-              (TradeMenu, "command",
-               "-label {Sell selected amount} -command {TradeAmount sell " &
-               Natural'Image(MaxSellAmount) & "}");
-            Menu.Add
-              (TradeMenu, "command",
-               "-label {Sell" & Natural'Image(MaxSellAmount) &
-               " of them} -command {TradeItem sell" &
-               Natural'Image(MaxSellAmount) & "}");
+            if MaxSellAmount > 0 then
+               Menu.Add
+                 (TradeMenu, "command",
+                  "-label {Sell selected amount} -command {TradeAmount sell " &
+                  Natural'Image(MaxSellAmount) & "}");
+               Menu.Add
+                 (TradeMenu, "command",
+                  "-label {Sell" & Natural'Image(MaxSellAmount) &
+                  " of them} -command {TradeItem sell" &
+                  Natural'Image(MaxSellAmount) & "}");
+            end if;
          end;
       end if;
       if BaseCargoIndex2 > 0 and MoneyIndex2 > 0 and
