@@ -127,6 +127,7 @@ package body Knowledge.Bases is
       BasesStatus := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
+      Load_Bases_Loop :
       for I in SkyBases'Range loop
          if not SkyBases(I).Known then
             goto End_Of_Loop;
@@ -212,7 +213,7 @@ package body Knowledge.Bases is
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
          <<End_Of_Loop>>
-      end loop;
+      end loop Load_Bases_Loop;
       UpdateTable(BasesTable);
       Tcl_Eval(Get_Context, "update");
       configure
