@@ -65,7 +65,7 @@ package body Knowledge is
    -- FUNCTION
    -- Table with info about the known events
    -- SOURCE
-   MissionsTable: Table_Widget (4);
+   MissionsTable: Table_Widget (5);
    -- ****
 
    function Show_Knowledge_Command
@@ -137,6 +137,7 @@ package body Knowledge is
            CreateTable
              (Widget_Image(KnowledgeFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Details"),
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
               False);
@@ -148,26 +149,70 @@ package body Knowledge is
                     (MissionsTable, "Deliver item to base",
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     To_String
+                       (Items_List(AcceptedMissions(I).ItemIndex).Name) &
+                     " to " &
+                     To_String
+                       (SkyBases
+                          (SkyMap
+                             (AcceptedMissions(I).TargetX,
+                              AcceptedMissions(I).TargetY)
+                             .BaseIndex)
+                          .Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Patrol =>
                   AddButton
                     (MissionsTable, "Patrol area",
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Destroy =>
                   AddButton
                     (MissionsTable, "Destroy ship",
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     To_String
+                       (ProtoShips_List(AcceptedMissions(I).ShipIndex).Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Explore =>
                   AddButton
                     (MissionsTable, "Explore area",
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Passenger =>
                   AddButton
                     (MissionsTable, "Transport passenger to base",
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "To " &
+                     To_String
+                       (SkyBases
+                          (SkyMap
+                             (AcceptedMissions(I).TargetX,
+                              AcceptedMissions(I).TargetY)
+                             .BaseIndex)
+                          .Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
             end case;
             AddButton
               (MissionsTable,
@@ -182,7 +227,7 @@ package body Knowledge is
             AddButton
               (MissionsTable, To_String(Mission_Time),
                "The time limit for finish and return the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+               "ShowMissionMenu" & Positive'Image(Row - 1), 4);
             AddButton
               (MissionsTable,
                Natural'Image
@@ -191,7 +236,7 @@ package body Knowledge is
                      Float(AcceptedMissions(I).Multiplier))) &
                " " & To_String(Money_Name),
                "The base money reward for the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 4, True);
+               "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
             Row := Row + 1;
          end loop;
          UpdateTable(MissionsTable);
