@@ -272,7 +272,7 @@ package body Game is
                                  (Positive_Container.To_Index(I) - 1))
                               .SkyY +
                             20);
-                     NormalizeCoord(Coord => Pos_Y);
+                     NormalizeCoord(Coord => Pos_Y, IsXAxis => False);
                      Attempts := Attempts + 1;
                      if Attempts = 251 then
                         Pos_X :=
