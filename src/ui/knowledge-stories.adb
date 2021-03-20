@@ -87,10 +87,11 @@ package body Knowledge.Stories is
       StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
       configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
       Delete(StoryView, "1.0", "end");
+      Story_Steps_Info_Loop :
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Append(StoryText, StepText & LF);
          Rows := Rows + (Length(StepText) / LineWidth) + 1;
-      end loop;
+      end loop Story_Steps_Info_Loop;
       if Natural(FinishedStories(StoryIndex).StepsTexts.Length) <
         FinishedStories(StoryIndex).StepsAmount then
          Append(StoryText, GetCurrentStoryText & LF);
@@ -155,14 +156,15 @@ package body Knowledge.Stories is
                      end if;
                      Append(StoryText, " ship.");
                   else
+                     Find_Proto_Ship_Loop :
                      for I in ProtoShips_List.Iterate loop
                         if ProtoShips_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
                            Append(StoryText, ProtoShips_List(I).Name);
                            Append(StoryText, ".");
-                           exit;
+                           exit Find_Proto_Ship_Loop;
                         end if;
-                     end loop;
+                     end loop Find_Proto_Ship_Loop;
                   end if;
                when ANY =>
                   null;
