@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -23,7 +22,6 @@ with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
 with Factions; use Factions;
@@ -76,10 +74,6 @@ package body Knowledge.Missions is
       Menu.Add
         (EventMenu, "command",
          "-label {Set the mission as destination for the ship} -command {SetMission2 " &
-         CArgv.Arg(Argv, 1) & "}");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Show more information about the mission} -command {ShowMissionInfo2 " &
          CArgv.Arg(Argv, 1) & "}");
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
@@ -158,83 +152,11 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Set_Mission_Command;
 
-   -- ****o* KMissions/KMissions.Show_Mission_Info_Command
-   -- FUNCTION
-   -- Show information about the selected mission
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowMissionInfo missionindex
-   -- Missionindex is the index of the mission to show
-   -- SOURCE
-   function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      MissionInfo: Unbounded_String;
-      Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
-   begin
-      case Mission.MType is
-         when Deliver =>
-            MissionInfo :=
-              To_Unbounded_String
-                ("Item: " & To_String(Items_List(Mission.ItemIndex).Name) &
-                 LF & "Weight:" &
-                 Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
-                 LF & "To base: " &
-                 To_String
-                   (SkyBases
-                      (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
-                      .Name));
-         when Patrol =>
-            MissionInfo := To_Unbounded_String("Patrol selected area");
-         when Destroy =>
-            MissionInfo :=
-              To_Unbounded_String
-                ("Target: " &
-                 To_String(ProtoShips_List(Mission.ShipIndex).Name));
-         when Explore =>
-            MissionInfo := To_Unbounded_String("Explore selected area");
-         when Passenger =>
-            MissionInfo :=
-              To_Unbounded_String
-                ("Needed quality of cabin:  GetCabinQuality(Mission.Data)" &
-                 LF & "To base: " &
-                 To_String
-                   (SkyBases
-                      (SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
-                      .Name));
-      end case;
-      Append(MissionInfo, LF & "Time limit:");
-      MinutesToDate(Mission.Time, MissionInfo);
-      Append
-        (MissionInfo,
-         LF & "Base reward:" &
-         Natural'Image
-           (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-         " " & To_String(Money_Name));
-      ShowInfo(To_String(MissionInfo));
-      return TCL_OK;
-   end Show_Mission_Info_Command;
-
    procedure AddCommands is
    begin
       AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
       AddCommand("ShowMission2", Show_Mission_Command'Access);
       AddCommand("SetMission2", Set_Mission_Command'Access);
-      AddCommand("ShowMissionInfo2", Show_Mission_Info_Command'Access);
    end AddCommands;
 
 end Knowledge.Missions;
