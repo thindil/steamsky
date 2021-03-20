@@ -263,13 +263,15 @@ package body Game is
                          (Min =>
                             SkyBases
                               (FactionBases
-                                 (Positive_Container.To_Index(I) - 1))
+                                 (Positive_Container.To_Index(Position => I) -
+                                  1))
                               .SkyY -
                             20,
                           Max =>
                             SkyBases
                               (FactionBases
-                                 (Positive_Container.To_Index(I) - 1))
+                                 (Positive_Container.To_Index(Position => I) -
+                                  1))
                               .SkyY +
                             20);
                      NormalizeCoord(Coord => Pos_Y, IsXAxis => False);
@@ -277,27 +279,29 @@ package body Game is
                      if Attempts = 251 then
                         Pos_X :=
                           GetRandom
-                            (Bases_Range'First + 5, Bases_Range'Last - 5);
+                            (Min => Bases_Range'First + 5,
+                             Max => Bases_Range'Last - 5);
                         Pos_Y :=
                           GetRandom
-                            (Bases_Range'First + 5, Bases_Range'Last - 5);
+                            (Min => Bases_Range'First + 5,
+                             Max => Bases_Range'Last - 5);
                         Attempts := 1;
                      end if;
                   end if;
                   Check_X_Coordinate_Loop :
                   for J in -5 .. 5 loop
                      Temp_X := Pos_X + J;
-                     NormalizeCoord(Temp_X);
+                     NormalizeCoord(Coord => Temp_X);
                      Check_Y_Coordinate_Loop :
                      for K in -5 .. 5 loop
                         Temp_Y := Pos_Y + K;
-                        NormalizeCoord(Temp_Y, False);
+                        NormalizeCoord(Coord => Temp_Y, IsXAxis => False);
                         if SkyMap(Temp_X, Temp_Y).BaseIndex > 0 then
                            Valid_Location := False;
                            exit Check_Y_Coordinate_Loop;
                         end if;
                      end loop Check_Y_Coordinate_Loop;
-                     exit Check_X_Coordinate_Loop when Valid_Location = False;
+                     exit Check_X_Coordinate_Loop when not Valid_Location;
                   end loop Check_X_Coordinate_Loop;
                   if SkyMap(Pos_X, Pos_Y).BaseIndex > 0 then
                      Valid_Location := False;
@@ -315,8 +319,9 @@ package body Game is
       -- Place player ship in random large base
       Place_Player_Loop :
       loop
-         Random_Base := GetRandom(1, 1024);
-         if NewGameSettings.StartingBase = To_Unbounded_String("Any") then
+         Random_Base := GetRandom(Min => 1, Max => 1024);
+         if NewGameSettings.StartingBase =
+           To_Unbounded_String(Source => "Any") then
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
               SkyBases(Random_Base).Owner = NewGameSettings.PlayerFaction;
@@ -330,11 +335,13 @@ package body Game is
       -- Create player ship
       PlayerShip :=
         CreateShip
-          (Factions_List(NewGameSettings.PlayerFaction).Careers
-             (NewGameSettings.PlayerCareer)
-             .ShipIndex,
-           NewGameSettings.ShipName, SkyBases(Integer(Random_Base)).SkyX,
-           SkyBases(Integer(Random_Base)).SkyY, DOCKED, False);
+          (ProtoIndex =>
+             Factions_List(NewGameSettings.PlayerFaction).Careers
+               (NewGameSettings.PlayerCareer)
+               .ShipIndex,
+           Name => NewGameSettings.ShipName, X => SkyBases(Random_Base).SkyX,
+           Y => SkyBases(Random_Base).SkyY, Speed => DOCKED,
+           RandomUpgrades => False);
       -- Add player to ship
       declare
          PlayerIndex2: constant Unbounded_String :=
