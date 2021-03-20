@@ -16,10 +16,13 @@
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -416,5 +419,34 @@ package body Table is
          Table.Row := Table.Row + 1;
       end if;
    end AddProgressBar;
+
+   procedure AddPagination
+     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) is
+      ButtonsFrame: constant Ttk_Frame :=
+        Create(Table.Canvas & ".buttonframe");
+      Button: Ttk_Button;
+   begin
+      if PreviousCommand'Length > 0 then
+         Button :=
+           Create
+             (ButtonsFrame & ".previous",
+              "-text Previous -command {" & PreviousCommand & "}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky w");
+         Add(Button, "Previous page");
+      end if;
+      if NextCommand'Length > 0 then
+         Button :=
+           Create
+             (ButtonsFrame & ".next",
+              "-text Next -command {" & NextCommand & "}");
+         Tcl.Tk.Ada.Grid.Grid(Button, "-sticky e -row 0 -column 1");
+         Add(Button, "Next page");
+      end if;
+      Tcl_Eval(Get_Interp(Table.Canvas), "update");
+      Canvas_Create
+        (Table.Canvas, "window",
+         "0" & Positive'Image(Table.Row * Table.Row_Height) &
+         " -anchor nw -window " & ButtonsFrame);
+   end AddPagination;
 
 end Table;
