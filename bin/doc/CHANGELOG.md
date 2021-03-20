@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Showing profit in trade screen
 - Counting max sell amount in trade
 - Showing sell option when selling is not possible
+- Crash when can't accept mission in bases
 
 ## [5.8] - 2021-02-21
 
