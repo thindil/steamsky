@@ -147,4 +147,20 @@ package Table is
       NewRow, InvertColors: Boolean := False);
    -- ****
 
+   -- ****f* Table/AddPagination
+   -- FUNCTION
+   -- Add pagination buttons to the bottom of the table
+   -- PARAMETERS
+   -- Table           - The Table_Widget to which buttons will be added
+   -- PreviousCommand - The Tcl command which will be executed by the previous
+   --                   button. If empty, button will not be shown.
+   -- NextCommand     - The Tcl command which will be executed by the next
+   --                   button. If empty, button will not be shown.
+   -- HISTORY
+   -- 5.9 - Added
+   -- SOURCE
+   procedure AddPagination
+     (Table: in out Table_Widget; PreviousCommand, NextCommand: String);
+   -- ****
+
 end Table;
