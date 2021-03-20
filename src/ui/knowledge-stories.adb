@@ -97,15 +97,13 @@ package body Knowledge.Stories is
          Append(StoryText, GetCurrentStoryText & LF);
          Rows := Rows + (Length(GetCurrentStoryText & LF) / LineWidth) + 1;
          if CurrentStory.Data /= Null_Unbounded_String then
-            if CurrentStory.CurrentStep = 0 then
-               Step := Stories_List(CurrentStory.Index).StartingStep;
-            elsif CurrentStory.CurrentStep > 0 then
-               Step :=
+            Step :=
+              (if CurrentStory.CurrentStep = 0 then
+                 Stories_List(CurrentStory.Index).StartingStep
+               elsif CurrentStory.CurrentStep > 0 then
                  Stories_List(CurrentStory.Index).Steps
-                   (CurrentStory.CurrentStep);
-            else
-               Step := Stories_List(CurrentStory.Index).FinalStep;
-            end if;
+                   (CurrentStory.CurrentStep)
+               else Stories_List(CurrentStory.Index).FinalStep);
             Create(Tokens, To_String(CurrentStory.Data), ";");
             case Step.FinishCondition is
                when ASKINBASE =>
