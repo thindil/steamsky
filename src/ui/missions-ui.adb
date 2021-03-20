@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
@@ -391,6 +392,10 @@ package body Missions.UI is
          UpdateMessages;
       end if;
       return TCL_OK;
+   exception
+      when An_Exception : Missions_Accepting_Error =>
+         ShowMessage(Exception_Message(An_Exception));
+         return TCL_OK;
    end Set_Mission_Command;
 
    -- ****o* MUI3/MIU3.Show_Base_Missions_Command
