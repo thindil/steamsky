@@ -112,14 +112,15 @@ package body Knowledge.Stories is
                        (StoryText,
                         "You must travel to base " & CurrentStory.Data &
                         " at X:");
+                     Base_Location_Loop :
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
                            Append(StoryText, Positive'Image(SkyBases(I).SkyX));
                            Append(StoryText, " Y:");
                            Append(StoryText, Positive'Image(SkyBases(I).SkyY));
-                           exit;
+                           exit Base_Location_Loop;
                         end if;
-                     end loop;
+                     end loop Base_Location_Loop;
                   else
                      Append(StoryText, "You can ask in any base. ");
                   end if;
