@@ -343,32 +343,37 @@ package body Game is
            Y => SkyBases(Random_Base).SkyY, Speed => DOCKED,
            RandomUpgrades => False);
       -- Add player to ship
+      Add_Player_Block :
       declare
-         PlayerIndex2: constant Unbounded_String :=
+         Player_Index_2: constant Unbounded_String :=
            Factions_List(NewGameSettings.PlayerFaction).Careers
              (NewGameSettings.PlayerCareer)
              .PlayerIndex;
-         Amount: Positive;
-         TmpInventory: Inventory_Container.Vector;
-         PlayerMorale: constant Positive :=
+         Amount: Positive := 1;
+         Tmp_Inventory: Inventory_Container.Vector :=
+           Inventory_Container.Empty_Vector;
+         Player_Morale: constant Positive :=
            (if
               Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
-                (To_Unbounded_String("nomorale"))
+                (Item => To_Unbounded_String(Source => "nomorale"))
             then 50
             else 100);
       begin
          Player_Inventory_Loop :
-         for I in ProtoMobs_List(PlayerIndex2).Inventory.Iterate loop
+         for I in ProtoMobs_List(Player_Index_2).Inventory.Iterate loop
             Amount :=
-              (if ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount > 0 then
+              (if ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount > 0
+               then
                  GetRandom
-                   (ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount,
-                    ProtoMobs_List(PlayerIndex2).Inventory(I).MaxAmount)
-               else ProtoMobs_List(PlayerIndex2).Inventory(I).MinAmount);
-            TmpInventory.Append
+                   (Min =>
+                      ProtoMobs_List(Player_Index_2).Inventory(I).MinAmount,
+                    Max =>
+                      ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount)
+               else ProtoMobs_List(Player_Index_2).Inventory(I).MinAmount);
+            Tmp_Inventory.Append
               (New_Item =>
                  (ProtoIndex =>
-                    ProtoMobs_List(PlayerIndex2).Inventory(I).ProtoIndex,
+                    ProtoMobs_List(Player_Index_2).Inventory(I).ProtoIndex,
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop Player_Inventory_Loop;
@@ -376,21 +381,22 @@ package body Game is
            (New_Item =>
               (Name => NewGameSettings.PlayerName,
                Gender => NewGameSettings.PlayerGender, Health => 100,
-               Tired => 0, Skills => ProtoMobs_List(PlayerIndex2).Skills,
+               Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
-               Order => ProtoMobs_List(PlayerIndex2).Order,
+               Order => ProtoMobs_List(Player_Index_2).Order,
                PreviousOrder => Rest, OrderTime => 15,
-               Orders => ProtoMobs_List(PlayerIndex2).Priorities,
-               Attributes => ProtoMobs_List(PlayerIndex2).Attributes,
-               Inventory => TmpInventory,
-               Equipment => ProtoMobs_List(PlayerIndex2).Equipment,
+               Orders => ProtoMobs_List(Player_Index_2).Priorities,
+               Attributes => ProtoMobs_List(Player_Index_2).Attributes,
+               Inventory => Tmp_Inventory,
+               Equipment => ProtoMobs_List(Player_Index_2).Equipment,
                Payment => (others => 0), ContractLength => -1,
-               Morale => (PlayerMorale, 0), Loyalty => 100,
+               Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                HomeBase => Random_Base,
                Faction => NewGameSettings.PlayerFaction));
-      end;
+      end Add_Player_Block;
+      Assign_Cabin_Block :
       declare
-         CabinAssigned: Boolean := False;
+         Cabin_Assigned: Boolean := False;
       begin
          PlayerShip_Modules_Loop :
          for Module of PlayerShip.Modules loop
@@ -401,26 +407,26 @@ package body Game is
                end if;
             end loop Module_Owner_Loop;
             if Modules_List(Module.ProtoIndex).MType = CABIN and
-              not CabinAssigned then
+              not Cabin_Assigned then
                Assign_Cabin_Loop :
                for I in Module.Owner.Iterate loop
                   if Module.Owner(I) = 0 then
                      Module.Owner(I) := 1;
-                     if Natural_Container.To_Index(I) = 1 then
+                     if Natural_Container.To_Index(Position => I) = 1 then
                         Module.Name :=
                           NewGameSettings.PlayerName &
-                          To_Unbounded_String("'s Cabin");
+                          To_Unbounded_String(Source => "'s Cabin");
                      end if;
-                     CabinAssigned := True;
+                     Cabin_Assigned := True;
                      exit Assign_Cabin_Loop;
                   end if;
                end loop Assign_Cabin_Loop;
             end if;
          end loop PlayerShip_Modules_Loop;
-      end;
+      end Assign_Cabin_Block;
       -- Set current map field/sky base info
-      SkyBases(Integer(Random_Base)).Visited := Game_Date;
-      SkyBases(Integer(Random_Base)).Known := True;
+      SkyBases(Random_Base).Visited := Game_Date;
+      SkyBases(Random_Base).Known := True;
       SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
       GenerateRecruits;
       GenerateMissions;
@@ -429,7 +435,8 @@ package body Game is
       if CurrentGoal.GType = RANDOM then
          CurrentGoal :=
            Goals_List
-             (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
+             (GetRandom
+                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       -- Set name of savegame
       GenerateSaveName;
