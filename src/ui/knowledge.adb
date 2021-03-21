@@ -94,16 +94,18 @@ package body Knowledge is
             To_String(Data_Directory) & "ui" & Dir_Separator &
             "knowledge.tcl");
          Append(ComboValues, " {Any}");
+         Load_Bases_Types_Loop :
          for BaseType of BasesTypes_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");
-         end loop;
+         end loop Load_Bases_Types_Loop;
          configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
          Current(ComboBox, "0");
          ComboValues := To_Unbounded_String(" {Any}");
          ComboBox.Name := New_String(KnowledgeCanvas & ".frame.options.owner");
+         Load_Bases_Owners_Loop :
          for I in Factions_List.Iterate loop
             Append(ComboValues, " {" & Factions_List(I).Name & "}");
-         end loop;
+         end loop Load_Bases_Owners_Loop;
          configure(ComboBox, "-values [list" & To_String(ComboValues) & "]");
          Current(ComboBox, "0");
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
@@ -141,6 +143,7 @@ package body Knowledge is
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
               False);
+         Load_Accepted_Missions_Loop :
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
             case AcceptedMissions(I).MType is
@@ -238,7 +241,7 @@ package body Knowledge is
                "The base money reward for the mission",
                "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
             Row := Row + 1;
-         end loop;
+         end loop Load_Accepted_Missions_Loop;
          UpdateTable(MissionsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
@@ -272,6 +275,7 @@ package body Knowledge is
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
               False);
+         Load_Known_Events_Loop :
          for Event of Events_List loop
             case Event.EType is
                when EnemyShip =>
@@ -350,7 +354,7 @@ package body Knowledge is
                   null;
             end case;
             Row := Row + 1;
-         end loop;
+         end loop Load_Known_Events_Loop;
          UpdateTable(EventsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
@@ -383,11 +387,12 @@ package body Knowledge is
             StoriesView: constant Tk_Text :=
               Create(KnowledgeFrame & ".view", "-wrap word");
          begin
+            Load_Finished_Stories_Loop :
             for FinishedStory of FinishedStories loop
                Append
                  (StoriesList,
                   " {" & Stories_List(FinishedStory.Index).Name & "}");
-            end loop;
+            end loop Load_Finished_Stories_Loop;
             configure
               (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
             Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
@@ -467,6 +472,7 @@ package body Knowledge is
           (Widget_Image(Frame) & "." & CArgv.Arg(Argv, 1) &
            ".canvas.frame.maxmin");
       if CArgv.Arg(Argv, 2) /= "show" then
+         Hide_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -481,12 +487,13 @@ package body Knowledge is
                   Natural'Image(FrameInfo.Column) & " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
-         end loop;
+         end loop Hide_Manipulate_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf106]"" -command {KnowledgeMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
+         Show_Manipulate_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -498,7 +505,7 @@ package body Knowledge is
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
-         end loop;
+         end loop Show_Manipulate_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf107]"" -command {KnowledgeMaxMin " &
