@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,19 +34,19 @@
 <ul>
 <li>1.1. <a href="./ui/statistics-ui_ads.html#robo59">Statistics/SUI</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/statistics-ui_ads.html#robo589">SUI/SUI.ShowStatistics</a></li>
+<li>1.1.1. <a href="./ui/statistics-ui_ads.html#robo600">SUI/SUI.ShowStatistics</a></li>
 </ul>
 <li>1.2. <a href="#robo144">Statistics/Statistics.Statistics_Container</a></li>
 <li>1.3. <a href="#robo190">Statistics/Statistics.GameStats_Data</a></li>
 <li>1.4. <a href="#robo191">Statistics/Statistics.Statistics_Data</a></li>
-<li>1.5. <a href="#robo322">Statistics/Statistics.GameStats</a></li>
-<li>1.6. <a href="#robo565">Statistics/Statistics.ClearGameStats</a></li>
-<li>1.7. <a href="#robo566">Statistics/Statistics.GetGamePoints</a></li>
-<li>1.8. <a href="#robo567">Statistics/Statistics.UpdateCraftingOrders</a></li>
-<li>1.9. <a href="#robo568">Statistics/Statistics.UpdateDestroyedShips</a></li>
-<li>1.10. <a href="#robo569">Statistics/Statistics.UpdateFinishedGoals</a></li>
-<li>1.11. <a href="#robo570">Statistics/Statistics.UpdateFinishedMissions</a></li>
-<li>1.12. <a href="#robo571">Statistics/Statistics.UpdateKilledMobs</a></li>
+<li>1.5. <a href="#robo332">Statistics/Statistics.GameStats</a></li>
+<li>1.6. <a href="#robo576">Statistics/Statistics.ClearGameStats</a></li>
+<li>1.7. <a href="#robo577">Statistics/Statistics.GetGamePoints</a></li>
+<li>1.8. <a href="#robo578">Statistics/Statistics.UpdateCraftingOrders</a></li>
+<li>1.9. <a href="#robo579">Statistics/Statistics.UpdateDestroyedShips</a></li>
+<li>1.10. <a href="#robo580">Statistics/Statistics.UpdateFinishedGoals</a></li>
+<li>1.11. <a href="#robo581">Statistics/Statistics.UpdateFinishedMissions</a></li>
+<li>1.12. <a href="#robo582">Statistics/Statistics.UpdateKilledMobs</a></li>
 </ul>
 </ul>
 <hr />
@@ -84,7 +84,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> GameStats_Data <span class="keyword">is</span> <span class="keyword">record</span>
       DestroyedShips<span class="sign">:</span> Statistics_Container<span class="sign">.</span>Vector<span class="sign">;</span>
-      BasesVisited<span class="sign">:</span> BasesRange<span class="sign">;</span>
+      BasesVisited<span class="sign">:</span> Bases_Range<span class="sign">;</span>
       MapVisited<span class="sign">:</span> Positive<span class="sign">;</span>
       DistanceTraveled<span class="sign">:</span> Natural<span class="sign">;</span>
       CraftingOrders<span class="sign">:</span> Statistics_Container<span class="sign">.</span>Vector<span class="sign">;</span>
@@ -129,7 +129,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eGameStats"></a>
-<a name="robo322"></a><h2>Statistics/Statistics.GameStats [ Variables ]</h2>
+<a name="robo332"></a><h2>Statistics/Statistics.GameStats [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -141,7 +141,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eClearGameStats"></a>
-<a name="robo565"></a><h2>Statistics/Statistics.ClearGameStats [ Subprograms ]</h2>
+<a name="robo576"></a><h2>Statistics/Statistics.ClearGameStats [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -149,12 +149,12 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> ClearGameStats <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_ClearGameStats"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_ClearGameStats"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Statistics2fStatistics2eGetGamePoints"></a>
-<a name="robo566"></a><h2>Statistics/Statistics.GetGamePoints [ Subprograms ]</h2>
+<a name="robo577"></a><h2>Statistics/Statistics.GetGamePoints [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -162,7 +162,7 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> GetGamePoints <span class="keyword">return</span> Natural <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_GetGamePoints"</span><span class="sign">,</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetGamePoints"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Amount of gained points by player in this game
@@ -170,7 +170,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eUpdateCraftingOrders"></a>
-<a name="robo567"></a><h2>Statistics/Statistics.UpdateCraftingOrders [ Subprograms ]</h2>
+<a name="robo578"></a><h2>Statistics/Statistics.UpdateCraftingOrders [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -179,7 +179,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateCraftingOrders<span class="sign">(</span>Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Index <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateCraftingOrders"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateCraftingOrders"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Index - Index of crafting order to update
@@ -187,7 +187,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eUpdateDestroyedShips"></a>
-<a name="robo568"></a><h2>Statistics/Statistics.UpdateDestroyedShips [ Subprograms ]</h2>
+<a name="robo579"></a><h2>Statistics/Statistics.UpdateDestroyedShips [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -196,7 +196,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateDestroyedShips<span class="sign">(</span>ShipName<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> ShipName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateDestroyedShips"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateDestroyedShips"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ShipName - Name of the ship to add to destroyed list
@@ -204,7 +204,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eUpdateFinishedGoals"></a>
-<a name="robo569"></a><h2>Statistics/Statistics.UpdateFinishedGoals [ Subprograms ]</h2>
+<a name="robo580"></a><h2>Statistics/Statistics.UpdateFinishedGoals [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -213,7 +213,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateFinishedGoals<span class="sign">(</span>Index<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Index <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateFinishedGoals"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateFinishedGoals"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Index - Index of goal to update
@@ -221,7 +221,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eUpdateFinishedMissions"></a>
-<a name="robo570"></a><h2>Statistics/Statistics.UpdateFinishedMissions [ Subprograms ]</h2>
+<a name="robo581"></a><h2>Statistics/Statistics.UpdateFinishedMissions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -230,7 +230,7 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateFinishedMissions<span class="sign">(</span>MType<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> MType <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateFinishedMissions"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateFinishedMissions"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> MType - Type of mission to update
@@ -238,7 +238,7 @@
 
 <hr />
 <a name="Statistics2fStatistics2eUpdateKilledMobs"></a>
-<a name="robo571"></a><h2>Statistics/Statistics.UpdateKilledMobs [ Subprograms ]</h2>
+<a name="robo582"></a><h2>Statistics/Statistics.UpdateKilledMobs [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo58">Statistics</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -248,7 +248,7 @@
 <pre class="source">   <span class="keyword">procedure</span> UpdateKilledMobs
      <span class="sign">(</span>Mob<span class="sign">:</span> Member_Data<span class="sign">;</span> FractionName<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> FractionName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span><span class="quote">"Test_UpdateKilledMobs"</span><span class="sign">,</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateKilledMobs"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Mob         - Killed mobile data
@@ -257,7 +257,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/statistics.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
+<p>Generated from ./src/statistics.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
 </p>
 </div> <!-- footer -->
 </body>

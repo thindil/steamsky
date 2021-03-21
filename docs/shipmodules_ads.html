@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -35,8 +35,9 @@
 <li>1.1. <a href="#robo132">ShipModules/ShipModules.BaseModules_Container</a></li>
 <li>1.2. <a href="#robo133">ShipModules/ShipModules.ModuleType</a></li>
 <li>1.3. <a href="#robo185">ShipModules/ShipModules.BaseModule_Data</a></li>
-<li>1.4. <a href="#robo313">ShipModules/ShipModules.Modules_List</a></li>
-<li>1.5. <a href="#robo540">ShipModules/ShipModules.LoadShipModules</a></li>
+<li>1.4. <a href="#robo323">ShipModules/ShipModules.Modules_List</a></li>
+<li>1.5. <a href="#robo551">ShipModules/ShipModules.GetModuleType</a></li>
+<li>1.6. <a href="#robo552">ShipModules/ShipModules.LoadShipModules</a></li>
 </ul>
 </ul>
 <hr />
@@ -104,7 +105,7 @@
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       MaxOwners<span class="sign">:</span> Natural<span class="sign">;</span>
       Speed<span class="sign">:</span> Integer<span class="sign">;</span>
-      Reputation<span class="sign">:</span> ReputationRange<span class="sign">;</span>
+      Reputation<span class="sign">:</span> Reputation_Range<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -128,7 +129,7 @@
 
 <hr />
 <a name="ShipModules2fShipModules2eModules5fList"></a>
-<a name="robo313"></a><h2>ShipModules/ShipModules.Modules_List [ Variables ]</h2>
+<a name="robo323"></a><h2>ShipModules/ShipModules.Modules_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -139,8 +140,27 @@
 </pre>
 
 <hr />
+<a name="ShipModules2fShipModules2eGetModuleType"></a>
+<a name="robo551"></a><h2>ShipModules/ShipModules.GetModuleType [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get type of selected module (replace all underscore with spaces)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> GetModuleType<span class="sign">(</span>ModuleIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Length<span class="sign">(</span>ModuleIndex<span class="sign">)</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetModuleType"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ModuleIndex - Index of module in prototypes list
+ RETURNS
+ Formatted type of module
+</pre>
+
+<hr />
 <a name="ShipModules2fShipModules2eLoadShipModules"></a>
-<a name="robo540"></a><h2>ShipModules/ShipModules.LoadShipModules [ Subprograms ]</h2>
+<a name="robo552"></a><h2>ShipModules/ShipModules.LoadShipModules [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo49">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -155,7 +175,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
+<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
 </p>
 </div> <!-- footer -->
 </body>

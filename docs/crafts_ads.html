@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.8 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,24 +34,24 @@
 <ul>
 <li>1.1. <a href="./ui/crafts-ui_ads.html#robo16">Crafts/CUI4</a></li>
 <ul>
-<li>1.1.1. <a href="./ui/crafts-ui_ads.html#robo416">CUI4/CUI4.AddCommands</a></li>
-<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo417">CUI4/CUI4.ShowSetRecipe</a></li>
-<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo627">CUI4/CUI4.Set_Crafting_Command</a></li>
-<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo628">CUI4/CUI4.Show_Crafting_Command</a></li>
-<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo629">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
+<li>1.1.1. <a href="./ui/crafts-ui_ads.html#robo427">CUI4/CUI4.AddCommands</a></li>
+<li>1.1.2. <a href="./ui/crafts-ui_adb.html#robo428">CUI4/CUI4.ShowSetRecipe</a></li>
+<li>1.1.3. <a href="./ui/crafts-ui_adb.html#robo641">CUI4/CUI4.Set_Crafting_Command</a></li>
+<li>1.1.4. <a href="./ui/crafts-ui_adb.html#robo642">CUI4/CUI4.Show_Crafting_Command</a></li>
+<li>1.1.5. <a href="./ui/crafts-ui_adb.html#robo643">CUI4/CUI4.Show_Recipe_Info_Command</a></li>
 </ul>
 <li>1.2. <a href="#robo86">Crafts/Crafts.Recipes_Container</a></li>
 <li>1.3. <a href="#robo166">Crafts/Crafts.Craft_Data</a></li>
-<li>1.4. <a href="#robo222">Crafts/Crafts.Known_Recipes</a></li>
-<li>1.5. <a href="#robo223">Crafts/Recipes_List</a></li>
-<li>1.6. <a href="#robo335">Crafts/Crafts.Crafting_No_Materials</a></li>
-<li>1.7. <a href="#robo336">Crafts/Crafts.Crafting_No_Tools</a></li>
-<li>1.8. <a href="#robo337">Crafts/Crafts.Crafting_No_Workshop</a></li>
-<li>1.9. <a href="#robo390">Crafts/Crafts.CheckRecipe</a></li>
-<li>1.10. <a href="#robo391">Crafts/Crafts.LoadRecipes</a></li>
-<li>1.11. <a href="#robo392">Crafts/Crafts.Manufacturing</a></li>
-<li>1.12. <a href="#robo393">Crafts/Crafts.SetRecipe</a></li>
-<li>1.13. <a href="./crafts_adb.html#robo394">Crafts/Crafts.SetRecipeData</a></li>
+<li>1.4. <a href="#robo229">Crafts/Crafts.Known_Recipes</a></li>
+<li>1.5. <a href="#robo230">Crafts/Recipes_List</a></li>
+<li>1.6. <a href="#robo346">Crafts/Crafts.Crafting_No_Materials</a></li>
+<li>1.7. <a href="#robo347">Crafts/Crafts.Crafting_No_Tools</a></li>
+<li>1.8. <a href="#robo348">Crafts/Crafts.Crafting_No_Workshop</a></li>
+<li>1.9. <a href="#robo401">Crafts/Crafts.CheckRecipe</a></li>
+<li>1.10. <a href="#robo402">Crafts/Crafts.LoadRecipes</a></li>
+<li>1.11. <a href="#robo403">Crafts/Crafts.Manufacturing</a></li>
+<li>1.12. <a href="#robo404">Crafts/Crafts.SetRecipe</a></li>
+<li>1.13. <a href="./crafts_adb.html#robo405">Crafts/Crafts.SetRecipeData</a></li>
 </ul>
 </ul>
 <hr />
@@ -95,7 +95,7 @@
       Time<span class="sign">:</span> Positive<span class="sign">;</span>
       Difficulty<span class="sign">:</span> Positive<span class="sign">;</span>
       Tool<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Reputation<span class="sign">:</span> ReputationRange<span class="sign">;</span>
+      Reputation<span class="sign">:</span> Reputation_Range<span class="sign">;</span>
       ToolQuality<span class="sign">:</span> Positive<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
@@ -115,7 +115,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eKnown5fRecipes"></a>
-<a name="robo222"></a><h2>Crafts/Crafts.Known_Recipes [ Variables ]</h2>
+<a name="robo229"></a><h2>Crafts/Crafts.Known_Recipes [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -127,7 +127,7 @@
 
 <hr />
 <a name="Crafts2fRecipes5fList"></a>
-<a name="robo223"></a><h2>Crafts/Recipes_List [ Variables ]</h2>
+<a name="robo230"></a><h2>Crafts/Recipes_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -139,7 +139,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eCrafting5fNo5fMaterials"></a>
-<a name="robo335"></a><h2>Crafts/Crafts.Crafting_No_Materials [ Exceptions ]</h2>
+<a name="robo346"></a><h2>Crafts/Crafts.Crafting_No_Materials [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -151,7 +151,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eCrafting5fNo5fTools"></a>
-<a name="robo336"></a><h2>Crafts/Crafts.Crafting_No_Tools [ Exceptions ]</h2>
+<a name="robo347"></a><h2>Crafts/Crafts.Crafting_No_Tools [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -163,7 +163,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eCrafting5fNo5fWorkshop"></a>
-<a name="robo337"></a><h2>Crafts/Crafts.Crafting_No_Workshop [ Exceptions ]</h2>
+<a name="robo348"></a><h2>Crafts/Crafts.Crafting_No_Workshop [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -175,7 +175,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eCheckRecipe"></a>
-<a name="robo390"></a><h2>Crafts/Crafts.CheckRecipe [ Subprograms ]</h2>
+<a name="robo401"></a><h2>Crafts/Crafts.CheckRecipe [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -196,7 +196,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eLoadRecipes"></a>
-<a name="robo391"></a><h2>Crafts/Crafts.LoadRecipes [ Subprograms ]</h2>
+<a name="robo402"></a><h2>Crafts/Crafts.LoadRecipes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -211,7 +211,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eManufacturing"></a>
-<a name="robo392"></a><h2>Crafts/Crafts.Manufacturing [ Subprograms ]</h2>
+<a name="robo403"></a><h2>Crafts/Crafts.Manufacturing [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -227,7 +227,7 @@
 
 <hr />
 <a name="Crafts2fCrafts2eSetRecipe"></a>
-<a name="robo393"></a><h2>Crafts/Crafts.SetRecipe [ Subprograms ]</h2>
+<a name="robo404"></a><h2>Crafts/Crafts.SetRecipe [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo15">Crafts</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -250,7 +250,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Feb 21 2021 06:23:43
+<p>Generated from ./src/crafts.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
 </p>
 </div> <!-- footer -->
 </body>
