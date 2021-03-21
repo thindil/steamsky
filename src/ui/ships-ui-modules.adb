@@ -518,10 +518,10 @@ package body Ships.UI.Modules is
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).MaxValue) * 1.5);
             if Module.Power = MaxValue then
-               Insert(ModuleText, "end", " (max upgrade)");
+               Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
             if Module.Disabled then
-               Insert(ModuleText, "end", " (disabled)");
+               Insert(ModuleText, "end", "{ (disabled)}");
             end if;
             Insert
               (ModuleText, "end",
@@ -530,7 +530,7 @@ package body Ships.UI.Modules is
             MaxValue :=
               Positive(Float(Modules_List(Module.ProtoIndex).Value) / 2.0);
             if Module.FuelUsage = MaxValue then
-               Insert(ModuleText, "end", " (max upgrade)");
+               Insert(ModuleText, "end", "{ (max upgrade)}");
             end if;
          when CARGO_ROOM =>
             Insert
