@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Counting max sell amount in trade
 - Showing sell option when selling is not possible
 - Crash when can't accept mission in bases
+- Showing info about the selected module when it is upgraded
 
 ## [5.8] - 2021-02-21
 
