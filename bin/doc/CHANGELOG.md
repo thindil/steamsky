@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [5.9] - 2021-03-21
 
 ### Added
 - Missing option to remember combat orders (Github issue #74)
