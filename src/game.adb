@@ -444,32 +444,33 @@ package body Game is
       Player_Career := NewGameSettings.PlayerCareer;
       -- Add welcoming message
       AddMessage
-        ("Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
-         OtherMessage);
+        (Message =>
+           "Welcome to Steam Sky. If it is your first game, please consider read help (entry 'Help' in Menu), especially topic 'First Steps'.",
+         MType => OtherMessage);
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
-      AddedHours, AddedMinutes: Natural;
-      BaseIndex: constant Extended_Base_Range :=
+      Added_Hours, Added_Minutes: Natural := 0;
+      Base_Index: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      TiredPoints: Natural := 0;
-      NeedCleaning: Boolean := False;
+      Tired_Points: Natural := 0;
+      Need_Cleaning: Boolean := False;
    begin
       Tired_Points_Loop :
       for I in 1 .. Minutes loop
-         if ((Game_Date.Minutes + I) rem 15) = 0 then
-            TiredPoints := TiredPoints + 1;
+         if (Game_Date.Minutes + I) rem 15 = 0 then
+            Tired_Points := Tired_Points + 1;
          end if;
       end loop Tired_Points_Loop;
       -- Update game time
-      AddedMinutes := Minutes rem 60;
-      AddedHours := Minutes / 60;
-      Game_Date.Minutes := Game_Date.Minutes + AddedMinutes;
+      Added_Minutes := Minutes rem 60;
+      Added_Hours := Minutes / 60;
+      Game_Date.Minutes := Game_Date.Minutes + Added_Minutes;
       if Game_Date.Minutes > 59 then
          Game_Date.Minutes := Game_Date.Minutes - 60;
          Game_Date.Hour := Game_Date.Hour + 1;
       end if;
-      Game_Date.Hour := Game_Date.Hour + AddedHours;
+      Game_Date.Hour := Game_Date.Hour + Added_Hours;
       if Game_Date.Hour > 23 then
          Game_Date.Hour := Game_Date.Hour - 24;
          Game_Date.Day := Game_Date.Day + 1;
@@ -477,11 +478,11 @@ package body Game is
          for Module of PlayerShip.Modules loop
             if Module.MType = CABIN and then Module.Cleanliness > 0 then
                Module.Cleanliness := Module.Cleanliness - 1;
-               NeedCleaning := True;
+               Need_Cleaning := True;
             end if;
          end loop Get_Dirty_Loop;
-         if NeedCleaning then
-            UpdateOrders(PlayerShip);
+         if Need_Cleaning then
+            UpdateOrders(Ship => PlayerShip);
          end if;
          if PlayerShip.Speed = DOCKED then
             PayForDock;
@@ -506,27 +507,31 @@ package body Game is
          end if;
       end if;
       -- Update crew
-      UpdateCrew(Minutes, TiredPoints, In_Combat);
+      UpdateCrew
+        (Minutes => Minutes, TiredPoints => Tired_Points,
+         InCombat => In_Combat);
       -- Repair ship (if needed)
-      Ships.Repairs.RepairShip(Minutes);
+      Ships.Repairs.RepairShip(Minutes => Minutes);
       -- Craft items
-      Manufacturing(Minutes);
+      Manufacturing(Minutes => Minutes);
       -- Upgrade ship module
-      UpgradeShip(Minutes);
+      UpgradeShip(Minutes => Minutes);
       -- Update base
-      if BaseIndex > 0 then
-         if SkyBases(BaseIndex).Visited.Year = 0 then
+      if Base_Index > 0 then
+         if SkyBases(Base_Index).Visited.Year = 0 then
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
-            UpdateGoal(VISIT, SkyBases(BaseIndex).Owner);
+            UpdateGoal
+              (GType => VISIT, TargetIndex => SkyBases(Base_Index).Owner);
          end if;
-         SkyBases(BaseIndex).Visited := Game_Date;
-         if not SkyBases(BaseIndex).Known then
-            SkyBases(BaseIndex).Known := True;
+         SkyBases(Base_Index).Visited := Game_Date;
+         if not SkyBases(Base_Index).Known then
+            SkyBases(Base_Index).Known := True;
             AddMessage
-              ("You discovered base " & To_String(SkyBases(BaseIndex).Name) &
-               ".",
-               OtherMessage);
+              (Message =>
+                 "You discovered base " &
+                 To_String(SkyBases(Base_Index).Name) & ".",
+               MType => OtherMessage);
          end if;
          UpdatePopulation;
          GenerateRecruits;
