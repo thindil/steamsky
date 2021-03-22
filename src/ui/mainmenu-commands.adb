@@ -125,9 +125,10 @@ package body MainMenu.Commands is
             To_String(Doc_Directory) & "' directory?}");
       else
          Open(ShowFile, In_File, To_String(Doc_Directory) & FileName);
+         Load_File_Line_Loop :
          while not End_Of_File(ShowFile) loop
             Insert(TextView, "end", "{" & Get_Line(ShowFile) & LF & "}");
-         end loop;
+         end loop Load_File_Line_Loop;
          Close(ShowFile);
       end if;
       configure(TextView, "-state disabled");
@@ -202,13 +203,14 @@ package body MainMenu.Commands is
       else
          Open(ChangesFile, In_File, To_String(Doc_Directory) & "CHANGELOG.md");
          Set_Line(ChangesFile, 6);
+         Load_Changes_File_Loop :
          while not End_Of_File(ChangesFile) loop
             FileText := To_Unbounded_String(Get_Line(ChangesFile));
             if Length(FileText) > 1 and not AllNews then
-               exit when Slice(FileText, 1, 3) = "## ";
+               exit Load_Changes_File_Loop when Slice(FileText, 1, 3) = "## ";
             end if;
             Insert(TextView, "end", "{" & To_String(FileText) & LF & "}");
-         end loop;
+         end loop Load_Changes_File_Loop;
          Close(ChangesFile);
       end if;
       configure(TextView, "-state disabled");
@@ -241,15 +243,17 @@ package body MainMenu.Commands is
       HofView: constant Ttk_Tree_View := Get_Widget(".hofmenu.view", Interp);
    begin
       Delete(HofView, "[list " & Children(HofView, "{}") & "]");
+      Load_Hall_Of_Fame_Loop :
       for I in HallOfFame_Array'Range loop
-         exit when HallOfFame_Array(I).Name = Null_Unbounded_String;
+         exit Load_Hall_Of_Fame_Loop when HallOfFame_Array(I).Name =
+           Null_Unbounded_String;
          Insert
            (HofView,
             "{} end -values [list " & Positive'Image(I) & " " &
             To_String(HallOfFame_Array(I).Name) & " " &
             Natural'Image(HallOfFame_Array(I).Points) & " " &
             To_String(HallOfFame_Array(I).DeathReason) & "]");
-      end loop;
+      end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
 
@@ -284,6 +288,7 @@ package body MainMenu.Commands is
    begin
       Delete(LoadView, "[list " & Children(LoadView, "{}") & "]");
       Start_Search(Files, To_String(Save_Directory), "*.sav");
+      Load_Saves_List_Loop :
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
@@ -298,7 +303,7 @@ package body MainMenu.Commands is
             Selection_Set(LoadView, "{" & Simple_Name(FoundFile) & "}");
             Selected := True;
          end if;
-      end loop;
+      end loop Load_Saves_List_Loop;
       End_Search(Files);
       return TCL_OK;
    end Show_Load_Game_Command;
@@ -474,6 +479,7 @@ package body MainMenu.Commands is
          ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end if;
+      Load_Faction_Based_Info_Loop :
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
             if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
@@ -489,27 +495,29 @@ package body MainMenu.Commands is
                Tcl.Tk.Ada.Grid.Grid(GenderFrame);
             end if;
             Values := Null_Unbounded_String;
+            Load_Careers_Loop :
             for I in Faction.Careers.Iterate loop
                Append(Values, " " & Faction.Careers(I).Name);
-            end loop;
+            end loop Load_Careers_Loop;
             Append(Values, " Random");
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
             configure(ComboBox, "-values [list " & To_String(Values) & "]");
             Set(ComboBox, "General");
             Values := To_Unbounded_String(" Any");
+            Load_Bases_Types_Loop :
             for I in Faction.BasesTypes.Iterate loop
                Append
                  (Values,
                   " {" & BasesTypes_List(BaseType_Container.Key(I)).Name &
                   "}");
-            end loop;
+            end loop Load_Bases_Types_Loop;
             ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
             configure(ComboBox, "-values [list " & To_String(Values) & "]");
             Set(ComboBox, "Any");
             UpdateInfo("{" & To_String(Faction.Description) & "}");
-            exit;
+            exit Load_Faction_Based_Info_Loop;
          end if;
-      end loop;
+      end loop Load_Faction_Based_Info_Loop;
       return TCL_OK;
    end Set_Faction_Command;
 
