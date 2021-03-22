@@ -120,7 +120,7 @@ package body MainMenu is
          ShowMainMenu;
          return;
       end if;
-      configure(VersionLabel, "-text {" & Game_Version & " (development)}");
+      configure(VersionLabel, "-text {" & Game_Version & "}");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
       Tcl_SetVar
