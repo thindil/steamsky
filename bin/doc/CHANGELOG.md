@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Closing wait menu with Escape key returns to map
+
 ## [5.9] - 2021-03-21
 
 ### Added
