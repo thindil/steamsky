@@ -558,19 +558,20 @@ package body MainMenu.Commands is
         (InfoText, "end",
          "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
          LF & LF & "}");
+      Set_Faction_Careers_Loop :
       for Faction of Factions_List loop
          if Faction.Name = FactionName then
+            Load_Careers_Loop :
             for Career of Faction.Careers loop
                if Career.Name = CareerName then
                   Insert
                     (InfoText, "end",
                      "{" & To_String(Career.Description) & "}");
-                  exit;
+                  exit Set_Faction_Careers_Loop;
                end if;
-            end loop;
-            exit;
+            end loop Load_Careers_Loop;
          end if;
-      end loop;
+      end loop Set_Faction_Careers_Loop;
       if CareerName = "Random" then
          Insert
            (InfoText, "end",
@@ -616,12 +617,13 @@ package body MainMenu.Commands is
         (InfoText, "end",
          "{Select your career from a list. Careers have some impact on gameplay (each have bonuses to gaining experience in some fields plus they determine your starting ship and crew). More info about each career can be found after selecting it. You can't change career later." &
          LF & LF & "}");
+      Find_Base_Type_Loop :
       for Base of BasesTypes_List loop
          if Base.Name = BaseName then
             Insert(InfoText, "end", "{" & To_String(Base.Description) & "}");
-            exit;
+            exit Find_Base_Type_Loop;
          end if;
-      end loop;
+      end loop Find_Base_Type_Loop;
       if BaseName = "Any" then
          Insert
            (InfoText, "end",
@@ -666,12 +668,13 @@ package body MainMenu.Commands is
            Interp);
    begin
       FactionName := To_Unbounded_String(Get(ComboBox));
+      Find_Faction_Index_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = FactionName then
             FactionIndex := Factions_Container.Key(I);
-            exit;
+            exit Find_Faction_Index_Loop;
          end if;
-      end loop;
+      end loop Find_Faction_Index_Loop;
       if CArgv.Arg(Argv, 1) = "player" then
          Gender := Tcl_GetVar(Interp, "playergender")(1);
          Delete(NameEntry, "0", "end");
@@ -727,27 +730,29 @@ package body MainMenu.Commands is
       NewGameSettings.PlayerName := To_Unbounded_String(Get(TextEntry));
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       NewGameSettings.ShipName := To_Unbounded_String(Get(TextEntry));
+      Find_Faction_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
             NewGameSettings.PlayerFaction := Factions_Container.Key(I);
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+            Find_Career_Loop :
             for J in Factions_List(I).Careers.Iterate loop
                if Factions_List(I).Careers(J).Name =
                  To_Unbounded_String(Get(ComboBox)) then
                   NewGameSettings.PlayerCareer := Careers_Container.Key(J);
-                  exit;
+                  exit Find_Faction_Loop;
                end if;
-            end loop;
-            exit;
+            end loop Find_Career_Loop;
          end if;
-      end loop;
+      end loop Find_Faction_Loop;
       ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+      Set_Starting_Base_Loop :
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
             NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
-            exit;
+            exit Set_Starting_Base_Loop;
          end if;
-      end loop;
+      end loop Set_Starting_Base_Loop;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       NewGameSettings.DifficultyLevel :=
