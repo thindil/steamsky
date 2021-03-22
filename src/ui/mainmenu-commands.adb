@@ -481,42 +481,41 @@ package body MainMenu.Commands is
       end if;
       Load_Faction_Based_Info_Loop :
       for Faction of Factions_List loop
-         if Faction.Name = FactionName then
-            if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
-               Label.Name :=
-                 New_String(".newgamemenu.canvas.player.labelgender");
-               Grid_Remove(Label);
-               Grid_Remove(GenderFrame);
-               Tcl_SetVar(Interp, "playergender", "M");
-            else
-               Label.Name :=
-                 New_String(".newgamemenu.canvas.player.labelgender");
-               Tcl.Tk.Ada.Grid.Grid(Label);
-               Tcl.Tk.Ada.Grid.Grid(GenderFrame);
-            end if;
-            Values := Null_Unbounded_String;
-            Load_Careers_Loop :
-            for I in Faction.Careers.Iterate loop
-               Append(Values, " " & Faction.Careers(I).Name);
-            end loop Load_Careers_Loop;
-            Append(Values, " Random");
-            ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
-            configure(ComboBox, "-values [list " & To_String(Values) & "]");
-            Set(ComboBox, "General");
-            Values := To_Unbounded_String(" Any");
-            Load_Bases_Types_Loop :
-            for I in Faction.BasesTypes.Iterate loop
-               Append
-                 (Values,
-                  " {" & BasesTypes_List(BaseType_Container.Key(I)).Name &
-                  "}");
-            end loop Load_Bases_Types_Loop;
-            ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
-            configure(ComboBox, "-values [list " & To_String(Values) & "]");
-            Set(ComboBox, "Any");
-            UpdateInfo("{" & To_String(Faction.Description) & "}");
-            exit Load_Faction_Based_Info_Loop;
+         if Faction.Name /= FactionName then
+            goto End_Of_Faction_Info_Loop;
          end if;
+         if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
+            Label.Name := New_String(".newgamemenu.canvas.player.labelgender");
+            Grid_Remove(Label);
+            Grid_Remove(GenderFrame);
+            Tcl_SetVar(Interp, "playergender", "M");
+         else
+            Label.Name := New_String(".newgamemenu.canvas.player.labelgender");
+            Tcl.Tk.Ada.Grid.Grid(Label);
+            Tcl.Tk.Ada.Grid.Grid(GenderFrame);
+         end if;
+         Values := Null_Unbounded_String;
+         Load_Careers_Loop :
+         for I in Faction.Careers.Iterate loop
+            Append(Values, " " & Faction.Careers(I).Name);
+         end loop Load_Careers_Loop;
+         Append(Values, " Random");
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         configure(ComboBox, "-values [list " & To_String(Values) & "]");
+         Set(ComboBox, "General");
+         Values := To_Unbounded_String(" Any");
+         Load_Bases_Types_Loop :
+         for I in Faction.BasesTypes.Iterate loop
+            Append
+              (Values,
+               " {" & BasesTypes_List(BaseType_Container.Key(I)).Name & "}");
+         end loop Load_Bases_Types_Loop;
+         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         configure(ComboBox, "-values [list " & To_String(Values) & "]");
+         Set(ComboBox, "Any");
+         UpdateInfo("{" & To_String(Faction.Description) & "}");
+         exit Load_Faction_Based_Info_Loop;
+         <<End_Of_Faction_Info_Loop>>
       end loop Load_Faction_Based_Info_Loop;
       return TCL_OK;
    end Set_Faction_Command;
