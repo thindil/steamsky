@@ -91,12 +91,13 @@ package body MainMenu is
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
       Wm_Set(MainWindow, "iconphoto", "-default " & Icon);
+      Load_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
             Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
-            exit;
+            exit Load_Theme_Loop;
          end if;
-      end loop;
+      end loop Load_Theme_Loop;
       Theme_Use(To_String(GameSettings.InterfaceTheme));
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
@@ -128,11 +129,12 @@ package body MainMenu is
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
+      Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
             Append(Values, " {" & Factions_List(I).Name & "}");
          end if;
-      end loop;
+      end loop Load_Factions_Names_Loop;
       Append(Values, " Random");
       configure(ComboBox, "-values [list" & To_String(Values) & "]");
       Set
