@@ -94,7 +94,8 @@ package body Knowledge.Bases is
       end case;
    end Get_Reputation_Text;
 
-   procedure UpdateBasesList(BaseName: String := "") is
+   procedure UpdateBasesList
+     (BaseName: String := ""; Start_Index: Positive := 1) is
       BasesCanvas: constant Tk_Canvas :=
         Get_Widget(".gameframe.paned.knowledgeframe.bases.canvas");
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
@@ -104,6 +105,7 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
+      Current_Index: Positive := Start_Index;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -128,7 +130,7 @@ package body Knowledge.Bases is
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
       Load_Bases_Loop :
-      for I in SkyBases'Range loop
+      for I in Start_Index .. SkyBases'Last loop
          if not SkyBases(I).Known then
             goto End_Of_Loop;
          end if;
@@ -212,8 +214,28 @@ package body Knowledge.Bases is
               (BasesTable, "yet", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
+         Current_Index := Current_Index + 1;
+         exit Load_Bases_Loop when Current_Index > Start_Index + 25 and
+           I < SkyBases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
+      if Start_Index > 1 then
+         if Current_Index < Start_Index + 26 then
+            AddPagination
+              (BasesTable,
+               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 26),
+               "");
+         else
+            AddPagination
+              (BasesTable,
+               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 26),
+               "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
+         end if;
+      else
+         AddPagination
+           (BasesTable, "",
+            "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
+      end if;
       UpdateTable(BasesTable);
       Tcl_Eval(Get_Context, "update");
       configure
@@ -233,9 +255,10 @@ package body Knowledge.Bases is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowBases ?basename?
+   -- ShowBases ?basename? ?startindex?
    -- Basename parameter is a string which will be looking for in the bases
-   -- names
+   -- names, baseindex parameter is a index of bases from which starts showing
+   -- them.
    -- SOURCE
    function Show_Bases_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -248,11 +271,15 @@ package body Knowledge.Bases is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
    begin
-      if Argc > 1 then
-         UpdateBasesList(CArgv.Arg(Argv, 1));
-      else
-         UpdateBasesList;
-      end if;
+      case Argc is
+         when 3 =>
+            UpdateBasesList
+              (CArgv.Arg(Argv, 1), Positive'Value(CArgv.Arg(Argv, 2)));
+         when 2 =>
+            UpdateBasesList(CArgv.Arg(Argv, 1));
+         when others =>
+            UpdateBasesList;
+      end case;
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Bases_Command;
