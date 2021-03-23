@@ -248,12 +248,12 @@ package body Ships.Upgrade is
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
-         PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
          AddMessage
            (MessageText & To_String(UpgradedModule.Name) & ".", OrderMessage,
             YELLOW);
          UpgradedModule.UpgradeProgress := 0;
          UpgradedModule.UpgradeAction := NONE;
+         PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
          PlayerShip.UpgradeModule := 0;
          GiveOrders(PlayerShip, WorkerIndex, Rest);
       end MaxUpgradeReached;
