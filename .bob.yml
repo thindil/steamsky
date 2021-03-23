@@ -14,7 +14,7 @@ version: 2.0
    name: release
    execute:
       - tclsh others/build.tcl
-   description: Build Steam sky in release mode
+   description: Build Steam Sky in release mode
 - command:
    name: analyze
    execute:
@@ -45,8 +45,8 @@ version: 2.0
 - command:
    name: windows
    execute:
-      - sudo docker run --rm -it -v $1:/app ghcr.io/thindil/adabuildwin64 /bin/bash
-   description: Build Steam sky release for Windows on Linux (enter docker image only for now, required argument is path to the game)
+      - sudo docker run --rm -w /app -v $1:/app ghcr.io/thindil/adabuildwin64 /bin/bash others/build.tcl x86_64-windows
+   description: Build Steam Sky release for Windows on Linux, required argument is full path to the game source code
    flags:
       - unixonly
 - command:
@@ -54,7 +54,7 @@ version: 2.0
    execute:
       - gnatpp -P steamsky.gpr
       - gnatpp -P tests/prettytests.gpr
-   description: Pretty print Steam sky source code
+   description: Pretty print Steam Sky source code
 - command:
    name: prettytests
    execute:
