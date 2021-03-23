@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Closing wait menu with Escape key returns to map
 - Refresh ship info and knowledge screens after wait some time
+- Resetting ugprade progress after finishing upgrading modules
 
 ## [5.9] - 2021-03-21
 
