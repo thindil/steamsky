@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
@@ -201,6 +202,8 @@ package body WaitMenu is
         Get_Widget(".gameframe.wait.close", Interp);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".gameframe.wait.amount", Interp);
+      CurrentFrame: Ttk_Frame :=
+        Get_Widget(".gameframe.paned.shipinfoframe", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "1" then
          Update_Game(1);
@@ -256,7 +259,18 @@ package body WaitMenu is
       end if;
       UpdateHeader;
       UpdateMessages;
-      DrawMap;
+      if Winfo_Get(CurrentFrame, "exists") = "1"
+        and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
+         Tcl_Eval(Interp, "ShowShipInfo 1");
+      else
+         CurrentFrame := Get_Widget(".gameframe.paned.knowledgeframe", Interp);
+         if Winfo_Get(CurrentFrame, "exists") = "1"
+           and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
+            Tcl_Eval(Interp, "ShowKnowledge 1");
+         else
+            DrawMap;
+         end if;
+      end if;
       if Invoke(CloseButton) /= "" then
          return TCL_ERROR;
       end if;
