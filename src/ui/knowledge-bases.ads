@@ -24,9 +24,10 @@ package Knowledge.Bases is
    -- FUNCTION
    -- Update and show list of known bases
    -- PARAMETERS
-   -- BaseName - Name of the base to find on list
+   -- BaseName    - Name of the base to find on list
+   -- Start_Index - Base index from which start showing bases
    -- SOURCE
-   procedure UpdateBasesList(BaseName: String := "");
+   procedure UpdateBasesList(BaseName: String := ""; Start_Index: Positive := 1);
    -- ****
 
    -- ****f* KBases/KBases.AddCommands
