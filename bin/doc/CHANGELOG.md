@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Closing wait menu with Escape key returns to map
 - Refresh ship info and knowledge screens after wait some time
 - Resetting ugprade progress after finishing upgrading modules
+- Crash on generating recruits in unfriendly bases
 
 ## [5.9] - 2021-03-21
 
