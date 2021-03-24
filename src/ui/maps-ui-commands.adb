@@ -652,6 +652,7 @@ package body Maps.UI.Commands is
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "moveto" then -- Move to destination
+         Move_Loop :
          loop
             NewX := 0;
             NewY := 0;
@@ -666,11 +667,11 @@ package body Maps.UI.Commands is
                NewY := -1;
             end if;
             Result := MoveShip(NewX, NewY, Message);
-            exit when Result = 0;
+            exit Move_Loop when Result = 0;
             StartsCombat := CheckForEvent;
             if StartsCombat then
                Result := 4;
-               exit;
+               exit Move_Loop;
             end if;
             if Result = 8 then
                WaitForRest;
@@ -684,7 +685,7 @@ package body Maps.UI.Commands is
                StartsCombat := CheckForEvent;
                if StartsCombat then
                   Result := 4;
-                  exit;
+                  exit Move_Loop;
                end if;
             end if;
             if GameSettings.AutoMoveStop /= NEVER and
@@ -700,19 +701,19 @@ package body Maps.UI.Commands is
                           Events_List(EventIndex).EType = FriendlyShip or
                           Events_List(EventIndex).EType = EnemyPatrol then
                            Result := 0;
-                           exit;
+                           exit Move_Loop;
                         end if;
                      when FRIENDLY =>
                         if Events_List(EventIndex).EType = Trader or
                           Events_List(EventIndex).EType = FriendlyShip then
                            Result := 0;
-                           exit;
+                           exit Move_Loop;
                         end if;
                      when Config.ENEMY =>
                         if Events_List(EventIndex).EType = EnemyShip or
                           Events_List(EventIndex).EType = EnemyPatrol then
                            Result := 0;
-                           exit;
+                           exit Move_Loop;
                         end if;
                      when NEVER =>
                         null;
@@ -727,15 +728,15 @@ package body Maps.UI.Commands is
                   if GetItemAmount(Fuel_Type) <= GameSettings.LowFuel then
                      ShowMessage("Your fuel level is dangerously low.");
                      Result := 4;
-                     exit;
+                     exit Move_Loop;
                   elsif GetItemsAmount("Food") <= GameSettings.LowFood then
                      ShowMessage("Your food level is dangerously low.");
                      Result := 4;
-                     exit;
+                     exit Move_Loop;
                   elsif GetItemsAmount("Drinks") <= GameSettings.LowDrinks then
                      ShowMessage("Your drinks level is dangerously low.");
                      Result := 4;
-                     exit;
+                     exit Move_Loop;
                   end if;
                end if;
             end;
@@ -749,10 +750,10 @@ package body Maps.UI.Commands is
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
                Result := 4;
-               exit;
+               exit Move_Loop;
             end if;
-            exit when Result = 6 or Result = 7;
-         end loop;
+            exit Move_Loop when Result = 6 or Result = 7;
+         end loop Move_Loop;
       end if;
       case Result is
          when 1 => -- Ship moved, check for events
