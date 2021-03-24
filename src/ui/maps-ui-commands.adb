@@ -376,11 +376,10 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       DestinationMenu: constant Tk_Menu := Get_Widget(".destination", Interp);
    begin
-      if MapX = 0 or MapY = 0 then
-         if Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
-           TCL_OK then
-            return TCL_ERROR;
-         end if;
+      if (MapX = 0 or MapY = 0)
+        and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
+          TCL_OK then
+         return TCL_ERROR;
       end if;
       if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
