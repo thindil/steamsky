@@ -159,8 +159,8 @@ package body Bases is
       SkillLevel, HighestLevel: Skill_Range;
       RecruitFaction: Unbounded_String;
       MaxRecruits, RecruitsAmount: Positive range 1 .. 30;
-      MaxSkillAmount, SkillsAmount, SkillNumber,
-      HighestSkill: Skills_Container.Extended_Index;
+      SkillsAmount, SkillNumber, HighestSkill: Skills_Container.Extended_Index;
+      MaxSkillAmount: Integer;
       procedure AddInventory
         (ItemsIndexes: UnboundedString_Container.Vector;
          EquipIndex: Positive) is
