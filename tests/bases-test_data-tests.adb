@@ -216,7 +216,7 @@ package body Bases.Test_Data.Tests is
          "Failed to generate recruits for bases with positive reputation.");
       SkyBases(BaseIndex).Recruits.Clear;
       SkyBases(BaseIndex).RecruitDate := (others => 0);
-      SkyBases(BaseIndex).Reputation(1) := -1;
+      SkyBases(BaseIndex).Reputation(1) := -50;
       GenerateRecruits;
       Assert
         (SkyBases(BaseIndex).Recruits.Length > 0,
