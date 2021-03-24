@@ -215,23 +215,23 @@ package body Knowledge.Bases is
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
          Current_Index := Current_Index + 1;
-         exit Load_Bases_Loop when Current_Index > Start_Index + 25 and
+         exit Load_Bases_Loop when Current_Index > Start_Index + 24 and
            I < SkyBases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
       if Start_Index > 1 then
-         if Current_Index < Start_Index + 26 then
+         if Current_Index < Start_Index + 25 then
             AddPagination
               (BasesTable,
-               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 26),
+               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 25),
                "");
          else
             AddPagination
               (BasesTable,
-               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 26),
+               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 25),
                "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
          end if;
-      else
+      elsif Current_Index > Start_Index + 24 then
          AddPagination
            (BasesTable, "",
             "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
