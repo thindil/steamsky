@@ -86,13 +86,14 @@ package body Maps.UI.Commands is
       Button: Ttk_Button;
    begin
       Button.Interp := Interp;
+      Hide_Buttons_Loop :
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
              (".gameframe.paned.mapframe.buttons." &
               To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-      end loop;
+      end loop Hide_Buttons_Loop;
       Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
@@ -126,12 +127,13 @@ package body Maps.UI.Commands is
         Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
    begin
       Button.Interp := Interp;
+      Show_Buttons_Loop :
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
              (Widget_Image(ButtonsBox) & "." & To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid(Button);
-      end loop;
+      end loop Show_Buttons_Loop;
       Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       Button.Name :=
