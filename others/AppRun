@@ -9,8 +9,8 @@ export FONTCONFIG_FILE=$APPDIR/usr/share/fonts/fonts.conf
 savedir="$HOME"/.local/share/steamsky/saves
 themesdir="$HOME"/.local/share/steamsky/themes
 modsdir="$HOME"/.local/share/steamsky/mods
-datadir="$APPDIR"/usr/share/data
-docdir="$APPDIR"/usr/share/doc
+datadir="$APPDIR"/usr/share/steamsky/data
+docdir="$APPDIR"/usr/share/doc/steamsky
 debug=none
 while test $# -gt 0
 do
