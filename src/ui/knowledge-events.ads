@@ -27,4 +27,13 @@ package Knowledge.Events is
    procedure AddCommands;
    -- ****
 
+   -- ****f* KEvents/KEvents.UpdateEventsList
+   -- FUNCTION
+   -- Update and show list of known events
+   -- PARAMETERS
+   -- Page     - The current page of events list to show
+   -- SOURCE
+   procedure UpdateEventsList(Page: Positive := 1);
+   -- ****
+
 end Knowledge.Events;

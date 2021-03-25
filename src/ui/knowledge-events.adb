@@ -14,14 +14,21 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with GNAT.String_Split; use GNAT.String_Split;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -33,10 +40,18 @@ with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
+with Table; use Table;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge.Events is
+
+   -- ****iv* KEvents/KEvents.EventsTable
+   -- FUNCTION
+   -- Table with info about the known events
+   -- SOURCE
+   EventsTable: Table_Widget (3);
+   -- ****
 
    -- ****if* KEvents/KEvents.Show_Events_Menu_Command
    -- FUNCTION
@@ -224,5 +239,124 @@ package body Knowledge.Events is
       AddCommand("SetEvent", Set_Event_Command'Access);
       AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
    end AddCommands;
+
+   procedure UpdateEventsList(Page: Positive := 1) is
+      EventsCanvas: constant Tk_Canvas :=
+        Get_Widget(".gameframe.paned.knowledgeframe.events.canvas");
+      EventsFrame: constant Ttk_Frame := Get_Widget(EventsCanvas & ".frame");
+      Tokens: Slice_Set;
+      Rows: Natural := 0;
+      Label: Ttk_Label;
+      Row: Positive;
+   begin
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(EventsFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      if EventsTable.Row > 1 then
+         ClearTable(EventsTable);
+      end if;
+      Delete_Widgets(2, Rows - 1, EventsFrame);
+      if Events_List.Length = 0 then
+         Label :=
+           Create
+             (EventsFrame & ".noevents",
+              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+      else
+         Row := 2;
+         EventsTable :=
+           CreateTable
+             (Widget_Image(EventsFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Details")),
+              False);
+         Load_Known_Events_Loop :
+         for Event of Events_List loop
+            case Event.EType is
+               when EnemyShip =>
+                  AddButton
+                    (EventsTable, "Enemy ship spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when FullDocks =>
+                  AddButton
+                    (EventsTable, "Full docks in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when AttackOnBase =>
+                  AddButton
+                    (EventsTable, "Base is under attack",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when Disease =>
+                  AddButton
+                    (EventsTable, "Disease in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when EnemyPatrol =>
+                  AddButton
+                    (EventsTable, "Enemy patrol",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when DoublePrice =>
+                  AddButton
+                    (EventsTable, "Double price in base",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when Trader =>
+                  AddButton
+                    (EventsTable, "Friendly trader spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when FriendlyShip =>
+                  AddButton
+                    (EventsTable, "Friendly ship spotted",
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
+               when None | BaseRecovery =>
+                  null;
+            end case;
+            AddButton
+              (EventsTable,
+               Natural'Image(CountDistance(Event.SkyX, Event.SkyY)),
+               "The distance to the event",
+               "ShowEventMenu" & Positive'Image(Row - 1), 2);
+            case Event.EType is
+               when DoublePrice =>
+                  AddButton
+                    (EventsTable,
+                     To_String(Items_List(Event.ItemIndex).Name) & " in " &
+                     To_String
+                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                          .Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
+                  AddButton
+                    (EventsTable,
+                     To_String
+                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                          .Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when EnemyShip | Trader | FriendlyShip =>
+                  AddButton
+                    (EventsTable,
+                     To_String(ProtoShips_List(Event.ShipIndex).Name),
+                     "Show available event's options",
+                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
+               when None | BaseRecovery =>
+                  null;
+            end case;
+            Row := Row + 1;
+         end loop Load_Known_Events_Loop;
+         UpdateTable(EventsTable);
+      end if;
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (EventsCanvas,
+         "-scrollregion [list " & BBox(EventsCanvas, "all") & "]");
+      Xview_Move_To(EventsCanvas, "0.0");
+      Yview_Move_To(EventsCanvas, "0.0");
+   end UpdateEventsList;
 
 end Knowledge.Events;

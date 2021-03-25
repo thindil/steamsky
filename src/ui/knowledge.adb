@@ -36,7 +36,6 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
-with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
@@ -53,13 +52,6 @@ with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge is
-
-   -- ****iv* Knowledge/Knowledge.EventsTable
-   -- FUNCTION
-   -- Table with info about the known events
-   -- SOURCE
-   EventsTable: Table_Widget (3);
-   -- ****
 
    -- ****iv* Knowledge/Knowledge.MissionsTable
    -- FUNCTION
@@ -253,118 +245,7 @@ package body Knowledge is
       Xview_Move_To(KnowledgeCanvas, "0.0");
       Yview_Move_To(KnowledgeCanvas, "0.0");
       -- Setting the known events list
-      KnowledgeFrame.Name :=
-        New_String(Paned & ".knowledgeframe.events.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      if EventsTable.Row > 1 then
-         ClearTable(EventsTable);
-      end if;
-      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
-      if Events_List.Length = 0 then
-         Label :=
-           Create
-             (KnowledgeFrame & ".noevents",
-              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-      else
-         Row := 2;
-         EventsTable :=
-           CreateTable
-             (Widget_Image(KnowledgeFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-               To_Unbounded_String("Details")),
-              False);
-         Load_Known_Events_Loop :
-         for Event of Events_List loop
-            case Event.EType is
-               when EnemyShip =>
-                  AddButton
-                    (EventsTable, "Enemy ship spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when FullDocks =>
-                  AddButton
-                    (EventsTable, "Full docks in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when AttackOnBase =>
-                  AddButton
-                    (EventsTable, "Base is under attack",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when Disease =>
-                  AddButton
-                    (EventsTable, "Disease in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when EnemyPatrol =>
-                  AddButton
-                    (EventsTable, "Enemy patrol",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when DoublePrice =>
-                  AddButton
-                    (EventsTable, "Double price in base",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when Trader =>
-                  AddButton
-                    (EventsTable, "Friendly trader spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when FriendlyShip =>
-                  AddButton
-                    (EventsTable, "Friendly ship spotted",
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 1);
-               when None | BaseRecovery =>
-                  null;
-            end case;
-            AddButton
-              (EventsTable,
-               Natural'Image(CountDistance(Event.SkyX, Event.SkyY)),
-               "The distance to the event",
-               "ShowEventMenu" & Positive'Image(Row - 1), 2);
-            case Event.EType is
-               when DoublePrice =>
-                  AddButton
-                    (EventsTable,
-                     To_String(Items_List(Event.ItemIndex).Name) & " in " &
-                     To_String
-                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
-                          .Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
-               when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
-                  AddButton
-                    (EventsTable,
-                     To_String
-                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
-                          .Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
-               when EnemyShip | Trader | FriendlyShip =>
-                  AddButton
-                    (EventsTable,
-                     To_String(ProtoShips_List(Event.ShipIndex).Name),
-                     "Show available event's options",
-                     "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
-               when None | BaseRecovery =>
-                  null;
-            end case;
-            Row := Row + 1;
-         end loop Load_Known_Events_Loop;
-         UpdateTable(EventsTable);
-      end if;
-      Tcl_Eval(Get_Context, "update");
-      KnowledgeCanvas.Name :=
-        New_String(Paned & ".knowledgeframe.events.canvas");
-      configure
-        (KnowledgeCanvas,
-         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
-      Xview_Move_To(KnowledgeCanvas, "0.0");
-      Yview_Move_To(KnowledgeCanvas, "0.0");
+      Knowledge.Events.UpdateEventsList;
       -- Setting the known stories list
       KnowledgeFrame.Name :=
         New_String(Paned & ".knowledgeframe.stories.canvas.frame");
