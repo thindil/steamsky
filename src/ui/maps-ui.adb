@@ -99,11 +99,12 @@ package body Maps.UI is
         (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
         (GameMenu, "command", "-label {Resign from game} -command ResignGame");
+      Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Entry_Configure
            (GameMenu, Natural'Image(I - 1),
             "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
-      end loop;
+      end loop Set_Accelerators_Loop;
    end CreateGameMenu;
 
    procedure UpdateHeader is
@@ -214,6 +215,7 @@ package body Maps.UI is
             end if;
          end;
       end if;
+      Check_Workers_Loop :
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when GUN | HARPOON_GUN =>
@@ -225,14 +227,15 @@ package body Maps.UI is
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.CraftingIndex /= Null_Unbounded_String then
                   NeedWorker := True;
+                  Check_Owners_Loop :
                   for Owner of Module.Owner loop
                      if Owner = 0 then
                         HaveWorker := False;
                      elsif PlayerShip.Crew(Owner).Order /= Craft then
                         HaveWorker := False;
                      end if;
-                     exit when not HaveWorker;
-                  end loop;
+                     exit Check_Owners_Loop when not HaveWorker;
+                  end loop Check_Owners_Loop;
                end if;
             when CABIN =>
                if Module.Cleanliness /= Module.Quality then
@@ -244,7 +247,7 @@ package body Maps.UI is
          if Module.Durability /= Module.MaxDurability then
             NeedRepairs := True;
          end if;
-      end loop;
+      end loop Check_Workers_Loop;
       Label.Name := New_String(".gameframe.header.pilot");
       if HavePilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
@@ -415,6 +418,7 @@ package body Maps.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
          PlayerShip.Speed := Ships.FULL_STOP;
       end if;
+      Draw_Map_Loop :
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             MapTag := Null_Unbounded_String;
@@ -515,7 +519,7 @@ package body Maps.UI is
          if Y < EndY then
             Insert(MapView, "end", "{" & LF & "}");
          end if;
-      end loop;
+      end loop Draw_Map_Loop;
       configure(MapView, "-state disable");
    end DrawMap;
 
@@ -754,6 +758,7 @@ package body Maps.UI is
          Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
          configure(Button, "-text Wait");
          Add(Button, "Wait 1 minute.");
+         Disable_Move_Buttons_Loop :
          for ButtonName of MoveButtonsNames loop
             Button.Name :=
               New_String
@@ -762,7 +767,7 @@ package body Maps.UI is
             Add
               (Button,
                "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
-         end loop;
+         end loop Disable_Move_Buttons_Loop;
       else
          Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
@@ -786,6 +791,7 @@ package body Maps.UI is
             configure(Button, "-text Wait");
             Add(Button, "Wait 1 minute.");
          end if;
+         Enable_Move_Buttons_Loop :
          for I in MoveButtonsNames'Range loop
             Button.Name :=
               New_String
@@ -793,7 +799,7 @@ package body Maps.UI is
                  To_String(MoveButtonsNames(I)));
             State(Button, "!disabled");
             Add(Button, To_String(MoveButtonsTooltips(I)));
-         end loop;
+         end loop Enable_Move_Buttons_Loop;
       end if;
    end UpdateMoveButtons;
 
@@ -816,12 +822,14 @@ package body Maps.UI is
             KeysFile: File_Type;
          begin
             Open(KeysFile, In_File, To_String(Save_Directory) & "keys.cfg");
+            Set_Menu_Accelerators_Loop :
             for Key of MenuAccelerators loop
                Key := To_Unbounded_String(Get_Line(KeysFile));
-            end loop;
+            end loop Set_Menu_Accelerators_Loop;
+            Set_Map_Accelerators_Loop :
             for Key of MapAccelerators loop
                Key := To_Unbounded_String(Get_Line(KeysFile));
-            end loop;
+            end loop Set_Map_Accelerators_Loop;
             FullScreenAccel := To_Unbounded_String(Get_Line(KeysFile));
             Close(KeysFile);
          exception
@@ -868,11 +876,12 @@ package body Maps.UI is
          Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
       end if;
       CreateGameMenu;
+      Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
            (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
-      end loop;
+      end loop Set_Accelerators_Loop;
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
            ".gameframe.header") =
@@ -882,11 +891,12 @@ package body Maps.UI is
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
+      Set_Tags_Loop :
       for I in BasesTypes_List.Iterate loop
          Tag_Configure
            (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
-      end loop;
+      end loop Set_Tags_Loop;
       PanedPosition :=
         (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
            GameSettings.WindowHeight
