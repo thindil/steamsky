@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Pagination to list of known bases
+
 ### Fixed
 - Closing wait menu with Escape key returns to map
 - Refresh ship info and knowledge screens after wait some time
