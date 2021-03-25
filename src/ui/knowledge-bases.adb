@@ -94,8 +94,7 @@ package body Knowledge.Bases is
       end case;
    end Get_Reputation_Text;
 
-   procedure UpdateBasesList
-     (BaseName: String := ""; Start_Index: Positive := 1) is
+   procedure UpdateBasesList(BaseName: String := ""; Page: Positive := 1) is
       BasesCanvas: constant Tk_Canvas :=
         Get_Widget(".gameframe.paned.knowledgeframe.bases.canvas");
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
@@ -105,7 +104,8 @@ package body Knowledge.Bases is
       Rows: Natural := 0;
       ComboBox: Ttk_ComboBox := Get_Widget(BasesFrame & ".options.types");
       BasesType, BasesOwner, BasesStatus: Unbounded_String;
-      Current_Index: Positive := Start_Index;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(BasesFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -129,8 +129,9 @@ package body Knowledge.Bases is
       BasesStatus := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(BasesFrame & ".options.owner");
       BasesOwner := To_Unbounded_String(Get(ComboBox));
+      Rows := 0;
       Load_Bases_Loop :
-      for I in Start_Index .. SkyBases'Last loop
+      for I in 1 .. SkyBases'Last loop
          if not SkyBases(I).Known then
             goto End_Of_Loop;
          end if;
@@ -153,6 +154,10 @@ package body Knowledge.Bases is
            and then
            (BasesType /= To_Unbounded_String("Any") or
             BasesOwner /= To_Unbounded_String("Any")) then
+            goto End_Of_Loop;
+         end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
          AddButton
@@ -214,27 +219,25 @@ package body Knowledge.Bases is
               (BasesTable, "yet", "Show available base's options",
                "ShowBasesMenu" & Positive'Image(I), 7, True);
          end if;
-         Current_Index := Current_Index + 1;
-         exit Load_Bases_Loop when Current_Index > Start_Index + 24 and
-           I < SkyBases'Last;
+         Rows := Rows + 1;
+         exit Load_Bases_Loop when Rows = 25 and I < SkyBases'Last;
          <<End_Of_Loop>>
       end loop Load_Bases_Loop;
-      if Start_Index > 1 then
-         if Current_Index < Start_Index + 25 then
+      if Page > 1 then
+         if Rows < 25 then
             AddPagination
               (BasesTable,
-               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 25),
-               "");
+               "ShowBases {" & BaseName & "} " & Positive'Image(Page - 1), "");
          else
             AddPagination
               (BasesTable,
-               "ShowBases {" & BaseName & "}" & Positive'Image(Start_Index - 25),
-               "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
+               "ShowBases {" & BaseName & "} " & Positive'Image(Page - 1),
+               "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
          end if;
-      elsif Current_Index > Start_Index + 24 then
+      elsif Rows > 24 then
          AddPagination
            (BasesTable, "",
-            "ShowBases {" & BaseName & "}" & Positive'Image(Current_Index));
+            "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
       end if;
       UpdateTable(BasesTable);
       Tcl_Eval(Get_Context, "update");
