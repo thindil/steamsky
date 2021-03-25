@@ -734,17 +734,24 @@ package body Game is
                       (Source =>
                          Get_Attribute(Elem => Data_Node, Name => "name")),
                   Description =>
-                    To_Unbounded_String(Node_Value(First_Child(Data_Node)))));
+                    To_Unbounded_String
+                      (Source =>
+                         Node_Value(N => First_Child(N => Data_Node)))));
          elsif To_String(Source => Node_Name) = "skill" then
             Tmp_Skill :=
-              (To_Unbounded_String
-                 (Source => Get_Attribute(Elem => Data_Node, Name => "name")),
-               1, Null_Unbounded_String, Null_Unbounded_String, Tool_Quality);
-            Tmp_Skill.Attribute :=
-              Find_Attribute_Index
-                (To_Unbounded_String
+              (Name =>
+                 To_Unbounded_String
                    (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "attribute")));
+                      Get_Attribute(Elem => Data_Node, Name => "name")),
+               Attribute =>
+                 Find_Attribute_Index
+                   (Attribute_Name =>
+                      To_Unbounded_String
+                        (Source =>
+                           Get_Attribute
+                             (Elem => Data_Node, Name => "attribute"))),
+               Description => Null_Unbounded_String,
+               Tool => Null_Unbounded_String, Tools_Quality => Tool_Quality);
             if Get_Attribute(Elem => Data_Node, Name => "tool") /= "" then
                Tmp_Skill.Tool :=
                  To_Unbounded_String
