@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Refresh ship info and knowledge screens after wait some time
 - Resetting ugprade progress after finishing upgrading modules
 - Crash on generating recruits in unfriendly bases
+- Search on trade list doesn't work if item isn't in the ship cargo
 
 ## [5.9] - 2021-03-21
 
