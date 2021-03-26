@@ -60,7 +60,9 @@ project steamsky is
          when "debug" =>
             for Default_Switches ("ada") use ("-no-pie");
          when "release" =>
-            for Default_Switches ("ada") use ("-Wl,--gc-sections", "-s");
+            for Default_Switches ("ada") use ("-Wl,--gc-sections",
+               "-s",
+               "-O2");
          when "analyze" =>
             for Default_Switches ("ada") use ("-no-pie",
                "-pg",
