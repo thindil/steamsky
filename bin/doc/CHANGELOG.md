@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Resetting ugprade progress after finishing upgrading modules
 - Crash on generating recruits in unfriendly bases
 - Search on trade list doesn't work if item isn't in the ship cargo
+- Crash on entering the knowledge screen again
 
 ## [5.9] - 2021-03-21
 
