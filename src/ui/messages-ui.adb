@@ -136,13 +136,15 @@ package body Messages.UI is
          Insert(MessagesView, "end", "{There are no messages of that type.}");
       else
          if GameSettings.MessagesOrder = OLDER_FIRST then
+            Show_Older_First_Loop :
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
-            end loop;
+            end loop Show_Older_First_Loop;
          else
+            Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
-            end loop;
+            end loop Show_Newer_First_Loop;
          end if;
       end if;
       configure(MessagesView, "-state disabled");
@@ -264,18 +266,21 @@ package body Messages.UI is
       Delete(MessagesView, "1.0", "end");
       if SearchText'Length = 0 then
          if GameSettings.MessagesOrder = OLDER_FIRST then
+            Show_Older_First_Loop :
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
-            end loop;
+            end loop Show_Older_First_Loop;
          else
+            Show_Newer_First_Loop :
             for Message of reverse Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
-            end loop;
+            end loop Show_Newer_First_Loop;
          end if;
          Tcl_SetResult(Interp, "1");
          return TCL_OK;
       end if;
       if GameSettings.MessagesOrder = OLDER_FIRST then
+         Search_Older_First_Loop :
          for Message of Messages_List loop
             if Index
                 (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
@@ -283,8 +288,9 @@ package body Messages.UI is
               0 then
                ShowMessage(Message, MessagesView, MessagesType);
             end if;
-         end loop;
+         end loop Search_Older_First_Loop;
       else
+         Search_Newer_First_Loop :
          for Message of reverse Messages_List loop
             if Index
                 (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
@@ -292,7 +298,7 @@ package body Messages.UI is
               0 then
                ShowMessage(Message, MessagesView, MessagesType);
             end if;
-         end loop;
+         end loop Search_Newer_First_Loop;
       end if;
       configure(MessagesView, "-state disable");
       Tcl_SetResult(Interp, "1");
