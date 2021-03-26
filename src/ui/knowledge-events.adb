@@ -248,6 +248,8 @@ package body Knowledge.Events is
       Rows: Natural := 0;
       Label: Ttk_Label;
       Row: Positive;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(EventsFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -269,8 +271,13 @@ package body Knowledge.Events is
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
               False);
+         Rows := 0;
          Load_Known_Events_Loop :
          for Event of Events_List loop
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Loop;
+            end if;
             case Event.EType is
                when EnemyShip =>
                   AddButton
@@ -348,7 +355,24 @@ package body Knowledge.Events is
                   null;
             end case;
             Row := Row + 1;
+            Rows := Rows + 1;
+            exit Load_Known_Events_Loop when Rows = 25 and
+              Event /= Events_List.Last_Element;
+            <<End_Of_Loop>>
          end loop Load_Known_Events_Loop;
+         if Page > 1 then
+            if Rows < 25 then
+               AddPagination
+                 (EventsTable, "ShowEvents" & Positive'Image(Page - 1), "");
+            else
+               AddPagination
+                 (EventsTable, "ShowEvents" & Positive'Image(Page - 1),
+                  "ShowEvents" & Positive'Image(Page + 1));
+            end if;
+         elsif Rows > 24 then
+            AddPagination
+              (EventsTable, "", "ShowEvents" & Positive'Image(Page + 1));
+         end if;
          UpdateTable(EventsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
