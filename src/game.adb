@@ -760,23 +760,32 @@ package body Game is
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Data_Node, "toolquality");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Data_Node, Name => "toolquality");
+            if Length(List => Child_Nodes) > 0 then
                Tmp_Skill.Tools_Quality.Clear;
             end if;
             Load_Skills_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Tmp_Skill.Tools_Quality.Append
-                 ((Integer'Value(Get_Attribute(Item(Child_Nodes, J), "level")),
-                   Integer'Value
-                     (Get_Attribute(Item(Child_Nodes, J), "quality"))));
+                 (New_Item =>
+                    (1 =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Item(List => Child_Nodes, Index => J),
+                             Name => "level")),
+                     2 =>
+                       Integer'Value
+                         (Get_Attribute
+                            (Elem => Item(List => Child_Nodes, Index => J),
+                             Name => "quality"))));
             end loop Load_Skills_Loop;
             if Tmp_Skill.Tools_Quality.Length = 0 then
-               Tmp_Skill.Tools_Quality.Append((100, 100));
+               Tmp_Skill.Tools_Quality.Append
+                 (New_Item => (1 => 100, 2 => 100));
             end if;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Data_Node, "description");
+                (Elem => Data_Node, Name => "description");
             if Length(Child_Nodes) > 0 then
                Tmp_Skill.Description :=
                  To_Unbounded_String
