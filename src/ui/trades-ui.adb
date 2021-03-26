@@ -276,7 +276,11 @@ package body Trades.UI is
             goto End_Of_Trader_Loop;
          end if;
          ItemName := Items_List(ProtoIndex).Name;
-         if Argc = 3 and then Index(ItemName, CArgv.Arg(Argv, 2)) = 0 then
+         if Argc = 3
+           and then
+             Index
+               (To_Lower(To_String(ItemName)), To_Lower(CArgv.Arg(Argv, 2))) =
+             0 then
             goto End_Of_Trader_Loop;
          end if;
          Price :=
