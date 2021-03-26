@@ -256,7 +256,7 @@ package body Knowledge.Events is
       if EventsTable.Row > 1 then
          ClearTable(EventsTable);
       end if;
-      Delete_Widgets(2, Rows - 1, EventsFrame);
+      Delete_Widgets(1, Rows - 1, EventsFrame);
       if Events_List.Length = 0 then
          Label :=
            Create
