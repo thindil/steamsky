@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Crash on generating recruits in unfriendly bases
 - Search on trade list doesn't work if item isn't in the ship cargo
 - Crash on entering the knowledge screen again
+- Possible crash when ending the game
 
 ## [5.9] - 2021-03-21
 
