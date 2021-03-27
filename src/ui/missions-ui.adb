@@ -220,13 +220,14 @@ package body Missions.UI is
                when others =>
                   MissionsLimit := 0;
             end case;
+            Count_Missions_Limit_Loop :
             for Mission of AcceptedMissions loop
                if Mission.StartBase =
                  SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
                   MissionsLimit := MissionsLimit - 1;
-                  exit when MissionsLimit = 0;
+                  exit Count_Missions_Limit_Loop when MissionsLimit = 0;
                end if;
-            end loop;
+            end loop Count_Missions_Limit_Loop;
             if CanAccept then
                State(Button, "!disabled");
             else
@@ -298,6 +299,7 @@ package body Missions.UI is
           (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview");
    begin
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
+      Show_Missions_List_Loop :
       for I in List.First_Index .. List.Last_Index loop
          case List(I).MType is
             when Deliver =>
@@ -341,7 +343,7 @@ package body Missions.UI is
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
          end case;
-      end loop;
+      end loop Show_Missions_List_Loop;
       Selection_Set(MissionsView, "[list 1]");
    end RefreshMissionsList;
 
