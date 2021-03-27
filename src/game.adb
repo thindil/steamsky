@@ -932,9 +932,13 @@ package body Game is
       if Save then
          SaveGame;
       else
-         if Exists(Name => To_String(Source => SaveName)) then
+         Delete_Save_Block:
+         begin
             Delete_File(Name => To_String(Source => SaveName));
-         end if;
+         exception
+            when Name_Error =>
+               null;
+         end Delete_Save_Block;
       end if;
       ClearMessages;
       Events_List.Clear;
