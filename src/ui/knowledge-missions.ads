@@ -27,4 +27,13 @@ package Knowledge.Missions is
    procedure AddCommands;
    -- ****
 
+   -- ****f* KMissions/KMissions.UpdateMissionsList
+   -- FUNCTION
+   -- Update and show list of accepted missions
+   -- PARAMETERS
+   -- Page     - The current page of missions list to show
+   -- SOURCE
+   procedure UpdateMissionsList(Page: Positive := 1);
+   -- ****
+
 end Knowledge.Missions;

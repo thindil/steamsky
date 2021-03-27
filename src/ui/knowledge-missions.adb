@@ -13,15 +13,23 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with GNAT.String_Split; use GNAT.String_Split;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Events; use Events;
 with Factions; use Factions;
@@ -32,6 +40,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
+with Table; use Table;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
@@ -158,5 +167,157 @@ package body Knowledge.Missions is
       AddCommand("ShowMission2", Show_Mission_Command'Access);
       AddCommand("SetMission2", Set_Mission_Command'Access);
    end AddCommands;
+
+   -- ****iv* KMissions/KMissions.MissionsTable
+   -- FUNCTION
+   -- Table with info about the known events
+   -- SOURCE
+   MissionsTable: Table_Widget (5);
+   -- ****
+
+   procedure UpdateMissionsList(Page: Positive := 1) is
+      pragma Unreferenced(Page);
+      MissionsCanvas: constant Tk_Canvas :=
+        Get_Widget(".gameframe.paned.knowledgeframe.missions.canvas");
+      MissionsFrame: constant Ttk_Frame :=
+        Get_Widget(MissionsCanvas & ".frame");
+      Tokens: Slice_Set;
+      Rows: Natural := 0;
+      Label: Ttk_Label;
+      Row: Positive;
+      -- Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      -- Current_Row: Positive := 1;
+      Mission_Time: Unbounded_String;
+   begin
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MissionsFrame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      if MissionsTable.Row > 1 then
+         ClearTable(MissionsTable);
+      end if;
+      Delete_Widgets(1, Rows - 1, MissionsFrame);
+      if AcceptedMissions.Length = 0 then
+         Label :=
+           Create
+             (MissionsFrame & ".nomissions",
+              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
+         Tcl.Tk.Ada.Grid.Grid(Label);
+      else
+         Row := 2;
+         MissionsTable :=
+           CreateTable
+             (Widget_Image(MissionsFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Details"),
+               To_Unbounded_String("Time limit"),
+               To_Unbounded_String("Base reward")),
+              False);
+         Load_Accepted_Missions_Loop :
+         for I in
+           AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+            case AcceptedMissions(I).MType is
+               when Deliver =>
+                  AddButton
+                    (MissionsTable, "Deliver item to base",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     To_String
+                       (Items_List(AcceptedMissions(I).ItemIndex).Name) &
+                     " to " &
+                     To_String
+                       (SkyBases
+                          (SkyMap
+                             (AcceptedMissions(I).TargetX,
+                              AcceptedMissions(I).TargetY)
+                             .BaseIndex)
+                          .Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+               when Patrol =>
+                  AddButton
+                    (MissionsTable, "Patrol area",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+               when Destroy =>
+                  AddButton
+                    (MissionsTable, "Destroy ship",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     To_String
+                       (ProtoShips_List(AcceptedMissions(I).ShipIndex).Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+               when Explore =>
+                  AddButton
+                    (MissionsTable, "Explore area",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+               when Passenger =>
+                  AddButton
+                    (MissionsTable, "Transport passenger to base",
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  AddButton
+                    (MissionsTable,
+                     "To " &
+                     To_String
+                       (SkyBases
+                          (SkyMap
+                             (AcceptedMissions(I).TargetX,
+                              AcceptedMissions(I).TargetY)
+                             .BaseIndex)
+                          .Name),
+                     "Show available mission's options",
+                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            end case;
+            AddButton
+              (MissionsTable,
+               Natural'Image
+                 (CountDistance
+                    (AcceptedMissions(I).TargetX,
+                     AcceptedMissions(I).TargetY)),
+               "The distance to the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 2);
+            Mission_Time := Null_Unbounded_String;
+            MinutesToDate(AcceptedMissions(I).Time, Mission_Time);
+            AddButton
+              (MissionsTable, To_String(Mission_Time),
+               "The time limit for finish and return the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 4);
+            AddButton
+              (MissionsTable,
+               Natural'Image
+                 (Natural
+                    (Float(AcceptedMissions(I).Reward) *
+                     Float(AcceptedMissions(I).Multiplier))) &
+               " " & To_String(Money_Name),
+               "The base money reward for the mission",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
+            Row := Row + 1;
+         end loop Load_Accepted_Missions_Loop;
+         UpdateTable(MissionsTable);
+      end if;
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (MissionsCanvas,
+         "-scrollregion [list " & BBox(MissionsCanvas, "all") & "]");
+      Xview_Move_To(MissionsCanvas, "0.0");
+      Yview_Move_To(MissionsCanvas, "0.0");
+   end UpdateMissionsList;
 
 end Knowledge.Missions;
