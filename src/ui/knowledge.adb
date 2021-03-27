@@ -34,31 +34,19 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
-with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with Factions; use Factions;
 with Game; use Game;
-with Items; use Items;
 with Knowledge.Bases;
 with Knowledge.Events;
-with Missions; use Missions;
 with Knowledge.Missions;
-with Ships; use Ships;
 with Stories; use Stories;
 with Knowledge.Stories;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Knowledge is
-
-   -- ****iv* Knowledge/Knowledge.MissionsTable
-   -- FUNCTION
-   -- Table with info about the known events
-   -- SOURCE
-   MissionsTable: Table_Widget (5);
-   -- ****
 
    function Show_Knowledge_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -75,8 +63,7 @@ package body Knowledge is
         Get_Widget(KnowledgeFrame & ".bases.canvas", Interp);
       ComboBox: Ttk_ComboBox :=
         Get_Widget(KnowledgeCanvas & ".frame.options.types");
-      ComboValues, Mission_Time: Unbounded_String;
-      Row: Positive;
+      ComboValues: Unbounded_String;
       Label: Ttk_Label;
       Button: Ttk_Button;
    begin
@@ -111,139 +98,7 @@ package body Knowledge is
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
       -- Setting accepted missions info
-      KnowledgeFrame.Name :=
-        New_String(Paned & ".knowledgeframe.missions.canvas.frame");
-      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
-      Rows := Natural'Value(Slice(Tokens, 2));
-      if MissionsTable.Row > 1 then
-         ClearTable(MissionsTable);
-      end if;
-      Delete_Widgets(1, Rows - 1, KnowledgeFrame);
-      if AcceptedMissions.Length = 0 then
-         Label :=
-           Create
-             (KnowledgeFrame & ".nomissions",
-              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
-         Tcl.Tk.Ada.Grid.Grid(Label);
-      else
-         Row := 2;
-         MissionsTable :=
-           CreateTable
-             (Widget_Image(KnowledgeFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
-               To_Unbounded_String("Details"),
-               To_Unbounded_String("Time limit"),
-               To_Unbounded_String("Base reward")),
-              False);
-         Load_Accepted_Missions_Loop :
-         for I in
-           AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
-            case AcceptedMissions(I).MType is
-               when Deliver =>
-                  AddButton
-                    (MissionsTable, "Deliver item to base",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
-                    (MissionsTable,
-                     To_String
-                       (Items_List(AcceptedMissions(I).ItemIndex).Name) &
-                     " to " &
-                     To_String
-                       (SkyBases
-                          (SkyMap
-                             (AcceptedMissions(I).TargetX,
-                              AcceptedMissions(I).TargetY)
-                             .BaseIndex)
-                          .Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
-               when Patrol =>
-                  AddButton
-                    (MissionsTable, "Patrol area",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
-                    (MissionsTable,
-                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
-                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
-               when Destroy =>
-                  AddButton
-                    (MissionsTable, "Destroy ship",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
-                    (MissionsTable,
-                     To_String
-                       (ProtoShips_List(AcceptedMissions(I).ShipIndex).Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
-               when Explore =>
-                  AddButton
-                    (MissionsTable, "Explore area",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
-                    (MissionsTable,
-                     "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
-                     " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
-               when Passenger =>
-                  AddButton
-                    (MissionsTable, "Transport passenger to base",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
-                    (MissionsTable,
-                     "To " &
-                     To_String
-                       (SkyBases
-                          (SkyMap
-                             (AcceptedMissions(I).TargetX,
-                              AcceptedMissions(I).TargetY)
-                             .BaseIndex)
-                          .Name),
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 3);
-            end case;
-            AddButton
-              (MissionsTable,
-               Natural'Image
-                 (CountDistance
-                    (AcceptedMissions(I).TargetX,
-                     AcceptedMissions(I).TargetY)),
-               "The distance to the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 2);
-            Mission_Time := Null_Unbounded_String;
-            MinutesToDate(AcceptedMissions(I).Time, Mission_Time);
-            AddButton
-              (MissionsTable, To_String(Mission_Time),
-               "The time limit for finish and return the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 4);
-            AddButton
-              (MissionsTable,
-               Natural'Image
-                 (Natural
-                    (Float(AcceptedMissions(I).Reward) *
-                     Float(AcceptedMissions(I).Multiplier))) &
-               " " & To_String(Money_Name),
-               "The base money reward for the mission",
-               "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
-            Row := Row + 1;
-         end loop Load_Accepted_Missions_Loop;
-         UpdateTable(MissionsTable);
-      end if;
-      Tcl_Eval(Get_Context, "update");
-      KnowledgeCanvas.Name :=
-        New_String(Paned & ".knowledgeframe.missions.canvas");
-      configure
-        (KnowledgeCanvas,
-         "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
-      Xview_Move_To(KnowledgeCanvas, "0.0");
-      Yview_Move_To(KnowledgeCanvas, "0.0");
+      Knowledge.Missions.UpdateMissionsList;
       -- Setting the known events list
       Knowledge.Events.UpdateEventsList;
       -- Setting the known stories list
