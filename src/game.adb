@@ -786,54 +786,65 @@ package body Game is
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
                 (Elem => Data_Node, Name => "description");
-            if Length(Child_Nodes) > 0 then
+            if Length(List => Child_Nodes) > 0 then
                Tmp_Skill.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             Skills_List.Append(New_Item => Tmp_Skill);
          elsif To_String(Source => Node_Name) = "conditionname" then
             Condition_Index :=
               Find_Attribute_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Attribute_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "strengthname" then
             Strength_Index :=
               Find_Attribute_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Attribute_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "pilotingskill" then
             Piloting_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "engineeringskill" then
             Engineering_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "gunneryskill" then
             Gunnery_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "talkingskill" then
             Talking_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "perceptionskill" then
             Perception_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "headarmor" then
             Head_Armor :=
               To_Unbounded_String
@@ -861,22 +872,25 @@ package body Game is
          elsif To_String(Source => Node_Name) = "dodgeskill" then
             Dodge_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "unarmedskill" then
             Unarmed_Skill :=
               Find_Skill_Index
-                (To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
+                (Skill_Name =>
+                   To_Unbounded_String
+                     (Source =>
+                        Get_Attribute(Elem => Data_Node, Name => "value")));
          elsif To_String(Source => Node_Name) = "remove" then
             if Get_Attribute(Elem => Data_Node, Name => "name") = "skill" then
                Delete_Index :=
                  Find_Skill_Index
-                   (To_Unbounded_String
-                      (Source =>
-                         Get_Attribute(Elem => Data_Node, Name => "value")));
+                   (Skill_Name =>
+                      To_Unbounded_String
+                        (Source =>
+                           Get_Attribute(Elem => Data_Node, Name => "value")));
                if Delete_Index > 0 then
                   Skills_List.Delete(Index => Delete_Index);
                end if;
@@ -884,9 +898,10 @@ package body Game is
               "attribute" then
                Delete_Index :=
                  Find_Attribute_Index
-                   (To_Unbounded_String
-                      (Source =>
-                         Get_Attribute(Elem => Data_Node, Name => "value")));
+                   (Attribute_Name =>
+                      To_Unbounded_String
+                        (Source =>
+                           Get_Attribute(Elem => Data_Node, Name => "value")));
                if Delete_Index > 0 then
                   Attributes_List.Delete(Index => Delete_Index);
                end if;
@@ -917,8 +932,8 @@ package body Game is
       if Save then
          SaveGame;
       else
-         if Exists(To_String(SaveName)) then
-            Delete_File(To_String(SaveName));
+         if Exists(Name => To_String(Source => SaveName)) then
+            Delete_File(Name => To_String(Source => SaveName));
          end if;
       end if;
       ClearMessages;
