@@ -232,12 +232,47 @@ package body Knowledge.Events is
       return TCL_OK;
    end Show_Event_Info_Command;
 
+   -- ****o* KEvents/KEvents.Show_Events_Command
+   -- FUNCTION
+   -- Show the list of known event to a player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowEvents ?startindex?
+   -- Page parameter is a page number which will be show
+   -- SOURCE
+   function Show_Events_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Events_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData);
+   begin
+      if Argc = 2 then
+         UpdateEventsList(Positive'Value(CArgv.Arg(Argv, 1)));
+      else
+         UpdateEventsList;
+      end if;
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   end Show_Events_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowEventMenu", Show_Events_Menu_Command'Access);
       AddCommand("ShowEvent", Show_Event_Command'Access);
       AddCommand("SetEvent", Set_Event_Command'Access);
       AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
+      AddCommand("ShowEvents", Show_Events_Command'Access);
    end AddCommands;
 
    procedure UpdateEventsList(Page: Positive := 1) is
