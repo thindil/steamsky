@@ -258,10 +258,10 @@ package body Knowledge.Bases is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowBases ?basename? ?startindex?
+   -- ShowBases ?basename? ?page?
    -- Basename parameter is a string which will be looking for in the bases
-   -- names, baseindex parameter is a index of bases from which starts showing
-   -- them.
+   -- names, page parameter is a index of page from which starts showing
+   -- bases.
    -- SOURCE
    function Show_Bases_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
