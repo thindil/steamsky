@@ -162,28 +162,31 @@ package body OrdersMenu is
                 (To_Unbounded_String("temple")) then
                Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
+            Add_Heal_Wounded_Menu_Loop :
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
                   Add
                     (OrdersMenu, "command",
                      "-label {Heal wounded} -underline 5 -command {ShowBaseUI heal}");
-                  exit;
+                  exit Add_Heal_Wounded_Menu_Loop;
                end if;
-            end loop;
+            end loop Add_Heal_Wounded_Menu_Loop;
+            Add_Repair_Ship_Menu_Loop :
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
                   Add
                     (OrdersMenu, "command",
                      "-label {Repair ship} -underline 2 -command {ShowBaseUI repair}");
-                  exit;
+                  exit Add_Repair_Ship_Menu_Loop;
                end if;
-            end loop;
+            end loop Add_Repair_Ship_Menu_Loop;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
                 (To_Unbounded_String("shipyard")) then
                Add
                  (OrdersMenu, "command",
                   "-label {Shipyard} -underline 2 -command ShowShipyard");
             end if;
+            Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
@@ -194,9 +197,9 @@ package body OrdersMenu is
                   Add
                     (OrdersMenu, "command",
                      "-label {Buy recipes} -underline 2 -command {ShowBaseUI recipes}");
-                  exit;
+                  exit Add_Buy_Recipes_Menu_Loop;
                end if;
-            end loop;
+            end loop Add_Buy_Recipes_Menu_Loop;
             if SkyBases(BaseIndex).Missions.Length > 0 then
                case SkyBases(BaseIndex).Reputation(1) is
                   when 0 .. 25 =>
@@ -210,6 +213,7 @@ package body OrdersMenu is
                   when others =>
                      MissionsLimit := 0;
                end case;
+               Add_Mission_Menu_Loop :
                for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
                     (Mission.TargetX = PlayerShip.SkyX and
@@ -253,7 +257,7 @@ package body OrdersMenu is
                   if Mission.StartBase = BaseIndex then
                      MissionsLimit := MissionsLimit - 1;
                   end if;
-               end loop;
+               end loop Add_Mission_Menu_Loop;
                if MissionsLimit > 0 then
                   Add
                     (OrdersMenu, "command",
@@ -313,12 +317,13 @@ package body OrdersMenu is
                      declare
                         DockingCost: Positive;
                      begin
+                        Count_Docking_Cost_Loop :
                         for Module of PlayerShip.Modules loop
                            if Module.MType = HULL then
                               DockingCost := Module.MaxModules;
-                              exit;
+                              exit Count_Docking_Cost_Loop;
                            end if;
-                        end loop;
+                        end loop Count_Docking_Cost_Loop;
                         Add
                           (OrdersMenu, "command",
                            "-label {Dock (" &
@@ -327,6 +332,7 @@ package body OrdersMenu is
                            ")} -underline 0 -command {Docking}");
                      end;
                   end if;
+                  Complete_Mission_Menu_Loop :
                   for Mission of AcceptedMissions loop
                      if HaveTrader and Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
@@ -369,8 +375,9 @@ package body OrdersMenu is
                               end if;
                         end case;
                      end if;
-                  end loop;
+                  end loop Complete_Mission_Menu_Loop;
                else
+                  Progress_Mission_Loop :
                   for Mission of AcceptedMissions loop
                      if Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
@@ -395,7 +402,7 @@ package body OrdersMenu is
                                  "-label {Explore area} -underline 0");
                         end case;
                      end if;
-                  end loop;
+                  end loop Progress_Mission_Loop;
                end if;
             when Trader =>
                if HaveTrader then
@@ -627,9 +634,10 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
+      Update_Morale_Loop :
       for I in PlayerShip.Crew.Iterate loop
          UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
-      end loop;
+      end loop Update_Morale_Loop;
       AddMessage
         ("You and your crew were praying for some time. Now you all feel a bit better.",
          OrderMessage);
