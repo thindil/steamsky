@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Search on trade list doesn't work if item isn't in the ship cargo
 - Crash on entering the knowledge screen again
 - Possible crash when ending the game
+- Clear search entry in trade when refreshing the items list
 
 ## [5.9] - 2021-03-21
 
