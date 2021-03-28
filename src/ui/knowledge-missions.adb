@@ -176,7 +176,6 @@ package body Knowledge.Missions is
    -- ****
 
    procedure UpdateMissionsList(Page: Positive := 1) is
-      pragma Unreferenced(Page);
       MissionsCanvas: constant Tk_Canvas :=
         Get_Widget(".gameframe.paned.knowledgeframe.missions.canvas");
       MissionsFrame: constant Ttk_Frame :=
@@ -185,8 +184,8 @@ package body Knowledge.Missions is
       Rows: Natural := 0;
       Label: Ttk_Label;
       Row: Positive;
-      -- Start_Row: constant Positive := ((Page - 1) * 25) + 1;
-      -- Current_Row: Positive := 1;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MissionsFrame), " ");
@@ -211,9 +210,14 @@ package body Knowledge.Missions is
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
               False);
+         Rows := 0;
          Load_Accepted_Missions_Loop :
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Loop;
+            end if;
             case AcceptedMissions(I).MType is
                when Deliver =>
                   AddButton
@@ -309,7 +313,25 @@ package body Knowledge.Missions is
                "The base money reward for the mission",
                "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
             Row := Row + 1;
+            Rows := Rows + 1;
+            exit Load_Accepted_Missions_Loop when Rows = 25 and
+              I /= AcceptedMissions.Last_Index;
+            <<End_Of_Loop>>
          end loop Load_Accepted_Missions_Loop;
+         if Page > 1 then
+            if Rows < 25 then
+               AddPagination
+                 (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
+                  "");
+            else
+               AddPagination
+                 (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
+                  "ShowEvents" & Positive'Image(Page + 1));
+            end if;
+         elsif Rows > 24 then
+            AddPagination
+              (MissionsTable, "", "ShowMissions" & Positive'Image(Page + 1));
+         end if;
          UpdateTable(MissionsTable);
       end if;
       Tcl_Eval(Get_Context, "update");
