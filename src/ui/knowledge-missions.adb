@@ -161,16 +161,51 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Set_Mission_Command;
 
+   -- ****o* KMissions/KMissions.Show_Missions_Command
+   -- FUNCTION
+   -- Show the list of known missions to the player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMissions ?startindex?
+   -- Page parameter is a page number which will be show
+   -- SOURCE
+   function Show_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData);
+   begin
+      if Argc = 2 then
+         UpdateMissionsList(Positive'Value(CArgv.Arg(Argv, 1)));
+      else
+         UpdateMissionsList;
+      end if;
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   end Show_Missions_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
       AddCommand("ShowMission2", Show_Mission_Command'Access);
       AddCommand("SetMission2", Set_Mission_Command'Access);
+      AddCommand("ShowMissions", Show_Missions_Command'Access);
    end AddCommands;
 
    -- ****iv* KMissions/KMissions.MissionsTable
    -- FUNCTION
-   -- Table with info about the known events
+   -- Table with info about the known Missions
    -- SOURCE
    MissionsTable: Table_Widget (5);
    -- ****
@@ -326,7 +361,7 @@ package body Knowledge.Missions is
             else
                AddPagination
                  (MissionsTable, "ShowMissions" & Positive'Image(Page - 1),
-                  "ShowEvents" & Positive'Image(Page + 1));
+                  "ShowMissions" & Positive'Image(Page + 1));
             end if;
          elsif Rows > 24 then
             AddPagination
