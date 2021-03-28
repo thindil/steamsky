@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -111,6 +112,8 @@ package body Trades.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
       Profit: Integer;
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(TradeCanvas & ".trade.options.search", Interp);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -135,6 +138,9 @@ package body Trades.UI is
          end if;
          ShowSkyMap(True);
          return TCL_OK;
+      end if;
+      if Argc < 3 then
+         Delete(SearchEntry, "0", "end");
       end if;
       configure(CloseButton, "-command {ShowSkyMap ShowTrade}");
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
