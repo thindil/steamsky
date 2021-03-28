@@ -932,7 +932,7 @@ package body Game is
       if Save then
          SaveGame;
       else
-         Delete_Save_Block:
+         Delete_Save_Block :
          begin
             Delete_File(Name => To_String(Source => SaveName));
          exception
@@ -954,40 +954,62 @@ package body Game is
       Find_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = Skill_Name then
-            return SkillsData_Container.To_Index(I);
+            return SkillsData_Container.To_Index(Position => I);
          end if;
       end loop Find_Skill_Loop;
       return 0;
    end Find_Skill_Index;
 
    function Load_Game_Data return String is
-      type DataType_Record is record
+      type Data_Type_Record is record
          Name: Unbounded_String;
-         FileName: Unbounded_String;
+         File_Name: Unbounded_String;
       end record;
-      DataTypes: constant array(1 .. 12) of DataType_Record :=
-        ((To_Unbounded_String("data"), To_Unbounded_String("game.dat")),
-         (To_Unbounded_String("help"), To_Unbounded_String("help.dat")),
-         (To_Unbounded_String("items"), To_Unbounded_String("items.dat")),
-         (To_Unbounded_String("modules"),
-          To_Unbounded_String("shipmodules.dat")),
-         (To_Unbounded_String("recipes"), To_Unbounded_String("recipes.dat")),
-         (To_Unbounded_String("bases"), To_Unbounded_String("bases.dat")),
-         (To_Unbounded_String("mobiles"), To_Unbounded_String("mobs.dat")),
-         (To_Unbounded_String("careers"), To_Unbounded_String("careers.dat")),
-         (To_Unbounded_String("factions"),
-          To_Unbounded_String("factions.dat")),
-         (To_Unbounded_String("ships"), To_Unbounded_String("ships.dat")),
-         (To_Unbounded_String("goals"), To_Unbounded_String("goals.dat")),
-         (To_Unbounded_String("stories"), To_Unbounded_String("stories.dat")));
+      Data_Types: constant array(1 .. 12) of Data_Type_Record :=
+        (1 =>
+           (Name => To_Unbounded_String(Source => "data"),
+            File_Name => To_Unbounded_String(Source => "game.dat")),
+         2 =>
+           (Name => To_Unbounded_String(Source => "help"),
+            File_Name => To_Unbounded_String(Source => "help.dat")),
+         3 =>
+           (Name => To_Unbounded_String(Source => "items"),
+            File_Name => To_Unbounded_String(Source => "items.dat")),
+         4 =>
+           (Name => To_Unbounded_String(Source => "modules"),
+            File_Name => To_Unbounded_String(Source => "shipmodules.dat")),
+         5 =>
+           (Name => To_Unbounded_String(Source => "recipes"),
+            File_Name => To_Unbounded_String(Source => "recipes.dat")),
+         6 =>
+           (Name => To_Unbounded_String(Source => "bases"),
+            File_Name => To_Unbounded_String(Source => "bases.dat")),
+         7 =>
+           (Name => To_Unbounded_String(Source => "mobiles"),
+            File_Name => To_Unbounded_String(Source => "mobs.dat")),
+         8 =>
+           (Name => To_Unbounded_String(Source => "careers"),
+            File_Name => To_Unbounded_String(Source => "careers.dat")),
+         9 =>
+           (Name => To_Unbounded_String(Source => "factions"),
+            File_Name => To_Unbounded_String(Source => "factions.dat")),
+         10 =>
+           (Name => To_Unbounded_String(Source => "ships"),
+            File_Name => To_Unbounded_String(Source => "ships.dat")),
+         11 =>
+           (Name => To_Unbounded_String(Source => "goals"),
+            File_Name => To_Unbounded_String(Source => "goals.dat")),
+         12 =>
+           (Name => To_Unbounded_String(Source => "stories"),
+            File_Name => To_Unbounded_String(Source => "stories.dat")));
       Directories: Search_Type;
       FoundDirectory: Directory_Entry_Type;
-      procedure LoadSelectedData(DataName, FileName: String) is
+      procedure LoadSelectedData(DataName, File_Name: String) is
          Files: Search_Type;
          FoundFile: Directory_Entry_Type;
          DataFile: File_Input;
          Reader: Tree_Reader;
-         LocalFileName: Unbounded_String;
+         LocalFile_Name: Unbounded_String;
          procedure LoadDataFile(LocalDataName: String) is
             DataType: Unbounded_String;
          begin
@@ -998,7 +1020,7 @@ package body Game is
               LocalDataName = "" then
                LogMessage
                  ("Loading " & To_String(DataType) & " file: " &
-                  To_String(LocalFileName),
+                  To_String(LocalFile_Name),
                   Everything);
                if To_String(DataType) = "factions" then
                   LoadFactions(Reader);
@@ -1029,20 +1051,20 @@ package body Game is
             Free(Reader);
          end LoadDataFile;
       begin
-         if FileName = "" then
+         if File_Name = "" then
             Start_Search(Files, DataName, "*.dat");
             Load_Data_Files_Loop :
             while More_Entries(Files) loop
                Get_Next_Entry(Files, FoundFile);
                Open(Full_Name(FoundFile), DataFile);
-               LocalFileName := To_Unbounded_String(Full_Name(FoundFile));
+               LocalFile_Name := To_Unbounded_String(Full_Name(FoundFile));
                LoadDataFile("");
                Close(DataFile);
             end loop Load_Data_Files_Loop;
             End_Search(Files);
          else
-            Open(To_String(Data_Directory) & FileName, DataFile);
-            LocalFileName := To_Unbounded_String(FileName);
+            Open(To_String(Data_Directory) & File_Name, DataFile);
+            LocalFile_Name := To_Unbounded_String(File_Name);
             LoadDataFile(DataName);
             Close(DataFile);
          end if;
@@ -1053,9 +1075,9 @@ package body Game is
       end if;
       -- Load standard game data
       Load_Standard_Data_Loop :
-      for I in DataTypes'Range loop
+      for I in Data_Types'Range loop
          LoadSelectedData
-           (To_String(DataTypes(I).Name), To_String(DataTypes(I).FileName));
+           (To_String(Data_Types(I).Name), To_String(Data_Types(I).File_Name));
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
