@@ -115,6 +115,7 @@ package body Ships.UI.Crew.Inventory is
       WeightLabel := Create(MemberFrame & ".weight", "-text {Weight}");
       Tcl.Tk.Ada.Grid.Grid(WeightLabel, "-column 4 -row 0");
       Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      Load_Inventory_Loop :
       for I in Member.Inventory.Iterate loop
          Label :=
            (if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
@@ -189,7 +190,7 @@ package body Ships.UI.Crew.Inventory is
             Width := NewWidth;
          end if;
          Bind(ItemButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      end loop;
+      end loop Load_Inventory_Loop;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 5");
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
