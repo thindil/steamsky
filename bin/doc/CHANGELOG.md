@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Crash on entering the knowledge screen again
 - Possible crash when ending the game
 - Clear search entry in trade when refreshing the items list
+- Crash when player accepts the last mission in base
 
 ## [5.9] - 2021-03-21
 
