@@ -234,7 +234,7 @@ package body Knowledge.Events is
 
    -- ****o* KEvents/KEvents.Show_Events_Command
    -- FUNCTION
-   -- Show the list of known event to a player
+   -- Show the list of known events to the player
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
