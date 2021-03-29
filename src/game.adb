@@ -1002,73 +1002,77 @@ package body Game is
          12 =>
            (Name => To_Unbounded_String(Source => "stories"),
             File_Name => To_Unbounded_String(Source => "stories.dat")));
-      Directories: Search_Type;
-      FoundDirectory: Directory_Entry_Type;
-      procedure LoadSelectedData(DataName, File_Name: String) is
+      Mods_Directories: Search_Type;
+      Found_Directory: Directory_Entry_Type;
+      procedure Load_Selected_Data(Data_Name, File_Name: String) is
          Files: Search_Type;
-         FoundFile: Directory_Entry_Type;
-         DataFile: File_Input;
-         Reader: Tree_Reader;
-         LocalFile_Name: Unbounded_String;
-         procedure LoadDataFile(LocalDataName: String) is
-            DataType: Unbounded_String;
+         Found_File: Directory_Entry_Type;
+         Data_File: File_Input;
+         Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
+         Local_File_Name: Unbounded_String := Null_Unbounded_String;
+         procedure Load_Data_File(Local_Data_Name: String) is
+            Data_Type: Unbounded_String;
          begin
-            Parse(Reader, DataFile);
-            DataType :=
-              To_Unbounded_String(Node_Name(Get_Element(Get_Tree(Reader))));
-            if DataType = To_Unbounded_String(LocalDataName) or
-              LocalDataName = "" then
+            Parse(Parser => Reader, Input => Data_File);
+            Data_Type :=
+              To_Unbounded_String
+                (Source =>
+                   Node_Name
+                     (N => Get_Element(Doc => Get_Tree(Read => Reader))));
+            if Data_Type = To_Unbounded_String(Source => Local_Data_Name) or
+              Local_Data_Name = "" then
                LogMessage
-                 ("Loading " & To_String(DataType) & " file: " &
-                  To_String(LocalFile_Name),
-                  Everything);
-               if To_String(DataType) = "factions" then
+                 (Message =>
+                    "Loading " & To_String(Source => Data_Type) & " file: " &
+                    To_String(Source => Local_File_Name),
+                  MessageType => Everything);
+               if To_String(Data_Type) = "factions" then
                   LoadFactions(Reader);
-               elsif To_String(DataType) = "goals" then
+               elsif To_String(Data_Type) = "goals" then
                   LoadGoals(Reader);
-               elsif To_String(DataType) = "help" then
+               elsif To_String(Data_Type) = "help" then
                   LoadHelp(Reader);
-               elsif To_String(DataType) = "items" then
+               elsif To_String(Data_Type) = "items" then
                   LoadItems(Reader);
-               elsif To_String(DataType) = "mobiles" then
+               elsif To_String(Data_Type) = "mobiles" then
                   LoadMobs(Reader);
-               elsif To_String(DataType) = "recipes" then
+               elsif To_String(Data_Type) = "recipes" then
                   LoadRecipes(Reader);
-               elsif To_String(DataType) = "bases" then
+               elsif To_String(Data_Type) = "bases" then
                   LoadBasesTypes(Reader);
-               elsif To_String(DataType) = "modules" then
+               elsif To_String(Data_Type) = "modules" then
                   LoadShipModules(Reader);
-               elsif To_String(DataType) = "ships" then
+               elsif To_String(Data_Type) = "ships" then
                   LoadShips(Reader);
-               elsif To_String(DataType) = "stories" then
+               elsif To_String(Data_Type) = "stories" then
                   LoadStories(Reader);
-               elsif To_String(DataType) = "data" then
+               elsif To_String(Data_Type) = "data" then
                   Load_Data(Reader);
-               elsif To_String(DataType) = "careers" then
+               elsif To_String(Data_Type) = "careers" then
                   LoadCareers(Reader);
                end if;
             end if;
             Free(Reader);
-         end LoadDataFile;
+         end Load_Data_File;
       begin
          if File_Name = "" then
-            Start_Search(Files, DataName, "*.dat");
+            Start_Search(Files, Data_Name, "*.dat");
             Load_Data_Files_Loop :
             while More_Entries(Files) loop
-               Get_Next_Entry(Files, FoundFile);
-               Open(Full_Name(FoundFile), DataFile);
-               LocalFile_Name := To_Unbounded_String(Full_Name(FoundFile));
-               LoadDataFile("");
-               Close(DataFile);
+               Get_Next_Entry(Files, Found_File);
+               Open(Full_Name(Found_File), Data_File);
+               Local_File_Name := To_Unbounded_String(Full_Name(Found_File));
+               Load_Data_File("");
+               Close(Data_File);
             end loop Load_Data_Files_Loop;
             End_Search(Files);
          else
-            Open(To_String(Data_Directory) & File_Name, DataFile);
-            LocalFile_Name := To_Unbounded_String(File_Name);
-            LoadDataFile(DataName);
-            Close(DataFile);
+            Open(To_String(Data_Directory) & File_Name, Data_File);
+            Local_File_Name := To_Unbounded_String(File_Name);
+            Load_Data_File(Data_Name);
+            Close(Data_File);
          end if;
-      end LoadSelectedData;
+      end Load_Selected_Data;
    begin
       if Factions_List.Length > 0 then
          return "";
@@ -1076,22 +1080,22 @@ package body Game is
       -- Load standard game data
       Load_Standard_Data_Loop :
       for I in Data_Types'Range loop
-         LoadSelectedData
+         Load_Selected_Data
            (To_String(Data_Types(I).Name), To_String(Data_Types(I).File_Name));
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
-        (Directories, To_String(Mods_Directory), "",
+        (Mods_Directories, To_String(Mods_Directory), "",
          (Directory => True, others => False));
       Load_Modifications_Loop :
-      while More_Entries(Directories) loop
-         Get_Next_Entry(Directories, FoundDirectory);
-         if Simple_Name(FoundDirectory) /= "." and
-           Simple_Name(FoundDirectory) /= ".." then
-            LoadSelectedData(Full_Name(FoundDirectory), "");
+      while More_Entries(Mods_Directories) loop
+         Get_Next_Entry(Mods_Directories, Found_Directory);
+         if Simple_Name(Found_Directory) /= "." and
+           Simple_Name(Found_Directory) /= ".." then
+            Load_Selected_Data(Full_Name(Found_Directory), "");
          end if;
       end loop Load_Modifications_Loop;
-      End_Search(Directories);
+      End_Search(Mods_Directories);
       SetToolsList;
       return "";
    exception
