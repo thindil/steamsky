@@ -383,12 +383,11 @@ package body Ships.UI.Cargo is
                end if;
             end loop Delete_Missions_Loop;
          end loop Check_Drop_Items_Loop;
-      elsif CurrentStory.Index /= Null_Unbounded_String then
-         if Stories_List(CurrentStory.Index).StartData(1) =
-           PlayerShip.Cargo(ItemIndex).ProtoIndex then
-            FinishedStories.Delete(FinishedStories.Last_Index);
-            ClearCurrentStory;
-         end if;
+      elsif CurrentStory.Index /= Null_Unbounded_String
+        and then Stories_List(CurrentStory.Index).StartData(1) =
+          PlayerShip.Cargo(ItemIndex).ProtoIndex then
+         FinishedStories.Delete(FinishedStories.Last_Index);
+         ClearCurrentStory;
       end if;
       if DropAmount > 0 then
          AddMessage
