@@ -96,6 +96,7 @@ package body Ships.UI.Cargo is
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
            False);
+      Load_Cargo_Loop :
       for I in PlayerShip.Cargo.Iterate loop
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          ItemType :=
@@ -137,7 +138,7 @@ package body Ships.UI.Cargo is
             "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             5, True);
          <<End_Of_Loop>>
-      end loop;
+      end loop Load_Cargo_Loop;
       UpdateTable(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
       Tcl_Eval(Get_Context, "update");
@@ -212,9 +213,10 @@ package body Ships.UI.Cargo is
          "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label := Create(ItemDialog & ".memberlbl", "-text {To:}");
       Tcl.Tk.Ada.Grid.Grid(Label);
+      Load_Crew_Names_Loop :
       for Member of PlayerShip.Crew loop
          Append(MembersNames, " " & Member.Name);
-      end loop;
+      end loop Load_Crew_Names_Loop;
       configure(CrewBox, "-values [list" & To_String(MembersNames) & "]");
       Current(CrewBox, "0");
       Tcl.Tk.Ada.Grid.Grid(CrewBox, "-column 1 -row 2");
@@ -367,7 +369,9 @@ package body Ships.UI.Cargo is
       DropAmount2 := DropAmount;
       if Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).IType =
         Mission_Items_Type then
+         Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
+            Delete_Missions_Loop :
             for I in
               AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
                if AcceptedMissions(I).MType = Deliver and
@@ -375,10 +379,10 @@ package body Ships.UI.Cargo is
                    PlayerShip.Cargo(ItemIndex).ProtoIndex then
                   DeleteMission(I);
                   DropAmount := DropAmount - 1;
-                  exit;
+                  exit Delete_Missions_Loop;
                end if;
-            end loop;
-         end loop;
+            end loop Delete_Missions_Loop;
+         end loop Check_Drop_Items_Loop;
       elsif CurrentStory.Index /= Null_Unbounded_String then
          if Stories_List(CurrentStory.Index).StartData(1) =
            PlayerShip.Cargo(ItemIndex).ProtoIndex then
