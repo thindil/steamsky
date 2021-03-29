@@ -297,7 +297,14 @@ package body Missions.UI is
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview");
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Get_Context);
    begin
+      if List.Length = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         ShowSkyMap(True);
+         return;
+      end if;
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       Show_Missions_List_Loop :
       for I in List.First_Index .. List.Last_Index loop
