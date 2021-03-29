@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Pagination to list of known bases and events
+- Pagination to list of known bases and events, accepted missions
 
 ### Fixed
 - Closing wait menu with Escape key returns to map
