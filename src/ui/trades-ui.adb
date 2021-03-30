@@ -277,7 +277,7 @@ package body Trades.UI is
          if Index(ItemsTypes, To_String("{" & ItemType & "}")) = 0 then
             Append(ItemsTypes, " {" & ItemType & "}");
          end if;
-         if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
+         if Argc > 1 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
             goto End_Of_Trader_Loop;
          end if;
