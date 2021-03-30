@@ -73,8 +73,13 @@ package body Bases.ShipyardUI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- COMMAND
+   -- ShowShipyard ?moduletype? ?modulename?
+   -- Show the base shipyard and load all available and installed modules
+   -- lists. Moduletype is the type of modules to show in available modules,
+   -- modulename is the name of the module to search in available modules.
    -- SOURCE
    function Show_Shipyard_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
