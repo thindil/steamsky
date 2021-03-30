@@ -111,6 +111,16 @@ package body Bases.ShipyardUI is
       InstallInfo: Unbounded_String;
       MoneyLabel: constant Ttk_Label :=
         Get_Widget(ShipyardCanvas & ".shipyard.moneyinfo", Interp);
+      Row: Positive := 1;
+      Page: constant Positive :=
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
+      Start_Row: constant Positive :=
+        (if Argc = 4 then ((Page - 1) * 25) + 1 else 1);
+      Current_Row: Positive := 1;
+      Arguments: constant String :=
+        (if Argc > 2 then
+           "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
+         elsif Argc = 2 then "{" & CArgv.Arg(Argv, 1) & "} {}" else "0 {}");
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -178,12 +188,16 @@ package body Bases.ShipyardUI is
                 ModuleType'Pos(Modules_List(I).MType) then
                goto End_Of_Loop;
             end if;
-            if Argc = 3 and then CArgv.Arg(Argv, 2)'Length > 0
+            if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
               and then
                 Index
                   (To_Lower(To_String(Modules_List(I).Name)),
                    To_Lower(CArgv.Arg(Argv, 2))) =
                 0 then
+               goto End_Of_Loop;
+            end if;
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
             case Modules_List(I).MType is
@@ -244,8 +258,26 @@ package body Bases.ShipyardUI is
                   5, True, "red");
             end if;
          end if;
+         Row := Row + 1;
+         exit Load_Install_Modules_Loop when Row = 25;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
+      if Page > 1 then
+         if Row < 25 then
+            AddPagination
+              (InstallTable,
+               "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (InstallTable,
+               "ShowShipyard " & Arguments & Positive'Image(Page - 1),
+               "ShowShipyard " & Arguments & Positive'Image(Page + 1));
+         end if;
+      elsif Row > 24 then
+         AddPagination
+           (InstallTable, "",
+            "ShowShipyard " & Arguments & Positive'Image(Page + 1));
+      end if;
       UpdateTable(InstallTable);
       ClearTable(RemoveTable);
       Load_Remove_Modules_Loop :
