@@ -1026,30 +1026,30 @@ package body Game is
                     "Loading " & To_String(Source => Data_Type) & " file: " &
                     To_String(Source => Local_File_Name),
                   MessageType => Everything);
-               if To_String(Data_Type) = "factions" then
-                  LoadFactions(Reader);
-               elsif To_String(Data_Type) = "goals" then
-                  LoadGoals(Reader);
-               elsif To_String(Data_Type) = "help" then
-                  LoadHelp(Reader);
-               elsif To_String(Data_Type) = "items" then
-                  LoadItems(Reader);
-               elsif To_String(Data_Type) = "mobiles" then
-                  LoadMobs(Reader);
-               elsif To_String(Data_Type) = "recipes" then
-                  LoadRecipes(Reader);
-               elsif To_String(Data_Type) = "bases" then
-                  LoadBasesTypes(Reader);
-               elsif To_String(Data_Type) = "modules" then
-                  LoadShipModules(Reader);
-               elsif To_String(Data_Type) = "ships" then
-                  LoadShips(Reader);
-               elsif To_String(Data_Type) = "stories" then
-                  LoadStories(Reader);
-               elsif To_String(Data_Type) = "data" then
-                  Load_Data(Reader);
-               elsif To_String(Data_Type) = "careers" then
-                  LoadCareers(Reader);
+               if To_String(Source => Data_Type) = "factions" then
+                  LoadFactions(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "goals" then
+                  LoadGoals(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "help" then
+                  LoadHelp(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "items" then
+                  LoadItems(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "mobiles" then
+                  LoadMobs(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "recipes" then
+                  LoadRecipes(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "bases" then
+                  LoadBasesTypes(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "modules" then
+                  LoadShipModules(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "ships" then
+                  LoadShips(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "stories" then
+                  LoadStories(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "data" then
+                  Load_Data(Reader => Reader);
+               elsif To_String(Source => Data_Type) = "careers" then
+                  LoadCareers(Reader => Reader);
                end if;
             end if;
             Free(Reader);
@@ -1067,7 +1067,7 @@ package body Game is
             end loop Load_Data_Files_Loop;
             End_Search(Files);
          else
-            Open(To_String(Data_Directory) & File_Name, Data_File);
+            Open(To_String(Source => Data_Directory) & File_Name, Data_File);
             Local_File_Name := To_Unbounded_String(File_Name);
             Load_Data_File(Data_Name);
             Close(Data_File);
@@ -1081,7 +1081,7 @@ package body Game is
       Load_Standard_Data_Loop :
       for I in Data_Types'Range loop
          Load_Selected_Data
-           (To_String(Data_Types(I).Name), To_String(Data_Types(I).File_Name));
+           (To_String(Source => Data_Types(I).Name), To_String(Source => Data_Types(I).File_Name));
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
