@@ -370,12 +370,12 @@ package body Trades.UI is
          if SkyBases(BaseIndex).Cargo(1).Amount = 0 then
             Append
               (TradeInfo,
-               "Base don't have any " & To_String(Money_Name) &
+               "Base doesn't have any " & To_String(Money_Name) &
                "to buy anything.");
          else
             Append
               (TradeInfo,
-               "Base have" &
+               "Base has" &
                Positive'Image(SkyBases(BaseIndex).Cargo(1).Amount) & " " &
                To_String(Money_Name) & ".");
          end if;
@@ -383,12 +383,12 @@ package body Trades.UI is
          if TraderCargo(1).Amount = 0 then
             Append
               (TradeInfo,
-               "Ship don't have any " & To_String(Money_Name) &
+               "Ship doesn't have any " & To_String(Money_Name) &
                "to buy anything.");
          else
             Append
               (TradeInfo,
-               "Ship have" & Positive'Image(TraderCargo(1).Amount) & " " &
+               "Ship has" & Positive'Image(TraderCargo(1).Amount) & " " &
                To_String(Money_Name) & ".");
          end if;
       end if;
