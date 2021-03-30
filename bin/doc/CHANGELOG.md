@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Possible crash when ending the game
 - Clear search entry in trade when refreshing the items list
 - Crash when player accepts the last mission in base
+- Looking for items in trade when the item's type is selected
 
 ## [5.9] - 2021-03-21
 
