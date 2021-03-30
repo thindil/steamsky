@@ -83,6 +83,7 @@ package body Ships.UI.Crew is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, CrewInfoFrame);
       ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
+      Check_Modules_Loop :
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
@@ -91,8 +92,8 @@ package body Ships.UI.Crew is
            and then Module.Cleanliness < Module.Quality then
             NeedClean := True;
          end if;
-         exit when NeedClean and NeedRepair;
-      end loop;
+         exit Check_Modules_Loop when NeedClean and NeedRepair;
+      end loop Check_Modules_Loop;
       if NeedClean then
          Button :=
            Create
@@ -128,6 +129,7 @@ package body Ships.UI.Crew is
             To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
             To_Unbounded_String("Morale")),
            False);
+      Load_Crew_Loop :
       for I in PlayerShip.Crew.Iterate loop
          AddButton
            (CrewTable, To_String(PlayerShip.Crew(I).Name),
@@ -171,7 +173,7 @@ package body Ships.UI.Crew is
             "The current morale level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 7,
             True);
-      end loop;
+      end loop Load_Crew_Loop;
       UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Get_Context;
@@ -209,11 +211,12 @@ package body Ships.UI.Crew is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
+      Give_Orders_Loop :
       for I in PlayerShip.Crew.Iterate loop
          GiveOrders
            (PlayerShip, Crew_Container.To_Index(I),
             Crew_Orders'Value(CArgv.Arg(Argv, 1)));
-      end loop;
+      end loop Give_Orders_Loop;
       UpdateHeader;
       UpdateMessages;
       UpdateCrewInfo;
@@ -576,6 +579,7 @@ package body Ships.UI.Crew is
       if Member.Skills.Length > 0 and Member.ContractLength /= 0 then
          -- Statistics of the selected crew member
          Frame := Create(MemberCanvas & ".stats");
+         Load_Statistics_Loop :
          for I in Member.Attributes.Iterate loop
             ProgressFrame :=
               Create
@@ -637,7 +641,7 @@ package body Ships.UI.Crew is
               NewHeight +
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
-         end loop;
+         end loop Load_Statistics_Loop;
          if NewHeight > Height then
             Height := NewHeight;
          end if;
@@ -647,6 +651,7 @@ package body Ships.UI.Crew is
          -- Skills of the selected crew member
          Frame := Create(MemberCanvas & ".skills");
          NewHeight := 1;
+         Load_Skills_Loop :
          for I in Member.Skills.Iterate loop
             ProgressFrame :=
               Create
@@ -707,7 +712,7 @@ package body Ships.UI.Crew is
               NewHeight +
               Positive'Value(Winfo_Get(ProgressFrame, "reqheight"));
             NewWidth := Positive'Value(Winfo_Get(ProgressFrame, "reqwidth"));
-         end loop;
+         end loop Load_Skills_Loop;
          if NewHeight > Height then
             Height := NewHeight;
          end if;
@@ -851,6 +856,7 @@ package body Ships.UI.Crew is
          Append(MessageText, "." & LF & "Training tool: ");
          Quality := 0;
          if CArgv.Arg(Argv, 3) = ".memberdialog" then
+            Find_Training_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType = Skills_List(SkillIndex).Tool
                  and then
@@ -863,8 +869,9 @@ package body Ships.UI.Crew is
                      Quality := Items_List(I).Value(1);
                   end if;
                end if;
-            end loop;
+            end loop Find_Training_Tool_Loop;
          else
+            Find_Training_Tool_2_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType = Skills_List(SkillIndex).Tool
                  and then
@@ -876,7 +883,7 @@ package body Ships.UI.Crew is
                      Quality := Items_List(I).Value(1);
                   end if;
                end if;
-            end loop;
+            end loop Find_Training_Tool_2_Loop;
          end if;
          Append(MessageText, Items_List(ItemIndex).Name);
       end if;
@@ -942,6 +949,7 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Label := Create(MemberDialog & ".level", "-text {Level}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0 -pady {5 0}");
+      Load_Priorities_Loop :
       for I in Member.Orders'Range loop
          Label :=
            Create
@@ -960,7 +968,7 @@ package body Ships.UI.Crew is
          Tcl.Tk.Ada.Grid.Grid
            (ComboBox, "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
          Bind(ComboBox, "<Escape>", "{" & CloseButton & " invoke;break}");
-      end loop;
+      end loop Load_Priorities_Loop;
       Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2 -pady {0 5}");
       Focus(CloseButton);
@@ -1002,12 +1010,13 @@ package body Ships.UI.Crew is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 3));
    begin
       if CArgv.Arg(Argv, 2) = "2" then
+         Set_Priority_Loop :
          for Order of PlayerShip.Crew(MemberIndex).Orders loop
             if Order = 2 then
                Order := 1;
-               exit;
+               exit Set_Priority_Loop;
             end if;
-         end loop;
+         end loop Set_Priority_Loop;
       end if;
       PlayerShip.Crew(MemberIndex).Orders
         (Positive'Value(CArgv.Arg(Argv, 1))) :=
@@ -1017,12 +1026,13 @@ package body Ships.UI.Crew is
       UpdateMessages;
       UpdateCrewInfo;
       ComboBox.Interp := Interp;
+      Update_Priority_Info_Loop :
       for I in PlayerShip.Crew(MemberIndex).Orders'Range loop
          ComboBox.Name :=
            New_String(".memberdialog.level" & Trim(Positive'Image(I), Left));
          Current
            (ComboBox, Natural'Image(PlayerShip.Crew(MemberIndex).Orders(I)));
-      end loop;
+      end loop Update_Priority_Info_Loop;
       return TCL_OK;
    end Set_Priority_Command;
 
@@ -1058,14 +1068,16 @@ package body Ships.UI.Crew is
         (Owners: Natural_Container.Vector; MemberIndex: Positive)
          return Boolean is
       begin
+         Find_Owner_Loop :
          for Owner of Owners loop
             if Owner = MemberIndex then
                return True;
             end if;
-         end loop;
+         end loop Find_Owner_Loop;
          return False;
       end IsWorking;
    begin
+      Check_Modules_Loop :
       for Module of PlayerShip.Modules loop
          if Module.Durability < Module.MaxDurability then
             NeedRepair := True;
@@ -1074,8 +1086,8 @@ package body Ships.UI.Crew is
            and then Module.Cleanliness < Module.Quality then
             NeedClean := True;
          end if;
-         exit when NeedClean and NeedRepair;
-      end loop;
+         exit Check_Modules_Loop when NeedClean and NeedRepair;
+      end loop Check_Modules_Loop;
       if (Winfo_Get(CrewMenu, "exists")) = "0" then
          CrewMenu := Create(".membermenu", "-tearoff false");
       end if;
@@ -1105,6 +1117,7 @@ package body Ships.UI.Crew is
                "-label {Go engineering the ship} -command {SetCrewOrder Engineer " &
                CArgv.Arg(Argv, 1) & "}");
          end if;
+         Set_Work_Orders_Loop :
          for J in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(J).Durability <
               PlayerShip.Modules(J).MaxDurability then
@@ -1178,7 +1191,8 @@ package body Ships.UI.Crew is
                   NeedRepair := False;
                end if;
             end if;
-         end loop;
+         end loop Set_Work_Orders_Loop;
+         Check_Heal_Order_Loop :
          for J in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(J).Health < 100 and
               Crew_Container.To_Index(J) /=
@@ -1188,9 +1202,9 @@ package body Ships.UI.Crew is
                  (CrewMenu, "command",
                   "-label {Heal wounded crew members} -command {SetCrewOrder Heal " &
                   CArgv.Arg(Argv, 1) & "}");
-               exit;
+               exit Check_Heal_Order_Loop;
             end if;
-         end loop;
+         end loop Check_Heal_Order_Loop;
          if PlayerShip.UpgradeModule > 0 and Member.Order /= Upgrading then
             Menu.Add
               (CrewMenu, "command",
