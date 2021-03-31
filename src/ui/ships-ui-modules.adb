@@ -253,6 +253,7 @@ package body Ships.UI.Modules is
                        "-tearoff false");
                end if;
                Delete(AmmoMenu, "0", "end");
+               Find_Ammo_Loop :
                for I in
                  PlayerShip.Cargo.First_Index ..
                    PlayerShip.Cargo.Last_Index loop
@@ -270,7 +271,7 @@ package body Ships.UI.Modules is
                         Positive'Image(I) & "}");
                      NotEmpty := True;
                   end if;
-               end loop;
+               end loop Find_Ammo_Loop;
                if NotEmpty then
                   Menu.Add
                     (ModuleMenu, "cascade",
@@ -325,6 +326,7 @@ package body Ships.UI.Modules is
                   CArgv.Arg(Argv, 1) & "}");
             end if;
          when MEDICAL_ROOM =>
+            Find_Healing_Tool_Loop :
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 and
                  FindItem
@@ -337,9 +339,9 @@ package body Ships.UI.Modules is
                     (ModuleMenu, "command",
                      "-label {Assign selected crew member as medic...} -command {ShowAssignCrew " &
                      CArgv.Arg(Argv, 1) & "}");
-                  exit;
+                  exit Find_Healing_Tool_Loop;
                end if;
-            end loop;
+            end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
             if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
                Menu.Add
@@ -425,6 +427,7 @@ package body Ships.UI.Modules is
          Insert
            (ModuleText, "end",
             "{ (max" & Count_Type'Image(Module.Owner.Length) & "): }");
+         Add_Owners_Info_Loop :
          for I in Module.Owner.First_Index .. Module.Owner.Last_Index loop
             if Module.Owner(I) > 0 then
                if HaveOwner then
@@ -435,7 +438,7 @@ package body Ships.UI.Modules is
                  (ModuleText, "end",
                   To_String(PlayerShip.Crew(Module.Owner(I)).Name));
             end if;
-         end loop;
+         end loop Add_Owners_Info_Loop;
          if not HaveOwner then
             Insert(ModuleText, "end", "{none}");
          end if;
@@ -481,6 +484,7 @@ package body Ships.UI.Modules is
         (ModuleText, "end",
          "{Weight: " & Integer'Image(Module.Weight) & " kg" & LF &
          "Repair/Upgrade material: }");
+      Find_Repair_Material_Loop :
       for Item of Items_List loop
          if Item.IType = Modules_List(Module.ProtoIndex).RepairMaterial then
             if Mamount > 0 then
@@ -497,7 +501,7 @@ package body Ships.UI.Modules is
             end if;
             Mamount := Mamount + 1;
          end if;
-      end loop;
+      end loop Find_Repair_Material_Loop;
       Insert
         (ModuleText, "end",
          "{" & LF & "Repair/Upgrade skill: " &
@@ -648,6 +652,7 @@ package body Ships.UI.Modules is
             end;
             if not HaveAmmo then
                Mamount := 0;
+               Find_Ammo_Info_Loop :
                for I in Items_List.Iterate loop
                   if Items_List(I).IType =
                     Items_Types(Modules_List(Module.ProtoIndex).Value) then
@@ -667,7 +672,7 @@ package body Ships.UI.Modules is
                      end if;
                      Mamount := Mamount + 1;
                   end if;
-               end loop;
+               end loop Find_Ammo_Info_Loop;
             end if;
             Insert(ModuleText, "end", "{" & LF & "}");
             if Module.Owner(1) > 0 then
