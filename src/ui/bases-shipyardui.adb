@@ -111,7 +111,6 @@ package body Bases.ShipyardUI is
       InstallInfo: Unbounded_String;
       MoneyLabel: constant Ttk_Label :=
         Get_Widget(ShipyardCanvas & ".shipyard.moneyinfo", Interp);
-      Row: Positive := 1;
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -256,13 +255,12 @@ package body Bases.ShipyardUI is
                   To_String(BaseModules_Container.Key(I)) & "} install",
                   5, True, "red");
             end if;
-            Row := Row + 1;
-            exit Load_Install_Modules_Loop when Row = 25;
+            exit Load_Install_Modules_Loop when InstallTable.Row = 25;
          end if;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       if Page > 1 then
-         if Row < 25 then
+         if InstallTable.Row < 25 then
             AddPagination
               (InstallTable,
                "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
@@ -272,7 +270,7 @@ package body Bases.ShipyardUI is
                "ShowShipyard " & Arguments & Positive'Image(Page - 1),
                "ShowShipyard " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif Row > 24 then
+      elsif InstallTable.Row = 25 then
          AddPagination
            (InstallTable, "",
             "ShowShipyard " & Arguments & Positive'Image(Page + 1));
