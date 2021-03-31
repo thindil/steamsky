@@ -114,13 +114,12 @@ package body Bases.ShipyardUI is
       Row: Positive := 1;
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
-      Start_Row: constant Positive :=
-        (if Argc = 4 then ((Page - 1) * 25) + 1 else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
       Arguments: constant String :=
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
-         elsif Argc = 2 then "{" & CArgv.Arg(Argv, 1) & "} {}" else "0 {}");
+         elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "0 {}");
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -257,9 +256,9 @@ package body Bases.ShipyardUI is
                   To_String(BaseModules_Container.Key(I)) & "} install",
                   5, True, "red");
             end if;
+            Row := Row + 1;
+            exit Load_Install_Modules_Loop when Row = 25;
          end if;
-         Row := Row + 1;
-         exit Load_Install_Modules_Loop when Row = 25;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       if Page > 1 then
