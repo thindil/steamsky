@@ -24,6 +24,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
+with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
@@ -422,10 +423,17 @@ package body Table is
 
    procedure AddPagination
      (Table: in out Table_Widget; PreviousCommand, NextCommand: String) is
-      ButtonsFrame: constant Ttk_Frame :=
-        Create(Table.Canvas & ".buttonframe");
+      ButtonsFrame: Ttk_Frame := Get_Widget(Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
+      if Winfo_Get(ButtonsFrame, "exists") = "1" then
+         Button := Get_Widget(ButtonsFrame & ".previous");
+         Destroy(Button);
+         Button := Get_Widget(ButtonsFrame & ".next");
+         Destroy(Button);
+         Destroy(ButtonsFrame);
+      end if;
+      ButtonsFrame := Create(Table.Canvas & ".buttonframe");
       if PreviousCommand'Length > 0 then
          Button :=
            Create
