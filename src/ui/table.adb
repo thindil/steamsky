@@ -289,7 +289,7 @@ package body Table is
          end if;
          Coords
            (Table.Canvas, "headerback",
-            "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
+            "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
             Positive'Image(Table.Row_Height - 3));
          NewY := Table.Row_Height;
          Resize_Background_Loop :
@@ -300,7 +300,7 @@ package body Table is
             Coords
               (Table.Canvas, To_String(Tag),
                "0" & Positive'Image(NewY - Table.Row_Height) &
-               Positive'Image(Positive'Value(Slice(Tokens, 3)) + 5) &
+               Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
       end;
