@@ -100,7 +100,16 @@ package body Table is
    end CreateTable;
 
    procedure ClearTable(Table: in out Table_Widget) is
+      ButtonsFrame: Ttk_Frame := Get_Widget(Table.Canvas & ".buttonframe");
+      Button: Ttk_Button;
    begin
+      if Winfo_Get(ButtonsFrame, "exists") = "1" then
+         Button := Get_Widget(ButtonsFrame & ".previous");
+         Destroy(Button);
+         Button := Get_Widget(ButtonsFrame & ".next");
+         Destroy(Button);
+         Destroy(ButtonsFrame);
+      end if;
       for Row in 1 .. Table.Row loop
          for Column in 1 .. Table.Amount loop
             Delete
@@ -423,17 +432,10 @@ package body Table is
 
    procedure AddPagination
      (Table: in out Table_Widget; PreviousCommand, NextCommand: String) is
-      ButtonsFrame: Ttk_Frame := Get_Widget(Table.Canvas & ".buttonframe");
+      ButtonsFrame: constant Ttk_Frame :=
+        Create(Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
    begin
-      if Winfo_Get(ButtonsFrame, "exists") = "1" then
-         Button := Get_Widget(ButtonsFrame & ".previous");
-         Destroy(Button);
-         Button := Get_Widget(ButtonsFrame & ".next");
-         Destroy(Button);
-         Destroy(ButtonsFrame);
-      end if;
-      ButtonsFrame := Create(Table.Canvas & ".buttonframe");
       if PreviousCommand'Length > 0 then
          Button :=
            Create
