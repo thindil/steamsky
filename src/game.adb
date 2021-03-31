@@ -1052,25 +1052,32 @@ package body Game is
                   LoadCareers(Reader => Reader);
                end if;
             end if;
-            Free(Reader);
+            Free(Read => Reader);
          end Load_Data_File;
       begin
          if File_Name = "" then
-            Start_Search(Files, Data_Name, "*.dat");
+            Start_Search
+              (Search => Files, Directory => Data_Name, Pattern => "*.dat");
             Load_Data_Files_Loop :
-            while More_Entries(Files) loop
-               Get_Next_Entry(Files, Found_File);
-               Open(Full_Name(Found_File), Data_File);
-               Local_File_Name := To_Unbounded_String(Full_Name(Found_File));
-               Load_Data_File("");
-               Close(Data_File);
+            while More_Entries(Search => Files) loop
+               Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
+               Open
+                 (Filename => Full_Name(Directory_Entry => Found_File),
+                  Input => Data_File);
+               Local_File_Name :=
+                 To_Unbounded_String
+                   (Source => Full_Name(Directory_Entry => Found_File));
+               Load_Data_File(Local_Data_Name => "");
+               Close(Input => Data_File);
             end loop Load_Data_Files_Loop;
-            End_Search(Files);
+            End_Search(Search => Files);
          else
-            Open(To_String(Source => Data_Directory) & File_Name, Data_File);
-            Local_File_Name := To_Unbounded_String(File_Name);
-            Load_Data_File(Data_Name);
-            Close(Data_File);
+            Open
+              (Filename => To_String(Source => Data_Directory) & File_Name,
+               Input => Data_File);
+            Local_File_Name := To_Unbounded_String(Source => File_Name);
+            Load_Data_File(Local_Data_Name => Data_Name);
+            Close(Input => Data_File);
          end if;
       end Load_Selected_Data;
    begin
@@ -1081,7 +1088,8 @@ package body Game is
       Load_Standard_Data_Loop :
       for I in Data_Types'Range loop
          Load_Selected_Data
-           (To_String(Source => Data_Types(I).Name), To_String(Source => Data_Types(I).File_Name));
+           (To_String(Source => Data_Types(I).Name),
+            To_String(Source => Data_Types(I).File_Name));
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
