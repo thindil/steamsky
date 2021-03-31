@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Crash when player accepts the last mission in base
 - Looking for items in trade when the item's type is selected
 - Typos in trade screen
+- Autoresizing of tables
 
 ## [5.9] - 2021-03-21
 
