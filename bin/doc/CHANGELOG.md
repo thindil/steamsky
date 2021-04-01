@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Pagination to list of known bases and events, accepted missions and shipyard
 
+### Changed
+- Don't create patrol and explore missions on fields with bases
+
 ### Fixed
 - Closing wait menu with Escape key returns to map
 - Refresh ship info and knowledge screens after wait some time
