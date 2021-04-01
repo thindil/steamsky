@@ -114,6 +114,14 @@ package body Trades.UI is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(TradeCanvas & ".trade.options.search", Interp);
+      Page: constant Positive :=
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
+      Arguments: constant String :=
+        (if Argc > 2 then
+           "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
+         elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "All {}");
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -182,6 +190,10 @@ package body Trades.UI is
              Index
                (To_Lower(To_String(ItemName)), To_Lower(CArgv.Arg(Argv, 2))) =
              0 then
+            goto End_Of_Cargo_Loop;
+         end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
             goto End_Of_Cargo_Loop;
          end if;
          if BaseCargoIndex = 0 then
@@ -260,9 +272,11 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             7, True);
+         exit when TradeTable.Row = 26;
          <<End_Of_Cargo_Loop>>
       end loop;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+         exit when TradeTable.Row = 26;
          if IndexesList.Find_Index(Item => I) > 0 or
            not Is_Buyable
              (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
@@ -287,6 +301,10 @@ package body Trades.UI is
              Index
                (To_Lower(To_String(ItemName)), To_Lower(CArgv.Arg(Argv, 2))) =
              0 then
+            goto End_Of_Trader_Loop;
+         end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
             goto End_Of_Trader_Loop;
          end if;
          Price :=
@@ -333,6 +351,22 @@ package body Trades.UI is
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 7, True);
          <<End_Of_Trader_Loop>>
       end loop;
+      if Page > 1 then
+         if TradeTable.Row < 26 then
+            AddPagination
+              (TradeTable,
+               "ShowTrade " & Arguments & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (TradeTable,
+               "ShowTrade " & Arguments & Positive'Image(Page - 1),
+               "ShowTrade " & Arguments & Positive'Image(Page + 1));
+         end if;
+      elsif TradeTable.Row = 26 then
+         AddPagination
+           (TradeTable, "",
+            "ShowTrade " & Arguments & Positive'Image(Page + 1));
+      end if;
       UpdateTable(TradeTable);
       Tcl_Eval(Get_Context, "update");
       configure(ComboBox, "-values [list " & To_String(ItemsTypes) & "]");
