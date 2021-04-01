@@ -1008,10 +1008,10 @@ package body Game is
          Files: Search_Type;
          Found_File: Directory_Entry_Type;
          Data_File: File_Input;
-         Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
          Local_File_Name: Unbounded_String := Null_Unbounded_String;
          procedure Load_Data_File(Local_Data_Name: String) is
             Data_Type: Unbounded_String;
+            Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
          begin
             Parse(Parser => Reader, Input => Data_File);
             Data_Type :=
@@ -1086,18 +1086,18 @@ package body Game is
       end if;
       -- Load standard game data
       Load_Standard_Data_Loop :
-      for I in Data_Types'Range loop
+      for Data_Type of Data_Types loop
          Load_Selected_Data
-           (To_String(Source => Data_Types(I).Name),
-            To_String(Source => Data_Types(I).File_Name));
+           (Data_Name => To_String(Source => Data_Type.Name),
+            File_Name => To_String(Source => Data_Type.File_Name));
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
-        (Mods_Directories, To_String(Mods_Directory), "",
-         (Directory => True, others => False));
+        (Search => Mods_Directories, Directory => To_String(Source => Mods_Directory), Pattern => "",
+         Filter => (Directory => True, others => False));
       Load_Modifications_Loop :
-      while More_Entries(Mods_Directories) loop
-         Get_Next_Entry(Mods_Directories, Found_Directory);
+      while More_Entries(Search => Mods_Directories) loop
+         Get_Next_Entry(Search => Mods_Directories, Directory_Entry => Found_Directory);
          if Simple_Name(Found_Directory) /= "." and
            Simple_Name(Found_Directory) /= ".." then
             Load_Selected_Data(Full_Name(Found_Directory), "");
