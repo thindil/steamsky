@@ -1093,13 +1093,14 @@ package body Game is
       end loop Load_Standard_Data_Loop;
       -- Load modifications
       Start_Search
-        (Search => Mods_Directories, Directory => To_String(Source => Mods_Directory), Pattern => "",
+        (Search => Mods_Directories,
+         Directory => To_String(Source => Mods_Directory), Pattern => "",
          Filter => (Directory => True, others => False));
       Load_Modifications_Loop :
       while More_Entries(Search => Mods_Directories) loop
-         Get_Next_Entry(Search => Mods_Directories, Directory_Entry => Found_Directory);
-         if Simple_Name(Found_Directory) /= "." and
-           Simple_Name(Found_Directory) /= ".." then
+         Get_Next_Entry
+           (Search => Mods_Directories, Directory_Entry => Found_Directory);
+         if Simple_Name(Found_Directory) not in "." | ".." then
             Load_Selected_Data(Full_Name(Found_Directory), "");
          end if;
       end loop Load_Modifications_Loop;
