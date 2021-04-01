@@ -255,12 +255,12 @@ package body Bases.ShipyardUI is
                   To_String(BaseModules_Container.Key(I)) & "} install",
                   5, True, "red");
             end if;
-            exit Load_Install_Modules_Loop when InstallTable.Row = 25;
+            exit Load_Install_Modules_Loop when InstallTable.Row = 26;
          end if;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       if Page > 1 then
-         if InstallTable.Row < 25 then
+         if InstallTable.Row < 26 then
             AddPagination
               (InstallTable,
                "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
@@ -270,16 +270,21 @@ package body Bases.ShipyardUI is
                "ShowShipyard " & Arguments & Positive'Image(Page - 1),
                "ShowShipyard " & Arguments & Positive'Image(Page + 1));
          end if;
-      elsif InstallTable.Row = 25 then
+      elsif InstallTable.Row = 26 then
          AddPagination
            (InstallTable, "",
             "ShowShipyard " & Arguments & Positive'Image(Page + 1));
       end if;
       UpdateTable(InstallTable);
       ClearTable(RemoveTable);
+      Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Remove_Loop;
+            end if;
             AddButton
               (RemoveTable, To_String(PlayerShip.Modules(I).Name),
                "Show available options for module",
@@ -328,8 +333,26 @@ package body Bases.ShipyardUI is
                "ShowShipyardModuleMenu {" &
                Positive'Image(Modules_Container.To_Index(I)) & "} remove",
                5, True);
+            exit Load_Remove_Modules_Loop when RemoveTable.Row = 26;
          end if;
+         <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
+      if Page > 1 then
+         if RemoveTable.Row < 26 then
+            AddPagination
+              (RemoveTable,
+               "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (RemoveTable,
+               "ShowShipyard " & Arguments & Positive'Image(Page - 1),
+               "ShowShipyard " & Arguments & Positive'Image(Page + 1));
+         end if;
+      elsif RemoveTable.Row = 26 then
+         AddPagination
+           (RemoveTable, "",
+            "ShowShipyard " & Arguments & Positive'Image(Page + 1));
+      end if;
       UpdateTable(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       ShipyardFrame.Name :=
