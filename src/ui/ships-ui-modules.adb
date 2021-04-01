@@ -992,13 +992,14 @@ package body Ships.UI.Modules is
                   end if;
                end loop Modules_Loop;
                Assigned := False;
+               Check_Assigned_Loop :
                for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
                   if Owner = 0 then
                      Owner := AssignIndex;
                      Assigned := True;
-                     exit;
+                     exit Check_Assigned_Loop;
                   end if;
-               end loop;
+               end loop Check_Assigned_Loop;
                if not Assigned then
                   PlayerShip.Modules(ModuleIndex).Owner(1) := AssignIndex;
                end if;
@@ -1077,15 +1078,16 @@ package body Ships.UI.Modules is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if not PlayerShip.Modules(ModuleIndex).Disabled then
+         Check_Can_Disable_Loop :
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).MType = ENGINE
               and then
               (not PlayerShip.Modules(I).Disabled and
                Modules_Container.To_Index(I) /= ModuleIndex) then
                CanDisable := True;
-               exit;
+               exit Check_Can_Disable_Loop;
             end if;
-         end loop;
+         end loop Check_Can_Disable_Loop;
          if not CanDisable then
             ShowMessage
               ("You can't disable this engine because it is your last working engine.");
@@ -1132,12 +1134,13 @@ package body Ships.UI.Modules is
       pragma Unreferenced(Argc);
    begin
       PlayerShip.UpgradeModule := 0;
+      Give_Orders_Loop :
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Order = Upgrading then
             GiveOrders(PlayerShip, I, Rest);
-            exit;
+            exit Give_Orders_Loop;
          end if;
-      end loop;
+      end loop Give_Orders_Loop;
       AddMessage("You stopped current upgrade.", OrderMessage);
       UpdateMessages;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
@@ -1253,12 +1256,13 @@ package body Ships.UI.Modules is
              (Interp,
               ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 2)) =
            "0" then
+            Remove_Owner_Loop :
             for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
                if Owner = CrewIndex then
                   Owner := 0;
-                  exit;
+                  exit Remove_Owner_Loop;
                end if;
-            end loop;
+            end loop Remove_Owner_Loop;
             if Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex)
                 .MType /=
               CABIN then
@@ -1273,6 +1277,7 @@ package body Ships.UI.Modules is
          end if;
       end if;
       CrewButton.Interp := Interp;
+      Enable_Buttons_Loop :
       for I in PlayerShip.Crew.Iterate loop
          CrewButton.Name :=
            New_String
@@ -1280,13 +1285,14 @@ package body Ships.UI.Modules is
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
          State(CrewButton, "!disabled");
          configure(CrewButton, "-takefocus 1");
-      end loop;
+      end loop Enable_Buttons_Loop;
       for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
          if Owner /= 0 then
             Assigned := Assigned + 1;
          end if;
       end loop;
       if Assigned = Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) then
+         Disable_Buttons_Loop :
          for I in PlayerShip.Crew.Iterate loop
             ButtonName :=
               To_Unbounded_String
@@ -1297,7 +1303,7 @@ package body Ships.UI.Modules is
                State(CrewButton, "disabled");
                configure(CrewButton, "-takefocus 0");
             end if;
-         end loop;
+         end loop Disable_Buttons_Loop;
       end if;
       if Winfo_Get(InfoLabel, "exists") = "1" then
          configure
@@ -1377,6 +1383,7 @@ package body Ships.UI.Modules is
       Autoscroll(YScroll);
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
+      Load_Crew_List_Loop :
       for I in PlayerShip.Crew.Iterate loop
          CrewButton :=
            Create
@@ -1386,13 +1393,14 @@ package body Ships.UI.Modules is
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
+         Count_Assigned_Loop :
          for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
             if Owner = Crew_Container.To_Index(I) then
                Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
                Assigned := Assigned + 1;
-               exit;
+               exit Count_Assigned_Loop;
             end if;
-         end loop;
+         end loop Count_Assigned_Loop;
          Tcl.Tk.Ada.Pack.Pack(CrewButton, "-anchor w");
          Height := Height + Positive'Value(Winfo_Get(CrewButton, "reqheight"));
          if Positive'Value(Winfo_Get(CrewButton, "reqwidth")) + 10 > Width then
@@ -1403,7 +1411,7 @@ package body Ships.UI.Modules is
            (CrewButton, "<Tab>",
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
-      end loop;
+      end loop Load_Crew_List_Loop;
       if Update_Assign_Crew_Command(ClientData, Interp, Argc, Argv) /=
         TCL_OK then
          return TCL_ERROR;
@@ -1496,6 +1504,7 @@ package body Ships.UI.Modules is
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
       Tag_Configure(SkillsView, "gray", "-foreground gray");
+      Load_Skills_List_Loop :
       for I in Skills_List.First_Index .. Skills_List.Last_Index loop
          if Skills_List(I).Tool /= Null_Unbounded_String then
             ProtoIndex := FindProtoItem(ItemType => Skills_List(I).Tool);
@@ -1515,7 +1524,7 @@ package body Ships.UI.Modules is
             "{} end -id" & Positive'Image(I) & " -values [list {" &
             To_String(SkillName) & "} {" & To_String(ToolName) & "}]" &
             To_String(Tags));
-      end loop;
+      end loop Load_Skills_List_Loop;
       if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
          Selection_Set
            (SkillsView,
@@ -1575,11 +1584,12 @@ package body Ships.UI.Modules is
       PlayerShip.Modules(ModuleIndex).CraftingIndex := Null_Unbounded_String;
       PlayerShip.Modules(ModuleIndex).CraftingAmount := 0;
       PlayerShip.Modules(ModuleIndex).CraftingTime := 0;
+      Give_Orders_Loop :
       for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
          if Owner > 0 then
             GiveOrders(PlayerShip, Owner, Rest);
          end if;
-      end loop;
+      end loop Give_Orders_Loop;
       AddMessage
         ("You cancelled crafting order in " &
          To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
@@ -1619,16 +1629,18 @@ package body Ships.UI.Modules is
       ButtonName: Unbounded_String;
       Button: Ttk_CheckButton;
    begin
+      Find_Active_Button_Loop :
       for I in PlayerShip.Crew.Iterate loop
          ButtonName :=
            To_Unbounded_String
              (".moduledialog.canvas.frame.crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
          Button := Get_Widget(To_String(ButtonName), Interp);
-         exit when InState(Button, "disabled") = "0" and
+         exit Find_Active_Button_Loop when InState(Button, "disabled") =
+           "0" and
            Crew_Container.To_Index(I) > CrewIndex;
          ButtonName := Null_Unbounded_String;
-      end loop;
+      end loop Find_Active_Button_Loop;
       if ButtonName = Null_Unbounded_String then
          ButtonName := To_Unbounded_String(".moduledialog.button");
       end if;
