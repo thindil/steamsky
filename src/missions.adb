@@ -142,8 +142,7 @@ package body Missions is
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
                   if SkyMap(MissionX, MissionY).Visited and
-                    MissionX /= PlayerShip.SkyX and
-                    MissionY /= PlayerShip.SkyY then
+                    SkyMap(MissionX, MissionY).BaseIndex = 0 then
                      Mission.Target := 0;
                      exit Find_Patrol_Mission_Location_Loop;
                   end if;
@@ -160,7 +159,8 @@ package body Missions is
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
-                  if not SkyMap(MissionX, MissionY).Visited then
+                  if not SkyMap(MissionX, MissionY).Visited and
+                    SkyMap(MissionX, MissionY).BaseIndex = 0 then
                      Mission.Target := 0;
                      exit Find_Explore_Location_Loop;
                   end if;
