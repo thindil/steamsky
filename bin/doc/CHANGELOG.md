@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Looking for items in trade when the item's type is selected
 - Typos in trade screen
 - Autoresizing of tables
+- Remembering size of last messages window
 
 ## [5.9] - 2021-03-21
 
