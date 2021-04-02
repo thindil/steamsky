@@ -268,6 +268,7 @@ package body Ships.UI is
       -- Setting ship modules info
       Row := 2;
       ClearTable(ModulesTable);
+      Show_Modules_Menu_Loop :
       for Module of PlayerShip.Modules loop
          AddButton
            (ModulesTable, To_String(Module.Name),
@@ -278,7 +279,7 @@ package body Ships.UI is
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
          Row := Row + 1;
-      end loop;
+      end loop Show_Modules_Menu_Loop;
       UpdateTable(ModulesTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Name := New_String(Paned & ".shipinfoframe.modules.canvas");
@@ -372,6 +373,7 @@ package body Ships.UI is
           (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
    begin
       if CArgv.Arg(Argv, 2) /= "show" then
+         Show_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -386,12 +388,13 @@ package body Ships.UI is
                   Natural'Image(FrameInfo.Column) & " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
-         end loop;
+         end loop Show_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf106]"" -command {ShipMaxMin " &
             CArgv.Arg(Argv, 1) & " show}");
       else
+         Hide_Frames_Loop :
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -403,7 +406,7 @@ package body Ships.UI is
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
-         end loop;
+         end loop Hide_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf107]"" -command {ShipMaxMin " &
