@@ -28,34 +28,36 @@ with Input_Sources.File; use Input_Sources.File;
 with Bases; use Bases;
 with Bases.Ship; use Bases.Ship;
 with Bases.Cargo; use Bases.Cargo;
+with BasesTypes;
+with Careers;
+with Config; use Config;
+with Crafts; use Crafts;
+with Crew; use Crew;
+with Events; use Events;
+with Factions; use Factions;
+with Game.SaveLoad; use Game.SaveLoad;
+with Goals; use Goals;
+with Help;
+with Items; use Items;
+with Log;
 with Maps; use Maps;
+with Messages; use Messages;
+with Missions; use Missions;
+with Mobs; use Mobs;
 with Ships; use Ships;
 with Ships.Upgrade; use Ships.Upgrade;
 with Ships.Repairs;
 with Ships.Crew; use Ships.Crew;
-with Crew; use Crew;
-with Messages; use Messages;
-with Crafts; use Crafts;
-with Items; use Items;
-with Events; use Events;
 with ShipModules; use ShipModules;
-with Config; use Config;
 with Statistics; use Statistics;
-with Missions; use Missions;
-with Utils; use Utils;
-with Goals; use Goals;
-with Game.SaveLoad; use Game.SaveLoad;
-with Mobs; use Mobs;
-with Factions; use Factions;
-with Log; use Log;
-with Help; use Help;
-with Stories; use Stories;
-with Careers; use Careers;
-with BasesTypes; use BasesTypes;
+with Stories;
+with Utils;
 
 package body Game is
 
    procedure New_Game is
+      use Utils;
+
       Random_Base: Positive := Positive'First;
    begin
       -- Save game configuration
@@ -553,380 +555,6 @@ package body Game is
       UpdateMissions(Minutes => Minutes);
    end Update_Game;
 
-   -- ****if* Game/Game.LoadData
-   -- FUNCTION
-   -- Load main the game data file
-   -- PARAMETERS
-   -- Reader - XML Reader from which data will be read
-   -- SOURCE
-   procedure Load_Data(Reader: Tree_Reader) is
-      -- ****
-      Game_Data: Document;
-      Nodes_List, Child_Nodes: Node_List;
-      Delete_Index: Natural := 0;
-      Tmp_Skill: Skill_Record := Empty_Skill;
-      Node_Name: Unbounded_String := Null_Unbounded_String;
-      Data_Node: Node;
-      Tool_Quality: constant Attributes_Container.Vector :=
-        Attributes_Container.Empty_Vector;
-      function Find_Attribute_Index
-        (Attribute_Name: Unbounded_String) return Natural is
-      begin
-         Find_Attribute_Loop :
-         for J in
-           Attributes_List.First_Index .. Attributes_List.Last_Index loop
-            if Attributes_List(J).Name = Attribute_Name then
-               return J;
-            end if;
-         end loop Find_Attribute_Loop;
-         return 0;
-      end Find_Attribute_Index;
-   begin
-      Game_Data := Get_Tree(Read => Reader);
-      Nodes_List :=
-        DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
-      Child_Nodes := Nodes_List;
-      Load_Game_Data_Loop :
-      for I in 0 .. Length(List => Nodes_List) - 1 loop
-         Data_Node := Item(List => Nodes_List, Index => I);
-         Node_Name :=
-           To_Unbounded_String
-             (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
-         if To_String(Source => Node_Name) = "basessyllablepre" then
-            BaseSyllablesPre.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "basessyllablestart" then
-            BaseSyllablesStart.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "basessyllableend" then
-            BaseSyllablesEnd.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "basessyllablepost" then
-            BaseSyllablesPost.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "malessyllablestart" then
-            MaleSyllablesStart.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "malessyllablemiddle" then
-            MaleSyllablesMiddle.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "malessyllableend" then
-            MaleSyllablesEnd.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "malesvocal" then
-            MaleVocals.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "malesconsonant" then
-            MaleConsonants.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "femalessyllablestart" then
-            FemaleSyllablesStart.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "femalessyllablemiddle" then
-            FemaleSyllablesMiddle.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "femalessyllableend" then
-            FemaleSyllablesEnd.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "femalesvocal" then
-            FemaleVocals.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "shipssyllablestart" then
-            ShipSyllablesStart.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "shipssyllablemiddle" then
-            ShipSyllablesMiddle.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "shipssyllableend" then
-            ShipSyllablesEnd.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "itemtype" then
-            Items_Types.Append
-              (New_Item =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "repairtools" then
-            Repair_Tools :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "cleaningtools" then
-            Cleaning_Tools :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "alchemytools" then
-            Alchemy_Tools :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "corpseindex" then
-            Corpse_Index :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "missionitemstype" then
-            Mission_Items_Type :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "fueltype" then
-            Fuel_Type :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "moneyindex" then
-            Money_Index :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "tradersname" then
-            Traders_Name :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "attribute" then
-            Attributes_List.Append
-              (New_Item =>
-                 (Name =>
-                    To_Unbounded_String
-                      (Source =>
-                         Get_Attribute(Elem => Data_Node, Name => "name")),
-                  Description =>
-                    To_Unbounded_String
-                      (Source =>
-                         Node_Value(N => First_Child(N => Data_Node)))));
-         elsif To_String(Source => Node_Name) = "skill" then
-            Tmp_Skill :=
-              (Name =>
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "name")),
-               Attribute =>
-                 Find_Attribute_Index
-                   (Attribute_Name =>
-                      To_Unbounded_String
-                        (Source =>
-                           Get_Attribute
-                             (Elem => Data_Node, Name => "attribute"))),
-               Description => Null_Unbounded_String,
-               Tool => Null_Unbounded_String, Tools_Quality => Tool_Quality);
-            if Get_Attribute(Elem => Data_Node, Name => "tool") /= "" then
-               Tmp_Skill.Tool :=
-                 To_Unbounded_String
-                   (Source =>
-                      Get_Attribute(Elem => Data_Node, Name => "tool"));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Data_Node, Name => "toolquality");
-            if Length(List => Child_Nodes) > 0 then
-               Tmp_Skill.Tools_Quality.Clear;
-            end if;
-            Load_Skills_Loop :
-            for J in 0 .. Length(List => Child_Nodes) - 1 loop
-               Tmp_Skill.Tools_Quality.Append
-                 (New_Item =>
-                    (1 =>
-                       Integer'Value
-                         (Get_Attribute
-                            (Elem => Item(List => Child_Nodes, Index => J),
-                             Name => "level")),
-                     2 =>
-                       Integer'Value
-                         (Get_Attribute
-                            (Elem => Item(List => Child_Nodes, Index => J),
-                             Name => "quality"))));
-            end loop Load_Skills_Loop;
-            if Tmp_Skill.Tools_Quality.Length = 0 then
-               Tmp_Skill.Tools_Quality.Append
-                 (New_Item => (1 => 100, 2 => 100));
-            end if;
-            Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Elem => Data_Node, Name => "description");
-            if Length(List => Child_Nodes) > 0 then
-               Tmp_Skill.Description :=
-                 To_Unbounded_String
-                   (Source =>
-                      Node_Value
-                        (N =>
-                           First_Child
-                             (N => Item(List => Child_Nodes, Index => 0))));
-            end if;
-            Skills_List.Append(New_Item => Tmp_Skill);
-         elsif To_String(Source => Node_Name) = "conditionname" then
-            Condition_Index :=
-              Find_Attribute_Index
-                (Attribute_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "strengthname" then
-            Strength_Index :=
-              Find_Attribute_Index
-                (Attribute_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "pilotingskill" then
-            Piloting_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "engineeringskill" then
-            Engineering_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "gunneryskill" then
-            Gunnery_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "talkingskill" then
-            Talking_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "perceptionskill" then
-            Perception_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "headarmor" then
-            Head_Armor :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "chestarmor" then
-            Chest_Armor :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "armsarmor" then
-            Arms_Armor :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "legsarmor" then
-            Legs_Armor :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "shieldtype" then
-            Shield_Type :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "weapontype" then
-            Weapon_Type :=
-              To_Unbounded_String
-                (Source => Get_Attribute(Elem => Data_Node, Name => "value"));
-         elsif To_String(Source => Node_Name) = "dodgeskill" then
-            Dodge_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "unarmedskill" then
-            Unarmed_Skill :=
-              Find_Skill_Index
-                (Skill_Name =>
-                   To_Unbounded_String
-                     (Source =>
-                        Get_Attribute(Elem => Data_Node, Name => "value")));
-         elsif To_String(Source => Node_Name) = "remove" then
-            if Get_Attribute(Elem => Data_Node, Name => "name") = "skill" then
-               Delete_Index :=
-                 Find_Skill_Index
-                   (Skill_Name =>
-                      To_Unbounded_String
-                        (Source =>
-                           Get_Attribute(Elem => Data_Node, Name => "value")));
-               if Delete_Index > 0 then
-                  Skills_List.Delete(Index => Delete_Index);
-               end if;
-            elsif Get_Attribute(Elem => Data_Node, Name => "name") =
-              "attribute" then
-               Delete_Index :=
-                 Find_Attribute_Index
-                   (Attribute_Name =>
-                      To_Unbounded_String
-                        (Source =>
-                           Get_Attribute(Elem => Data_Node, Name => "value")));
-               if Delete_Index > 0 then
-                  Attributes_List.Delete(Index => Delete_Index);
-               end if;
-            elsif Get_Attribute(Elem => Data_Node, Name => "name") =
-              "itemtype" then
-               Delete_Index := 0;
-               Load_Item_Types_Loop :
-               for J in Items_Types.First_Index .. Items_Types.Last_Index loop
-                  if Items_Types(J) =
-                    To_Unbounded_String
-                      (Source =>
-                         Get_Attribute
-                           (Elem => Data_Node, Name => "value")) then
-                     Delete_Index := J;
-                     exit Load_Item_Types_Loop;
-                  end if;
-               end loop Load_Item_Types_Loop;
-               if Delete_Index > 0 then
-                  Items_Types.Delete(Index => Delete_Index);
-               end if;
-            end if;
-         end if;
-      end loop Load_Game_Data_Loop;
-   end Load_Data;
-
    procedure End_Game(Save: Boolean) is
    begin
       if Save then
@@ -961,10 +589,14 @@ package body Game is
    end Find_Skill_Index;
 
    function Load_Game_Data return String is
+      use Log;
+
+      --## rule off TYPE_INITIAL_VALUES
       type Data_Type_Record is record
          Name: Unbounded_String;
          File_Name: Unbounded_String;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Data_Types: constant array(1 .. 12) of Data_Type_Record :=
         (1 =>
            (Name => To_Unbounded_String(Source => "data"),
@@ -1010,15 +642,465 @@ package body Game is
          Data_File: File_Input;
          Local_File_Name: Unbounded_String := Null_Unbounded_String;
          procedure Load_Data_File(Local_Data_Name: String) is
+            use BasesTypes;
+            use Careers;
+            use Help;
+            use Stories;
+
             Data_Type: Unbounded_String;
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
+            procedure Load_Data(Reader: Tree_Reader) is
+               Game_Data: Document;
+               Nodes_List, Child_Nodes: Node_List;
+               Delete_Index: Natural := 0;
+               Tmp_Skill: Skill_Record := Empty_Skill;
+               Node_Name: Unbounded_String := Null_Unbounded_String;
+               Data_Node: Node;
+               Tool_Quality: constant Attributes_Container.Vector :=
+                 Attributes_Container.Empty_Vector;
+               function Find_Attribute_Index
+                 (Attribute_Name: Unbounded_String) return Natural is
+               begin
+                  Find_Attribute_Loop :
+                  for J in
+                    Attributes_List.First_Index ..
+                      Attributes_List.Last_Index loop
+                     if Attributes_List(J).Name = Attribute_Name then
+                        return J;
+                     end if;
+                  end loop Find_Attribute_Loop;
+                  return 0;
+               end Find_Attribute_Index;
+            begin
+               Game_Data := Get_Tree(Read => Reader);
+               Nodes_List :=
+                 DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
+               Child_Nodes := Nodes_List;
+               Load_Game_Data_Loop :
+               for I in 0 .. Length(List => Nodes_List) - 1 loop
+                  Data_Node := Item(List => Nodes_List, Index => I);
+                  Node_Name :=
+                    To_Unbounded_String
+                      (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
+                  if To_String(Source => Node_Name) = "basessyllablepre" then
+                     BaseSyllablesPre.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "basessyllablestart" then
+                     BaseSyllablesStart.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "basessyllableend" then
+                     BaseSyllablesEnd.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "basessyllablepost" then
+                     BaseSyllablesPost.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "malessyllablestart" then
+                     MaleSyllablesStart.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "malessyllablemiddle" then
+                     MaleSyllablesMiddle.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "malessyllableend" then
+                     MaleSyllablesEnd.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "malesvocal" then
+                     MaleVocals.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "malesconsonant" then
+                     MaleConsonants.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "femalessyllablestart" then
+                     FemaleSyllablesStart.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "femalessyllablemiddle" then
+                     FemaleSyllablesMiddle.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "femalessyllableend" then
+                     FemaleSyllablesEnd.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "femalesvocal" then
+                     FemaleVocals.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "shipssyllablestart" then
+                     ShipSyllablesStart.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "shipssyllablemiddle" then
+                     ShipSyllablesMiddle.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "shipssyllableend" then
+                     ShipSyllablesEnd.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "itemtype" then
+                     Items_Types.Append
+                       (New_Item =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "repairtools" then
+                     Repair_Tools :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "cleaningtools" then
+                     Cleaning_Tools :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "alchemytools" then
+                     Alchemy_Tools :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "corpseindex" then
+                     Corpse_Index :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) =
+                    "missionitemstype" then
+                     Mission_Items_Type :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "fueltype" then
+                     Fuel_Type :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "moneyindex" then
+                     Money_Index :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "tradersname" then
+                     Traders_Name :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "attribute" then
+                     Attributes_List.Append
+                       (New_Item =>
+                          (Name =>
+                             To_Unbounded_String
+                               (Source =>
+                                  Get_Attribute
+                                    (Elem => Data_Node, Name => "name")),
+                           Description =>
+                             To_Unbounded_String
+                               (Source =>
+                                  Node_Value
+                                    (N => First_Child(N => Data_Node)))));
+                  elsif To_String(Source => Node_Name) = "skill" then
+                     Tmp_Skill :=
+                       (Name =>
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "name")),
+                        Attribute =>
+                          Find_Attribute_Index
+                            (Attribute_Name =>
+                               To_Unbounded_String
+                                 (Source =>
+                                    Get_Attribute
+                                      (Elem => Data_Node,
+                                       Name => "attribute"))),
+                        Description => Null_Unbounded_String,
+                        Tool => Null_Unbounded_String,
+                        Tools_Quality => Tool_Quality);
+                     if Get_Attribute(Elem => Data_Node, Name => "tool") /=
+                       "" then
+                        Tmp_Skill.Tool :=
+                          To_Unbounded_String
+                            (Source =>
+                               Get_Attribute
+                                 (Elem => Data_Node, Name => "tool"));
+                     end if;
+                     Child_Nodes :=
+                       DOM.Core.Elements.Get_Elements_By_Tag_Name
+                         (Elem => Data_Node, Name => "toolquality");
+                     if Length(List => Child_Nodes) > 0 then
+                        Tmp_Skill.Tools_Quality.Clear;
+                     end if;
+                     Load_Skills_Loop :
+                     for J in 0 .. Length(List => Child_Nodes) - 1 loop
+                        Tmp_Skill.Tools_Quality.Append
+                          (New_Item =>
+                             (1 =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "level")),
+                              2 =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem =>
+                                        Item(List => Child_Nodes, Index => J),
+                                      Name => "quality"))));
+                     end loop Load_Skills_Loop;
+                     if Tmp_Skill.Tools_Quality.Length = 0 then
+                        Tmp_Skill.Tools_Quality.Append
+                          (New_Item => (1 => 100, 2 => 100));
+                     end if;
+                     Child_Nodes :=
+                       DOM.Core.Elements.Get_Elements_By_Tag_Name
+                         (Elem => Data_Node, Name => "description");
+                     if Length(List => Child_Nodes) > 0 then
+                        Tmp_Skill.Description :=
+                          To_Unbounded_String
+                            (Source =>
+                               Node_Value
+                                 (N =>
+                                    First_Child
+                                      (N =>
+                                         Item
+                                           (List => Child_Nodes,
+                                            Index => 0))));
+                     end if;
+                     Skills_List.Append(New_Item => Tmp_Skill);
+                  elsif To_String(Source => Node_Name) = "conditionname" then
+                     Condition_Index :=
+                       Find_Attribute_Index
+                         (Attribute_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "strengthname" then
+                     Strength_Index :=
+                       Find_Attribute_Index
+                         (Attribute_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "pilotingskill" then
+                     Piloting_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) =
+                    "engineeringskill" then
+                     Engineering_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "gunneryskill" then
+                     Gunnery_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "talkingskill" then
+                     Talking_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "perceptionskill" then
+                     Perception_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "headarmor" then
+                     Head_Armor :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "chestarmor" then
+                     Chest_Armor :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "armsarmor" then
+                     Arms_Armor :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "legsarmor" then
+                     Legs_Armor :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "shieldtype" then
+                     Shield_Type :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "weapontype" then
+                     Weapon_Type :=
+                       To_Unbounded_String
+                         (Source =>
+                            Get_Attribute(Elem => Data_Node, Name => "value"));
+                  elsif To_String(Source => Node_Name) = "dodgeskill" then
+                     Dodge_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "unarmedskill" then
+                     Unarmed_Skill :=
+                       Find_Skill_Index
+                         (Skill_Name =>
+                            To_Unbounded_String
+                              (Source =>
+                                 Get_Attribute
+                                   (Elem => Data_Node, Name => "value")));
+                  elsif To_String(Source => Node_Name) = "remove" then
+                     if Get_Attribute(Elem => Data_Node, Name => "name") =
+                       "skill" then
+                        Delete_Index :=
+                          Find_Skill_Index
+                            (Skill_Name =>
+                               To_Unbounded_String
+                                 (Source =>
+                                    Get_Attribute
+                                      (Elem => Data_Node, Name => "value")));
+                        if Delete_Index > 0 then
+                           Skills_List.Delete(Index => Delete_Index);
+                        end if;
+                     elsif Get_Attribute(Elem => Data_Node, Name => "name") =
+                       "attribute" then
+                        Delete_Index :=
+                          Find_Attribute_Index
+                            (Attribute_Name =>
+                               To_Unbounded_String
+                                 (Source =>
+                                    Get_Attribute
+                                      (Elem => Data_Node, Name => "value")));
+                        if Delete_Index > 0 then
+                           Attributes_List.Delete(Index => Delete_Index);
+                        end if;
+                     elsif Get_Attribute(Elem => Data_Node, Name => "name") =
+                       "itemtype" then
+                        Delete_Index := 0;
+                        Load_Item_Types_Loop :
+                        for J in
+                          Items_Types.First_Index ..
+                            Items_Types.Last_Index loop
+                           if Items_Types(J) =
+                             To_Unbounded_String
+                               (Source =>
+                                  Get_Attribute
+                                    (Elem => Data_Node, Name => "value")) then
+                              Delete_Index := J;
+                              exit Load_Item_Types_Loop;
+                           end if;
+                        end loop Load_Item_Types_Loop;
+                        if Delete_Index > 0 then
+                           Items_Types.Delete(Index => Delete_Index);
+                        end if;
+                     end if;
+                  end if;
+               end loop Load_Game_Data_Loop;
+            end Load_Data;
          begin
-            Parse(Parser => Reader, Input => Data_File);
+            Parse
+              (Parser => Reader,
+               Input => Data_File); --## rule line off IMPROPER_INITIALIZATION
             Data_Type :=
               To_Unbounded_String
                 (Source =>
                    Node_Name
-                     (N => Get_Element(Doc => Get_Tree(Read => Reader))));
+                     (N =>
+                        Get_Element
+                          (Doc =>
+                             Get_Tree
+                               (Read =>
+                                  Reader)))); --## rule line off IMPROPER_INITIALIZATION
             if Data_Type = To_Unbounded_String(Source => Local_Data_Name) or
               Local_Data_Name = "" then
                LogMessage
@@ -1052,7 +1134,7 @@ package body Game is
                   LoadCareers(Reader => Reader);
                end if;
             end if;
-            Free(Read => Reader);
+            Free(Read => Reader); --## rule line off IMPROPER_INITIALIZATION
          end Load_Data_File;
       begin
          if File_Name = "" then
@@ -1100,17 +1182,22 @@ package body Game is
       while More_Entries(Search => Mods_Directories) loop
          Get_Next_Entry
            (Search => Mods_Directories, Directory_Entry => Found_Directory);
-         if Simple_Name(Found_Directory) not in "." | ".." then
-            Load_Selected_Data(Full_Name(Found_Directory), "");
+         if Simple_Name(Directory_Entry => Found_Directory) not in "." |
+               ".." then
+            Load_Selected_Data
+              (Data_Name => Full_Name(Directory_Entry => Found_Directory),
+               File_Name => "");
          end if;
       end loop Load_Modifications_Loop;
-      End_Search(Mods_Directories);
+      End_Search(Search => Mods_Directories);
       SetToolsList;
       return "";
    exception
       when An_Exception : others =>
-         LogMessage(Exception_Message(An_Exception), Everything);
-         return Exception_Message(An_Exception);
+         LogMessage
+           (Message => Exception_Message(X => An_Exception),
+            MessageType => Everything);
+         return Exception_Message(X => An_Exception);
    end Load_Game_Data;
 
 end Game;
