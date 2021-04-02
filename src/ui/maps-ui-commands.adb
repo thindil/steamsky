@@ -208,27 +208,9 @@ package body Maps.UI.Commands is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
       MapView: constant Tk_Text :=
         Get_Widget(".gameframe.paned.mapframe.map", Interp);
-      PanedPosition: Positive;
-      SashPosition: constant Natural := Natural'Value(SashPos(Paned, "0"));
    begin
-      GameSettings.WindowWidth :=
-        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
-      GameSettings.WindowHeight :=
-        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
-      PanedPosition :=
-        (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
-           GameSettings.WindowHeight
-         else GameSettings.WindowHeight - GameSettings.MessagesPosition);
-      if SashPosition > 0 and then SashPosition /= PanedPosition then
-         GameSettings.MessagesPosition :=
-           GameSettings.WindowHeight - SashPosition;
-         PanedPosition := SashPosition;
-      end if;
-      SashPos(Paned, "0", Natural'Image(PanedPosition));
       configure
         (MapView,
          "-width [expr [winfo width $mapview] / [font measure MapFont {" &
@@ -1039,6 +1021,53 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Toggle_Full_Screen_Command;
 
+   -- ****o* MapCommands/MapCommands.Resize_Last_Messages_Command
+   -- FUNCTION
+   -- Resize the last messages window
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ResizeLastMessages
+   -- SOURCE
+   function Resize_Last_Messages_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Resize_Last_Messages_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(".gameframe.paned", Interp);
+      PanedPosition: Positive;
+      SashPosition: constant Natural := Natural'Value(SashPos(Paned, "0"));
+   begin
+      GameSettings.WindowWidth :=
+        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
+      GameSettings.WindowHeight :=
+        Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
+      PanedPosition :=
+        (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
+           GameSettings.WindowHeight
+         else GameSettings.WindowHeight - GameSettings.MessagesPosition);
+      if SashPosition > 0 and then SashPosition /= PanedPosition then
+         if GameSettings.MessagesPosition - SashPosition > -1 then
+            GameSettings.MessagesPosition :=
+               GameSettings.WindowHeight - SashPosition;
+         end if;
+         PanedPosition := SashPosition;
+      end if;
+      SashPos(Paned, "0", Natural'Image(PanedPosition));
+      return TCL_OK;
+   end Resize_Last_Messages_Command;
+
    procedure AddCommands is
    begin
       AddCommand("HideMapButtons", Hide_Map_Buttons_Command'Access);
@@ -1058,6 +1087,7 @@ package body Maps.UI.Commands is
       AddCommand("ShowSkyMap", Show_Sky_Map_Command'Access);
       AddCommand("MoveCursor", Move_Mouse_Command'Access);
       AddCommand("ToggleFullScreen", Toggle_Full_Screen_Command'Access);
+      AddCommand("ResizeLastMessages", Resize_Last_Messages_Command'Access);
    end AddCommands;
 
 end Maps.UI.Commands;

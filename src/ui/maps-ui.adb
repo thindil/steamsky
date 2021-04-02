@@ -856,6 +856,7 @@ package body Maps.UI is
          LootUI.AddCommands;
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
+         Bind(Paned, "<Configure>", "ResizeLastMessages");
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %X %Y}");
