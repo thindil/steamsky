@@ -1064,7 +1064,6 @@ package body Maps.UI.Commands is
          end if;
          PanedPosition := SashPosition;
       end if;
-      SashPos(Paned, "0", Natural'Image(PanedPosition));
       return TCL_OK;
    end Resize_Last_Messages_Command;
 

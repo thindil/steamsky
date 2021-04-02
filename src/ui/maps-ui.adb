@@ -804,6 +804,8 @@ package body Maps.UI is
    end UpdateMoveButtons;
 
    procedure CreateGameUI is
+      use Log;
+
       GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
       Paned: constant Ttk_PanedWindow := Get_Widget(GameFrame & ".paned");
       Button: constant Ttk_Button :=
@@ -813,7 +815,6 @@ package body Maps.UI is
       MessagesFrame: constant Ttk_Frame :=
         Get_Widget(Paned & ".controls.messages");
       PanedPosition: Natural;
-      use Log;
    begin
       GameMenu := Get_Widget(".gamemenu");
       MapView := Get_Widget(".gameframe.paned.mapframe.map");
@@ -856,7 +857,7 @@ package body Maps.UI is
          LootUI.AddCommands;
          Knowledge.AddCommands;
          Missions.UI.AddCommands;
-         Bind(Paned, "<Configure>", "ResizeLastMessages");
+         Bind(MessagesFrame, "<Configure>", "ResizeLastMessages");
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
          Bind(MapView, "<1>", "{ShowDestinationMenu %X %Y}");
