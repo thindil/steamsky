@@ -57,12 +57,13 @@ package body Ships.UI.Cargo is
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- UpdateCargo
+   -- ShowCargo ?page?
+   -- Optional paramater page is the number of the page of cargo list to show
    -- SOURCE
    function Show_Cargo_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -73,7 +74,7 @@ package body Ships.UI.Cargo is
    function Show_Cargo_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData);
       ShipCanvas: constant Tk_Canvas :=
         Get_Widget(".gameframe.paned.shipinfoframe.cargo.canvas", Interp);
       CargoInfoFrame: constant Ttk_Frame :=
@@ -85,6 +86,10 @@ package body Ships.UI.Cargo is
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget(CargoInfoFrame & ".selecttype.combo", Interp);
       ItemsType: constant String := Get(TypeBox);
+      Page: constant Positive :=
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -98,6 +103,10 @@ package body Ships.UI.Cargo is
            False);
       Load_Cargo_Loop :
       for I in PlayerShip.Cargo.Iterate loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
          ItemType :=
            (if Items_List(ProtoIndex).ShowType /= Null_Unbounded_String then
@@ -137,8 +146,22 @@ package body Ships.UI.Cargo is
             "The total weight of the selected item",
             "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             5, True);
+         exit Load_Cargo_Loop when CargoTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
+      if Page > 1 then
+         if CargoTable.Row < 26 then
+            AddPagination
+              (CargoTable, "ShowCargo" & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (CargoTable, "ShowCargo " & Positive'Image(Page - 1),
+               "ShowCargo " & Positive'Image(Page + 1));
+         end if;
+      elsif CargoTable.Row = 26 then
+         AddPagination
+           (CargoTable, "", "ShowCargo " & Positive'Image(Page + 1));
+      end if;
       UpdateTable(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");
       Tcl_Eval(Get_Context, "update");
