@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Pagination to list of known bases and events, accepted missions and shipyard
+- Pagination to lists of known bases and events, accepted missions, shipyard and
+  trade
 
 ### Changed
 - Don't create patrol and explore missions on fields with bases
