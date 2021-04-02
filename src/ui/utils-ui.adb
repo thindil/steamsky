@@ -886,10 +886,6 @@ package body Utils.UI is
             SashPos(Paned, "0", Winfo_Get(Paned, "height"));
          end if;
       else
-         SashPos
-           (Paned, "0",
-            Positive'Image
-              (GameSettings.WindowHeight - GameSettings.MessagesPosition));
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
       Paned.Name := New_String(".gameframe.paned.controls.buttons");
