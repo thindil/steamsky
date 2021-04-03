@@ -16,17 +16,17 @@
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Directories; use Ada.Directories;
-with Ada.Exceptions; use Ada.Exceptions;
+with Ada.Exceptions;
 with Ada.Containers.Hashed_Maps;
 with Ada.Strings.Unbounded.Hash;
-with DOM.Core; use DOM.Core;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Core.Documents; use DOM.Core.Documents;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
+with DOM.Core;
+with DOM.Core.Elements;
+with DOM.Core.Documents;
+with DOM.Core.Nodes;
+with DOM.Readers;
+with Input_Sources.File;
 with Bases; use Bases;
-with Bases.Ship; use Bases.Ship;
+with Bases.Ship;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes;
 with Careers;
@@ -44,11 +44,11 @@ with Maps; use Maps;
 with Messages; use Messages;
 with Missions; use Missions;
 with Mobs; use Mobs;
-with Ships; use Ships;
-with Ships.Upgrade; use Ships.Upgrade;
-with Ships.Repairs;
-with Ships.Crew; use Ships.Crew;
 with ShipModules; use ShipModules;
+with Ships; use Ships;
+with Ships.Crew;
+with Ships.Repairs;
+with Ships.Upgrade;
 with Statistics; use Statistics;
 with Stories;
 with Utils;
@@ -72,16 +72,16 @@ package body Game is
            Positive'First;
       begin
          -- Set player faction if random option was selected
-         if NewGameSettings.PlayerFaction =
+         if NewGameSettings.Player_Faction =
            To_Unbounded_String(Source => "random") then
-            NewGameSettings.PlayerCareer :=
+            NewGameSettings.Player_Career :=
               To_Unbounded_String(Source => "random");
             Roll := GetRandom(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
                if Index = Roll then
-                  NewGameSettings.PlayerFaction :=
+                  NewGameSettings.Player_Faction :=
                     Factions_Container.Key(Position => I);
                   exit Get_Player_Faction_Loop;
                end if;
@@ -89,21 +89,21 @@ package body Game is
             end loop Get_Player_Faction_Loop;
          end if;
          -- Set player career if random option was selected
-         if NewGameSettings.PlayerCareer =
+         if NewGameSettings.Player_Career =
            To_Unbounded_String(Source => "random") then
             Roll :=
               GetRandom
                 (Min => 1,
                  Max =>
                    Positive
-                     (Factions_List(NewGameSettings.PlayerFaction).Careers
+                     (Factions_List(NewGameSettings.Player_Faction).Careers
                         .Length));
             Index := 1;
             Get_Player_Career_Loop :
-            for I in Factions_List(NewGameSettings.PlayerFaction).Careers
+            for I in Factions_List(NewGameSettings.Player_Faction).Careers
               .Iterate loop
                if Index = Roll then
-                  NewGameSettings.PlayerCareer :=
+                  NewGameSettings.Player_Career :=
                     Factions.Careers_Container.Key(Position => I);
                   exit Get_Player_Career_Loop;
                end if;
@@ -164,7 +164,7 @@ package body Game is
                           Max => Factions_List(J).Population(2)));
                   Base_Reputation :=
                     GetReputation
-                      (SourceFaction => NewGameSettings.PlayerFaction,
+                      (SourceFaction => NewGameSettings.Player_Faction,
                        TargetFaction => Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
@@ -322,41 +322,41 @@ package body Game is
       Place_Player_Loop :
       loop
          Random_Base := GetRandom(Min => 1, Max => 1024);
-         if NewGameSettings.StartingBase =
+         if NewGameSettings.Starting_Base =
            To_Unbounded_String(Source => "Any") then
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = NewGameSettings.PlayerFaction;
+              SkyBases(Random_Base).Owner = NewGameSettings.Player_Faction;
          else
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = NewGameSettings.PlayerFaction and
-              SkyBases(Random_Base).BaseType = NewGameSettings.StartingBase;
+              SkyBases(Random_Base).Owner = NewGameSettings.Player_Faction and
+              SkyBases(Random_Base).BaseType = NewGameSettings.Starting_Base;
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
       PlayerShip :=
         CreateShip
           (ProtoIndex =>
-             Factions_List(NewGameSettings.PlayerFaction).Careers
-               (NewGameSettings.PlayerCareer)
+             Factions_List(NewGameSettings.Player_Faction).Careers
+               (NewGameSettings.Player_Career)
                .ShipIndex,
-           Name => NewGameSettings.ShipName, X => SkyBases(Random_Base).SkyX,
+           Name => NewGameSettings.Ship_Name, X => SkyBases(Random_Base).SkyX,
            Y => SkyBases(Random_Base).SkyY, Speed => DOCKED,
            RandomUpgrades => False);
       -- Add player to ship
       Add_Player_Block :
       declare
          Player_Index_2: constant Unbounded_String :=
-           Factions_List(NewGameSettings.PlayerFaction).Careers
-             (NewGameSettings.PlayerCareer)
+           Factions_List(NewGameSettings.Player_Faction).Careers
+             (NewGameSettings.Player_Career)
              .PlayerIndex;
          Amount: Positive := 1;
          Tmp_Inventory: Inventory_Container.Vector :=
            Inventory_Container.Empty_Vector;
          Player_Morale: constant Positive :=
            (if
-              Factions_List(NewGameSettings.PlayerFaction).Flags.Contains
+              Factions_List(NewGameSettings.Player_Faction).Flags.Contains
                 (Item => To_Unbounded_String(Source => "nomorale"))
             then 50
             else 100);
@@ -381,8 +381,8 @@ package body Game is
          end loop Player_Inventory_Loop;
          PlayerShip.Crew.Prepend
            (New_Item =>
-              (Name => NewGameSettings.PlayerName,
-               Gender => NewGameSettings.PlayerGender, Health => 100,
+              (Name => NewGameSettings.Player_Name,
+               Gender => NewGameSettings.Player_Gender, Health => 100,
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
                Order => ProtoMobs_List(Player_Index_2).Order,
@@ -394,7 +394,7 @@ package body Game is
                Payment => (others => 0), ContractLength => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                HomeBase => Random_Base,
-               Faction => NewGameSettings.PlayerFaction));
+               Faction => NewGameSettings.Player_Faction));
       end Add_Player_Block;
       Assign_Cabin_Block :
       declare
@@ -416,7 +416,7 @@ package body Game is
                      Module.Owner(I) := 1;
                      if Natural_Container.To_Index(Position => I) = 1 then
                         Module.Name :=
-                          NewGameSettings.PlayerName &
+                          NewGameSettings.Player_Name &
                           To_Unbounded_String(Source => "'s Cabin");
                      end if;
                      Cabin_Assigned := True;
@@ -443,7 +443,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      Player_Career := NewGameSettings.PlayerCareer;
+      Player_Career := NewGameSettings.Player_Career;
       -- Add welcoming message
       AddMessage
         (Message =>
@@ -452,6 +452,10 @@ package body Game is
    end New_Game;
 
    procedure Update_Game(Minutes: Positive; In_Combat: Boolean := False) is
+      use Bases.Ship;
+      use Ships.Crew;
+      use Ships.Upgrade;
+
       Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -589,6 +593,7 @@ package body Game is
    end Find_Skill_Index;
 
    function Load_Game_Data return String is
+      use Ada.Exceptions;
       use Log;
 
       --## rule off TYPE_INITIAL_VALUES
@@ -637,11 +642,16 @@ package body Game is
       Mods_Directories: Search_Type;
       Found_Directory: Directory_Entry_Type;
       procedure Load_Selected_Data(Data_Name, File_Name: String) is
+         use Input_Sources.File;
+
          Files: Search_Type;
          Found_File: Directory_Entry_Type;
          Data_File: File_Input;
          Local_File_Name: Unbounded_String := Null_Unbounded_String;
          procedure Load_Data_File(Local_Data_Name: String) is
+            use DOM.Core.Documents;
+            use DOM.Core.Nodes;
+            use DOM.Readers;
             use BasesTypes;
             use Careers;
             use Help;
@@ -649,7 +659,10 @@ package body Game is
 
             Data_Type: Unbounded_String;
             Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-            procedure Load_Data(Reader: Tree_Reader) is
+            procedure Load_Data(Current_Reader: Tree_Reader) is
+               use DOM.Core;
+               use DOM.Core.Elements;
+
                Game_Data: Document;
                Nodes_List, Child_Nodes: Node_List;
                Delete_Index: Natural := 0;
@@ -672,7 +685,7 @@ package body Game is
                   return 0;
                end Find_Attribute_Index;
             begin
-               Game_Data := Get_Tree(Read => Reader);
+               Game_Data := Get_Tree(Read => Current_Reader);
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
                Child_Nodes := Nodes_List;
@@ -1089,8 +1102,8 @@ package body Game is
             end Load_Data;
          begin
             Parse
-              (Parser => Reader,
-               Input => Data_File); --## rule line off IMPROPER_INITIALIZATION
+              (Parser => Reader, --## rule line off IMPROPER_INITIALIZATION
+               Input => Data_File);
             Data_Type :=
               To_Unbounded_String
                 (Source =>
@@ -1129,7 +1142,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "stories" then
                   LoadStories(Reader => Reader);
                elsif To_String(Source => Data_Type) = "data" then
-                  Load_Data(Reader => Reader);
+                  Load_Data(Current_Reader => Reader);
                elsif To_String(Source => Data_Type) = "careers" then
                   LoadCareers(Reader => Reader);
                end if;
