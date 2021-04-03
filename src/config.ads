@@ -1,4 +1,4 @@
---    Copyright 2016-2020 Bartek thindil Jasicki
+--    Copyright 2016-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -39,7 +39,7 @@ package Config is
    type Difficulty_Type is (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM);
    -- ****
 
-   -- ****s* Config/Config.NewGameRecord
+   -- ****s* Config/Config.New_Game_Record
    -- FUNCTION
    -- Data for new game settings
    -- PARAMETERS
@@ -63,14 +63,14 @@ package Config is
    -- PricesBonus            - Default bonus to prices for services in bases
    -- DifficultyLevel        - Default the game difficulty level
    -- SOURCE
-   type NewGameRecord is record
-      PlayerName: Unbounded_String;
-      PlayerGender: Character;
-      ShipName: Unbounded_String;
-      PlayerFaction: Unbounded_String;
-      PlayerCareer: Unbounded_String;
-      StartingBase: Unbounded_String;
-      EnemyDamageBonus: Bonus_Type;
+   type New_Game_Record is record
+      Player_Name: Unbounded_String;
+      Player_Gender: Character;
+      Ship_Name: Unbounded_String;
+      Player_Faction: Unbounded_String;
+      Player_Career: Unbounded_String;
+      Starting_Base: Unbounded_String;
+      Enemy_Damage_Bonus: Bonus_Type;
       PlayerDamageBonus: Bonus_Type;
       EnemyMeleeDamageBonus: Bonus_Type;
       PlayerMeleeDamageBonus: Bonus_Type;
@@ -183,7 +183,7 @@ package Config is
    -- FUNCTION
    -- Settings for the new game
    -- SOURCE
-   NewGameSettings: NewGameRecord;
+   NewGameSettings: New_Game_Record;
    -- ****
 
    -- ****v* Config/Config.GameSettings

@@ -94,7 +94,7 @@ package body Game.SaveLoad is
       end record;
       Difficulties: constant array(1 .. 8) of Difficulty_Data :=
         ((To_Unbounded_String("enemydamagebonus"),
-          NewGameSettings.EnemyDamageBonus),
+          NewGameSettings.Enemy_Damage_Bonus),
          (To_Unbounded_String("playerdamagebonus"),
           NewGameSettings.PlayerDamageBonus),
          (To_Unbounded_String("enemymeleedamagebonus"),
@@ -399,7 +399,7 @@ package body Game.SaveLoad is
       if Length(NodesList) > 0 then
          LogMessage("Loading game difficulty settings...", Everything, False);
          SavedNode := Item(NodesList, 0);
-         NewGameSettings.EnemyDamageBonus :=
+         NewGameSettings.Enemy_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
          NewGameSettings.PlayerDamageBonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
