@@ -867,16 +867,16 @@ package body Utils.UI is
 
    procedure ShowScreen(NewScreenName: String) is
       Paned: Ttk_PanedWindow := Get_Widget(".gameframe.paned");
-      SubWindow: Ttk_Frame;
+      SubWindow, OldSubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
         Get_Widget(Paned & ".controls.messages");
    begin
       SubWindows := To_Unbounded_String(Panes(Paned));
-      SubWindow :=
+      OldSubWindow :=
         (if Index(SubWindows, " ") = 0 then Get_Widget(To_String(SubWindows))
          else Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " "))));
-      Forget(Paned, SubWindow);
+      Forget(Paned, OldSubWindow);
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       if NewScreenName in "optionsframe" | "messagesframe" or
@@ -886,6 +886,13 @@ package body Utils.UI is
             SashPos(Paned, "0", Winfo_Get(Paned, "height"));
          end if;
       else
+         if Trim(Widget_Image(OldSubWindow), Both) in
+             Paned & ".messagesframe" | Paned & ".optionsframe" then
+            SashPos
+              (Paned, "0",
+               Natural'Image
+                 (GameSettings.WindowHeight - GameSettings.MessagesPosition));
+         end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
       Paned.Name := New_String(".gameframe.paned.controls.buttons");
