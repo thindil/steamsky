@@ -114,9 +114,10 @@ package body Statistics.UI is
          LF & "Distance traveled - the total amount of map's fields visited");
       StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
       TotalFinished := 0;
+      Count_Finished_Crafting_Loop :
       for CraftingOrder of GameStats.CraftingOrders loop
          TotalFinished := TotalFinished + CraftingOrder.Amount;
-      end loop;
+      end loop Count_Finished_Crafting_Loop;
       Label.Name := New_String(Widget_Image(StatsFrame) & ".left.crafts");
       configure
         (Label,
@@ -129,6 +130,7 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         Show_Finished_Crafting_Loop :
          for Order of GameStats.CraftingOrders loop
             Insert
               (TreeView,
@@ -136,7 +138,7 @@ package body Statistics.UI is
                To_String
                  (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
                "} {" & Positive'Image(Order.Amount) & "}]");
-         end loop;
+         end loop Show_Finished_Crafting_Loop;
          if GameStats.CraftingOrders.Length < 10 then
             configure
               (TreeView,
@@ -150,9 +152,10 @@ package body Statistics.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
       TotalFinished := 0;
+      Count_Finished_Missions_Loop :
       for FinishedMission of GameStats.FinishedMissions loop
          TotalFinished := TotalFinished + FinishedMission.Amount;
-      end loop;
+      end loop Count_Finished_Missions_Loop;
       Label.Name := New_String(StatsCanvas & ".stats.left.missions");
       declare
          MissionsPercent: Natural := 0;
@@ -180,6 +183,7 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         Show_Finished_Missions_Loop :
          for FinishedMission of GameStats.FinishedMissions loop
             case Missions_Types'Val
               (Integer'Value(To_String(FinishedMission.Index))) is
@@ -209,7 +213,7 @@ package body Statistics.UI is
                      "{} end -values [list {Passengers transported} {" &
                      Positive'Image(FinishedMission.Amount) & "}]");
             end case;
-         end loop;
+         end loop Show_Finished_Missions_Loop;
          if GameStats.FinishedMissions.Length < 10 then
             configure
               (TreeView,
@@ -230,9 +234,10 @@ package body Statistics.UI is
       end if;
       Add(Label, "The current goal: " & GoalText(0));
       TotalFinished := 0;
+      Count_Finished_Goals_Loop :
       for FinishedGoal of GameStats.FinishedGoals loop
          TotalFinished := TotalFinished + FinishedGoal.Amount;
-      end loop;
+      end loop Count_Finished_Goals_Loop;
       Label.Name := New_String(StatsCanvas & ".stats.left.goals");
       configure
         (Label, "-text {Finished goals:" & Natural'Image(TotalFinished) & "}");
@@ -243,18 +248,20 @@ package body Statistics.UI is
          Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
       end if;
       if TotalFinished > 0 then
+         Show_Finished_Goals_Loop :
          for Goal of GameStats.FinishedGoals loop
+            Get_Proto_Goal_Loop :
             for J in Goals_List.Iterate loop
                if Goal.Index = Goals_List(J).Index then
                   ProtoIndex := Goals_Container.To_Index(J);
-                  exit;
+                  exit Get_Proto_Goal_Loop;
                end if;
-            end loop;
+            end loop Get_Proto_Goal_Loop;
             Insert
               (TreeView,
                "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
                Positive'Image(Goal.Amount) & "}]");
-         end loop;
+         end loop Show_Finished_Goals_Loop;
          if GameStats.FinishedGoals.Length < 10 then
             configure
               (TreeView,
@@ -273,7 +280,9 @@ package body Statistics.UI is
          if Children(TreeView, "{}") /= "{}" then
             Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
          end if;
+         Count_Destroyed_Ships_Loop :
          for DestroyedShip of GameStats.DestroyedShips loop
+            Get_Proto_Ship_Loop :
             for J in ProtoShips_List.Iterate loop
                if ProtoShips_Container.Key(J) = DestroyedShip.Index then
                   Insert
@@ -281,11 +290,11 @@ package body Statistics.UI is
                      "{} end -values [list {" &
                      To_String(ProtoShips_List(J).Name) & "} {" &
                      Positive'Image(DestroyedShip.Amount) & "}]");
-                  exit;
+                  exit Get_Proto_Ship_Loop;
                end if;
-            end loop;
+            end loop Get_Proto_Ship_Loop;
             TotalDestroyed := TotalDestroyed + DestroyedShip.Amount;
-         end loop;
+         end loop Count_Destroyed_Ships_Loop;
          if GameStats.DestroyedShips.Length < 10 then
             configure
               (TreeView,
@@ -311,13 +320,14 @@ package body Statistics.UI is
          if Children(TreeView, "{}") /= "{}" then
             Delete(TreeView, "[list " & Children(TreeView, "{}") & "]");
          end if;
+         Show_Killed_Mobs_Loop :
          for KilledMob of GameStats.KilledMobs loop
             Insert
               (TreeView,
                "{} end -values [list {" & To_String(KilledMob.Index) & "} {" &
                Positive'Image(KilledMob.Amount) & "}]");
             TotalDestroyed := TotalDestroyed + KilledMob.Amount;
-         end loop;
+         end loop Show_Killed_Mobs_Loop;
          if GameStats.KilledMobs.Length < 10 then
             configure
               (TreeView,
