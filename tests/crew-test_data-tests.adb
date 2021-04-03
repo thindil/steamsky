@@ -210,9 +210,9 @@ package body Crew.Test_Data.Tests is
       UpdateCrew(1, 1);
       PlayerShip.Crew(1).Health := 0;
       UpdateCrew(1, 1);
-      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
-      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
-      NewGameSettings.StartingBase := To_Unbounded_String("1");
+      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
+      NewGameSettings.Player_Career := To_Unbounded_String("general");
+      NewGameSettings.Starting_Base := To_Unbounded_String("1");
       New_Game;
       Assert(True, "This tests can only crash.");
 

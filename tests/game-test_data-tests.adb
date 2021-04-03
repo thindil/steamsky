@@ -86,9 +86,9 @@ package body Game.Test_Data.Tests is
 
       End_Game(False);
       Assert(Messages_List.Length = 0, "Failed to clear old game data.");
-      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
-      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
-      NewGameSettings.StartingBase := To_Unbounded_String("1");
+      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
+      NewGameSettings.Player_Career := To_Unbounded_String("general");
+      NewGameSettings.Starting_Base := To_Unbounded_String("1");
       New_Game;
 
 --  begin read only

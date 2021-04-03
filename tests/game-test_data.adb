@@ -29,9 +29,9 @@ package body Game.Test_Data is
             Put_Line(Message);
          end if;
       end;
-      NewGameSettings.PlayerFaction := To_Unbounded_String("POLEIS");
-      NewGameSettings.PlayerCareer := To_Unbounded_String("general");
-      NewGameSettings.StartingBase := To_Unbounded_String("1");
+      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
+      NewGameSettings.Player_Career := To_Unbounded_String("general");
+      NewGameSettings.Starting_Base := To_Unbounded_String("1");
       New_Game;
    end Set_Up;
 
