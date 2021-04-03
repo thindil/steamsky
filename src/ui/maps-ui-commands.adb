@@ -1058,9 +1058,9 @@ package body Maps.UI.Commands is
            GameSettings.WindowHeight
          else GameSettings.WindowHeight - GameSettings.MessagesPosition);
       if SashPosition > 0 and then SashPosition /= PanedPosition then
-         if GameSettings.MessagesPosition - SashPosition > -1 then
+         if GameSettings.WindowHeight - SashPosition > -1 then
             GameSettings.MessagesPosition :=
-               GameSettings.WindowHeight - SashPosition;
+              GameSettings.WindowHeight - SashPosition;
          end if;
          PanedPosition := SashPosition;
       end if;
