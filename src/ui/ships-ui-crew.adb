@@ -67,7 +67,7 @@ package body Ships.UI.Crew is
    CrewTable: Table_Widget (7);
    -- ****
 
-   procedure UpdateCrewInfo is
+   procedure UpdateCrewInfo(Page: Positive := 1) is
       CrewInfoFrame, ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -75,6 +75,8 @@ package body Ships.UI.Crew is
       NeedRepair, NeedClean: Boolean := False;
       Button: Ttk_Button;
       TiredLevel: Integer;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       CrewInfoFrame.Interp := Get_Context;
       CrewInfoFrame.Name :=
@@ -131,6 +133,10 @@ package body Ships.UI.Crew is
            False);
       Load_Crew_Loop :
       for I in PlayerShip.Crew.Iterate loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          AddButton
            (CrewTable, To_String(PlayerShip.Crew(I).Name),
             "Show available crew member's options",
@@ -173,7 +179,22 @@ package body Ships.UI.Crew is
             "The current morale level of the selected crew member",
             "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 7,
             True);
+         exit Load_Crew_Loop when CrewTable.Row = 26;
+         <<End_Of_Loop>>
       end loop Load_Crew_Loop;
+      if Page > 1 then
+         if CrewTable.Row < 26 then
+            AddPagination
+              (CrewTable, "ShowCrew" & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (CrewTable, "ShowCrew" & Positive'Image(Page - 1),
+               "ShowCrew" & Positive'Image(Page + 1));
+         end if;
+      elsif CrewTable.Row = 26 then
+         AddPagination
+           (CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
+      end if;
       UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
       ShipCanvas.Interp := Get_Context;
