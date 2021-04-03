@@ -720,26 +720,26 @@ package body MainMenu.Commands is
       SpinBox: Ttk_SpinBox :=
         Get_Widget(".newgamemenu.canvas.difficulty.enemydamage", Interp);
    begin
-      NewGameSettings.PlayerGender := Tcl_GetVar(Interp, "playergender")(1);
+      NewGameSettings.Player_Gender := Tcl_GetVar(Interp, "playergender")(1);
       if cget(GoalButton, "-text") = "Random" then
          ClearCurrentGoal;
          CurrentGoal :=
            Goals_List
              (GetRandom(Goals_List.First_Index, Goals_List.Last_Index));
       end if;
-      NewGameSettings.PlayerName := To_Unbounded_String(Get(TextEntry));
+      NewGameSettings.Player_Name := To_Unbounded_String(Get(TextEntry));
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
-      NewGameSettings.ShipName := To_Unbounded_String(Get(TextEntry));
+      NewGameSettings.Ship_Name := To_Unbounded_String(Get(TextEntry));
       Find_Faction_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
-            NewGameSettings.PlayerFaction := Factions_Container.Key(I);
+            NewGameSettings.Player_Faction := Factions_Container.Key(I);
             ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
             Find_Career_Loop :
             for J in Factions_List(I).Careers.Iterate loop
                if Factions_List(I).Careers(J).Name =
                  To_Unbounded_String(Get(ComboBox)) then
-                  NewGameSettings.PlayerCareer := Careers_Container.Key(J);
+                  NewGameSettings.Player_Career := Careers_Container.Key(J);
                   exit Find_Faction_Loop;
                end if;
             end loop Find_Career_Loop;
@@ -749,7 +749,7 @@ package body MainMenu.Commands is
       Set_Starting_Base_Loop :
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(ComboBox)) then
-            NewGameSettings.StartingBase := BasesTypes_Container.Key(I);
+            NewGameSettings.Starting_Base := BasesTypes_Container.Key(I);
             exit Set_Starting_Base_Loop;
          end if;
       end loop Set_Starting_Base_Loop;
@@ -757,7 +757,7 @@ package body MainMenu.Commands is
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       NewGameSettings.DifficultyLevel :=
         Difficulty_Type'Val(Natural'Value(Current(ComboBox)));
-      NewGameSettings.EnemyDamageBonus :=
+      NewGameSettings.Enemy_Damage_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");

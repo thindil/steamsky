@@ -123,12 +123,12 @@ package body MainMenu is
       end if;
       configure(VersionLabel, "-text {" & Game_Version & "}");
       Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(NewGameSettings.PlayerName));
+      Insert(TextEntry, "0", To_String(NewGameSettings.Player_Name));
       Tcl_SetVar
-        (Get_Context, "playergender", "" & NewGameSettings.PlayerGender);
+        (Get_Context, "playergender", "" & NewGameSettings.Player_Gender);
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(NewGameSettings.ShipName));
+      Insert(TextEntry, "0", To_String(NewGameSettings.Ship_Name));
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
@@ -139,17 +139,17 @@ package body MainMenu is
       configure(ComboBox, "-values [list" & To_String(Values) & "]");
       Set
         (ComboBox,
-         To_String(Factions_List(NewGameSettings.PlayerFaction).Name));
+         To_String(Factions_List(NewGameSettings.Player_Faction).Name));
       Tcl_Eval(Get_Context, "SetFaction");
       ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
       Set
-        (ComboBox, To_String(Careers_List(NewGameSettings.PlayerCareer).Name));
+        (ComboBox, To_String(Careers_List(NewGameSettings.Player_Career).Name));
       ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
-      if NewGameSettings.StartingBase /= To_Unbounded_String("Any") then
+      if NewGameSettings.Starting_Base /= To_Unbounded_String("Any") then
          Set
            (ComboBox,
             "{" &
-            To_String(BasesTypes_List(NewGameSettings.StartingBase).Name) &
+            To_String(BasesTypes_List(NewGameSettings.Starting_Base).Name) &
             "}");
       else
          Set(ComboBox, "Any");
@@ -158,7 +158,7 @@ package body MainMenu is
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.EnemyDamageBonus * 100.0)));
+         Natural'Image(Natural(NewGameSettings.Enemy_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
       Set

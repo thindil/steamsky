@@ -168,7 +168,7 @@ package body Statistics is
       MalusIndexes: constant array(Positive range <>) of Positive :=
         (2, 4, 5, 6);
       DifficultyValues: constant array(1 .. 7) of Bonus_Type :=
-        (NewGameSettings.EnemyDamageBonus, NewGameSettings.PlayerDamageBonus,
+        (NewGameSettings.Enemy_Damage_Bonus, NewGameSettings.PlayerDamageBonus,
          NewGameSettings.EnemyMeleeDamageBonus,
          NewGameSettings.PlayerMeleeDamageBonus,
          NewGameSettings.ExperienceBonus, NewGameSettings.ReputationBonus,

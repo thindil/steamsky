@@ -34,11 +34,11 @@ package body Config is
       end LoadBoolean;
    begin
       NewGameSettings :=
-        (PlayerName => To_Unbounded_String("Laeran"), PlayerGender => 'M',
-         ShipName => To_Unbounded_String("Anaria"),
-         PlayerFaction => To_Unbounded_String("POLEIS"),
-         PlayerCareer => To_Unbounded_String("general"),
-         StartingBase => To_Unbounded_String("Any"), EnemyDamageBonus => 1.0,
+        (Player_Name => To_Unbounded_String("Laeran"), Player_Gender => 'M',
+         Ship_Name => To_Unbounded_String("Anaria"),
+         Player_Faction => To_Unbounded_String("POLEIS"),
+         Player_Career => To_Unbounded_String("general"),
+         Starting_Base => To_Unbounded_String("Any"), Enemy_Damage_Bonus => 1.0,
          PlayerDamageBonus => 1.0, EnemyMeleeDamageBonus => 1.0,
          PlayerMeleeDamageBonus => 1.0, ExperienceBonus => 1.0,
          ReputationBonus => 1.0, UpgradeCostBonus => 1.0, PricesBonus => 1.0,
@@ -65,19 +65,19 @@ package body Config is
             FieldName := Head(RawData, EqualIndex - 2);
             Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
             if FieldName = To_Unbounded_String("PlayerName") then
-               NewGameSettings.PlayerName := Value;
+               NewGameSettings.Player_Name := Value;
             elsif FieldName = To_Unbounded_String("PlayerGender") then
-               NewGameSettings.PlayerGender := Element(Value, 1);
+               NewGameSettings.Player_Gender := Element(Value, 1);
             elsif FieldName = To_Unbounded_String("ShipName") then
-               NewGameSettings.ShipName := Value;
+               NewGameSettings.Ship_Name := Value;
             elsif FieldName = To_Unbounded_String("PlayerFaction") then
-               NewGameSettings.PlayerFaction := Value;
+               NewGameSettings.Player_Faction := Value;
             elsif FieldName = To_Unbounded_String("PlayerCareer") then
-               NewGameSettings.PlayerCareer := Value;
+               NewGameSettings.Player_Career := Value;
             elsif FieldName = To_Unbounded_String("StartingBase") then
-               NewGameSettings.StartingBase := Value;
+               NewGameSettings.Starting_Base := Value;
             elsif FieldName = To_Unbounded_String("EnemyDamageBonus") then
-               NewGameSettings.EnemyDamageBonus :=
+               NewGameSettings.Enemy_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PlayerDamageBonus") then
                NewGameSettings.PlayerDamageBonus :=
@@ -192,23 +192,23 @@ package body Config is
    begin
       Create(ConfigFile, Append_File, To_String(Save_Directory) & "game.cfg");
       Put_Line
-        (ConfigFile, "PlayerName = " & To_String(NewGameSettings.PlayerName));
-      Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.PlayerGender);
+        (ConfigFile, "PlayerName = " & To_String(NewGameSettings.Player_Name));
+      Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.Player_Gender);
       Put_Line
-        (ConfigFile, "ShipName = " & To_String(NewGameSettings.ShipName));
-      Put_Line
-        (ConfigFile,
-         "PlayerFaction = " & To_String(NewGameSettings.PlayerFaction));
+        (ConfigFile, "ShipName = " & To_String(NewGameSettings.Ship_Name));
       Put_Line
         (ConfigFile,
-         "PlayerCareer = " & To_String(NewGameSettings.PlayerCareer));
+         "PlayerFaction = " & To_String(NewGameSettings.Player_Faction));
       Put_Line
         (ConfigFile,
-         "StartingBase = " & To_String(NewGameSettings.StartingBase));
+         "PlayerCareer = " & To_String(NewGameSettings.Player_Career));
+      Put_Line
+        (ConfigFile,
+         "StartingBase = " & To_String(NewGameSettings.Starting_Base));
       Put_Line
         (ConfigFile,
          "EnemyDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.EnemyDamageBonus));
+         Bonus_Type'Image(NewGameSettings.Enemy_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "PlayerDamageBonus =" &

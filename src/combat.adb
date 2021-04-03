@@ -675,7 +675,7 @@ package body Combat is
                              Float(NewGameSettings.PlayerDamageBonus))
                         else Integer
                             (Float(WeaponDamage) *
-                             Float(NewGameSettings.EnemyDamageBonus)));
+                             Float(NewGameSettings.Enemy_Damage_Bonus)));
                      if ArmorIndex = 0 then
                         if Ship.Modules(K).MType = HARPOON_GUN then
                            Count_Damage_Loop :
