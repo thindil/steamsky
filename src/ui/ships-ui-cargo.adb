@@ -159,8 +159,7 @@ package body Ships.UI.Cargo is
                "ShowCargo" & Positive'Image(Page + 1));
          end if;
       elsif CargoTable.Row = 26 then
-         AddPagination
-           (CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
+         AddPagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
       UpdateTable(CargoTable);
       configure(TypeBox, "-values [list " & To_String(ItemsTypes) & "]");

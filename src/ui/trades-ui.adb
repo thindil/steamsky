@@ -354,12 +354,11 @@ package body Trades.UI is
       if Page > 1 then
          if TradeTable.Row < 26 then
             AddPagination
-              (TradeTable,
-               "ShowTrade " & Arguments & Positive'Image(Page - 1), "");
+              (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
+               "");
          else
             AddPagination
-              (TradeTable,
-               "ShowTrade " & Arguments & Positive'Image(Page - 1),
+              (TradeTable, "ShowTrade " & Arguments & Positive'Image(Page - 1),
                "ShowTrade " & Arguments & Positive'Image(Page + 1));
          end if;
       elsif TradeTable.Row = 26 then

@@ -182,7 +182,9 @@ package body ShipModules is
         To_Unbounded_String
           (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
    begin
-      Replace_Element(ModuleTypeName, 1, To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
+      Replace_Element
+        (ModuleTypeName, 1,
+         To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
       Translate(ModuleTypeName, To_Mapping("_", " "));
       return To_String(ModuleTypeName);
    end GetModuleType;

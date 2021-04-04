@@ -1103,6 +1103,7 @@ package body Game is
          begin
             Parse
               (Parser => Reader, --## rule line off IMPROPER_INITIALIZATION
+
                Input => Data_File);
             Data_Type :=
               To_Unbounded_String

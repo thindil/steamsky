@@ -38,10 +38,11 @@ package body Config is
          Ship_Name => To_Unbounded_String("Anaria"),
          Player_Faction => To_Unbounded_String("POLEIS"),
          Player_Career => To_Unbounded_String("general"),
-         Starting_Base => To_Unbounded_String("Any"), Enemy_Damage_Bonus => 1.0,
-         PlayerDamageBonus => 1.0, EnemyMeleeDamageBonus => 1.0,
-         PlayerMeleeDamageBonus => 1.0, ExperienceBonus => 1.0,
-         ReputationBonus => 1.0, UpgradeCostBonus => 1.0, PricesBonus => 1.0,
+         Starting_Base => To_Unbounded_String("Any"),
+         Enemy_Damage_Bonus => 1.0, PlayerDamageBonus => 1.0,
+         EnemyMeleeDamageBonus => 1.0, PlayerMeleeDamageBonus => 1.0,
+         ExperienceBonus => 1.0, ReputationBonus => 1.0,
+         UpgradeCostBonus => 1.0, PricesBonus => 1.0,
          DifficultyLevel => NORMAL);
       GameSettings :=
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
