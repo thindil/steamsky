@@ -150,7 +150,7 @@ package body Bases.Trade is
       else
          Cost := Recipes_List(RecipeIndex).Difficulty * 10;
       end if;
-      Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
+      Cost := Natural(Float(Cost) * Float(NewGameSettings.Prices_Bonus));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -246,7 +246,7 @@ package body Bases.Trade is
             end if;
          end loop Count_Heal_Cost_Loop;
       end if;
-      Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
+      Cost := Natural(Float(Cost) * Float(NewGameSettings.Prices_Bonus));
       if Cost = 0 then
          Cost := 1;
       end if;
@@ -266,7 +266,7 @@ package body Bases.Trade is
    function TrainCost
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) return Natural is
-      Cost: Natural := Natural(100.0 * NewGameSettings.PricesBonus);
+      Cost: Natural := Natural(100.0 * NewGameSettings.Prices_Bonus);
    begin
       Count_Train_Cost_Loop :
       for Skill of PlayerShip.Crew(MemberIndex).Skills loop
@@ -277,7 +277,7 @@ package body Bases.Trade is
             Cost :=
               Natural
                 (Float((Skill(2) + 1) * 100) *
-                 Float(NewGameSettings.PricesBonus));
+                 Float(NewGameSettings.Prices_Bonus));
             if Cost = 0 then
                Cost := 1;
             end if;

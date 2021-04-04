@@ -38,7 +38,7 @@ package body Bases is
       end if;
       NewPoints :=
         SkyBases(BaseIndex).Reputation(2) +
-        Integer(Float(Points) * Float(NewGameSettings.ReputationBonus));
+        Integer(Float(Points) * Float(NewGameSettings.Reputation_Bonus));
       if BaseIndex = PlayerShip.HomeBase then
          NewPoints := NewPoints + Points;
       end if;
@@ -307,7 +307,7 @@ package body Bases is
             Payment := Payment / 2;
          end if;
          Price :=
-           Natural(Float(Price * 100) * Float(NewGameSettings.PricesBonus));
+           Natural(Float(Price * 100) * Float(NewGameSettings.Prices_Bonus));
          if Price = 0 then
             Price := 1;
          end if;

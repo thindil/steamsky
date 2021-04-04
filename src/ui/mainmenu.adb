@@ -164,39 +164,40 @@ package body MainMenu is
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.PlayerDamageBonus * 100.0)));
+         Natural'Image(Natural(NewGameSettings.Player_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
       Set
         (SpinBox,
          Natural'Image
-           (Natural(NewGameSettings.EnemyMeleeDamageBonus * 100.0)));
+           (Natural(NewGameSettings.Enemy_Melee_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
       Set
         (SpinBox,
          Natural'Image
-           (Natural(NewGameSettings.PlayerMeleeDamageBonus * 100.0)));
+           (Natural(NewGameSettings.Player_Melee_Damage_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.ExperienceBonus * 100.0)));
+         Natural'Image(Natural(NewGameSettings.Experience_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.ReputationBonus * 100.0)));
+         Natural'Image(Natural(NewGameSettings.Reputation_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.UpgradeCostBonus * 100.0)));
+         Natural'Image(Natural(NewGameSettings.Upgrade_Cost_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
       Set
-        (SpinBox, Natural'Image(Natural(NewGameSettings.PricesBonus * 100.0)));
+        (SpinBox,
+         Natural'Image(Natural(NewGameSettings.Prices_Bonus * 100.0)));
       Tcl_Eval(Get_Context, "SetPoints");
       ShowMainMenu;
       Current
         (ComboBox,
-         Natural'Image(Difficulty_Type'Pos(NewGameSettings.DifficultyLevel)));
+         Natural'Image(Difficulty_Type'Pos(NewGameSettings.Difficulty_Level)));
       Generate(ComboBox, "<<ComboboxSelected>>");
    end CreateMainMenu;
 

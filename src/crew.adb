@@ -61,7 +61,7 @@ package body Crew is
          then Amount + (Amount / 2)
          else Amount);
       NewAmount :=
-        Natural(Float(NewAmount) * Float(NewGameSettings.ExperienceBonus));
+        Natural(Float(NewAmount) * Float(NewGameSettings.Experience_Bonus));
       if NewAmount = 0 then
          return;
       end if;
