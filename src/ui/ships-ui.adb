@@ -40,17 +40,9 @@ with ShipModules; use ShipModules;
 with Ships.UI.Crew;
 with Ships.UI.Cargo;
 with Ships.UI.Modules;
-with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI is
-
-   -- ****iv* SUI2/SUI2.ModulesTable
-   -- FUNCTION
-   -- Table with info about the available items to trade
-   -- SOURCE
-   ModulesTable: Table_Widget (2);
-   -- ****
 
    function Show_Ship_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -67,8 +59,7 @@ package body Ships.UI is
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       CancelButton: Ttk_Button;
-      Row: Natural := 0;
-      ShipCanvas: Tk_Canvas :=
+      ShipCanvas: constant Tk_Canvas :=
         Get_Widget(Paned & ".shipinfoframe.general.canvas");
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
@@ -79,12 +70,6 @@ package body Ships.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
-         ShipInfoFrame := Get_Widget(ShipInfoFrame & ".modules.canvas.frame");
-         ModulesTable :=
-           CreateTable
-             (Widget_Image(ShipInfoFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
-              False);
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          Tcl_Eval(Interp, "InvokeButton " & CloseButton);
@@ -266,27 +251,7 @@ package body Ships.UI is
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
       -- Setting ship modules info
-      Row := 2;
-      ClearTable(ModulesTable);
-      Show_Modules_Menu_Loop :
-      for Module of PlayerShip.Modules loop
-         AddButton
-           (ModulesTable, To_String(Module.Name),
-            "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Row - 1), 1);
-         AddProgressBar
-           (ModulesTable, Module.Durability, Module.MaxDurability,
-            "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
-         Row := Row + 1;
-      end loop Show_Modules_Menu_Loop;
-      UpdateTable(ModulesTable);
-      Tcl_Eval(Get_Context, "update");
-      ShipCanvas.Name := New_String(Paned & ".shipinfoframe.modules.canvas");
-      configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
-      Xview_Move_To(ShipCanvas, "0.0");
-      Yview_Move_To(ShipCanvas, "0.0");
+      Ships.UI.Modules.UpdateModulesInfo;
       -- Setting crew info
       Ships.UI.Crew.UpdateCrewInfo;
       -- Setting cargo info
