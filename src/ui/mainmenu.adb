@@ -143,7 +143,8 @@ package body MainMenu is
       Tcl_Eval(Get_Context, "SetFaction");
       ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
       Set
-        (ComboBox, To_String(Careers_List(NewGameSettings.Player_Career).Name));
+        (ComboBox,
+         To_String(Careers_List(NewGameSettings.Player_Career).Name));
       ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
       if NewGameSettings.Starting_Base /= To_Unbounded_String("Any") then
          Set
