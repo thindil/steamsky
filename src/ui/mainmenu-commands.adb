@@ -755,33 +755,33 @@ package body MainMenu.Commands is
       end loop Set_Starting_Base_Loop;
       ComboBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
-      NewGameSettings.DifficultyLevel :=
+      NewGameSettings.Difficulty_Level :=
         Difficulty_Type'Val(Natural'Value(Current(ComboBox)));
       NewGameSettings.Enemy_Damage_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
-      NewGameSettings.PlayerDamageBonus :=
+      NewGameSettings.Player_Damage_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
-      NewGameSettings.EnemyMeleeDamageBonus :=
+      NewGameSettings.Enemy_Melee_Damage_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
-      NewGameSettings.PlayerMeleeDamageBonus :=
+      NewGameSettings.Player_Melee_Damage_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
-      NewGameSettings.ExperienceBonus :=
+      NewGameSettings.Experience_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
-      NewGameSettings.ReputationBonus :=
+      NewGameSettings.Reputation_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
-      NewGameSettings.UpgradeCostBonus :=
+      NewGameSettings.Upgrade_Cost_Bonus :=
         Bonus_Type'Value(Get(SpinBox)) / 100.0;
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
-      NewGameSettings.PricesBonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
+      NewGameSettings.Prices_Bonus := Bonus_Type'Value(Get(SpinBox)) / 100.0;
       New_Game;
       StartGame;
       return TCL_OK;

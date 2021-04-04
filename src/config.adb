@@ -39,11 +39,11 @@ package body Config is
          Player_Faction => To_Unbounded_String("POLEIS"),
          Player_Career => To_Unbounded_String("general"),
          Starting_Base => To_Unbounded_String("Any"),
-         Enemy_Damage_Bonus => 1.0, PlayerDamageBonus => 1.0,
-         EnemyMeleeDamageBonus => 1.0, PlayerMeleeDamageBonus => 1.0,
-         ExperienceBonus => 1.0, ReputationBonus => 1.0,
-         UpgradeCostBonus => 1.0, PricesBonus => 1.0,
-         DifficultyLevel => NORMAL);
+         Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
+         Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
+         Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
+         Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
+         Difficulty_Level => NORMAL);
       GameSettings :=
         (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
          AutoReturn => True, AutoFinish => True, LowFuel => 100,
@@ -81,34 +81,34 @@ package body Config is
                NewGameSettings.Enemy_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PlayerDamageBonus") then
-               NewGameSettings.PlayerDamageBonus :=
+               NewGameSettings.Player_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("EnemyMeleeDamageBonus") then
-               NewGameSettings.EnemyMeleeDamageBonus :=
+               NewGameSettings.Enemy_Melee_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName =
               To_Unbounded_String("PlayerMeleeDamageBonus") then
-               NewGameSettings.PlayerMeleeDamageBonus :=
+               NewGameSettings.Player_Melee_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ExperienceBonus") then
-               NewGameSettings.ExperienceBonus :=
+               NewGameSettings.Experience_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ReputationBonus") then
-               NewGameSettings.ReputationBonus :=
+               NewGameSettings.Reputation_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("UpgradeCostBonus") then
-               NewGameSettings.UpgradeCostBonus :=
+               NewGameSettings.Upgrade_Cost_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PricesBonus") then
-               NewGameSettings.PricesBonus :=
+               NewGameSettings.Prices_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("DifficultyLevel") then
                if To_String(Value) in "VERY_EASY" | "EASY" | "NORMAL" |
                      "HARD" | "VERY_HARD" | "CUSTOM" then
-                  NewGameSettings.DifficultyLevel :=
+                  NewGameSettings.Difficulty_Level :=
                     Difficulty_Type'Value(To_String(Value));
                else
-                  NewGameSettings.DifficultyLevel := NORMAL;
+                  NewGameSettings.Difficulty_Level := NORMAL;
                end if;
             elsif FieldName = To_Unbounded_String("AutoRest") then
                GameSettings.AutoRest := LoadBoolean;
@@ -213,34 +213,34 @@ package body Config is
       Put_Line
         (ConfigFile,
          "PlayerDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.PlayerDamageBonus));
+         Bonus_Type'Image(NewGameSettings.Player_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "EnemyMeleeDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.EnemyMeleeDamageBonus));
+         Bonus_Type'Image(NewGameSettings.Enemy_Melee_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "PlayerMeleeDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.PlayerMeleeDamageBonus));
+         Bonus_Type'Image(NewGameSettings.Player_Melee_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "ExperienceBonus =" &
-         Bonus_Type'Image(NewGameSettings.ExperienceBonus));
+         Bonus_Type'Image(NewGameSettings.Experience_Bonus));
       Put_Line
         (ConfigFile,
          "ReputationBonus =" &
-         Bonus_Type'Image(NewGameSettings.ReputationBonus));
+         Bonus_Type'Image(NewGameSettings.Reputation_Bonus));
       Put_Line
         (ConfigFile,
          "UpgradeCostBonus =" &
-         Bonus_Type'Image(NewGameSettings.UpgradeCostBonus));
+         Bonus_Type'Image(NewGameSettings.Upgrade_Cost_Bonus));
       Put_Line
         (ConfigFile,
-         "PricesBonus =" & Bonus_Type'Image(NewGameSettings.PricesBonus));
+         "PricesBonus =" & Bonus_Type'Image(NewGameSettings.Prices_Bonus));
       Put_Line
         (ConfigFile,
          "DifficultyLevel = " &
-         Difficulty_Type'Image(NewGameSettings.DifficultyLevel));
+         Difficulty_Type'Image(NewGameSettings.Difficulty_Level));
       SaveBoolean(GameSettings.AutoRest, "AutoRest");
       Put_Line
         (ConfigFile,

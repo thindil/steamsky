@@ -43,25 +43,25 @@ package Config is
    -- FUNCTION
    -- Data for new game settings
    -- PARAMETERS
-   -- PlayerName             - Default player name
-   -- PlayerGender           - Default player gender
-   -- ShipName               - Default ship name
-   -- PlayerFaction          - Default player faction index
-   -- PlayerCareer           - Default player career index
-   -- StartingBase           - Default starting base type
-   -- EnemyDamageBonus       - Default bonus for enemy ship to damage
-   -- PlayerDamageBonus      - Default bonus for player ship to damage
-   -- EnemyMeleeDamageBonus  - Default bonus for enemy to damage in melee
-   --                          combat
-   -- PlayerMeleeDamageBonus - Default bonus for player and player's ship crew
-   --                          to damage in melee combat
-   -- ExperienceBonus        - Default bonus to gained experience
-   -- ReputationBonus        - Default bonus to gained or lost reputation in
-   --                          bases
-   -- UpgradeCostBonus       - Default bonus to amount of materials needed for
-   --                          player's ship upgrades.
-   -- PricesBonus            - Default bonus to prices for services in bases
-   -- DifficultyLevel        - Default the game difficulty level
+   -- Player_Name               - Default player name
+   -- Player_Gender             - Default player gender
+   -- Ship_Name                 - Default ship name
+   -- Player_Faction            - Default player faction index
+   -- Player_Career             - Default player career index
+   -- Starting_Base             - Default starting base type
+   -- Enemy_Damage_Bonus        - Default bonus for enemy ship to damage
+   -- Player_Damage_Bonus       - Default bonus for player ship to damage
+   -- Enemy_Melee_Damage_Bonus  - Default bonus for enemy to damage in melee
+   --                             combat
+   -- Player_Melee_Damage_Bonus - Default bonus for player and player's ship
+   --                             crew to damage in melee combat
+   -- Experience_Bonus          - Default bonus to gained experience
+   -- Reputation_Bonus          - Default bonus to gained or lost reputation in
+   --                             bases
+   -- Upgrade_Cost_Bonus        - Default bonus to amount of materials needed for
+   --                             player's ship upgrades.
+   -- Prices_Bonus              - Default bonus to prices for services in bases
+   -- Difficulty_Level          - Default the game difficulty level
    -- SOURCE
    type New_Game_Record is record
       Player_Name: Unbounded_String;
@@ -71,14 +71,14 @@ package Config is
       Player_Career: Unbounded_String;
       Starting_Base: Unbounded_String;
       Enemy_Damage_Bonus: Bonus_Type;
-      PlayerDamageBonus: Bonus_Type;
-      EnemyMeleeDamageBonus: Bonus_Type;
-      PlayerMeleeDamageBonus: Bonus_Type;
-      ExperienceBonus: Bonus_Type;
-      ReputationBonus: Bonus_Type;
-      UpgradeCostBonus: Bonus_Type;
-      PricesBonus: Bonus_Type;
-      DifficultyLevel: Difficulty_Type;
+      Player_Damage_Bonus: Bonus_Type;
+      Enemy_Melee_Damage_Bonus: Bonus_Type;
+      Player_Melee_Damage_Bonus: Bonus_Type;
+      Experience_Bonus: Bonus_Type;
+      Reputation_Bonus: Bonus_Type;
+      Upgrade_Cost_Bonus: Bonus_Type;
+      Prices_Bonus: Bonus_Type;
+      Difficulty_Level: Difficulty_Type;
    end record;
    -- ****
 

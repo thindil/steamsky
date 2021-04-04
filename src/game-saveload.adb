@@ -96,18 +96,18 @@ package body Game.SaveLoad is
         ((To_Unbounded_String("enemydamagebonus"),
           NewGameSettings.Enemy_Damage_Bonus),
          (To_Unbounded_String("playerdamagebonus"),
-          NewGameSettings.PlayerDamageBonus),
+          NewGameSettings.Player_Damage_Bonus),
          (To_Unbounded_String("enemymeleedamagebonus"),
-          NewGameSettings.EnemyMeleeDamageBonus),
+          NewGameSettings.Enemy_Melee_Damage_Bonus),
          (To_Unbounded_String("playermeleedamagebonus"),
-          NewGameSettings.PlayerMeleeDamageBonus),
+          NewGameSettings.Player_Melee_Damage_Bonus),
          (To_Unbounded_String("experiencebonus"),
-          NewGameSettings.ExperienceBonus),
+          NewGameSettings.Experience_Bonus),
          (To_Unbounded_String("reputationbonus"),
-          NewGameSettings.ReputationBonus),
+          NewGameSettings.Reputation_Bonus),
          (To_Unbounded_String("upgradecostbonus"),
-          NewGameSettings.UpgradeCostBonus),
-         (To_Unbounded_String("pricesbonus"), NewGameSettings.PricesBonus));
+          NewGameSettings.Upgrade_Cost_Bonus),
+         (To_Unbounded_String("pricesbonus"), NewGameSettings.Prices_Bonus));
    begin
       LogMessage
         ("Start saving game in file " & To_String(SaveName) & ".", Everything);
@@ -401,21 +401,21 @@ package body Game.SaveLoad is
          SavedNode := Item(NodesList, 0);
          NewGameSettings.Enemy_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
-         NewGameSettings.PlayerDamageBonus :=
+         NewGameSettings.Player_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
-         NewGameSettings.EnemyMeleeDamageBonus :=
+         NewGameSettings.Enemy_Melee_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
-         NewGameSettings.PlayerMeleeDamageBonus :=
+         NewGameSettings.Player_Melee_Damage_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(SavedNode, "playermeleedamagebonus"));
-         NewGameSettings.ExperienceBonus :=
+         NewGameSettings.Experience_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "experiencebonus"));
-         NewGameSettings.ReputationBonus :=
+         NewGameSettings.Reputation_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "reputationbonus"));
-         NewGameSettings.UpgradeCostBonus :=
+         NewGameSettings.Upgrade_Cost_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
          if Get_Attribute(SavedNode, "pricesbonus") /= "" then
-            NewGameSettings.PricesBonus :=
+            NewGameSettings.Prices_Bonus :=
               Bonus_Type'Value(Get_Attribute(SavedNode, "pricesbonus"));
          end if;
          LogMessage("done.", Everything, True, False);

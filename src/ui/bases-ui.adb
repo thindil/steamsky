@@ -323,7 +323,7 @@ package body Bases.UI is
                  Recipes_List(ItemIndex).ResultIndex) *
               Recipes_List(ItemIndex).Difficulty * 10
             else Recipes_List(ItemIndex).Difficulty * 10);
-         Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
+         Cost := Natural(Float(Cost) * Float(NewGameSettings.Prices_Bonus));
          if Cost = 0 then
             Cost := 1;
          end if;

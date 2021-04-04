@@ -483,7 +483,7 @@ package body Bases.Ship is
          end if;
       end loop Count_Docking_Cost_Loop;
       DockingCost :=
-        Natural(Float(DockingCost) * Float(NewGameSettings.PricesBonus));
+        Natural(Float(DockingCost) * Float(NewGameSettings.Prices_Bonus));
       if DockingCost = 0 then
          DockingCost := 1;
       end if;
@@ -546,7 +546,7 @@ package body Bases.Ship is
           (To_Unbounded_String("shipyard")) then
          Cost := Cost / 2;
       end if;
-      Cost := Natural(Float(Cost) * Float(NewGameSettings.PricesBonus));
+      Cost := Natural(Float(Cost) * Float(NewGameSettings.Prices_Bonus));
       if Cost = 0 then
          Cost := 1;
       end if;

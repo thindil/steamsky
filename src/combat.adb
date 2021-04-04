@@ -672,7 +672,7 @@ package body Combat is
                        (if Ship = PlayerShip then
                           Integer
                             (Float(WeaponDamage) *
-                             Float(NewGameSettings.PlayerDamageBonus))
+                             Float(NewGameSettings.Player_Damage_Bonus))
                         else Integer
                             (Float(WeaponDamage) *
                              Float(NewGameSettings.Enemy_Damage_Bonus)));
@@ -825,10 +825,10 @@ package body Combat is
               (if PlayerAttack2 then
                  Integer
                    (Float(Damage) *
-                    Float(NewGameSettings.PlayerMeleeDamageBonus))
+                    Float(NewGameSettings.Player_Melee_Damage_Bonus))
                else Integer
                    (Float(Damage) *
-                    Float(NewGameSettings.EnemyMeleeDamageBonus)));
+                    Float(NewGameSettings.Enemy_Melee_Damage_Bonus)));
             if Attacker.Equipment(1) > 0 then
                AttackSkill :=
                  GetSkillLevel
