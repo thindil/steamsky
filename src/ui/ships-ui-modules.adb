@@ -40,6 +40,7 @@ with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -59,9 +60,17 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.UI.Crew; use Ships.UI.Crew;
 with Ships.Upgrade; use Ships.Upgrade;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
+
+   -- ****iv* SUI2/SUI2.ModulesTable
+   -- FUNCTION
+   -- Table with info about the available items to trade
+   -- SOURCE
+   ModulesTable: Table_Widget (2);
+   -- ****
 
    -- ****if* SUModules/SUModules.Show_Module_Menu_Command
    -- FUNCTION
@@ -1648,6 +1657,42 @@ package body Ships.UI.Modules is
       Focus(Button);
       return TCL_OK;
    end Get_Active_Button_Command;
+
+   procedure UpdateModulesInfo(Page: Positive := 1) is
+      pragma Unreferenced(Page);
+      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
+      ShipCanvas: constant Tk_Canvas :=
+        Get_Widget(Paned & ".shipinfoframe.modules.canvas");
+      ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
+      Row: Positive := 2;
+   begin
+      if ModulesTable.Row_Height = 1 then
+         ModulesTable :=
+           CreateTable
+             (Widget_Image(ShipInfoFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
+              False);
+      end if;
+      ClearTable(ModulesTable);
+      Show_Modules_Menu_Loop :
+      for Module of PlayerShip.Modules loop
+         AddButton
+           (ModulesTable, To_String(Module.Name),
+            "Show available module's options",
+            "ShowModuleMenu" & Positive'Image(Row - 1), 1);
+         AddProgressBar
+           (ModulesTable, Module.Durability, Module.MaxDurability,
+            "Show available module's options",
+            "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
+         Row := Row + 1;
+      end loop Show_Modules_Menu_Loop;
+      UpdateTable(ModulesTable);
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+      Xview_Move_To(ShipCanvas, "0.0");
+      Yview_Move_To(ShipCanvas, "0.0");
+   end UpdateModulesInfo;
 
    procedure AddCommands is
    begin

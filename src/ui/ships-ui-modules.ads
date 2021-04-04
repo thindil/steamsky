@@ -27,4 +27,13 @@ package Ships.UI.Modules is
    procedure AddCommands;
    -- ****
 
+   -- ****f* SUModules/SUModules.UpdateModulesInfo
+   -- FUNCTION
+   -- Update information about the player ship modules
+   -- PARAMETERS
+   -- Page - The number of current page of modules list to show
+   -- SOURCE
+   procedure UpdateModulesInfo(Page: Positive := 1);
+   -- ****
+
 end Ships.UI.Modules;
