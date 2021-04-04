@@ -22,6 +22,7 @@ with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
+with CArgv;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -192,8 +193,7 @@ package body Ships.UI.Crew is
                "ShowCrew" & Positive'Image(Page + 1));
          end if;
       elsif CrewTable.Row = 26 then
-         AddPagination
-           (CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
+         AddPagination(CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
       end if;
       UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
@@ -1270,6 +1270,36 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Member_Menu_Command;
 
+   -- ****o* SUCrew/SUCrew.Show_Crew_Command
+   -- FUNCTION
+   -- Show the list of the player's ship crew to a player
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowCrew ?page?
+   -- Page parameter is a index of page from which starts showing
+   -- crew.
+   -- SOURCE
+   function Show_Crew_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Crew_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+   begin
+      UpdateCrewInfo(Positive'Value(CArgv.Arg(Argv, 1)));
+      return TCL_OK;
+   end Show_Crew_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1283,6 +1313,7 @@ package body Ships.UI.Crew is
         ("ShowMemberPriorities", Show_Member_Priorities_Command'Access);
       AddCommand("SetPriority", Set_Priority_Command'Access);
       AddCommand("ShowMemberMenu", Show_Member_Menu_Command'Access);
+      AddCommand("ShowCrew", Show_Crew_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
    end AddCommands;
 
