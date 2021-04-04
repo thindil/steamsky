@@ -70,6 +70,7 @@ package body Table is
          Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
          Table.Scrollbars := False;
       end if;
+      Create_Headers_Loop :
       for I in Headers'Range loop
          Canvas_Create
            (Canvas, "text",
@@ -87,7 +88,7 @@ package body Table is
          if I = 1 then
             Table.Row_Height := Positive'Value(Slice(Tokens, 4)) + 5;
          end if;
-      end loop;
+      end loop Create_Headers_Loop;
       Canvas_Create
         (Canvas, "rectangle",
          "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
@@ -110,7 +111,9 @@ package body Table is
          Destroy(Button);
          Destroy(ButtonsFrame);
       end if;
+      Clear_Rows_Loop :
       for Row in 1 .. Table.Row loop
+         Clear_Columns_Loop :
          for Column in 1 .. Table.Amount loop
             Delete
               (Table.Canvas,
@@ -125,8 +128,8 @@ package body Table is
               (Table.Canvas,
                "progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
                Trim(Positive'Image(Column), Left));
-         end loop;
-      end loop;
+         end loop Clear_Columns_Loop;
+      end loop Clear_Rows_Loop;
       Table.Row := 1;
    end ClearTable;
 
@@ -198,9 +201,10 @@ package body Table is
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
    begin
+      Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
-      end loop;
+      end loop Count_X_Loop;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
@@ -250,12 +254,14 @@ package body Table is
       NewX: Natural := Table.Columns_Width(1);
       NewY: Natural := 2;
    begin
+      Update_Columns_Loop :
       for Column in 2 .. Table.Amount loop
          Tag :=
            To_Unbounded_String("header" & Trim(Natural'Image(Column), Left));
          Coords
            (Table.Canvas, To_String(Tag),
             Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
+         Update_Rows_Loop :
          for Row in 1 .. Table.Row loop
             NewY := NewY + Table.Row_Height;
             Tag :=
@@ -280,10 +286,10 @@ package body Table is
               (Table.Canvas, To_String(Tag),
                Trim(Positive'Image(NewX + 2), Left),
                Trim(Positive'Image(NewY + 7), Left));
-         end loop;
+         end loop Update_Rows_Loop;
          NewX := NewX + Table.Columns_Width(Column);
          NewY := 2;
-      end loop;
+      end loop Update_Columns_Loop;
       declare
          Tokens: Slice_Set;
       begin
@@ -364,9 +370,10 @@ package body Table is
          end if;
       end Add_Bindings;
    begin
+      Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
-      end loop;
+      end loop Count_X_Loop;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
