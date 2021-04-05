@@ -281,12 +281,12 @@ package body Game is
                      if Attempts = 251 then
                         Pos_X :=
                           GetRandom
-                            (Min => Bases_Range'First + 5,
-                             Max => Bases_Range'Last - 5);
+                            (Min => Bases_Range'First + 10,
+                             Max => Bases_Range'Last - 10);
                         Pos_Y :=
                           GetRandom
-                            (Min => Bases_Range'First + 5,
-                             Max => Bases_Range'Last - 5);
+                            (Min => Bases_Range'First + 10,
+                             Max => Bases_Range'Last - 10);
                         Attempts := 1;
                      end if;
                   end if;
