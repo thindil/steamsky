@@ -85,12 +85,14 @@ package body Themes is
       Start_Search
         (Directories, To_String(Themes_Directory), "",
          (Directory => True, others => False));
+      Load_Themes_Loop :
       while More_Entries(Directories) loop
          Get_Next_Entry(Directories, FoundDirectory);
          if Simple_Name(FoundDirectory) in "." | ".." then
             goto End_Of_Load_Themes_Loop;
          end if;
          Start_Search(Files, Full_Name(FoundDirectory), "*.cfg");
+         Load_Config_Loop :
          while More_Entries(Files) loop
             Get_Next_Entry(Files, FoundFile);
             Open(ConfigFile, In_File, Full_Name(FoundFile));
@@ -248,10 +250,10 @@ package body Themes is
             Themes_Container.Include
               (Themes_List, Simple_Name(FoundDirectory), TempRecord);
             SetDefaultValues;
-         end loop;
+         end loop Load_Config_Loop;
          End_Search(Files);
          <<End_Of_Load_Themes_Loop>>
-      end loop;
+      end loop Load_Themes_Loop;
       End_Search(Directories);
       if not Themes_List.Contains(To_String(GameSettings.InterfaceTheme)) then
          GameSettings.InterfaceTheme := To_Unbounded_String("steamsky");
@@ -264,6 +266,7 @@ package body Themes is
    begin
       Label.Interp := Get_Context;
       Button.Interp := Get_Context;
+      Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) /= GameSettings.InterfaceTheme then
             goto End_Of_Set_Theme_Loop;
@@ -324,7 +327,7 @@ package body Themes is
            (Button,
             "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
          <<End_Of_Set_Theme_Loop>>
-      end loop;
+      end loop Set_Theme_Loop;
    end SetTheme;
 
 end Themes;
