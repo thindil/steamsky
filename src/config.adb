@@ -128,7 +128,7 @@ package body Config is
                GameSettings.LowFood := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoMoveStop") then
                GameSettings.AutoMoveStop :=
-                 AutoMoveBreak'Value(To_String(Value));
+                 Auto_Move_Break'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowWidth") then
                GameSettings.WindowWidth := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowHeight") then
@@ -148,7 +148,7 @@ package body Config is
                GameSettings.InterfaceTheme := Value;
             elsif FieldName = To_Unbounded_String("MessagesOrder") then
                GameSettings.MessagesOrder :=
-                 MessagesOrderType'Value(To_String(Value));
+                 Messages_Order_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoAskForBases") then
                GameSettings.AutoAskForBases := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoAskForEvents") then
@@ -166,7 +166,7 @@ package body Config is
                GameSettings.AutoCloseMessagesTime :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoSave") then
-               GameSettings.AutoSave := AutoSaveType'Value(To_String(Value));
+               GameSettings.AutoSave := Auto_Save_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
                GameSettings.TopicsPosition := Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
@@ -254,7 +254,7 @@ package body Config is
       Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.LowFood));
       Put_Line
         (ConfigFile,
-         "AutoMoveStop = " & AutoMoveBreak'Image(GameSettings.AutoMoveStop));
+         "AutoMoveStop = " & Auto_Move_Break'Image(GameSettings.AutoMoveStop));
       Put_Line
         (ConfigFile,
          "WindowWidth =" & Positive'Image(GameSettings.WindowWidth));
@@ -283,7 +283,7 @@ package body Config is
       Put_Line
         (ConfigFile,
          "MessagesOrder = " &
-         MessagesOrderType'Image(GameSettings.MessagesOrder));
+         Messages_Order_Type'Image(GameSettings.MessagesOrder));
       SaveBoolean(GameSettings.AutoAskForBases, "AutoAskForBases");
       SaveBoolean(GameSettings.AutoAskForEvents, "AutoAskForEvents");
       SaveBoolean(GameSettings.ShowTooltips, "ShowTooltips");
@@ -298,7 +298,7 @@ package body Config is
          Positive'Image(GameSettings.AutoCloseMessagesTime));
       Put_Line
         (ConfigFile,
-         "AutoSave = " & AutoSaveType'Image(GameSettings.AutoSave));
+         "AutoSave = " & Auto_Save_Type'Image(GameSettings.AutoSave));
       Put_Line
         (ConfigFile,
          "TopicsPosition =" & Natural'Image(GameSettings.TopicsPosition));

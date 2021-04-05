@@ -82,28 +82,28 @@ package Config is
    end record;
    -- ****
 
-   -- ****t* Config/Config.AutoMoveBreak
+   -- ****t* Config/Config.Auto_Move_Break
    -- FUNCTION
    -- Options when stop auto move of player ship
    -- SOURCE
-   type AutoMoveBreak is (NEVER, ANY, FRIENDLY, ENEMY);
+   type Auto_Move_Break is (NEVER, ANY, FRIENDLY, ENEMY);
    -- ****
 
-   -- ****t* Config/Config.MessagesOrderType
+   -- ****t* Config/Config.Messages_Order_Type
    -- FUNCTION
    -- Options to set showing messages order
    -- SOURCE
-   type MessagesOrderType is (OLDER_FIRST, NEWER_FIRST);
+   type Messages_Order_Type is (OLDER_FIRST, NEWER_FIRST);
    -- ****
 
-   -- ****t* Config/Config.AutoSaveType
+   -- ****t* Config/Config.Auto_Save_Type
    -- FUNCTION
    -- Type used to set how often autosave is done
    -- SOURCE
-   type AutoSaveType is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
+   type Auto_Save_Type is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
    -- ****
 
-   -- ****s* Config/Config.GameSettingsRecord
+   -- ****s* Config/Config.Game_Settings_Record
    -- FUNCTION
    -- Data for game settings
    -- PARAMETERS
@@ -147,7 +147,7 @@ package Config is
    -- ShowNumbers           - If true, show numbers values instead of text for
    --                         various things (like weapon strength, etc)
    -- SOURCE
-   type GameSettingsRecord is record
+   type Game_Settings_Record is record
       AutoRest: Boolean;
       UndockSpeed: ShipSpeed;
       AutoCenter: Boolean;
@@ -156,7 +156,7 @@ package Config is
       LowFuel: Positive range 1 .. 10_000;
       LowDrinks: Positive range 1 .. 10_000;
       LowFood: Positive range 1 .. 10_000;
-      AutoMoveStop: AutoMoveBreak;
+      AutoMoveStop: Auto_Move_Break;
       WindowWidth: Positive;
       WindowHeight: Positive;
       MessagesLimit: Positive range 10 .. 5_000;
@@ -165,7 +165,7 @@ package Config is
       MapFontSize: Positive range 2 .. 51;
       InterfaceFontSize: Positive range 2 .. 51;
       InterfaceTheme: Unbounded_String;
-      MessagesOrder: MessagesOrderType;
+      MessagesOrder: Messages_Order_Type;
       AutoAskForBases: Boolean;
       AutoAskForEvents: Boolean;
       ShowTooltips: Boolean;
@@ -173,7 +173,7 @@ package Config is
       MessagesPosition: Natural;
       FullScreen: Boolean;
       AutoCloseMessagesTime: Positive range 1 .. 60;
-      AutoSave: AutoSaveType;
+      AutoSave: Auto_Save_Type;
       TopicsPosition: Natural;
       ShowNumbers: Boolean;
    end record;
@@ -190,7 +190,7 @@ package Config is
    -- FUNCTION
    -- General settings for the game
    -- SOURCE
-   GameSettings: GameSettingsRecord;
+   GameSettings: Game_Settings_Record;
    -- ****
 
    -- ****f* Config/Config.LoadConfig

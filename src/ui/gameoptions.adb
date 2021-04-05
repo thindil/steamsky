@@ -229,7 +229,7 @@ package body GameOptions is
         New_String(Widget_Image(OptionsFrame) & ".automovestop");
       Current
         (ComboBox,
-         Natural'Image(AutoMoveBreak'Pos(GameSettings.AutoMoveStop)));
+         Natural'Image(Auto_Move_Break'Pos(GameSettings.AutoMoveStop)));
       SpinBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".messageslimit");
       Set(SpinBox, Natural'Image(GameSettings.MessagesLimit));
@@ -240,10 +240,10 @@ package body GameOptions is
         New_String(Widget_Image(OptionsFrame) & ".messagesorder");
       Current
         (ComboBox,
-         Natural'Image(MessagesOrderType'Pos(GameSettings.MessagesOrder)));
+         Natural'Image(Messages_Order_Type'Pos(GameSettings.MessagesOrder)));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".autosave");
       Current
-        (ComboBox, Natural'Image(AutoSaveType'Pos(GameSettings.AutoSave)));
+        (ComboBox, Natural'Image(Auto_Save_Type'Pos(GameSettings.AutoSave)));
       OptionsFrame.Name :=
         New_String
           (Widget_Image(OptionsCanvas) & ".options.notebook.interface");
@@ -495,17 +495,17 @@ package body GameOptions is
       GameSettings.LowFood := Positive'Value(Get(SpinBox));
       ComboBox.Name := New_String(RootName & ".general.automovestop");
       GameSettings.AutoMoveStop :=
-        AutoMoveBreak'Val(Natural'Value(Current(ComboBox)));
+        Auto_Move_Break'Val(Natural'Value(Current(ComboBox)));
       SpinBox.Name := New_String(RootName & ".general.messageslimit");
       GameSettings.MessagesLimit := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.savedmessages");
       GameSettings.SavedMessages := Positive'Value(Get(SpinBox));
       ComboBox.Name := New_String(RootName & ".general.messagesorder");
       GameSettings.MessagesOrder :=
-        MessagesOrderType'Val(Natural'Value(Current(ComboBox)));
+        Messages_Order_Type'Val(Natural'Value(Current(ComboBox)));
       ComboBox.Name := New_String(RootName & ".general.autosave");
       GameSettings.AutoSave :=
-        AutoSaveType'Val(Natural'Value(Current(ComboBox)));
+        Auto_Save_Type'Val(Natural'Value(Current(ComboBox)));
       ComboBox.Name := New_String(RootName & ".interface.theme");
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
