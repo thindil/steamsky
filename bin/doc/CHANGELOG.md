@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Typos in trade screen
 - Autoresizing of tables
 - Remembering size of last messages window
+- Generate bases at borders of the map
 
 ## [5.9] - 2021-03-21
 
