@@ -1659,12 +1659,13 @@ package body Ships.UI.Modules is
    end Get_Active_Button_Command;
 
    procedure UpdateModulesInfo(Page: Positive := 1) is
-      pragma Unreferenced(Page);
       Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       ShipCanvas: constant Tk_Canvas :=
         Get_Widget(Paned & ".shipinfoframe.modules.canvas");
       ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
       Row: Positive := 2;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       if ModulesTable.Row_Height = 1 then
          ModulesTable :=
@@ -1676,6 +1677,10 @@ package body Ships.UI.Modules is
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
       for Module of PlayerShip.Modules loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          AddButton
            (ModulesTable, To_String(Module.Name),
             "Show available module's options",
@@ -1685,7 +1690,22 @@ package body Ships.UI.Modules is
             "Show available module's options",
             "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
          Row := Row + 1;
+         exit Show_Modules_Menu_Loop when ModulesTable.Row = 26;
+         <<End_Of_Loop>>
       end loop Show_Modules_Menu_Loop;
+      if Page > 1 then
+         if ModulesTable.Row < 26 then
+            AddPagination
+              (ModulesTable, "ShowModules" & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (ModulesTable, "ShowModules" & Positive'Image(Page - 1),
+               "ShowModules" & Positive'Image(Page + 1));
+         end if;
+      elsif ModulesTable.Row = 26 then
+         AddPagination
+           (ModulesTable, "", "ShowModules" & Positive'Image(Page + 1));
+      end if;
       UpdateTable(ModulesTable);
       Tcl_Eval(Get_Context, "update");
       configure
