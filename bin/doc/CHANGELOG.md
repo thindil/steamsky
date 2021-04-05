@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Pagination to lists of known bases and events, accepted missions, shipyard,
-  trade, player's ship cargo and crew
+  trade, player's ship cargo, crew and modules
 
 ### Changed
 - Don't create patrol and explore missions on fields with bases
