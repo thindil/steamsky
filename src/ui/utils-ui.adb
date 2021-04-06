@@ -891,7 +891,8 @@ package body Utils.UI is
             SashPos
               (Paned, "0",
                Natural'Image
-                 (GameSettings.Window_Height - GameSettings.Messages_Position));
+                 (GameSettings.Window_Height -
+                  GameSettings.Messages_Position));
          end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;

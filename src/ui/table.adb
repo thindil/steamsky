@@ -138,7 +138,8 @@ package body Table is
       ItemId: Unbounded_String;
       Color: constant String :=
         (if Table.Row rem 2 > 0 then
-           Style_Lookup(To_String(GameSettings.Interface_Theme), "-troughcolor")
+           Style_Lookup
+             (To_String(GameSettings.Interface_Theme), "-troughcolor")
          else Style_Lookup
              (To_String(GameSettings.Interface_Theme), "-background"));
    begin

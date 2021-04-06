@@ -55,8 +55,8 @@ package body Config is
          Messages_Order => OLDER_FIRST, Auto_Ask_For_Bases => False,
          Auto_Ask_For_Events => False, Show_Tooltips => True,
          Show_Last_Messages => True, Messages_Position => 213,
-         Full_Screen => False, Auto_Close_Messages_Time => 6, Auto_Save => NONE,
-         Topics_Position => 200, Show_Numbers => False);
+         Full_Screen => False, Auto_Close_Messages_Time => 6,
+         Auto_Save => NONE, Topics_Position => 200, Show_Numbers => False);
       Open(ConfigFile, In_File, To_String(Save_Directory) & "game.cfg");
       Read_Config_File_Loop :
       while not End_Of_File(ConfigFile) loop
@@ -166,7 +166,8 @@ package body Config is
                GameSettings.Auto_Close_Messages_Time :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoSave") then
-               GameSettings.Auto_Save := Auto_Save_Type'Value(To_String(Value));
+               GameSettings.Auto_Save :=
+                 Auto_Save_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
                GameSettings.Topics_Position := Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
@@ -248,13 +249,16 @@ package body Config is
       SaveBoolean(GameSettings.Auto_Center, "AutoCenter");
       SaveBoolean(GameSettings.Auto_Return, "AutoReturn");
       SaveBoolean(GameSettings.Auto_Finish, "AutoFinish");
-      Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.Low_Fuel));
+      Put_Line
+        (ConfigFile, "LowFuel =" & Positive'Image(GameSettings.Low_Fuel));
       Put_Line
         (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.Low_Drinks));
-      Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.Low_Food));
+      Put_Line
+        (ConfigFile, "LowFood =" & Positive'Image(GameSettings.Low_Food));
       Put_Line
         (ConfigFile,
-         "AutoMoveStop = " & Auto_Move_Break'Image(GameSettings.Auto_Move_Stop));
+         "AutoMoveStop = " &
+         Auto_Move_Break'Image(GameSettings.Auto_Move_Stop));
       Put_Line
         (ConfigFile,
          "WindowWidth =" & Positive'Image(GameSettings.Window_Width));
