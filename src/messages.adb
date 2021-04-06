@@ -50,7 +50,7 @@ package body Messages is
    procedure AddMessage
      (Message: String; MType: Message_Type; Color: Message_Color := WHITE) is
    begin
-      if Natural(Messages_List.Length) = GameSettings.MessagesLimit then
+      if Natural(Messages_List.Length) = GameSettings.Messages_Limit then
          Messages_List.Delete_First;
       end if;
       Messages_List.Append

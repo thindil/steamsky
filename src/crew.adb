@@ -842,7 +842,7 @@ package body Crew is
 
    function GetSkillLevelName(SkillLevel: Skill_Range) return String is
    begin
-      if GameSettings.ShowNumbers then
+      if GameSettings.Show_Numbers then
          return Positive'Image(SkillLevel);
       end if;
       case SkillLevel is
@@ -873,7 +873,7 @@ package body Crew is
 
    function GetAttributeLevelName(AttributeLevel: Positive) return String is
    begin
-      if GameSettings.ShowNumbers then
+      if GameSettings.Show_Numbers then
          return Positive'Image(AttributeLevel);
       end if;
       case AttributeLevel is

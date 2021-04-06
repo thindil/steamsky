@@ -255,8 +255,8 @@ package body Themes is
          <<End_Of_Load_Themes_Loop>>
       end loop Load_Themes_Loop;
       End_Search(Directories);
-      if not Themes_List.Contains(To_String(GameSettings.InterfaceTheme)) then
-         GameSettings.InterfaceTheme := To_Unbounded_String("steamsky");
+      if not Themes_List.Contains(To_String(GameSettings.Interface_Theme)) then
+         GameSettings.Interface_Theme := To_Unbounded_String("steamsky");
       end if;
    end LoadThemes;
 
@@ -268,7 +268,7 @@ package body Themes is
       Button.Interp := Get_Context;
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) /= GameSettings.InterfaceTheme then
+         if Themes_Container.Key(I) /= GameSettings.Interface_Theme then
             goto End_Of_Set_Theme_Loop;
          end if;
          Label.Name := New_String(".gameframe.header.nofuel");

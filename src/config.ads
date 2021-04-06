@@ -107,75 +107,75 @@ package Config is
    -- FUNCTION
    -- Data for game settings
    -- PARAMETERS
-   -- AutoRest              - If true, rest when pilot/engineer need rest
-   -- UndockSpeed           - Default player ship speed after undock
-   -- AutoCenter            - If true, back to ship after sets destination for
-   --                         it
-   -- AutoReturn            - If true, set base as destination for ship after
-   --                         finished mission
-   -- AutoFinish            - If true, complete mission if ship is near
-   --                         corresponding base
-   -- LowFuel               - Amount of fuel below which warning about low
-   --                         level is show
-   -- LowDrinks             - Amount of drinkis below which warning about low
-   --                         level is show
-   -- LowFood               - Amount of food below which warning about low
-   --                         level is show
-   -- AutoMoveStop          - When stop automoving of player ship
-   -- WindowWidth           - Game window default width
-   -- WindowHeight          - Game window default height
-   -- MessagesLimit         - Max amount of messages showed in game
-   -- SavedMessages         - Max amount fo messages saved to file
-   -- HelpFontSize          - Size of font used in help
-   -- MapFontSize           - Size of font used in map
-   -- InterfaceFontSize     - Size of font used in interface
-   -- InterfaceTheme        - Name of current user interface theme
-   -- MessagesOrder         - Order of showing messages
-   -- AutoAskForBases       - If true, auto ask for new bases when ship docked
-   -- AutoAskForEvents      - If true, auto ask for new events in bases when
-   --                         ship docked
-   -- ShowTooltips          - If true, show tooltips to player
-   -- ShowLastMessages      - If true, show last messages window everywhere
-   -- MessagesPosition      - Height of last messages window in pixels from
-   --                         bottom of the game window
-   -- FullScreen            - If true, set the game window in full screen mode
-   -- AutoCloseMessagesTime - Amount of seconds after which message box is
-   --                         auto closed
-   -- AutoSave              - How often game is autosaved
-   -- TopicPosition         - Position of help topics window in pixels from
-   --                         top of the help window
-   -- ShowNumbers           - If true, show numbers values instead of text for
-   --                         various things (like weapon strength, etc)
+   -- Auto_Rest                - If true, rest when pilot/engineer need rest
+   -- Undock_Speed             - Default player ship speed after undock
+   -- Auto_Center              - If true, back to ship after sets destination for
+   --                            it
+   -- Auto_Return              - If true, set base as destination for ship after
+   --                            finished mission
+   -- Auto_Finish              - If true, complete mission if ship is near
+   --                            corresponding base
+   -- Low_Fuel                 - Amount of fuel below which warning about low
+   --                            level is show
+   -- Low_Drinks               - Amount of drinkis below which warning about low
+   --                            level is show
+   -- Low_Food                 - Amount of food below which warning about low
+   --                            level is show
+   -- Auto_Move_Stop           - When stop automoving of player ship
+   -- Window_Width             - Game window default width
+   -- Window_Height            - Game window default height
+   -- Messages_Limit           - Max amount of messages showed in game
+   -- Saved_Messages           - Max amount fo messages saved to file
+   -- Help_Font_Size           - Size of font used in help
+   -- Map_Font_Size            - Size of font used in map
+   -- Interface_Font_Size      - Size of font used in interface
+   -- Interface_Theme          - Name of current user interface theme
+   -- Messages_Order           - Order of showing messages
+   -- Auto_Ask_For_Bases       - If true, auto ask for new bases when ship docked
+   -- Auto_Ask_For_Events      - If true, auto ask for new events in bases when
+   --                            ship docked
+   -- Show_Tooltips            - If true, show tooltips to player
+   -- Show_Last_Messages       - If true, show last messages window everywhere
+   -- Messages_Position        - Height of last messages window in pixels from
+   --                            bottom of the game window
+   -- Full_Screen              - If true, set the game window in full screen mode
+   -- Auto_Close_Messages_Time - Amount of seconds after which message box is
+   --                            auto closed
+   -- Auto_Save                - How often game is autosaved
+   -- Topic_Position           - Position of help topics window in pixels from
+   --                            top of the help window
+   -- Show_Numbers             - If true, show numbers values instead of text for
+   --                            various things (like weapon strength, etc)
    -- SOURCE
    type Game_Settings_Record is record
-      AutoRest: Boolean;
-      UndockSpeed: ShipSpeed;
-      AutoCenter: Boolean;
-      AutoReturn: Boolean;
-      AutoFinish: Boolean;
-      LowFuel: Positive range 1 .. 10_000;
-      LowDrinks: Positive range 1 .. 10_000;
-      LowFood: Positive range 1 .. 10_000;
-      AutoMoveStop: Auto_Move_Break;
-      WindowWidth: Positive;
-      WindowHeight: Positive;
-      MessagesLimit: Positive range 10 .. 5_000;
-      SavedMessages: Positive range 5 .. 200;
-      HelpFontSize: Positive range 2 .. 51;
-      MapFontSize: Positive range 2 .. 51;
-      InterfaceFontSize: Positive range 2 .. 51;
-      InterfaceTheme: Unbounded_String;
-      MessagesOrder: Messages_Order_Type;
-      AutoAskForBases: Boolean;
-      AutoAskForEvents: Boolean;
-      ShowTooltips: Boolean;
-      ShowLastMessages: Boolean;
-      MessagesPosition: Natural;
-      FullScreen: Boolean;
-      AutoCloseMessagesTime: Positive range 1 .. 60;
-      AutoSave: Auto_Save_Type;
-      TopicsPosition: Natural;
-      ShowNumbers: Boolean;
+      Auto_Rest: Boolean;
+      Undock_Speed: ShipSpeed;
+      Auto_Center: Boolean;
+      Auto_Return: Boolean;
+      Auto_Finish: Boolean;
+      Low_Fuel: Positive range 1 .. 10_000;
+      Low_Drinks: Positive range 1 .. 10_000;
+      Low_Food: Positive range 1 .. 10_000;
+      Auto_Move_Stop: Auto_Move_Break;
+      Window_Width: Positive;
+      Window_Height: Positive;
+      Messages_Limit: Positive range 10 .. 5_000;
+      Saved_Messages: Positive range 5 .. 200;
+      Help_Font_Size: Positive range 2 .. 51;
+      Map_Font_Size: Positive range 2 .. 51;
+      Interface_Font_Size: Positive range 2 .. 51;
+      Interface_Theme: Unbounded_String;
+      Messages_Order: Messages_Order_Type;
+      Auto_Ask_For_Bases: Boolean;
+      Auto_Ask_For_Events: Boolean;
+      Show_Tooltips: Boolean;
+      Show_Last_Messages: Boolean;
+      Messages_Position: Natural;
+      Full_Screen: Boolean;
+      Auto_Close_Messages_Time: Positive range 1 .. 60;
+      Auto_Save: Auto_Save_Type;
+      Topics_Position: Natural;
+      Show_Numbers: Boolean;
    end record;
    -- ****
 

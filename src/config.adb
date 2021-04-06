@@ -45,18 +45,18 @@ package body Config is
          Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
          Difficulty_Level => NORMAL);
       GameSettings :=
-        (AutoRest => True, UndockSpeed => FULL_SPEED, AutoCenter => True,
-         AutoReturn => True, AutoFinish => True, LowFuel => 100,
-         LowDrinks => 50, LowFood => 25, AutoMoveStop => NEVER,
-         WindowWidth => 800, WindowHeight => 600, MessagesLimit => 500,
-         SavedMessages => 10, HelpFontSize => 14, MapFontSize => 16,
-         InterfaceFontSize => 14,
-         InterfaceTheme => To_Unbounded_String("steamsky"),
-         MessagesOrder => OLDER_FIRST, AutoAskForBases => False,
-         AutoAskForEvents => False, ShowTooltips => True,
-         ShowLastMessages => True, MessagesPosition => 213,
-         FullScreen => False, AutoCloseMessagesTime => 6, AutoSave => NONE,
-         TopicsPosition => 200, ShowNumbers => False);
+        (Auto_Rest => True, Undock_Speed => FULL_SPEED, Auto_Center => True,
+         Auto_Return => True, Auto_Finish => True, Low_Fuel => 100,
+         Low_Drinks => 50, Low_Food => 25, Auto_Move_Stop => NEVER,
+         Window_Width => 800, Window_Height => 600, Messages_Limit => 500,
+         Saved_Messages => 10, Help_Font_Size => 14, Map_Font_Size => 16,
+         Interface_Font_Size => 14,
+         Interface_Theme => To_Unbounded_String("steamsky"),
+         Messages_Order => OLDER_FIRST, Auto_Ask_For_Bases => False,
+         Auto_Ask_For_Events => False, Show_Tooltips => True,
+         Show_Last_Messages => True, Messages_Position => 213,
+         Full_Screen => False, Auto_Close_Messages_Time => 6, Auto_Save => NONE,
+         Topics_Position => 200, Show_Numbers => False);
       Open(ConfigFile, In_File, To_String(Save_Directory) & "game.cfg");
       Read_Config_File_Loop :
       while not End_Of_File(ConfigFile) loop
@@ -111,66 +111,66 @@ package body Config is
                   NewGameSettings.Difficulty_Level := NORMAL;
                end if;
             elsif FieldName = To_Unbounded_String("AutoRest") then
-               GameSettings.AutoRest := LoadBoolean;
+               GameSettings.Auto_Rest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
-               GameSettings.UndockSpeed := ShipSpeed'Value(To_String(Value));
+               GameSettings.Undock_Speed := ShipSpeed'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoCenter") then
-               GameSettings.AutoCenter := LoadBoolean;
+               GameSettings.Auto_Center := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoReturn") then
-               GameSettings.AutoReturn := LoadBoolean;
+               GameSettings.Auto_Return := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoFinish") then
-               GameSettings.AutoFinish := LoadBoolean;
+               GameSettings.Auto_Finish := LoadBoolean;
             elsif FieldName = To_Unbounded_String("LowFuel") then
-               GameSettings.LowFuel := Positive'Value(To_String(Value));
+               GameSettings.Low_Fuel := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowDrinks") then
-               GameSettings.LowDrinks := Positive'Value(To_String(Value));
+               GameSettings.Low_Drinks := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowFood") then
-               GameSettings.LowFood := Positive'Value(To_String(Value));
+               GameSettings.Low_Food := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoMoveStop") then
-               GameSettings.AutoMoveStop :=
+               GameSettings.Auto_Move_Stop :=
                  Auto_Move_Break'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowWidth") then
-               GameSettings.WindowWidth := Positive'Value(To_String(Value));
+               GameSettings.Window_Width := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowHeight") then
-               GameSettings.WindowHeight := Positive'Value(To_String(Value));
+               GameSettings.Window_Height := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MessagesLimit") then
-               GameSettings.MessagesLimit := Positive'Value(To_String(Value));
+               GameSettings.Messages_Limit := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("SavedMessages") then
-               GameSettings.SavedMessages := Positive'Value(To_String(Value));
+               GameSettings.Saved_Messages := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("HelpFontSize") then
-               GameSettings.HelpFontSize := Positive'Value(To_String(Value));
+               GameSettings.Help_Font_Size := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MapFontSize") then
-               GameSettings.MapFontSize := Positive'Value(To_String(Value));
+               GameSettings.Map_Font_Size := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
-               GameSettings.InterfaceFontSize :=
+               GameSettings.Interface_Font_Size :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceTheme") then
-               GameSettings.InterfaceTheme := Value;
+               GameSettings.Interface_Theme := Value;
             elsif FieldName = To_Unbounded_String("MessagesOrder") then
-               GameSettings.MessagesOrder :=
+               GameSettings.Messages_Order :=
                  Messages_Order_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoAskForBases") then
-               GameSettings.AutoAskForBases := LoadBoolean;
+               GameSettings.Auto_Ask_For_Bases := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoAskForEvents") then
-               GameSettings.AutoAskForEvents := LoadBoolean;
+               GameSettings.Auto_Ask_For_Events := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowTooltips") then
-               GameSettings.ShowTooltips := LoadBoolean;
+               GameSettings.Show_Tooltips := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowLastMessages") then
-               GameSettings.ShowLastMessages := LoadBoolean;
+               GameSettings.Show_Last_Messages := LoadBoolean;
             elsif FieldName = To_Unbounded_String("MessagesPosition") then
-               GameSettings.MessagesPosition :=
+               GameSettings.Messages_Position :=
                  Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("FullScreen") then
-               GameSettings.FullScreen := LoadBoolean;
+               GameSettings.Full_Screen := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoCloseMessagesTime") then
-               GameSettings.AutoCloseMessagesTime :=
+               GameSettings.Auto_Close_Messages_Time :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoSave") then
-               GameSettings.AutoSave := Auto_Save_Type'Value(To_String(Value));
+               GameSettings.Auto_Save := Auto_Save_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
-               GameSettings.TopicsPosition := Natural'Value(To_String(Value));
+               GameSettings.Topics_Position := Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
-               GameSettings.ShowNumbers := LoadBoolean;
+               GameSettings.Show_Numbers := LoadBoolean;
             end if;
          end if;
       end loop Read_Config_File_Loop;
@@ -241,68 +241,68 @@ package body Config is
         (ConfigFile,
          "DifficultyLevel = " &
          Difficulty_Type'Image(NewGameSettings.Difficulty_Level));
-      SaveBoolean(GameSettings.AutoRest, "AutoRest");
+      SaveBoolean(GameSettings.Auto_Rest, "AutoRest");
       Put_Line
         (ConfigFile,
-         "UndockSpeed = " & ShipSpeed'Image(GameSettings.UndockSpeed));
-      SaveBoolean(GameSettings.AutoCenter, "AutoCenter");
-      SaveBoolean(GameSettings.AutoReturn, "AutoReturn");
-      SaveBoolean(GameSettings.AutoFinish, "AutoFinish");
-      Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.LowFuel));
+         "UndockSpeed = " & ShipSpeed'Image(GameSettings.Undock_Speed));
+      SaveBoolean(GameSettings.Auto_Center, "AutoCenter");
+      SaveBoolean(GameSettings.Auto_Return, "AutoReturn");
+      SaveBoolean(GameSettings.Auto_Finish, "AutoFinish");
+      Put_Line(ConfigFile, "LowFuel =" & Positive'Image(GameSettings.Low_Fuel));
       Put_Line
-        (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.LowDrinks));
-      Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.LowFood));
-      Put_Line
-        (ConfigFile,
-         "AutoMoveStop = " & Auto_Move_Break'Image(GameSettings.AutoMoveStop));
+        (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.Low_Drinks));
+      Put_Line(ConfigFile, "LowFood =" & Positive'Image(GameSettings.Low_Food));
       Put_Line
         (ConfigFile,
-         "WindowWidth =" & Positive'Image(GameSettings.WindowWidth));
+         "AutoMoveStop = " & Auto_Move_Break'Image(GameSettings.Auto_Move_Stop));
       Put_Line
         (ConfigFile,
-         "WindowHeight =" & Positive'Image(GameSettings.WindowHeight));
+         "WindowWidth =" & Positive'Image(GameSettings.Window_Width));
       Put_Line
         (ConfigFile,
-         "MessagesLimit =" & Positive'Image(GameSettings.MessagesLimit));
+         "WindowHeight =" & Positive'Image(GameSettings.Window_Height));
       Put_Line
         (ConfigFile,
-         "SavedMessages =" & Positive'Image(GameSettings.SavedMessages));
+         "MessagesLimit =" & Positive'Image(GameSettings.Messages_Limit));
       Put_Line
         (ConfigFile,
-         "HelpFontSize =" & Positive'Image(GameSettings.HelpFontSize));
+         "SavedMessages =" & Positive'Image(GameSettings.Saved_Messages));
       Put_Line
         (ConfigFile,
-         "MapFontSize =" & Positive'Image(GameSettings.MapFontSize));
+         "HelpFontSize =" & Positive'Image(GameSettings.Help_Font_Size));
+      Put_Line
+        (ConfigFile,
+         "MapFontSize =" & Positive'Image(GameSettings.Map_Font_Size));
       Put_Line
         (ConfigFile,
          "InterfaceFontSize =" &
-         Positive'Image(GameSettings.InterfaceFontSize));
+         Positive'Image(GameSettings.Interface_Font_Size));
       Put_Line
         (ConfigFile,
-         "InterfaceTheme = " & To_String(GameSettings.InterfaceTheme));
+         "InterfaceTheme = " & To_String(GameSettings.Interface_Theme));
       Put_Line
         (ConfigFile,
          "MessagesOrder = " &
-         Messages_Order_Type'Image(GameSettings.MessagesOrder));
-      SaveBoolean(GameSettings.AutoAskForBases, "AutoAskForBases");
-      SaveBoolean(GameSettings.AutoAskForEvents, "AutoAskForEvents");
-      SaveBoolean(GameSettings.ShowTooltips, "ShowTooltips");
-      SaveBoolean(GameSettings.ShowLastMessages, "ShowLastMessages");
+         Messages_Order_Type'Image(GameSettings.Messages_Order));
+      SaveBoolean(GameSettings.Auto_Ask_For_Bases, "AutoAskForBases");
+      SaveBoolean(GameSettings.Auto_Ask_For_Events, "AutoAskForEvents");
+      SaveBoolean(GameSettings.Show_Tooltips, "ShowTooltips");
+      SaveBoolean(GameSettings.Show_Last_Messages, "ShowLastMessages");
       Put_Line
         (ConfigFile,
-         "MessagesPosition =" & Natural'Image(GameSettings.MessagesPosition));
-      SaveBoolean(GameSettings.FullScreen, "FullScreen");
+         "MessagesPosition =" & Natural'Image(GameSettings.Messages_Position));
+      SaveBoolean(GameSettings.Full_Screen, "FullScreen");
       Put_Line
         (ConfigFile,
          "AutoCloseMessagesTime =" &
-         Positive'Image(GameSettings.AutoCloseMessagesTime));
+         Positive'Image(GameSettings.Auto_Close_Messages_Time));
       Put_Line
         (ConfigFile,
-         "AutoSave = " & Auto_Save_Type'Image(GameSettings.AutoSave));
+         "AutoSave = " & Auto_Save_Type'Image(GameSettings.Auto_Save));
       Put_Line
         (ConfigFile,
-         "TopicsPosition =" & Natural'Image(GameSettings.TopicsPosition));
-      SaveBoolean(GameSettings.ShowNumbers, "ShowNumbers");
+         "TopicsPosition =" & Natural'Image(GameSettings.Topics_Position));
+      SaveBoolean(GameSettings.Show_Numbers, "ShowNumbers");
       Close(ConfigFile);
    end SaveConfig;
 

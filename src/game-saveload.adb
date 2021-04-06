@@ -183,7 +183,7 @@ package body Game.SaveLoad is
       -- Save messages
       LogMessage("Saving messages...", Everything, False);
       declare
-         Messages: Natural := GameSettings.SavedMessages;
+         Messages: Natural := GameSettings.Saved_Messages;
          StartLoop: Positive;
          MessageNode: DOM.Core.Element;
          Message: Message_Data;
