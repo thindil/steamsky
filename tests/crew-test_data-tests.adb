@@ -296,7 +296,7 @@ package body Crew.Test_Data.Tests is
 
    begin
 
-      GameSettings.ShowNumbers := False;
+      GameSettings.Show_Numbers := False;
       Assert
         (GetSkillLevelName(9) = "Beginner",
          "Failed to get skill level name for level 9");
@@ -306,7 +306,7 @@ package body Crew.Test_Data.Tests is
       Assert
         (GetSkillLevelName(92) = "Legendary",
          "Failed to get skill level name for level 92");
-      GameSettings.ShowNumbers := True;
+      GameSettings.Show_Numbers := True;
       Assert
         (GetSkillLevelName(9) = " 9",
          "Failed to get skill level name for level 9 (numeric)");
@@ -371,7 +371,7 @@ package body Crew.Test_Data.Tests is
 
    begin
 
-      GameSettings.ShowNumbers := False;
+      GameSettings.Show_Numbers := False;
       Assert
         (GetAttributeLevelName(3) = "Very low",
          "Failed to get attribute level name for level 3");
@@ -381,7 +381,7 @@ package body Crew.Test_Data.Tests is
       Assert
         (GetAttributeLevelName(48) = "Very high",
          "Failed to get attribute level name for level 48");
-      GameSettings.ShowNumbers := True;
+      GameSettings.Show_Numbers := True;
       Assert
         (GetAttributeLevelName(3) = " 3",
          "Failed to get attribute level name for level 3 (numeric)");
