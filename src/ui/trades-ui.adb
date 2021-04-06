@@ -162,6 +162,7 @@ package body Trades.UI is
          BaseType := To_Unbounded_String("0");
          BaseCargo := TraderCargo;
       end if;
+      Show_Cargo_Items_Loop :
       for I in PlayerShip.Cargo.Iterate loop
          if Get_Price(BaseType, PlayerShip.Cargo(I).ProtoIndex) = 0 then
             goto End_Of_Cargo_Loop;
@@ -272,11 +273,12 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             7, True);
-         exit when TradeTable.Row = 26;
+         exit Show_Cargo_Items_Loop when TradeTable.Row = 26;
          <<End_Of_Cargo_Loop>>
-      end loop;
+      end loop Show_Cargo_Items_Loop;
+      Show_Trader_Items_Loop :
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
-         exit when TradeTable.Row = 26;
+         exit Show_Trader_Items_Loop when TradeTable.Row = 26;
          if IndexesList.Find_Index(Item => I) > 0 or
            not Is_Buyable
              (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
@@ -350,7 +352,7 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 7, True);
          <<End_Of_Trader_Loop>>
-      end loop;
+      end loop Show_Trader_Items_Loop;
       if Page > 1 then
          if TradeTable.Row < 26 then
             AddPagination
@@ -541,6 +543,7 @@ package body Trades.UI is
                null;
          end case;
       end if;
+      Show_More_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
             Append
@@ -551,9 +554,9 @@ package body Trades.UI is
               (ItemInfo,
                LF & "Strength:" &
                Integer'Image(Items_List(ProtoIndex).Value(2)));
-            exit;
+            exit Show_More_Info_Loop;
          end if;
-      end loop;
+      end loop Show_More_Info_Loop;
       if Tools_List.Contains(Items_List(ProtoIndex).IType) then
          Append
            (ItemInfo,
@@ -845,20 +848,21 @@ package body Trades.UI is
             Weight :=
               FreeCargo
                 ((Items_List(ProtoIndex).Weight * MaxSellAmount) - MaxPrice);
+            Count_Sell_Amount_loop :
             while Weight < 0 loop
                MaxSellAmount :=
                  Integer
                    (Float'Floor
                       (Float(MaxSellAmount) *
                        (Float(MaxPrice + Weight) / Float(MaxPrice))));
-               exit when MaxSellAmount < 1;
+               exit Count_Sell_Amount_loop when MaxSellAmount < 1;
                MaxPrice := MaxSellAmount * Price;
                CountPrice(MaxPrice, FindMember(Talk), False);
                Weight :=
                  FreeCargo
                    ((Items_List(ProtoIndex).Weight * MaxSellAmount) -
                     MaxPrice);
-            end loop;
+            end loop Count_Sell_Amount_loop;
             if MaxSellAmount > 0 then
                Menu.Add
                  (TradeMenu, "command",
@@ -905,6 +909,7 @@ package body Trades.UI is
                Weight :=
                  FreeCargo
                    (MaxPrice - (Items_List(ProtoIndex).Weight * MaxBuyAmount));
+               Count_Buy_Amount_Loop :
                while Weight < 0 loop
                   MaxBuyAmount :=
                     MaxBuyAmount + (Weight / Items_List(ProtoIndex).Weight) -
@@ -912,14 +917,14 @@ package body Trades.UI is
                   if MaxBuyAmount < 0 then
                      MaxBuyAmount := 0;
                   end if;
-                  exit when MaxBuyAmount = 0;
+                  exit Count_Buy_Amount_Loop when MaxBuyAmount = 0;
                   MaxPrice := MaxBuyAmount * Price;
                   CountPrice(MaxPrice, FindMember(Talk));
                   Weight :=
                     FreeCargo
                       (MaxPrice -
                        (Items_List(ProtoIndex).Weight * MaxBuyAmount));
-               end loop;
+               end loop Count_Buy_Amount_Loop;
                if MaxBuyAmount > 0 then
                   Menu.Add
                     (TradeMenu, "command",
