@@ -202,7 +202,8 @@ package body GameOptions is
          Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Rest)), Left));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
       Current
-        (ComboBox, Natural'Image(ShipSpeed'Pos(GameSettings.Undock_Speed) - 1));
+        (ComboBox,
+         Natural'Image(ShipSpeed'Pos(GameSettings.Undock_Speed) - 1));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autocenter",
          Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Center)), Left));
@@ -214,11 +215,14 @@ package body GameOptions is
          Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Finish)), Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autoaskforbases",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Bases)), Left));
+         Trim
+           (Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Bases)),
+            Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autoaskforevents",
          Trim
-           (Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Events)), Left));
+           (Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Events)),
+            Left));
       SpinBox := Get_Widget(Widget_Image(OptionsFrame) & ".fuel", Interp);
       Set(SpinBox, Natural'Image(GameSettings.Low_Fuel));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".drinks");
@@ -259,7 +263,8 @@ package body GameOptions is
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showmessages",
          Trim
-           (Natural'Image(Boolean'Pos(GameSettings.Show_Last_Messages)), Left));
+           (Natural'Image(Boolean'Pos(GameSettings.Show_Last_Messages)),
+            Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".fullscreen",
          Trim(Natural'Image(Boolean'Pos(GameSettings.Full_Screen)), Left));

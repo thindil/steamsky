@@ -216,7 +216,8 @@ package body Maps.UI.Commands is
          "-width [expr [winfo width $mapview] / [font measure MapFont {" &
          Encode
            ("" &
-            Themes_List(To_String(GameSettings.Interface_Theme)).EmptyMapIcon) &
+            Themes_List(To_String(GameSettings.Interface_Theme))
+              .EmptyMapIcon) &
          "}]]");
       configure
         (MapView,
@@ -715,7 +716,8 @@ package body Maps.UI.Commands is
                      ShowMessage("Your food level is dangerously low.");
                      Result := 4;
                      exit Move_Loop;
-                  elsif GetItemsAmount("Drinks") <= GameSettings.Low_Drinks then
+                  elsif GetItemsAmount("Drinks") <=
+                    GameSettings.Low_Drinks then
                      ShowMessage("Your drinks level is dangerously low.");
                      Result := 4;
                      exit Move_Loop;
@@ -1054,8 +1056,8 @@ package body Maps.UI.Commands is
       GameSettings.Window_Height :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
       PanedPosition :=
-        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0 then
-           GameSettings.Window_Height
+        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0
+         then GameSettings.Window_Height
          else GameSettings.Window_Height - GameSettings.Messages_Position);
       if SashPosition > 0 and then SashPosition /= PanedPosition then
          if GameSettings.Window_Height - SashPosition > -1 then

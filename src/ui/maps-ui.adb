@@ -900,8 +900,8 @@ package body Maps.UI is
             "-foreground #" & BasesTypes_List(I).Color);
       end loop Set_Tags_Loop;
       PanedPosition :=
-        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0 then
-           GameSettings.Window_Height
+        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0
+         then GameSettings.Window_Height
          else GameSettings.Window_Height - GameSettings.Messages_Position);
       SashPos(Paned, "0", Natural'Image(PanedPosition));
       if Index
