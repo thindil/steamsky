@@ -494,21 +494,21 @@ package body Game is
             PayForDock;
          end if;
          DailyPayment;
-         if GameSettings.AutoSave = DAILY then
+         if GameSettings.Auto_Save = DAILY then
             SaveGame;
          end if;
       end if;
       if Game_Date.Day > 30 then
          Game_Date.Day := 1;
          Game_Date.Month := Game_Date.Month + 1;
-         if GameSettings.AutoSave = MONTHLY then
+         if GameSettings.Auto_Save = MONTHLY then
             SaveGame;
          end if;
       end if;
       if Game_Date.Month > 12 then
          Game_Date.Month := 1;
          Game_Date.Year := Game_Date.Year + 1;
-         if GameSettings.AutoSave = YEARLY then
+         if GameSettings.Auto_Save = YEARLY then
             SaveGame;
          end if;
       end if;

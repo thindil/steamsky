@@ -93,16 +93,16 @@ package body MainMenu is
       Wm_Set(MainWindow, "iconphoto", "-default " & Icon);
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) = GameSettings.InterfaceTheme then
+         if Themes_Container.Key(I) = GameSettings.Interface_Theme then
             Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;
-      Theme_Use(To_String(GameSettings.InterfaceTheme));
+      Theme_Use(To_String(GameSettings.Interface_Theme));
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
-      if not GameSettings.ShowTooltips then
+      if not GameSettings.Show_Tooltips then
          Disable;
       end if;
       DefaultFontsSizes :=
@@ -110,12 +110,12 @@ package body MainMenu is
          Positive'Value(Font.Configure("InterfaceFont", "-size")),
          Positive'Value(Font.Configure("HelpFont", "-size")));
       Font.Configure
-        ("MapFont", "-size" & Positive'Image(GameSettings.MapFontSize));
+        ("MapFont", "-size" & Positive'Image(GameSettings.Map_Font_Size));
       Font.Configure
-        ("HelpFont", "-size" & Positive'Image(GameSettings.HelpFontSize));
+        ("HelpFont", "-size" & Positive'Image(GameSettings.Help_Font_Size));
       Font.Configure
         ("InterfaceFont",
-         "-size" & Positive'Image(GameSettings.InterfaceFontSize));
+         "-size" & Positive'Image(GameSettings.Interface_Font_Size));
       DataError := To_Unbounded_String(Load_Game_Data);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
@@ -217,7 +217,7 @@ package body MainMenu is
       if Y < 0 then
          Y := 0;
       end if;
-      if GameSettings.FullScreen then
+      if GameSettings.Full_Screen then
          Wm_Set(MainWindow, "attributes", "-fullscreen 0");
       end if;
       if OsName = "Linux" then

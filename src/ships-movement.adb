@@ -190,13 +190,13 @@ package body Ships.Movement is
       if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          if NeedRest(Pilot) then
-            if not GameSettings.AutoRest then
+            if not GameSettings.Auto_Rest then
                return 6;
             end if;
             return 8;
          end if;
          if NeedRest(Engineer) then
-            if not GameSettings.AutoRest then
+            if not GameSettings.Auto_Rest then
                return 7;
             end if;
             return 8;
@@ -220,7 +220,7 @@ package body Ships.Movement is
             AddMessage
               ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name),
                OrderMessage);
-            if GameSettings.AutoSave = DOCK then
+            if GameSettings.Auto_Save = DOCK then
                SaveGame;
             end if;
             declare
@@ -253,10 +253,10 @@ package body Ships.Movement is
                   end if;
                end loop Resign_Crew_Member_Loop;
             end;
-            if GameSettings.AutoAskForBases then
+            if GameSettings.Auto_Ask_For_Bases then
                AskForBases;
             end if;
-            if GameSettings.AutoAskForEvents then
+            if GameSettings.Auto_Ask_For_Events then
                AskForEvents;
             end if;
          else
@@ -268,7 +268,7 @@ package body Ships.Movement is
          PlayerShip.Speed := DOCKED;
          Update_Game(10);
       else
-         PlayerShip.Speed := GameSettings.UndockSpeed;
+         PlayerShip.Speed := GameSettings.Undock_Speed;
          declare
             Speed: constant SpeedType :=
               (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
@@ -379,9 +379,9 @@ package body Ships.Movement is
             end;
          end if;
          if PlayerShip.Crew(1).Health > 0 then
-            PlayerShip.Speed := GameSettings.UndockSpeed;
+            PlayerShip.Speed := GameSettings.Undock_Speed;
             Update_Game(5);
-            if GameSettings.AutoSave = UNDOCK then
+            if GameSettings.Auto_Save = UNDOCK then
                SaveGame;
             end if;
          end if;
@@ -479,7 +479,7 @@ package body Ships.Movement is
       end if;
       if Ship = PlayerShip and (Ship.Speed in DOCKED | FULL_STOP) and
         InfoOnly then
-         ShipSetSpeed := GameSettings.UndockSpeed;
+         ShipSetSpeed := GameSettings.Undock_Speed;
          if ShipSetSpeed = FULL_STOP then
             ShipSetSpeed := QUARTER_SPEED;
          end if;
@@ -505,7 +505,7 @@ package body Ships.Movement is
       Speed: ShipSpeed := PlayerShip.Speed;
    begin
       if Speed in DOCKED | FULL_STOP then
-         Speed := GameSettings.UndockSpeed;
+         Speed := GameSettings.Undock_Speed;
       end if;
       Count_Fuel_Needed_Loop :
       for Module of PlayerShip.Modules loop

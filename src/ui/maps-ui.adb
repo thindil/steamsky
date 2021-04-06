@@ -116,7 +116,7 @@ package body Maps.UI is
       Frame: constant Ttk_Frame := Get_Widget(".gameframe.paned.combat");
    begin
       configure(Label, "-text {" & FormatedTime & "}");
-      if GameSettings.ShowNumbers then
+      if GameSettings.Show_Numbers then
          configure
            (Label,
             "-text {" & FormatedTime & " Speed:" &
@@ -132,7 +132,7 @@ package body Maps.UI is
            (Label,
             "You can't travel anymore, because you don't have any fuel for ship.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= GameSettings.LowFuel then
+      elsif ItemAmount <= GameSettings.Low_Fuel then
          configure(Label, "-style TLabel");
          Add
            (Label,
@@ -149,7 +149,7 @@ package body Maps.UI is
            (Label,
             "You don't have any drinks in ship but your crew needs them to live.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= GameSettings.LowDrinks then
+      elsif ItemAmount <= GameSettings.Low_Drinks then
          configure(Label, "-style TLabel");
          Add
            (Label,
@@ -166,7 +166,7 @@ package body Maps.UI is
            (Label,
             "You don't have any food in ship but your crew needs it to live.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif ItemAmount <= GameSettings.LowFood then
+      elsif ItemAmount <= GameSettings.Low_Food then
          configure(Label, "-style TLabel");
          Add
            (Label,
@@ -381,7 +381,7 @@ package body Maps.UI is
       MapTag: Unbounded_String;
       StoryX, StoryY: Natural := 1;
       CurrentTheme: constant ThemeRecord :=
-        Themes_List(To_String(GameSettings.InterfaceTheme));
+        Themes_List(To_String(GameSettings.Interface_Theme));
    begin
       configure(MapView, "-state normal");
       Delete(MapView, "1.0", "end");
@@ -874,7 +874,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Pack.Pack(GameFrame, "-fill both -expand true");
       end if;
       Wm_Set(Get_Main_Window(Get_Context), "title", "{Steam Sky}");
-      if GameSettings.FullScreen then
+      if GameSettings.Full_Screen then
          Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
       end if;
       CreateGameMenu;
@@ -900,9 +900,9 @@ package body Maps.UI is
             "-foreground #" & BasesTypes_List(I).Color);
       end loop Set_Tags_Loop;
       PanedPosition :=
-        (if GameSettings.WindowHeight - GameSettings.MessagesPosition < 0 then
-           GameSettings.WindowHeight
-         else GameSettings.WindowHeight - GameSettings.MessagesPosition);
+        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0 then
+           GameSettings.Window_Height
+         else GameSettings.Window_Height - GameSettings.Messages_Position);
       SashPos(Paned, "0", Natural'Image(PanedPosition));
       if Index
           (Tcl.Tk.Ada.Grid.Grid_Slaves(Get_Main_Window(Get_Context)),
@@ -919,7 +919,7 @@ package body Maps.UI is
       UpdateMessages;
       UpdateMoveButtons;
       UpdateMapInfo;
-      if not GameSettings.ShowLastMessages then
+      if not GameSettings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
       Tcl_SetVar(Get_Context, "shipname", To_String(PlayerShip.Name));

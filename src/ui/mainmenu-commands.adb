@@ -348,22 +348,22 @@ package body MainMenu.Commands is
    begin
       X :=
         (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) -
-         GameSettings.WindowWidth) /
+         GameSettings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
         (Positive'Value(Winfo_Get(MainWindow, "vrootheight")) -
-         GameSettings.WindowHeight) /
+         GameSettings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
         (MainWindow, "geometry",
-         Trim(Positive'Image(GameSettings.WindowWidth), Left) & "x" &
-         Trim(Positive'Image(GameSettings.WindowHeight), Left) & "+" &
+         Trim(Positive'Image(GameSettings.Window_Width), Left) & "x" &
+         Trim(Positive'Image(GameSettings.Window_Height), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       GenerateTraders;
       CreateGameUI;

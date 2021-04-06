@@ -145,7 +145,7 @@ package body Utils.UI is
         Create
           (MessageDialog & ".button",
            "-text {Close" &
-           Positive'Image(GameSettings.AutoCloseMessagesTime) &
+           Positive'Image(GameSettings.Auto_Close_Messages_Time) &
            "} -command {CloseDialog " & MessageDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
@@ -286,7 +286,7 @@ package body Utils.UI is
       if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
         Fuel_Type then
          Amount := GetItemAmount(Fuel_Type) - Value;
-         if Amount <= GameSettings.LowFuel then
+         if Amount <= GameSettings.Low_Fuel then
             Widgets.configure
               (Label, "-text {" & To_String(WarningText) & "fuel.}");
             Tcl.Tk.Ada.Grid.Grid(Label);
@@ -298,7 +298,7 @@ package body Utils.UI is
          if Factions_List(Member.Faction).DrinksTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Drinks") - Value;
-            if Amount <= GameSettings.LowDrinks then
+            if Amount <= GameSettings.Low_Drinks then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "drinks.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
@@ -309,7 +309,7 @@ package body Utils.UI is
          elsif Factions_List(Member.Faction).FoodTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Food") - Value;
-            if Amount <= GameSettings.LowFood then
+            if Amount <= GameSettings.Low_Food then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "food.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
@@ -580,7 +580,7 @@ package body Utils.UI is
             StartsCombat: constant Boolean := CheckForEvent;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
-            if not StartsCombat and GameSettings.AutoFinish then
+            if not StartsCombat and GameSettings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
             if Message /= Null_Unbounded_String then
@@ -599,8 +599,8 @@ package body Utils.UI is
             Paned: constant Ttk_PanedWindow :=
               Get_Widget(".gameframe.paned", Interp);
          begin
-            GameSettings.MessagesPosition :=
-              GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
+            GameSettings.Messages_Position :=
+              GameSettings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(True);
             ShowMainMenu;
          end;
@@ -625,8 +625,8 @@ package body Utils.UI is
          declare
             Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
          begin
-            GameSettings.MessagesPosition :=
-              GameSettings.WindowHeight - Natural'Value(SashPos(Paned, "0"));
+            GameSettings.Messages_Position :=
+              GameSettings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(False);
             ShowMainMenu;
          end;
@@ -844,7 +844,7 @@ package body Utils.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      if GameSettings.MessagesOrder = OLDER_FIRST then
+      if GameSettings.Messages_Order = OLDER_FIRST then
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
@@ -880,7 +880,7 @@ package body Utils.UI is
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       if NewScreenName in "optionsframe" | "messagesframe" or
-        not GameSettings.ShowLastMessages then
+        not GameSettings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
          if NewScreenName /= "mapframe" then
             SashPos(Paned, "0", Winfo_Get(Paned, "height"));
@@ -891,7 +891,7 @@ package body Utils.UI is
             SashPos
               (Paned, "0",
                Natural'Image
-                 (GameSettings.WindowHeight - GameSettings.MessagesPosition));
+                 (GameSettings.Window_Height - GameSettings.Messages_Position));
          end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;

@@ -354,7 +354,7 @@ package body Items is
 
    function GetItemChanceToDamage(ItemData: Natural) return String is
    begin
-      if GameSettings.ShowNumbers then
+      if GameSettings.Show_Numbers then
          return Natural'Image(ItemData) & "%";
       end if;
       case ItemData is
