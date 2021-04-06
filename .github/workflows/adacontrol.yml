@@ -20,7 +20,7 @@ jobs:
       run: |
          mkdir obj
          cd obj
-         adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv
+         adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv-unicode-sax-dom-input_sources
          cd ..
 
     - name: Upload the log
