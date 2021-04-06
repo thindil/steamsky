@@ -135,7 +135,7 @@ package body Messages.UI is
       if MessagesAmount(MessagesType) = 0 then
          Insert(MessagesView, "end", "{There are no messages of that type.}");
       else
-         if GameSettings.MessagesOrder = OLDER_FIRST then
+         if GameSettings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
@@ -265,7 +265,7 @@ package body Messages.UI is
       configure(MessagesView, "-state normal");
       Delete(MessagesView, "1.0", "end");
       if SearchText'Length = 0 then
-         if GameSettings.MessagesOrder = OLDER_FIRST then
+         if GameSettings.Messages_Order = OLDER_FIRST then
             Show_Older_First_Loop :
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
@@ -279,7 +279,7 @@ package body Messages.UI is
          Tcl_SetResult(Interp, "1");
          return TCL_OK;
       end if;
-      if GameSettings.MessagesOrder = OLDER_FIRST then
+      if GameSettings.Messages_Order = OLDER_FIRST then
          Search_Older_First_Loop :
          for Message of Messages_List loop
             if Index
