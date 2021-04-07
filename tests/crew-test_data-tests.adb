@@ -210,9 +210,9 @@ package body Crew.Test_Data.Tests is
       UpdateCrew(1, 1);
       PlayerShip.Crew(1).Health := 0;
       UpdateCrew(1, 1);
-      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
-      NewGameSettings.Player_Career := To_Unbounded_String("general");
-      NewGameSettings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Career := To_Unbounded_String("general");
+      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;
       Assert(True, "This tests can only crash.");
 
@@ -296,7 +296,7 @@ package body Crew.Test_Data.Tests is
 
    begin
 
-      GameSettings.Show_Numbers := False;
+      Game_Settings.Show_Numbers := False;
       Assert
         (GetSkillLevelName(9) = "Beginner",
          "Failed to get skill level name for level 9");
@@ -306,7 +306,7 @@ package body Crew.Test_Data.Tests is
       Assert
         (GetSkillLevelName(92) = "Legendary",
          "Failed to get skill level name for level 92");
-      GameSettings.Show_Numbers := True;
+      Game_Settings.Show_Numbers := True;
       Assert
         (GetSkillLevelName(9) = " 9",
          "Failed to get skill level name for level 9 (numeric)");
@@ -371,7 +371,7 @@ package body Crew.Test_Data.Tests is
 
    begin
 
-      GameSettings.Show_Numbers := False;
+      Game_Settings.Show_Numbers := False;
       Assert
         (GetAttributeLevelName(3) = "Very low",
          "Failed to get attribute level name for level 3");
@@ -381,7 +381,7 @@ package body Crew.Test_Data.Tests is
       Assert
         (GetAttributeLevelName(48) = "Very high",
          "Failed to get attribute level name for level 48");
-      GameSettings.Show_Numbers := True;
+      Game_Settings.Show_Numbers := True;
       Assert
         (GetAttributeLevelName(3) = " 3",
          "Failed to get attribute level name for level 3 (numeric)");

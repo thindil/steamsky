@@ -12,9 +12,9 @@ package body Bases.Trade.Test_Data is
    procedure Set_Up(Gnattest_T: in out Test) is
       pragma Unreferenced(Gnattest_T);
    begin
-      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
-      NewGameSettings.Player_Career := To_Unbounded_String("general");
-      NewGameSettings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Career := To_Unbounded_String("general");
+      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;
    end Set_Up;
 

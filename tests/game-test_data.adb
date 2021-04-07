@@ -21,7 +21,7 @@ package body Game.Test_Data is
       Doc_Directory := To_Unbounded_String("../../bin/doc/");
       Mods_Directory := To_Unbounded_String("../../bin/data/mods/");
       Themes_Directory := To_Unbounded_String("../../bin/data/themes/");
-      LoadConfig;
+      Load_Config;
       declare
          Message: constant String := Load_Game_Data;
       begin
@@ -29,9 +29,9 @@ package body Game.Test_Data is
             Put_Line(Message);
          end if;
       end;
-      NewGameSettings.Player_Faction := To_Unbounded_String("POLEIS");
-      NewGameSettings.Player_Career := To_Unbounded_String("general");
-      NewGameSettings.Starting_Base := To_Unbounded_String("1");
+      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Career := To_Unbounded_String("general");
+      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
       New_Game;
    end Set_Up;
 
