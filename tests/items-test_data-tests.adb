@@ -325,13 +325,13 @@ package body Items.Test_Data.Tests is
 
    begin
 
-      GameSettings.Show_Numbers := False;
+      Game_Settings.Show_Numbers := False;
       Assert
         (GetItemChanceToDamage(3) = "Small", "Wrong value returned for 3.");
       Assert
         (GetItemChanceToDamage(30) = "Very high",
          "Wrong value returned for 30.");
-      GameSettings.Show_Numbers := True;
+      Game_Settings.Show_Numbers := True;
       Assert
         (GetItemChanceToDamage(3) = " 3%",
          "Wrong value returned for 3 (numeric).");
