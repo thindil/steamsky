@@ -90,10 +90,12 @@ package body Ships.UI.Cargo is
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
+      Free_Space_Label: constant Ttk_Label :=
+        Get_Widget(CargoInfoFrame & ".freespace", Interp);
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CargoInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
-      Delete_Widgets(2, Rows - 1, CargoInfoFrame);
+      Delete_Widgets(3, Rows - 1, CargoInfoFrame);
       CargoTable :=
         CreateTable
           (Widget_Image(CargoInfoFrame),
@@ -101,6 +103,9 @@ package body Ships.UI.Cargo is
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
            False);
+      configure
+        (Free_Space_Label,
+         "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");
       Load_Cargo_Loop :
       for I in PlayerShip.Cargo.Iterate loop
          if Current_Row < Start_Row then
