@@ -113,7 +113,7 @@ package body Ships.Cargo is
          Get_Drinks_Amount_Loop :
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
-               ItemsAmount := GameSettings.Low_Drinks + 1;
+               ItemsAmount := Game_Settings.Low_Drinks + 1;
             else
                ItemsAmount := 0;
                Get_Selected_Drinks_Amount_Loop :
@@ -121,14 +121,14 @@ package body Ships.Cargo is
                   ItemsAmount := ItemsAmount + GetItemAmount(DrinkType);
                end loop Get_Selected_Drinks_Amount_Loop;
                exit Get_Drinks_Amount_Loop when ItemsAmount <
-                 GameSettings.Low_Drinks;
+                 Game_Settings.Low_Drinks;
             end if;
          end loop Get_Drinks_Amount_Loop;
       else
          Get_Items_Amount_Loop :
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).FoodTypes.Length = 0 then
-               ItemsAmount := GameSettings.Low_Food + 1;
+               ItemsAmount := Game_Settings.Low_Food + 1;
             else
                ItemsAmount := 0;
                Get_Food_Amount_Loop :
@@ -136,7 +136,7 @@ package body Ships.Cargo is
                   ItemsAmount := ItemsAmount + GetItemAmount(FoodType);
                end loop Get_Food_Amount_Loop;
                exit Get_Items_Amount_Loop when ItemsAmount <
-                 GameSettings.Low_Food;
+                 Game_Settings.Low_Food;
             end if;
          end loop Get_Items_Amount_Loop;
       end if;

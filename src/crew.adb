@@ -61,7 +61,7 @@ package body Crew is
          then Amount + (Amount / 2)
          else Amount);
       NewAmount :=
-        Natural(Float(NewAmount) * Float(NewGameSettings.Experience_Bonus));
+        Natural(Float(NewAmount) * Float(New_Game_Settings.Experience_Bonus));
       if NewAmount = 0 then
          return;
       end if;
@@ -842,7 +842,7 @@ package body Crew is
 
    function GetSkillLevelName(SkillLevel: Skill_Range) return String is
    begin
-      if GameSettings.Show_Numbers then
+      if Game_Settings.Show_Numbers then
          return Positive'Image(SkillLevel);
       end if;
       case SkillLevel is
@@ -873,7 +873,7 @@ package body Crew is
 
    function GetAttributeLevelName(AttributeLevel: Positive) return String is
    begin
-      if GameSettings.Show_Numbers then
+      if Game_Settings.Show_Numbers then
          return Positive'Image(AttributeLevel);
       end if;
       case AttributeLevel is

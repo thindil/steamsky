@@ -21,7 +21,7 @@ with Game; use Game;
 
 package body Config is
 
-   procedure LoadConfig is
+   procedure Load_Config is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
@@ -33,7 +33,7 @@ package body Config is
          return False;
       end LoadBoolean;
    begin
-      NewGameSettings :=
+      New_Game_Settings :=
         (Player_Name => To_Unbounded_String("Laeran"), Player_Gender => 'M',
          Ship_Name => To_Unbounded_String("Anaria"),
          Player_Faction => To_Unbounded_String("POLEIS"),
@@ -44,7 +44,7 @@ package body Config is
          Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
          Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
          Difficulty_Level => NORMAL);
-      GameSettings :=
+      Game_Settings :=
         (Auto_Rest => True, Undock_Speed => FULL_SPEED, Auto_Center => True,
          Auto_Return => True, Auto_Finish => True, Low_Fuel => 100,
          Low_Drinks => 50, Low_Food => 25, Auto_Move_Stop => NEVER,
@@ -66,112 +66,112 @@ package body Config is
             FieldName := Head(RawData, EqualIndex - 2);
             Value := Tail(RawData, (Length(RawData) - EqualIndex - 1));
             if FieldName = To_Unbounded_String("PlayerName") then
-               NewGameSettings.Player_Name := Value;
+               New_Game_Settings.Player_Name := Value;
             elsif FieldName = To_Unbounded_String("PlayerGender") then
-               NewGameSettings.Player_Gender := Element(Value, 1);
+               New_Game_Settings.Player_Gender := Element(Value, 1);
             elsif FieldName = To_Unbounded_String("ShipName") then
-               NewGameSettings.Ship_Name := Value;
+               New_Game_Settings.Ship_Name := Value;
             elsif FieldName = To_Unbounded_String("PlayerFaction") then
-               NewGameSettings.Player_Faction := Value;
+               New_Game_Settings.Player_Faction := Value;
             elsif FieldName = To_Unbounded_String("PlayerCareer") then
-               NewGameSettings.Player_Career := Value;
+               New_Game_Settings.Player_Career := Value;
             elsif FieldName = To_Unbounded_String("StartingBase") then
-               NewGameSettings.Starting_Base := Value;
+               New_Game_Settings.Starting_Base := Value;
             elsif FieldName = To_Unbounded_String("EnemyDamageBonus") then
-               NewGameSettings.Enemy_Damage_Bonus :=
+               New_Game_Settings.Enemy_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PlayerDamageBonus") then
-               NewGameSettings.Player_Damage_Bonus :=
+               New_Game_Settings.Player_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("EnemyMeleeDamageBonus") then
-               NewGameSettings.Enemy_Melee_Damage_Bonus :=
+               New_Game_Settings.Enemy_Melee_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName =
               To_Unbounded_String("PlayerMeleeDamageBonus") then
-               NewGameSettings.Player_Melee_Damage_Bonus :=
+               New_Game_Settings.Player_Melee_Damage_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ExperienceBonus") then
-               NewGameSettings.Experience_Bonus :=
+               New_Game_Settings.Experience_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ReputationBonus") then
-               NewGameSettings.Reputation_Bonus :=
+               New_Game_Settings.Reputation_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("UpgradeCostBonus") then
-               NewGameSettings.Upgrade_Cost_Bonus :=
+               New_Game_Settings.Upgrade_Cost_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("PricesBonus") then
-               NewGameSettings.Prices_Bonus :=
+               New_Game_Settings.Prices_Bonus :=
                  Bonus_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("DifficultyLevel") then
                if To_String(Value) in "VERY_EASY" | "EASY" | "NORMAL" |
                      "HARD" | "VERY_HARD" | "CUSTOM" then
-                  NewGameSettings.Difficulty_Level :=
+                  New_Game_Settings.Difficulty_Level :=
                     Difficulty_Type'Value(To_String(Value));
                else
-                  NewGameSettings.Difficulty_Level := NORMAL;
+                  New_Game_Settings.Difficulty_Level := NORMAL;
                end if;
             elsif FieldName = To_Unbounded_String("AutoRest") then
-               GameSettings.Auto_Rest := LoadBoolean;
+               Game_Settings.Auto_Rest := LoadBoolean;
             elsif FieldName = To_Unbounded_String("UndockSpeed") then
-               GameSettings.Undock_Speed := ShipSpeed'Value(To_String(Value));
+               Game_Settings.Undock_Speed := ShipSpeed'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoCenter") then
-               GameSettings.Auto_Center := LoadBoolean;
+               Game_Settings.Auto_Center := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoReturn") then
-               GameSettings.Auto_Return := LoadBoolean;
+               Game_Settings.Auto_Return := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoFinish") then
-               GameSettings.Auto_Finish := LoadBoolean;
+               Game_Settings.Auto_Finish := LoadBoolean;
             elsif FieldName = To_Unbounded_String("LowFuel") then
-               GameSettings.Low_Fuel := Positive'Value(To_String(Value));
+               Game_Settings.Low_Fuel := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowDrinks") then
-               GameSettings.Low_Drinks := Positive'Value(To_String(Value));
+               Game_Settings.Low_Drinks := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("LowFood") then
-               GameSettings.Low_Food := Positive'Value(To_String(Value));
+               Game_Settings.Low_Food := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoMoveStop") then
-               GameSettings.Auto_Move_Stop :=
+               Game_Settings.Auto_Move_Stop :=
                  Auto_Move_Break'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowWidth") then
-               GameSettings.Window_Width := Positive'Value(To_String(Value));
+               Game_Settings.Window_Width := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("WindowHeight") then
-               GameSettings.Window_Height := Positive'Value(To_String(Value));
+               Game_Settings.Window_Height := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MessagesLimit") then
-               GameSettings.Messages_Limit := Positive'Value(To_String(Value));
+               Game_Settings.Messages_Limit := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("SavedMessages") then
-               GameSettings.Saved_Messages := Positive'Value(To_String(Value));
+               Game_Settings.Saved_Messages := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("HelpFontSize") then
-               GameSettings.Help_Font_Size := Positive'Value(To_String(Value));
+               Game_Settings.Help_Font_Size := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MapFontSize") then
-               GameSettings.Map_Font_Size := Positive'Value(To_String(Value));
+               Game_Settings.Map_Font_Size := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
-               GameSettings.Interface_Font_Size :=
+               Game_Settings.Interface_Font_Size :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceTheme") then
-               GameSettings.Interface_Theme := Value;
+               Game_Settings.Interface_Theme := Value;
             elsif FieldName = To_Unbounded_String("MessagesOrder") then
-               GameSettings.Messages_Order :=
+               Game_Settings.Messages_Order :=
                  Messages_Order_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoAskForBases") then
-               GameSettings.Auto_Ask_For_Bases := LoadBoolean;
+               Game_Settings.Auto_Ask_For_Bases := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoAskForEvents") then
-               GameSettings.Auto_Ask_For_Events := LoadBoolean;
+               Game_Settings.Auto_Ask_For_Events := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowTooltips") then
-               GameSettings.Show_Tooltips := LoadBoolean;
+               Game_Settings.Show_Tooltips := LoadBoolean;
             elsif FieldName = To_Unbounded_String("ShowLastMessages") then
-               GameSettings.Show_Last_Messages := LoadBoolean;
+               Game_Settings.Show_Last_Messages := LoadBoolean;
             elsif FieldName = To_Unbounded_String("MessagesPosition") then
-               GameSettings.Messages_Position :=
+               Game_Settings.Messages_Position :=
                  Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("FullScreen") then
-               GameSettings.Full_Screen := LoadBoolean;
+               Game_Settings.Full_Screen := LoadBoolean;
             elsif FieldName = To_Unbounded_String("AutoCloseMessagesTime") then
-               GameSettings.Auto_Close_Messages_Time :=
+               Game_Settings.Auto_Close_Messages_Time :=
                  Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("AutoSave") then
-               GameSettings.Auto_Save :=
+               Game_Settings.Auto_Save :=
                  Auto_Save_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
-               GameSettings.Topics_Position := Natural'Value(To_String(Value));
+               Game_Settings.Topics_Position := Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
-               GameSettings.Show_Numbers := LoadBoolean;
+               Game_Settings.Show_Numbers := LoadBoolean;
             end if;
          end if;
       end loop Read_Config_File_Loop;
@@ -179,9 +179,9 @@ package body Config is
    exception
       when Ada.Directories.Name_Error =>
          null;
-   end LoadConfig;
+   end Load_Config;
 
-   procedure SaveConfig is
+   procedure Save_Config is
       ConfigFile: File_Type;
       procedure SaveBoolean(Value: Boolean; Name: String) is
       begin
@@ -194,120 +194,120 @@ package body Config is
    begin
       Create(ConfigFile, Append_File, To_String(Save_Directory) & "game.cfg");
       Put_Line
-        (ConfigFile, "PlayerName = " & To_String(NewGameSettings.Player_Name));
-      Put_Line(ConfigFile, "PlayerGender = " & NewGameSettings.Player_Gender);
+        (ConfigFile, "PlayerName = " & To_String(New_Game_Settings.Player_Name));
+      Put_Line(ConfigFile, "PlayerGender = " & New_Game_Settings.Player_Gender);
       Put_Line
-        (ConfigFile, "ShipName = " & To_String(NewGameSettings.Ship_Name));
-      Put_Line
-        (ConfigFile,
-         "PlayerFaction = " & To_String(NewGameSettings.Player_Faction));
+        (ConfigFile, "ShipName = " & To_String(New_Game_Settings.Ship_Name));
       Put_Line
         (ConfigFile,
-         "PlayerCareer = " & To_String(NewGameSettings.Player_Career));
+         "PlayerFaction = " & To_String(New_Game_Settings.Player_Faction));
       Put_Line
         (ConfigFile,
-         "StartingBase = " & To_String(NewGameSettings.Starting_Base));
+         "PlayerCareer = " & To_String(New_Game_Settings.Player_Career));
+      Put_Line
+        (ConfigFile,
+         "StartingBase = " & To_String(New_Game_Settings.Starting_Base));
       Put_Line
         (ConfigFile,
          "EnemyDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.Enemy_Damage_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Enemy_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "PlayerDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.Player_Damage_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Player_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "EnemyMeleeDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.Enemy_Melee_Damage_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Enemy_Melee_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "PlayerMeleeDamageBonus =" &
-         Bonus_Type'Image(NewGameSettings.Player_Melee_Damage_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Player_Melee_Damage_Bonus));
       Put_Line
         (ConfigFile,
          "ExperienceBonus =" &
-         Bonus_Type'Image(NewGameSettings.Experience_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Experience_Bonus));
       Put_Line
         (ConfigFile,
          "ReputationBonus =" &
-         Bonus_Type'Image(NewGameSettings.Reputation_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Reputation_Bonus));
       Put_Line
         (ConfigFile,
          "UpgradeCostBonus =" &
-         Bonus_Type'Image(NewGameSettings.Upgrade_Cost_Bonus));
+         Bonus_Type'Image(New_Game_Settings.Upgrade_Cost_Bonus));
       Put_Line
         (ConfigFile,
-         "PricesBonus =" & Bonus_Type'Image(NewGameSettings.Prices_Bonus));
+         "PricesBonus =" & Bonus_Type'Image(New_Game_Settings.Prices_Bonus));
       Put_Line
         (ConfigFile,
          "DifficultyLevel = " &
-         Difficulty_Type'Image(NewGameSettings.Difficulty_Level));
-      SaveBoolean(GameSettings.Auto_Rest, "AutoRest");
+         Difficulty_Type'Image(New_Game_Settings.Difficulty_Level));
+      SaveBoolean(Game_Settings.Auto_Rest, "AutoRest");
       Put_Line
         (ConfigFile,
-         "UndockSpeed = " & ShipSpeed'Image(GameSettings.Undock_Speed));
-      SaveBoolean(GameSettings.Auto_Center, "AutoCenter");
-      SaveBoolean(GameSettings.Auto_Return, "AutoReturn");
-      SaveBoolean(GameSettings.Auto_Finish, "AutoFinish");
+         "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
+      SaveBoolean(Game_Settings.Auto_Center, "AutoCenter");
+      SaveBoolean(Game_Settings.Auto_Return, "AutoReturn");
+      SaveBoolean(Game_Settings.Auto_Finish, "AutoFinish");
       Put_Line
-        (ConfigFile, "LowFuel =" & Positive'Image(GameSettings.Low_Fuel));
+        (ConfigFile, "LowFuel =" & Positive'Image(Game_Settings.Low_Fuel));
       Put_Line
-        (ConfigFile, "LowDrinks =" & Positive'Image(GameSettings.Low_Drinks));
+        (ConfigFile, "LowDrinks =" & Positive'Image(Game_Settings.Low_Drinks));
       Put_Line
-        (ConfigFile, "LowFood =" & Positive'Image(GameSettings.Low_Food));
+        (ConfigFile, "LowFood =" & Positive'Image(Game_Settings.Low_Food));
       Put_Line
         (ConfigFile,
          "AutoMoveStop = " &
-         Auto_Move_Break'Image(GameSettings.Auto_Move_Stop));
+         Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop));
       Put_Line
         (ConfigFile,
-         "WindowWidth =" & Positive'Image(GameSettings.Window_Width));
+         "WindowWidth =" & Positive'Image(Game_Settings.Window_Width));
       Put_Line
         (ConfigFile,
-         "WindowHeight =" & Positive'Image(GameSettings.Window_Height));
+         "WindowHeight =" & Positive'Image(Game_Settings.Window_Height));
       Put_Line
         (ConfigFile,
-         "MessagesLimit =" & Positive'Image(GameSettings.Messages_Limit));
+         "MessagesLimit =" & Positive'Image(Game_Settings.Messages_Limit));
       Put_Line
         (ConfigFile,
-         "SavedMessages =" & Positive'Image(GameSettings.Saved_Messages));
+         "SavedMessages =" & Positive'Image(Game_Settings.Saved_Messages));
       Put_Line
         (ConfigFile,
-         "HelpFontSize =" & Positive'Image(GameSettings.Help_Font_Size));
+         "HelpFontSize =" & Positive'Image(Game_Settings.Help_Font_Size));
       Put_Line
         (ConfigFile,
-         "MapFontSize =" & Positive'Image(GameSettings.Map_Font_Size));
+         "MapFontSize =" & Positive'Image(Game_Settings.Map_Font_Size));
       Put_Line
         (ConfigFile,
          "InterfaceFontSize =" &
-         Positive'Image(GameSettings.Interface_Font_Size));
+         Positive'Image(Game_Settings.Interface_Font_Size));
       Put_Line
         (ConfigFile,
-         "InterfaceTheme = " & To_String(GameSettings.Interface_Theme));
+         "InterfaceTheme = " & To_String(Game_Settings.Interface_Theme));
       Put_Line
         (ConfigFile,
          "MessagesOrder = " &
-         Messages_Order_Type'Image(GameSettings.Messages_Order));
-      SaveBoolean(GameSettings.Auto_Ask_For_Bases, "AutoAskForBases");
-      SaveBoolean(GameSettings.Auto_Ask_For_Events, "AutoAskForEvents");
-      SaveBoolean(GameSettings.Show_Tooltips, "ShowTooltips");
-      SaveBoolean(GameSettings.Show_Last_Messages, "ShowLastMessages");
+         Messages_Order_Type'Image(Game_Settings.Messages_Order));
+      SaveBoolean(Game_Settings.Auto_Ask_For_Bases, "AutoAskForBases");
+      SaveBoolean(Game_Settings.Auto_Ask_For_Events, "AutoAskForEvents");
+      SaveBoolean(Game_Settings.Show_Tooltips, "ShowTooltips");
+      SaveBoolean(Game_Settings.Show_Last_Messages, "ShowLastMessages");
       Put_Line
         (ConfigFile,
-         "MessagesPosition =" & Natural'Image(GameSettings.Messages_Position));
-      SaveBoolean(GameSettings.Full_Screen, "FullScreen");
+         "MessagesPosition =" & Natural'Image(Game_Settings.Messages_Position));
+      SaveBoolean(Game_Settings.Full_Screen, "FullScreen");
       Put_Line
         (ConfigFile,
          "AutoCloseMessagesTime =" &
-         Positive'Image(GameSettings.Auto_Close_Messages_Time));
+         Positive'Image(Game_Settings.Auto_Close_Messages_Time));
       Put_Line
         (ConfigFile,
-         "AutoSave = " & Auto_Save_Type'Image(GameSettings.Auto_Save));
+         "AutoSave = " & Auto_Save_Type'Image(Game_Settings.Auto_Save));
       Put_Line
         (ConfigFile,
-         "TopicsPosition =" & Natural'Image(GameSettings.Topics_Position));
-      SaveBoolean(GameSettings.Show_Numbers, "ShowNumbers");
+         "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
+      SaveBoolean(Game_Settings.Show_Numbers, "ShowNumbers");
       Close(ConfigFile);
-   end SaveConfig;
+   end Save_Config;
 
 end Config;

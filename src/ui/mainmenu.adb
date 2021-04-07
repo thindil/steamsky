@@ -93,16 +93,16 @@ package body MainMenu is
       Wm_Set(MainWindow, "iconphoto", "-default " & Icon);
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) = GameSettings.Interface_Theme then
+         if Themes_Container.Key(I) = Game_Settings.Interface_Theme then
             Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;
-      Theme_Use(To_String(GameSettings.Interface_Theme));
+      Theme_Use(To_String(Game_Settings.Interface_Theme));
       Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
       MainMenuFrame.Interp := Get_Context;
       MainMenuFrame.Name := New_String(".mainmenu");
-      if not GameSettings.Show_Tooltips then
+      if not Game_Settings.Show_Tooltips then
          Disable;
       end if;
       DefaultFontsSizes :=
@@ -110,12 +110,12 @@ package body MainMenu is
          Positive'Value(Font.Configure("InterfaceFont", "-size")),
          Positive'Value(Font.Configure("HelpFont", "-size")));
       Font.Configure
-        ("MapFont", "-size" & Positive'Image(GameSettings.Map_Font_Size));
+        ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
       Font.Configure
-        ("HelpFont", "-size" & Positive'Image(GameSettings.Help_Font_Size));
+        ("HelpFont", "-size" & Positive'Image(Game_Settings.Help_Font_Size));
       Font.Configure
         ("InterfaceFont",
-         "-size" & Positive'Image(GameSettings.Interface_Font_Size));
+         "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
       DataError := To_Unbounded_String(Load_Game_Data);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
@@ -123,12 +123,12 @@ package body MainMenu is
       end if;
       configure(VersionLabel, "-text {" & Game_Version & "}");
       Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(NewGameSettings.Player_Name));
+      Insert(TextEntry, "0", To_String(New_Game_Settings.Player_Name));
       Tcl_SetVar
-        (Get_Context, "playergender", "" & NewGameSettings.Player_Gender);
+        (Get_Context, "playergender", "" & New_Game_Settings.Player_Gender);
       TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
       Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(NewGameSettings.Ship_Name));
+      Insert(TextEntry, "0", To_String(New_Game_Settings.Ship_Name));
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
@@ -139,18 +139,18 @@ package body MainMenu is
       configure(ComboBox, "-values [list" & To_String(Values) & "]");
       Set
         (ComboBox,
-         To_String(Factions_List(NewGameSettings.Player_Faction).Name));
+         To_String(Factions_List(New_Game_Settings.Player_Faction).Name));
       Tcl_Eval(Get_Context, "SetFaction");
       ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
       Set
         (ComboBox,
-         To_String(Careers_List(NewGameSettings.Player_Career).Name));
+         To_String(Careers_List(New_Game_Settings.Player_Career).Name));
       ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
-      if NewGameSettings.Starting_Base /= To_Unbounded_String("Any") then
+      if New_Game_Settings.Starting_Base /= To_Unbounded_String("Any") then
          Set
            (ComboBox,
             "{" &
-            To_String(BasesTypes_List(NewGameSettings.Starting_Base).Name) &
+            To_String(BasesTypes_List(New_Game_Settings.Starting_Base).Name) &
             "}");
       else
          Set(ComboBox, "Any");
@@ -159,45 +159,45 @@ package body MainMenu is
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Enemy_Damage_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Enemy_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Player_Damage_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
       Set
         (SpinBox,
          Natural'Image
-           (Natural(NewGameSettings.Enemy_Melee_Damage_Bonus * 100.0)));
+           (Natural(New_Game_Settings.Enemy_Melee_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
       Set
         (SpinBox,
          Natural'Image
-           (Natural(NewGameSettings.Player_Melee_Damage_Bonus * 100.0)));
+           (Natural(New_Game_Settings.Player_Melee_Damage_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Experience_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Experience_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Reputation_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Upgrade_Cost_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
       SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
       Set
         (SpinBox,
-         Natural'Image(Natural(NewGameSettings.Prices_Bonus * 100.0)));
+         Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
       Tcl_Eval(Get_Context, "SetPoints");
       ShowMainMenu;
       Current
         (ComboBox,
-         Natural'Image(Difficulty_Type'Pos(NewGameSettings.Difficulty_Level)));
+         Natural'Image(Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
       Generate(ComboBox, "<<ComboboxSelected>>");
    end CreateMainMenu;
 
@@ -217,7 +217,7 @@ package body MainMenu is
       if Y < 0 then
          Y := 0;
       end if;
-      if GameSettings.Full_Screen then
+      if Game_Settings.Full_Screen then
          Wm_Set(MainWindow, "attributes", "-fullscreen 0");
       end if;
       if OsName = "Linux" then

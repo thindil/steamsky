@@ -168,12 +168,12 @@ package body Statistics is
       MalusIndexes: constant array(Positive range <>) of Positive :=
         (2, 4, 5, 6);
       DifficultyValues: constant array(1 .. 7) of Bonus_Type :=
-        (NewGameSettings.Enemy_Damage_Bonus,
-         NewGameSettings.Player_Damage_Bonus,
-         NewGameSettings.Enemy_Melee_Damage_Bonus,
-         NewGameSettings.Player_Melee_Damage_Bonus,
-         NewGameSettings.Experience_Bonus, NewGameSettings.Reputation_Bonus,
-         NewGameSettings.Upgrade_Cost_Bonus);
+        (New_Game_Settings.Enemy_Damage_Bonus,
+         New_Game_Settings.Player_Damage_Bonus,
+         New_Game_Settings.Enemy_Melee_Damage_Bonus,
+         New_Game_Settings.Player_Melee_Damage_Bonus,
+         New_Game_Settings.Experience_Bonus, New_Game_Settings.Reputation_Bonus,
+         New_Game_Settings.Upgrade_Cost_Bonus);
       PointsBonus, Value: Float := 0.0;
    begin
       Get_Game_Points_Loop :

@@ -569,7 +569,7 @@ package body Missions is
             Append(MessageText, "'Transport passenger to base'.");
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
-      if GameSettings.Auto_Return then
+      if Game_Settings.Auto_Return then
          PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
          PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
          AddMessage

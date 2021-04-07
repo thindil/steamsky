@@ -179,32 +179,32 @@ package Config is
    end record;
    -- ****
 
-   -- ****v* Config/Config.NewGameSettings
+   -- ****v* Config/Config.New_Game_Settings
    -- FUNCTION
    -- Settings for the new game
    -- SOURCE
-   NewGameSettings: New_Game_Record;
+   New_Game_Settings: New_Game_Record;
    -- ****
 
-   -- ****v* Config/Config.GameSettings
+   -- ****v* Config/Config.Game_Settings
    -- FUNCTION
    -- General settings for the game
    -- SOURCE
-   GameSettings: Game_Settings_Record;
+   Game_Settings: Game_Settings_Record;
    -- ****
 
-   -- ****f* Config/Config.LoadConfig
+   -- ****f* Config/Config.Load_Config
    -- FUNCTION
    -- Load game configuration from file
    -- SOURCE
-   procedure LoadConfig;
+   procedure Load_Config;
    -- ****
 
    -- ****f* Config/Config.SaveConfig
    -- FUNCTION
    -- Save game configuration to file
    -- SOURCE
-   procedure SaveConfig;
+   procedure Save_Config;
    -- ****
 
 end Config;
