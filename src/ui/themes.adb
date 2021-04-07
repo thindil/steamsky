@@ -255,7 +255,8 @@ package body Themes is
          <<End_Of_Load_Themes_Loop>>
       end loop Load_Themes_Loop;
       End_Search(Directories);
-      if not Themes_List.Contains(To_String(Game_Settings.Interface_Theme)) then
+      if not Themes_List.Contains
+          (To_String(Game_Settings.Interface_Theme)) then
          Game_Settings.Interface_Theme := To_Unbounded_String("steamsky");
       end if;
    end LoadThemes;

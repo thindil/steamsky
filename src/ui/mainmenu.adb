@@ -164,7 +164,8 @@ package body MainMenu is
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
       Set
         (SpinBox,
-         Natural'Image(Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
+         Natural'Image
+           (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
       SpinBox.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
       Set
@@ -197,7 +198,8 @@ package body MainMenu is
       ShowMainMenu;
       Current
         (ComboBox,
-         Natural'Image(Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
+         Natural'Image
+           (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
       Generate(ComboBox, "<<ComboboxSelected>>");
    end CreateMainMenu;
 

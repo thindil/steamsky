@@ -172,7 +172,8 @@ package body Statistics is
          New_Game_Settings.Player_Damage_Bonus,
          New_Game_Settings.Enemy_Melee_Damage_Bonus,
          New_Game_Settings.Player_Melee_Damage_Bonus,
-         New_Game_Settings.Experience_Bonus, New_Game_Settings.Reputation_Bonus,
+         New_Game_Settings.Experience_Bonus,
+         New_Game_Settings.Reputation_Bonus,
          New_Game_Settings.Upgrade_Cost_Bonus);
       PointsBonus, Value: Float := 0.0;
    begin

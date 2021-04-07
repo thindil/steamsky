@@ -330,7 +330,8 @@ package body Game is
          else
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = New_Game_Settings.Player_Faction and
+              SkyBases(Random_Base).Owner =
+                New_Game_Settings.Player_Faction and
               SkyBases(Random_Base).BaseType = New_Game_Settings.Starting_Base;
          end if;
       end loop Place_Player_Loop;
@@ -341,9 +342,9 @@ package body Game is
              Factions_List(New_Game_Settings.Player_Faction).Careers
                (New_Game_Settings.Player_Career)
                .ShipIndex,
-           Name => New_Game_Settings.Ship_Name, X => SkyBases(Random_Base).SkyX,
-           Y => SkyBases(Random_Base).SkyY, Speed => DOCKED,
-           RandomUpgrades => False);
+           Name => New_Game_Settings.Ship_Name,
+           X => SkyBases(Random_Base).SkyX, Y => SkyBases(Random_Base).SkyY,
+           Speed => DOCKED, RandomUpgrades => False);
       -- Add player to ship
       Add_Player_Block :
       declare

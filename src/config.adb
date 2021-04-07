@@ -134,11 +134,14 @@ package body Config is
             elsif FieldName = To_Unbounded_String("WindowHeight") then
                Game_Settings.Window_Height := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MessagesLimit") then
-               Game_Settings.Messages_Limit := Positive'Value(To_String(Value));
+               Game_Settings.Messages_Limit :=
+                 Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("SavedMessages") then
-               Game_Settings.Saved_Messages := Positive'Value(To_String(Value));
+               Game_Settings.Saved_Messages :=
+                 Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("HelpFontSize") then
-               Game_Settings.Help_Font_Size := Positive'Value(To_String(Value));
+               Game_Settings.Help_Font_Size :=
+                 Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("MapFontSize") then
                Game_Settings.Map_Font_Size := Positive'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("InterfaceFontSize") then
@@ -169,7 +172,8 @@ package body Config is
                Game_Settings.Auto_Save :=
                  Auto_Save_Type'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("TopicsPosition") then
-               Game_Settings.Topics_Position := Natural'Value(To_String(Value));
+               Game_Settings.Topics_Position :=
+                 Natural'Value(To_String(Value));
             elsif FieldName = To_Unbounded_String("ShowNumbers") then
                Game_Settings.Show_Numbers := LoadBoolean;
             end if;
@@ -194,8 +198,10 @@ package body Config is
    begin
       Create(ConfigFile, Append_File, To_String(Save_Directory) & "game.cfg");
       Put_Line
-        (ConfigFile, "PlayerName = " & To_String(New_Game_Settings.Player_Name));
-      Put_Line(ConfigFile, "PlayerGender = " & New_Game_Settings.Player_Gender);
+        (ConfigFile,
+         "PlayerName = " & To_String(New_Game_Settings.Player_Name));
+      Put_Line
+        (ConfigFile, "PlayerGender = " & New_Game_Settings.Player_Gender);
       Put_Line
         (ConfigFile, "ShipName = " & To_String(New_Game_Settings.Ship_Name));
       Put_Line
@@ -294,7 +300,8 @@ package body Config is
       SaveBoolean(Game_Settings.Show_Last_Messages, "ShowLastMessages");
       Put_Line
         (ConfigFile,
-         "MessagesPosition =" & Natural'Image(Game_Settings.Messages_Position));
+         "MessagesPosition =" &
+         Natural'Image(Game_Settings.Messages_Position));
       SaveBoolean(Game_Settings.Full_Screen, "FullScreen");
       Put_Line
         (ConfigFile,
