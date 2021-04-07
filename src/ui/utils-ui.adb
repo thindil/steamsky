@@ -145,7 +145,7 @@ package body Utils.UI is
         Create
           (MessageDialog & ".button",
            "-text {Close" &
-           Positive'Image(GameSettings.Auto_Close_Messages_Time) &
+           Positive'Image(Game_Settings.Auto_Close_Messages_Time) &
            "} -command {CloseDialog " & MessageDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
@@ -286,7 +286,7 @@ package body Utils.UI is
       if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
         Fuel_Type then
          Amount := GetItemAmount(Fuel_Type) - Value;
-         if Amount <= GameSettings.Low_Fuel then
+         if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
               (Label, "-text {" & To_String(WarningText) & "fuel.}");
             Tcl.Tk.Ada.Grid.Grid(Label);
@@ -294,31 +294,32 @@ package body Utils.UI is
             return TCL_OK;
          end if;
       end if;
+      Check_Food_And_Drinks_Loop :
       for Member of PlayerShip.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Drinks") - Value;
-            if Amount <= GameSettings.Low_Drinks then
+            if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "drinks.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
             end if;
-            exit;
+            exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
              (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Food") - Value;
-            if Amount <= GameSettings.Low_Food then
+            if Amount <= Game_Settings.Low_Food then
                Widgets.configure
                  (Label, "-text {" & To_String(WarningText) & "food.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
             end if;
-            exit;
+            exit Check_Food_And_Drinks_Loop;
          end if;
-      end loop;
+      end loop Check_Food_And_Drinks_Loop;
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
@@ -580,7 +581,7 @@ package body Utils.UI is
             StartsCombat: constant Boolean := CheckForEvent;
             Message: Unbounded_String := Null_Unbounded_String;
          begin
-            if not StartsCombat and GameSettings.Auto_Finish then
+            if not StartsCombat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
             if Message /= Null_Unbounded_String then
@@ -599,8 +600,8 @@ package body Utils.UI is
             Paned: constant Ttk_PanedWindow :=
               Get_Widget(".gameframe.paned", Interp);
          begin
-            GameSettings.Messages_Position :=
-              GameSettings.Window_Height - Natural'Value(SashPos(Paned, "0"));
+            Game_Settings.Messages_Position :=
+              Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(True);
             ShowMainMenu;
          end;
@@ -625,8 +626,8 @@ package body Utils.UI is
          declare
             Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
          begin
-            GameSettings.Messages_Position :=
-              GameSettings.Window_Height - Natural'Value(SashPos(Paned, "0"));
+            Game_Settings.Messages_Position :=
+              Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(False);
             ShowMainMenu;
          end;
@@ -655,10 +656,11 @@ package body Utils.UI is
             DeleteMember(MemberIndex, PlayerShip);
             SkyBases(BaseIndex).Population :=
               SkyBases(BaseIndex).Population + 1;
+            Update_Morale_Loop :
             for I in PlayerShip.Crew.Iterate loop
                UpdateMorale
                  (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
-            end loop;
+            end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;
             UpdateMessages;
@@ -684,6 +686,7 @@ package body Utils.UI is
       TravelTime: Date_Record := (others => 0);
       MinutesDiff: Integer := Minutes;
    begin
+      Count_Time_Loop :
       while MinutesDiff > 0 loop
          if MinutesDiff >= 518400 then
             TravelTime.Year := TravelTime.Year + 1;
@@ -701,7 +704,7 @@ package body Utils.UI is
             TravelTime.Minutes := MinutesDiff;
             MinutesDiff := 0;
          end if;
-      end loop;
+      end loop Count_Time_Loop;
       if TravelTime.Year > 0 then
          Append(InfoText, Positive'Image(TravelTime.Year) & "y");
       end if;
@@ -753,6 +756,7 @@ package body Utils.UI is
       end case;
       Append(InfoText, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
+      Count_Rest_Time_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Pilot or
            PlayerShip.Crew(I).Order = Engineer then
@@ -799,7 +803,7 @@ package body Utils.UI is
                end if;
             end if;
          end if;
-      end loop;
+      end loop Count_Rest_Time_Loop;
       MinutesDiff := MinutesDiff + (Rests * RestTime);
       MinutesToDate(MinutesDiff, InfoText);
       Append
@@ -844,23 +848,25 @@ package body Utils.UI is
       if LoopStart < -10 then
          LoopStart := -10;
       end if;
-      if GameSettings.Messages_Order = OLDER_FIRST then
+      if Game_Settings.Messages_Order = OLDER_FIRST then
+         Show_Older_First_Loop :
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
             if I < -1 then
                Insert(MessagesView, "end", "{" & LF & "}");
             end if;
-         end loop;
+         end loop Show_Older_First_Loop;
          See(MessagesView, "end");
       else
+         Show_Newer_First_Loop :
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
             if I > LoopStart then
                Insert(MessagesView, "end", "{" & LF & "}");
             end if;
-         end loop;
+         end loop Show_Newer_First_Loop;
       end if;
       Tcl.Tk.Ada.Widgets.configure(MessagesView, "-state disable");
    end UpdateMessages;
@@ -880,7 +886,7 @@ package body Utils.UI is
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
       Insert(Paned, "0", SubWindow, "-weight 1");
       if NewScreenName in "optionsframe" | "messagesframe" or
-        not GameSettings.Show_Last_Messages then
+        not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
          if NewScreenName /= "mapframe" then
             SashPos(Paned, "0", Winfo_Get(Paned, "height"));
@@ -891,8 +897,8 @@ package body Utils.UI is
             SashPos
               (Paned, "0",
                Natural'Image
-                 (GameSettings.Window_Height -
-                  GameSettings.Messages_Position));
+                 (Game_Settings.Window_Height -
+                  Game_Settings.Messages_Position));
          end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
@@ -962,6 +968,7 @@ package body Utils.UI is
                null;
          end case;
       end if;
+      Show_More_Item_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
             Append
@@ -972,9 +979,9 @@ package body Utils.UI is
               (ItemInfo,
                LF & "Strength:" &
                Integer'Image(Items_List(ProtoIndex).Value(2)));
-            exit;
+            exit Show_More_Item_Info_Loop;
          end if;
-      end loop;
+      end loop Show_More_Item_Info_Loop;
       if Tools_List.Contains(Items_List(ProtoIndex).IType) then
          Append
            (ItemInfo,
