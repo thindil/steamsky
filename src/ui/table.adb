@@ -77,7 +77,7 @@ package body Table is
             Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
             To_String(Headers(I)) &
             "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
-            To_String(GameSettings.Interface_Theme) &
+            To_String(Game_Settings.Interface_Theme) &
             " -foreground] -tags [list header" &
             Trim(Positive'Image(I), Left) & "]");
          Create
@@ -139,9 +139,9 @@ package body Table is
       Color: constant String :=
         (if Table.Row rem 2 > 0 then
            Style_Lookup
-             (To_String(GameSettings.Interface_Theme), "-troughcolor")
+             (To_String(Game_Settings.Interface_Theme), "-troughcolor")
          else Style_Lookup
-             (To_String(GameSettings.Interface_Theme), "-background"));
+             (To_String(Game_Settings.Interface_Theme), "-background"));
    begin
       if not NewRow then
          return Color;
@@ -162,7 +162,7 @@ package body Table is
             "{" & Table.Canvas & " itemconfigure row" &
             Trim(Positive'Image(Table.Row), Left) & " -fill " &
             Style_Lookup
-              (To_String(GameSettings.Interface_Theme), "-selectbackground") &
+              (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
             ";" & Table.Canvas & " configure -cursor hand1}");
          Bind
            (Table.Canvas, To_String(ItemId), "<Leave>",
@@ -176,7 +176,7 @@ package body Table is
             "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
             " -fill " &
             Style_Lookup
-              (To_String(GameSettings.Interface_Theme), "-selectbackground") &
+              (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
             "}");
          Bind
            (Table.Canvas, To_String(ItemId), "<Leave>",
@@ -198,7 +198,7 @@ package body Table is
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
          else Style_Lookup
-             (To_String(GameSettings.Interface_Theme), "-foreground"));
+             (To_String(Game_Settings.Interface_Theme), "-foreground"));
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
    begin
@@ -224,7 +224,7 @@ package body Table is
          "{" & Table.Canvas & " itemconfigure row" &
          Trim(Positive'Image(Table.Row), Left) & " -fill " &
          Style_Lookup
-           (To_String(GameSettings.Interface_Theme), "-selectbackground") &
+           (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
          "}");
       Bind
         (Table.Canvas, To_String(ItemId), "<Leave>",
@@ -344,7 +344,7 @@ package body Table is
                "{" & Table.Canvas & " itemconfigure row" &
                Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Style_Lookup
-                 (To_String(GameSettings.Interface_Theme),
+                 (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
                ";" & Table.Canvas & " configure -cursor hand1}");
             Bind
@@ -360,7 +360,7 @@ package body Table is
                "{" & Table.Canvas & " itemconfigure row" &
                Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Style_Lookup
-                 (To_String(GameSettings.Interface_Theme),
+                 (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
                "}");
             Bind
