@@ -255,7 +255,8 @@ package body GameOptions is
       Set
         (ComboBox,
          "{" &
-         To_String(Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
+         To_String
+           (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
