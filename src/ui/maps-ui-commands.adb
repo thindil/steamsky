@@ -216,7 +216,7 @@ package body Maps.UI.Commands is
          "-width [expr [winfo width $mapview] / [font measure MapFont {" &
          Encode
            ("" &
-            Themes_List(To_String(GameSettings.Interface_Theme))
+            Themes_List(To_String(Game_Settings.Interface_Theme))
               .EmptyMapIcon) &
          "}]]");
       configure
@@ -417,7 +417,7 @@ package body Maps.UI.Commands is
       PlayerShip.DestinationY := MapY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      if GameSettings.Auto_Center then
+      if Game_Settings.Auto_Center then
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
       end if;
@@ -544,18 +544,18 @@ package body Maps.UI.Commands is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
-      GameSettings.Map_Font_Size :=
-        (if CArgv.Arg(Argv, 1) = "raise" then GameSettings.Map_Font_Size + 1
-         else GameSettings.Map_Font_Size - 1);
-      if GameSettings.Map_Font_Size < 3 then
-         GameSettings.Map_Font_Size := 3;
-      elsif GameSettings.Map_Font_Size > 50 then
-         GameSettings.Map_Font_Size := 50;
+      Game_Settings.Map_Font_Size :=
+        (if CArgv.Arg(Argv, 1) = "raise" then Game_Settings.Map_Font_Size + 1
+         else Game_Settings.Map_Font_Size - 1);
+      if Game_Settings.Map_Font_Size < 3 then
+         Game_Settings.Map_Font_Size := 3;
+      elsif Game_Settings.Map_Font_Size > 50 then
+         Game_Settings.Map_Font_Size := 50;
       end if;
       Tcl_Eval
         (Interp,
          "font configure MapFont -size" &
-         Positive'Image(GameSettings.Map_Font_Size));
+         Positive'Image(Game_Settings.Map_Font_Size));
       return Draw_Map_Command(ClientData, Interp, Argc, Argv);
    end Zoom_Map_Command;
 
@@ -628,7 +628,7 @@ package body Maps.UI.Commands is
                  ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
-               if GameSettings.Auto_Finish then
+               if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
                Result := 4;
@@ -671,13 +671,13 @@ package body Maps.UI.Commands is
                   exit Move_Loop;
                end if;
             end if;
-            if GameSettings.Auto_Move_Stop /= NEVER and
+            if Game_Settings.Auto_Move_Stop /= NEVER and
               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
                declare
                   EventIndex: constant Positive :=
                     SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
                begin
-                  case GameSettings.Auto_Move_Stop is
+                  case Game_Settings.Auto_Move_Stop is
                      when ANY =>
                         if Events_List(EventIndex).EType = EnemyShip or
                           Events_List(EventIndex).EType = Trader or
@@ -708,16 +708,16 @@ package body Maps.UI.Commands is
                  Get_Widget(".message", Interp);
             begin
                if Winfo_Get(MessageDialog, "exists") = "0" then
-                  if GetItemAmount(Fuel_Type) <= GameSettings.Low_Fuel then
+                  if GetItemAmount(Fuel_Type) <= Game_Settings.Low_Fuel then
                      ShowMessage("Your fuel level is dangerously low.");
                      Result := 4;
                      exit Move_Loop;
-                  elsif GetItemsAmount("Food") <= GameSettings.Low_Food then
+                  elsif GetItemsAmount("Food") <= Game_Settings.Low_Food then
                      ShowMessage("Your food level is dangerously low.");
                      Result := 4;
                      exit Move_Loop;
                   elsif GetItemsAmount("Drinks") <=
-                    GameSettings.Low_Drinks then
+                    Game_Settings.Low_Drinks then
                      ShowMessage("Your drinks level is dangerously low.");
                      Result := 4;
                      exit Move_Loop;
@@ -730,7 +730,7 @@ package body Maps.UI.Commands is
                  ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
-               if GameSettings.Auto_Finish then
+               if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
                Result := 4;
@@ -742,7 +742,7 @@ package body Maps.UI.Commands is
       case Result is
          when 1 => -- Ship moved, check for events
             StartsCombat := CheckForEvent;
-            if not StartsCombat and GameSettings.Auto_Finish then
+            if not StartsCombat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
@@ -767,7 +767,7 @@ package body Maps.UI.Commands is
                end if;
                StartsCombat := CheckForEvent;
             end if;
-            if not StartsCombat and GameSettings.Auto_Finish then
+            if not StartsCombat and Game_Settings.Auto_Finish then
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
          when others =>
@@ -1015,10 +1015,10 @@ package body Maps.UI.Commands is
       Tcl_Eval(Interp, "wm attributes . -fullscreen");
       if Tcl_GetResult(Interp) = "0" then
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
-         GameSettings.Full_Screen := True;
+         Game_Settings.Full_Screen := True;
       else
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
-         GameSettings.Full_Screen := False;
+         Game_Settings.Full_Screen := False;
       end if;
       return TCL_OK;
    end Toggle_Full_Screen_Command;
@@ -1051,18 +1051,18 @@ package body Maps.UI.Commands is
       PanedPosition: Positive;
       SashPosition: constant Natural := Natural'Value(SashPos(Paned, "0"));
    begin
-      GameSettings.Window_Width :=
+      Game_Settings.Window_Width :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
-      GameSettings.Window_Height :=
+      Game_Settings.Window_Height :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
       PanedPosition :=
-        (if GameSettings.Window_Height - GameSettings.Messages_Position < 0
-         then GameSettings.Window_Height
-         else GameSettings.Window_Height - GameSettings.Messages_Position);
+        (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
+         then Game_Settings.Window_Height
+         else Game_Settings.Window_Height - Game_Settings.Messages_Position);
       if SashPosition > 0 and then SashPosition /= PanedPosition then
-         if GameSettings.Window_Height - SashPosition > -1 then
-            GameSettings.Messages_Position :=
-              GameSettings.Window_Height - SashPosition;
+         if Game_Settings.Window_Height - SashPosition > -1 then
+            Game_Settings.Messages_Position :=
+              Game_Settings.Window_Height - SashPosition;
          end if;
          PanedPosition := SashPosition;
       end if;

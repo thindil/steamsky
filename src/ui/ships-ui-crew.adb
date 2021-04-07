@@ -104,7 +104,7 @@ package body Ships.UI.Crew is
               "-text {" &
               Encode
                 ("" &
-                 Themes_List(To_String(GameSettings.Interface_Theme))
+                 Themes_List(To_String(Game_Settings.Interface_Theme))
                    .CleanIcon) &
               "} -style Header.Toolbutton -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
@@ -117,7 +117,7 @@ package body Ships.UI.Crew is
               "-text {" &
               Encode
                 ("" &
-                 Themes_List(To_String(GameSettings.Interface_Theme))
+                 Themes_List(To_String(Game_Settings.Interface_Theme))
                    .RepairIcon) &
               "} -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
@@ -420,7 +420,7 @@ package body Ships.UI.Crew is
       -- General info about the selected crew member
       Frame := Create(MemberCanvas & ".general");
       if Member.Health < 100 then
-         if GameSettings.Show_Numbers then
+         if Game_Settings.Show_Numbers then
             MemberLabel :=
               Create
                 (Frame & ".health",
@@ -448,7 +448,7 @@ package body Ships.UI.Crew is
          TiredPoints := 0;
       end if;
       if TiredPoints > 0 then
-         if GameSettings.Show_Numbers then
+         if Game_Settings.Show_Numbers then
             MemberLabel :=
               Create
                 (Frame & ".tired",
@@ -474,7 +474,7 @@ package body Ships.UI.Crew is
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
       if Member.Thirst > 0 then
-         if GameSettings.Show_Numbers then
+         if Game_Settings.Show_Numbers then
             MemberLabel :=
               Create
                 (Frame & ".thirst",
@@ -501,7 +501,7 @@ package body Ships.UI.Crew is
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
       if Member.Hunger > 0 then
-         if GameSettings.Show_Numbers then
+         if Game_Settings.Show_Numbers then
             MemberLabel :=
               Create
                 (Frame & ".hunger",
@@ -527,7 +527,7 @@ package body Ships.UI.Crew is
            Height + Positive'Value(Winfo_Get(MemberLabel, "reqheight"));
       end if;
       if Member.Morale(1) /= 50 then
-         if GameSettings.Show_Numbers then
+         if Game_Settings.Show_Numbers then
             MemberLabel :=
               Create
                 (Frame & ".morale",

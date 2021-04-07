@@ -199,55 +199,55 @@ package body GameOptions is
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook.general");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autorest",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Rest)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Rest)), Left));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
       Current
         (ComboBox,
-         Natural'Image(ShipSpeed'Pos(GameSettings.Undock_Speed) - 1));
+         Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autocenter",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Center)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Center)), Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autoreturn",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Return)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Return)), Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autofinish",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Auto_Finish)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Finish)), Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autoaskforbases",
          Trim
-           (Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Bases)),
+           (Natural'Image(Boolean'Pos(Game_Settings.Auto_Ask_For_Bases)),
             Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autoaskforevents",
          Trim
-           (Natural'Image(Boolean'Pos(GameSettings.Auto_Ask_For_Events)),
+           (Natural'Image(Boolean'Pos(Game_Settings.Auto_Ask_For_Events)),
             Left));
       SpinBox := Get_Widget(Widget_Image(OptionsFrame) & ".fuel", Interp);
-      Set(SpinBox, Natural'Image(GameSettings.Low_Fuel));
+      Set(SpinBox, Natural'Image(Game_Settings.Low_Fuel));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".drinks");
-      Set(SpinBox, Natural'Image(GameSettings.Low_Drinks));
+      Set(SpinBox, Natural'Image(Game_Settings.Low_Drinks));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".food");
-      Set(SpinBox, Natural'Image(GameSettings.Low_Food));
+      Set(SpinBox, Natural'Image(Game_Settings.Low_Food));
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".automovestop");
       Current
         (ComboBox,
-         Natural'Image(Auto_Move_Break'Pos(GameSettings.Auto_Move_Stop)));
+         Natural'Image(Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)));
       SpinBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".messageslimit");
-      Set(SpinBox, Natural'Image(GameSettings.Messages_Limit));
+      Set(SpinBox, Natural'Image(Game_Settings.Messages_Limit));
       SpinBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".savedmessages");
-      Set(SpinBox, Natural'Image(GameSettings.Saved_Messages));
+      Set(SpinBox, Natural'Image(Game_Settings.Saved_Messages));
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".messagesorder");
       Current
         (ComboBox,
-         Natural'Image(Messages_Order_Type'Pos(GameSettings.Messages_Order)));
+         Natural'Image(Messages_Order_Type'Pos(Game_Settings.Messages_Order)));
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".autosave");
       Current
-        (ComboBox, Natural'Image(Auto_Save_Type'Pos(GameSettings.Auto_Save)));
+        (ComboBox, Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)));
       OptionsFrame.Name :=
         New_String
           (Widget_Image(OptionsCanvas) & ".options.notebook.interface");
@@ -255,32 +255,32 @@ package body GameOptions is
       Set
         (ComboBox,
          "{" &
-         To_String(Themes_List(To_String(GameSettings.Interface_Theme)).Name) &
+         To_String(Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Show_Tooltips)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Tooltips)), Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showmessages",
          Trim
-           (Natural'Image(Boolean'Pos(GameSettings.Show_Last_Messages)),
+           (Natural'Image(Boolean'Pos(Game_Settings.Show_Last_Messages)),
             Left));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".fullscreen",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Full_Screen)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Full_Screen)), Left));
       SpinBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".closemessages");
-      Set(SpinBox, Natural'Image(GameSettings.Auto_Close_Messages_Time));
+      Set(SpinBox, Natural'Image(Game_Settings.Auto_Close_Messages_Time));
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".shownumbers",
-         Trim(Natural'Image(Boolean'Pos(GameSettings.Show_Numbers)), Left));
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Numbers)), Left));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".mapfont");
-      Set(SpinBox, Natural'Image(GameSettings.Map_Font_Size));
+      Set(SpinBox, Natural'Image(Game_Settings.Map_Font_Size));
       SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".helpfont");
-      Set(SpinBox, Natural'Image(GameSettings.Help_Font_Size));
+      Set(SpinBox, Natural'Image(Game_Settings.Help_Font_Size));
       SpinBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".interfacefont");
-      Set(SpinBox, Natural'Image(GameSettings.Interface_Font_Size));
+      Set(SpinBox, Natural'Image(Game_Settings.Interface_Font_Size));
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook");
@@ -360,24 +360,24 @@ package body GameOptions is
    begin
       if CArgv.Arg(Argv, 1) =
         ".gameframe.paned.optionsframe.canvas.options.notebook.interface.mapfont" then
-         GameSettings.Map_Font_Size := Positive'Value(Get(SpinBox));
+         Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
          Font.Configure
-           ("MapFont", "-size" & Positive'Image(GameSettings.Map_Font_Size));
+           ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
       elsif CArgv.Arg(Argv, 1) =
         ".gameframe.paned.optionsframe.canvas.options.notebook.interface.helpfont" then
-         GameSettings.Help_Font_Size := Positive'Value(Get(SpinBox));
+         Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
          Set_Fonts_Loop :
          for FontName of HelpFonts loop
             Font.Configure
               (To_String(FontName),
-               "-size" & Positive'Image(GameSettings.Help_Font_Size));
+               "-size" & Positive'Image(Game_Settings.Help_Font_Size));
          end loop Set_Fonts_Loop;
       else
-         GameSettings.Interface_Font_Size := Positive'Value(Get(SpinBox));
+         Game_Settings.Interface_Font_Size := Positive'Value(Get(SpinBox));
          for FontName of InterfaceFonts loop
             Font.Configure
               (To_String(FontName),
-               "-size" & Positive'Image(GameSettings.Interface_Font_Size));
+               "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
          end loop;
       end if;
       return TCL_OK;
@@ -468,91 +468,91 @@ package body GameOptions is
    begin
       configure(CloseButton, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-      GameSettings.Auto_Rest :=
+      Game_Settings.Auto_Rest :=
         (if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then True
          else False);
-      GameSettings.Undock_Speed :=
+      Game_Settings.Undock_Speed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
-      GameSettings.Auto_Center :=
+      Game_Settings.Auto_Center :=
         (if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
            True
          else False);
-      GameSettings.Auto_Return :=
+      Game_Settings.Auto_Return :=
         (if Tcl_GetVar(Interp, RootName & ".general.autoreturn") = "1" then
            True
          else False);
-      GameSettings.Auto_Finish :=
+      Game_Settings.Auto_Finish :=
         (if Tcl_GetVar(Interp, RootName & ".general.autofinish") = "1" then
            True
          else False);
-      GameSettings.Auto_Ask_For_Bases :=
+      Game_Settings.Auto_Ask_For_Bases :=
         (if Tcl_GetVar(Interp, RootName & ".general.autoaskforbases") = "1"
          then True
          else False);
-      GameSettings.Auto_Ask_For_Events :=
+      Game_Settings.Auto_Ask_For_Events :=
         (if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1"
          then True
          else False);
-      GameSettings.Low_Fuel := Positive'Value(Get(SpinBox));
+      Game_Settings.Low_Fuel := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.drinks");
-      GameSettings.Low_Drinks := Positive'Value(Get(SpinBox));
+      Game_Settings.Low_Drinks := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.food");
-      GameSettings.Low_Food := Positive'Value(Get(SpinBox));
+      Game_Settings.Low_Food := Positive'Value(Get(SpinBox));
       ComboBox.Name := New_String(RootName & ".general.automovestop");
-      GameSettings.Auto_Move_Stop :=
+      Game_Settings.Auto_Move_Stop :=
         Auto_Move_Break'Val(Natural'Value(Current(ComboBox)));
       SpinBox.Name := New_String(RootName & ".general.messageslimit");
-      GameSettings.Messages_Limit := Positive'Value(Get(SpinBox));
+      Game_Settings.Messages_Limit := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".general.savedmessages");
-      GameSettings.Saved_Messages := Positive'Value(Get(SpinBox));
+      Game_Settings.Saved_Messages := Positive'Value(Get(SpinBox));
       ComboBox.Name := New_String(RootName & ".general.messagesorder");
-      GameSettings.Messages_Order :=
+      Game_Settings.Messages_Order :=
         Messages_Order_Type'Val(Natural'Value(Current(ComboBox)));
       ComboBox.Name := New_String(RootName & ".general.autosave");
-      GameSettings.Auto_Save :=
+      Game_Settings.Auto_Save :=
         Auto_Save_Type'Val(Natural'Value(Current(ComboBox)));
       ComboBox.Name := New_String(RootName & ".interface.theme");
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(ComboBox) then
-            GameSettings.Interface_Theme :=
+            Game_Settings.Interface_Theme :=
               To_Unbounded_String(Themes_Container.Key(I));
             exit Set_Theme_Loop;
          end if;
       end loop Set_Theme_Loop;
-      Theme_Use(To_String(GameSettings.Interface_Theme));
+      Theme_Use(To_String(Game_Settings.Interface_Theme));
       SetTheme;
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
-         GameSettings.Show_Tooltips := True;
+         Game_Settings.Show_Tooltips := True;
          Enable;
       else
-         GameSettings.Show_Tooltips := False;
+         Game_Settings.Show_Tooltips := False;
          Disable;
       end if;
-      GameSettings.Show_Last_Messages :=
+      Game_Settings.Show_Last_Messages :=
         (if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
            True
          else False);
       if Tcl_GetVar(Interp, RootName & ".interface.fullscreen") = "1" then
-         GameSettings.Full_Screen := True;
+         Game_Settings.Full_Screen := True;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 1");
       else
-         GameSettings.Full_Screen := False;
+         Game_Settings.Full_Screen := False;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
       end if;
       SpinBox.Name := New_String(RootName & ".interface.closemessages");
-      GameSettings.Auto_Close_Messages_Time := Positive'Value(Get(SpinBox));
-      GameSettings.Show_Numbers :=
+      Game_Settings.Auto_Close_Messages_Time := Positive'Value(Get(SpinBox));
+      Game_Settings.Show_Numbers :=
         (if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
            True
          else False);
       SpinBox.Name := New_String(RootName & ".interface.mapfont");
-      GameSettings.Map_Font_Size := Positive'Value(Get(SpinBox));
+      Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".interface.helpfont");
-      GameSettings.Help_Font_Size := Positive'Value(Get(SpinBox));
+      Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(RootName & ".interface.interfacefont");
-      GameSettings.Interface_Font_Size := Positive'Value(Get(SpinBox));
-      SaveConfig;
+      Game_Settings.Interface_Font_Size := Positive'Value(Get(SpinBox));
+      Save_Config;
       KeyEntry.Interp := Interp;
       Set_Accelerators_Loop :
       for I in 1 .. (Accels'Last - 1) loop

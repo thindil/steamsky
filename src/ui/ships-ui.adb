@@ -168,7 +168,7 @@ package body Ships.UI is
          end case;
          MaxUpgrade :=
            Integer
-             (Float(MaxUpgrade) * Float(NewGameSettings.Upgrade_Cost_Bonus));
+             (Float(MaxUpgrade) * Float(New_Game_Settings.Upgrade_Cost_Bonus));
          if MaxUpgrade = 0 then
             MaxUpgrade := 1;
          end if;

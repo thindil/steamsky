@@ -282,25 +282,25 @@ package body Help.UI is
          To_String(Data_Directory) & "ui" & Dir_Separator & "help.tcl");
       X :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootwidth")) -
-         GameSettings.Window_Width) /
+         Game_Settings.Window_Width) /
         2;
       if X < 0 then
          X := 0;
       end if;
       Y :=
         (Positive'Value(Winfo_Get(HelpWindow, "vrootheight")) -
-         GameSettings.Window_Height) /
+         Game_Settings.Window_Height) /
         2;
       if Y < 0 then
          Y := 0;
       end if;
       Wm_Set
         (HelpWindow, "geometry",
-         Trim(Positive'Image(GameSettings.Window_Width), Left) & "x" &
-         Trim(Positive'Image(GameSettings.Window_Height), Left) & "+" &
+         Trim(Positive'Image(Game_Settings.Window_Width), Left) & "x" &
+         Trim(Positive'Image(Game_Settings.Window_Height), Left) & "+" &
          Trim(Positive'Image(X), Left) & "+" & Trim(Positive'Image(Y), Left));
       Tcl_Eval(Interp, "update");
-      SashPos(Paned, "0", Natural'Image(GameSettings.Topics_Position));
+      SashPos(Paned, "0", Natural'Image(Game_Settings.Topics_Position));
       for I in Help_List.Iterate loop
          Insert
            (TopicsView,
@@ -339,7 +339,7 @@ package body Help.UI is
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(HelpWindow & ".paned", Interp);
    begin
-      GameSettings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
+      Game_Settings.Topics_Position := Natural'Value(SashPos(Paned, "0"));
       Destroy(HelpWindow);
       return TCL_OK;
    end Close_Help_Command;
