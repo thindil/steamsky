@@ -94,20 +94,20 @@ package body Game.SaveLoad is
       end record;
       Difficulties: constant array(1 .. 8) of Difficulty_Data :=
         ((To_Unbounded_String("enemydamagebonus"),
-          NewGameSettings.Enemy_Damage_Bonus),
+          New_Game_Settings.Enemy_Damage_Bonus),
          (To_Unbounded_String("playerdamagebonus"),
-          NewGameSettings.Player_Damage_Bonus),
+          New_Game_Settings.Player_Damage_Bonus),
          (To_Unbounded_String("enemymeleedamagebonus"),
-          NewGameSettings.Enemy_Melee_Damage_Bonus),
+          New_Game_Settings.Enemy_Melee_Damage_Bonus),
          (To_Unbounded_String("playermeleedamagebonus"),
-          NewGameSettings.Player_Melee_Damage_Bonus),
+          New_Game_Settings.Player_Melee_Damage_Bonus),
          (To_Unbounded_String("experiencebonus"),
-          NewGameSettings.Experience_Bonus),
+          New_Game_Settings.Experience_Bonus),
          (To_Unbounded_String("reputationbonus"),
-          NewGameSettings.Reputation_Bonus),
+          New_Game_Settings.Reputation_Bonus),
          (To_Unbounded_String("upgradecostbonus"),
-          NewGameSettings.Upgrade_Cost_Bonus),
-         (To_Unbounded_String("pricesbonus"), NewGameSettings.Prices_Bonus));
+          New_Game_Settings.Upgrade_Cost_Bonus),
+         (To_Unbounded_String("pricesbonus"), New_Game_Settings.Prices_Bonus));
    begin
       LogMessage
         ("Start saving game in file " & To_String(SaveName) & ".", Everything);
@@ -183,7 +183,7 @@ package body Game.SaveLoad is
       -- Save messages
       LogMessage("Saving messages...", Everything, False);
       declare
-         Messages: Natural := GameSettings.Saved_Messages;
+         Messages: Natural := Game_Settings.Saved_Messages;
          StartLoop: Positive;
          MessageNode: DOM.Core.Element;
          Message: Message_Data;
@@ -399,23 +399,23 @@ package body Game.SaveLoad is
       if Length(NodesList) > 0 then
          LogMessage("Loading game difficulty settings...", Everything, False);
          SavedNode := Item(NodesList, 0);
-         NewGameSettings.Enemy_Damage_Bonus :=
+         New_Game_Settings.Enemy_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
-         NewGameSettings.Player_Damage_Bonus :=
+         New_Game_Settings.Player_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
-         NewGameSettings.Enemy_Melee_Damage_Bonus :=
+         New_Game_Settings.Enemy_Melee_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
-         NewGameSettings.Player_Melee_Damage_Bonus :=
+         New_Game_Settings.Player_Melee_Damage_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(SavedNode, "playermeleedamagebonus"));
-         NewGameSettings.Experience_Bonus :=
+         New_Game_Settings.Experience_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "experiencebonus"));
-         NewGameSettings.Reputation_Bonus :=
+         New_Game_Settings.Reputation_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "reputationbonus"));
-         NewGameSettings.Upgrade_Cost_Bonus :=
+         New_Game_Settings.Upgrade_Cost_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
          if Get_Attribute(SavedNode, "pricesbonus") /= "" then
-            NewGameSettings.Prices_Bonus :=
+            New_Game_Settings.Prices_Bonus :=
               Bonus_Type'Value(Get_Attribute(SavedNode, "pricesbonus"));
          end if;
          LogMessage("done.", Everything, True, False);

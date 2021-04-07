@@ -61,7 +61,7 @@ package body Game is
       Random_Base: Positive := Positive'First;
    begin
       -- Save game configuration
-      SaveConfig;
+      Save_Config;
       -- Set game statistics
       ClearGameStats;
       Set_Faction_Career_Block :
@@ -72,16 +72,16 @@ package body Game is
            Positive'First;
       begin
          -- Set player faction if random option was selected
-         if NewGameSettings.Player_Faction =
+         if New_Game_Settings.Player_Faction =
            To_Unbounded_String(Source => "random") then
-            NewGameSettings.Player_Career :=
+            New_Game_Settings.Player_Career :=
               To_Unbounded_String(Source => "random");
             Roll := GetRandom(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
             Get_Player_Faction_Loop :
             for I in Factions_List.Iterate loop
                if Index = Roll then
-                  NewGameSettings.Player_Faction :=
+                  New_Game_Settings.Player_Faction :=
                     Factions_Container.Key(Position => I);
                   exit Get_Player_Faction_Loop;
                end if;
@@ -89,21 +89,21 @@ package body Game is
             end loop Get_Player_Faction_Loop;
          end if;
          -- Set player career if random option was selected
-         if NewGameSettings.Player_Career =
+         if New_Game_Settings.Player_Career =
            To_Unbounded_String(Source => "random") then
             Roll :=
               GetRandom
                 (Min => 1,
                  Max =>
                    Positive
-                     (Factions_List(NewGameSettings.Player_Faction).Careers
+                     (Factions_List(New_Game_Settings.Player_Faction).Careers
                         .Length));
             Index := 1;
             Get_Player_Career_Loop :
-            for I in Factions_List(NewGameSettings.Player_Faction).Careers
+            for I in Factions_List(New_Game_Settings.Player_Faction).Careers
               .Iterate loop
                if Index = Roll then
-                  NewGameSettings.Player_Career :=
+                  New_Game_Settings.Player_Career :=
                     Factions.Careers_Container.Key(Position => I);
                   exit Get_Player_Career_Loop;
                end if;
@@ -164,7 +164,7 @@ package body Game is
                           Max => Factions_List(J).Population(2)));
                   Base_Reputation :=
                     GetReputation
-                      (SourceFaction => NewGameSettings.Player_Faction,
+                      (SourceFaction => New_Game_Settings.Player_Faction,
                        TargetFaction => Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
                   Count_Max_Spawn_Chance_Loop :
@@ -322,41 +322,41 @@ package body Game is
       Place_Player_Loop :
       loop
          Random_Base := GetRandom(Min => 1, Max => 1024);
-         if NewGameSettings.Starting_Base =
+         if New_Game_Settings.Starting_Base =
            To_Unbounded_String(Source => "Any") then
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = NewGameSettings.Player_Faction;
+              SkyBases(Random_Base).Owner = New_Game_Settings.Player_Faction;
          else
             exit Place_Player_Loop when SkyBases(Random_Base).Population >
               299 and
-              SkyBases(Random_Base).Owner = NewGameSettings.Player_Faction and
-              SkyBases(Random_Base).BaseType = NewGameSettings.Starting_Base;
+              SkyBases(Random_Base).Owner = New_Game_Settings.Player_Faction and
+              SkyBases(Random_Base).BaseType = New_Game_Settings.Starting_Base;
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
       PlayerShip :=
         CreateShip
           (ProtoIndex =>
-             Factions_List(NewGameSettings.Player_Faction).Careers
-               (NewGameSettings.Player_Career)
+             Factions_List(New_Game_Settings.Player_Faction).Careers
+               (New_Game_Settings.Player_Career)
                .ShipIndex,
-           Name => NewGameSettings.Ship_Name, X => SkyBases(Random_Base).SkyX,
+           Name => New_Game_Settings.Ship_Name, X => SkyBases(Random_Base).SkyX,
            Y => SkyBases(Random_Base).SkyY, Speed => DOCKED,
            RandomUpgrades => False);
       -- Add player to ship
       Add_Player_Block :
       declare
          Player_Index_2: constant Unbounded_String :=
-           Factions_List(NewGameSettings.Player_Faction).Careers
-             (NewGameSettings.Player_Career)
+           Factions_List(New_Game_Settings.Player_Faction).Careers
+             (New_Game_Settings.Player_Career)
              .PlayerIndex;
          Amount: Positive := 1;
          Tmp_Inventory: Inventory_Container.Vector :=
            Inventory_Container.Empty_Vector;
          Player_Morale: constant Positive :=
            (if
-              Factions_List(NewGameSettings.Player_Faction).Flags.Contains
+              Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
                 (Item => To_Unbounded_String(Source => "nomorale"))
             then 50
             else 100);
@@ -381,8 +381,8 @@ package body Game is
          end loop Player_Inventory_Loop;
          PlayerShip.Crew.Prepend
            (New_Item =>
-              (Name => NewGameSettings.Player_Name,
-               Gender => NewGameSettings.Player_Gender, Health => 100,
+              (Name => New_Game_Settings.Player_Name,
+               Gender => New_Game_Settings.Player_Gender, Health => 100,
                Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
                Hunger => 0, Thirst => 0,
                Order => ProtoMobs_List(Player_Index_2).Order,
@@ -394,7 +394,7 @@ package body Game is
                Payment => (others => 0), ContractLength => -1,
                Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
                HomeBase => Random_Base,
-               Faction => NewGameSettings.Player_Faction));
+               Faction => New_Game_Settings.Player_Faction));
       end Add_Player_Block;
       Assign_Cabin_Block :
       declare
@@ -416,7 +416,7 @@ package body Game is
                      Module.Owner(I) := 1;
                      if Natural_Container.To_Index(Position => I) = 1 then
                         Module.Name :=
-                          NewGameSettings.Player_Name &
+                          New_Game_Settings.Player_Name &
                           To_Unbounded_String(Source => "'s Cabin");
                      end if;
                      Cabin_Assigned := True;
@@ -443,7 +443,7 @@ package body Game is
       -- Set name of savegame
       GenerateSaveName;
       -- Set player career
-      Player_Career := NewGameSettings.Player_Career;
+      Player_Career := New_Game_Settings.Player_Career;
       -- Add welcoming message
       AddMessage
         (Message =>
@@ -494,21 +494,21 @@ package body Game is
             PayForDock;
          end if;
          DailyPayment;
-         if GameSettings.Auto_Save = DAILY then
+         if Game_Settings.Auto_Save = DAILY then
             SaveGame;
          end if;
       end if;
       if Game_Date.Day > 30 then
          Game_Date.Day := 1;
          Game_Date.Month := Game_Date.Month + 1;
-         if GameSettings.Auto_Save = MONTHLY then
+         if Game_Settings.Auto_Save = MONTHLY then
             SaveGame;
          end if;
       end if;
       if Game_Date.Month > 12 then
          Game_Date.Month := 1;
          Game_Date.Year := Game_Date.Year + 1;
-         if GameSettings.Auto_Save = YEARLY then
+         if Game_Settings.Auto_Save = YEARLY then
             SaveGame;
          end if;
       end if;
@@ -578,7 +578,7 @@ package body Game is
       Known_Recipes.Clear;
       ClearCurrentGoal;
       AcceptedMissions.Clear;
-      SaveConfig;
+      Save_Config;
    end End_Game;
 
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is

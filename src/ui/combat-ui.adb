@@ -150,7 +150,7 @@ package body Combat.UI is
          CurrentTurnTime :=
            Unbounded_Slice(Message.Message, 1, Length(CurrentTurnTime));
       end if;
-      if GameSettings.Messages_Order = OLDER_FIRST then
+      if Game_Settings.Messages_Order = OLDER_FIRST then
          Show_Older_Messages_First_Loop :
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);

@@ -135,7 +135,7 @@ begin
 
    StartLogging;
 
-   LoadConfig;
+   Load_Config;
    LoadHallOfFame;
    LoadThemes;
 

@@ -672,10 +672,10 @@ package body Combat is
                        (if Ship = PlayerShip then
                           Integer
                             (Float(WeaponDamage) *
-                             Float(NewGameSettings.Player_Damage_Bonus))
+                             Float(New_Game_Settings.Player_Damage_Bonus))
                         else Integer
                             (Float(WeaponDamage) *
-                             Float(NewGameSettings.Enemy_Damage_Bonus)));
+                             Float(New_Game_Settings.Enemy_Damage_Bonus)));
                      if ArmorIndex = 0 then
                         if Ship.Modules(K).MType = HARPOON_GUN then
                            Count_Damage_Loop :
@@ -825,10 +825,10 @@ package body Combat is
               (if PlayerAttack2 then
                  Integer
                    (Float(Damage) *
-                    Float(NewGameSettings.Player_Melee_Damage_Bonus))
+                    Float(New_Game_Settings.Player_Melee_Damage_Bonus))
                else Integer
                    (Float(Damage) *
-                    Float(NewGameSettings.Enemy_Melee_Damage_Bonus)));
+                    Float(New_Game_Settings.Enemy_Melee_Damage_Bonus)));
             if Attacker.Equipment(1) > 0 then
                AttackSkill :=
                  GetSkillLevel
