@@ -98,6 +98,7 @@ ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin cargo show}] -sticky w
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship cargo info}
+grid [ttk::label $shipcanvas.frame.freespace] -sticky w
 grid [ttk::frame $shipcanvas.frame.selecttype] -sticky w
 grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}]
 grid [ttk::combobox $shipcanvas.frame.selecttype.combo -state readonly] -row 0 -column 1
