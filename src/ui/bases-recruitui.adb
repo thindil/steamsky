@@ -67,7 +67,7 @@ package body Bases.RecruitUI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -82,7 +82,7 @@ package body Bases.RecruitUI is
    function Show_Recruit_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
         Get_Widget(".gameframe.paned", Interp);
       RecruitFrame: Ttk_Frame := Get_Widget(Paned & ".recruitframe", Interp);
@@ -91,6 +91,10 @@ package body Bases.RecruitUI is
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       HighestLevel, HighestIndex: Positive;
+      Page: constant Positive :=
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       if Winfo_Get(RecruitFrame, "exists") = "0" then
          RecruitFrame := Create(Widget_Image(RecruitFrame));
@@ -117,6 +121,10 @@ package body Bases.RecruitUI is
       ClearTable(RecruitTable);
       Load_Recruits_Loop :
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          AddButton
            (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
@@ -178,7 +186,25 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
             6, True);
+         exit Load_Recruits_Loop when RecruitTable.Row = 26;
+         <<End_Of_Loop>>
       end loop Load_Recruits_Loop;
+      if Page > 1 then
+         if RecruitTable.Row < 26 then
+            AddPagination
+              (RecruitTable,
+               "ShowRecruit" & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (RecruitTable,
+               "ShowRecruit" & Positive'Image(Page - 1),
+               "ShowRecruit" & Positive'Image(Page + 1));
+         end if;
+      elsif RecruitTable.Row = 26 then
+         AddPagination
+           (RecruitTable, "",
+            "ShowRecruit" & Positive'Image(Page + 1));
+      end if;
       UpdateTable(RecruitTable);
       configure
         (RecruitTable.Canvas,
