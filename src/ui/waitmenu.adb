@@ -123,8 +123,7 @@ package body WaitMenu is
            PlayerShip.Crew(I).Order = Rest then
             NeedRest := True;
          end if;
-         if PlayerShip.Crew(I).Health < 100 and
-           PlayerShip.Crew(I).Health > 0 and
+         if PlayerShip.Crew(I).Health in 1 .. 99 and
            PlayerShip.Crew(I).Order = Rest then
             Modules_Loop :
             for Module of PlayerShip.Modules loop
@@ -228,8 +227,7 @@ package body WaitMenu is
          WaitForRest;
       elsif CArgv.Arg(Argv, 1) = "heal" then
          for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Health < 100 and
-              PlayerShip.Crew(I).Health > 0 and
+            if PlayerShip.Crew(I).Health in 1 .. 99 and
               PlayerShip.Crew(I).Order = Rest then
                Modules_Loop :
                for Module of PlayerShip.Modules loop
