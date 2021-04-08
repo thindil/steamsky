@@ -117,6 +117,7 @@ package body WaitMenu is
       AmountLabel :=
         Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
+      Check_Crew_Rest_Loop :
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Tired > 0 and
            PlayerShip.Crew(I).Order = Rest then
@@ -137,7 +138,7 @@ package body WaitMenu is
                end if;
             end loop Modules_Loop;
          end if;
-      end loop;
+      end loop Check_Crew_Rest_Loop;
       if NeedRest then
          Button :=
            Create
