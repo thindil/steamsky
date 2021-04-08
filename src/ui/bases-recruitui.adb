@@ -176,9 +176,9 @@ package body Bases.RecruitUI is
          HighestIndex := 1;
          Get_Highest_Skill_Level_Loop :
          for J in SkyBases(BaseIndex).Recruits(I).Skills.Iterate loop
-            if SkyBases(BaseIndex).Recruits(I).Skills(J)(1) > HighestLevel then
-               HighestLevel := SkyBases(BaseIndex).Recruits(I).Skills(J)(1);
-               HighestIndex := Skills_Container.To_Index(J);
+            if SkyBases(BaseIndex).Recruits(I).Skills(J)(2) > HighestLevel then
+               HighestLevel := SkyBases(BaseIndex).Recruits(I).Skills(J)(2);
+               HighestIndex := SkyBases(BaseIndex).Recruits(I).Skills(J)(1);
             end if;
          end loop Get_Highest_Skill_Level_Loop;
          AddButton
