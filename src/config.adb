@@ -33,30 +33,8 @@ package body Config is
          return False;
       end Load_Boolean;
    begin
-      New_Game_Settings :=
-        (Player_Name => To_Unbounded_String("Laeran"), Player_Gender => 'M',
-         Ship_Name => To_Unbounded_String("Anaria"),
-         Player_Faction => To_Unbounded_String("POLEIS"),
-         Player_Career => To_Unbounded_String("general"),
-         Starting_Base => To_Unbounded_String("Any"),
-         Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
-         Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
-         Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
-         Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
-         Difficulty_Level => NORMAL);
-      Game_Settings :=
-        (Auto_Rest => True, Undock_Speed => FULL_SPEED, Auto_Center => True,
-         Auto_Return => True, Auto_Finish => True, Low_Fuel => 100,
-         Low_Drinks => 50, Low_Food => 25, Auto_Move_Stop => NEVER,
-         Window_Width => 800, Window_Height => 600, Messages_Limit => 500,
-         Saved_Messages => 10, Help_Font_Size => 14, Map_Font_Size => 16,
-         Interface_Font_Size => 14,
-         Interface_Theme => To_Unbounded_String("steamsky"),
-         Messages_Order => OLDER_FIRST, Auto_Ask_For_Bases => False,
-         Auto_Ask_For_Events => False, Show_Tooltips => True,
-         Show_Last_Messages => True, Messages_Position => 213,
-         Full_Screen => False, Auto_Close_Messages_Time => 6,
-         Auto_Save => NONE, Topics_Position => 200, Show_Numbers => False);
+      New_Game_Settings := Default_New_Game_Settings;
+      Game_Settings := Default_Game_Settings;
       Open(Config_File, In_File, To_String(Save_Directory) & "game.cfg");
       Read_Config_File_Loop :
       while not End_Of_File(Config_File) loop
@@ -109,7 +87,8 @@ package body Config is
                   New_Game_Settings.Difficulty_Level :=
                     Difficulty_Type'Value(To_String(Value));
                else
-                  New_Game_Settings.Difficulty_Level := NORMAL;
+                  New_Game_Settings.Difficulty_Level :=
+                    Default_Difficulty_Type;
                end if;
             elsif Field_Name = To_Unbounded_String("AutoRest") then
                Game_Settings.Auto_Rest := Load_Boolean;
