@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Pagination to lists of known bases and events, accepted missions, shipyard,
-  trade, player's ship cargo, crew and modules
+  trade, player's ship cargo, crew and modules and available recruits in bases
 - Missing info about free space in cargo
 
 ### Changed
