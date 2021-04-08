@@ -39,6 +39,13 @@ package Config is
    type Difficulty_Type is (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM);
    -- ****
 
+   -- ****d* Config/Config.Default_Difficulty_Type
+   -- FUNCTION
+   -- Default difficulty level for the game
+   -- SOURCE
+   Default_Difficulty_Type: constant Difficulty_Type := NORMAL;
+   -- ****
+
    -- ****s* Config/Config.New_Game_Record
    -- FUNCTION
    -- Data for new game settings
@@ -82,11 +89,34 @@ package Config is
    end record;
    -- ****
 
+   -- ****d* Config/Config.Default_New_Game_Settings
+   -- FUNCTION
+   -- Default settings for the new game
+   -- SOURCE
+   Default_New_Game_Settings: constant New_Game_Record :=
+     (Player_Name => To_Unbounded_String("Laeran"), Player_Gender => 'M',
+      Ship_Name => To_Unbounded_String("Anaria"),
+      Player_Faction => To_Unbounded_String("POLEIS"),
+      Player_Career => To_Unbounded_String("general"),
+      Starting_Base => To_Unbounded_String("Any"), Enemy_Damage_Bonus => 1.0,
+      Player_Damage_Bonus => 1.0, Enemy_Melee_Damage_Bonus => 1.0,
+      Player_Melee_Damage_Bonus => 1.0, Experience_Bonus => 1.0,
+      Reputation_Bonus => 1.0, Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
+      Difficulty_Level => Default_Difficulty_Type);
+   -- ****
+
    -- ****t* Config/Config.Auto_Move_Break
    -- FUNCTION
    -- Options when stop auto move of player ship
    -- SOURCE
    type Auto_Move_Break is (NEVER, ANY, FRIENDLY, ENEMY);
+   -- ****
+
+   -- ****d* Config/Config.Default_Auto_Move_Stop
+   -- FUNCTION
+   -- Default setting for stop automovement of the player ship
+   -- SOURCE
+   Default_Auto_Move_Stop: constant Auto_Move_Break := NEVER;
    -- ****
 
    -- ****t* Config/Config.Messages_Order_Type
@@ -96,11 +126,25 @@ package Config is
    type Messages_Order_Type is (OLDER_FIRST, NEWER_FIRST);
    -- ****
 
+   -- ****d* Config/Config.Default_Messages_Order
+   -- FUNCTION
+   -- Default order of show the last messages
+   -- SOURCE
+   Default_Messages_Order: constant Messages_Order_Type := OLDER_FIRST;
+   -- ****
+
    -- ****t* Config/Config.Auto_Save_Type
    -- FUNCTION
    -- Type used to set how often autosave is done
    -- SOURCE
    type Auto_Save_Type is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
+   -- ****
+
+   -- ****d* Config/Config.Default_Auto_Save_Time
+   -- FUNCTION
+   -- Default time when to auto save the game
+   -- SOURCE
+   Default_Auto_Save_Time: constant Auto_Save_Type := NONE;
    -- ****
 
    -- ****s* Config/Config.Game_Settings_Record
@@ -177,6 +221,26 @@ package Config is
       Topics_Position: Natural;
       Show_Numbers: Boolean;
    end record;
+   -- ****
+
+   -- ****d* Config/Config.Default_Game_Settings
+   -- FUNCTION
+   -- Default setting for the game
+   -- SOURCE
+   Default_Game_Settings: constant Game_Settings_Record :=
+     (Auto_Rest => True, Undock_Speed => FULL_SPEED, Auto_Center => True,
+      Auto_Return => True, Auto_Finish => True, Low_Fuel => 100,
+      Low_Drinks => 50, Low_Food => 25,
+      Auto_Move_Stop => Default_Auto_Move_Stop, Window_Width => 800,
+      Window_Height => 600, Messages_Limit => 500, Saved_Messages => 10,
+      Help_Font_Size => 14, Map_Font_Size => 16, Interface_Font_Size => 14,
+      Interface_Theme => To_Unbounded_String("steamsky"),
+      Messages_Order => Default_Messages_Order, Auto_Ask_For_Bases => False,
+      Auto_Ask_For_Events => False, Show_Tooltips => True,
+      Show_Last_Messages => True, Messages_Position => 213,
+      Full_Screen => False, Auto_Close_Messages_Time => 6,
+      Auto_Save => Default_Auto_Save_Time, Topics_Position => 200,
+      Show_Numbers => False);
    -- ****
 
    -- ****v* Config/Config.New_Game_Settings
