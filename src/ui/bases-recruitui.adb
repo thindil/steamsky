@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -130,19 +131,13 @@ package body Bases.RecruitUI is
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
             1);
-         if SkyBases(BaseIndex).Recruits(I).Gender = 'M' then
-            AddButton
-              (RecruitTable, "Male", "Show available options for recruit",
-               "ShowRecruitMenu" &
-               Positive'Image(Recruit_Container.To_Index(I)),
-               2);
-         else
-            AddButton
-              (RecruitTable, "Female", "Show available options for recruit",
-               "ShowRecruitMenu" &
-               Positive'Image(Recruit_Container.To_Index(I)),
-               2);
-         end if;
+         AddButton
+           (RecruitTable,
+            (if SkyBases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
+             else "Male"),
+            "Show available options for recruit",
+            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
+            2);
          AddButton
            (RecruitTable,
             To_String
@@ -192,18 +187,15 @@ package body Bases.RecruitUI is
       if Page > 1 then
          if RecruitTable.Row < 26 then
             AddPagination
-              (RecruitTable,
-               "ShowRecruit" & Positive'Image(Page - 1), "");
+              (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1), "");
          else
             AddPagination
-              (RecruitTable,
-               "ShowRecruit" & Positive'Image(Page - 1),
+              (RecruitTable, "ShowRecruit" & Positive'Image(Page - 1),
                "ShowRecruit" & Positive'Image(Page + 1));
          end if;
       elsif RecruitTable.Row = 26 then
          AddPagination
-           (RecruitTable, "",
-            "ShowRecruit" & Positive'Image(Page + 1));
+           (RecruitTable, "", "ShowRecruit" & Positive'Image(Page + 1));
       end if;
       UpdateTable(RecruitTable);
       configure
@@ -310,45 +302,30 @@ package body Bases.RecruitUI is
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       RecruitLabel: Ttk_Label;
       ProgressFrame: Ttk_Frame;
+      TabNames: constant array(1 .. 4) of Unbounded_String :=
+        (To_Unbounded_String("General"), To_Unbounded_String("Statistics"),
+         To_Unbounded_String("Skills"), To_Unbounded_String("Inventory"));
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Create(RecruitDialog & ".buttonbox");
-      Tcl_SetVar(Interp, "newtab", "general");
-      TabButton :=
-        Create
-          (Frame & ".general",
-           " -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowRecruitTab");
-      Tcl.Tk.Ada.Grid.Grid(TabButton);
-      Bind
-        (TabButton, "<Escape>",
-         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
+      for I in TabNames'Range loop
+         TabButton :=
+           Create
+             (Frame & "." & To_Lower(To_String(TabNames(I))),
+              " -text " & To_String(TabNames(I)) &
+              " -style Radio.Toolbutton -value " &
+              To_Lower(To_String(TabNames(I))) &
+              " -variable newtab -command ShowRecruitTab");
+         Tcl.Tk.Ada.Grid.Grid
+           (TabButton, "-column" & Natural'Image(I - 1) & " -row 0");
+         Bind
+           (TabButton, "<Escape>",
+            "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
+      end loop;
       Height := Positive'Value(Winfo_Get(TabButton, "reqheight"));
-      TabButton :=
-        Create
-          (Frame & ".stats",
-           " -text Statistics -style Radio.Toolbutton -value stats -variable newtab -command ShowRecruitTab");
-      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
-      Bind
-        (TabButton, "<Escape>",
-         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
-      TabButton :=
-        Create
-          (Frame & ".skills",
-           " -text Skills -style Radio.Toolbutton -value skills -variable newtab -command ShowRecruitTab");
-      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 2 -row 0");
-      Bind
-        (TabButton, "<Escape>",
-         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
-      TabButton :=
-        Create
-          (Frame & ".inventory",
-           " -text Inventory -style Radio.Toolbutton -value inventory -variable newtab -command ShowRecruitTab");
-      Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 3 -row 0");
-      Bind
-        (TabButton, "<Escape>",
-         "{" & RecruitDialog & ".buttonbox2.button invoke;break}");
       Bind
         (TabButton, "<Tab>",
          "{focus " & RecruitDialog & ".buttonbox2.hirebutton;break}");
@@ -379,10 +356,10 @@ package body Bases.RecruitUI is
            (if Recruit.Gender = 'M' then To_Unbounded_String("Gender: Male")
             else To_Unbounded_String("Gender: Female"));
       end if;
-      Append(RecruitInfo, LF & "Faction: ");
-      Append(RecruitInfo, Factions_List(Recruit.Faction).Name);
-      Append(RecruitInfo, LF & "Home base: ");
-      Append(RecruitInfo, SkyBases(Recruit.HomeBase).Name);
+      Append
+        (RecruitInfo,
+         LF & "Faction: " & Factions_List(Recruit.Faction).Name & LF &
+         "Home base: " & SkyBases(Recruit.HomeBase).Name);
       RecruitLabel :=
         Create
           (Frame & ".label",
@@ -392,7 +369,7 @@ package body Bases.RecruitUI is
       Width := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Frame);
       -- Statistics of the selected recruit
-      Frame := Create(RecruitCanvas & ".stats");
+      Frame := Create(RecruitCanvas & ".statistics");
       Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes.Iterate loop
          ProgressFrame :=
