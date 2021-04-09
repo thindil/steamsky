@@ -232,7 +232,6 @@ package body Bases.LootUI is
          Current(ComboBox, "0");
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      LootFrame.Name := New_String(LootCanvas & ".loot");
       configure
         (LootCanvas,
          "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
@@ -293,10 +292,8 @@ package body Bases.LootUI is
       else
          CargoIndex := ItemIndex;
       end if;
-      if CargoIndex > Natural(PlayerShip.Cargo.Length) then
-         return TCL_OK;
-      end if;
-      if BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
+      if CargoIndex > Natural(PlayerShip.Cargo.Length) or
+        BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
       ProtoIndex :=
