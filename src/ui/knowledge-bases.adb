@@ -122,7 +122,9 @@ package body Knowledge.Bases is
             To_Unbounded_String("Reputation")),
            False);
       if BaseName'Length = 0 then
+         configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
+         configure(SearchEntry, "-validatecommand {ShowBases %P}");
       end if;
       BasesType := To_Unbounded_String(Get(ComboBox));
       ComboBox.Name := New_String(BasesFrame & ".options.status");
