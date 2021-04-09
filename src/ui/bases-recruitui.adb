@@ -763,7 +763,9 @@ package body Bases.RecruitUI is
            "-text {Daily payment:" & Natural'Image(Recruit.Payment) & "}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Scale :=
-        Create(NegotiateDialog & ".daily", "-from 0 -command NegotiateHire");
+        Create
+          (NegotiateDialog & ".daily",
+           "-from 0 -command NegotiateHire -length 250");
       Tcl.Tk.Ada.Grid.Grid(Scale);
       configure
         (Scale,
@@ -777,7 +779,7 @@ package body Bases.RecruitUI is
       Scale :=
         Create
           (NegotiateDialog & ".percent",
-           "-from 0 -to 10 -command NegotiateHire");
+           "-from 0 -to 10 -command NegotiateHire -length 250");
       Tcl.Tk.Ada.Grid.Grid(Scale);
       configure(Scale, "-value 0");
       Label :=
