@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file.
 - Autoresizing of tables
 - Remembering size of last messages window
 - Generate bases at borders of the map
+- Showing info about the highest skill of recruits in bases
 
 ## [5.9] - 2021-03-21
 
