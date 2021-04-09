@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Don't create patrol and explore missions on fields with bases
+- Updated interface
 
 ### Fixed
 - Closing wait menu with Escape key returns to map
