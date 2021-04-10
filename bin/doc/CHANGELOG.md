@@ -29,6 +29,7 @@ All notable changes to this project will be documented in this file.
 - Generate bases at borders of the map
 - Showing info about the highest skill of recruits in bases
 - Showing list of known bases after reenter knowledge screen
+- Reseting search field in install modules in shipyard screen
 
 ## [5.9] - 2021-03-21
 
