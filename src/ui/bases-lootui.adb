@@ -94,6 +94,12 @@ package body Bases.LootUI is
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
+      Page: constant Positive :=
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
+      Arguments: constant String :=
+        (if Argc > 1 then "{" & CArgv.Arg(Argv, 1) & "}" else "All");
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -138,6 +144,10 @@ package body Bases.LootUI is
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
             goto End_Of_Cargo_Loop;
          end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Cargo_Loop;
+         end if;
          ItemName :=
            To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
          AddButton
@@ -177,10 +187,12 @@ package body Bases.LootUI is
             "ShowLootItemMenu" &
             Positive'Image(Inventory_Container.To_Index(I)),
             5, True);
+         exit Add_Player_Cargo_Loop when LootTable.Row = 26;
          <<End_Of_Cargo_Loop>>
       end loop Add_Player_Cargo_Loop;
       Add_Base_Cargo_Loop :
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+         exit Add_Base_Cargo_Loop when LootTable.Row = 26;
          if IndexesList.Find_Index(Item => I) > 0 then
             goto End_Of_Base_Cargo_Loop;
          end if;
@@ -194,6 +206,10 @@ package body Bases.LootUI is
          end if;
          if Argc = 2 and then CArgv.Arg(Argv, 1) /= "All"
            and then To_String(ItemType) /= CArgv.Arg(Argv, 1) then
+            goto End_Of_Base_Cargo_Loop;
+         end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
             goto End_Of_Base_Cargo_Loop;
          end if;
          ItemName := Items_List(ProtoIndex).Name;
@@ -221,6 +237,20 @@ package body Bases.LootUI is
             "ShowLootItemMenu" & Integer'Image(-(I)), 5, True);
          <<End_Of_Base_Cargo_Loop>>
       end loop Add_Base_Cargo_Loop;
+      if Page > 1 then
+         if LootTable.Row < 26 then
+            AddPagination
+              (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
+               "");
+         else
+            AddPagination
+              (LootTable, "ShowLoot " & Arguments & Positive'Image(Page - 1),
+               "ShowLoot " & Arguments & Positive'Image(Page + 1));
+         end if;
+      elsif LootTable.Row = 26 then
+         AddPagination
+           (LootTable, "", "ShowLoot " & Arguments & Positive'Image(Page + 1));
+      end if;
       UpdateTable(LootTable);
       Tcl_Eval(Get_Context, "update");
       configure
@@ -398,8 +428,7 @@ package body Bases.LootUI is
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (Main_Paned & ".lootframe.canvas.loot.options.type", Interp);
+        Get_Widget(Main_Paned & ".lootframe.canvas.loot.options.type", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
