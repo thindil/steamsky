@@ -147,7 +147,7 @@ package Table is
       NewRow, InvertColors: Boolean := False);
    -- ****
 
-   -- ****f* Table/AddPagination
+   -- ****f* Table/Table.AddPagination
    -- FUNCTION
    -- Add pagination buttons to the bottom of the table
    -- PARAMETERS
@@ -161,6 +161,26 @@ package Table is
    -- SOURCE
    procedure AddPagination
      (Table: in out Table_Widget; PreviousCommand, NextCommand: String);
+   -- ****
+
+   -- ****f* Table/Table.AddCheckButton
+   -- FUNCTION
+   -- Add check button item to the selecte Table_Widget
+   -- PARAMETERS
+   -- Table   - The Table_Widget in which button will be added
+   -- Tooltip - The tooltip show when user hover mouse over button
+   -- Command - Tcl command which will be executed when button was clicked. If
+   --           empty, the button will be disabled
+   -- Checked - If True, the button will be checked
+   -- Column  - The column in which the button will be added
+   -- NewRow  - If True, increase current number of row in the Table_Widget.
+   --           Default value is False.
+   -- HISTORY
+   -- 6.0 - Added
+   -- SOURCE
+   procedure AddCheckButton
+     (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
+      Column: Positive; NewRow: Boolean := False);
    -- ****
 
 end Table;
