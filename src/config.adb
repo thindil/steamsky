@@ -36,12 +36,13 @@ package body Config is
       New_Game_Settings := Default_New_Game_Settings;
       Game_Settings := Default_Game_Settings;
       Open
-        (Config_File, In_File,
-         To_String(Source => Save_Directory) & "game.cfg");
+        (File => Config_File, Mode => In_File,
+         Name => To_String(Source => Save_Directory) & "game.cfg");
       Read_Config_File_Loop :
-      while not End_Of_File(Config_File) loop
-         Raw_Data := To_Unbounded_String(Get_Line(Config_File));
-         if Length(Raw_Data) > 0 then
+      while not End_Of_File(File => Config_File) loop
+         Raw_Data :=
+           To_Unbounded_String(Source => Get_Line(File => Config_File));
+         if Length(Source => Raw_Data) > 0 then
             Equal_Index := Index(Raw_Data, "=");
             Field_Name := Head(Raw_Data, Equal_Index - 2);
             Value := Tail(Raw_Data, (Length(Raw_Data) - Equal_Index - 1));
