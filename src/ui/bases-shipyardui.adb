@@ -37,6 +37,7 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -119,6 +120,8 @@ package body Bases.ShipyardUI is
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
          elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "0 {}");
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(ShipyardCanvas & ".shipyard.install.options.search");
    begin
       if Winfo_Get(ShipyardCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -176,6 +179,14 @@ package body Bases.ShipyardUI is
          LF & "You have used" & Natural'Image(UsedSpace) &
          " modules space from max" & Natural'Image(AllSpace) & " allowed.");
       configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
+      if Argc < 3 then
+         configure(SearchEntry, "-validatecommand {}");
+         Delete(SearchEntry, "0", "end");
+         configure
+           (SearchEntry,
+            "-validatecommand {ShowShipyard [" & ShipyardFrame &
+            ".install.options.modules current] %P}");
+      end if;
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
       for I in Modules_List.Iterate loop
