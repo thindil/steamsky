@@ -38,6 +38,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
+with CoreUI; use CoreUI;
 with Events; use Events;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -78,9 +79,7 @@ package body Bases.LootUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      LootFrame: Ttk_Frame := Get_Widget(Paned & ".lootframe", Interp);
+      LootFrame: Ttk_Frame := Get_Widget(Main_Paned & ".lootframe", Interp);
       LootCanvas: constant Tk_Canvas :=
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
@@ -234,8 +233,8 @@ package body Bases.LootUI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       configure
         (LootCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (LootCanvas, "window", "0 0 -anchor nw -window " & LootFrame);
@@ -400,7 +399,7 @@ package body Bases.LootUI is
         Get_Widget(".itemdialog.amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.lootframe.canvas.loot.options.type", Interp);
+          (Main_Paned & ".lootframe.canvas.loot.options.type", Interp);
    begin
       if ItemIndex < 0 then
          BaseCargoIndex := abs (ItemIndex);
