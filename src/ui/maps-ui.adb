@@ -48,6 +48,7 @@ with Bases.UI;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crafts.UI;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with DebugUI; use DebugUI;
 with Factions; use Factions;
@@ -840,6 +841,7 @@ package body Maps.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
+         Main_Paned := Get_Widget(".gameframe.paned");
          SetTheme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
