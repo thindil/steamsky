@@ -45,13 +45,17 @@ package body Config is
          if Length(Source => Raw_Data) = 0 then
             goto End_Of_Loop;
          end if;
-         Equal_Index := Index(Raw_Data, "=");
-         Field_Name := Head(Raw_Data, Equal_Index - 2);
-         Value := Tail(Raw_Data, (Length(Raw_Data) - Equal_Index - 1));
+         Equal_Index := Index(Source => Raw_Data, Pattern => "=");
+         Field_Name := Head(Source => Raw_Data, Count => Equal_Index - 2);
+         Value :=
+           Tail
+             (Source => Raw_Data,
+              Count => Length(Source => Raw_Data) - Equal_Index - 1);
          if Field_Name = To_Unbounded_String(Source => "PlayerName") then
             New_Game_Settings.Player_Name := Value;
          elsif Field_Name = To_Unbounded_String(Source => "PlayerGender") then
-            New_Game_Settings.Player_Gender := Element(Value, 1);
+            New_Game_Settings.Player_Gender :=
+              Element(Source => Value, Index => 1);
          elsif Field_Name = To_Unbounded_String(Source => "ShipName") then
             New_Game_Settings.Ship_Name := Value;
          elsif Field_Name = To_Unbounded_String(Source => "PlayerFaction") then
@@ -184,7 +188,7 @@ package body Config is
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
-      Close(Config_File);
+      Close(File => Config_File);
    exception
       when Ada.Directories.Name_Error =>
          null;
@@ -192,14 +196,14 @@ package body Config is
 
    procedure Save_Config is
       Config_File: File_Type;
-      procedure SaveBoolean(Value: Boolean; Name: String) is
+      procedure Save_Boolean(Value: Boolean; Name: String) is
       begin
          if Value then
             Put_Line(Config_File, Name & " = Yes");
          else
             Put_Line(Config_File, Name & " = No");
          end if;
-      end SaveBoolean;
+      end Save_Boolean;
    begin
       Create
         (Config_File, Append_File,
@@ -259,13 +263,13 @@ package body Config is
         (Config_File,
          "DifficultyLevel = " &
          Difficulty_Type'Image(New_Game_Settings.Difficulty_Level));
-      SaveBoolean(Game_Settings.Auto_Rest, "AutoRest");
+      Save_Boolean(Game_Settings.Auto_Rest, "AutoRest");
       Put_Line
         (Config_File,
          "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
-      SaveBoolean(Game_Settings.Auto_Center, "AutoCenter");
-      SaveBoolean(Game_Settings.Auto_Return, "AutoReturn");
-      SaveBoolean(Game_Settings.Auto_Finish, "AutoFinish");
+      Save_Boolean(Game_Settings.Auto_Center, "AutoCenter");
+      Save_Boolean(Game_Settings.Auto_Return, "AutoReturn");
+      Save_Boolean(Game_Settings.Auto_Finish, "AutoFinish");
       Put_Line
         (Config_File, "LowFuel =" & Positive'Image(Game_Settings.Low_Fuel));
       Put_Line
@@ -307,15 +311,15 @@ package body Config is
         (Config_File,
          "MessagesOrder = " &
          Messages_Order_Type'Image(Game_Settings.Messages_Order));
-      SaveBoolean(Game_Settings.Auto_Ask_For_Bases, "AutoAskForBases");
-      SaveBoolean(Game_Settings.Auto_Ask_For_Events, "AutoAskForEvents");
-      SaveBoolean(Game_Settings.Show_Tooltips, "ShowTooltips");
-      SaveBoolean(Game_Settings.Show_Last_Messages, "ShowLastMessages");
+      Save_Boolean(Game_Settings.Auto_Ask_For_Bases, "AutoAskForBases");
+      Save_Boolean(Game_Settings.Auto_Ask_For_Events, "AutoAskForEvents");
+      Save_Boolean(Game_Settings.Show_Tooltips, "ShowTooltips");
+      Save_Boolean(Game_Settings.Show_Last_Messages, "ShowLastMessages");
       Put_Line
         (Config_File,
          "MessagesPosition =" &
          Natural'Image(Game_Settings.Messages_Position));
-      SaveBoolean(Game_Settings.Full_Screen, "FullScreen");
+      Save_Boolean(Game_Settings.Full_Screen, "FullScreen");
       Put_Line
         (Config_File,
          "AutoCloseMessagesTime =" &
@@ -326,7 +330,7 @@ package body Config is
       Put_Line
         (Config_File,
          "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
-      SaveBoolean(Game_Settings.Show_Numbers, "ShowNumbers");
+      Save_Boolean(Game_Settings.Show_Numbers, "ShowNumbers");
       Close(Config_File);
    end Save_Config;
 
