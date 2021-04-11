@@ -324,12 +324,18 @@ package body OrdersMenu is
                               exit Count_Docking_Cost_Loop;
                            end if;
                         end loop Count_Docking_Cost_Loop;
-                        Add
-                          (OrdersMenu, "command",
-                           "-label {Dock (" &
-                           Trim(Positive'Image(DockingCost), Left) & " " &
-                           To_String(Money_Name) &
-                           ")} -underline 0 -command {Docking}");
+                        if SkyBases(BaseIndex).Population > 0 then
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Dock (" &
+                              Trim(Positive'Image(DockingCost), Left) & " " &
+                              To_String(Money_Name) &
+                              ")} -underline 0 -command {Docking}");
+                        else
+                           Add
+                             (OrdersMenu, "command",
+                              "-label {Dock} -underline 0 -command {Docking}");
+                        end if;
                      end;
                   end if;
                   Complete_Mission_Menu_Loop :
