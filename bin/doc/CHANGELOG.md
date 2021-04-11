@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about the highest skill of recruits in bases
 - Showing list of known bases after reenter knowledge screen
 - Reseting search field in install modules in shipyard screen
+- Showing info about docking cost in abandoned bases
 
 ## [5.9] - 2021-03-21
 
