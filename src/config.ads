@@ -94,11 +94,11 @@ package Config is
    -- Default settings for the new game
    -- SOURCE
    Default_New_Game_Settings: constant New_Game_Record :=
-     (Player_Name => To_Unbounded_String("Laeran"), Player_Gender => 'M',
-      Ship_Name => To_Unbounded_String("Anaria"),
-      Player_Faction => To_Unbounded_String("POLEIS"),
-      Player_Career => To_Unbounded_String("general"),
-      Starting_Base => To_Unbounded_String("Any"), Enemy_Damage_Bonus => 1.0,
+     (Player_Name => To_Unbounded_String(Source => "Laeran"), Player_Gender => 'M',
+      Ship_Name => To_Unbounded_String(Source => "Anaria"),
+      Player_Faction => To_Unbounded_String(Source => "POLEIS"),
+      Player_Career => To_Unbounded_String(Source => "general"),
+      Starting_Base => To_Unbounded_String(Source => "Any"), Enemy_Damage_Bonus => 1.0,
       Player_Damage_Bonus => 1.0, Enemy_Melee_Damage_Bonus => 1.0,
       Player_Melee_Damage_Bonus => 1.0, Experience_Bonus => 1.0,
       Reputation_Bonus => 1.0, Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
@@ -234,7 +234,7 @@ package Config is
       Auto_Move_Stop => Default_Auto_Move_Stop, Window_Width => 800,
       Window_Height => 600, Messages_Limit => 500, Saved_Messages => 10,
       Help_Font_Size => 14, Map_Font_Size => 16, Interface_Font_Size => 14,
-      Interface_Theme => To_Unbounded_String("steamsky"),
+      Interface_Theme => To_Unbounded_String(Source => "steamsky"),
       Messages_Order => Default_Messages_Order, Auto_Ask_For_Bases => False,
       Auto_Ask_For_Events => False, Show_Tooltips => True,
       Show_Last_Messages => True, Messages_Position => 213,
