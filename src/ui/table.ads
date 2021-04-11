@@ -71,7 +71,9 @@ package Table is
    -- SOURCE
    function CreateTable
      (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
-      return Table_Widget;
+      return Table_Widget with
+      Pre => Parent'Length > 0 and Headers'Length > 0,
+      Post => CreateTable'Result.Row_Height > 1;
    -- ****
 
      -- ****f* Table/Table.ClearTable
@@ -84,7 +86,8 @@ package Table is
      -- HISTORY
      -- 5.7 - Added
      -- SOURCE
-   procedure ClearTable(Table: in out Table_Widget);
+   procedure ClearTable(Table: in out Table_Widget) with
+      Pre => Table.Row_Height > 1;
    -- ****
 
    -- ****f* Table/Table.AddButton
@@ -107,7 +110,8 @@ package Table is
    -- SOURCE
    procedure AddButton
      (Table: in out Table_Widget; Text, Tooltip, Command: String;
-      Column: Positive; NewRow: Boolean := False; Color: String := "");
+      Column: Positive; NewRow: Boolean := False; Color: String := "") with
+      Pre => Table.Row_Height > 1 and Command'Length > 0;
    -- ****
 
    -- ****f* Table/Table.UpdateTable
@@ -118,7 +122,8 @@ package Table is
    -- HISTORY
    -- 5.7 - Added
    -- SOURCE
-   procedure UpdateTable(Table: in out Table_Widget);
+   procedure UpdateTable(Table: in out Table_Widget) with
+      Pre => Table.Row_Height > 1;
    -- ****
 
    -- ****f* Table/Table.AddProgressBar
@@ -144,7 +149,8 @@ package Table is
    procedure AddProgressBar
      (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
       Tooltip, Command: String; Column: Positive;
-      NewRow, InvertColors: Boolean := False);
+      NewRow, InvertColors: Boolean := False) with
+      Pre => Table.Row_Height > 1 and Value <= MaxValue;
    -- ****
 
    -- ****f* Table/Table.AddPagination
@@ -160,12 +166,13 @@ package Table is
    -- 5.9 - Added
    -- SOURCE
    procedure AddPagination
-     (Table: in out Table_Widget; PreviousCommand, NextCommand: String);
+     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) with
+      Pre => Table.Row_Height > 1;
    -- ****
 
    -- ****f* Table/Table.AddCheckButton
    -- FUNCTION
-   -- Add check button item to the selecte Table_Widget
+   -- Add check button item to the selected Table_Widget
    -- PARAMETERS
    -- Table   - The Table_Widget in which button will be added
    -- Tooltip - The tooltip show when user hover mouse over button
@@ -180,7 +187,8 @@ package Table is
    -- SOURCE
    procedure AddCheckButton
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
-      Column: Positive; NewRow: Boolean := False);
+      Column: Positive; NewRow: Boolean := False) with
+      Pre => Table.Row_Height > 1;
    -- ****
 
 end Table;
