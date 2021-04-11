@@ -38,7 +38,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
@@ -46,6 +45,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade; use Bases.Trade;
+with CoreUI; use CoreUI;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -84,9 +84,8 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      RecruitFrame: Ttk_Frame := Get_Widget(Paned & ".recruitframe", Interp);
+      RecruitFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".recruitframe", Interp);
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
@@ -170,10 +169,10 @@ package body Bases.RecruitUI is
          HighestLevel := 1;
          HighestIndex := 1;
          Get_Highest_Skill_Level_Loop :
-         for J in SkyBases(BaseIndex).Recruits(I).Skills.Iterate loop
-            if SkyBases(BaseIndex).Recruits(I).Skills(J)(2) > HighestLevel then
-               HighestLevel := SkyBases(BaseIndex).Recruits(I).Skills(J)(2);
-               HighestIndex := SkyBases(BaseIndex).Recruits(I).Skills(J)(1);
+         for Skill of SkyBases(BaseIndex).Recruits(I).Skills loop
+            if Skill(2) > HighestLevel then
+               HighestLevel := Skill(2);
+               HighestIndex := Skill(1);
             end if;
          end loop Get_Highest_Skill_Level_Loop;
          AddButton
@@ -307,8 +306,7 @@ package body Bases.RecruitUI is
          To_Unbounded_String("Skills"), To_Unbounded_String("Inventory"));
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Frame := Create(RecruitDialog & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
       for I in TabNames'Range loop
@@ -544,40 +542,36 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      DialogName: constant String := ".negotiatedialog";
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
-      Scale: Ttk_Scale := Get_Widget(".negotiatedialog.daily", Interp);
+      Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
       ContractBox: constant Ttk_ComboBox :=
-        Get_Widget(".negotiatedialog.contract", Interp);
+        Get_Widget(DialogName & ".contract", Interp);
       ContractLength: constant Natural := Natural'Value(Current(ContractBox));
       TradePayment: Natural;
-      Label: Ttk_Label := Get_Widget(".negotiatedialog.cost", Interp);
+      Label: Ttk_Label := Get_Widget(DialogName & ".cost", Interp);
       HireButton: constant Ttk_Button :=
-        Get_Widget(".negotiatedialog.buttonbox.hirebutton", Interp);
+        Get_Widget(DialogName & ".buttonbox.hirebutton", Interp);
    begin
-      Scale.Name := New_String(".negotiatedialog.percent");
+      Scale.Name := New_String(DialogName & ".percent");
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
         (TradePayment * 5000);
-      case ContractLength is
-         when 1 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.1);
-         when 2 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.5);
-         when 3 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.75);
-         when 4 =>
-            Cost := Cost - Integer(Float(Recruit.Price) * 0.9);
-         when others =>
-            null;
-      end case;
+      Cost :=
+        (case ContractLength is
+           when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
+           when 2 => Cost - Integer(Float(Recruit.Price) * 0.5),
+           when 3 => Cost - Integer(Float(Recruit.Price) * 0.75),
+           when 4 => Cost - Integer(Float(Recruit.Price) * 0.9),
+           when others => Cost);
       if Cost < 1 then
          Cost := 1;
       end if;
@@ -586,20 +580,19 @@ package body Bases.RecruitUI is
         (Label,
          "-text {Hire for" & Natural'Image(Cost) & " " &
          To_String(Money_Name) & "}");
-      Label.Name := New_String(".negotiatedialog.dailylbl");
+      Label.Name := New_String(DialogName & ".dailylbl");
       configure
         (Label, "-text {Daily payment:" & Natural'Image(DailyPayment) & "}");
-      Label.Name := New_String(".negotiatedialog.percentlbl");
+      Label.Name := New_String(DialogName & ".percentlbl");
       configure
         (Label,
          "-text {Percent of profit from trades: " &
          Natural'Image(TradePayment) & "}");
-      if MoneyIndex2 > 0 then
-         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-            configure(HireButton, "-state disabled");
-         else
-            configure(HireButton, "-state !disabled");
-         end if;
+      if MoneyIndex2 > 0
+        and then PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+         configure(HireButton, "-state disabled");
+      else
+         configure(HireButton, "-state !disabled");
       end if;
       return TCL_OK;
    end Negotiate_Hire_Command;
@@ -755,8 +748,7 @@ package body Bases.RecruitUI is
       Cost: Positive;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned", Interp);
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Label :=
         Create
           (NegotiateDialog & ".dailylbl",
