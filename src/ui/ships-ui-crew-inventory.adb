@@ -58,7 +58,7 @@ package body Ships.UI.Crew.Inventory is
    -- Show inventory of the selected crew member
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -76,7 +76,7 @@ package body Ships.UI.Crew.Inventory is
    function Show_Member_Inventory_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
+      pragma Unreferenced(ClientData);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
@@ -96,6 +96,10 @@ package body Ships.UI.Crew.Inventory is
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, Width: Positive := 10;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Page: constant Positive :=
+        (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
@@ -113,6 +117,10 @@ package body Ships.UI.Crew.Inventory is
            False);
       Load_Inventory_Loop :
       for I in Member.Inventory.Iterate loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          AddButton
            (InventoryTable, GetItemName(Member.Inventory(I), False, False),
             "Show available item's options",
@@ -155,7 +163,30 @@ package body Ships.UI.Crew.Inventory is
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
             Positive'Image(Inventory_Container.To_Index(I)),
             5, True);
+         exit Load_Inventory_Loop when InventoryTable.Row = 26;
+         <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
+      if Page > 1 then
+         if InventoryTable.Row < 26 then
+            AddPagination
+              (InventoryTable,
+               "UpdateInventory " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Page - 1),
+               "");
+         else
+            AddPagination
+              (InventoryTable,
+               "UpdateInventory " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Page - 1),
+               "UpdateInventory " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Page + 1));
+         end if;
+      elsif InventoryTable.Row = 26 then
+         AddPagination
+           (InventoryTable, "",
+            "UpdateInventory " & CArgv.Arg(Argv, 1) &
+            Positive'Image(Page + 1));
+      end if;
       UpdateTable(InventoryTable);
       Height :=
         Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
