@@ -53,68 +53,41 @@ package body Ships.UI.Crew.Inventory is
    InventoryTable: Table_Widget (5);
    -- ****
 
-   -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
+   -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
-   -- Show inventory of the selected crew member
+   -- Update inventory list of the selected crew member
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowMemberInventory memberindex
-   -- MemberIndex is the index of the crew member to show inventory
+   -- UpdateInventory memberindex page
+   -- MemberIndex is the index of the crew member to show inventory, page
+   -- is a number of the page of inventory list to show
    -- SOURCE
-   function Show_Member_Inventory_Command
+   function Update_Inventory_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Show_Member_Inventory_Command
+   function Update_Inventory_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
+      pragma Unreferenced(ClientData, Interp);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
-      MemberDialog: constant Ttk_Frame :=
-        Create(".memberdialog", "-style Dialog.TFrame");
-      YScroll: constant Ttk_Scrollbar :=
-        Create
-          (MemberDialog & ".yscroll",
-           "-orient vertical -command [list .memberdialog.canvas yview]");
-      MemberCanvas: constant Tk_Canvas :=
-        Create
-          (MemberDialog & ".canvas",
-           "-yscrollcommand [list " & YScroll & " set]");
-      MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
-      CloseButton: constant Ttk_Button :=
-        Create
-          (MemberFrame & ".button",
-           "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, Width: Positive := 10;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
-      Tcl.Tk.Ada.Pack.Pack
-        (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
-      Autoscroll(YScroll);
-      InventoryTable :=
-        CreateTable
-          (Widget_Image(MemberFrame),
-           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
-            To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
-            To_Unbounded_String("Weight")),
-           False);
+      if InventoryTable.Row > 1 then
+         ClearTable(InventoryTable);
+      end if;
       Load_Inventory_Loop :
       for I in Member.Inventory.Iterate loop
          if Current_Row < Start_Row then
@@ -188,6 +161,68 @@ package body Ships.UI.Crew.Inventory is
             Positive'Image(Page + 1));
       end if;
       UpdateTable(InventoryTable);
+      return TCL_OK;
+   end Update_Inventory_Command;
+
+   -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
+   -- FUNCTION
+   -- Show inventory of the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowMemberInventory memberindex
+   -- MemberIndex is the index of the crew member to show inventory
+   -- SOURCE
+   function Show_Member_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Member_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      MemberDialog: constant Ttk_Frame :=
+        Create(".memberdialog", "-style Dialog.TFrame");
+      YScroll: constant Ttk_Scrollbar :=
+        Create
+          (MemberDialog & ".yscroll",
+           "-orient vertical -command [list .memberdialog.canvas yview]");
+      MemberCanvas: constant Tk_Canvas :=
+        Create
+          (MemberDialog & ".canvas",
+           "-yscrollcommand [list " & YScroll & " set]");
+      MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (MemberFrame & ".button",
+           "-text Close -command {CloseDialog " & MemberDialog & "}");
+      Height, Width: Positive := 10;
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+   begin
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
+      Tcl.Tk.Ada.Pack.Pack
+        (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
+      Autoscroll(YScroll);
+      InventoryTable :=
+        CreateTable
+          (Widget_Image(MemberFrame),
+           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
+            To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
+            To_Unbounded_String("Weight")),
+           False);
+      if Update_Inventory_Command(ClientData, Interp, Argc, Argv) =
+        TCL_ERROR then
+         return TCL_ERROR;
+      end if;
       Height :=
         Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
       Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
@@ -595,6 +630,7 @@ package body Ships.UI.Crew.Inventory is
 
    procedure AddCommands is
    begin
+      AddCommand("UpdateInventory", Update_Inventory_Command'Access);
       AddCommand("ShowMemberInventory", Show_Member_Inventory_Command'Access);
       AddCommand("SetUseItem", Set_Use_Item_Command'Access);
       AddCommand("ShowMoveItem", Show_Move_Item_Command'Access);
