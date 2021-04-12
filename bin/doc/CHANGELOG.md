@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file.
 - Showing list of known bases after reenter knowledge screen
 - Reseting search field in install modules in shipyard screen
 - Showing info about docking cost in abandoned bases
+- Crash on lack of permission to write to directory selected for saves
 
 ## [5.9] - 2021-03-21
 
