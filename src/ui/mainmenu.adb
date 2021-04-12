@@ -20,6 +20,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
+with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
@@ -260,6 +261,26 @@ package body MainMenu is
          ShowMessage
            ("Can't load game data files. Error: " & To_String(DataError),
             ".mainmenu");
+         return;
+      end if;
+      if not Is_Writable_File(Name => To_String(Source => Save_Directory)) then
+         Button.Name := New_String(".mainmenu.newgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Button.Name := New_String(".mainmenu.loadgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         if Dir_Separator = '/' then
+            ShowMessage
+              ("You don't have permissions to write to directory """ &
+               To_String(Source => Save_Directory) &
+               """ which is set as directory for saved games. Please select different directory.",
+               ".mainmenu");
+         else
+            ShowMessage
+              ("You don't have permissions to write to directory """ &
+               To_String(Source => Save_Directory) &
+               """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
+               ".mainmenu");
+         end if;
       end if;
    end ShowMainMenu;
 
