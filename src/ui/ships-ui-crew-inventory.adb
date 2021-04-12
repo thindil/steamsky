@@ -118,60 +118,43 @@ package body Ships.UI.Crew.Inventory is
             "Show available item's options",
             "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
             Positive'Image(Inventory_Container.To_Index(I)),
-            1, True);
---         Label :=
---           (if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
---              Create
---                (MemberFrame & ".used" &
---                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
---                 "-text {Yes}")
---            else Create
---                (MemberFrame & ".used" &
---                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
---                 "-text {No}"));
---         ProgressBarStyle :=
---           (if Member.Inventory(I).Durability > 74 then
---              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
---            elsif Member.Inventory(I).Durability > 24 then
---              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
---            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
---         DamageBar :=
---           Create
---             (MemberFrame & ".durability" &
---              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
---              "-value {" & Positive'Image(Member.Inventory(I).Durability) &
---              "} -length 150" & To_String(ProgressBarStyle));
---         Add(DamageBar, "The current durability level of the selected item.");
---         Tcl.Tk.Ada.Grid.Grid
---           (DamageBar,
---            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
---            " -column 1");
---         Tcl.Tk.Ada.Grid.Grid
---           (Label,
---            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
---            " -column 2");
---         ItemLabel :=
---           Create
---             (MemberFrame & ".amount" &
---              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
---              "-text {" & Positive'Image(Member.Inventory(I).Amount) & "}");
---         Tcl.Tk.Ada.Grid.Grid
---           (ItemLabel,
---            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
---            " -column 3");
---         ItemLabel :=
---           Create
---             (MemberFrame & ".weight" &
---              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
---              "-text {" &
---              Positive'Image
---                (Member.Inventory(I).Amount *
---                 Items_List(Member.Inventory(I).ProtoIndex).Weight) &
---              " kg}");
---         Tcl.Tk.Ada.Grid.Grid
---           (ItemLabel,
---            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
---            " -column 4");
+            1);
+         AddProgressBar
+           (InventoryTable, Member.Inventory(I).Durability,
+            Default_Item_Durability,
+            "The current durability level of the selected item.",
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            2);
+         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+            AddButton
+              (InventoryTable, "Yes", "The item is used by the crew member",
+               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Inventory_Container.To_Index(I)),
+               3);
+         else
+            AddButton
+              (InventoryTable, "No", "The item isn't used by the crew member",
+               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Inventory_Container.To_Index(I)),
+               3);
+         end if;
+         AddButton
+           (InventoryTable, Positive'Image(Member.Inventory(I).Amount),
+            "The amount of the item owned by the crew member",
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            4);
+         AddButton
+           (InventoryTable,
+            Positive'Image
+              (Member.Inventory(I).Amount *
+               Items_List(Member.Inventory(I).ProtoIndex).Weight) &
+            " kg",
+            "The total weight of the items",
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            5, True);
       end loop Load_Inventory_Loop;
       UpdateTable(InventoryTable);
       Height :=
