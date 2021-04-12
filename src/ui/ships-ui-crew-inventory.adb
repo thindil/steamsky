@@ -13,8 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -35,19 +33,25 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crew.Inventory; use Crew.Inventory;
 with Factions; use Factions;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
+with Table; use Table;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Crew.Inventory is
+
+   -- ****iv* SUCI/SUCI.InventoryTable
+   -- FUNCTION
+   -- Table with info about the crew member inventory
+   -- SOURCE
+   InventoryTable: Table_Widget (5);
+   -- ****
 
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
    -- FUNCTION
@@ -90,11 +94,7 @@ package body Ships.UI.Crew.Inventory is
         Create
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
-      Height, Width, NewWidth: Positive := 10;
-      Label, AmountLabel, WeightLabel, ItemLabel: Ttk_Label;
-      ItemButton: Ttk_Button;
-      DamageBar: Ttk_ProgressBar;
-      ProgressBarStyle: Unbounded_String;
+      Height, Width: Positive := 10;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -104,94 +104,80 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
       Autoscroll(YScroll);
-      Label := Create(MemberFrame & ".name", "-text {Name}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
-      Label := Create(MemberFrame & ".durability", "-text {Durability}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0");
-      Label := Create(MemberFrame & ".used", "-text {Used}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-column 2 -row 0");
-      AmountLabel := Create(MemberFrame & ".amount", "-text {Amount}");
-      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-column 3 -row 0");
-      WeightLabel := Create(MemberFrame & ".weight", "-text {Weight}");
-      Tcl.Tk.Ada.Grid.Grid(WeightLabel, "-column 4 -row 0");
-      Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
+      InventoryTable :=
+        CreateTable
+          (Widget_Image(MemberFrame),
+           (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
+            To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
+            To_Unbounded_String("Weight")),
+           False);
       Load_Inventory_Loop :
       for I in Member.Inventory.Iterate loop
-         Label :=
-           (if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-              Create
-                (MemberFrame & ".used" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {Yes}")
-            else Create
-                (MemberFrame & ".used" &
-                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-                 "-text {No}"));
-         ItemButton :=
-           Create
-             (MemberFrame & ".name" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & GetItemName(Member.Inventory(I), False, False) &
-              "} -command {ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-              Positive'Image(Inventory_Container.To_Index(I)) & "}");
-         Add(ItemButton, "Show available item's options");
-         Tcl.Tk.Ada.Grid.Grid(ItemButton, "-sticky w");
-         Height := Height + Positive'Value(Winfo_Get(ItemButton, "reqheight"));
-         ProgressBarStyle :=
-           (if Member.Inventory(I).Durability > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif Member.Inventory(I).Durability > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-         DamageBar :=
-           Create
-             (MemberFrame & ".durability" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-value {" & Positive'Image(Member.Inventory(I).Durability) &
-              "} -length 150" & To_String(ProgressBarStyle));
-         Add(DamageBar, "The current durability level of the selected item.");
-         Tcl.Tk.Ada.Grid.Grid
-           (DamageBar,
-            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -column 1");
-         Tcl.Tk.Ada.Grid.Grid
-           (Label,
-            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -column 2");
-         ItemLabel :=
-           Create
-             (MemberFrame & ".amount" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" & Positive'Image(Member.Inventory(I).Amount) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemLabel,
-            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -column 3");
-         ItemLabel :=
-           Create
-             (MemberFrame & ".weight" &
-              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
-              "-text {" &
-              Positive'Image
-                (Member.Inventory(I).Amount *
-                 Items_List(Member.Inventory(I).ProtoIndex).Weight) &
-              " kg}");
-         Tcl.Tk.Ada.Grid.Grid
-           (ItemLabel,
-            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
-            " -column 4");
-         NewWidth :=
-           Positive'Value(Winfo_Get(ItemButton, "reqwidth")) +
-           Positive'Value(Winfo_Get(DamageBar, "reqwidth")) +
-           Positive'Value(Winfo_Get(Label, "reqwidth")) +
-           Positive'Value(Winfo_Get(AmountLabel, "reqwidth")) +
-           Positive'Value(Winfo_Get(WeightLabel, "reqwidth"));
-         if NewWidth > Width then
-            Width := NewWidth;
-         end if;
-         Bind(ItemButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+         AddButton
+           (InventoryTable, GetItemName(Member.Inventory(I), False, False),
+            "Show available item's options",
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
+            Positive'Image(Inventory_Container.To_Index(I)),
+            1, True);
+--         Label :=
+--           (if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+--              Create
+--                (MemberFrame & ".used" &
+--                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+--                 "-text {Yes}")
+--            else Create
+--                (MemberFrame & ".used" &
+--                 Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+--                 "-text {No}"));
+--         ProgressBarStyle :=
+--           (if Member.Inventory(I).Durability > 74 then
+--              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+--            elsif Member.Inventory(I).Durability > 24 then
+--              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
+--            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
+--         DamageBar :=
+--           Create
+--             (MemberFrame & ".durability" &
+--              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+--              "-value {" & Positive'Image(Member.Inventory(I).Durability) &
+--              "} -length 150" & To_String(ProgressBarStyle));
+--         Add(DamageBar, "The current durability level of the selected item.");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (DamageBar,
+--            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+--            " -column 1");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (Label,
+--            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+--            " -column 2");
+--         ItemLabel :=
+--           Create
+--             (MemberFrame & ".amount" &
+--              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+--              "-text {" & Positive'Image(Member.Inventory(I).Amount) & "}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (ItemLabel,
+--            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+--            " -column 3");
+--         ItemLabel :=
+--           Create
+--             (MemberFrame & ".weight" &
+--              Trim(Positive'Image(Inventory_Container.To_Index(I)), Left),
+--              "-text {" &
+--              Positive'Image
+--                (Member.Inventory(I).Amount *
+--                 Items_List(Member.Inventory(I).ProtoIndex).Weight) &
+--              " kg}");
+--         Tcl.Tk.Ada.Grid.Grid
+--           (ItemLabel,
+--            "-row" & Positive'Image(Inventory_Container.To_Index(I)) &
+--            " -column 4");
       end loop Load_Inventory_Loop;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 5");
+      UpdateTable(InventoryTable);
+      Height :=
+        Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
+      Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
+      Tcl.Tk.Ada.Grid.Grid(CloseButton);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
       Focus(CloseButton);
       if Height > 500 then
@@ -213,7 +199,6 @@ package body Ships.UI.Crew.Inventory is
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
       Tcl.Tk.Ada.Place.Place
         (MemberDialog, "-in .gameframe -relx 0.2 -rely 0.2");
-      Bind(ItemButton, "<Tab>", "{focus " & CloseButton & ";break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       return TCL_OK;
