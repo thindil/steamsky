@@ -620,20 +620,21 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
+      DialogName: constant String := ".negotiatedialog";
       Cost, ContractLength2: Integer;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
-      Scale: Ttk_Scale := Get_Widget(".negotiatedialog.daily", Interp);
+      Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
       DailyPayment: constant Natural :=
         Natural(Float'Value(cget(Scale, "-value")));
       ContractBox: constant Ttk_ComboBox :=
-        Get_Widget(".negotiatedialog.contract", Interp);
+        Get_Widget(DialogName & ".contract", Interp);
       ContractLength: constant Natural := Natural'Value(Current(ContractBox));
       TradePayment: Natural;
    begin
-      Scale.Name := New_String(".negotiatedialog.percent");
+      Scale.Name := New_String(DialogName & ".percent");
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
