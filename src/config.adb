@@ -199,39 +199,47 @@ package body Config is
       procedure Save_Boolean(Value: Boolean; Name: String) is
       begin
          if Value then
-            Put_Line(Config_File, Name & " = Yes");
+            Put_Line(File => Config_File, Item => Name & " = Yes");
          else
-            Put_Line(Config_File, Name & " = No");
+            Put_Line(File => Config_File, Item => Name & " = No");
          end if;
       end Save_Boolean;
    begin
       Create
-        (Config_File, Append_File,
-         To_String(Source => Save_Directory) & "game.cfg");
+        (File => Config_File, Mode => Append_File,
+         Name => To_String(Source => Save_Directory) & "game.cfg");
       Put_Line
-        (Config_File,
-         "PlayerName = " & To_String(Source => New_Game_Settings.Player_Name));
+        (File => Config_File,
+         Item =>
+           "PlayerName = " &
+           To_String(Source => New_Game_Settings.Player_Name));
       Put_Line
-        (Config_File, "PlayerGender = " & New_Game_Settings.Player_Gender);
+        (File => Config_File,
+         Item => "PlayerGender = " & New_Game_Settings.Player_Gender);
       Put_Line
-        (Config_File,
-         "ShipName = " & To_String(Source => New_Game_Settings.Ship_Name));
+        (File => Config_File,
+         Item =>
+           "ShipName = " & To_String(Source => New_Game_Settings.Ship_Name));
       Put_Line
-        (Config_File,
-         "PlayerFaction = " &
-         To_String(Source => New_Game_Settings.Player_Faction));
+        (File => Config_File,
+         Item =>
+           "PlayerFaction = " &
+           To_String(Source => New_Game_Settings.Player_Faction));
       Put_Line
-        (Config_File,
-         "PlayerCareer = " &
-         To_String(Source => New_Game_Settings.Player_Career));
+        (File => Config_File,
+         Item =>
+           "PlayerCareer = " &
+           To_String(Source => New_Game_Settings.Player_Career));
       Put_Line
-        (Config_File,
-         "StartingBase = " &
-         To_String(Source => New_Game_Settings.Starting_Base));
+        (File => Config_File,
+         Item =>
+           "StartingBase = " &
+           To_String(Source => New_Game_Settings.Starting_Base));
       Put_Line
-        (Config_File,
-         "EnemyDamageBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Enemy_Damage_Bonus));
+        (File => Config_File,
+         Item =>
+           "EnemyDamageBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Enemy_Damage_Bonus));
       Put_Line
         (Config_File,
          "PlayerDamageBonus =" &
