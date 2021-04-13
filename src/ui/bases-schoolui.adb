@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
+with CoreUI; use CoreUI;
 with Maps.UI; use Maps.UI;
 with Trades; use Trades;
 with Utils.UI; use Utils.UI;
@@ -60,9 +61,8 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      SchoolFrame: Ttk_Frame := Get_Widget(Paned & ".schoolframe", Interp);
+      SchoolFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
       CloseButton: constant Ttk_Button :=
@@ -81,7 +81,7 @@ package body Bases.SchoolUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
+      SchoolFrame.Name := New_String(SchoolCanvas & ".school");
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
       Load_Crew_Loop :
@@ -93,15 +93,13 @@ package body Bases.SchoolUI is
       end loop Load_Crew_Loop;
       Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      SchoolFrame.Name := New_String(Widget_Image(SchoolCanvas) & ".school");
       configure
         (SchoolCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (SchoolCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(SchoolFrame));
+        (SchoolCanvas, "window", "0 0 -anchor nw -window " & SchoolFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (SchoolCanvas,
@@ -140,19 +138,16 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
       CrewView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.schoolframe.canvas.school.crew.view", Interp);
+        Get_Widget(FrameName & ".crew.view", Interp);
       SkillsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.schoolframe.canvas.school.skills.view", Interp);
+        Get_Widget(FrameName & ".skills.view", Interp);
       Cost, MoneyIndex2, FirstIndex: Natural := 0;
       MoneyLabel: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.schoolframe.canvas.school.skills.money", Interp);
+        Get_Widget(FrameName & ".skills.money", Interp);
       TrainButton: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.schoolframe.canvas.school.skills.train", Interp);
+        Get_Widget(FrameName & ".skills.train", Interp);
    begin
       MemberIndex := Positive'Value(Selection(CrewView));
       Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
@@ -217,7 +212,7 @@ package body Bases.SchoolUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       SkillsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.schoolframe.canvas.school.skills.view", Interp);
+          (Main_Paned & ".schoolframe.canvas.school.skills.view", Interp);
       SkillIndex: Positive;
    begin
       SkillIndex := Positive'Value(Selection(SkillsView));
