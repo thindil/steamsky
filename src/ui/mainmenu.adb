@@ -117,12 +117,12 @@ package body MainMenu is
       Font.Configure
         ("InterfaceFont",
          "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
+      configure(VersionLabel, "-text {" & Game_Version & "}");
       DataError := To_Unbounded_String(Load_Game_Data);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
          return;
       end if;
-      configure(VersionLabel, "-text {" & Game_Version & "}");
       Delete(TextEntry, "0", "end");
       Insert(TextEntry, "0", To_String(New_Game_Settings.Player_Name));
       Tcl_SetVar
