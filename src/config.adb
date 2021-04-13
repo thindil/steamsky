@@ -241,41 +241,50 @@ package body Config is
            "EnemyDamageBonus =" &
            Bonus_Type'Image(New_Game_Settings.Enemy_Damage_Bonus));
       Put_Line
-        (Config_File,
-         "PlayerDamageBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Player_Damage_Bonus));
+        (File => Config_File,
+         Item =>
+           "PlayerDamageBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Player_Damage_Bonus));
       Put_Line
-        (Config_File,
-         "EnemyMeleeDamageBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Enemy_Melee_Damage_Bonus));
+        (File => Config_File,
+         Item =>
+           "EnemyMeleeDamageBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Enemy_Melee_Damage_Bonus));
       Put_Line
-        (Config_File,
-         "PlayerMeleeDamageBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Player_Melee_Damage_Bonus));
+        (File => Config_File,
+         Item =>
+           "PlayerMeleeDamageBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Player_Melee_Damage_Bonus));
       Put_Line
-        (Config_File,
-         "ExperienceBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Experience_Bonus));
+        (File => Config_File,
+         Item =>
+           "ExperienceBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Experience_Bonus));
       Put_Line
-        (Config_File,
-         "ReputationBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Reputation_Bonus));
+        (File => Config_File,
+         Item =>
+           "ReputationBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Reputation_Bonus));
       Put_Line
-        (Config_File,
-         "UpgradeCostBonus =" &
-         Bonus_Type'Image(New_Game_Settings.Upgrade_Cost_Bonus));
+        (File => Config_File,
+         Item =>
+           "UpgradeCostBonus =" &
+           Bonus_Type'Image(New_Game_Settings.Upgrade_Cost_Bonus));
       Put_Line
-        (Config_File,
-         "PricesBonus =" & Bonus_Type'Image(New_Game_Settings.Prices_Bonus));
+        (File => Config_File,
+         Item =>
+           "PricesBonus =" & Bonus_Type'Image(New_Game_Settings.Prices_Bonus));
       Put_Line
-        (Config_File,
-         "DifficultyLevel = " &
-         Difficulty_Type'Image(New_Game_Settings.Difficulty_Level));
-      Save_Boolean(Game_Settings.Auto_Rest, "AutoRest");
+        (File => Config_File,
+         Item =>
+           "DifficultyLevel = " &
+           Difficulty_Type'Image(New_Game_Settings.Difficulty_Level));
+      Save_Boolean(Value => Game_Settings.Auto_Rest, Name => "AutoRest");
       Put_Line
-        (Config_File,
-         "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
-      Save_Boolean(Game_Settings.Auto_Center, "AutoCenter");
+        (File => Config_File,
+         Item =>
+           "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
+      Save_Boolean(Value => Game_Settings.Auto_Center, Name => "AutoCenter");
       Save_Boolean(Game_Settings.Auto_Return, "AutoReturn");
       Save_Boolean(Game_Settings.Auto_Finish, "AutoFinish");
       Put_Line
