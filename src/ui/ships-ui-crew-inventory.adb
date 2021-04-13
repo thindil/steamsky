@@ -257,9 +257,9 @@ package body Ships.UI.Crew.Inventory is
    -- FUNCTION
    -- Set if item is used by a crew member or not
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -277,16 +277,12 @@ package body Ships.UI.Crew.Inventory is
    function Set_Use_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=
         Items_List
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
-      UsedLabel: constant Ttk_Label :=
-        Get_Widget
-          (".memberdialog.canvas.frame.used" & CArgv.Arg(Argv, 2), Interp);
    begin
       if not ItemIsUsed(MemberIndex, ItemIndex) then
          if ItemType = Weapon_Type then
@@ -330,12 +326,10 @@ package body Ships.UI.Crew.Inventory is
            UnboundedString_Container.No_Index then
             PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
          end if;
-         configure(UsedLabel, "-text {Yes}");
       else
          TakeOffItem(MemberIndex, ItemIndex);
-         configure(UsedLabel, "-text {No}");
       end if;
-      return TCL_OK;
+      return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Set_Use_Item_Command;
 
    -- ****o* SUCI/SUCI.Show_Move_Item_Command
