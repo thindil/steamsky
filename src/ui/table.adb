@@ -17,6 +17,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
+with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
@@ -479,7 +480,8 @@ package body Table is
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
       ImageName: constant String :=
-        (if Checked then "$I(checkbox-checked)" else "$I(checkbox-unchecked)");
+        "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
+        (if Checked then "checked" else "unchecked") & ")}";
    begin
       Count_X_Loop :
       for I in 1 .. Column - 1 loop
@@ -491,12 +493,13 @@ package body Table is
              (Table.Canvas, "image",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -image {" & ImageName & "} -tags [list row" &
+              " -anchor nw -image " & ImageName & " -tags [list row" &
               Trim(Positive'Image(Table.Row), Left) & "col" &
               Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
+      Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
         (Positive'Value(Slice(Tokens, 3)) + 10) -
         Positive'Value(Slice(Tokens, 1));
