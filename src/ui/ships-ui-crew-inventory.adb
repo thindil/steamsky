@@ -108,17 +108,17 @@ package body Ships.UI.Crew.Inventory is
             Positive'Image(Inventory_Container.To_Index(I)),
             2);
          if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
-            AddButton
-              (InventoryTable, "Yes", "The item is used by the crew member",
+            AddCheckButton
+              (InventoryTable, "The item is used by the crew member",
                "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
                Positive'Image(Inventory_Container.To_Index(I)),
-               3);
+               True, 3);
          else
-            AddButton
-              (InventoryTable, "No", "The item isn't used by the crew member",
+            AddCheckButton
+              (InventoryTable, "The item isn't used by the crew member",
                "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
                Positive'Image(Inventory_Container.To_Index(I)),
-               3);
+               False, 3);
          end if;
          AddButton
            (InventoryTable, Positive'Image(Member.Inventory(I).Amount),
