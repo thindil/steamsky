@@ -21,8 +21,10 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with GNAT.OS_Lib; use GNAT.OS_Lib;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
@@ -74,10 +76,9 @@ package body MainMenu is
       UI_Directory: constant String :=
         To_String(Data_Directory) & "ui" & Dir_Separator;
       MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
-      Icon: constant Tk_Photo :=
-        Create
-          ("logo",
-           "-file {" & UI_Directory & "images" & Dir_Separator & "icon.png}");
+      IconPath: constant String :=
+        UI_Directory & "images" & Dir_Separator & "icon.png";
+      Icon: Tk_Photo;
       TextEntry: Ttk_Entry :=
         Get_Widget(".newgamemenu.canvas.player.playername");
       ComboBox: Ttk_ComboBox :=
@@ -87,6 +88,18 @@ package body MainMenu is
         Get_Widget(".newgamemenu.canvas.difficulty.enemydamage");
       VersionLabel: constant Ttk_Label := Get_Widget(".mainmenu.version");
    begin
+      if not Exists(IconPath) then
+         Wm_Set(MainWindow, "withdraw");
+         if MessageBox
+             ("-message {Couldn't not find the game data files and the game have to stop. Are you sure that directory """ &
+              To_String(Data_Directory) &
+              """ is the proper place where the game data files exists?} -icon error -type ok") /=
+           "" then
+            Tcl_Exit(1);
+         end if;
+         return;
+      end if;
+      Icon := Create("logo", "-file {" & IconPath & "}");
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
