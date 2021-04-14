@@ -27,7 +27,6 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -84,8 +83,6 @@ package body Bases.LootUI is
         Get_Widget(LootFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(LootCanvas & ".loot.options.typelabel", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       ItemDurability, ItemType, ProtoIndex, ItemName: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
@@ -115,7 +112,7 @@ package body Bases.LootUI is
                To_Unbounded_String("Available")),
               False);
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
@@ -260,7 +257,7 @@ package body Bases.LootUI is
       if Argc = 1 then
          Current(ComboBox, "0");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (LootCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
