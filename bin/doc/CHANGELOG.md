@@ -36,6 +36,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about docking cost in abandoned bases
 - Crash on lack of permission to write to directory selected for saves
 - Showing the game version in main menu when showing error about the game data
+- Crash on set invalid data directory
 
 ## [5.9] - 2021-03-21
 
