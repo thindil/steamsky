@@ -204,6 +204,13 @@ package body Ships.UI.Crew.Inventory is
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, Width: Positive := 10;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      FreeSpaceLabel: constant Ttk_Label :=
+        Create
+          (MemberFrame & ".freespace",
+           "-text {Free inventory space:" &
+           Integer'Image
+             (FreeInventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
+           " kg} -wraplength 400");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
@@ -212,6 +219,9 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
       Autoscroll(YScroll);
+      Tcl.Tk.Ada.Grid.Grid(FreeSpaceLabel);
+      Height :=
+        Height + Positive'Value(Winfo_Get(FreeSpaceLabel, "reqheight"));
       InventoryTable :=
         CreateTable
           (Widget_Image(MemberFrame),
