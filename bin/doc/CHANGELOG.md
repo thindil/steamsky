@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
 - Pagination to lists of known bases and events, accepted missions, shipyard,
   trade, player's ship cargo, crew and modules, available recruits in bases
   and available items to loot from bases
-- Missing info about free space in cargo
+- Missing info about free space in player ship cargo
+- Missing info about free space in crew members inventory
 
 ### Changed
 - Don't create patrol and explore missions on fields with bases
