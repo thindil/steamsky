@@ -13,20 +13,28 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 
 -- ****h* CoreUI/CoreUI
 -- FUNCTION
--- Provide some constants and variables common for the game UI
+-- Provide some variables common for the game UI
 -- SOURCE
 package CoreUI is
 -- ****
 
-   -- ****d* CoreUI/CoreUI.Paned
+   -- ****v* CoreUI/CoreUI.Paned
    -- FUNCTION
    -- The main Tk paned widget of the game
    -- SOURCE
    Main_Paned: Ttk_PanedWindow;
+   -- ****
+
+   -- ****v* CoreUI/CoreUI.Close_Button
+   -- FUNCTION
+   -- The button used to close screens in the game
+   -- SOURCE
+   Close_Button: Ttk_Button;
    -- ****
 
 end CoreUI;

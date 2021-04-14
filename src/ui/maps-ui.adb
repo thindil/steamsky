@@ -842,6 +842,7 @@ package body Maps.UI is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
          Main_Paned := Get_Widget(".gameframe.paned");
+         Close_Button := Get_Widget(".gameframe.header.closebutton");
          SetTheme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
