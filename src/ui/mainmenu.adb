@@ -77,8 +77,7 @@ package body MainMenu is
       Icon: constant Tk_Photo :=
         Create
           ("logo",
-           "-file {" & UI_Directory & Dir_Separator & "images" &
-           Dir_Separator & "icon.png}");
+           "-file {" & UI_Directory & "images" & Dir_Separator & "icon.png}");
       TextEntry: Ttk_Entry :=
         Get_Widget(".newgamemenu.canvas.player.playername");
       ComboBox: Ttk_ComboBox :=
