@@ -285,31 +285,37 @@ package body Config is
          Item =>
            "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
       Save_Boolean(Value => Game_Settings.Auto_Center, Name => "AutoCenter");
-      Save_Boolean(Game_Settings.Auto_Return, "AutoReturn");
-      Save_Boolean(Game_Settings.Auto_Finish, "AutoFinish");
+      Save_Boolean(Value => Game_Settings.Auto_Return, Name => "AutoReturn");
+      Save_Boolean(Value => Game_Settings.Auto_Finish, Name => "AutoFinish");
       Put_Line
-        (Config_File, "LowFuel =" & Positive'Image(Game_Settings.Low_Fuel));
+        (File => Config_File,
+         Item => "LowFuel =" & Positive'Image(Game_Settings.Low_Fuel));
       Put_Line
-        (Config_File,
-         "LowDrinks =" & Positive'Image(Game_Settings.Low_Drinks));
+        (File => Config_File,
+         Item => "LowDrinks =" & Positive'Image(Game_Settings.Low_Drinks));
       Put_Line
-        (Config_File, "LowFood =" & Positive'Image(Game_Settings.Low_Food));
+        (File => Config_File,
+         Item => "LowFood =" & Positive'Image(Game_Settings.Low_Food));
       Put_Line
-        (Config_File,
-         "AutoMoveStop = " &
-         Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop));
+        (File => Config_File,
+         Item =>
+           "AutoMoveStop = " &
+           Auto_Move_Break'Image(Game_Settings.Auto_Move_Stop));
       Put_Line
-        (Config_File,
-         "WindowWidth =" & Positive'Image(Game_Settings.Window_Width));
+        (File => Config_File,
+         Item => "WindowWidth =" & Positive'Image(Game_Settings.Window_Width));
       Put_Line
-        (Config_File,
-         "WindowHeight =" & Positive'Image(Game_Settings.Window_Height));
+        (File => Config_File,
+         Item =>
+           "WindowHeight =" & Positive'Image(Game_Settings.Window_Height));
       Put_Line
-        (Config_File,
-         "MessagesLimit =" & Positive'Image(Game_Settings.Messages_Limit));
+        (File => Config_File,
+         Item =>
+           "MessagesLimit =" & Positive'Image(Game_Settings.Messages_Limit));
       Put_Line
-        (Config_File,
-         "SavedMessages =" & Positive'Image(Game_Settings.Saved_Messages));
+        (File => Config_File,
+         Item =>
+           "SavedMessages =" & Positive'Image(Game_Settings.Saved_Messages));
       Put_Line
         (Config_File,
          "HelpFontSize =" & Positive'Image(Game_Settings.Help_Font_Size));
