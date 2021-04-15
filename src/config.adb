@@ -317,44 +317,59 @@ package body Config is
          Item =>
            "SavedMessages =" & Positive'Image(Game_Settings.Saved_Messages));
       Put_Line
-        (Config_File,
-         "HelpFontSize =" & Positive'Image(Game_Settings.Help_Font_Size));
+        (File => Config_File,
+         Item =>
+           "HelpFontSize =" & Positive'Image(Game_Settings.Help_Font_Size));
       Put_Line
-        (Config_File,
-         "MapFontSize =" & Positive'Image(Game_Settings.Map_Font_Size));
+        (File => Config_File,
+         Item =>
+           "MapFontSize =" & Positive'Image(Game_Settings.Map_Font_Size));
       Put_Line
-        (Config_File,
-         "InterfaceFontSize =" &
-         Positive'Image(Game_Settings.Interface_Font_Size));
+        (File => Config_File,
+         Item =>
+           "InterfaceFontSize =" &
+           Positive'Image(Game_Settings.Interface_Font_Size));
       Put_Line
-        (Config_File,
-         "InterfaceTheme = " &
-         To_String(Source => Game_Settings.Interface_Theme));
+        (File => Config_File,
+         Item =>
+           "InterfaceTheme = " &
+           To_String(Source => Game_Settings.Interface_Theme));
       Put_Line
-        (Config_File,
-         "MessagesOrder = " &
-         Messages_Order_Type'Image(Game_Settings.Messages_Order));
-      Save_Boolean(Game_Settings.Auto_Ask_For_Bases, "AutoAskForBases");
-      Save_Boolean(Game_Settings.Auto_Ask_For_Events, "AutoAskForEvents");
-      Save_Boolean(Game_Settings.Show_Tooltips, "ShowTooltips");
-      Save_Boolean(Game_Settings.Show_Last_Messages, "ShowLastMessages");
+        (File => Config_File,
+         Item =>
+           "MessagesOrder = " &
+           Messages_Order_Type'Image(Game_Settings.Messages_Order));
+      Save_Boolean
+        (Value => Game_Settings.Auto_Ask_For_Bases, Name => "AutoAskForBases");
+      Save_Boolean
+        (Value => Game_Settings.Auto_Ask_For_Events,
+         Name => "AutoAskForEvents");
+      Save_Boolean
+        (Value => Game_Settings.Show_Tooltips, Name => "ShowTooltips");
+      Save_Boolean
+        (Value => Game_Settings.Show_Last_Messages,
+         Name => "ShowLastMessages");
       Put_Line
-        (Config_File,
-         "MessagesPosition =" &
-         Natural'Image(Game_Settings.Messages_Position));
-      Save_Boolean(Game_Settings.Full_Screen, "FullScreen");
+        (File => Config_File,
+         Item =>
+           "MessagesPosition =" &
+           Natural'Image(Game_Settings.Messages_Position));
+      Save_Boolean(Value => Game_Settings.Full_Screen, Name => "FullScreen");
       Put_Line
-        (Config_File,
-         "AutoCloseMessagesTime =" &
-         Positive'Image(Game_Settings.Auto_Close_Messages_Time));
+        (File => Config_File,
+         Item =>
+           "AutoCloseMessagesTime =" &
+           Positive'Image(Game_Settings.Auto_Close_Messages_Time));
       Put_Line
-        (Config_File,
-         "AutoSave = " & Auto_Save_Type'Image(Game_Settings.Auto_Save));
+        (File => Config_File,
+         Item =>
+           "AutoSave = " & Auto_Save_Type'Image(Game_Settings.Auto_Save));
       Put_Line
-        (Config_File,
-         "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
-      Save_Boolean(Game_Settings.Show_Numbers, "ShowNumbers");
-      Close(Config_File);
+        (File => Config_File,
+         Item =>
+           "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
+      Save_Boolean(Value => Game_Settings.Show_Numbers, Name => "ShowNumbers");
+      Close(File => Config_File);
    end Save_Config;
 
 end Config;
