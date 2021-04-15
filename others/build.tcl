@@ -27,9 +27,9 @@ if {$target != "x86_64-linux-gnu" && $target != "x86_64-windows"} {
 
 # Clean and compile the game
 exec gprclean -P steamsky.gpr --target=$target >@stdout
-exec gprbuild -p -P steamsky.gpr -XMode=release --target=$target >@stdout
-puts -nonewline {Copying files and directories ... }
 if {$target == "x86_64-linux-gnu"} {
+   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Unix --target=$target >@stdout
+   puts -nonewline {Copying files and directories ... }
    file mkdir usr/bin usr/share/metainfo usr/share/doc/steamsky usr/share/steamsky
    file copy share/fonts usr/share/
    file copy bin/steamsky usr/bin
@@ -41,6 +41,8 @@ if {$target == "x86_64-linux-gnu"} {
    file copy README.md usr/share/doc/steamsky
    file copy others/steamsky.appdata.xml usr/share/metainfo
 } else {
+   exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target >@stdout
+   puts -nonewline {Copying files and directories ... }
    file mkdir release
    file copy bin [file join release bin]
    file copy README.md [file join release bin doc]
