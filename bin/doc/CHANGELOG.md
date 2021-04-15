@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Don't create patrol and explore missions on fields with bases
 - Updated interface
 - Redesigned crew member's inventory screen
+- Updated README.md
 
 ### Fixed
 - Closing wait menu with Escape key returns to map
