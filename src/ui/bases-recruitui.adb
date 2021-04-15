@@ -86,8 +86,6 @@ package body Bases.RecruitUI is
       pragma Unreferenced(ClientData);
       RecruitFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       HighestLevel, HighestIndex: Positive;
@@ -111,13 +109,13 @@ package body Bases.RecruitUI is
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
       elsif Winfo_Get(RecruitFrame, "ismapped") = "1" and
         (Argc = 1 or SkyBases(BaseIndex).Recruits.Length = 0) then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ClearTable(RecruitTable);
       Load_Recruits_Loop :
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
