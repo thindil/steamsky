@@ -5,18 +5,19 @@ commander of a flying ship, as leader you will be traveling across floating
 bases, engaging in combat, trading goods etc. There is no mandatory ending
 to the game, you may freely play until your character dies. The game is
 currently in constant development, but is in a playable state. Steam Sky is
-available for Linux and Windows 64-bit platforms.
+available for Linux and Windows 64-bit platforms. If you read this file
+on Github: **please don't send pull requests here**. All will be automatically
+closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/repositories/steamsky) repository.
 
 ## Game versions
 There are currently 2 versions of the game:
-* 5.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *5.0* branch.
-* 5.x: "development" version of game, future version 6.0. This is where
+* 6.0.x: "stable" version of game. This version will receive bug fixes but
+  no new features. Source code for this version is in the *6.0* branch. **This**
+  version.
+* 6.x: "development" version of game, future version 6.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *trunk* branch. **This** version. If you
-  read this file on Github: **please don't send pull requests here**. All will
-  be automatically closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/repositories/steamsky) repository.
+  Source code for this version is in the *trunk* branch.
 
 ## Build game from sources
 
