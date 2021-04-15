@@ -13,6 +13,9 @@ project steamsky is
    type Mode_Type is ("debug", "release", "analyze");
    Mode : Mode_Type := external ("Mode", "debug");
 
+   type OS_Type is ("Windows", "Unix");
+   OS : OS_Type := external ("OS", "Unix");
+
    package Builder is
       case Mode is
          when "release" =>
@@ -56,13 +59,18 @@ project steamsky is
    end Compiler;
 
    package Linker is
+      Release_Switches := ("-Wl,--gc-sections", "-s", "-O2");
       case Mode is
          when "debug" =>
             for Default_Switches ("ada") use ("-no-pie");
          when "release" =>
-            for Default_Switches ("ada") use ("-Wl,--gc-sections",
-               "-s",
-               "-O2");
+            case OS is
+               when "Windows" =>
+                  for Default_Switches ("ada") use Release_Switches &
+                     "-mwindows";
+               when "Unix" =>
+                  for Default_Switches ("ada") use Release_Switches;
+            end case;
          when "analyze" =>
             for Default_Switches ("ada") use ("-no-pie",
                "-pg",
