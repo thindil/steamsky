@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 
 -- ****h* CoreUI/CoreUI
@@ -26,13 +27,26 @@ package CoreUI is
    -- ****v* CoreUI/CoreUI.Paned
    -- FUNCTION
    -- The main Tk paned widget of the game
+   -- HISTORY
+   -- 6.0 - Added
    -- SOURCE
    Main_Paned: Ttk_PanedWindow;
+   -- ****
+
+   -- ****v* CoreUI/Game_Header
+   -- FUNCTION
+   -- The game frame used as header (with menu button, date, etc)
+   -- HISTORY
+   -- 6.0 - Added
+   -- SOURCE
+   Game_Header: Ttk_Frame;
    -- ****
 
    -- ****v* CoreUI/CoreUI.Close_Button
    -- FUNCTION
    -- The button used to close screens in the game
+   -- HISTORY
+   -- 6.0 - Added
    -- SOURCE
    Close_Button: Ttk_Button;
    -- ****
