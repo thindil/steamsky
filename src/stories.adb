@@ -317,15 +317,16 @@ package body Stories is
             end if;
             if Action /= UPDATE then
                Stories_Container.Include(Stories_List, StoryIndex, TempRecord);
-               LogMessage("Story added: " & To_String(StoryIndex), Everything);
+               Log_Message
+                 ("Story added: " & To_String(StoryIndex), EVERYTHING);
             else
                Stories_List(StoryIndex) := TempRecord;
-               LogMessage
-                 ("Story updated: " & To_String(StoryIndex), Everything);
+               Log_Message
+                 ("Story updated: " & To_String(StoryIndex), EVERYTHING);
             end if;
          else
             Stories_Container.Exclude(Stories_List, StoryIndex);
-            LogMessage("Story removed: " & To_String(StoryIndex), Everything);
+            Log_Message("Story removed: " & To_String(StoryIndex), EVERYTHING);
          end if;
       end loop Load_Stories_Loop;
    end LoadStories;

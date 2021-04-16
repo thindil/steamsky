@@ -70,13 +70,13 @@ package body Help is
             end if;
             if Action /= UPDATE then
                Help_Container.Include(Help_List, HelpTitle, TmpHelp);
-               LogMessage("Help added: " & To_String(HelpTitle), Everything);
+               Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
             else
                Help_List(HelpTitle) := TmpHelp;
             end if;
          else
             Help_Container.Exclude(Help_List, HelpTitle);
-            LogMessage("Help removed: " & To_String(HelpTitle), Everything);
+            Log_Message("Help removed: " & To_String(HelpTitle), EVERYTHING);
          end if;
       end loop Load_Help_Data;
    end LoadHelp;

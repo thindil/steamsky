@@ -31,9 +31,9 @@ package body Log is
    LogFile: File_Type;
    -- ****
 
-   procedure StartLogging is
+   procedure Start_Logging is
    begin
-      if DebugMode = None then
+      if Debug_Mode = Default_Debug_Mode then
          return;
       end if;
       if Exists(To_String(Save_Directory) & "debug.log") then
@@ -41,44 +41,44 @@ package body Log is
       else
          Create(LogFile, Append_File, To_String(Save_Directory) & "debug.log");
       end if;
-      LogMessage
-        ("Start game in debug mode: " & Debug_Types'Image(DebugMode) & ".",
-         DebugMode);
-   end StartLogging;
+      Log_Message
+        ("Start game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
+         Debug_Mode);
+   end Start_Logging;
 
-   procedure LogMessage
-     (Message: String; MessageType: Debug_Types;
-      NewLine, TimeStamp: Boolean := True) is
+   procedure Log_Message
+     (Message: String; Message_Type: Debug_Types;
+      New_Line, Time_Stamp: Boolean := True) is
       NewMessage: Unbounded_String;
    begin
-      if DebugMode = None or
-        (MessageType /= DebugMode and DebugMode /= Everything) then
+      if Debug_Mode = Default_Debug_Mode or
+        (Message_Type /= Debug_Mode and Debug_Mode /= EVERYTHING) then
          return;
       end if;
       if not Is_Open(LogFile) then
          return;
       end if;
       NewMessage :=
-        (if TimeStamp then
+        (if Time_Stamp then
            To_Unbounded_String
              ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
          else To_Unbounded_String(Message));
-      if NewLine then
+      if New_Line then
          Put_Line(LogFile, To_String(NewMessage));
       else
          Put(LogFile, To_String(NewMessage));
       end if;
-   end LogMessage;
+   end Log_Message;
 
-   procedure EndLogging is
+   procedure End_Logging is
    begin
-      if DebugMode = None or not Is_Open(LogFile) then
+      if Debug_Mode = Default_Debug_Mode or not Is_Open(LogFile) then
          return;
       end if;
-      LogMessage
-        ("Ending game in debug mode: " & Debug_Types'Image(DebugMode) & ".",
-         DebugMode);
+      Log_Message
+        ("Ending game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
+         Debug_Mode);
       Close(LogFile);
-   end EndLogging;
+   end End_Logging;
 
 end Log;

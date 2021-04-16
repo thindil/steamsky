@@ -1118,11 +1118,11 @@ package body Game is
                                   Reader)))); --## rule line off IMPROPER_INITIALIZATION
             if Data_Type = To_Unbounded_String(Source => Local_Data_Name) or
               Local_Data_Name = "" then
-               LogMessage
+               Log_Message
                  (Message =>
                     "Loading " & To_String(Source => Data_Type) & " file: " &
                     To_String(Source => Local_File_Name),
-                  MessageType => Everything);
+                  Message_Type => EVERYTHING);
                if To_String(Source => Data_Type) = "factions" then
                   LoadFactions(Reader => Reader);
                elsif To_String(Source => Data_Type) = "goals" then
@@ -1209,9 +1209,9 @@ package body Game is
       return "";
    exception
       when An_Exception : others =>
-         LogMessage
+         Log_Message
            (Message => Exception_Message(X => An_Exception),
-            MessageType => Everything);
+            Message_Type => EVERYTHING);
          return Exception_Message(X => An_Exception);
    end Load_Game_Data;
 

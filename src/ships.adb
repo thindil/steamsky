@@ -842,14 +842,14 @@ package body Ships is
             if Action /= UPDATE then
                ProtoShips_Container.Include
                  (ProtoShips_List, ShipIndex, TempRecord);
-               LogMessage
-                 ("Ship added: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Ship added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                ProtoShips_List(ShipIndex) := TempRecord;
             end if;
          else
             ProtoShips_Container.Exclude(ProtoShips_List, ShipIndex);
-            LogMessage("Ship removed: " & To_String(ShipIndex), Everything);
+            Log_Message("Ship removed: " & To_String(ShipIndex), EVERYTHING);
          end if;
       end loop Load_Proto_Ships_Loop;
    end LoadShips;
