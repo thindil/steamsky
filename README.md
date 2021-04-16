@@ -75,8 +75,9 @@ this file is) to compile:
   for debug mode build or for release mode: `gprbuild -XMode=release`. If you
   have installed [Bob](https://www.laeran.pl/repositories/bob) you can type `bob debug`
   for build in debug mode or `bob release` to prepare release for the program.
-  If you want to only build release version of the game, use only `gprbuild -XMode=release`
-  command.
+  If you want to only build release version of the game, for Linux use only
+  `gprbuild -XMode=release` command. For Windows, you have to type
+  `gprbuild -XMode=release -XOS=Windows`.
 
 ### Build unit tests
 
