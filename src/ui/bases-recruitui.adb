@@ -296,16 +296,15 @@ package body Bases.RecruitUI is
       Width, NewWidth: Positive := 1;
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Frame: Ttk_Frame := Create(RecruitDialog & ".buttonbox");
       RecruitLabel: Ttk_Label;
       ProgressFrame: Ttk_Frame;
       TabNames: constant array(1 .. 4) of Unbounded_String :=
         (To_Unbounded_String("General"), To_Unbounded_String("Statistics"),
          To_Unbounded_String("Skills"), To_Unbounded_String("Inventory"));
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Frame := Create(RecruitDialog & ".buttonbox");
       Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
       for I in TabNames'Range loop
          TabButton :=
@@ -711,7 +710,7 @@ package body Bases.RecruitUI is
    -- Show negotation UI to the player
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -728,11 +727,11 @@ package body Bases.RecruitUI is
    function Negotiate_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
       NegotiateDialog: constant Ttk_Frame :=
         Create(".negotiatedialog", "-style Dialog.TFrame");
       CloseButton, HireButton: Ttk_Button;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      Frame: constant Ttk_Frame := Create(NegotiateDialog & ".buttonbox");
       Label: Ttk_Label;
       Scale: Ttk_Scale;
       ContractBox: constant Ttk_ComboBox :=
@@ -746,7 +745,7 @@ package body Bases.RecruitUI is
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       Cost: Positive;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Label :=
         Create
@@ -779,7 +778,6 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(ContractBox);
       Bind(ContractBox, "<<ComboboxSelected>>", "{NegotiateHire}");
       Current(ContractBox, "0");
-      Frame := Create(NegotiateDialog & ".buttonbox");
       HireButton :=
         Create
           (NegotiateDialog & ".buttonbox.hirebutton",
