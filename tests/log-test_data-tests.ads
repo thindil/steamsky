@@ -10,8 +10,8 @@ package Log.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_LogMessage_30dbb2_caf43b(Gnattest_T: in out Test);
-   --  log.ads:56:4:LogMessage:Test_LogMessage
+   procedure Test_Log_Message_6a7537_caf43b(Gnattest_T: in out Test);
+   --  log.ads:65:4:Log_Message:Test_LogMessage
 
 end Log.Test_Data.Tests;
 --  end read only

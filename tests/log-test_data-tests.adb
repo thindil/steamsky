@@ -29,9 +29,9 @@ package body Log.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_LogMessage_30dbb2_caf43b
-     (Message: String; MessageType: Debug_Types;
-      NewLine, TimeStamp: Boolean := True) is
+   procedure Wrap_Test_Log_Message_6a7537_caf43b
+     (Message: String; Message_Type: Debug_Types;
+      New_Line, Time_Stamp: Boolean := True) is
    begin
       begin
          pragma Assert(Message'Length > 0);
@@ -42,8 +42,8 @@ package body Log.Test_Data.Tests is
               (False,
                "req_sloc(log.ads:0):Test_LogMessage test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Log.LogMessage
-        (Message, MessageType, NewLine, TimeStamp);
+      GNATtest_Generated.GNATtest_Standard.Log.Log_Message
+        (Message, Message_Type, New_Line, Time_Stamp);
       begin
          pragma Assert(True);
          null;
@@ -53,33 +53,33 @@ package body Log.Test_Data.Tests is
               (False,
                "ens_sloc(log.ads:0:):Test_LogMessage test commitment violated");
       end;
-   end Wrap_Test_LogMessage_30dbb2_caf43b;
+   end Wrap_Test_Log_Message_6a7537_caf43b;
 --  end read only
 
 --  begin read only
-   procedure Test_LogMessage_test_logmessage(Gnattest_T: in out Test);
-   procedure Test_LogMessage_30dbb2_caf43b(Gnattest_T: in out Test) renames
-     Test_LogMessage_test_logmessage;
---  id:2.2/30dbb2bd59a60b97/LogMessage/1/0/test_logmessage/
-   procedure Test_LogMessage_test_logmessage(Gnattest_T: in out Test) is
-      procedure LogMessage
-        (Message: String; MessageType: Debug_Types;
-         NewLine, TimeStamp: Boolean := True) renames
-        Wrap_Test_LogMessage_30dbb2_caf43b;
+   procedure Test_Log_Message_test_logmessage(Gnattest_T: in out Test);
+   procedure Test_Log_Message_6a7537_caf43b(Gnattest_T: in out Test) renames
+     Test_Log_Message_test_logmessage;
+--  id:2.2/6a7537630b1363a5/Log_Message/1/0/test_logmessage/
+   procedure Test_Log_Message_test_logmessage(Gnattest_T: in out Test) is
+      procedure Log_Message
+        (Message: String; Message_Type: Debug_Types;
+         New_Line, Time_Stamp: Boolean := True) renames
+        Wrap_Test_Log_Message_6a7537_caf43b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      DebugMode := Everything;
-      StartLogging;
-      LogMessage("Test message", Everything);
-      EndLogging;
+      Debug_Mode := EVERYTHING;
+      Start_Logging;
+      Log_Message("Test message", EVERYTHING);
+      End_Logging;
       Assert(True, "This test can only crash.");
 
 --  begin read only
-   end Test_LogMessage_test_logmessage;
+   end Test_Log_Message_test_logmessage;
 --  end read only
 
 --  begin read only
