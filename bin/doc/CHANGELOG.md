@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file.
 - Showing the game version in main menu when showing error about the game data
 - Crash on set invalid data directory
 - Show console window on Windows
+- Asking friendly ships for bases and events
 
 ## [5.9] - 2021-03-21
 
