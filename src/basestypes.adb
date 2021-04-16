@@ -182,19 +182,19 @@ package body BasesTypes is
             if Action /= UPDATE then
                BasesTypes_Container.Include
                  (BasesTypes_List, BaseIndex, TempRecord);
-               LogMessage
+               Log_Message
                  ("Base type added: " & To_String(TempRecord.Name),
-                  Everything);
+                  EVERYTHING);
             else
                BasesTypes_List(BaseIndex) := TempRecord;
-               LogMessage
+               Log_Message
                  ("Base type updated: " & To_String(TempRecord.Name),
-                  Everything);
+                  EVERYTHING);
             end if;
          else
             BasesTypes_Container.Exclude(BasesTypes_List, BaseIndex);
-            LogMessage
-              ("Base type removed: " & To_String(BaseIndex), Everything);
+            Log_Message
+              ("Base type removed: " & To_String(BaseIndex), EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
    end LoadBasesTypes;

@@ -264,9 +264,9 @@ package body Combat is
                   OtherMessage);
             else
                if RealSpeed(PlayerShip) < RealSpeed(Enemy.Ship) then
-                  LogMessage
+                  Log_Message
                     ("You were attacked by " & To_String(Enemy.Ship.Name),
-                     Log.Combat);
+                     Log.COMBAT);
                   AddMessage
                     (To_String(Enemy.Ship.Name) & " intercepted you.",
                      CombatMessage);
@@ -280,8 +280,8 @@ package body Combat is
          return False;
       end if;
       TurnNumber := 0;
-      LogMessage
-        ("Started combat with " & To_String(Enemy.Ship.Name), Log.Combat);
+      Log_Message
+        ("Started combat with " & To_String(Enemy.Ship.Name), Log.COMBAT);
       return True;
    end StartCombat;
 
@@ -347,9 +347,9 @@ package body Combat is
          end FindHitWeapon;
       begin
          if Ship = PlayerShip then
-            LogMessage("Player's round.", Log.Combat);
+            Log_Message("Player's round.", Log.COMBAT);
          else
-            LogMessage("Enemy's round.", Log.Combat);
+            Log_Message("Enemy's round.", Log.COMBAT);
          end if;
          Attack_Loop :
          for K in Ship.Modules.Iterate loop
@@ -367,9 +367,9 @@ package body Combat is
             end if;
             if Ship.Modules(K).MType in GUN | HARPOON_GUN then
                GunnerIndex := Ship.Modules(K).Owner(1);
-               LogMessage
+               Log_Message
                  ("Gunner index:" & Natural'Image(GunnerIndex) & ".",
-                  Log.Combat);
+                  Log.COMBAT);
                if Ship = PlayerShip then
                   Shoots := 0;
                   if GunnerIndex > 0 then
@@ -383,10 +383,10 @@ package body Combat is
                                  Shoots :=
                                    Natural(Float'Ceiling(Float(Shoots) / 2.0));
                               end if;
-                              LogMessage
+                              Log_Message
                                 ("Player Shoots (no cooldown):" &
                                  Natural'Image(Shoots),
-                                 Log.Combat);
+                                 Log.COMBAT);
                            elsif Gun(3) < 0 then
                               Shoots := 0;
                               Gun(3) := Gun(3) + 1;
@@ -402,16 +402,16 @@ package body Combat is
                                         .Speed -
                                       1);
                               end if;
-                              LogMessage
+                              Log_Message
                                 ("Player Shoots (after cooldown):" &
                                  Natural'Image(Shoots),
-                                 Log.Combat);
+                                 Log.COMBAT);
                            end if;
                            exit Count_Player_Shoots_Loop;
                         end if;
                      end loop Count_Player_Shoots_Loop;
-                     LogMessage
-                       ("Shoots test3:" & Natural'Image(Shoots), Log.Combat);
+                     Log_Message
+                       ("Shoots test3:" & Natural'Image(Shoots), Log.COMBAT);
                      if Ship.Crew(GunnerIndex).Order /= Gunner then
                         GunnerOrder := 1;
                      end if;
@@ -537,7 +537,7 @@ package body Combat is
                end if;
                Ship.Modules(K).CoolingDown := not Ship.Modules(K).CoolingDown;
             end if;
-            LogMessage("Shoots:" & Integer'Image(Shoots), Log.Combat);
+            Log_Message("Shoots:" & Integer'Image(Shoots), Log.COMBAT);
             if Shoots > 0 then
                HitChance :=
                  (if Ship = PlayerShip then
@@ -551,16 +551,16 @@ package body Combat is
                if HitChance < -48 then
                   HitChance := -48;
                end if;
-               LogMessage
+               Log_Message
                  ("Player Accuracy:" & Integer'Image(CurrentAccuracyBonus) &
                   " Player Evasion:" & Integer'Image(EvadeBonus),
-                  Log.Combat);
-               LogMessage
+                  Log.COMBAT);
+               Log_Message
                  ("Enemy Evasion:" & Integer'Image(Enemy.Evasion) &
                   " Enemy Accuracy:" & Integer'Image(Enemy.Accuracy),
-                  Log.Combat);
-               LogMessage
-                 ("Chance to hit:" & Integer'Image(HitChance), Log.Combat);
+                  Log.COMBAT);
+               Log_Message
+                 ("Chance to hit:" & Integer'Image(HitChance), Log.COMBAT);
                Shooting_Loop :
                for I in 1 .. Shoots loop
                   if Ship = PlayerShip then
@@ -1402,14 +1402,14 @@ package body Combat is
       elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
          AccuracyBonus := AccuracyBonus - 10;
          EvadeBonus := EvadeBonus + 10;
-         LogMessage("Distance: long", Log.Combat);
+         Log_Message("Distance: long", Log.COMBAT);
       elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
          AccuracyBonus := AccuracyBonus + 10;
-         LogMessage("Distance: medium", Log.Combat);
+         Log_Message("Distance: medium", Log.COMBAT);
       elsif Enemy.Distance < 1000 then
          AccuracyBonus := AccuracyBonus + 20;
          EvadeBonus := EvadeBonus - 10;
-         LogMessage("Distance: short or close", Log.Combat);
+         Log_Message("Distance: short or close", Log.COMBAT);
       end if;
       Attack(PlayerShip, Enemy.Ship); -- Player attack
       if not EndCombat then

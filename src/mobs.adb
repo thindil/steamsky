@@ -345,14 +345,14 @@ package body Mobs is
             if Action /= UPDATE then
                ProtoMobs_Container.Include
                  (ProtoMobs_List, MobIndex, TempRecord);
-               LogMessage("Mob added: " & To_String(MobIndex), Everything);
+               Log_Message("Mob added: " & To_String(MobIndex), EVERYTHING);
             else
                ProtoMobs_List(MobIndex) := TempRecord;
-               LogMessage("Mob updated: " & To_String(MobIndex), Everything);
+               Log_Message("Mob updated: " & To_String(MobIndex), EVERYTHING);
             end if;
          else
             ProtoMobs_Container.Exclude(ProtoMobs_List, MobIndex);
-            LogMessage("Mob removed: " & To_String(MobIndex), Everything);
+            Log_Message("Mob removed: " & To_String(MobIndex), EVERYTHING);
          end if;
       end loop Load_Mobs_Loop;
    end LoadMobs;

@@ -76,7 +76,7 @@ begin
                    (Item =>
                       Argument(Number => I)(9 .. Argument(Number => I)'Last)) =
                  Debug_Types'Image(J) then
-                  DebugMode := J;
+                  Debug_Mode := J;
                   exit Set_Debug_Mode_Loop;
                end if;
             end loop Set_Debug_Mode_Loop;
@@ -133,7 +133,7 @@ begin
    Create_Path(New_Directory => To_String(Source => Mods_Directory));
    Create_Path(New_Directory => To_String(Source => Themes_Directory));
 
-   StartLogging;
+   Start_Logging;
 
    Load_Config;
    LoadHallOfFame;
@@ -192,7 +192,7 @@ begin
    --------------------------------------------------------------------------
    Tcl.Tk.Tk_MainLoop;
 
-   EndLogging;
+   End_Logging;
 exception
    when An_Exception : others =>
       Save_Exception(An_Exception => An_Exception);

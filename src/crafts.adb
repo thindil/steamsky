@@ -172,21 +172,21 @@ package body Crafts is
             if Action /= UPDATE then
                Recipes_Container.Include
                  (Recipes_List, RecipeIndex, TempRecord);
-               LogMessage
+               Log_Message
                  ("Recipe added: " &
                   To_String(Items_List(TempRecord.ResultIndex).Name),
-                  Everything);
+                  EVERYTHING);
             else
                Recipes_List(RecipeIndex) := TempRecord;
-               LogMessage
+               Log_Message
                  ("Recipe updated: " &
                   To_String(Items_List(TempRecord.ResultIndex).Name),
-                  Everything);
+                  EVERYTHING);
             end if;
          else
             Recipes_Container.Exclude(Recipes_List, RecipeIndex);
-            LogMessage
-              ("Recipe removed: " & To_String(RecipeIndex), Everything);
+            Log_Message
+              ("Recipe removed: " & To_String(RecipeIndex), EVERYTHING);
          end if;
       end loop Load_Recipes_Loop;
    end LoadRecipes;

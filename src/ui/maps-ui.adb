@@ -871,7 +871,7 @@ package body Maps.UI is
          Bind(MapView, "<Button-4>", "{ZoomMap raise}");
          Bind(MapView, "<Button-5>", "{ZoomMap lower}");
          SetKeys;
-         if Log.DebugMode = Log.Menu then
+         if Log.Debug_Mode = Log.MENU then
             ShowDebugUI;
          end if;
       else

@@ -162,17 +162,17 @@ package body ShipModules is
             if Action /= UPDATE then
                BaseModules_Container.Include
                  (Modules_List, ModuleIndex, TempRecord);
-               LogMessage
-                 ("Module added: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Module added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                Modules_List(ModuleIndex) := TempRecord;
-               LogMessage
-                 ("Module updated: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Module updated: " & To_String(TempRecord.Name), EVERYTHING);
             end if;
          else
             BaseModules_Container.Exclude(Modules_List, ModuleIndex);
-            LogMessage
-              ("Module removed: " & To_String(ModuleIndex), Everything);
+            Log_Message
+              ("Module removed: " & To_String(ModuleIndex), EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
    end LoadShipModules;

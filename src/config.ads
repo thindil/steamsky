@@ -94,14 +94,16 @@ package Config is
    -- Default settings for the new game
    -- SOURCE
    Default_New_Game_Settings: constant New_Game_Record :=
-     (Player_Name => To_Unbounded_String(Source => "Laeran"), Player_Gender => 'M',
+     (Player_Name => To_Unbounded_String(Source => "Laeran"),
+      Player_Gender => 'M',
       Ship_Name => To_Unbounded_String(Source => "Anaria"),
       Player_Faction => To_Unbounded_String(Source => "POLEIS"),
       Player_Career => To_Unbounded_String(Source => "general"),
-      Starting_Base => To_Unbounded_String(Source => "Any"), Enemy_Damage_Bonus => 1.0,
-      Player_Damage_Bonus => 1.0, Enemy_Melee_Damage_Bonus => 1.0,
-      Player_Melee_Damage_Bonus => 1.0, Experience_Bonus => 1.0,
-      Reputation_Bonus => 1.0, Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
+      Starting_Base => To_Unbounded_String(Source => "Any"),
+      Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
+      Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
+      Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
+      Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
       Difficulty_Level => Default_Difficulty_Type);
    -- ****
 

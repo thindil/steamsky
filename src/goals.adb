@@ -98,17 +98,17 @@ package body Goals is
             end if;
             if Action /= UPDATE then
                Goals_List.Append(New_Item => TempRecord);
-               LogMessage
-                 ("Goal added: " & To_String(TempRecord.Index), Everything);
+               Log_Message
+                 ("Goal added: " & To_String(TempRecord.Index), EVERYTHING);
             else
                Goals_List(GoalIndex) := TempRecord;
-               LogMessage
-                 ("Goal updated: " & To_String(TempRecord.Index), Everything);
+               Log_Message
+                 ("Goal updated: " & To_String(TempRecord.Index), EVERYTHING);
             end if;
          else
             Goals_List.Delete(Index => GoalIndex);
-            LogMessage
-              ("Goal removed: " & To_String(TempRecord.Index), Everything);
+            Log_Message
+              ("Goal removed: " & To_String(TempRecord.Index), EVERYTHING);
          end if;
       end loop Load_Goals_Loop;
    end LoadGoals;

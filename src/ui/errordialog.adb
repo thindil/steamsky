@@ -91,7 +91,7 @@ package body ErrorDialog is
          New_Item => "-------------------------------------------------");
       Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
       Close(File => Error_File);
-      EndLogging;
+      End_Logging;
       Show_Error_Dialog_Block :
       declare
          use type Interfaces.C.int;

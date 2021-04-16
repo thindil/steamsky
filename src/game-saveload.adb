@@ -109,8 +109,8 @@ package body Game.SaveLoad is
           New_Game_Settings.Upgrade_Cost_Bonus),
          (To_Unbounded_String("pricesbonus"), New_Game_Settings.Prices_Bonus));
    begin
-      LogMessage
-        ("Start saving game in file " & To_String(SaveName) & ".", Everything);
+      Log_Message
+        ("Start saving game in file " & To_String(SaveName) & ".", EVERYTHING);
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
@@ -119,7 +119,7 @@ package body Game.SaveLoad is
         (MainNode, "version",
          Trim(Positive'Image(SaveVersion), Ada.Strings.Left));
       -- Save game difficulty settings
-      LogMessage("Saving game difficulty settings...", Everything, False);
+      Log_Message("Saving game difficulty settings...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "difficulty");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Save_Difficulty_Loop :
@@ -129,9 +129,9 @@ package body Game.SaveLoad is
            (CategoryNode, To_String(Difficulty.Name),
             To_String(Trim(RawValue, Ada.Strings.Left)));
       end loop Save_Difficulty_Loop;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save game date
-      LogMessage("Saving game time...", Everything, False);
+      Log_Message("Saving game time...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "gamedate");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       SaveNumber(Game_Date.Year, "year");
@@ -139,9 +139,9 @@ package body Game.SaveLoad is
       SaveNumber(Game_Date.Day, "day");
       SaveNumber(Game_Date.Hour, "hour");
       SaveNumber(Game_Date.Minutes, "minutes");
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save map
-      LogMessage("Saving map...", Everything, False);
+      Log_Message("Saving map...", EVERYTHING, False);
       declare
          FieldNode: DOM.Core.Element;
       begin
@@ -158,17 +158,17 @@ package body Game.SaveLoad is
             end loop Save_Map_Y_Loop;
          end loop Save_Map_X_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save bases
-      LogMessage("Saving bases...", Everything, False);
+      Log_Message("Saving bases...", EVERYTHING, False);
       SaveBases(SaveData, MainNode);
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save player ship
-      LogMessage("Saving player ship...", Everything, False);
+      Log_Message("Saving player ship...", EVERYTHING, False);
       SavePlayerShip(SaveData, MainNode);
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save known recipes
-      LogMessage("Saving known recipes...", Everything, False);
+      Log_Message("Saving known recipes...", EVERYTHING, False);
       declare
          RecipeNode: DOM.Core.Element;
       begin
@@ -179,9 +179,9 @@ package body Game.SaveLoad is
             Set_Attribute(RecipeNode, "index", To_String(Recipe));
          end loop Save_Known_Recipes_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save messages
-      LogMessage("Saving messages...", Everything, False);
+      Log_Message("Saving messages...", EVERYTHING, False);
       declare
          Messages: Natural := Game_Settings.Saved_Messages;
          StartLoop: Positive;
@@ -209,9 +209,9 @@ package body Game.SaveLoad is
             end loop Save_Messages_Loop;
          end if;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save events
-      LogMessage("Saving events...", Everything, False);
+      Log_Message("Saving events...", EVERYTHING, False);
       declare
          EventNode: DOM.Core.Element;
       begin
@@ -236,9 +236,9 @@ package body Game.SaveLoad is
               (EventNode, "data", To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop Save_Events_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save game statistics
-      LogMessage("Saving game statistics...", Everything, False);
+      Log_Message("Saving game statistics...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "statistics");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       SaveStatistics(GameStats.DestroyedShips, "destroyedships");
@@ -251,9 +251,9 @@ package body Game.SaveLoad is
       SaveStatistics(GameStats.FinishedGoals, "finishedgoals");
       SaveStatistics(GameStats.KilledMobs, "killedmobs");
       SaveNumber(GameStats.Points, "points");
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save current goal
-      LogMessage("Saving current goal...", Everything, False);
+      Log_Message("Saving current goal...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "currentgoal");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "index", To_String(CurrentGoal.Index));
@@ -261,10 +261,10 @@ package body Game.SaveLoad is
       SaveNumber(CurrentGoal.Amount, "amount");
       Set_Attribute
         (CategoryNode, "target", To_String(CurrentGoal.TargetIndex));
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Save current story
       if CurrentStory.Index /= Null_Unbounded_String then
-         LogMessage("Saving current story...", Everything, False);
+         Log_Message("Saving current story...", EVERYTHING, False);
          CategoryNode := Create_Element(SaveData, "currentstory");
          CategoryNode := Append_Child(MainNode, CategoryNode);
          Set_Attribute(CategoryNode, "index", To_String(CurrentStory.Index));
@@ -294,14 +294,14 @@ package body Game.SaveLoad is
          end if;
          SaveNumber
            (StepConditionType'Pos(CurrentStory.FinishedStep), "finishedstep");
-         LogMessage("done.", Everything, True, False);
+         Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Save finished stories data
       declare
          StepNode: DOM.Core.Element;
          StepText: Text;
       begin
-         LogMessage("Saving finished stories...", Everything, False);
+         Log_Message("Saving finished stories...", EVERYTHING, False);
          Save_Finished_Stories_Loop :
          for FinishedStory of FinishedStories loop
             CategoryNode := Create_Element(SaveData, "finishedstory");
@@ -317,7 +317,7 @@ package body Game.SaveLoad is
                StepText := Append_Child(StepNode, StepText);
             end loop Save_Story_Steps_Loop;
          end loop Save_Finished_Stories_Loop;
-         LogMessage("done.", Everything, True, False);
+         Log_Message("done.", EVERYTHING, True, False);
       end;
       -- Save missions accepted by player
       Save_Missions_Loop :
@@ -356,17 +356,17 @@ package body Game.SaveLoad is
          end if;
       end loop Save_Missions_Loop;
       -- Save player career
-      LogMessage("Saving player career...", Everything, False);
+      Log_Message("Saving player career...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "playercareer");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "index", To_String(Player_Career));
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write
         (Stream => Stream(SaveFile), N => SaveData,
          Pretty_Print => PrettyPrint);
       Close(SaveFile);
-      LogMessage("Finished saving game.", Everything);
+      Log_Message("Finished saving game.", EVERYTHING);
    end SaveGame;
 
    procedure LoadGame is
@@ -375,9 +375,9 @@ package body Game.SaveLoad is
       NodesList, ChildNodes: Node_List;
       SavedNode: Node;
    begin
-      LogMessage
+      Log_Message
         ("Start loading game from file " & To_String(SaveName) & ".",
-         Everything);
+         EVERYTHING);
       Open(To_String(SaveName), SaveFile);
       Parse(Reader, SaveFile);
       Close(SaveFile);
@@ -397,7 +397,7 @@ package body Game.SaveLoad is
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "difficulty");
       if Length(NodesList) > 0 then
-         LogMessage("Loading game difficulty settings...", Everything, False);
+         Log_Message("Loading game difficulty settings...", EVERYTHING, False);
          SavedNode := Item(NodesList, 0);
          New_Game_Settings.Enemy_Damage_Bonus :=
            Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
@@ -418,10 +418,10 @@ package body Game.SaveLoad is
             New_Game_Settings.Prices_Bonus :=
               Bonus_Type'Value(Get_Attribute(SavedNode, "pricesbonus"));
          end if;
-         LogMessage("done.", Everything, True, False);
+         Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Load game date
-      LogMessage("Loading game time...", Everything, False);
+      Log_Message("Loading game time...", EVERYTHING, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "gamedate");
       SavedNode := Item(NodesList, 0);
@@ -430,9 +430,9 @@ package body Game.SaveLoad is
       Game_Date.Day := Natural'Value(Get_Attribute(SavedNode, "day"));
       Game_Date.Hour := Natural'Value(Get_Attribute(SavedNode, "hour"));
       Game_Date.Minutes := Natural'Value(Get_Attribute(SavedNode, "minutes"));
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load sky map
-      LogMessage("Loading map...", Everything, False);
+      Log_Message("Loading map...", EVERYTHING, False);
       SkyMap :=
         (others =>
            (others =>
@@ -451,17 +451,17 @@ package body Game.SaveLoad is
             SkyMap(X, Y).Visited := True;
          end loop Load_Map_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load sky bases
-      LogMessage("Loading bases...", Everything, False);
+      Log_Message("Loading bases...", EVERYTHING, False);
       LoadBases(SaveData);
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load player ship
-      LogMessage("Loading player ship...", Everything, False);
+      Log_Message("Loading player ship...", EVERYTHING, False);
       LoadPlayerShip(SaveData);
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load known recipes
-      LogMessage("Loading known recipes...", Everything, False);
+      Log_Message("Loading known recipes...", EVERYTHING, False);
       Known_Recipes.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "recipe");
@@ -471,9 +471,9 @@ package body Game.SaveLoad is
            (New_Item =>
               To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
       end loop Load_Known_Recipes_Loop;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load messages
-      LogMessage("Loading messages...", Everything, False);
+      Log_Message("Loading messages...", EVERYTHING, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "message");
       ClearMessages;
@@ -495,9 +495,9 @@ package body Game.SaveLoad is
             RestoreMessage(Text, MType, Color);
          end loop Load_Messages_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load events
-      LogMessage("Loading events...", Everything, False);
+      Log_Message("Loading events...", EVERYTHING, False);
       Events_List.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "event");
@@ -565,9 +565,9 @@ package body Game.SaveLoad is
               I + 1;
          end loop Load_Events_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load game statistics
-      LogMessage("Loading game statistics...", Everything, False);
+      Log_Message("Loading game statistics...", EVERYTHING, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "statistics");
       declare
@@ -614,9 +614,9 @@ package body Game.SaveLoad is
             end if;
          end loop Load_Statistics_Loop;
       end;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load current goal
-      LogMessage("Loading current goal...", Everything, False);
+      Log_Message("Loading current goal...", EVERYTHING, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "currentgoal");
       CurrentGoal.Index :=
@@ -628,12 +628,12 @@ package body Game.SaveLoad is
         Integer'Value(Get_Attribute(Item(NodesList, 0), "amount"));
       CurrentGoal.TargetIndex :=
         To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "target"));
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       -- Load current story
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "currentstory");
       if Length(NodesList) > 0 then
-         LogMessage("Loading current story...", Everything, False);
+         Log_Message("Loading current story...", EVERYTHING, False);
          SavedNode := Item(NodesList, 0);
          CurrentStory.Index :=
            To_Unbounded_String(Get_Attribute(SavedNode, "index"));
@@ -665,7 +665,7 @@ package body Game.SaveLoad is
          CurrentStory.FinishedStep :=
            StepConditionType'Val
              (Integer'Value(Get_Attribute(SavedNode, "finishedstep")));
-         LogMessage("done.", Everything, True, False);
+         Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Load finished stories data
       NodesList :=
@@ -675,7 +675,7 @@ package body Game.SaveLoad is
          TempTexts: UnboundedString_Container.Vector;
          StoryIndex: Unbounded_String;
       begin
-         LogMessage("Loading finished stories...", Everything, False);
+         Log_Message("Loading finished stories...", EVERYTHING, False);
          Load_Finished_Stories_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
@@ -697,7 +697,7 @@ package body Game.SaveLoad is
                  (Index => StoryIndex, StepsAmount => StepsAmount,
                   StepsTexts => TempTexts));
          end loop Load_Finished_Stories_Loop;
-         LogMessage("done.", Everything, True, False);
+         Log_Message("done.", EVERYTHING, True, False);
       end;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
@@ -711,7 +711,7 @@ package body Game.SaveLoad is
          Index: Unbounded_String;
          Multiplier: RewardMultiplier;
       begin
-         LogMessage("Loading accepted missions...", Everything, False);
+         Log_Message("Loading accepted missions...", EVERYTHING, False);
          Load_Missions_Loop :
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
@@ -793,7 +793,7 @@ package body Game.SaveLoad is
          end loop Load_Missions_Loop;
       end;
       -- Load player career
-      LogMessage("Loading player career...", Everything, False);
+      Log_Message("Loading player career...", EVERYTHING, False);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playercareer");
       if Length(NodesList) > 0 then
@@ -803,9 +803,9 @@ package body Game.SaveLoad is
       else
          Player_Career := Careers_Container.Key(Careers_List.First);
       end if;
-      LogMessage("done.", Everything, True, False);
+      Log_Message("done.", EVERYTHING, True, False);
       Free(Reader);
-      LogMessage("Finished loading game.", Everything);
+      Log_Message("Finished loading game.", EVERYTHING);
    exception
       when An_Exception : others =>
          Free(Reader);

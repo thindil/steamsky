@@ -104,12 +104,12 @@ package body Careers is
             if Action /= UPDATE then
                Careers_Container.Include
                  (Careers_List, CareerIndex, TempRecord);
-               LogMessage
-                 ("Career added: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Career added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                Careers_List(CareerIndex) := TempRecord;
-               LogMessage
-                 ("Career updated: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Career updated: " & To_String(TempRecord.Name), EVERYTHING);
             end if;
          else
             Careers_Container.Exclude(Careers_List, CareerIndex);
@@ -118,8 +118,8 @@ package body Careers is
                Factions.Careers_Container.Exclude
                  (Faction.Careers, CareerIndex);
             end loop Remove_Careers_Loop;
-            LogMessage
-              ("Career removed: " & To_String(CareerIndex), Everything);
+            Log_Message
+              ("Career removed: " & To_String(CareerIndex), EVERYTHING);
          end if;
       end loop Load_Careers_Loop;
    end LoadCareers;

@@ -138,16 +138,16 @@ package body Items is
             end if;
             if Action /= UPDATE then
                Objects_Container.Include(Items_List, ItemIndex, TempRecord);
-               LogMessage
-                 ("Item added: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Item added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                Items_List(ItemIndex) := TempRecord;
-               LogMessage
-                 ("Item updated: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Item updated: " & To_String(TempRecord.Name), EVERYTHING);
             end if;
          else
             Objects_Container.Exclude(Items_List, ItemIndex);
-            LogMessage("Item removed: " & To_String(ItemIndex), Everything);
+            Log_Message("Item removed: " & To_String(ItemIndex), EVERYTHING);
          end if;
       end loop Load_Items_Loop;
       Set_Items_Lists_Loop :

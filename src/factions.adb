@@ -339,18 +339,18 @@ package body Factions is
                end if;
                Factions_Container.Include
                  (Factions_List, FactionIndex, TempRecord);
-               LogMessage
-                 ("Faction added: " & To_String(TempRecord.Name), Everything);
+               Log_Message
+                 ("Faction added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                Factions_List(FactionIndex) := TempRecord;
-               LogMessage
+               Log_Message
                  ("Faction updated: " & To_String(TempRecord.Name),
-                  Everything);
+                  EVERYTHING);
             end if;
          else
             Factions_Container.Exclude(Factions_List, FactionIndex);
-            LogMessage
-              ("Faction removed: " & To_String(FactionIndex), Everything);
+            Log_Message
+              ("Faction removed: " & To_String(FactionIndex), EVERYTHING);
          end if;
       end loop Load_Factions_Loop;
    end LoadFactions;
