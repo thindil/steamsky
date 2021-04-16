@@ -422,10 +422,10 @@ package body OrdersMenu is
                      "}");
                   Add
                     (OrdersMenu, "command",
-                     "-label {Ask for events} -underline 8");
+                     "-label {Ask for events} -underline 8 -command AskForEvents");
                   Add
                     (OrdersMenu, "command",
-                     "-label {Ask for bases} -underline 8");
+                     "-label {Ask for bases} -underline 8 -command AskForBases");
                end if;
                Add
                  (OrdersMenu, "command",
@@ -452,11 +452,11 @@ package body OrdersMenu is
                         "}");
                      Add
                        (OrdersMenu, "command",
-                        "-label {Ask for bases} -underline 8");
+                        "-label {Ask for bases} -underline 8 -command AskForBases");
                   end if;
                   Add
                     (OrdersMenu, "command",
-                     "-label {Ask for events} -underline 8");
+                     "-label {Ask for events} -underline 8 -command AskForEvents");
                end if;
                Add
                  (OrdersMenu, "command",
