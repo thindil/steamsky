@@ -26,45 +26,54 @@ package Log is
    -- FUNCTION
    -- Types of debug mode, which messages log to file
    -- SOURCE
-   type Debug_Types is (None, Everything, Combat, Menu);
+   type Debug_Types is (NONE, EVERYTHING, COMBAT, MENU);
    -- ****
 
-   -- ****v* Log/Log.DebugMode
+   -- ****d* Log/Log.Default_Debug_Mode
+   -- FUNCTION
+   -- Default type of debug (disabled)
+   -- HISTORY
+   -- 6.0 - Added
+   -- SOURCE
+   Default_Debug_Mode: constant Debug_Types := NONE;
+   -- ****
+
+   -- ****v* Log/Log.Debug_Mode
    -- FUNCTION
    -- Did game is run in debug mode
    -- SOURCE
-   DebugMode: Debug_Types := None;
+   Debug_Mode: Debug_Types := Default_Debug_Mode;
    -- ****
 
-   -- ****f* Log/Log.StartLogging
+   -- ****f* Log/Log.Start_Logging
    -- FUNCTION
    -- Open/create debug.log file
    -- SOURCE
-   procedure StartLogging;
+   procedure Start_Logging;
    -- ****
 
-   -- ****f* Log/Log.LogMessage
+   -- ****f* Log/Log.Log_Message
    -- FUNCTION
    -- Log message (if proper type) to file in debug mode
    -- PARAMETERS
-   -- Message     - Message to write to debug log file
-   -- MessageType - Type of message to write to debug log file
-   -- NewLine     - If true, add new line character after message. Default is
-   --               true
-   -- TimeStamp   - If true, add timestamp before message. Default is true
+   -- Message      - Message to write to debug log file
+   -- Message_Type - Type of message to write to debug log file
+   -- New_Line     - If true, add new line character after message. Default is
+   --                true
+   -- Time_Stamp   - If true, add timestamp before message. Default is true
    -- SOURCE
-   procedure LogMessage
-     (Message: String; MessageType: Debug_Types;
-      NewLine, TimeStamp: Boolean := True) with
+   procedure Log_Message
+     (Message: String; Message_Type: Debug_Types;
+      New_Line, Time_Stamp: Boolean := True) with
       Pre => Message'Length > 0,
       Test_Case => (Name => "Test_LogMessage", Mode => Nominal);
       -- ****
 
-      -- ****f* Log/Log.EndLogging
+      -- ****f* Log/Log.End_Logging
       -- FUNCTION
       -- Close debug.file
       -- SOURCE
-   procedure EndLogging;
+   procedure End_Logging;
    -- ****
 
 end Log;
