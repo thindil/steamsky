@@ -40,6 +40,7 @@ All notable changes to this project will be documented in this file.
 - Crash on set invalid data directory
 - Show console window on Windows
 - Asking friendly ships for bases and events
+- Lack of name of friendly ship in message when asking it for bases or events
 
 ## [5.9] - 2021-03-21
 
