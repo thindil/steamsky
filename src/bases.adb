@@ -368,9 +368,7 @@ package body Bases is
             elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 5 else 10);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
-            To_String
-              (GenerateShipName
-                 (Factions_List(ProtoShips_List(ShipIndex).Owner).Name)) &
+            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
@@ -474,9 +472,7 @@ package body Bases is
             elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 3 else 5);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
-            To_String
-              (GenerateShipName
-                 (Factions_List(ProtoShips_List(ShipIndex).Owner).Name)) &
+            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for recent events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
