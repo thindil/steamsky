@@ -65,8 +65,6 @@ package body Bases.SchoolUI is
         Get_Widget(Main_Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       CrewView: Ttk_Tree_View;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
@@ -75,7 +73,7 @@ package body Bases.SchoolUI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
@@ -92,7 +90,7 @@ package body Bases.SchoolUI is
             " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
       end loop Load_Crew_Loop;
       Selection_Set(CrewView, "[list 1]");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (SchoolCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
