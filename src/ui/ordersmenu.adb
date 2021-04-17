@@ -25,6 +25,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with Combat; use Combat;
 with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
 with Crew; use Crew;
@@ -224,7 +225,7 @@ package body OrdersMenu is
                              (OrdersMenu, "0", "command",
                               "-label {Complete delivery of " &
                               To_String(Items_List(Mission.ItemIndex).Name) &
-                              "} -underline 0");
+                              "} -underline 0 -command CompleteMission");
                         when Destroy =>
                            if Mission.Finished then
                               Insert
@@ -232,25 +233,25 @@ package body OrdersMenu is
                                  "-label {Complete destroy " &
                                  To_String
                                    (ProtoShips_List(Mission.ShipIndex).Name) &
-                                 "} -underline 0");
+                                 "} -underline 0 -command CompleteMission");
                            end if;
                         when Patrol =>
                            if Mission.Finished then
                               Insert
                                 (OrdersMenu, "0", "command",
-                                 "-label {Complete Patrol area mission} -underline 0");
+                                 "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
                            end if;
                         when Explore =>
                            if Mission.Finished then
                               Insert
                                 (OrdersMenu, "0", "command",
-                                 "-label {Complete Explore area mission} -underline 0");
+                                 "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
                            end if;
                         when Passenger =>
                            if Mission.Finished then
                               Insert
                                 (OrdersMenu, "0", "command",
-                                 "-label {Complete Transport passenger mission} -underline 0");
+                                 "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
                            end if;
                      end case;
                   end if;
@@ -350,7 +351,7 @@ package body OrdersMenu is
                                  "-label {Complete delivery of " &
                                  To_String
                                    (Items_List(Mission.ItemIndex).Name) &
-                                 "} -underline 0");
+                                 "} -underline 0 -command CompleteMission");
                            when Destroy =>
                               if Mission.Finished then
                                  Add
@@ -359,25 +360,25 @@ package body OrdersMenu is
                                     To_String
                                       (ProtoShips_List(Mission.ShipIndex)
                                          .Name) &
-                                    "} -underline 0");
+                                    "} -underline 0 -command CompleteMission");
                               end if;
                            when Patrol =>
                               if Mission.Finished then
                                  Add
                                    (OrdersMenu, "command",
-                                    "-label {Complete Patrol area mission} -underline 0");
+                                    "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
                               end if;
                            when Explore =>
                               if Mission.Finished then
                                  Add
                                    (OrdersMenu, "command",
-                                    "-label {Complete Explore area mission} -underline 0");
+                                    "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
                               end if;
                            when Passenger =>
                               if Mission.Finished then
                                  Add
                                    (OrdersMenu, "command",
-                                    "-label {Complete Transport passenger mission} -underline 0");
+                                    "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
                               end if;
                         end case;
                      end if;
@@ -397,15 +398,15 @@ package body OrdersMenu is
                                  "-label {Search for " &
                                  To_String
                                    (ProtoShips_List(Mission.ShipIndex).Name) &
-                                 "} -underline 0");
+                                 "} -underline 0 -command StartMission");
                            when Patrol =>
                               Add
                                 (OrdersMenu, "command",
-                                 "-label {Patrol area} -underline 0");
+                                 "-label {Patrol area} -underline 0 -command StartMission");
                            when Explore =>
                               Add
                                 (OrdersMenu, "command",
-                                 "-label {Explore area} -underline 0");
+                                 "-label {Explore area} -underline 0 -command StartMission");
                         end case;
                      end if;
                   end loop Progress_Mission_Loop;
@@ -717,6 +718,108 @@ package body OrdersMenu is
       return TCL_OK;
    end Show_Trader_Command;
 
+   -- ****f* OrdersMenu/OrdersMenu.Start_Mission_Command
+   -- FUNCTION
+   -- Start the selected mission
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- StartMission
+   -- SOURCE
+   function Start_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Start_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      StartsCombat: Boolean := False;
+   begin
+      for Mission of AcceptedMissions loop
+         if Mission.TargetX = PlayerShip.SkyX and
+           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
+            case Mission.MType is
+               when Deliver | Passenger =>
+                  null;
+               when Destroy =>
+                  Update_Game(GetRandom(15, 45));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     StartsCombat :=
+                       StartCombat
+                         (AcceptedMissions
+                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               .MissionIndex)
+                            .ShipIndex,
+                          False);
+                  end if;
+               when Patrol =>
+                  Update_Game(GetRandom(45, 75));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+               when Explore =>
+                  Update_Game(GetRandom(30, 60));
+                  StartsCombat := CheckForEvent;
+                  if not StartsCombat then
+                     UpdateMission
+                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                  end if;
+            end case;
+            exit;
+         end if;
+      end loop;
+      if StartsCombat then
+         ShowCombatUI;
+         return TCL_OK;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      ShowSkyMap;
+      return TCL_OK;
+   end Start_Mission_Command;
+
+   -- ****f* OrdersMenu/OrdersMenu.Complete_Mission_Command
+   -- FUNCTION
+   -- Complete the selected mission in base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CompleteMission
+   -- SOURCE
+   function Complete_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Complete_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+      UpdateHeader;
+      UpdateMessages;
+      ShowSkyMap;
+      return TCL_OK;
+   end Complete_Mission_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -727,6 +830,8 @@ package body OrdersMenu is
       AddCommand("Pray", Pray_Command'Access);
       AddCommand("SetAsHome", Set_As_Home_Command'Access);
       AddCommand("ShowTrader", Show_Trader_Command'Access);
+      AddCommand("StartMission", Start_Mission_Command'Access);
+      AddCommand("CompleteMission", Complete_Mission_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
