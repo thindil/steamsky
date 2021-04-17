@@ -42,6 +42,7 @@ All notable changes to this project will be documented in this file.
 - Asking friendly ships for bases and events
 - Lack of name of friendly ship in message when asking it for bases or events
 - Color of the info about friendly trader in map info
+- Starting and completing missions
 
 ## [5.9] - 2021-03-21
 
