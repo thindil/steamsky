@@ -41,6 +41,7 @@ All notable changes to this project will be documented in this file.
 - Show console window on Windows
 - Asking friendly ships for bases and events
 - Lack of name of friendly ship in message when asking it for bases or events
+- Color of the info about friendly trader in map info
 
 ## [5.9] - 2021-03-21
 
