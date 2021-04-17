@@ -24,11 +24,11 @@ with Game; use Game;
 
 package body Log is
 
-   -- ****iv* Log/Log.LogFile
+   -- ****iv* Log/Log.Log_File
    -- FUNCTION
    -- Debug log file
    -- SOURCE
-   LogFile: File_Type;
+   Log_File: File_Type;
    -- ****
 
    procedure Start_Logging is
@@ -37,9 +37,10 @@ package body Log is
          return;
       end if;
       if Exists(To_String(Save_Directory) & "debug.log") then
-         Open(LogFile, Append_File, To_String(Save_Directory) & "debug.log");
+         Open(Log_File, Append_File, To_String(Save_Directory) & "debug.log");
       else
-         Create(LogFile, Append_File, To_String(Save_Directory) & "debug.log");
+         Create
+           (Log_File, Append_File, To_String(Save_Directory) & "debug.log");
       end if;
       Log_Message
         ("Start game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
@@ -49,36 +50,37 @@ package body Log is
    procedure Log_Message
      (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
-      NewMessage: Unbounded_String;
+      New_Message: Unbounded_String;
    begin
       if Debug_Mode = Default_Debug_Mode or
         (Message_Type /= Debug_Mode and Debug_Mode /= EVERYTHING) then
          return;
       end if;
-      if not Is_Open(LogFile) then
+      if not Is_Open
+          (Log_File) then --## rule line off DIRECTLY_ACCESSED_GLOBALS
          return;
       end if;
-      NewMessage :=
+      New_Message :=
         (if Time_Stamp then
            To_Unbounded_String
              ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
          else To_Unbounded_String(Message));
       if New_Line then
-         Put_Line(LogFile, To_String(NewMessage));
+         Put_Line(Log_File, To_String(New_Message));
       else
-         Put(LogFile, To_String(NewMessage));
+         Put(Log_File, To_String(New_Message));
       end if;
    end Log_Message;
 
    procedure End_Logging is
    begin
-      if Debug_Mode = Default_Debug_Mode or not Is_Open(LogFile) then
+      if Debug_Mode = Default_Debug_Mode or not Is_Open(Log_File) then
          return;
       end if;
       Log_Message
         ("Ending game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
          Debug_Mode);
-      Close(LogFile);
+      Close(Log_File);
    end End_Logging;
 
 end Log;
