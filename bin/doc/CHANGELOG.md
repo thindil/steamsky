@@ -43,6 +43,7 @@ All notable changes to this project will be documented in this file.
 - Lack of name of friendly ship in message when asking it for bases or events
 - Color of the info about friendly trader in map info
 - Starting and completing missions
+- Progressing stories
 
 ## [5.9] - 2021-03-21
 
