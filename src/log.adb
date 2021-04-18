@@ -36,15 +36,19 @@ package body Log is
       if Debug_Mode = Default_Debug_Mode then
          return;
       end if;
-      if Exists(To_String(Save_Directory) & "debug.log") then
-         Open(Log_File, Append_File, To_String(Save_Directory) & "debug.log");
+      if Exists(Name => To_String(Source => Save_Directory) & "debug.log") then
+         Open
+           (File => Log_File, Mode => Append_File,
+            Name => To_String(Source => Save_Directory) & "debug.log");
       else
          Create
-           (Log_File, Append_File, To_String(Save_Directory) & "debug.log");
+           (File => Log_File, Mode => Append_File,
+            Name => To_String(Source => Save_Directory) & "debug.log");
       end if;
       Log_Message
-        ("Start game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
-         Debug_Mode);
+        (Message =>
+           "Start game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
+         Message_Type => Debug_Mode);
    end Start_Logging;
 
    procedure Log_Message
@@ -66,7 +70,10 @@ package body Log is
              ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
          else To_Unbounded_String(Message));
       if New_Line then
-         Put_Line(Log_File, To_String(New_Message));
+         Put_Line
+           (Log_File, --## rule line off DIRECTLY_ACCESSED_GLOBALS
+
+            To_String(New_Message));
       else
          Put(Log_File, To_String(New_Message));
       end if;
