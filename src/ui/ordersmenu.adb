@@ -38,6 +38,7 @@ with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
+with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Stories; use Stories;
@@ -306,10 +307,10 @@ package body OrdersMenu is
                   if ItemIndex > 0 then
                      Add
                        (OrdersMenu, "command",
-                        "-label {Deliver medicines for free} -underline 0");
+                        "-label {Deliver medicines for free} -underline 0 -command {DeliverMedicines free}");
                      Add
                        (OrdersMenu, "command",
-                        "-label {Deliver medicines for price} -underline 8");
+                        "-label {Deliver medicines for price} -underline 8 -command {DeliverMedicines paid}");
                   end if;
                end if;
             when None | DoublePrice | BaseRecovery =>
@@ -905,6 +906,80 @@ package body OrdersMenu is
       return TCL_OK;
    end Execute_Story_Command;
 
+   -- ****f* OrdersMenu/OrdersMenu.Deliver_Medicines_Command
+   -- FUNCTION
+   -- Deliver medicines to the base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- DeliverMedicines type
+   -- If argument type is free, deliver medicines for free, otherwise deliver
+   -- medicines for a price
+   -- SOURCE
+   function Deliver_Medicines_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Deliver_Medicines_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      EventIndex: constant Natural :=
+        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+      ItemIndex: constant Natural :=
+        FindItem
+          (Inventory => PlayerShip.Cargo,
+           ItemType => Factions_List(SkyBases(BaseIndex).Owner).HealingTools);
+      NewTime: constant Integer :=
+        Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
+   begin
+      if NewTime < 1 then
+         DeleteEvent(EventIndex);
+      else
+         Events_List(EventIndex).Time := NewTime;
+      end if;
+      if CArgv.Arg(Argv, 1) = "free" then
+         GainRep(BaseIndex, (PlayerShip.Cargo(ItemIndex).Amount / 10));
+         AddMessage
+           ("You gave " &
+            To_String
+              (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
+            " for free to base.",
+            TradeMessage);
+         UpdateCargo
+           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
+      else
+         begin
+            GainRep
+              (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+            SellItems
+              (ItemIndex,
+               Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+         exception
+            when Trade_No_Free_Cargo =>
+               ShowMessage
+                 ("You can't sell medicines to the base because you don't have enough free cargo space for money.");
+            when Trade_No_Money_In_Base =>
+               ShowMessage
+                 ("You can't sell medicines to the base because the base don't have enough money to buy them.");
+         end;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      ShowSkyMap;
+      return TCL_OK;
+   end Deliver_Medicines_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -918,6 +993,7 @@ package body OrdersMenu is
       AddCommand("StartMission", Start_Mission_Command'Access);
       AddCommand("CompleteMission", Complete_Mission_Command'Access);
       AddCommand("ExecuteStory", Execute_Story_Command'Access);
+      AddCommand("DeliverMedicines", Deliver_Medicines_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
