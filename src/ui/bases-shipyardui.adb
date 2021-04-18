@@ -44,6 +44,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
+with CoreUI; use CoreUI;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with ShipModules; use ShipModules;
@@ -92,13 +93,10 @@ package body Bases.ShipyardUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      ShipyardFrame: Ttk_Frame := Get_Widget(Paned & ".shipyardframe", Interp);
+      ShipyardFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".shipyardframe", Interp);
       ShipyardCanvas: constant Tk_Canvas :=
         Get_Widget(ShipyardFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       ModuleSize: Integer;
@@ -147,7 +145,7 @@ package body Bases.ShipyardUI is
                To_Unbounded_String("Price")),
               False);
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
@@ -190,97 +188,76 @@ package body Bases.ShipyardUI is
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
       for I in Modules_List.Iterate loop
-         if Modules_List(I).Price > 0 and
-           SkyBases(BaseIndex).Reputation(1) >= Modules_List(I).Reputation then
-            if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
-              and then Natural'Value(CArgv.Arg(Argv, 1)) /=
-                ModuleType'Pos(Modules_List(I).MType) then
-               goto End_Of_Loop;
-            end if;
-            if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
-              and then
-                Index
-                  (To_Lower(To_String(Modules_List(I).Name)),
-                   To_Lower(CArgv.Arg(Argv, 2))) =
-                0 then
-               goto End_Of_Loop;
-            end if;
-            if Current_Row < Start_Row then
-               Current_Row := Current_Row + 1;
-               goto End_Of_Loop;
-            end if;
-            case Modules_List(I).MType is
-               when HULL =>
-                  ModuleSize := Modules_List(I).MaxValue;
-               when others =>
-                  ModuleSize := Modules_List(I).Size;
-            end case;
-            AddButton
-              (InstallTable, To_String(Modules_List(I).Name),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               To_String(BaseModules_Container.Key(I)) & "} install",
-               1);
-            AddButton
-              (InstallTable, GetModuleType(BaseModules_Container.Key(I)),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               To_String(BaseModules_Container.Key(I)) & "} install",
-               2);
-            if ModuleSize <= MaxSize then
-               AddButton
-                 (InstallTable, Integer'Image(ModuleSize),
-                  "Show available options for module",
-                  "ShowShipyardModuleMenu {" &
-                  To_String(BaseModules_Container.Key(I)) & "} install",
-                  3);
-            else
-               AddButton
-                 (InstallTable, Integer'Image(ModuleSize),
-                  "Show available options for module",
-                  "ShowShipyardModuleMenu {" &
-                  To_String(BaseModules_Container.Key(I)) & "} install",
-                  3, False, "red");
-            end if;
-            AddButton
-              (InstallTable, To_String(Modules_List(I).RepairMaterial),
-               "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               To_String(BaseModules_Container.Key(I)) & "} install",
-               4);
-            Cost := Modules_List(I).Price;
-            CountPrice(Cost, FindMember(Talk));
-            if MoneyIndex2 > 0
-              and then Cost <= PlayerShip.Cargo(MoneyIndex2).Amount then
-               AddButton
-                 (InstallTable, Natural'Image(Cost),
-                  "Show available options for module",
-                  "ShowShipyardModuleMenu {" &
-                  To_String(BaseModules_Container.Key(I)) & "} install",
-                  5, True);
-            else
-               AddButton
-                 (InstallTable, Natural'Image(Cost),
-                  "Show available options for module",
-                  "ShowShipyardModuleMenu {" &
-                  To_String(BaseModules_Container.Key(I)) & "} install",
-                  5, True, "red");
-            end if;
-            exit Load_Install_Modules_Loop when InstallTable.Row = 26;
+         if Modules_List(I).Price = 0 or
+           SkyBases(BaseIndex).Reputation(1) < Modules_List(I).Reputation then
+            goto End_Of_Loop;
          end if;
+         if Argc > 1 and then Natural'Value(CArgv.Arg(Argv, 1)) > 0
+           and then Natural'Value(CArgv.Arg(Argv, 1)) /=
+             ModuleType'Pos(Modules_List(I).MType) then
+            goto End_Of_Loop;
+         end if;
+         if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
+           and then
+             Index
+               (To_Lower(To_String(Modules_List(I).Name)),
+                To_Lower(CArgv.Arg(Argv, 2))) =
+             0 then
+            goto End_Of_Loop;
+         end if;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
+         ModuleSize :=
+           (if Modules_List(I).MType = HULL then Modules_List(I).MaxValue
+            else Modules_List(I).Size);
+         AddButton
+           (InstallTable, To_String(Modules_List(I).Name),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" &
+            To_String(BaseModules_Container.Key(I)) & "} install",
+            1);
+         AddButton
+           (InstallTable, GetModuleType(BaseModules_Container.Key(I)),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" &
+            To_String(BaseModules_Container.Key(I)) & "} install",
+            2);
+         AddButton
+           (InstallTable, Integer'Image(ModuleSize),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" &
+            To_String(BaseModules_Container.Key(I)) & "} install",
+            3, False, (if ModuleSize > MaxSize then "red" else ""));
+         AddButton
+           (InstallTable, To_String(Modules_List(I).RepairMaterial),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" &
+            To_String(BaseModules_Container.Key(I)) & "} install",
+            4);
+         Cost := Modules_List(I).Price;
+         CountPrice(Cost, FindMember(Talk));
+         AddButton
+           (InstallTable, Natural'Image(Cost),
+            "Show available options for module",
+            "ShowShipyardModuleMenu {" &
+            To_String(BaseModules_Container.Key(I)) & "} install",
+            5, True,
+            (if
+               MoneyIndex2 > 0
+               and then Cost <= PlayerShip.Cargo(MoneyIndex2).Amount
+             then ""
+             else "red"));
+         exit Load_Install_Modules_Loop when InstallTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
       if Page > 1 then
-         if InstallTable.Row < 26 then
-            AddPagination
-              (InstallTable,
-               "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
-         else
-            AddPagination
-              (InstallTable,
-               "ShowShipyard " & Arguments & Positive'Image(Page - 1),
-               "ShowShipyard " & Arguments & Positive'Image(Page + 1));
-         end if;
+         AddPagination
+           (InstallTable,
+            "ShowShipyard " & Arguments & Positive'Image(Page - 1),
+            (if InstallTable.Row < 26 then ""
+             else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       elsif InstallTable.Row = 26 then
          AddPagination
            (InstallTable, "",
@@ -365,13 +342,13 @@ package body Bases.ShipyardUI is
             "ShowShipyard " & Arguments & Positive'Image(Page + 1));
       end if;
       UpdateTable(RemoveTable);
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShipyardFrame.Name :=
         New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
       configure
         (ShipyardCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Xview_Move_To(ShipyardCanvas, "0.0");
       Yview_Move_To(ShipyardCanvas, "0.0");
       ShowScreen("shipyardframe");
