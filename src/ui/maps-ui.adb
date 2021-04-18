@@ -61,11 +61,12 @@ with Maps.UI.Commands;
 with Messages; use Messages;
 with Messages.UI; use Messages.UI;
 with Missions.UI; use Missions.UI;
-with ShipModules; use ShipModules;
 with OrdersMenu;
+with ShipModules; use ShipModules;
 with Ships.Cargo; use Ships.Cargo;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI; use Ships.UI;
+with Statistics; use Statistics;
 with Stories; use Stories;
 with Trades.UI;
 with Themes; use Themes;
@@ -939,6 +940,20 @@ package body Maps.UI is
       Tcl_Eval(Get_Context, "DrawMap");
       UpdateMessages;
       UpdateMoveButtons;
+      if CurrentStory.Index /= Null_Unbounded_String and
+        CurrentStory.ShowText then
+         if CurrentStory.CurrentStep > -2 then
+            ShowInfo(To_String(GetCurrentStoryText));
+         else
+            FinishStory;
+            if PlayerShip.Crew(1).Health = 0 then
+               ShowQuestion
+                 ("You are dead. Would you like to see your game statistics?",
+                  "showstats");
+            end if;
+         end if;
+         CurrentStory.ShowText := False;
+      end if;
    end ShowSkyMap;
 
    procedure SetKeys is
@@ -1059,5 +1074,15 @@ package body Maps.UI is
         (Get_Context, "<" & To_String(FullScreenAccel) & ">",
          "{ToggleFullScreen}");
    end SetKeys;
+
+   procedure FinishStory is
+   begin
+      GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
+      ClearCurrentStory;
+      ShowQuestion
+        (To_String(Stories_List(CurrentStory.Index).EndText) &
+         " Are you want to finish game?",
+         "retire");
+   end FinishStory;
 
 end Maps.UI;

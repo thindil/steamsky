@@ -642,6 +642,13 @@ package body Utils.UI is
             Current(TypeBox, "0");
             Tcl_Eval(Get_Context, "ShowLastMessages");
          end;
+      elsif Result = "retire" then
+         Death
+           (1, To_Unbounded_String("retired after finished the game"),
+            PlayerShip);
+         ShowQuestion
+           ("You are dead. Would you like to see your game statistics?",
+            "showstats");
       else
          declare
             BaseIndex: constant Positive :=

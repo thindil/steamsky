@@ -143,6 +143,13 @@ package Maps.UI is
    procedure SetKeys;
    -- ****
 
+   -- ****f* MUI/MUI.FinishStory
+   -- FUNCTION
+   -- Finish the current story
+   -- SOURCE
+   procedure FinishStory;
+   -- ****
+
 private
 
    -- ****v* MUI/MUI.StartX_(private)
