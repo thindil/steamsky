@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0] - 2021-04-18
 
 ### Added
 - Pagination to lists of known bases and events, accepted missions, shipyard,
