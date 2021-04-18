@@ -91,7 +91,7 @@ package body OrdersMenu is
                            To_String
                              (Items_List(GetStepData(Step.FinishData, "item"))
                                 .Name) &
-                           "} -underline 4");
+                           "} -underline 4 -command ExecuteStory");
                      end if;
                   end if;
                when DESTROYSHIP =>
@@ -108,7 +108,7 @@ package body OrdersMenu is
                              (ProtoShips_List
                                 (To_Unbounded_String(Slice(Tokens, 3)))
                                 .Name) &
-                           "} -underline 0");
+                           "} -underline 0 -command ExecuteStory");
                      end if;
                   end;
                when EXPLORE =>
@@ -120,7 +120,7 @@ package body OrdersMenu is
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
-                           "-label {Search area} -underline 0");
+                           "-label {Search area} -underline 0 -command ExecuteStory");
                      end if;
                   end;
                when ANY | LOOT =>
@@ -820,6 +820,91 @@ package body OrdersMenu is
       return TCL_OK;
    end Complete_Mission_Command;
 
+   -- ****f* OrdersMenu/OrdersMenu.Execute_Story_Command
+   -- FUNCTION
+   -- Execute the current step in the current story
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ExecuteStory
+   -- SOURCE
+   function Execute_Story_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Execute_Story_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      Step: Step_Data;
+      Message: Unbounded_String;
+   begin
+      if CurrentStory.CurrentStep = 0 then
+         Step := Stories_List(CurrentStory.Index).StartingStep;
+      elsif CurrentStory.CurrentStep > 0 then
+         Step :=
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
+      else
+         Step := Stories_List(CurrentStory.Index).FinalStep;
+      end if;
+      if PlayerShip.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
+         Message := To_Unbounded_String(DockShip(True));
+         if Message /= Null_Unbounded_String then
+            ShowInfo(To_String(Message));
+            return TCL_OK;
+         end if;
+      end if;
+      if ProgressStory then
+         declare
+            Tokens: Slice_Set;
+         begin
+            Create(Tokens, To_String(CurrentStory.Data), ";");
+            case Step.FinishCondition is
+               when DESTROYSHIP =>
+                  if StartCombat
+                      (To_Unbounded_String(Slice(Tokens, 3)), False) then
+                     ShowCombatUI;
+                     return TCL_OK;
+                  end if;
+               when others =>
+                  null;
+            end case;
+            if CurrentStory.CurrentStep > -2 then
+               if CurrentStory.CurrentStep > 0 then
+                  Step :=
+                    Stories_List(CurrentStory.Index).Steps
+                      (CurrentStory.CurrentStep);
+               else
+                  Step := Stories_List(CurrentStory.Index).FinalStep;
+               end if;
+               for Text of Step.Texts loop
+                  if CurrentStory.FinishedStep = Text.Condition then
+                     ShowInfo(To_String(Text.Text));
+                     CurrentStory.ShowText := False;
+                     exit;
+                  end if;
+               end loop;
+            else
+               FinishStory;
+            end if;
+         end;
+      else
+         ShowInfo(To_String(Step.FailText));
+         CurrentStory.ShowText := False;
+      end if;
+      UpdateHeader;
+      UpdateMessages;
+      ShowSkyMap;
+      return TCL_OK;
+   end Execute_Story_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOrders", Show_Orders_Command'Access);
@@ -832,6 +917,7 @@ package body OrdersMenu is
       AddCommand("ShowTrader", Show_Trader_Command'Access);
       AddCommand("StartMission", Start_Mission_Command'Access);
       AddCommand("CompleteMission", Complete_Mission_Command'Access);
+      AddCommand("ExecuteStory", Execute_Story_Command'Access);
    end AddCommands;
 
 end OrdersMenu;
