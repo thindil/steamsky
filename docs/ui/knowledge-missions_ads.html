@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,41 +30,59 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo34">Knowledge/KMissions</a></li>
+<li>1. <a href="#robo35">Knowledge/KMissions</a></li>
 <ul>
-<li>1.1. <a href="#robo484">KMissions/KMissions.AddCommands</a></li>
-<li>1.2. <a href="./knowledge-missions_adb.html#robo485">KMissions/KMissions.Set_Mission_Command</a></li>
-<li>1.3. <a href="./knowledge-missions_adb.html#robo486">KMissions/KMissions.Show_Mission_Command</a></li>
-<li>1.4. <a href="./knowledge-missions_adb.html#robo487">KMissions/KMissions.Show_Missions_Menu_Command</a></li>
+<li>1.1. <a href="./knowledge-missions_adb.html#robo308">KMissions/KMissions.MissionsTable</a></li>
+<li>1.2. <a href="#robo496">KMissions/KMissions.AddCommands</a></li>
+<li>1.3. <a href="./knowledge-missions_adb.html#robo497">KMissions/KMissions.Set_Mission_Command</a></li>
+<li>1.4. <a href="./knowledge-missions_adb.html#robo498">KMissions/KMissions.Show_Mission_Command</a></li>
+<li>1.5. <a href="./knowledge-missions_adb.html#robo499">KMissions/KMissions.Show_Missions_Menu_Command</a></li>
+<li>1.6. <a href="#robo500">KMissions/KMissions.UpdateMissionsList</a></li>
+<li>1.7. <a href="./knowledge-missions_adb.html#robo695">KMissions/KMissions.Show_Missions_Command</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Knowledge2fKMissions"></a>
-<a name="robo34"></a><h2>Knowledge/KMissions [ Packages ]</h2>
+<a name="robo35"></a><h2>Knowledge/KMissions [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge_ads.html#robo35">Knowledge</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge_ads.html#robo36">Knowledge</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code to show the list of known events to the player
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="./knowledge_ads.html#robo35">Knowledge</a><span class="sign">.</span><a href="../missions_ads.html#robo44">Missions</a> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="./knowledge_ads.html#robo36">Knowledge</a><span class="sign">.</span><a href="../missions_ads.html#robo45">Missions</a> <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="KMissions2fKMissions2eAddCommands"></a>
-<a name="robo484"></a><h2>KMissions/KMissions.AddCommands [ Subprograms ]</h2>
+<a name="robo496"></a><h2>KMissions/KMissions.AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo34">KMissions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">KMissions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the list of known bases
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo500">AddCommands</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo513">AddCommands</a><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="KMissions2fKMissions2eUpdateMissionsList"></a>
+<a name="robo500"></a><h2>KMissions/KMissions.UpdateMissionsList [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo35">KMissions</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update and show list of accepted missions
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> UpdateMissionsList<span class="sign">(</span>Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Page     - The current page of missions list to show
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-missions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/knowledge-missions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

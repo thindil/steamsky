@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -30,91 +30,90 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo23">Game/Game</a></li>
+<li>1. <a href="#robo24">Game/Game</a></li>
 <ul>
-<li>1.1. <a href="./game-saveload_ads.html#robo24">Game/GSaveLoad</a></li>
+<li>1.1. <a href="./game-saveload_ads.html#robo25">Game/GSaveLoad</a></li>
 <ul>
-<li>1.1.1. <a href="./game-saveload_adb.html#robo280">GSaveLoad/GSaveLoad.SaveData</a></li>
-<li>1.1.2. <a href="./game-saveload_ads.html#robo281">GSaveLoad/GSaveLoad.SaveName</a></li>
-<li>1.1.3. <a href="./game-saveload_adb.html#robo282">GSaveLoad/GSaveLoad.SaveVersion</a></li>
-<li>1.1.4. <a href="./game-saveload_ads.html#robo352">GSaveLoad/GSaveLoad.SaveGame_Invalid_Data</a></li>
-<li>1.1.5. <a href="./game-saveload_ads.html#robo453">GSaveLoad/GSaveLoad.GenerateSaveName</a></li>
-<li>1.1.6. <a href="./game-saveload_ads.html#robo454">GSaveLoad/GSaveLoad.LoadGame</a></li>
-<li>1.1.7. <a href="./game-saveload_ads.html#robo455">GSaveLoad/GSaveLoad.SaveGame</a></li>
+<li>1.1.1. <a href="./game-saveload_adb.html#robo291">GSaveLoad/GSaveLoad.SaveData</a></li>
+<li>1.1.2. <a href="./game-saveload_ads.html#robo292">GSaveLoad/GSaveLoad.SaveName</a></li>
+<li>1.1.3. <a href="./game-saveload_adb.html#robo293">GSaveLoad/GSaveLoad.SaveVersion</a></li>
+<li>1.1.4. <a href="./game-saveload_ads.html#robo364">GSaveLoad/GSaveLoad.SaveGame_Invalid_Data</a></li>
+<li>1.1.5. <a href="./game-saveload_ads.html#robo464">GSaveLoad/GSaveLoad.GenerateSaveName</a></li>
+<li>1.1.6. <a href="./game-saveload_ads.html#robo465">GSaveLoad/GSaveLoad.LoadGame</a></li>
+<li>1.1.7. <a href="./game-saveload_ads.html#robo466">GSaveLoad/GSaveLoad.SaveGame</a></li>
 </ul>
-<li>1.2. <a href="#robo99">Game/Game.Attributes_Array</a></li>
-<li>1.3. <a href="#robo100">Game/Game.Attributes_Container</a></li>
-<li>1.4. <a href="#robo101">Game/Game.AttributesData_Container</a></li>
-<li>1.5. <a href="#robo102">Game/Game.Bases_Range</a></li>
-<li>1.6. <a href="#robo103">Game/Game.Damage_Factor</a></li>
-<li>1.7. <a href="#robo104">Game/Game.Data_Action</a></li>
-<li>1.8. <a href="#robo105">Game/Game.Extended_Base_Range</a></li>
-<li>1.9. <a href="#robo106">Game/Game.Integer_Container</a></li>
-<li>1.10. <a href="#robo107">Game/Game.Map_X_Range</a></li>
-<li>1.11. <a href="#robo108">Game/Game.Map_Y_Range</a></li>
-<li>1.12. <a href="#robo109">Game/Game.Natural_Array</a></li>
-<li>1.13. <a href="#robo110">Game/Game.Natural_Container</a></li>
-<li>1.14. <a href="#robo111">Game/Game.Positive_Container</a></li>
-<li>1.15. <a href="#robo112">Game/Game.Reputation_Array</a></li>
-<li>1.16. <a href="#robo113">Game/Game.Reputation_Range</a></li>
-<li>1.17. <a href="#robo114">Game/Game.SkillsData_Container</a></li>
-<li>1.18. <a href="#robo115">Game/Game.UnboundedString_Container</a></li>
-<li>1.19. <a href="#robo172">Game/Game.Attribute_Record</a></li>
-<li>1.20. <a href="#robo173">Game/Game.Date_Record</a></li>
-<li>1.21. <a href="#robo174">Game/Game.Skill_Record</a></li>
-<li>1.22. <a href="#robo199">Game/Default_Reputation</a></li>
-<li>1.23. <a href="#robo200">Game/Game.Default_Data_Action</a></li>
-<li>1.24. <a href="#robo201">Game/Game.Empty_Atribute_Record</a></li>
-<li>1.25. <a href="#robo202">Game/Game.Empty_Attributes_Array</a></li>
-<li>1.26. <a href="#robo203">Game/Game.Empty_Skill</a></li>
-<li>1.27. <a href="#robo204">Game/Game.Game_Version</a></li>
-<li>1.28. <a href="#robo205">Game/Game.No_Damage</a></li>
-<li>1.29. <a href="#robo206">Game/Game.Start_Date</a></li>
-<li>1.30. <a href="#robo244">Game/Game.Alchemy_Tools</a></li>
-<li>1.31. <a href="#robo245">Game/Game.Arms_Armor</a></li>
-<li>1.32. <a href="#robo246">Game/Game.Attributes_List</a></li>
-<li>1.33. <a href="#robo247">Game/Game.Chest_Armor</a></li>
-<li>1.34. <a href="#robo248">Game/Game.Cleaning_Tools</a></li>
-<li>1.35. <a href="#robo249">Game/Game.Condition_Index</a></li>
-<li>1.36. <a href="#robo250">Game/Game.Corpse_Index</a></li>
-<li>1.37. <a href="#robo251">Game/Game.Data_Directory</a></li>
-<li>1.38. <a href="#robo252">Game/Game.Doc_Directory</a></li>
-<li>1.39. <a href="#robo253">Game/Game.Dodge_Skill</a></li>
-<li>1.40. <a href="#robo254">Game/Game.Engineering_Skill</a></li>
-<li>1.41. <a href="#robo255">Game/Game.Fuel_Type</a></li>
-<li>1.42. <a href="#robo256">Game/Game.Game_Date</a></li>
-<li>1.43. <a href="#robo257">Game/Game.Gunnery_Skill</a></li>
-<li>1.44. <a href="#robo258">Game/Game.Head_Armor</a></li>
-<li>1.45. <a href="#robo259">Game/Game.Legs_Armor</a></li>
-<li>1.46. <a href="#robo260">Game/Game.Mission_Items_Type</a></li>
-<li>1.47. <a href="#robo261">Game/Game.Mods_Directory</a></li>
-<li>1.48. <a href="#robo262">Game/Game.Money_Index</a></li>
-<li>1.49. <a href="#robo263">Game/Game.Money_Name</a></li>
-<li>1.50. <a href="#robo264">Game/Game.Perception_Skill</a></li>
-<li>1.51. <a href="#robo265">Game/Game.Piloting_Skill</a></li>
-<li>1.52. <a href="#robo266">Game/Game.Player_Career</a></li>
-<li>1.53. <a href="#robo267">Game/Game.Repair_Tools</a></li>
-<li>1.54. <a href="#robo268">Game/Game.Save_Directory</a></li>
-<li>1.55. <a href="#robo269">Game/Game.Shield_Type</a></li>
-<li>1.56. <a href="#robo270">Game/Game.Skills_List</a></li>
-<li>1.57. <a href="#robo271">Game/Game.Strength_Index</a></li>
-<li>1.58. <a href="#robo272">Game/Game.Talking_Skill</a></li>
-<li>1.59. <a href="#robo273">Game/Game.Themes_Directory</a></li>
-<li>1.60. <a href="#robo274">Game/Game.Traders_Name</a></li>
-<li>1.61. <a href="#robo275">Game/Game.Unarmed_Skill</a></li>
-<li>1.62. <a href="#robo276">Game/Game.Weapon_Type</a></li>
-<li>1.63. <a href="#robo351">Game/Game.Data_Loading_Error</a></li>
-<li>1.64. <a href="#robo442">Game/Game.End_Game</a></li>
-<li>1.65. <a href="#robo443">Game/Game.Find_Skill_Index</a></li>
-<li>1.66. <a href="#robo444">Game/Game.Load_Game_Data</a></li>
-<li>1.67. <a href="./game_adb.html#robo445">Game/Game.LoadData</a></li>
-<li>1.68. <a href="#robo446">Game/Game.New_Game</a></li>
-<li>1.69. <a href="#robo447">Game/Game.Update_Game</a></li>
+<li>1.2. <a href="#robo100">Game/Game.Attributes_Array</a></li>
+<li>1.3. <a href="#robo101">Game/Game.Attributes_Container</a></li>
+<li>1.4. <a href="#robo102">Game/Game.AttributesData_Container</a></li>
+<li>1.5. <a href="#robo103">Game/Game.Bases_Range</a></li>
+<li>1.6. <a href="#robo104">Game/Game.Damage_Factor</a></li>
+<li>1.7. <a href="#robo105">Game/Game.Data_Action</a></li>
+<li>1.8. <a href="#robo106">Game/Game.Extended_Base_Range</a></li>
+<li>1.9. <a href="#robo107">Game/Game.Integer_Container</a></li>
+<li>1.10. <a href="#robo108">Game/Game.Map_X_Range</a></li>
+<li>1.11. <a href="#robo109">Game/Game.Map_Y_Range</a></li>
+<li>1.12. <a href="#robo110">Game/Game.Natural_Array</a></li>
+<li>1.13. <a href="#robo111">Game/Game.Natural_Container</a></li>
+<li>1.14. <a href="#robo112">Game/Game.Positive_Container</a></li>
+<li>1.15. <a href="#robo113">Game/Game.Reputation_Array</a></li>
+<li>1.16. <a href="#robo114">Game/Game.Reputation_Range</a></li>
+<li>1.17. <a href="#robo115">Game/Game.SkillsData_Container</a></li>
+<li>1.18. <a href="#robo116">Game/Game.UnboundedString_Container</a></li>
+<li>1.19. <a href="#robo173">Game/Game.Attribute_Record</a></li>
+<li>1.20. <a href="#robo174">Game/Game.Date_Record</a></li>
+<li>1.21. <a href="#robo175">Game/Game.Skill_Record</a></li>
+<li>1.22. <a href="#robo206">Game/Default_Reputation</a></li>
+<li>1.23. <a href="#robo207">Game/Game.Default_Data_Action</a></li>
+<li>1.24. <a href="#robo208">Game/Game.Empty_Atribute_Record</a></li>
+<li>1.25. <a href="#robo209">Game/Game.Empty_Attributes_Array</a></li>
+<li>1.26. <a href="#robo210">Game/Game.Empty_Skill</a></li>
+<li>1.27. <a href="#robo211">Game/Game.Game_Version</a></li>
+<li>1.28. <a href="#robo212">Game/Game.No_Damage</a></li>
+<li>1.29. <a href="#robo213">Game/Game.Start_Date</a></li>
+<li>1.30. <a href="#robo255">Game/Game.Alchemy_Tools</a></li>
+<li>1.31. <a href="#robo256">Game/Game.Arms_Armor</a></li>
+<li>1.32. <a href="#robo257">Game/Game.Attributes_List</a></li>
+<li>1.33. <a href="#robo258">Game/Game.Chest_Armor</a></li>
+<li>1.34. <a href="#robo259">Game/Game.Cleaning_Tools</a></li>
+<li>1.35. <a href="#robo260">Game/Game.Condition_Index</a></li>
+<li>1.36. <a href="#robo261">Game/Game.Corpse_Index</a></li>
+<li>1.37. <a href="#robo262">Game/Game.Data_Directory</a></li>
+<li>1.38. <a href="#robo263">Game/Game.Doc_Directory</a></li>
+<li>1.39. <a href="#robo264">Game/Game.Dodge_Skill</a></li>
+<li>1.40. <a href="#robo265">Game/Game.Engineering_Skill</a></li>
+<li>1.41. <a href="#robo266">Game/Game.Fuel_Type</a></li>
+<li>1.42. <a href="#robo267">Game/Game.Game_Date</a></li>
+<li>1.43. <a href="#robo268">Game/Game.Gunnery_Skill</a></li>
+<li>1.44. <a href="#robo269">Game/Game.Head_Armor</a></li>
+<li>1.45. <a href="#robo270">Game/Game.Legs_Armor</a></li>
+<li>1.46. <a href="#robo271">Game/Game.Mission_Items_Type</a></li>
+<li>1.47. <a href="#robo272">Game/Game.Mods_Directory</a></li>
+<li>1.48. <a href="#robo273">Game/Game.Money_Index</a></li>
+<li>1.49. <a href="#robo274">Game/Game.Money_Name</a></li>
+<li>1.50. <a href="#robo275">Game/Game.Perception_Skill</a></li>
+<li>1.51. <a href="#robo276">Game/Game.Piloting_Skill</a></li>
+<li>1.52. <a href="#robo277">Game/Game.Player_Career</a></li>
+<li>1.53. <a href="#robo278">Game/Game.Repair_Tools</a></li>
+<li>1.54. <a href="#robo279">Game/Game.Save_Directory</a></li>
+<li>1.55. <a href="#robo280">Game/Game.Shield_Type</a></li>
+<li>1.56. <a href="#robo281">Game/Game.Skills_List</a></li>
+<li>1.57. <a href="#robo282">Game/Game.Strength_Index</a></li>
+<li>1.58. <a href="#robo283">Game/Game.Talking_Skill</a></li>
+<li>1.59. <a href="#robo284">Game/Game.Themes_Directory</a></li>
+<li>1.60. <a href="#robo285">Game/Game.Traders_Name</a></li>
+<li>1.61. <a href="#robo286">Game/Game.Unarmed_Skill</a></li>
+<li>1.62. <a href="#robo287">Game/Game.Weapon_Type</a></li>
+<li>1.63. <a href="#robo363">Game/Game.Data_Loading_Error</a></li>
+<li>1.64. <a href="#robo454">Game/Game.End_Game</a></li>
+<li>1.65. <a href="#robo455">Game/Game.Find_Skill_Index</a></li>
+<li>1.66. <a href="#robo456">Game/Game.Load_Game_Data</a></li>
+<li>1.67. <a href="#robo457">Game/Game.New_Game</a></li>
+<li>1.68. <a href="#robo458">Game/Game.Update_Game</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Game2fGame"></a>
-<a name="robo23"></a><h2>Game/Game [ Packages ]</h2>
+<a name="robo24"></a><h2>Game/Game [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -126,9 +125,9 @@
 
 <hr />
 <a name="Game2fGame2eAttributes5fArray"></a>
-<a name="robo99"></a><h2>Game/Game.Attributes_Array [ Types ]</h2>
+<a name="robo100"></a><h2>Game/Game.Attributes_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
 </pre>
@@ -138,9 +137,9 @@
 
 <hr />
 <a name="Game2fGame2eAttributes5fContainer"></a>
-<a name="robo100"></a><h2>Game/Game.Attributes_Container [ Types ]</h2>
+<a name="robo101"></a><h2>Game/Game.Attributes_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> Attributes_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Index_Type <span class="sign">=</span><span class="sign">&gt;</span> Positive<span class="sign">,</span>
       Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Attributes_Array<span class="sign">)</span><span class="sign">;</span>
@@ -148,9 +147,9 @@
 
 <hr />
 <a name="Game2fGame2eAttributesData5fContainer"></a>
-<a name="robo101"></a><h2>Game/Game.AttributesData_Container [ Types ]</h2>
+<a name="robo102"></a><h2>Game/Game.AttributesData_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store attributes data
 </pre>
@@ -161,9 +160,9 @@
 
 <hr />
 <a name="Game2fGame2eBases5fRange"></a>
-<a name="robo102"></a><h2>Game/Game.Bases_Range [ Types ]</h2>
+<a name="robo103"></a><h2>Game/Game.Bases_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Amount of sky bases
 </pre>
@@ -173,9 +172,9 @@
 
 <hr />
 <a name="Game2fGame2eDamage5fFactor"></a>
-<a name="robo103"></a><h2>Game/Game.Damage_Factor [ Types ]</h2>
+<a name="robo104"></a><h2>Game/Game.Damage_Factor [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used mostly for count percentage of damage of modules
 </pre>
@@ -185,9 +184,9 @@
 
 <hr />
 <a name="Game2fGame2eData5fAction"></a>
-<a name="robo104"></a><h2>Game/Game.Data_Action [ Types ]</h2>
+<a name="robo105"></a><h2>Game/Game.Data_Action [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Possible actions to do when loading game data
 </pre>
@@ -197,9 +196,9 @@
 
 <hr />
 <a name="Game2fGame2eExtended5fBase5fRange"></a>
-<a name="robo105"></a><h2>Game/Game.Extended_Base_Range [ Types ]</h2>
+<a name="robo106"></a><h2>Game/Game.Extended_Base_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Amount of sky bases starting from 0
 </pre>
@@ -209,9 +208,9 @@
 
 <hr />
 <a name="Game2fGame2eInteger5fContainer"></a>
-<a name="robo106"></a><h2>Game/Game.Integer_Container [ Types ]</h2>
+<a name="robo107"></a><h2>Game/Game.Integer_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store Integer values as list
 </pre>
@@ -222,9 +221,9 @@
 
 <hr />
 <a name="Game2fGame2eMap5fX5fRange"></a>
-<a name="robo107"></a><h2>Game/Game.Map_X_Range [ Types ]</h2>
+<a name="robo108"></a><h2>Game/Game.Map_X_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> X axis size of the game map
 </pre>
@@ -234,9 +233,9 @@
 
 <hr />
 <a name="Game2fGame2eMap5fY5fRange"></a>
-<a name="robo108"></a><h2>Game/Game.Map_Y_Range [ Types ]</h2>
+<a name="robo109"></a><h2>Game/Game.Map_Y_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Y axis size of the game map
 </pre>
@@ -246,9 +245,9 @@
 
 <hr />
 <a name="Game2fGame2eNatural5fArray"></a>
-<a name="robo109"></a><h2>Game/Game.Natural_Array [ Types ]</h2>
+<a name="robo110"></a><h2>Game/Game.Natural_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> General purpose array of Natural
 </pre>
@@ -258,9 +257,9 @@
 
 <hr />
 <a name="Game2fGame2eNatural5fContainer"></a>
-<a name="robo110"></a><h2>Game/Game.Natural_Container [ Types ]</h2>
+<a name="robo111"></a><h2>Game/Game.Natural_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store Natural values as list
 </pre>
@@ -271,9 +270,9 @@
 
 <hr />
 <a name="Game2fGame2ePositive5fContainer"></a>
-<a name="robo111"></a><h2>Game/Game.Positive_Container [ Types ]</h2>
+<a name="robo112"></a><h2>Game/Game.Positive_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store Positive values as list
 </pre>
@@ -284,9 +283,9 @@
 
 <hr />
 <a name="Game2fGame2eReputation5fArray"></a>
-<a name="robo112"></a><h2>Game/Game.Reputation_Array [ Types ]</h2>
+<a name="robo113"></a><h2>Game/Game.Reputation_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for reputation, 1 = level, 2 = points to next level
 </pre>
@@ -296,9 +295,9 @@
 
 <hr />
 <a name="Game2fGame2eReputation5fRange"></a>
-<a name="robo113"></a><h2>Game/Game.Reputation_Range [ Types ]</h2>
+<a name="robo114"></a><h2>Game/Game.Reputation_Range [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Range of the player's reputation level in bases
 </pre>
@@ -308,9 +307,9 @@
 
 <hr />
 <a name="Game2fGame2eSkillsData5fContainer"></a>
-<a name="robo114"></a><h2>Game/Game.SkillsData_Container [ Types ]</h2>
+<a name="robo115"></a><h2>Game/Game.SkillsData_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store skills data
 </pre>
@@ -321,9 +320,9 @@
 
 <hr />
 <a name="Game2fGame2eUnboundedString5fContainer"></a>
-<a name="robo115"></a><h2>Game/Game.UnboundedString_Container [ Types ]</h2>
+<a name="robo116"></a><h2>Game/Game.UnboundedString_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store Unbounded_String values as list
 </pre>
@@ -334,9 +333,9 @@
 
 <hr />
 <a name="Game2fGame2eAttribute5fRecord"></a>
-<a name="robo172"></a><h2>Game/Game.Attribute_Record [ Records ]</h2>
+<a name="robo173"></a><h2>Game/Game.Attribute_Record [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for attributes
 </pre>
@@ -353,9 +352,9 @@
 
 <hr />
 <a name="Game2fGame2eDate5fRecord"></a>
-<a name="robo173"></a><h2>Game/Game.Date_Record [ Records ]</h2>
+<a name="robo174"></a><h2>Game/Game.Date_Record [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for game date/time
  Year    - Current in game year
@@ -376,9 +375,9 @@
 
 <hr />
 <a name="Game2fGame2eSkill5fRecord"></a>
-<a name="robo174"></a><h2>Game/Game.Skill_Record [ Records ]</h2>
+<a name="robo175"></a><h2>Game/Game.Skill_Record [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for skills
 </pre>
@@ -403,9 +402,9 @@
 
 <hr />
 <a name="Game2fDefault5fReputation"></a>
-<a name="robo199"></a><h2>Game/Default_Reputation [ Constants ]</h2>
+<a name="robo206"></a><h2>Game/Default_Reputation [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Default reputation values
 </pre>
@@ -415,9 +414,9 @@
 
 <hr />
 <a name="Game2fGame2eDefault5fData5fAction"></a>
-<a name="robo200"></a><h2>Game/Game.Default_Data_Action [ Constants ]</h2>
+<a name="robo207"></a><h2>Game/Game.Default_Data_Action [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Default data action when loading the game data
 </pre>
@@ -427,9 +426,9 @@
 
 <hr />
 <a name="Game2fGame2eEmpty5fAtribute5fRecord"></a>
-<a name="robo201"></a><h2>Game/Game.Empty_Atribute_Record [ Constants ]</h2>
+<a name="robo208"></a><h2>Game/Game.Empty_Atribute_Record [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Empty attributes record constant
 </pre>
@@ -440,9 +439,9 @@
 
 <hr />
 <a name="Game2fGame2eEmpty5fAttributes5fArray"></a>
-<a name="robo202"></a><h2>Game/Game.Empty_Attributes_Array [ Constants ]</h2>
+<a name="robo209"></a><h2>Game/Game.Empty_Attributes_Array [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Empty attributes array constant
 </pre>
@@ -452,9 +451,9 @@
 
 <hr />
 <a name="Game2fGame2eEmpty5fSkill"></a>
-<a name="robo203"></a><h2>Game/Game.Empty_Skill [ Constants ]</h2>
+<a name="robo210"></a><h2>Game/Game.Empty_Skill [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Empty skill data constant
 </pre>
@@ -467,21 +466,21 @@
 
 <hr />
 <a name="Game2fGame2eGame5fVersion"></a>
-<a name="robo204"></a><h2>Game/Game.Game_Version [ Constants ]</h2>
+<a name="robo211"></a><h2>Game/Game.Game_Version [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Current the game version
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Game_Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Version<span class="sign">:</span> 5.9"</span><span class="sign">;</span>
+<pre class="source">   Game_Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Version<span class="sign">:</span> 6.0"</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Game2fGame2eNo5fDamage"></a>
-<a name="robo205"></a><h2>Game/Game.No_Damage [ Constants ]</h2>
+<a name="robo212"></a><h2>Game/Game.No_Damage [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Constant for no damage for Damage_Factor type
 </pre>
@@ -491,9 +490,9 @@
 
 <hr />
 <a name="Game2fGame2eStart5fDate"></a>
-<a name="robo206"></a><h2>Game/Game.Start_Date [ Constants ]</h2>
+<a name="robo213"></a><h2>Game/Game.Start_Date [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> The default start date for in-game time
 </pre>
@@ -504,9 +503,9 @@
 
 <hr />
 <a name="Game2fGame2eAlchemy5fTools"></a>
-<a name="robo244"></a><h2>Game/Game.Alchemy_Tools [ Variables ]</h2>
+<a name="robo255"></a><h2>Game/Game.Alchemy_Tools [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as alchemy tools (mainly in deconstructing orders)
 </pre>
@@ -516,9 +515,9 @@
 
 <hr />
 <a name="Game2fGame2eArms5fArmor"></a>
-<a name="robo245"></a><h2>Game/Game.Arms_Armor [ Variables ]</h2>
+<a name="robo256"></a><h2>Game/Game.Arms_Armor [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters arms armor
 </pre>
@@ -528,9 +527,9 @@
 
 <hr />
 <a name="Game2fGame2eAttributes5fList"></a>
-<a name="robo246"></a><h2>Game/Game.Attributes_List [ Variables ]</h2>
+<a name="robo257"></a><h2>Game/Game.Attributes_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Contains data for all characters attributes
 </pre>
@@ -540,9 +539,9 @@
 
 <hr />
 <a name="Game2fGame2eChest5fArmor"></a>
-<a name="robo247"></a><h2>Game/Game.Chest_Armor [ Variables ]</h2>
+<a name="robo258"></a><h2>Game/Game.Chest_Armor [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters torso armor
 </pre>
@@ -552,9 +551,9 @@
 
 <hr />
 <a name="Game2fGame2eCleaning5fTools"></a>
-<a name="robo248"></a><h2>Game/Game.Cleaning_Tools [ Variables ]</h2>
+<a name="robo259"></a><h2>Game/Game.Cleaning_Tools [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as tool in cleaning ship
 </pre>
@@ -564,9 +563,9 @@
 
 <hr />
 <a name="Game2fGame2eCondition5fIndex"></a>
-<a name="robo249"></a><h2>Game/Game.Condition_Index [ Variables ]</h2>
+<a name="robo260"></a><h2>Game/Game.Condition_Index [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of attribute used as bonus to character condition
 </pre>
@@ -576,9 +575,9 @@
 
 <hr />
 <a name="Game2fGame2eCorpse5fIndex"></a>
-<a name="robo250"></a><h2>Game/Game.Corpse_Index [ Variables ]</h2>
+<a name="robo261"></a><h2>Game/Game.Corpse_Index [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of item used to create mobs corpses
 </pre>
@@ -588,9 +587,9 @@
 
 <hr />
 <a name="Game2fGame2eData5fDirectory"></a>
-<a name="robo251"></a><h2>Game/Game.Data_Directory [ Variables ]</h2>
+<a name="robo262"></a><h2>Game/Game.Data_Directory [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Path to directory where are game data files
 </pre>
@@ -601,9 +600,9 @@
 
 <hr />
 <a name="Game2fGame2eDoc5fDirectory"></a>
-<a name="robo252"></a><h2>Game/Game.Doc_Directory [ Variables ]</h2>
+<a name="robo263"></a><h2>Game/Game.Doc_Directory [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Path to directory where documentation is
 </pre>
@@ -614,9 +613,9 @@
 
 <hr />
 <a name="Game2fGame2eDodge5fSkill"></a>
-<a name="robo253"></a><h2>Game/Game.Dodge_Skill [ Variables ]</h2>
+<a name="robo264"></a><h2>Game/Game.Dodge_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used for dodge in character's combat
 </pre>
@@ -626,9 +625,9 @@
 
 <hr />
 <a name="Game2fGame2eEngineering5fSkill"></a>
-<a name="robo254"></a><h2>Game/Game.Engineering_Skill [ Variables ]</h2>
+<a name="robo265"></a><h2>Game/Game.Engineering_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used by engineer on ship
 </pre>
@@ -638,9 +637,9 @@
 
 <hr />
 <a name="Game2fGame2eFuel5fType"></a>
-<a name="robo255"></a><h2>Game/Game.Fuel_Type [ Variables ]</h2>
+<a name="robo266"></a><h2>Game/Game.Fuel_Type [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as fuel for ships
 </pre>
@@ -650,9 +649,9 @@
 
 <hr />
 <a name="Game2fGame2eGame5fDate"></a>
-<a name="robo256"></a><h2>Game/Game.Game_Date [ Variables ]</h2>
+<a name="robo267"></a><h2>Game/Game.Game_Date [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Current in game date
 </pre>
@@ -662,9 +661,9 @@
 
 <hr />
 <a name="Game2fGame2eGunnery5fSkill"></a>
-<a name="robo257"></a><h2>Game/Game.Gunnery_Skill [ Variables ]</h2>
+<a name="robo268"></a><h2>Game/Game.Gunnery_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used by gunners
 </pre>
@@ -674,9 +673,9 @@
 
 <hr />
 <a name="Game2fGame2eHead5fArmor"></a>
-<a name="robo258"></a><h2>Game/Game.Head_Armor [ Variables ]</h2>
+<a name="robo269"></a><h2>Game/Game.Head_Armor [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters head armor
 </pre>
@@ -686,9 +685,9 @@
 
 <hr />
 <a name="Game2fGame2eLegs5fArmor"></a>
-<a name="robo259"></a><h2>Game/Game.Legs_Armor [ Variables ]</h2>
+<a name="robo270"></a><h2>Game/Game.Legs_Armor [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters legs armor
 </pre>
@@ -698,9 +697,9 @@
 
 <hr />
 <a name="Game2fGame2eMission5fItems5fType"></a>
-<a name="robo260"></a><h2>Game/Game.Mission_Items_Type [ Variables ]</h2>
+<a name="robo271"></a><h2>Game/Game.Mission_Items_Type [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used for delivery missions
 </pre>
@@ -710,9 +709,9 @@
 
 <hr />
 <a name="Game2fGame2eMods5fDirectory"></a>
-<a name="robo261"></a><h2>Game/Game.Mods_Directory [ Variables ]</h2>
+<a name="robo272"></a><h2>Game/Game.Mods_Directory [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Path to directory where are game modifications
 </pre>
@@ -724,9 +723,9 @@
 
 <hr />
 <a name="Game2fGame2eMoney5fIndex"></a>
-<a name="robo262"></a><h2>Game/Game.Money_Index [ Variables ]</h2>
+<a name="robo273"></a><h2>Game/Game.Money_Index [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of item used as money
 </pre>
@@ -736,9 +735,9 @@
 
 <hr />
 <a name="Game2fGame2eMoney5fName"></a>
-<a name="robo263"></a><h2>Game/Game.Money_Name [ Variables ]</h2>
+<a name="robo274"></a><h2>Game/Game.Money_Name [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of money (taken from MoneyIndex)
 </pre>
@@ -748,9 +747,9 @@
 
 <hr />
 <a name="Game2fGame2ePerception5fSkill"></a>
-<a name="robo264"></a><h2>Game/Game.Perception_Skill [ Variables ]</h2>
+<a name="robo275"></a><h2>Game/Game.Perception_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used for spoting
 </pre>
@@ -760,9 +759,9 @@
 
 <hr />
 <a name="Game2fGame2ePiloting5fSkill"></a>
-<a name="robo265"></a><h2>Game/Game.Piloting_Skill [ Variables ]</h2>
+<a name="robo276"></a><h2>Game/Game.Piloting_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used to piloting ship
 </pre>
@@ -772,9 +771,9 @@
 
 <hr />
 <a name="Game2fGame2ePlayer5fCareer"></a>
-<a name="robo266"></a><h2>Game/Game.Player_Career [ Variables ]</h2>
+<a name="robo277"></a><h2>Game/Game.Player_Career [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of career selected by player during starting game
 </pre>
@@ -784,9 +783,9 @@
 
 <hr />
 <a name="Game2fGame2eRepair5fTools"></a>
-<a name="robo267"></a><h2>Game/Game.Repair_Tools [ Variables ]</h2>
+<a name="robo278"></a><h2>Game/Game.Repair_Tools [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as tool in repairing/upgrading ship
 </pre>
@@ -796,9 +795,9 @@
 
 <hr />
 <a name="Game2fGame2eSave5fDirectory"></a>
-<a name="robo268"></a><h2>Game/Game.Save_Directory [ Variables ]</h2>
+<a name="robo279"></a><h2>Game/Game.Save_Directory [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Path to directory where are savegame and logs
 </pre>
@@ -810,9 +809,9 @@
 
 <hr />
 <a name="Game2fGame2eShield5fType"></a>
-<a name="robo269"></a><h2>Game/Game.Shield_Type [ Variables ]</h2>
+<a name="robo280"></a><h2>Game/Game.Shield_Type [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters shield
 </pre>
@@ -822,9 +821,9 @@
 
 <hr />
 <a name="Game2fGame2eSkills5fList"></a>
-<a name="robo270"></a><h2>Game/Game.Skills_List [ Variables ]</h2>
+<a name="robo281"></a><h2>Game/Game.Skills_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Contains data for all skills
 </pre>
@@ -834,9 +833,9 @@
 
 <hr />
 <a name="Game2fGame2eStrength5fIndex"></a>
-<a name="robo271"></a><h2>Game/Game.Strength_Index [ Variables ]</h2>
+<a name="robo282"></a><h2>Game/Game.Strength_Index [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of attribute used to count max character encumbrance
 </pre>
@@ -846,9 +845,9 @@
 
 <hr />
 <a name="Game2fGame2eTalking5fSkill"></a>
-<a name="robo272"></a><h2>Game/Game.Talking_Skill [ Variables ]</h2>
+<a name="robo283"></a><h2>Game/Game.Talking_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used for talk in bases or with other ships
 </pre>
@@ -858,9 +857,9 @@
 
 <hr />
 <a name="Game2fGame2eThemes5fDirectory"></a>
-<a name="robo273"></a><h2>Game/Game.Themes_Directory [ Variables ]</h2>
+<a name="robo284"></a><h2>Game/Game.Themes_Directory [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Path to directory where are ui themes
 </pre>
@@ -872,9 +871,9 @@
 
 <hr />
 <a name="Game2fGame2eTraders5fName"></a>
-<a name="robo274"></a><h2>Game/Game.Traders_Name [ Variables ]</h2>
+<a name="robo285"></a><h2>Game/Game.Traders_Name [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Word used in ships names for traders ships (for events)
 </pre>
@@ -884,9 +883,9 @@
 
 <hr />
 <a name="Game2fGame2eUnarmed5fSkill"></a>
-<a name="robo275"></a><h2>Game/Game.Unarmed_Skill [ Variables ]</h2>
+<a name="robo286"></a><h2>Game/Game.Unarmed_Skill [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Index of skill used for unarmed attacks in character's combat
 </pre>
@@ -896,9 +895,9 @@
 
 <hr />
 <a name="Game2fGame2eWeapon5fType"></a>
-<a name="robo276"></a><h2>Game/Game.Weapon_Type [ Variables ]</h2>
+<a name="robo287"></a><h2>Game/Game.Weapon_Type [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Name of item type used as characters weapon
 </pre>
@@ -908,9 +907,9 @@
 
 <hr />
 <a name="Game2fGame2eData5fLoading5fError"></a>
-<a name="robo351"></a><h2>Game/Game.Data_Loading_Error [ Exceptions ]</h2>
+<a name="robo363"></a><h2>Game/Game.Data_Loading_Error [ Exceptions ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Raised when error occurs during loading any game data
 </pre>
@@ -920,9 +919,9 @@
 
 <hr />
 <a name="Game2fGame2eEnd5fGame"></a>
-<a name="robo442"></a><h2>Game/Game.End_Game [ Subprograms ]</h2>
+<a name="robo454"></a><h2>Game/Game.End_Game [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save (or not) game and clear all temporary data
 </pre>
@@ -936,9 +935,9 @@
 
 <hr />
 <a name="Game2fGame2eFind5fSkill5fIndex"></a>
-<a name="robo443"></a><h2>Game/Game.Find_Skill_Index [ Subprograms ]</h2>
+<a name="robo455"></a><h2>Game/Game.Find_Skill_Index [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Find index of selected skill
 </pre>
@@ -956,9 +955,9 @@
 
 <hr />
 <a name="Game2fGame2eLoad5fGame5fData"></a>
-<a name="robo444"></a><h2>Game/Game.Load_Game_Data [ Subprograms ]</h2>
+<a name="robo456"></a><h2>Game/Game.Load_Game_Data [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load game data from files
 </pre>
@@ -972,9 +971,9 @@
 
 <hr />
 <a name="Game2fGame2eNew5fGame"></a>
-<a name="robo446"></a><h2>Game/Game.New_Game [ Subprograms ]</h2>
+<a name="robo457"></a><h2>Game/Game.New_Game [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Start new game: create map, place ship, crew, etc
 </pre>
@@ -984,11 +983,11 @@
 
 <hr />
 <a name="Game2fGame2eUpdate5fGame"></a>
-<a name="robo447"></a><h2>Game/Game.Update_Game [ Subprograms ]</h2>
+<a name="robo458"></a><h2>Game/Game.Update_Game [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="#robo23">Game</a> ticks (update time, crew, ship, etc)
+<pre> <a href="#robo24">Game</a> ticks (update time, crew, ship, etc)
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Update_Game<span class="sign">(</span>Minutes<span class="sign">:</span> Positive<span class="sign">;</span> In_Combat<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">with</span>
@@ -1001,7 +1000,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/game.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/game.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

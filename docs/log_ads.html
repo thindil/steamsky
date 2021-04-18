@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -30,19 +30,20 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo37">Log/Log</a></li>
+<li>1. <a href="#robo38">Log/Log</a></li>
 <ul>
-<li>1.1. <a href="#robo123">Log/Log.Debug_Types</a></li>
-<li>1.2. <a href="#robo298">Log/Log.DebugMode</a></li>
-<li>1.3. <a href="./log_adb.html#robo299">Log/Log.LogFile</a></li>
-<li>1.4. <a href="#robo490">Log/Log.EndLogging</a></li>
-<li>1.5. <a href="#robo491">Log/Log.LogMessage</a></li>
-<li>1.6. <a href="#robo492">Log/Log.StartLogging</a></li>
+<li>1.1. <a href="#robo124">Log/Log.Debug_Types</a></li>
+<li>1.2. <a href="#robo215">Log/Log.Default_Debug_Mode</a></li>
+<li>1.3. <a href="#robo309">Log/Log.Debug_Mode</a></li>
+<li>1.4. <a href="./log_adb.html#robo310">Log/Log.Log_File</a></li>
+<li>1.5. <a href="#robo503">Log/Log.End_Logging</a></li>
+<li>1.6. <a href="#robo504">Log/Log.Log_Message</a></li>
+<li>1.7. <a href="#robo505">Log/Log.Start_Logging</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Log2fLog"></a>
-<a name="robo37"></a><h2>Log/Log [ Packages ]</h2>
+<a name="robo38"></a><h2>Log/Log [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -54,78 +55,93 @@
 
 <hr />
 <a name="Log2fLog2eDebug5fTypes"></a>
-<a name="robo123"></a><h2>Log/Log.Debug_Types [ Types ]</h2>
+<a name="robo124"></a><h2>Log/Log.Debug_Types [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Log</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of debug mode, which messages log to file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Debug_Types <span class="keyword">is</span> <span class="sign">(</span>None<span class="sign">,</span> Everything<span class="sign">,</span> <a href="./combat_ads.html#robo12">Combat</a><span class="sign">,</span> Menu<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Debug_Types <span class="keyword">is</span> <span class="sign">(</span>NONE<span class="sign">,</span> EVERYTHING<span class="sign">,</span> COMBAT<span class="sign">,</span> MENU<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Log2fLog2eDebugMode"></a>
-<a name="robo298"></a><h2>Log/Log.DebugMode [ Variables ]</h2>
+<a name="Log2fLog2eDefault5fDebug5fMode"></a>
+<a name="robo215"></a><h2>Log/Log.Default_Debug_Mode [ Constants ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Log</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default type of debug (disabled)
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Debug_Mode<span class="sign">:</span> <span class="keyword">constant</span> Debug_Types <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.0 - Added
+</pre>
+
+<hr />
+<a name="Log2fLog2eDebug5fMode"></a>
+<a name="robo309"></a><h2>Log/Log.Debug_Mode [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Did game is run in debug mode
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   DebugMode<span class="sign">:</span> Debug_Types <span class="sign">:</span><span class="sign">=</span> None<span class="sign">;</span>
+<pre class="source">   Debug_Mode<span class="sign">:</span> Debug_Types <span class="sign">:</span><span class="sign">=</span> Default_Debug_Mode<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Log2fLog2eEndLogging"></a>
-<a name="robo490"></a><h2>Log/Log.EndLogging [ Subprograms ]</h2>
+<a name="Log2fLog2eEnd5fLogging"></a>
+<a name="robo503"></a><h2>Log/Log.End_Logging [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Close debug.file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> EndLogging<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> End_Logging<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Log2fLog2eLogMessage"></a>
-<a name="robo491"></a><h2>Log/Log.LogMessage [ Subprograms ]</h2>
+<a name="Log2fLog2eLog5fMessage"></a>
+<a name="robo504"></a><h2>Log/Log.Log_Message [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> <a href="#robo37">Log</a> message (if proper type) to file in debug mode
+<pre> <a href="#robo38">Log</a> message (if proper type) to file in debug mode
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LogMessage
-     <span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">;</span> MessageType<span class="sign">:</span> Debug_Types<span class="sign">;</span>
-      NewLine<span class="sign">,</span> TimeStamp<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
+<pre class="source">   <span class="keyword">procedure</span> Log_Message
+     <span class="sign">(</span>Message<span class="sign">:</span> String<span class="sign">;</span> Message_Type<span class="sign">:</span> Debug_Types<span class="sign">;</span>
+      New_Line<span class="sign">,</span> Time_Stamp<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Message<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">,</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_LogMessage"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Message     - Message to write to debug log file
- MessageType - Type of message to write to debug log file
- NewLine     - If true, add new line character after message. Default is
-               true
- TimeStamp   - If true, add timestamp before message. Default is true
+<pre> Message      - Message to write to debug log file
+ Message_Type - Type of message to write to debug log file
+ New_Line     - If true, add new line character after message. Default is
+                true
+ Time_Stamp   - If true, add timestamp before message. Default is true
 </pre>
 
 <hr />
-<a name="Log2fLog2eStartLogging"></a>
-<a name="robo492"></a><h2>Log/Log.StartLogging [ Subprograms ]</h2>
+<a name="Log2fLog2eStart5fLogging"></a>
+<a name="robo505"></a><h2>Log/Log.Start_Logging [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo37">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo38">Log</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Open/create debug.log file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> StartLogging<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Start_Logging<span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/log.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/log.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

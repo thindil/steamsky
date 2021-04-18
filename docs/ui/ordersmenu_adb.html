@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,19 +30,106 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo531">OrdersMenu/OrdersMenu.Pray_Command</a></li>
-<li>2. <a href="#robo532">OrdersMenu/OrdersMenu.Set_As_Home_Command</a></li>
-<li>3. <a href="#robo533">OrdersMenu/OrdersMenu.Show_Trader_Command</a></li>
-<li>4. <a href="#robo721">OrdersMenu/OrdersMenu.Ask_For_Bases_Command</a></li>
-<li>5. <a href="#robo722">OrdersMenu/OrdersMenu.Ask_For_Events_Command</a></li>
-<li>6. <a href="#robo723">OrdersMenu/OrdersMenu.Attack_Command</a></li>
-<li>7. <a href="#robo724">OrdersMenu/OrdersMenu.Docking_Command</a></li>
+<li>1. <a href="#robo545">OrdersMenu/OrdersMenu.Complete_Mission_Command</a></li>
+<li>2. <a href="#robo546">OrdersMenu/OrdersMenu.Deliver_Medicines_Command</a></li>
+<li>3. <a href="#robo547">OrdersMenu/OrdersMenu.Execute_Story_Command</a></li>
+<li>4. <a href="#robo548">OrdersMenu/OrdersMenu.Pray_Command</a></li>
+<li>5. <a href="#robo549">OrdersMenu/OrdersMenu.Set_As_Home_Command</a></li>
+<li>6. <a href="#robo550">OrdersMenu/OrdersMenu.Show_Trader_Command</a></li>
+<li>7. <a href="#robo551">OrdersMenu/OrdersMenu.Start_Mission_Command</a></li>
+<li>8. <a href="#robo744">OrdersMenu/OrdersMenu.Ask_For_Bases_Command</a></li>
+<li>9. <a href="#robo745">OrdersMenu/OrdersMenu.Ask_For_Events_Command</a></li>
+<li>10. <a href="#robo746">OrdersMenu/OrdersMenu.Attack_Command</a></li>
+<li>11. <a href="#robo747">OrdersMenu/OrdersMenu.Docking_Command</a></li>
 </ul>
 <hr />
-<a name="OrdersMenu2fOrdersMenu2ePray5fCommand"></a>
-<a name="robo531"></a><h2>OrdersMenu/OrdersMenu.Pray_Command [ Subprograms ]</h2>
+<a name="OrdersMenu2fOrdersMenu2eComplete5fMission5fCommand"></a>
+<a name="robo545"></a><h2>OrdersMenu/OrdersMenu.Complete_Mission_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Complete the selected mission in base
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Complete_Mission_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> CompleteMission
+</pre>
+
+<hr />
+<a name="OrdersMenu2fOrdersMenu2eDeliver5fMedicines5fCommand"></a>
+<a name="robo546"></a><h2>OrdersMenu/OrdersMenu.Deliver_Medicines_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Deliver medicines to the base
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Deliver_Medicines_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> DeliverMedicines type
+ If argument type is free, deliver medicines for free, otherwise deliver
+ medicines for a price
+</pre>
+
+<hr />
+<a name="OrdersMenu2fOrdersMenu2eExecute5fStory5fCommand"></a>
+<a name="robo547"></a><h2>OrdersMenu/OrdersMenu.Execute_Story_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Execute the current step in the current story
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Execute_Story_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ExecuteStory
+</pre>
+
+<hr />
+<a name="OrdersMenu2fOrdersMenu2ePray5fCommand"></a>
+<a name="robo548"></a><h2>OrdersMenu/OrdersMenu.Pray_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Pray in the selected base
 </pre>
@@ -67,9 +154,9 @@
 
 <hr />
 <a name="OrdersMenu2fOrdersMenu2eSet5fAs5fHome5fCommand"></a>
-<a name="robo532"></a><h2>OrdersMenu/OrdersMenu.Set_As_Home_Command [ Subprograms ]</h2>
+<a name="robo549"></a><h2>OrdersMenu/OrdersMenu.Set_As_Home_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set the selected base as a home base
 </pre>
@@ -94,9 +181,9 @@
 
 <hr />
 <a name="OrdersMenu2fOrdersMenu2eShow5fTrader5fCommand"></a>
-<a name="robo533"></a><h2>OrdersMenu/OrdersMenu.Show_Trader_Command [ Subprograms ]</h2>
+<a name="robo550"></a><h2>OrdersMenu/OrdersMenu.Show_Trader_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Generate cargo for trader and show trading UI
 </pre>
@@ -122,10 +209,37 @@
 </pre>
 
 <hr />
-<a name="OrdersMenu2fOrdersMenu2eAsk5fFor5fBases5fCommand"></a>
-<a name="robo721"></a><h2>OrdersMenu/OrdersMenu.Ask_For_Bases_Command [ Commands ]</h2>
+<a name="OrdersMenu2fOrdersMenu2eStart5fMission5fCommand"></a>
+<a name="robo551"></a><h2>OrdersMenu/OrdersMenu.Start_Mission_Command [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Start the selected mission
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Start_Mission_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> StartMission
+</pre>
+
+<hr />
+<a name="OrdersMenu2fOrdersMenu2eAsk5fFor5fBases5fCommand"></a>
+<a name="robo744"></a><h2>OrdersMenu/OrdersMenu.Ask_For_Bases_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask for bases in the currently visited base
 </pre>
@@ -150,9 +264,9 @@
 
 <hr />
 <a name="OrdersMenu2fOrdersMenu2eAsk5fFor5fEvents5fCommand"></a>
-<a name="robo722"></a><h2>OrdersMenu/OrdersMenu.Ask_For_Events_Command [ Commands ]</h2>
+<a name="robo745"></a><h2>OrdersMenu/OrdersMenu.Ask_For_Events_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Ask for events in the currently visited base
 </pre>
@@ -177,9 +291,9 @@
 
 <hr />
 <a name="OrdersMenu2fOrdersMenu2eAttack5fCommand"></a>
-<a name="robo723"></a><h2>OrdersMenu/OrdersMenu.Attack_Command [ Commands ]</h2>
+<a name="robo746"></a><h2>OrdersMenu/OrdersMenu.Attack_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Start the combat
 </pre>
@@ -204,9 +318,9 @@
 
 <hr />
 <a name="OrdersMenu2fOrdersMenu2eDocking5fCommand"></a>
-<a name="robo724"></a><h2>OrdersMenu/OrdersMenu.Docking_Command [ Commands ]</h2>
+<a name="robo747"></a><h2>OrdersMenu/OrdersMenu.Docking_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo48">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ordersmenu_ads.html#robo49">OrdersMenu</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Dock or undock from the sky base
 </pre>
@@ -233,7 +347,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ordersmenu.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/ordersmenu.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

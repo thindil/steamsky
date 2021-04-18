@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,73 +30,79 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo63">SUI2/SUCrew</a></li>
+<li>1. <a href="#robo64">SUI2/SUCrew</a></li>
 <ul>
-<li>1.1. <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCrew/SUCI</a></li>
+<li>1.1. <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCrew/SUCI</a></li>
 <ul>
-<li>1.1.1. <a href="./ships-ui-crew-inventory_ads.html#robo596">SUCI/SUCI.AddCommands</a></li>
-<li>1.1.2. <a href="./ships-ui-crew-inventory_adb.html#robo597">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
-<li>1.1.3. <a href="./ships-ui-crew-inventory_adb.html#robo744">SUCI/SUCI.Move_Item_Command</a></li>
-<li>1.1.4. <a href="./ships-ui-crew-inventory_adb.html#robo745">SUCI/SUCI.Set_Use_Item_Command</a></li>
-<li>1.1.5. <a href="./ships-ui-crew-inventory_adb.html#robo746">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
-<li>1.1.6. <a href="./ships-ui-crew-inventory_adb.html#robo747">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
-<li>1.1.7. <a href="./ships-ui-crew-inventory_adb.html#robo748">SUCI/SUCI.Show_Move_Item_Command</a></li>
-<li>1.1.8. <a href="./ships-ui-crew-inventory_adb.html#robo749">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
+<li>1.1.1. <a href="./ships-ui-crew-inventory_adb.html#robo348">SUCI/SUCI.InventoryTable</a></li>
+<li>1.1.2. <a href="./ships-ui-crew-inventory_ads.html#robo614">SUCI/SUCI.AddCommands</a></li>
+<li>1.1.3. <a href="./ships-ui-crew-inventory_adb.html#robo615">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
+<li>1.1.4. <a href="./ships-ui-crew-inventory_adb.html#robo767">SUCI/SUCI.Move_Item_Command</a></li>
+<li>1.1.5. <a href="./ships-ui-crew-inventory_adb.html#robo768">SUCI/SUCI.Set_Use_Item_Command</a></li>
+<li>1.1.6. <a href="./ships-ui-crew-inventory_adb.html#robo769">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
+<li>1.1.7. <a href="./ships-ui-crew-inventory_adb.html#robo770">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
+<li>1.1.8. <a href="./ships-ui-crew-inventory_adb.html#robo771">SUCI/SUCI.Show_Move_Item_Command</a></li>
+<li>1.1.9. <a href="./ships-ui-crew-inventory_adb.html#robo772">SUCI/SUCI.Update_Inventory_Command</a></li>
+<li>1.1.10. <a href="./ships-ui-crew-inventory_adb.html#robo773">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
 </ul>
-<li>1.2. <a href="./ships-ui-crew_adb.html#robo337">SUCrew/SUCrew.CrewTable</a></li>
-<li>1.3. <a href="#robo598">SUCrew/SUCrew.AddCommands</a></li>
-<li>1.4. <a href="#robo599">SUCrew/SUCrew.UpdateCrewInfo</a></li>
-<li>1.5. <a href="./ships-ui-crew_adb.html#robo750">SUCrew/SUCrew.Dismiss_Command</a></li>
-<li>1.6. <a href="./ships-ui-crew_adb.html#robo751">SUCrew/SUCrew.Order_For_All_Command</a></li>
-<li>1.7. <a href="./ships-ui-crew_adb.html#robo752">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
-<li>1.8. <a href="./ships-ui-crew_adb.html#robo753">SUCrew/SUCrew.Set_Priority_Command</a></li>
-<li>1.9. <a href="./ships-ui-crew_adb.html#robo754">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
-<li>1.10. <a href="./ships-ui-crew_adb.html#robo755">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
-<li>1.11. <a href="./ships-ui-crew_adb.html#robo756">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
-<li>1.12. <a href="./ships-ui-crew_adb.html#robo757">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
-<li>1.13. <a href="./ships-ui-crew_adb.html#robo758">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
-<li>1.14. <a href="./ships-ui-crew_adb.html#robo759">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
+<li>1.2. <a href="./ships-ui-crew_adb.html#robo349">SUCrew/SUCrew.CrewTable</a></li>
+<li>1.3. <a href="#robo616">SUCrew/SUCrew.AddCommands</a></li>
+<li>1.4. <a href="#robo617">SUCrew/SUCrew.UpdateCrewInfo</a></li>
+<li>1.5. <a href="./ships-ui-crew_adb.html#robo774">SUCrew/SUCrew.Dismiss_Command</a></li>
+<li>1.6. <a href="./ships-ui-crew_adb.html#robo775">SUCrew/SUCrew.Order_For_All_Command</a></li>
+<li>1.7. <a href="./ships-ui-crew_adb.html#robo776">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
+<li>1.8. <a href="./ships-ui-crew_adb.html#robo777">SUCrew/SUCrew.Set_Priority_Command</a></li>
+<li>1.9. <a href="./ships-ui-crew_adb.html#robo778">SUCrew/SUCrew.Show_Crew_Command</a></li>
+<li>1.10. <a href="./ships-ui-crew_adb.html#robo779">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
+<li>1.11. <a href="./ships-ui-crew_adb.html#robo780">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
+<li>1.12. <a href="./ships-ui-crew_adb.html#robo781">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
+<li>1.13. <a href="./ships-ui-crew_adb.html#robo782">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
+<li>1.14. <a href="./ships-ui-crew_adb.html#robo783">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
+<li>1.15. <a href="./ships-ui-crew_adb.html#robo784">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
 </ul>
 </ul>
 <hr />
 <a name="SUI22fSUCrew"></a>
-<a name="robo63"></a><h2>SUI2/SUCrew [ Packages ]</h2>
+<a name="robo64"></a><h2>SUI2/SUCrew [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui_ads.html#robo56">SUI2</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui_ads.html#robo57">SUI2</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code to show information about the player ship crew members
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="../ships_ads.html#robo52">Ships</a><span class="sign">.</span>UI<span class="sign">.</span><a href="../crew_ads.html#robo17">Crew</a> <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="../ships_ads.html#robo53">Ships</a><span class="sign">.</span>UI<span class="sign">.</span><a href="../crew_ads.html#robo18">Crew</a> <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="SUCrew2fSUCrew2eAddCommands"></a>
-<a name="robo598"></a><h2>SUCrew/SUCrew.AddCommands [ Subprograms ]</h2>
+<a name="robo616"></a><h2>SUCrew/SUCrew.AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the player's ship crew members information
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo500">AddCommands</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo513">AddCommands</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="SUCrew2fSUCrew2eUpdateCrewInfo"></a>
-<a name="robo599"></a><h2>SUCrew/SUCrew.UpdateCrewInfo [ Subprograms ]</h2>
+<a name="robo617"></a><h2>SUCrew/SUCrew.UpdateCrewInfo [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo63">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">SUCrew</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update information about the player ship crew members
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> UpdateCrewInfo<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> UpdateCrewInfo<span class="sign">(</span>Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Page - The number of current page of crew list to show
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/ships-ui-crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

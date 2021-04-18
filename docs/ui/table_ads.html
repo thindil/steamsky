@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,22 +30,23 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo65">Table/Table</a></li>
+<li>1. <a href="#robo66">Table/Table</a></li>
 <ul>
-<li>1.1. <a href="#robo152">Table/Table.Headers_Array</a></li>
-<li>1.2. <a href="#robo153">Table/Table.Width_Array</a></li>
-<li>1.3. <a href="#robo198">Table/Table.Table_Widget</a></li>
-<li>1.4. <a href="#robo606">Table/AddPagination</a></li>
-<li>1.5. <a href="#robo607">Table/Table.AddButton</a></li>
-<li>1.6. <a href="#robo608">Table/Table.AddProgressBar</a></li>
-<li>1.7. <a href="#robo609">Table/Table.ClearTable</a></li>
-<li>1.8. <a href="#robo610">Table/Table.CreateTable</a></li>
-<li>1.9. <a href="#robo611">Table/Table.UpdateTable</a></li>
+<li>1.1. <a href="#robo153">Table/Table.Headers_Array</a></li>
+<li>1.2. <a href="#robo154">Table/Table.Width_Array</a></li>
+<li>1.3. <a href="#robo199">Table/Table.Table_Widget</a></li>
+<li>1.4. <a href="#robo625">Table/Table.AddButton</a></li>
+<li>1.5. <a href="#robo626">Table/Table.AddCheckButton</a></li>
+<li>1.6. <a href="#robo627">Table/Table.AddPagination</a></li>
+<li>1.7. <a href="#robo628">Table/Table.AddProgressBar</a></li>
+<li>1.8. <a href="#robo629">Table/Table.ClearTable</a></li>
+<li>1.9. <a href="#robo630">Table/Table.CreateTable</a></li>
+<li>1.10. <a href="#robo631">Table/Table.UpdateTable</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Table2fTable"></a>
-<a name="robo65"></a><h2>Table/Table [ Packages ]</h2>
+<a name="robo66"></a><h2>Table/Table [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -57,9 +58,9 @@
 
 <hr />
 <a name="Table2fTable2eHeaders5fArray"></a>
-<a name="robo152"></a><h2>Table/Table.Headers_Array [ Types ]</h2>
+<a name="robo153"></a><h2>Table/Table.Headers_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store the titles for columns in the selected table
 </pre>
@@ -69,9 +70,9 @@
 
 <hr />
 <a name="Table2fTable2eWidth5fArray"></a>
-<a name="robo153"></a><h2>Table/Table.Width_Array [ Types ]</h2>
+<a name="robo154"></a><h2>Table/Table.Width_Array [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store width of Table_Widget columns
 </pre>
@@ -81,9 +82,9 @@
 
 <hr />
 <a name="Table2fTable2eTable5fWidget"></a>
-<a name="robo198"></a><h2>Table/Table.Table_Widget [ Records ]</h2>
+<a name="robo199"></a><h2>Table/Table.Table_Widget [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Store data for each created table
 </pre>
@@ -105,43 +106,21 @@
 </pre>
 
 <hr />
-<a name="Table2fAddPagination"></a>
-<a name="robo606"></a><h2>Table/AddPagination [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Add pagination buttons to the bottom of the table
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <strong>AddPagination</strong>
-     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> PreviousCommand<span class="sign">,</span> NextCommand<span class="sign">:</span> String<span class="sign">)</span><span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a>           - The Table_Widget to which buttons will be added
- PreviousCommand - The Tcl command which will be executed by the previous
-                   button. If empty, button will not be shown.
- NextCommand     - The Tcl command which will be executed by the next
-                   button. If empty, button will not be shown.
-</pre>
-<p class="item_name">HISTORY</p>
-<pre> 5.9 - Added
-</pre>
-
-<hr />
 <a name="Table2fTable2eAddButton"></a>
-<a name="robo607"></a><h2>Table/Table.AddButton [ Subprograms ]</h2>
+<a name="robo625"></a><h2>Table/Table.AddButton [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add button item to the selected Table_Widget
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> AddButton
-     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span>
-      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span> Color<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Text<span class="sign">,</span> Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span>
+      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">;</span> Color<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1 <span class="keyword">and</span> Command<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a>   - The Table_Widget in which button will be added
+<pre> <a href="#robo66">Table</a>   - The Table_Widget in which button will be added
  Text    - The text displayed on the button
  Tooltip - The tooltip show when user hover mouse over button
  Command - Tcl command which will be executed when button was clicked
@@ -152,28 +131,81 @@
            use default interface color. Default value is empty.
 </pre>
 <p class="item_name">OUTPUT</p>
-<pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
+<pre> Updated <a href="#robo66">Table</a> parameter Table_Widget
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 5.7 - Added
 </pre>
 
 <hr />
-<a name="Table2fTable2eAddProgressBar"></a>
-<a name="robo608"></a><h2>Table/Table.AddProgressBar [ Subprograms ]</h2>
+<a name="Table2fTable2eAddCheckButton"></a>
+<a name="robo626"></a><h2>Table/Table.AddCheckButton [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Add check button item to the selected Table_Widget
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> AddCheckButton
+     <span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span> Checked<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Column<span class="sign">:</span> Positive<span class="sign">;</span> NewRow<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo66">Table</a>   - The Table_Widget in which button will be added
+ Tooltip - The tooltip show when user hover mouse over button
+ Command - Tcl command which will be executed when button was clicked. If
+           empty, the button will be disabled
+ Checked - If True, the button will be checked
+ Column  - The column in which the button will be added
+ NewRow  - If True, increase current number of row in the Table_Widget.
+           Default value is False.
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.0 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eAddPagination"></a>
+<a name="robo627"></a><h2>Table/Table.AddPagination [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Add pagination buttons to the bottom of the table
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> AddPagination
+     <span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> PreviousCommand<span class="sign">,</span> NextCommand<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> <a href="#robo66">Table</a>           - The Table_Widget to which buttons will be added
+ PreviousCommand - The Tcl command which will be executed by the previous
+                   button. If empty, button will not be shown.
+ NextCommand     - The Tcl command which will be executed by the next
+                   button. If empty, button will not be shown.
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 5.9 - Added
+</pre>
+
+<hr />
+<a name="Table2fTable2eAddProgressBar"></a>
+<a name="robo628"></a><h2>Table/Table.AddProgressBar [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add progress bar item to the selected Table_Widget
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> AddProgressBar
-     <span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Value<span class="sign">:</span> Natural<span class="sign">;</span> MaxValue<span class="sign">:</span> Positive<span class="sign">;</span>
+     <span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">;</span> Value<span class="sign">:</span> Natural<span class="sign">;</span> MaxValue<span class="sign">:</span> Positive<span class="sign">;</span>
       Tooltip<span class="sign">,</span> Command<span class="sign">:</span> String<span class="sign">;</span> Column<span class="sign">:</span> Positive<span class="sign">;</span>
-      NewRow<span class="sign">,</span> InvertColors<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
+      NewRow<span class="sign">,</span> InvertColors<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1 <span class="keyword">and</span> Value <span class="sign">&lt;</span><span class="sign">=</span> MaxValue<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a>        - The Table_Widget in which progress bar will be added
+<pre> <a href="#robo66">Table</a>        - The Table_Widget in which progress bar will be added
  Value        - The current value of the progress bar
  MaxValue     - The maximum value of the progress bar
  Tooltip      - The tooltip show when user hover mouse over progress bar
@@ -186,7 +218,7 @@
                 red instead of small amount red and max green)
 </pre>
 <p class="item_name">OUTPUT</p>
-<pre> Updated <a href="#robo65">Table</a> parameter Table_Widget
+<pre> Updated <a href="#robo66">Table</a> parameter Table_Widget
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 5.7 - Added
@@ -194,20 +226,21 @@
 
 <hr />
 <a name="Table2fTable2eClearTable"></a>
-<a name="robo609"></a><h2>Table/Table.ClearTable [ Subprograms ]</h2>
+<a name="robo629"></a><h2>Table/Table.ClearTable [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Clear data from the table
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> ClearTable<span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> ClearTable<span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a> - The Table_Widget which will be cleared
+<pre> <a href="#robo66">Table</a> - The Table_Widget which will be cleared
 </pre>
 <p class="item_name">OUTPUT</p>
-<pre> Cleared <a href="#robo65">Table</a> parameter Table_Widget
+<pre> Cleared <a href="#robo66">Table</a> parameter Table_Widget
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 5.7 - Added
@@ -215,16 +248,18 @@
 
 <hr />
 <a name="Table2fTable2eCreateTable"></a>
-<a name="robo610"></a><h2>Table/Table.CreateTable [ Subprograms ]</h2>
+<a name="robo630"></a><h2>Table/Table.CreateTable [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create a new table and columns headers in it
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> CreateTable
      <span class="sign">(</span>Parent<span class="sign">:</span> String<span class="sign">;</span> Headers<span class="sign">:</span> Headers_Array<span class="sign">;</span> With_Scrollbars<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
-      <span class="keyword">return</span> Table_Widget<span class="sign">;</span>
+      <span class="keyword">return</span> Table_Widget <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Parent<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0 and Headers'</span>Length <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> CreateTable<span class="keyword">'Result</span>.Row_Height <span class="sign">&gt;</span> 1<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Parent          - The Tk path for the parent widget
@@ -241,17 +276,18 @@
 
 <hr />
 <a name="Table2fTable2eUpdateTable"></a>
-<a name="robo611"></a><h2>Table/Table.UpdateTable [ Subprograms ]</h2>
+<a name="robo631"></a><h2>Table/Table.UpdateTable [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">Table</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update size and coordinates of all elements in the selected table
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> UpdateTable<span class="sign">(</span><a href="#robo65">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> UpdateTable<span class="sign">(</span><a href="#robo66">Table</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Table_Widget<span class="sign">)</span> <span class="keyword">with</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> <a href="#robo66">Table</a><span class="sign">.</span>Row_Height <span class="sign">&gt;</span> 1<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> <a href="#robo65">Table</a> - The Table_Widget which elements will be resized if needed
+<pre> <a href="#robo66">Table</a> - The Table_Widget which elements will be resized if needed
 </pre>
 <p class="item_name">HISTORY</p>
 <pre> 5.7 - Added
@@ -259,7 +295,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/table.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/table.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>
