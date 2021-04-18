@@ -44,6 +44,7 @@ All notable changes to this project will be documented in this file.
 - Color of the info about friendly trader in map info
 - Starting and completing missions
 - Progressing stories
+- Delivering medicines to the diseaded bases
 
 ## [5.9] - 2021-03-21
 
