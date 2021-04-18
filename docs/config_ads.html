@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -32,17 +32,23 @@
 <ul>
 <li>1. <a href="#robo14">Config/Config</a></li>
 <ul>
-<li>1.1. <a href="#robo81">Config/Config.AutoMoveBreak</a></li>
-<li>1.2. <a href="#robo82">Config/Config.AutoSaveType</a></li>
-<li>1.3. <a href="#robo83">Config/Config.Bonus_Type</a></li>
-<li>1.4. <a href="#robo84">Config/Config.Difficulty_Type</a></li>
-<li>1.5. <a href="#robo85">Config/Config.MessagesOrderType</a></li>
-<li>1.6. <a href="#robo164">Config/Config.GameSettingsRecord</a></li>
-<li>1.7. <a href="#robo165">Config/Config.NewGameRecord</a></li>
-<li>1.8. <a href="#robo227">Config/Config.GameSettings</a></li>
-<li>1.9. <a href="#robo228">Config/Config.NewGameSettings</a></li>
-<li>1.10. <a href="#robo399">Config/Config.LoadConfig</a></li>
-<li>1.11. <a href="#robo400">Config/Config.SaveConfig</a></li>
+<li>1.1. <a href="#robo82">Config/Config.Auto_Move_Break</a></li>
+<li>1.2. <a href="#robo83">Config/Config.Auto_Save_Type</a></li>
+<li>1.3. <a href="#robo84">Config/Config.Bonus_Type</a></li>
+<li>1.4. <a href="#robo85">Config/Config.Difficulty_Type</a></li>
+<li>1.5. <a href="#robo86">Config/Config.Messages_Order_Type</a></li>
+<li>1.6. <a href="#robo165">Config/Config.Game_Settings_Record</a></li>
+<li>1.7. <a href="#robo166">Config/Config.New_Game_Record</a></li>
+<li>1.8. <a href="#robo200">Config/Config.Default_Auto_Move_Stop</a></li>
+<li>1.9. <a href="#robo201">Config/Config.Default_Auto_Save_Time</a></li>
+<li>1.10. <a href="#robo202">Config/Config.Default_Difficulty_Type</a></li>
+<li>1.11. <a href="#robo203">Config/Config.Default_Game_Settings</a></li>
+<li>1.12. <a href="#robo204">Config/Config.Default_Messages_Order</a></li>
+<li>1.13. <a href="#robo205">Config/Config.Default_New_Game_Settings</a></li>
+<li>1.14. <a href="#robo235">Config/Config.Game_Settings</a></li>
+<li>1.15. <a href="#robo236">Config/Config.New_Game_Settings</a></li>
+<li>1.16. <a href="#robo411">Config/Config.Load_Config</a></li>
+<li>1.17. <a href="#robo412">Config/Config.SaveConfig</a></li>
 </ul>
 </ul>
 <hr />
@@ -58,32 +64,32 @@
 </pre>
 
 <hr />
-<a name="Config2fConfig2eAutoMoveBreak"></a>
-<a name="robo81"></a><h2>Config/Config.AutoMoveBreak [ Types ]</h2>
+<a name="Config2fConfig2eAuto5fMove5fBreak"></a>
+<a name="robo82"></a><h2>Config/Config.Auto_Move_Break [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Options when stop auto move of player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> AutoMoveBreak <span class="keyword">is</span> <span class="sign">(</span>NEVER<span class="sign">,</span> ANY<span class="sign">,</span> FRIENDLY<span class="sign">,</span> ENEMY<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Auto_Move_Break <span class="keyword">is</span> <span class="sign">(</span>NEVER<span class="sign">,</span> ANY<span class="sign">,</span> FRIENDLY<span class="sign">,</span> ENEMY<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Config2fConfig2eAutoSaveType"></a>
-<a name="robo82"></a><h2>Config/Config.AutoSaveType [ Types ]</h2>
+<a name="Config2fConfig2eAuto5fSave5fType"></a>
+<a name="robo83"></a><h2>Config/Config.Auto_Save_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Type used to set how often autosave is done
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> AutoSaveType <span class="keyword">is</span> <span class="sign">(</span>NONE<span class="sign">,</span> DOCK<span class="sign">,</span> UNDOCK<span class="sign">,</span> DAILY<span class="sign">,</span> MONTHLY<span class="sign">,</span> YEARLY<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Auto_Save_Type <span class="keyword">is</span> <span class="sign">(</span>NONE<span class="sign">,</span> DOCK<span class="sign">,</span> UNDOCK<span class="sign">,</span> DAILY<span class="sign">,</span> MONTHLY<span class="sign">,</span> YEARLY<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Config2fConfig2eBonus5fType"></a>
-<a name="robo83"></a><h2>Config/Config.Bonus_Type [ Types ]</h2>
+<a name="robo84"></a><h2>Config/Config.Bonus_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -95,7 +101,7 @@
 
 <hr />
 <a name="Config2fConfig2eDifficulty5fType"></a>
-<a name="robo84"></a><h2>Config/Config.Difficulty_Type [ Types ]</h2>
+<a name="robo85"></a><h2>Config/Config.Difficulty_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -106,199 +112,295 @@
 </pre>
 
 <hr />
-<a name="Config2fConfig2eMessagesOrderType"></a>
-<a name="robo85"></a><h2>Config/Config.MessagesOrderType [ Types ]</h2>
+<a name="Config2fConfig2eMessages5fOrder5fType"></a>
+<a name="robo86"></a><h2>Config/Config.Messages_Order_Type [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Options to set showing messages order
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> MessagesOrderType <span class="keyword">is</span> <span class="sign">(</span>OLDER_FIRST<span class="sign">,</span> NEWER_FIRST<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Messages_Order_Type <span class="keyword">is</span> <span class="sign">(</span>OLDER_FIRST<span class="sign">,</span> NEWER_FIRST<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Config2fConfig2eGameSettingsRecord"></a>
-<a name="robo164"></a><h2>Config/Config.GameSettingsRecord [ Records ]</h2>
+<a name="Config2fConfig2eGame5fSettings5fRecord"></a>
+<a name="robo165"></a><h2>Config/Config.Game_Settings_Record [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for game settings
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> GameSettingsRecord <span class="keyword">is</span> <span class="keyword">record</span>
-      AutoRest<span class="sign">:</span> Boolean<span class="sign">;</span>
-      UndockSpeed<span class="sign">:</span> ShipSpeed<span class="sign">;</span>
-      AutoCenter<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AutoReturn<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AutoFinish<span class="sign">:</span> Boolean<span class="sign">;</span>
-      LowFuel<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
-      LowDrinks<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
-      LowFood<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
-      AutoMoveStop<span class="sign">:</span> AutoMoveBreak<span class="sign">;</span>
-      WindowWidth<span class="sign">:</span> Positive<span class="sign">;</span>
-      WindowHeight<span class="sign">:</span> Positive<span class="sign">;</span>
-      MessagesLimit<span class="sign">:</span> Positive <span class="keyword">range</span> 10 <span class="sign">.</span><span class="sign">.</span> 5_000<span class="sign">;</span>
-      SavedMessages<span class="sign">:</span> Positive <span class="keyword">range</span> 5 <span class="sign">.</span><span class="sign">.</span> 200<span class="sign">;</span>
-      HelpFontSize<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
-      MapFontSize<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
-      InterfaceFontSize<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
-      InterfaceTheme<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      MessagesOrder<span class="sign">:</span> MessagesOrderType<span class="sign">;</span>
-      AutoAskForBases<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AutoAskForEvents<span class="sign">:</span> Boolean<span class="sign">;</span>
-      ShowTooltips<span class="sign">:</span> Boolean<span class="sign">;</span>
-      ShowLastMessages<span class="sign">:</span> Boolean<span class="sign">;</span>
-      MessagesPosition<span class="sign">:</span> Natural<span class="sign">;</span>
-      FullScreen<span class="sign">:</span> Boolean<span class="sign">;</span>
-      AutoCloseMessagesTime<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 60<span class="sign">;</span>
-      AutoSave<span class="sign">:</span> AutoSaveType<span class="sign">;</span>
-      TopicsPosition<span class="sign">:</span> Natural<span class="sign">;</span>
-      ShowNumbers<span class="sign">:</span> Boolean<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Game_Settings_Record <span class="keyword">is</span> <span class="keyword">record</span>
+      Auto_Rest<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Undock_Speed<span class="sign">:</span> ShipSpeed<span class="sign">;</span>
+      Auto_Center<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Auto_Return<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Auto_Finish<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Low_Fuel<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
+      Low_Drinks<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
+      Low_Food<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
+      Auto_Move_Stop<span class="sign">:</span> Auto_Move_Break<span class="sign">;</span>
+      Window_Width<span class="sign">:</span> Positive<span class="sign">;</span>
+      Window_Height<span class="sign">:</span> Positive<span class="sign">;</span>
+      Messages_Limit<span class="sign">:</span> Positive <span class="keyword">range</span> 10 <span class="sign">.</span><span class="sign">.</span> 5_000<span class="sign">;</span>
+      Saved_Messages<span class="sign">:</span> Positive <span class="keyword">range</span> 5 <span class="sign">.</span><span class="sign">.</span> 200<span class="sign">;</span>
+      Help_Font_Size<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
+      Map_Font_Size<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
+      Interface_Font_Size<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
+      Interface_Theme<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Messages_Order<span class="sign">:</span> Messages_Order_Type<span class="sign">;</span>
+      Auto_Ask_For_Bases<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Auto_Ask_For_Events<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Show_Tooltips<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Show_Last_Messages<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Messages_Position<span class="sign">:</span> Natural<span class="sign">;</span>
+      Full_Screen<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Auto_Close_Messages_Time<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 60<span class="sign">;</span>
+      Auto_Save<span class="sign">:</span> Auto_Save_Type<span class="sign">;</span>
+      Topics_Position<span class="sign">:</span> Natural<span class="sign">;</span>
+      Show_Numbers<span class="sign">:</span> Boolean<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> AutoRest              - If true, rest when pilot/engineer need rest
- UndockSpeed           - Default player ship speed after undock
- AutoCenter            - If true, back to ship after sets destination for
-                         it
- AutoReturn            - If true, set base as destination for ship after
-                         finished mission
- AutoFinish            - If true, complete mission if ship is near
-                         corresponding base
- LowFuel               - Amount of fuel below which warning about low
-                         level is show
- LowDrinks             - Amount of drinkis below which warning about low
-                         level is show
- LowFood               - Amount of food below which warning about low
-                         level is show
- AutoMoveStop          - When stop automoving of player ship
- WindowWidth           - <a href="./game_ads.html#robo23">Game</a> window default width
- WindowHeight          - <a href="./game_ads.html#robo23">Game</a> window default height
- MessagesLimit         - Max amount of messages showed in game
- SavedMessages         - Max amount fo messages saved to file
- HelpFontSize          - Size of font used in help
- MapFontSize           - Size of font used in map
- InterfaceFontSize     - Size of font used in interface
- InterfaceTheme        - Name of current user interface theme
- MessagesOrder         - Order of showing messages
- AutoAskForBases       - If true, auto ask for new bases when ship docked
- AutoAskForEvents      - If true, auto ask for new events in bases when
-                         ship docked
- ShowTooltips          - If true, show tooltips to player
- ShowLastMessages      - If true, show last messages window everywhere
- MessagesPosition      - Height of last messages window in pixels from
-                         bottom of the game window
- FullScreen            - If true, set the game window in full screen mode
- AutoCloseMessagesTime - Amount of seconds after which message box is
-                         auto closed
- AutoSave              - How often game is autosaved
- TopicPosition         - Position of help topics window in pixels from
-                         top of the help window
- ShowNumbers           - If true, show numbers values instead of text for
-                         various things (like weapon strength, etc)
+<pre> Auto_Rest                - If true, rest when pilot/engineer need rest
+ Undock_Speed             - Default player ship speed after undock
+ Auto_Center              - If true, back to ship after sets destination for
+                            it
+ Auto_Return              - If true, set base as destination for ship after
+                            finished mission
+ Auto_Finish              - If true, complete mission if ship is near
+                            corresponding base
+ Low_Fuel                 - Amount of fuel below which warning about low
+                            level is show
+ Low_Drinks               - Amount of drinkis below which warning about low
+                            level is show
+ Low_Food                 - Amount of food below which warning about low
+                            level is show
+ Auto_Move_Stop           - When stop automoving of player ship
+ Window_Width             - <a href="./game_ads.html#robo24">Game</a> window default width
+ Window_Height            - <a href="./game_ads.html#robo24">Game</a> window default height
+ Messages_Limit           - Max amount of messages showed in game
+ Saved_Messages           - Max amount fo messages saved to file
+ Help_Font_Size           - Size of font used in help
+ Map_Font_Size            - Size of font used in map
+ Interface_Font_Size      - Size of font used in interface
+ Interface_Theme          - Name of current user interface theme
+ Messages_Order           - Order of showing messages
+ Auto_Ask_For_Bases       - If true, auto ask for new bases when ship docked
+ Auto_Ask_For_Events      - If true, auto ask for new events in bases when
+                            ship docked
+ Show_Tooltips            - If true, show tooltips to player
+ Show_Last_Messages       - If true, show last messages window everywhere
+ Messages_Position        - Height of last messages window in pixels from
+                            bottom of the game window
+ Full_Screen              - If true, set the game window in full screen mode
+ Auto_Close_Messages_Time - Amount of seconds after which message box is
+                            auto closed
+ Auto_Save                - How often game is autosaved
+ Topic_Position           - Position of help topics window in pixels from
+                            top of the help window
+ Show_Numbers             - If true, show numbers values instead of text for
+                            various things (like weapon strength, etc)
 </pre>
 
 <hr />
-<a name="Config2fConfig2eNewGameRecord"></a>
-<a name="robo165"></a><h2>Config/Config.NewGameRecord [ Records ]</h2>
+<a name="Config2fConfig2eNew5fGame5fRecord"></a>
+<a name="robo166"></a><h2>Config/Config.New_Game_Record [ Records ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data for new game settings
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> NewGameRecord <span class="keyword">is</span> <span class="keyword">record</span>
-      PlayerName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      PlayerGender<span class="sign">:</span> Character<span class="sign">;</span>
-      ShipName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      PlayerFaction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      PlayerCareer<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      StartingBase<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      EnemyDamageBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      PlayerDamageBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      EnemyMeleeDamageBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      PlayerMeleeDamageBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      ExperienceBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      ReputationBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      UpgradeCostBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      PricesBonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
-      DifficultyLevel<span class="sign">:</span> Difficulty_Type<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> New_Game_Record <span class="keyword">is</span> <span class="keyword">record</span>
+      Player_Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Player_Gender<span class="sign">:</span> Character<span class="sign">;</span>
+      Ship_Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Player_Faction<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Player_Career<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Starting_Base<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Enemy_Damage_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Player_Damage_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Enemy_Melee_Damage_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Player_Melee_Damage_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Experience_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Reputation_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Upgrade_Cost_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Prices_Bonus<span class="sign">:</span> Bonus_Type<span class="sign">;</span>
+      Difficulty_Level<span class="sign">:</span> Difficulty_Type<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> PlayerName             - Default player name
- PlayerGender           - Default player gender
- ShipName               - Default ship name
- PlayerFaction          - Default player faction index
- PlayerCareer           - Default player career index
- StartingBase           - Default starting base type
- EnemyDamageBonus       - Default bonus for enemy ship to damage
- PlayerDamageBonus      - Default bonus for player ship to damage
- EnemyMeleeDamageBonus  - Default bonus for enemy to damage in melee
-                          combat
- PlayerMeleeDamageBonus - Default bonus for player and player's ship crew
-                          to damage in melee combat
- ExperienceBonus        - Default bonus to gained experience
- ReputationBonus        - Default bonus to gained or lost reputation in
-                          bases
- UpgradeCostBonus       - Default bonus to amount of materials needed for
-                          player's ship upgrades.
- PricesBonus            - Default bonus to prices for services in bases
- DifficultyLevel        - Default the game difficulty level
+<pre> Player_Name               - Default player name
+ Player_Gender             - Default player gender
+ Ship_Name                 - Default ship name
+ Player_Faction            - Default player faction index
+ Player_Career             - Default player career index
+ Starting_Base             - Default starting base type
+ Enemy_Damage_Bonus        - Default bonus for enemy ship to damage
+ Player_Damage_Bonus       - Default bonus for player ship to damage
+ Enemy_Melee_Damage_Bonus  - Default bonus for enemy to damage in melee
+                             combat
+ Player_Melee_Damage_Bonus - Default bonus for player and player's ship
+                             crew to damage in melee combat
+ Experience_Bonus          - Default bonus to gained experience
+ Reputation_Bonus          - Default bonus to gained or lost reputation in
+                             bases
+ Upgrade_Cost_Bonus        - Default bonus to amount of materials needed for
+                             player's ship upgrades.
+ Prices_Bonus              - Default bonus to prices for services in bases
+ Difficulty_Level          - Default the game difficulty level
 </pre>
 
 <hr />
-<a name="Config2fConfig2eGameSettings"></a>
-<a name="robo227"></a><h2>Config/Config.GameSettings [ Variables ]</h2>
+<a name="Config2fConfig2eDefault5fAuto5fMove5fStop"></a>
+<a name="robo200"></a><h2>Config/Config.Default_Auto_Move_Stop [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default setting for stop automovement of the player ship
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Auto_Move_Stop<span class="sign">:</span> <span class="keyword">constant</span> Auto_Move_Break <span class="sign">:</span><span class="sign">=</span> NEVER<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eDefault5fAuto5fSave5fTime"></a>
+<a name="robo201"></a><h2>Config/Config.Default_Auto_Save_Time [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default time when to auto save the game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Auto_Save_Time<span class="sign">:</span> <span class="keyword">constant</span> Auto_Save_Type <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eDefault5fDifficulty5fType"></a>
+<a name="robo202"></a><h2>Config/Config.Default_Difficulty_Type [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default difficulty level for the game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Difficulty_Type<span class="sign">:</span> <span class="keyword">constant</span> Difficulty_Type <span class="sign">:</span><span class="sign">=</span> NORMAL<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eDefault5fGame5fSettings"></a>
+<a name="robo203"></a><h2>Config/Config.Default_Game_Settings [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default setting for the game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Game_Settings<span class="sign">:</span> <span class="keyword">constant</span> Game_Settings_Record <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>Auto_Rest <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Undock_Speed <span class="sign">=</span><span class="sign">&gt;</span> FULL_SPEED<span class="sign">,</span> Auto_Center <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Auto_Return <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Auto_Finish <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Low_Fuel <span class="sign">=</span><span class="sign">&gt;</span> 100<span class="sign">,</span>
+      Low_Drinks <span class="sign">=</span><span class="sign">&gt;</span> 50<span class="sign">,</span> Low_Food <span class="sign">=</span><span class="sign">&gt;</span> 25<span class="sign">,</span>
+      Auto_Move_Stop <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Move_Stop<span class="sign">,</span> Window_Width <span class="sign">=</span><span class="sign">&gt;</span> 800<span class="sign">,</span>
+      Window_Height <span class="sign">=</span><span class="sign">&gt;</span> 600<span class="sign">,</span> Messages_Limit <span class="sign">=</span><span class="sign">&gt;</span> 500<span class="sign">,</span> Saved_Messages <span class="sign">=</span><span class="sign">&gt;</span> 10<span class="sign">,</span>
+      Help_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span> Map_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 16<span class="sign">,</span> Interface_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span>
+      Interface_Theme <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"steamsky"</span><span class="sign">)</span><span class="sign">,</span>
+      Messages_Order <span class="sign">=</span><span class="sign">&gt;</span> Default_Messages_Order<span class="sign">,</span> Auto_Ask_For_Bases <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
+      Auto_Ask_For_Events <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span> Show_Tooltips <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Show_Last_Messages <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Messages_Position <span class="sign">=</span><span class="sign">&gt;</span> 213<span class="sign">,</span>
+      Full_Screen <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span> Auto_Close_Messages_Time <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">,</span>
+      Auto_Save <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Save_Time<span class="sign">,</span> Topics_Position <span class="sign">=</span><span class="sign">&gt;</span> 200<span class="sign">,</span>
+      Show_Numbers <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eDefault5fMessages5fOrder"></a>
+<a name="robo204"></a><h2>Config/Config.Default_Messages_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default order of show the last messages
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Messages_Order<span class="sign">:</span> <span class="keyword">constant</span> Messages_Order_Type <span class="sign">:</span><span class="sign">=</span> OLDER_FIRST<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eDefault5fNew5fGame5fSettings"></a>
+<a name="robo205"></a><h2>Config/Config.Default_New_Game_Settings [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default settings for the new game
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_New_Game_Settings<span class="sign">:</span> <span class="keyword">constant</span> New_Game_Record <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>Player_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Laeran"</span><span class="sign">)</span><span class="sign">,</span>
+      Player_Gender <span class="sign">=</span><span class="sign">&gt;</span> <span class="squote">'M'</span><span class="sign">,</span>
+      Ship_Name <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Anaria"</span><span class="sign">)</span><span class="sign">,</span>
+      Player_Faction <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"POLEIS"</span><span class="sign">)</span><span class="sign">,</span>
+      Player_Career <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"general"</span><span class="sign">)</span><span class="sign">,</span>
+      Starting_Base <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Any"</span><span class="sign">)</span><span class="sign">,</span>
+      Enemy_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Player_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Enemy_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Player_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Experience_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Reputation_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Upgrade_Cost_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Prices_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Difficulty_Level <span class="sign">=</span><span class="sign">&gt;</span> Default_Difficulty_Type<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Config2fConfig2eGame5fSettings"></a>
+<a name="robo235"></a><h2>Config/Config.Game_Settings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> General settings for the game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   GameSettings<span class="sign">:</span> GameSettingsRecord<span class="sign">;</span>
+<pre class="source">   Game_Settings<span class="sign">:</span> Game_Settings_Record<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Config2fConfig2eNewGameSettings"></a>
-<a name="robo228"></a><h2>Config/Config.NewGameSettings [ Variables ]</h2>
+<a name="Config2fConfig2eNew5fGame5fSettings"></a>
+<a name="robo236"></a><h2>Config/Config.New_Game_Settings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Settings for the new game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   NewGameSettings<span class="sign">:</span> NewGameRecord<span class="sign">;</span>
+<pre class="source">   New_Game_Settings<span class="sign">:</span> New_Game_Record<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Config2fConfig2eLoadConfig"></a>
-<a name="robo399"></a><h2>Config/Config.LoadConfig [ Subprograms ]</h2>
+<a name="Config2fConfig2eLoad5fConfig"></a>
+<a name="robo411"></a><h2>Config/Config.Load_Config [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load game configuration from file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LoadConfig<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Load_Config<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Config2fConfig2eSaveConfig"></a>
-<a name="robo400"></a><h2>Config/Config.SaveConfig [ Subprograms ]</h2>
+<a name="robo412"></a><h2>Config/Config.SaveConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Save game configuration to file
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> SaveConfig<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Save_Config<span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,19 +30,33 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo597">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
-<li>2. <a href="#robo744">SUCI/SUCI.Move_Item_Command</a></li>
-<li>3. <a href="#robo745">SUCI/SUCI.Set_Use_Item_Command</a></li>
-<li>4. <a href="#robo746">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
-<li>5. <a href="#robo747">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
-<li>6. <a href="#robo748">SUCI/SUCI.Show_Move_Item_Command</a></li>
-<li>7. <a href="#robo749">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
+<li>1. <a href="#robo348">SUCI/SUCI.InventoryTable</a></li>
+<li>2. <a href="#robo615">SUCI/SUCI.Show_Inventory_Menu_Command</a></li>
+<li>3. <a href="#robo767">SUCI/SUCI.Move_Item_Command</a></li>
+<li>4. <a href="#robo768">SUCI/SUCI.Set_Use_Item_Command</a></li>
+<li>5. <a href="#robo769">SUCI/SUCI.Show_Inventory_Item_Info_Command</a></li>
+<li>6. <a href="#robo770">SUCI/SUCI.Show_Member_Inventory_Command</a></li>
+<li>7. <a href="#robo771">SUCI/SUCI.Show_Move_Item_Command</a></li>
+<li>8. <a href="#robo772">SUCI/SUCI.Update_Inventory_Command</a></li>
+<li>9. <a href="#robo773">SUCI/SUCI.Validate_Move_Amount_Command</a></li>
 </ul>
 <hr />
-<a name="SUCI2fSUCI2eShow5fInventory5fMenu5fCommand"></a>
-<a name="robo597"></a><h2>SUCI/SUCI.Show_Inventory_Menu_Command [ Subprograms ]</h2>
+<a name="SUCI2fSUCI2eInventoryTable"></a>
+<a name="robo348"></a><h2>SUCI/SUCI.InventoryTable [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> <a href="./table_ads.html#robo66">Table</a> with info about the crew member inventory
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   InventoryTable<span class="sign">:</span> Table_Widget <span class="sign">(</span>5<span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="SUCI2fSUCI2eShow5fInventory5fMenu5fCommand"></a>
+<a name="robo615"></a><h2>SUCI/SUCI.Show_Inventory_Menu_Command [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show the menu with available the selected item options
 </pre>
@@ -68,9 +82,9 @@
 
 <hr />
 <a name="SUCI2fSUCI2eMove5fItem5fCommand"></a>
-<a name="robo744"></a><h2>SUCI/SUCI.Move_Item_Command [ Commands ]</h2>
+<a name="robo767"></a><h2>SUCI/SUCI.Move_Item_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Move the selected item to the ship cargo
 </pre>
@@ -97,9 +111,9 @@
 
 <hr />
 <a name="SUCI2fSUCI2eSet5fUse5fItem5fCommand"></a>
-<a name="robo745"></a><h2>SUCI/SUCI.Set_Use_Item_Command [ Commands ]</h2>
+<a name="robo768"></a><h2>SUCI/SUCI.Set_Use_Item_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set if item is used by a crew member or not
 </pre>
@@ -110,9 +124,9 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
+<pre> ClientData - Custom data send to the command.
  Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
+ Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
 <p class="item_name">RESULT</p>
@@ -126,9 +140,9 @@
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fInventory5fItem5fInfo5fCommand"></a>
-<a name="robo746"></a><h2>SUCI/SUCI.Show_Inventory_Item_Info_Command [ Commands ]</h2>
+<a name="robo769"></a><h2>SUCI/SUCI.Show_Inventory_Item_Info_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show detailed information about the selected item in crew member
  inventory
@@ -154,9 +168,9 @@
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fMember5fInventory5fCommand"></a>
-<a name="robo747"></a><h2>SUCI/SUCI.Show_Member_Inventory_Command [ Commands ]</h2>
+<a name="robo770"></a><h2>SUCI/SUCI.Show_Member_Inventory_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show inventory of the selected crew member
 </pre>
@@ -167,8 +181,8 @@
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
  Argc       - Number of arguments passed to the command.
  Argv       - Values of arguments passed to the command.
 </pre>
@@ -182,9 +196,9 @@
 
 <hr />
 <a name="SUCI2fSUCI2eShow5fMove5fItem5fCommand"></a>
-<a name="robo748"></a><h2>SUCI/SUCI.Show_Move_Item_Command [ Commands ]</h2>
+<a name="robo771"></a><h2>SUCI/SUCI.Show_Move_Item_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Show UI to move the selected item to the ship cargo
 </pre>
@@ -210,10 +224,39 @@
 </pre>
 
 <hr />
-<a name="SUCI2fSUCI2eValidate5fMove5fAmount5fCommand"></a>
-<a name="robo749"></a><h2>SUCI/SUCI.Validate_Move_Amount_Command [ Commands ]</h2>
+<a name="SUCI2fSUCI2eUpdate5fInventory5fCommand"></a>
+<a name="robo772"></a><h2>SUCI/SUCI.Update_Inventory_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo61">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update inventory list of the selected crew member
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Update_Inventory_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> UpdateInventory memberindex page
+ MemberIndex is the index of the crew member to show inventory, page
+ is a number of the page of inventory list to show
+</pre>
+
+<hr />
+<a name="SUCI2fSUCI2eValidate5fMove5fAmount5fCommand"></a>
+<a name="robo773"></a><h2>SUCI/SUCI.Validate_Move_Amount_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew-inventory_ads.html#robo62">SUCI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Validate amount of the item to move
 </pre>
@@ -238,7 +281,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-crew-inventory.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/ships-ui-crew-inventory.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>

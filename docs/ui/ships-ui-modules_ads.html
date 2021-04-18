@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 5.9 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,51 +30,68 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo64">SUI2/SUModules</a></li>
+<li>1. <a href="#robo65">SUI2/SUModules</a></li>
 <ul>
-<li>1.1. <a href="#robo602">SUModules/SUModules.AddCommands</a></li>
-<li>1.2. <a href="./ships-ui-modules_adb.html#robo603">SUModules/SUModules.Show_Module_Menu_Command</a></li>
-<li>1.3. <a href="./ships-ui-modules_adb.html#robo763">SUModules/SUModules.Assign_Module_Command</a></li>
-<li>1.4. <a href="./ships-ui-modules_adb.html#robo764">SUModules/SUModules.Cancel_Order_Command</a></li>
-<li>1.5. <a href="./ships-ui-modules_adb.html#robo765">SUModules/SUModules.Disable_Engine_Command</a></li>
-<li>1.6. <a href="./ships-ui-modules_adb.html#robo766">SUModules/SUModules.Get_Active_Button_Command</a></li>
-<li>1.7. <a href="./ships-ui-modules_adb.html#robo767">SUModules/SUModules.Reset_Destination_Command</a></li>
-<li>1.8. <a href="./ships-ui-modules_adb.html#robo768">SUModules/SUModules.Set_Repair_Command</a></li>
-<li>1.9. <a href="./ships-ui-modules_adb.html#robo769">SUModules/SUModules.Set_Upgrade_Command</a></li>
-<li>1.10. <a href="./ships-ui-modules_adb.html#robo770">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
-<li>1.11. <a href="./ships-ui-modules_adb.html#robo771">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
-<li>1.12. <a href="./ships-ui-modules_adb.html#robo772">SUModules/SUModules.Show_Module_Info_Command</a></li>
-<li>1.13. <a href="./ships-ui-modules_adb.html#robo773">SUModules/SUModules.Stop_Upgrading_Command</a></li>
-<li>1.14. <a href="./ships-ui-modules_adb.html#robo774">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
+<li>1.1. <a href="#robo620">SUModules/SUModules.AddCommands</a></li>
+<li>1.2. <a href="./ships-ui-modules_adb.html#robo621">SUModules/SUModules.Show_Module_Menu_Command</a></li>
+<li>1.3. <a href="#robo622">SUModules/SUModules.UpdateModulesInfo</a></li>
+<li>1.4. <a href="./ships-ui-modules_adb.html#robo788">SUModules/SUModules.Assign_Module_Command</a></li>
+<li>1.5. <a href="./ships-ui-modules_adb.html#robo789">SUModules/SUModules.Cancel_Order_Command</a></li>
+<li>1.6. <a href="./ships-ui-modules_adb.html#robo790">SUModules/SUModules.Disable_Engine_Command</a></li>
+<li>1.7. <a href="./ships-ui-modules_adb.html#robo791">SUModules/SUModules.Get_Active_Button_Command</a></li>
+<li>1.8. <a href="./ships-ui-modules_adb.html#robo792">SUModules/SUModules.Reset_Destination_Command</a></li>
+<li>1.9. <a href="./ships-ui-modules_adb.html#robo793">SUModules/SUModules.Set_Repair_Command</a></li>
+<li>1.10. <a href="./ships-ui-modules_adb.html#robo794">SUModules/SUModules.Set_Upgrade_Command</a></li>
+<li>1.11. <a href="./ships-ui-modules_adb.html#robo795">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
+<li>1.12. <a href="./ships-ui-modules_adb.html#robo796">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
+<li>1.13. <a href="./ships-ui-modules_adb.html#robo797">SUModules/SUModules.Show_Module_Info_Command</a></li>
+<li>1.14. <a href="./ships-ui-modules_adb.html#robo798">SUModules/SUModules.Show_Modules_Command</a></li>
+<li>1.15. <a href="./ships-ui-modules_adb.html#robo799">SUModules/SUModules.Stop_Upgrading_Command</a></li>
+<li>1.16. <a href="./ships-ui-modules_adb.html#robo800">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
 </ul>
 </ul>
 <hr />
 <a name="SUI22fSUModules"></a>
-<a name="robo64"></a><h2>SUI2/SUModules [ Packages ]</h2>
+<a name="robo65"></a><h2>SUI2/SUModules [ Packages ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui_ads.html#robo56">SUI2</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui_ads.html#robo57">SUI2</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Provide code to show information about the player ship modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source"><span class="keyword">package</span> <a href="../ships_ads.html#robo52">Ships</a><span class="sign">.</span>UI<span class="sign">.</span>Modules <span class="keyword">is</span>
+<pre class="source"><span class="keyword">package</span> <a href="../ships_ads.html#robo53">Ships</a><span class="sign">.</span>UI<span class="sign">.</span>Modules <span class="keyword">is</span>
 </pre>
 
 <hr />
 <a name="SUModules2fSUModules2eAddCommands"></a>
-<a name="robo602"></a><h2>SUModules/SUModules.AddCommands [ Subprograms ]</h2>
+<a name="robo620"></a><h2>SUModules/SUModules.AddCommands [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo64">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the player's ship modules information
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo500">AddCommands</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo513">AddCommands</a><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="SUModules2fSUModules2eUpdateModulesInfo"></a>
+<a name="robo622"></a><h2>SUModules/SUModules.UpdateModulesInfo [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo65">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update information about the player ship modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">procedure</span> UpdateModulesInfo<span class="sign">(</span>Page<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">)</span><span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> Page - The number of current page of modules list to show
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-modules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Mar 21 2021 06:27:37
+<p>Generated from ./src/ui/ships-ui-modules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
 </p>
 </div> <!-- footer -->
 </body>
