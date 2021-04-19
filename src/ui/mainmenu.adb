@@ -129,7 +129,7 @@ package body MainMenu is
       Font.Configure
         ("InterfaceFont",
          "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
-      configure(VersionLabel, "-text {" & Game_Version & "}");
+      configure(VersionLabel, "-text {" & Game_Version & " development}");
       DataError := To_Unbounded_String(Load_Game_Data);
       if DataError /= Null_Unbounded_String then
          ShowMainMenu;
