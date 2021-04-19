@@ -24,6 +24,7 @@ with Game; use Game;
 
 package body Log is
 
+   --## rule off DIRECTLY_ACCESSED_GLOBALS
    -- ****iv* Log/Log.Log_File
    -- FUNCTION
    -- Debug log file
@@ -60,8 +61,7 @@ package body Log is
         (Message_Type /= Debug_Mode and Debug_Mode /= EVERYTHING) then
          return;
       end if;
-      if not Is_Open
-          (Log_File) then --## rule line off DIRECTLY_ACCESSED_GLOBALS
+      if not Is_Open(Log_File) then
          return;
       end if;
       New_Message :=
@@ -70,10 +70,7 @@ package body Log is
              ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
          else To_Unbounded_String(Message));
       if New_Line then
-         Put_Line
-           (Log_File, --## rule line off DIRECTLY_ACCESSED_GLOBALS
-
-            To_String(New_Message));
+         Put_Line(Log_File, To_String(New_Message));
       else
          Put(Log_File, To_String(New_Message));
       end if;
@@ -89,5 +86,6 @@ package body Log is
          Debug_Mode);
       Close(Log_File);
    end End_Logging;
+   --## rule on DIRECTLY_ACCESSED_GLOBALS
 
 end Log;
