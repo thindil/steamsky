@@ -12,12 +12,11 @@ closed. Any code propositions should go to the [Fossil](https://www.laeran.pl/re
 ## Game versions
 There are currently 2 versions of the game:
 * 6.0.x: "stable" version of game. This version will receive bug fixes but
-  no new features. Source code for this version is in the *6.0* branch. **This**
-  version.
+  no new features. Source code for this version is in the *6.0* branch.
 * 6.x: "development" version of game, future version 6.0. This is where
   game feature updates happen. Due to new features, save compatibility
   will typically break between releases. Use this version at your own risk.
-  Source code for this version is in the *trunk* branch.
+  Source code for this version is in the *trunk* branch. **This** version.
 
 ## Build game from sources
 
