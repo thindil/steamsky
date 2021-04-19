@@ -1,8 +1,8 @@
-name: Continuous Integration - development version
+name: Continuous Integration - stable version
 
 on:
   push:
-    branches: [ master ]
+    branches: [ 6.0 ]
 
 jobs:
 
@@ -10,7 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild
+    container: ghcr.io/thindil/adabuild:9
 
     steps:
     - name: Checkout
@@ -31,7 +31,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild
+    container: ghcr.io/thindil/adabuild:9
 
     steps:
     - name: Checkout
@@ -46,8 +46,8 @@ jobs:
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
-         name: steamsky-development-linux.tar
-         path: steamsky-development-linux.tar
+         name: steamsky-stable-linux.tar
+         path: steamsky-stable-linux.tar
 
   build_windows:
 
@@ -55,7 +55,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuildwin64
+    container: ghcr.io/thindil/adabuildwin64:9
 
     steps:
     - name: Checkout
@@ -70,5 +70,5 @@ jobs:
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
       with:
-         name: steamsky-development-windows.tar
-         path: steamsky-development-windows.tar
+         name: steamsky-stable-windows.tar
+         path: steamsky-stable-windows.tar
