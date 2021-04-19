@@ -11,7 +11,7 @@ options:
   --multidoc
   --index
   --internal
-  --documenttitle "Steamsky 6.0 code documentation"
+  --documenttitle "Steamsky 6.1 code documentation"
   --syntaxcolors
   --sections
   --toc
