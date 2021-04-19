@@ -252,17 +252,13 @@ package body Bases.ShipyardUI is
          exit Load_Install_Modules_Loop when InstallTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Install_Modules_Loop;
-      if Page > 1 then
-         AddPagination
-           (InstallTable,
-            "ShowShipyard " & Arguments & Positive'Image(Page - 1),
-            (if InstallTable.Row < 26 then ""
-             else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
-      elsif InstallTable.Row = 26 then
-         AddPagination
-           (InstallTable, "",
-            "ShowShipyard " & Arguments & Positive'Image(Page + 1));
-      end if;
+      AddPagination
+        (InstallTable,
+         (if Page > 1 then
+            "ShowShipyard " & Arguments & Positive'Image(Page - 1)
+          else ""),
+         (if InstallTable.Row < 26 then ""
+          else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(InstallTable);
       ClearTable(RemoveTable);
       Current_Row := 1;
@@ -325,26 +321,15 @@ package body Bases.ShipyardUI is
          end if;
          <<End_Of_Remove_Loop>>
       end loop Load_Remove_Modules_Loop;
-      if Page > 1 then
-         if RemoveTable.Row < 26 then
-            AddPagination
-              (RemoveTable,
-               "ShowShipyard " & Arguments & Positive'Image(Page - 1), "");
-         else
-            AddPagination
-              (RemoveTable,
-               "ShowShipyard " & Arguments & Positive'Image(Page - 1),
-               "ShowShipyard " & Arguments & Positive'Image(Page + 1));
-         end if;
-      elsif RemoveTable.Row = 26 then
-         AddPagination
-           (RemoveTable, "",
-            "ShowShipyard " & Arguments & Positive'Image(Page + 1));
-      end if;
+      AddPagination
+        (RemoveTable,
+         (if Page > 1 then
+            "ShowShipyard " & Arguments & Positive'Image(Page - 1)
+          else ""),
+         (if RemoveTable.Row < 26 then ""
+          else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(RemoveTable);
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      ShipyardFrame.Name :=
-        New_String(Widget_Image(ShipyardCanvas) & ".shipyard");
       configure
         (ShipyardCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
@@ -442,11 +427,8 @@ package body Bases.ShipyardUI is
             if Installing then
                Insert
                  (ModuleText, "end",
-                  "{" & LF & "Ship hull can be only replaced.}");
-               Insert
-                 (ModuleText, "end",
-                  "{" & LF & "Modules space:" & Positive'Image(MaxValue) &
-                  "}");
+                  "{" & LF & "Ship hull can be only replaced." & LF &
+                  "Modules space:" & Positive'Image(MaxValue) & "}");
             end if;
             Insert
               (ModuleText, "end",
@@ -485,8 +467,8 @@ package body Bases.ShipyardUI is
          when GUN | HARPOON_GUN =>
             Insert
               (ModuleText, "end",
-               "{" & LF & "Strength:" & Natural'Image(MaxValue) & "}");
-            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
+               "{" & LF & "Strength:" & Natural'Image(MaxValue) & LF &
+               "Ammunition: }");
             MAmount := 0;
             Ammunition_Info_Loop :
             for Item of Items_List loop
@@ -580,7 +562,7 @@ package body Bases.ShipyardUI is
    -- Show information about the selected module to install
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -593,19 +575,26 @@ package body Bases.ShipyardUI is
    function Show_Install_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleDialog: constant Ttk_Frame :=
         Create(".moduledialog", "-style Dialog.TFrame");
       ModuleText: constant Tk_Text :=
         Create(ModuleDialog & ".info", "-height 10 -width 40");
-      InstallButton, CloseButton: Ttk_Button;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
+      CloseButton: constant Ttk_Button :=
+        Create
+          (ModuleDialog & ".buttonbox.button",
+           "-text Close -command {CloseDialog " & ModuleDialog & "}");
+      InstallButton: constant Ttk_Button :=
+        Create
+          (ModuleDialog & ".buttonbox.install",
+           "-text Install -command {CloseDialog " & ModuleDialog &
+           ";ManipulateModule install}");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
@@ -613,17 +602,13 @@ package body Bases.ShipyardUI is
       Tag_Configure(ModuleText, "red", "-foreground red");
       Delete(ModuleText, "1.0", "end");
       Insert(ModuleText, "end", "{Install cost:}");
-      if MoneyIndex2 = 0
-        or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
-         Insert
-           (ModuleText, "end",
-            "{" & Positive'Image(Cost) & " " & To_String(Money_Name) &
-            "} [list red]");
-      else
-         Insert
-           (ModuleText, "end",
-            "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
-      end if;
+      Insert
+        (ModuleText, "end",
+         "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
+         (if
+            MoneyIndex2 = 0 or else PlayerShip.Cargo(MoneyIndex2).Amount < Cost
+          then " [list red]"
+          else ""));
       Insert
         (ModuleText, "end",
          "{" & LF & "Installation time:" &
@@ -634,12 +619,6 @@ package body Bases.ShipyardUI is
          "-state disabled -height [expr " &
          Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
-      Frame := Create(ModuleDialog & ".buttonbox");
-      InstallButton :=
-        Create
-          (ModuleDialog & ".buttonbox.install",
-           "-text Install -command {CloseDialog " & ModuleDialog &
-           ";ManipulateModule install}");
       Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
       Find_Hull_Loop :
       for Module of PlayerShip.Modules loop
@@ -665,10 +644,6 @@ package body Bases.ShipyardUI is
             configure(InstallButton, "-state !disabled");
          end if;
       end if;
-      CloseButton :=
-        Create
-          (ModuleDialog & ".buttonbox.button",
-           "-text Close -command {CloseDialog " & ModuleDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
