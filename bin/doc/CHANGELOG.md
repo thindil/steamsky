@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Look of tooltips in the game options
+
 ## [6.0] - 2021-04-18
 
 ### Added
