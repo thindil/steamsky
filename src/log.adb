@@ -15,12 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Calendar; use Ada.Calendar;
+with Ada.Calendar;
 with Ada.Calendar.Formatting;
-with Ada.Directories; use Ada.Directories;
+with Ada.Directories;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
-with Game; use Game;
+with Game;
 
 package body Log is
 
@@ -33,6 +33,9 @@ package body Log is
    -- ****
 
    procedure Start_Logging is
+      use Ada.Directories;
+      use Game;
+
    begin
       if Debug_Mode = Default_Debug_Mode then
          return;
@@ -55,36 +58,41 @@ package body Log is
    procedure Log_Message
      (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
+      use Ada.Calendar;
+
       New_Message: Unbounded_String;
    begin
       if Debug_Mode = Default_Debug_Mode or
         (Message_Type /= Debug_Mode and Debug_Mode /= EVERYTHING) then
          return;
       end if;
-      if not Is_Open(Log_File) then
+      if not Is_Open(File => Log_File) then
          return;
       end if;
       New_Message :=
         (if Time_Stamp then
            To_Unbounded_String
-             ("[" & Ada.Calendar.Formatting.Image(Clock) & "]:" & Message)
-         else To_Unbounded_String(Message));
+             (Source =>
+                "[" & Ada.Calendar.Formatting.Image(Date => Clock) & "]:" &
+                Message)
+         else To_Unbounded_String(Source => Message));
       if New_Line then
-         Put_Line(Log_File, To_String(New_Message));
+         Put_Line(File => Log_File, Item => To_String(Source => New_Message));
       else
-         Put(Log_File, To_String(New_Message));
+         Put(File => Log_File, Item => To_String(Source => New_Message));
       end if;
    end Log_Message;
 
    procedure End_Logging is
    begin
-      if Debug_Mode = Default_Debug_Mode or not Is_Open(Log_File) then
+      if Debug_Mode = Default_Debug_Mode or not Is_Open(File => Log_File) then
          return;
       end if;
       Log_Message
-        ("Ending game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
-         Debug_Mode);
-      Close(Log_File);
+        (Message =>
+           "Ending game in debug mode: " & Debug_Types'Image(Debug_Mode) & ".",
+         Message_Type => Debug_Mode);
+      Close(File => Log_File);
    end End_Logging;
    --## rule on DIRECTLY_ACCESSED_GLOBALS
 
