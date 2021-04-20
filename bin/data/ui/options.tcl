@@ -117,47 +117,47 @@ proc SetShortcut {field key} {
    set specialkey {}
 }
 set moveoptions [ttk::frame $optionsframe.notebook.movement]
-grid [ttk::label $moveoptions.lbl1 -text {Move ship up/left:}]
-grid [ttk::entry $moveoptions.upleft] -row 0 -column 1
+grid [ttk::label $moveoptions.lbl1 -text {Move ship up/left:}] -sticky w
+grid [ttk::entry $moveoptions.upleft -width 15] -row 0 -column 1 -sticky w
 bind $moveoptions.upleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl2 -text {Move ship up:}]
-grid [ttk::entry $moveoptions.up] -row 1 -column 1
+grid [ttk::label $moveoptions.lbl2 -text {Move ship up:}] -sticky w
+grid [ttk::entry $moveoptions.up -width 15] -row 1 -column 1 -sticky w
 bind $moveoptions.up <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl3 -text {Move ship up/right:}]
-grid [ttk::entry $moveoptions.upright] -row 2 -column 1
+grid [ttk::label $moveoptions.lbl3 -text {Move ship up/right:}] -sticky w
+grid [ttk::entry $moveoptions.upright -width 15] -row 2 -column 1 -sticky w
 bind $moveoptions.upright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl4 -text {Move ship left:}]
-grid [ttk::entry $moveoptions.left] -row 3 -column 1
+grid [ttk::label $moveoptions.lbl4 -text {Move ship left:}] -sticky w
+grid [ttk::entry $moveoptions.left -width 15] -row 3 -column 1 -sticky w
 bind $moveoptions.left <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}]
-grid [ttk::entry $moveoptions.wait] -row 4 -column 1
+grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}] -sticky w
+grid [ttk::entry $moveoptions.wait -width 15] -row 4 -column 1 -sticky w
 bind $moveoptions.wait <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl6 -text {Move ship right:}]
-grid [ttk::entry $moveoptions.right] -row 5 -column 1
+grid [ttk::label $moveoptions.lbl6 -text {Move ship right:}] -sticky w
+grid [ttk::entry $moveoptions.right -width 15] -row 5 -column 1 -sticky w
 bind $moveoptions.right <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl7 -text {Move ship down/left:}]
-grid [ttk::entry $moveoptions.downleft] -row 6 -column 1
+grid [ttk::label $moveoptions.lbl7 -text {Move ship down/left:}] -sticky w
+grid [ttk::entry $moveoptions.downleft -width 15] -row 6 -column 1 -sticky w
 bind $moveoptions.downleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl8 -text {Move ship down:}]
-grid [ttk::entry $moveoptions.down] -row 7 -column 1
+grid [ttk::label $moveoptions.lbl8 -text {Move ship down:}] -sticky w
+grid [ttk::entry $moveoptions.down -width 15] -row 7 -column 1 -sticky w
 bind $moveoptions.down <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl9 -text {Move ship down/right:}]
-grid [ttk::entry $moveoptions.downright] -row 8 -column 1
+grid [ttk::label $moveoptions.lbl9 -text {Move ship down/right:}] -sticky w
+grid [ttk::entry $moveoptions.downright -width 15] -row 8 -column 1 -sticky w
 bind $moveoptions.downright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl10 -text {Move ship to destination:}]
-grid [ttk::entry $moveoptions.moveto] -row 9 -column 1
+grid [ttk::label $moveoptions.lbl10 -text {Move ship to destination:}] -sticky w
+grid [ttk::entry $moveoptions.moveto -width 15] -row 9 -column 1 -sticky w
 bind $moveoptions.moveto <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl11 -text {Set full stop for ship:}]
-grid [ttk::entry $moveoptions.fullstop] -row 10 -column 1
+grid [ttk::label $moveoptions.lbl11 -text {Set full stop for ship:}] -sticky w
+grid [ttk::entry $moveoptions.fullstop -width 15] -row 10 -column 1 -sticky w
 bind $moveoptions.fullstop <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl12 -text {Set quarter speed for ship:}]
-grid [ttk::entry $moveoptions.quarterspeed] -row 11 -column 1
+grid [ttk::label $moveoptions.lbl12 -text {Set quarter speed for ship:}] -sticky w
+grid [ttk::entry $moveoptions.quarterspeed -width 15] -row 11 -column 1 -sticky w
 bind $moveoptions.quarterspeed <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl13 -text {Set half speed for ship:}]
-grid [ttk::entry $moveoptions.halfspeed] -row 12 -column 1
+grid [ttk::label $moveoptions.lbl13 -text {Set half speed for ship:}] -sticky w
+grid [ttk::entry $moveoptions.halfspeed -width 15] -row 12 -column 1 -sticky w
 bind $moveoptions.halfspeed <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl14 -text {Set full speed for ship:}]
-grid [ttk::entry $moveoptions.fullspeed] -row 13 -column 1
+grid [ttk::label $moveoptions.lbl14 -text {Set full speed for ship:}] -sticky w
+grid [ttk::entry $moveoptions.fullspeed -width 15] -row 13 -column 1 -sticky w
 bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
