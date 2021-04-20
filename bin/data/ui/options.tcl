@@ -201,71 +201,71 @@ bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
 set mapoptions [ttk::frame $optionsframe.notebook.map]
-grid [ttk::label $mapoptions.lbl1 -text {Center map on player ship:}]
-grid [ttk::entry $mapoptions.center] -row 0 -column 1
+grid [ttk::label $mapoptions.lbl1 -text {Center map on player ship:}] -sticky w
+grid [ttk::entry $mapoptions.center -width 15] -row 0 -column 1 -sticky w
 bind $mapoptions.center <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl2 -text {Center map on home base:}]
-grid [ttk::entry $mapoptions.centerhomebase] -row 1 -column 1
+grid [ttk::label $mapoptions.lbl2 -text {Center map on home base:}] -sticky w
+grid [ttk::entry $mapoptions.centerhomebase -width 15] -row 1 -column 1 -sticky w
 bind $mapoptions.centerhomebase <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl3 -text {Move map to left:}]
-grid [ttk::entry $mapoptions.mapleft] -row 2 -column 1
+grid [ttk::label $mapoptions.lbl3 -text {Move map to left:}] -sticky w
+grid [ttk::entry $mapoptions.mapleft -width 15] -row 2 -column 1 -sticky w
 bind $mapoptions.mapleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl4 -text {Move map to right:}]
-grid [ttk::entry $mapoptions.mapright] -row 3 -column 1
+grid [ttk::label $mapoptions.lbl4 -text {Move map to right:}] -sticky w
+grid [ttk::entry $mapoptions.mapright -width 15] -row 3 -column 1 -sticky w
 bind $mapoptions.mapright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl5 -text {Move map up:}]
-grid [ttk::entry $mapoptions.mapup] -row 4 -column 1
+grid [ttk::label $mapoptions.lbl5 -text {Move map up:}] -sticky w
+grid [ttk::entry $mapoptions.mapup -width 15] -row 4 -column 1 -sticky w
 bind $mapoptions.mapup <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl6 -text {Move map down:}]
-grid [ttk::entry $mapoptions.mapdown] -row 5 -column 1
+grid [ttk::label $mapoptions.lbl6 -text {Move map down:}] -sticky w
+grid [ttk::entry $mapoptions.mapdown -width 15] -row 5 -column 1 -sticky w
 bind $mapoptions.mapdown <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl7 -text {Move map up/left:}]
-grid [ttk::entry $mapoptions.mapupleft] -row 6 -column 1
+grid [ttk::label $mapoptions.lbl7 -text {Move map up/left:}] -sticky w
+grid [ttk::entry $mapoptions.mapupleft -width 15] -row 6 -column 1 -sticky w
 bind $mapoptions.mapupleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl8 -text {Move map up/right:}]
-grid [ttk::entry $mapoptions.mapupright] -row 7 -column 1
+grid [ttk::label $mapoptions.lbl8 -text {Move map up/right:}] -sticky w
+grid [ttk::entry $mapoptions.mapupright -width 15] -row 7 -column 1 -sticky w
 bind $mapoptions.mapupright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl9 -text {Move map down/left:}]
-grid [ttk::entry $mapoptions.mapdownleft] -row 8 -column 1
+grid [ttk::label $mapoptions.lbl9 -text {Move map down/left:}] -sticky w
+grid [ttk::entry $mapoptions.mapdownleft -width 15] -row 8 -column 1 -sticky w
 bind $mapoptions.mapdownleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl10 -text {Move map down/right:}]
-grid [ttk::entry $mapoptions.mapdownright] -row 9 -column 1
+grid [ttk::label $mapoptions.lbl10 -text {Move map down/right:}] -sticky w
+grid [ttk::entry $mapoptions.mapdownright -width 15] -row 9 -column 1 -sticky w
 bind $mapoptions.mapdownright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl11 -text {Move cursor up/left:}]
-grid [ttk::entry $mapoptions.cursorupleft] -row 10 -column 1
+grid [ttk::label $mapoptions.lbl11 -text {Move cursor up/left:}] -sticky w
+grid [ttk::entry $mapoptions.cursorupleft -width 15] -row 10 -column 1 -sticky w
 bind $mapoptions.cursorupleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl12 -text {Move cursor up:}]
-grid [ttk::entry $mapoptions.cursorup] -row 11 -column 1
+grid [ttk::label $mapoptions.lbl12 -text {Move cursor up:}] -sticky w
+grid [ttk::entry $mapoptions.cursorup -width 15] -row 11 -column 1 -sticky w
 bind $mapoptions.cursorup <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl13 -text {Move cursor up/right:}]
-grid [ttk::entry $mapoptions.cursorupright] -row 12 -column 1
+grid [ttk::label $mapoptions.lbl13 -text {Move cursor up/right:}] -sticky w
+grid [ttk::entry $mapoptions.cursorupright -width 15] -row 12 -column 1 -sticky w
 bind $mapoptions.cursorupright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl14 -text {Move cursor left:}]
-grid [ttk::entry $mapoptions.cursorleft] -row 13 -column 1
+grid [ttk::label $mapoptions.lbl14 -text {Move cursor left:}] -sticky w
+grid [ttk::entry $mapoptions.cursorleft -width 15] -row 13 -column 1 -sticky w
 bind $mapoptions.cursorleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl15 -text {Move cursor right:}]
-grid [ttk::entry $mapoptions.cursorright] -row 14 -column 1
+grid [ttk::label $mapoptions.lbl15 -text {Move cursor right:}] -sticky w
+grid [ttk::entry $mapoptions.cursorright -width 15] -row 14 -column 1 -sticky w
 bind $mapoptions.cursorright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl16 -text {Move cursor down/left:}]
-grid [ttk::entry $mapoptions.cursordownleft] -row 15 -column 1
+grid [ttk::label $mapoptions.lbl16 -text {Move cursor down/left:}] -sticky w
+grid [ttk::entry $mapoptions.cursordownleft -width 15] -row 15 -column 1 -sticky w
 bind $mapoptions.cursordownleft <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl17 -text {Move cursor down:}]
-grid [ttk::entry $mapoptions.cursordown] -row 16 -column 1
+grid [ttk::label $mapoptions.lbl17 -text {Move cursor down:}] -sticky w
+grid [ttk::entry $mapoptions.cursordown -width 15] -row 16 -column 1 -sticky w
 bind $mapoptions.cursordown <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl18 -text {Move cursor donw/right:}]
-grid [ttk::entry $mapoptions.cursordownright] -row 17 -column 1
+grid [ttk::label $mapoptions.lbl18 -text {Move cursor donw/right:}] -sticky w
+grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 -sticky w
 bind $mapoptions.cursordownright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl19 -text {Press mouse left button:}]
-grid [ttk::entry $mapoptions.clickmouse] -row 18 -column 1
+grid [ttk::label $mapoptions.lbl19 -text {Press mouse left button:}] -sticky w
+grid [ttk::entry $mapoptions.clickmouse -width 15] -row 18 -column 1 -sticky w
 bind $mapoptions.clickmouse <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl20 -text {Zoom in map:}]
-grid [ttk::entry $mapoptions.zoomin] -row 19 -column 1
+grid [ttk::label $mapoptions.lbl20 -text {Zoom in map:}] -sticky w
+grid [ttk::entry $mapoptions.zoomin -width 15] -row 19 -column 1 -sticky w
 bind $mapoptions.zoomin <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl21 -text {Zoom out map:}]
-grid [ttk::entry $mapoptions.zoomout] -row 20 -column 1
+grid [ttk::label $mapoptions.lbl21 -text {Zoom out map:}] -sticky w
+grid [ttk::entry $mapoptions.zoomout -width 15] -row 20 -column 1 -sticky w
 bind $mapoptions.zoomout <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl22 -text {Show move map options:}]
-grid [ttk::entry $mapoptions.mapoptions] -row 21 -column 1
+grid [ttk::label $mapoptions.lbl22 -text {Show move map options:}] -sticky w
+grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $mapoptions -text {Map keys}
 # Interface options
