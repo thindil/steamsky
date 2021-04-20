@@ -35,9 +35,9 @@ tooltip::tooltip $goptions.lbl3 {After set destination for ship, center map on s
 grid [ttk::checkbutton $goptions.autocenter] -row 2 -column 1
 tooltip::tooltip $goptions.autocenter {After set destination for ship, center map on ship.}
 grid [ttk::label $goptions.lbl4 -text {Auto set base after finished mission:}]
-tooltip::tooltip $goptions.lbl4 {After finished mission, set skybase from which mission was taken as a destination for ship.}
+tooltip::tooltip $goptions.lbl4 "After finished mission, set skybase from which\nmission was taken as a destination for ship."
 grid [ttk::checkbutton $goptions.autoreturn] -row 3 -column 1
-tooltip::tooltip $goptions.autoreturn {After finished mission, set skybase from which mission was taken as a destination for ship.}
+tooltip::tooltip $goptions.autoreturn "After finished mission, set skybase from which\nmission was taken as a destination for ship."
 grid [ttk::label $goptions.lbl5 -text {Auto finish missions:}]
 tooltip::tooltip $goptions.lbl5 {Auto finish missions when ship is near corresponding skybase.}
 grid [ttk::checkbutton $goptions.autofinish] -row 4 -column 1
@@ -51,33 +51,33 @@ tooltip::tooltip $goptions.lbl7 {Auto ask for events when ship end docking to ba
 grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1
 tooltip::tooltip $goptions.autoaskforevents {Auto ask for events when ship end docking to bases.}
 grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}]
-tooltip::tooltip $goptions.lbl8 {Amount of fuel below which you will see warning about low level of.}
+tooltip::tooltip $goptions.lbl8 "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 7 -column 1
-tooltip::tooltip $goptions.fuel {Amount of fuel below which you will see warning about low level of.}
+tooltip::tooltip $goptions.fuel "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}]
-tooltip::tooltip $goptions.lbl9 {Amount of drinks below which you will see warning about low level of.}
+tooltip::tooltip $goptions.lbl9 "Amount of drinks below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 8 -column 1
-tooltip::tooltip $goptions.drinks {Amount of drinks below which you will see warning about low level of.}
+tooltip::tooltip $goptions.drinks "Amount of drinks below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl10 -text {Low level of food:}]
-tooltip::tooltip $goptions.lbl10 {Amount of food below which you will see warning about low level of.}
+tooltip::tooltip $goptions.lbl10 "Amount of food below which you will see warning about low\nlevel of. Enter value between 1 and 10 000."
 grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 9 -column 1
-tooltip::tooltip $goptions.food {Amount of food below which you will see warning about low level of.}
+tooltip::tooltip $goptions.food "Amount of food below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}]
-tooltip::tooltip $goptions.lbl11 {Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.}
+tooltip::tooltip $goptions.lbl11 "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
 grid [ttk::combobox $goptions.automovestop -state readonly -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10] -row 10 -column 1
-tooltip::tooltip $goptions.automovestop {Set when auto move ship should stop: never, on meet any ship, on meet friendly ship or on meet enemy ship.}
+tooltip::tooltip $goptions.automovestop "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}]
-tooltip::tooltip $goptions.lbl12 {Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.}
+tooltip::tooltip $goptions.lbl12 "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 11 -column 1
-tooltip::tooltip $goptions.messageslimit {Amount of messages stored in game. If new message arrive when limit is reached, oldest message will be deleted. Enter value between 10 and 5000.}
+tooltip::tooltip $goptions.messageslimit "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}]
-tooltip::tooltip $goptions.lbl13 {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
+tooltip::tooltip $goptions.lbl13 "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
 grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 12 -column 1
-tooltip::tooltip $goptions.savedmessages {Maximum amount of last messages saved to file. Enter value between 5 and 200.}
+tooltip::tooltip $goptions.savedmessages "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
 grid [ttk::label $goptions.lbl14 -text {Messages order:}]
-tooltip::tooltip $goptions.lbl14 {In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.}
+tooltip::tooltip $goptions.lbl14 "In what order show messages in game. If Older first\nill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
 grid [ttk::combobox $goptions.messagesorder -state readonly -values [list {Older messages first} {Newer messages first}] -width 16] -row 13 -column 1
-tooltip::tooltip $goptions.messagesorder {In what order show messages in game. If Older first will be select, then older messages will appear at top of the lists. Otherwise newer messages will be at top.}
+tooltip::tooltip $goptions.messagesorder "In what order show messages in game. If Older first will\nbe select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
 grid [ttk::label $goptions.lbl15 -text {Autosave game:}]
 tooltip::tooltip $goptions.lbl15 {How often game should be automatically saved to disk.}
 grid [ttk::combobox $goptions.autosave -state readonly -values [list {Never} {After dock to base} {After undock from base} {Every game day} {Every game month} {Every game year}] -width 18] -row 14 -column 1
@@ -294,9 +294,9 @@ tooltip::tooltip $ioptions.lbl8 {Auto close game messages after that amount of s
 grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 5 -column 1
 tooltip::tooltip $ioptions.closemessages {Auto close game messages after that amount of seconds.}
 grid [ttk::label $ioptions.lbl9 -text {Show numeric values:}]
-tooltip::tooltip $ioptions.lbl9 {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
+tooltip::tooltip $ioptions.lbl9 "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
 grid [ttk::checkbutton $ioptions.shownumbers] -row 6 -column 1
-tooltip::tooltip $ioptions.shownumbers {Show numeric values of many statistics, like crew abilities, weapons strength, etc.}
+tooltip::tooltip $ioptions.shownumbers "Show numeric values of many statistics, like\ncrew abilities, weapons strength, etc."
 grid [ttk::label $ioptions.lbl10 -text {Size of map font:}]
 tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used to draw game map.}
 grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}] -row 7 -column 1
