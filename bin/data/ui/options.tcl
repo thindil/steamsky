@@ -162,41 +162,41 @@ bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
 set menuoptions [ttk::frame $optionsframe.notebook.menu]
-grid [ttk::label $menuoptions.lbl1 -text {Ship information:}]
-grid [ttk::entry $menuoptions.shipinfo] -row 0 -column 1
+grid [ttk::label $menuoptions.lbl1 -text {Ship information:}] -sticky w
+grid [ttk::entry $menuoptions.shipinfo -width 15] -row 0 -column 1 -sticky w
 bind $menuoptions.shipinfo <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl4 -text {Ship orders:}]
-grid [ttk::entry $menuoptions.orders] -row 1 -column 1
+grid [ttk::label $menuoptions.lbl4 -text {Ship orders:}] -sticky w
+grid [ttk::entry $menuoptions.orders -width 15] -row 1 -column 1 -sticky w
 bind $menuoptions.orders <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl5 -text {Crafting orders:}]
-grid [ttk::entry $menuoptions.crafts] -row 2 -column 1
+grid [ttk::label $menuoptions.lbl5 -text {Crafting orders:}] -sticky w
+grid [ttk::entry $menuoptions.crafts -width 15] -row 2 -column 1 -sticky w
 bind $menuoptions.crafts <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl6 -text {Last messages:}]
-grid [ttk::entry $menuoptions.messages] -row 3 -column 1
+grid [ttk::label $menuoptions.lbl6 -text {Last messages:}] -sticky w
+grid [ttk::entry $menuoptions.messages -width 15] -row 3 -column 1 -sticky w
 bind $menuoptions.messages <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl7 -text {Knowledge lists:}]
-grid [ttk::entry $menuoptions.knowledge] -row 4 -column 1
+grid [ttk::label $menuoptions.lbl7 -text {Knowledge lists:}] -sticky w
+grid [ttk::entry $menuoptions.knowledge -width 15] -row 4 -column 1 -sticky w
 bind $menuoptions.knowledge <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}]
-grid [ttk::entry $menuoptions.waitorders] -row 5 -column 1
+grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}] -sticky w
+grid [ttk::entry $menuoptions.waitorders -width 15] -row 5 -column 1 -sticky w
 bind $menuoptions.waitorders <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}]
-grid [ttk::entry $menuoptions.gamestats] -row 6 -column 1
+grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}] -sticky w
+grid [ttk::entry $menuoptions.gamestats -width 15] -row 6 -column 1 -sticky w
 bind $menuoptions.gamestats <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl13 -text {Help:}]
-grid [ttk::entry $menuoptions.help] -row 7 -column 1
+grid [ttk::label $menuoptions.lbl13 -text {Help:}] -sticky w
+grid [ttk::entry $menuoptions.help -width 15] -row 7 -column 1 -sticky w
 bind $menuoptions.help <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl14 -text {Game options:}]
-grid [ttk::entry $menuoptions.gameoptions] -row 8 -column 1
+grid [ttk::label $menuoptions.lbl14 -text {Game options:}] -sticky w
+grid [ttk::entry $menuoptions.gameoptions -width 15] -row 8 -column 1 -sticky w
 bind $menuoptions.gameoptions <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}]
-grid [ttk::entry $menuoptions.quit] -row 9 -column 1
+grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}] -sticky w
+grid [ttk::entry $menuoptions.quit -width 15] -row 9 -column 1 -sticky w
 bind $menuoptions.quit <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}]
-grid [ttk::entry $menuoptions.resign] -row 10 -column 1
+grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}] -sticky w
+grid [ttk::entry $menuoptions.resign -width 15] -row 10 -column 1 -sticky w
 bind $menuoptions.resign <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $menuoptions.lbl17 -text {Show menu:}]
-grid [ttk::entry $menuoptions.menu] -row 11 -column 1
+grid [ttk::label $menuoptions.lbl17 -text {Show menu:}] -sticky w
+grid [ttk::entry $menuoptions.menu -width 15] -row 11 -column 1 -sticky w
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
