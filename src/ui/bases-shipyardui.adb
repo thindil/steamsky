@@ -720,7 +720,7 @@ package body Bases.ShipyardUI is
    -- Show information about the selected module to remove
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- SOURCE
@@ -733,7 +733,7 @@ package body Bases.ShipyardUI is
    function Show_Remove_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
       Cost: Natural;
       Damage: Float;
       ShipModuleIndex: constant Natural :=
@@ -745,11 +745,10 @@ package body Bases.ShipyardUI is
         Create(ModuleDialog & ".info", "-height 10 -width 40");
       Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
       RemoveButton, CloseButton: Ttk_Button;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
+      Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Damage :=
         1.0 -
         Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
@@ -768,10 +767,9 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
-      Insert(ModuleText, "end", "{Remove gain:" & Positive'Image(Cost) & "}");
       Insert
         (ModuleText, "end",
-         "{" & LF & "Removing time:" &
+         "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
          Positive'Image
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
               .InstallTime) &
@@ -810,7 +808,6 @@ package body Bases.ShipyardUI is
         (ModuleText,
          "-state disabled -height [expr " &
          Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
-      Frame := Create(ModuleDialog & ".buttonbox");
       RemoveButton :=
         Create
           (ModuleDialog & ".buttonbox.install",
@@ -909,7 +906,7 @@ package body Bases.ShipyardUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       ShipyardCanvas: constant Tk_Canvas :=
-        Get_Widget(".gameframe.paned.shipyardframe.canvas", Interp);
+        Get_Widget(Main_Paned & ".shipyardframe.canvas", Interp);
       ShipyardFrame: constant Ttk_Frame :=
         Get_Widget(ShipyardCanvas & ".shipyard");
       Frame: Ttk_Frame;
