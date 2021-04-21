@@ -96,7 +96,7 @@ package body Ships.Crew is
               ("You died from " & To_String(Reason) & ".", CombatMessage, RED);
             PlayerShip.Crew(MemberIndex).Order := Rest;
             PlayerShip.Crew(MemberIndex).Health := 0;
-            UpdateHallOfFame(PlayerShip.Crew(MemberIndex).Name, Reason);
+            Update_Hall_Of_Fame(PlayerShip.Crew(MemberIndex).Name, Reason);
             return;
          end if;
       end if;

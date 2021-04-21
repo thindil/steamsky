@@ -136,7 +136,7 @@ begin
    Start_Logging;
 
    Load_Config;
-   LoadHallOfFame;
+   Load_Hall_Of_Fame;
    LoadThemes;
 
    -- Start Tk
