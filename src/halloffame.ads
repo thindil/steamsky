@@ -24,7 +24,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package HallOfFame is
 -- ****
 
-   -- ****s* HallOfFame/HallOfFame.HallOfFame_Data
+   -- ****s* HallOfFame/HallOfFame.Hall_Of_Fame_Data
    -- FUNCTION
    -- Data structure for hall of fame
    -- PARAMETERS
@@ -32,41 +32,42 @@ package HallOfFame is
    -- Points      - Amount of points earned
    -- DeathReason - What caused player death
    -- SOURCE
-   type HallOfFame_Data is record
+   type Hall_Of_Fame_Data is record
       Name: Unbounded_String;
       Points: Natural;
       DeathReason: Unbounded_String;
    end record;
    -- ****
 
-   -- ****v* HallOfFame/HallOfFame.HallOfFame_Array
+   -- ****v* HallOfFame/HallOfFame.Hall_Of_Fame_Array
    -- FUNCTION
    -- Store all hall of fame entries
    -- SOURCE
-   HallOfFame_Array: array(1 .. 10) of HallOfFame_Data :=
+   Hall_Of_Fame_Array: array(1 .. 10) of Hall_Of_Fame_Data :=
      (others =>
         (Name => Null_Unbounded_String, Points => 0,
          DeathReason => Null_Unbounded_String));
    -- ****
 
-   -- ****f* HallOfFame/HallOfFame.LoadHallOfFame
+   -- ****f* HallOfFame/HallOfFame.Load_Hall_Of_Fame
    -- FUNCTION
    -- Read hall of fame data from file
    -- SOURCE
-   procedure LoadHallOfFame;
+   procedure Load_Hall_Of_Fame;
    -- ****
 
-   -- ****f* HallOfFame/HallOfFame.UpdateHallOfFame
+   -- ****f* HallOfFame/HallOfFame.Update_Hall_Of_Fame
    -- FUNCTION
    -- Check did new entry should enter hall of fame
    -- PARAMETERS
-   -- PlayerName  - Name of player's character to add to the hall of fame
-   -- DeathReason - Reason of death of selected character
+   -- Player_Name  - Name of player's character to add to the hall of fame
+   -- Death_Reason - Reason of death of selected character
    -- SOURCE
-   procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) with
+   procedure Update_Hall_Of_Fame
+     (Player_Name, Death_Reason: Unbounded_String) with
       Pre =>
-      (PlayerName /= Null_Unbounded_String and
-       DeathReason /= Null_Unbounded_String),
+      (Player_Name /= Null_Unbounded_String and
+       Death_Reason /= Null_Unbounded_String),
       Test_Case => (Name => "Test_UpdateHallOfFame", Mode => Nominal);
       -- ****
 
