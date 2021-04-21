@@ -239,12 +239,12 @@ package body Ships.Upgrade is
       WorkerIndex: Crew_Container.Extended_Index;
       procedure FindMatsAndTools is
       begin
+         UpgradeTools := FindTools(WorkerIndex, Repair_Tools, Upgrading);
          UpgradeMaterial :=
            FindItem
              (Inventory => PlayerShip.Cargo,
               ItemType =>
                 Modules_List(UpgradedModule.ProtoIndex).RepairMaterial);
-         UpgradeTools := FindTools(WorkerIndex, Repair_Tools, Upgrading);
       end FindMatsAndTools;
       procedure MaxUpgradeReached(MessageText: String) is
       begin
