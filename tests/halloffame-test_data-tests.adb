@@ -29,13 +29,13 @@ package body HallOfFame.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateHallOfFame_117948_539c16
-     (PlayerName, DeathReason: Unbounded_String) is
+   procedure Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59
+     (Player_Name, Death_Reason: Unbounded_String) is
    begin
       begin
          pragma Assert
-           ((PlayerName /= Null_Unbounded_String and
-             DeathReason /= Null_Unbounded_String));
+           ((Player_Name /= Null_Unbounded_String and
+             Death_Reason /= Null_Unbounded_String));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -43,8 +43,8 @@ package body HallOfFame.Test_Data.Tests is
               (False,
                "req_sloc(halloffame.ads:0):Test_UpdateHallOfFame test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.HallOfFame.UpdateHallOfFame
-        (PlayerName, DeathReason);
+      GNATtest_Generated.GNATtest_Standard.HallOfFame.Update_Hall_Of_Fame
+        (Player_Name, Death_Reason);
       begin
          pragma Assert(True);
          null;
@@ -54,39 +54,39 @@ package body HallOfFame.Test_Data.Tests is
               (False,
                "ens_sloc(halloffame.ads:0:):Test_UpdateHallOfFame test commitment violated");
       end;
-   end Wrap_Test_UpdateHallOfFame_117948_539c16;
+   end Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateHallOfFame_test_updatehalloffame
+   procedure Test_Update_Hall_Of_Fame_test_updatehalloffame
      (Gnattest_T: in out Test);
-   procedure Test_UpdateHallOfFame_117948_539c16
+   procedure Test_Update_Hall_Of_Fame_45b65a_473c59
      (Gnattest_T: in out Test) renames
-     Test_UpdateHallOfFame_test_updatehalloffame;
---  id:2.2/1179489e293ca621/UpdateHallOfFame/1/0/test_updatehalloffame/
-   procedure Test_UpdateHallOfFame_test_updatehalloffame
+     Test_Update_Hall_Of_Fame_test_updatehalloffame;
+--  id:2.2/45b65a22905d6b25/Update_Hall_Of_Fame/1/0/test_updatehalloffame/
+   procedure Test_Update_Hall_Of_Fame_test_updatehalloffame
      (Gnattest_T: in out Test) is
-      procedure UpdateHallOfFame
-        (PlayerName, DeathReason: Unbounded_String) renames
-        Wrap_Test_UpdateHallOfFame_117948_539c16;
+      procedure Update_Hall_Of_Fame
+        (Player_Name, Death_Reason: Unbounded_String) renames
+        Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      HallOfFame_Array :=
+      Hall_Of_Fame_Array :=
         (others =>
            (Name => Null_Unbounded_String, Points => 0,
             DeathReason => Null_Unbounded_String));
-      UpdateHallOfFame
+      Update_Hall_Of_Fame
         (To_Unbounded_String("TestPlayer"), To_Unbounded_String("TestDeath"));
       Assert
-        (HallOfFame_Array(1).Name = To_Unbounded_String("TestPlayer"),
+        (Hall_Of_Fame_Array(1).Name = To_Unbounded_String("TestPlayer"),
          "Failed to update Hall Of Fame.");
 
 --  begin read only
-   end Test_UpdateHallOfFame_test_updatehalloffame;
+   end Test_Update_Hall_Of_Fame_test_updatehalloffame;
 --  end read only
 
 --  begin read only
