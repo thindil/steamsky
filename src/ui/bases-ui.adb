@@ -38,6 +38,7 @@ with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -70,16 +71,14 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      BaseFrame: Ttk_Frame := Get_Widget(Paned & ".baseframe", Interp);
+      BaseFrame: Ttk_Frame := Get_Widget(Main_Paned & ".baseframe", Interp);
       BaseCanvas: constant Tk_Canvas :=
         Get_Widget(BaseFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       ActionButton: Ttk_Button;
-      SearchEntry: Ttk_Entry;
-      ItemsView: Ttk_Tree_View;
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(BaseCanvas & ".base.search", Interp);
+      ItemsView: constant Ttk_Tree_View :=
+        Get_Widget(BaseCanvas & ".base.items.view", Interp);
       FirstIndex, ButtonText: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
@@ -91,13 +90,12 @@ package body Bases.UI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "base.tcl");
          Bind(BaseFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(BaseCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
-      SearchEntry := Get_Widget(BaseFrame & ".search", Interp);
+      BaseFrame.Name := New_String(BaseCanvas & ".base");
       if CArgv.Arg(Argv, 1) /= "recipes" then
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
       else
@@ -106,7 +104,6 @@ package body Bases.UI is
             Delete(SearchEntry, "0", "end");
          end if;
       end if;
-      ItemsView := Get_Widget(BaseFrame & ".items.view", Interp);
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       ActionButton := Get_Widget(BaseFrame & ".info.accept", Interp);
       if CArgv.Arg(Argv, 1) = "heal" then
@@ -163,38 +160,36 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
          for I in Recipes_List.Iterate loop
-            if BasesTypes_List(BaseType).Recipes.Contains
-                (Recipes_Container.Key(I)) and
-              Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
-                Positive_Container.No_Index and
-              Recipes_List(I).Reputation <=
+            if not BasesTypes_List(BaseType).Recipes.Contains
+                (Recipes_Container.Key(I)) or
+              Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) /=
+                Positive_Container.No_Index or
+              Recipes_List(I).Reputation >
                 SkyBases(BaseIndex).Reputation(1) then
-               if Argc = 3
-                 and then
-                   Index
-                     (To_Lower
-                        (To_String
-                           (Items_List(Recipes_List(I).ResultIndex).Name)),
-                      To_Lower(CArgv.Arg(Argv, 2))) =
-                   0 then
-                  goto End_Of_Recipes_Loop;
-               end if;
-               if FirstIndex = Null_Unbounded_String then
-                  FirstIndex := Recipes_Container.Key(I);
-               end if;
-               Insert
-                 (ItemsView,
-                  "{} end -id " & To_String(Recipes_Container.Key(I)) &
-                  " -text {" &
-                  To_String
-                    (Items_List(Recipes_List(I).ResultIndex).Name & "}"));
-               <<End_Of_Recipes_Loop>>
+               goto End_Of_Recipes_Loop;
             end if;
+            if Argc = 3
+              and then
+                Index
+                  (To_Lower
+                     (To_String(Items_List(Recipes_List(I).ResultIndex).Name)),
+                   To_Lower(CArgv.Arg(Argv, 2))) =
+                0 then
+               goto End_Of_Recipes_Loop;
+            end if;
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex := Recipes_Container.Key(I);
+            end if;
+            Insert
+              (ItemsView,
+               "{} end -id " & To_String(Recipes_Container.Key(I)) &
+               " -text {" &
+               To_String(Items_List(Recipes_List(I).ResultIndex).Name & "}"));
+            <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
          ButtonText := To_Unbounded_String("Buy recipe");
          Heading(ItemsView, "#0", "-text Recipes");
       end if;
-      Unbind(ItemsView, "<<TreeviewSelect>>");
       Bind
         (ItemsView, "<<TreeviewSelect>>",
          "{ShowItemInfo " & CArgv.Arg(Argv, 1) & "}");
@@ -203,22 +198,21 @@ package body Bases.UI is
          "-text {" & To_String(ButtonText) & "} -command {BaseAction " &
          CArgv.Arg(Argv, 1) & "}");
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
       Selection_Set(ItemsView, "[list " & To_String(FirstIndex) & "]");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      BaseFrame.Name := New_String(Widget_Image(BaseCanvas) & ".base");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      BaseFrame.Name := New_String(BaseCanvas & ".base");
       configure
         (BaseCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (BaseCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(BaseFrame));
+        (BaseCanvas, "window", "0 0 -anchor nw -window " & BaseFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (BaseCanvas, "-scrollregion [list " & BBox(BaseCanvas, "all") & "]");
@@ -251,19 +245,17 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      FrameName: constant String := Main_Paned & ".baseframe.canvas.base";
       ItemsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.baseframe.canvas.base.items.view", Interp);
+        Get_Widget(FrameName & ".items.view", Interp);
       FormattedTime, ItemIndex: Unbounded_String;
       Cost, Time: Natural := 0;
-      InfoLabel: Ttk_Label :=
-        Get_Widget(".gameframe.paned.baseframe.canvas.base.info.info", Interp);
+      InfoLabel: Ttk_Label := Get_Widget(FrameName & ".info.info", Interp);
       BaseIndex: constant Positive :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       MoneyIndex2: Natural;
       ActionButton: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.baseframe.canvas.base.info.accept", Interp);
+        Get_Widget(FrameName & ".info.accept", Interp);
       procedure Format_Time is
       begin
          if Time < 60 then
