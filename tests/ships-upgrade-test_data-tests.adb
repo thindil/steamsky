@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Config; use Config;
 with Ships.Crew; use Ships.Crew;
 
 --  begin read only
@@ -108,6 +109,8 @@ package body Ships.Upgrade.Test_Data.Tests is
 
    begin
 
+      PlayerShip.Cargo.Swap(5, 12);
+      PlayerShip.Cargo(10).Amount := 1;
       GiveOrders(PlayerShip, 4, Upgrading);
       UpgradeShip(15);
       Assert
@@ -117,6 +120,10 @@ package body Ships.Upgrade.Test_Data.Tests is
       UpgradeShip(15);
       Assert(True, "This test can only crash");
       PlayerShip.UpgradeModule := OldUpgrade;
+      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Career := To_Unbounded_String("general");
+      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game;
 
 --  begin read only
    end Test_UpgradeShip_test_upgradeship;
