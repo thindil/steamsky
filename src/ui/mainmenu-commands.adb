@@ -244,15 +244,15 @@ package body MainMenu.Commands is
    begin
       Delete(HofView, "[list " & Children(HofView, "{}") & "]");
       Load_Hall_Of_Fame_Loop :
-      for I in HallOfFame_Array'Range loop
-         exit Load_Hall_Of_Fame_Loop when HallOfFame_Array(I).Name =
+      for I in Hall_Of_Fame_Array'Range loop
+         exit Load_Hall_Of_Fame_Loop when Hall_Of_Fame_Array(I).Name =
            Null_Unbounded_String;
          Insert
            (HofView,
             "{} end -values [list " & Positive'Image(I) & " " &
-            To_String(HallOfFame_Array(I).Name) & " " &
-            Natural'Image(HallOfFame_Array(I).Points) & " " &
-            To_String(HallOfFame_Array(I).DeathReason) & "]");
+            To_String(Hall_Of_Fame_Array(I).Name) & " " &
+            Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
+            To_String(Hall_Of_Fame_Array(I).DeathReason) & "]");
       end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;

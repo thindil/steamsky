@@ -36,13 +36,13 @@ package body HallOfFame is
    HoFData: Document;
    -- ****
 
-   procedure LoadHallOfFame is
+   procedure Load_Hall_Of_Fame is
       HoFFile: File_Input;
       Reader: Tree_Reader;
       EntriesList: Node_List;
       EntryNode: Node;
    begin
-      if HallOfFame_Array(1).Name /= Null_Unbounded_String then
+      if Hall_Of_Fame_Array(1).Name /= Null_Unbounded_String then
          return;
       end if;
       Open(To_String(Save_Directory) & "halloffame.dat", HoFFile);
@@ -54,20 +54,21 @@ package body HallOfFame is
       Load_Hall_Of_Fame_Loop :
       for I in 0 .. Length(EntriesList) - 1 loop
          EntryNode := Item(EntriesList, I);
-         HallOfFame_Array(I + 1).Name :=
+         Hall_Of_Fame_Array(I + 1).Name :=
            To_Unbounded_String(Get_Attribute(EntryNode, "name"));
-         HallOfFame_Array(I + 1).Points :=
+         Hall_Of_Fame_Array(I + 1).Points :=
            Natural'Value(Get_Attribute(EntryNode, "points"));
-         HallOfFame_Array(I + 1).DeathReason :=
+         Hall_Of_Fame_Array(I + 1).DeathReason :=
            To_Unbounded_String(Get_Attribute(EntryNode, "deathreason"));
       end loop Load_Hall_Of_Fame_Loop;
       Free(Reader);
    exception
       when Ada.Directories.Name_Error =>
          null;
-   end LoadHallOfFame;
+   end Load_Hall_Of_Fame;
 
-   procedure UpdateHallOfFame(PlayerName, DeathReason: Unbounded_String) is
+   procedure Update_Hall_Of_Fame
+     (Player_Name, Death_Reason: Unbounded_String) is
       NewIndex: Natural range 0 .. 10 := 0;
       HoFFile: File_Type;
       HoF: DOM_Implementation;
@@ -75,8 +76,8 @@ package body HallOfFame is
       RawValue: Unbounded_String;
    begin
       Find_New_Index_Loop :
-      for I in HallOfFame_Array'Range loop
-         if HallOfFame_Array(I).Points < GetGamePoints then
+      for I in Hall_Of_Fame_Array'Range loop
+         if Hall_Of_Fame_Array(I).Points < GetGamePoints then
             NewIndex := I;
             exit Find_New_Index_Loop;
          end if;
@@ -86,33 +87,34 @@ package body HallOfFame is
       end if;
       Move_Hall_Of_Fame_Loop :
       for I in reverse NewIndex .. 9 loop
-         HallOfFame_Array(I + 1) := HallOfFame_Array(I);
+         Hall_Of_Fame_Array(I + 1) := Hall_Of_Fame_Array(I);
       end loop Move_Hall_Of_Fame_Loop;
-      HallOfFame_Array(NewIndex) :=
-        (Name => PlayerName, Points => GetGamePoints,
-         DeathReason => DeathReason);
+      Hall_Of_Fame_Array(NewIndex) :=
+        (Name => Player_Name, Points => GetGamePoints,
+         DeathReason => Death_Reason);
       HoFData := Create_Document(HoF);
       MainNode := Create_Element(HoFData, "halloffame");
       MainNode := Append_Child(HoFData, MainNode);
       Update_Hall_Of_Fame_Loop :
-      for I in HallOfFame_Array'Range loop
-         if HallOfFame_Array(I).Name = Null_Unbounded_String then
+      for I in Hall_Of_Fame_Array'Range loop
+         if Hall_Of_Fame_Array(I).Name = Null_Unbounded_String then
             exit Update_Hall_Of_Fame_Loop;
          end if;
          EntryNode := Create_Element(HoFData, "entry");
          EntryNode := Append_Child(MainNode, EntryNode);
-         Set_Attribute(EntryNode, "name", To_String(HallOfFame_Array(I).Name));
+         Set_Attribute
+           (EntryNode, "name", To_String(Hall_Of_Fame_Array(I).Name));
          RawValue :=
-           To_Unbounded_String(Integer'Image(HallOfFame_Array(I).Points));
+           To_Unbounded_String(Integer'Image(Hall_Of_Fame_Array(I).Points));
          Set_Attribute
            (EntryNode, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
          Set_Attribute
            (EntryNode, "deathreason",
-            To_String(HallOfFame_Array(I).DeathReason));
+            To_String(Hall_Of_Fame_Array(I).DeathReason));
       end loop Update_Hall_Of_Fame_Loop;
       Create(HoFFile, Out_File, To_String(Save_Directory) & "halloffame.dat");
       Write(Stream => Stream(HoFFile), N => HoFData, Pretty_Print => True);
       Close(HoFFile);
-   end UpdateHallOfFame;
+   end Update_Hall_Of_Fame;
 
 end HallOfFame;
