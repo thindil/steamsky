@@ -49,6 +49,23 @@ package body Ships.Repairs is
                   10) *
                  CrewRepairPoints(PointsIndex);
                RepairPoints := CrewRepairPoints(PointsIndex) + PointsBonus;
+               ToolsIndex :=
+                 FindTools(Crew_Container.To_Index(J), Repair_Tools, Repair);
+               if ToolsIndex = 0 then
+                  if PointsIndex = 1 then
+                     AddMessage
+                       ("You don't have the proper repair tools to continue repairs of " &
+                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+                        OrderMessage, RED);
+                  else
+                     AddMessage
+                       (To_String(PlayerShip.Crew(J).Name) &
+                        " can't continue repairs due to a lack of repair tools.",
+                        OrderMessage, RED);
+                  end if;
+                  RepairStopped := True;
+                  return;
+               end if;
                RepairMaterial :=
                  FindItem
                    (Inventory => PlayerShip.Cargo,
@@ -65,23 +82,6 @@ package body Ships.Repairs is
                     ("You don't have the proper repair materials to continue repairs of " &
                      To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
                      OrderMessage, RED);
-                  RepairStopped := True;
-                  return;
-               end if;
-               ToolsIndex :=
-                 FindTools(Crew_Container.To_Index(J), Repair_Tools, Repair);
-               if ToolsIndex = 0 then
-                  if PointsIndex = 1 then
-                     AddMessage
-                       ("You don't have the proper repair tools to continue repairs of " &
-                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
-                        OrderMessage, RED);
-                  else
-                     AddMessage
-                       (To_String(PlayerShip.Crew(J).Name) &
-                        " can't continue repairs due to a lack of repair tools.",
-                        OrderMessage, RED);
-                  end if;
                   RepairStopped := True;
                   return;
                end if;
