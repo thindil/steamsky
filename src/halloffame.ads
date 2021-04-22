@@ -30,13 +30,22 @@ package HallOfFame is
    -- PARAMETERS
    -- Name        - Name of player
    -- Points      - Amount of points earned
-   -- DeathReason - What caused player death
+   -- Death_Reason - What caused player death
    -- SOURCE
    type Hall_Of_Fame_Data is record
       Name: Unbounded_String;
       Points: Natural;
-      DeathReason: Unbounded_String;
+      Death_Reason: Unbounded_String;
    end record;
+   -- ****
+
+   -- ****d* HallOfFame/HallOfFame.Empty_Hall_Of_Fame_Entry
+   -- FUNCTION
+   -- Empty entry for Hall of Fame
+   -- SOURCE
+   Empty_Hall_Of_Fame_Entry: constant Hall_Of_Fame_Data :=
+     (Name => Null_Unbounded_String, Points => 0,
+      Death_Reason => Null_Unbounded_String);
    -- ****
 
    -- ****v* HallOfFame/HallOfFame.Hall_Of_Fame_Array
@@ -44,9 +53,7 @@ package HallOfFame is
    -- Store all hall of fame entries
    -- SOURCE
    Hall_Of_Fame_Array: array(1 .. 10) of Hall_Of_Fame_Data :=
-     (others =>
-        (Name => Null_Unbounded_String, Points => 0,
-         DeathReason => Null_Unbounded_String));
+     (others => Empty_Hall_Of_Fame_Entry);
    -- ****
 
    -- ****f* HallOfFame/HallOfFame.Load_Hall_Of_Fame
@@ -65,9 +72,8 @@ package HallOfFame is
    -- SOURCE
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) with
-      Pre =>
-      (Player_Name /= Null_Unbounded_String and
-       Death_Reason /= Null_Unbounded_String),
+      Pre => Player_Name /= Null_Unbounded_String and
+      Death_Reason /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateHallOfFame", Mode => Nominal);
       -- ****
 

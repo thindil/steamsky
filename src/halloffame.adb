@@ -58,8 +58,8 @@ package body HallOfFame is
            To_Unbounded_String(Get_Attribute(EntryNode, "name"));
          Hall_Of_Fame_Array(I + 1).Points :=
            Natural'Value(Get_Attribute(EntryNode, "points"));
-         Hall_Of_Fame_Array(I + 1).DeathReason :=
-           To_Unbounded_String(Get_Attribute(EntryNode, "deathreason"));
+         Hall_Of_Fame_Array(I + 1).Death_Reason :=
+           To_Unbounded_String(Get_Attribute(EntryNode, "Death_Reason"));
       end loop Load_Hall_Of_Fame_Loop;
       Free(Reader);
    exception
@@ -91,7 +91,7 @@ package body HallOfFame is
       end loop Move_Hall_Of_Fame_Loop;
       Hall_Of_Fame_Array(NewIndex) :=
         (Name => Player_Name, Points => GetGamePoints,
-         DeathReason => Death_Reason);
+         Death_Reason => Death_Reason);
       HoFData := Create_Document(HoF);
       MainNode := Create_Element(HoFData, "halloffame");
       MainNode := Append_Child(HoFData, MainNode);
@@ -109,8 +109,8 @@ package body HallOfFame is
          Set_Attribute
            (EntryNode, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
          Set_Attribute
-           (EntryNode, "deathreason",
-            To_String(Hall_Of_Fame_Array(I).DeathReason));
+           (EntryNode, "Death_Reason",
+            To_String(Hall_Of_Fame_Array(I).Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
       Create(HoFFile, Out_File, To_String(Save_Directory) & "halloffame.dat");
       Write(Stream => Stream(HoFFile), N => HoFData, Pretty_Print => True);
