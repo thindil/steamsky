@@ -47,6 +47,7 @@ with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
@@ -110,7 +111,7 @@ package body Combat.UI is
       Message: Message_Data;
       CurrentTurnTime: Unbounded_String := To_Unbounded_String(FormatedTime);
       MessagesView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.controls.messages.view");
+        Get_Widget(Main_Paned & ".controls.messages.view");
       procedure ShowMessage is
          TagNames: constant array(1 .. 5) of Unbounded_String :=
            (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
@@ -186,7 +187,7 @@ package body Combat.UI is
       -- ****
       Tokens: Slice_Set;
       Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe.crew.canvas.frame");
+        Get_Widget(Main_Paned & ".combatframe.crew.canvas.frame");
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox := Get_Widget(Frame & ".pilotcrew");
       GunnersOrders: constant array(1 .. 6) of Unbounded_String :=
@@ -367,7 +368,7 @@ package body Combat.UI is
             " -column 1");
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.next}");
+            "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatPosition gunner " & To_String(GunIndex) & "}");
@@ -394,7 +395,7 @@ package body Combat.UI is
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          Bind
            (ComboBox, "<Return>",
-            "{InvokeButton .gameframe.paned.combatframe.next}");
+            "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
@@ -475,7 +476,7 @@ package body Combat.UI is
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.crew.canvas");
+      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.crew.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -483,7 +484,7 @@ package body Combat.UI is
       Yview_Move_To(CombatCanvas, "0.0");
       -- Show player ship damage info if needed
       Frame.Name :=
-        New_String(".gameframe.paned.combatframe.damage.canvas.frame");
+        New_String(Main_Paned & ".combatframe.damage.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(0, Rows - 1, Frame);
@@ -505,17 +506,16 @@ package body Combat.UI is
            (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
-         ProgressBarStyle :=
-           (if DamagePercent = 1.0 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif DamagePercent > 0.24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
               "-orient horizontal -length 150 -maximum 1.0 -value" &
-              Float'Image(DamagePercent) & To_String(ProgressBarStyle));
+              Float'Image(DamagePercent) &
+              (if DamagePercent = 1.0 then
+                 " -style green.Horizontal.TProgressbar"
+               elsif DamagePercent > 0.24 then
+                 " -style yellow.Horizontal.TProgressbar"
+               else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
          Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
@@ -525,35 +525,27 @@ package body Combat.UI is
          <<End_Of_Player_Ship_Damage_Loop>>
       end loop Show_Player_Ship_Damage_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.damage.canvas");
+      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.damage.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      Frame.Name := New_String(".gameframe.paned.combatframe.damage");
+      Frame.Name := New_String(Main_Paned & ".combatframe.damage");
       if not HasDamage then
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
       else
          Tcl.Tk.Ada.Grid.Grid(Frame);
       end if;
-      Append(EnemyInfo, "Name: " & EnemyName & LF);
-      Append(EnemyInfo, "Type: " & Enemy.Ship.Name & LF);
-      Append(EnemyInfo, "Home: " & SkyBases(Enemy.Ship.HomeBase).Name & LF);
-      Append(EnemyInfo, "Distance: ");
-      if Enemy.Distance >= 15_000 then
-         Append(EnemyInfo, "Escaped");
-      elsif Enemy.Distance in 10_000 .. 15_000 then
-         Append(EnemyInfo, "Long");
-      elsif Enemy.Distance in 5_000 .. 10_000 then
-         Append(EnemyInfo, "Medium");
-      elsif Enemy.Distance in 1_000 .. 5_000 then
-         Append(EnemyInfo, "Short");
-      else
-         Append(EnemyInfo, "Close");
-      end if;
-      Append(EnemyInfo, LF);
-      Append(EnemyInfo, "Status: ");
+      Append
+        (EnemyInfo,
+         "Name: " & EnemyName & LF & "Type: " & Enemy.Ship.Name & LF &
+         "Home: " & SkyBases(Enemy.Ship.HomeBase).Name & LF & "Distance: " &
+         (if Enemy.Distance >= 15_000 then "Escaped"
+          elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
+          elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
+          elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
+         LF & "Status: ");
       if Enemy.Distance < 15000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
             Append(EnemyInfo, "Destroyed");
