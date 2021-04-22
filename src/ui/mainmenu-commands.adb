@@ -252,7 +252,7 @@ package body MainMenu.Commands is
             "{} end -values [list " & Positive'Image(I) & " " &
             To_String(Hall_Of_Fame_Array(I).Name) & " " &
             Natural'Image(Hall_Of_Fame_Array(I).Points) & " " &
-            To_String(Hall_Of_Fame_Array(I).DeathReason) & "]");
+            To_String(Hall_Of_Fame_Array(I).Death_Reason) & "]");
       end loop Load_Hall_Of_Fame_Loop;
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
