@@ -29,13 +29,13 @@ package body HallOfFame.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59
+   procedure Wrap_Test_Update_Hall_Of_Fame_45b65a_b0b945
      (Player_Name, Death_Reason: Unbounded_String) is
    begin
       begin
          pragma Assert
-           ((Player_Name /= Null_Unbounded_String and
-             Death_Reason /= Null_Unbounded_String));
+           (Player_Name /= Null_Unbounded_String and
+            Death_Reason /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -54,13 +54,13 @@ package body HallOfFame.Test_Data.Tests is
               (False,
                "ens_sloc(halloffame.ads:0:):Test_UpdateHallOfFame test commitment violated");
       end;
-   end Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59;
+   end Wrap_Test_Update_Hall_Of_Fame_45b65a_b0b945;
 --  end read only
 
 --  begin read only
    procedure Test_Update_Hall_Of_Fame_test_updatehalloffame
      (Gnattest_T: in out Test);
-   procedure Test_Update_Hall_Of_Fame_45b65a_473c59
+   procedure Test_Update_Hall_Of_Fame_45b65a_b0b945
      (Gnattest_T: in out Test) renames
      Test_Update_Hall_Of_Fame_test_updatehalloffame;
 --  id:2.2/45b65a22905d6b25/Update_Hall_Of_Fame/1/0/test_updatehalloffame/
@@ -68,7 +68,7 @@ package body HallOfFame.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       procedure Update_Hall_Of_Fame
         (Player_Name, Death_Reason: Unbounded_String) renames
-        Wrap_Test_Update_Hall_Of_Fame_45b65a_473c59;
+        Wrap_Test_Update_Hall_Of_Fame_45b65a_b0b945;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -77,8 +77,7 @@ package body HallOfFame.Test_Data.Tests is
 
       Hall_Of_Fame_Array :=
         (others =>
-           (Name => Null_Unbounded_String, Points => 0,
-            DeathReason => Null_Unbounded_String));
+           Empty_Hall_Of_Fame_Entry);
       Update_Hall_Of_Fame
         (To_Unbounded_String("TestPlayer"), To_Unbounded_String("TestDeath"));
       Assert
