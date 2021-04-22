@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -166,7 +167,7 @@ package body GameOptions is
            New_String
              (Widget_Image(OptionsCanvas) & ".options.notebook.info." &
               LabelName);
-         configure(Label, "-text {" & To_String(Path) & " }");
+         configure(Label, "-text {" & Full_Name(To_String(Path)) & " }");
       end Set_Path;
    begin
       Label.Interp := Interp;
