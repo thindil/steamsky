@@ -15,6 +15,7 @@ with System.Assertions;
 --
 --  end read only
 
+with Config; use Config;
 with Ships.Crew; use Ships.Crew;
 
 --  begin read only
@@ -52,12 +53,18 @@ package body Ships.Repairs.Test_Data.Tests is
 
    begin
 
+      PlayerShip.Cargo.Swap(5, 12);
+      PlayerShip.Cargo(10).Amount := 1;
       PlayerShip.Modules(1).Durability := Durability - 1;
       GiveOrders(PlayerShip, 4, Repair, 0, False);
       RepairShip(15);
       Assert
         (PlayerShip.Modules(1).Durability = Durability,
          "Failed to repair ship.");
+      New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
+      New_Game_Settings.Player_Career := To_Unbounded_String("general");
+      New_Game_Settings.Starting_Base := To_Unbounded_String("1");
+      New_Game;
 
 --  begin read only
    end Test_RepairShip_test_repairship;
