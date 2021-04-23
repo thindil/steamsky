@@ -12,3 +12,4 @@ All notable changes to this project will be documented in this file.
   player ship cargo
 - Crash during repair ship when repair material is the last in the player
   ship cargo
+- Checking permissions to save game in the selected directory
