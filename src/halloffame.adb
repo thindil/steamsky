@@ -29,37 +29,37 @@ with Statistics; use Statistics;
 
 package body HallOfFame is
 
-   -- ****iv* HallOfFame/HallOfFame.HoFData
+   -- ****iv* HallOfFame/HallOfFame.Hof_Data
    -- FUNCTION
    -- XML structure for save or load hall of fame data from file
    -- SOURCE
-   HoFData: Document;
+   Hof_Data: Document;
    -- ****
 
    procedure Load_Hall_Of_Fame is
-      HoFFile: File_Input;
-      Reader: Tree_Reader;
-      EntriesList: Node_List;
-      EntryNode: Node;
+      Hof_File: File_Input;
+      Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
+      Entries_List: Node_List;
+      Entry_Node: Node;
    begin
       if Hall_Of_Fame_Array(1).Name /= Null_Unbounded_String then
          return;
       end if;
-      Open(To_String(Save_Directory) & "halloffame.dat", HoFFile);
-      Parse(Reader, HoFFile);
-      Close(HoFFile);
-      HoFData := Get_Tree(Reader);
-      EntriesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(HoFData, "entry");
+      Open(To_String(Save_Directory) & "halloffame.dat", Hof_File);
+      Parse(Reader, Hof_File); --## rule line off IMPROPER_INITIALIZATION
+      Close(Hof_File);
+      Hof_Data := Get_Tree(Reader); --## rule line off IMPROPER_INITIALIZATION
+      Entries_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(Hof_Data, "entry");
       Load_Hall_Of_Fame_Loop :
-      for I in 0 .. Length(EntriesList) - 1 loop
-         EntryNode := Item(EntriesList, I);
+      for I in 0 .. Length(Entries_List) - 1 loop
+         Entry_Node := Item(Entries_List, I);
          Hall_Of_Fame_Array(I + 1).Name :=
-           To_Unbounded_String(Get_Attribute(EntryNode, "name"));
+           To_Unbounded_String(Get_Attribute(Entry_Node, "name"));
          Hall_Of_Fame_Array(I + 1).Points :=
-           Natural'Value(Get_Attribute(EntryNode, "points"));
+           Natural'Value(Get_Attribute(Entry_Node, "points"));
          Hall_Of_Fame_Array(I + 1).Death_Reason :=
-           To_Unbounded_String(Get_Attribute(EntryNode, "Death_Reason"));
+           To_Unbounded_String(Get_Attribute(Entry_Node, "Death_Reason"));
       end loop Load_Hall_Of_Fame_Loop;
       Free(Reader);
    exception
@@ -70,9 +70,9 @@ package body HallOfFame is
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
       NewIndex: Natural range 0 .. 10 := 0;
-      HoFFile: File_Type;
+      Hof_File: File_Type;
       HoF: DOM_Implementation;
-      EntryNode, MainNode: DOM.Core.Element;
+      Entry_Node, MainNode: DOM.Core.Element;
       RawValue: Unbounded_String;
    begin
       Find_New_Index_Loop :
@@ -92,29 +92,29 @@ package body HallOfFame is
       Hall_Of_Fame_Array(NewIndex) :=
         (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
-      HoFData := Create_Document(HoF);
-      MainNode := Create_Element(HoFData, "halloffame");
-      MainNode := Append_Child(HoFData, MainNode);
+      Hof_Data := Create_Document(HoF);
+      MainNode := Create_Element(Hof_Data, "halloffame");
+      MainNode := Append_Child(Hof_Data, MainNode);
       Update_Hall_Of_Fame_Loop :
       for I in Hall_Of_Fame_Array'Range loop
          if Hall_Of_Fame_Array(I).Name = Null_Unbounded_String then
             exit Update_Hall_Of_Fame_Loop;
          end if;
-         EntryNode := Create_Element(HoFData, "entry");
-         EntryNode := Append_Child(MainNode, EntryNode);
+         Entry_Node := Create_Element(Hof_Data, "entry");
+         Entry_Node := Append_Child(MainNode, Entry_Node);
          Set_Attribute
-           (EntryNode, "name", To_String(Hall_Of_Fame_Array(I).Name));
+           (Entry_Node, "name", To_String(Hall_Of_Fame_Array(I).Name));
          RawValue :=
            To_Unbounded_String(Integer'Image(Hall_Of_Fame_Array(I).Points));
          Set_Attribute
-           (EntryNode, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
+           (Entry_Node, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
          Set_Attribute
-           (EntryNode, "Death_Reason",
+           (Entry_Node, "Death_Reason",
             To_String(Hall_Of_Fame_Array(I).Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
-      Create(HoFFile, Out_File, To_String(Save_Directory) & "halloffame.dat");
-      Write(Stream => Stream(HoFFile), N => HoFData, Pretty_Print => True);
-      Close(HoFFile);
+      Create(Hof_File, Out_File, To_String(Save_Directory) & "halloffame.dat");
+      Write(Stream => Stream(Hof_File), N => Hof_Data, Pretty_Print => True);
+      Close(Hof_File);
    end Update_Hall_Of_Fame;
 
 end HallOfFame;
