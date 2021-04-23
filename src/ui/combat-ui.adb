@@ -197,8 +197,7 @@ package body Combat.UI is
          To_Unbounded_String("{Aim for their engine "),
          To_Unbounded_String("{Aim for their weapon "),
          To_Unbounded_String("{Aim for their hull "));
-      GunIndex, GunnerOrders, EnemyInfo, ProgressBarStyle,
-      Font: Unbounded_String;
+      GunIndex, GunnerOrders, EnemyInfo: Unbounded_String;
       HaveAmmo, HasDamage: Boolean;
       AmmoAmount, AmmoIndex, Row, Rows: Natural := 0;
       ProgressBar: Ttk_ProgressBar;
@@ -494,14 +493,13 @@ package body Combat.UI is
          if Module.Durability = Module.MaxDurability then
             goto End_Of_Player_Ship_Damage_Loop;
          end if;
-         Font :=
-           (if Module.Durability = 0 then
-              To_Unbounded_String(" -font OverstrikedFont -style Gray.TLabel")
-            else Null_Unbounded_String);
          Label :=
            Create
              (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-              "-text {" & To_String(Module.Name) & "}" & To_String(Font));
+              "-text {" & To_String(Module.Name) & "}" &
+              (if Module.Durability = 0 then
+                 " -font OverstrikedFont -style Gray.TLabel"
+               else ""));
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
          DamagePercent :=
@@ -583,8 +581,7 @@ package body Combat.UI is
       else
          Append(EnemyInfo, "Unknown");
       end if;
-      Append(EnemyInfo, LF);
-      Append(EnemyInfo, "Speed: ");
+      Append(EnemyInfo, LF & "Speed: ");
       if Enemy.Distance < 15000 then
          case Enemy.Ship.Speed is
             when Ships.FULL_STOP =>
@@ -622,74 +619,65 @@ package body Combat.UI is
       if Length(Enemy.Ship.Description) > 0 then
          Append(EnemyInfo, LF & LF & Enemy.Ship.Description);
       end if;
-      Label := Get_Widget(".gameframe.paned.combatframe.enemy.canvas.info");
+      Label := Get_Widget(Main_Paned & ".combatframe.enemy.canvas.info");
       configure(Label, "-text {" & To_String(EnemyInfo) & "}");
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.enemy.canvas");
+      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.enemy.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
-      declare
-         ModuleName: Unbounded_String;
-      begin
-         Frame.Name :=
-           New_String(".gameframe.paned.combatframe.status.canvas.frame");
-         Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
-         Rows := Natural'Value(Slice(Tokens, 2));
-         Delete_Widgets(0, Rows - 1, Frame);
-         if Enemy.Ship.Modules(1).Durability = 0 then
-            Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
-            goto End_Of_Enemy_Modules_Block;
-         end if;
-         Row := 0;
-         Show_Enemy_Ship_Status_Loop :
-         for I in Enemy.Ship.Modules.Iterate loop
-            if Enemy.Distance > 1000 then
-               ModuleName :=
-                 To_Unbounded_String
-                   (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex));
-            else
-               ModuleName :=
-                 Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name;
-            end if;
-            Font :=
+      Frame.Name :=
+        New_String(Main_Paned & ".combatframe.status.canvas.frame");
+      Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
+      Rows := Natural'Value(Slice(Tokens, 2));
+      Delete_Widgets(0, Rows - 1, Frame);
+      if Enemy.Ship.Modules(1).Durability = 0 then
+         Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
+         goto End_Of_Enemy_Modules;
+      end if;
+      Row := 0;
+      Show_Enemy_Ship_Status_Loop :
+      for I in Enemy.Ship.Modules.Iterate loop
+         Label :=
+           Create
+             (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
+              "-text {" &
+              To_String
+                (if Enemy.Distance > 1000 then
+                   To_Unbounded_String
+                     (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex))
+                 else Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name) &
+              "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then
-                 To_Unbounded_String
-                   (" -font OverstrikedFont -style Gray.TLabel")
-               else Null_Unbounded_String);
-            Label :=
-              Create
-                (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
-                 "-text {" & To_String(ModuleName) & "}" & To_String(Font));
-            Tcl.Tk.Ada.Grid.Grid
-              (Label,
-               "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
-            DamagePercent :=
-              ((Float(Enemy.Ship.Modules(I).Durability) /
-                Float(Enemy.Ship.Modules(I).MaxDurability)));
-            ProgressBarStyle :=
+                 " -font OverstrikedFont -style Gray.TLabel"
+               else ""));
+         Tcl.Tk.Ada.Grid.Grid
+           (Label,
+            "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
+         DamagePercent :=
+           ((Float(Enemy.Ship.Modules(I).Durability) /
+             Float(Enemy.Ship.Modules(I).MaxDurability)));
+         ProgressBar :=
+           Create
+             (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
+              "-orient horizontal -length 150 -maximum 1.0 -value" &
+              Float'Image(DamagePercent) &
               (if DamagePercent = 1.0 then
-                 To_Unbounded_String(" -style green.Horizontal.TProgressbar")
+                 " -style green.Horizontal.TProgressbar"
                elsif DamagePercent > 0.24 then
-                 To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-               else To_Unbounded_String(" -style Horizontal.TProgressbar"));
-            ProgressBar :=
-              Create
-                (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
-                 "-orient horizontal -length 150 -maximum 1.0 -value" &
-                 Float'Image(DamagePercent) & To_String(ProgressBarStyle));
-            Tcl.Tk.Ada.Grid.Grid
-              (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
-            Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
-            Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
-            Row := Row + 1;
-         end loop Show_Enemy_Ship_Status_Loop;
-         <<End_Of_Enemy_Modules_Block>>
-      end;
+                 " -style yellow.Horizontal.TProgressbar"
+               else " -style Horizontal.TProgressbar"));
+         Tcl.Tk.Ada.Grid.Grid
+           (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+         Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
+         Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
+         Row := Row + 1;
+      end loop Show_Enemy_Ship_Status_Loop;
+      <<End_Of_Enemy_Modules>>
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.status.canvas");
+      CombatCanvas := Get_Widget(Main_Paned & ".combatframe.status.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
