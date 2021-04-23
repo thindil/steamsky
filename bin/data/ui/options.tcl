@@ -318,18 +318,18 @@ $optionsframe.notebook add $ioptions -text {Interface}
 set infooptions [ttk::frame $optionsframe.notebook.info]
 grid [ttk::label $infooptions.lbl1 -text {Data directory path:}] -sticky w
 tooltip::tooltip $infooptions.lbl1 {Place where all standard game data are.}
-grid [ttk::label $infooptions.data] -row 0 -column 1 -sticky w
+grid [ttk::label $infooptions.data -wraplength 500] -row 0 -column 1 -sticky w
 tooltip::tooltip $infooptions.data {Place where all standard game data are.}
 grid [ttk::label $infooptions.lbl2 -text {Save directory path:}] -sticky w
 tooltip::tooltip $infooptions.lbl2 {Place where all game saves and configuration files are.}
-grid [ttk::label $infooptions.save] -row 1 -column 1 -sticky w
+grid [ttk::label $infooptions.save -wraplength 500] -row 1 -column 1 -sticky w
 tooltip::tooltip $infooptions.save {Place where all game saves and configuration files are.}
 grid [ttk::label $infooptions.lbl3 -text {Documentation directory path:}] -sticky w
 tooltip::tooltip $infooptions.lbl3 {Place where are game documentation files.}
-grid [ttk::label $infooptions.docs] -row 2 -column 1 -sticky w
+grid [ttk::label $infooptions.docs -wraplength 500] -row 2 -column 1 -sticky w
 tooltip::tooltip $infooptions.docs {Place where are game documentation files.}
 grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}] -sticky w
 tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications files.}
-grid [ttk::label $infooptions.mods] -row 3 -column 1 -sticky w
+grid [ttk::label $infooptions.mods -wraplength 500] -row 3 -column 1 -sticky w
 tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
 $optionsframe.notebook add $infooptions -text {Info}
