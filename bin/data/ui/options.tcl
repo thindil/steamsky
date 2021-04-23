@@ -118,25 +118,39 @@ proc SetShortcut {field key} {
 }
 set moveoptions [ttk::frame $optionsframe.notebook.movement]
 grid [ttk::label $moveoptions.lbl1 -text {Move ship up/left:}] -sticky w
+tooltip::tooltip $moveoptions.lbl1 "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.upleft -width 15] -row 0 -column 1 -sticky w
+tooltip::tooltip $moveoptions.upleft "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.upleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl2 -text {Move ship up:}] -sticky w
+tooltip::tooltip $moveoptions.lbl2 "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.up -width 15] -row 1 -column 1 -sticky w
+tooltip::tooltip $moveoptions.up "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.up <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl3 -text {Move ship up/right:}] -sticky w
+tooltip::tooltip $moveoptions.lbl3 "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.upright -width 15] -row 2 -column 1 -sticky w
+tooltip::tooltip $moveoptions.upright "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.upright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl4 -text {Move ship left:}] -sticky w
+tooltip::tooltip $moveoptions.lbl4 "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.left -width 15] -row 3 -column 1 -sticky w
+tooltip::tooltip $moveoptions.left "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.left <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}] -sticky w
+tooltip::tooltip $moveoptions.lbl5 "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.wait -width 15] -row 4 -column 1 -sticky w
+tooltip::tooltip $moveoptions.wait "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.wait <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl6 -text {Move ship right:}] -sticky w
+tooltip::tooltip $moveoptions.lbl6 "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.right -width 15] -row 5 -column 1 -sticky w
+tooltip::tooltip $moveoptions.right "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.right <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl7 -text {Move ship down/left:}] -sticky w
+tooltip::tooltip $moveoptions.lbl7 "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.downleft -width 15] -row 6 -column 1 -sticky w
+tooltip::tooltip $moveoptions.downleft "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.downleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl8 -text {Move ship down:}] -sticky w
 grid [ttk::entry $moveoptions.down -width 15] -row 7 -column 1 -sticky w
