@@ -18,9 +18,9 @@ with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with GNAT.OS_Lib; use GNAT.OS_Lib;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -275,25 +275,37 @@ package body MainMenu is
             ".mainmenu");
          return;
       end if;
-      if not Is_Writable_File(Name => To_String(Source => Save_Directory)) then
-         Button.Name := New_String(".mainmenu.newgame");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         Button.Name := New_String(".mainmenu.loadgame");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         if Dir_Separator = '/' then
-            ShowMessage
-              ("You don't have permissions to write to directory """ &
-               To_String(Source => Save_Directory) &
-               """ which is set as directory for saved games. Please select different directory.",
-               ".mainmenu");
-         else
-            ShowMessage
-              ("You don't have permissions to write to directory """ &
-               To_String(Source => Save_Directory) &
-               """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
-               ".mainmenu");
-         end if;
-      end if;
+      declare
+         Test_File: File_Type;
+      begin
+         Create
+           (File => Test_File,
+            Name =>
+              To_String(Source => Save_Directory) & Dir_Separator &
+              "test.txt");
+         Close(Test_File);
+         Delete_File
+           (To_String(Source => Save_Directory) & Dir_Separator & "test.txt");
+      exception
+         when Ada.Text_IO.Use_Error =>
+            Button.Name := New_String(".mainmenu.newgame");
+            Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+            Button.Name := New_String(".mainmenu.loadgame");
+            Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+            if Dir_Separator = '/' then
+               ShowMessage
+                 ("You don't have permissions to write to directory """ &
+                  To_String(Source => Save_Directory) &
+                  """ which is set as directory for saved games. Please select different directory.",
+                  ".mainmenu");
+            else
+               ShowMessage
+                 ("You don't have permissions to write to directory """ &
+                  To_String(Source => Save_Directory) &
+                  """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
+                  ".mainmenu");
+            end if;
+      end;
    end ShowMainMenu;
 
 end MainMenu;
