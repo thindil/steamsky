@@ -221,22 +221,34 @@ grid [ttk::entry $menuoptions.waitorders -width 15] -row 5 -column 1 -sticky w
 tooltip::tooltip $menuoptions.waitorders "Key used to show wait orders. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.waitorders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}] -sticky w
+tooltip::tooltip $menuoptions.lbl12 "Key used to show game statistics screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.gamestats -width 15] -row 6 -column 1 -sticky w
+tooltip::tooltip $menuoptions.gamestats "Key used to show game statistics screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.gamestats <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl13 -text {Help:}] -sticky w
+tooltip::tooltip $menuoptions.lbl13 "Key used to show help window. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.help -width 15] -row 7 -column 1 -sticky w
+tooltip::tooltip $menuoptions.help "Key used to show help window. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.help <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl14 -text {Game options:}] -sticky w
+tooltip::tooltip $menuoptions.lbl14 "Key used to show game options screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.gameoptions -width 15] -row 8 -column 1 -sticky w
+tooltip::tooltip $menuoptions.gameoptions "Key used to show game options screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.gameoptions <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl15 -text {Quit from game:}] -sticky w
+tooltip::tooltip $menuoptions.lbl15 "Key used to quit from the game. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.quit -width 15] -row 9 -column 1 -sticky w
+tooltip::tooltip $menuoptions.quit "Key used to quit from the game. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.quit <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl16 -text {Resign from game:}] -sticky w
+tooltip::tooltip $menuoptions.lbl16 "Key used to resign from the game. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.resign -width 15] -row 10 -column 1 -sticky w
+tooltip::tooltip $menuoptions.resign "Key used to resign from the game. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.resign <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl17 -text {Show menu:}] -sticky w
+tooltip::tooltip $menuoptions.lbl17 "Key used to show main menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.menu -width 15] -row 11 -column 1 -sticky w
+tooltip::tooltip $menuoptions.menu "Key used to show main menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
