@@ -191,22 +191,34 @@ $optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
 set menuoptions [ttk::frame $optionsframe.notebook.menu]
 grid [ttk::label $menuoptions.lbl1 -text {Ship information:}] -sticky w
+tooltip::tooltip $menuoptions.lbl1 "Key used to show ship info screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.shipinfo -width 15] -row 0 -column 1 -sticky w
+tooltip::tooltip $menuoptions.shipinfo "Key used to show ship info screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.shipinfo <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl4 -text {Ship orders:}] -sticky w
+tooltip::tooltip $menuoptions.lbl4 "Key used to show ship orders menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.orders -width 15] -row 1 -column 1 -sticky w
+tooltip::tooltip $menuoptions.orders "Key used to show ship orders menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.orders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl5 -text {Crafting orders:}] -sticky w
+tooltip::tooltip $menuoptions.lbl5 "Key used to show crafting screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.crafts -width 15] -row 2 -column 1 -sticky w
+tooltip::tooltip $menuoptions.crafts "Key used to show crafting screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.crafts <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl6 -text {Last messages:}] -sticky w
+tooltip::tooltip $menuoptions.lbl6 "Key used to show messages screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.messages -width 15] -row 3 -column 1 -sticky w
+tooltip::tooltip $menuoptions.messages "Key used to show messages screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.messages <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl7 -text {Knowledge lists:}] -sticky w
+tooltip::tooltip $menuoptions.lbl7 "Key used to show knowledge screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.knowledge -width 15] -row 4 -column 1 -sticky w
+tooltip::tooltip $menuoptions.knowledge "Key used to show knowledge screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.knowledge <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl11 -text {Wait orders:}] -sticky w
+tooltip::tooltip $menuoptions.lbl11 "Key used to show wait orders menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.waitorders -width 15] -row 5 -column 1 -sticky w
+tooltip::tooltip $menuoptions.waitorders "Key used to show wait orders. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.waitorders <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $menuoptions.lbl12 -text {Game statistics:}] -sticky w
 grid [ttk::entry $menuoptions.gamestats -width 15] -row 6 -column 1 -sticky w
