@@ -801,8 +801,8 @@ package body Combat.UI is
    procedure UpdateBoardingUI is
       -- ****
       OrdersList, OrderName: Unbounded_String;
-      Frame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe.right.canvas.frame");
+      FrameName: constant String := Main_Paned & ".combatframe";
+      Frame: Ttk_Frame := Get_Widget(FrameName & ".right.canvas.frame");
       Label: Ttk_Label;
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -811,7 +811,6 @@ package body Combat.UI is
       OrderIndex: Positive := 1;
       CombatCanvas: Tk_Canvas;
       Button: Ttk_Button;
-      ProgressBarStyle: Unbounded_String;
    begin
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -831,19 +830,17 @@ package body Combat.UI is
            (Button,
             "-row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {5 0}");
-         ProgressBarStyle :=
-           (if Enemy.Ship.Crew(I).Health > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif Enemy.Ship.Crew(I).Health > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(Enemy.Ship.Crew(I).Health) & " -length 150" &
-              To_String(ProgressBarStyle));
+              (if Enemy.Ship.Crew(I).Health > 74 then
+                 " -style green.Horizontal.TProgressbar"
+               elsif Enemy.Ship.Crew(I).Health > 24 then
+                 " -style yellow.Horizontal.TProgressbar"
+               else " -style Horizontal.TProgressbar"));
          Add(ProgressBar, "Enemy's health");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
@@ -866,15 +863,14 @@ package body Combat.UI is
             " -padx {0 5}");
       end loop Show_Enemy_Crew_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.right.canvas");
+      CombatCanvas := Get_Widget(FrameName & ".right.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
       Xview_Move_To(CombatCanvas, "0.0");
       Yview_Move_To(CombatCanvas, "0.0");
       Append(OrdersList, " {Back to the ship}");
-      Frame.Name :=
-        New_String(".gameframe.paned.combatframe.left.canvas.frame");
+      Frame.Name := New_String(FrameName & ".left.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(Frame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
@@ -895,19 +891,17 @@ package body Combat.UI is
            (Button,
             "-row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {5 0}");
-         ProgressBarStyle :=
-           (if PlayerShip.Crew(I).Health > 74 then
-              To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif PlayerShip.Crew(I).Health > 24 then
-              To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
-            else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          ProgressBar :=
            Create
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
               Natural'Image(PlayerShip.Crew(I).Health) & " -length 150" &
-              To_String(ProgressBarStyle));
+              (if PlayerShip.Crew(I).Health > 74 then
+                 " -style green.Horizontal.TProgressbar"
+               elsif PlayerShip.Crew(I).Health > 24 then
+                 " -style yellow.Horizontal.TProgressbar"
+               else " -style Horizontal.TProgressbar"));
          Add(ProgressBar, "The crew member health.");
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar,
@@ -933,7 +927,7 @@ package body Combat.UI is
          <<End_Of_Loop>>
       end loop Show_Boarding_Party_Loop;
       Tcl_Eval(Get_Context, "update");
-      CombatCanvas := Get_Widget(".gameframe.paned.combatframe.left.canvas");
+      CombatCanvas := Get_Widget(FrameName & ".left.canvas");
       configure
         (CombatCanvas,
          "-scrollregion [list " & BBox(CombatCanvas, "all") & "]");
@@ -966,17 +960,17 @@ package body Combat.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CombatFrame: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.combatframe", Interp);
+        Get_Widget(Main_Paned & ".combatframe", Interp);
       Frame: Ttk_Frame := Get_Widget(CombatFrame & ".crew", Interp);
-      Button: Ttk_Button := Get_Widget(CombatFrame & ".next", Interp);
+      Next_Button: constant Ttk_Button :=
+        Get_Widget(CombatFrame & ".next", Interp);
    begin
       CombatTurn;
       UpdateHeader;
       if EndCombat then
          UpdateCombatUI;
-         Button.Name := New_String(".gameframe.header.closebutton");
-         configure(Button, "-command {ShowSkyMap}");
-         Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+         configure(Close_Button, "-command {ShowSkyMap}");
+         Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".left");
          if Winfo_Get(Frame, "ismapped") = "1" then
             ShowCombatFrame(".combat");
@@ -984,8 +978,7 @@ package body Combat.UI is
          Frame.Name := New_String(Widget_Image(CombatFrame) & ".status");
          Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
          CreateGameMenu;
-         Button := Get_Widget(CombatFrame & ".next", Interp);
-         Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
          return TCL_OK;
       end if;
       if PlayerShip.Crew(1).Order = Boarding and
@@ -1063,12 +1056,12 @@ package body Combat.UI is
       pragma Unreferenced(ClientData, Argc);
       ComboBox: Ttk_ComboBox;
       GunIndex: Positive;
+      FrameName: constant String :=
+        Main_Paned & ".combatframe.crew.canvas.frame";
    begin
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
-         ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.pilotorder");
+         ComboBox.Name := New_String(FrameName & ".pilotorder");
          PilotOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
@@ -1082,9 +1075,7 @@ package body Combat.UI is
               ("Order for ship was set on: " & Get(ComboBox), CombatMessage);
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
-         ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.engineerorder");
+         ComboBox.Name := New_String(FrameName & ".engineerorder");
          EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
@@ -1099,9 +1090,7 @@ package body Combat.UI is
          end if;
       else
          ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.gunorder" &
-              CArgv.Arg(Argv, 1));
+           New_String(FrameName & ".gunorder" & CArgv.Arg(Argv, 1));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 1));
          Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
          Guns(GunIndex)(3) :=
@@ -1147,7 +1136,7 @@ package body Combat.UI is
       pragma Unreferenced(ClientData, Argc);
       Combobox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.combatframe.left.canvas.frame.order" &
+          (Main_Paned & ".combatframe.left.canvas.frame.order" &
            CArgv.Arg(Argv, 1),
            Interp);
    begin
