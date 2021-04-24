@@ -153,25 +153,39 @@ grid [ttk::entry $moveoptions.downleft -width 15] -row 6 -column 1 -sticky w
 tooltip::tooltip $moveoptions.downleft "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.downleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl8 -text {Move ship down:}] -sticky w
+tooltip::tooltip $moveoptions.lbl8 "Key used to move ship down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.down -width 15] -row 7 -column 1 -sticky w
+tooltip::tooltip $moveoptions.down "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.down <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl9 -text {Move ship down/right:}] -sticky w
+tooltip::tooltip $moveoptions.lbl9 "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.downright -width 15] -row 8 -column 1 -sticky w
+tooltip::tooltip $moveoptions.downright "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.downright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl10 -text {Move ship to destination:}] -sticky w
+tooltip::tooltip $moveoptions.lbl10 "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.moveto -width 15] -row 9 -column 1 -sticky w
+tooltip::tooltip $moveoptions.moveto "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.moveto <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl11 -text {Set full stop for ship:}] -sticky w
+tooltip::tooltip $moveoptions.lbl11 "Key used to set full stop for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.fullstop -width 15] -row 10 -column 1 -sticky w
+tooltip::tooltip $moveoptions.fullstop "Key used to set full stop for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullstop <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl12 -text {Set quarter speed for ship:}] -sticky w
+tooltip::tooltip $moveoptions.lbl12 "Key used to set quarter speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.quarterspeed -width 15] -row 11 -column 1 -sticky w
+tooltip::tooltip $moveoptions.quarterspeed "Key used to set quarter speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.quarterspeed <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl13 -text {Set half speed for ship:}] -sticky w
+tooltip::tooltip $moveoptions.lbl13 "Key used to set half speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.halfspeed -width 15] -row 12 -column 1 -sticky w
+tooltip::tooltip $moveoptions.halfspeed "Key used to set half speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.halfspeed <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl14 -text {Set full speed for ship:}] -sticky w
+tooltip::tooltip $moveoptions.lbl14 "Key used to set full speed. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.fullspeed -width 15] -row 13 -column 1 -sticky w
+tooltip::tooltip $moveoptions.fullspeed "Key used to set full speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
