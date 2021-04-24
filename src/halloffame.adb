@@ -45,23 +45,31 @@ package body HallOfFame is
       if Hall_Of_Fame_Array(1).Name /= Null_Unbounded_String then
          return;
       end if;
-      Open(To_String(Save_Directory) & "halloffame.dat", Hof_File);
-      Parse(Reader, Hof_File); --## rule line off IMPROPER_INITIALIZATION
-      Close(Hof_File);
-      Hof_Data := Get_Tree(Reader); --## rule line off IMPROPER_INITIALIZATION
+      Open
+        (Filename => To_String(Source => Save_Directory) & "halloffame.dat",
+         Input => Hof_File);
+      --## rule off IMPROPER_INITIALIZATION
+      Parse(Parser => Reader, Input => Hof_File);
+      Close(Input => Hof_File);
+      Hof_Data := Get_Tree(Read => Reader);
+      --## rule on IMPROPER_INITIALIZATION
       Entries_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Hof_Data, "entry");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Hof_Data, Tag_Name => "entry");
       Load_Hall_Of_Fame_Loop :
-      for I in 0 .. Length(Entries_List) - 1 loop
-         Entry_Node := Item(Entries_List, I);
+      for I in 0 .. Length(List => Entries_List) - 1 loop
+         Entry_Node := Item(List => Entries_List, Index => I);
          Hall_Of_Fame_Array(I + 1).Name :=
-           To_Unbounded_String(Get_Attribute(Entry_Node, "name"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Entry_Node, Name => "name"));
          Hall_Of_Fame_Array(I + 1).Points :=
-           Natural'Value(Get_Attribute(Entry_Node, "points"));
+           Natural'Value(Get_Attribute(Elem => Entry_Node, Name => "points"));
          Hall_Of_Fame_Array(I + 1).Death_Reason :=
-           To_Unbounded_String(Get_Attribute(Entry_Node, "Death_Reason"));
+           To_Unbounded_String
+             (Source =>
+                Get_Attribute(Elem => Entry_Node, Name => "Death_Reason"));
       end loop Load_Hall_Of_Fame_Loop;
-      Free(Reader);
+      Free(Read => Reader);
    exception
       when Ada.Directories.Name_Error =>
          null;
