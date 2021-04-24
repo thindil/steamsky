@@ -1210,7 +1210,7 @@ package body Combat.UI is
       YScroll: constant Ttk_Scrollbar :=
         Create
           (CrewDialog & ".yscroll",
-           "-orient vertical -command [list .moduledialog.canvas yview]");
+           "-orient vertical -command [list " & CrewDialog & ".canvas yview]");
       CrewCanvas: constant Tk_Canvas :=
         Create
           (CrewDialog & ".canvas",
