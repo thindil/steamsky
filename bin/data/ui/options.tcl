@@ -333,3 +333,5 @@ tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications
 grid [ttk::label $infooptions.mods] -row 3 -column 1
 tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
 $optionsframe.notebook add $infooptions -text {Info}
+::autoscroll::autoscroll .gameframe.paned.optionsframe.scrolly
+::autoscroll::autoscroll .gameframe.paned.optionsframe.scrollx
