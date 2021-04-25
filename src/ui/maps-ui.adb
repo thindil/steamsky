@@ -938,8 +938,9 @@ package body Maps.UI is
       end if;
       UpdateHeader;
       Tcl_Eval(Get_Context, "DrawMap");
-      UpdateMessages;
       UpdateMoveButtons;
+      Tcl_Eval(Get_Context, "update");
+      UpdateMessages;
       if CurrentStory.Index /= Null_Unbounded_String and
         CurrentStory.ShowText then
          if CurrentStory.CurrentStep > -2 then
