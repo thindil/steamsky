@@ -29,18 +29,12 @@ with Statistics; use Statistics;
 
 package body HallOfFame is
 
-   -- ****iv* HallOfFame/HallOfFame.Hof_Data
-   -- FUNCTION
-   -- XML structure for save or load hall of fame data from file
-   -- SOURCE
-   Hof_Data: Document;
-   -- ****
-
    procedure Load_Hall_Of_Fame is
       Hof_File: File_Input;
       Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
       Entries_List: Node_List;
       Entry_Node: Node;
+      Hof_Data: Document;
    begin
       if Hall_Of_Fame_Array(1).Name /= Null_Unbounded_String then
          return;
@@ -77,30 +71,31 @@ package body HallOfFame is
 
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
-      NewIndex: Natural range 0 .. 10 := 0;
+      New_Index: Natural range 0 .. 10 := 0;
       Hof_File: File_Type;
-      HoF: DOM_Implementation;
+      Hall_Of_Fame: DOM_Implementation;
       Entry_Node, MainNode: DOM.Core.Element;
-      RawValue: Unbounded_String;
+      Raw_Value: Unbounded_String := Null_Unbounded_String;
+      Hof_Data: Document;
    begin
       Find_New_Index_Loop :
       for I in Hall_Of_Fame_Array'Range loop
          if Hall_Of_Fame_Array(I).Points < GetGamePoints then
-            NewIndex := I;
+            New_Index := I;
             exit Find_New_Index_Loop;
          end if;
       end loop Find_New_Index_Loop;
-      if NewIndex = 0 then
+      if New_Index = 0 then
          return;
       end if;
       Move_Hall_Of_Fame_Loop :
-      for I in reverse NewIndex .. 9 loop
+      for I in reverse New_Index .. 9 loop
          Hall_Of_Fame_Array(I + 1) := Hall_Of_Fame_Array(I);
       end loop Move_Hall_Of_Fame_Loop;
-      Hall_Of_Fame_Array(NewIndex) :=
+      Hall_Of_Fame_Array(New_Index) :=
         (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
-      Hof_Data := Create_Document(HoF);
+      Hof_Data := Create_Document(Hall_Of_Fame);
       MainNode := Create_Element(Hof_Data, "halloffame");
       MainNode := Append_Child(Hof_Data, MainNode);
       Update_Hall_Of_Fame_Loop :
@@ -112,10 +107,11 @@ package body HallOfFame is
          Entry_Node := Append_Child(MainNode, Entry_Node);
          Set_Attribute
            (Entry_Node, "name", To_String(Hall_Of_Fame_Array(I).Name));
-         RawValue :=
+         Raw_Value :=
            To_Unbounded_String(Integer'Image(Hall_Of_Fame_Array(I).Points));
          Set_Attribute
-           (Entry_Node, "points", To_String(Trim(RawValue, Ada.Strings.Left)));
+           (Entry_Node, "points",
+            To_String(Trim(Raw_Value, Ada.Strings.Left)));
          Set_Attribute
            (Entry_Node, "Death_Reason",
             To_String(Hall_Of_Fame_Array(I).Death_Reason));
