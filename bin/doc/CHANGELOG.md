@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0.1] - 2021-04-25
 
 ### Changed
 - Installer shouldn't longer require Administrator's rights on Windows
