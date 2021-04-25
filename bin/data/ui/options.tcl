@@ -254,22 +254,34 @@ $optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
 set mapoptions [ttk::frame $optionsframe.notebook.map]
 grid [ttk::label $mapoptions.lbl1 -text {Center map on player ship:}] -sticky w
+tooltip::tooltip $mapoptions.lbl1 "Key used to center map on player ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.center -width 15] -row 0 -column 1 -sticky w
+tooltip::tooltip $mapoptions.center "Key used to center map on player ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.center <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl2 -text {Center map on home base:}] -sticky w
+tooltip::tooltip $mapoptions.lbl2 "Key used to center map on home base. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.centerhomebase -width 15] -row 1 -column 1 -sticky w
+tooltip::tooltip $mapoptions.centerhomebase "Key used to center map on home base. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.centerhomebase <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl3 -text {Move map to left:}] -sticky w
+tooltip::tooltip $mapoptions.lbl3 "Key used to move map left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapleft -width 15] -row 2 -column 1 -sticky w
+tooltip::tooltip $mapoptions.mapleft "Key used to move map left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl4 -text {Move map to right:}] -sticky w
+tooltip::tooltip $mapoptions.lbl4 "Key used to move map right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapright -width 15] -row 3 -column 1 -sticky w
+tooltip::tooltip $mapoptions.mapright "Key used to move map right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl5 -text {Move map up:}] -sticky w
+tooltip::tooltip $mapoptions.lbl5 "Key used to move map up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapup -width 15] -row 4 -column 1 -sticky w
+tooltip::tooltip $mapoptions.mapup "Key used to move map up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapup <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl6 -text {Move map down:}] -sticky w
+tooltip::tooltip $mapoptions.lbl6 "Key used to move map down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapdown -width 15] -row 5 -column 1 -sticky w
+tooltip::tooltip $mapoptions.mapdown "Key used to move map down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapdown <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl7 -text {Move map up/left:}] -sticky w
 grid [ttk::entry $mapoptions.mapupleft -width 15] -row 6 -column 1 -sticky w
