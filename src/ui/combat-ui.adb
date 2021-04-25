@@ -39,7 +39,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -1202,11 +1201,9 @@ package body Combat.UI is
            "} -wraplength 250");
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv, 1) = "boarding" then Boarding else Defend);
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
@@ -1288,12 +1285,12 @@ package body Combat.UI is
       ComboBox: Ttk_ComboBox;
       GunIndex: Positive;
       CrewIndex: Natural;
+      FrameName: constant String :=
+        ".gameframe.paned.combatframe.crew.canvas.frame";
    begin
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
-         ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.pilotcrew");
+         ComboBox.Name := New_String(FrameName & ".pilotcrew");
          CrewIndex := Positive'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Pilot);
@@ -1302,9 +1299,7 @@ package body Combat.UI is
             GiveOrders(PlayerShip, CrewIndex, Rest);
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
-         ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.engineercrew");
+         ComboBox.Name := New_String(FrameName & ".engineercrew");
          CrewIndex := Positive'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Engineer);
@@ -1314,9 +1309,7 @@ package body Combat.UI is
          end if;
       else
          ComboBox.Name :=
-           New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.gunorder" &
-              CArgv.Arg(Argv, 2));
+           New_String(FrameName & ".gunorder" & CArgv.Arg(Argv, 2));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Positive'Value(Current(ComboBox));
          if CrewIndex > 0 then
@@ -1384,13 +1377,13 @@ package body Combat.UI is
    end Show_Combat_Info_Command;
 
    procedure ShowCombatUI(NewCombat: Boolean := True) is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
-      CombatFrame: constant Ttk_Frame := Get_Widget(Paned & ".combatframe");
+      CombatFrame: constant Ttk_Frame :=
+        Get_Widget(Main_Paned & ".combatframe");
       CombatStarted: Boolean;
-      Button: Ttk_Button := Get_Widget(".gameframe.header.closebutton");
+      Button: constant Ttk_Button := Get_Widget(CombatFrame & ".next");
       EnemyFrame: constant Ttk_Frame := Get_Widget(CombatFrame & ".status");
    begin
-      Tcl.Tk.Ada.Grid.Grid_Remove(Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if NewCombat then
          if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
            and then EnemyName /=
@@ -1426,12 +1419,10 @@ package body Combat.UI is
               ("SetCombatPosition", Set_Combat_Position_Command'Access);
             AddCommand("ShowCombatInfo", Show_Combat_Info_Command'Access);
          else
-            Button.Name := New_String(CombatFrame & ".next");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid(EnemyFrame);
          end if;
-         Button.Name := New_String(".gameframe.header.closebutton");
-         configure(Button, "-command ShowCombatUI");
+         configure(Close_Button, "-command ShowCombatUI");
          Back_To_Work_Loop :
          for Member of PlayerShip.Crew loop
             if Member.Order = Rest
