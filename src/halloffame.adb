@@ -73,8 +73,8 @@ package body HallOfFame is
      (Player_Name, Death_Reason: Unbounded_String) is
       New_Index: Natural range 0 .. 10 := 0;
       Hof_File: File_Type;
-      Hall_Of_Fame: DOM_Implementation;
-      Entry_Node, MainNode: DOM.Core.Element;
+      Hall_Of_Fame: DOM_Implementation; --## rule line off IMPROPER_INITIALIZATION
+      Entry_Node, Main_Node: DOM.Core.Element;
       Raw_Value: Unbounded_String := Null_Unbounded_String;
       Hof_Data: Document;
    begin
@@ -96,25 +96,22 @@ package body HallOfFame is
         (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
       Hof_Data := Create_Document(Hall_Of_Fame);
-      MainNode := Create_Element(Hof_Data, "halloffame");
-      MainNode := Append_Child(Hof_Data, MainNode);
+      Main_Node :=
+        Append_Child(Hof_Data, Create_Element(Hof_Data, "halloffame"));
       Update_Hall_Of_Fame_Loop :
-      for I in Hall_Of_Fame_Array'Range loop
-         if Hall_Of_Fame_Array(I).Name = Null_Unbounded_String then
+      for Element of Hall_Of_Fame_Array loop
+         if Element.Name = Null_Unbounded_String then
             exit Update_Hall_Of_Fame_Loop;
          end if;
-         Entry_Node := Create_Element(Hof_Data, "entry");
-         Entry_Node := Append_Child(MainNode, Entry_Node);
-         Set_Attribute
-           (Entry_Node, "name", To_String(Hall_Of_Fame_Array(I).Name));
-         Raw_Value :=
-           To_Unbounded_String(Integer'Image(Hall_Of_Fame_Array(I).Points));
+         Entry_Node :=
+           Append_Child(Main_Node, Create_Element(Hof_Data, "entry"));
+         Set_Attribute(Entry_Node, "name", To_String(Element.Name));
+         Raw_Value := To_Unbounded_String(Integer'Image(Element.Points));
          Set_Attribute
            (Entry_Node, "points",
             To_String(Trim(Raw_Value, Ada.Strings.Left)));
          Set_Attribute
-           (Entry_Node, "Death_Reason",
-            To_String(Hall_Of_Fame_Array(I).Death_Reason));
+           (Entry_Node, "Death_Reason", To_String(Element.Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
       Create(Hof_File, Out_File, To_String(Save_Directory) & "halloffame.dat");
       Write(Stream => Stream(Hof_File), N => Hof_Data, Pretty_Print => True);
