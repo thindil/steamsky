@@ -19,9 +19,8 @@ pack [ttk::scrollbar .gameframe.paned.optionsframe.scrolly -orient vertical -com
 pack $optionscanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -fill x
 set optionsframe [ttk::frame $optionscanvas.options]
-grid [ttk::notebook $optionsframe.notebook] -sticky nwes
 # General options
-set goptions [ttk::frame $optionsframe.notebook.general]
+set goptions [ttk::frame $optionsframe.general]
 grid [ttk::label $goptions.lbl1 -text {Auto rest when crew is tired:}] -sticky w
 tooltip::tooltip $goptions.lbl1 {Wait for crew is rested when pilot or engineer are too tired to work.}
 grid [ttk::checkbutton $goptions.autorest] -row 0 -column 1 -sticky w
@@ -82,7 +81,6 @@ grid [ttk::label $goptions.lbl15 -text {Autosave game:}] -sticky w
 tooltip::tooltip $goptions.lbl15 {How often game should be automatically saved to disk.}
 grid [ttk::combobox $goptions.autosave -state readonly -values [list {Never} {After dock to base} {After undock from base} {Every game day} {Every game month} {Every game year}] -width 18] -row 14 -column 1 -sticky w
 tooltip::tooltip $goptions.autosave {How often game should be automatically saved to disk.}
-$optionsframe.notebook add $goptions -text {General}
 # Movement keys options
 set specialkey {}
 # Set proper shortcut, validate it and check if it is not set somewhere
@@ -116,7 +114,7 @@ proc SetShortcut {field key} {
    }
    set specialkey {}
 }
-set moveoptions [ttk::frame $optionsframe.notebook.movement]
+set moveoptions [ttk::frame $optionsframe.movement]
 grid [ttk::label $moveoptions.lbl1 -text {Move ship up/left:}] -sticky w
 tooltip::tooltip $moveoptions.lbl1 "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.upleft -width 15] -row 0 -column 1 -sticky w
@@ -187,9 +185,8 @@ tooltip::tooltip $moveoptions.lbl14 "Key used to set full speed. Select the fiel
 grid [ttk::entry $moveoptions.fullspeed -width 15] -row 13 -column 1 -sticky w
 tooltip::tooltip $moveoptions.fullspeed "Key used to set full speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
-$optionsframe.notebook add $moveoptions -text {Movement keys}
 # Menu keys options
-set menuoptions [ttk::frame $optionsframe.notebook.menu]
+set menuoptions [ttk::frame $optionsframe.menu]
 grid [ttk::label $menuoptions.lbl1 -text {Ship information:}] -sticky w
 tooltip::tooltip $menuoptions.lbl1 "Key used to show ship info screen. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $menuoptions.shipinfo -width 15] -row 0 -column 1 -sticky w
@@ -250,9 +247,8 @@ tooltip::tooltip $menuoptions.lbl17 "Key used to show main menu. Select the fiel
 grid [ttk::entry $menuoptions.menu -width 15] -row 11 -column 1 -sticky w
 tooltip::tooltip $menuoptions.menu "Key used to show main menu. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $menuoptions.menu <KeyRelease> {SetShortcut %W %K}
-$optionsframe.notebook add $menuoptions -text {Menu keys}
 # Map keys options
-set mapoptions [ttk::frame $optionsframe.notebook.map]
+set mapoptions [ttk::frame $optionsframe.map]
 grid [ttk::label $mapoptions.lbl1 -text {Center map on player ship:}] -sticky w
 tooltip::tooltip $mapoptions.lbl1 "Key used to center map on player ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.center -width 15] -row 0 -column 1 -sticky w
@@ -363,9 +359,8 @@ tooltip::tooltip $mapoptions.lbl22 "Key used to show move map options. Select th
 grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
 tooltip::tooltip $mapoptions.mapoptions "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
-$optionsframe.notebook add $mapoptions -text {Map keys}
 # Interface options
-set ioptions [ttk::frame $optionsframe.notebook.interface]
+set ioptions [ttk::frame $optionsframe.interface]
 grid [ttk::label $ioptions.lbl3 -text {Interface theme:}] -sticky w
 tooltip::tooltip $ioptions.lbl3 {Select UI theme.}
 grid [ttk::combobox $ioptions.theme -state readonly -width 15] -row 0 -column 1 -sticky w
@@ -409,9 +404,8 @@ grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validat
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
-$optionsframe.notebook add $ioptions -text {Interface}
 # Info options
-set infooptions [ttk::frame $optionsframe.notebook.info]
+set infooptions [ttk::frame $optionsframe.info]
 grid [ttk::label $infooptions.lbl1 -text {Data directory path:}] -sticky w
 tooltip::tooltip $infooptions.lbl1 {Place where all standard game data are.}
 grid [ttk::label $infooptions.data -wraplength 500] -row 0 -column 1 -sticky w
@@ -428,6 +422,5 @@ grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}] -stick
 tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications files.}
 grid [ttk::label $infooptions.mods -wraplength 500] -row 3 -column 1 -sticky w
 tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
-$optionsframe.notebook add $infooptions -text {Info}
 ::autoscroll::autoscroll .gameframe.paned.optionsframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.optionsframe.scrollx
