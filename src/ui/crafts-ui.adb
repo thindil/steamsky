@@ -27,7 +27,6 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -37,6 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with CoreUI; use CoreUI;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Trades; use Trades;
@@ -67,13 +67,9 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      CraftsFrame: Ttk_Frame := Get_Widget(Paned & ".craftframe", Interp);
+      CraftsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".craftframe", Interp);
       CraftsCanvas: constant Tk_Canvas :=
         Get_Widget(CraftsFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       Studies, Deconstructs: UnboundedString_Container.Vector;
       CanCraft: Boolean;
       Recipe: Craft_Data;
@@ -106,8 +102,8 @@ package body Crafts.UI is
          Bind(CraftsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(CraftsCanvas, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
@@ -246,12 +242,12 @@ package body Crafts.UI is
          end if;
       end loop Set_Deconstruct_Recipes_Loop;
       Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
         (CraftsCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (CraftsCanvas, "window",
