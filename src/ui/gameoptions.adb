@@ -46,6 +46,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Combat.UI; use Combat.UI;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -165,13 +166,13 @@ package body GameOptions is
       begin
          Label.Name :=
            New_String
-             (Widget_Image(OptionsCanvas) & ".options.info." &
-              LabelName);
+             (Widget_Image(OptionsCanvas) & ".options.info." & LabelName);
          configure(Label, "-text {" & Full_Name(To_String(Path)) & " }");
       end Set_Path;
    begin
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
+      Tcl_SetVar(Interp, "newtab", "general");
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
@@ -251,8 +252,7 @@ package body GameOptions is
       Current
         (ComboBox, Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)));
       OptionsFrame.Name :=
-        New_String
-          (Widget_Image(OptionsCanvas) & ".options.interface");
+        New_String(Widget_Image(OptionsCanvas) & ".options.interface");
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
       Set
         (ComboBox,
@@ -360,12 +360,12 @@ package body GameOptions is
          To_Unbounded_String("UnderlineFont"));
    begin
       if CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.optionsframe.canvas.options.notebook.interface.mapfont" then
+        ".gameframe.paned.optionsframe.canvas.options.interface.mapfont" then
          Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
          Font.Configure
            ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
       elsif CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.optionsframe.canvas.options.notebook.interface.helpfont" then
+        ".gameframe.paned.optionsframe.canvas.options.interface.helpfont" then
          Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
          Set_Fonts_Loop :
          for FontName of HelpFonts loop
@@ -420,7 +420,7 @@ package body GameOptions is
       for I in SpinBoxNames'Range loop
          SpinBox.Name :=
            New_String
-             (".gameframe.paned.optionsframe.canvas.options.notebook.interface." &
+             (".gameframe.paned.optionsframe.canvas.options.interface." &
               To_String(SpinBoxNames(I)) & "font");
          Set(SpinBox, Positive'Image(DefaultFontsSizes(I)));
          Font.Configure
@@ -460,7 +460,7 @@ package body GameOptions is
       CloseButton: constant Ttk_Button :=
         Get_Widget(".gameframe.header.closebutton", Interp);
       RootName: constant String :=
-        ".gameframe.paned.optionsframe.canvas.options.notebook";
+        ".gameframe.paned.optionsframe.canvas.options";
       ComboBox: Ttk_ComboBox :=
         Get_Widget(RootName & ".general.speed", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(RootName & ".general.fuel", Interp);
@@ -596,12 +596,54 @@ package body GameOptions is
       return TCL_OK;
    end Close_Options_Command;
 
+   -- ****o* GameOptions/GameOptions.Show_Options_Tab_Command
+   -- FUNCTION
+   -- Show the selected options tab
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOptionsTab
+   -- SOURCE
+   function Show_Options_Tab_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Options_Tab_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      OptionsCanvas: constant Tk_Canvas :=
+        Get_Widget(Main_Paned & ".optionsframe.canvas", Interp);
+      OptionsFrame: constant Ttk_Frame :=
+        Get_Widget(OptionsCanvas & ".options", Interp);
+      Frame: constant Ttk_Frame :=
+        Get_Widget(OptionsFrame & "." & Tcl_GetVar(Interp, "newtab"));
+      OldFrame: constant Ttk_Frame :=
+        Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(OptionsFrame, "-row 1"));
+   begin
+      Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes");
+      Tcl_Eval(Interp, "update");
+      configure
+        (OptionsCanvas,
+         "-scrollregion [list " & BBox(OptionsCanvas, "all") & "]");
+      return TCL_OK;
+   end Show_Options_Tab_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowOptions", Show_Options_Command'Access);
       AddCommand("SetFonts", Set_Fonts_Command'Access);
       AddCommand("SetDefaultFonts", Set_Default_Fonts_Command'Access);
       AddCommand("CloseOptions", Close_Options_Command'Access);
+      AddCommand("ShowOptionsTab", Show_Options_Tab_Command'Access);
    end AddCommands;
 
 end GameOptions;
