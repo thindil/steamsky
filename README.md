@@ -162,7 +162,7 @@ of the game, you can also use all of this starting parameters.
 ### Testing versions
 
 Here are available testing versions of the game. You can find them
-in [Github Actions](https://github.com/thindil/steamsky/actions?query=workflow%3A"Continuous+Integration+-+development+version").
+in [Github Actions](https://github.com/thindil/steamsky/actions/workflows/ada.yml).
 Just select option from the list of results to see Artifacts list.
 To use them, first you must download normal release. Then, for Linux: inside
 directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
@@ -171,9 +171,9 @@ from the archive to the proper location. To run that version, enter
 *squashfs-root* directory and type in console `./AppRun`. For Windows:
 unzip files (replace existing) to the proper location where the game is installed.
 
-* steamsky-development-windows.tar contains Windows 64-bit version of the game.
+* steamsky-stable-windows.tar contains Windows 64-bit version of the game.
 
-* steamsky-development-linux.tar contains Linux 64-bit version of the game.
+* steamsky-stable-linux.tar contains Linux 64-bit version of the game.
 
 Size is a file's size after unpacking. You will download it compressed with
 Zip.
