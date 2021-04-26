@@ -165,7 +165,7 @@ package body GameOptions is
       begin
          Label.Name :=
            New_String
-             (Widget_Image(OptionsCanvas) & ".options.notebook.info." &
+             (Widget_Image(OptionsCanvas) & ".options.info." &
               LabelName);
          configure(Label, "-text {" & Full_Name(To_String(Path)) & " }");
       end Set_Path;
@@ -187,7 +187,7 @@ package body GameOptions is
          end loop Load_Themes_Loop;
          ComboBox.Name :=
            New_String
-             (".gameframe.paned.optionsframe.canvas.options.notebook.interface.theme");
+             (".gameframe.paned.optionsframe.canvas.options.interface.theme");
          configure(ComboBox, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -197,7 +197,8 @@ package body GameOptions is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       OptionsFrame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options.notebook.general");
+        New_String(Widget_Image(OptionsCanvas) & ".options.general");
+      Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autorest",
          Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Rest)), Left));
@@ -251,7 +252,7 @@ package body GameOptions is
         (ComboBox, Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)));
       OptionsFrame.Name :=
         New_String
-          (Widget_Image(OptionsCanvas) & ".options.notebook.interface");
+          (Widget_Image(OptionsCanvas) & ".options.interface");
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
       Set
         (ComboBox,
@@ -285,7 +286,7 @@ package body GameOptions is
       Set(SpinBox, Natural'Image(Game_Settings.Interface_Font_Size));
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options.notebook");
+        New_String(Widget_Image(OptionsCanvas) & ".options");
       Load_Menu_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Accels(I).ShortCut := MenuAccelerators(I);
@@ -308,8 +309,6 @@ package body GameOptions is
          configure(CloseButton, "-command {CloseOptions map}");
       end if;
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      OptionsFrame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options");
       configure
         (OptionsCanvas,
          "-height " & cget(Paned, "-height") & " -width " &
