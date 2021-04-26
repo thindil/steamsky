@@ -343,17 +343,25 @@ tooltip::tooltip $mapoptions.lbl18 "Key used to move cursor down and right. Sele
 grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 -sticky w
 tooltip::tooltip $mapoptions.cursordownright "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordownright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $mapoptions.lbl19 -text {Press mouse left button:}] -sticky w
+grid [ttk::label $mapoptions.lbl19 -text {Press mouse button:}] -sticky w
+tooltip::tooltip $mapoptions.lbl19 "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.clickmouse -width 15] -row 18 -column 1 -sticky w
+tooltip::tooltip $mapoptions.clickmouse "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.clickmouse <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl20 -text {Zoom in map:}] -sticky w
+tooltip::tooltip $mapoptions.lbl20 "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.zoomin -width 15] -row 19 -column 1 -sticky w
+tooltip::tooltip $mapoptions.zoomin "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.zoomin <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl21 -text {Zoom out map:}] -sticky w
+tooltip::tooltip $mapoptions.lbl21 "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.zoomout -width 15] -row 20 -column 1 -sticky w
+tooltip::tooltip $mapoptions.zoomout "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.zoomout <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl22 -text {Show move map options:}] -sticky w
+tooltip::tooltip $mapoptions.lbl22 "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
+tooltip::tooltip $mapoptions.mapoptions "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
 $optionsframe.notebook add $mapoptions -text {Map keys}
 # Interface options
