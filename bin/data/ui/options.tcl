@@ -19,6 +19,15 @@ pack [ttk::scrollbar .gameframe.paned.optionsframe.scrolly -orient vertical -com
 pack $optionscanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -fill x
 set optionsframe [ttk::frame $optionscanvas.options]
+# Tabs buttons
+set buttonsframe [ttk::frame $optionsframe.buttons]
+grid [ttk::radiobutton $buttonsframe.general -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowOptionsTab] -row 0 -column 1
+grid [ttk::radiobutton $buttonsframe.movement -text {Movement keys} -style Radio.Toolbutton -value movement -variable newtab -command ShowOptionsTab] -row 0 -column 2
+grid [ttk::radiobutton $buttonsframe.menu -text {Menu keys} -style Radio.Toolbutton -value menu -variable newtab -command ShowOptionsTab] -row 0 -column 3
+grid [ttk::radiobutton $buttonsframe.map -text {Map keys} -style Radio.Toolbutton -value map -variable newtab -command ShowOptionsTab] -row 0 -column 4
+grid [ttk::radiobutton $buttonsframe.interface -text Interface -style Radio.Toolbutton -value interface -variable newtab -command ShowOptionsTab] -row 0 -column 5
+grid [ttk::radiobutton $buttonsframe.info -text Info -style Radio.Toolbutton -value info -variable newtab -command ShowOptionsTab] -row 0 -column 6
+grid $buttonsframe -sticky w -padx 5 -pady 5
 # General options
 set goptions [ttk::frame $optionsframe.general]
 grid [ttk::label $goptions.lbl1 -text {Auto rest when crew is tired:}] -sticky w
