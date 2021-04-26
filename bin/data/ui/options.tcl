@@ -311,25 +311,37 @@ bind $mapoptions.cursorupleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl12 -text {Move cursor up:}] -sticky w
 tooltip::tooltip $mapoptions.lbl12 "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorup -width 15] -row 11 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorup "Key used to move cursorup. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.cursorup "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorup <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl13 -text {Move cursor up/right:}] -sticky w
+tooltip::tooltip $mapoptions.lbl13 "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorupright -width 15] -row 12 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursorupright "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorupright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl14 -text {Move cursor left:}] -sticky w
+tooltip::tooltip $mapoptions.lbl14 "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorleft -width 15] -row 13 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursorleft "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl15 -text {Move cursor right:}] -sticky w
+tooltip::tooltip $mapoptions.lbl15 "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorright -width 15] -row 14 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursorright "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl16 -text {Move cursor down/left:}] -sticky w
+tooltip::tooltip $mapoptions.lbl16 "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursordownleft -width 15] -row 15 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursordownleft "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordownleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl17 -text {Move cursor down:}] -sticky w
+tooltip::tooltip $mapoptions.lbl17 "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursordown -width 15] -row 16 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursordown "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordown <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl18 -text {Move cursor donw/right:}] -sticky w
+tooltip::tooltip $mapoptions.lbl18 "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 -sticky w
+tooltip::tooltip $mapoptions.cursordownright "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordownright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl19 -text {Press mouse left button:}] -sticky w
 grid [ttk::entry $mapoptions.clickmouse -width 15] -row 18 -column 1 -sticky w
