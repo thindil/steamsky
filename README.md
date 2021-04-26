@@ -161,7 +161,7 @@ of the game, you can also use all of this starting parameters.
 ### Testing versions
 
 Here are available testing versions of the game. You can find them
-in [Github Actions](https://github.com/thindil/steamsky/actions?query=workflow%3A"Continuous+Integration+-+development+version").
+in [Github Actions](https://github.com/thindil/steamsky/actions/workflows/ada-devel.yml).
 Just select option from the list of results to see Artifacts list.
 To use them, first you must download normal release. Then, for Linux: inside
 directory where the game is, type `./steamsky-x86_64.AppImage --appimage-extract`
