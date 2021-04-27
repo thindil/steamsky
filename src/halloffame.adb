@@ -88,10 +88,8 @@ package body HallOfFame is
       if New_Index = 0 then
          return;
       end if;
-      Move_Hall_Of_Fame_Loop :
-      for I in reverse New_Index .. 9 loop
-         Hall_Of_Fame_Array(I + 1) := Hall_Of_Fame_Array(I);
-      end loop Move_Hall_Of_Fame_Loop;
+      Hall_Of_Fame_Array(New_Index + 1 .. Hall_Of_Fame_Array'Last) :=
+        Hall_Of_Fame_Array(New_Index .. Hall_Of_Fame_Array'Last - 1);
       Hall_Of_Fame_Array(New_Index) :=
         (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
