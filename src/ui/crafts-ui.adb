@@ -175,23 +175,12 @@ package body Crafts.UI is
                end loop Set_Can_Craft_Loop;
             end;
          end if;
-         if CanCraft then
-            Insert
-              (RecipesView,
-               "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
-               To_String
-                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
-                    .Name) &
-               "}");
-         else
-            Insert
-              (RecipesView,
-               "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
-               To_String
-                 (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
-                    .Name) &
-               "} -tags [list gray]");
-         end if;
+         Insert
+           (RecipesView,
+            "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
+            To_String
+              (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name) &
+            "}" & (if not CanCraft then " -tag [list gray]" else ""));
          if FirstIndex = Null_Unbounded_String then
             FirstIndex := Known_Recipes(I);
          end if;
@@ -209,37 +198,21 @@ package body Crafts.UI is
          end loop Find_Alchemy_Lab_Loop;
       end if;
       Set_Study_Recipes_Loop :
-      for I in Studies.First_Index .. Studies.Last_Index loop
-         if CanCraft then
-            Insert
-              (RecipesView,
-               "{} end -id {Study " & To_String(Studies(I)) &
-               "} -text {Study " & To_String(Items_List(Studies(I)).Name) &
-               "}");
-         else
-            Insert
-              (RecipesView,
-               "{} end -id {Study " & To_String(Studies(I)) &
-               "} -text {Study " & To_String(Items_List(Studies(I)).Name) &
-               "} -tag [list gray]");
-         end if;
+      for I in Studies.Iterate loop
+         Insert
+           (RecipesView,
+            "{} end -id {Study " & To_String(Studies(I)) & "} -text {Study " &
+            To_String(Items_List(Studies(I)).Name) & "}" &
+            (if not CanCraft then " -tag [list gray]" else ""));
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
-      for I in Deconstructs.First_Index .. Deconstructs.Last_Index loop
-         if CanCraft then
-            Insert
-              (RecipesView,
-               "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
-               "} -text {Decontruct " &
-               To_String(Items_List(Deconstructs(I)).Name) & "}");
-         else
-            Insert
-              (RecipesView,
-               "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
-               "} -text {Decontruct " &
-               To_String(Items_List(Deconstructs(I)).Name) &
-               "} -tag [list gray]");
-         end if;
+      for I in Deconstructs.Iterate loop
+         Insert
+           (RecipesView,
+            "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
+            "} -text {Decontruct " &
+            To_String(Items_List(Deconstructs(I)).Name) & "}" &
+            (if not CanCraft then " -tag [list gray]" else ""));
       end loop Set_Deconstruct_Recipes_Loop;
       Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
@@ -269,14 +242,11 @@ package body Crafts.UI is
       MaxAmount: Positive;
       MType: ModuleType;
       ModulesList: Unbounded_String;
-      AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(".gameframe.paned.craftframe.canvas.craft.item.set.amount");
-      MaxLabel: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.set.maxamount");
-      ModulesBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
+      FrameName: constant String :=
+        Main_Paned & "craftframe.canvas.craft.item.set";
+      AmountBox: constant Ttk_SpinBox := Get_Widget(FrameName & ".amount");
+      MaxLabel: constant Ttk_Label := Get_Widget(FrameName & ".maxamount");
+      ModulesBox: constant Ttk_ComboBox := Get_Widget(FrameName & ".workshop");
       RecipeIndex: constant Unbounded_String :=
         (if Element(Index, 1) = '{' then
            Unbounded_Slice(Index, 2, Length(Index) - 1)
@@ -358,9 +328,9 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := Main_Paned & ".craftframe.canvas.craft";
       RecipesView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
+        Get_Widget(FrameName & ".list.view", Interp);
       WorkplaceName: Unbounded_String := Null_Unbounded_String;
       Recipe: Craft_Data;
       MAmount, CargoIndex: Natural := 0;
@@ -368,14 +338,11 @@ package body Crafts.UI is
       HaveTool: Boolean := False;
       TextLength: Positive;
       RecipeText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.info.text", Interp);
+        Get_Widget(FrameName & ".item.info.text", Interp);
       CraftFrame: constant Ttk_Frame :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.set", Interp);
+        Get_Widget(FrameName & ".item.set", Interp);
       ErrorLabel: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.error", Interp);
+        Get_Widget(FrameName & ".item.error", Interp);
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(Selection(RecipesView));
    begin
