@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated README.md
 
+### Fixed
+- Showing crafting recipe as uncraftable when materials are present
+
 ## [6.0.1] - 2021-04-25
 
 ### Changed
