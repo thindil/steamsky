@@ -18,3 +18,4 @@ All notable changes to this project will be documented in this file.
 - Scrollbar in setting boarding party in combat
 - Autohide scrollbars in the game options
 - Showing last messages after back to the map
+- Showing crafting recipe as uncraftable when materials are present
