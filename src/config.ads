@@ -192,6 +192,8 @@ package Config is
    --                            top of the help window
    -- Show_Numbers             - If true, show numbers values instead of text for
    --                            various things (like weapon strength, etc)
+   -- Right_Button             - If true, use right mouse button for show various
+   --                            in game menus. Otherwise use the left button
    -- SOURCE
    type Game_Settings_Record is record
       Auto_Rest: Boolean;
@@ -222,6 +224,7 @@ package Config is
       Auto_Save: Auto_Save_Type;
       Topics_Position: Natural;
       Show_Numbers: Boolean;
+      Right_Button: Boolean;
    end record;
    -- ****
 
@@ -242,7 +245,7 @@ package Config is
       Show_Last_Messages => True, Messages_Position => 213,
       Full_Screen => False, Auto_Close_Messages_Time => 6,
       Auto_Save => Default_Auto_Save_Time, Topics_Position => 200,
-      Show_Numbers => False);
+      Show_Numbers => False, Right_Button => False);
    -- ****
 
    -- ****v* Config/Config.New_Game_Settings

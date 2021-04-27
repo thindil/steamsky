@@ -185,6 +185,8 @@ package body Config is
               Natural'Value(To_String(Source => Value));
          elsif Field_Name = To_Unbounded_String(Source => "ShowNumbers") then
             Game_Settings.Show_Numbers := Load_Boolean;
+         elsif Field_Name = To_Unbounded_String(Source => "RightButton") then
+            Game_Settings.Right_Button := Load_Boolean;
          end if;
          <<End_Of_Loop>>
       end loop Read_Config_File_Loop;
@@ -369,6 +371,7 @@ package body Config is
          Item =>
            "TopicsPosition =" & Natural'Image(Game_Settings.Topics_Position));
       Save_Boolean(Value => Game_Settings.Show_Numbers, Name => "ShowNumbers");
+      Save_Boolean(Value => Game_Settings.Right_Button, Name => "RightButton");
       Close(File => Config_File);
    end Save_Config;
 
