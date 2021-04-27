@@ -171,8 +171,8 @@ package body Crafts.UI is
                end loop Find_Materials_Loop;
                CanCraft := True;
                Set_Can_Craft_Loop :
-               for I in Materials'Range loop
-                  if not Materials(I) then
+               for J in Materials'Range loop
+                  if not Materials(J) then
                      CanCraft := False;
                      exit Set_Can_Craft_Loop;
                   end if;
