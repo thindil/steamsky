@@ -199,7 +199,7 @@ package body GameOptions is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.general");
-      Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes");
+      Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".autorest",
          Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Rest)), Left));
@@ -629,7 +629,7 @@ package body GameOptions is
         Get_Widget(Tcl.Tk.Ada.Grid.Grid_Slaves(OptionsFrame, "-row 1"));
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(OldFrame);
-      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes");
+      Tcl.Tk.Ada.Grid.Grid(Frame, "-sticky nwes -padx 10");
       Tcl_Eval(Interp, "update");
       configure
         (OptionsCanvas,
