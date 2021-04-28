@@ -15,6 +15,7 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
 with Ada.Directories;
@@ -75,7 +76,6 @@ package body HallOfFame is
       Hof_File: File_Type;
       Hall_Of_Fame: DOM_Implementation; --## rule line off IMPROPER_INITIALIZATION
       Entry_Node, Main_Node: DOM.Core.Element;
-      Raw_Value: Unbounded_String := Null_Unbounded_String;
       Hof_Data: Document;
    begin
       Find_New_Index_Loop :
@@ -93,23 +93,33 @@ package body HallOfFame is
       Hall_Of_Fame_Array(New_Index) :=
         (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
-      Hof_Data := Create_Document(Hall_Of_Fame);
+      Hof_Data := Create_Document(Implementation => Hall_Of_Fame);
       Main_Node :=
-        Append_Child(Hof_Data, Create_Element(Hof_Data, "halloffame"));
+        Append_Child
+          (N => Hof_Data,
+           New_Child =>
+             Create_Element(Doc => Hof_Data, Tag_Name => "halloffame"));
       Update_Hall_Of_Fame_Loop :
       for Element of Hall_Of_Fame_Array loop
          if Element.Name = Null_Unbounded_String then
             exit Update_Hall_Of_Fame_Loop;
          end if;
          Entry_Node :=
-           Append_Child(Main_Node, Create_Element(Hof_Data, "entry"));
-         Set_Attribute(Entry_Node, "name", To_String(Element.Name));
-         Raw_Value := To_Unbounded_String(Integer'Image(Element.Points));
+           Append_Child
+             (N => Main_Node,
+              New_Child =>
+                Create_Element(Doc => Hof_Data, Tag_Name => "entry"));
+         Set_Attribute
+           (Elem => Entry_Node, Name => "name",
+            Value => To_String(Source => Element.Name));
          Set_Attribute
            (Entry_Node, "points",
-            To_String(Trim(Raw_Value, Ada.Strings.Left)));
+            Trim
+              (Source => Integer'Image(Element.Points),
+               Side => Ada.Strings.Left));
          Set_Attribute
-           (Entry_Node, "Death_Reason", To_String(Element.Death_Reason));
+           (Elem => Entry_Node, Name => "Death_Reason",
+            Value => To_String(Source => Element.Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
       Create(Hof_File, Out_File, To_String(Save_Directory) & "halloffame.dat");
       Write(Stream => Stream(Hof_File), N => Hof_Data, Pretty_Print => True);
