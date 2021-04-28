@@ -243,7 +243,7 @@ package body Crafts.UI is
       MType: ModuleType;
       ModulesList: Unbounded_String;
       FrameName: constant String :=
-        Main_Paned & "craftframe.canvas.craft.item.set";
+        Main_Paned & ".craftframe.canvas.craft.item.set";
       AmountBox: constant Ttk_SpinBox := Get_Widget(FrameName & ".amount");
       MaxLabel: constant Ttk_Label := Get_Widget(FrameName & ".maxamount");
       ModulesBox: constant Ttk_ComboBox := Get_Widget(FrameName & ".workshop");
@@ -502,14 +502,11 @@ package body Crafts.UI is
                     Quality => Recipe.ToolQuality);
                if CargoIndex > 0 then
                   HaveTool := True;
-                  Insert
-                    (RecipeText, "end",
-                     "{" & To_String(Items_List(I).Name) & "}");
-               else
-                  Insert
-                    (RecipeText, "end",
-                     "{" & To_String(Items_List(I).Name) & "} [list red]");
                end if;
+               Insert
+                 (RecipeText, "end",
+                  "{" & To_String(Items_List(I).Name) & "}" &
+                  (if not HaveTool then " [list red]" else ""));
                MAmount := MAmount + 1;
             end if;
          end loop Check_Tool_Loop;
@@ -539,23 +536,16 @@ package body Crafts.UI is
             end if;
          end loop Find_Workshop_Name_Loop;
       end if;
-      if not HaveWorkplace then
-         Insert
-           (RecipeText, "end",
-            "{" & To_String(WorkplaceName) & "} [list red]");
-      else
-         Insert(RecipeText, "end", "{" & To_String(WorkplaceName) & "}");
-      end if;
+      Insert
+        (RecipeText, "end",
+         "{" & To_String(WorkplaceName) & "}" &
+         (if not HaveWorkplace then " [list red]" else ""));
       Insert
         (RecipeText, "end",
          "{" & LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name) &
-         "}");
-      Insert
-        (RecipeText, "end",
-         "{" & LF & "Time needed:" & Positive'Image(Recipe.Time) &
-         " minutes}");
+         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       if HaveMaterials and HaveTool and HaveWorkplace then
          ShowSetRecipe(RecipeIndex);
          Tcl.Tk.Ada.Grid.Grid(CraftFrame);
@@ -606,17 +596,15 @@ package body Crafts.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := Main_Paned & ".craftframe.canvas.craft";
       RecipesView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.list.view", Interp);
+        Get_Widget(FrameName & ".list.view", Interp);
       RecipeIndex: Unbounded_String :=
         To_Unbounded_String(Selection(RecipesView));
       ModulesBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.set.workshop");
+        Get_Widget(FrameName & ".item.set.workshop");
       AmountBox: constant Ttk_SpinBox :=
-        Get_Widget
-          (".gameframe.paned.craftframe.canvas.craft.item.set.amount", Interp);
+        Get_Widget(FrameName & ".item.set.amount", Interp);
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
