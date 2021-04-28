@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated README.md
 - Installer shouldn't longer require Administrator's rights on Windows
 - Redesigned the game options screen
+- Updated interface
 
 ### Fixed
 - Look of tooltips in the game options
