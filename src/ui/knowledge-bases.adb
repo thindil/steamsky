@@ -345,7 +345,7 @@ package body Knowledge.Bases is
    -- Show the selected base on map
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -363,12 +363,16 @@ package body Knowledge.Bases is
    function Show_Base_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       CenterX := SkyBases(BaseIndex).SkyX;
       CenterY := SkyBases(BaseIndex).SkyY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Show_Base_Command;
 
@@ -377,7 +381,7 @@ package body Knowledge.Bases is
    -- Set the selected base as the player's ship destination
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -395,8 +399,10 @@ package body Knowledge.Bases is
    function Set_Base_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
         SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
@@ -407,7 +413,9 @@ package body Knowledge.Bases is
       PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Set_Base_Command;
 
