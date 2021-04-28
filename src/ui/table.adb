@@ -248,7 +248,11 @@ package body Table is
       Bind
         (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
-      Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+      if Game_Settings.Right_Button then
+         Bind(Table.Canvas, Tag, "<3>", "{" & Command & "}");
+      else
+         Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+      end if;
    end AddButton;
 
    procedure UpdateTable(Table: in out Table_Widget) is
@@ -354,7 +358,13 @@ package body Table is
                Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Background_Color & ";" & Table.Canvas &
                " configure -cursor left_ptr}");
-            Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+            if Game_Settings.Right_Button then
+               Bind
+                 (Table.Canvas, To_String(ItemId), "<3>", "{" & Command & "}");
+            else
+               Bind
+                 (Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+            end if;
          else
             Bind
               (Table.Canvas, To_String(ItemId), "<Enter>",
@@ -529,7 +539,11 @@ package body Table is
          Bind
            (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
-         Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+         if Game_Settings.Right_Button then
+            Bind(Table.Canvas, Tag, "<3>", "{" & Command & "}");
+         else
+            Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+         end if;
       end if;
    end AddCheckButton;
 
