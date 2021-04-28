@@ -261,6 +261,9 @@ package body GameOptions is
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
       Tcl_SetVar
+        (Interp, Widget_Image(OptionsFrame) & ".rightbutton",
+         Trim(Natural'Image(Boolean'Pos(Game_Settings.Right_Button)), Left));
+      Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
          Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Tooltips)), Left));
       Tcl_SetVar
@@ -523,6 +526,10 @@ package body GameOptions is
       end loop Set_Theme_Loop;
       Theme_Use(To_String(Game_Settings.Interface_Theme));
       SetTheme;
+      Game_Settings.Right_Button :=
+        (if Tcl_GetVar(Interp, RootName & ".interface.rightbutton") = "1" then
+           True
+         else False);
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
          Game_Settings.Show_Tooltips := True;
          Enable;
