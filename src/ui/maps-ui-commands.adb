@@ -941,9 +941,15 @@ package body Maps.UI.Commands is
         Get_Widget(".gameframe.paned.mapframe.map", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "click" then
-         Generate
-           (MapView, "<1>",
-            "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
+         if Game_Settings.Right_Button then
+            Generate
+              (MapView, "<Button-3>",
+               "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
+         else
+            Generate
+              (MapView, "<Button-1>",
+               "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
+         end if;
       elsif CArgv.Arg(Argv, 1) = "nw" then
          Generate
            (MapView, "<Motion>",

@@ -866,7 +866,11 @@ package body Maps.UI is
          Bind(MessagesFrame, "<Configure>", "ResizeLastMessages");
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
-         Bind(MapView, "<1>", "{ShowDestinationMenu %X %Y}");
+         if Game_Settings.Right_Button then
+            Bind(MapView, "<Button-3>", "{ShowDestinationMenu %X %Y}");
+         else
+            Bind(MapView, "<Button-1>", "{ShowDestinationMenu %X %Y}");
+         end if;
          Bind
            (MapView, "<MouseWheel>",
             "{if {%D > 0}{ZoomMap raise}else{ZoomMap lower}}");
