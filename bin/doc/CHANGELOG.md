@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing crafting recipe as uncraftable when materials are present
+- Hiding close button after setting base as the player's ship's destination
 
 ## [6.0.1] - 2021-04-25
 
