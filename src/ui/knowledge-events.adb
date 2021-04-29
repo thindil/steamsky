@@ -27,6 +27,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -124,12 +125,16 @@ package body Knowledge.Events is
    function Show_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       CenterX := Events_List(EventIndex).SkyX;
       CenterY := Events_List(EventIndex).SkyY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Show_Event_Command;
 
@@ -156,8 +161,10 @@ package body Knowledge.Events is
    function Set_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
         Events_List(EventIndex).SkyY = PlayerShip.SkyY then
@@ -168,7 +175,9 @@ package body Knowledge.Events is
       PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Set_Event_Command;
 
