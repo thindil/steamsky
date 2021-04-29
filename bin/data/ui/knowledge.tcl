@@ -25,7 +25,7 @@ ttk::frame $knowledgecanvas.frame
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known bases}
 # List of bases options
-grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w
+grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w -padx 5
 grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]
 grid [ttk::combobox $knowledgecanvas.frame.options.types -state readonly -width 10] -row 0 -column 1
 bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases}
