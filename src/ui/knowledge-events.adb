@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with CoreUI; use CoreUI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
@@ -106,7 +107,7 @@ package body Knowledge.Events is
    -- Show the selected event on map
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -124,12 +125,14 @@ package body Knowledge.Events is
    function Show_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       CenterX := Events_List(EventIndex).SkyX;
       CenterY := Events_List(EventIndex).SkyY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Show_Event_Command;
 
@@ -138,7 +141,7 @@ package body Knowledge.Events is
    -- Set the selected event as the player's ship destination
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -156,7 +159,7 @@ package body Knowledge.Events is
    function Set_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if Events_List(EventIndex).SkyX = PlayerShip.SkyX and
@@ -168,7 +171,9 @@ package body Knowledge.Events is
       PlayerShip.DestinationY := Events_List(EventIndex).SkyY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Set_Event_Command;
 
