@@ -113,17 +113,22 @@ package body HallOfFame is
            (Elem => Entry_Node, Name => "name",
             Value => To_String(Source => Element.Name));
          Set_Attribute
-           (Entry_Node, "points",
-            Trim
-              (Source => Integer'Image(Element.Points),
-               Side => Ada.Strings.Left));
+           (Elem => Entry_Node, Name => "points",
+            Value =>
+              Trim
+                (Source => Integer'Image(Element.Points),
+                 Side => Ada.Strings.Left));
          Set_Attribute
            (Elem => Entry_Node, Name => "Death_Reason",
             Value => To_String(Source => Element.Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
-      Create(Hof_File, Out_File, To_String(Save_Directory) & "halloffame.dat");
-      Write(Stream => Stream(Hof_File), N => Hof_Data, Pretty_Print => True);
-      Close(Hof_File);
+      Create
+        (File => Hof_File, Mode => Out_File,
+         Name => To_String(Source => Save_Directory) & "halloffame.dat");
+      Write
+        (Stream => Stream(File => Hof_File), N => Hof_Data,
+         Pretty_Print => True);
+      Close(File => Hof_File);
    end Update_Hall_Of_Fame;
 
 end HallOfFame;
