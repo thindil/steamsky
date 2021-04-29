@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -469,6 +470,7 @@ package body GameOptions is
       SpinBox: Ttk_SpinBox := Get_Widget(RootName & ".general.fuel", Interp);
       KeyEntry: Ttk_Entry;
       KeysFile: File_Type;
+      MapView: Tk_Text;
    begin
       configure(CloseButton, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
@@ -526,10 +528,16 @@ package body GameOptions is
       end loop Set_Theme_Loop;
       Theme_Use(To_String(Game_Settings.Interface_Theme));
       SetTheme;
-      Game_Settings.Right_Button :=
-        (if Tcl_GetVar(Interp, RootName & ".interface.rightbutton") = "1" then
-           True
-         else False);
+      MapView := Get_Widget(".gameframe.paned.mapframe.map");
+      if Tcl_GetVar(Interp, RootName & ".interface.rightbutton") = "1" then
+         Game_Settings.Right_Button := True;
+         Bind(MapView, "<Button-3>", "{ShowDestinationMenu %X %Y}");
+         Unbind(MapView, "<Button-1>");
+      else
+         Game_Settings.Right_Button := False;
+         Bind(MapView, "<Button-1>", "{ShowDestinationMenu %X %Y}");
+         Unbind(MapView, "<Button-3>");
+      end if;
       if Tcl_GetVar(Interp, RootName & ".interface.showtooltips") = "1" then
          Game_Settings.Show_Tooltips := True;
          Enable;
