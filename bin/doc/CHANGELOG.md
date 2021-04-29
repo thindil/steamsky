@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Option to set which mouse button use for showing in game menus
+
 ### Changed
 - Updated README.md
 - Installer shouldn't longer require Administrator's rights on Windows
