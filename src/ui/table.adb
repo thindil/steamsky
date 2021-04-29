@@ -170,7 +170,15 @@ package body Table is
             "{" & Table.Canvas & " itemconfigure row" &
             Trim(Positive'Image(Table.Row), Left) & " -fill " & Color & ";" &
             Table.Canvas & " configure -cursor left_ptr}");
-         Bind(Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+         if Game_Settings.Right_Button then
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Button-3>",
+               "{" & Command & "}");
+         else
+            Bind
+              (Table.Canvas, To_String(ItemId), "<Button-1>",
+               "{" & Command & "}");
+         end if;
       else
          Bind
            (Table.Canvas, To_String(ItemId), "<Enter>",
@@ -249,9 +257,9 @@ package body Table is
         (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
       if Game_Settings.Right_Button then
-         Bind(Table.Canvas, Tag, "<3>", "{" & Command & "}");
+         Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");
       else
-         Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+         Bind(Table.Canvas, Tag, "<Button-1>", "{" & Command & "}");
       end if;
    end AddButton;
 
@@ -360,10 +368,12 @@ package body Table is
                " configure -cursor left_ptr}");
             if Game_Settings.Right_Button then
                Bind
-                 (Table.Canvas, To_String(ItemId), "<3>", "{" & Command & "}");
+                 (Table.Canvas, To_String(ItemId), "<Button-3>",
+                  "{" & Command & "}");
             else
                Bind
-                 (Table.Canvas, To_String(ItemId), "<1>", "{" & Command & "}");
+                 (Table.Canvas, To_String(ItemId), "<Button-1>",
+                  "{" & Command & "}");
             end if;
          else
             Bind
@@ -540,9 +550,9 @@ package body Table is
            (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
          if Game_Settings.Right_Button then
-            Bind(Table.Canvas, Tag, "<3>", "{" & Command & "}");
+            Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");
          else
-            Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+            Bind(Table.Canvas, Tag, "<Button-1>", "{" & Command & "}");
          end if;
       end if;
    end AddCheckButton;
