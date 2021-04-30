@@ -15,22 +15,25 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Text_IO.Text_Streams; use Ada.Text_IO.Text_Streams;
+with Ada.Strings.Fixed;
+with Ada.Text_IO;
+with Ada.Text_IO.Text_Streams;
 with Ada.Directories;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents; use DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
-with DOM.Readers; use DOM.Readers;
-with Input_Sources.File; use Input_Sources.File;
+with DOM.Readers;
+with Input_Sources.File;
 with Game; use Game;
-with Statistics; use Statistics;
+with Statistics;
 
 package body HallOfFame is
 
    procedure Load_Hall_Of_Fame is
+      use DOM.Readers;
+      use Input_Sources.File;
+
       Hof_File: File_Input;
       Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
       Entries_List: Node_List;
@@ -72,6 +75,11 @@ package body HallOfFame is
 
    procedure Update_Hall_Of_Fame
      (Player_Name, Death_Reason: Unbounded_String) is
+      use Ada.Strings.Fixed;
+      use Ada.Text_IO;
+      use Ada.Text_IO.Text_Streams;
+      use Statistics;
+
       New_Index: Natural range 0 .. 10 := 0;
       Hof_File: File_Type;
       Hall_Of_Fame: DOM_Implementation; --## rule line off IMPROPER_INITIALIZATION
