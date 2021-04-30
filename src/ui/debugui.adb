@@ -268,11 +268,12 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := ".debugdialog.main.world";
       EventsBox: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.world.delete", Interp);
+        Get_Widget(FrameName & ".delete", Interp);
       ValuesList: Unbounded_String;
       EventsButton: constant Ttk_Button :=
-        Get_Widget(".debugdialog.main.world.deleteevent", Interp);
+        Get_Widget(FrameName & ".deleteevent", Interp);
    begin
       if Events_List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(EventsButton);
@@ -432,16 +433,13 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      NameEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.bases.name", Interp);
+      FrameName: constant String := ".debugdialog.main.bases";
+      NameEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
       BaseIndex: Natural := 0;
-      BaseName: Unbounded_String;
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.bases.type", Interp);
-      SpinBox: Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.bases.population", Interp);
+      BaseName: constant Unbounded_String := To_Unbounded_String(Get(NameEntry));
+      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
-      BaseName := To_Unbounded_String(Get(NameEntry));
       Find_Base_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
@@ -455,15 +453,15 @@ package body DebugUI is
       Set
         (ComboBox,
          To_String(BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
-      ComboBox.Name := New_String(".debugdialog.main.bases.owner");
+      ComboBox.Name := New_String(FrameName & ".owner");
       Set(ComboBox, To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
-      ComboBox.Name := New_String(".debugdialog.main.bases.size");
+      ComboBox.Name := New_String(FrameName & ".size");
       Current
         (ComboBox, Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
       Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Population));
-      SpinBox.Name := New_String(".debugdialog.main.bases.reputation");
+      SpinBox.Name := New_String(FrameName & ".reputation");
       Set(SpinBox, Integer'Image(SkyBases(BaseIndex).Reputation(1)));
-      SpinBox.Name := New_String(".debugdialog.main.bases.money");
+      SpinBox.Name := New_String(FrameName & ".money");
       if SkyBases(BaseIndex).Cargo.Length > 0 then
          Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Cargo(1).Amount));
       else
@@ -523,10 +521,11 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      SpinBox: Ttk_SpinBox := Get_Widget(".debugdialog.main.ship.x", Interp);
+      FrameName: constant String := ".debugdialog.main.ship";
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
    begin
       PlayerShip.SkyX := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.ship.y");
+      SpinBox.Name := New_String(FrameName & ".y");
       PlayerShip.SkyY := Positive'Value(Get(SpinBox));
       ShowSkyMap(True);
       return TCL_OK;
@@ -555,17 +554,14 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      ModuleBox: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.ship.module", Interp);
-      ModuleIndex: Positive;
+      FrameName: constant String := ".debugdialog.main.ship";
+      ModuleBox: constant Ttk_ComboBox := Get_Widget(".module", Interp);
+      ModuleIndex: constant Positive := Natural'Value(Current(ModuleBox)) + 1;
       ModuleEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.ship.proto", Interp);
-      Value: Unbounded_String;
-      SpinBox: Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.ship.weight", Interp);
+        Get_Widget(FrameName & ".proto", Interp);
+      Value: Unbounded_String := To_Unbounded_String(Get(ModuleEntry));
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
    begin
-      ModuleIndex := Natural'Value(Current(ModuleBox)) + 1;
-      Value := To_Unbounded_String(Get(ModuleEntry));
       Update_Proto_Index_Loop :
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
@@ -576,13 +572,13 @@ package body DebugUI is
          end if;
       end loop Update_Proto_Index_Loop;
       PlayerShip.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.ship.dur");
+      SpinBox.Name := New_String(FrameName & ".dur");
       PlayerShip.Modules(ModuleIndex).Durability :=
         Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.ship.maxdur");
+      SpinBox.Name := New_String(FrameName & ".maxdur");
       PlayerShip.Modules(ModuleIndex).MaxDurability :=
         Natural'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.ship.upgrade");
+      SpinBox.Name := New_String(FrameName & ".upgrade");
       PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
         Natural'Value(Get(SpinBox));
       return TCL_OK;
@@ -592,10 +588,10 @@ package body DebugUI is
    -- FUNCTION
    -- Add a new skill to the selected crew member
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -610,22 +606,19 @@ package body DebugUI is
    function Add_Skill_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.crew.member", Interp);
-      MemberIndex: Positive;
+      FrameName: constant String := ".debugdialog.main.crew";
+      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
+      MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
       SkillName: Unbounded_String;
    begin
-      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
-      ComboBox.Name := New_String(".debugdialog.main.crew.addskill.skills");
+      ComboBox.Name := New_String(FrameName & ".addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
       Add_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
             PlayerShip.Crew(MemberIndex).Skills.Append
               ((SkillsData_Container.To_Index(I), 1, 0));
-            Tcl_Eval(Interp, "RefreshMember");
-            exit Add_Skill_Loop;
+            return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;
       end loop Add_Skill_Loop;
       return TCL_OK;
