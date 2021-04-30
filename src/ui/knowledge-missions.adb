@@ -26,6 +26,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -95,7 +96,7 @@ package body Knowledge.Missions is
    -- Show the selected mission on map
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -113,12 +114,16 @@ package body Knowledge.Missions is
    function Show_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       CenterX := AcceptedMissions(MissionIndex).TargetX;
       CenterY := AcceptedMissions(MissionIndex).TargetY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Show_Mission_Command;
 
@@ -127,7 +132,7 @@ package body Knowledge.Missions is
    -- Set the selected mission as the player's ship destination
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -145,8 +150,10 @@ package body Knowledge.Missions is
    function Set_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
         AcceptedMissions(MissionIndex).TargetY = PlayerShip.SkyY then
@@ -157,7 +164,9 @@ package body Knowledge.Missions is
       PlayerShip.DestinationY := AcceptedMissions(MissionIndex).TargetY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Set_Mission_Command;
 
