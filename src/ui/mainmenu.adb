@@ -58,38 +58,38 @@ with Utils.UI; use Utils.UI;
 
 package body MainMenu is
 
-   -- ****iv* MainMenu/MainMenuFrame
+   -- ****iv* MainMenu/Main_Menu_Frame
    -- FUNCTION
    -- Ttk Frame with content of main menu
    -- SOURCE
-   MainMenuFrame: Ttk_Frame;
+   Main_Menu_Frame: Ttk_Frame;
    -- ****
 
-   -- ****iv* MainMenu/DataError
+   -- ****iv* MainMenu/Data_Error
    -- FUNCTION
    -- Stores error message from loading the game data
    -- SOURCE
-   DataError: Unbounded_String;
+   Data_Error: Unbounded_String;
    -- ****
 
-   procedure CreateMainMenu is
-      UI_Directory: constant String :=
+   procedure Create_Main_Menu is
+      Ui_Directory: constant String :=
         To_String(Data_Directory) & "ui" & Dir_Separator;
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+      Main_Window: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       IconPath: constant String :=
-        UI_Directory & "images" & Dir_Separator & "icon.png";
+        Ui_Directory & "images" & Dir_Separator & "icon.png";
       Icon: Tk_Photo;
       TextEntry: Ttk_Entry :=
         Get_Widget(".newgamemenu.canvas.player.playername");
       ComboBox: Ttk_ComboBox :=
         Get_Widget(".newgamemenu.canvas.player.faction");
-      Values: Unbounded_String;
+      Values: Unbounded_String := Null_Unbounded_String;
       SpinBox: Ttk_SpinBox :=
         Get_Widget(".newgamemenu.canvas.difficulty.enemydamage");
       VersionLabel: constant Ttk_Label := Get_Widget(".mainmenu.version");
    begin
       if not Exists(IconPath) then
-         Wm_Set(MainWindow, "withdraw");
+         Wm_Set(Main_Window, "withdraw");
          if MessageBox
              ("-message {Couldn't not find the game data files and the game have to stop. Are you sure that directory """ &
               To_String(Data_Directory) &
@@ -103,7 +103,7 @@ package body MainMenu is
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
-      Wm_Set(MainWindow, "iconphoto", "-default " & Icon);
+      Wm_Set(Main_Window, "iconphoto", "-default " & Icon);
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) = Game_Settings.Interface_Theme then
@@ -112,9 +112,9 @@ package body MainMenu is
          end if;
       end loop Load_Theme_Loop;
       Theme_Use(To_String(Game_Settings.Interface_Theme));
-      Tcl_EvalFile(Get_Context, UI_Directory & "mainmenu.tcl");
-      MainMenuFrame.Interp := Get_Context;
-      MainMenuFrame.Name := New_String(".mainmenu");
+      Tcl_EvalFile(Get_Context, Ui_Directory & "mainmenu.tcl");
+      Main_Menu_Frame.Interp := Get_Context;
+      Main_Menu_Frame.Name := New_String(".mainmenu");
       if not Game_Settings.Show_Tooltips then
          Disable;
       end if;
@@ -130,9 +130,9 @@ package body MainMenu is
         ("InterfaceFont",
          "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
       configure(VersionLabel, "-text {" & Game_Version & " development}");
-      DataError := To_Unbounded_String(Load_Game_Data);
-      if DataError /= Null_Unbounded_String then
-         ShowMainMenu;
+      Data_Error := To_Unbounded_String(Load_Game_Data);
+      if Data_Error /= Null_Unbounded_String then
+         Show_Main_Menu;
          return;
       end if;
       Delete(TextEntry, "0", "end");
@@ -208,47 +208,47 @@ package body MainMenu is
         (SpinBox,
          Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
       Tcl_Eval(Get_Context, "SetPoints");
-      ShowMainMenu;
+      Show_Main_Menu;
       Current
         (ComboBox,
          Natural'Image
            (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
       Generate(ComboBox, "<<ComboboxSelected>>");
-   end CreateMainMenu;
+   end Create_Main_Menu;
 
-   procedure ShowMainMenu is
-      MainWindow: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+   procedure Show_Main_Menu is
+      Main_Window: constant Tk_Toplevel := Get_Main_Window(Get_Context);
       X, Y: Integer;
       Files: Search_Type;
       Button: Ttk_Button := Get_Widget(".mainmenu.loadgame");
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
       GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
    begin
-      X := (Positive'Value(Winfo_Get(MainWindow, "vrootwidth")) - 600) / 2;
+      X := (Positive'Value(Winfo_Get(Main_Window, "vrootwidth")) - 600) / 2;
       if X < 0 then
          X := 0;
       end if;
-      Y := (Positive'Value(Winfo_Get(MainWindow, "vrootheight")) - 400) / 2;
+      Y := (Positive'Value(Winfo_Get(Main_Window, "vrootheight")) - 400) / 2;
       if Y < 0 then
          Y := 0;
       end if;
       if Game_Settings.Full_Screen then
-         Wm_Set(MainWindow, "attributes", "-fullscreen 0");
+         Wm_Set(Main_Window, "attributes", "-fullscreen 0");
       end if;
       if OsName = "Linux" then
-         Wm_Set(MainWindow, "attributes", "-zoomed 0");
+         Wm_Set(Main_Window, "attributes", "-zoomed 0");
       else
-         Wm_Set(MainWindow, "state", "normal");
+         Wm_Set(Main_Window, "state", "normal");
       end if;
-      Wm_Set(MainWindow, "title", "{Steam Sky - Main Menu}");
+      Wm_Set(Main_Window, "title", "{Steam Sky - Main Menu}");
       Wm_Set
-        (MainWindow, "geometry",
+        (Main_Window, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
          Trim(Positive'Image(Y), Left));
       if Winfo_Get(GameFrame, "exists") = "1" then
          Tcl.Tk.Ada.Pack.Pack_Forget(GameFrame);
       end if;
-      Tcl.Tk.Ada.Pack.Pack(MainMenuFrame, "-fill both -expand true");
+      Tcl.Tk.Ada.Pack.Pack(Main_Menu_Frame, "-fill both -expand true");
       Start_Search(Files, To_String(Save_Directory), "*.sav");
       if not More_Entries(Files) then
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
@@ -265,13 +265,13 @@ package body MainMenu is
       else
          Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");
       end if;
-      if DataError /= Null_Unbounded_String then
+      if Data_Error /= Null_Unbounded_String then
          Button.Name := New_String(".mainmenu.newgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Button.Name := New_String(".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          ShowMessage
-           ("Can't load game data files. Error: " & To_String(DataError),
+           ("Can't load game data files. Error: " & To_String(Data_Error),
             ".mainmenu");
          return;
       end if;
@@ -306,6 +306,6 @@ package body MainMenu is
                   ".mainmenu");
             end if;
       end;
-   end ShowMainMenu;
+   end Show_Main_Menu;
 
 end MainMenu;
