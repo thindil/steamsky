@@ -112,7 +112,7 @@ package body Knowledge is
            Create
              (KnowledgeFrame & ".nostories",
               "-text {You didn't discover any story yet.} -wraplength 400");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
       else
          declare
             OptionsFrame: constant Ttk_Frame :=
