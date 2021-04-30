@@ -1,4 +1,4 @@
--- Copyright (c) 2020 Bartek thindil Jasicki <thindil@laeran.pl>
+-- Copyright (c) 2020-2021 Bartek thindil Jasicki <thindil@laeran.pl>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -20,18 +20,18 @@
 package MainMenu is
 -- ****
 
-   -- ****f* MainMenu/CreateMainMenu
+   -- ****f* MainMenu/Create_Main_Menu
    -- FUNCTION
    -- Create main menu UI
    -- SOURCE
-   procedure CreateMainMenu;
+   procedure Create_Main_Menu;
    -- ****
 
-   -- ****f* MainMenu/ShowMainMenu
+   -- ****f* MainMenu/Show_Main_Menu
    -- FUNCTION
    -- Show main menu to a player
    -- SOURCE
-   procedure ShowMainMenu;
+   procedure Show_Main_Menu;
    -- ****
 
 end MainMenu;

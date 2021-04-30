@@ -403,7 +403,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    exception
       when An_Exception : SaveGame_Invalid_Data =>
-         ShowMainMenu;
+         Show_Main_Menu;
          ShowMessage
            ("Can't load this game. Reason: " & Exception_Message(An_Exception),
             ".mainmenu");
@@ -811,7 +811,7 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      ShowMainMenu;
+      Show_Main_Menu;
       return TCL_OK;
    end Show_Main_Menu_Command;
 

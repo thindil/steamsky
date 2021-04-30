@@ -533,7 +533,7 @@ package body Utils.UI is
                Unbind_From_Main_Window(Interp, "<Alt-d>");
                Unbind_From_Main_Window(Interp, "<Escape>");
                Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
-               ShowMainMenu;
+               Show_Main_Menu;
             else
                ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
                if ItemIndex = Null_Unbounded_String then
@@ -603,7 +603,7 @@ package body Utils.UI is
             Game_Settings.Messages_Position :=
               Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(True);
-            ShowMainMenu;
+            Show_Main_Menu;
          end;
       elsif Result = "resign" then
          Death(1, To_Unbounded_String("resignation"), PlayerShip);
@@ -629,7 +629,7 @@ package body Utils.UI is
             Game_Settings.Messages_Position :=
               Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
             End_Game(False);
-            ShowMainMenu;
+            Show_Main_Menu;
          end;
       elsif Result = "messages" then
          declare
