@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
+with CoreUI; use CoreUI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
@@ -95,7 +96,7 @@ package body Knowledge.Missions is
    -- Show the selected mission on map
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -113,12 +114,14 @@ package body Knowledge.Missions is
    function Show_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       CenterX := AcceptedMissions(MissionIndex).TargetX;
       CenterY := AcceptedMissions(MissionIndex).TargetY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Show_Mission_Command;
 
@@ -127,7 +130,7 @@ package body Knowledge.Missions is
    -- Set the selected mission as the player's ship destination
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -145,7 +148,7 @@ package body Knowledge.Missions is
    function Set_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
@@ -157,7 +160,9 @@ package body Knowledge.Missions is
       PlayerShip.DestinationY := AcceptedMissions(MissionIndex).TargetY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Set_Mission_Command;
 
