@@ -75,9 +75,7 @@ package body HallOfFame.Test_Data.Tests is
 
    begin
 
-      Hall_Of_Fame_Array :=
-        (others =>
-           Empty_Hall_Of_Fame_Entry);
+      Hall_Of_Fame_Array := (others => Empty_Hall_Of_Fame_Entry);
       Update_Hall_Of_Fame
         (To_Unbounded_String("TestPlayer"), To_Unbounded_String("TestDeath"));
       Assert
