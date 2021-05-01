@@ -239,7 +239,7 @@ package body Knowledge.Missions is
            Create
              (MissionsFrame & ".nomissions",
               "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
-         Tcl.Tk.Ada.Grid.Grid(Label);
+         Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
       else
          Row := 2;
          MissionsTable :=
