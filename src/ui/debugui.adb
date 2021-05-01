@@ -648,30 +648,30 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.crew.member", Interp);
+        Get_Widget(FrameName & ".member", Interp);
       MemberIndex: Positive;
-      SpinBox: Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.crew.health", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".health", Interp);
    begin
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       PlayerShip.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.crew.thirst");
+      SpinBox.Name := New_String(FrameName & ".thirst");
       PlayerShip.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.crew.hunger");
+      SpinBox.Name := New_String(FrameName & ".hunger");
       PlayerShip.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.crew.tired");
+      SpinBox.Name := New_String(FrameName & ".tired");
       PlayerShip.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.crew.morale");
+      SpinBox.Name := New_String(FrameName & ".morale");
       PlayerShip.Crew(MemberIndex).Morale(1) :=
         Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(".debugdialog.main.crew.loyalty");
+      SpinBox.Name := New_String(FrameName & ".loyalty");
       PlayerShip.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
       Update_Stats_Loop :
       for I in PlayerShip.Crew(MemberIndex).Attributes.Iterate loop
          SpinBox.Name :=
            New_String
-             (".debugdialog.main.crew.stats.value" &
+             (FrameName & ".stats.value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Attributes(I)(1) :=
            Positive'Value(Get(SpinBox));
@@ -680,7 +680,7 @@ package body DebugUI is
       for I in PlayerShip.Crew(MemberIndex).Skills.Iterate loop
          SpinBox.Name :=
            New_String
-             (".debugdialog.main.crew.skills.value" &
+             (FrameName & ".skills.value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Skills(I)(2) :=
            Positive'Value(Get(SpinBox));
@@ -710,10 +710,10 @@ package body DebugUI is
    function Add_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      ItemEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.cargo.add", Interp);
+      FrameName: constant String := ".debugdialog.main.cargo";
+      ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".add", Interp);
       ItemBox: constant Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.cargo.amount", Interp);
+        Get_Widget(FrameName & ".amount", Interp);
       ItemIndex, ItemName: Unbounded_String;
    begin
       ItemName := To_Unbounded_String(Get(ItemEntry));
@@ -753,10 +753,11 @@ package body DebugUI is
    function Update_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      FrameName: constant String := ".debugdialog.main.cargo";
       ItemCombo: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.cargo.update", Interp);
+        Get_Widget(FrameName & ".update", Interp);
       ItemBox: constant Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.cargo.updateamount", Interp);
+        Get_Widget(FrameName & ".updateamount", Interp);
       ItemIndex: Positive;
    begin
       ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
@@ -789,14 +790,12 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := ".debugdialog.main.bases";
       BaseIndex: Natural := 0;
-      BaseEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.bases.name", Interp);
+      BaseEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
       BaseName: Unbounded_String;
-      BaseCombo: Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.bases.type", Interp);
-      BaseBox: Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.bases.population", Interp);
+      BaseCombo: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
+      BaseBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
       BaseName := To_Unbounded_String(Get(BaseEntry));
       Find_Index_Loop :
@@ -816,7 +815,7 @@ package body DebugUI is
             exit Update_Base_Type_Loop;
          end if;
       end loop Update_Base_Type_Loop;
-      BaseCombo.Name := New_String(".debugdialog.main.bases.owner");
+      BaseCombo.Name := New_String(FrameName & ".owner");
       Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
@@ -824,12 +823,12 @@ package body DebugUI is
             exit Update_Base_Owner_Loop;
          end if;
       end loop Update_Base_Owner_Loop;
-      BaseCombo.Name := New_String(".debugdialog.main.bases.size");
+      BaseCombo.Name := New_String(FrameName & ".size");
       SkyBases(BaseIndex).Size := Bases_Size'Value(Get(BaseCombo));
       SkyBases(BaseIndex).Population := Natural'Value(Get(BaseBox));
-      BaseBox.Name := New_String(".debugdialog.main.bases.reputation");
+      BaseBox.Name := New_String(FrameName & ".reputation");
       SkyBases(BaseIndex).Reputation(1) := Integer'Value(Get(BaseBox));
-      BaseBox.Name := New_String(".debugdialog.main.bases.money");
+      BaseBox.Name := New_String(FrameName & ".money");
       SkyBases(BaseIndex).Cargo(1).Amount := Natural'Value(Get(BaseBox));
       return TCL_OK;
    end Update_Base_Command;
@@ -856,17 +855,17 @@ package body DebugUI is
    function Add_Ship_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      ShipEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.world.ship", Interp);
+      FrameName: constant String := ".debugdialog.main.world";
+      ShipEntry: constant Ttk_Entry := Get_Widget(FrameName & ".ship", Interp);
       ShipName: Unbounded_String;
       NpcShipX, NpcShipY, Duration: Positive;
-      ShipBox: Ttk_SpinBox := Get_Widget(".debugdialog.main.world.x", Interp);
+      ShipBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
    begin
       ShipName := To_Unbounded_String(Get(ShipEntry));
       NpcShipX := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(".debugdialog.main.world.y");
+      ShipBox.Name := New_String(FrameName & ".y");
       NpcShipY := Positive'Value(Get(ShipBox));
-      ShipBox.Name := New_String(".debugdialog.main.world.duration");
+      ShipBox.Name := New_String(FrameName & ".duration");
       Duration := Positive'Value(Get(ShipBox));
       Add_Ship_Event_Loop :
       for I in ProtoShips_List.Iterate loop
@@ -917,12 +916,12 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String := ".debugdialog.main.world";
       EventCombo: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.world.event", Interp);
-      ItemEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.world.item", Interp);
+        Get_Widget(FrameName & ".event", Interp);
+      ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".item", Interp);
       ItemLabel: constant Ttk_Label :=
-        Get_Widget(".debugdialog.main.world.itemlbl", Interp);
+        Get_Widget(FrameName & ".itemlbl", Interp);
    begin
       if Current(EventCombo) = "1" then
          Tcl.Tk.Ada.Grid.Grid(ItemLabel);
