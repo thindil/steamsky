@@ -18,10 +18,12 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
+with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -208,13 +210,17 @@ package body Knowledge.Stories is
    function Show_Story_Location_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       NewX, NewY: Positive := 1;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       GetStoryLocation(NewX, NewY);
       CenterX := NewX;
       CenterY := NewY;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Show_Story_Location_Command;
 
@@ -240,8 +246,10 @@ package body Knowledge.Stories is
    function Set_Story_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc, Argv);
       NewX, NewY: Positive := 1;
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       GetStoryLocation(NewX, NewY);
       if NewX = PlayerShip.SkyX and NewY = PlayerShip.SkyY then
@@ -252,7 +260,9 @@ package body Knowledge.Stories is
       PlayerShip.DestinationY := NewY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Set_Story_Command;
 
