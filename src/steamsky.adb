@@ -185,7 +185,7 @@ begin
    Autoscroll_Init(Interp => Interp);
 
    -- Create and show the main game menu
-   CreateMainMenu;
+   Create_Main_Menu;
 
    --  Loop inside Tk, waiting for commands to execute.
    --  When there are no windows left, Tcl.Tk.Tk_MainLoop returns and we exit.
