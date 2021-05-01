@@ -436,7 +436,8 @@ package body DebugUI is
       FrameName: constant String := ".debugdialog.main.bases";
       NameEntry: constant Ttk_Entry := Get_Widget(FrameName & ".name", Interp);
       BaseIndex: Natural := 0;
-      BaseName: constant Unbounded_String := To_Unbounded_String(Get(NameEntry));
+      BaseName: constant Unbounded_String :=
+        To_Unbounded_String(Get(NameEntry));
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
