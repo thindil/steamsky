@@ -76,19 +76,19 @@ package body MainMenu is
       Ui_Directory: constant String :=
         To_String(Data_Directory) & "ui" & Dir_Separator;
       Main_Window: constant Tk_Toplevel := Get_Main_Window(Get_Context);
-      IconPath: constant String :=
+      Icon_Path: constant String :=
         Ui_Directory & "images" & Dir_Separator & "icon.png";
       Icon: Tk_Photo;
-      TextEntry: Ttk_Entry :=
+      Text_Entry: Ttk_Entry :=
         Get_Widget(".newgamemenu.canvas.player.playername");
-      ComboBox: Ttk_ComboBox :=
+      Combo_Box: Ttk_ComboBox :=
         Get_Widget(".newgamemenu.canvas.player.faction");
       Values: Unbounded_String := Null_Unbounded_String;
-      SpinBox: Ttk_SpinBox :=
+      Spin_Box: Ttk_SpinBox :=
         Get_Widget(".newgamemenu.canvas.difficulty.enemydamage");
-      VersionLabel: constant Ttk_Label := Get_Widget(".mainmenu.version");
+      Version_Label: constant Ttk_Label := Get_Widget(".mainmenu.version");
    begin
-      if not Exists(IconPath) then
+      if not Exists(Icon_Path) then
          Wm_Set(Main_Window, "withdraw");
          if MessageBox
              ("-message {Couldn't not find the game data files and the game have to stop. Are you sure that directory """ &
@@ -99,7 +99,7 @@ package body MainMenu is
          end if;
          return;
       end if;
-      Icon := Create("logo", "-file {" & IconPath & "}");
+      Icon := Create("logo", "-file {" & Icon_Path & "}");
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
@@ -129,19 +129,19 @@ package body MainMenu is
       Font.Configure
         ("InterfaceFont",
          "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
-      configure(VersionLabel, "-text {" & Game_Version & " development}");
+      configure(Version_Label, "-text {" & Game_Version & " development}");
       Data_Error := To_Unbounded_String(Load_Game_Data);
       if Data_Error /= Null_Unbounded_String then
          Show_Main_Menu;
          return;
       end if;
-      Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(New_Game_Settings.Player_Name));
+      Delete(Text_Entry, "0", "end");
+      Insert(Text_Entry, "0", To_String(New_Game_Settings.Player_Name));
       Tcl_SetVar
         (Get_Context, "playergender", "" & New_Game_Settings.Player_Gender);
-      TextEntry.Name := New_String(".newgamemenu.canvas.player.shipname");
-      Delete(TextEntry, "0", "end");
-      Insert(TextEntry, "0", To_String(New_Game_Settings.Ship_Name));
+      Text_Entry.Name := New_String(".newgamemenu.canvas.player.shipname");
+      Delete(Text_Entry, "0", "end");
+      Insert(Text_Entry, "0", To_String(New_Game_Settings.Ship_Name));
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
@@ -149,71 +149,71 @@ package body MainMenu is
          end if;
       end loop Load_Factions_Names_Loop;
       Append(Values, " Random");
-      configure(ComboBox, "-values [list" & To_String(Values) & "]");
+      configure(Combo_Box, "-values [list" & To_String(Values) & "]");
       Set
-        (ComboBox,
+        (Combo_Box,
          To_String(Factions_List(New_Game_Settings.Player_Faction).Name));
       Tcl_Eval(Get_Context, "SetFaction");
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+      Combo_Box.Name := New_String(".newgamemenu.canvas.player.career");
       Set
-        (ComboBox,
+        (Combo_Box,
          To_String(Careers_List(New_Game_Settings.Player_Career).Name));
-      ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+      Combo_Box.Name := New_String(".newgamemenu.canvas.player.base");
       if New_Game_Settings.Starting_Base /= To_Unbounded_String("Any") then
          Set
-           (ComboBox,
+           (Combo_Box,
             "{" &
             To_String(BasesTypes_List(New_Game_Settings.Starting_Base).Name) &
             "}");
       else
-         Set(ComboBox, "Any");
+         Set(Combo_Box, "Any");
       end if;
-      ComboBox.Name :=
+      Combo_Box.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image(Natural(New_Game_Settings.Enemy_Damage_Bonus * 100.0)));
-      SpinBox.Name :=
+      Spin_Box.Name :=
         New_String(".newgamemenu.canvas.difficulty.playerdamage");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image
            (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
-      SpinBox.Name :=
+      Spin_Box.Name :=
         New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image
            (Natural(New_Game_Settings.Enemy_Melee_Damage_Bonus * 100.0)));
-      SpinBox.Name :=
+      Spin_Box.Name :=
         New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image
            (Natural(New_Game_Settings.Player_Melee_Damage_Bonus * 100.0)));
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.experience");
+      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.experience");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image(Natural(New_Game_Settings.Experience_Bonus * 100.0)));
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
+      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
+      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image(Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
-      SpinBox.Name := New_String(".newgamemenu.canvas.difficulty.prices");
+      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.prices");
       Set
-        (SpinBox,
+        (Spin_Box,
          Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
       Tcl_Eval(Get_Context, "SetPoints");
       Show_Main_Menu;
       Current
-        (ComboBox,
+        (Combo_Box,
          Natural'Image
            (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
-      Generate(ComboBox, "<<ComboboxSelected>>");
+      Generate(Combo_Box, "<<Combo_BoxSelected>>");
    end Create_Main_Menu;
 
    procedure Show_Main_Menu is
