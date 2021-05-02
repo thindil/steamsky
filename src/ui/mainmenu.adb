@@ -74,40 +74,49 @@ package body MainMenu is
 
    procedure Create_Main_Menu is
       Ui_Directory: constant String :=
-        To_String(Data_Directory) & "ui" & Dir_Separator;
-      Main_Window: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+        To_String(Source => Data_Directory) & "ui" & Dir_Separator;
+      Main_Window: constant Tk_Toplevel :=
+        Get_Main_Window(Interp => Get_Context);
       Icon_Path: constant String :=
         Ui_Directory & "images" & Dir_Separator & "icon.png";
       Icon: Tk_Photo;
       Text_Entry: Ttk_Entry :=
-        Get_Widget(".newgamemenu.canvas.player.playername");
+        Get_Widget(pathName => ".newgamemenu.canvas.player.playername");
       Combo_Box: Ttk_ComboBox :=
-        Get_Widget(".newgamemenu.canvas.player.faction");
+        Get_Widget(pathName => ".newgamemenu.canvas.player.faction");
       Values: Unbounded_String := Null_Unbounded_String;
       Spin_Box: Ttk_SpinBox :=
-        Get_Widget(".newgamemenu.canvas.difficulty.enemydamage");
-      Version_Label: constant Ttk_Label := Get_Widget(".mainmenu.version");
+        Get_Widget(pathName => ".newgamemenu.canvas.difficulty.enemydamage");
+      Version_Label: constant Ttk_Label :=
+        Get_Widget(pathName => ".mainmenu.version");
    begin
-      if not Exists(Icon_Path) then
-         Wm_Set(Main_Window, "withdraw");
+      if not Exists(Name => Icon_Path) then
+         Wm_Set(Widgt => Main_Window, Action => "withdraw");
          if MessageBox
-             ("-message {Couldn't not find the game data files and the game have to stop. Are you sure that directory """ &
-              To_String(Data_Directory) &
-              """ is the proper place where the game data files exists?} -icon error -type ok") /=
+             (Options =>
+                "-message {Couldn't not find the game data files and the game have to stop. Are you sure that directory """ &
+                To_String(Source => Data_Directory) &
+                """ is the proper place where the game data files exists?} -icon error -type ok") /=
            "" then
-            Tcl_Exit(1);
+            Tcl_Exit(status => 1);
          end if;
          return;
       end if;
-      Icon := Create("logo", "-file {" & Icon_Path & "}");
+      Icon :=
+        Create(pathName => "logo", options => "-file {" & Icon_Path & "}");
       MainMenu.Commands.AddCommands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
-      Wm_Set(Main_Window, "iconphoto", "-default " & Icon);
+      Wm_Set
+        (Widgt => Main_Window, Action => "iconphoto",
+         Options => "-default " & Icon);
       Load_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) = Game_Settings.Interface_Theme then
-            Tcl_EvalFile(Get_Context, To_String(Themes_List(I).FileName));
+         if Themes_Container.Key(Position => I) =
+           Game_Settings.Interface_Theme then
+            Tcl_EvalFile
+              (interp => Get_Context,
+               fileName => To_String(Source => Themes_List(I).FileName));
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;
