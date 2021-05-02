@@ -23,5 +23,5 @@ All notable changes to this project will be documented in this file.
 - Autohide scrollbars in the game options
 - Showing last messages after back to the map
 - Showing crafting recipe as uncraftable when materials are present
-- Hiding close button after setting base/event/mission/story as the player's
-  ship's destination or showing it on map
+- Hiding close button after setting base, event, accepted or available mission,
+  story as the player's ship's destination or showing it on map
