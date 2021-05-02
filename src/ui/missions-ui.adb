@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with CoreUI; use CoreUI;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -289,7 +290,9 @@ package body Missions.UI is
          CenterX := SkyBases(BaseIndex).Missions(MissionIndex).TargetX;
          CenterY := SkyBases(BaseIndex).Missions(MissionIndex).TargetY;
       end if;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Show_Mission_Command;
 
