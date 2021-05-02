@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package require Tk 8.6.0
+package require extrafont 1.2
 
 namespace eval ttk::theme::steamsky {
 
@@ -42,6 +43,11 @@ namespace eval ttk::theme::steamsky {
    #
    # Fonts
    #
+
+   # Load needed fonts
+   foreach fontfile [glob -directory [file join [file dirname [info script]] fonts] *.ttf] {
+      extrafont::load [file normalize $fontfile]
+   }
 
    # Font used in drawing the game map
    font create MapFont -family {Hack NF} -size 16
