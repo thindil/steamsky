@@ -955,14 +955,14 @@ package body DebugUI is
    function Add_Event_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      FrameName: constant String := ".debugdialog.main.world";
       EventEntry: constant Ttk_Entry :=
-        Get_Widget(".debugdialog.main.world.base", Interp);
+        Get_Widget(FrameName & ".base", Interp);
       EventName: Unbounded_String;
       BaseIndex, EventType: Natural := 0;
-      EventBox: Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.world.event", Interp);
+      EventBox: Ttk_ComboBox := Get_Widget(FrameName & ".event", Interp);
       DurationBox: constant Ttk_SpinBox :=
-        Get_Widget(".debugdialog.main.world.baseduration", Interp);
+        Get_Widget(FrameName & ".baseduration", Interp);
       Added: Boolean := True;
    begin
       EventName := To_Unbounded_String(Get(EventEntry));
@@ -984,7 +984,7 @@ package body DebugUI is
                  (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
                   Positive'Value(Get(DurationBox)), 1));
          when 1 =>
-            EventBox.Name := New_String(".debugdialog.main.world.item");
+            EventBox.Name := New_String(FrameName & ".item");
             EventName := To_Unbounded_String(Get(EventBox));
             Added := False;
             Find_Item_Loop :
@@ -1046,7 +1046,8 @@ package body DebugUI is
    end Delete_Event_Command;
 
    procedure ShowDebugUI is
-      ComboBox: Ttk_ComboBox := Get_Widget(".debugdialog.main.bases.type");
+      FrameName: constant String := ".debugdialog.main.bases";
+      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type");
       ValuesList: Unbounded_String;
    begin
       Tcl_EvalFile
@@ -1076,7 +1077,7 @@ package body DebugUI is
       end loop Load_Bases_Types_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
-      ComboBox.Name := New_String(".debugdialog.main.bases.owner");
+      ComboBox.Name := New_String(FrameName & ".owner");
       Load_Factions_Loop :
       for Faction of Factions_List loop
          Append(ValuesList, " " & Faction.Name);
