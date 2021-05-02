@@ -8,8 +8,8 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing crafting recipe as uncraftable when materials are present
-- Hiding close button after setting base/event/mission/story as the player's
-  ship's destination or showing it on map
+- Hiding close button after setting base, event, accepted or available mission,
+  story as the player's ship's destination or showing it on map
 
 ## [6.0.1] - 2021-04-25
 
