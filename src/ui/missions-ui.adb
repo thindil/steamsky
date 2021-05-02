@@ -281,6 +281,8 @@ package body Missions.UI is
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
+      CloseButton: constant Ttk_Button :=
+        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if BaseIndex = 0 then
          CenterX := AcceptedMissions(MissionIndex).TargetX;
@@ -289,7 +291,9 @@ package body Missions.UI is
          CenterX := SkyBases(BaseIndex).Missions(MissionIndex).TargetX;
          CenterY := SkyBases(BaseIndex).Missions(MissionIndex).TargetY;
       end if;
-      ShowSkyMap(True);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & CloseButton);
+      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
       return TCL_OK;
    end Show_Mission_Command;
 
