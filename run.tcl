@@ -3,7 +3,6 @@
 exec tclsh "$0" ${1+"$@"}
 
 if {$tcl_platform(os) == "Linux"} {
-   set env(FONTCONFIG_FILE) [pwd]/share/fonts/fonts.conf
    set executable [pwd]/bin/steamsky
 } else {
    set executable [pwd]\bin\steamsky.exe
