@@ -39,7 +39,6 @@ with CoreUI; use CoreUI;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
@@ -359,7 +358,7 @@ package body Missions.UI is
 
    -- ****o* MUI3/MIU3.Set_Mission_Command
    -- FUNCTION
-   -- Set mission as the player's ship destination or accept it in a base
+   -- Accept the mission in a base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
@@ -387,22 +386,9 @@ package body Missions.UI is
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
    begin
-      if BaseIndex = 0 then
-         if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
-           AcceptedMissions(MissionIndex).TargetY = PlayerShip.SkyY then
-            ShowMessage("You are at this mission now.");
-            return TCL_OK;
-         end if;
-         PlayerShip.DestinationX := AcceptedMissions(MissionIndex).TargetX;
-         PlayerShip.DestinationY := AcceptedMissions(MissionIndex).TargetY;
-         AddMessage
-           ("You set the travel destination for your ship.", OrderMessage);
-         ShowSkyMap(True);
-      else
-         AcceptMission(MissionIndex);
-         RefreshMissionsList(SkyBases(BaseIndex).Missions);
-         UpdateMessages;
-      end if;
+      AcceptMission(MissionIndex);
+      RefreshMissionsList(SkyBases(BaseIndex).Missions);
+      UpdateMessages;
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
