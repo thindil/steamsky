@@ -31,7 +31,6 @@ if {$target == "x86_64-linux-gnu"} {
    exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Unix --target=$target >@stdout
    puts -nonewline {Copying files and directories ... }
    file mkdir usr/bin usr/share/metainfo usr/share/doc/steamsky usr/share/steamsky
-   file copy share/fonts usr/share/
    file copy bin/steamsky usr/bin
    file copy bin/data usr/share/steamsky
    file delete -force usr/share/steamsky/data/mods usr/share/steamsky/data/saves usr/share/steamsky/data/themes
