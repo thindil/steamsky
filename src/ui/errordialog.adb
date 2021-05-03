@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1;
-with Ada.Directories;
 with Ada.Strings.Unbounded;
 with Ada.Text_IO;
 with Interfaces.C;
@@ -40,7 +39,6 @@ package body ErrorDialog is
 
    procedure Save_Exception(An_Exception: Exception_Occurrence) is
       use Ada.Characters.Latin_1;
-      use Ada.Directories;
       use Ada.Strings.Unbounded;
       use Ada.Text_IO;
       use GNAT.OS_Lib;
@@ -57,26 +55,13 @@ package body ErrorDialog is
       if Natural(PlayerShip.Crew.Length) > 0 then
          SaveGame;
       end if;
-      if Exists(Name => To_String(Source => Save_Directory) & "error.log") then
-         Open
-           (File => Error_File, Mode => Append_File,
-            Name => To_String(Source => Save_Directory) & "error.log");
-      else
-         Create
-           (File => Error_File, Mode => Append_File,
-            Name => To_String(Source => Save_Directory) & "error.log");
-      end if;
-      Append(Source => Error_Text, New_Item => Current_Time & LF);
-      Append(Source => Error_Text, New_Item => Game_Version & LF);
       Append
         (Source => Error_Text,
-         New_Item => "Exception: " & Exception_Name(X => An_Exception) & LF);
-      Append
-        (Source => Error_Text,
-         New_Item => "Message: " & Exception_Message(X => An_Exception) & LF);
-      Append
-        (Source => Error_Text,
-         New_Item => "-------------------------------------------------" & LF);
+         New_Item =>
+           Current_Time & LF & Game_Version & LF & "Exception: " &
+           Exception_Name(X => An_Exception) & LF & "Message: " &
+           Exception_Message(X => An_Exception) & LF &
+           "-------------------------------------------------" & LF);
       if Directory_Separator = '/' then
          Append
            (Source => Error_Text,
@@ -89,6 +74,17 @@ package body ErrorDialog is
       Append
         (Source => Error_Text,
          New_Item => "-------------------------------------------------");
+      Open_Error_File_Block :
+      begin
+         Open
+           (File => Error_File, Mode => Append_File,
+            Name => To_String(Source => Save_Directory) & "error.log");
+      exception
+         when Name_Error =>
+            Create
+              (File => Error_File, Mode => Append_File,
+               Name => To_String(Source => Save_Directory) & "error.log");
+      end Open_Error_File_Block;
       Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
       Close(File => Error_File);
       End_Logging;
