@@ -5,7 +5,6 @@ if [ -z ${APPDIR+x} ]; then
 fi
 cd $APPDIR/usr/bin
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$APPDIR/usr/lib
-export FONTCONFIG_FILE=$APPDIR/usr/share/fonts/fonts.conf
 savedir="$HOME"/.local/share/steamsky/saves
 themesdir="$HOME"/.local/share/steamsky/themes
 modsdir="$HOME"/.local/share/steamsky/mods
