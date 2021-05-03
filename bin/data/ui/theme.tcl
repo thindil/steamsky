@@ -45,7 +45,7 @@ namespace eval ttk::theme::steamsky {
    #
 
    # Load needed fonts
-   foreach fontfile [glob -directory [file join [file dirname [info script]] fonts] *.ttf] {
+   foreach fontfile [glob -directory [file join [file dirname [info script]] fonts] *.*tf] {
       extrafont::load [file normalize $fontfile]
    }
 
