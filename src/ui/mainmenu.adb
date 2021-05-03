@@ -120,24 +120,35 @@ package body MainMenu is
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;
-      Theme_Use(To_String(Game_Settings.Interface_Theme));
-      Tcl_EvalFile(Get_Context, Ui_Directory & "mainmenu.tcl");
+      Theme_Use
+        (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
+      Tcl_EvalFile
+        (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");
       Main_Menu_Frame.Interp := Get_Context;
-      Main_Menu_Frame.Name := New_String(".mainmenu");
+      Main_Menu_Frame.Name := New_String(Str => ".mainmenu");
       if not Game_Settings.Show_Tooltips then
          Disable;
       end if;
       DefaultFontsSizes :=
-        (Positive'Value(Font.Configure("MapFont", "-size")),
-         Positive'Value(Font.Configure("InterfaceFont", "-size")),
-         Positive'Value(Font.Configure("HelpFont", "-size")));
+        (1 =>
+           Positive'Value
+             (Font.Configure(FontName => "MapFont", Option => "-size")),
+         2 =>
+           Positive'Value
+             (Font.Configure(FontName => "InterfaceFont", Option => "-size")),
+         3 =>
+           Positive'Value
+             (Font.Configure(FontName => "HelpFont", Option => "-size")));
       Font.Configure
-        ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+        (FontName => "MapFont",
+         Options => "-size" & Positive'Image(Game_Settings.Map_Font_Size));
       Font.Configure
-        ("HelpFont", "-size" & Positive'Image(Game_Settings.Help_Font_Size));
+        (FontName => "HelpFont",
+         Options => "-size" & Positive'Image(Game_Settings.Help_Font_Size));
       Font.Configure
-        ("InterfaceFont",
-         "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
+        (FontName => "InterfaceFont",
+         Options =>
+           "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
       configure(Version_Label, "-text {" & Game_Version & " development}");
       Data_Error := To_Unbounded_String(Load_Game_Data);
       if Data_Error /= Null_Unbounded_String then
