@@ -131,7 +131,7 @@ package body Ships.UI.Crew is
             To_Unbounded_String("Health"), To_Unbounded_String("Fatigue"),
             To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
             To_Unbounded_String("Morale")),
-           False);
+           Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"));
       Load_Crew_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if Current_Row < Start_Row then

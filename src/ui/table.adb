@@ -15,6 +15,7 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -24,7 +25,6 @@ with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -33,8 +33,8 @@ with Config; use Config;
 package body Table is
 
    function CreateTable
-     (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
-      return Table_Widget is
+     (Parent: String; Headers: Headers_Array;
+      Scrollbar: Ttk_Scrollbar := Get_Widget("")) return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
       XScroll: Ttk_Scrollbar;
@@ -43,7 +43,7 @@ package body Table is
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
-      if With_Scrollbars then
+      if Scrollbar.Name = New_String("") then
          YScroll :=
            Create
              (Parent & ".scrolly",
@@ -63,13 +63,13 @@ package body Table is
          Tcl.Tk.Ada.Pack.Pack(XScroll, "-side bottom -fill x");
          Autoscroll(XScroll);
          Autoscroll(YScroll);
-         Table.Scrollbars := True;
+         Table.Scrollbar := YScroll;
       else
          Canvas := Create(Parent & ".table");
          Tcl.Tk.Ada.Grid.Grid(Canvas, "-sticky nwes -padx {5 0}");
          Tcl.Tk.Ada.Grid.Column_Configure(Master, Canvas, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
-         Table.Scrollbars := False;
+         Table.Scrollbar := Scrollbar;
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
@@ -309,7 +309,8 @@ package body Table is
       begin
          Create(Tokens, BBox(Table.Canvas, "all"), " ");
             -- if no scrollbars, resize the table
-         if not Table.Scrollbars then
+         if Winfo_Get(Table.Canvas, "parent") /=
+           Winfo_Get(Table.Scrollbar, "parent") then
             configure
               (Table.Canvas,
                "-height [expr " & Slice(Tokens, 4) & " - " & Slice(Tokens, 2) &

@@ -228,7 +228,7 @@ package body Ships.UI.Crew.Inventory is
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
-           False);
+           YScroll);
       if Update_Inventory_Command(ClientData, Interp, Argc, Argv) =
         TCL_ERROR then
          return TCL_ERROR;

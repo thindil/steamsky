@@ -40,6 +40,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
@@ -136,7 +137,7 @@ package body Trades.UI is
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
                To_Unbounded_String("Profit"), To_Unbounded_String("Owned"),
                To_Unbounded_String("Available")),
-              False);
+              Get_Widget(".gameframe.paned.tradeframe.scrolly"));
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          configure(CloseButton, "-command ShowSkyMap");

@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -249,7 +250,7 @@ package body Knowledge.Missions is
                To_Unbounded_String("Details"),
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
-              False);
+              Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"));
          Rows := 0;
          Load_Accepted_Missions_Loop :
          for I in

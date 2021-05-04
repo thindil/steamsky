@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
@@ -310,7 +311,7 @@ package body Knowledge.Events is
              (Widget_Image(EventsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
-              False);
+              Get_Widget(".gameframe.paned.knowledgeframe.events.scrolly"));
          Rows := 0;
          Load_Known_Events_Loop :
          for Event of Events_List loop
