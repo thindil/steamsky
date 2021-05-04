@@ -1672,7 +1672,7 @@ package body Ships.UI.Modules is
            CreateTable
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
-              False);
+              Get_Widget(".gameframe.paned.shipinfoframe.modules.scrolly"));
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :

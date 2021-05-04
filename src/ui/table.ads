@@ -15,6 +15,7 @@
 
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 
 -- ****h* Table/Table
 -- FUNCTION
@@ -38,14 +39,14 @@ package Table is
    -- Columns_Width - The array with the width for each column in the table
    -- Row           - The current row of the table
    -- Row_Height    - The height of each row
-   -- Scrollbars    - If true, the table was created with the scrollbars
+   -- Scrollbar     - The vertical Ttk_Scrollbar associated with the table
    -- SOURCE
    type Table_Widget(Amount: Positive) is record
       Canvas: Tk_Canvas;
       Columns_Width: Width_Array(1 .. Amount) := (others => 1);
       Row: Positive := 1;
       Row_Height: Positive := 1;
-      Scrollbars: Boolean := True;
+      Scrollbar: Ttk_Scrollbar;
    end record;
    -- ****
 
@@ -60,18 +61,18 @@ package Table is
    -- FUNCTION
    -- Create a new table and columns headers in it
    -- PARAMETERS
-   -- Parent          - The Tk path for the parent widget
-   -- Headers         - The titles for the table headers
-   -- With_Scrollbars - If True add table with scrollbars. Default value is
-   --                   True.
+   -- Parent    - The Tk path for the parent widget
+   -- Headers   - The titles for the table headers
+   -- Scrollbar - Ttk_Scrollbar associated with the table. If empty
+   --             then create a new scrollbars. Default value is empty.
    -- RESULT
    -- The newly created Table_Widget
    -- HISTORY
    -- 5.7 - Added
    -- SOURCE
    function CreateTable
-     (Parent: String; Headers: Headers_Array; With_Scrollbars: Boolean := True)
-      return Table_Widget with
+     (Parent: String; Headers: Headers_Array;
+      Scrollbar: Ttk_Scrollbar := Get_Widget("")) return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
    -- ****

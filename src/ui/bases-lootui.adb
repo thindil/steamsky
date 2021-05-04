@@ -34,6 +34,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
@@ -110,7 +111,7 @@ package body Bases.LootUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Owned"),
                To_Unbounded_String("Available")),
-              False);
+              Get_Widget(".gameframe.paned.lootframe.scrolly", Interp));
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");

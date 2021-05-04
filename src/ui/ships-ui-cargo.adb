@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crew.Inventory; use Crew.Inventory;
 with Maps.UI; use Maps.UI;
@@ -102,7 +103,7 @@ package body Ships.UI.Cargo is
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
-           False);
+           Get_Widget(".gameframe.paned.shipinfoframe.cargo.scrolly"));
       configure
         (Free_Space_Label,
          "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");

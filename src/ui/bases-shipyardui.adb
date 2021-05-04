@@ -42,6 +42,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with CoreUI; use CoreUI;
@@ -134,7 +135,7 @@ package body Bases.ShipyardUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Cost")),
-              False);
+              Get_Widget(".gameframe.paned.shipyardframe.scrolly"));
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
          RemoveTable :=
@@ -143,7 +144,7 @@ package body Bases.ShipyardUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Price")),
-              False);
+              Get_Widget(".gameframe.paned.shipyardframe.scrolly"));
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");

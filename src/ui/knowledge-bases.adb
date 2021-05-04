@@ -37,6 +37,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -121,7 +122,7 @@ package body Knowledge.Bases is
             To_Unbounded_String("Population"), To_Unbounded_String("Size"),
             To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
             To_Unbounded_String("Reputation")),
-           False);
+           Get_Widget(".gameframe.paned.knowledgeframe.bases.scrolly"));
       if BaseName'Length = 0 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
