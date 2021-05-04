@@ -98,6 +98,9 @@ package body Table is
          " -width 2 -tags [list headerback]");
       Lower(Canvas, "headerback");
       Table.Canvas := Canvas;
+      Tcl_Eval
+        (Get_Context,
+         "SetScrollbarBindings " & Table.Canvas & " " & Table.Scrollbar);
       return Table;
    end CreateTable;
 
