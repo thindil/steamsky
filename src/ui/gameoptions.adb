@@ -42,7 +42,6 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
@@ -151,25 +150,24 @@ package body GameOptions is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      OptionsFrame: Ttk_Frame := Get_Widget(Paned & ".optionsframe", Interp);
+      OptionsFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".optionsframe", Interp);
       OptionsCanvas: constant Tk_Canvas :=
         Get_Widget(OptionsFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox;
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
-      procedure Set_Path(Path: Unbounded_String; LabelName: String) is
+      Path_Buttons: constant array(1 .. 4) of String(1 .. 4) :=
+        ("data", "save", "docs", "mods");
+      Paths_Array: constant array(Path_Buttons'Range) of Unbounded_String :=
+        (Data_Directory, Save_Directory, Doc_Directory, Mods_Directory);
+      procedure Set_Spinbox(Name: String; Value: Natural) is
       begin
-         Label.Name :=
-           New_String
-             (Widget_Image(OptionsCanvas) & ".options.info." & LabelName);
-         configure(Label, "-text {" & Full_Name(To_String(Path)) & " }");
-      end Set_Path;
+         SpinBox := Get_Widget(Widget_Image(OptionsFrame) & Name, Interp);
+         Set(SpinBox, Natural'Image(Value));
+      end Set_Spinbox;
    begin
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
@@ -179,20 +177,23 @@ package body GameOptions is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Set_Path(Data_Directory, "data");
-         Set_Path(Save_Directory, "save");
-         Set_Path(Doc_Directory, "docs");
-         Set_Path(Mods_Directory, "mods");
+         for I in Path_Buttons'Range loop
+            Label.Name :=
+              New_String
+                (Widget_Image(OptionsCanvas) & ".options.info." &
+                 Path_Buttons(I));
+            configure
+              (Label, "-text {" & Full_Name(To_String(Paths_Array(I))) & " }");
+         end loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
          ComboBox.Name :=
-           New_String
-             (".gameframe.paned.optionsframe.canvas.options.interface.theme");
+           New_String(OptionsFrame & ".canvas.options.interface.theme");
          configure(ComboBox, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
@@ -227,23 +228,16 @@ package body GameOptions is
          Trim
            (Natural'Image(Boolean'Pos(Game_Settings.Auto_Ask_For_Events)),
             Left));
-      SpinBox := Get_Widget(Widget_Image(OptionsFrame) & ".fuel", Interp);
-      Set(SpinBox, Natural'Image(Game_Settings.Low_Fuel));
-      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".drinks");
-      Set(SpinBox, Natural'Image(Game_Settings.Low_Drinks));
-      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".food");
-      Set(SpinBox, Natural'Image(Game_Settings.Low_Food));
+      Set_Spinbox(".fuel", Game_Settings.Low_Fuel);
+      Set_Spinbox(".drinks", Game_Settings.Low_Drinks);
+      Set_Spinbox(".food", Game_Settings.Low_Food);
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".automovestop");
       Current
         (ComboBox,
          Natural'Image(Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)));
-      SpinBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".messageslimit");
-      Set(SpinBox, Natural'Image(Game_Settings.Messages_Limit));
-      SpinBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".savedmessages");
-      Set(SpinBox, Natural'Image(Game_Settings.Saved_Messages));
+      Set_Spinbox(".messageslimit", Game_Settings.Messages_Limit);
+      Set_Spinbox(".savedmessages", Game_Settings.Saved_Messages);
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".messagesorder");
       Current
@@ -275,19 +269,13 @@ package body GameOptions is
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".fullscreen",
          Trim(Natural'Image(Boolean'Pos(Game_Settings.Full_Screen)), Left));
-      SpinBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".closemessages");
-      Set(SpinBox, Natural'Image(Game_Settings.Auto_Close_Messages_Time));
+      Set_Spinbox(".closemessages", Game_Settings.Auto_Close_Messages_Time);
       Tcl_SetVar
         (Interp, Widget_Image(OptionsFrame) & ".shownumbers",
          Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Numbers)), Left));
-      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".mapfont");
-      Set(SpinBox, Natural'Image(Game_Settings.Map_Font_Size));
-      SpinBox.Name := New_String(Widget_Image(OptionsFrame) & ".helpfont");
-      Set(SpinBox, Natural'Image(Game_Settings.Help_Font_Size));
-      SpinBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".interfacefont");
-      Set(SpinBox, Natural'Image(Game_Settings.Interface_Font_Size));
+      Set_Spinbox(".mapfont", Game_Settings.Map_Font_Size);
+      Set_Spinbox(".helpfont", Game_Settings.Help_Font_Size);
+      Set_Spinbox(".interfacefont", Game_Settings.Interface_Font_Size);
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
@@ -307,16 +295,16 @@ package body GameOptions is
          Delete(KeyEntry, "0", "end");
          Insert(KeyEntry, "0", To_String(Accel.ShortCut));
       end loop Load_Accelerators_Loop;
-      if cget(CloseButton, "-command") = "ShowCombatUI" then
-         configure(CloseButton, "-command {CloseOptions combat}");
+      if cget(Close_Button, "-command") = "ShowCombatUI" then
+         configure(Close_Button, "-command {CloseOptions combat}");
       else
-         configure(CloseButton, "-command {CloseOptions map}");
+         configure(Close_Button, "-command {CloseOptions map}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (OptionsCanvas,
-         "-height " & cget(Paned, "-height") & " -width " &
-         cget(Paned, "-width"));
+         "-height " & cget(Main_Paned, "-height") & " -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (OptionsCanvas, "window",
