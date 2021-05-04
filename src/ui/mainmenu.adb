@@ -149,19 +149,27 @@ package body MainMenu is
         (FontName => "InterfaceFont",
          Options =>
            "-size" & Positive'Image(Game_Settings.Interface_Font_Size));
-      configure(Version_Label, "-text {" & Game_Version & " development}");
-      Data_Error := To_Unbounded_String(Load_Game_Data);
+      configure
+        (Widgt => Version_Label,
+         options => "-text {" & Game_Version & " development}");
+      Data_Error := To_Unbounded_String(Source => Load_Game_Data);
       if Data_Error /= Null_Unbounded_String then
          Show_Main_Menu;
          return;
       end if;
-      Delete(Text_Entry, "0", "end");
-      Insert(Text_Entry, "0", To_String(New_Game_Settings.Player_Name));
+      Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
+      Insert
+        (TextEntry => Text_Entry, Index => "0",
+         Text => To_String(Source => New_Game_Settings.Player_Name));
       Tcl_SetVar
-        (Get_Context, "playergender", "" & New_Game_Settings.Player_Gender);
-      Text_Entry.Name := New_String(".newgamemenu.canvas.player.shipname");
-      Delete(Text_Entry, "0", "end");
-      Insert(Text_Entry, "0", To_String(New_Game_Settings.Ship_Name));
+        (interp => Get_Context, varName => "playergender",
+         newValue => "" & New_Game_Settings.Player_Gender);
+      Text_Entry.Name :=
+        New_String(Str => ".newgamemenu.canvas.player.shipname");
+      Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
+      Insert
+        (TextEntry => Text_Entry, Index => "0",
+         Text => To_String(Source => New_Game_Settings.Ship_Name));
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
