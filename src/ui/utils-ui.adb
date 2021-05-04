@@ -39,6 +39,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -676,6 +677,48 @@ package body Utils.UI is
       return TCL_OK;
    end Process_Question_Command;
 
+   -- ****o* UUI/UUI.Set_Scrollbar_Bindings_Command
+   -- FUNCTION
+   -- Assign scrolling events with mouse wheel to the selected vertical
+   -- scrollbar from the selected widget
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetScrollbarBindings widget scrollbar
+   -- Widget is the widget from which events will be fired, scrollbar is
+   -- Ttk::scrollbar which to which bindings will be added
+   -- SOURCE
+   function Set_Scrollbar_Bindings_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Scrollbar_Bindings_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      Widget: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Scrollbar: constant Ttk_Scrollbar :=
+        Get_Widget(CArgv.Arg(Argv, 2), Interp);
+   begin
+      Bind
+        (Widget, "<Button-4>",
+         "{event generate " & Scrollbar & " <Button-4>}");
+      Bind
+        (Widget, "<Button-5>",
+         "{event generate " & Scrollbar & " <Button-5>}");
+      Bind
+        (Widget, "<MouseWheel>",
+         "{event generate " & Scrollbar & " <MouseWheel>}");
+      return TCL_OK;
+   end Set_Scrollbar_Bindings_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -686,6 +729,7 @@ package body Utils.UI is
       AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
       AddCommand("ProcessQuestion", Process_Question_Command'Access);
+      AddCommand("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
