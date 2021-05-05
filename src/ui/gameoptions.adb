@@ -15,7 +15,6 @@
 
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
-with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C; use Interfaces.C;
@@ -159,10 +158,50 @@ package body GameOptions is
       SpinBox: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
-      Path_Buttons: constant array(1 .. 4) of String(1 .. 4) :=
-        ("data", "save", "docs", "mods");
-      Paths_Array: constant array(Path_Buttons'Range) of Unbounded_String :=
-        (Data_Directory, Save_Directory, Doc_Directory, Mods_Directory);
+      type Widget_Data is record
+         Name: Unbounded_String;
+         Value: Unbounded_String;
+      end record;
+      Labels_Array: constant array(1 .. 4) of Widget_Data :=
+        ((To_Unbounded_String("data"), Data_Directory),
+         (To_Unbounded_String("save"), Save_Directory),
+         (To_Unbounded_String("docs"), Doc_Directory),
+         (To_Unbounded_String("mods"), Mods_Directory));
+      Checkbox_Array: constant array(1 .. 11) of Widget_Data :=
+        ((To_Unbounded_String(OptionsCanvas & ".options.general.autorest"),
+          To_Unbounded_String(if Game_Settings.Auto_Rest then "1" else "0")),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.autocenter"),
+          To_Unbounded_String(if Game_Settings.Auto_Center then "1" else "0")),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.autoreturn"),
+          To_Unbounded_String(if Game_Settings.Auto_Return then "1" else "0")),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.autofinish"),
+          To_Unbounded_String(if Game_Settings.Auto_Finish then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.general.autoaskforbases"),
+          To_Unbounded_String
+            (if Game_Settings.Auto_Ask_For_Bases then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.general.autoaskforevents"),
+          To_Unbounded_String
+            (if Game_Settings.Auto_Ask_For_Events then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.rightbutton"),
+          To_Unbounded_String
+            (if Game_Settings.Right_Button then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.showtooltips"),
+          To_Unbounded_String
+            (if Game_Settings.Show_Tooltips then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.showmessages"),
+          To_Unbounded_String
+            (if Game_Settings.Show_Last_Messages then "1" else "0")),
+         (To_Unbounded_String(OptionsCanvas & ".options.interface.fullscreen"),
+          To_Unbounded_String(if Game_Settings.Full_Screen then "1" else "0")),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.shownumbers"),
+          To_Unbounded_String
+            (if Game_Settings.Show_Numbers then "1" else "0")));
       procedure Set_Spinbox(Name: String; Value: Natural) is
       begin
          SpinBox := Get_Widget(Widget_Image(OptionsFrame) & Name, Interp);
@@ -177,13 +216,14 @@ package body GameOptions is
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "options.tcl");
          Bind(OptionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         for I in Path_Buttons'Range loop
+         for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
                 (Widget_Image(OptionsCanvas) & ".options.info." &
-                 Path_Buttons(I));
+                 To_String(Path_Label.Name));
             configure
-              (Label, "-text {" & Full_Name(To_String(Paths_Array(I))) & " }");
+              (Label,
+               "-text {" & Full_Name(To_String(Path_Label.Value)) & " }");
          end loop;
          Load_Themes_Loop :
          for Theme of Themes_List loop
@@ -202,32 +242,14 @@ package body GameOptions is
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.general");
       Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autorest",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Rest)), Left));
+      for CheckBox of Checkbox_Array loop
+         Tcl_SetVar
+           (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
+      end loop;
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
       Current
         (ComboBox,
          Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autocenter",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Center)), Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autoreturn",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Return)), Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autofinish",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Auto_Finish)), Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autoaskforbases",
-         Trim
-           (Natural'Image(Boolean'Pos(Game_Settings.Auto_Ask_For_Bases)),
-            Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".autoaskforevents",
-         Trim
-           (Natural'Image(Boolean'Pos(Game_Settings.Auto_Ask_For_Events)),
-            Left));
       Set_Spinbox(".fuel", Game_Settings.Low_Fuel);
       Set_Spinbox(".drinks", Game_Settings.Low_Drinks);
       Set_Spinbox(".food", Game_Settings.Low_Food);
@@ -255,24 +277,7 @@ package body GameOptions is
          To_String
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".rightbutton",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Right_Button)), Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".showtooltips",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Tooltips)), Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".showmessages",
-         Trim
-           (Natural'Image(Boolean'Pos(Game_Settings.Show_Last_Messages)),
-            Left));
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".fullscreen",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Full_Screen)), Left));
       Set_Spinbox(".closemessages", Game_Settings.Auto_Close_Messages_Time);
-      Tcl_SetVar
-        (Interp, Widget_Image(OptionsFrame) & ".shownumbers",
-         Trim(Natural'Image(Boolean'Pos(Game_Settings.Show_Numbers)), Left));
       Set_Spinbox(".mapfont", Game_Settings.Map_Font_Size);
       Set_Spinbox(".helpfont", Game_Settings.Help_Font_Size);
       Set_Spinbox(".interfacefont", Game_Settings.Interface_Font_Size);
@@ -285,7 +290,7 @@ package body GameOptions is
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in MapAccelerators'Range loop
-         Accels(I + 11).ShortCut := MapAccelerators(I);
+         Accels(I + MenuAccelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
       Accels(Accels'Last).ShortCut := FullScreenAccel;
       Load_Accelerators_Loop :
