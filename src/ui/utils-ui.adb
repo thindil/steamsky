@@ -709,13 +709,16 @@ package body Utils.UI is
    begin
       Bind
         (Widget, "<Button-4>",
-         "{event generate " & Scrollbar & " <Button-4>}");
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-4>}}");
       Bind
         (Widget, "<Button-5>",
-         "{event generate " & Scrollbar & " <Button-5>}");
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-5>}}");
       Bind
         (Widget, "<MouseWheel>",
-         "{event generate " & Scrollbar & " <MouseWheel>}");
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <MouseWheel>}}");
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
@@ -729,7 +732,8 @@ package body Utils.UI is
       AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
       AddCommand("ProcessQuestion", Process_Question_Command'Access);
-      AddCommand("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
+      AddCommand
+        ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
