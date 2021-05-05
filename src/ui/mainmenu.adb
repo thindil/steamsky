@@ -173,28 +173,40 @@ package body MainMenu is
       Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
-            Append(Values, " {" & Factions_List(I).Name & "}");
+            Append
+              (Source => Values,
+               New_Item => " {" & Factions_List(I).Name & "}");
          end if;
       end loop Load_Factions_Names_Loop;
-      Append(Values, " Random");
-      configure(Combo_Box, "-values [list" & To_String(Values) & "]");
+      Append(Source => Values, New_Item => " Random");
+      configure
+        (Widgt => Combo_Box,
+         options => "-values [list" & To_String(Source => Values) & "]");
       Set
-        (Combo_Box,
-         To_String(Factions_List(New_Game_Settings.Player_Faction).Name));
-      Tcl_Eval(Get_Context, "SetFaction");
-      Combo_Box.Name := New_String(".newgamemenu.canvas.player.career");
+        (ComboBox => Combo_Box,
+         Value =>
+           To_String
+             (Source => Factions_List(New_Game_Settings.Player_Faction).Name));
+      Tcl_Eval(interp => Get_Context, strng => "SetFaction");
+      Combo_Box.Name := New_String(Str => ".newgamemenu.canvas.player.career");
       Set
-        (Combo_Box,
-         To_String(Careers_List(New_Game_Settings.Player_Career).Name));
-      Combo_Box.Name := New_String(".newgamemenu.canvas.player.base");
-      if New_Game_Settings.Starting_Base /= To_Unbounded_String("Any") then
-         Set
-           (Combo_Box,
-            "{" &
-            To_String(BasesTypes_List(New_Game_Settings.Starting_Base).Name) &
-            "}");
+        (ComboBox => Combo_Box,
+         Value =>
+           To_String
+             (Source => Careers_List(New_Game_Settings.Player_Career).Name));
+      Combo_Box.Name := New_String(Str => ".newgamemenu.canvas.player.base");
+      if New_Game_Settings.Starting_Base =
+        To_Unbounded_String(Source => "Any") then
+         Set(ComboBox => Combo_Box, Value => "Any");
       else
-         Set(Combo_Box, "Any");
+         Set
+           (ComboBox => Combo_Box,
+            Value =>
+              "{" &
+              To_String
+                (Source =>
+                   BasesTypes_List(New_Game_Settings.Starting_Base).Name) &
+              "}");
       end if;
       Combo_Box.Name :=
         New_String(".newgamemenu.canvas.difficulty.difficultylevel");
