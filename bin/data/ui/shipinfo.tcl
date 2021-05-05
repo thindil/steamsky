@@ -108,13 +108,17 @@ set shipcanvas [canvas $shipinfoframe.cargo.canvas -yscrollcommand [list $shipin
 pack [ttk::scrollbar $shipinfoframe.cargo.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.cargo.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
 pack $shipcanvas -side top -fill both -expand true
+SetScrollbarBindings $shipcanvas $shipinfoframe.cargo.scrolly
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
+SetScrollbarBindings $shipcanvas.frame $shipinfoframe.cargo.scrolly
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin cargo show}] -sticky w -padx 5
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship cargo info}
 grid [ttk::label $shipcanvas.frame.freespace] -sticky w -padx 5
+SetScrollbarBindings $shipcanvas.frame.freespace $shipinfoframe.cargo.scrolly
 grid [ttk::frame $shipcanvas.frame.selecttype] -sticky w
 grid [ttk::label $shipcanvas.frame.selecttype.label -text {Type:}] -padx 5
+SetScrollbarBindings $shipcanvas.frame.selecttype.label $shipinfoframe.cargo.scrolly
 grid [ttk::combobox $shipcanvas.frame.selecttype.combo -state readonly] -row 0 -column 1
 bind $shipcanvas.frame.selecttype.combo <<ComboboxSelected>> ShowCargo
 tooltip::tooltip $shipcanvas.frame.selecttype {Show only items with the selected type}
