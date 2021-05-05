@@ -78,9 +78,11 @@ set shipcanvas [canvas $shipinfoframe.modules.canvas -yscrollcommand [list $ship
 pack [ttk::scrollbar $shipinfoframe.modules.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.modules.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
 pack $shipcanvas -side top -fill both -expand true
+SetScrollbarBindings $shipcanvas $shipinfoframe.modules.scrolly
 ttk::frame $shipcanvas.frame
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
+SetScrollbarBindings $shipcanvas.frame $shipinfoframe.modules.scrolly
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin modules show}] -sticky w -padx 5
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship modules info}
 ::autoscroll::autoscroll $shipinfoframe.modules.scrolly
@@ -91,8 +93,10 @@ set shipcanvas [canvas $shipinfoframe.crew.canvas -yscrollcommand [list $shipinf
 pack [ttk::scrollbar $shipinfoframe.crew.scrolly -orient vertical -command [list $shipcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $shipinfoframe.crew.scrollx -orient horizontal -command [list $shipcanvas xview]] -fill x -side bottom
 pack $shipcanvas -side top -fill both -expand true
+SetScrollbarBindings $shipcanvas $shipinfoframe.crew.scrolly
 ttk::frame $shipcanvas.frame
 grid columnconfigure $shipcanvas.frame 1 -weight 1
+SetScrollbarBindings $shipcanvas.frame $shipinfoframe.crew.scrolly
 grid [ttk::button $shipcanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {ShipMaxMin crew show}] -sticky w -padx 5
 tooltip::tooltip $shipcanvas.frame.maxmin {Maximize/minimize the ship crew info}
 $shipcanvas create window 0 0 -anchor nw -window $shipcanvas.frame
