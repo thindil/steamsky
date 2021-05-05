@@ -20,26 +20,33 @@ set knowledgecanvas [canvas $knowledgeframe.bases.canvas -yscrollcommand [list $
 pack [ttk::scrollbar $knowledgeframe.bases.scrolly -orient vertical -command [list $knowledgecanvas yview]] -side right -fill y
 pack [ttk::scrollbar $knowledgeframe.bases.scrollx -orient horizontal -command [list $knowledgecanvas xview]] -fill x -side bottom
 pack $knowledgecanvas -side top -fill both -expand true
+SetScrollbarBindings $knowledgecanvas $knowledgeframe.bases.scrolly
 ttk::frame $knowledgecanvas.frame
+SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.bases.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known bases}
 # List of bases options
 grid [ttk::frame $knowledgecanvas.frame.options] -columnspan 6 -sticky w -padx 5
+SetScrollbarBindings $knowledgecanvas.frame.options $knowledgeframe.bases.scrolly
 grid [ttk::label $knowledgecanvas.frame.options.typeslbl -text {Type:}]
+SetScrollbarBindings $knowledgecanvas.frame.options.typeslbl $knowledgeframe.bases.scrolly
 grid [ttk::combobox $knowledgecanvas.frame.options.types -state readonly -width 10] -row 0 -column 1
 bind $knowledgecanvas.frame.options.types <<ComboboxSelected>> {ShowBases}
 tooltip::tooltip $knowledgecanvas.frame.options.types {Show only the selected type bases}
 grid [ttk::label $knowledgecanvas.frame.options.statuslbl -text {Status:}] -row 0 -column 2
+SetScrollbarBindings $knowledgecanvas.frame.options.statuslbl $knowledgeframe.bases.scrolly
 grid [ttk::combobox $knowledgecanvas.frame.options.status -state readonly -values [list {Any} {Only not visited} {Only visited}] -width 10] -row 0 -column 3
 bind $knowledgecanvas.frame.options.status <<ComboboxSelected>> {ShowBases}
 tooltip::tooltip $knowledgecanvas.frame.options.status {Show only the selected status bases}
 $knowledgecanvas.frame.options.status current 0
 grid [ttk::label $knowledgecanvas.frame.options.ownerlbl -text {Owner:}] -row 0 -column 4
+SetScrollbarBindings $knowledgecanvas.frame.options.ownerlbl $knowledgeframe.bases.scrolly
 grid [ttk::combobox $knowledgecanvas.frame.options.owner -state readonly -width 10] -row 0 -column 5
 bind $knowledgecanvas.frame.options.owner <<ComboboxSelected>> {ShowBases}
 tooltip::tooltip $knowledgecanvas.frame.options.owner {Show only the selected owner bases}
 grid [ttk::label $knowledgecanvas.frame.options.searchlbl -text {Name:}]
+SetScrollbarBindings $knowledgecanvas.frame.options.searchlbl $knowledgeframe.bases.scrolly
 grid [ttk::entry $knowledgecanvas.frame.options.search -validate key -validatecommand {ShowBases %P} -width 20] -row 1 -column 1 -columnspan 6 -sticky w
 tooltip::tooltip $knowledgecanvas.frame.options.search {Search for a base with the selected name}
 # List of bases
