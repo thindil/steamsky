@@ -59,8 +59,10 @@ set knowledgecanvas [canvas $knowledgeframe.missions.canvas -yscrollcommand [lis
 pack [ttk::scrollbar $knowledgeframe.missions.scrolly -orient vertical -command [list $knowledgecanvas yview]] -side right -fill y
 pack [ttk::scrollbar $knowledgeframe.missions.scrollx -orient horizontal -command [list $knowledgecanvas xview]] -fill x -side bottom
 pack $knowledgecanvas -side top -fill both -expand true
+SetScrollbarBindings $knowledgecanvas $knowledgeframe.missions.scrolly
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.missions.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {KnowledgeMaxMin missions show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of accepted missions}
@@ -73,8 +75,10 @@ set knowledgecanvas [canvas $knowledgeframe.events.canvas -yscrollcommand [list 
 pack [ttk::scrollbar $knowledgeframe.events.scrolly -orient vertical -command [list $knowledgecanvas yview]] -side right -fill y
 pack [ttk::scrollbar $knowledgeframe.events.scrollx -orient horizontal -command [list $knowledgecanvas xview]] -fill x -side bottom
 pack $knowledgecanvas -side top -fill both -expand true
+SetScrollbarBindings $knowledgecanvas $knowledgeframe.events.scrolly
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.events.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {KnowledgeMaxMin events show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known events}
@@ -87,8 +91,10 @@ set knowledgecanvas [canvas $knowledgeframe.stories.canvas -yscrollcommand [list
 pack [ttk::scrollbar $knowledgeframe.stories.scrolly -orient vertical -command [list $knowledgecanvas yview]] -side right -fill y
 pack [ttk::scrollbar $knowledgeframe.stories.scrollx -orient horizontal -command [list $knowledgecanvas xview]] -fill x -side bottom
 pack $knowledgecanvas -side top -fill both -expand true
+SetScrollbarBindings $knowledgecanvas $knowledgeframe.stories.scrolly
 ttk::frame $knowledgecanvas.frame
 grid columnconfigure $knowledgecanvas.frame 1 -weight 1
+SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.stories.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton -text "[format %c 0xf106]" -command {KnowledgeMaxMin stories show}] -sticky w
 tooltip::tooltip $knowledgecanvas.frame.maxmin {Maximize/minimize the list of known stories}
