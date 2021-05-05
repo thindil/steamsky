@@ -38,7 +38,6 @@ with Bases; use Bases;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Ships; use Ships;
 with Utils.UI; use Utils.UI;
 
