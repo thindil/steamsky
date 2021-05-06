@@ -212,6 +212,10 @@ tooltip::tooltip $moveoptions.lbl14 "Key used to set full speed. Select the fiel
 grid [ttk::entry $moveoptions.fullspeed -width 15] -row 13 -column 1 -sticky w
 tooltip::tooltip $moveoptions.fullspeed "Key used to set full speed for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullspeed <KeyRelease> {SetShortcut %W %K}
+SetScrollbarBindings $moveoptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 15} {incr i} {
+   SetScrollbarBindings $moveoptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
 # Menu keys options
 set menuoptions [ttk::frame $optionsframe.menu]
 grid [ttk::label $menuoptions.lbl1 -text {Ship information:}] -sticky w
