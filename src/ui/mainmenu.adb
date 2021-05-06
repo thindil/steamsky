@@ -209,40 +209,52 @@ package body MainMenu is
               "}");
       end if;
       Combo_Box.Name :=
-        New_String(".newgamemenu.canvas.difficulty.difficultylevel");
+        New_String(Str => ".newgamemenu.canvas.difficulty.difficultylevel");
       Set
-        (Spin_Box,
-         Natural'Image(Natural(New_Game_Settings.Enemy_Damage_Bonus * 100.0)));
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image
+             (Natural(New_Game_Settings.Enemy_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(".newgamemenu.canvas.difficulty.playerdamage");
+        New_String(Str => ".newgamemenu.canvas.difficulty.playerdamage");
       Set
-        (Spin_Box,
-         Natural'Image
-           (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image
+             (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(".newgamemenu.canvas.difficulty.enemymeleedamage");
+        New_String(Str => ".newgamemenu.canvas.difficulty.enemymeleedamage");
       Set
-        (Spin_Box,
-         Natural'Image
-           (Natural(New_Game_Settings.Enemy_Melee_Damage_Bonus * 100.0)));
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image
+             (Natural(New_Game_Settings.Enemy_Melee_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(".newgamemenu.canvas.difficulty.playermeleedamage");
+        New_String(Str => ".newgamemenu.canvas.difficulty.playermeleedamage");
       Set
-        (Spin_Box,
-         Natural'Image
-           (Natural(New_Game_Settings.Player_Melee_Damage_Bonus * 100.0)));
-      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.experience");
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image
+             (Natural(New_Game_Settings.Player_Melee_Damage_Bonus * 100.0)));
+      Spin_Box.Name :=
+        New_String(Str => ".newgamemenu.canvas.difficulty.experience");
       Set
-        (Spin_Box,
-         Natural'Image(Natural(New_Game_Settings.Experience_Bonus * 100.0)));
-      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.reputation");
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image(Natural(New_Game_Settings.Experience_Bonus * 100.0)));
+      Spin_Box.Name :=
+        New_String(Str => ".newgamemenu.canvas.difficulty.reputation");
       Set
-        (Spin_Box,
-         Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
-      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.upgrade");
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
+      Spin_Box.Name :=
+        New_String(Str => ".newgamemenu.canvas.difficulty.upgrade");
       Set
-        (Spin_Box,
-         Natural'Image(Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image
+             (Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
       Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.prices");
       Set
         (Spin_Box,
