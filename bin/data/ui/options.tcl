@@ -409,7 +409,9 @@ tooltip::tooltip $ioptions.lbl5 {Run the game in full screen mode.}
 grid [ttk::checkbutton $ioptions.fullscreen] -row 4 -column 1 -sticky w
 tooltip::tooltip $ioptions.fullscreen {Run the game in full screen mode.}
 grid [ttk::label $ioptions.lbl6 -text {Full screen shortcut:}] -sticky w
+tooltip::tooltip $ioptions.lbl6 {Key used to switch full screen mode.}
 grid [ttk::entry $ioptions.fullscreenkey -width 15] -row 5 -column 1 -sticky w
+tooltip::tooltip $ioptions.fullscreenkey {Key used to switch full screen mode.}
 bind $ioptions.fullscreenkey <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $ioptions.lbl7 -text {Close messages after:}] -sticky w
 tooltip::tooltip $ioptions.lbl7 {Auto close game messages after that amount of seconds.}
