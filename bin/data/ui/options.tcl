@@ -382,55 +382,63 @@ tooltip::tooltip $mapoptions.lbl22 "Key used to show move map options. Select th
 grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
 tooltip::tooltip $mapoptions.mapoptions "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
+SetScrollbarBindings $mapoptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 23} {incr i} {
+   SetScrollbarBindings $mapoptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
 # Interface options
 set ioptions [ttk::frame $optionsframe.interface]
-grid [ttk::label $ioptions.lbl3 -text {Interface theme:}] -sticky w
-tooltip::tooltip $ioptions.lbl3 {Select UI theme.}
+grid [ttk::label $ioptions.lbl1 -text {Interface theme:}] -sticky w
+tooltip::tooltip $ioptions.lbl1 {Select UI theme.}
 grid [ttk::combobox $ioptions.theme -state readonly -width 15] -row 0 -column 1 -sticky w
 tooltip::tooltip $ioptions.theme {Select UI theme.}
 grid [ttk::label $ioptions.lbl2 -text {Use right mouse button:}] -sticky w
 tooltip::tooltip $ioptions.lbl2 {Use right mouse button to show various menus in the game.}
 grid [ttk::checkbutton $ioptions.rightbutton] -row 1 -column 1 -sticky w
 tooltip::tooltip $ioptions.rightbutton {Use right mouse button to show various menus in the game.}
-grid [ttk::label $ioptions.lbl4 -text {Show tooltips:}] -sticky w
-tooltip::tooltip $ioptions.lbl4 {Show help tooltips for various game elements.}
+grid [ttk::label $ioptions.lbl3 -text {Show tooltips:}] -sticky w
+tooltip::tooltip $ioptions.lbl3 {Show help tooltips for various game elements.}
 grid [ttk::checkbutton $ioptions.showtooltips] -row 2 -column 1 -sticky w
 tooltip::tooltip $ioptions.showtooltips {Show help tooltips for various game elements.}
-grid [ttk::label $ioptions.lbl5 -text {Show last messages:}] -sticky w
-tooltip::tooltip $ioptions.lbl5 {Show last messages window in every place in the game.}
+grid [ttk::label $ioptions.lbl4 -text {Show last messages:}] -sticky w
+tooltip::tooltip $ioptions.lbl4 {Show last messages window in every place in the game.}
 grid [ttk::checkbutton $ioptions.showmessages] -row 3 -column 1 -sticky w
 tooltip::tooltip $ioptions.showmessages {Show last messages window in every place in the game.}
-grid [ttk::label $ioptions.lbl6 -text {Full screen mode:}] -sticky w
-tooltip::tooltip $ioptions.lbl6 {Run the game in full screen mode.}
+grid [ttk::label $ioptions.lbl5 -text {Full screen mode:}] -sticky w
+tooltip::tooltip $ioptions.lbl5 {Run the game in full screen mode.}
 grid [ttk::checkbutton $ioptions.fullscreen] -row 4 -column 1 -sticky w
 tooltip::tooltip $ioptions.fullscreen {Run the game in full screen mode.}
-grid [ttk::label $ioptions.lbl7 -text {Full screen shortcut:}] -sticky w
+grid [ttk::label $ioptions.lbl6 -text {Full screen shortcut:}] -sticky w
 grid [ttk::entry $ioptions.fullscreenkey -width 15] -row 5 -column 1 -sticky w
 bind $ioptions.fullscreenkey <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $ioptions.lbl8 -text {Close messages after:}] -sticky w
-tooltip::tooltip $ioptions.lbl8 {Auto close game messages after that amount of seconds.}
+grid [ttk::label $ioptions.lbl7 -text {Close messages after:}] -sticky w
+tooltip::tooltip $ioptions.lbl7 {Auto close game messages after that amount of seconds.}
 grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 6 -column 1 -sticky w
 tooltip::tooltip $ioptions.closemessages {Auto close game messages after that amount of seconds.}
-grid [ttk::label $ioptions.lbl9 -text {Show numeric values:}] -sticky w
-tooltip::tooltip $ioptions.lbl9 "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
+grid [ttk::label $ioptions.lbl8 -text {Show numeric values:}] -sticky w
+tooltip::tooltip $ioptions.lbl8 "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
 grid [ttk::checkbutton $ioptions.shownumbers] -row 7 -column 1 -sticky w
 tooltip::tooltip $ioptions.shownumbers "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
-grid [ttk::label $ioptions.lbl10 -text {Size of map font:}] -sticky w
-tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used to draw game map.}
+grid [ttk::label $ioptions.lbl9 -text {Size of map font:}] -sticky w
+tooltip::tooltip $ioptions.lbl9 {Size (in pixels) of font used to draw game map.}
 grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 -sticky w
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.mapfont {Size (in pixels) of font used to draw game map.}
-grid [ttk::label $ioptions.lbl11 -text {Size of help font:}] -sticky w
-tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used mainly in help.}
+grid [ttk::label $ioptions.lbl10 -text {Size of help font:}] -sticky w
+tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used mainly in help.}
 grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 -sticky w
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.helpfont {Size (in pixels) of font used mainly in help.}
-grid [ttk::label $ioptions.lbl12 -text {Size of interface font:}] -sticky w
-tooltip::tooltip $ioptions.lbl12 {Size (in pixels) of font used in interface (for example, here).}
+grid [ttk::label $ioptions.lbl11 -text {Size of interface font:}] -sticky w
+tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 -sticky w
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
 tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
 grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
+SetScrollbarBindings $ioptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 12} {incr i} {
+   SetScrollbarBindings $ioptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
 # Info options
 set infooptions [ttk::frame $optionsframe.info]
 grid [ttk::label $infooptions.lbl1 -text {Data directory path:}] -sticky w
