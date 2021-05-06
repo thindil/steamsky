@@ -32,82 +32,70 @@ grid [ttk::radiobutton $buttonsframe.info -text Info -style Radio.Toolbutton -va
 grid $buttonsframe -sticky w -padx 5 -pady 5
 # General options
 set goptions [ttk::frame $optionsframe.general]
-SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
 grid [ttk::label $goptions.lbl1 -text {Auto rest when crew is tired:}] -sticky w
 tooltip::tooltip $goptions.lbl1 {Wait for crew is rested when pilot or engineer are too tired to work.}
-SetScrollbarBindings $goptions.lbl1 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autorest] -row 0 -column 1 -sticky w
 tooltip::tooltip $goptions.autorest {Wait for crew is rested when pilot or engineer are too tired to work.}
 grid [ttk::label $goptions.lbl2 -text {Default speed after undocking:}] -sticky w
 tooltip::tooltip $goptions.lbl2 {Default speed of ship after undock from base.}
-SetScrollbarBindings $goptions.lbl2 .gameframe.paned.optionsframe.scrolly
 grid [ttk::combobox $goptions.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] -width 10] -row 1 -column 1 -sticky w
 tooltip::tooltip $goptions.speed {Default speed of ship after undock from base.}
 grid [ttk::label $goptions.lbl3 -text {Auto center map after set destination:}] -sticky w
 tooltip::tooltip $goptions.lbl3 {After set destination for ship, center map on ship.}
-SetScrollbarBindings $goptions.lbl3 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autocenter] -row 2 -column 1 -sticky w
 tooltip::tooltip $goptions.autocenter {After set destination for ship, center map on ship.}
 grid [ttk::label $goptions.lbl4 -text {Auto set base after finished mission:}] -sticky w
 tooltip::tooltip $goptions.lbl4 "After finished mission, set skybase from which\nmission was taken as a destination for ship."
-SetScrollbarBindings $goptions.lbl4 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autoreturn] -row 3 -column 1 -sticky w
 tooltip::tooltip $goptions.autoreturn "After finished mission, set skybase from\nwhich mission was taken as a destination for ship."
 grid [ttk::label $goptions.lbl5 -text {Auto finish missions:}] -sticky w
 tooltip::tooltip $goptions.lbl5 {Auto finish missions when ship is near corresponding skybase.}
-SetScrollbarBindings $goptions.lbl5 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autofinish] -row 4 -column 1 -sticky w
 tooltip::tooltip $goptions.autofinish {Auto finish missions when ship is near corresponding skybase.}
 grid [ttk::label $goptions.lbl6 -text {Auto ask for bases:}] -sticky w
 tooltip::tooltip $goptions.lbl6 {Auto ask for bases when ship end docking to bases.}
-SetScrollbarBindings $goptions.lbl6 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autoaskforbases] -row 5 -column 1 -sticky w
 tooltip::tooltip $goptions.autoaskforbases {Auto ask for bases when ship end docking to bases.}
 grid [ttk::label $goptions.lbl7 -text {Auto ask for events:}] -sticky w
 tooltip::tooltip $goptions.lbl7 {Auto ask for events when ship end docking to bases.}
-SetScrollbarBindings $goptions.lbl7 .gameframe.paned.optionsframe.scrolly
 grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1 -sticky w
 tooltip::tooltip $goptions.autoaskforevents {Auto ask for events when ship end docking to bases.}
 grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}] -sticky w
 tooltip::tooltip $goptions.lbl8 "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
-SetScrollbarBindings $goptions.lbl8 .gameframe.paned.optionsframe.scrolly
 grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 7 -column 1 -sticky w
 tooltip::tooltip $goptions.fuel "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}] -sticky w
 tooltip::tooltip $goptions.lbl9 "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-SetScrollbarBindings $goptions.lbl9 .gameframe.paned.optionsframe.scrolly
 grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 -sticky w
 tooltip::tooltip $goptions.drinks "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl10 -text {Low level of food:}] -sticky w
 tooltip::tooltip $goptions.lbl10 "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-SetScrollbarBindings $goptions.lbl10 .gameframe.paned.optionsframe.scrolly
 grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 -sticky w
 tooltip::tooltip $goptions.food "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}] -sticky w
 tooltip::tooltip $goptions.lbl11 "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
-SetScrollbarBindings $goptions.lbl11 .gameframe.paned.optionsframe.scrolly
 grid [ttk::combobox $goptions.automovestop -state readonly -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10] -row 10 -column 1 -sticky w
 tooltip::tooltip $goptions.automovestop "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}] -sticky w
 tooltip::tooltip $goptions.lbl12 "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
-SetScrollbarBindings $goptions.lbl12 .gameframe.paned.optionsframe.scrolly
 grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 -sticky w
 tooltip::tooltip $goptions.messageslimit "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}] -sticky w
 tooltip::tooltip $goptions.lbl13 "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
-SetScrollbarBindings $goptions.lbl13 .gameframe.paned.optionsframe.scrolly
 grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 12 -column 1 -sticky w
 tooltip::tooltip $goptions.savedmessages "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
 grid [ttk::label $goptions.lbl14 -text {Messages order:}] -sticky w
 tooltip::tooltip $goptions.lbl14 "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
-SetScrollbarBindings $goptions.lbl14 .gameframe.paned.optionsframe.scrolly
 grid [ttk::combobox $goptions.messagesorder -state readonly -values [list {Older messages first} {Newer messages first}] -width 16] -row 13 -column 1 -sticky w
 tooltip::tooltip $goptions.messagesorder "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
 grid [ttk::label $goptions.lbl15 -text {Autosave game:}] -sticky w
 tooltip::tooltip $goptions.lbl15 {How often game should be automatically saved to disk.}
-SetScrollbarBindings $goptions.lbl15 .gameframe.paned.optionsframe.scrolly
 grid [ttk::combobox $goptions.autosave -state readonly -values [list {Never} {After dock to base} {After undock from base} {Every game day} {Every game month} {Every game year}] -width 18] -row 14 -column 1 -sticky w
 tooltip::tooltip $goptions.autosave {How often game should be automatically saved to disk.}
+SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 16} {incr i} {
+   SetScrollbarBindings $goptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
 # Movement keys options
 set specialkey {}
 # Set proper shortcut, validate it and check if it is not set somewhere
