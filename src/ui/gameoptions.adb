@@ -155,7 +155,7 @@ package body GameOptions is
         Get_Widget(OptionsFrame & ".canvas", Interp);
       Label: Ttk_Label;
       ComboBox: Ttk_ComboBox;
-      SpinBox: Ttk_SpinBox;
+      SpinBox_Widget: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
       type Widget_Data is record
@@ -202,11 +202,31 @@ package body GameOptions is
             (OptionsCanvas & ".options.interface.shownumbers"),
           To_Unbounded_String
             (if Game_Settings.Show_Numbers then "1" else "0")));
-      procedure Set_Spinbox(Name: String; Value: Natural) is
-      begin
-         SpinBox := Get_Widget(Widget_Image(OptionsFrame) & Name, Interp);
-         Set(SpinBox, Natural'Image(Value));
-      end Set_Spinbox;
+      SpinBox_Array: constant array(1 .. 9) of Widget_Data :=
+        ((To_Unbounded_String(OptionsCanvas & ".options.general.fuel"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Low_Fuel))),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.drinks"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Low_Drinks))),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.food"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Low_Food))),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.general.messageslimit"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Messages_Limit))),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.general.savedmessages"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Saved_Messages))),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.closemessages"),
+          To_Unbounded_String
+            (Natural'Image(Game_Settings.Auto_Close_Messages_Time))),
+         (To_Unbounded_String(OptionsCanvas & ".options.interface.mapfont"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Map_Font_Size))),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.interface.interfacefont"),
+          To_Unbounded_String
+            (Natural'Image(Game_Settings.Interface_Font_Size))),
+         (To_Unbounded_String(OptionsCanvas & ".options.interface.helpfont"),
+          To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))));
    begin
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
@@ -239,27 +259,25 @@ package body GameOptions is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      OptionsFrame.Name :=
-        New_String(Widget_Image(OptionsCanvas) & ".options.general");
+      OptionsFrame.Name := New_String(OptionsCanvas & ".options.general");
       Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
            (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
       end loop;
+      for SpinBox of SpinBox_Array loop
+         SpinBox_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
+         Set(SpinBox_Widget, To_String(SpinBox.Value));
+      end loop;
       ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
       Current
         (ComboBox,
          Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1));
-      Set_Spinbox(".fuel", Game_Settings.Low_Fuel);
-      Set_Spinbox(".drinks", Game_Settings.Low_Drinks);
-      Set_Spinbox(".food", Game_Settings.Low_Food);
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".automovestop");
       Current
         (ComboBox,
          Natural'Image(Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)));
-      Set_Spinbox(".messageslimit", Game_Settings.Messages_Limit);
-      Set_Spinbox(".savedmessages", Game_Settings.Saved_Messages);
       ComboBox.Name :=
         New_String(Widget_Image(OptionsFrame) & ".messagesorder");
       Current
@@ -277,10 +295,6 @@ package body GameOptions is
          To_String
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
          "}");
-      Set_Spinbox(".closemessages", Game_Settings.Auto_Close_Messages_Time);
-      Set_Spinbox(".mapfont", Game_Settings.Map_Font_Size);
-      Set_Spinbox(".helpfont", Game_Settings.Help_Font_Size);
-      Set_Spinbox(".interfacefont", Game_Settings.Interface_Font_Size);
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
