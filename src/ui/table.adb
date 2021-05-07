@@ -34,7 +34,7 @@ package body Table is
 
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget("")) return Table_Widget is
+      Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
       XScroll: Ttk_Scrollbar;
@@ -43,7 +43,7 @@ package body Table is
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
-      if Scrollbar.Name = New_String("") then
+      if Scrollbar.Name = New_String(".") then
          YScroll :=
            Create
              (Parent & ".scrolly",

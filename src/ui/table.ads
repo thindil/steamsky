@@ -72,7 +72,7 @@ package Table is
    -- SOURCE
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget("")) return Table_Widget with
+      Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
    -- ****
