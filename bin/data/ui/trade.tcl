@@ -18,14 +18,20 @@ set tradecanvas [canvas .gameframe.paned.tradeframe.canvas -yscrollcommand [list
 pack [ttk::scrollbar .gameframe.paned.tradeframe.scrolly -orient vertical -command [list $tradecanvas yview]] -side right -fill y
 pack $tradecanvas -side top -fill both
 pack [ttk::scrollbar .gameframe.paned.tradeframe.scrollx -orient horizontal -command [list $tradecanvas xview]] -fill x
+SetScrollbarBindings $tradecanvas .gameframe.paned.tradeframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.tradeframe.scrollx
 set tradeframe [ttk::frame $tradecanvas.trade]
+SetScrollbarBindings $tradeframe .gameframe.paned.tradeframe.scrolly
 # Type of items to show
 grid [ttk::frame $tradeframe.options] -sticky w
+SetScrollbarBindings $tradeframe.options .gameframe.paned.tradeframe.scrolly
 grid [ttk::label $tradeframe.options.typelabel -text {Type:}]
+SetScrollbarBindings $tradeframe.options.typelabel .gameframe.paned.tradeframe.scrolly
 grid [ttk::combobox $tradeframe.options.type -state readonly] -column 1 -row 0
 bind $tradeframe.options.type <<ComboboxSelected>> {ShowTrade [$tradeframe.options.type get]}
 grid [ttk::entry $tradeframe.options.search -validate key -validatecommand {SearchTrade %P}] -column 2 -row 0
 grid [ttk::label $tradeframe.options.playerinfo -wraplength 300] -sticky nw -columnspan 2
+SetScrollbarBindings $tradeframe.options.playerinfo .gameframe.paned.tradeframe.scrolly
 grid [ttk::label $tradeframe.options.baseinfo -wraplength 300] -sticky nw -column 2 -row 1
+SetScrollbarBindings $tradeframe.options.baseinfo .gameframe.paned.tradeframe.scrolly
