@@ -459,5 +459,13 @@ grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}] -stick
 tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications files.}
 grid [ttk::label $infooptions.mods -wraplength 500] -row 3 -column 1 -sticky w
 tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
+SetScrollbarBindings $infooptions .gameframe.paned.optionsframe.scrolly
+for {set i 1} {$i < 5} {incr i} {
+   SetScrollbarBindings $infooptions.lbl$i .gameframe.paned.optionsframe.scrolly
+}
+SetScrollbarBindings $infooptions.data .gameframe.paned.optionsframe.scrolly
+SetScrollbarBindings $infooptions.save .gameframe.paned.optionsframe.scrolly
+SetScrollbarBindings $infooptions.docs .gameframe.paned.optionsframe.scrolly
+SetScrollbarBindings $infooptions.mods .gameframe.paned.optionsframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.optionsframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.optionsframe.scrollx
