@@ -15,7 +15,6 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -43,7 +42,7 @@ package body Table is
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
    begin
-      if Scrollbar.Name = New_String(".") then
+      if Widget_Image(Scrollbar) = "." then
          YScroll :=
            Create
              (Parent & ".scrolly",
