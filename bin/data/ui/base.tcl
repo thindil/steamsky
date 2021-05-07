@@ -22,6 +22,7 @@ pack [ttk::scrollbar .gameframe.paned.baseframe.scrollx -orient horizontal -comm
 ::autoscroll::autoscroll .gameframe.paned.baseframe.scrollx
 set baseframe [ttk::frame $basecanvas.base]
 grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2 -sticky w -padx 5 -pady 5
+tooltip::tooltip $baseframe.search "Search for the selected recipe."
 # Items list
 grid [ttk::frame $baseframe.items] -sticky nwes -padx 5 -pady {5 0}
 set baseview [ttk::treeview $baseframe.items.view -yscrollcommand [list $baseframe.items.scrolly set]]
