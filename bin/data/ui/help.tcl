@@ -33,7 +33,7 @@ $helpview tag configure special -foreground yellow -font BoldHelpFont
 $helpview tag configure bold -font BoldHelpFont
 $helpview tag configure underline -font UnderlineHelpFont
 $helpview tag configure italic -font ItalicHelpFont
-pack $helpview -side top -fill both
+pack $helpview -side top -fill both -padx {10 0}
 bind .help <Escape> {CloseHelp}
 bind .help.paned.content <Configure> {
    $helpview configure -height [expr [winfo height .help.paned.content] / [font metrics HelpFont -linespace]]
