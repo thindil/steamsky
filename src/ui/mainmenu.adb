@@ -255,26 +255,29 @@ package body MainMenu is
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
-      Spin_Box.Name := New_String(".newgamemenu.canvas.difficulty.prices");
+      Spin_Box.Name :=
+        New_String(Str => ".newgamemenu.canvas.difficulty.prices");
       Set
-        (Spin_Box,
-         Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
-      Tcl_Eval(Get_Context, "SetPoints");
+        (SpinBox => Spin_Box,
+         Value =>
+           Natural'Image(Natural(New_Game_Settings.Prices_Bonus * 100.0)));
+      Tcl_Eval(interp => Get_Context, strng => "SetPoints");
       Show_Main_Menu;
       Current
-        (Combo_Box,
-         Natural'Image
-           (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
-      Generate(Combo_Box, "<<Combo_BoxSelected>>");
+        (ComboBox => Combo_Box,
+         NewIndex =>
+           Natural'Image
+             (Difficulty_Type'Pos(New_Game_Settings.Difficulty_Level)));
+      Generate(Window => Combo_Box, EventName => "<<Combo_BoxSelected>>");
    end Create_Main_Menu;
 
    procedure Show_Main_Menu is
-      Main_Window: constant Tk_Toplevel := Get_Main_Window(Get_Context);
+      Main_Window: constant Tk_Toplevel :=
+        Get_Main_Window(Interp => Get_Context);
       X, Y: Integer;
       Files: Search_Type;
-      Button: Ttk_Button := Get_Widget(".mainmenu.loadgame");
-      OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
-      GameFrame: constant Ttk_Frame := Get_Widget(".gameframe");
+      Button: Ttk_Button := Get_Widget(pathName => ".mainmenu.loadgame");
+      Game_Frame: constant Ttk_Frame := Get_Widget(".Game_Frame");
    begin
       X := (Positive'Value(Winfo_Get(Main_Window, "vrootwidth")) - 600) / 2;
       if X < 0 then
@@ -287,7 +290,7 @@ package body MainMenu is
       if Game_Settings.Full_Screen then
          Wm_Set(Main_Window, "attributes", "-fullscreen 0");
       end if;
-      if OsName = "Linux" then
+      if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
          Wm_Set(Main_Window, "attributes", "-zoomed 0");
       else
          Wm_Set(Main_Window, "state", "normal");
@@ -297,8 +300,8 @@ package body MainMenu is
         (Main_Window, "geometry",
          "600x400+" & Trim(Positive'Image(X), Left) & "+" &
          Trim(Positive'Image(Y), Left));
-      if Winfo_Get(GameFrame, "exists") = "1" then
-         Tcl.Tk.Ada.Pack.Pack_Forget(GameFrame);
+      if Winfo_Get(Game_Frame, "exists") = "1" then
+         Tcl.Tk.Ada.Pack.Pack_Forget(Game_Frame);
       end if;
       Tcl.Tk.Ada.Pack.Pack(Main_Menu_Frame, "-fill both -expand true");
       Start_Search(Files, To_String(Save_Directory), "*.sav");
