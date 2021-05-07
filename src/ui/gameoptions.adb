@@ -154,7 +154,7 @@ package body GameOptions is
       OptionsCanvas: constant Tk_Canvas :=
         Get_Widget(OptionsFrame & ".canvas", Interp);
       Label: Ttk_Label;
-      ComboBox: Ttk_ComboBox;
+      ComboBox_Widget: Ttk_ComboBox;
       SpinBox_Widget: Ttk_SpinBox;
       KeyEntry: Ttk_Entry;
       ThemesList: Unbounded_String;
@@ -227,9 +227,25 @@ package body GameOptions is
             (Natural'Image(Game_Settings.Interface_Font_Size))),
          (To_Unbounded_String(OptionsCanvas & ".options.interface.helpfont"),
           To_Unbounded_String(Natural'Image(Game_Settings.Help_Font_Size))));
+      ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
+        ((To_Unbounded_String(OptionsCanvas & ".options.general.speed"),
+          To_Unbounded_String
+            (Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1))),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.automovestop"),
+          To_Unbounded_String
+            (Natural'Image
+               (Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)))),
+         (To_Unbounded_String
+            (OptionsCanvas & ".options.general.messagesorder"),
+          To_Unbounded_String
+            (Natural'Image
+               (Messages_Order_Type'Pos(Game_Settings.Messages_Order)))),
+         (To_Unbounded_String(OptionsCanvas & ".options.general.autosave"),
+          To_Unbounded_String
+            (Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)))));
    begin
       Label.Interp := Interp;
-      ComboBox.Interp := Interp;
+      ComboBox_Widget.Interp := Interp;
       Tcl_SetVar(Interp, "newtab", "general");
       if Winfo_Get(OptionsCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -249,9 +265,10 @@ package body GameOptions is
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
-         ComboBox.Name :=
+         ComboBox_Widget.Name :=
            New_String(OptionsFrame & ".canvas.options.interface.theme");
-         configure(ComboBox, "-values [list" & To_String(ThemesList) & "]");
+         configure
+           (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -269,28 +286,16 @@ package body GameOptions is
          SpinBox_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
          Set(SpinBox_Widget, To_String(SpinBox.Value));
       end loop;
-      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".speed");
-      Current
-        (ComboBox,
-         Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1));
-      ComboBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".automovestop");
-      Current
-        (ComboBox,
-         Natural'Image(Auto_Move_Break'Pos(Game_Settings.Auto_Move_Stop)));
-      ComboBox.Name :=
-        New_String(Widget_Image(OptionsFrame) & ".messagesorder");
-      Current
-        (ComboBox,
-         Natural'Image(Messages_Order_Type'Pos(Game_Settings.Messages_Order)));
-      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".autosave");
-      Current
-        (ComboBox, Natural'Image(Auto_Save_Type'Pos(Game_Settings.Auto_Save)));
+      for ComboBox of ComboBox_Array loop
+         ComboBox_Widget := Get_Widget(To_String(ComboBox.Name), Interp);
+         Current(ComboBox_Widget, To_String(ComboBox.Value));
+      end loop;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options.interface");
-      ComboBox.Name := New_String(Widget_Image(OptionsFrame) & ".theme");
+      ComboBox_Widget.Name :=
+        New_String(Widget_Image(OptionsFrame) & ".theme");
       Set
-        (ComboBox,
+        (ComboBox_Widget,
          "{" &
          To_String
            (Themes_List(To_String(Game_Settings.Interface_Theme)).Name) &
