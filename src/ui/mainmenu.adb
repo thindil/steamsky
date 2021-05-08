@@ -277,29 +277,45 @@ package body MainMenu is
       X, Y: Integer;
       Files: Search_Type;
       Button: Ttk_Button := Get_Widget(pathName => ".mainmenu.loadgame");
-      Game_Frame: constant Ttk_Frame := Get_Widget(".Game_Frame");
+      Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".Game_Frame");
    begin
-      X := (Positive'Value(Winfo_Get(Main_Window, "vrootwidth")) - 600) / 2;
+      X :=
+        (Positive'Value
+           (Winfo_Get(Widgt => Main_Window, Info => "vrootwidth")) -
+         600) /
+        2;
       if X < 0 then
          X := 0;
       end if;
-      Y := (Positive'Value(Winfo_Get(Main_Window, "vrootheight")) - 400) / 2;
+      Y :=
+        (Positive'Value
+           (Winfo_Get(Widgt => Main_Window, Info => "vrootheight")) -
+         400) /
+        2;
       if Y < 0 then
          Y := 0;
       end if;
       if Game_Settings.Full_Screen then
-         Wm_Set(Main_Window, "attributes", "-fullscreen 0");
+         Wm_Set
+           (Widgt => Main_Window, Action => "attributes",
+            Options => "-fullscreen 0");
       end if;
-      if Tcl_GetVar(Get_Context, "tcl_platform(os)") = "Linux" then
-         Wm_Set(Main_Window, "attributes", "-zoomed 0");
+      if Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)") =
+        "Linux" then
+         Wm_Set
+           (Widgt => Main_Window, Action => "attributes",
+            Options => "-zoomed 0");
       else
-         Wm_Set(Main_Window, "state", "normal");
+         Wm_Set(Widgt => Main_Window, Action => "state", Options => "normal");
       end if;
-      Wm_Set(Main_Window, "title", "{Steam Sky - Main Menu}");
       Wm_Set
-        (Main_Window, "geometry",
-         "600x400+" & Trim(Positive'Image(X), Left) & "+" &
-         Trim(Positive'Image(Y), Left));
+        (Widgt => Main_Window, Action => "title",
+         Options => "{Steam Sky - Main Menu}");
+      Wm_Set
+        (Widgt => Main_Window, Action => "geometry",
+         Options =>
+           "600x400+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
+           Trim(Source => Positive'Image(Y), Side => Left));
       if Winfo_Get(Game_Frame, "exists") = "1" then
          Tcl.Tk.Ada.Pack.Pack_Forget(Game_Frame);
       end if;
