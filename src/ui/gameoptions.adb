@@ -33,7 +33,6 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -364,6 +363,8 @@ package body GameOptions is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      FrameName: constant String :=
+        ".gameframe.paned.optionsframe.canvas.options.interface";
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       HelpFonts: constant array(1 .. 4) of Unbounded_String :=
         (To_Unbounded_String("HelpFont"), To_Unbounded_String("BoldHelpFont"),
@@ -375,13 +376,11 @@ package body GameOptions is
          To_Unbounded_String("OverstrikedFont"),
          To_Unbounded_String("UnderlineFont"));
    begin
-      if CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.optionsframe.canvas.options.interface.mapfont" then
+      if CArgv.Arg(Argv, 1) = FrameName & ".mapfont" then
          Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
          Font.Configure
            ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
-      elsif CArgv.Arg(Argv, 1) =
-        ".gameframe.paned.optionsframe.canvas.options.interface.helpfont" then
+      elsif CArgv.Arg(Argv, 1) = FrameName & ".helpfont" then
          Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
          Set_Fonts_Loop :
          for FontName of HelpFonts loop
@@ -473,19 +472,22 @@ package body GameOptions is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       RootName: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
       ComboBox: Ttk_ComboBox :=
         Get_Widget(RootName & ".general.speed", Interp);
-      SpinBox: Ttk_SpinBox := Get_Widget(RootName & ".general.fuel", Interp);
       KeyEntry: Ttk_Entry;
       KeysFile: File_Type;
       MapView: Tk_Text;
+      function Get_Spinbox_Value(SpinBox_Name: String) return Natural is
+         SpinBox: constant Ttk_SpinBox :=
+           Get_Widget(RootName & SpinBox_Name, Interp);
+      begin
+         return Natural'Value(Get(SpinBox));
+      end Get_Spinbox_Value;
    begin
-      configure(CloseButton, "-command ShowSkyMap");
-      Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+      configure(Close_Button, "-command ShowSkyMap");
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       Game_Settings.Auto_Rest :=
         (if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then True
          else False);
@@ -511,18 +513,16 @@ package body GameOptions is
         (if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1"
          then True
          else False);
-      Game_Settings.Low_Fuel := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(RootName & ".general.drinks");
-      Game_Settings.Low_Drinks := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(RootName & ".general.food");
-      Game_Settings.Low_Food := Positive'Value(Get(SpinBox));
+      Game_Settings.Low_Fuel := Get_Spinbox_Value(".general.fuel");
+      Game_Settings.Low_Drinks := Get_Spinbox_Value(".general.drinks");
+      Game_Settings.Low_Food := Get_Spinbox_Value(".general.food");
       ComboBox.Name := New_String(RootName & ".general.automovestop");
       Game_Settings.Auto_Move_Stop :=
         Auto_Move_Break'Val(Natural'Value(Current(ComboBox)));
-      SpinBox.Name := New_String(RootName & ".general.messageslimit");
-      Game_Settings.Messages_Limit := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(RootName & ".general.savedmessages");
-      Game_Settings.Saved_Messages := Positive'Value(Get(SpinBox));
+      Game_Settings.Messages_Limit :=
+        Get_Spinbox_Value(".general.messageslimit");
+      Game_Settings.Saved_Messages :=
+        Get_Spinbox_Value(".general.savedmessages");
       ComboBox.Name := New_String(RootName & ".general.messagesorder");
       Game_Settings.Messages_Order :=
         Messages_Order_Type'Val(Natural'Value(Current(ComboBox)));
@@ -568,18 +568,16 @@ package body GameOptions is
          Game_Settings.Full_Screen := False;
          Wm_Set(Get_Main_Window(Interp), "attributes", "-fullscreen 0");
       end if;
-      SpinBox.Name := New_String(RootName & ".interface.closemessages");
-      Game_Settings.Auto_Close_Messages_Time := Positive'Value(Get(SpinBox));
+      Game_Settings.Auto_Close_Messages_Time :=
+        Get_Spinbox_Value(".interface.closemessages");
       Game_Settings.Show_Numbers :=
         (if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
            True
          else False);
-      SpinBox.Name := New_String(RootName & ".interface.mapfont");
-      Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(RootName & ".interface.helpfont");
-      Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
-      SpinBox.Name := New_String(RootName & ".interface.interfacefont");
-      Game_Settings.Interface_Font_Size := Positive'Value(Get(SpinBox));
+      Game_Settings.Map_Font_Size := Get_Spinbox_Value(".interface.mapfont");
+      Game_Settings.Help_Font_Size := Get_Spinbox_Value(".interface.helpfont");
+      Game_Settings.Interface_Font_Size :=
+        Get_Spinbox_Value(".interface.interfacefont");
       Save_Config;
       KeyEntry.Interp := Interp;
       Set_Accelerators_Loop :
