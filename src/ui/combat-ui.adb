@@ -462,6 +462,9 @@ package body Combat.UI is
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 3) &
                " -column 1 -columnspan 2 -sticky w");
+            Tcl_Eval
+              (Get_Context,
+               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
             if Defenders /= Null_Unbounded_String then
                Defenders :=
                  Unbounded_Slice(Defenders, 1, Length(Defenders) - 2);
@@ -475,6 +478,9 @@ package body Combat.UI is
               (Label,
                "-row" & Positive'Image(Positive(Guns.Length) + 4) &
                " -column 1 -columnspan 2 -sticky w");
+            Tcl_Eval
+              (Get_Context,
+               "SetScrollbarBindings " & Label & " $combatframe.crew.scrolly");
          end;
       end if;
       Tcl_Eval(Get_Context, "update");
@@ -505,6 +511,9 @@ package body Combat.UI is
                else ""));
          Tcl.Tk.Ada.Grid.Grid
            (Label, "-row" & Natural'Image(Row) & " -sticky w -padx 5");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
          DamagePercent :=
            (Float(Module.Durability) / Float(Module.MaxDurability));
          ProgressBar :=
@@ -519,6 +528,10 @@ package body Combat.UI is
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & ProgressBar &
+            " $combatframe.damage.scrolly");
          Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
          Row := Row + 1;

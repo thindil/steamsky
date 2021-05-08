@@ -60,7 +60,9 @@ set combatcanvas [canvas $combatframe.damage.canvas -yscrollcommand [list $comba
 pack [ttk::scrollbar $combatframe.damage.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.damage.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.damage.scrolly
 ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.damage.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.damage.scrolly
 ::autoscroll::autoscroll $combatframe.damage.scrollx
