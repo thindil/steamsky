@@ -556,7 +556,8 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.ship";
-      ModuleBox: constant Ttk_ComboBox := Get_Widget(".module", Interp);
+      ModuleBox: constant Ttk_ComboBox :=
+        Get_Widget(FrameName & ".module", Interp);
       ModuleIndex: constant Positive := Natural'Value(Current(ModuleBox)) + 1;
       ModuleEntry: constant Ttk_Entry :=
         Get_Widget(FrameName & ".proto", Interp);
