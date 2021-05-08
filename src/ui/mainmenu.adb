@@ -277,7 +277,7 @@ package body MainMenu is
       X, Y: Integer;
       Files: Search_Type;
       Button: Ttk_Button := Get_Widget(pathName => ".mainmenu.loadgame");
-      Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".Game_Frame");
+      Game_Frame: constant Ttk_Frame := Get_Widget(pathName => ".gameframe");
    begin
       X :=
         (Positive'Value
