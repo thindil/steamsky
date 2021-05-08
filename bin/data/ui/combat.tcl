@@ -22,11 +22,17 @@ set combatcanvas [canvas $combatframe.crew.canvas -yscrollcommand [list $combatf
 pack [ttk::scrollbar $combatframe.crew.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.crew.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.crew.scrolly
 ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.crew.scrolly
 grid [ttk::label $combatcanvas.frame.position -text {Position}]
+SetScrollbarBindings $combatcanvas.frame.position $combatframe.crew.scrolly
 grid [ttk::label $combatcanvas.frame.name -text {Name}] -row 0 -column 1
+SetScrollbarBindings $combatcanvas.frame.name $combatframe.crew.scrolly
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
+SetScrollbarBindings $combatcanvas.frame.order $combatframe.crew.scrolly
 grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 -sticky w -padx {5 0} -pady {0 5}
+SetScrollbarBindings $combatcanvas.frame.pilotlabel $combatframe.crew.scrolly
 grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] -row 1 -column 1 -pady {0 5}
 tooltip::tooltip $combatcanvas.frame.pilotcrew "Select the crew member which will be the pilot during the combat.\nThe sign + after name means that this crew member has\npiloting skill, the sign ++ after name means that his/her\npiloting skill is the best in the crew"
 bind $combatcanvas.frame.pilotcrew <Return> {InvokeButton $combatframe.next}
@@ -36,6 +42,7 @@ tooltip::tooltip $combatcanvas.frame.pilotorder "Select the order for the pilot"
 bind $combatcanvas.frame.pilotorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotorder <<ComboboxSelected>> {SetCombatOrder pilot}
 grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 -sticky w -padx {5 0} -pady {5 0}
+SetScrollbarBindings $combatcanvas.frame.engineerlabel $combatframe.crew.scrolly
 grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] -row 2 -column 1 -pady {5 0}
 tooltip::tooltip $combatcanvas.frame.engineercrew "Select the crew member which will be the engineer during the combat.\nThe sign + after name means that this crew member has\nengineering skill, the sign ++ after name means that his/her\nengineering skill is the best in the crew"
 bind $combatcanvas.frame.engineercrew <Return> {InvokeButton $combatframe.next}

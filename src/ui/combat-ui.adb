@@ -343,6 +343,10 @@ package body Combat.UI is
            (Label,
             "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
             " -padx {5 0}");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & Frame & ".gunlabel" &
+            To_String(GunIndex) & " $combatframe.crew.scrolly");
          ComboBox :=
            Create
              (Frame & ".guncrew" & To_String(GunIndex),
