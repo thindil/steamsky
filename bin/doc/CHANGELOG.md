@@ -28,3 +28,4 @@ All notable changes to this project will be documented in this file.
   story as the player's ship's destination or showing it on map
 - Hiding guns orders in combat when nobody is assigned to them
 - Crash on setting new crew member to empty position in combat
+- Crash on setting new crew member to empty gun in combat
