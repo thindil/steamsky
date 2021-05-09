@@ -1327,7 +1327,9 @@ package body Combat.UI is
             GiveOrders(PlayerShip, CrewIndex, Pilot);
          else
             CrewIndex := FindMember(Pilot);
-            GiveOrders(PlayerShip, CrewIndex, Rest);
+            if CrewIndex > 0 then
+               GiveOrders(PlayerShip, CrewIndex, Rest);
+            end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineercrew");
@@ -1336,18 +1338,22 @@ package body Combat.UI is
             GiveOrders(PlayerShip, CrewIndex, Engineer);
          else
             CrewIndex := FindMember(Engineer);
-            GiveOrders(PlayerShip, CrewIndex, Rest);
+            if CrewIndex > 0 then
+               GiveOrders(PlayerShip, CrewIndex, Rest);
+            end if;
          end if;
       else
          ComboBox.Name :=
            New_String(FrameName & ".gunorder" & CArgv.Arg(Argv, 2));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
-         CrewIndex := Positive'Value(Current(ComboBox));
+         CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Gunner, Guns(GunIndex)(1));
          else
             CrewIndex := PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1);
-            GiveOrders(PlayerShip, CrewIndex, Rest);
+            if CrewIndex > 0 then
+               GiveOrders(PlayerShip, CrewIndex, Rest);
+            end if;
          end if;
       end if;
       UpdateCombatUI;
