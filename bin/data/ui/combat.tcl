@@ -72,7 +72,9 @@ set combatcanvas [canvas $combatframe.enemy.canvas -yscrollcommand [list $combat
 pack [ttk::scrollbar $combatframe.enemy.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.enemy.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.enemy.scrolly
 ttk::label $combatcanvas.info -wraplength 350
+SetScrollbarBindings $combatcanvas.info $combatframe.enemy.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.info
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
@@ -82,7 +84,9 @@ set combatcanvas [canvas $combatframe.status.canvas -yscrollcommand [list $comba
 pack [ttk::scrollbar $combatframe.status.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.status.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.status.scrolly
 ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.status.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.status.scrolly
 ::autoscroll::autoscroll $combatframe.status.scrollx
