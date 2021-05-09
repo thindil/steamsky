@@ -1325,7 +1325,7 @@ package body Combat.UI is
       ComboBox.Interp := Interp;
       if CArgv.Arg(Argv, 1) = "pilot" then
          ComboBox.Name := New_String(FrameName & ".pilotcrew");
-         CrewIndex := Positive'Value(Current(ComboBox));
+         CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Pilot);
          else
@@ -1336,7 +1336,7 @@ package body Combat.UI is
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineercrew");
-         CrewIndex := Positive'Value(Current(ComboBox));
+         CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Engineer);
          else
@@ -1347,7 +1347,7 @@ package body Combat.UI is
          end if;
       else
          ComboBox.Name :=
-           New_String(FrameName & ".gunorder" & CArgv.Arg(Argv, 2));
+           New_String(FrameName & ".guncrew" & CArgv.Arg(Argv, 2));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
