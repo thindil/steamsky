@@ -390,10 +390,13 @@ package body Combat.UI is
                " " & GunnersOrders(J) &
                GetGunSpeed(Guns_Container.To_Index(I), J) & "}");
          end loop Show_Gun_Orders_Loop;
-         ComboBox :=
-           Create
-             (Frame & ".gunorder" & To_String(GunIndex),
-              "-values [list" & To_String(GunnerOrders) & "] -state readonly");
+         ComboBox := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
+         if Winfo_Get(ComboBox, "exists") = "0" then
+            ComboBox :=
+               Create
+                  (Frame & ".gunorder" & To_String(GunIndex),
+               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
+         end if;
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
             Tcl.Tk.Ada.Grid.Grid
