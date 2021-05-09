@@ -1335,7 +1335,7 @@ package body Combat.UI is
          ComboBox.Name :=
            New_String
              (".gameframe.paned.combatframe.crew.canvas.frame.pilotcrew");
-         CrewIndex := Positive'Value(Current(ComboBox));
+         CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Pilot);
          else
@@ -1348,7 +1348,7 @@ package body Combat.UI is
          ComboBox.Name :=
            New_String
              (".gameframe.paned.combatframe.crew.canvas.frame.engineercrew");
-         CrewIndex := Positive'Value(Current(ComboBox));
+         CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
             GiveOrders(PlayerShip, CrewIndex, Engineer);
          else
@@ -1360,7 +1360,7 @@ package body Combat.UI is
       else
          ComboBox.Name :=
            New_String
-             (".gameframe.paned.combatframe.crew.canvas.frame.gunorder" &
+             (".gameframe.paned.combatframe.crew.canvas.frame.guncrew" &
               CArgv.Arg(Argv, 2));
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Natural'Value(Current(ComboBox));
