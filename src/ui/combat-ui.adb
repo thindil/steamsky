@@ -202,6 +202,7 @@ package body Combat.UI is
       ProgressBar: Ttk_ProgressBar;
       DamagePercent: Float;
       CombatCanvas: Tk_Canvas;
+      Has_Gunner: Boolean := False;
       function GetCrewList(Position: Natural) return String is
          SkillIndex, SkillValue: Natural := 0;
          SkillString: Unbounded_String;
@@ -296,6 +297,7 @@ package body Combat.UI is
       Show_Guns_Info_Loop :
       for I in Guns.Iterate loop
          HaveAmmo := False;
+         Has_Gunner := False;
          declare
             AmmoIndex: constant Natural :=
               (if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
@@ -358,6 +360,7 @@ package body Combat.UI is
                Current
                  (ComboBox,
                   Positive'Image(PlayerShip.Modules(Guns(I)(1)).Owner(1)));
+               Has_Gunner := True;
             else
                Current(ComboBox, "0");
             end if;
@@ -395,16 +398,20 @@ package body Combat.UI is
              (Frame & ".gunorder" & To_String(GunIndex),
               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
+         if Has_Gunner then
+            Tcl.Tk.Ada.Grid.Grid
+              (ComboBox,
+               "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
+               " -column 2 -padx {0 5}");
+         else
+            Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
+         end if;
          Bind
            (ComboBox, "<Return>",
             "{InvokeButton " & Main_Paned & ".combatframe.next}");
          Bind
            (ComboBox, "<<ComboboxSelected>>",
             "{SetCombatOrder " & To_String(GunIndex) & "}");
-         Tcl.Tk.Ada.Grid.Grid
-           (ComboBox,
-            "-row" & Positive'Image(Guns_Container.To_Index(I) + 2) &
-            " -column 2 -padx {0 5}");
          Add
            (ComboBox,
             "Select the order for the gunner. Shooting in the selected" & LF &
