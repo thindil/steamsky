@@ -485,34 +485,26 @@ package body GameOptions is
       begin
          return Natural'Value(Get(SpinBox));
       end Get_Spinbox_Value;
+      function Get_Checkbox_Value(CheckBox_Name: String) return Boolean is
+      begin
+         if Tcl_GetVar(Interp, RootName & CheckBox_Name) = "1" then
+            return True;
+         end if;
+         return False;
+      end Get_Checkbox_Value;
    begin
       configure(Close_Button, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      Game_Settings.Auto_Rest :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autorest") = "1" then True
-         else False);
+      Game_Settings.Auto_Rest := Get_Checkbox_Value(".general.autorest");
       Game_Settings.Undock_Speed :=
         ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
-      Game_Settings.Auto_Center :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autocenter") = "1" then
-           True
-         else False);
-      Game_Settings.Auto_Return :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autoreturn") = "1" then
-           True
-         else False);
-      Game_Settings.Auto_Finish :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autofinish") = "1" then
-           True
-         else False);
+      Game_Settings.Auto_Center := Get_Checkbox_Value(".general.autocenter");
+      Game_Settings.Auto_Return := Get_Checkbox_Value(".general.autoreturn");
+      Game_Settings.Auto_Finish := Get_Checkbox_Value(".general.autofinish");
       Game_Settings.Auto_Ask_For_Bases :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autoaskforbases") = "1"
-         then True
-         else False);
+        Get_Checkbox_Value(".general.autoaskforbases");
       Game_Settings.Auto_Ask_For_Events :=
-        (if Tcl_GetVar(Interp, RootName & ".general.autoaskforevents") = "1"
-         then True
-         else False);
+        Get_Checkbox_Value(".general.autoaskforevents");
       Game_Settings.Low_Fuel := Get_Spinbox_Value(".general.fuel");
       Game_Settings.Low_Drinks := Get_Spinbox_Value(".general.drinks");
       Game_Settings.Low_Food := Get_Spinbox_Value(".general.food");
@@ -571,9 +563,7 @@ package body GameOptions is
       Game_Settings.Auto_Close_Messages_Time :=
         Get_Spinbox_Value(".interface.closemessages");
       Game_Settings.Show_Numbers :=
-        (if Tcl_GetVar(Interp, RootName & ".interface.shownumbers") = "1" then
-           True
-         else False);
+        Get_Checkbox_Value(".interface.shownumbers");
       Game_Settings.Map_Font_Size := Get_Spinbox_Value(".interface.mapfont");
       Game_Settings.Help_Font_Size := Get_Spinbox_Value(".interface.helpfont");
       Game_Settings.Interface_Font_Size :=
