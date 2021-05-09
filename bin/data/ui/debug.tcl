@@ -120,8 +120,8 @@ grid [ttk::label $worldframe.ylbl -text {Y:}]
 grid [ttk::spinbox $worldframe.y -from 1 -to 1024 -validate key -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 2
 $worldframe.y set 1
 grid [ttk::label $worldframe.durationlbl -text {Duration:}]
-grid [ttk::spinbox $worldframe.duration -from 30 -to 45 -validate key -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 3
-$worldframe.duration set 30
+grid [ttk::spinbox $worldframe.duration -from 60 -to 1000 -validate key -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 3
+$worldframe.duration set 60
 grid [ttk::button $worldframe.addship -text {Add ship} -command DebugAddShip]
 grid [ttk::label $worldframe.baselbl -text {Base:}] -column 2 -row 0
 grid [ttk::entry $worldframe.base] -column 3 -row 0
