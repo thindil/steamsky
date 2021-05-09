@@ -672,6 +672,9 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid
            (Label,
             "-row" & Natural'Image(Row) & " -column 0 -sticky w -padx 5");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & Label & " $combatframe.status.scrolly");
          DamagePercent :=
            ((Float(Enemy.Ship.Modules(I).Durability) /
              Float(Enemy.Ship.Modules(I).MaxDurability)));
@@ -687,6 +690,10 @@ package body Combat.UI is
                else " -style Horizontal.TProgressbar"));
          Tcl.Tk.Ada.Grid.Grid
            (ProgressBar, "-row" & Natural'Image(Row) & " -column 1");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & ProgressBar &
+            " $combatframe.status.scrolly");
          Tcl.Tk.Ada.Grid.Column_Configure(Frame, ProgressBar, "-weight 1");
          Tcl.Tk.Ada.Grid.Row_Configure(Frame, ProgressBar, "-weight 1");
          Row := Row + 1;
