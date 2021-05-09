@@ -316,25 +316,29 @@ package body MainMenu is
          Options =>
            "600x400+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
            Trim(Source => Positive'Image(Y), Side => Left));
-      if Winfo_Get(Game_Frame, "exists") = "1" then
-         Tcl.Tk.Ada.Pack.Pack_Forget(Game_Frame);
+      if Winfo_Get(Widgt => Game_Frame, Info => "exists") = "1" then
+         Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Game_Frame);
       end if;
-      Tcl.Tk.Ada.Pack.Pack(Main_Menu_Frame, "-fill both -expand true");
-      Start_Search(Files, To_String(Save_Directory), "*.sav");
-      if not More_Entries(Files) then
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         Button.Name := New_String(".mainmenu.newgame");
-         Focus(Button);
+      Tcl.Tk.Ada.Pack.Pack
+        (Slave => Main_Menu_Frame, Options => "-fill both -expand true");
+      Start_Search
+        (Search => Files, Directory => To_String(Source => Save_Directory),
+         Pattern => "*.sav");
+      if More_Entries(Search => Files) then
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => Button, Options => "-after .mainmenu.newgame");
+         Focus(Widgt => Button);
       else
-         Tcl.Tk.Ada.Pack.Pack(Button, "-after .mainmenu.newgame");
-         Focus(Button);
+         Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
+         Button.Name := New_String(Str => ".mainmenu.newgame");
+         Focus(Widgt => Button);
       end if;
-      End_Search(Files);
-      Button.Name := New_String(".mainmenu.halloffame");
-      if not Exists(To_String(Save_Directory) & "halloffame.dat") then
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-      else
+      End_Search(Search => Files);
+      Button.Name := New_String(Str => ".mainmenu.halloffame");
+      if Exists(To_String(Save_Directory) & "halloffame.dat") then
          Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");
+      else
+         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
       end if;
       if Data_Error /= Null_Unbounded_String then
          Button.Name := New_String(".mainmenu.newgame");
