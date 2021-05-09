@@ -27,3 +27,4 @@ All notable changes to this project will be documented in this file.
 - Hiding close button after setting base, event, accepted or available mission,
   story as the player's ship's destination or showing it on map
 - Hiding guns orders in combat when nobody is assigned to them
+- Crash on setting new crew member to empty position in combat
