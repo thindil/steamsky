@@ -329,7 +329,9 @@ tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
 bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
 ttk::frame .newgamemenu.canvas.difficulty
+SetScrollbarBindings .newgamemenu.canvas.difficulty .newgamemenu.scrollbar
 grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}] -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.difficultylabel .newgamemenu.scrollbar
 grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0 -pady 3
 bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
    set level [.newgamemenu.canvas.difficulty.difficultylevel get]
@@ -390,34 +392,42 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
 tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
 bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> {SetInfo difficulty 1}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.enemydamagelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemydamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 1 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemydamage [lindex $difficultytooltips 2]
 bind .newgamemenu.canvas.difficulty.enemydamage <FocusIn> {SetInfo difficulty 2}
 grid [ttk::label .newgamemenu.canvas.difficulty.playerdamagelabel -text {Player ship damage:}] -row 2 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.playerdamagelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playerdamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.playerdamage [lindex $difficultytooltips 3]
 bind .newgamemenu.canvas.difficulty.playerdamage <FocusIn> {SetInfo difficulty 3}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemymeleedamagelabel -text {Enemy damage in melee combat:} -wraplength 150] -row 3 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.enemymeleedamagelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.enemymeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 3 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.enemymeleedamage [lindex $difficultytooltips 4]
 bind .newgamemenu.canvas.difficulty.enemymeleedamage <FocusIn> {SetInfo difficulty 4}
 grid [ttk::label .newgamemenu.canvas.difficulty.playermeleedamagelabel -text {Player crew damage in melee combat:} -wraplength 150] -row 4 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.playermeleedamagelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.playermeleedamage -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 4 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.playermeleedamage [lindex $difficultytooltips 5]
 bind .newgamemenu.canvas.difficulty.playermeleedamage <FocusIn> {SetInfo difficulty 5}
 grid [ttk::label .newgamemenu.canvas.difficulty.experiencelabel -text {Experience gained:}] -row 5 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.experiencelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.experience -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 5 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.experience [lindex $difficultytooltips 6]
 bind .newgamemenu.canvas.difficulty.experience <FocusIn> {SetInfo difficulty 6}
 grid [ttk::label .newgamemenu.canvas.difficulty.reputationlabel -text {Reputation gained:}] -row 6 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.reputationlabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.reputation -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 6 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.reputation [lindex $difficultytooltips 7]
 bind .newgamemenu.canvas.difficulty.reputation <FocusIn> {SetInfo difficulty 7}
 grid [ttk::label .newgamemenu.canvas.difficulty.upgradelabel -text {Upgrade cost:}] -row 7 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.upgradelabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.upgrade -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 7 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.upgrade [lindex $difficultytooltips 8]
 bind .newgamemenu.canvas.difficulty.upgrade <FocusIn> {SetInfo difficulty 8}
 grid [ttk::label .newgamemenu.canvas.difficulty.priceslabel -text {Prices in bases:}] -row 8 -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.priceslabel .newgamemenu.scrollbar
 grid [ttk::spinbox .newgamemenu.canvas.difficulty.prices -from 1 -to 500 -increment 1.0 -width 5 -validate focusout -validatecommand SetPoints -command SetPoints] -column 1 -row 8 -pady 3
 tooltip::tooltip .newgamemenu.canvas.difficulty.prices [lindex $difficultytooltips 9]
 bind .newgamemenu.canvas.difficulty.prices <FocusIn> {SetInfo difficulty 9}
@@ -435,11 +445,13 @@ grid [ttk::button .newgamemenu.canvas.difficulty.random -text Random -command {
 tooltip::tooltip .newgamemenu.canvas.difficulty.random [lindex $difficultytooltips 10]
 bind .newgamemenu.canvas.difficulty.random <FocusIn> {SetInfo difficulty 10}
 grid [ttk::label .newgamemenu.canvas.difficulty.randomizelabel -text {Randomize difficulty on game start} -wraplength 150] -row 10
+SetScrollbarBindings .newgamemenu.canvas.difficulty.randomizelabel .newgamemenu.scrollbar
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomizelabel [lindex $difficultytooltips 11]
 grid [ttk::checkbutton .newgamemenu.canvas.difficulty.randomize] -row 10 -column 1
 tooltip::tooltip .newgamemenu.canvas.difficulty.randomize [lindex $difficultytooltips 11]
 bind .newgamemenu.canvas.difficulty.randomize <FocusIn> {SetInfo difficulty 11}
 grid [ttk::label .newgamemenu.canvas.difficulty.totalpoints -text {Total gained points: 100%}] -row 11 -columnspan 2
+SetScrollbarBindings .newgamemenu.canvas.difficulty.totalpoints .newgamemenu.scrollbar
 grid [ttk::labelframe .newgamemenu.info -text Info] -row 1 -column 2 -sticky nwes -padx 2
 pack [ttk::scrollbar .newgamemenu.info.scroll -orient vertical -command [list .newgamemenu.info.text yview]] -side right -fill y
 pack [text .newgamemenu.info.text -wrap word -yscrollcommand [list .newgamemenu.info.scroll set]] -expand true -fill both -side top
