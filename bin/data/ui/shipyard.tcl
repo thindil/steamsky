@@ -17,10 +17,12 @@ ttk::frame .gameframe.paned.shipyardframe
 set shipyardcanvas [canvas .gameframe.paned.shipyardframe.canvas -yscrollcommand [list .gameframe.paned.shipyardframe.scrolly set] -xscrollcommand [list .gameframe.paned.shipyardframe.scrollx set]]
 pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrolly -orient vertical -command [list $shipyardcanvas yview]] -side right -fill y
 pack $shipyardcanvas -side top -fill both
+SetScrollbarBindings $shipyardcanvas .gameframe.paned.shipyardframe.scrolly
 pack [ttk::scrollbar .gameframe.paned.shipyardframe.scrollx -orient horizontal -command [list $shipyardcanvas xview]] -fill x
 ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.shipyardframe.scrollx
 set shipyardframe [ttk::frame $shipyardcanvas.shipyard]
+SetScrollbarBindings $shipyardframe .gameframe.paned.shipyardframe.scrolly
 set newtab install
 grid [ttk::frame $shipyardframe.tabs] -pady 5
 grid [ttk::radiobutton $shipyardframe.tabs.install -text {Install modules} -state selected -style Radio.Toolbutton -value install -variable newtab -command ShowShipyardTab] -padx 5
@@ -28,8 +30,11 @@ grid [ttk::radiobutton $shipyardframe.tabs.remove -text {Remove modules} -style 
 grid [ttk::label $shipyardframe.moneyinfo -wraplength 500] -sticky w
 # Install modules
 set sinstall [ttk::frame $shipyardframe.install]
+SetScrollbarBindings $sinstall .gameframe.paned.shipyardframe.scrolly
 grid [ttk::frame $sinstall.options] -sticky we -pady {0 5}
+SetScrollbarBindings $sinstall.options .gameframe.paned.shipyardframe.scrolly
 grid [ttk::label $sinstall.options.label -text "Show modules:"]
+SetScrollbarBindings $sinstall.options.label .gameframe.paned.shipyardframe.scrolly
 grid [ttk::combobox $sinstall.options.modules -state readonly -values [list {Any} {Engines} {Cabins} {Cockpits} {Turrets} {Guns} {Cargo bays} {Hulls} {Armors} {Battering rams} {Alchemy labs} {Furnaces} {Water collectors} {Workshops} {Greenhouses} {Medical rooms} {Harpoon guns} {Training rooms}]] -row 0 -column 1 -padx {0 5}
 $sinstall.options.modules current 0
 bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.options.modules current] [$sinstall.options.search get]}

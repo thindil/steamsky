@@ -178,6 +178,10 @@ package body Bases.ShipyardUI is
          LF & "You have used" & Natural'Image(UsedSpace) &
          " modules space from max" & Natural'Image(AllSpace) & " allowed.");
       configure(MoneyLabel, "-text {" & To_String(InstallInfo) & "}");
+      Tcl_Eval
+        (Interp,
+         "SetScrollbarBindings " & MoneyLabel &
+         " .gameframe.paned.shipyardframe.scrolly");
       if Argc < 3 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
