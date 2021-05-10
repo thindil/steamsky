@@ -17,12 +17,15 @@ ttk::frame .gameframe.paned.schoolframe
 set schoolcanvas [canvas .gameframe.paned.schoolframe.canvas -yscrollcommand [list .gameframe.paned.schoolframe.scrolly set] -xscrollcommand [list .gameframe.paned.schoolframe.scrollx set]]
 pack [ttk::scrollbar .gameframe.paned.schoolframe.scrolly -orient vertical -command [list $schoolcanvas yview]] -side right -fill y
 pack $schoolcanvas -side top -fill both
+SetScrollbarBindings $schoolcanvas .gameframe.paned.schoolframe.scrolly
 pack [ttk::scrollbar .gameframe.paned.schoolframe.scrollx -orient horizontal -command [list $schoolcanvas xview]] -fill x
 ::autoscroll::autoscroll .gameframe.paned.schoolframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.schoolframe.scrollx
 set schoolframe [ttk::frame $schoolcanvas.school]
+SetScrollbarBindings $schoolframe .gameframe.paned.schoolframe.scrolly
 # Crew members list
 grid [ttk::frame $schoolframe.crew] -sticky nwes -padx 5 -pady {5 0}
+SetScrollbarBindings $schoolframe.crew .gameframe.paned.schoolframe.scrolly
 set schoolview [ttk::treeview $schoolframe.crew.view -yscrollcommand [list $schoolframe.crew.scrolly set]]
 $schoolview heading #0 -text {Crew member}
 grid $schoolview -sticky nwes
@@ -31,6 +34,7 @@ grid [ttk::scrollbar $schoolframe.crew.scrolly -orient vertical -command [list $
 ::autoscroll::autoscroll $schoolframe.crew.scrolly
 # Skills list
 set schoolskillsframe [ttk::frame $schoolframe.skills]
+SetScrollbarBindings $schoolskillsframe .gameframe.paned.schoolframe.scrolly
 set schoolskillsview [ttk::treeview $schoolskillsframe.view -show headings -columns [list name price] -yscrollcommand [list $schoolskillsframe.scrolly set]]
 $schoolskillsview heading name -text {Name}
 $schoolskillsview column name -width 200
@@ -41,5 +45,6 @@ grid [ttk::scrollbar $schoolskillsframe.scrolly -orient vertical -command [list 
 ::autoscroll::autoscroll $schoolskillsframe.scrolly
 # Skills options
 grid [ttk::label $schoolskillsframe.money]
+SetScrollbarBindings $schoolskillsframe.money .gameframe.paned.schoolframe.scrolly
 grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command TrainSkill]
 grid $schoolskillsframe -row 0 -column 1 -sticky nwes
