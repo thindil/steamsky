@@ -41,3 +41,4 @@ bind $sinstall.options.modules <<ComboboxSelected>> {ShowShipyard [$sinstall.opt
 grid [ttk::entry $sinstall.options.search -validate key -validatecommand {ShowShipyard [$sinstall.options.modules current] %P}] -row 0 -column 2
 # Remove modules
 set sremove [ttk::frame $shipyardframe.remove]
+SetScrollbarBindings $sremove .gameframe.paned.shipyardframe.scrolly
