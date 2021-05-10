@@ -396,9 +396,10 @@ package body Combat.UI is
          ComboBox := Get_Widget(Frame & ".gunorder" & To_String(GunIndex));
          if Winfo_Get(ComboBox, "exists") = "0" then
             ComboBox :=
-               Create
-                  (Frame & ".gunorder" & To_String(GunIndex),
-               "-values [list" & To_String(GunnerOrders) & "] -state readonly");
+              Create
+                (Frame & ".gunorder" & To_String(GunIndex),
+                 "-values [list" & To_String(GunnerOrders) &
+                 "] -state readonly");
          end if;
          Current(ComboBox, Natural'Image(Guns(I)(2) - 1));
          if Has_Gunner then
@@ -879,6 +880,10 @@ package body Combat.UI is
            (ProgressBar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx 5");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & ProgressBar &
+            " $combatframe.right.scrolly");
          OrderName :=
            To_Unbounded_String(Crew_Orders'Image(Enemy.Ship.Crew(I).Order));
          Replace_Slice
@@ -894,6 +899,9 @@ package body Combat.UI is
            (Label,
             "-column 2 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx {0 5}");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & Label & " $combatframe.right.scrolly");
       end loop Show_Enemy_Crew_Loop;
       Tcl_Eval(Get_Context, "update");
       CombatCanvas := Get_Widget(FrameName & ".right.canvas");
@@ -940,6 +948,10 @@ package body Combat.UI is
            (ProgressBar,
             "-column 1 -row" & Positive'Image(Crew_Container.To_Index(I)) &
             " -padx 5");
+         Tcl_Eval
+           (Get_Context,
+            "SetScrollbarBindings " & ProgressBar &
+            " $combatframe.left.scrolly");
          ComboBox :=
            Create
              (Frame & ".order" &
