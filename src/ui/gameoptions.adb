@@ -474,11 +474,11 @@ package body GameOptions is
       pragma Unreferenced(ClientData, Argc);
       RootName: constant String :=
         ".gameframe.paned.optionsframe.canvas.options";
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(RootName & ".general.speed", Interp);
       KeyEntry: Ttk_Entry;
       KeysFile: File_Type;
       MapView: Tk_Text;
+      ThemeComboBox: constant Ttk_ComboBox :=
+        Get_Widget(RootName & ".interface.theme", Interp);
       function Get_Spinbox_Value(SpinBox_Name: String) return Natural is
          SpinBox: constant Ttk_SpinBox :=
            Get_Widget(RootName & SpinBox_Name, Interp);
@@ -492,12 +492,18 @@ package body GameOptions is
          end if;
          return False;
       end Get_Checkbox_Value;
+      function Get_Combobox_Value(ComboBox_Name: String) return Natural is
+         ComboBox: constant Ttk_ComboBox :=
+           Get_Widget(RootName & ComboBox_Name, Interp);
+      begin
+         return Natural'Value(Current(ComboBox));
+      end Get_Combobox_Value;
    begin
       configure(Close_Button, "-command ShowSkyMap");
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       Game_Settings.Auto_Rest := Get_Checkbox_Value(".general.autorest");
       Game_Settings.Undock_Speed :=
-        ShipSpeed'Val(Natural'Value(Current(ComboBox)) + 1);
+        ShipSpeed'Val(Get_Combobox_Value(".general.speed") + 1);
       Game_Settings.Auto_Center := Get_Checkbox_Value(".general.autocenter");
       Game_Settings.Auto_Return := Get_Checkbox_Value(".general.autoreturn");
       Game_Settings.Auto_Finish := Get_Checkbox_Value(".general.autofinish");
@@ -508,23 +514,19 @@ package body GameOptions is
       Game_Settings.Low_Fuel := Get_Spinbox_Value(".general.fuel");
       Game_Settings.Low_Drinks := Get_Spinbox_Value(".general.drinks");
       Game_Settings.Low_Food := Get_Spinbox_Value(".general.food");
-      ComboBox.Name := New_String(RootName & ".general.automovestop");
       Game_Settings.Auto_Move_Stop :=
-        Auto_Move_Break'Val(Natural'Value(Current(ComboBox)));
+        Auto_Move_Break'Val(Get_Combobox_Value(".general.automovestop"));
       Game_Settings.Messages_Limit :=
         Get_Spinbox_Value(".general.messageslimit");
       Game_Settings.Saved_Messages :=
         Get_Spinbox_Value(".general.savedmessages");
-      ComboBox.Name := New_String(RootName & ".general.messagesorder");
       Game_Settings.Messages_Order :=
-        Messages_Order_Type'Val(Natural'Value(Current(ComboBox)));
-      ComboBox.Name := New_String(RootName & ".general.autosave");
+        Messages_Order_Type'Val(Get_Combobox_Value(".general.messagesorder"));
       Game_Settings.Auto_Save :=
-        Auto_Save_Type'Val(Natural'Value(Current(ComboBox)));
-      ComboBox.Name := New_String(RootName & ".interface.theme");
+        Auto_Save_Type'Val(Get_Combobox_Value(".general.autosave"));
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_List(I).Name = Get(ComboBox) then
+         if Themes_List(I).Name = Get(ThemeComboBox) then
             Game_Settings.Interface_Theme :=
               To_Unbounded_String(Themes_Container.Key(I));
             exit Set_Theme_Loop;
