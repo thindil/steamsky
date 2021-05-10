@@ -72,6 +72,16 @@ package body MainMenu is
    Data_Error: Unbounded_String;
    -- ****
 
+   -- ****if* MainMenu/Get_Data_Error
+   -- FUNCTION
+   -- Get the error message from loading the game data
+   -- SOURCE
+   function Get_Data_Error return String is
+      -- ****
+   begin
+      return To_String(Data_Error);
+   end Get_Data_Error;
+
    procedure Create_Main_Menu is
       Ui_Directory: constant String :=
         To_String(Source => Data_Directory) & "ui" & Dir_Separator;
@@ -153,7 +163,7 @@ package body MainMenu is
         (Widgt => Version_Label,
          options => "-text {" & Game_Version & " development}");
       Data_Error := To_Unbounded_String(Source => Load_Game_Data);
-      if Data_Error /= Null_Unbounded_String then
+      if Get_Data_Error'Length > 0 then
          Show_Main_Menu;
          return;
       end if;
@@ -340,13 +350,13 @@ package body MainMenu is
       else
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
       end if;
-      if Data_Error /= Null_Unbounded_String then
+      if Get_Data_Error'Length > 0 then
          Button.Name := New_String(".mainmenu.newgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          Button.Name := New_String(".mainmenu.loadgame");
          Tcl.Tk.Ada.Pack.Pack_Forget(Button);
          ShowMessage
-           ("Can't load game data files. Error: " & To_String(Data_Error),
+           ("Can't load game data files. Error: " & Get_Data_Error,
             ".mainmenu");
          return;
       end if;
