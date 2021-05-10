@@ -101,10 +101,15 @@ set combatcanvas [canvas $combatframe.left.canvas -yscrollcommand [list $combatf
 pack [ttk::scrollbar $combatframe.left.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.left.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.left.scrolly
 ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.left.scrolly
 grid [ttk::label $combatcanvas.frame.name -text {Name}]
+SetScrollbarBindings $combatcanvas.frame.name $combatframe.left.scrolly
 grid [ttk::label $combatcanvas.frame.health -text {Health}] -row 0 -column 1
+SetScrollbarBindings $combatcanvas.frame.health $combatframe.left.scrolly
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
+SetScrollbarBindings $combatcanvas.frame.order $combatframe.left.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.left.scrolly
 ::autoscroll::autoscroll $combatframe.left.scrollx
@@ -114,10 +119,15 @@ set combatcanvas [canvas $combatframe.right.canvas -yscrollcommand [list $combat
 pack [ttk::scrollbar $combatframe.right.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
 pack [ttk::scrollbar $combatframe.right.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
+SetScrollbarBindings $combatcanvas $combatframe.right.scrolly
 ttk::frame $combatcanvas.frame
+SetScrollbarBindings $combatcanvas.frame $combatframe.right.scrolly
 grid [ttk::label $combatcanvas.frame.name -text {Name}]
+SetScrollbarBindings $combatcanvas.frame.name $combatframe.right.scrolly
 grid [ttk::label $combatcanvas.frame.health -text {Health}] -row 0 -column 1
+SetScrollbarBindings $combatcanvas.frame.health $combatframe.right.scrolly
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
+SetScrollbarBindings $combatcanvas.frame.order $combatframe.right.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.right.scrolly
 ::autoscroll::autoscroll $combatframe.right.scrollx
