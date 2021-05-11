@@ -50,7 +50,7 @@ package body Knowledge.Missions is
 
    -- ****if* KMissions/KMissions.Show_Missions_Menu_Command
    -- FUNCTION
-   -- Show the menu with available the selected event options
+   -- Show the menu with available the selected mission options
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
