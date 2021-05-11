@@ -41,6 +41,7 @@ $messagesview2 tag configure gray -foreground {dim gray}
 pack [ttk::scrollbar $messagesframe.list.scrolly -orient vertical -command [list $messagesview2 yview]] -side right -fill y
 pack $messagesview2 -side top -fill both -expand true
 ::autoscroll::autoscroll $messagesframe.list.scrolly
+SetScrollbarBindings $messagescanvas $messagesframe.list.scrolly
 bind $messagescanvas <Configure> {
    $messagesview2 configure -height [expr [winfo height $messagescanvas] / [font metrics InterfaceFont -linespace] - 1]
 }
