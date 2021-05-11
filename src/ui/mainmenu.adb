@@ -79,7 +79,7 @@ package body MainMenu is
    function Get_Data_Error return String is
       -- ****
    begin
-      return To_String(Data_Error);
+      return To_String(Source => Data_Error);
    end Get_Data_Error;
 
    procedure Create_Main_Menu is
@@ -345,21 +345,24 @@ package body MainMenu is
       end if;
       End_Search(Search => Files);
       Button.Name := New_String(Str => ".mainmenu.halloffame");
-      if Exists(To_String(Save_Directory) & "halloffame.dat") then
-         Tcl.Tk.Ada.Pack.Pack(Button, "-before .mainmenu.news");
+      if Exists
+          (Name => To_String(Source => Save_Directory) & "halloffame.dat") then
+         Tcl.Tk.Ada.Pack.Pack
+           (Slave => Button, Options => "-before .mainmenu.news");
       else
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
       end if;
       if Get_Data_Error'Length > 0 then
-         Button.Name := New_String(".mainmenu.newgame");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-         Button.Name := New_String(".mainmenu.loadgame");
-         Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+         Button.Name := New_String(Str => ".mainmenu.newgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
+         Button.Name := New_String(Str => ".mainmenu.loadgame");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
          ShowMessage
-           ("Can't load game data files. Error: " & Get_Data_Error,
-            ".mainmenu");
+           (Text => "Can't load game data files. Error: " & Get_Data_Error,
+            ParentFrame => ".mainmenu");
          return;
       end if;
+      Check_Permissions_Block :
       declare
          Test_File: File_Type;
       begin
@@ -368,15 +371,17 @@ package body MainMenu is
             Name =>
               To_String(Source => Save_Directory) & Dir_Separator &
               "test.txt");
-         Close(Test_File);
+         Close(File => Test_File);
          Delete_File
-           (To_String(Source => Save_Directory) & Dir_Separator & "test.txt");
+           (Name =>
+              To_String(Source => Save_Directory) & Dir_Separator &
+              "test.txt");
       exception
          when Ada.Text_IO.Use_Error =>
-            Button.Name := New_String(".mainmenu.newgame");
-            Tcl.Tk.Ada.Pack.Pack_Forget(Button);
-            Button.Name := New_String(".mainmenu.loadgame");
-            Tcl.Tk.Ada.Pack.Pack_Forget(Button);
+            Button.Name := New_String(Str => ".mainmenu.newgame");
+            Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
+            Button.Name := New_String(Str => ".mainmenu.loadgame");
+            Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
             if Dir_Separator = '/' then
                ShowMessage
                  ("You don't have permissions to write to directory """ &
@@ -390,7 +395,7 @@ package body MainMenu is
                   """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
                   ".mainmenu");
             end if;
-      end;
+      end Check_Permissions_Block;
    end Show_Main_Menu;
 
 end MainMenu;
