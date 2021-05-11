@@ -80,6 +80,7 @@ package body Knowledge.Events is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       EventMenu: Tk_Menu := Get_Widget(".eventslistmenu", Interp);
+      EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       if Winfo_Get(EventMenu, "exists") = "0" then
          EventMenu := Create(".eventslistmenu", "-tearoff false");
@@ -87,8 +88,9 @@ package body Knowledge.Events is
       Delete(EventMenu, "0", "end");
       Menu.Add
         (EventMenu, "command",
-         "-label {Show the event on map} -command {ShowEvent " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Show the event on map} -command {ShowOnMap" &
+         Map_X_Range'Image(Events_List(EventIndex).SkyX) &
+         Map_Y_Range'Image(Events_List(EventIndex).SkyY) & "}");
       Menu.Add
         (EventMenu, "command",
          "-label {Set the event as destination for the ship} -command {SetEvent " &
@@ -102,40 +104,6 @@ package body Knowledge.Events is
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Events_Menu_Command;
-
-   -- ****if* KEvents/KEvents.Show_Event_Command
-   -- FUNCTION
-   -- Show the selected event on map
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowEvent eventidex
-   -- EventIndex is the index of the event to show
-   -- SOURCE
-   function Show_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Event_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      EventIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      CenterX := Events_List(EventIndex).SkyX;
-      CenterY := Events_List(EventIndex).SkyY;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
-   end Show_Event_Command;
 
    -- ****if* KEvents/KEvents.Set_Event_Command
    -- FUNCTION
@@ -275,7 +243,6 @@ package body Knowledge.Events is
    procedure AddCommands is
    begin
       AddCommand("ShowEventMenu", Show_Events_Menu_Command'Access);
-      AddCommand("ShowEvent", Show_Event_Command'Access);
       AddCommand("SetEvent", Set_Event_Command'Access);
       AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
       AddCommand("ShowEvents", Show_Events_Command'Access);

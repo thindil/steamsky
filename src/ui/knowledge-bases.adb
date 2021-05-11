@@ -44,6 +44,7 @@ with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with CoreUI; use CoreUI;
 with Factions; use Factions;
+with Game; use Game;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
@@ -314,8 +315,9 @@ package body Knowledge.Bases is
       Delete(BaseMenu, "0", "end");
       Menu.Add
         (BaseMenu, "command",
-         "-label {Show the base on map} -command {ShowBase " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Show the base on map} -command {ShowOnMap" &
+         Map_X_Range'Image(SkyBases(BaseIndex).SkyX) &
+         Map_Y_Range'Image(SkyBases(BaseIndex).SkyY) & "}");
       Menu.Add
         (BaseMenu, "command",
          "-label {Set the base as destination for the ship} -command {SetBase2 " &
@@ -331,40 +333,6 @@ package body Knowledge.Bases is
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Bases_Menu_Command;
-
-   -- ****if* KBases/KBases.Show_Base_Command
-   -- FUNCTION
-   -- Show the selected base on map
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowBase baseidex
-   -- BaseIndex is the index of the base to show
-   -- SOURCE
-   function Show_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      CenterX := SkyBases(BaseIndex).SkyX;
-      CenterY := SkyBases(BaseIndex).SkyY;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
-   end Show_Base_Command;
 
    -- ****if* KBases/KBases.Set_Base_Command
    -- FUNCTION
@@ -558,7 +526,6 @@ package body Knowledge.Bases is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
-      AddCommand("ShowBase", Show_Base_Command'Access);
       AddCommand("SetBase2", Set_Base_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
    end AddCommands;
