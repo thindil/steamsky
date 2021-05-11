@@ -98,7 +98,7 @@ package body Knowledge.Bases is
 
    procedure UpdateBasesList(BaseName: String := ""; Page: Positive := 1) is
       BasesCanvas: constant Tk_Canvas :=
-        Get_Widget(".gameframe.paned.knowledgeframe.bases.canvas");
+        Get_Widget(Main_Paned & ".knowledgeframe.bases.canvas");
       BasesFrame: constant Ttk_Frame := Get_Widget(BasesCanvas & ".frame");
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(BasesFrame & ".options.search");
@@ -174,23 +174,13 @@ package body Knowledge.Bases is
             "The distance to the base", "ShowBasesMenu" & Positive'Image(I),
             2);
          if SkyBases(I).Visited.Year > 0 then
-            if SkyBases(I).Population = 0 then
-               AddButton
-                 (BasesTable, "empty", "The population size of the base",
-                  "ShowBasesMenu" & Positive'Image(I), 3);
-            elsif SkyBases(I).Population < 150 then
-               AddButton
-                 (BasesTable, "small", "The population size of the base",
-                  "ShowBasesMenu" & Positive'Image(I), 3);
-            elsif SkyBases(I).Population < 300 then
-               AddButton
-                 (BasesTable, "medium", "The population size of the base",
-                  "ShowBasesMenu" & Positive'Image(I), 3);
-            else
-               AddButton
-                 (BasesTable, "large", "The population size of the base",
-                  "ShowBasesMenu" & Positive'Image(I), 3);
-            end if;
+            AddButton
+              (BasesTable,
+               (case SkyBases(I).Population is when 0 => "empty",
+                  when 1 .. 150 => "small", when 151 .. 299 => "medium",
+                  when others => "large"),
+               "The population size of the base",
+               "ShowBasesMenu" & Positive'Image(I), 3);
             AddButton
               (BasesTable, To_Lower(Bases_Size'Image(SkyBases(I).Size)),
                "The size of the base", "ShowBasesMenu" & Positive'Image(I), 4);
@@ -450,7 +440,6 @@ package body Knowledge.Bases is
            "-text Close -command {CloseDialog " & BaseDialog & "}");
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       procedure SetReputationText(ReputationText: String) is
          ReputationBar: constant Ttk_Frame :=
            Create
@@ -490,9 +479,8 @@ package body Knowledge.Bases is
          Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w -padx {5 0}");
       end SetReputationText;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       BaseInfo :=
         To_Unbounded_String
           ("Coordinates X:" & Positive'Image(SkyBases(BaseIndex).SkyX) &
