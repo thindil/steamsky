@@ -17,12 +17,16 @@ ttk::frame .gameframe.paned.lootframe
 set lootcanvas [canvas .gameframe.paned.lootframe.canvas -yscrollcommand [list .gameframe.paned.lootframe.scrolly set] -xscrollcommand [list .gameframe.paned.lootframe.scrollx set]]
 pack [ttk::scrollbar .gameframe.paned.lootframe.scrolly -orient vertical -command [list $lootcanvas yview]] -side right -fill y
 pack $lootcanvas -side top -fill both
+SetScrollbarBindings $lootcanvas .gameframe.paned.lootframe.scrolly
 pack [ttk::scrollbar .gameframe.paned.lootframe.scrollx -orient horizontal -command [list $lootcanvas xview]] -fill x
 ::autoscroll::autoscroll .gameframe.paned.lootframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.lootframe.scrollx
 set lootframe [ttk::frame $lootcanvas.loot]
+SetScrollbarBindings $lootframe .gameframe.paned.lootframe.scrolly
 # Type of items to show
 grid [ttk::frame $lootframe.options] -sticky w -padx 5 -pady 5
+SetScrollbarBindings $lootframe.options .gameframe.paned.lootframe.scrolly
 grid [ttk::label $lootframe.options.typelabel -text {Type:}]
+SetScrollbarBindings $lootframe.options.typelabel .gameframe.paned.lootframe.scrolly
 grid [ttk::combobox $lootframe.options.type -state readonly] -column 1 -row 0
 bind $lootframe.options.type <<ComboboxSelected>> {ShowLoot [$lootframe.options.type get]}
