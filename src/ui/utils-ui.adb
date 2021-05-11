@@ -46,6 +46,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Events; use Events;
 with Factions; use Factions;
@@ -722,6 +723,40 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
+   -- ****if* UUI/UUI.Show_On_Map_Command
+   -- FUNCTION
+   -- Show the selected point on map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOnMap X Y
+   -- X is the x coordinate of point to show, Y is the y coordinate of point
+   -- to show
+   -- SOURCE
+   function Show_On_Map_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_On_Map_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+   begin
+      CenterX := Positive'Value(CArgv.Arg(Argv, 1));
+      CenterY := Positive'Value(CArgv.Arg(Argv, 2));
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      return TCL_OK;
+   end Show_On_Map_Command;
+
    procedure AddCommands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -734,6 +769,7 @@ package body Utils.UI is
       AddCommand("ProcessQuestion", Process_Question_Command'Access);
       AddCommand
         ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
+      AddCommand("ShowOnMap", Show_On_Map_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
