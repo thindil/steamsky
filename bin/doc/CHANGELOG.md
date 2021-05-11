@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Option to set which mouse button use for showing in game menus
 - Ability to set own fonts in the game themes
+- Moving in game screens with the mouse wheel
 
 ### Changed
 - Updated README.md
