@@ -17,7 +17,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -35,7 +35,6 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
-with CoreUI; use CoreUI;
 with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -256,10 +255,10 @@ package body Missions.UI is
    -- FUNCTION
    -- Show mission on map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -274,7 +273,7 @@ package body Missions.UI is
    function Show_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Argc);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
           (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
@@ -282,17 +281,13 @@ package body Missions.UI is
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
    begin
-      if BaseIndex = 0 then
-         CenterX := AcceptedMissions(MissionIndex).TargetX;
-         CenterY := AcceptedMissions(MissionIndex).TargetY;
-      else
-         CenterX := SkyBases(BaseIndex).Missions(MissionIndex).TargetX;
-         CenterY := SkyBases(BaseIndex).Missions(MissionIndex).TargetY;
-      end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
+      return Show_On_Map_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) &
+           Map_X_Range'Image
+             (SkyBases(BaseIndex).Missions(MissionIndex).TargetX) &
+           Map_Y_Range'Image
+             (SkyBases(BaseIndex).Missions(MissionIndex).TargetY));
    end Show_Mission_Command;
 
    procedure RefreshMissionsList(List: Mission_Container.Vector) is

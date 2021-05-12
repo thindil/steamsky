@@ -67,6 +67,27 @@ package Utils.UI is
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
+   -- ****if* UUI/UUI.Show_On_Map_Command
+   -- FUNCTION
+   -- Show the selected point on map
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowOnMap X Y
+   -- X is the x coordinate of point to show, Y is the y coordinate of point
+   -- to show
+   -- SOURCE
+   function Show_On_Map_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
    -- ****f* UUI/UUI.AddCommand
    -- FUNCTION
    -- Add the selected command to Tcl interpreter
