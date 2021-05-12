@@ -17,7 +17,7 @@ with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
@@ -193,10 +193,10 @@ package body Knowledge.Stories is
    -- FUNCTION
    -- Show the current story event on map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -211,16 +211,14 @@ package body Knowledge.Stories is
    function Show_Story_Location_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
-      CenterX := NewX;
-      CenterY := NewY;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
+      return Show_On_Map_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
+           Positive'Image(NewY));
    end Show_Story_Location_Command;
 
    -- ****o* KStories/KStories.Set_Story_Command
