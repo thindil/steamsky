@@ -384,16 +384,18 @@ package body MainMenu is
             Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
             if Dir_Separator = '/' then
                ShowMessage
-                 ("You don't have permissions to write to directory """ &
-                  To_String(Source => Save_Directory) &
-                  """ which is set as directory for saved games. Please select different directory.",
-                  ".mainmenu");
+                 (Text =>
+                    "You don't have permissions to write to directory """ &
+                    To_String(Source => Save_Directory) &
+                    """ which is set as directory for saved games. Please select different directory.",
+                  ParentFrame => ".mainmenu");
             else
                ShowMessage
-                 ("You don't have permissions to write to directory """ &
-                  To_String(Source => Save_Directory) &
-                  """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
-                  ".mainmenu");
+                 (Text =>
+                    "You don't have permissions to write to directory """ &
+                    To_String(Source => Save_Directory) &
+                    """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
+                  ParentFrame => ".mainmenu");
             end if;
       end Check_Permissions_Block;
    end Show_Main_Menu;
