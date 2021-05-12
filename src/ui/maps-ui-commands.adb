@@ -389,7 +389,7 @@ package body Maps.UI.Commands is
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
-   -- ****o* MapCommands/MapCommands.Set_Destination_Command
+   -- ****o* MapCommands/MapCommands.Set_Ship_Destination_Command
    -- FUNCTION
    -- Set current map cell as destination for the player's ship
    -- PARAMETERS
@@ -402,13 +402,13 @@ package body Maps.UI.Commands is
    -- COMMANDS
    -- SetDestination
    -- SOURCE
-   function Set_Destination_Command
+   function Set_Ship_Destination_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Set_Destination_Command
+   function Set_Ship_Destination_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
@@ -424,7 +424,7 @@ package body Maps.UI.Commands is
       DrawMap;
       UpdateMoveButtons;
       return TCL_OK;
-   end Set_Destination_Command;
+   end Set_Ship_Destination_Command;
 
    -- ****o* MapCommands/MapCommands.Move_Map_Command
    -- FUNCTION
@@ -1084,7 +1084,7 @@ package body Maps.UI.Commands is
       AddCommand("UpdateMapInfo", Update_Map_Info_Command'Access);
       AddCommand("MoveMapInfo", Move_Map_Info_Command'Access);
       AddCommand("ShowDestinationMenu", Show_Destination_Menu_Command'Access);
-      AddCommand("SetDestination", Set_Destination_Command'Access);
+      AddCommand("SetDestination", Set_Ship_Destination_Command'Access);
       AddCommand("MoveMap", Move_Map_Command'Access);
       AddCommand("ZoomMap", Zoom_Map_Command'Access);
       AddCommand("MoveShip", Move_Ship_Command'Access);
