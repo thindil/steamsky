@@ -18,24 +18,18 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with CArgv; use CArgv;
-with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
-with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Items; use Items;
-with Maps; use Maps;
-with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Ships; use Ships;
 with Stories; use Stories;
 with Utils.UI; use Utils.UI;
@@ -225,10 +219,10 @@ package body Knowledge.Stories is
    -- FUNCTION
    -- Set the current story event as the player's ship destination
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -243,22 +237,14 @@ package body Knowledge.Stories is
    function Set_Story_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
-      if NewX = PlayerShip.SkyX and NewY = PlayerShip.SkyY then
-         ShowMessage("You are at this story location now.");
-         return TCL_OK;
-      end if;
-      PlayerShip.DestinationX := NewX;
-      PlayerShip.DestinationY := NewY;
-      AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
+      return Set_Destination_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
+           Positive'Image(NewY));
    end Set_Story_Command;
 
    procedure AddCommands is

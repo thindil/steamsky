@@ -736,27 +736,6 @@ package body Utils.UI is
       return TCL_OK;
    end Show_On_Map_Command;
 
-   -- ****if* UUI/UUI.Set_Destination_Command
-   -- FUNCTION
-   -- Set the selected map point as the player's ship destination
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetDestination X Y
-   -- X is the x coordinate of point to set, Y is the y coordinate of point
-   -- to set
-   -- SOURCE
-   function Set_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
    function Set_Destination_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is

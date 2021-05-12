@@ -67,7 +67,7 @@ package Utils.UI is
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
-   -- ****if* UUI/UUI.Show_On_Map_Command
+   -- ****o* UUI/UUI.Show_On_Map_Command
    -- FUNCTION
    -- Show the selected point on map
    -- PARAMETERS
@@ -88,13 +88,34 @@ package Utils.UI is
       Convention => C;
       -- ****
 
-   -- ****f* UUI/UUI.AddCommand
-   -- FUNCTION
-   -- Add the selected command to Tcl interpreter
-   -- PARAMETERS
-   -- Name       - The name of the command which will be used in Tcl
-   -- AdaCommand - Ada function which will be invoked
-   -- SOURCE
+      -- ****o* UUI/UUI.Set_Destination_Command
+      -- FUNCTION
+      -- Set the selected map point as the player's ship destination
+      -- PARAMETERS
+      -- ClientData - Custom data send to the command. Unused
+      -- Interp     - Tcl interpreter in which command was executed.
+      -- Argc       - Number of arguments passed to the command. Unused
+      -- Argv       - Values of arguments passed to the command.
+      -- RESULT
+      -- This function always return TCL_OK
+      -- COMMANDS
+      -- SetDestination X Y
+      -- X is the x coordinate of point to set, Y is the y coordinate of point
+      -- to set
+      -- SOURCE
+   function Set_Destination_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+      -- ****f* UUI/UUI.AddCommand
+      -- FUNCTION
+      -- Add the selected command to Tcl interpreter
+      -- PARAMETERS
+      -- Name       - The name of the command which will be used in Tcl
+      -- AdaCommand - Ada function which will be invoked
+      -- SOURCE
    procedure AddCommand
      (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) with
       Pre => Name'Length > 0;
