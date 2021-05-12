@@ -250,7 +250,7 @@ package body Knowledge.Events is
 
    procedure UpdateEventsList(Page: Positive := 1) is
       EventsCanvas: constant Tk_Canvas :=
-        Get_Widget(".gameframe.paned.knowledgeframe.events.canvas");
+        Get_Widget(Main_Paned & ".knowledgeframe.events.canvas");
       EventsFrame: constant Ttk_Frame := Get_Widget(EventsCanvas & ".frame");
       Tokens: Slice_Set;
       Rows: Natural := 0;
@@ -278,7 +278,7 @@ package body Knowledge.Events is
              (Widget_Image(EventsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
-              Get_Widget(".gameframe.paned.knowledgeframe.events.scrolly"));
+              Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"));
          Rows := 0;
          Load_Known_Events_Loop :
          for Event of Events_List loop
