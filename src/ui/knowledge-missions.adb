@@ -32,14 +32,11 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
-with CoreUI; use CoreUI;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
-with Messages; use Messages;
 with Missions; use Missions;
 with Ships; use Ships;
 with Table; use Table;
@@ -86,54 +83,14 @@ package body Knowledge.Missions is
          Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY) & "}");
       Menu.Add
         (EventMenu, "command",
-         "-label {Set the mission as destination for the ship} -command {SetMission2 " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Set the mission as destination for the ship} -command {SetDestination2 " &
+         Map_X_Range'Image(AcceptedMissions(MissionIndex).TargetX) &
+         Map_Y_Range'Image(AcceptedMissions(MissionIndex).TargetY) & "}");
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Missions_Menu_Command;
-
-   -- ****if* KMissions/KMissions.Set_Mission_Command
-   -- FUNCTION
-   -- Set the selected mission as the player's ship destination
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetMission missionindex
-   -- Missionindex is the index of the mission to show
-   -- SOURCE
-   function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      if AcceptedMissions(MissionIndex).TargetX = PlayerShip.SkyX and
-        AcceptedMissions(MissionIndex).TargetY = PlayerShip.SkyY then
-         ShowMessage("You are at this mission now.");
-         return TCL_OK;
-      end if;
-      PlayerShip.DestinationX := AcceptedMissions(MissionIndex).TargetX;
-      PlayerShip.DestinationY := AcceptedMissions(MissionIndex).TargetY;
-      AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
-   end Set_Mission_Command;
 
    -- ****o* KMissions/KMissions.Show_Missions_Command
    -- FUNCTION
@@ -172,7 +129,6 @@ package body Knowledge.Missions is
    procedure AddCommands is
    begin
       AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
-      AddCommand("SetMission2", Set_Mission_Command'Access);
       AddCommand("ShowMissions", Show_Missions_Command'Access);
    end AddCommands;
 

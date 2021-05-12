@@ -46,7 +46,6 @@ with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Game; use Game;
 with Maps; use Maps;
-with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Ships; use Ships;
 with Table; use Table;
@@ -320,8 +319,9 @@ package body Knowledge.Bases is
          Map_Y_Range'Image(SkyBases(BaseIndex).SkyY) & "}");
       Menu.Add
         (BaseMenu, "command",
-         "-label {Set the base as destination for the ship} -command {SetBase2 " &
-         CArgv.Arg(Argv, 1) & "}");
+         "-label {Set the base as destination for the ship} -command {SetDestination2 " &
+         Map_X_Range'Image(SkyBases(BaseIndex).SkyX) &
+         Map_Y_Range'Image(SkyBases(BaseIndex).SkyY) & "}");
       if SkyBases(BaseIndex).Visited.Year > 0 then
          Menu.Add
            (BaseMenu, "command",
@@ -333,47 +333,6 @@ package body Knowledge.Bases is
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Bases_Menu_Command;
-
-   -- ****if* KBases/KBases.Set_Base_Command
-   -- FUNCTION
-   -- Set the selected base as the player's ship destination
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SetBase2 baseidex
-   -- BaseIndex is the index of the base to show
-   -- SOURCE
-   function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Set_Base_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-   begin
-      if SkyBases(BaseIndex).SkyX = PlayerShip.SkyX and
-        SkyBases(BaseIndex).SkyY = PlayerShip.SkyY then
-         ShowMessage("You are at this base now.");
-         return TCL_OK;
-      end if;
-      PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
-      PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
-      AddMessage
-        ("You set the travel destination for your ship.", OrderMessage);
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
-      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-      return TCL_OK;
-   end Set_Base_Command;
 
    -- ****o* KBases/KBases.Show_Base_Info_Command
    -- FUNCTION
@@ -526,7 +485,6 @@ package body Knowledge.Bases is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
-      AddCommand("SetBase2", Set_Base_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
    end AddCommands;
 
