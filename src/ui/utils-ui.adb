@@ -723,27 +723,6 @@ package body Utils.UI is
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
-   -- ****if* UUI/UUI.Show_On_Map_Command
-   -- FUNCTION
-   -- Show the selected point on map
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowOnMap X Y
-   -- X is the x coordinate of point to show, Y is the y coordinate of point
-   -- to show
-   -- SOURCE
-   function Show_On_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
    function Show_On_Map_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
@@ -756,6 +735,47 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       return TCL_OK;
    end Show_On_Map_Command;
+
+   -- ****if* UUI/UUI.Set_Destination_Command
+   -- FUNCTION
+   -- Set the selected map point as the player's ship destination
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetDestination X Y
+   -- X is the x coordinate of point to set, Y is the y coordinate of point
+   -- to set
+   -- SOURCE
+   function Set_Destination_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_Destination_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+   begin
+      if Positive'Value(CArgv.Arg(Argv, 1)) = PlayerShip.SkyX and
+        Positive'Value(CArgv.Arg(Argv, 2)) = PlayerShip.SkyY then
+         ShowMessage("You are at this location now.");
+         return TCL_OK;
+      end if;
+      PlayerShip.DestinationX := Positive'Value(CArgv.Arg(Argv, 1));
+      PlayerShip.DestinationY := Positive'Value(CArgv.Arg(Argv, 2));
+      AddMessage
+        ("You set the travel destination for your ship.", OrderMessage);
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+      Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+      Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+      return TCL_OK;
+   end Set_Destination_Command;
 
    procedure AddCommands is
    begin
@@ -770,6 +790,7 @@ package body Utils.UI is
       AddCommand
         ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
       AddCommand("ShowOnMap", Show_On_Map_Command'Access);
+      AddCommand("SetDestination2", Set_Destination_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
