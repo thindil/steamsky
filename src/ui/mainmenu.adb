@@ -13,7 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Containers; use Ada.Containers;
+with Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -24,36 +24,34 @@ with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Dialogs; use Tcl.Tk.Ada.Dialogs;
-with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
+with Tcl.Tk.Ada.Dialogs;
+with Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Font;
-with Tcl.Tk.Ada.Image.Photo; use Tcl.Tk.Ada.Image.Photo;
+with Tcl.Tk.Ada.Image.Photo;
 with Tcl.Tk.Ada.Pack;
-with Tcl.Tk.Ada.TtkStyle; use Tcl.Tk.Ada.TtkStyle;
+with Tcl.Tk.Ada.TtkStyle;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
+with Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
-use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
-with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
-with BasesTypes; use BasesTypes;
-with Careers; use Careers;
+with Tcl.Tklib.Ada.Tooltip;
+with BasesTypes;
+with Careers;
 with Config; use Config;
-with Factions; use Factions;
+with Factions;
 with Game; use Game;
 with Goals.UI;
 with MainMenu.Commands;
-with Maps.UI; use Maps.UI;
-with Themes; use Themes;
+with Maps.UI;
+with Themes;
 with Utils.UI; use Utils.UI;
 
 package body MainMenu is
@@ -83,6 +81,22 @@ package body MainMenu is
    end Get_Data_Error;
 
    procedure Create_Main_Menu is
+      use Ada.Containers;
+      use Tcl.Tk.Ada.Dialogs;
+      use Tcl.Tk.Ada.Event;
+      use Tcl.Tk.Ada.Image.Photo;
+      use Tcl.Tk.Ada.TtkStyle;
+      use Tcl.Tk.Ada.Widgets.TtkEntry;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+      use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use Tcl.Tklib.Ada.Tooltip;
+      use BasesTypes;
+      use Careers;
+      use Factions;
+      use Maps.UI;
+      use Themes;
+
       Ui_Directory: constant String :=
         To_String(Source => Data_Directory) & "ui" & Dir_Separator;
       Main_Window: constant Tk_Toplevel :=
