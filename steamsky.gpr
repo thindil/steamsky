@@ -69,7 +69,8 @@ project steamsky is
                   for Default_Switches ("ada") use Release_Switches &
                      "-mwindows";
                when "Unix" =>
-                  for Default_Switches ("ada") use Release_Switches;
+                  for Default_Switches ("ada") use Release_Switches &
+                     "-Wl,-rpath,$ORIGIN/libs";
             end case;
          when "analyze" =>
             for Default_Switches ("ada") use ("-no-pie",
