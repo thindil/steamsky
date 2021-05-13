@@ -19,6 +19,7 @@ with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Directories; use Ada.Directories;
 with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -140,6 +141,11 @@ begin
    LoadThemes;
 
    -- Start Tk
+
+   Ada.Environment_Variables.Set
+     (Name => "TCL_LIBRARY",
+      Value =>
+        Current_Directory & Dir_Separator & "libs" & Dir_Separator & "tcl8.6");
 
    --  Get command-line arguments and put them into C-style "argv"
    --------------------------------------------------------------
