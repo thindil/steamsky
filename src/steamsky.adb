@@ -15,12 +15,12 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Directories; use Ada.Directories;
-with Ada.Command_Line; use Ada.Command_Line;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Command_Line; use Ada.Command_Line;
+with Ada.Directories; use Ada.Directories;
 with Ada.Environment_Variables;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Ada.Text_IO; use Ada.Text_IO;
 with Interfaces.C;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
 with CArgv;
@@ -29,11 +29,11 @@ with Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Config; use Config;
 with ErrorDialog; use ErrorDialog;
 with Game; use Game;
-with Config; use Config;
-with Log; use Log;
 with HallOfFame; use HallOfFame;
+with Log; use Log;
 with MainMenu; use MainMenu;
 with Themes; use Themes;
 
