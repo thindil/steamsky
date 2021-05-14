@@ -28,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Items; use Items;
 with Ships; use Ships;
@@ -50,31 +51,29 @@ package body Knowledge.Stories is
    -- ShowStory
    -- SOURCE
    function Show_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      StoryView: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.knowledgeframe.stories.canvas.frame.view",
-           Interp);
+      FrameName: constant String :=
+        Main_Paned & ".knowledgeframe.stories.canvas.frame";
+      StoryView: constant Tk_Text := Get_Widget(FrameName & ".view", Interp);
       StoryText: Unbounded_String;
       Tokens: Slice_Set;
       Step: Step_Data;
       StoryIndex: Positive;
       StoriesBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.titles",
-           Interp);
-      Button: Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.show",
-           Interp);
+        Get_Widget(FrameName & ".options.titles", Interp);
+      Button: Ttk_Button := Get_Widget(FrameName & ".options.show", Interp);
       Rows: Positive := 1;
       LineWidth: constant Positive :=
         (Positive'Value(Winfo_Get(StoriesBox, "reqwidth")) +
@@ -84,7 +83,7 @@ package body Knowledge.Stories is
       StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
       configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
       Delete(StoryView, "1.0", "end");
-      Story_Steps_Info_Loop :
+      Story_Steps_Info_Loop:
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Append(StoryText, StepText & LF);
          Rows := Rows + (Length(StepText) / LineWidth) + 1;
@@ -95,9 +94,13 @@ package body Knowledge.Stories is
          Rows := Rows + (Length(GetCurrentStoryText & LF) / LineWidth) + 1;
          if CurrentStory.Data /= Null_Unbounded_String then
             Step :=
-              (if CurrentStory.CurrentStep = 0 then
+              (if
+                 CurrentStory.CurrentStep = 0
+               then
                  Stories_List(CurrentStory.Index).StartingStep
-               elsif CurrentStory.CurrentStep > 0 then
+               elsif
+                 CurrentStory.CurrentStep > 0
+               then
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep)
                else Stories_List(CurrentStory.Index).FinalStep);
@@ -107,9 +110,10 @@ package body Knowledge.Stories is
                   if Slice_Count(Tokens) < 2 then
                      Append
                        (StoryText,
-                        "You must travel to base " & CurrentStory.Data &
+                        "You must travel to base " &
+                        CurrentStory.Data &
                         " at X:");
-                     Base_Location_Loop :
+                     Base_Location_Loop:
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
                            Append(StoryText, Positive'Image(SkyBases(I).SkyX));
@@ -127,11 +131,16 @@ package body Knowledge.Stories is
                      "You must find " &
                      ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
                        .Name &
-                     " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
+                     " at X:" &
+                     Slice(Tokens, 1) &
+                     " Y:" &
+                     Slice(Tokens, 2));
                when EXPLORE =>
                   Append
                     (StoryText,
-                     "You must travel to X:" & Slice(Tokens, 1) & " Y:" &
+                     "You must travel to X:" &
+                     Slice(Tokens, 1) &
+                     " Y:" &
                      Slice(Tokens, 2));
                when LOOT =>
                   Append
@@ -152,7 +161,7 @@ package body Knowledge.Stories is
                      end if;
                      Append(StoryText, " ship.");
                   else
-                     Find_Proto_Ship_Loop :
+                     Find_Proto_Ship_Loop:
                      for I in ProtoShips_List.Iterate loop
                         if ProtoShips_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
@@ -197,21 +206,29 @@ package body Knowledge.Stories is
    -- ShowStoryLocation
    -- SOURCE
    function Show_Story_Location_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Location_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
       return Show_On_Map_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
+          (ClientData,
+           Interp,
+           3,
+           CArgv.Empty &
+           CArgv.Arg(Argv, 0) &
+           Positive'Image(NewX) &
            Positive'Image(NewY));
    end Show_Story_Location_Command;
 
@@ -229,21 +246,29 @@ package body Knowledge.Stories is
    -- SetStory
    -- SOURCE
    function Set_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Story_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
       return Set_Destination_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
+          (ClientData,
+           Interp,
+           3,
+           CArgv.Empty &
+           CArgv.Arg(Argv, 0) &
+           Positive'Image(NewX) &
            Positive'Image(NewY));
    end Set_Story_Command;
 
