@@ -31,7 +31,8 @@ package body Ships.Cargo.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_UpdateCargo_87d3a7_53988c
      (Ship: in out ShipRecord;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      ProtoIndex: Unbounded_String := Null_Unbounded_String;
+      Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
    begin
@@ -44,8 +45,13 @@ package body Ships.Cargo.Test_Data.Tests is
               (False,
                "req_sloc(ships-cargo.ads:0):Test_UpdateCargo test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Cargo.UpdateCargo
-        (Ship, ProtoIndex, Amount, Durability, CargoIndex, Price);
+      Gnattest_Generated.GNATtest_Standard.Ships.Cargo.UpdateCargo
+        (Ship,
+         ProtoIndex,
+         Amount,
+         Durability,
+         CargoIndex,
+         Price);
       begin
          pragma Assert(True);
          null;
@@ -60,7 +66,8 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test);
-   procedure Test_UpdateCargo_87d3a7_53988c(Gnattest_T: in out Test) renames
+   procedure Test_UpdateCargo_87d3a7_53988c
+     (Gnattest_T: in out Test) renames
      Test_UpdateCargo_test_updatecargo;
 --  id:2.2/87d3a721378c9b6a/UpdateCargo/1/0/test_updatecargo/
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test) is
@@ -96,12 +103,14 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_FreeCargo_2845af_4f2f60
-     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
+     (Amount: Integer;
+      Ship: ShipRecord := PlayerShip) return Integer is
    begin
       declare
          Test_FreeCargo_2845af_4f2f60_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Cargo.FreeCargo
-             (Amount, Ship);
+           Gnattest_Generated.GNATtest_Standard.Ships.Cargo.FreeCargo
+             (Amount,
+              Ship);
       begin
          return Test_FreeCargo_2845af_4f2f60_Result;
       end;
@@ -110,13 +119,14 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    procedure Test_FreeCargo_test_freecargo(Gnattest_T: in out Test);
-   procedure Test_FreeCargo_2845af_4f2f60(Gnattest_T: in out Test) renames
+   procedure Test_FreeCargo_2845af_4f2f60
+     (Gnattest_T: in out Test) renames
      Test_FreeCargo_test_freecargo;
 --  id:2.2/2845af0c133e2533/FreeCargo/1/0/test_freecargo/
    procedure Test_FreeCargo_test_freecargo(Gnattest_T: in out Test) is
       function FreeCargo
-        (Amount: Integer; Ship: ShipRecord := PlayerShip)
-         return Integer renames
+        (Amount: Integer;
+         Ship: ShipRecord := PlayerShip) return Integer renames
         Wrap_Test_FreeCargo_2845af_4f2f60;
 --  end read only
 
@@ -147,7 +157,7 @@ package body Ships.Cargo.Test_Data.Tests is
       end;
       declare
          Test_GetItemAmount_57499f_15cacd_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Cargo.GetItemAmount
+           Gnattest_Generated.GNATtest_Standard.Ships.Cargo.GetItemAmount
              (ItemType);
       begin
          begin
@@ -166,11 +176,13 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetItemAmount_test_getitemamount(Gnattest_T: in out Test);
-   procedure Test_GetItemAmount_57499f_15cacd(Gnattest_T: in out Test) renames
+   procedure Test_GetItemAmount_57499f_15cacd
+     (Gnattest_T: in out Test) renames
      Test_GetItemAmount_test_getitemamount;
 --  id:2.2/57499f0478a1da15/GetItemAmount/1/0/test_getitemamount/
    procedure Test_GetItemAmount_test_getitemamount(Gnattest_T: in out Test) is
-      function GetItemAmount(ItemType: Unbounded_String) return Natural renames
+      function GetItemAmount
+        (ItemType: Unbounded_String) return Natural renames
         Wrap_Test_GetItemAmount_57499f_15cacd;
 --  end read only
 
@@ -202,7 +214,7 @@ package body Ships.Cargo.Test_Data.Tests is
       end;
       declare
          Test_GetItemsAmount_df8553_e4797c_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Ships.Cargo.GetItemsAmount
+           Gnattest_Generated.GNATtest_Standard.Ships.Cargo.GetItemsAmount
              (IType);
       begin
          begin
@@ -221,12 +233,14 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetItemsAmount_test_getitemsamount(Gnattest_T: in out Test);
-   procedure Test_GetItemsAmount_df8553_e4797c(Gnattest_T: in out Test) renames
+   procedure Test_GetItemsAmount_df8553_e4797c
+     (Gnattest_T: in out Test) renames
      Test_GetItemsAmount_test_getitemsamount;
 --  id:2.2/df8553144fad6203/GetItemsAmount/1/0/test_getitemsamount/
    procedure Test_GetItemsAmount_test_getitemsamount
      (Gnattest_T: in out Test) is
-      function GetItemsAmount(IType: String) return Natural renames
+      function GetItemsAmount
+        (IType: String) return Natural renames
         Wrap_Test_GetItemsAmount_df8553_e4797c;
 --  end read only
 
@@ -239,7 +253,8 @@ package body Ships.Cargo.Test_Data.Tests is
       end loop;
       PlayerShip.Cargo(3).Amount := 200;
       Assert
-        (GetItemsAmount("Drinks") = 200, "Failed to get amount of drinks.");
+        (GetItemsAmount("Drinks") = 200,
+         "Failed to get amount of drinks.");
 
 --  begin read only
    end Test_GetItemsAmount_test_getitemsamount;

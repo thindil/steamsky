@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Log.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Log.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Log.Test_Data
      .Test with
    null record;
 

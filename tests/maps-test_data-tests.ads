@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Maps.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Maps.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Maps.Test_Data
      .Test with
    null record;
 
@@ -14,7 +14,7 @@ package Maps.Test_Data.Tests is
    --  maps.ads:63:4:CountDistance:Test_CountDistance
 
    procedure Test_NormalizeCoord_6338a5_63c4fc(Gnattest_T: in out Test);
-   --  maps.ads:77:4:NormalizeCoord:Test_NormalizeCoord
+   --  maps.ads:78:4:NormalizeCoord:Test_NormalizeCoord
 
 end Maps.Test_Data.Tests;
 --  end read only

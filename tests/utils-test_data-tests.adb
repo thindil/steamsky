@@ -42,7 +42,7 @@ package body Utils.Test_Data.Tests is
       end;
       declare
          Test_GetRandom_9cea97_28ba02_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Utils.GetRandom(Min, Max);
+           Gnattest_Generated.GNATtest_Standard.Utils.GetRandom(Min, Max);
       begin
          begin
             pragma Assert(True);
@@ -60,11 +60,13 @@ package body Utils.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test);
-   procedure Test_GetRandom_9cea97_28ba02(Gnattest_T: in out Test) renames
+   procedure Test_GetRandom_9cea97_28ba02
+     (Gnattest_T: in out Test) renames
      Test_GetRandom_test_getrandom;
 --  id:2.2/9cea97d085bfefbe/GetRandom/1/0/test_getrandom/
    procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test) is
-      function GetRandom(Min, Max: Integer) return Integer renames
+      function GetRandom
+        (Min, Max: Integer) return Integer renames
         Wrap_Test_GetRandom_9cea97_28ba02;
 --  end read only
 
@@ -87,7 +89,7 @@ package body Utils.Test_Data.Tests is
    begin
       declare
          Test_DaysDifference_ef24bd_fd50f2_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Utils.DaysDifference
+           Gnattest_Generated.GNATtest_Standard.Utils.DaysDifference
              (DateToCompare);
       begin
          return Test_DaysDifference_ef24bd_fd50f2_Result;
@@ -97,7 +99,8 @@ package body Utils.Test_Data.Tests is
 
 --  begin read only
    procedure Test_DaysDifference_test_daysdifference(Gnattest_T: in out Test);
-   procedure Test_DaysDifference_ef24bd_fd50f2(Gnattest_T: in out Test) renames
+   procedure Test_DaysDifference_ef24bd_fd50f2
+     (Gnattest_T: in out Test) renames
      Test_DaysDifference_test_daysdifference;
 --  id:2.2/ef24bd841a916fae/DaysDifference/1/0/test_daysdifference/
    procedure Test_DaysDifference_test_daysdifference

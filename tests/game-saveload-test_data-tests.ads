@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Game.SaveLoad.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Game.SaveLoad
+   type Test is new Gnattest_Generated.GNATtest_Standard.Game.SaveLoad
      .Test_Data
      .Test with
    null record;

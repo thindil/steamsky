@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Statistics.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Statistics.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Statistics.Test_Data
      .Test with
    null record;
 
@@ -30,7 +30,7 @@ package Statistics.Test_Data.Tests is
    --  statistics.ads:145:4:UpdateKilledMobs:Test_UpdateKilledMobs
 
    procedure Test_GetGamePoints_e274aa_4eed1d(Gnattest_T: in out Test);
-   --  statistics.ads:157:4:GetGamePoints:Test_GetGamePoints
+   --  statistics.ads:158:4:GetGamePoints:Test_GetGamePoints
 
 end Statistics.Test_Data.Tests;
 --  end read only

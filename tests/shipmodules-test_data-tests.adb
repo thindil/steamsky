@@ -43,7 +43,7 @@ package body ShipModules.Test_Data.Tests is
       end;
       declare
          Test_GetModuleType_51fe9c_8ea853_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.ShipModules.GetModuleType
+           Gnattest_Generated.GNATtest_Standard.ShipModules.GetModuleType
              (ModuleIndex);
       begin
          begin
@@ -62,7 +62,8 @@ package body ShipModules.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test);
-   procedure Test_GetModuleType_51fe9c_8ea853(Gnattest_T: in out Test) renames
+   procedure Test_GetModuleType_51fe9c_8ea853
+     (Gnattest_T: in out Test) renames
      Test_GetModuleType_test_getmoduletype;
 --  id:2.2/51fe9c61c193b590/GetModuleType/1/0/test_getmoduletype/
    procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test) is

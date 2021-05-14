@@ -6,11 +6,8 @@ with Gnattest_Generated;
 
 package Combat.Test_Data.Tests.Guns_Container.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Combat.Test_Data.Tests
-     .Guns_Container
-     .Test_Data
-     .New_Test with
-   null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Combat.Test_Data.Tests.Guns_Container.Test_Data.New_Test
+   with null record;
 
 end Combat.Test_Data.Tests.Guns_Container.Test_Data.Tests;
 --  end read only

@@ -6,18 +6,18 @@ with Gnattest_Generated;
 
 package Crafts.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Crafts.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Crafts.Test_Data
      .Test with
    null record;
 
    procedure Test_Manufacturing_dd583a_cf804c(Gnattest_T: in out Test);
-   --  crafts.ads:120:4:Manufacturing:Test_Manufacturing
+   --  crafts.ads:123:4:Manufacturing:Test_Manufacturing
 
    procedure Test_CheckRecipe_6b22c5_37e1c4(Gnattest_T: in out Test);
-   --  crafts.ads:133:4:CheckRecipe:Test_CheckRecipe
+   --  crafts.ads:136:4:CheckRecipe:Test_CheckRecipe
 
    procedure Test_SetRecipe_d9013b_dcc889(Gnattest_T: in out Test);
-   --  crafts.ads:147:4:SetRecipe:Test_SetRecipe
+   --  crafts.ads:150:4:SetRecipe:Test_SetRecipe
 
 end Crafts.Test_Data.Tests;
 --  end read only
