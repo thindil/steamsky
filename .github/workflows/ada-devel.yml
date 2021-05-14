@@ -41,7 +41,7 @@ jobs:
       run: others/build.tcl x86_64-linux-gnu
 
     - name: Compress the artifact
-      run: tar -cf steamsky-development-linux.tar usr
+      run: tar -cf steamsky-development-linux.tar release/linux
 
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
@@ -65,7 +65,7 @@ jobs:
       run: others/build.tcl x86_64-windows
 
     - name: Compress the artifact
-      run: tar -cf steamsky-development-windows.tar release
+      run: tar -cf steamsky-development-windows.tar release/windows
 
     - name: Upload the artifact
       uses: actions/upload-artifact@v2
