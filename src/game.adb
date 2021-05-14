@@ -64,10 +64,10 @@ package body Game is
       Save_Config;
       -- Set game statistics
       ClearGameStats;
-      Set_Faction_Career_Block :
-      declare
+      Set_Faction_Career_Block: declare
          Roll,
-         Index: Positive range Positive'First ..
+         Index: Positive range
+           Positive'First ..
              Positive(Factions_List.Length) :=
            Positive'First;
       begin
@@ -78,7 +78,7 @@ package body Game is
               To_Unbounded_String(Source => "random");
             Roll := GetRandom(Min => 1, Max => Positive(Factions_List.Length));
             Index := 1;
-            Get_Player_Faction_Loop :
+            Get_Player_Faction_Loop:
             for I in Factions_List.Iterate loop
                if Index = Roll then
                   New_Game_Settings.Player_Faction :=
@@ -96,12 +96,13 @@ package body Game is
                 (Min => 1,
                  Max =>
                    Positive
-                     (Factions_List(New_Game_Settings.Player_Faction).Careers
-                        .Length));
+                     (Factions_List(New_Game_Settings.Player_Faction)
+                        .Careers.Length));
             Index := 1;
-            Get_Player_Career_Loop :
-            for I in Factions_List(New_Game_Settings.Player_Faction).Careers
-              .Iterate loop
+            Get_Player_Career_Loop:
+            for I in
+              Factions_List(New_Game_Settings.Player_Faction)
+                .Careers.Iterate loop
                if Index = Roll then
                   New_Game_Settings.Player_Career :=
                     Factions.Careers_Container.Key(Position => I);
@@ -117,10 +118,11 @@ package body Game is
       SkyMap :=
         (others =>
            (others =>
-              (BaseIndex => 0, Visited => False, EventIndex => 0,
+              (BaseIndex => 0,
+               Visited => False,
+               EventIndex => 0,
                MissionIndex => 0)));
-      Generate_Bases_Block :
-      declare
+      Generate_Bases_Block: declare
          Max_Spawn_Roll, Max_Base_Spawn_Roll: Natural := 0;
          Faction_Roll: Positive := 1;
          Valid_Location: Boolean := False;
@@ -137,29 +139,34 @@ package body Game is
          package Bases_Container is new Hashed_Maps
            (Key_Type => Unbounded_String,
             Element_Type => Positive_Container.Vector,
-            Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=",
+            Hash => Ada.Strings.Unbounded.Hash,
+            Equivalent_Keys => "=",
             "=" => Positive_Container."=");
          Bases_Array: Bases_Container.Map := Bases_Container.Empty_Map;
          Attempts: Positive range 1 .. 251 := 1;
       begin
-         Count_Spawn_Chance_Loop :
+         Count_Spawn_Chance_Loop:
          for I in Factions_List.Iterate loop
             Max_Spawn_Roll := Max_Spawn_Roll + Factions_List(I).SpawnChance;
             Bases_Array.Include
-              (Key => Factions_Container.Key(Position => I),
-               New_Item => Positive_Container.Empty_Vector);
+            (Key =>
+               Factions_Container.Key(Position => I), New_Item =>
+               Positive_Container.Empty_Vector);
          end loop Count_Spawn_Chance_Loop;
-         Set_Bases_Loop :
+         Set_Bases_Loop:
          for I in SkyBases'Range loop
             Faction_Roll := GetRandom(Min => 1, Max => Max_Spawn_Roll);
-            Set_Base_Faction_Loop :
+            Set_Base_Faction_Loop:
             for J in Factions_List.Iterate loop
                if Faction_Roll <= Factions_List(J).SpawnChance then
                   Base_Owner := Factions_Container.Key(Position => J);
                   Base_Population :=
-                    (if Factions_List(J).Population(2) = 0 then
+                    (if
+                       Factions_List(J).Population(2) = 0
+                     then
                        Factions_List(J).Population(1)
-                     else GetRandom
+                     else
+                       GetRandom
                          (Min => Factions_List(J).Population(1),
                           Max => Factions_List(J).Population(2)));
                   Base_Reputation :=
@@ -167,13 +174,13 @@ package body Game is
                       (SourceFaction => New_Game_Settings.Player_Faction,
                        TargetFaction => Factions_Container.Key(Position => J));
                   Max_Base_Spawn_Roll := 0;
-                  Count_Max_Spawn_Chance_Loop :
+                  Count_Max_Spawn_Chance_Loop:
                   for SpawnChance of Factions_List(J).BasesTypes loop
                      Max_Base_Spawn_Roll := Max_Base_Spawn_Roll + SpawnChance;
                   end loop Count_Max_Spawn_Chance_Loop;
                   Base_Type_Roll :=
                     GetRandom(Min => 1, Max => Max_Base_Spawn_Roll);
-                  Get_Base_Type_Loop :
+                  Get_Base_Type_Loop:
                   for K in Factions_List(J).BasesTypes.Iterate loop
                      if Base_Type_Roll <= Factions_List(J).BasesTypes(K) then
                         Base_Type := BaseType_Container.Key(Position => K);
@@ -187,24 +194,35 @@ package body Game is
                Faction_Roll := Faction_Roll - Factions_List(J).SpawnChance;
             end loop Set_Base_Faction_Loop;
             Base_Size :=
-              (if Base_Population = 0 then
+              (if
+                 Base_Population = 0
+               then
                  Bases_Size'Val(GetRandom(Min => 0, Max => 2))
                elsif Base_Population < 150 then Small
-               elsif Base_Population < 300 then Medium else Big);
+               elsif Base_Population < 300 then Medium
+               else Big);
             SkyBases(I) :=
               (Name => GenerateBaseName(FactionIndex => Base_Owner),
-               Visited => (others => 0), SkyX => 1, SkyY => 1,
-               BaseType => Base_Type, Population => Base_Population,
-               RecruitDate => (others => 0), Recruits => Tmp_Recruits,
-               Known => False, AskedForBases => False,
+               Visited => (others => 0),
+               SkyX => 1,
+               SkyY => 1,
+               BaseType => Base_Type,
+               Population => Base_Population,
+               RecruitDate => (others => 0),
+               Recruits => Tmp_Recruits,
+               Known => False,
+               AskedForBases => False,
                AskedForEvents => (others => 0),
                Reputation => (1 => Base_Reputation, 2 => 0),
-               MissionsDate => (others => 0), Missions => Tmp_Missions,
-               Owner => Base_Owner, Cargo => Tmp_Cargo, Size => Base_Size);
+               MissionsDate => (others => 0),
+               Missions => Tmp_Missions,
+               Owner => Base_Owner,
+               Cargo => Tmp_Cargo,
+               Size => Base_Size);
             if Factions_List(Base_Owner).Flags.Contains
-                (Item => To_Unbounded_String(Source => "loner")) then
+              (Item => To_Unbounded_String(Source => "loner")) then
                Faction_Roll := GetRandom(Min => 1, Max => Max_Spawn_Roll);
-               Get_Faction_Loop :
+               Get_Faction_Loop:
                for J in Factions_List.Iterate loop
                   if Faction_Roll > Factions_List(J).SpawnChance then
                      Faction_Roll :=
@@ -216,24 +234,23 @@ package body Game is
             end if;
             Bases_Array(Base_Owner).Append(New_Item => I);
          end loop Set_Bases_Loop;
-         Place_Bases_Loop :
+         Place_Bases_Loop:
          for FactionBases of Bases_Array loop
-            Place_Faction_Bases_Loop :
+            Place_Faction_Bases_Loop:
             for I in FactionBases.Iterate loop
                Attempts := 1;
-               Count_Base_Position_Loop :
+               Count_Base_Position_Loop:
                loop
                   Valid_Location := True;
                   if Positive_Container.To_Index(Position => I) =
                     FactionBases.First_Index or
                     (Factions_List
                        (SkyBases(FactionBases(FactionBases.First_Index)).Owner)
-                       .Flags
-                       .Contains
-                       (Item => To_Unbounded_String(Source => "loner")) and
-                     Factions_List(SkyBases(FactionBases(I)).Owner).Flags
-                       .Contains
-                       (Item => To_Unbounded_String(Source => "loner"))) then
+                       .Flags.Contains
+                     (Item => To_Unbounded_String(Source => "loner")) and
+                     Factions_List(SkyBases(FactionBases(I)).Owner)
+                       .Flags.Contains
+                     (Item => To_Unbounded_String(Source => "loner"))) then
                      Pos_X :=
                        GetRandom
                          (Min => Bases_Range'First + 5,
@@ -290,11 +307,11 @@ package body Game is
                         Attempts := 1;
                      end if;
                   end if;
-                  Check_X_Coordinate_Loop :
+                  Check_X_Coordinate_Loop:
                   for J in -5 .. 5 loop
                      Temp_X := Pos_X + J;
                      NormalizeCoord(Coord => Temp_X);
-                     Check_Y_Coordinate_Loop :
+                     Check_Y_Coordinate_Loop:
                      for K in -5 .. 5 loop
                         Temp_Y := Pos_Y + K;
                         NormalizeCoord(Coord => Temp_Y, IsXAxis => False);
@@ -311,15 +328,17 @@ package body Game is
                   exit Count_Base_Position_Loop when Valid_Location;
                end loop Count_Base_Position_Loop;
                SkyMap(Pos_X, Pos_Y) :=
-                 (BaseIndex => FactionBases(I), Visited => False,
-                  EventIndex => 0, MissionIndex => 0);
+                 (BaseIndex => FactionBases(I),
+                  Visited => False,
+                  EventIndex => 0,
+                  MissionIndex => 0);
                SkyBases(FactionBases(I)).SkyX := Pos_X;
                SkyBases(FactionBases(I)).SkyY := Pos_Y;
             end loop Place_Faction_Bases_Loop;
          end loop Place_Bases_Loop;
       end Generate_Bases_Block;
       -- Place player ship in random large base
-      Place_Player_Loop :
+      Place_Player_Loop:
       loop
          Random_Base := GetRandom(Min => 1, Max => 1024);
          if New_Game_Settings.Starting_Base =
@@ -343,11 +362,12 @@ package body Game is
                (New_Game_Settings.Player_Career)
                .ShipIndex,
            Name => New_Game_Settings.Ship_Name,
-           X => SkyBases(Random_Base).SkyX, Y => SkyBases(Random_Base).SkyY,
-           Speed => DOCKED, RandomUpgrades => False);
+           X => SkyBases(Random_Base).SkyX,
+           Y => SkyBases(Random_Base).SkyY,
+           Speed => DOCKED,
+           RandomUpgrades => False);
       -- Add player to ship
-      Add_Player_Block :
-      declare
+      Add_Player_Block: declare
          Player_Index_2: constant Unbounded_String :=
            Factions_List(New_Game_Settings.Player_Faction).Careers
              (New_Game_Settings.Player_Career)
@@ -358,14 +378,16 @@ package body Game is
          Player_Morale: constant Positive :=
            (if
               Factions_List(New_Game_Settings.Player_Faction).Flags.Contains
-                (Item => To_Unbounded_String(Source => "nomorale"))
-            then 50
+              (Item => To_Unbounded_String(Source => "nomorale"))
+            then
+              50
             else 100);
       begin
-         Player_Inventory_Loop :
+         Player_Inventory_Loop:
          for I in ProtoMobs_List(Player_Index_2).Inventory.Iterate loop
             Amount :=
-              (if ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount > 0
+              (if
+                 ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount > 0
                then
                  GetRandom
                    (Min =>
@@ -374,36 +396,43 @@ package body Game is
                       ProtoMobs_List(Player_Index_2).Inventory(I).MaxAmount)
                else ProtoMobs_List(Player_Index_2).Inventory(I).MinAmount);
             Tmp_Inventory.Append
-              (New_Item =>
-                 (ProtoIndex =>
-                    ProtoMobs_List(Player_Index_2).Inventory(I).ProtoIndex,
-                  Amount => Amount, Name => Null_Unbounded_String,
-                  Durability => 100, Price => 0));
+            (New_Item =>
+               (ProtoIndex =>
+                  ProtoMobs_List(Player_Index_2).Inventory(I).ProtoIndex,
+                Amount => Amount,
+                Name => Null_Unbounded_String,
+                Durability => 100,
+                Price => 0));
          end loop Player_Inventory_Loop;
          PlayerShip.Crew.Prepend
-           (New_Item =>
-              (Name => New_Game_Settings.Player_Name,
-               Gender => New_Game_Settings.Player_Gender, Health => 100,
-               Tired => 0, Skills => ProtoMobs_List(Player_Index_2).Skills,
-               Hunger => 0, Thirst => 0,
-               Order => ProtoMobs_List(Player_Index_2).Order,
-               PreviousOrder => Rest, OrderTime => 15,
-               Orders => ProtoMobs_List(Player_Index_2).Priorities,
-               Attributes => ProtoMobs_List(Player_Index_2).Attributes,
-               Inventory => Tmp_Inventory,
-               Equipment => ProtoMobs_List(Player_Index_2).Equipment,
-               Payment => (others => 0), ContractLength => -1,
-               Morale => (1 => Player_Morale, 2 => 0), Loyalty => 100,
-               HomeBase => Random_Base,
-               Faction => New_Game_Settings.Player_Faction));
+         (New_Item =>
+            (Name => New_Game_Settings.Player_Name,
+             Gender => New_Game_Settings.Player_Gender,
+             Health => 100,
+             Tired => 0,
+             Skills => ProtoMobs_List(Player_Index_2).Skills,
+             Hunger => 0,
+             Thirst => 0,
+             Order => ProtoMobs_List(Player_Index_2).Order,
+             PreviousOrder => Rest,
+             OrderTime => 15,
+             Orders => ProtoMobs_List(Player_Index_2).Priorities,
+             Attributes => ProtoMobs_List(Player_Index_2).Attributes,
+             Inventory => Tmp_Inventory,
+             Equipment => ProtoMobs_List(Player_Index_2).Equipment,
+             Payment => (others => 0),
+             ContractLength => -1,
+             Morale => (1 => Player_Morale, 2 => 0),
+             Loyalty => 100,
+             HomeBase => Random_Base,
+             Faction => New_Game_Settings.Player_Faction));
       end Add_Player_Block;
-      Assign_Cabin_Block :
-      declare
+      Assign_Cabin_Block: declare
          Cabin_Assigned: Boolean := False;
       begin
-         PlayerShip_Modules_Loop :
+         PlayerShip_Modules_Loop:
          for Module of PlayerShip.Modules loop
-            Module_Owner_Loop :
+            Module_Owner_Loop:
             for Owner of Module.Owner loop
                if Owner > 0 then
                   Owner := Owner + 1;
@@ -411,7 +440,7 @@ package body Game is
             end loop Module_Owner_Loop;
             if Modules_List(Module.ProtoIndex).MType = CABIN and
               not Cabin_Assigned then
-               Assign_Cabin_Loop :
+               Assign_Cabin_Loop:
                for I in Module.Owner.Iterate loop
                   if Module.Owner(I) = 0 then
                      Module.Owner(I) := 1;
@@ -439,7 +468,8 @@ package body Game is
          CurrentGoal :=
            Goals_List
              (GetRandom
-                (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
+                (Min => Goals_List.First_Index,
+                 Max => Goals_List.Last_Index));
       end if;
       -- Set name of savegame
       GenerateSaveName;
@@ -463,7 +493,7 @@ package body Game is
       Tired_Points: Natural := 0;
       Need_Cleaning: Boolean := False;
    begin
-      Tired_Points_Loop :
+      Tired_Points_Loop:
       for I in 1 .. Minutes loop
          if (Game_Date.Minutes + I) rem 15 = 0 then
             Tired_Points := Tired_Points + 1;
@@ -481,7 +511,7 @@ package body Game is
       if Game_Date.Hour > 23 then
          Game_Date.Hour := Game_Date.Hour - 24;
          Game_Date.Day := Game_Date.Day + 1;
-         Get_Dirty_Loop :
+         Get_Dirty_Loop:
          for Module of PlayerShip.Modules loop
             if Module.MType = CABIN and then Module.Cleanliness > 0 then
                Module.Cleanliness := Module.Cleanliness - 1;
@@ -515,7 +545,8 @@ package body Game is
       end if;
       -- Update crew
       UpdateCrew
-        (Minutes => Minutes, TiredPoints => Tired_Points,
+        (Minutes => Minutes,
+         TiredPoints => Tired_Points,
          InCombat => In_Combat);
       -- Repair ship (if needed)
       Ships.Repairs.RepairShip(Minutes => Minutes);
@@ -529,7 +560,8 @@ package body Game is
             GameStats.BasesVisited := GameStats.BasesVisited + 1;
             GameStats.Points := GameStats.Points + 1;
             UpdateGoal
-              (GType => VISIT, TargetIndex => SkyBases(Base_Index).Owner);
+              (GType => VISIT,
+               TargetIndex => SkyBases(Base_Index).Owner);
          end if;
          SkyBases(Base_Index).Visited := Game_Date;
          if not SkyBases(Base_Index).Known then
@@ -537,7 +569,8 @@ package body Game is
             AddMessage
               (Message =>
                  "You discovered base " &
-                 To_String(Source => SkyBases(Base_Index).Name) & ".",
+                 To_String(Source => SkyBases(Base_Index).Name) &
+                 ".",
                MType => OtherMessage);
          end if;
          UpdatePopulation;
@@ -565,8 +598,7 @@ package body Game is
       if Save then
          SaveGame;
       else
-         Delete_Save_Block :
-         begin
+         Delete_Save_Block: begin
             Delete_File(Name => To_String(Source => SaveName));
          exception
             when Name_Error =>
@@ -584,7 +616,7 @@ package body Game is
 
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural is
    begin
-      Find_Skill_Loop :
+      Find_Skill_Loop:
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = Skill_Name then
             return SkillsData_Container.To_Index(Position => I);
@@ -675,10 +707,10 @@ package body Game is
                function Find_Attribute_Index
                  (Attribute_Name: Unbounded_String) return Natural is
                begin
-                  Find_Attribute_Loop :
+                  Find_Attribute_Loop:
                   for J in
                     Attributes_List.First_Index ..
-                      Attributes_List.Last_Index loop
+                        Attributes_List.Last_Index loop
                      if Attributes_List(J).Name = Attribute_Name then
                         return J;
                      end if;
@@ -690,7 +722,7 @@ package body Game is
                Nodes_List :=
                  DOM.Core.Nodes.Child_Nodes(N => First_Child(N => Game_Data));
                Child_Nodes := Nodes_List;
-               Load_Game_Data_Loop :
+               Load_Game_Data_Loop:
                for I in 0 .. Length(List => Nodes_List) - 1 loop
                   Data_Node := Item(List => Nodes_List, Index => I);
                   Node_Name :=
@@ -698,135 +730,152 @@ package body Game is
                       (Source => DOM.Core.Nodes.Node_Name(N => Data_Node));
                   if To_String(Source => Node_Name) = "basessyllablepre" then
                      BaseSyllablesPre.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllablestart" then
                      BaseSyllablesStart.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllableend" then
                      BaseSyllablesEnd.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "basessyllablepost" then
                      BaseSyllablesPost.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllablestart" then
                      MaleSyllablesStart.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllablemiddle" then
                      MaleSyllablesMiddle.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "malessyllableend" then
                      MaleSyllablesEnd.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesvocal" then
                      MaleVocals.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) = "malesconsonant" then
                      MaleConsonants.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllablestart" then
                      FemaleSyllablesStart.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllablemiddle" then
                      FemaleSyllablesMiddle.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "femalessyllableend" then
                      FemaleSyllablesEnd.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) = "femalesvocal" then
                      FemaleVocals.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllablestart" then
                      ShipSyllablesStart.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllablemiddle" then
                      ShipSyllablesMiddle.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllableend" then
                      ShipSyllablesEnd.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) = "itemtype" then
                      Items_Types.Append
-                       (New_Item =>
-                          To_Unbounded_String
-                            (Source =>
-                               Get_Attribute
-                                 (Elem => Data_Node, Name => "value")));
+                     (New_Item =>
+                        To_Unbounded_String
+                          (Source =>
+                             Get_Attribute
+                               (Elem => Data_Node,
+                                Name => "value")));
                   elsif To_String(Source => Node_Name) = "repairtools" then
                      Repair_Tools :=
                        To_Unbounded_String
@@ -870,24 +919,26 @@ package body Game is
                             Get_Attribute(Elem => Data_Node, Name => "value"));
                   elsif To_String(Source => Node_Name) = "attribute" then
                      Attributes_List.Append
-                       (New_Item =>
-                          (Name =>
-                             To_Unbounded_String
-                               (Source =>
-                                  Get_Attribute
-                                    (Elem => Data_Node, Name => "name")),
-                           Description =>
-                             To_Unbounded_String
-                               (Source =>
-                                  Node_Value
-                                    (N => First_Child(N => Data_Node)))));
+                     (New_Item =>
+                        (Name =>
+                           To_Unbounded_String
+                             (Source =>
+                                Get_Attribute
+                                  (Elem => Data_Node,
+                                   Name => "name")),
+                         Description =>
+                           To_Unbounded_String
+                             (Source =>
+                                Node_Value
+                                  (N => First_Child(N => Data_Node)))));
                   elsif To_String(Source => Node_Name) = "skill" then
                      Tmp_Skill :=
                        (Name =>
                           To_Unbounded_String
                             (Source =>
                                Get_Attribute
-                                 (Elem => Data_Node, Name => "name")),
+                                 (Elem => Data_Node,
+                                  Name => "name")),
                         Attribute =>
                           Find_Attribute_Index
                             (Attribute_Name =>
@@ -905,38 +956,41 @@ package body Game is
                           To_Unbounded_String
                             (Source =>
                                Get_Attribute
-                                 (Elem => Data_Node, Name => "tool"));
+                                 (Elem => Data_Node,
+                                  Name => "tool"));
                      end if;
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
-                         (Elem => Data_Node, Name => "toolquality");
+                         (Elem => Data_Node,
+                          Name => "toolquality");
                      if Length(List => Child_Nodes) > 0 then
                         Tmp_Skill.Tools_Quality.Clear;
                      end if;
-                     Load_Skills_Loop :
+                     Load_Skills_Loop:
                      for J in 0 .. Length(List => Child_Nodes) - 1 loop
                         Tmp_Skill.Tools_Quality.Append
-                          (New_Item =>
-                             (1 =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "level")),
-                              2 =>
-                                Integer'Value
-                                  (Get_Attribute
-                                     (Elem =>
-                                        Item(List => Child_Nodes, Index => J),
-                                      Name => "quality"))));
+                        (New_Item =>
+                           (1 =>
+                              Integer'Value
+                                (Get_Attribute
+                                   (Elem =>
+                                      Item(List => Child_Nodes, Index => J),
+                                    Name => "level")),
+                            2 =>
+                              Integer'Value
+                                (Get_Attribute
+                                   (Elem =>
+                                      Item(List => Child_Nodes, Index => J),
+                                    Name => "quality"))));
                      end loop Load_Skills_Loop;
                      if Tmp_Skill.Tools_Quality.Length = 0 then
                         Tmp_Skill.Tools_Quality.Append
-                          (New_Item => (1 => 100, 2 => 100));
+                        (New_Item => (1 => 100, 2 => 100));
                      end if;
                      Child_Nodes :=
                        DOM.Core.Elements.Get_Elements_By_Tag_Name
-                         (Elem => Data_Node, Name => "description");
+                         (Elem => Data_Node,
+                          Name => "description");
                      if Length(List => Child_Nodes) > 0 then
                         Tmp_Skill.Description :=
                           To_Unbounded_String
@@ -957,7 +1011,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "strengthname" then
                      Strength_Index :=
                        Find_Attribute_Index
@@ -965,7 +1020,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "pilotingskill" then
                      Piloting_Skill :=
                        Find_Skill_Index
@@ -973,7 +1029,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "engineeringskill" then
                      Engineering_Skill :=
@@ -982,7 +1039,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "gunneryskill" then
                      Gunnery_Skill :=
                        Find_Skill_Index
@@ -990,7 +1048,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "talkingskill" then
                      Talking_Skill :=
                        Find_Skill_Index
@@ -998,7 +1057,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "perceptionskill" then
                      Perception_Skill :=
                        Find_Skill_Index
@@ -1006,7 +1066,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "headarmor" then
                      Head_Armor :=
                        To_Unbounded_String
@@ -1044,7 +1105,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "unarmedskill" then
                      Unarmed_Skill :=
                        Find_Skill_Index
@@ -1052,7 +1114,8 @@ package body Game is
                             To_Unbounded_String
                               (Source =>
                                  Get_Attribute
-                                   (Elem => Data_Node, Name => "value")));
+                                   (Elem => Data_Node,
+                                    Name => "value")));
                   elsif To_String(Source => Node_Name) = "remove" then
                      if Get_Attribute(Elem => Data_Node, Name => "name") =
                        "skill" then
@@ -1062,7 +1125,8 @@ package body Game is
                                To_Unbounded_String
                                  (Source =>
                                     Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
+                                      (Elem => Data_Node,
+                                       Name => "value")));
                         if Delete_Index > 0 then
                            Skills_List.Delete(Index => Delete_Index);
                         end if;
@@ -1074,22 +1138,24 @@ package body Game is
                                To_Unbounded_String
                                  (Source =>
                                     Get_Attribute
-                                      (Elem => Data_Node, Name => "value")));
+                                      (Elem => Data_Node,
+                                       Name => "value")));
                         if Delete_Index > 0 then
                            Attributes_List.Delete(Index => Delete_Index);
                         end if;
                      elsif Get_Attribute(Elem => Data_Node, Name => "name") =
                        "itemtype" then
                         Delete_Index := 0;
-                        Load_Item_Types_Loop :
+                        Load_Item_Types_Loop:
                         for J in
                           Items_Types.First_Index ..
-                            Items_Types.Last_Index loop
+                              Items_Types.Last_Index loop
                            if Items_Types(J) =
                              To_Unbounded_String
                                (Source =>
                                   Get_Attribute
-                                    (Elem => Data_Node, Name => "value")) then
+                                    (Elem => Data_Node,
+                                     Name => "value")) then
                               Delete_Index := J;
                               exit Load_Item_Types_Loop;
                            end if;
@@ -1102,10 +1168,9 @@ package body Game is
                end loop Load_Game_Data_Loop;
             end Load_Data;
          begin
-            Parse
-              (Parser => Reader, --## rule line off IMPROPER_INITIALIZATION
+            Parse(Parser => Reader, --## rule line off IMPROPER_INITIALIZATION
 
-               Input => Data_File);
+Input => Data_File);
             Data_Type :=
               To_Unbounded_String
                 (Source =>
@@ -1120,7 +1185,9 @@ package body Game is
               Local_Data_Name = "" then
                Log_Message
                  (Message =>
-                    "Loading " & To_String(Source => Data_Type) & " file: " &
+                    "Loading " &
+                    To_String(Source => Data_Type) &
+                    " file: " &
                     To_String(Source => Local_File_Name),
                   Message_Type => EVERYTHING);
                if To_String(Source => Data_Type) = "factions" then
@@ -1154,8 +1221,10 @@ package body Game is
       begin
          if File_Name = "" then
             Start_Search
-              (Search => Files, Directory => Data_Name, Pattern => "*.dat");
-            Load_Data_Files_Loop :
+              (Search => Files,
+               Directory => Data_Name,
+               Pattern => "*.dat");
+            Load_Data_Files_Loop:
             while More_Entries(Search => Files) loop
                Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
                Open
@@ -1182,7 +1251,7 @@ package body Game is
          return "";
       end if;
       -- Load standard game data
-      Load_Standard_Data_Loop :
+      Load_Standard_Data_Loop:
       for Data_Type of Data_Types loop
          Load_Selected_Data
            (Data_Name => To_String(Source => Data_Type.Name),
@@ -1191,13 +1260,16 @@ package body Game is
       -- Load modifications
       Start_Search
         (Search => Mods_Directories,
-         Directory => To_String(Source => Mods_Directory), Pattern => "",
+         Directory => To_String(Source => Mods_Directory),
+         Pattern => "",
          Filter => (Directory => True, others => False));
-      Load_Modifications_Loop :
+      Load_Modifications_Loop:
       while More_Entries(Search => Mods_Directories) loop
          Get_Next_Entry
-           (Search => Mods_Directories, Directory_Entry => Found_Directory);
-         if Simple_Name(Directory_Entry => Found_Directory) not in "." |
+           (Search => Mods_Directories,
+            Directory_Entry => Found_Directory);
+         if Simple_Name(Directory_Entry => Found_Directory) not in
+             "." |
                ".." then
             Load_Selected_Data
               (Data_Name => Full_Name(Directory_Entry => Found_Directory),

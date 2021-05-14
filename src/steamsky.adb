@@ -46,7 +46,8 @@ procedure Steamsky is
    Interp: Tcl.Tcl_Interp;
 
    function Update_Path
-     (Path: in out Unbounded_String; Path_Name: String) return Boolean is
+     (Path: in out Unbounded_String;
+      Path_Name: String) return Boolean is
    begin
       if Element(Source => Path, Index => Length(Source => Path)) /=
         Dir_Separator then
@@ -56,9 +57,11 @@ procedure Steamsky is
         and then Path_Name not in "Save" | "Modifications" | "Themes" then
          Put_Line
            (Item =>
-              "Directory " & To_String(Source => Path) &
+              "Directory " &
+              To_String(Source => Path) &
               " does not exist. You must use an existing directory as " &
-              To_Lower(Item => Path_Name) & " directory.");
+              To_Lower(Item => Path_Name) &
+              " directory.");
          return False;
       end if;
       return True;
@@ -67,11 +70,11 @@ procedure Steamsky is
 begin
    Set_Directory(Directory => Dir_Name(Path => Command_Name));
    -- Command line arguments
-   Command_Line_Loop :
+   Command_Line_Loop:
    for I in 1 .. Argument_Count loop
       if Argument(Number => I)'Length > 8 then
          if Argument(Number => I)(1 .. 8) = "--debug=" then
-            Set_Debug_Mode_Loop :
+            Set_Debug_Mode_Loop:
             for J in Debug_Types loop
                if To_Upper
                    (Item =>
@@ -87,7 +90,8 @@ begin
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => Data_Directory, Path_Name => "Data") then
+                (Path => Data_Directory,
+                 Path_Name => "Data") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--savedi" then
@@ -96,7 +100,8 @@ begin
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => Save_Directory, Path_Name => "Save") then
+                (Path => Save_Directory,
+                 Path_Name => "Save") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--docdir" then
@@ -105,7 +110,8 @@ begin
                 (Source =>
                    Argument(Number => I)(10 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => Doc_Directory, Path_Name => "Documentation") then
+                (Path => Doc_Directory,
+                 Path_Name => "Documentation") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--modsdi" then
@@ -114,7 +120,8 @@ begin
                 (Source =>
                    Argument(Number => I)(11 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => Mods_Directory, Path_Name => "Modifications") then
+                (Path => Mods_Directory,
+                 Path_Name => "Modifications") then
                return;
             end if;
          elsif Argument(Number => I)(1 .. 8) = "--themes" then
@@ -123,7 +130,8 @@ begin
                 (Source =>
                    Argument(Number => I)(13 .. Argument(Number => I)'Last));
             if not Update_Path
-                (Path => Themes_Directory, Path_Name => "Themes") then
+                (Path => Themes_Directory,
+                 Path_Name => "Themes") then
                return;
             end if;
          end if;

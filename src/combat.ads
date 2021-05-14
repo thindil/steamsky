@@ -151,8 +151,8 @@ package Combat is
    -- True if combat starts, otherwise false
    -- SOURCE
    function StartCombat
-     (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
-      return Boolean with
+     (EnemyIndex: Unbounded_String;
+      NewCombat: Boolean := True) return Boolean with
       Pre => ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex),
       Test_Case => (Name => "Test_StartCombat", Mode => Nominal);
       -- ****

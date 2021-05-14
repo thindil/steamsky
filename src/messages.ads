@@ -31,8 +31,13 @@ package Messages is
    -- Types of messages
    -- SOURCE
    type Message_Type is
-     (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
-      OtherMessage, MissionMessage);
+     (Default,
+      CombatMessage,
+      TradeMessage,
+      OrderMessage,
+      CraftMessage,
+      OtherMessage,
+      MissionMessage);
    -- ****
 
    -- ****t* Messages/Messages.Message_Color
@@ -99,7 +104,9 @@ package Messages is
       -- Color   - Color of message to add
       -- SOURCE
    procedure AddMessage
-     (Message: String; MType: Message_Type; Color: Message_Color := WHITE) with
+     (Message: String;
+      MType: Message_Type;
+      Color: Message_Color := WHITE) with
       Pre => Message'Length > 0,
       Test_Case => (Name => "Test_AddMessage", Mode => Nominal);
       -- ****
@@ -116,8 +123,8 @@ package Messages is
       -- Selected message or empty message if nothing found
       -- SOURCE
    function GetMessage
-     (MessageIndex: Integer; MType: Message_Type := Default)
-      return Message_Data with
+     (MessageIndex: Integer;
+      MType: Message_Type := Default) return Message_Data with
       Test_Case => (Name => "Test_GetMessage", Mode => Robustness);
       -- ****
 
@@ -150,7 +157,8 @@ package Messages is
       -- Color   - Color of message to restore. Default is white.
       -- SOURCE
    procedure RestoreMessage
-     (Message: Unbounded_String; MType: Message_Type := Default;
+     (Message: Unbounded_String;
+      MType: Message_Type := Default;
       Color: Message_Color := WHITE) with
       Pre => Message /= Null_Unbounded_String;
       -- ****

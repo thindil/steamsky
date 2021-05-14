@@ -69,19 +69,21 @@ package body Game.SaveLoad is
          StatName: String) is
          StatNode: DOM.Core.Element;
       begin
-         Save_Statistics_Loop :
+         Save_Statistics_Loop:
          for Statistic of StatisticsVector loop
             StatNode := Create_Element(SaveData, StatName);
             StatNode := Append_Child(CategoryNode, StatNode);
             Set_Attribute(StatNode, "index", To_String(Statistic.Index));
             RawValue := To_Unbounded_String(Integer'Image(Statistic.Amount));
             Set_Attribute
-              (StatNode, "amount",
+              (StatNode,
+               "amount",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop Save_Statistics_Loop;
       end SaveStatistics;
       procedure SaveNumber
-        (Value: Integer; Name: String;
+        (Value: Integer;
+         Name: String;
          Node: DOM.Core.Element := CategoryNode) is
          RawValue: constant String :=
            Trim(Integer'Image(Value), Ada.Strings.Left);
@@ -110,23 +112,26 @@ package body Game.SaveLoad is
          (To_Unbounded_String("pricesbonus"), New_Game_Settings.Prices_Bonus));
    begin
       Log_Message
-        ("Start saving game in file " & To_String(SaveName) & ".", EVERYTHING);
+        ("Start saving game in file " & To_String(SaveName) & ".",
+         EVERYTHING);
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
       -- Write save game version
       Set_Attribute
-        (MainNode, "version",
+        (MainNode,
+         "version",
          Trim(Positive'Image(SaveVersion), Ada.Strings.Left));
       -- Save game difficulty settings
       Log_Message("Saving game difficulty settings...", EVERYTHING, False);
       CategoryNode := Create_Element(SaveData, "difficulty");
       CategoryNode := Append_Child(MainNode, CategoryNode);
-      Save_Difficulty_Loop :
+      Save_Difficulty_Loop:
       for Difficulty of Difficulties loop
          RawValue := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
          Set_Attribute
-           (CategoryNode, To_String(Difficulty.Name),
+           (CategoryNode,
+            To_String(Difficulty.Name),
             To_String(Trim(RawValue, Ada.Strings.Left)));
       end loop Save_Difficulty_Loop;
       Log_Message("done.", EVERYTHING, True, False);
@@ -145,9 +150,9 @@ package body Game.SaveLoad is
       declare
          FieldNode: DOM.Core.Element;
       begin
-         Save_Map_X_Loop :
+         Save_Map_X_Loop:
          for X in SkyMap'Range(1) loop
-            Save_Map_Y_Loop :
+            Save_Map_Y_Loop:
             for Y in SkyMap'Range(2) loop
                if SkyMap(X, Y).Visited then
                   FieldNode := Create_Element(SaveData, "field");
@@ -172,7 +177,7 @@ package body Game.SaveLoad is
       declare
          RecipeNode: DOM.Core.Element;
       begin
-         Save_Known_Recipes_Loop :
+         Save_Known_Recipes_Loop:
          for Recipe of Known_Recipes loop
             RecipeNode := Create_Element(SaveData, "recipe");
             RecipeNode := Append_Child(MainNode, RecipeNode);
@@ -194,15 +199,19 @@ package body Game.SaveLoad is
          end if;
          if Messages > 0 then
             StartLoop := MessagesAmount - Messages + 1;
-            Save_Messages_Loop :
+            Save_Messages_Loop:
             for I in StartLoop .. MessagesAmount loop
                Message := GetMessage(I);
                MessageNode := Create_Element(SaveData, "message");
                MessageNode := Append_Child(MainNode, MessageNode);
                SaveNumber
-                 (Message_Type'Pos(Message.MType), "type", MessageNode);
+                 (Message_Type'Pos(Message.MType),
+                  "type",
+                  MessageNode);
                SaveNumber
-                 (Message_Color'Pos(Message.Color), "color", MessageNode);
+                 (Message_Color'Pos(Message.Color),
+                  "color",
+                  MessageNode);
                MessageText :=
                  Create_Text_Node(SaveData, To_String(Message.Message));
                MessageText := Append_Child(MessageNode, MessageText);
@@ -215,7 +224,7 @@ package body Game.SaveLoad is
       declare
          EventNode: DOM.Core.Element;
       begin
-         Save_Events_Loop :
+         Save_Events_Loop:
          for Event of Events_List loop
             EventNode := Create_Element(SaveData, "event");
             EventNode := Append_Child(MainNode, EventNode);
@@ -226,14 +235,19 @@ package body Game.SaveLoad is
             case Event.EType is
                when DoublePrice =>
                   RawValue := Event.ItemIndex;
-               when AttackOnBase | EnemyShip | EnemyPatrol | Trader |
+               when AttackOnBase |
+                 EnemyShip |
+                 EnemyPatrol |
+                 Trader |
                  FriendlyShip =>
                   RawValue := Event.ShipIndex;
                when others =>
                   RawValue := To_Unbounded_String(Integer'Image(Event.Data));
             end case;
             Set_Attribute
-              (EventNode, "data", To_String(Trim(RawValue, Ada.Strings.Left)));
+              (EventNode,
+               "data",
+               To_String(Trim(RawValue, Ada.Strings.Left)));
          end loop Save_Events_Loop;
       end;
       Log_Message("done.", EVERYTHING, True, False);
@@ -260,7 +274,9 @@ package body Game.SaveLoad is
       SaveNumber(GoalTypes'Pos(CurrentGoal.GType), "type");
       SaveNumber(CurrentGoal.Amount, "amount");
       Set_Attribute
-        (CategoryNode, "target", To_String(CurrentGoal.TargetIndex));
+        (CategoryNode,
+         "target",
+         To_String(CurrentGoal.TargetIndex));
       Log_Message("done.", EVERYTHING, True, False);
       -- Save current story
       if CurrentStory.Index /= Null_Unbounded_String then
@@ -270,14 +286,17 @@ package body Game.SaveLoad is
          Set_Attribute(CategoryNode, "index", To_String(CurrentStory.Index));
          RawValue := To_Unbounded_String(Positive'Image(CurrentStory.Step));
          Set_Attribute
-           (CategoryNode, "step", To_String(Trim(RawValue, Ada.Strings.Left)));
+           (CategoryNode,
+            "step",
+            To_String(Trim(RawValue, Ada.Strings.Left)));
          if CurrentStory.CurrentStep = 0 then
             Set_Attribute(CategoryNode, "currentstep", "start");
          elsif CurrentStory.CurrentStep = -1 then
             Set_Attribute(CategoryNode, "currentstep", "finish");
          else
             Set_Attribute
-              (CategoryNode, "currentstep",
+              (CategoryNode,
+               "currentstep",
                To_String
                  (Stories_List(CurrentStory.Index).Steps
                     (CurrentStory.CurrentStep)
@@ -293,7 +312,8 @@ package body Game.SaveLoad is
             Set_Attribute(CategoryNode, "data", To_String(CurrentStory.Data));
          end if;
          SaveNumber
-           (StepConditionType'Pos(CurrentStory.FinishedStep), "finishedstep");
+           (StepConditionType'Pos(CurrentStory.FinishedStep),
+            "finishedstep");
          Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Save finished stories data
@@ -302,14 +322,16 @@ package body Game.SaveLoad is
          StepText: Text;
       begin
          Log_Message("Saving finished stories...", EVERYTHING, False);
-         Save_Finished_Stories_Loop :
+         Save_Finished_Stories_Loop:
          for FinishedStory of FinishedStories loop
             CategoryNode := Create_Element(SaveData, "finishedstory");
             CategoryNode := Append_Child(MainNode, CategoryNode);
             Set_Attribute
-              (CategoryNode, "index", To_String(FinishedStory.Index));
+              (CategoryNode,
+               "index",
+               To_String(FinishedStory.Index));
             SaveNumber(FinishedStory.StepsAmount, "stepsamount");
-            Save_Story_Steps_Loop :
+            Save_Story_Steps_Loop:
             for Step of FinishedStory.StepsTexts loop
                StepNode := Create_Element(SaveData, "steptext");
                StepNode := Append_Child(CategoryNode, StepNode);
@@ -320,7 +342,7 @@ package body Game.SaveLoad is
          Log_Message("done.", EVERYTHING, True, False);
       end;
       -- Save missions accepted by player
-      Save_Missions_Loop :
+      Save_Missions_Loop:
       for Mission of AcceptedMissions loop
          CategoryNode := Create_Element(SaveData, "acceptedmission");
          CategoryNode := Append_Child(MainNode, CategoryNode);
@@ -335,7 +357,8 @@ package body Game.SaveLoad is
             RawValue := To_Unbounded_String(Integer'Image(Mission.Target));
          end if;
          Set_Attribute
-           (CategoryNode, "target",
+           (CategoryNode,
+            "target",
             To_String(Trim(RawValue, Ada.Strings.Left)));
          SaveNumber(Mission.Time, "time");
          SaveNumber(Mission.TargetX, "targetx");
@@ -351,7 +374,8 @@ package body Game.SaveLoad is
             RawValue :=
               To_Unbounded_String(RewardMultiplier'Image(Mission.Multiplier));
             Set_Attribute
-              (CategoryNode, "multiplier",
+              (CategoryNode,
+               "multiplier",
                To_String(Trim(RawValue, Ada.Strings.Left)));
          end if;
       end loop Save_Missions_Loop;
@@ -363,7 +387,8 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       Create(SaveFile, Out_File, To_String(SaveName));
       Write
-        (Stream => Stream(SaveFile), N => SaveData,
+        (Stream => Stream(SaveFile),
+         N => SaveData,
          Pretty_Print => PrettyPrint);
       Close(SaveFile);
       Log_Message("Finished saving game.", EVERYTHING);
@@ -436,14 +461,16 @@ package body Game.SaveLoad is
       SkyMap :=
         (others =>
            (others =>
-              (BaseIndex => 0, Visited => False, EventIndex => 0,
+              (BaseIndex => 0,
+               Visited => False,
+               EventIndex => 0,
                MissionIndex => 0)));
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "field");
       declare
          X, Y: Positive;
       begin
-         Load_Map_Loop :
+         Load_Map_Loop:
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             X := Natural'Value(Get_Attribute(SavedNode, "x"));
@@ -465,11 +492,11 @@ package body Game.SaveLoad is
       Known_Recipes.Clear;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "recipe");
-      Load_Known_Recipes_Loop :
+      Load_Known_Recipes_Loop:
       for I in 0 .. Length(NodesList) - 1 loop
          Known_Recipes.Append
-           (New_Item =>
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
+         (New_Item =>
+            To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
       end loop Load_Known_Recipes_Loop;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load messages
@@ -482,7 +509,7 @@ package body Game.SaveLoad is
          MType: Message_Type;
          Color: Message_Color;
       begin
-         Load_Messages_Loop :
+         Load_Messages_Loop:
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             Text := To_Unbounded_String(Node_Value(First_Child(SavedNode)));
@@ -506,7 +533,7 @@ package body Game.SaveLoad is
          X, Y, Time: Integer;
          Data: Unbounded_String;
       begin
-         Load_Events_Loop :
+         Load_Events_Loop:
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             EType :=
@@ -519,44 +546,68 @@ package body Game.SaveLoad is
             case EType is
                when EnemyShip =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => EnemyShip, SkyX => X, SkyY => Y, Time => Time,
-                        ShipIndex => Data));
+                  (New_Item =>
+                     (EType => EnemyShip,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ShipIndex => Data));
                when AttackOnBase =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => AttackOnBase, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
+                  (New_Item =>
+                     (EType => AttackOnBase,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ShipIndex => Data));
                when Disease =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => Disease, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                  (New_Item =>
+                     (EType => Disease,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      Data => Integer'Value(To_String(Data))));
                when DoublePrice =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => DoublePrice, SkyX => X, SkyY => Y,
-                        Time => Time, ItemIndex => Data));
+                  (New_Item =>
+                     (EType => DoublePrice,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ItemIndex => Data));
                when FullDocks =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => FullDocks, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                  (New_Item =>
+                     (EType => FullDocks,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      Data => Integer'Value(To_String(Data))));
                when EnemyPatrol =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => EnemyPatrol, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
+                  (New_Item =>
+                     (EType => EnemyPatrol,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ShipIndex => Data));
                when Trader =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => Trader, SkyX => X, SkyY => Y, Time => Time,
-                        ShipIndex => Data));
+                  (New_Item =>
+                     (EType => Trader,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ShipIndex => Data));
                when FriendlyShip =>
                   Events_List.Append
-                    (New_Item =>
-                       (EType => FriendlyShip, SkyX => X, SkyY => Y,
-                        Time => Time, ShipIndex => Data));
+                  (New_Item =>
+                     (EType => FriendlyShip,
+                      SkyX => X,
+                      SkyY => Y,
+                      Time => Time,
+                      ShipIndex => Data));
                when None | BaseRecovery =>
                   null;
             end case;
@@ -586,7 +637,7 @@ package body Game.SaveLoad is
          GameStats.Points :=
            Positive'Value(Get_Attribute(SavedNode, "points"));
          ChildNodes := Child_Nodes(SavedNode);
-         Load_Statistics_Loop :
+         Load_Statistics_Loop:
          for I in 0 .. Length(ChildNodes) - 1 loop
             NodeName := To_Unbounded_String(Node_Name(Item(ChildNodes, I)));
             if To_String(NodeName) /= "#text" then
@@ -598,19 +649,19 @@ package body Game.SaveLoad is
             end if;
             if To_String(NodeName) = "destroyedships" then
                GameStats.DestroyedShips.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
             elsif To_String(NodeName) = "finishedcrafts" then
                GameStats.CraftingOrders.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
             elsif To_String(NodeName) = "finishedmissions" then
                GameStats.FinishedMissions.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
             elsif To_String(NodeName) = "finishedgoals" then
                GameStats.FinishedGoals.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
             elsif To_String(NodeName) = "killedmobs" then
                GameStats.KilledMobs.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+               (New_Item => (Index => StatIndex, Amount => StatAmount));
             end if;
          end loop Load_Statistics_Loop;
       end;
@@ -643,7 +694,7 @@ package body Game.SaveLoad is
          elsif Get_Attribute(SavedNode, "currentstep") = "finish" then
             CurrentStory.CurrentStep := -1;
          else
-            Load_Story_Steps_Loop :
+            Load_Story_Steps_Loop:
             for I in Stories_List(CurrentStory.Index).Steps.Iterate loop
                if Stories_List(CurrentStory.Index).Steps(I).Index =
                  To_Unbounded_String
@@ -676,7 +727,7 @@ package body Game.SaveLoad is
          StoryIndex: Unbounded_String;
       begin
          Log_Message("Loading finished stories...", EVERYTHING, False);
-         Load_Finished_Stories_Loop :
+         Load_Finished_Stories_Loop:
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             StoryIndex :=
@@ -685,23 +736,25 @@ package body Game.SaveLoad is
               Positive'Value(Get_Attribute(SavedNode, "stepsamount"));
             TempTexts.Clear;
             ChildNodes := Child_Nodes(SavedNode);
-            Load_Stories_Text_Loop :
+            Load_Stories_Text_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempTexts.Append
-                 (New_Item =>
-                    (To_Unbounded_String
-                       (Node_Value(First_Child(Item(ChildNodes, J))))));
+               (New_Item =>
+                  (To_Unbounded_String
+                     (Node_Value(First_Child(Item(ChildNodes, J))))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
-              (New_Item =>
-                 (Index => StoryIndex, StepsAmount => StepsAmount,
-                  StepsTexts => TempTexts));
+            (New_Item =>
+               (Index => StoryIndex,
+                StepsAmount => StepsAmount,
+                StepsTexts => TempTexts));
          end loop Load_Finished_Stories_Loop;
          Log_Message("done.", EVERYTHING, True, False);
       end;
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (SaveData, "acceptedmission");
+          (SaveData,
+           "acceptedmission");
       declare
          MType: Missions_Types;
          TargetX, TargetY, StartBase: Natural;
@@ -712,7 +765,7 @@ package body Game.SaveLoad is
          Multiplier: RewardMultiplier;
       begin
          Log_Message("Loading accepted missions...", EVERYTHING, False);
-         Load_Missions_Loop :
+         Load_Missions_Loop:
          for I in 0 .. Length(NodesList) - 1 loop
             SavedNode := Item(NodesList, I);
             MType :=
@@ -730,7 +783,9 @@ package body Game.SaveLoad is
             Reward := Positive'Value(Get_Attribute(SavedNode, "reward"));
             StartBase := Natural'Value(Get_Attribute(SavedNode, "startbase"));
             Multiplier :=
-              (if Get_Attribute(SavedNode, "multiplier") /= "" then
+              (if
+                 Get_Attribute(SavedNode, "multiplier") /= ""
+               then
                  RewardMultiplier'Value(Get_Attribute(SavedNode, "multiplier"))
                else 1.0);
             Finished :=
@@ -739,42 +794,67 @@ package body Game.SaveLoad is
             case MType is
                when Deliver =>
                   AcceptedMissions.Append
-                    (New_Item =>
-                       (MType => Deliver, ItemIndex => Index, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
-                        Finished => Finished, Multiplier => Multiplier));
+                  (New_Item =>
+                     (MType => Deliver,
+                      ItemIndex => Index,
+                      Time => Time,
+                      TargetX => TargetX,
+                      TargetY => TargetY,
+                      Reward => Reward,
+                      StartBase => StartBase,
+                      Finished => Finished,
+                      Multiplier => Multiplier));
                when Destroy =>
                   AcceptedMissions.Append
-                    (New_Item =>
-                       (MType => Destroy, ShipIndex => Index, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
-                        Finished => Finished, Multiplier => Multiplier));
+                  (New_Item =>
+                     (MType => Destroy,
+                      ShipIndex => Index,
+                      Time => Time,
+                      TargetX => TargetX,
+                      TargetY => TargetY,
+                      Reward => Reward,
+                      StartBase => StartBase,
+                      Finished => Finished,
+                      Multiplier => Multiplier));
                when Patrol =>
                   AcceptedMissions.Append
-                    (New_Item =>
-                       (MType => Patrol, Target => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
-                        Finished => Finished, Multiplier => Multiplier));
+                  (New_Item =>
+                     (MType => Patrol,
+                      Target => Target,
+                      Time => Time,
+                      TargetX => TargetX,
+                      TargetY => TargetY,
+                      Reward => Reward,
+                      StartBase => StartBase,
+                      Finished => Finished,
+                      Multiplier => Multiplier));
                when Explore =>
                   AcceptedMissions.Append
-                    (New_Item =>
-                       (MType => Explore, Target => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
-                        Finished => Finished, Multiplier => Multiplier));
+                  (New_Item =>
+                     (MType => Explore,
+                      Target => Target,
+                      Time => Time,
+                      TargetX => TargetX,
+                      TargetY => TargetY,
+                      Reward => Reward,
+                      StartBase => StartBase,
+                      Finished => Finished,
+                      Multiplier => Multiplier));
                when Passenger =>
                   if Target > 91 then
                      Target := 91;
                   end if;
                   AcceptedMissions.Append
-                    (New_Item =>
-                       (MType => Passenger, Data => Target, Time => Time,
-                        TargetX => TargetX, TargetY => TargetY,
-                        Reward => Reward, StartBase => StartBase,
-                        Finished => Finished, Multiplier => Multiplier));
+                  (New_Item =>
+                     (MType => Passenger,
+                      Data => Target,
+                      Time => Time,
+                      TargetX => TargetX,
+                      TargetY => TargetY,
+                      Reward => Reward,
+                      StartBase => StartBase,
+                      Finished => Finished,
+                      Multiplier => Multiplier));
             end case;
             MIndex := AcceptedMissions.Last_Index;
             if not Finished then
@@ -816,11 +896,13 @@ package body Game.SaveLoad is
    procedure GenerateSaveName(RenameSave: Boolean := False) is
       OldSaveName: constant String := To_String(SaveName);
    begin
-      Generate_Save_Name_Loop :
+      Generate_Save_Name_Loop:
       loop
          SaveName :=
-           Save_Directory & PlayerShip.Crew(1).Name &
-           To_Unbounded_String("_") & PlayerShip.Name &
+           Save_Directory &
+           PlayerShip.Crew(1).Name &
+           To_Unbounded_String("_") &
+           PlayerShip.Name &
            To_Unbounded_String
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
          exit Generate_Save_Name_Loop when not Exists(To_String(SaveName)) and

@@ -52,13 +52,17 @@ package body Bases.SchoolUI is
    -- ShowSchool
    -- SOURCE
    function Show_School_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_School_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       SchoolFrame: Ttk_Frame :=
@@ -82,22 +86,29 @@ package body Bases.SchoolUI is
       SchoolFrame.Name := New_String(SchoolCanvas & ".school");
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
-      Load_Crew_Loop :
+      Load_Crew_Loop:
       for I in PlayerShip.Crew.Iterate loop
          Insert
            (CrewView,
-            "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+            "{} end -id" &
+            Positive'Image(Crew_Container.To_Index(I)) &
+            " -text {" &
+            To_String(PlayerShip.Crew(I).Name) &
+            "}");
       end loop Load_Crew_Loop;
       Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (SchoolCanvas,
-         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         "-height [expr " &
+         SashPos(Main_Paned, "0") &
+         " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (SchoolCanvas, "window", "0 0 -anchor nw -window " & SchoolFrame);
+        (SchoolCanvas,
+         "window",
+         "0 0 -anchor nw -window " & SchoolFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (SchoolCanvas,
@@ -127,13 +138,17 @@ package body Bases.SchoolUI is
    -- ShowTrainingInfo
    -- SOURCE
    function Show_Training_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Training_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
@@ -149,7 +164,7 @@ package body Bases.SchoolUI is
    begin
       MemberIndex := Positive'Value(Selection(CrewView));
       Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
-      Load_Skills_List_Loop :
+      Load_Skills_List_Loop:
       for I in Skills_List.Iterate loop
          Cost := TrainCost(MemberIndex, SkillsData_Container.To_Index(I));
          if Cost > 0 then
@@ -160,8 +175,11 @@ package body Bases.SchoolUI is
               (SkillsView,
                "{} end -id" &
                Positive'Image(SkillsData_Container.To_Index(I)) &
-               " -values [list {" & To_String(Skills_List(I).Name) & "}" &
-               Natural'Image(Cost) & "]");
+               " -values [list {" &
+               To_String(Skills_List(I).Name) &
+               "}" &
+               Natural'Image(Cost) &
+               "]");
          end if;
       end loop Load_Skills_List_Loop;
       MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
@@ -169,12 +187,15 @@ package body Bases.SchoolUI is
          configure
            (MoneyLabel,
             "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(Money_Name) & ".}");
+            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) &
+            " " &
+            To_String(Money_Name) &
+            ".}");
       else
          configure
            (MoneyLabel,
-            "-text {You don't have any " & To_String(Money_Name) &
+            "-text {You don't have any " &
+            To_String(Money_Name) &
             " to pay for learning.}");
       end if;
       if Children(SkillsView, "{}") /= "{}" then
@@ -200,17 +221,22 @@ package body Bases.SchoolUI is
    -- TrainSkill
    -- SOURCE
    function Train_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Train_Skill_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       SkillsView: constant Ttk_Tree_View :=
         Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.skills.view", Interp);
+          (Main_Paned & ".schoolframe.canvas.school.skills.view",
+           Interp);
       SkillIndex: Positive;
    begin
       SkillIndex := Positive'Value(Selection(SkillsView));
@@ -220,12 +246,14 @@ package body Bases.SchoolUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have any " & To_String(Money_Name) &
+           ("You don't have any " &
+            To_String(Money_Name) &
             " to pay for learning.");
          return TCL_OK;
       when Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " & To_String(Money_Name) &
+           ("You don't have enough " &
+            To_String(Money_Name) &
             " to pay for learning this skill.");
          return TCL_OK;
       when Trade_Cant_Train =>

@@ -35,7 +35,10 @@ package body Factions is
       TmpRelations: Relations_Container.Map;
       TmpRelation: RelationsRecord;
       TmpFood: UnboundedString_Container.Vector;
-      Value, CareerIndex, RelationIndex, FactionIndex,
+      Value,
+      CareerIndex,
+      RelationIndex,
+      FactionIndex,
       ItemIndex: Unbounded_String;
       SkillIndex: Natural;
       TmpCareers: Factions.Careers_Container.Map;
@@ -48,19 +51,24 @@ package body Factions is
       function GetAction(CurrentNode: Node) return Data_Action is
       begin
          return
-           (if Get_Attribute(CurrentNode, "action")'Length > 0 then
+           (if
+              Get_Attribute(CurrentNode, "action")'Length > 0
+            then
               Data_Action'Value(Get_Attribute(CurrentNode, "action"))
             else ADD);
       end GetAction;
       procedure AddChildNode
-        (Data: in out UnboundedString_Container.Vector; Name: String;
-         Index: Natural; CheckItemType: Boolean := True) is
+        (Data: in out UnboundedString_Container.Vector;
+         Name: String;
+         Index: Natural;
+         CheckItemType: Boolean := True) is
          Value: Unbounded_String;
       begin
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, Index), Name);
-         Load_Items_Loop :
+             (Item(NodesList, Index),
+              Name);
+         Load_Items_Loop:
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
             Value := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
@@ -69,16 +77,20 @@ package body Factions is
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
-                    "', no items with type '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Data_Action'Image(Action)) &
+                    " faction '" &
+                    To_String(FactionIndex) &
+                    "', no items with type '" &
+                    To_String(Value) &
+                    "'.";
                end if;
             end if;
             if SubAction /= REMOVE then
                Data.Append(New_Item => Value);
             else
                DeleteIndex := Data.First_Index;
-               Delete_Item_Loop :
+               Delete_Item_Loop:
                while DeleteIndex <= Data.Last_Index loop
                   if Data(DeleteIndex) = Value then
                      Data.Delete(Index => DeleteIndex);
@@ -93,33 +105,45 @@ package body Factions is
       FactionsData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(FactionsData, "faction");
-      Load_Factions_Loop :
+      Load_Factions_Loop:
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String, MemberName => Null_Unbounded_String,
-            PluralMemberName => Null_Unbounded_String, SpawnChance => 0,
-            Population => (0, 0), NamesType => STANDARD,
-            Relations => TmpRelations, Description => Null_Unbounded_String,
-            FoodTypes => TmpFood, DrinksTypes => TmpFood,
-            HealingTools => Null_Unbounded_String, HealingSkill => 1,
-            Flags => TmpFood, Careers => TmpCareers,
+           (Name => Null_Unbounded_String,
+            MemberName => Null_Unbounded_String,
+            PluralMemberName => Null_Unbounded_String,
+            SpawnChance => 0,
+            Population => (0, 0),
+            NamesType => STANDARD,
+            Relations => TmpRelations,
+            Description => Null_Unbounded_String,
+            FoodTypes => TmpFood,
+            DrinksTypes => TmpFood,
+            HealingTools => Null_Unbounded_String,
+            HealingSkill => 1,
+            Flags => TmpFood,
+            Careers => TmpCareers,
             BaseIcon => Wide_Character'Val(16#f5d2#),
-            BasesTypes => TmpBasesTypes, WeaponSkill => 17);
+            BasesTypes => TmpBasesTypes,
+            WeaponSkill => 17);
          FactionNode := Item(NodesList, I);
          FactionIndex :=
            To_Unbounded_String(Get_Attribute(FactionNode, "index"));
          Action := GetAction(FactionNode);
          if Action in UPDATE | REMOVE then
             if not Factions_Container.Contains
-                (Factions_List, FactionIndex) then
+                (Factions_List,
+                 FactionIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " faction '" & To_String(FactionIndex) &
+                 with "Can't " &
+                 To_Lower(Data_Action'Image(Action)) &
+                 " faction '" &
+                 To_String(FactionIndex) &
                  "', there no faction with that index.";
             end if;
          elsif Factions_Container.Contains(Factions_List, FactionIndex) then
             raise Data_Loading_Error
-              with "Can't add faction '" & To_String(FactionIndex) &
+              with "Can't add faction '" &
+              To_String(FactionIndex) &
               "', there is already a faction with that index.";
          end if;
          if Action /= REMOVE then
@@ -155,8 +179,10 @@ package body Factions is
                  Natural'Value(Get_Attribute(FactionNode, "maxpopulation"));
                if TempRecord.Population(2) < TempRecord.Population(1) then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
+                    with "Can't " &
+                    To_Lower(Data_Action'Image(Action)) &
+                    " faction '" &
+                    To_String(FactionIndex) &
                     "', invalid range for faction's population.";
                end if;
             end if;
@@ -171,9 +197,13 @@ package body Factions is
                ItemIndex := FindProtoItem(ItemType => Value);
                if ItemIndex = Null_Unbounded_String then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
-                    "', no items with type '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Data_Action'Image(Action)) &
+                    " faction '" &
+                    To_String(FactionIndex) &
+                    "', no items with type '" &
+                    To_String(Value) &
+                    "'.";
                end if;
                TempRecord.HealingTools := Value;
             end if;
@@ -184,9 +214,13 @@ package body Factions is
                SkillIndex := Find_Skill_Index(Value);
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
-                    "', no skill named '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Data_Action'Image(Action)) &
+                    " faction '" &
+                    To_String(FactionIndex) &
+                    "', no skill named '" &
+                    To_String(Value) &
+                    "'.";
                end if;
                TempRecord.HealingSkill := SkillIndex;
             end if;
@@ -203,16 +237,21 @@ package body Factions is
                SkillIndex := Find_Skill_Index(Value);
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                    " faction '" & To_String(FactionIndex) &
-                    "', no skill named '" & To_String(Value) & "'.";
+                    with "Can't " &
+                    To_Lower(Data_Action'Image(Action)) &
+                    " faction '" &
+                    To_String(FactionIndex) &
+                    "', no skill named '" &
+                    To_String(Value) &
+                    "'.";
                end if;
                TempRecord.WeaponSkill := SkillIndex;
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "relation");
-            Load_Relations_Loop :
+                (FactionNode,
+                 "relation");
+            Load_Relations_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                RelationIndex :=
@@ -226,10 +265,13 @@ package body Factions is
                      Integer'Value(Get_Attribute(ChildNode, "maxreputation")));
                   if TmpRelation.Reputation(2) < TmpRelation.Reputation(1) then
                      raise Data_Loading_Error
-                       with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                       " faction '" & To_String(FactionIndex) &
+                       with "Can't " &
+                       To_Lower(Data_Action'Image(Action)) &
+                       " faction '" &
+                       To_String(FactionIndex) &
                        "', invalid range for faction's reputation with '" &
-                       To_String(RelationIndex) & "'.";
+                       To_String(RelationIndex) &
+                       "'.";
                   end if;
                end if;
                if Get_Attribute(ChildNode, "friendly") = "Y" then
@@ -239,14 +281,17 @@ package body Factions is
                end if;
                if Action /= UPDATE then
                   Relations_Container.Include
-                    (TempRecord.Relations, RelationIndex, TmpRelation);
+                    (TempRecord.Relations,
+                     RelationIndex,
+                     TmpRelation);
                else
                   TempRecord.Relations(RelationIndex) := TmpRelation;
                end if;
             end loop Load_Relations_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "description");
+                (FactionNode,
+                 "description");
             if Length(ChildNodes) > 0 then
                TempRecord.Description :=
                  To_Unbounded_String
@@ -257,8 +302,9 @@ package body Factions is
             AddChildNode(TempRecord.Flags, "flag", I, False);
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "career");
-            Load_Careers_Loop :
+                (FactionNode,
+                 "career");
+            Load_Careers_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
@@ -284,23 +330,28 @@ package body Factions is
                   TmpCareer.Name := Careers_List(CareerIndex).Name;
                end if;
                if Careers.Careers_Container.Contains
-                   (Careers_List, CareerIndex) then
+                   (Careers_List,
+                    CareerIndex) then
                   case SubAction is
                      when REMOVE =>
                         Factions.Careers_Container.Exclude
-                          (TempRecord.Careers, CareerIndex);
+                          (TempRecord.Careers,
+                           CareerIndex);
                      when UPDATE =>
                         TempRecord.Careers(CareerIndex) := TmpCareer;
                      when ADD =>
                         Factions.Careers_Container.Include
-                          (TempRecord.Careers, CareerIndex, TmpCareer);
+                          (TempRecord.Careers,
+                           CareerIndex,
+                           TmpCareer);
                   end case;
                end if;
             end loop Load_Careers_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (FactionNode, "basetype");
-            Load_Bases_Types_Loop :
+                (FactionNode,
+                 "basetype");
+            Load_Bases_Types_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                CareerIndex :=
@@ -314,17 +365,20 @@ package body Factions is
                     Factions_List(FactionIndex).BasesTypes(CareerIndex);
                end if;
                if BasesTypes_Container.Contains
-                   (BasesTypes_List, CareerIndex) then
+                   (BasesTypes_List,
+                    CareerIndex) then
                   case SubAction is
                      when REMOVE =>
                         Factions.BaseType_Container.Exclude
-                          (TempRecord.BasesTypes, CareerIndex);
+                          (TempRecord.BasesTypes,
+                           CareerIndex);
                      when UPDATE =>
                         TempRecord.BasesTypes(CareerIndex) :=
                           TmpBaseTypeChance;
                      when ADD =>
                         Factions.BaseType_Container.Include
-                          (TempRecord.BasesTypes, CareerIndex,
+                          (TempRecord.BasesTypes,
+                           CareerIndex,
                            TmpBaseTypeChance);
                   end case;
                end if;
@@ -333,14 +387,18 @@ package body Factions is
                if TempRecord.BasesTypes.Length = 0 then
                   for I in BasesTypes_List.Iterate loop
                      Factions.BaseType_Container.Include
-                       (TempRecord.BasesTypes, BasesTypes_Container.Key(I),
+                       (TempRecord.BasesTypes,
+                        BasesTypes_Container.Key(I),
                         20);
                   end loop;
                end if;
                Factions_Container.Include
-                 (Factions_List, FactionIndex, TempRecord);
+                 (Factions_List,
+                  FactionIndex,
+                  TempRecord);
                Log_Message
-                 ("Faction added: " & To_String(TempRecord.Name), EVERYTHING);
+                 ("Faction added: " & To_String(TempRecord.Name),
+                  EVERYTHING);
             else
                Factions_List(FactionIndex) := TempRecord;
                Log_Message
@@ -350,7 +408,8 @@ package body Factions is
          else
             Factions_Container.Exclude(Factions_List, FactionIndex);
             Log_Message
-              ("Faction removed: " & To_String(FactionIndex), EVERYTHING);
+              ("Faction removed: " & To_String(FactionIndex),
+               EVERYTHING);
          end if;
       end loop Load_Factions_Loop;
    end LoadFactions;
@@ -365,7 +424,8 @@ package body Factions is
            0
          then
            Factions_List(SourceFaction).Relations(TargetFaction).Reputation(1)
-         else GetRandom
+         else
+           GetRandom
              (Factions_List(SourceFaction).Relations(TargetFaction).Reputation
                 (1),
               Factions_List(SourceFaction).Relations(TargetFaction).Reputation
@@ -384,7 +444,7 @@ package body Factions is
    begin
       FactionIndex := GetRandom(1, Positive(Factions_List.Length));
       CurrentIndex := 1;
-      Get_Random_Faction_Loop :
+      Get_Random_Faction_Loop:
       for J in Factions_List.Iterate loop
          if CurrentIndex = FactionIndex then
             return Factions_Container.Key(J);

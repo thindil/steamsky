@@ -48,7 +48,8 @@ package body Messages.UI is
    -- MessagesType - The selected type of messages to show
    -- SOURCE
    procedure ShowMessage
-     (Message: Message_Data; MessagesView: Tk_Text;
+     (Message: Message_Data;
+      MessagesView: Tk_Text;
       MessagesType: Message_Type) is
       -- ****
       MessageTag: Unbounded_String;
@@ -69,8 +70,12 @@ package body Messages.UI is
                MessageTag := Null_Unbounded_String;
          end case;
          Insert
-           (MessagesView, "end",
-            "{" & To_String(Message.Message) & LF & "}" &
+           (MessagesView,
+            "end",
+            "{" &
+            To_String(Message.Message) &
+            LF &
+            "}" &
             To_String(MessageTag));
       end if;
    end ShowMessage;
@@ -90,13 +95,17 @@ package body Messages.UI is
    -- MessagesType is the type of messages to show, default all
    -- SOURCE
    function Show_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Last_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Paned: constant Ttk_PanedWindow :=
@@ -136,12 +145,12 @@ package body Messages.UI is
          Insert(MessagesView, "end", "{There are no messages of that type.}");
       else
          if Game_Settings.Messages_Order = OLDER_FIRST then
-            Show_Older_First_Loop :
+            Show_Older_First_Loop:
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
             end loop Show_Older_First_Loop;
          else
-            Show_Newer_First_Loop :
+            Show_Newer_First_Loop:
             for Message of reverse Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
             end loop Show_Newer_First_Loop;
@@ -153,11 +162,14 @@ package body Messages.UI is
         New_String(Widget_Image(MessagesCanvas) & ".messages");
       configure
         (MessagesCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
+         "-height [expr " &
+         SashPos(Paned, "0") &
+         " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (MessagesCanvas, "window",
+        (MessagesCanvas,
+         "window",
          "0 0 -anchor nw -window " & Widget_Image(MessagesFrame));
       Tcl_Eval(Get_Context, "update");
       configure
@@ -181,13 +193,17 @@ package body Messages.UI is
    -- SelectMessages
    -- SOURCE
    function Select_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Select_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
@@ -196,7 +212,10 @@ package body Messages.UI is
            Interp);
    begin
       return Show_Last_Messages_Command
-          (ClientData, Interp, 2, Argv & Current(TypeBox));
+          (ClientData,
+           Interp,
+           2,
+           Argv & Current(TypeBox));
    end Select_Messages_Command;
 
    -- ****o* MUI2/MUI2.Delete_Messages_Command
@@ -213,13 +232,17 @@ package body Messages.UI is
    -- DeleteMessages
    -- SOURCE
    function Delete_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -242,13 +265,17 @@ package body Messages.UI is
    -- Text is the string to search in the messages
    -- SOURCE
    function Search_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Search_Messages_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TypeBox: constant Ttk_ComboBox :=
@@ -258,7 +285,8 @@ package body Messages.UI is
       MessagesType: Message_Type;
       MessagesView: constant Tk_Text :=
         Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.list.view", Interp);
+          (".gameframe.paned.messagesframe.canvas.messages.list.view",
+           Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));
@@ -266,12 +294,12 @@ package body Messages.UI is
       Delete(MessagesView, "1.0", "end");
       if SearchText'Length = 0 then
          if Game_Settings.Messages_Order = OLDER_FIRST then
-            Show_Older_First_Loop :
+            Show_Older_First_Loop:
             for Message of Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
             end loop Show_Older_First_Loop;
          else
-            Show_Newer_First_Loop :
+            Show_Newer_First_Loop:
             for Message of reverse Messages_List loop
                ShowMessage(Message, MessagesView, MessagesType);
             end loop Show_Newer_First_Loop;
@@ -280,20 +308,22 @@ package body Messages.UI is
          return TCL_OK;
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
-         Search_Older_First_Loop :
+         Search_Older_First_Loop:
          for Message of Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                (To_Lower(To_String(Message.Message)),
+                 To_Lower(SearchText),
                  1) >
               0 then
                ShowMessage(Message, MessagesView, MessagesType);
             end if;
          end loop Search_Older_First_Loop;
       else
-         Search_Newer_First_Loop :
+         Search_Newer_First_Loop:
          for Message of reverse Messages_List loop
             if Index
-                (To_Lower(To_String(Message.Message)), To_Lower(SearchText),
+                (To_Lower(To_String(Message.Message)),
+                 To_Lower(SearchText),
                  1) >
               0 then
                ShowMessage(Message, MessagesView, MessagesType);

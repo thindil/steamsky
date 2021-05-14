@@ -23,13 +23,14 @@ package body Ships.Cargo is
 
    procedure UpdateCargo
      (Ship: in out ShipRecord;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+      ProtoIndex: Unbounded_String := Null_Unbounded_String;
+      Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
       ItemIndex: Inventory_Container.Extended_Index := 0;
    begin
       if ProtoIndex /= Null_Unbounded_String and CargoIndex = 0 then
-         Find_Item_Index_Loop :
+         Find_Item_Index_Loop:
          for I in Ship.Cargo.Iterate loop
             if Ship.Cargo(I).ProtoIndex = ProtoIndex and
               Ship.Cargo(I).Durability = Durability then
@@ -46,10 +47,12 @@ package body Ships.Cargo is
       end if;
       if ItemIndex = 0 then
          Ship.Cargo.Append
-           (New_Item =>
-              (ProtoIndex => ProtoIndex, Amount => Amount,
-               Name => Null_Unbounded_String, Durability => Durability,
-               Price => Price));
+         (New_Item =>
+            (ProtoIndex => ProtoIndex,
+             Amount => Amount,
+             Name => Null_Unbounded_String,
+             Durability => Durability,
+             Price => Price));
       else
          declare
             NewAmount: constant Integer :=
@@ -57,7 +60,7 @@ package body Ships.Cargo is
          begin
             if NewAmount < 1 then
                Ship.Cargo.Delete(Index => ItemIndex);
-               Update_Ammo_Index_Loop :
+               Update_Ammo_Index_Loop:
                for Module of Ship.Modules loop
                   if Module.MType = GUN then
                      if Module.AmmoIndex > ItemIndex then
@@ -76,16 +79,17 @@ package body Ships.Cargo is
    end UpdateCargo;
 
    function FreeCargo
-     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
+     (Amount: Integer;
+      Ship: ShipRecord := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin
-      Count_Cargo_Size_Loop :
+      Count_Cargo_Size_Loop:
       for Module of Ship.Modules loop
          if Module.MType = CARGO_ROOM and Module.Durability > 0 then
             FreeCargo := FreeCargo + Modules_List(Module.ProtoIndex).MaxValue;
          end if;
       end loop Count_Cargo_Size_Loop;
-      Count_Cargo_Weight_Loop :
+      Count_Cargo_Weight_Loop:
       for Item of Ship.Cargo loop
          FreeCargo :=
            FreeCargo - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
@@ -97,7 +101,7 @@ package body Ships.Cargo is
    function GetItemAmount(ItemType: Unbounded_String) return Natural is
       Amount: Natural := 0;
    begin
-      Get_Item_Amount_Loop :
+      Get_Item_Amount_Loop:
       for Item of PlayerShip.Cargo loop
          if Items_List(Item.ProtoIndex).IType = ItemType then
             Amount := Amount + Item.Amount;
@@ -110,13 +114,13 @@ package body Ships.Cargo is
       ItemsAmount: Natural;
    begin
       if IType = "Drinks" then
-         Get_Drinks_Amount_Loop :
+         Get_Drinks_Amount_Loop:
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).DrinksTypes.Length = 0 then
                ItemsAmount := Game_Settings.Low_Drinks + 1;
             else
                ItemsAmount := 0;
-               Get_Selected_Drinks_Amount_Loop :
+               Get_Selected_Drinks_Amount_Loop:
                for DrinkType of Factions_List(Member.Faction).DrinksTypes loop
                   ItemsAmount := ItemsAmount + GetItemAmount(DrinkType);
                end loop Get_Selected_Drinks_Amount_Loop;
@@ -125,13 +129,13 @@ package body Ships.Cargo is
             end if;
          end loop Get_Drinks_Amount_Loop;
       else
-         Get_Items_Amount_Loop :
+         Get_Items_Amount_Loop:
          for Member of PlayerShip.Crew loop
             if Factions_List(Member.Faction).FoodTypes.Length = 0 then
                ItemsAmount := Game_Settings.Low_Food + 1;
             else
                ItemsAmount := 0;
-               Get_Food_Amount_Loop :
+               Get_Food_Amount_Loop:
                for FoodType of Factions_List(Member.Faction).FoodTypes loop
                   ItemsAmount := ItemsAmount + GetItemAmount(FoodType);
                end loop Get_Food_Amount_Loop;

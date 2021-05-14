@@ -35,22 +35,24 @@ package body Utils is
       subtype Letters is Character range 'A' .. 'Z';
       subtype Numbers is Character range '0' .. '9';
    begin
-      First_Name_Part_Loop :
+      First_Name_Part_Loop:
       for I in 1 .. LettersAmount loop
          Append
            (NewName,
             Letters'Val
               (GetRandom
-                 (Letters'Pos(Letters'First), Letters'Pos(Letters'Last))));
+                 (Letters'Pos(Letters'First),
+                  Letters'Pos(Letters'Last))));
       end loop First_Name_Part_Loop;
       Append(NewName, '-');
-      Second_Name_Part_Loop :
+      Second_Name_Part_Loop:
       for I in 1 .. NumbersAmount loop
          Append
            (NewName,
             Numbers'Val
               (GetRandom
-                 (Numbers'Pos(Numbers'First), Numbers'Pos(Numbers'Last))));
+                 (Numbers'Pos(Numbers'First),
+                  Numbers'Pos(Numbers'Last))));
       end loop Second_Name_Part_Loop;
       return NewName;
    end GenerateRoboticName;

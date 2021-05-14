@@ -80,8 +80,11 @@ package Mobs is
    -- FUNCTION
    -- Used to store mobiles
    -- SOURCE
-   package ProtoMobs_Container is new Hashed_Maps(Unbounded_String,
-      ProtoMobRecord, Ada.Strings.Unbounded.Hash, "=");
+   package ProtoMobs_Container is new Hashed_Maps
+     (Unbounded_String,
+      ProtoMobRecord,
+      Ada.Strings.Unbounded.Hash,
+      "=");
    -- ****
 
    -- ****v* Mobs/Mobs.ProtoMobs_List
@@ -143,7 +146,9 @@ package Mobs is
       EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
       FactionIndex: Unbounded_String) return Unbounded_String with
       Pre =>
-      (EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and
+      (EquipIndex < 8 and
+       HighestLevel < 101 and
+       WeaponSkillLevel < 101 and
        Factions_List.Contains(FactionIndex)),
       Test_Case => (Name => "Test_GetRandomItem", Mode => Nominal);
       -- ****

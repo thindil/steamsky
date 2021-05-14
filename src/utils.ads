@@ -47,9 +47,11 @@ package Utils is
       -- RESULT
       -- Amount of days difference between DateToCompare and current game date
       -- SOURCE
-   function DaysDifference(DateToCompare: Date_Record) return Natural is
+   function DaysDifference
+     (DateToCompare: Date_Record) return Natural is
      ((Game_Date.Day + (30 * Game_Date.Month) + (Game_Date.Year * 360)) -
-      (DateToCompare.Day + (30 * DateToCompare.Month) +
+      (DateToCompare.Day +
+       (30 * DateToCompare.Month) +
        (DateToCompare.Year * 360))) with
       Test_Case => (Name => "Test_DaysDifference", Mode => Robustness);
       -- ****

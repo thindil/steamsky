@@ -21,7 +21,8 @@ with Ships; use Ships;
 package body Maps is
 
    function CountDistance
-     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural is
+     (DestinationX: Map_X_Range;
+      DestinationY: Map_Y_Range) return Natural is
       DiffX: Natural range 0 .. Map_X_Range'Last;
       DiffY: Natural range 0 .. Map_Y_Range'Last;
       Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);

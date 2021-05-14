@@ -50,36 +50,49 @@ package body Stories is
    begin
       ClearCurrentStory;
       TempStep :=
-        (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
-         FinishData => TempData, FailText => Null_Unbounded_String,
+        (Index => Null_Unbounded_String,
+         FinishCondition => ASKINBASE,
+         FinishData => TempData,
+         FailText => Null_Unbounded_String,
          Texts => TempTexts);
       StartStep := Null_Unbounded_String;
       StoriesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(StoriesData, "story");
-      Load_Stories_Loop :
+      Load_Stories_Loop:
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (StartCondition => DROPITEM, StartData => TempValue, MinSteps => 1,
-            MaxSteps => 2, StartingStep => TempStep, Steps => TempSteps,
-            FinalStep => TempStep, EndText => Null_Unbounded_String,
-            Name => Null_Unbounded_String, ForbiddenFactions => TempValue);
+           (StartCondition => DROPITEM,
+            StartData => TempValue,
+            MinSteps => 1,
+            MaxSteps => 2,
+            StartingStep => TempStep,
+            Steps => TempSteps,
+            FinalStep => TempStep,
+            EndText => Null_Unbounded_String,
+            Name => Null_Unbounded_String,
+            ForbiddenFactions => TempValue);
          StoryNode := Item(NodesList, I);
          StoryIndex := To_Unbounded_String(Get_Attribute(StoryNode, "index"));
          Action :=
-           (if Get_Attribute(StoryNode, "action")'Length > 0 then
+           (if
+              Get_Attribute(StoryNode, "action")'Length > 0
+            then
               Data_Action'Value(Get_Attribute(StoryNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Stories_Container.Contains(Stories_List, StoryIndex) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " story '" & To_String(StoryIndex) &
+                 with "Can't " &
+                 To_Lower(Data_Action'Image(Action)) &
+                 " story '" &
+                 To_String(StoryIndex) &
                  "', there no story with that index.";
             end if;
          elsif Stories_Container.Contains(Stories_List, StoryIndex) then
             raise Data_Loading_Error
-              with "Can't add story '" & To_String(StoryIndex) &
+              with "Can't add story '" &
+              To_String(StoryIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -114,20 +127,23 @@ package body Stories is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (StoryNode, "startdata");
-            Load_Start_Data_Loop :
+                (StoryNode,
+                 "startdata");
+            Load_Start_Data_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
                SubAction :=
-                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                 (if
+                    Get_Attribute(ChildNode, "action")'Length > 0
+                  then
                     Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
                      TempRecord.StartData.Append(New_Item => Value);
                   when REMOVE =>
-                     Find_Delete_Start_Index_Loop :
+                     Find_Delete_Start_Index_Loop:
                      for K in TempRecord.StartData.Iterate loop
                         if TempRecord.StartData(K) = Value then
                            DeleteIndex :=
@@ -142,20 +158,23 @@ package body Stories is
             end loop Load_Start_Data_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (StoryNode, "forbiddenfaction");
-            Load_Forbidden_Faction_Loop :
+                (StoryNode,
+                 "forbiddenfaction");
+            Load_Forbidden_Faction_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                Value := To_Unbounded_String(Get_Attribute(ChildNode, "value"));
                SubAction :=
-                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                 (if
+                    Get_Attribute(ChildNode, "action")'Length > 0
+                  then
                     Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                case SubAction is
                   when ADD =>
                      TempRecord.ForbiddenFactions.Append(New_Item => Value);
                   when REMOVE =>
-                     Find_Delete_Forbidden_Index_Loop :
+                     Find_Delete_Forbidden_Index_Loop:
                      for K in TempRecord.ForbiddenFactions.Iterate loop
                         if TempRecord.ForbiddenFactions(K) = Value then
                            DeleteIndex :=
@@ -170,20 +189,24 @@ package body Stories is
             end loop Load_Forbidden_Faction_Loop;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name(StoryNode, "step");
-            Load_Steps_Data_Loop :
+            Load_Steps_Data_Loop:
             for J in 0 .. Length(ChildNodes) - 1 loop
                TempStep :=
-                 (Index => Null_Unbounded_String, FinishCondition => ASKINBASE,
-                  FinishData => TempData, FailText => Null_Unbounded_String,
+                 (Index => Null_Unbounded_String,
+                  FinishCondition => ASKINBASE,
+                  FinishData => TempData,
+                  FailText => Null_Unbounded_String,
                   Texts => TempTexts);
                ChildNode := Item(ChildNodes, J);
                TempStep.Index :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                SubAction :=
-                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
+                 (if
+                    Get_Attribute(ChildNode, "action")'Length > 0
+                  then
                     Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
-               Find_Step_Index_Loop :
+               Find_Step_Index_Loop:
                for K in TempRecord.Steps.Iterate loop
                   if TempRecord.Steps(K).Index = TempStep.Index then
                      StepIndex := Steps_Container.To_Index(K);
@@ -201,12 +224,15 @@ package body Stories is
                   end if;
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (ChildNode, "finishdata");
-                  Load_Finish_Data_Loop :
+                      (ChildNode,
+                       "finishdata");
+                  Load_Finish_Data_Loop:
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
-                       (if Get_Attribute(StepNode, "action")'Length > 0 then
+                       (if
+                          Get_Attribute(StepNode, "action")'Length > 0
+                        then
                           Data_Action'Value(Get_Attribute(StepNode, "action"))
                         else ADD);
                      Value :=
@@ -214,11 +240,11 @@ package body Stories is
                      case SubSubAction is
                         when ADD =>
                            TempStep.FinishData.Append
-                             (New_Item =>
-                                (Name => Value,
-                                 Value =>
-                                   To_Unbounded_String
-                                     (Get_Attribute(StepNode, "value"))));
+                           (New_Item =>
+                              (Name => Value,
+                               Value =>
+                                 To_Unbounded_String
+                                   (Get_Attribute(StepNode, "value"))));
                         when UPDATE =>
                            for Data of TempStep.FinishData loop
                               if Data.Name = Value then
@@ -229,7 +255,7 @@ package body Stories is
                               end if;
                            end loop;
                         when REMOVE =>
-                           Find_Delete_Finish_Index_Loop :
+                           Find_Delete_Finish_Index_Loop:
                            for L in TempStep.FinishData.Iterate loop
                               if TempStep.FinishData(L).Name = Value then
                                  DeleteIndex := StepData_Container.To_Index(L);
@@ -241,12 +267,15 @@ package body Stories is
                   end loop Load_Finish_Data_Loop;
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Item(ChildNodes, J), "text");
-                  Load_Step_Text_Loop :
+                      (Item(ChildNodes, J),
+                       "text");
+                  Load_Step_Text_Loop:
                   for K in 0 .. Length(StepDataNodes) - 1 loop
                      StepNode := Item(StepDataNodes, K);
                      SubSubAction :=
-                       (if Get_Attribute(StepNode, "action")'Length > 0 then
+                       (if
+                          Get_Attribute(StepNode, "action")'Length > 0
+                        then
                           Data_Action'Value(Get_Attribute(StepNode, "action"))
                         else ADD);
                      Value :=
@@ -255,14 +284,14 @@ package body Stories is
                      case SubSubAction is
                         when ADD =>
                            TempStep.Texts.Append
-                             (New_Item =>
-                                (Condition =>
-                                   StepConditionType'Value(To_String(Value)),
-                                 Text =>
-                                   To_Unbounded_String
-                                     (Node_Value(First_Child(StepNode)))));
+                           (New_Item =>
+                              (Condition =>
+                                 StepConditionType'Value(To_String(Value)),
+                               Text =>
+                                 To_Unbounded_String
+                                   (Node_Value(First_Child(StepNode)))));
                         when UPDATE =>
-                           Load_Update_Text_Loop :
+                           Load_Update_Text_Loop:
                            for Text of TempStep.Texts loop
                               if Text.Condition =
                                 StepConditionType'Value(To_String(Value)) then
@@ -273,7 +302,7 @@ package body Stories is
                               end if;
                            end loop Load_Update_Text_Loop;
                         when REMOVE =>
-                           Find_Delete_Text_Index_Loop :
+                           Find_Delete_Text_Index_Loop:
                            for L in TempStep.Texts.Iterate loop
                               if TempStep.Texts(L).Condition =
                                 StepConditionType'Value(To_String(Value)) then
@@ -287,7 +316,8 @@ package body Stories is
                   end loop Load_Step_Text_Loop;
                   StepDataNodes :=
                     DOM.Core.Elements.Get_Elements_By_Tag_Name
-                      (Item(ChildNodes, J), "failtext");
+                      (Item(ChildNodes, J),
+                       "failtext");
                   if Length(StepDataNodes) > 0 then
                      TempStep.FailText :=
                        To_Unbounded_String
@@ -318,11 +348,13 @@ package body Stories is
             if Action /= UPDATE then
                Stories_Container.Include(Stories_List, StoryIndex, TempRecord);
                Log_Message
-                 ("Story added: " & To_String(StoryIndex), EVERYTHING);
+                 ("Story added: " & To_String(StoryIndex),
+                  EVERYTHING);
             else
                Stories_List(StoryIndex) := TempRecord;
                Log_Message
-                 ("Story updated: " & To_String(StoryIndex), EVERYTHING);
+                 ("Story updated: " & To_String(StoryIndex),
+                  EVERYTHING);
             end if;
          else
             Stories_Container.Exclude(Stories_List, StoryIndex);
@@ -345,7 +377,7 @@ package body Stories is
       if Value = "any" then
          return Null_Unbounded_String;
       end if;
-      Select_Base_Loop :
+      Select_Base_Loop:
       loop
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known and
@@ -384,7 +416,7 @@ package body Stories is
       PlayerShip.DestinationX := LocationX;
       Value := GetStepData(StepData, "y");
       if Value = To_Unbounded_String("random") then
-         Random_Location_Loop :
+         Random_Location_Loop:
          loop
             LocationY := GetRandom(SkyMap'First(2), SkyMap'Last(2));
             exit Random_Location_Loop when SkyMap(LocationX, LocationY)
@@ -455,7 +487,8 @@ package body Stories is
    end SelectLoot;
 
    procedure StartStory
-     (FactionName: Unbounded_String; Condition: StartConditionType) is
+     (FactionName: Unbounded_String;
+      Condition: StartConditionType) is
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
       TempTexts: UnboundedString_Container.Vector;
       CanStart: Boolean;
@@ -463,7 +496,7 @@ package body Stories is
       if CurrentStory.Index /= Null_Unbounded_String then
          return;
       end if;
-      Find_Faction_Index_Loop :
+      Find_Faction_Index_Loop:
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = FactionName then
             FactionIndex := Factions_Container.Key(I);
@@ -473,10 +506,10 @@ package body Stories is
       if FactionIndex = Null_Unbounded_String then
          return;
       end if;
-      Check_Stories_Loop :
+      Check_Stories_Loop:
       for I in Stories_List.Iterate loop
          CanStart := True;
-         Check_Faction_Loop :
+         Check_Faction_Loop:
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
               To_Lower(To_String(PlayerShip.Crew(1).Faction)) then
@@ -518,20 +551,22 @@ package body Stories is
                            null;
                      end case;
                      CurrentStory :=
-                       (Index => Stories_Container.Key(I), Step => 1,
+                       (Index => Stories_Container.Key(I),
+                        Step => 1,
                         CurrentStep => 0,
                         MaxSteps =>
                           GetRandom
                             (Stories_List(I).MinSteps,
                              Stories_List(I).MaxSteps),
-                        ShowText => True, Data => StepData,
+                        ShowText => True,
+                        Data => StepData,
                         FinishedStep => ANY);
                      UpdateCargo(PlayerShip, Stories_List(I).StartData(1), 1);
                      FinishedStories.Append
-                       (New_Item =>
-                          (Index => CurrentStory.Index,
-                           StepsAmount => CurrentStory.MaxSteps,
-                           StepsTexts => TempTexts));
+                     (New_Item =>
+                        (Index => CurrentStory.Index,
+                         StepsAmount => CurrentStory.MaxSteps,
+                         StepsTexts => TempTexts));
                      return;
                   end if;
             end case;
@@ -542,22 +577,30 @@ package body Stories is
    procedure ClearCurrentStory is
    begin
       CurrentStory :=
-        (Index => Null_Unbounded_String, Step => 1, CurrentStep => -3,
-         MaxSteps => 1, ShowText => False, Data => Null_Unbounded_String,
+        (Index => Null_Unbounded_String,
+         Step => 1,
+         CurrentStep => -3,
+         MaxSteps => 1,
+         ShowText => False,
+         Data => Null_Unbounded_String,
          FinishedStep => ANY);
    end ClearCurrentStory;
 
    function ProgressStory(NextStep: Boolean := False) return Boolean is
       Step: Step_Data :=
-        (if CurrentStory.CurrentStep = 0 then
+        (if
+           CurrentStory.CurrentStep = 0
+         then
            Stories_List(CurrentStory.Index).StartingStep
-         elsif CurrentStory.CurrentStep > 0 then
+         elsif
+           CurrentStory.CurrentStep > 0
+         then
            Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
          else Stories_List(CurrentStory.Index).FinalStep);
       MaxRandom: constant Positive :=
         (if Step.FinishCondition = DESTROYSHIP and NextStep then 1
-         else Positive'Value
-             (To_String(GetStepData(Step.FinishData, "chance"))));
+         else
+           Positive'Value(To_String(GetStepData(Step.FinishData, "chance"))));
       FinishCondition: Unbounded_String;
       Chance: Natural;
    begin
@@ -581,23 +624,25 @@ package body Stories is
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
-               Count_Explore_Chance_Loop :
+               Count_Explore_Chance_Loop:
                for Member of PlayerShip.Crew loop
                   if Member.Order = Pilot or Member.Order = Gunner then
                      Chance :=
                        Chance +
                        GetSkillLevel
-                         (Member, Find_Skill_Index(FinishCondition));
+                         (Member,
+                          Find_Skill_Index(FinishCondition));
                   end if;
                end loop Count_Explore_Chance_Loop;
             when LOOT =>
-               Count_Loot_Chance_Loop :
+               Count_Loot_Chance_Loop:
                for Member of PlayerShip.Crew loop
                   if Member.Order = Boarding then
                      Chance :=
                        Chance +
                        GetSkillLevel
-                         (Member, Find_Skill_Index(FinishCondition));
+                         (Member,
+                          Find_Skill_Index(FinishCondition));
                   end if;
                end loop Count_Loot_Chance_Loop;
             when ANY =>
@@ -620,25 +665,29 @@ package body Stories is
                begin
                   if TraderIndex > 0 then
                      GainExp
-                       (10, Find_Skill_Index(FinishCondition), TraderIndex);
+                       (10,
+                        Find_Skill_Index(FinishCondition),
+                        TraderIndex);
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
-               Count_Explore_Experience_Loop :
+               Count_Explore_Experience_Loop:
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Order = Pilot or
                     PlayerShip.Crew(I).Order = Gunner then
                      GainExp
-                       (10, Find_Skill_Index(FinishCondition),
+                       (10,
+                        Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Explore_Experience_Loop;
             when LOOT =>
-               Count_Loot_Experience_Loop :
+               Count_Loot_Experience_Loop:
                for I in PlayerShip.Crew.Iterate loop
                   if PlayerShip.Crew(I).Order = Boarding then
                      GainExp
-                       (10, Find_Skill_Index(FinishCondition),
+                       (10,
+                        Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
                   end if;
                end loop Count_Loot_Experience_Loop;
@@ -647,7 +696,7 @@ package body Stories is
          end case;
       end if;
       Update_Game(30);
-      Update_Finished_Stories_Loop :
+      Update_Finished_Stories_Loop:
       for FinishedStory of FinishedStories loop
          if FinishedStory.Index = CurrentStory.Index then
             FinishedStory.StepsTexts.Append(New_Item => GetCurrentStoryText);
@@ -690,14 +739,18 @@ package body Stories is
 
    function GetCurrentStoryText return Unbounded_String is
       StepTexts: constant StepTexts_Container.Vector :=
-        (if CurrentStory.CurrentStep = 0 then
+        (if
+           CurrentStory.CurrentStep = 0
+         then
            Stories_List(CurrentStory.Index).StartingStep.Texts
-         elsif CurrentStory.CurrentStep > 0 then
+         elsif
+           CurrentStory.CurrentStep > 0
+         then
            Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
              .Texts
          else Stories_List(CurrentStory.Index).FinalStep.Texts);
    begin
-      Current_Story_Text_Loop :
+      Current_Story_Text_Loop:
       for Text of StepTexts loop
          if Text.Condition = CurrentStory.FinishedStep then
             return Text.Text;
@@ -707,10 +760,10 @@ package body Stories is
    end GetCurrentStoryText;
 
    function GetStepData
-     (FinishData: StepData_Container.Vector; Name: String)
-      return Unbounded_String is
+     (FinishData: StepData_Container.Vector;
+      Name: String) return Unbounded_String is
    begin
-      Get_Step_Data_Loop :
+      Get_Step_Data_Loop:
       for Data of FinishData loop
          if Data.Name = To_Unbounded_String(Name) then
             return Data.Value;
@@ -720,13 +773,14 @@ package body Stories is
    end GetStepData;
 
    procedure GetStoryLocation
-     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) is
+     (StoryX: out Map_X_Range;
+      StoryY: out Map_Y_Range) is
       Tokens: Slice_Set;
    begin
       if CurrentStory.Data /= Null_Unbounded_String then
          Create(Tokens, To_String(CurrentStory.Data), ";");
          if Slice_Count(Tokens) < 3 then
-            Get_Story_Location_Loop :
+            Get_Story_Location_Loop:
             for I in SkyBases'Range loop
                if SkyBases(I).Name = CurrentStory.Data then
                   StoryX := SkyBases(I).SkyX;

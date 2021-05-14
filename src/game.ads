@@ -70,7 +70,8 @@ package Game is
    -- FUNCTION
    -- Used to store Unbounded_String values as list
    -- SOURCE
-   package UnboundedString_Container is new Vectors(Index_Type => Positive,
+   package UnboundedString_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Unbounded_String);
    -- ****
 
@@ -78,7 +79,8 @@ package Game is
    -- FUNCTION
    -- Used to store Positive values as list
    -- SOURCE
-   package Positive_Container is new Vectors(Index_Type => Positive,
+   package Positive_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Positive);
    -- ****
 
@@ -86,7 +88,8 @@ package Game is
    -- FUNCTION
    -- Used to store Natural values as list
    -- SOURCE
-   package Natural_Container is new Vectors(Index_Type => Positive,
+   package Natural_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Natural);
    -- ****
 
@@ -94,7 +97,8 @@ package Game is
    -- FUNCTION
    -- Used to store Integer values as list
    -- SOURCE
-   package Integer_Container is new Vectors(Index_Type => Positive,
+   package Integer_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Integer);
    -- ****
 
@@ -115,7 +119,8 @@ package Game is
    -- ****t* Game/Game.Attributes_Container
    -- Used to store attributes data
    -- SOURCE
-   package Attributes_Container is new Vectors(Index_Type => Positive,
+   package Attributes_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Attributes_Array);
    -- ****
 
@@ -144,7 +149,8 @@ package Game is
    -- FUNCTION
    -- Used to store attributes data
    -- SOURCE
-   package AttributesData_Container is new Vectors(Index_Type => Positive,
+   package AttributesData_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Attribute_Record);
    -- ****
 
@@ -174,8 +180,10 @@ package Game is
    -- Empty skill data constant
    -- SOURCE
    Empty_Skill: constant Skill_Record :=
-     (Name => Null_Unbounded_String, Attribute => 0,
-      Description => Null_Unbounded_String, Tool => Null_Unbounded_String,
+     (Name => Null_Unbounded_String,
+      Attribute => 0,
+      Description => Null_Unbounded_String,
+      Tool => Null_Unbounded_String,
       Tools_Quality => Attributes_Container.Empty_Vector);
    -- ****
 
@@ -183,7 +191,8 @@ package Game is
    -- FUNCTION
    -- Used to store skills data
    -- SOURCE
-   package SkillsData_Container is new Vectors(Index_Type => Positive,
+   package SkillsData_Container is new Vectors
+     (Index_Type => Positive,
       Element_Type => Skill_Record);
    -- ****
 
