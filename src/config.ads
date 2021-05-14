@@ -100,10 +100,14 @@ package Config is
       Player_Faction => To_Unbounded_String(Source => "POLEIS"),
       Player_Career => To_Unbounded_String(Source => "general"),
       Starting_Base => To_Unbounded_String(Source => "Any"),
-      Enemy_Damage_Bonus => 1.0, Player_Damage_Bonus => 1.0,
-      Enemy_Melee_Damage_Bonus => 1.0, Player_Melee_Damage_Bonus => 1.0,
-      Experience_Bonus => 1.0, Reputation_Bonus => 1.0,
-      Upgrade_Cost_Bonus => 1.0, Prices_Bonus => 1.0,
+      Enemy_Damage_Bonus => 1.0,
+      Player_Damage_Bonus => 1.0,
+      Enemy_Melee_Damage_Bonus => 1.0,
+      Player_Melee_Damage_Bonus => 1.0,
+      Experience_Bonus => 1.0,
+      Reputation_Bonus => 1.0,
+      Upgrade_Cost_Bonus => 1.0,
+      Prices_Bonus => 1.0,
       Difficulty_Level => Default_Difficulty_Type);
    -- ****
 
@@ -233,19 +237,35 @@ package Config is
    -- Default setting for the game
    -- SOURCE
    Default_Game_Settings: constant Game_Settings_Record :=
-     (Auto_Rest => True, Undock_Speed => FULL_SPEED, Auto_Center => True,
-      Auto_Return => True, Auto_Finish => True, Low_Fuel => 100,
-      Low_Drinks => 50, Low_Food => 25,
-      Auto_Move_Stop => Default_Auto_Move_Stop, Window_Width => 800,
-      Window_Height => 600, Messages_Limit => 500, Saved_Messages => 10,
-      Help_Font_Size => 14, Map_Font_Size => 16, Interface_Font_Size => 14,
+     (Auto_Rest => True,
+      Undock_Speed => FULL_SPEED,
+      Auto_Center => True,
+      Auto_Return => True,
+      Auto_Finish => True,
+      Low_Fuel => 100,
+      Low_Drinks => 50,
+      Low_Food => 25,
+      Auto_Move_Stop => Default_Auto_Move_Stop,
+      Window_Width => 800,
+      Window_Height => 600,
+      Messages_Limit => 500,
+      Saved_Messages => 10,
+      Help_Font_Size => 14,
+      Map_Font_Size => 16,
+      Interface_Font_Size => 14,
       Interface_Theme => To_Unbounded_String(Source => "steamsky"),
-      Messages_Order => Default_Messages_Order, Auto_Ask_For_Bases => False,
-      Auto_Ask_For_Events => False, Show_Tooltips => True,
-      Show_Last_Messages => True, Messages_Position => 213,
-      Full_Screen => False, Auto_Close_Messages_Time => 6,
-      Auto_Save => Default_Auto_Save_Time, Topics_Position => 200,
-      Show_Numbers => False, Right_Button => False);
+      Messages_Order => Default_Messages_Order,
+      Auto_Ask_For_Bases => False,
+      Auto_Ask_For_Events => False,
+      Show_Tooltips => True,
+      Show_Last_Messages => True,
+      Messages_Position => 213,
+      Full_Screen => False,
+      Auto_Close_Messages_Time => 6,
+      Auto_Save => Default_Auto_Save_Time,
+      Topics_Position => 200,
+      Show_Numbers => False,
+      Right_Button => False);
    -- ****
 
    -- ****v* Config/Config.New_Game_Settings

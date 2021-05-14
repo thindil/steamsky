@@ -46,8 +46,11 @@ package Careers is
    -- FUNCTION
    -- Used to store all available careers
    -- SOURCE
-   package Careers_Container is new Hashed_Maps(Unbounded_String, CareerRecord,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Careers_Container is new Hashed_Maps
+     (Unbounded_String,
+      CareerRecord,
+      Ada.Strings.Unbounded.Hash,
+      "=");
    -- ****
 
    -- ****v* Careers/Careers.Careers_List

@@ -57,8 +57,10 @@ package Bases.Trade is
    --                  means infinite contract
    -- SOURCE
    procedure HireRecruit
-     (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
-      DailyPayment, TradePayment: Natural; ContractLenght: Integer) with
+     (RecruitIndex: Recruit_Container.Extended_Index;
+      Cost: Positive;
+      DailyPayment, TradePayment: Natural;
+      ContractLenght: Integer) with
       Test_Case => (Name => "Test_HireRecruit", Mode => Robustness);
       -- ****
 

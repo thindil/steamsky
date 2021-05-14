@@ -33,9 +33,24 @@ package ShipModules is
    -- Types of ship modules
    -- SOURCE
    type ModuleType is
-     (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
-      BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
-      GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
+     (ANY,
+      ENGINE,
+      CABIN,
+      COCKPIT,
+      TURRET,
+      GUN,
+      CARGO,
+      HULL,
+      ARMOR,
+      BATTERING_RAM,
+      ALCHEMY_LAB,
+      FURNACE,
+      WATER_COLLECTOR,
+      WORKSHOP,
+      GREENHOUSE,
+      MEDICAL_ROOM,
+      HARPOON_GUN,
+      TRAINING_ROOM);
    -- ****
 
    -- ****s* ShipModules/ShipModules.BaseModule_Data
@@ -83,8 +98,11 @@ package ShipModules is
    -- FUNCTION
    -- Used for store prototypes of modules
    -- SOURCE
-   package BaseModules_Container is new Hashed_Maps(Unbounded_String,
-      BaseModule_Data, Ada.Strings.Unbounded.Hash, "=");
+   package BaseModules_Container is new Hashed_Maps
+     (Unbounded_String,
+      BaseModule_Data,
+      Ada.Strings.Unbounded.Hash,
+      "=");
    -- ****
 
    -- ****v* ShipModules/ShipModules.Modules_List

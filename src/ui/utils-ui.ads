@@ -49,7 +49,9 @@ package Utils.UI is
    -- Dialogname is name of the dialog to close
    -- SOURCE
    function Close_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
@@ -63,7 +65,8 @@ package Utils.UI is
       --               the game frame. Can be empty
       -- SOURCE
    procedure ShowMessage
-     (Text: String; ParentFrame: String := ".gameframe") with
+     (Text: String;
+      ParentFrame: String := ".gameframe") with
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
@@ -83,7 +86,9 @@ package Utils.UI is
    -- to show
    -- SOURCE
    function Show_On_Map_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
@@ -104,7 +109,9 @@ package Utils.UI is
       -- to set
       -- SOURCE
    function Set_Destination_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
@@ -117,7 +124,8 @@ package Utils.UI is
       -- AdaCommand - Ada function which will be invoked
       -- SOURCE
    procedure AddCommand
-     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) with
+     (Name: String;
+      AdaCommand: not null CreateCommands.Tcl_CmdProc) with
       Pre => Name'Length > 0;
       -- ****
 
@@ -138,7 +146,8 @@ package Utils.UI is
    -- Parameter InfoText
    -- SOURCE
    procedure MinutesToDate
-     (Minutes: Natural; InfoText: in out Unbounded_String);
+     (Minutes: Natural;
+      InfoText: in out Unbounded_String);
    -- ****
 
    -- ****f* UUI/UUI.TravelInfo
@@ -152,7 +161,8 @@ package Utils.UI is
    -- Parameter InfoText
    -- SOURCE
    procedure TravelInfo
-     (InfoText: in out Unbounded_String; Distance: Positive;
+     (InfoText: in out Unbounded_String;
+      Distance: Positive;
       ShowFuelName: Boolean := False);
    -- ****
 
@@ -183,7 +193,9 @@ package Utils.UI is
    --               otherwise 0
    -- SOURCE
    procedure ShowInventoryItemInfo
-     (Parent: String; ItemIndex: Positive; MemberIndex: Natural) with
+     (Parent: String;
+      ItemIndex: Positive;
+      MemberIndex: Natural) with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
@@ -233,7 +245,8 @@ package Utils.UI is
       -- 5.9 - Added
       -- SOURCE
    procedure ShowQuestion
-     (Question, Result: String; In_Game: Boolean := True) with
+     (Question, Result: String;
+      In_Game: Boolean := True) with
       Pre => Question'Length > 0;
       -- ****
 
@@ -248,7 +261,8 @@ package Utils.UI is
       -- 5.9 - Added
       -- SOURCE
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class);
+     (Start_Index, End_Index: Integer;
+      Frame: Tk_Widget'Class);
    -- ****
 
 end Utils.UI;

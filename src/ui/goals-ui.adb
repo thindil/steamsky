@@ -46,13 +46,17 @@ package body Goals.UI is
    -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Show_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Goals_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       GoalsView: constant Ttk_Tree_View :=
@@ -63,13 +67,16 @@ package body Goals.UI is
       Tcl_EvalFile
         (Interp,
          To_String(Data_Directory) & "ui" & Dir_Separator & "goals.tcl");
-      Load_Goals_Loop :
+      Load_Goals_Loop:
       for I in Goals_List.Iterate loop
          Insert
            (GoalsView,
-            GoalTypes'Image(Goals_List(I).GType) & " end -id {" &
+            GoalTypes'Image(Goals_List(I).GType) &
+            " end -id {" &
             Trim(Positive'Image(Goals_Container.To_Index(I)), Left) &
-            "} -text {" & GoalText(Goals_Container.To_Index(I)) & "}");
+            "} -text {" &
+            GoalText(Goals_Container.To_Index(I)) &
+            "}");
       end loop Load_Goals_Loop;
       configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
@@ -90,13 +97,17 @@ package body Goals.UI is
    -- Buttonpath is path to the button which is used to set the goal
    -- SOURCE
    function Set_Goal_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Goal_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       GoalsView: constant Ttk_Tree_View :=

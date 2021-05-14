@@ -41,7 +41,8 @@ package Bases.Cargo is
       --              is set
       -- SOURCE
    procedure UpdateBaseCargo
-     (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
+     (ProtoIndex: Unbounded_String := Null_Unbounded_String;
+      Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex: Inventory_Container.Extended_Index := 0) with
       Test_Case => (Name => "Test_UpdateBaseCargo", Mode => Robustness);
@@ -58,7 +59,8 @@ package Bases.Cargo is
       -- SOURCE
    function FindBaseCargo
      (ProtoIndex: Unbounded_String;
-      Durability: Items_Durability := Items_Durability'Last)
+      Durability: Items_Durability :=
+        Items_Durability'Last)
       return Natural with
       Test_Case => (Name => "Test_FindBaseCargo", Mode => Robustness);
       -- ****

@@ -22,7 +22,8 @@ with Ships.Crew; use Ships.Crew;
 package body Crew.Inventory is
 
    procedure UpdateInventory
-     (MemberIndex: Positive; Amount: Integer;
+     (MemberIndex: Positive;
+      Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) is
@@ -30,10 +31,13 @@ package body Crew.Inventory is
    begin
       if InventoryIndex = 0 then
          ItemIndex :=
-           (if Durability > 0 then
+           (if
+              Durability > 0
+            then
               FindItem
                 (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-                 ProtoIndex => ProtoIndex, Durability => Durability)
+                 ProtoIndex => ProtoIndex,
+                 Durability => Durability)
             else FindItem(PlayerShip.Crew(MemberIndex).Inventory, ProtoIndex));
       else
          ItemIndex := InventoryIndex;
@@ -41,7 +45,9 @@ package body Crew.Inventory is
       if Amount > 0 then
          declare
             Weight: constant Positive :=
-              (if ItemIndex > 0 then
+              (if
+                 ItemIndex > 0
+               then
                  Items_List
                    (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
                       .ProtoIndex)
@@ -62,10 +68,12 @@ package body Crew.Inventory is
       end if;
       if ItemIndex = 0 then
          PlayerShip.Crew(MemberIndex).Inventory.Append
-           (New_Item =>
-              (ProtoIndex => ProtoIndex, Amount => Amount,
-               Name => Items_List(ProtoIndex).Name, Durability => Durability,
-               Price => Price));
+         (New_Item =>
+            (ProtoIndex => ProtoIndex,
+             Amount => Amount,
+             Name => Items_List(ProtoIndex).Name,
+             Durability => Durability,
+             Price => Price));
       else
          declare
             NewAmount: constant Natural :=
@@ -74,8 +82,8 @@ package body Crew.Inventory is
          begin
             if NewAmount = 0 then
                PlayerShip.Crew(MemberIndex).Inventory.Delete
-                 (Index => ItemIndex);
-               Update_Item_Index_Loop :
+               (Index => ItemIndex);
+               Update_Item_Index_Loop:
                for Item of PlayerShip.Crew(MemberIndex).Equipment loop
                   if Item = ItemIndex then
                      Item := 0;
@@ -92,11 +100,12 @@ package body Crew.Inventory is
    end UpdateInventory;
 
    function FreeInventory
-     (MemberIndex: Positive; Amount: Integer) return Integer is
+     (MemberIndex: Positive;
+      Amount: Integer) return Integer is
       FreeSpace: Integer :=
         50 + PlayerShip.Crew(MemberIndex).Attributes(Strength_Index)(1);
    begin
-      Count_Free_Inventory_Space_Loop :
+      Count_Free_Inventory_Space_Loop:
       for Item of PlayerShip.Crew(MemberIndex).Inventory loop
          FreeSpace :=
            FreeSpace - (Items_List(Item.ProtoIndex).Weight * Item.Amount);
@@ -106,7 +115,7 @@ package body Crew.Inventory is
 
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) is
    begin
-      Take_Off_Item_Loop :
+      Take_Off_Item_Loop:
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
             PlayerShip.Crew(MemberIndex).Equipment(I) := 0;
@@ -117,7 +126,7 @@ package body Crew.Inventory is
 
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean is
    begin
-      Check_Item_Usage_Loop :
+      Check_Item_Usage_Loop:
       for I in PlayerShip.Crew(MemberIndex).Equipment'Range loop
          if PlayerShip.Crew(MemberIndex).Equipment(I) = ItemIndex then
             return True;
@@ -127,7 +136,9 @@ package body Crew.Inventory is
    end ItemIsUsed;
 
    function FindTools
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+     (MemberIndex: Positive;
+      ItemType: Unbounded_String;
+      Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
       ToolsIndex: Inventory_Container.Extended_Index :=
         PlayerShip.Crew(MemberIndex).Equipment(7);
@@ -143,11 +154,14 @@ package body Crew.Inventory is
               (Items_List(ProtoIndex).Value.Length > 0
                and then Items_List(ProtoIndex).Value(1) < ToolQuality) then
                UpdateCargo
-                 (PlayerShip, ProtoIndex, 1,
+                 (PlayerShip,
+                  ProtoIndex,
+                  1,
                   PlayerShip.Crew(MemberIndex).Inventory(ToolsIndex)
                     .Durability);
                UpdateInventory
-                 (MemberIndex => MemberIndex, Amount => -1,
+                 (MemberIndex => MemberIndex,
+                  Amount => -1,
                   InventoryIndex => ToolsIndex);
                ToolsIndex := 0;
             end if;
@@ -156,23 +170,30 @@ package body Crew.Inventory is
       ToolsIndex :=
         FindItem
           (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-           ItemType => ItemType, Quality => ToolQuality);
+           ItemType => ItemType,
+           Quality => ToolQuality);
       if ToolsIndex = 0 then
          ToolsIndex :=
            FindItem
-             (Inventory => PlayerShip.Cargo, ItemType => ItemType,
+             (Inventory => PlayerShip.Cargo,
+              ItemType => ItemType,
               Quality => ToolQuality);
          if ToolsIndex > 0 then
             begin
                UpdateInventory
-                 (MemberIndex, 1, PlayerShip.Cargo(ToolsIndex).ProtoIndex,
+                 (MemberIndex,
+                  1,
+                  PlayerShip.Cargo(ToolsIndex).ProtoIndex,
                   PlayerShip.Cargo(ToolsIndex).Durability);
                UpdateCargo
-                 (Ship => PlayerShip, Amount => -1, CargoIndex => ToolsIndex);
+                 (Ship => PlayerShip,
+                  Amount => -1,
+                  CargoIndex => ToolsIndex);
                ToolsIndex :=
                  FindItem
                    (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
-                    ItemType => ItemType, Quality => ToolQuality);
+                    ItemType => ItemType,
+                    Quality => ToolQuality);
             exception
                when Crew_No_Space_Error =>
                   case Order is
@@ -180,27 +201,32 @@ package body Crew.Inventory is
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue repairs because they don't have free space in their inventory for repair tools.",
-                           OrderMessage, RED);
+                           OrderMessage,
+                           RED);
                      when Upgrading =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue upgrading module because they don't have free space in their inventory for repair tools.",
-                           OrderMessage, RED);
+                           OrderMessage,
+                           RED);
                      when Clean =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue cleaning ship because they don't have free space in their inventory for cleaning tools.",
-                           OrderMessage, RED);
+                           OrderMessage,
+                           RED);
                      when Craft =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue manufacturing because they don't have space in their inventory for the proper tools.",
-                           OrderMessage, RED);
+                           OrderMessage,
+                           RED);
                      when Train =>
                         AddMessage
                           (To_String(PlayerShip.Crew(MemberIndex).Name) &
                            " can't continue training because they don't have space in their inventory for the proper tools.",
-                           OrderMessage, RED);
+                           OrderMessage,
+                           RED);
                      when others =>
                         null;
                   end case;

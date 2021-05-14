@@ -114,7 +114,8 @@ package Goals is
       -- Amount      - Amount for goal to modify if both checks are valid
       -- SOURCE
    procedure UpdateGoal
-     (GType: GoalTypes; TargetIndex: Unbounded_String;
+     (GType: GoalTypes;
+      TargetIndex: Unbounded_String;
       Amount: Positive := 1) with
       Test_Case => (Name => "Test_UpdateGoal", Mode => Robustness);
       -- ****

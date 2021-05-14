@@ -49,7 +49,9 @@ with Utils.UI; use Utils.UI;
 package body Knowledge is
 
    function Show_Knowledge_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: constant Ttk_PanedWindow :=
@@ -70,10 +72,12 @@ package body Knowledge is
       if Winfo_Get(KnowledgeFrame, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
-            To_String(Data_Directory) & "ui" & Dir_Separator &
+            To_String(Data_Directory) &
+            "ui" &
+            Dir_Separator &
             "knowledge.tcl");
          Append(ComboValues, " {Any}");
-         Load_Bases_Types_Loop :
+         Load_Bases_Types_Loop:
          for BaseType of BasesTypes_List loop
             Append(ComboValues, " {" & BaseType.Name & "}");
          end loop Load_Bases_Types_Loop;
@@ -81,7 +85,7 @@ package body Knowledge is
          Current(ComboBox, "0");
          ComboValues := To_Unbounded_String(" {Any}");
          ComboBox.Name := New_String(KnowledgeCanvas & ".frame.options.owner");
-         Load_Bases_Owners_Loop :
+         Load_Bases_Owners_Loop:
          for I in Factions_List.Iterate loop
             Append(ComboValues, " {" & Factions_List(I).Name & "}");
          end loop Load_Bases_Owners_Loop;
@@ -123,17 +127,19 @@ package body Knowledge is
             StoriesView: constant Tk_Text :=
               Create(KnowledgeFrame & ".view", "-wrap word");
          begin
-            Load_Finished_Stories_Loop :
+            Load_Finished_Stories_Loop:
             for FinishedStory of FinishedStories loop
                Append
                  (StoriesList,
                   " {" & Stories_List(FinishedStory.Index).Name & "}");
             end loop Load_Finished_Stories_Loop;
             configure
-              (StoriesBox, "-values [list " & To_String(StoriesList) & "]");
+              (StoriesBox,
+               "-values [list " & To_String(StoriesList) & "]");
             Bind(StoriesBox, "<<ComboboxSelected>>", "ShowStory");
             Current
-              (StoriesBox, Natural'Image(Natural(FinishedStories.Length) - 1));
+              (StoriesBox,
+               Natural'Image(Natural(FinishedStories.Length) - 1));
             Tcl.Tk.Ada.Grid.Grid(StoriesBox);
             Button :=
               Create
@@ -178,13 +184,17 @@ package body Knowledge is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Knowledge_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Knowledge_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       type Frame_Info is record
@@ -205,10 +215,12 @@ package body Knowledge is
       Button.Interp := Interp;
       Button.Name :=
         New_String
-          (Widget_Image(Frame) & "." & CArgv.Arg(Argv, 1) &
+          (Widget_Image(Frame) &
+           "." &
+           CArgv.Arg(Argv, 1) &
            ".canvas.frame.maxmin");
       if CArgv.Arg(Argv, 2) /= "show" then
-         Hide_Manipulate_Frames_Loop :
+         Hide_Manipulate_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -220,16 +232,18 @@ package body Knowledge is
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Frame,
                   "-columnspan 1 -rowspan 1 -column" &
-                  Natural'Image(FrameInfo.Column) & " -row" &
+                  Natural'Image(FrameInfo.Column) &
+                  " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
          end loop Hide_Manipulate_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf106]"" -command {KnowledgeMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
+            CArgv.Arg(Argv, 1) &
+            " show}");
       else
-         Show_Manipulate_Frames_Loop :
+         Show_Manipulate_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -239,13 +253,15 @@ package body Knowledge is
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+                 (Frame,
+                  "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop Show_Manipulate_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf107]"" -command {KnowledgeMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
+            CArgv.Arg(Argv, 1) &
+            " hide}");
       end if;
       return TCL_OK;
    end Knowledge_Max_Min_Command;

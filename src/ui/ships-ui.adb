@@ -45,7 +45,9 @@ with Utils.UI; use Utils.UI;
 package body Ships.UI is
 
    function Show_Ship_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       Paned: constant Ttk_PanedWindow :=
@@ -93,7 +95,8 @@ package body Ships.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          UpgradeInfo :=
-           "Upgrade:" & PlayerShip.Modules(PlayerShip.UpgradeModule).Name &
+           "Upgrade:" &
+           PlayerShip.Modules(PlayerShip.UpgradeModule).Name &
            " ";
          case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
             when DURABILITY =>
@@ -178,14 +181,19 @@ package body Ships.UI is
               (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
             Float(MaxUpgrade));
          ProgressBarStyle :=
-           (if UpgradePercent > 0.74 then
+           (if
+              UpgradePercent > 0.74
+            then
               To_Unbounded_String(" -style green.Horizontal.TProgressbar")
-            elsif UpgradePercent > 0.24 then
+            elsif
+              UpgradePercent > 0.24
+            then
               To_Unbounded_String(" -style yellow.Horizontal.TProgressbar")
             else To_Unbounded_String(" -style Horizontal.TProgressbar"));
          configure
            (UpgradeProgress,
-            "-value" & Float'Image(UpgradePercent) &
+            "-value" &
+            Float'Image(UpgradePercent) &
             To_String(ProgressBarStyle));
          configure(Label, "-text {" & To_String(UpgradeInfo) & "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
@@ -202,7 +210,8 @@ package body Ships.UI is
          configure
            (Label,
             "-text {Repair first: " &
-            To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name) & "}");
+            To_String(PlayerShip.Modules(PlayerShip.RepairModule).Name) &
+            "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
       end if;
@@ -229,8 +238,10 @@ package body Ships.UI is
             configure
               (Label,
                "-text {Destination: X:" &
-               Positive'Image(PlayerShip.DestinationX) & " Y:" &
-               Positive'Image(PlayerShip.DestinationY) & "}");
+               Positive'Image(PlayerShip.DestinationX) &
+               " Y:" &
+               Positive'Image(PlayerShip.DestinationY) &
+               "}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
@@ -238,16 +249,19 @@ package body Ships.UI is
       Label.Name := New_String(ShipInfoFrame & ".homelabel");
       configure
         (Label,
-         "-text {Home: " & To_String(SkyBases(PlayerShip.HomeBase).Name) &
+         "-text {Home: " &
+         To_String(SkyBases(PlayerShip.HomeBase).Name) &
          "}");
       Label.Name := New_String(ShipInfoFrame & ".weight");
       configure
         (Label,
-         "-text {Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
+         "-text {Weight:" &
+         Integer'Image(CountShipWeight(PlayerShip)) &
          "kg}");
       Tcl_Eval(Get_Context, "update");
       configure
-        (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
+        (ShipCanvas,
+         "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
       Yview_Move_To(ShipCanvas, "0.0");
       -- Setting ship modules info
@@ -277,18 +291,23 @@ package body Ships.UI is
    -- Shipname is the new name for the player's ship
    -- SOURCE
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Ship_Name_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       NameEntry: constant Ttk_Label :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.general.canvas.frame.name", Interp);
+          (".gameframe.paned.shipinfoframe.general.canvas.frame.name",
+           Interp);
    begin
       if Argc = 1 then
          return TCL_OK;
@@ -313,13 +332,17 @@ package body Ships.UI is
    -- Framename is name of the frame to maximize or minimize
    -- SOURCE
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ship_Max_Min_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       type Frame_Info is record
@@ -335,10 +358,11 @@ package body Ships.UI is
       Frame: Ttk_Frame := Get_Widget(".gameframe.paned.shipinfoframe", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
+          (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin",
+           Interp);
    begin
       if CArgv.Arg(Argv, 2) /= "show" then
-         Show_Frames_Loop :
+         Show_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -350,16 +374,18 @@ package body Ships.UI is
                Tcl.Tk.Ada.Grid.Grid_Configure
                  (Frame,
                   "-columnspan 1 -rowspan 1 -column" &
-                  Natural'Image(FrameInfo.Column) & " -row" &
+                  Natural'Image(FrameInfo.Column) &
+                  " -row" &
                   Natural'Image(FrameInfo.Row));
             end if;
          end loop Show_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf106]"" -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " show}");
+            CArgv.Arg(Argv, 1) &
+            " show}");
       else
-         Hide_Frames_Loop :
+         Hide_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
@@ -369,13 +395,15 @@ package body Ships.UI is
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else
                Tcl.Tk.Ada.Grid.Grid_Configure
-                 (Frame, "-columnspan 2 -rowspan 2 -row 0 -column 0");
+                 (Frame,
+                  "-columnspan 2 -rowspan 2 -row 0 -column 0");
             end if;
          end loop Hide_Frames_Loop;
          configure
            (Button,
             "-text ""[format %c 0xf107]"" -command {ShipMaxMin " &
-            CArgv.Arg(Argv, 1) & " hide}");
+            CArgv.Arg(Argv, 1) &
+            " hide}");
       end if;
       return TCL_OK;
    end Ship_Max_Min_Command;

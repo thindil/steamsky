@@ -64,13 +64,17 @@ package body Missions.UI is
    -- ShowMissionInfo
    -- SOURCE
    function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
@@ -88,7 +92,8 @@ package body Missions.UI is
            Interp);
       Button: constant Ttk_Button :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.set", Interp);
+          (".gameframe.paned.missionsframe.canvas.missions.info.set",
+           Interp);
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
       MissionScale: constant Ttk_Scale :=
@@ -106,11 +111,16 @@ package body Missions.UI is
       case Mission.MType is
          when Deliver =>
             Insert
-              (MissionText, "end",
-               "{Item: " & To_String(Items_List(Mission.ItemIndex).Name) & LF &
+              (MissionText,
+               "end",
+               "{Item: " &
+               To_String(Items_List(Mission.ItemIndex).Name) &
+               LF &
                "Weight:" &
-               Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
-               LF & "To base: " &
+               Positive'Image(Items_List(Mission.ItemIndex).Weight) &
+               " kg" &
+               LF &
+               "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name) &
@@ -119,14 +129,16 @@ package body Missions.UI is
             Insert(MissionText, "end", "{Patrol selected area}");
          when Destroy =>
             Insert
-              (MissionText, "end",
+              (MissionText,
+               "end",
                "{Target: " &
-               To_String(ProtoShips_List(Mission.ShipIndex).Name) & "}");
+               To_String(ProtoShips_List(Mission.ShipIndex).Name) &
+               "}");
          when Explore =>
             Insert(MissionText, "end", "{Explore selected area}");
          when Passenger =>
             CanAccept := False;
-            Modules_Loop :
+            Modules_Loop:
             for Module of PlayerShip.Modules loop
                if (Module.MType = CABIN and not CanAccept)
                  and then Module.Quality >= Mission.Data then
@@ -148,20 +160,26 @@ package body Missions.UI is
             Insert(MissionText, "end", "{Needed quality of cabin: }");
             if CanAccept then
                Insert
-                 (MissionText, "end",
+                 (MissionText,
+                  "end",
                   "{" & GetCabinQuality(Mission.Data) & "}");
             elsif CabinTaken then
                Insert
-                 (MissionText, "end",
+                 (MissionText,
+                  "end",
                   "{" & GetCabinQuality(Mission.Data) & "} [list yellow]");
             else
                Insert
-                 (MissionText, "end",
+                 (MissionText,
+                  "end",
                   "{" & GetCabinQuality(Mission.Data) & "} [list red]");
             end if;
             Insert
-              (MissionText, "end",
-               "{" & LF & "To base: " &
+              (MissionText,
+               "end",
+               "{" &
+               LF &
+               "To base: " &
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name) &
@@ -173,18 +191,23 @@ package body Missions.UI is
         RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       Append
         (MissionInfo,
-         LF & "Base reward:" &
+         LF &
+         "Base reward:" &
          Natural'Image
            (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-         " " & To_String(Money_Name));
+         " " &
+         To_String(Money_Name));
       State(Button, "!disabled");
       if BaseIndex > 0 then
          declare
             Distance: constant Positive :=
-              (if Mission.MType in Deliver | Passenger then
+              (if
+                 Mission.MType in Deliver | Passenger
+               then
                  Positive'Value
                    (Set(MissionsView, Selection(MissionsView), "distance"))
-               else Positive'Value
+               else
+                 Positive'Value
                    (Set(MissionsView, Selection(MissionsView), "distance")) *
                  2);
          begin
@@ -219,7 +242,7 @@ package body Missions.UI is
                when others =>
                   MissionsLimit := 0;
             end case;
-            Count_Missions_Limit_Loop :
+            Count_Missions_Limit_Loop:
             for Mission of AcceptedMissions loop
                if Mission.StartBase =
                  SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
@@ -235,7 +258,8 @@ package body Missions.UI is
             if MissionsLimit > 0 then
                configure
                  (MissionLabel,
-                  "-text {You can take" & Natural'Image(MissionsLimit) &
+                  "-text {You can take" &
+                  Natural'Image(MissionsLimit) &
                   " more missions in from base.}");
             else
                configure
@@ -265,13 +289,17 @@ package body Missions.UI is
    -- ShowMission
    -- SOURCE
    function Show_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       MissionsView: constant Ttk_Tree_View :=
@@ -282,8 +310,11 @@ package body Missions.UI is
         Positive'Value(Selection(MissionsView));
    begin
       return Show_On_Map_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & CArgv.Arg(Argv, 0) &
+          (ClientData,
+           Interp,
+           3,
+           CArgv.Empty &
+           CArgv.Arg(Argv, 0) &
            Map_X_Range'Image
              (SkyBases(BaseIndex).Missions(MissionIndex).TargetX) &
            Map_Y_Range'Image
@@ -303,13 +334,14 @@ package body Missions.UI is
          return;
       end if;
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
-      Show_Missions_List_Loop :
+      Show_Missions_List_Loop:
       for I in List.First_Index .. List.Last_Index loop
          case List(I).MType is
             when Deliver =>
                Insert
                  (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
+                  "{} end -id" &
+                  Positive'Image(I) &
                   " -values [list {Deliver item to base}" &
                   Positive'Image
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
@@ -317,7 +349,8 @@ package body Missions.UI is
             when Patrol =>
                Insert
                  (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
+                  "{} end -id" &
+                  Positive'Image(I) &
                   " -values [list {Patrol area}" &
                   Positive'Image
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
@@ -325,7 +358,8 @@ package body Missions.UI is
             when Destroy =>
                Insert
                  (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
+                  "{} end -id" &
+                  Positive'Image(I) &
                   " -values [list {Destroy ship}" &
                   Positive'Image
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
@@ -333,7 +367,8 @@ package body Missions.UI is
             when Explore =>
                Insert
                  (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
+                  "{} end -id" &
+                  Positive'Image(I) &
                   " -values [list {Explore area}" &
                   Positive'Image
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
@@ -341,7 +376,8 @@ package body Missions.UI is
             when Passenger =>
                Insert
                  (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
+                  "{} end -id" &
+                  Positive'Image(I) &
                   " -values [list {Transport passenger to base}" &
                   Positive'Image
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
@@ -365,13 +401,17 @@ package body Missions.UI is
    -- SetMission
    -- SOURCE
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Mission_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
@@ -405,13 +445,17 @@ package body Missions.UI is
    -- ShowBaseMissions
    -- SOURCE
    function Show_Base_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Base_Missions_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Paned: constant Ttk_PanedWindow :=
@@ -446,13 +490,16 @@ package body Missions.UI is
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
       configure
         (MissionsCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
+         "-height [expr " &
+         SashPos(Paned, "0") &
+         " - 20] -width " &
          cget(Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       MissionsFrame.Name :=
         New_String(Widget_Image(MissionsCanvas) & ".missions");
       Canvas_Create
-        (MissionsCanvas, "window",
+        (MissionsCanvas,
+         "window",
          "0 0 -anchor nw -window " & Widget_Image(MissionsFrame));
       Tcl_Eval(Get_Context, "update");
       configure

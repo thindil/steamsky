@@ -146,8 +146,11 @@ package Stories is
    -- FUNCTION
    -- Used to store stories
    -- SOURCE
-   package Stories_Container is new Hashed_Maps(Unbounded_String, Story_Data,
-      Ada.Strings.Unbounded.Hash, "=");
+   package Stories_Container is new Hashed_Maps
+     (Unbounded_String,
+      Story_Data,
+      Ada.Strings.Unbounded.Hash,
+      "=");
    -- ****
 
    -- ****s* Stories/CurrentStory_Data
@@ -195,7 +198,8 @@ package Stories is
    -- FUNCTIONS
    -- Used to store finished stories
    -- SOURCE
-   package FinishedStories_Container is new Vectors(Positive,
+   package FinishedStories_Container is new Vectors
+     (Positive,
       FinishedStory_Data);
    -- ****
 
@@ -237,7 +241,8 @@ package Stories is
    -- Condition   - Starting condition which was triggered
    -- SOURCE
    procedure StartStory
-     (FactionName: Unbounded_String; Condition: StartConditionType) with
+     (FactionName: Unbounded_String;
+      Condition: StartConditionType) with
       Pre => FactionName /= Null_Unbounded_String,
       Test_Case => (Name => "Test_StartStory", Mode => Nominal);
       -- ****
@@ -283,8 +288,8 @@ package Stories is
       -- Selected data from FinishData parameter
       -- SOURCE
    function GetStepData
-     (FinishData: StepData_Container.Vector; Name: String)
-      return Unbounded_String with
+     (FinishData: StepData_Container.Vector;
+      Name: String) return Unbounded_String with
       Pre => Name /= "",
       Test_Case => (Name => "Test_GetStepData", Mode => Nominal);
       -- ****
@@ -299,7 +304,8 @@ package Stories is
       -- Parameters X and Y
       -- SOURCE
    procedure GetStoryLocation
-     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) with
+     (StoryX: out Map_X_Range;
+      StoryY: out Map_Y_Range) with
       Test_Case => (Name => "Test_GetStoryLocation", Mode => Robustness);
       -- ****
 

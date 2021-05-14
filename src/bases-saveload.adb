@@ -27,14 +27,16 @@ package body Bases.SaveLoad is
       RawValue: Unbounded_String;
       BaseNode, SubNode: DOM.Core.Element;
       procedure SaveNumber
-        (Value: Integer; Name: String; Node: DOM.Core.Element := SubNode) is
+        (Value: Integer;
+         Name: String;
+         Node: DOM.Core.Element := SubNode) is
          RawValue: constant String :=
            Trim(Integer'Image(Value), Ada.Strings.Left);
       begin
          Set_Attribute(Node, Name, RawValue);
       end SaveNumber;
    begin
-      Save_Bases_Loop :
+      Save_Bases_Loop:
       for SkyBase of SkyBases loop
          BaseNode := Create_Element(SaveData, "base");
          BaseNode := Append_Child(MainNode, BaseNode);
@@ -68,7 +70,7 @@ package body Bases.SaveLoad is
          declare
             RecruitNode, RecruitDataNode: DOM.Core.Element;
          begin
-            Save_Recruits_Loop :
+            Save_Recruits_Loop:
             for Recruit of SkyBase.Recruits loop
                RecruitNode := Create_Element(SaveData, "recruit");
                RecruitNode := Append_Child(BaseNode, RecruitNode);
@@ -76,9 +78,10 @@ package body Bases.SaveLoad is
                Set_Attribute(RecruitNode, "gender", Recruit.Gender & "");
                RawValue := To_Unbounded_String(Integer'Image(Recruit.Price));
                Set_Attribute
-                 (RecruitNode, "price",
+                 (RecruitNode,
+                  "price",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
-               Save_Skills_Loop :
+               Save_Skills_Loop:
                for Skill of Recruit.Skills loop
                   RecruitDataNode := Create_Element(SaveData, "skill");
                   RecruitDataNode :=
@@ -86,21 +89,21 @@ package body Bases.SaveLoad is
                   SaveNumber(Skill(1), "index", RecruitDataNode);
                   SaveNumber(Skill(2), "level", RecruitDataNode);
                end loop Save_Skills_Loop;
-               Save_Attributes_Loop :
+               Save_Attributes_Loop:
                for Attribute of Recruit.Attributes loop
                   RecruitDataNode := Create_Element(SaveData, "attribute");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   SaveNumber(Attribute(1), "level", RecruitDataNode);
                end loop Save_Attributes_Loop;
-               Save_Inventory_Loop :
+               Save_Inventory_Loop:
                for Item of Recruit.Inventory loop
                   RecruitDataNode := Create_Element(SaveData, "item");
                   RecruitDataNode :=
                     Append_Child(RecruitNode, RecruitDataNode);
                   Set_Attribute(RecruitDataNode, "index", To_String(Item));
                end loop Save_Inventory_Loop;
-               Save_Equipment_Loop :
+               Save_Equipment_Loop:
                for J in Recruit.Equipment'Range loop
                   if Recruit.Equipment(J) > 0 then
                      RecruitDataNode := Create_Element(SaveData, "equipment");
@@ -108,13 +111,17 @@ package body Bases.SaveLoad is
                        Append_Child(RecruitNode, RecruitDataNode);
                      SaveNumber(J, "slot", RecruitDataNode);
                      SaveNumber
-                       (Recruit.Equipment(J), "index", RecruitDataNode);
+                       (Recruit.Equipment(J),
+                        "index",
+                        RecruitDataNode);
                   end if;
                end loop Save_Equipment_Loop;
                SaveNumber(Recruit.Payment, "payment", RecruitNode);
                SaveNumber(Recruit.HomeBase, "homebase", RecruitNode);
                Set_Attribute
-                 (RecruitNode, "faction", To_String(Recruit.Faction));
+                 (RecruitNode,
+                  "faction",
+                  To_String(Recruit.Faction));
             end loop Save_Recruits_Loop;
          end;
          <<Save_AskForBases>>
@@ -148,21 +155,25 @@ package body Bases.SaveLoad is
          declare
             MissionNode: DOM.Core.Element;
          begin
-            Save_Missions_Loop :
+            Save_Missions_Loop:
             for Mission of SkyBase.Missions loop
                MissionNode := Create_Element(SaveData, "mission");
                MissionNode := Append_Child(BaseNode, MissionNode);
                SaveNumber
-                 (Missions_Types'Pos(Mission.MType), "type", MissionNode);
+                 (Missions_Types'Pos(Mission.MType),
+                  "type",
+                  MissionNode);
                RawValue :=
-                 (case Mission.MType is when Deliver => Mission.ItemIndex,
+                 (case Mission.MType is
+                    when Deliver => Mission.ItemIndex,
                     when Passenger =>
                       To_Unbounded_String(Integer'Image(Mission.Data)),
                     when Destroy => Mission.ShipIndex,
                     when others =>
                       To_Unbounded_String(Integer'Image(Mission.Target)));
                Set_Attribute
-                 (MissionNode, "target",
+                 (MissionNode,
+                  "target",
                   To_String(Trim(RawValue, Ada.Strings.Left)));
                SaveNumber(Mission.Time, "time", MissionNode);
                SaveNumber(Mission.TargetX, "targetx", MissionNode);
@@ -177,7 +188,7 @@ package body Bases.SaveLoad is
          declare
             ItemNode: DOM.Core.Element;
          begin
-            Save_Cargo_Loop :
+            Save_Cargo_Loop:
             for Item of SkyBase.Cargo loop
                ItemNode := Create_Element(SaveData, "item");
                ItemNode := Append_Child(BaseNode, ItemNode);
@@ -209,7 +220,7 @@ package body Bases.SaveLoad is
    begin
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "base");
-      Load_Bases_Loop :
+      Load_Bases_Loop:
       for I in 0 .. Length(NodesList) - 1 loop
          BaseIndex := I + 1;
          BaseNode := Item(NodesList, I);
@@ -220,10 +231,14 @@ package body Bases.SaveLoad is
             SkyY => Integer'Value(Get_Attribute(BaseNode, "y")),
             BaseType => To_Unbounded_String(Get_Attribute(BaseNode, "type")),
             Population => Integer'Value(Get_Attribute(BaseNode, "population")),
-            RecruitDate => (others => 0), Recruits => BaseRecruits,
-            Known => False, AskedForBases => False,
-            AskedForEvents => (others => 0), Reputation => (0, 0),
-            MissionsDate => (others => 0), Missions => BaseMissions,
+            RecruitDate => (others => 0),
+            Recruits => BaseRecruits,
+            Known => False,
+            AskedForBases => False,
+            AskedForEvents => (others => 0),
+            Reputation => (0, 0),
+            MissionsDate => (others => 0),
+            Missions => BaseMissions,
             Owner => Factions_Container.Key(Factions_List.First),
             Cargo => BaseCargo,
             Size => Bases_Size'Value(Get_Attribute(BaseNode, "size")));
@@ -236,7 +251,7 @@ package body Bases.SaveLoad is
             SkyBases(BaseIndex).AskedForBases := True;
          end if;
          BaseData := Child_Nodes(BaseNode);
-         Load_Base_Loop :
+         Load_Base_Loop:
          for J in 0 .. Length(BaseData) - 1 loop
             ChildNode := Item(BaseData, J);
             NodeName := To_Unbounded_String(Node_Name(ChildNode));
@@ -253,7 +268,8 @@ package body Bases.SaveLoad is
                  (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
                   Month => Natural'Value(Get_Attribute(ChildNode, "month")),
                   Day => Natural'Value(Get_Attribute(ChildNode, "day")),
-                  Hour => 0, Minutes => 0);
+                  Hour => 0,
+                  Minutes => 0);
             elsif NodeName = To_Unbounded_String("recruit") then
                declare
                   RecruitData: Node_List;
@@ -279,7 +295,7 @@ package body Bases.SaveLoad is
                   Price := Positive'Value(Get_Attribute(ChildNode, "price"));
                   Payment := 20;
                   RecruitData := Child_Nodes(ChildNode);
-                  Load_Recruits_Loop :
+                  Load_Recruits_Loop:
                   for L in 0 .. Length(RecruitData) - 1 loop
                      RecruitNode := Item(RecruitData, L);
                      NodeName := To_Unbounded_String(Node_Name(RecruitNode));
@@ -297,9 +313,9 @@ package body Bases.SaveLoad is
                         Attributes.Append(New_Item => (Level, 0));
                      elsif NodeName = To_Unbounded_String("item") then
                         Inventory.Append
-                          (New_Item =>
-                             To_Unbounded_String
-                               (Get_Attribute(RecruitNode, "index")));
+                        (New_Item =>
+                           To_Unbounded_String
+                             (Get_Attribute(RecruitNode, "index")));
                      elsif NodeName = To_Unbounded_String("equipment") then
                         Equipment
                           (Positive'Value
@@ -322,19 +338,25 @@ package body Bases.SaveLoad is
                      end if;
                   end loop Load_Recruits_Loop;
                   SkyBases(BaseIndex).Recruits.Append
-                    (New_Item =>
-                       (Name => RecruitName, Gender => Gender(1),
-                        Price => Price, Skills => Skills,
-                        Attributes => Attributes, Inventory => Inventory,
-                        Equipment => Equipment, Payment => Payment,
-                        HomeBase => HomeBase, Faction => RecruitFaction));
+                  (New_Item =>
+                     (Name => RecruitName,
+                      Gender => Gender(1),
+                      Price => Price,
+                      Skills => Skills,
+                      Attributes => Attributes,
+                      Inventory => Inventory,
+                      Equipment => Equipment,
+                      Payment => Payment,
+                      HomeBase => HomeBase,
+                      Faction => RecruitFaction));
                end;
             elsif NodeName = To_Unbounded_String("askedforeventsdate") then
                SkyBases(BaseIndex).AskedForEvents :=
                  (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
                   Month => Natural'Value(Get_Attribute(ChildNode, "month")),
                   Day => Natural'Value(Get_Attribute(ChildNode, "day")),
-                  Hour => 0, Minutes => 0);
+                  Hour => 0,
+                  Minutes => 0);
             elsif NodeName = To_Unbounded_String("reputation") then
                SkyBases(BaseIndex).Reputation(1) :=
                  Natural'Value(Get_Attribute(ChildNode, "level"));
@@ -347,7 +369,8 @@ package body Bases.SaveLoad is
                  (Year => Natural'Value(Get_Attribute(ChildNode, "year")),
                   Month => Natural'Value(Get_Attribute(ChildNode, "month")),
                   Day => Natural'Value(Get_Attribute(ChildNode, "day")),
-                  Hour => 0, Minutes => 0);
+                  Hour => 0,
+                  Minutes => 0);
             elsif NodeName = To_Unbounded_String("mission") then
                declare
                   MType: Missions_Types;
@@ -375,44 +398,67 @@ package body Bases.SaveLoad is
                   case MType is
                      when Deliver =>
                         SkyBases(BaseIndex).Missions.Append
-                          (New_Item =>
-                             (MType => Deliver, ItemIndex => Index,
-                              Time => Time, TargetX => TargetX,
-                              TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False,
-                              Multiplier => 1.0));
+                        (New_Item =>
+                           (MType => Deliver,
+                            ItemIndex => Index,
+                            Time => Time,
+                            TargetX => TargetX,
+                            TargetY => TargetY,
+                            Reward => Reward,
+                            StartBase => BaseIndex,
+                            Finished => False,
+                            Multiplier => 1.0));
                      when Destroy =>
                         SkyBases(BaseIndex).Missions.Append
-                          (New_Item =>
-                             (MType => Destroy, ShipIndex => Index,
-                              Time => Time, TargetX => TargetX,
-                              TargetY => TargetY, Reward => Reward,
-                              StartBase => BaseIndex, Finished => False,
-                              Multiplier => 1.0));
+                        (New_Item =>
+                           (MType => Destroy,
+                            ShipIndex => Index,
+                            Time => Time,
+                            TargetX => TargetX,
+                            TargetY => TargetY,
+                            Reward => Reward,
+                            StartBase => BaseIndex,
+                            Finished => False,
+                            Multiplier => 1.0));
                      when Patrol =>
                         SkyBases(BaseIndex).Missions.Append
-                          (New_Item =>
-                             (MType => Patrol, Target => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
-                              Finished => False, Multiplier => 1.0));
+                        (New_Item =>
+                           (MType => Patrol,
+                            Target => Target,
+                            Time => Time,
+                            TargetX => TargetX,
+                            TargetY => TargetY,
+                            Reward => Reward,
+                            StartBase => BaseIndex,
+                            Finished => False,
+                            Multiplier => 1.0));
                      when Explore =>
                         SkyBases(BaseIndex).Missions.Append
-                          (New_Item =>
-                             (MType => Explore, Target => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
-                              Finished => False, Multiplier => 1.0));
+                        (New_Item =>
+                           (MType => Explore,
+                            Target => Target,
+                            Time => Time,
+                            TargetX => TargetX,
+                            TargetY => TargetY,
+                            Reward => Reward,
+                            StartBase => BaseIndex,
+                            Finished => False,
+                            Multiplier => 1.0));
                      when Passenger =>
                         if Target > 91 then
                            Target := 91;
                         end if;
                         SkyBases(BaseIndex).Missions.Append
-                          (New_Item =>
-                             (MType => Passenger, Data => Target, Time => Time,
-                              TargetX => TargetX, TargetY => TargetY,
-                              Reward => Reward, StartBase => BaseIndex,
-                              Finished => False, Multiplier => 1.0));
+                        (New_Item =>
+                           (MType => Passenger,
+                            Data => Target,
+                            Time => Time,
+                            TargetX => TargetX,
+                            TargetY => TargetY,
+                            Reward => Reward,
+                            StartBase => BaseIndex,
+                            Finished => False,
+                            Multiplier => 1.0));
                   end case;
                end;
             elsif NodeName = To_Unbounded_String("item") then
@@ -429,9 +475,11 @@ package body Bases.SaveLoad is
                   Amount := Natural'Value(Get_Attribute(ChildNode, "amount"));
                   Price := Natural'Value(Get_Attribute(ChildNode, "price"));
                   SkyBases(BaseIndex).Cargo.Append
-                    (New_Item =>
-                       (ProtoIndex => ProtoIndex, Amount => Amount,
-                        Durability => Durability, Price => Price));
+                  (New_Item =>
+                     (ProtoIndex => ProtoIndex,
+                      Amount => Amount,
+                      Durability => Durability,
+                      Price => Price));
                end;
             end if;
          end loop Load_Base_Loop;

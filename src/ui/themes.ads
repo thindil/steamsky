@@ -117,7 +117,10 @@ package Themes is
    -- Used to store themes data
    -- SOURCE
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
-     (String, ThemeRecord, Ada.Strings.Hash, "=");
+     (String,
+      ThemeRecord,
+      Ada.Strings.Hash,
+      "=");
    -- ****
 
    -- ****v* Themes/Themes.Themes_List

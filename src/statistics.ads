@@ -143,7 +143,8 @@ package Statistics is
       -- FactionName - Faction name to which killed mobile belongs
       -- SOURCE
    procedure UpdateKilledMobs
-     (Mob: Member_Data; FractionName: Unbounded_String) with
+     (Mob: Member_Data;
+      FractionName: Unbounded_String) with
       Pre => FractionName /= Null_Unbounded_String,
       Test_Case => (Name => "Test_UpdateKilledMobs", Mode => Nominal);
       -- ****

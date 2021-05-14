@@ -139,13 +139,17 @@ package body GameOptions is
    -- ShowOptions
    -- SOURCE
    function Show_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       OptionsFrame: Ttk_Frame :=
@@ -254,20 +258,22 @@ package body GameOptions is
          for Path_Label of Labels_Array loop
             Label.Name :=
               New_String
-                (Widget_Image(OptionsCanvas) & ".options.info." &
+                (Widget_Image(OptionsCanvas) &
+                 ".options.info." &
                  To_String(Path_Label.Name));
             configure
               (Label,
                "-text {" & Full_Name(To_String(Path_Label.Value)) & " }");
          end loop;
-         Load_Themes_Loop :
+         Load_Themes_Loop:
          for Theme of Themes_List loop
             Append(ThemesList, " {" & Theme.Name & "}");
          end loop Load_Themes_Loop;
          ComboBox_Widget.Name :=
            New_String(OptionsFrame & ".canvas.options.interface.theme");
          configure
-           (ComboBox_Widget, "-values [list" & To_String(ThemesList) & "]");
+           (ComboBox_Widget,
+            "-values [list" & To_String(ThemesList) & "]");
       elsif Winfo_Get(OptionsCanvas, "ismapped") = "1" then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -279,7 +285,9 @@ package body GameOptions is
       Tcl.Tk.Ada.Grid.Grid(OptionsFrame, "-sticky nwes -padx 10");
       for CheckBox of Checkbox_Array loop
          Tcl_SetVar
-           (Interp, To_String(CheckBox.Name), To_String(CheckBox.Value));
+           (Interp,
+            To_String(CheckBox.Name),
+            To_String(CheckBox.Value));
       end loop;
       for SpinBox of SpinBox_Array loop
          SpinBox_Widget := Get_Widget(To_String(SpinBox.Name), Interp);
@@ -302,16 +310,16 @@ package body GameOptions is
       KeyEntry.Interp := Interp;
       OptionsFrame.Name :=
         New_String(Widget_Image(OptionsCanvas) & ".options");
-      Load_Menu_Accelerators_Loop :
+      Load_Menu_Accelerators_Loop:
       for I in MenuAccelerators'Range loop
          Accels(I).ShortCut := MenuAccelerators(I);
       end loop Load_Menu_Accelerators_Loop;
-      Load_Map_Accelerators_Loop :
+      Load_Map_Accelerators_Loop:
       for I in MapAccelerators'Range loop
          Accels(I + MenuAccelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
       Accels(Accels'Last).ShortCut := FullScreenAccel;
-      Load_Accelerators_Loop :
+      Load_Accelerators_Loop:
       for Accel of Accels loop
          KeyEntry.Name :=
            New_String(Widget_Image(OptionsFrame) & To_String(Accel.EntryName));
@@ -326,11 +334,14 @@ package body GameOptions is
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (OptionsCanvas,
-         "-height " & cget(Main_Paned, "-height") & " -width " &
+         "-height " &
+         cget(Main_Paned, "-height") &
+         " -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (OptionsCanvas, "window",
+        (OptionsCanvas,
+         "window",
          "0 0 -anchor nw -window " & Widget_Image(OptionsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
@@ -354,20 +365,25 @@ package body GameOptions is
    -- SetFonts
    -- SOURCE
    function Set_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       FrameName: constant String :=
         ".gameframe.paned.optionsframe.canvas.options.interface";
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       HelpFonts: constant array(1 .. 4) of Unbounded_String :=
-        (To_Unbounded_String("HelpFont"), To_Unbounded_String("BoldHelpFont"),
+        (To_Unbounded_String("HelpFont"),
+         To_Unbounded_String("BoldHelpFont"),
          To_Unbounded_String("UnderlineHelpFont"),
          To_Unbounded_String("ItalicHelpFont"));
       InterfaceFonts: constant array(1 .. 4) of Unbounded_String :=
@@ -379,10 +395,11 @@ package body GameOptions is
       if CArgv.Arg(Argv, 1) = FrameName & ".mapfont" then
          Game_Settings.Map_Font_Size := Positive'Value(Get(SpinBox));
          Font.Configure
-           ("MapFont", "-size" & Positive'Image(Game_Settings.Map_Font_Size));
+           ("MapFont",
+            "-size" & Positive'Image(Game_Settings.Map_Font_Size));
       elsif CArgv.Arg(Argv, 1) = FrameName & ".helpfont" then
          Game_Settings.Help_Font_Size := Positive'Value(Get(SpinBox));
-         Set_Fonts_Loop :
+         Set_Fonts_Loop:
          for FontName of HelpFonts loop
             Font.Configure
               (To_String(FontName),
@@ -413,37 +430,45 @@ package body GameOptions is
    -- SetDefaultFonts
    -- SOURCE
    function Set_Default_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Default_Fonts_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       SpinBox: Ttk_SpinBox;
       SpinBoxNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("map"), To_Unbounded_String("interface"),
+        (To_Unbounded_String("map"),
+         To_Unbounded_String("interface"),
          To_Unbounded_String("help"));
       FontNames: constant array(1 .. 3) of Unbounded_String :=
-        (To_Unbounded_String("MapFont"), To_Unbounded_String("InterfaceFont"),
+        (To_Unbounded_String("MapFont"),
+         To_Unbounded_String("InterfaceFont"),
          To_Unbounded_String("HelpFont"));
    begin
       SpinBox.Interp := Interp;
-      Set_Default_Fonts_Loop :
+      Set_Default_Fonts_Loop:
       for I in SpinBoxNames'Range loop
          SpinBox.Name :=
            New_String
              (".gameframe.paned.optionsframe.canvas.options.interface." &
-              To_String(SpinBoxNames(I)) & "font");
+              To_String(SpinBoxNames(I)) &
+              "font");
          Set(SpinBox, Positive'Image(DefaultFontsSizes(I)));
          Font.Configure
            (To_String(FontNames(I)),
             "-size" & Positive'Image(DefaultFontsSizes(I)));
       end loop Set_Default_Fonts_Loop;
       Font.Configure
-        ("InterfaceIcons", "-size" & Positive'Image(DefaultFontsSizes(2)));
+        ("InterfaceIcons",
+         "-size" & Positive'Image(DefaultFontsSizes(2)));
       return TCL_OK;
    end Set_Default_Fonts_Command;
 
@@ -463,13 +488,17 @@ package body GameOptions is
    -- Can be 'map' or 'combat'.
    -- SOURCE
    function Close_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Close_Options_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       RootName: constant String :=
@@ -524,7 +553,7 @@ package body GameOptions is
         Messages_Order_Type'Val(Get_Combobox_Value(".general.messagesorder"));
       Game_Settings.Auto_Save :=
         Auto_Save_Type'Val(Get_Combobox_Value(".general.autosave"));
-      Set_Theme_Loop :
+      Set_Theme_Loop:
       for I in Themes_List.Iterate loop
          if Themes_List(I).Name = Get(ThemeComboBox) then
             Game_Settings.Interface_Theme :=
@@ -552,7 +581,9 @@ package body GameOptions is
          Disable;
       end if;
       Game_Settings.Show_Last_Messages :=
-        (if Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1" then
+        (if
+           Tcl_GetVar(Interp, RootName & ".interface.showmessages") = "1"
+         then
            True
          else False);
       if Tcl_GetVar(Interp, RootName & ".interface.fullscreen") = "1" then
@@ -572,32 +603,35 @@ package body GameOptions is
         Get_Spinbox_Value(".interface.interfacefont");
       Save_Config;
       KeyEntry.Interp := Interp;
-      Set_Accelerators_Loop :
+      Set_Accelerators_Loop:
       for I in 1 .. (Accels'Last - 1) loop
          Unbind_From_Main_Window
-           (Interp, "<" & To_String(Accels(I).ShortCut) & ">");
+           (Interp,
+            "<" & To_String(Accels(I).ShortCut) & ">");
          KeyEntry.Name :=
            New_String(RootName & To_String(Accels(I).EntryName));
          if I < 12 then
             MenuAccelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
-              (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
+              (Get_Context,
+               "<" & To_String(MenuAccelerators(I)) & ">",
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
          else
             MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
-        (Interp, "<" & To_String(Accels(Accels'Last).ShortCut) & ">");
+        (Interp,
+         "<" & To_String(Accels(Accels'Last).ShortCut) & ">");
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
       FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
-      Save_Menu_Accelerators_Loop :
+      Save_Menu_Accelerators_Loop:
       for Key of MenuAccelerators loop
          Put_Line(KeysFile, To_String(Key));
       end loop Save_Menu_Accelerators_Loop;
-      Save_Map_Accelerators_Loop :
+      Save_Map_Accelerators_Loop:
       for Key of MapAccelerators loop
          Put_Line(KeysFile, To_String(Key));
       end loop Save_Map_Accelerators_Loop;
@@ -627,13 +661,17 @@ package body GameOptions is
    -- ShowOptionsTab
    -- SOURCE
    function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Options_Tab_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+     (ClientData: Integer;
+      Interp: Tcl.Tcl_Interp;
+      Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       OptionsCanvas: constant Tk_Canvas :=

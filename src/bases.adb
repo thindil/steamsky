@@ -42,7 +42,7 @@ package body Bases is
       if BaseIndex = PlayerShip.HomeBase then
          NewPoints := NewPoints + Points;
       end if;
-      Reduce_Reputation_Loop :
+      Reduce_Reputation_Loop:
       while NewPoints < 0 loop
          SkyBases(BaseIndex).Reputation(1) :=
            SkyBases(BaseIndex).Reputation(1) - 1;
@@ -52,7 +52,7 @@ package body Bases is
             return;
          end if;
       end loop Reduce_Reputation_Loop;
-      Raise_Reputation_Loop :
+      Raise_Reputation_Loop:
       while NewPoints > abs (SkyBases(BaseIndex).Reputation(1) * 5) loop
          NewPoints := NewPoints - abs (SkyBases(BaseIndex).Reputation(1) * 5);
          SkyBases(BaseIndex).Reputation(1) :=
@@ -65,7 +65,8 @@ package body Bases is
    end GainRep;
 
    procedure CountPrice
-     (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
+     (Price: in out Natural;
+      TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
       Bonus: Integer := 0;
    begin
@@ -79,7 +80,8 @@ package body Bases is
                 (Float(Price) *
                  (Float
                     (GetSkillLevel
-                       (PlayerShip.Crew(TraderIndex), Talking_Skill)) /
+                       (PlayerShip.Crew(TraderIndex),
+                        Talking_Skill)) /
                   200.0)));
       end if;
       if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
@@ -122,23 +124,28 @@ package body Bases is
          NewName :=
            BaseSyllablesPre
              (GetRandom
-                (BaseSyllablesPre.First_Index, BaseSyllablesPre.Last_Index)) &
+                (BaseSyllablesPre.First_Index,
+                 BaseSyllablesPre.Last_Index)) &
            " ";
       end if;
       NewName :=
         NewName &
         BaseSyllablesStart
           (GetRandom
-             (BaseSyllablesStart.First_Index, BaseSyllablesStart.Last_Index)) &
+             (BaseSyllablesStart.First_Index,
+              BaseSyllablesStart.Last_Index)) &
         BaseSyllablesEnd
           (GetRandom
-             (BaseSyllablesEnd.First_Index, BaseSyllablesEnd.Last_Index));
+             (BaseSyllablesEnd.First_Index,
+              BaseSyllablesEnd.Last_Index));
       if GetRandom(1, 100) < 16 then
          NewName :=
-           NewName & " " &
+           NewName &
+           " " &
            BaseSyllablesPost
              (GetRandom
-                (BaseSyllablesPost.First_Index, BaseSyllablesPost.Last_Index));
+                (BaseSyllablesPost.First_Index,
+                 BaseSyllablesPost.Last_Index));
       end if;
       return NewName;
    end GenerateBaseName;
@@ -171,7 +178,10 @@ package body Bases is
          end if;
          ItemIndex :=
            GetRandomItem
-             (ItemsIndexes, EquipIndex, HighestLevel, Skills(1)(2),
+             (ItemsIndexes,
+              EquipIndex,
+              HighestLevel,
+              Skills(1)(2),
               RecruitFaction);
          if ItemIndex = Null_Unbounded_String then
             return;
@@ -189,9 +199,10 @@ package body Bases is
       end if;
       MaxRecruits :=
         (if SkyBases(BaseIndex).Population < 150 then 5
-         elsif SkyBases(BaseIndex).Population < 300 then 10 else 15);
+         elsif SkyBases(BaseIndex).Population < 300 then 10
+         else 15);
       if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
-          (To_Unbounded_String("barracks")) then
+        (To_Unbounded_String("barracks")) then
          MaxRecruits := MaxRecruits * 2;
       end if;
       if MaxRecruits > (SkyBases(BaseIndex).Population / 10) then
@@ -205,7 +216,7 @@ package body Bases is
       if MaxSkillAmount < 5 then
          MaxSkillAmount := 5;
       end if;
-      Generate_Recruits_Loop :
+      Generate_Recruits_Loop:
       for I in 1 .. RecruitsAmount loop
          Skills.Clear;
          Attributes.Clear;
@@ -218,7 +229,7 @@ package body Bases is
            (if GetRandom(1, 100) < 99 then SkyBases(BaseIndex).Owner
             else GetRandomFaction);
          if not Factions_List(RecruitFaction).Flags.Contains
-             (To_Unbounded_String("nogender")) then
+           (To_Unbounded_String("nogender")) then
             Gender := (if GetRandom(1, 2) = 1 then 'M' else 'F');
          else
             Gender := 'M';
@@ -237,10 +248,12 @@ package body Bases is
          if GetRandom(1, 100) > 95 then
             MaxSkillLevel := GetRandom(MaxSkillLevel, 100);
          end if;
-         Generate_Skills_Loop :
+         Generate_Skills_Loop:
          for J in 1 .. SkillsAmount loop
             SkillNumber :=
-              (if J > 1 then
+              (if
+                 J > 1
+               then
                  GetRandom(Skills_List.First_Index, Skills_List.Last_Index)
                else Factions_List(RecruitFaction).WeaponSkill);
             SkillLevel := GetRandom(1, MaxSkillLevel);
@@ -249,11 +262,13 @@ package body Bases is
                HighestSkill := SkillNumber;
             end if;
             SkillIndex := 0;
-            Get_Skill_Index_Loop :
+            Get_Skill_Index_Loop:
             for C in Skills.Iterate loop
                if Skills(C)(1) = SkillNumber then
                   SkillIndex :=
-                    (if Skills(C)(2) < SkillLevel then
+                    (if
+                       Skills(C)(2) < SkillLevel
+                     then
                        Skills_Container.To_Index(C)
                      else -1);
                   exit Get_Skill_Index_Loop;
@@ -263,21 +278,20 @@ package body Bases is
                Skills.Append(New_Item => (SkillNumber, SkillLevel, 0));
             elsif SkillIndex > 0 then
                Skills.Replace_Element
-                 (Index => SkillIndex,
-                  New_Item => (SkillNumber, SkillLevel, 0));
+               (Index => SkillIndex, New_Item => (SkillNumber, SkillLevel, 0));
             end if;
          end loop Generate_Skills_Loop;
-         Generate_Attributes_Loop :
+         Generate_Attributes_Loop:
          for J in Attributes_List.Iterate loop
             Attributes.Append
-              (New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
+            (New_Item => (GetRandom(3, (MaxSkillLevel / 3)), 0));
          end loop Generate_Attributes_Loop;
-         Update_Price_With_Skills_Loop :
+         Update_Price_With_Skills_Loop:
          for Skill of Skills loop
             Price := Price + Skill(2);
             Payment := Payment + Skill(2);
          end loop Update_Price_With_Skills_Loop;
-         Update_Price_With_Stats_Loop :
+         Update_Price_With_Stats_Loop:
          for Stat of Attributes loop
             Price := Price + (Stat(1) * 2);
             Payment := Payment + (Stat(1) * 2);
@@ -288,10 +302,10 @@ package body Bases is
          AddInventory(ChestArmors_List, 4);
          AddInventory(ArmsArmors_List, 5);
          AddInventory(LegsArmors_List, 6);
-         Add_Tool_Loop :
+         Add_Tool_Loop:
          for Recipe of Recipes_List loop
             if HighestSkill = Recipe.Skill then
-               Find_Tool_Loop :
+               Find_Tool_Loop:
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.Tool then
                      TempTools.Append(New_Item => Objects_Container.Key(J));
@@ -302,7 +316,7 @@ package body Bases is
             end if;
          end loop Add_Tool_Loop;
          if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
-             (To_Unbounded_String("barracks")) then
+           (To_Unbounded_String("barracks")) then
             Price := Price / 2;
             Payment := Payment / 2;
          end if;
@@ -315,12 +329,17 @@ package body Bases is
            (if GetRandom(1, 100) < 99 then BaseIndex
             else GetRandom(SkyBases'First, SkyBases'Last));
          BaseRecruits.Append
-           (New_Item =>
-              (Name => GenerateMemberName(Gender, RecruitFaction),
-               Gender => Gender, Price => Price, Skills => Skills,
-               Attributes => Attributes, Inventory => Inventory,
-               Equipment => Equipment, Payment => Payment,
-               HomeBase => RecruitBase, Faction => RecruitFaction));
+         (New_Item =>
+            (Name => GenerateMemberName(Gender, RecruitFaction),
+             Gender => Gender,
+             Price => Price,
+             Skills => Skills,
+             Attributes => Attributes,
+             Inventory => Inventory,
+             Equipment => Equipment,
+             Payment => Payment,
+             HomeBase => RecruitBase,
+             Faction => RecruitFaction));
       end loop Generate_Recruits_Loop;
       SkyBases(BaseIndex).RecruitDate := Game_Date;
       SkyBases(BaseIndex).Recruits := BaseRecruits;
@@ -356,7 +375,8 @@ package body Bases is
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked for directions to other bases in base '" &
-            To_String(SkyBases(BaseIndex).Name) & "'.",
+            To_String(SkyBases(BaseIndex).Name) &
+            "'.",
             OrderMessage);
       else -- asking friendly ship
          Radius := 40;
@@ -365,16 +385,18 @@ package body Bases is
               .ShipIndex);
          Amount :=
            (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 3
-            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 5 else 10);
+            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 5
+            else 10);
          AddMessage
-           (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked ship '" &
             To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
          UpdateOrders(PlayerShip);
       end if;
-      Bases_Loop :
+      Bases_Loop:
       for X in -Radius .. Radius loop
          for Y in -Radius .. Radius loop
             TempX := PlayerShip.SkyX + X;
@@ -404,7 +426,7 @@ package body Bases is
                elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 2
                else 4);
          end if;
-         Count_Unknown_Bases :
+         Count_Unknown_Bases:
          for I in SkyBases'Range loop
             if not SkyBases(I).Known then
                UnknownBases := UnknownBases + 1;
@@ -412,7 +434,7 @@ package body Bases is
             exit Count_Unknown_Bases when UnknownBases >= Amount;
          end loop Count_Unknown_Bases;
          if UnknownBases >= Amount then
-            Reveal_Random_Bases_Loop :
+            Reveal_Random_Bases_Loop:
             loop
                TmpBaseIndex := GetRandom(1, 1024);
                if not SkyBases(TmpBaseIndex).Known then
@@ -422,7 +444,7 @@ package body Bases is
                exit Reveal_Random_Bases_Loop when Amount = 0;
             end loop Reveal_Random_Bases_Loop;
          else
-            Reveal_Bases_Loop :
+            Reveal_Bases_Loop:
             for I in SkyBases'Range loop
                if not SkyBases(I).Known then
                   SkyBases(I).Known := True;
@@ -455,12 +477,14 @@ package body Bases is
       if BaseIndex > 0 then -- asking in base
          MaxEvents :=
            (if SkyBases(BaseIndex).Population < 150 then 5
-            elsif SkyBases(BaseIndex).Population < 300 then 10 else 15);
+            elsif SkyBases(BaseIndex).Population < 300 then 10
+            else 15);
          SkyBases(BaseIndex).AskedForEvents := Game_Date;
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) &
             " asked for recent events known at base '" &
-            To_String(SkyBases(BaseIndex).Name) & "'.",
+            To_String(SkyBases(BaseIndex).Name) &
+            "'.",
             OrderMessage);
          GainRep(BaseIndex, 1);
       else -- asking friendly ship
@@ -469,9 +493,11 @@ package body Bases is
              .ShipIndex;
          MaxEvents :=
            (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
-            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 3 else 5);
+            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 3
+            else 5);
          AddMessage
-           (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
+           (To_String(PlayerShip.Crew(TraderIndex).Name) &
+            " asked ship '" &
             To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for recent events.",
             OrderMessage);
@@ -488,11 +514,11 @@ package body Bases is
       MaxY := PlayerShip.SkyY + 100;
       NormalizeCoord(MaxY, False);
       GenerateEnemies(Enemies);
-      Generate_Events_Loop :
+      Generate_Events_Loop:
       for I in 1 .. EventsAmount loop
          Event := Events_Types'Val(GetRandom(1, 5));
          Attempts := 10;
-         Generate_Event_Location_Loop :
+         Generate_Event_Location_Loop:
          loop
             if Event = EnemyShip then
                EventX := GetRandom(MinX, MaxX);
@@ -500,7 +526,8 @@ package body Bases is
                exit Generate_Event_Location_Loop when SkyMap(EventX, EventY)
                    .BaseIndex =
                  0 and
-                 EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and
+                 EventX /= PlayerShip.SkyX and
+                 EventY /= PlayerShip.SkyY and
                  SkyMap(EventX, EventY).EventIndex = 0;
             else
                TmpBaseIndex := GetRandom(1, 1024);
@@ -509,12 +536,13 @@ package body Bases is
                Attempts := Attempts - 1;
                if Attempts = 0 then
                   Event := EnemyShip;
-                  Regenerate_Event_Location_Loop :
+                  Regenerate_Event_Location_Loop:
                   loop
                      EventX := GetRandom(MinX, MaxX);
                      EventY := GetRandom(MinY, MaxY);
                      exit Regenerate_Event_Location_Loop when SkyMap
-                         (EventX, EventY)
+                         (EventX,
+                          EventY)
                          .BaseIndex =
                        0 and
                        EventX /= PlayerShip.SkyX and
@@ -523,7 +551,8 @@ package body Bases is
                   end loop Regenerate_Event_Location_Loop;
                   exit Generate_Event_Location_Loop;
                end if;
-               if EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and
+               if EventX /= PlayerShip.SkyX and
+                 EventY /= PlayerShip.SkyY and
                  SkyMap(EventX, EventY).EventIndex = 0 and
                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                   if Event = AttackOnBase and
@@ -540,9 +569,8 @@ package body Bases is
                   if Event = Disease and
                     not Factions_List
                       (SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner)
-                      .Flags
-                      .Contains
-                      (To_Unbounded_String("diseaseimmune")) and
+                      .Flags.Contains
+                    (To_Unbounded_String("diseaseimmune")) and
                     IsFriendly
                       (PlayerShip.Crew(1).Faction,
                        SkyBases(SkyMap(EventX, EventY).BaseIndex).Owner) then
@@ -562,24 +590,28 @@ package body Bases is
          case Event is
             when EnemyShip =>
                Events_List.Append
-                 (New_Item =>
-                    (EnemyShip, EventX, EventY,
-                     GetRandom(EventTime, EventTime + 60),
-                     Enemies
-                       (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+               (New_Item =>
+                  (EnemyShip,
+                   EventX,
+                   EventY,
+                   GetRandom(EventTime, EventTime + 60),
+                   Enemies
+                     (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
             when AttackOnBase =>
                GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
                Events_List.Append
-                 (New_Item =>
-                    (AttackOnBase, EventX, EventY,
-                     GetRandom(EventTime, EventTime + 120),
-                     Enemies
-                       (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
+               (New_Item =>
+                  (AttackOnBase,
+                   EventX,
+                   EventY,
+                   GetRandom(EventTime, EventTime + 120),
+                   Enemies
+                     (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
                GenerateEnemies(Enemies);
             when Disease =>
                Events_List.Append
-                 (New_Item =>
-                    (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
+               (New_Item =>
+                  (Disease, EventX, EventY, GetRandom(10080, 12000), 1));
             when DoublePrice =>
                loop
                   ItemIndex := GetRandom(1, Positive(Items_List.Length));
@@ -599,10 +631,12 @@ package body Bases is
                   exit when NewItemIndex /= Null_Unbounded_String;
                end loop;
                Events_List.Append
-                 (New_Item =>
-                    (DoublePrice, EventX, EventY,
-                     GetRandom((EventTime * 3), (EventTime * 4)),
-                     NewItemIndex));
+               (New_Item =>
+                  (DoublePrice,
+                   EventX,
+                   EventY,
+                   GetRandom((EventTime * 3), (EventTime * 4)),
+                   NewItemIndex));
             when BaseRecovery =>
                RecoverBase(SkyMap(EventX, EventY).BaseIndex);
             when others =>
@@ -659,7 +693,8 @@ package body Bases is
       end if;
       Chance :=
         (if SkyBases(BaseIndex).Population < 150 then 1
-         elsif SkyBases(BaseIndex).Population < 300 then 2 else 5);
+         elsif SkyBases(BaseIndex).Population < 300 then 2
+         else 5);
       Chance := Chance + (DaysDifference(SkyBases(BaseIndex).Visited) / 10);
       if GetRandom(1, 100) > Chance then
          return;
