@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Ships.Upgrade.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Ships.Upgrade
+   type Test is new Gnattest_Generated.GNATtest_Standard.Ships.Upgrade
      .Test_Data
      .Test with
    null record;

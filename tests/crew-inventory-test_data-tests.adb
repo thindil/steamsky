@@ -30,7 +30,8 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_UpdateInventory_5fa756_ea0095
-     (MemberIndex: Positive; Amount: Integer;
+     (MemberIndex: Positive;
+      Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) is
@@ -47,8 +48,13 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "req_sloc(crew-inventory.ads:0):Test_UpdateInventory test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Crew.Inventory.UpdateInventory
-        (MemberIndex, Amount, ProtoIndex, Durability, InventoryIndex, Price);
+      Gnattest_Generated.GNATtest_Standard.Crew.Inventory.UpdateInventory
+        (MemberIndex,
+         Amount,
+         ProtoIndex,
+         Durability,
+         InventoryIndex,
+         Price);
       begin
          pragma Assert(True);
          null;
@@ -71,7 +77,8 @@ package body Crew.Inventory.Test_Data.Tests is
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test) is
       procedure UpdateInventory
-        (MemberIndex: Positive; Amount: Integer;
+        (MemberIndex: Positive;
+         Amount: Integer;
          ProtoIndex: Unbounded_String := Null_Unbounded_String;
          Durability: Items_Durability := 0;
          InventoryIndex, Price: Natural := 0) renames
@@ -112,7 +119,8 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_FreeInventory_df8fe5_59014f
-     (MemberIndex: Positive; Amount: Integer) return Integer is
+     (MemberIndex: Positive;
+      Amount: Integer) return Integer is
    begin
       begin
          pragma Assert(MemberIndex <= PlayerShip.Crew.Last_Index);
@@ -125,8 +133,9 @@ package body Crew.Inventory.Test_Data.Tests is
       end;
       declare
          Test_FreeInventory_df8fe5_59014f_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FreeInventory
-             (MemberIndex, Amount);
+           Gnattest_Generated.GNATtest_Standard.Crew.Inventory.FreeInventory
+             (MemberIndex,
+              Amount);
       begin
          begin
             pragma Assert(True);
@@ -144,12 +153,14 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    procedure Test_FreeInventory_test_freeinventory(Gnattest_T: in out Test);
-   procedure Test_FreeInventory_df8fe5_59014f(Gnattest_T: in out Test) renames
+   procedure Test_FreeInventory_df8fe5_59014f
+     (Gnattest_T: in out Test) renames
      Test_FreeInventory_test_freeinventory;
 --  id:2.2/df8fe5d066a1fde9/FreeInventory/1/0/test_freeinventory/
    procedure Test_FreeInventory_test_freeinventory(Gnattest_T: in out Test) is
       function FreeInventory
-        (MemberIndex: Positive; Amount: Integer) return Integer renames
+        (MemberIndex: Positive;
+         Amount: Integer) return Integer renames
         Wrap_Test_FreeInventory_df8fe5_59014f;
 --  end read only
 
@@ -180,8 +191,9 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "req_sloc(crew-inventory.ads:0):Test_TakeOffItem test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Crew.Inventory.TakeOffItem
-        (MemberIndex, ItemIndex);
+      Gnattest_Generated.GNATtest_Standard.Crew.Inventory.TakeOffItem
+        (MemberIndex,
+         ItemIndex);
       begin
          pragma Assert(True);
          null;
@@ -196,11 +208,13 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    procedure Test_TakeOffItem_test_takeoffitem(Gnattest_T: in out Test);
-   procedure Test_TakeOffItem_a8b09e_c7fb64(Gnattest_T: in out Test) renames
+   procedure Test_TakeOffItem_a8b09e_c7fb64
+     (Gnattest_T: in out Test) renames
      Test_TakeOffItem_test_takeoffitem;
 --  id:2.2/a8b09e84477e626f/TakeOffItem/1/0/test_takeoffitem/
    procedure Test_TakeOffItem_test_takeoffitem(Gnattest_T: in out Test) is
-      procedure TakeOffItem(MemberIndex, ItemIndex: Positive) renames
+      procedure TakeOffItem
+        (MemberIndex, ItemIndex: Positive) renames
         Wrap_Test_TakeOffItem_a8b09e_c7fb64;
 --  end read only
 
@@ -234,8 +248,9 @@ package body Crew.Inventory.Test_Data.Tests is
       end;
       declare
          Test_ItemIsUsed_9a8ce5_fa2743_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.Crew.Inventory.ItemIsUsed
-             (MemberIndex, ItemIndex);
+           Gnattest_Generated.GNATtest_Standard.Crew.Inventory.ItemIsUsed
+             (MemberIndex,
+              ItemIndex);
       begin
          begin
             pragma Assert(True);
@@ -253,7 +268,8 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    procedure Test_ItemIsUsed_test_itemisused(Gnattest_T: in out Test);
-   procedure Test_ItemIsUsed_9a8ce5_fa2743(Gnattest_T: in out Test) renames
+   procedure Test_ItemIsUsed_9a8ce5_fa2743
+     (Gnattest_T: in out Test) renames
      Test_ItemIsUsed_test_itemisused;
 --  id:2.2/9a8ce5527fb6a663/ItemIsUsed/1/0/test_itemisused/
    procedure Test_ItemIsUsed_test_itemisused(Gnattest_T: in out Test) is
@@ -267,7 +283,8 @@ package body Crew.Inventory.Test_Data.Tests is
    begin
 
       Assert
-        (ItemIsUsed(1, 1) = False, "Failed to detect that item is not used.");
+        (ItemIsUsed(1, 1) = False,
+         "Failed to detect that item is not used.");
       Assert(ItemIsUsed(1, 2) = True, "Failed to detect that item is used.");
 
 --  begin read only
@@ -276,7 +293,9 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_FindTools_9ef8ba_61150c
-     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+     (MemberIndex: Positive;
+      ItemType: Unbounded_String;
+      Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
    begin
       begin
@@ -292,8 +311,11 @@ package body Crew.Inventory.Test_Data.Tests is
       end;
       declare
          Test_FindTools_9ef8ba_61150c_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FindTools
-             (MemberIndex, ItemType, Order, ToolQuality);
+           Gnattest_Generated.GNATtest_Standard.Crew.Inventory.FindTools
+             (MemberIndex,
+              ItemType,
+              Order,
+              ToolQuality);
       begin
          begin
             pragma Assert(True);
@@ -311,12 +333,15 @@ package body Crew.Inventory.Test_Data.Tests is
 
 --  begin read only
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test);
-   procedure Test_FindTools_9ef8ba_61150c(Gnattest_T: in out Test) renames
+   procedure Test_FindTools_9ef8ba_61150c
+     (Gnattest_T: in out Test) renames
      Test_FindTools_test_findtools;
 --  id:2.2/9ef8baa51d571ac0/FindTools/1/0/test_findtools/
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test) is
       function FindTools
-        (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
+        (MemberIndex: Positive;
+         ItemType: Unbounded_String;
+         Order: Crew_Orders;
          ToolQuality: Positive := 100) return Natural renames
         Wrap_Test_FindTools_9ef8ba_61150c;
 --  end read only

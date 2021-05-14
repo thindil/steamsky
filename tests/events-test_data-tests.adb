@@ -35,7 +35,7 @@ package body Events.Test_Data.Tests is
    begin
       declare
          Test_CheckForEvent_1c4562_e01b25_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.Events.CheckForEvent;
+           Gnattest_Generated.GNATtest_Standard.Events.CheckForEvent;
       begin
          return Test_CheckForEvent_1c4562_e01b25_Result;
       end;
@@ -44,7 +44,8 @@ package body Events.Test_Data.Tests is
 
 --  begin read only
    procedure Test_CheckForEvent_test_checkforevent(Gnattest_T: in out Test);
-   procedure Test_CheckForEvent_1c4562_e01b25(Gnattest_T: in out Test) renames
+   procedure Test_CheckForEvent_1c4562_e01b25
+     (Gnattest_T: in out Test) renames
      Test_CheckForEvent_test_checkforevent;
 --  id:2.2/1c45624e0a8cde64/CheckForEvent/1/0/test_checkforevent/
    procedure Test_CheckForEvent_test_checkforevent(Gnattest_T: in out Test) is
@@ -68,17 +69,19 @@ package body Events.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_UpdateEvents_96e988_646fe5(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Events.UpdateEvents(Minutes);
+      Gnattest_Generated.GNATtest_Standard.Events.UpdateEvents(Minutes);
    end Wrap_Test_UpdateEvents_96e988_646fe5;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateEvents_test_updateevents(Gnattest_T: in out Test);
-   procedure Test_UpdateEvents_96e988_646fe5(Gnattest_T: in out Test) renames
+   procedure Test_UpdateEvents_96e988_646fe5
+     (Gnattest_T: in out Test) renames
      Test_UpdateEvents_test_updateevents;
 --  id:2.2/96e988ace71f5fcf/UpdateEvents/1/0/test_updateevents/
    procedure Test_UpdateEvents_test_updateevents(Gnattest_T: in out Test) is
-      procedure UpdateEvents(Minutes: Positive) renames
+      procedure UpdateEvents
+        (Minutes: Positive) renames
         Wrap_Test_UpdateEvents_96e988_646fe5;
 --  end read only
 
@@ -105,7 +108,7 @@ package body Events.Test_Data.Tests is
               (False,
                "req_sloc(events.ads:0):Test_DeleteEvent test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Events.DeleteEvent(EventIndex);
+      Gnattest_Generated.GNATtest_Standard.Events.DeleteEvent(EventIndex);
       begin
          pragma Assert(True);
          null;
@@ -120,11 +123,13 @@ package body Events.Test_Data.Tests is
 
 --  begin read only
    procedure Test_DeleteEvent_test_deleteevent(Gnattest_T: in out Test);
-   procedure Test_DeleteEvent_0ca9ce_33228f(Gnattest_T: in out Test) renames
+   procedure Test_DeleteEvent_0ca9ce_33228f
+     (Gnattest_T: in out Test) renames
      Test_DeleteEvent_test_deleteevent;
 --  id:2.2/0ca9ce05c1aa70d1/DeleteEvent/1/0/test_deleteevent/
    procedure Test_DeleteEvent_test_deleteevent(Gnattest_T: in out Test) is
-      procedure DeleteEvent(EventIndex: Positive) renames
+      procedure DeleteEvent
+        (EventIndex: Positive) renames
         Wrap_Test_DeleteEvent_0ca9ce_33228f;
 --  end read only
 
@@ -143,7 +148,7 @@ package body Events.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_GenerateTraders_8d2b65_5d00a3 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Events.GenerateTraders;
+      Gnattest_Generated.GNATtest_Standard.Events.GenerateTraders;
    end Wrap_Test_GenerateTraders_8d2b65_5d00a3;
 --  end read only
 
@@ -174,17 +179,19 @@ package body Events.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_RecoverBase_904011_a032fd(BaseIndex: Bases_Range) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Events.RecoverBase(BaseIndex);
+      Gnattest_Generated.GNATtest_Standard.Events.RecoverBase(BaseIndex);
    end Wrap_Test_RecoverBase_904011_a032fd;
 --  end read only
 
 --  begin read only
    procedure Test_RecoverBase_test_recoverbase(Gnattest_T: in out Test);
-   procedure Test_RecoverBase_904011_a032fd(Gnattest_T: in out Test) renames
+   procedure Test_RecoverBase_904011_a032fd
+     (Gnattest_T: in out Test) renames
      Test_RecoverBase_test_recoverbase;
 --  id:2.2/904011d165b5f6d4/RecoverBase/1/0/test_recoverbase/
    procedure Test_RecoverBase_test_recoverbase(Gnattest_T: in out Test) is
-      procedure RecoverBase(BaseIndex: Bases_Range) renames
+      procedure RecoverBase
+        (BaseIndex: Bases_Range) renames
         Wrap_Test_RecoverBase_904011_a032fd;
 --  end read only
 
@@ -219,8 +226,10 @@ package body Events.Test_Data.Tests is
               (False,
                "req_sloc(events.ads:0):Test_GenerateEnemies test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Events.GenerateEnemies
-        (Enemies, Owner, WithTraders);
+      Gnattest_Generated.GNATtest_Standard.Events.GenerateEnemies
+        (Enemies,
+         Owner,
+         WithTraders);
       begin
          pragma Assert(True);
          null;

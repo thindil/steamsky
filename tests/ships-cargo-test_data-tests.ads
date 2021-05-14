@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Ships.Cargo.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Ships.Cargo.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Ships.Cargo.Test_Data
      .Test with
    null record;
 
@@ -14,13 +14,13 @@ package Ships.Cargo.Test_Data.Tests is
    --  ships-cargo.ads:40:4:UpdateCargo:Test_UpdateCargo
 
    procedure Test_FreeCargo_2845af_4f2f60(Gnattest_T: in out Test);
-   --  ships-cargo.ads:61:4:FreeCargo:Test_FreeCargo
+   --  ships-cargo.ads:62:4:FreeCargo:Test_FreeCargo
 
    procedure Test_GetItemAmount_57499f_15cacd(Gnattest_T: in out Test);
-   --  ships-cargo.ads:74:4:GetItemAmount:Test_GetItemAmount
+   --  ships-cargo.ads:76:4:GetItemAmount:Test_GetItemAmount
 
    procedure Test_GetItemsAmount_df8553_e4797c(Gnattest_T: in out Test);
-   --  ships-cargo.ads:87:4:GetItemsAmount:Test_GetItemsAmount
+   --  ships-cargo.ads:89:4:GetItemsAmount:Test_GetItemsAmount
 
 end Ships.Cargo.Test_Data.Tests;
 --  end read only

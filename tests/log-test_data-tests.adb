@@ -30,7 +30,8 @@ package body Log.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_Log_Message_6a7537_caf43b
-     (Message: String; Message_Type: Debug_Types;
+     (Message: String;
+      Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
    begin
       begin
@@ -42,8 +43,11 @@ package body Log.Test_Data.Tests is
               (False,
                "req_sloc(log.ads:0):Test_LogMessage test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Log.Log_Message
-        (Message, Message_Type, New_Line, Time_Stamp);
+      Gnattest_Generated.GNATtest_Standard.Log.Log_Message
+        (Message,
+         Message_Type,
+         New_Line,
+         Time_Stamp);
       begin
          pragma Assert(True);
          null;
@@ -58,12 +62,14 @@ package body Log.Test_Data.Tests is
 
 --  begin read only
    procedure Test_Log_Message_test_logmessage(Gnattest_T: in out Test);
-   procedure Test_Log_Message_6a7537_caf43b(Gnattest_T: in out Test) renames
+   procedure Test_Log_Message_6a7537_caf43b
+     (Gnattest_T: in out Test) renames
      Test_Log_Message_test_logmessage;
 --  id:2.2/6a7537630b1363a5/Log_Message/1/0/test_logmessage/
    procedure Test_Log_Message_test_logmessage(Gnattest_T: in out Test) is
       procedure Log_Message
-        (Message: String; Message_Type: Debug_Types;
+        (Message: String;
+         Message_Type: Debug_Types;
          New_Line, Time_Stamp: Boolean := True) renames
         Wrap_Test_Log_Message_6a7537_caf43b;
 --  end read only

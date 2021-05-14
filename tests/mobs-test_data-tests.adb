@@ -47,8 +47,9 @@ package body Mobs.Test_Data.Tests is
       end;
       declare
          Test_GenerateMob_520182_3c2c38_Result: constant Member_Data :=
-           GNATtest_Generated.GNATtest_Standard.Mobs.GenerateMob
-             (MobIndex, FactionIndex);
+           Gnattest_Generated.GNATtest_Standard.Mobs.GenerateMob
+             (MobIndex,
+              FactionIndex);
       begin
          begin
             pragma Assert(True);
@@ -66,7 +67,8 @@ package body Mobs.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test);
-   procedure Test_GenerateMob_520182_3c2c38(Gnattest_T: in out Test) renames
+   procedure Test_GenerateMob_520182_3c2c38
+     (Gnattest_T: in out Test) renames
      Test_GenerateMob_test_genearatemob;
 --  id:2.2/5201826c898ff8db/GenerateMob/1/0/test_genearatemob/
    procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test) is
@@ -99,8 +101,10 @@ package body Mobs.Test_Data.Tests is
    begin
       begin
          pragma Assert
-           ((EquipIndex < 8 and HighestLevel < 101 and
-             WeaponSkillLevel < 101 and Factions_List.Contains(FactionIndex)));
+           ((EquipIndex < 8 and
+             HighestLevel < 101 and
+             WeaponSkillLevel < 101 and
+             Factions_List.Contains(FactionIndex)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -110,8 +114,11 @@ package body Mobs.Test_Data.Tests is
       end;
       declare
          Test_GetRandomItem_61c13c_8c2473_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Mobs.GetRandomItem
-             (ItemsIndexes, EquipIndex, HighestLevel, WeaponSkillLevel,
+           Gnattest_Generated.GNATtest_Standard.Mobs.GetRandomItem
+             (ItemsIndexes,
+              EquipIndex,
+              HighestLevel,
+              WeaponSkillLevel,
               FactionIndex);
       begin
          begin
@@ -130,7 +137,8 @@ package body Mobs.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test);
-   procedure Test_GetRandomItem_61c13c_8c2473(Gnattest_T: in out Test) renames
+   procedure Test_GetRandomItem_61c13c_8c2473
+     (Gnattest_T: in out Test) renames
      Test_GetRandomItem_test_getrandomitem;
 --  id:2.2/61c13cdf12147be3/GetRandomItem/1/0/test_getrandomitem/
    procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test) is
@@ -147,7 +155,11 @@ package body Mobs.Test_Data.Tests is
 
       Assert
         (GetRandomItem
-           (Weapons_List, 1, 20, 20, To_Unbounded_String("POLEIS")) /=
+           (Weapons_List,
+            1,
+            20,
+            20,
+            To_Unbounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to get random item for mob.");
 

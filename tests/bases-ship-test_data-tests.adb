@@ -40,7 +40,7 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "req_sloc(bases-ship.ads:0):Test_RepairShip test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Bases.Ship.RepairShip(ModuleIndex);
+      Gnattest_Generated.GNATtest_Standard.Bases.Ship.RepairShip(ModuleIndex);
       begin
          pragma Assert(True);
          null;
@@ -55,11 +55,13 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test);
-   procedure Test_RepairShip_41c4af_d40bee(Gnattest_T: in out Test) renames
+   procedure Test_RepairShip_41c4af_d40bee
+     (Gnattest_T: in out Test) renames
      Test_RepairShip_test_repairship;
 --  id:2.2/41c4af333c446830/RepairShip/1/0/test_repairship/
    procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test) is
-      procedure RepairShip(ModuleIndex: Integer) renames
+      procedure RepairShip
+        (ModuleIndex: Integer) renames
         Wrap_Test_RepairShip_41c4af_d40bee;
 --  end read only
 
@@ -87,7 +89,8 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_UpgradeShip_62a16e_73d66b
-     (Install: Boolean; ModuleIndex: Unbounded_String) is
+     (Install: Boolean;
+      ModuleIndex: Unbounded_String) is
    begin
       begin
          pragma Assert((ModuleIndex /= Null_Unbounded_String));
@@ -98,8 +101,9 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "req_sloc(bases-ship.ads:0):Test_UpdgradeShip test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Bases.Ship.UpgradeShip
-        (Install, ModuleIndex);
+      Gnattest_Generated.GNATtest_Standard.Bases.Ship.UpgradeShip
+        (Install,
+         ModuleIndex);
       begin
          pragma Assert(True);
          null;
@@ -114,12 +118,14 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Test_UpgradeShip_test_updgradeship(Gnattest_T: in out Test);
-   procedure Test_UpgradeShip_62a16e_73d66b(Gnattest_T: in out Test) renames
+   procedure Test_UpgradeShip_62a16e_73d66b
+     (Gnattest_T: in out Test) renames
      Test_UpgradeShip_test_updgradeship;
 --  id:2.2/62a16ebed8881e22/UpgradeShip/1/0/test_updgradeship/
    procedure Test_UpgradeShip_test_updgradeship(Gnattest_T: in out Test) is
       procedure UpgradeShip
-        (Install: Boolean; ModuleIndex: Unbounded_String) renames
+        (Install: Boolean;
+         ModuleIndex: Unbounded_String) renames
         Wrap_Test_UpgradeShip_62a16e_73d66b;
 --  end read only
 
@@ -143,13 +149,14 @@ package body Bases.Ship.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_PayForDock_b46f8e_d92d34 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Bases.Ship.PayForDock;
+      Gnattest_Generated.GNATtest_Standard.Bases.Ship.PayForDock;
    end Wrap_Test_PayForDock_b46f8e_d92d34;
 --  end read only
 
 --  begin read only
    procedure Test_PayForDock_test_payfordock(Gnattest_T: in out Test);
-   procedure Test_PayForDock_b46f8e_d92d34(Gnattest_T: in out Test) renames
+   procedure Test_PayForDock_b46f8e_d92d34
+     (Gnattest_T: in out Test) renames
      Test_PayForDock_test_payfordock;
 --  id:2.2/b46f8ee6fa97fa17/PayForDock/1/0/test_payfordock/
    procedure Test_PayForDock_test_payfordock(Gnattest_T: in out Test) is
@@ -170,7 +177,8 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_RepairCost_2d9781_2dee42
-     (Cost, Time: in out Natural; ModuleIndex: Integer) is
+     (Cost, Time: in out Natural;
+      ModuleIndex: Integer) is
    begin
       begin
          pragma Assert((ModuleIndex <= PlayerShip.Modules.Last_Index));
@@ -181,8 +189,10 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "req_sloc(bases-ship.ads:0):Test_RepairCost test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Bases.Ship.RepairCost
-        (Cost, Time, ModuleIndex);
+      Gnattest_Generated.GNATtest_Standard.Bases.Ship.RepairCost
+        (Cost,
+         Time,
+         ModuleIndex);
       begin
          pragma Assert(True);
          null;
@@ -197,12 +207,14 @@ package body Bases.Ship.Test_Data.Tests is
 
 --  begin read only
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test);
-   procedure Test_RepairCost_2d9781_2dee42(Gnattest_T: in out Test) renames
+   procedure Test_RepairCost_2d9781_2dee42
+     (Gnattest_T: in out Test) renames
      Test_RepairCost_test_repaircost;
 --  id:2.2/2d9781143dbec48d/RepairCost/1/0/test_repaircost/
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test) is
       procedure RepairCost
-        (Cost, Time: in out Natural; ModuleIndex: Integer) renames
+        (Cost, Time: in out Natural;
+         ModuleIndex: Integer) renames
         Wrap_Test_RepairCost_2d9781_2dee42;
 --  end read only
 

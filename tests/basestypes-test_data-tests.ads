@@ -6,15 +6,15 @@ with Gnattest_Generated;
 
 package BasesTypes.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.BasesTypes.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.BasesTypes.Test_Data
      .Test with
    null record;
 
    procedure Test_Is_Buyable_e4fcaf_0acf10(Gnattest_T: in out Test);
-   --  basestypes.ads:107:4:Is_Buyable:Test_Is_Buyable
+   --  basestypes.ads:113:4:Is_Buyable:Test_Is_Buyable
 
    procedure Test_Get_Price_58bb07_522dbd(Gnattest_T: in out Test);
-   --  basestypes.ads:124:4:Get_Price:Test_Get_Price
+   --  basestypes.ads:131:4:Get_Price:Test_Get_Price
 
 end BasesTypes.Test_Data.Tests;
 --  end read only

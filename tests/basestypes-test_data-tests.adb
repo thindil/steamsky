@@ -30,7 +30,8 @@ package body BasesTypes.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_Is_Buyable_e4fcaf_0acf10
-     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+     (BaseType, ItemIndex: Unbounded_String;
+      CheckFlag: Boolean := True;
       BaseIndex: Extended_Base_Range := 0) return Boolean is
    begin
       begin
@@ -46,8 +47,11 @@ package body BasesTypes.Test_Data.Tests is
       end;
       declare
          Test_Is_Buyable_e4fcaf_0acf10_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.BasesTypes.Is_Buyable
-             (BaseType, ItemIndex, CheckFlag, BaseIndex);
+           Gnattest_Generated.GNATtest_Standard.BasesTypes.Is_Buyable
+             (BaseType,
+              ItemIndex,
+              CheckFlag,
+              BaseIndex);
       begin
          begin
             pragma Assert(True);
@@ -65,12 +69,14 @@ package body BasesTypes.Test_Data.Tests is
 
 --  begin read only
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test);
-   procedure Test_Is_Buyable_e4fcaf_0acf10(Gnattest_T: in out Test) renames
+   procedure Test_Is_Buyable_e4fcaf_0acf10
+     (Gnattest_T: in out Test) renames
      Test_Is_Buyable_test_is_buyable;
 --  id:2.2/e4fcaf8408019fdf/Is_Buyable/1/0/test_is_buyable/
    procedure Test_Is_Buyable_test_is_buyable(Gnattest_T: in out Test) is
       function Is_Buyable
-        (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
+        (BaseType, ItemIndex: Unbounded_String;
+         CheckFlag: Boolean := True;
          BaseIndex: Extended_Base_Range := 0) return Boolean renames
         Wrap_Test_Is_Buyable_e4fcaf_0acf10;
 --  end read only
@@ -108,8 +114,9 @@ package body BasesTypes.Test_Data.Tests is
       end;
       declare
          Test_Get_Price_58bb07_522dbd_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.BasesTypes.Get_Price
-             (BaseType, ItemIndex);
+           Gnattest_Generated.GNATtest_Standard.BasesTypes.Get_Price
+             (BaseType,
+              ItemIndex);
       begin
          begin
             pragma Assert(True);
@@ -127,7 +134,8 @@ package body BasesTypes.Test_Data.Tests is
 
 --  begin read only
    procedure Test_Get_Price_test_get_price(Gnattest_T: in out Test);
-   procedure Test_Get_Price_58bb07_522dbd(Gnattest_T: in out Test) renames
+   procedure Test_Get_Price_58bb07_522dbd
+     (Gnattest_T: in out Test) renames
      Test_Get_Price_test_get_price;
 --  id:2.2/58bb076ead9f93c1/Get_Price/1/0/test_get_price/
    procedure Test_Get_Price_test_get_price(Gnattest_T: in out Test) is

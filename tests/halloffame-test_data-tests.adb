@@ -43,8 +43,9 @@ package body HallOfFame.Test_Data.Tests is
               (False,
                "req_sloc(halloffame.ads:0):Test_UpdateHallOfFame test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.HallOfFame.Update_Hall_Of_Fame
-        (Player_Name, Death_Reason);
+      Gnattest_Generated.GNATtest_Standard.HallOfFame.Update_Hall_Of_Fame
+        (Player_Name,
+         Death_Reason);
       begin
          pragma Assert(True);
          null;
@@ -77,7 +78,8 @@ package body HallOfFame.Test_Data.Tests is
 
       Hall_Of_Fame_Array := (others => Empty_Hall_Of_Fame_Entry);
       Update_Hall_Of_Fame
-        (To_Unbounded_String("TestPlayer"), To_Unbounded_String("TestDeath"));
+        (To_Unbounded_String("TestPlayer"),
+         To_Unbounded_String("TestDeath"));
       Assert
         (Hall_Of_Fame_Array(1).Name = To_Unbounded_String("TestPlayer"),
          "Failed to update Hall Of Fame.");

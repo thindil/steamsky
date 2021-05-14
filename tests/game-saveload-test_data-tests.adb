@@ -32,7 +32,7 @@ package body Game.SaveLoad.Test_Data.Tests is
    procedure Wrap_Test_GenerateSaveName_ddf358_e85ed1
      (RenameSave: Boolean := False) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Game.SaveLoad.GenerateSaveName
+      Gnattest_Generated.GNATtest_Standard.Game.SaveLoad.GenerateSaveName
         (RenameSave);
    end Wrap_Test_GenerateSaveName_ddf358_e85ed1;
 --  end read only
@@ -46,7 +46,8 @@ package body Game.SaveLoad.Test_Data.Tests is
 --  id:2.2/ddf358647b83b861/GenerateSaveName/1/0/test_generatesavename/
    procedure Test_GenerateSaveName_test_generatesavename
      (Gnattest_T: in out Test) is
-      procedure GenerateSaveName(RenameSave: Boolean := False) renames
+      procedure GenerateSaveName
+        (RenameSave: Boolean := False) renames
         Wrap_Test_GenerateSaveName_ddf358_e85ed1;
 --  end read only
 
@@ -59,7 +60,9 @@ package body Game.SaveLoad.Test_Data.Tests is
       Assert
         (OldSaveName /= SaveName,
          "Failed to generate new save name (Oldsavename = '" &
-         To_String(OldSaveName) & "', SaveName = '" & To_String(SaveName) &
+         To_String(OldSaveName) &
+         "', SaveName = '" &
+         To_String(SaveName) &
          "').");
 
 --  begin read only

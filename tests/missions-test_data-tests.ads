@@ -6,7 +6,7 @@ with Gnattest_Generated;
 
 package Missions.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Missions.Test_Data
+   type Test is new Gnattest_Generated.GNATtest_Standard.Missions.Test_Data
      .Test with
    null record;
 
@@ -26,10 +26,10 @@ package Missions.Test_Data.Tests is
    --  missions.ads:159:4:DeleteMission:Test_DeleteMission
 
    procedure Test_UpdateMission_06efd0_8b6bc6(Gnattest_T: in out Test);
-   --  missions.ads:172:4:UpdateMission:Test_UpdateMission
+   --  missions.ads:173:4:UpdateMission:Test_UpdateMission
 
    procedure Test_AutoFinishMissions_ca7126_527254(Gnattest_T: in out Test);
-   --  missions.ads:184:4:AutoFinishMissions:Test_AutoFinishMissions
+   --  missions.ads:185:4:AutoFinishMissions:Test_AutoFinishMissions
 
 end Missions.Test_Data.Tests;
 --  end read only

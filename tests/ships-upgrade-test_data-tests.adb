@@ -33,7 +33,8 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  end read only
 --  begin read only
    procedure Wrap_Test_StartUpgrading_9699a2_bf0e24
-     (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
+     (ModuleIndex: Modules_Container.Extended_Index;
+      UpgradeType: Positive) is
    begin
       begin
          pragma Assert
@@ -48,8 +49,9 @@ package body Ships.Upgrade.Test_Data.Tests is
               (False,
                "req_sloc(ships-upgrade.ads:0):Test_StartUpgrading test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.StartUpgrading
-        (ModuleIndex, UpgradeType);
+      Gnattest_Generated.GNATtest_Standard.Ships.Upgrade.StartUpgrading
+        (ModuleIndex,
+         UpgradeType);
       begin
          pragma Assert(True);
          null;
@@ -64,7 +66,8 @@ package body Ships.Upgrade.Test_Data.Tests is
 
 --  begin read only
    procedure Test_StartUpgrading_test_startupgrading(Gnattest_T: in out Test);
-   procedure Test_StartUpgrading_9699a2_bf0e24(Gnattest_T: in out Test) renames
+   procedure Test_StartUpgrading_9699a2_bf0e24
+     (Gnattest_T: in out Test) renames
      Test_StartUpgrading_test_startupgrading;
 --  id:2.2/9699a2ac94abe86f/StartUpgrading/1/0/test_startupgrading/
    procedure Test_StartUpgrading_test_startupgrading
@@ -89,17 +92,19 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_UpgradeShip_4209d2_2b44d6(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Upgrade.UpgradeShip(Minutes);
+      Gnattest_Generated.GNATtest_Standard.Ships.Upgrade.UpgradeShip(Minutes);
    end Wrap_Test_UpgradeShip_4209d2_2b44d6;
 --  end read only
 
 --  begin read only
    procedure Test_UpgradeShip_test_upgradeship(Gnattest_T: in out Test);
-   procedure Test_UpgradeShip_4209d2_2b44d6(Gnattest_T: in out Test) renames
+   procedure Test_UpgradeShip_4209d2_2b44d6
+     (Gnattest_T: in out Test) renames
      Test_UpgradeShip_test_upgradeship;
 --  id:2.2/4209d24a189d78e6/UpgradeShip/1/0/test_upgradeship/
    procedure Test_UpgradeShip_test_upgradeship(Gnattest_T: in out Test) is
-      procedure UpgradeShip(Minutes: Positive) renames
+      procedure UpgradeShip
+        (Minutes: Positive) renames
         Wrap_Test_UpgradeShip_4209d2_2b44d6;
 --  end read only
 

@@ -45,8 +45,9 @@ package body Factions.Test_Data.Tests is
       end;
       declare
          Test_GetReputation_f138bb_fd71d1_Result: constant Integer :=
-           GNATtest_Generated.GNATtest_Standard.Factions.GetReputation
-             (SourceFaction, TargetFaction);
+           Gnattest_Generated.GNATtest_Standard.Factions.GetReputation
+             (SourceFaction,
+              TargetFaction);
       begin
          begin
             pragma Assert(True);
@@ -64,7 +65,8 @@ package body Factions.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test);
-   procedure Test_GetReputation_f138bb_fd71d1(Gnattest_T: in out Test) renames
+   procedure Test_GetReputation_f138bb_fd71d1
+     (Gnattest_T: in out Test) renames
      Test_GetReputation_test_getreputation;
 --  id:2.2/f138bbb5c8b2b971/GetReputation/1/0/test_getreputation/
    procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test) is
@@ -79,12 +81,14 @@ package body Factions.Test_Data.Tests is
 
       Assert
         (GetReputation
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("POLEIS")) =
+           (To_Unbounded_String("POLEIS"),
+            To_Unbounded_String("POLEIS")) =
          0,
          "Failed to get reputation for Poleis to Poleis.");
       Assert
         (GetReputation
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) =
+           (To_Unbounded_String("POLEIS"),
+            To_Unbounded_String("PIRATES")) =
          -10,
          "Failed to get reputation for Poleis to Pirates.");
 
@@ -109,8 +113,9 @@ package body Factions.Test_Data.Tests is
       end;
       declare
          Test_IsFriendly_868bec_b689c9_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.Factions.IsFriendly
-             (SourceFaction, TargetFaction);
+           Gnattest_Generated.GNATtest_Standard.Factions.IsFriendly
+             (SourceFaction,
+              TargetFaction);
       begin
          begin
             pragma Assert(True);
@@ -128,7 +133,8 @@ package body Factions.Test_Data.Tests is
 
 --  begin read only
    procedure Test_IsFriendly_test_isfriendly(Gnattest_T: in out Test);
-   procedure Test_IsFriendly_868bec_b689c9(Gnattest_T: in out Test) renames
+   procedure Test_IsFriendly_868bec_b689c9
+     (Gnattest_T: in out Test) renames
      Test_IsFriendly_test_isfriendly;
 --  id:2.2/868bec8bf6fd9c98/IsFriendly/1/0/test_isfriendly/
    procedure Test_IsFriendly_test_isfriendly(Gnattest_T: in out Test) is
@@ -149,7 +155,8 @@ package body Factions.Test_Data.Tests is
          "Failed to check two friendly factions.");
       Assert
         (IsFriendly
-           (To_Unbounded_String("POLEIS"), To_Unbounded_String("PIRATES")) =
+           (To_Unbounded_String("POLEIS"),
+            To_Unbounded_String("PIRATES")) =
          False,
          "Failed to check two unfriendly factions.");
 
@@ -162,7 +169,7 @@ package body Factions.Test_Data.Tests is
    begin
       declare
          Test_GetRandomFaction_47dd81_103989_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Factions.GetRandomFaction;
+           Gnattest_Generated.GNATtest_Standard.Factions.GetRandomFaction;
       begin
          return Test_GetRandomFaction_47dd81_103989_Result;
       end;

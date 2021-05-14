@@ -30,8 +30,8 @@ package body Combat.Test_Data.Tests is
 --  end read only
 --  begin read only
    function Wrap_Test_StartCombat_523cd4_8ba7bd
-     (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
-      return Boolean is
+     (EnemyIndex: Unbounded_String;
+      NewCombat: Boolean := True) return Boolean is
    begin
       begin
          pragma Assert
@@ -45,8 +45,9 @@ package body Combat.Test_Data.Tests is
       end;
       declare
          Test_StartCombat_523cd4_8ba7bd_Result: constant Boolean :=
-           GNATtest_Generated.GNATtest_Standard.Combat.StartCombat
-             (EnemyIndex, NewCombat);
+           Gnattest_Generated.GNATtest_Standard.Combat.StartCombat
+             (EnemyIndex,
+              NewCombat);
       begin
          begin
             pragma Assert(True);
@@ -64,13 +65,14 @@ package body Combat.Test_Data.Tests is
 
 --  begin read only
    procedure Test_StartCombat_test_startcombat(Gnattest_T: in out Test);
-   procedure Test_StartCombat_523cd4_8ba7bd(Gnattest_T: in out Test) renames
+   procedure Test_StartCombat_523cd4_8ba7bd
+     (Gnattest_T: in out Test) renames
      Test_StartCombat_test_startcombat;
 --  id:2.2/523cd4ef15c88057/StartCombat/1/0/test_startcombat/
    procedure Test_StartCombat_test_startcombat(Gnattest_T: in out Test) is
       function StartCombat
-        (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
-         return Boolean renames
+        (EnemyIndex: Unbounded_String;
+         NewCombat: Boolean := True) return Boolean renames
         Wrap_Test_StartCombat_523cd4_8ba7bd;
 --  end read only
 
@@ -91,13 +93,14 @@ package body Combat.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_CombatTurn_4b34b0_e12d30 is
    begin
-      GNATtest_Generated.GNATtest_Standard.Combat.CombatTurn;
+      Gnattest_Generated.GNATtest_Standard.Combat.CombatTurn;
    end Wrap_Test_CombatTurn_4b34b0_e12d30;
 --  end read only
 
 --  begin read only
    procedure Test_CombatTurn_test_combatturn(Gnattest_T: in out Test);
-   procedure Test_CombatTurn_4b34b0_e12d30(Gnattest_T: in out Test) renames
+   procedure Test_CombatTurn_4b34b0_e12d30
+     (Gnattest_T: in out Test) renames
      Test_CombatTurn_test_combatturn;
 --  id:2.2/4b34b0f86cde143a/CombatTurn/1/0/test_combatturn/
    procedure Test_CombatTurn_test_combatturn(Gnattest_T: in out Test) is

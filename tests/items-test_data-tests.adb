@@ -46,7 +46,7 @@ package body Items.Test_Data.Tests is
       end;
       declare
          Test_FindProtoItem_f36791_112bba_Result: constant Unbounded_String :=
-           GNATtest_Generated.GNATtest_Standard.Items.FindProtoItem(ItemType);
+           Gnattest_Generated.GNATtest_Standard.Items.FindProtoItem(ItemType);
       begin
          begin
             pragma Assert(True);
@@ -64,7 +64,8 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Test_FindProtoItem_test_findprotoitem(Gnattest_T: in out Test);
-   procedure Test_FindProtoItem_f36791_112bba(Gnattest_T: in out Test) renames
+   procedure Test_FindProtoItem_f36791_112bba
+     (Gnattest_T: in out Test) renames
      Test_FindProtoItem_test_findprotoitem;
 --  id:2.2/f36791a587ee5451/FindProtoItem/1/0/test_findprotoitem/
    procedure Test_FindProtoItem_test_findprotoitem(Gnattest_T: in out Test) is
@@ -91,13 +92,14 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_GetItemDamage_dedcfa_d584da
-     (ItemDurability: Items_Durability; ToLower: Boolean := False)
-      return String is
+     (ItemDurability: Items_Durability;
+      ToLower: Boolean := False) return String is
    begin
       declare
          Test_GetItemDamage_dedcfa_d584da_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Items.GetItemDamage
-             (ItemDurability, ToLower);
+           Gnattest_Generated.GNATtest_Standard.Items.GetItemDamage
+             (ItemDurability,
+              ToLower);
       begin
          return Test_GetItemDamage_dedcfa_d584da_Result;
       end;
@@ -106,13 +108,14 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetItemDamage_test_getitemdamage(Gnattest_T: in out Test);
-   procedure Test_GetItemDamage_dedcfa_d584da(Gnattest_T: in out Test) renames
+   procedure Test_GetItemDamage_dedcfa_d584da
+     (Gnattest_T: in out Test) renames
      Test_GetItemDamage_test_getitemdamage;
 --  id:2.2/dedcfaf3e24b7100/GetItemDamage/1/0/test_getitemdamage/
    procedure Test_GetItemDamage_test_getitemdamage(Gnattest_T: in out Test) is
       function GetItemDamage
-        (ItemDurability: Items_Durability; ToLower: Boolean := False)
-         return String renames
+        (ItemDurability: Items_Durability;
+         ToLower: Boolean := False) return String renames
         Wrap_Test_GetItemDamage_dedcfa_d584da;
 --  end read only
 
@@ -133,13 +136,15 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_GetItemName_2db285_6191e0
-     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
-      return String is
+     (Item: InventoryData;
+      DamageInfo, ToLower: Boolean := True) return String is
    begin
       declare
          Test_GetItemName_2db285_6191e0_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Items.GetItemName
-             (Item, DamageInfo, ToLower);
+           Gnattest_Generated.GNATtest_Standard.Items.GetItemName
+             (Item,
+              DamageInfo,
+              ToLower);
       begin
          return Test_GetItemName_2db285_6191e0_Result;
       end;
@@ -148,20 +153,24 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GetItemName_test_getitemname(Gnattest_T: in out Test);
-   procedure Test_GetItemName_2db285_6191e0(Gnattest_T: in out Test) renames
+   procedure Test_GetItemName_2db285_6191e0
+     (Gnattest_T: in out Test) renames
      Test_GetItemName_test_getitemname;
 --  id:2.2/2db285163d74c283/GetItemName/1/0/test_getitemname/
    procedure Test_GetItemName_test_getitemname(Gnattest_T: in out Test) is
       function GetItemName
-        (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
-         return String renames
+        (Item: InventoryData;
+         DamageInfo, ToLower: Boolean := True) return String renames
         Wrap_Test_GetItemName_2db285_6191e0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       Item: InventoryData :=
-        (ProtoIndex => To_Unbounded_String("2"), Amount => 1,
-         Name => Null_Unbounded_String, Durability => 80, Price => 0);
+        (ProtoIndex => To_Unbounded_String("2"),
+         Amount => 1,
+         Name => Null_Unbounded_String,
+         Durability => 80,
+         Price => 0);
 
    begin
 
@@ -183,7 +192,8 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_DamageItem_f848d1_f75741
-     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
+     (Inventory: in out Inventory_Container.Vector;
+      ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) is
    begin
       begin
@@ -195,8 +205,11 @@ package body Items.Test_Data.Tests is
               (False,
                "req_sloc(items.ads:0):Test_DamageItem test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Items.DamageItem
-        (Inventory, ItemIndex, SkillLevel, MemberIndex);
+      Gnattest_Generated.GNATtest_Standard.Items.DamageItem
+        (Inventory,
+         ItemIndex,
+         SkillLevel,
+         MemberIndex);
       begin
          pragma Assert(True);
          null;
@@ -211,12 +224,14 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Test_DamageItem_test_damageitem(Gnattest_T: in out Test);
-   procedure Test_DamageItem_f848d1_f75741(Gnattest_T: in out Test) renames
+   procedure Test_DamageItem_f848d1_f75741
+     (Gnattest_T: in out Test) renames
      Test_DamageItem_test_damageitem;
 --  id:2.2/f848d19e08f0418b/DamageItem/1/0/test_damageitem/
    procedure Test_DamageItem_test_damageitem(Gnattest_T: in out Test) is
       procedure DamageItem
-        (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
+        (Inventory: in out Inventory_Container.Vector;
+         ItemIndex: Positive;
          SkillLevel, MemberIndex: Natural := 0) renames
         Wrap_Test_DamageItem_f848d1_f75741;
 --  end read only
@@ -243,8 +258,12 @@ package body Items.Test_Data.Tests is
    begin
       declare
          Test_FindItem_5f6068_d3c7d4_Result: constant Natural :=
-           GNATtest_Generated.GNATtest_Standard.Items.FindItem
-             (Inventory, ProtoIndex, ItemType, Durability, Quality);
+           Gnattest_Generated.GNATtest_Standard.Items.FindItem
+             (Inventory,
+              ProtoIndex,
+              ItemType,
+              Durability,
+              Quality);
       begin
          return Test_FindItem_5f6068_d3c7d4_Result;
       end;
@@ -253,7 +272,8 @@ package body Items.Test_Data.Tests is
 
 --  begin read only
    procedure Test_FindItem_test_finditem(Gnattest_T: in out Test);
-   procedure Test_FindItem_5f6068_d3c7d4(Gnattest_T: in out Test) renames
+   procedure Test_FindItem_5f6068_d3c7d4
+     (Gnattest_T: in out Test) renames
      Test_FindItem_test_finditem;
 --  id:2.2/5f60688911337e8b/FindItem/1/0/test_finditem/
    procedure Test_FindItem_test_finditem(Gnattest_T: in out Test) is
@@ -280,7 +300,8 @@ package body Items.Test_Data.Tests is
          "Can't find item wiht ItemType.");
       Assert
         (FindItem
-           (PlayerShip.Crew(1).Inventory, To_Unbounded_String("tsdfsdf")) =
+           (PlayerShip.Crew(1).Inventory,
+            To_Unbounded_String("tsdfsdf")) =
          0,
          "Item with not existing ProtoIndex found.");
       Assert
@@ -300,7 +321,7 @@ package body Items.Test_Data.Tests is
    begin
       declare
          Test_GetItemChanceToDamage_71801d_da4763_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Items.GetItemChanceToDamage
+           Gnattest_Generated.GNATtest_Standard.Items.GetItemChanceToDamage
              (ItemData);
       begin
          return Test_GetItemChanceToDamage_71801d_da4763_Result;
@@ -317,7 +338,8 @@ package body Items.Test_Data.Tests is
 --  id:2.2/71801da93fac4ec5/GetItemChanceToDamage/1/0/test_getitemchancetodamage/
    procedure Test_GetItemChanceToDamage_test_getitemchancetodamage
      (Gnattest_T: in out Test) is
-      function GetItemChanceToDamage(ItemData: Natural) return String renames
+      function GetItemChanceToDamage
+        (ItemData: Natural) return String renames
         Wrap_Test_GetItemChanceToDamage_71801d_da4763;
 --  end read only
 
@@ -327,7 +349,8 @@ package body Items.Test_Data.Tests is
 
       Game_Settings.Show_Numbers := False;
       Assert
-        (GetItemChanceToDamage(3) = "Small", "Wrong value returned for 3.");
+        (GetItemChanceToDamage(3) = "Small",
+         "Wrong value returned for 3.");
       Assert
         (GetItemChanceToDamage(30) = "Very high",
          "Wrong value returned for 30.");

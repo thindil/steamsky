@@ -43,7 +43,7 @@ package body Goals.Test_Data.Tests is
       end;
       declare
          Test_GoalText_c541ba_267fe9_Result: constant String :=
-           GNATtest_Generated.GNATtest_Standard.Goals.GoalText(Index);
+           Gnattest_Generated.GNATtest_Standard.Goals.GoalText(Index);
       begin
          begin
             pragma Assert(True);
@@ -61,7 +61,8 @@ package body Goals.Test_Data.Tests is
 
 --  begin read only
    procedure Test_GoalText_test_goaltext(Gnattest_T: in out Test);
-   procedure Test_GoalText_c541ba_267fe9(Gnattest_T: in out Test) renames
+   procedure Test_GoalText_c541ba_267fe9
+     (Gnattest_T: in out Test) renames
      Test_GoalText_test_goaltext;
 --  id:2.2/c541bacce47cf44b/GoalText/1/0/test_goaltext/
    procedure Test_GoalText_test_goaltext(Gnattest_T: in out Test) is
@@ -85,7 +86,7 @@ package body Goals.Test_Data.Tests is
 --  begin read only
    procedure Wrap_Test_ClearCurrentGoal_cb9255_08f1aa is
    begin
-      GNATtest_Generated.GNATtest_Standard.Goals.ClearCurrentGoal;
+      Gnattest_Generated.GNATtest_Standard.Goals.ClearCurrentGoal;
    end Wrap_Test_ClearCurrentGoal_cb9255_08f1aa;
 --  end read only
 
@@ -118,22 +119,27 @@ package body Goals.Test_Data.Tests is
 
 --  begin read only
    procedure Wrap_Test_UpdateGoal_cfe7db_0e93ce
-     (GType: GoalTypes; TargetIndex: Unbounded_String;
+     (GType: GoalTypes;
+      TargetIndex: Unbounded_String;
       Amount: Positive := 1) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Goals.UpdateGoal
-        (GType, TargetIndex, Amount);
+      Gnattest_Generated.GNATtest_Standard.Goals.UpdateGoal
+        (GType,
+         TargetIndex,
+         Amount);
    end Wrap_Test_UpdateGoal_cfe7db_0e93ce;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateGoal_test_updategoal(Gnattest_T: in out Test);
-   procedure Test_UpdateGoal_cfe7db_0e93ce(Gnattest_T: in out Test) renames
+   procedure Test_UpdateGoal_cfe7db_0e93ce
+     (Gnattest_T: in out Test) renames
      Test_UpdateGoal_test_updategoal;
 --  id:2.2/cfe7dbae26bc2b25/UpdateGoal/1/0/test_updategoal/
    procedure Test_UpdateGoal_test_updategoal(Gnattest_T: in out Test) is
       procedure UpdateGoal
-        (GType: GoalTypes; TargetIndex: Unbounded_String;
+        (GType: GoalTypes;
+         TargetIndex: Unbounded_String;
          Amount: Positive := 1) renames
         Wrap_Test_UpdateGoal_cfe7db_0e93ce;
 --  end read only
