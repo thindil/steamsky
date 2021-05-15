@@ -165,6 +165,8 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Headergreen.TLabel -foreground green
       # Labels with gray text
       ttk::style configure Gray.TLabel -foreground $colors(-gray)
+      # Dialogs header label
+      ttk::style configure Header.TLabel -background $colors(-darkorange) -anchor center -justify center
 
       # Progressbar setting
       # Default progressbars
