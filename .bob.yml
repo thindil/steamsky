@@ -53,7 +53,6 @@ version: 2.0
    name: pretty
    execute:
       - gnatpp -P steamsky.gpr
-      - gnatpp -P tests/prettytests.gpr
    description: Pretty print Steam Sky source code
 - command:
    name: push
