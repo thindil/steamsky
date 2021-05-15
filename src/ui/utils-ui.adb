@@ -147,7 +147,7 @@ package body Utils.UI is
    procedure ShowMessage
      (Text: String;
       ParentFrame: String := ".gameframe";
-      Header_Text: String := "Message") is
+      Title: String := "Message") is
       MessageDialog: constant Ttk_Frame :=
         Create(ParentFrame & ".message", "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
@@ -166,7 +166,7 @@ package body Utils.UI is
       Message_Header: constant Ttk_Label :=
         Create
           (MessageDialog & ".header",
-           "-text {" & Header_Text & "} -wraplength 200 -style Header.TLabel");
+           "-text {" & Title & "} -wraplength 200 -style Header.TLabel");
    begin
       if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
