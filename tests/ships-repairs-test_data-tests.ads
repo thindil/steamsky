@@ -6,12 +6,10 @@ with Gnattest_Generated;
 
 package Ships.Repairs.Test_Data.Tests is
 
-   type Test is new Gnattest_Generated.GNATtest_Standard.Ships.Repairs
-     .Test_Data
-     .Test with
-   null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Ships.Repairs.Test_Data.Test
+   with null record;
 
-   procedure Test_RepairShip_41c4af_831bda(Gnattest_T: in out Test);
+   procedure Test_RepairShip_41c4af_831bda (Gnattest_T : in out Test);
    --  ships-repairs.ads:31:4:RepairShip:Test_RepairShip
 
 end Ships.Repairs.Test_Data.Tests;

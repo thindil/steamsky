@@ -6,26 +6,25 @@ with Gnattest_Generated;
 
 package Messages.Test_Data.Tests is
 
-   type Test is new Gnattest_Generated.GNATtest_Standard.Messages.Test_Data
-     .Test with
-   null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Messages.Test_Data.Test
+   with null record;
 
-   procedure Test_FormatedTime_5bb1ad_45f0f1(Gnattest_T: in out Test);
+   procedure Test_FormatedTime_5bb1ad_45f0f1 (Gnattest_T : in out Test);
    --  messages.ads:94:4:FormatedTime:Test_FormattedTime
 
-   procedure Test_AddMessage_508d2e_c15a00(Gnattest_T: in out Test);
+   procedure Test_AddMessage_508d2e_c15a00 (Gnattest_T : in out Test);
    --  messages.ads:106:4:AddMessage:Test_AddMessage
 
-   procedure Test_GetMessage_56cd5a_0b2a8d(Gnattest_T: in out Test);
+   procedure Test_GetMessage_56cd5a_0b2a8d (Gnattest_T : in out Test);
    --  messages.ads:125:4:GetMessage:Test_GetMessage
 
-   procedure Test_ClearMessages_aeb026_267040(Gnattest_T: in out Test);
+   procedure Test_ClearMessages_aeb026_267040 (Gnattest_T : in out Test);
    --  messages.ads:135:4:ClearMessages:Test_ClearMessages
 
-   procedure Test_MessagesAmount_922f17_8e4cbf(Gnattest_T: in out Test);
+   procedure Test_MessagesAmount_922f17_8e4cbf (Gnattest_T : in out Test);
    --  messages.ads:147:4:MessagesAmount:Test_MessagesAmount
 
-   procedure Test_GetLastMessageIndex_ee1f16_517343(Gnattest_T: in out Test);
+   procedure Test_GetLastMessageIndex_ee1f16_517343 (Gnattest_T : in out Test);
    --  messages.ads:172:4:GetLastMessageIndex:Test_GetLastMessageIndex
 
 end Messages.Test_Data.Tests;
