@@ -144,7 +144,10 @@ package body Utils.UI is
       return TCL_OK;
    end Update_Dialog_Command;
 
-   procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
+   procedure ShowMessage
+     (Text: String;
+      ParentFrame: String := ".gameframe";
+      Header_Text: String := "Message") is
       MessageDialog: constant Ttk_Frame :=
         Create(ParentFrame & ".message", "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
@@ -160,6 +163,10 @@ package body Utils.UI is
            MessageDialog &
            "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Message_Header: constant Ttk_Label :=
+        Create
+          (MessageDialog & ".header",
+           "-text {" & Header_Text & "} -wraplength 200 -style Header.TLabel");
    begin
       if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -171,6 +178,7 @@ package body Utils.UI is
          TimerId := Null_Unbounded_String;
       end if;
       Tcl_Eval(Get_Context, "update");
+      Tcl.Tk.Ada.Grid.Grid(Message_Header, "-sticky we");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
