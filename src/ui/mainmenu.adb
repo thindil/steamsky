@@ -141,7 +141,7 @@ package body MainMenu is
            Game_Settings.Interface_Theme then
             Tcl_EvalFile
               (interp => Get_Context,
-               fileName => To_String(Source => Themes_List(I).FileName));
+               fileName => To_String(Source => Themes_List(I).File_Name));
             exit Load_Theme_Loop;
          end if;
       end loop Load_Theme_Loop;

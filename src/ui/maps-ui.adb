@@ -414,7 +414,7 @@ package body Maps.UI is
       MapHeight, MapWidth: Positive;
       MapTag: Unbounded_String;
       StoryX, StoryY: Natural := 1;
-      CurrentTheme: constant ThemeRecord :=
+      CurrentTheme: constant Theme_Record :=
         Themes_List(To_String(Game_Settings.Interface_Theme));
    begin
       configure(MapView, "-state normal");
@@ -476,19 +476,19 @@ package body Maps.UI is
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
                      when Deliver =>
-                        MapChar := CurrentTheme.DeliverIcon;
+                        MapChar := CurrentTheme.Deliver_Icon;
                         MapTag := To_Unbounded_String("yellow");
                      when Destroy =>
-                        MapChar := CurrentTheme.DestroyIcon;
+                        MapChar := CurrentTheme.Destroy_Icon;
                         MapTag := To_Unbounded_String("red");
                      when Patrol =>
-                        MapChar := CurrentTheme.PatrolIcon;
+                        MapChar := CurrentTheme.Patrol_Icon;
                         MapTag := To_Unbounded_String("lime");
                      when Explore =>
-                        MapChar := CurrentTheme.ExploreIcon;
+                        MapChar := CurrentTheme.Explore_Icon;
                         MapTag := To_Unbounded_String("green");
                      when Passenger =>
-                        MapChar := CurrentTheme.PassengerIcon;
+                        MapChar := CurrentTheme.Passenger_Icon;
                         MapTag := To_Unbounded_String("cyan");
                   end case;
                   if not SkyMap(X, Y).Visited then
@@ -500,28 +500,28 @@ package body Maps.UI is
                   else
                      case Events_List(SkyMap(X, Y).EventIndex).EType is
                         when EnemyShip =>
-                           MapChar := CurrentTheme.EnemyShipIcon;
+                           MapChar := CurrentTheme.Enemy_Ship_Icon;
                            MapTag := To_Unbounded_String("red");
                         when AttackOnBase =>
-                           MapChar := CurrentTheme.AttackOnBaseIcon;
+                           MapChar := CurrentTheme.Attack_On_Base_Icon;
                            MapTag := To_Unbounded_String("red2");
                         when EnemyPatrol =>
-                           MapChar := CurrentTheme.EnemyPatrolIcon;
+                           MapChar := CurrentTheme.Enemy_Patrol_Icon;
                            MapTag := To_Unbounded_String("red3");
                         when Disease =>
-                           MapChar := CurrentTheme.DiseaseIcon;
+                           MapChar := CurrentTheme.Disease_Icon;
                            MapTag := To_Unbounded_String("yellow");
                         when FullDocks =>
-                           MapChar := CurrentTheme.FullDocksIcon;
+                           MapChar := CurrentTheme.Full_Docks_Icon;
                            MapTag := To_Unbounded_String("cyan");
                         when DoublePrice =>
-                           MapChar := CurrentTheme.DoublePriceIcon;
+                           MapChar := CurrentTheme.Double_Price_Icon;
                            MapTag := To_Unbounded_String("lime");
                         when Trader =>
-                           MapChar := CurrentTheme.TraderIcon;
+                           MapChar := CurrentTheme.Trader_Icon;
                            MapTag := To_Unbounded_String("green");
                         when FriendlyShip =>
-                           MapChar := CurrentTheme.FriendlyShipIcon;
+                           MapChar := CurrentTheme.Friendly_Ship_Icon;
                            MapTag := To_Unbounded_String("green2");
                         when others =>
                            null;
