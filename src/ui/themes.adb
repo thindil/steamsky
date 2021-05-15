@@ -34,27 +34,27 @@ package body Themes is
       ConfigFile: File_Type;
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
-      TempRecord: ThemeRecord;
+      TempRecord: Theme_Record;
       procedure SetDefaultValues is
       begin
          TempRecord :=
-           (Name => Null_Unbounded_String, FileName => Null_Unbounded_String,
-            EnemyShipIcon => Wide_Character'Val(16#f51c#),
-            AttackOnBaseIcon => Wide_Character'Val(16#f543#),
-            DiseaseIcon => Wide_Character'Val(16#f5a6#),
-            DoublePriceIcon => Wide_Character'Val(16#f0d6#),
-            FullDocksIcon => Wide_Character'Val(16#f057#),
-            EnemyPatrolIcon => Wide_Character'Val(16#f51b#),
-            TraderIcon => Wide_Character'Val(16#f197#),
-            FriendlyShipIcon => Wide_Character'Val(16#f197#),
-            DeliverIcon => Wide_Character'Val(16#f53b#),
-            DestroyIcon => Wide_Character'Val(16#fc6a#),
-            PatrolIcon => Wide_Character'Val(16#f540#),
-            ExploreIcon => Wide_Character'Val(16#f707#),
-            PassengerIcon => Wide_Character'Val(16#f183#),
-            PilotIcon => Wide_Character'Val(16#f655#),
-            EngineerIcon => Wide_Character'Val(16#f013#),
-            GunnerIcon => Wide_Character'Val(16#f4fb#),
+           (Name => Null_Unbounded_String, File_Name => Null_Unbounded_String,
+            Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
+            Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
+            Disease_Icon => Wide_Character'Val(16#f5a6#),
+            Double_Price_Icon => Wide_Character'Val(16#f0d6#),
+            Full_Docks_Icon => Wide_Character'Val(16#f057#),
+            Enemy_Patrol_Icon => Wide_Character'Val(16#f51b#),
+            Trader_Icon => Wide_Character'Val(16#f197#),
+            Friendly_Ship_Icon => Wide_Character'Val(16#f197#),
+            Deliver_Icon => Wide_Character'Val(16#f53b#),
+            Destroy_Icon => Wide_Character'Val(16#fc6a#),
+            Patrol_Icon => Wide_Character'Val(16#f540#),
+            Explore_Icon => Wide_Character'Val(16#f707#),
+            Passenger_Icon => Wide_Character'Val(16#f183#),
+            Pilot_Icon => Wide_Character'Val(16#f655#),
+            Engineer_Icon => Wide_Character'Val(16#f013#),
+            Gunner_Icon => Wide_Character'Val(16#f4fb#),
             CrewTraderIcon => Wide_Character'Val(16#f651#),
             RepairIcon => Wide_Character'Val(16#f54a#),
             UpgradeIcon => Wide_Character'Val(16#f6e3#),
@@ -77,7 +77,7 @@ package body Themes is
    begin
       SetDefaultValues;
       TempRecord.Name := To_Unbounded_String("Default theme");
-      TempRecord.FileName :=
+      TempRecord.File_Name :=
         Data_Directory &
         To_Unbounded_String("ui" & Dir_Separator & "theme.tcl");
       Themes_Container.Include(Themes_List, "steamsky", TempRecord);
@@ -107,72 +107,72 @@ package body Themes is
                if FieldName = To_Unbounded_String("Name") then
                   TempRecord.Name := Value;
                elsif FieldName = To_Unbounded_String("FileName") then
-                  TempRecord.FileName :=
+                  TempRecord.File_Name :=
                     To_Unbounded_String
                       (Full_Name(FoundDirectory) & Dir_Separator) &
                     Value;
                elsif FieldName = To_Unbounded_String("EnemyShipIcon") then
-                  TempRecord.EnemyShipIcon :=
+                  TempRecord.Enemy_Ship_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("AttackOnBaseIcon") then
-                  TempRecord.AttackOnBaseIcon :=
+                  TempRecord.Attack_On_Base_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("DiseaseIcon") then
-                  TempRecord.DiseaseIcon :=
+                  TempRecord.Disease_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("DoublePriceIcon") then
-                  TempRecord.DoublePriceIcon :=
+                  TempRecord.Double_Price_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("FullDocksIcon") then
-                  TempRecord.FullDocksIcon :=
+                  TempRecord.Full_Docks_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("EnemyPatrolIcon") then
-                  TempRecord.EnemyPatrolIcon :=
+                  TempRecord.Enemy_Patrol_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("TraderIcon") then
-                  TempRecord.TraderIcon :=
+                  TempRecord.Trader_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("FriendlyShipIcon") then
-                  TempRecord.FriendlyShipIcon :=
+                  TempRecord.Friendly_Ship_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("DeliverIcon") then
-                  TempRecord.DeliverIcon :=
+                  TempRecord.Deliver_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("DestroyIcon") then
-                  TempRecord.DestroyIcon :=
+                  TempRecord.Destroy_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("PatrolIcon") then
-                  TempRecord.PatrolIcon :=
+                  TempRecord.Patrol_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("ExploreIcon") then
-                  TempRecord.ExploreIcon :=
+                  TempRecord.Explore_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("PassengerIcon") then
-                  TempRecord.PassengerIcon :=
+                  TempRecord.Passenger_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("PilotIcon") then
-                  TempRecord.PilotIcon :=
+                  TempRecord.Pilot_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("EngineerIcon") then
-                  TempRecord.EngineerIcon :=
+                  TempRecord.Engineer_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("GunnerIcon") then
-                  TempRecord.GunnerIcon :=
+                  TempRecord.Gunner_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("CrewTraderIcon") then
@@ -287,13 +287,13 @@ package body Themes is
             "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
          Label.Name := New_String(".gameframe.header.pilot");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).PilotIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Pilot_Icon) & "}");
          Label.Name := New_String(".gameframe.header.engineer");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).EngineerIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Engineer_Icon) & "}");
          Label.Name := New_String(".gameframe.header.gunner");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).GunnerIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Gunner_Icon) & "}");
          Label.Name := New_String(".gameframe.header.talk");
          configure
            (Label,

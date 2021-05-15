@@ -28,31 +28,31 @@ package Themes is
    -- FUNCTION
    -- Types of font available in game
    -- SOURCE
-   type FontTypes is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
+   type Font_Types is (HELPFONT, MAPFONT, INTERFACEFONT, ALLFONTS);
    -- ****
 
-   -- ****t* Themes/Themes.ThemeRecord
+   -- ****t* Themes/Themes.Theme_Record
    -- FUNCTION
    -- Data structure for themes settings
    -- PARAMETERS
    -- Name                 - Name of theme
-   -- FileName             - Name of .tcl file of theme
-   -- EnemyShipIcon        - Icon used for Enemy Ship event
-   -- AttackOnBaseIcon     - Icon used for Attack on Base event
-   -- DiseaseIcon          - Icon used for Disease event
-   -- DoublePriceIcon      - Icon used for Double Price event
-   -- FullDocksIcon        - Icon used for Full Docks event
-   -- EnemyPatrolIcon      - Icon used for Enemy Patrol event
-   -- TraderIcon           - Icon used for Trader event
-   -- FriendlyShipIcon     - Icon used for Friendly Ship event
-   -- DeliverIcon          - Icon used for Deliver Item mission
-   -- DestroyIcon          - Icon used for Destroy Ship mission
-   -- PatrolIcon           - Icon used for  Patrol Area mission
-   -- ExploreIcon          - Icon used for Explore Area mission
-   -- PassengerIcon        - Icon used for Transport Passenger mission
-   -- PilotIcon            - Icon used for Pilot info
-   -- EngineerIcon         - Icon used for Engineer info
-   -- GunnerIcon           - Icon used for Gunners info
+   -- File_Name            - Name of .tcl file of theme
+   -- Enemy_Ship_Icon      - Icon used for Enemy Ship event
+   -- Attack_On_Base_Icon  - Icon used for Attack on Base event
+   -- Disease_Icon         - Icon used for Disease event
+   -- Double_PriceIcon     - Icon used for Double Price event
+   -- Full_Docks_Icon      - Icon used for Full Docks event
+   -- Enemy_Patrol_Icon    - Icon used for Enemy Patrol event
+   -- Trader_Icon          - Icon used for Trader event
+   -- Friendly_Ship_Icon   - Icon used for Friendly Ship event
+   -- Deliver_Icon         - Icon used for Deliver Item mission
+   -- Destroy_Icon         - Icon used for Destroy Ship mission
+   -- Patrol_Icon          - Icon used for  Patrol Area mission
+   -- Explore_Icon         - Icon used for Explore Area mission
+   -- Passenger_Icon       - Icon used for Transport Passenger mission
+   -- Pilot_Icon           - Icon used for Pilot info
+   -- Engineer_Icon        - Icon used for Engineer info
+   -- Gunner_Icon          - Icon used for Gunners info
    -- CrewTraderIcon       - Icon used for Trader info
    -- RepairIcon           - Icon used for Repairs info
    -- UpgradeIcon          - Icon used for Upgrade info
@@ -72,25 +72,25 @@ package Themes is
    -- StoryIcon            - Icon used for show story event location on map
    -- OverloadedIcon       - Icon used for show warning about overloaded ship
    -- SOURCE
-   type ThemeRecord is record
+   type Theme_Record is record
       Name: Unbounded_String;
-      FileName: Unbounded_String;
-      EnemyShipIcon: Wide_Character;
-      AttackOnBaseIcon: Wide_Character;
-      DiseaseIcon: Wide_Character;
-      DoublePriceIcon: Wide_Character;
-      FullDocksIcon: Wide_Character;
-      EnemyPatrolIcon: Wide_Character;
-      TraderIcon: Wide_Character;
-      FriendlyShipIcon: Wide_Character;
-      DeliverIcon: Wide_Character;
-      DestroyIcon: Wide_Character;
-      PatrolIcon: Wide_Character;
-      ExploreIcon: Wide_Character;
-      PassengerIcon: Wide_Character;
-      PilotIcon: Wide_Character;
-      EngineerIcon: Wide_Character;
-      GunnerIcon: Wide_Character;
+      File_Name: Unbounded_String;
+      Enemy_Ship_Icon: Wide_Character;
+      Attack_On_Base_Icon: Wide_Character;
+      Disease_Icon: Wide_Character;
+      Double_Price_Icon: Wide_Character;
+      Full_Docks_Icon: Wide_Character;
+      Enemy_Patrol_Icon: Wide_Character;
+      Trader_Icon: Wide_Character;
+      Friendly_Ship_Icon: Wide_Character;
+      Deliver_Icon: Wide_Character;
+      Destroy_Icon: Wide_Character;
+      Patrol_Icon: Wide_Character;
+      Explore_Icon: Wide_Character;
+      Passenger_Icon: Wide_Character;
+      Pilot_Icon: Wide_Character;
+      Engineer_Icon: Wide_Character;
+      Gunner_Icon: Wide_Character;
       CrewTraderIcon: Wide_Character;
       RepairIcon: Wide_Character;
       UpgradeIcon: Wide_Character;
@@ -118,7 +118,7 @@ package Themes is
    -- SOURCE
    package Themes_Container is new Ada.Containers.Indefinite_Hashed_Maps
      (String,
-      ThemeRecord,
+      Theme_Record,
       Ada.Strings.Hash,
       "=");
    -- ****
