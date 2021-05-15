@@ -177,15 +177,11 @@ package body Knowledge.Stories is
          end if;
          Insert(StoryView, "end", "{" & To_String(StoryText) & "}");
          Tcl.Tk.Ada.Grid.Grid(Button);
-         Button.Name :=
-           New_String
-             (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.set");
+         Button.Name := New_String(FrameName & ".options.set");
          Tcl.Tk.Ada.Grid.Grid(Button);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name :=
-           New_String
-             (".gameframe.paned.knowledgeframe.stories.canvas.frame.options.set");
+         Button.Name := New_String(FrameName & ".options.set");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end if;
       configure(StoryView, "-state disabled -height" & Positive'Image(Rows));
