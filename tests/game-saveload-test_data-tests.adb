@@ -29,26 +29,19 @@ package body Game.SaveLoad.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateSaveName_ddf358_e85ed1
-     (RenameSave: Boolean := False) is
+   procedure Wrap_Test_GenerateSaveName_ddf358_e85ed1 (RenameSave: Boolean := False) 
+   is
    begin
-      Gnattest_Generated.GNATtest_Standard.Game.SaveLoad.GenerateSaveName
-        (RenameSave);
+      GNATtest_Generated.GNATtest_Standard.Game.SaveLoad.GenerateSaveName (RenameSave);
    end Wrap_Test_GenerateSaveName_ddf358_e85ed1;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateSaveName_test_generatesavename
-     (Gnattest_T: in out Test);
-   procedure Test_GenerateSaveName_ddf358_e85ed1
-     (Gnattest_T: in out Test) renames
-     Test_GenerateSaveName_test_generatesavename;
+   procedure Test_GenerateSaveName_test_generatesavename (Gnattest_T : in out Test);
+   procedure Test_GenerateSaveName_ddf358_e85ed1 (Gnattest_T : in out Test) renames Test_GenerateSaveName_test_generatesavename;
 --  id:2.2/ddf358647b83b861/GenerateSaveName/1/0/test_generatesavename/
-   procedure Test_GenerateSaveName_test_generatesavename
-     (Gnattest_T: in out Test) is
-      procedure GenerateSaveName
-        (RenameSave: Boolean := False) renames
-        Wrap_Test_GenerateSaveName_ddf358_e85ed1;
+   procedure Test_GenerateSaveName_test_generatesavename (Gnattest_T : in out Test) is
+   procedure GenerateSaveName (RenameSave: Boolean := False) renames Wrap_Test_GenerateSaveName_ddf358_e85ed1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

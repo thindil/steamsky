@@ -31,20 +31,19 @@ package body Bases.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateCargo_1e6cf6_021eea is
+   procedure Wrap_Test_GenerateCargo_1e6cf6_021eea
+   is
    begin
-      Gnattest_Generated.GNATtest_Standard.Bases.Cargo.GenerateCargo;
+      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.GenerateCargo;
    end Wrap_Test_GenerateCargo_1e6cf6_021eea;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test);
-   procedure Test_GenerateCargo_1e6cf6_021eea
-     (Gnattest_T: in out Test) renames
-     Test_GenerateCargo_test_generatecargo;
+   procedure Test_GenerateCargo_test_generatecargo (Gnattest_T : in out Test);
+   procedure Test_GenerateCargo_1e6cf6_021eea (Gnattest_T : in out Test) renames Test_GenerateCargo_test_generatecargo;
 --  id:2.2/1e6cf6e4bcd576d4/GenerateCargo/1/0/test_generatecargo/
-   procedure Test_GenerateCargo_test_generatecargo(Gnattest_T: in out Test) is
-      procedure GenerateCargo renames Wrap_Test_GenerateCargo_1e6cf6_021eea;
+   procedure Test_GenerateCargo_test_generatecargo (Gnattest_T : in out Test) is
+   procedure GenerateCargo renames Wrap_Test_GenerateCargo_1e6cf6_021eea;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -64,35 +63,19 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787
-     (ProtoIndex: Unbounded_String := Null_Unbounded_String;
-      Amount: Integer;
-      Durability: Items_Durability := Default_Item_Durability;
-      CargoIndex: Inventory_Container.Extended_Index := 0) is
+   procedure Wrap_Test_UpdateBaseCargo_8dbba5_1e1787 (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Items_Durability := Default_Item_Durability; CargoIndex: Inventory_Container.Extended_Index := 0) 
+   is
    begin
-      Gnattest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo
-        (ProtoIndex,
-         Amount,
-         Durability,
-         CargoIndex);
+      GNATtest_Generated.GNATtest_Standard.Bases.Cargo.UpdateBaseCargo (ProtoIndex, Amount, Durability, CargoIndex);
    end Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateBaseCargo_test_updatebasecargo
-     (Gnattest_T: in out Test);
-   procedure Test_UpdateBaseCargo_8dbba5_1e1787
-     (Gnattest_T: in out Test) renames
-     Test_UpdateBaseCargo_test_updatebasecargo;
+   procedure Test_UpdateBaseCargo_test_updatebasecargo (Gnattest_T : in out Test);
+   procedure Test_UpdateBaseCargo_8dbba5_1e1787 (Gnattest_T : in out Test) renames Test_UpdateBaseCargo_test_updatebasecargo;
 --  id:2.2/8dbba5e239df57ed/UpdateBaseCargo/1/0/test_updatebasecargo/
-   procedure Test_UpdateBaseCargo_test_updatebasecargo
-     (Gnattest_T: in out Test) is
-      procedure UpdateBaseCargo
-        (ProtoIndex: Unbounded_String := Null_Unbounded_String;
-         Amount: Integer;
-         Durability: Items_Durability := Default_Item_Durability;
-         CargoIndex: Inventory_Container.Extended_Index := 0) renames
-        Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
+   procedure Test_UpdateBaseCargo_test_updatebasecargo (Gnattest_T : in out Test) is
+   procedure UpdateBaseCargo (ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer; Durability: Items_Durability := Default_Item_Durability; CargoIndex: Inventory_Container.Extended_Index := 0) renames Wrap_Test_UpdateBaseCargo_8dbba5_1e1787;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -121,15 +104,12 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindBaseCargo_7cc62c_be492f
-     (ProtoIndex: Unbounded_String;
-      Durability: Items_Durability := Items_Durability'Last) return Natural is
+   function Wrap_Test_FindBaseCargo_7cc62c_be492f (ProtoIndex: Unbounded_String; Durability: Items_Durability :=
+        Items_Durability'Last)  return Natural
+   is
    begin
       declare
-         Test_FindBaseCargo_7cc62c_be492f_Result: constant Natural :=
-           Gnattest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo
-             (ProtoIndex,
-              Durability);
+         Test_FindBaseCargo_7cc62c_be492f_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo (ProtoIndex, Durability);
       begin
          return Test_FindBaseCargo_7cc62c_be492f_Result;
       end;
@@ -137,18 +117,12 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test);
-   procedure Test_FindBaseCargo_7cc62c_be492f
-     (Gnattest_T: in out Test) renames
-     Test_FindBaseCargo_test_findbasecargo;
+   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test);
+   procedure Test_FindBaseCargo_7cc62c_be492f (Gnattest_T : in out Test) renames Test_FindBaseCargo_test_findbasecargo;
 --  id:2.2/7cc62c290354667f/FindBaseCargo/1/0/test_findbasecargo/
-   procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test) is
-      function FindBaseCargo
-        (ProtoIndex: Unbounded_String;
-         Durability: Items_Durability :=
-           Items_Durability'Last)
-         return Natural renames
-        Wrap_Test_FindBaseCargo_7cc62c_be492f;
+   procedure Test_FindBaseCargo_test_findbasecargo (Gnattest_T : in out Test) is
+      function FindBaseCargo (ProtoIndex: Unbounded_String; Durability: Items_Durability :=
+        Items_Durability'Last) return Natural renames Wrap_Test_FindBaseCargo_7cc62c_be492f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
