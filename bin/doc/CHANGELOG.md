@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.1] - 2021-05-16
 
 ### Added
 - Option to set which mouse button use for showing in game menus
