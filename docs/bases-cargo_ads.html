@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -60,7 +60,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> FindBaseCargo
      <span class="sign">(</span>ProtoIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Items_Durability<span class="keyword">'Last</span><span class="sign">)</span>
+      Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span>
+        Items_Durability<span class="keyword">'Last</span><span class="sign">)</span>
       <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_FindBaseCargo"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Robustness<span class="sign">);</span>
 </pre>
@@ -95,7 +96,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> UpdateBaseCargo
-     <span class="sign">(</span>ProtoIndex<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span> Amount<span class="sign">:</span> Integer<span class="sign">;</span>
+     <span class="sign">(</span>ProtoIndex<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
+      Amount<span class="sign">:</span> Integer<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Default_Item_Durability<span class="sign">;</span>
       CargoIndex<span class="sign">:</span> Inventory_Container<span class="sign">.</span>Extended_Index <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_UpdateBaseCargo"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
@@ -110,7 +112,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/bases-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:26
+<p>Generated from ./src/bases-cargo.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

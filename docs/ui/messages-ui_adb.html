@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,15 +30,15 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo542">MUI2/MUI2.ShowMessage</a></li>
-<li>2. <a href="#robo736">MUI2/MUI2.Delete_Messages_Command</a></li>
-<li>3. <a href="#robo737">MUI2/MUI2.Search_Messages_Command</a></li>
-<li>4. <a href="#robo738">MUI2/MUI2.Select_Messages_Command</a></li>
-<li>5. <a href="#robo739">MUI2/MUI2.Show_Last_Messages_Command</a></li>
+<li>1. <a href="#robo537">MUI2/MUI2.ShowMessage</a></li>
+<li>2. <a href="#robo732">MUI2/MUI2.Delete_Messages_Command</a></li>
+<li>3. <a href="#robo733">MUI2/MUI2.Search_Messages_Command</a></li>
+<li>4. <a href="#robo734">MUI2/MUI2.Select_Messages_Command</a></li>
+<li>5. <a href="#robo735">MUI2/MUI2.Show_Last_Messages_Command</a></li>
 </ul>
 <hr />
 <a name="MUI22fMUI22eShowMessage"></a>
-<a name="robo542"></a><h2>MUI2/MUI2.ShowMessage [ Subprograms ]</h2>
+<a name="robo537"></a><h2>MUI2/MUI2.ShowMessage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo44">MUI2</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -46,7 +46,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> ShowMessage
-     <span class="sign">(</span>Message<span class="sign">:</span> Message_Data<span class="sign">;</span> MessagesView<span class="sign">:</span> Tk_Text<span class="sign">;</span>
+     <span class="sign">(</span>Message<span class="sign">:</span> Message_Data<span class="sign">;</span>
+      MessagesView<span class="sign">:</span> Tk_Text<span class="sign">;</span>
       MessagesType<span class="sign">:</span> Message_Type<span class="sign">)</span> <span class="keyword">is</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -57,7 +58,7 @@
 
 <hr />
 <a name="MUI22fMUI22eDelete5fMessages5fCommand"></a>
-<a name="robo736"></a><h2>MUI2/MUI2.Delete_Messages_Command [ Commands ]</h2>
+<a name="robo732"></a><h2>MUI2/MUI2.Delete_Messages_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo44">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -65,7 +66,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Delete_Messages_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -84,7 +87,7 @@
 
 <hr />
 <a name="MUI22fMUI22eSearch5fMessages5fCommand"></a>
-<a name="robo737"></a><h2>MUI2/MUI2.Search_Messages_Command [ Commands ]</h2>
+<a name="robo733"></a><h2>MUI2/MUI2.Search_Messages_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo44">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -92,7 +95,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Search_Messages_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -112,7 +117,7 @@
 
 <hr />
 <a name="MUI22fMUI22eSelect5fMessages5fCommand"></a>
-<a name="robo738"></a><h2>MUI2/MUI2.Select_Messages_Command [ Commands ]</h2>
+<a name="robo734"></a><h2>MUI2/MUI2.Select_Messages_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo44">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -120,7 +125,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Select_Messages_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -139,7 +146,7 @@
 
 <hr />
 <a name="MUI22fMUI22eShow5fLast5fMessages5fCommand"></a>
-<a name="robo739"></a><h2>MUI2/MUI2.Show_Last_Messages_Command [ Commands ]</h2>
+<a name="robo735"></a><h2>MUI2/MUI2.Show_Last_Messages_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./messages-ui_ads.html#robo44">MUI2</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -147,7 +154,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_Last_Messages_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -167,7 +176,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/messages-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/ui/messages-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

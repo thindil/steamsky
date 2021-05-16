@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -34,26 +34,29 @@
 <ul>
 <li>1.1. <a href="#robo158">UUI/UUI.CreateCommands</a></li>
 <li>1.2. <a href="./utils-ui_adb.html#robo354">UUI/UUI.TimerId</a></li>
-<li>1.3. <a href="#robo642">UUI/UUI.AddCommand</a></li>
-<li>1.4. <a href="#robo643">UUI/UUI.AddCommands</a></li>
-<li>1.5. <a href="#robo644">UUI/UUI.Delete_Widgets</a></li>
-<li>1.6. <a href="#robo645">UUI/UUI.MinutesToDate</a></li>
-<li>1.7. <a href="#robo646">UUI/UUI.ShowInfo</a></li>
-<li>1.8. <a href="#robo647">UUI/UUI.ShowInventoryItemInfo</a></li>
-<li>1.9. <a href="#robo648">UUI/UUI.ShowManipulateItem</a></li>
-<li>1.10. <a href="#robo649">UUI/UUI.ShowMessage</a></li>
-<li>1.11. <a href="#robo650">UUI/UUI.ShowQuestion</a></li>
-<li>1.12. <a href="#robo651">UUI/UUI.ShowScreen</a></li>
-<li>1.13. <a href="#robo652">UUI/UUI.TravelInfo</a></li>
-<li>1.14. <a href="#robo653">UUI/UUI.UpdateMessages</a></li>
-<li>1.15. <a href="./utils-ui_adb.html#robo808">UUI/UUI.Check_Amount_Command</a></li>
-<li>1.16. <a href="#robo809">UUI/UUI.Close_Dialog_Command</a></li>
-<li>1.17. <a href="./utils-ui_adb.html#robo810">UUI/UUI.Get_String_Command</a></li>
-<li>1.18. <a href="./utils-ui_adb.html#robo811">UUI/UUI.Process_Question_Command</a></li>
-<li>1.19. <a href="./utils-ui_adb.html#robo812">UUI/UUI.Resize_Canvas_Command</a></li>
-<li>1.20. <a href="./utils-ui_adb.html#robo813">UUI/UUI.Set_Text_Variable_Command</a></li>
-<li>1.21. <a href="./utils-ui_adb.html#robo814">UUI/UUI.Update_Dialog_Command</a></li>
-<li>1.22. <a href="./utils-ui_adb.html#robo815">UUI/UUI.Validate_Amount_Command</a></li>
+<li>1.3. <a href="#robo637">UUI/UUI.AddCommand</a></li>
+<li>1.4. <a href="#robo638">UUI/UUI.AddCommands</a></li>
+<li>1.5. <a href="#robo639">UUI/UUI.Delete_Widgets</a></li>
+<li>1.6. <a href="#robo640">UUI/UUI.MinutesToDate</a></li>
+<li>1.7. <a href="#robo641">UUI/UUI.ShowInfo</a></li>
+<li>1.8. <a href="#robo642">UUI/UUI.ShowInventoryItemInfo</a></li>
+<li>1.9. <a href="#robo643">UUI/UUI.ShowManipulateItem</a></li>
+<li>1.10. <a href="#robo644">UUI/UUI.ShowMessage</a></li>
+<li>1.11. <a href="#robo645">UUI/UUI.ShowQuestion</a></li>
+<li>1.12. <a href="#robo646">UUI/UUI.ShowScreen</a></li>
+<li>1.13. <a href="#robo647">UUI/UUI.TravelInfo</a></li>
+<li>1.14. <a href="#robo648">UUI/UUI.UpdateMessages</a></li>
+<li>1.15. <a href="./utils-ui_adb.html#robo804">UUI/UUI.Check_Amount_Command</a></li>
+<li>1.16. <a href="#robo805">UUI/UUI.Close_Dialog_Command</a></li>
+<li>1.17. <a href="./utils-ui_adb.html#robo806">UUI/UUI.Get_String_Command</a></li>
+<li>1.18. <a href="./utils-ui_adb.html#robo807">UUI/UUI.Process_Question_Command</a></li>
+<li>1.19. <a href="./utils-ui_adb.html#robo808">UUI/UUI.Resize_Canvas_Command</a></li>
+<li>1.20. <a href="#robo809">UUI/UUI.Set_Destination_Command</a></li>
+<li>1.21. <a href="./utils-ui_adb.html#robo810">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
+<li>1.22. <a href="./utils-ui_adb.html#robo811">UUI/UUI.Set_Text_Variable_Command</a></li>
+<li>1.23. <a href="#robo812">UUI/UUI.Show_On_Map_Command</a></li>
+<li>1.24. <a href="./utils-ui_adb.html#robo813">UUI/UUI.Update_Dialog_Command</a></li>
+<li>1.25. <a href="./utils-ui_adb.html#robo814">UUI/UUI.Validate_Amount_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -82,7 +85,7 @@
 
 <hr />
 <a name="UUI2fUUI2eAddCommand"></a>
-<a name="robo642"></a><h2>UUI/UUI.AddCommand [ Subprograms ]</h2>
+<a name="robo637"></a><h2>UUI/UUI.AddCommand [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -90,7 +93,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> AddCommand
-     <span class="sign">(</span>Name<span class="sign">:</span> String<span class="sign">;</span> AdaCommand<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> CreateCommands<span class="sign">.</span>Tcl_CmdProc<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>Name<span class="sign">:</span> String<span class="sign">;</span>
+      AdaCommand<span class="sign">:</span> <span class="keyword">not</span> <span class="keyword">null</span> CreateCommands<span class="sign">.</span>Tcl_CmdProc<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Name<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -100,19 +104,19 @@
 
 <hr />
 <a name="UUI2fUUI2eAddCommands"></a>
-<a name="robo643"></a><h2>UUI/UUI.AddCommands [ Subprograms ]</h2>
+<a name="robo638"></a><h2>UUI/UUI.AddCommands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add various, UI related Tcl commands
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo513">AddCommands</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo508">AddCommands</a><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="UUI2fUUI2eDelete5fWidgets"></a>
-<a name="robo644"></a><h2>UUI/UUI.Delete_Widgets [ Subprograms ]</h2>
+<a name="robo639"></a><h2>UUI/UUI.Delete_Widgets [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -120,7 +124,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> Delete_Widgets
-     <span class="sign">(</span>Start_Index<span class="sign">,</span> End_Index<span class="sign">:</span> Integer<span class="sign">;</span> Frame<span class="sign">:</span> Tk_Widget<span class="keyword">'Class</span><span class="sign">);</span>
+     <span class="sign">(</span>Start_Index<span class="sign">,</span> End_Index<span class="sign">:</span> Integer<span class="sign">;</span>
+      Frame<span class="sign">:</span> Tk_Widget<span class="keyword">'Class</span><span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Start_Index - The first row from which widgets will be removed
@@ -133,7 +138,7 @@
 
 <hr />
 <a name="UUI2fUUI2eMinutesToDate"></a>
-<a name="robo645"></a><h2>UUI/UUI.MinutesToDate [ Subprograms ]</h2>
+<a name="robo640"></a><h2>UUI/UUI.MinutesToDate [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -141,7 +146,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> MinutesToDate
-     <span class="sign">(</span>Minutes<span class="sign">:</span> Natural<span class="sign">;</span> InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Minutes<span class="sign">:</span> Natural<span class="sign">;</span>
+      InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Minutes  - Amount of minutes to convert
@@ -153,7 +159,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShowInfo"></a>
-<a name="robo646"></a><h2>UUI/UUI.ShowInfo [ Subprograms ]</h2>
+<a name="robo641"></a><h2>UUI/UUI.ShowInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -172,7 +178,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShowInventoryItemInfo"></a>
-<a name="robo647"></a><h2>UUI/UUI.ShowInventoryItemInfo [ Subprograms ]</h2>
+<a name="robo642"></a><h2>UUI/UUI.ShowInventoryItemInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -180,7 +186,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> ShowInventoryItemInfo
-     <span class="sign">(</span>Parent<span class="sign">:</span> String<span class="sign">;</span> ItemIndex<span class="sign">:</span> Positive<span class="sign">;</span> MemberIndex<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>Parent<span class="sign">:</span> String<span class="sign">;</span>
+      ItemIndex<span class="sign">:</span> Positive<span class="sign">;</span>
+      MemberIndex<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> MemberIndex <span class="sign">&lt;</span><span class="sign">=</span> PlayerShip<span class="sign">.</span><a href="../crew_ads.html#robo18">Crew</a><span class="sign">.</span>Last_Index <span class="keyword">and</span> Parent<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -192,7 +200,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShowManipulateItem"></a>
-<a name="robo648"></a><h2>UUI/UUI.ShowManipulateItem [ Subprograms ]</h2>
+<a name="robo643"></a><h2>UUI/UUI.ShowManipulateItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -220,7 +228,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShowMessage"></a>
-<a name="robo649"></a><h2>UUI/UUI.ShowMessage [ Subprograms ]</h2>
+<a name="robo644"></a><h2>UUI/UUI.ShowMessage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -228,18 +236,22 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> ShowMessage
-     <span class="sign">(</span>Text<span class="sign">:</span> String<span class="sign">;</span> ParentFrame<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".gameframe"</span><span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>Text<span class="sign">:</span> String<span class="sign">;</span>
+      ParentFrame<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">".gameframe"</span><span class="sign">;</span>
+      Title<span class="sign">:</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Message"</span><span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Text<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0 and ParentFrame'</span>Length <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> Text        - Text of message to show
  ParentFrame - The parent frame of the message widget. Default is
                the game frame. Can be empty
+ Title       - The text show in the dialog header. Default is
+               "Message". Can be empty
 </pre>
 
 <hr />
 <a name="UUI2fUUI2eShowQuestion"></a>
-<a name="robo650"></a><h2>UUI/UUI.ShowQuestion [ Subprograms ]</h2>
+<a name="robo645"></a><h2>UUI/UUI.ShowQuestion [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -247,7 +259,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> ShowQuestion
-     <span class="sign">(</span>Question<span class="sign">,</span> Result<span class="sign">:</span> String<span class="sign">;</span> In_Game<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>Question<span class="sign">,</span> Result<span class="sign">:</span> String<span class="sign">;</span>
+      In_Game<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Question<span class="keyword">'Length</span> <span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -261,7 +274,7 @@
 
 <hr />
 <a name="UUI2fUUI2eShowScreen"></a>
-<a name="robo651"></a><h2>UUI/UUI.ShowScreen [ Subprograms ]</h2>
+<a name="robo646"></a><h2>UUI/UUI.ShowScreen [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -277,7 +290,7 @@
 
 <hr />
 <a name="UUI2fUUI2eTravelInfo"></a>
-<a name="robo652"></a><h2>UUI/UUI.TravelInfo [ Subprograms ]</h2>
+<a name="robo647"></a><h2>UUI/UUI.TravelInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -285,7 +298,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> TravelInfo
-     <span class="sign">(</span>InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">;</span> Distance<span class="sign">:</span> Positive<span class="sign">;</span>
+     <span class="sign">(</span>InfoText<span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Unbounded_String<span class="sign">;</span>
+      Distance<span class="sign">:</span> Positive<span class="sign">;</span>
       ShowFuelName<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -299,7 +313,7 @@
 
 <hr />
 <a name="UUI2fUUI2eUpdateMessages"></a>
-<a name="robo653"></a><h2>UUI/UUI.UpdateMessages [ Subprograms ]</h2>
+<a name="robo648"></a><h2>UUI/UUI.UpdateMessages [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -311,7 +325,7 @@
 
 <hr />
 <a name="UUI2fUUI2eClose5fDialog5fCommand"></a>
-<a name="robo809"></a><h2>UUI/UUI.Close_Dialog_Command [ Commands ]</h2>
+<a name="robo805"></a><h2>UUI/UUI.Close_Dialog_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -319,7 +333,9 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Close_Dialog_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -337,9 +353,71 @@
  Dialogname is name of the dialog to close
 </pre>
 
+<hr />
+<a name="UUI2fUUI2eSet5fDestination5fCommand"></a>
+<a name="robo809"></a><h2>UUI/UUI.Set_Destination_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set the selected map point as the player's ship destination
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Set_Destination_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SetDestination X Y
+ X is the x coordinate of point to set, Y is the y coordinate of point
+ to set
+</pre>
+
+<hr />
+<a name="UUI2fUUI2eShow5fOn5fMap5fCommand"></a>
+<a name="robo812"></a><h2>UUI/UUI.Show_On_Map_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Show the selected point on map
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Show_On_Map_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
+      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
+      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> ShowOnMap X Y
+ X is the x coordinate of point to show, Y is the y coordinate of point
+ to show
+</pre>
+
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/ui/utils-ui.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -40,7 +40,7 @@
 <li>1.6. <a href="#robo170">Factions/Factions.CareerRecord</a></li>
 <li>1.7. <a href="#robo171">Factions/Factions.FactionRecord</a></li>
 <li>1.8. <a href="#robo172">Factions/Factions.RelationsRecord</a></li>
-<li>1.9. <a href="#robo254">Factions/Factions.Factions_List</a></li>
+<li>1.9. <a href="#robo255">Factions/Factions.Factions_List</a></li>
 <li>1.10. <a href="#robo450">Factions/Factions.GetRandomFaction</a></li>
 <li>1.11. <a href="#robo451">Factions/Factions.GetReputation</a></li>
 <li>1.12. <a href="#robo452">Factions/Factions.IsFriendly</a></li>
@@ -68,8 +68,11 @@
 <pre> Used to store bases types data in faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> BaseType_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> Positive<span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> BaseType_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      Positive<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -81,8 +84,11 @@
 <pre> Used to store careers data in faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Careers_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> CareerRecord<span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Careers_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      CareerRecord<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -94,8 +100,11 @@
 <pre> Used to store factions data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Factions_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      FactionRecord<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Factions_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      FactionRecord<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -119,8 +128,11 @@
 <pre> Used to store relations data in faction
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Relations_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      RelationsRecord<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Relations_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      RelationsRecord<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -229,7 +241,7 @@
 
 <hr />
 <a name="Factions2fFactions2eFactions5fList"></a>
-<a name="robo254"></a><h2>Factions/Factions.Factions_List [ Variables ]</h2>
+<a name="robo255"></a><h2>Factions/Factions.Factions_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Factions</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">SOURCE</p>
@@ -317,7 +329,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

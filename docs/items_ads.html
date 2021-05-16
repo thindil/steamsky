@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -37,7 +37,7 @@
 <li>1.3. <a href="#robo123">Items/Items.Objects_Container</a></li>
 <li>1.4. <a href="#robo179">Items/Items.InventoryData</a></li>
 <li>1.5. <a href="#robo180">Items/Items.Object_Data</a></li>
-<li>1.6. <a href="#robo214">Items/Items.Default_Item_Durability</a></li>
+<li>1.6. <a href="#robo215">Items/Items.Default_Item_Durability</a></li>
 <li>1.7. <a href="#robo297">Items/Items.ArmsArmors_List</a></li>
 <li>1.8. <a href="#robo298">Items/Items.ChestArmors_List</a></li>
 <li>1.9. <a href="#robo299">Items/Items.HeadArmors_List</a></li>
@@ -102,8 +102,11 @@
 <pre> Used to store items data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Objects_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> Object_Data<span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Objects_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      Object_Data<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -165,7 +168,7 @@
 
 <hr />
 <a name="Items2fItems2eDefault5fItem5fDurability"></a>
-<a name="robo214"></a><h2>Items/Items.Default_Item_Durability [ Constants ]</h2>
+<a name="robo215"></a><h2>Items/Items.Default_Item_Durability [ Constants ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo32">Items</a> ] [ <a href="./robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -293,7 +296,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> DamageItem
-     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Inventory_Container<span class="sign">.</span>Vector<span class="sign">;</span> ItemIndex<span class="sign">:</span> Positive<span class="sign">;</span>
+     <span class="sign">(</span><a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> <span class="keyword">in</span> <span class="keyword">out</span> Inventory_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      ItemIndex<span class="sign">:</span> Positive<span class="sign">;</span>
       SkillLevel<span class="sign">,</span> MemberIndex<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>ItemIndex <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_DamageItem"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
@@ -387,8 +391,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> GetItemDamage
-     <span class="sign">(</span>ItemDurability<span class="sign">:</span> Items_Durability<span class="sign">;</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span>
-      <span class="keyword">return</span> String <span class="keyword">with</span>
+     <span class="sign">(</span>ItemDurability<span class="sign">:</span> Items_Durability<span class="sign">;</span>
+      ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemDamage"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -415,8 +419,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> GetItemName
-     <span class="sign">(</span>Item<span class="sign">:</span> InventoryData<span class="sign">;</span> DamageInfo<span class="sign">,</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
-      <span class="keyword">return</span> String <span class="keyword">with</span>
+     <span class="sign">(</span>Item<span class="sign">:</span> InventoryData<span class="sign">;</span>
+      DamageInfo<span class="sign">,</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemName"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
@@ -452,7 +456,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>
