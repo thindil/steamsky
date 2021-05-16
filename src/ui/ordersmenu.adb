@@ -526,7 +526,9 @@ package body OrdersMenu is
       Add(OrdersMenu, "command", "-label {Close} -underline 0");
       if Index(OrdersMenu, "0") = Index(OrdersMenu, "end") then
          ShowMessage
-           ("Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.");
+           (Text =>
+              "Here are no available ship orders at this moment. Ship orders available mostly when you are at base or at event on map.",
+            Title => "No orders available");
       else
          Tk_Popup
            (OrdersMenu,
@@ -571,7 +573,9 @@ package body OrdersMenu is
            (if Argc = 1 then To_Unbounded_String(DockShip(False))
             else To_Unbounded_String(DockShip(False, True)));
          if Length(Message) > 0 then
-            ShowMessage(To_String(Message));
+            ShowMessage
+              (Text => To_String(Message),
+               Title => "Can't undock from base");
             return TCL_OK;
          end if;
       else
@@ -584,7 +588,9 @@ package body OrdersMenu is
          end if;
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
-            ShowMessage(To_String(Message));
+            ShowMessage
+              (Text => To_String(Message),
+               Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
@@ -1078,10 +1084,14 @@ package body OrdersMenu is
          exception
             when Trade_No_Free_Cargo =>
                ShowMessage
-                 ("You can't sell medicines to the base because you don't have enough free cargo space for money.");
+                 (Text =>
+                    "You can't sell medicines to the base because you don't have enough free cargo space for money.",
+                  Title => "No free cargo space");
             when Trade_No_Money_In_Base =>
                ShowMessage
-                 ("You can't sell medicines to the base because the base don't have enough money to buy them.");
+                 (Text =>
+                    "You can't sell medicines to the base because the base don't have enough money to buy them.",
+                  Title => "Can't sell medicines");
          end;
       end if;
       UpdateHeader;
