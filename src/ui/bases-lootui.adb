@@ -468,8 +468,9 @@ package body Bases.LootUI is
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
          if FreeCargo(0 - (Amount * Items_List(ProtoIndex).Weight)) < 0 then
             ShowMessage
-              ("You can't take that much " &
-               To_String(Items_List(ProtoIndex).Name) & ".");
+              (Text => "You can't take that much " &
+               To_String(Items_List(ProtoIndex).Name) & ".",
+               Title => "Too much taken");
             return TCL_OK;
          end if;
          if CargoIndex > 0 then

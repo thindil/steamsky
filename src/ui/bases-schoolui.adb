@@ -246,18 +246,24 @@ package body Bases.SchoolUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have any " &
-            To_String(Money_Name) &
-            " to pay for learning.");
+           (Text =>
+              "You don't have any " &
+              To_String(Money_Name) &
+              " to pay for learning.",
+            Title => "Can't train");
          return TCL_OK;
       when Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " &
-            To_String(Money_Name) &
-            " to pay for learning this skill.");
+           (Text =>
+              "You don't have enough " &
+              To_String(Money_Name) &
+              " to pay for learning this skill.",
+            Title => "Can't train");
          return TCL_OK;
       when Trade_Cant_Train =>
-         ShowMessage("You can't train this skill any more.");
+         ShowMessage
+           (Text => "You can't train this skill any more.",
+            Title => "Can't train");
          return TCL_OK;
    end Train_Skill_Command;
 
