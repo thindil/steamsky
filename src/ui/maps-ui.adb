@@ -457,21 +457,21 @@ package body Maps.UI is
          for X in StartX .. EndX loop
             MapTag := Null_Unbounded_String;
             if X = PlayerShip.SkyX and Y = PlayerShip.SkyY then
-               MapChar := CurrentTheme.PlayerShipIcon;
+               MapChar := CurrentTheme.Player_Ship_Icon;
             else
-               MapChar := CurrentTheme.EmptyMapIcon;
+               MapChar := CurrentTheme.Empty_Map_Icon;
                MapTag :=
                  (if SkyMap(X, Y).Visited then To_Unbounded_String("black")
                   else To_Unbounded_String("unvisited gray"));
                if X = PlayerShip.DestinationX and
                  Y = PlayerShip.DestinationY then
-                  MapChar := CurrentTheme.TargetIcon;
+                  MapChar := CurrentTheme.Target_Icon;
                   MapTag :=
                     (if SkyMap(X, Y).Visited then Null_Unbounded_String
                      else To_Unbounded_String("unvisited"));
                elsif CurrentStory.Index /= Null_Unbounded_String
                  and then (X = StoryX and Y = StoryY) then
-                  MapChar := CurrentTheme.StoryIcon;
+                  MapChar := CurrentTheme.Story_Icon;
                   MapTag := To_Unbounded_String("green");
                elsif SkyMap(X, Y).MissionIndex > 0 then
                   case AcceptedMissions(SkyMap(X, Y).MissionIndex).MType is
@@ -531,7 +531,7 @@ package body Maps.UI is
                      Append(MapTag, " unvisited");
                   end if;
                elsif SkyMap(X, Y).BaseIndex > 0 then
-                  MapChar := CurrentTheme.NotVisitedBaseIcon;
+                  MapChar := CurrentTheme.Not_Visited_Base_Icon;
                   if SkyBases(SkyMap(X, Y).BaseIndex).Known then
                      if SkyBases(SkyMap(X, Y).BaseIndex).Visited.Year > 0 then
                         MapChar :=

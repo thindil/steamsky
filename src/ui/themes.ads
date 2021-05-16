@@ -35,42 +35,42 @@ package Themes is
    -- FUNCTION
    -- Data structure for themes settings
    -- PARAMETERS
-   -- Name                 - Name of theme
-   -- File_Name            - Name of .tcl file of theme
-   -- Enemy_Ship_Icon      - Icon used for Enemy Ship event
-   -- Attack_On_Base_Icon  - Icon used for Attack on Base event
-   -- Disease_Icon         - Icon used for Disease event
-   -- Double_PriceIcon     - Icon used for Double Price event
-   -- Full_Docks_Icon      - Icon used for Full Docks event
-   -- Enemy_Patrol_Icon    - Icon used for Enemy Patrol event
-   -- Trader_Icon          - Icon used for Trader event
-   -- Friendly_Ship_Icon   - Icon used for Friendly Ship event
-   -- Deliver_Icon         - Icon used for Deliver Item mission
-   -- Destroy_Icon         - Icon used for Destroy Ship mission
-   -- Patrol_Icon          - Icon used for  Patrol Area mission
-   -- Explore_Icon         - Icon used for Explore Area mission
-   -- Passenger_Icon       - Icon used for Transport Passenger mission
-   -- Pilot_Icon           - Icon used for Pilot info
-   -- Engineer_Icon        - Icon used for Engineer info
-   -- Gunner_Icon          - Icon used for Gunners info
-   -- CrewTraderIcon       - Icon used for Trader info
-   -- RepairIcon           - Icon used for Repairs info
-   -- UpgradeIcon          - Icon used for Upgrade info
-   -- CleanIcon            - Icon used for Clean Ship info
-   -- ManufactureIcon      - Icon used for Manufacturing info
-   -- MoveMapUpIcon        - Icon used for move map up button
-   -- MoveMapDownIcon      - Icon used for move map down button
-   -- MoveMapLeftIcon      - Icon used for move map left button
-   -- MoveMapRightIcon     - Icon used for move map right button
-   -- NoFuelIcon           - Icon used for show warning about no fuel
-   -- NoFoodIcon           - Icon used for show warning about no food
-   -- NoDrinksIcon         - Icon used for show warning about no drinks
-   -- NotVisitedBaseIcon   - Icon used for show not visited bases on map
-   -- PlayerShipIcon       - Icon used for show player ship on map
-   -- EmptyMapIcon         - Icon used for empty map fields
-   -- TargetIcon           - Icon used for player selected target on map
-   -- StoryIcon            - Icon used for show story event location on map
-   -- OverloadedIcon       - Icon used for show warning about overloaded ship
+   -- Name                  - Name of theme
+   -- File_Name             - Name of .tcl file of theme
+   -- Enemy_Ship_Icon       - Icon used for Enemy Ship event
+   -- Attack_On_Base_Icon   - Icon used for Attack on Base event
+   -- Disease_Icon          - Icon used for Disease event
+   -- Double_PriceIcon      - Icon used for Double Price event
+   -- Full_Docks_Icon       - Icon used for Full Docks event
+   -- Enemy_Patrol_Icon     - Icon used for Enemy Patrol event
+   -- Trader_Icon           - Icon used for Trader event
+   -- Friendly_Ship_Icon    - Icon used for Friendly Ship event
+   -- Deliver_Icon          - Icon used for Deliver Item mission
+   -- Destroy_Icon          - Icon used for Destroy Ship mission
+   -- Patrol_Icon           - Icon used for  Patrol Area mission
+   -- Explore_Icon          - Icon used for Explore Area mission
+   -- Passenger_Icon        - Icon used for Transport Passenger mission
+   -- Pilot_Icon            - Icon used for Pilot info
+   -- Engineer_Icon         - Icon used for Engineer info
+   -- Gunner_Icon           - Icon used for Gunners info
+   -- Crew_Trader_Icon      - Icon used for Trader info
+   -- Repair_Icon           - Icon used for Repairs info
+   -- Upgrade_Icon          - Icon used for Upgrade info
+   -- Clean_Icon            - Icon used for Clean Ship info
+   -- Manufacture_Icon      - Icon used for Manufacturing info
+   -- Move_Map_Up_Icon      - Icon used for move map up button
+   -- Move_Map_Down_Icon    - Icon used for move map down button
+   -- Move_Map_Left_Icon    - Icon used for move map left button
+   -- Move_Map_Right_Icon   - Icon used for move map right button
+   -- No_Fuel_Icon          - Icon used for show warning about no fuel
+   -- No_Food_Icon          - Icon used for show warning about no food
+   -- No_Drinks_Icon        - Icon used for show warning about no drinks
+   -- Not_Visited_Base_Icon - Icon used for show not visited bases on map
+   -- Player_Ship_Icon      - Icon used for show player ship on map
+   -- Empty_Map_Icon        - Icon used for empty map fields
+   -- Target_Icon           - Icon used for player selected target on map
+   -- Story_Icon            - Icon used for show story event location on map
+   -- Overloaded_Icon       - Icon used for show warning about overloaded ship
    -- SOURCE
    type Theme_Record is record
       Name: Unbounded_String;
@@ -91,24 +91,24 @@ package Themes is
       Pilot_Icon: Wide_Character;
       Engineer_Icon: Wide_Character;
       Gunner_Icon: Wide_Character;
-      CrewTraderIcon: Wide_Character;
-      RepairIcon: Wide_Character;
-      UpgradeIcon: Wide_Character;
-      CleanIcon: Wide_Character;
-      ManufactureIcon: Wide_Character;
-      MoveMapUpIcon: Wide_Character;
-      MoveMapDownIcon: Wide_Character;
-      MoveMapLeftIcon: Wide_Character;
-      MoveMapRightIcon: Wide_Character;
-      NoFuelIcon: Wide_Character;
-      NoFoodIcon: Wide_Character;
-      NoDrinksIcon: Wide_Character;
-      NotVisitedBaseIcon: Wide_Character;
-      PlayerShipIcon: Wide_Character;
-      EmptyMapIcon: Wide_Character;
-      TargetIcon: Wide_Character;
-      StoryIcon: Wide_Character;
-      OverloadedIcon: Wide_Character;
+      Crew_Trader_Icon: Wide_Character;
+      Repair_Icon: Wide_Character;
+      Upgrade_Icon: Wide_Character;
+      Clean_Icon: Wide_Character;
+      Manufacture_Icon: Wide_Character;
+      Move_Map_Up_Icon: Wide_Character;
+      Move_Map_Down_Icon: Wide_Character;
+      Move_Map_Left_Icon: Wide_Character;
+      Move_Map_Right_Icon: Wide_Character;
+      No_Fuel_Icon: Wide_Character;
+      No_Food_Icon: Wide_Character;
+      No_Drinks_Icon: Wide_Character;
+      Not_Visited_Base_Icon: Wide_Character;
+      Player_Ship_Icon: Wide_Character;
+      Empty_Map_Icon: Wide_Character;
+      Target_Icon: Wide_Character;
+      Story_Icon: Wide_Character;
+      Overloaded_Icon: Wide_Character;
    end record;
    -- ****
 
