@@ -691,32 +691,40 @@ package body Bases.ShipyardUI is
    exception
       when Trade_No_Money =>
          ShowMessage
-           ("You don't have " & To_String(Money_Name) &
-            " to pay for modules.");
+           (Text => "You don't have " & To_String(Money_Name) &
+            " to pay for modules.",
+            Title => "Can't install module");
          return TCL_OK;
       when An_Exception : Trade_Not_Enough_Money =>
          ShowMessage
-           ("You don't have enough " & To_String(Money_Name) & " to pay for " &
-            Exception_Message(An_Exception) & ".");
+           (Text => "You don't have enough " & To_String(Money_Name) &
+            " to pay for " &
+            Exception_Message(An_Exception) & ".",
+            Title => "Can't install module");
          return TCL_OK;
       when An_Exception : BasesShip_Unique_Module =>
          ShowMessage
-           ("You can't install another " & Exception_Message(An_Exception) &
-            " because you have installed one module that type. Remove old first.");
+           (Text => "You can't install another " &
+            Exception_Message(An_Exception) &
+            " because you have installed one module that type. Remove old first.",
+            Title => "Can't install module");
          return TCL_OK;
       when An_Exception : BasesShip_Installation_Error |
         BasesShip_Removing_Error =>
-         ShowMessage(Exception_Message(An_Exception));
+         ShowMessage(Text => Exception_Message(An_Exception),
+         Title => "Can't" & (if CArgv.Arg(Argv, 1) = "install" then
+         "install" else "remove") & " module");
          return TCL_OK;
       when Trade_No_Free_Cargo =>
          ShowMessage
-           ("You don't have enough free space for " & To_String(Money_Name) &
-            " in ship cargo.");
+           (Text => "You don't have enough free space for " &
+            To_String(Money_Name) & " in ship cargo.",
+            Title => "Can't remove module");
          return TCL_OK;
       when Trade_No_Money_In_Base =>
          ShowMessage
-           ("Base don't have enough " & To_String(Money_Name) &
-            " for buy this module.");
+           (Text => "Base don't have enough " & To_String(Money_Name) &
+            " for buy this module.", Title => "Can't remove module");
          return TCL_OK;
    end Manipulate_Module_Command;
 
