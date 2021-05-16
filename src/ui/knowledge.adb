@@ -32,9 +32,9 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with BasesTypes; use BasesTypes;
+with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Game; use Game;
 with Knowledge.Bases;
@@ -54,11 +54,7 @@ package body Knowledge is
       Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      KnowledgeFrame: Ttk_Frame := Get_Widget(Paned & ".knowledgeframe");
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
+      KnowledgeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".knowledgeframe");
       Tokens: Slice_Set;
       Rows: Natural := 0;
       KnowledgeCanvas: Tk_Canvas :=
@@ -93,12 +89,12 @@ package body Knowledge is
          Current(ComboBox, "0");
       elsif Winfo_Get(KnowledgeFrame, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       -- Setting bases list
       Knowledge.Bases.UpdateBasesList;
       -- Setting accepted missions info
@@ -107,7 +103,7 @@ package body Knowledge is
       Knowledge.Events.UpdateEventsList;
       -- Setting the known stories list
       KnowledgeFrame.Name :=
-        New_String(Paned & ".knowledgeframe.stories.canvas.frame");
+        New_String(Main_Paned & ".knowledgeframe.stories.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(KnowledgeFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, KnowledgeFrame);
@@ -158,7 +154,7 @@ package body Knowledge is
       end if;
       Tcl_Eval(Get_Context, "update");
       KnowledgeCanvas.Name :=
-        New_String(Paned & ".knowledgeframe.stories.canvas");
+        New_String(Main_Paned & ".knowledgeframe.stories.canvas");
       configure
         (KnowledgeCanvas,
          "-scrollregion [list " & BBox(KnowledgeCanvas, "all") & "]");
@@ -207,25 +203,18 @@ package body Knowledge is
          (To_Unbounded_String("missions"), 0, 1),
          (To_Unbounded_String("events"), 1, 0),
          (To_Unbounded_String("stories"), 1, 1));
-      Frame: Ttk_Frame;
-      Button: Ttk_Button;
+      FrameName: constant String := Main_Paned & ".knowledgeframe";
+      Frame: Ttk_Frame := Get_Widget(FrameName, Interp);
+      Button: constant Ttk_Button :=
+        Get_Widget
+          (FrameName & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin",
+           Interp);
    begin
-      Frame.Interp := Interp;
-      Frame.Name := New_String(".gameframe.paned.knowledgeframe");
-      Button.Interp := Interp;
-      Button.Name :=
-        New_String
-          (Widget_Image(Frame) &
-           "." &
-           CArgv.Arg(Argv, 1) &
-           ".canvas.frame.maxmin");
       if CArgv.Arg(Argv, 2) /= "show" then
          Hide_Manipulate_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String
-                (".gameframe.paned.knowledgeframe." &
-                 To_String(FrameInfo.Name));
+              New_String(FrameName & "." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid(Frame);
             else
@@ -246,9 +235,7 @@ package body Knowledge is
          Show_Manipulate_Frames_Loop:
          for FrameInfo of Frames loop
             Frame.Name :=
-              New_String
-                (".gameframe.paned.knowledgeframe." &
-                 To_String(FrameInfo.Name));
+              New_String(FrameName & "." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else
