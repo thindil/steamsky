@@ -55,24 +55,24 @@ package body Themes is
             Pilot_Icon => Wide_Character'Val(16#f655#),
             Engineer_Icon => Wide_Character'Val(16#f013#),
             Gunner_Icon => Wide_Character'Val(16#f4fb#),
-            CrewTraderIcon => Wide_Character'Val(16#f651#),
-            RepairIcon => Wide_Character'Val(16#f54a#),
-            UpgradeIcon => Wide_Character'Val(16#f6e3#),
-            CleanIcon => Wide_Character'Val(16#f458#),
-            ManufactureIcon => Wide_Character'Val(16#f0e3#),
-            MoveMapUpIcon => Wide_Character'Val(16#2191#),
-            MoveMapDownIcon => Wide_Character'Val(16#2193#),
-            MoveMapLeftIcon => Wide_Character'Val(16#2190#),
-            MoveMapRightIcon => Wide_Character'Val(16#2192#),
-            NoFuelIcon => Wide_Character'Val(16#f2ca#),
-            NoFoodIcon => Wide_Character'Val(16#f787#),
-            NoDrinksIcon => Wide_Character'Val(16#f72f#),
-            NotVisitedBaseIcon => Wide_Character'Val(16#229b#),
-            PlayerShipIcon => Wide_Character'Val(16#f135#),
-            EmptyMapIcon => Wide_Character'Val(16#f0c8#),
-            TargetIcon => Wide_Character'Val(16#f05b#),
-            StoryIcon => Wide_Character'Val(16#f059#),
-            OverloadedIcon => Wide_Character'Val(16#f55b#));
+            Crew_Trader_Icon => Wide_Character'Val(16#f651#),
+            Repair_Icon => Wide_Character'Val(16#f54a#),
+            Upgrade_Icon => Wide_Character'Val(16#f6e3#),
+            Clean_Icon => Wide_Character'Val(16#f458#),
+            Manufacture_Icon => Wide_Character'Val(16#f0e3#),
+            Move_Map_Up_Icon => Wide_Character'Val(16#2191#),
+            Move_Map_Down_Icon => Wide_Character'Val(16#2193#),
+            Move_Map_Left_Icon => Wide_Character'Val(16#2190#),
+            Move_Map_Right_Icon => Wide_Character'Val(16#2192#),
+            No_Fuel_Icon => Wide_Character'Val(16#f2ca#),
+            No_Food_Icon => Wide_Character'Val(16#f787#),
+            No_Drinks_Icon => Wide_Character'Val(16#f72f#),
+            Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
+            Player_Ship_Icon => Wide_Character'Val(16#f135#),
+            Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
+            Target_Icon => Wide_Character'Val(16#f05b#),
+            Story_Icon => Wide_Character'Val(16#f059#),
+            Overloaded_Icon => Wide_Character'Val(16#f55b#));
       end SetDefaultValues;
    begin
       SetDefaultValues;
@@ -176,71 +176,71 @@ package body Themes is
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("CrewTraderIcon") then
-                  TempRecord.CrewTraderIcon :=
+                  TempRecord.Crew_Trader_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("RepairIcon") then
-                  TempRecord.RepairIcon :=
+                  TempRecord.Repair_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("UpgradeIcon") then
-                  TempRecord.UpgradeIcon :=
+                  TempRecord.Upgrade_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("CleanIcon") then
-                  TempRecord.CleanIcon :=
+                  TempRecord.Clean_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("ManufactureIcon") then
-                  TempRecord.ManufactureIcon :=
+                  TempRecord.Manufacture_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("MoveMapUpIcon") then
-                  TempRecord.MoveMapUpIcon :=
+                  TempRecord.Move_Map_Up_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("MoveMapDownIcon") then
-                  TempRecord.MoveMapDownIcon :=
+                  TempRecord.Move_Map_Down_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("MoveMapLeftIcon") then
-                  TempRecord.MoveMapLeftIcon :=
+                  TempRecord.Move_Map_Left_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("MoveMapRightIcon") then
-                  TempRecord.MoveMapRightIcon :=
+                  TempRecord.Move_Map_Right_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("NoFuelIcon") then
-                  TempRecord.NoFuelIcon :=
+                  TempRecord.No_Fuel_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("NoFoodIcon") then
-                  TempRecord.NoFoodIcon :=
+                  TempRecord.No_Food_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("NoDrinksIcon") then
-                  TempRecord.NoDrinksIcon :=
+                  TempRecord.No_Drinks_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("NotVisitedBaseIcon") then
-                  TempRecord.NotVisitedBaseIcon :=
+                  TempRecord.Not_Visited_Base_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("EmptyMapIcon") then
-                  TempRecord.EmptyMapIcon :=
+                  TempRecord.Empty_Map_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("TargetIcon") then
-                  TempRecord.TargetIcon :=
+                  TempRecord.Target_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("StoryIcon") then
-                  TempRecord.StoryIcon :=
+                  TempRecord.Story_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                elsif FieldName = To_Unbounded_String("OverloadedIcon") then
-                  TempRecord.OverloadedIcon :=
+                  TempRecord.Overloaded_Icon :=
                     Wide_Character'Val
                       (Natural'Value("16#" & To_String(Value) & "#"));
                end if;
@@ -274,17 +274,17 @@ package body Themes is
          end if;
          Label.Name := New_String(".gameframe.header.nofuel");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).NoFuelIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).No_Fuel_Icon) & "}");
          Label.Name := New_String(".gameframe.header.nofood");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).NoFoodIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).No_Food_Icon) & "}");
          Label.Name := New_String(".gameframe.header.nodrink");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).NoDrinksIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).No_Drinks_Icon) & "}");
          Label.Name := New_String(".gameframe.header.overloaded");
          configure
            (Label,
-            "-text {" & Encode("" & Themes_List(I).OverloadedIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Overloaded_Icon) & "}");
          Label.Name := New_String(".gameframe.header.pilot");
          configure
            (Label, "-text {" & Encode("" & Themes_List(I).Pilot_Icon) & "}");
@@ -297,36 +297,36 @@ package body Themes is
          Label.Name := New_String(".gameframe.header.talk");
          configure
            (Label,
-            "-text {" & Encode("" & Themes_List(I).CrewTraderIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Crew_Trader_Icon) & "}");
          Label.Name := New_String(".gameframe.header.repairs");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).RepairIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Repair_Icon) & "}");
          Label.Name := New_String(".gameframe.header.upgrade");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).UpgradeIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Upgrade_Icon) & "}");
          Label.Name := New_String(".gameframe.header.clean");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).CleanIcon) & "}");
+           (Label, "-text {" & Encode("" & Themes_List(I).Clean_Icon) & "}");
          Label.Name := New_String(".gameframe.header.crafting");
          configure
            (Label,
-            "-text {" & Encode("" & Themes_List(I).ManufactureIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Manufacture_Icon) & "}");
          Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
          configure
            (Button,
-            "-text {" & Encode("" & Themes_List(I).MoveMapUpIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Move_Map_Up_Icon) & "}");
          Button.Name := New_String(".gameframe.paned.mapframe.buttons.hide");
          configure
            (Button,
-            "-text {" & Encode("" & Themes_List(I).MoveMapDownIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Move_Map_Down_Icon) & "}");
          Button.Name := New_String(".gameframe.paned.mapframe.buttons.left");
          configure
            (Button,
-            "-text {" & Encode("" & Themes_List(I).MoveMapLeftIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Move_Map_Left_Icon) & "}");
          Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
          configure
            (Button,
-            "-text {" & Encode("" & Themes_List(I).MoveMapRightIcon) & "}");
+            "-text {" & Encode("" & Themes_List(I).Move_Map_Right_Icon) & "}");
          <<End_Of_Set_Theme_Loop>>
       end loop Set_Theme_Loop;
    end SetTheme;

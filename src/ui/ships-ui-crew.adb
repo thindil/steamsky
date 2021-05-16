@@ -105,7 +105,7 @@ package body Ships.UI.Crew is
               Encode
                 ("" &
                  Themes_List(To_String(Game_Settings.Interface_Theme))
-                   .CleanIcon) &
+                   .Clean_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Clean}");
          Add(Button, "Clean ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-padx 5");
@@ -118,7 +118,7 @@ package body Ships.UI.Crew is
               Encode
                 ("" &
                  Themes_List(To_String(Game_Settings.Interface_Theme))
-                   .RepairIcon) &
+                   .Repair_Icon) &
               "} -style Header.Toolbutton -command {OrderForAll Repair}");
          Add(Button, "Repair ship everyone");
          Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx 5");
