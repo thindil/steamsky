@@ -309,9 +309,10 @@ package body Ships.UI.Cargo is
           (MemberIndex, 0 - (Items_List(Item.ProtoIndex).Weight * Amount)) <
         0 then
          ShowMessage
-           ("No free space in " &
+           (Text => "No free space in " &
             To_String(PlayerShip.Crew(MemberIndex).Name) &
-            "'s inventory for that amount of " & GetItemName(Item));
+            "'s inventory for that amount of " & GetItemName(Item),
+            Title => "Can't give item");
          return TCL_OK;
       end if;
       AddMessage

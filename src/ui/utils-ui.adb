@@ -621,17 +621,21 @@ package body Utils.UI is
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
-                 ("You don't have any " &
-                  To_String(Money_Name) &
-                  " for change ship home base.");
+                 (Text =>
+                    "You don't have any " &
+                    To_String(Money_Name) &
+                    " for change ship home base.",
+                  Title => "No money");
                return TCL_OK;
             end if;
             CountPrice(Price, TraderIndex);
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowMessage
-                 ("You don't have enough " &
-                  To_String(Money_Name) &
-                  " for change ship home base.");
+                 (Text =>
+                    "You don't have enough " &
+                    To_String(Money_Name) &
+                    " for change ship home base.",
+                  Title => "No money");
                return TCL_OK;
             end if;
             PlayerShip.HomeBase :=
@@ -658,7 +662,7 @@ package body Utils.UI is
                Message := To_Unbounded_String(AutoFinishMissions);
             end if;
             if Message /= Null_Unbounded_String then
-               ShowMessage(To_String(Message));
+               ShowMessage(Text => To_String(Message), Title => "Error");
             end if;
             CenterX := PlayerShip.SkyX;
             CenterY := PlayerShip.SkyY;
@@ -838,7 +842,9 @@ package body Utils.UI is
    begin
       if Positive'Value(CArgv.Arg(Argv, 1)) = PlayerShip.SkyX and
         Positive'Value(CArgv.Arg(Argv, 2)) = PlayerShip.SkyY then
-         ShowMessage("You are at this location now.");
+         ShowMessage
+           (Text => "You are at this location now.",
+            Title => "Can't set destination");
          return TCL_OK;
       end if;
       PlayerShip.DestinationX := Positive'Value(CArgv.Arg(Argv, 1));
