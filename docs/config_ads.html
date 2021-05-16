@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -45,8 +45,8 @@
 <li>1.11. <a href="#robo203">Config/Config.Default_Game_Settings</a></li>
 <li>1.12. <a href="#robo204">Config/Config.Default_Messages_Order</a></li>
 <li>1.13. <a href="#robo205">Config/Config.Default_New_Game_Settings</a></li>
-<li>1.14. <a href="#robo235">Config/Config.Game_Settings</a></li>
-<li>1.15. <a href="#robo236">Config/Config.New_Game_Settings</a></li>
+<li>1.14. <a href="#robo236">Config/Config.Game_Settings</a></li>
+<li>1.15. <a href="#robo237">Config/Config.New_Game_Settings</a></li>
 <li>1.16. <a href="#robo411">Config/Config.Load_Config</a></li>
 <li>1.17. <a href="#robo412">Config/Config.SaveConfig</a></li>
 </ul>
@@ -161,6 +161,7 @@
       Auto_Save<span class="sign">:</span> Auto_Save_Type<span class="sign">;</span>
       Topics_Position<span class="sign">:</span> Natural<span class="sign">;</span>
       Show_Numbers<span class="sign">:</span> Boolean<span class="sign">;</span>
+      Right_Button<span class="sign">:</span> Boolean<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -203,6 +204,8 @@
                             top of the help window
  Show_Numbers             - If true, show numbers values instead of text for
                             various things (like weapon strength, etc)
+ Right_Button             - If true, use right mouse button for show various
+                            in game menus. Otherwise use the left button
 </pre>
 
 <hr />
@@ -300,19 +303,35 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   Default_Game_Settings<span class="sign">:</span> <span class="keyword">constant</span> Game_Settings_Record <span class="sign">:</span><span class="sign">=</span>
-     <span class="sign">(</span>Auto_Rest <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Undock_Speed <span class="sign">=</span><span class="sign">&gt;</span> FULL_SPEED<span class="sign">,</span> Auto_Center <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
-      Auto_Return <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Auto_Finish <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Low_Fuel <span class="sign">=</span><span class="sign">&gt;</span> 100<span class="sign">,</span>
-      Low_Drinks <span class="sign">=</span><span class="sign">&gt;</span> 50<span class="sign">,</span> Low_Food <span class="sign">=</span><span class="sign">&gt;</span> 25<span class="sign">,</span>
-      Auto_Move_Stop <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Move_Stop<span class="sign">,</span> Window_Width <span class="sign">=</span><span class="sign">&gt;</span> 800<span class="sign">,</span>
-      Window_Height <span class="sign">=</span><span class="sign">&gt;</span> 600<span class="sign">,</span> Messages_Limit <span class="sign">=</span><span class="sign">&gt;</span> 500<span class="sign">,</span> Saved_Messages <span class="sign">=</span><span class="sign">&gt;</span> 10<span class="sign">,</span>
-      Help_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span> Map_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 16<span class="sign">,</span> Interface_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span>
+     <span class="sign">(</span>Auto_Rest <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Undock_Speed <span class="sign">=</span><span class="sign">&gt;</span> FULL_SPEED<span class="sign">,</span>
+      Auto_Center <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Auto_Return <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Auto_Finish <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Low_Fuel <span class="sign">=</span><span class="sign">&gt;</span> 100<span class="sign">,</span>
+      Low_Drinks <span class="sign">=</span><span class="sign">&gt;</span> 50<span class="sign">,</span>
+      Low_Food <span class="sign">=</span><span class="sign">&gt;</span> 25<span class="sign">,</span>
+      Auto_Move_Stop <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Move_Stop<span class="sign">,</span>
+      Window_Width <span class="sign">=</span><span class="sign">&gt;</span> 800<span class="sign">,</span>
+      Window_Height <span class="sign">=</span><span class="sign">&gt;</span> 600<span class="sign">,</span>
+      Messages_Limit <span class="sign">=</span><span class="sign">&gt;</span> 500<span class="sign">,</span>
+      Saved_Messages <span class="sign">=</span><span class="sign">&gt;</span> 10<span class="sign">,</span>
+      Help_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span>
+      Map_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 16<span class="sign">,</span>
+      Interface_Font_Size <span class="sign">=</span><span class="sign">&gt;</span> 14<span class="sign">,</span>
       Interface_Theme <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"steamsky"</span><span class="sign">)</span><span class="sign">,</span>
-      Messages_Order <span class="sign">=</span><span class="sign">&gt;</span> Default_Messages_Order<span class="sign">,</span> Auto_Ask_For_Bases <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
-      Auto_Ask_For_Events <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span> Show_Tooltips <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
-      Show_Last_Messages <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span> Messages_Position <span class="sign">=</span><span class="sign">&gt;</span> 213<span class="sign">,</span>
-      Full_Screen <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span> Auto_Close_Messages_Time <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">,</span>
-      Auto_Save <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Save_Time<span class="sign">,</span> Topics_Position <span class="sign">=</span><span class="sign">&gt;</span> 200<span class="sign">,</span>
-      Show_Numbers <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">)</span><span class="sign">;</span>
+      Messages_Order <span class="sign">=</span><span class="sign">&gt;</span> Default_Messages_Order<span class="sign">,</span>
+      Auto_Ask_For_Bases <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
+      Auto_Ask_For_Events <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
+      Show_Tooltips <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Show_Last_Messages <span class="sign">=</span><span class="sign">&gt;</span> True<span class="sign">,</span>
+      Messages_Position <span class="sign">=</span><span class="sign">&gt;</span> 213<span class="sign">,</span>
+      Full_Screen <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
+      Auto_Close_Messages_Time <span class="sign">=</span><span class="sign">&gt;</span> 6<span class="sign">,</span>
+      Auto_Save <span class="sign">=</span><span class="sign">&gt;</span> Default_Auto_Save_Time<span class="sign">,</span>
+      Topics_Position <span class="sign">=</span><span class="sign">&gt;</span> 200<span class="sign">,</span>
+      Show_Numbers <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">,</span>
+      Right_Button <span class="sign">=</span><span class="sign">&gt;</span> False<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -343,16 +362,20 @@
       Player_Faction <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"POLEIS"</span><span class="sign">)</span><span class="sign">,</span>
       Player_Career <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"general"</span><span class="sign">)</span><span class="sign">,</span>
       Starting_Base <span class="sign">=</span><span class="sign">&gt;</span> To_Unbounded_String<span class="sign">(</span>Source <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Any"</span><span class="sign">)</span><span class="sign">,</span>
-      Enemy_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Player_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
-      Enemy_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Player_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
-      Experience_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Reputation_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
-      Upgrade_Cost_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span> Prices_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Enemy_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Player_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Enemy_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Player_Melee_Damage_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Experience_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Reputation_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Upgrade_Cost_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
+      Prices_Bonus <span class="sign">=</span><span class="sign">&gt;</span> 1<span class="sign">.</span>0<span class="sign">,</span>
       Difficulty_Level <span class="sign">=</span><span class="sign">&gt;</span> Default_Difficulty_Type<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Config2fConfig2eGame5fSettings"></a>
-<a name="robo235"></a><h2>Config/Config.Game_Settings [ Variables ]</h2>
+<a name="robo236"></a><h2>Config/Config.Game_Settings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -364,7 +387,7 @@
 
 <hr />
 <a name="Config2fConfig2eNew5fGame5fSettings"></a>
-<a name="robo236"></a><h2>Config/Config.New_Game_Settings [ Variables ]</h2>
+<a name="robo237"></a><h2>Config/Config.New_Game_Settings [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -400,7 +423,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

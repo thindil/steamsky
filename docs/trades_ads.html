@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -43,9 +43,9 @@
 <li>1.9. <a href="#robo381">Trades/Trades.Trade_Not_Enough_Money</a></li>
 <li>1.10. <a href="#robo382">Trades/Trades.Trade_Not_For_Sale_Now</a></li>
 <li>1.11. <a href="#robo383">Trades/Trades.Trade_Too_Much_For_Sale</a></li>
-<li>1.12. <a href="#robo634">Trades/Trades.BuyItems</a></li>
-<li>1.13. <a href="#robo635">Trades/Trades.GenerateTraderCargo</a></li>
-<li>1.14. <a href="#robo636">Trades/Trades.SellItems</a></li>
+<li>1.12. <a href="#robo629">Trades/Trades.BuyItems</a></li>
+<li>1.13. <a href="#robo630">Trades/Trades.GenerateTraderCargo</a></li>
+<li>1.14. <a href="#robo631">Trades/Trades.SellItems</a></li>
 </ul>
 </ul>
 <hr />
@@ -194,7 +194,7 @@
 
 <hr />
 <a name="Trades2fTrades2eBuyItems"></a>
-<a name="robo634"></a><h2>Trades/Trades.BuyItems [ Subprograms ]</h2>
+<a name="robo629"></a><h2>Trades/Trades.BuyItems [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo69">Trades</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -202,7 +202,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> BuyItems
-     <span class="sign">(</span>BaseItemIndex<span class="sign">:</span> BaseCargo_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span> Amount<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>BaseItemIndex<span class="sign">:</span> BaseCargo_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
+      Amount<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_BuyItems"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -212,7 +213,7 @@
 
 <hr />
 <a name="Trades2fTrades2eGenerateTraderCargo"></a>
-<a name="robo635"></a><h2>Trades/Trades.GenerateTraderCargo [ Subprograms ]</h2>
+<a name="robo630"></a><h2>Trades/Trades.GenerateTraderCargo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo69">Trades</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -230,7 +231,7 @@
 
 <hr />
 <a name="Trades2fTrades2eSellItems"></a>
-<a name="robo636"></a><h2>Trades/Trades.SellItems [ Subprograms ]</h2>
+<a name="robo631"></a><h2>Trades/Trades.SellItems [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo69">Trades</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -238,7 +239,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> SellItems
-     <span class="sign">(</span>ItemIndex<span class="sign">:</span> Inventory_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span> Amount<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>ItemIndex<span class="sign">:</span> Inventory_Container<span class="sign">.</span>Extended_Index<span class="sign">;</span>
+      Amount<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> ItemIndex <span class="keyword">in</span>
         PlayerShip<span class="sign">.</span>Cargo<span class="sign">.</span>First_Index <span class="sign">.</span><span class="sign">.</span> PlayerShip<span class="sign">.</span>Cargo<span class="sign">.</span>Last_Index<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_SellItems"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
@@ -250,7 +252,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/trades.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/trades.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -33,11 +33,11 @@
 <li>1. <a href="#robo67">Themes/Themes</a></li>
 <ul>
 <li>1.1. <a href="#robo155">Themes/Themes.FontTypes</a></li>
-<li>1.2. <a href="#robo156">Themes/Themes.ThemeRecord</a></li>
+<li>1.2. <a href="#robo156">Themes/Themes.Theme_Record</a></li>
 <li>1.3. <a href="#robo157">Themes/Themes.Themes_Container</a></li>
 <li>1.4. <a href="#robo351">Themes/Themes.Themes_List</a></li>
-<li>1.5. <a href="#robo632">Themes/Themes.LoadThemes</a></li>
-<li>1.6. <a href="#robo633">Themes/Themes.SetTheme</a></li>
+<li>1.5. <a href="#robo627">Themes/Themes.LoadThemes</a></li>
+<li>1.6. <a href="#robo628">Themes/Themes.SetTheme</a></li>
 </ul>
 </ul>
 <hr />
@@ -61,94 +61,94 @@
 <pre> Types of font available in game
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> FontTypes <span class="keyword">is</span> <span class="sign">(</span>HELPFONT<span class="sign">,</span> MAPFONT<span class="sign">,</span> INTERFACEFONT<span class="sign">,</span> ALLFONTS<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Font_Types <span class="keyword">is</span> <span class="sign">(</span>HELPFONT<span class="sign">,</span> MAPFONT<span class="sign">,</span> INTERFACEFONT<span class="sign">,</span> ALLFONTS<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Themes2fThemes2eThemeRecord"></a>
-<a name="robo156"></a><h2>Themes/Themes.ThemeRecord [ Types ]</h2>
+<a name="Themes2fThemes2eTheme5fRecord"></a>
+<a name="robo156"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for themes settings
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> ThemeRecord <span class="keyword">is</span> <span class="keyword">record</span>
+<pre class="source">   <span class="keyword">type</span> Theme_Record <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      FileName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      EnemyShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      AttackOnBaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      DiseaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      DoublePriceIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      FullDocksIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      EnemyPatrolIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      TraderIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      FriendlyShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      DeliverIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      DestroyIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      PatrolIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      ExploreIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      PassengerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      PilotIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      EngineerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      GunnerIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      CrewTraderIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      RepairIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      UpgradeIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      CleanIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      ManufactureIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      MoveMapUpIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      MoveMapDownIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      MoveMapLeftIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      MoveMapRightIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      NoFuelIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      NoFoodIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      NoDrinksIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      NotVisitedBaseIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      PlayerShipIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      EmptyMapIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      TargetIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      StoryIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
-      OverloadedIcon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      File_Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Enemy_Ship_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Attack_On_Base_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Disease_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Double_Price_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Full_Docks_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Enemy_Patrol_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Trader_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Friendly_Ship_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Deliver_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Destroy_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Patrol_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Explore_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Passenger_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Pilot_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Engineer_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Gunner_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Crew_Trader_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Repair_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Upgrade_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Clean_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Manufacture_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Move_Map_Up_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Move_Map_Down_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Move_Map_Left_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Move_Map_Right_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      No_Fuel_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      No_Food_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      No_Drinks_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Not_Visited_Base_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Player_Ship_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Empty_Map_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Target_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Story_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
+      Overloaded_Icon<span class="sign">:</span> Wide_Character<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
-<pre> Name                 - Name of theme
- FileName             - Name of .tcl file of theme
- EnemyShipIcon        - Icon used for Enemy <a href="../bases-ship_ads.html#robo8">Ship</a> event
- AttackOnBaseIcon     - Icon used for Attack on Base event
- DiseaseIcon          - Icon used for Disease event
- DoublePriceIcon      - Icon used for Double Price event
- FullDocksIcon        - Icon used for Full Docks event
- EnemyPatrolIcon      - Icon used for Enemy Patrol event
- TraderIcon           - Icon used for Trader event
- FriendlyShipIcon     - Icon used for Friendly <a href="../bases-ship_ads.html#robo8">Ship</a> event
- DeliverIcon          - Icon used for Deliver Item mission
- DestroyIcon          - Icon used for Destroy <a href="../bases-ship_ads.html#robo8">Ship</a> mission
- PatrolIcon           - Icon used for  Patrol Area mission
- ExploreIcon          - Icon used for Explore Area mission
- PassengerIcon        - Icon used for Transport Passenger mission
- PilotIcon            - Icon used for Pilot info
- EngineerIcon         - Icon used for Engineer info
- GunnerIcon           - Icon used for Gunners info
- CrewTraderIcon       - Icon used for Trader info
- RepairIcon           - Icon used for Repairs info
- UpgradeIcon          - Icon used for Upgrade info
- CleanIcon            - Icon used for Clean <a href="../bases-ship_ads.html#robo8">Ship</a> info
- ManufactureIcon      - Icon used for Manufacturing info
- MoveMapUpIcon        - Icon used for move map up button
- MoveMapDownIcon      - Icon used for move map down button
- MoveMapLeftIcon      - Icon used for move map left button
- MoveMapRightIcon     - Icon used for move map right button
- NoFuelIcon           - Icon used for show warning about no fuel
- NoFoodIcon           - Icon used for show warning about no food
- NoDrinksIcon         - Icon used for show warning about no drinks
- NotVisitedBaseIcon   - Icon used for show not visited bases on map
- PlayerShipIcon       - Icon used for show player ship on map
- EmptyMapIcon         - Icon used for empty map fields
- TargetIcon           - Icon used for player selected target on map
- StoryIcon            - Icon used for show story event location on map
- OverloadedIcon       - Icon used for show warning about overloaded ship
+<pre> Name                  - Name of theme
+ File_Name             - Name of .tcl file of theme
+ Enemy_Ship_Icon       - Icon used for Enemy <a href="../bases-ship_ads.html#robo8">Ship</a> event
+ Attack_On_Base_Icon   - Icon used for Attack on Base event
+ Disease_Icon          - Icon used for Disease event
+ Double_PriceIcon      - Icon used for Double Price event
+ Full_Docks_Icon       - Icon used for Full Docks event
+ Enemy_Patrol_Icon     - Icon used for Enemy Patrol event
+ Trader_Icon           - Icon used for Trader event
+ Friendly_Ship_Icon    - Icon used for Friendly <a href="../bases-ship_ads.html#robo8">Ship</a> event
+ Deliver_Icon          - Icon used for Deliver Item mission
+ Destroy_Icon          - Icon used for Destroy <a href="../bases-ship_ads.html#robo8">Ship</a> mission
+ Patrol_Icon           - Icon used for  Patrol Area mission
+ Explore_Icon          - Icon used for Explore Area mission
+ Passenger_Icon        - Icon used for Transport Passenger mission
+ Pilot_Icon            - Icon used for Pilot info
+ Engineer_Icon         - Icon used for Engineer info
+ Gunner_Icon           - Icon used for Gunners info
+ Crew_Trader_Icon      - Icon used for Trader info
+ Repair_Icon           - Icon used for Repairs info
+ Upgrade_Icon          - Icon used for Upgrade info
+ Clean_Icon            - Icon used for Clean <a href="../bases-ship_ads.html#robo8">Ship</a> info
+ Manufacture_Icon      - Icon used for Manufacturing info
+ Move_Map_Up_Icon      - Icon used for move map up button
+ Move_Map_Down_Icon    - Icon used for move map down button
+ Move_Map_Left_Icon    - Icon used for move map left button
+ Move_Map_Right_Icon   - Icon used for move map right button
+ No_Fuel_Icon          - Icon used for show warning about no fuel
+ No_Food_Icon          - Icon used for show warning about no food
+ No_Drinks_Icon        - Icon used for show warning about no drinks
+ Not_Visited_Base_Icon - Icon used for show not visited bases on map
+ Player_Ship_Icon      - Icon used for show player ship on map
+ Empty_Map_Icon        - Icon used for empty map fields
+ Target_Icon           - Icon used for player selected target on map
+ Story_Icon            - Icon used for show story event location on map
+ Overloaded_Icon       - Icon used for show warning about overloaded ship
 </pre>
 
 <hr />
@@ -161,7 +161,10 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> Themes_Container <span class="keyword">is</span> <span class="keyword">new</span> Ada<span class="sign">.</span>Containers<span class="sign">.</span>Indefinite_Hashed_Maps
-     <span class="sign">(</span>String<span class="sign">,</span> ThemeRecord<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>String<span class="sign">,</span>
+      Theme_Record<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -178,7 +181,7 @@
 
 <hr />
 <a name="Themes2fThemes2eLoadThemes"></a>
-<a name="robo632"></a><h2>Themes/Themes.LoadThemes [ Subprograms ]</h2>
+<a name="robo627"></a><h2>Themes/Themes.LoadThemes [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -190,7 +193,7 @@
 
 <hr />
 <a name="Themes2fThemes2eSetTheme"></a>
-<a name="robo633"></a><h2>Themes/Themes.SetTheme [ Subprograms ]</h2>
+<a name="robo628"></a><h2>Themes/Themes.SetTheme [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -202,7 +205,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

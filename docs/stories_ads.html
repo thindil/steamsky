@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -48,17 +48,17 @@
 <li>1.14. <a href="#robo344">Stories/Stories.CurrentStory</a></li>
 <li>1.15. <a href="#robo345">Stories/Stories.FinishedStories</a></li>
 <li>1.16. <a href="#robo346">Stories/Stories.Stories_List</a></li>
-<li>1.17. <a href="#robo601">Stories/Stories.ClearCurrentStory</a></li>
-<li>1.18. <a href="#robo602">Stories/Stories.GetCurrentStoryText</a></li>
-<li>1.19. <a href="#robo603">Stories/Stories.GetStepData</a></li>
-<li>1.20. <a href="#robo604">Stories/Stories.GetStoryLocation</a></li>
-<li>1.21. <a href="#robo605">Stories/Stories.LoadStories</a></li>
-<li>1.22. <a href="#robo606">Stories/Stories.ProgressStory</a></li>
-<li>1.23. <a href="./stories_adb.html#robo607">Stories/Stories.SelectBase</a></li>
-<li>1.24. <a href="./stories_adb.html#robo608">Stories/Stories.SelectEnemy</a></li>
-<li>1.25. <a href="./stories_adb.html#robo609">Stories/Stories.SelectLocation</a></li>
-<li>1.26. <a href="./stories_adb.html#robo610">Stories/Stories.SelectLoot</a></li>
-<li>1.27. <a href="#robo611">Stories/Stories.StartStory</a></li>
+<li>1.17. <a href="#robo596">Stories/Stories.ClearCurrentStory</a></li>
+<li>1.18. <a href="#robo597">Stories/Stories.GetCurrentStoryText</a></li>
+<li>1.19. <a href="#robo598">Stories/Stories.GetStepData</a></li>
+<li>1.20. <a href="#robo599">Stories/Stories.GetStoryLocation</a></li>
+<li>1.21. <a href="#robo600">Stories/Stories.LoadStories</a></li>
+<li>1.22. <a href="#robo601">Stories/Stories.ProgressStory</a></li>
+<li>1.23. <a href="./stories_adb.html#robo602">Stories/Stories.SelectBase</a></li>
+<li>1.24. <a href="./stories_adb.html#robo603">Stories/Stories.SelectEnemy</a></li>
+<li>1.25. <a href="./stories_adb.html#robo604">Stories/Stories.SelectLocation</a></li>
+<li>1.26. <a href="./stories_adb.html#robo605">Stories/Stories.SelectLoot</a></li>
+<li>1.27. <a href="#robo606">Stories/Stories.StartStory</a></li>
 </ul>
 </ul>
 <hr />
@@ -79,7 +79,8 @@
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> FinishedStories_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors<span class="sign">(</span>Positive<span class="sign">,</span>
+<pre class="source">   <span class="keyword">package</span> FinishedStories_Container <span class="keyword">is</span> <span class="keyword">new</span> Vectors
+     <span class="sign">(</span>Positive<span class="sign">,</span>
       FinishedStory_Data<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
@@ -152,8 +153,11 @@
 <pre> Used to store stories
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> Stories_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span> Story_Data<span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> Stories_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      Story_Data<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -349,7 +353,7 @@
 
 <hr />
 <a name="Stories2fStories2eClearCurrentStory"></a>
-<a name="robo601"></a><h2>Stories/Stories.ClearCurrentStory [ Subprograms ]</h2>
+<a name="robo596"></a><h2>Stories/Stories.ClearCurrentStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -362,7 +366,7 @@
 
 <hr />
 <a name="Stories2fStories2eGetCurrentStoryText"></a>
-<a name="robo602"></a><h2>Stories/Stories.GetCurrentStoryText [ Subprograms ]</h2>
+<a name="robo597"></a><h2>Stories/Stories.GetCurrentStoryText [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -378,7 +382,7 @@
 
 <hr />
 <a name="Stories2fStories2eGetStepData"></a>
-<a name="robo603"></a><h2>Stories/Stories.GetStepData [ Subprograms ]</h2>
+<a name="robo598"></a><h2>Stories/Stories.GetStepData [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -386,8 +390,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> GetStepData
-     <span class="sign">(</span>FinishData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span> Name<span class="sign">:</span> String<span class="sign">)</span>
-      <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
+     <span class="sign">(</span>FinishData<span class="sign">:</span> StepData_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+      Name<span class="sign">:</span> String<span class="sign">)</span> <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Name <span class="sign">/</span><span class="sign">=</span> <span class="quote">""</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetStepData"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -401,7 +405,7 @@
 
 <hr />
 <a name="Stories2fStories2eGetStoryLocation"></a>
-<a name="robo604"></a><h2>Stories/Stories.GetStoryLocation [ Subprograms ]</h2>
+<a name="robo599"></a><h2>Stories/Stories.GetStoryLocation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -409,7 +413,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> GetStoryLocation
-     <span class="sign">(</span>StoryX<span class="sign">:</span> <span class="keyword">out</span> Map_X_Range<span class="sign">;</span> StoryY<span class="sign">:</span> <span class="keyword">out</span> Map_Y_Range<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>StoryX<span class="sign">:</span> <span class="keyword">out</span> Map_X_Range<span class="sign">;</span>
+      StoryY<span class="sign">:</span> <span class="keyword">out</span> Map_Y_Range<span class="sign">)</span> <span class="keyword">with</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetStoryLocation"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -422,7 +427,7 @@
 
 <hr />
 <a name="Stories2fStories2eLoadStories"></a>
-<a name="robo605"></a><h2>Stories/Stories.LoadStories [ Subprograms ]</h2>
+<a name="robo600"></a><h2>Stories/Stories.LoadStories [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -437,7 +442,7 @@
 
 <hr />
 <a name="Stories2fStories2eProgressStory"></a>
-<a name="robo606"></a><h2>Stories/Stories.ProgressStory [ Subprograms ]</h2>
+<a name="robo601"></a><h2>Stories/Stories.ProgressStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -457,7 +462,7 @@
 
 <hr />
 <a name="Stories2fStories2eStartStory"></a>
-<a name="robo611"></a><h2>Stories/Stories.StartStory [ Subprograms ]</h2>
+<a name="robo606"></a><h2>Stories/Stories.StartStory [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo61">Stories</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -465,7 +470,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">procedure</span> StartStory
-     <span class="sign">(</span>FactionName<span class="sign">:</span> Unbounded_String<span class="sign">;</span> Condition<span class="sign">:</span> StartConditionType<span class="sign">)</span> <span class="keyword">with</span>
+     <span class="sign">(</span>FactionName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
+      Condition<span class="sign">:</span> StartConditionType<span class="sign">)</span> <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> FactionName <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_StartStory"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
@@ -476,7 +482,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/stories.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

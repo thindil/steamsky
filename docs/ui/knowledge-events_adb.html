@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -31,11 +31,9 @@
 <h3>TABLE OF CONTENTS</h3>
 <ul>
 <li>1. <a href="#robo307">KEvents/KEvents.EventsTable</a></li>
-<li>2. <a href="#robo492">KEvents/KEvents.Set_Event_Command</a></li>
-<li>3. <a href="#robo493">KEvents/KEvents.Show_Event_Command</a></li>
-<li>4. <a href="#robo494">KEvents/KEvents.Show_Events_Menu_Command</a></li>
-<li>5. <a href="#robo693">KEvents/KEvents.Show_Event_Info_Command</a></li>
-<li>6. <a href="#robo694">KEvents/KEvents.Show_Events_Command</a></li>
+<li>2. <a href="#robo490">KEvents/KEvents.Show_Events_Menu_Command</a></li>
+<li>3. <a href="#robo689">KEvents/KEvents.Show_Event_Info_Command</a></li>
+<li>4. <a href="#robo690">KEvents/KEvents.Show_Events_Command</a></li>
 </ul>
 <hr />
 <a name="KEvents2fKEvents2eEventsTable"></a>
@@ -50,64 +48,8 @@
 </pre>
 
 <hr />
-<a name="KEvents2fKEvents2eSet5fEvent5fCommand"></a>
-<a name="robo492"></a><h2>KEvents/KEvents.Set_Event_Command [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Set the selected event as the player's ship destination
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Set_Event_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> SetEvent2 eventidex
- EventIndex is the index of the event to show
-</pre>
-
-<hr />
-<a name="KEvents2fKEvents2eShow5fEvent5fCommand"></a>
-<a name="robo493"></a><h2>KEvents/KEvents.Show_Event_Command [ Subprograms ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show the selected event on map
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Event_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowEvent eventidex
- EventIndex is the index of the event to show
-</pre>
-
-<hr />
 <a name="KEvents2fKEvents2eShow5fEvents5fMenu5fCommand"></a>
-<a name="robo494"></a><h2>KEvents/KEvents.Show_Events_Menu_Command [ Subprograms ]</h2>
+<a name="robo490"></a><h2>KEvents/KEvents.Show_Events_Menu_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -135,7 +77,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eShow5fEvent5fInfo5fCommand"></a>
-<a name="robo693"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
+<a name="robo689"></a><h2>KEvents/KEvents.Show_Event_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -163,7 +105,7 @@
 
 <hr />
 <a name="KEvents2fKEvents2eShow5fEvents5fCommand"></a>
-<a name="robo694"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
+<a name="robo690"></a><h2>KEvents/KEvents.Show_Events_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./knowledge-events_ads.html#robo34">KEvents</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -191,7 +133,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/ui/knowledge-events.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>

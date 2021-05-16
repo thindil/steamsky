@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.0 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -36,8 +36,8 @@
 <li>1.2. <a href="#robo134">ShipModules/ShipModules.ModuleType</a></li>
 <li>1.3. <a href="#robo186">ShipModules/ShipModules.BaseModule_Data</a></li>
 <li>1.4. <a href="#robo334">ShipModules/ShipModules.Modules_List</a></li>
-<li>1.5. <a href="#robo569">ShipModules/ShipModules.GetModuleType</a></li>
-<li>1.6. <a href="#robo570">ShipModules/ShipModules.LoadShipModules</a></li>
+<li>1.5. <a href="#robo564">ShipModules/ShipModules.GetModuleType</a></li>
+<li>1.6. <a href="#robo565">ShipModules/ShipModules.LoadShipModules</a></li>
 </ul>
 </ul>
 <hr />
@@ -61,8 +61,11 @@
 <pre> Used for store prototypes of modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">package</span> BaseModules_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps<span class="sign">(</span>Unbounded_String<span class="sign">,</span>
-      BaseModule_Data<span class="sign">,</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">package</span> BaseModules_Container <span class="keyword">is</span> <span class="keyword">new</span> Hashed_Maps
+     <span class="sign">(</span>Unbounded_String<span class="sign">,</span>
+      BaseModule_Data<span class="sign">,</span>
+      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Unbounded<span class="sign">.</span>Hash<span class="sign">,</span>
+      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -75,9 +78,24 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> ModuleType <span class="keyword">is</span>
-     <span class="sign">(</span>ANY<span class="sign">,</span> ENGINE<span class="sign">,</span> CABIN<span class="sign">,</span> COCKPIT<span class="sign">,</span> TURRET<span class="sign">,</span> GUN<span class="sign">,</span> CARGO<span class="sign">,</span> HULL<span class="sign">,</span> ARMOR<span class="sign">,</span>
-      BATTERING_RAM<span class="sign">,</span> ALCHEMY_LAB<span class="sign">,</span> FURNACE<span class="sign">,</span> WATER_COLLECTOR<span class="sign">,</span> WORKSHOP<span class="sign">,</span>
-      GREENHOUSE<span class="sign">,</span> MEDICAL_ROOM<span class="sign">,</span> HARPOON_GUN<span class="sign">,</span> TRAINING_ROOM<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>ANY<span class="sign">,</span>
+      ENGINE<span class="sign">,</span>
+      CABIN<span class="sign">,</span>
+      COCKPIT<span class="sign">,</span>
+      TURRET<span class="sign">,</span>
+      GUN<span class="sign">,</span>
+      CARGO<span class="sign">,</span>
+      HULL<span class="sign">,</span>
+      ARMOR<span class="sign">,</span>
+      BATTERING_RAM<span class="sign">,</span>
+      ALCHEMY_LAB<span class="sign">,</span>
+      FURNACE<span class="sign">,</span>
+      WATER_COLLECTOR<span class="sign">,</span>
+      WORKSHOP<span class="sign">,</span>
+      GREENHOUSE<span class="sign">,</span>
+      MEDICAL_ROOM<span class="sign">,</span>
+      HARPOON_GUN<span class="sign">,</span>
+      TRAINING_ROOM<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -141,7 +159,7 @@
 
 <hr />
 <a name="ShipModules2fShipModules2eGetModuleType"></a>
-<a name="robo569"></a><h2>ShipModules/ShipModules.GetModuleType [ Subprograms ]</h2>
+<a name="robo564"></a><h2>ShipModules/ShipModules.GetModuleType [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo50">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -160,7 +178,7 @@
 
 <hr />
 <a name="ShipModules2fShipModules2eLoadShipModules"></a>
-<a name="robo570"></a><h2>ShipModules/ShipModules.LoadShipModules [ Subprograms ]</h2>
+<a name="robo565"></a><h2>ShipModules/ShipModules.LoadShipModules [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo50">ShipModules</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -175,7 +193,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Apr 18 2021 06:35:25
+<p>Generated from ./src/shipmodules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
 </p>
 </div> <!-- footer -->
 </body>
