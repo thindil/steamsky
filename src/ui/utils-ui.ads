@@ -63,13 +63,12 @@ package Utils.UI is
       -- Text        - Text of message to show
       -- ParentFrame - The parent frame of the message widget. Default is
       --               the game frame. Can be empty
-      -- Title       - The text show in the dialog header. Default is
-      --               "Message". Can be empty
+      -- Title       - The text show in the dialog header.
       -- SOURCE
    procedure ShowMessage
      (Text: String;
       ParentFrame: String := ".gameframe";
-      Title: String := "Message") with
+      Title: String) with
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 

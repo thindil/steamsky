@@ -147,7 +147,7 @@ package body Utils.UI is
    procedure ShowMessage
      (Text: String;
       ParentFrame: String := ".gameframe";
-      Title: String := "Message") is
+      Title: String) is
       MessageDialog: constant Ttk_Frame :=
         Create(ParentFrame & ".message", "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
