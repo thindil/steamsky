@@ -562,7 +562,7 @@ package body GameOptions is
          end if;
       end loop Set_Theme_Loop;
       Theme_Use(To_String(Game_Settings.Interface_Theme));
-      SetTheme;
+      Set_Theme;
       MapView := Get_Widget(".gameframe.paned.mapframe.map");
       if Tcl_GetVar(Interp, RootName & ".interface.rightbutton") = "1" then
          Game_Settings.Right_Button := True;

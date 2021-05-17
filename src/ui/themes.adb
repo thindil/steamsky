@@ -28,7 +28,7 @@ with Game; use Game;
 
 package body Themes is
 
-   procedure LoadThemes is
+   procedure Load_Themes is
       Directories, Files: Search_Type;
       FoundDirectory, FoundFile: Directory_Entry_Type;
       ConfigFile: File_Type;
@@ -259,9 +259,9 @@ package body Themes is
           (To_String(Game_Settings.Interface_Theme)) then
          Game_Settings.Interface_Theme := To_Unbounded_String("steamsky");
       end if;
-   end LoadThemes;
+   end Load_Themes;
 
-   procedure SetTheme is
+   procedure Set_Theme is
       Label: Ttk_Label;
       Button: Ttk_Button;
    begin
@@ -329,6 +329,6 @@ package body Themes is
             "-text {" & Encode("" & Themes_List(I).Move_Map_Right_Icon) & "}");
          <<End_Of_Set_Theme_Loop>>
       end loop Set_Theme_Loop;
-   end SetTheme;
+   end Set_Theme;
 
 end Themes;

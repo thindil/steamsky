@@ -130,18 +130,18 @@ package Themes is
    Themes_List: Themes_Container.Map;
    -- ****
 
-   -- ****f* Themes/Themes.LoadThemes
+   -- ****f* Themes/Themes.Load_Themes
    -- FUNCTION
    -- Load data for all themes
    -- SOURCE
-   procedure LoadThemes;
+   procedure Load_Themes;
    -- ****
 
-   -- ****f* Themes/Themes.SetTheme
+   -- ****f* Themes/Themes.Set_Theme
    -- FUNCTION
    -- Set values for the current theme
    -- SOURCE
-   procedure SetTheme;
+   procedure Set_Theme;
    -- ****
 
 end Themes;
