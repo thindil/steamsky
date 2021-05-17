@@ -280,7 +280,8 @@ package body Themes is
            (Label, "-text {" & Encode("" & Themes_List(I).No_Food_Icon) & "}");
          Label.Name := New_String(".gameframe.header.nodrink");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).No_Drinks_Icon) & "}");
+           (Label,
+            "-text {" & Encode("" & Themes_List(I).No_Drinks_Icon) & "}");
          Label.Name := New_String(".gameframe.header.overloaded");
          configure
            (Label,
@@ -290,7 +291,8 @@ package body Themes is
            (Label, "-text {" & Encode("" & Themes_List(I).Pilot_Icon) & "}");
          Label.Name := New_String(".gameframe.header.engineer");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Engineer_Icon) & "}");
+           (Label,
+            "-text {" & Encode("" & Themes_List(I).Engineer_Icon) & "}");
          Label.Name := New_String(".gameframe.header.gunner");
          configure
            (Label, "-text {" & Encode("" & Themes_List(I).Gunner_Icon) & "}");

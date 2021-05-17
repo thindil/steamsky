@@ -39,49 +39,33 @@ package body ShipModules is
       ModulesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(ModulesData, "module");
-      Load_Modules_Loop:
+      Load_Modules_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String,
-            MType => ENGINE,
-            Weight => 0,
-            Value => 0,
-            MaxValue => 0,
-            Durability => 0,
-            RepairMaterial => Null_Unbounded_String,
-            RepairSkill => 2,
-            Price => 0,
-            InstallTime => 60,
-            Unique => False,
-            Size => 1,
-            Description => Null_Unbounded_String,
-            MaxOwners => 1,
-            Speed => 4,
+           (Name => Null_Unbounded_String, MType => ENGINE, Weight => 0,
+            Value => 0, MaxValue => 0, Durability => 0,
+            RepairMaterial => Null_Unbounded_String, RepairSkill => 2,
+            Price => 0, InstallTime => 60, Unique => False, Size => 1,
+            Description => Null_Unbounded_String, MaxOwners => 1, Speed => 4,
             Reputation => -100);
          ModuleNode := Item(NodesList, I);
          ModuleIndex :=
            To_Unbounded_String(Get_Attribute(ModuleNode, "index"));
          Action :=
-           (if
-              Get_Attribute(ModuleNode, "action")'Length > 0
-            then
+           (if Get_Attribute(ModuleNode, "action")'Length > 0 then
               Data_Action'Value(Get_Attribute(ModuleNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BaseModules_Container.Contains
-                (Modules_List,
-                 ModuleIndex) then
+                (Modules_List, ModuleIndex) then
                raise Data_Loading_Error
-                 with "Can't " &
-                 To_Lower(Data_Action'Image(Action)) &
-                 " ship module '" &
-                 To_String(ModuleIndex) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                 " ship module '" & To_String(ModuleIndex) &
                  "', there is no ship module with that index.";
             end if;
          elsif BaseModules_Container.Contains(Modules_List, ModuleIndex) then
             raise Data_Loading_Error
-              with "Can't add ship module '" &
-              To_String(ModuleIndex) &
+              with "Can't add ship module '" & To_String(ModuleIndex) &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
@@ -116,7 +100,7 @@ package body ShipModules is
                TempRecord.RepairMaterial :=
                  To_Unbounded_String(Get_Attribute(ModuleNode, "material"));
                MaterialExists := False;
-               Check_Materials_Loop:
+               Check_Materials_Loop :
                for Material of Items_Types loop
                   if Material = TempRecord.RepairMaterial then
                      MaterialExists := True;
@@ -125,13 +109,10 @@ package body ShipModules is
                end loop Check_Materials_Loop;
                if not MaterialExists then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " ship module '" &
-                    To_String(ModuleIndex) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " ship module '" & To_String(ModuleIndex) &
                     "', there is no item type '" &
-                    Get_Attribute(ModuleNode, "material") &
-                    "'.";
+                    Get_Attribute(ModuleNode, "material") & "'.";
                end if;
             end if;
             if Get_Attribute(ModuleNode, "skill")'Length > 0 then
@@ -140,13 +121,10 @@ package body ShipModules is
                    (To_Unbounded_String(Get_Attribute(ModuleNode, "skill")));
                if SkillIndex = 0 then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " ship module '" &
-                    To_String(ModuleIndex) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " ship module '" & To_String(ModuleIndex) &
                     "', there is no skill named '" &
-                    Get_Attribute(ModuleNode, "skill") &
-                    "'.";
+                    Get_Attribute(ModuleNode, "skill") & "'.";
                end if;
                TempRecord.RepairSkill := SkillIndex;
             end if;
@@ -183,23 +161,18 @@ package body ShipModules is
             end if;
             if Action /= UPDATE then
                BaseModules_Container.Include
-                 (Modules_List,
-                  ModuleIndex,
-                  TempRecord);
+                 (Modules_List, ModuleIndex, TempRecord);
                Log_Message
-                 ("Module added: " & To_String(TempRecord.Name),
-                  EVERYTHING);
+                 ("Module added: " & To_String(TempRecord.Name), EVERYTHING);
             else
                Modules_List(ModuleIndex) := TempRecord;
                Log_Message
-                 ("Module updated: " & To_String(TempRecord.Name),
-                  EVERYTHING);
+                 ("Module updated: " & To_String(TempRecord.Name), EVERYTHING);
             end if;
          else
             BaseModules_Container.Exclude(Modules_List, ModuleIndex);
             Log_Message
-              ("Module removed: " & To_String(ModuleIndex),
-               EVERYTHING);
+              ("Module removed: " & To_String(ModuleIndex), EVERYTHING);
          end if;
       end loop Load_Modules_Loop;
    end LoadShipModules;
@@ -210,8 +183,7 @@ package body ShipModules is
           (To_Lower(ModuleType'Image(Modules_List(ModuleIndex).MType)));
    begin
       Replace_Element
-        (ModuleTypeName,
-         1,
+        (ModuleTypeName, 1,
          To_Upper(Ada.Strings.Unbounded.Element(ModuleTypeName, 1)));
       Translate(ModuleTypeName, To_Mapping("_", " "));
       return To_String(ModuleTypeName);

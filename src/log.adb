@@ -42,13 +42,11 @@ package body Log is
       end if;
       if Exists(Name => To_String(Source => Save_Directory) & "debug.log") then
          Open
-           (File => Log_File,
-            Mode => Append_File,
+           (File => Log_File, Mode => Append_File,
             Name => To_String(Source => Save_Directory) & "debug.log");
       else
          Create
-           (File => Log_File,
-            Mode => Append_File,
+           (File => Log_File, Mode => Append_File,
             Name => To_String(Source => Save_Directory) & "debug.log");
       end if;
       Log_Message
@@ -58,8 +56,7 @@ package body Log is
    end Start_Logging;
 
    procedure Log_Message
-     (Message: String;
-      Message_Type: Debug_Types;
+     (Message: String; Message_Type: Debug_Types;
       New_Line, Time_Stamp: Boolean := True) is
       use Ada.Calendar;
 
@@ -73,14 +70,10 @@ package body Log is
          return;
       end if;
       New_Message :=
-        (if
-           Time_Stamp
-         then
+        (if Time_Stamp then
            To_Unbounded_String
              (Source =>
-                "[" &
-                Ada.Calendar.Formatting.Image(Date => Clock) &
-                "]:" &
+                "[" & Ada.Calendar.Formatting.Image(Date => Clock) & "]:" &
                 Message)
          else To_Unbounded_String(Source => Message));
       if New_Line then

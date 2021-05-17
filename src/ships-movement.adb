@@ -46,7 +46,7 @@ package body Ships.Movement is
       -- ****
       HaveCockpit, HaveEngine, HavePilot, HaveEngineer: Boolean := False;
    begin
-      Find_Modules_Loop:
+      Find_Modules_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = COCKPIT and Module.Durability > 0 then
             HaveCockpit := True;
@@ -57,17 +57,19 @@ package body Ships.Movement is
          exit Find_Modules_Loop when HaveEngine and HaveCockpit;
       end loop Find_Modules_Loop;
       if not HaveEngine then
-         return "You don't have a working engine on your ship or all of the engines are destroyed.";
+         return
+           "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if not HaveCockpit then
-         return "You don't have a cockpit on your ship or the cockpit is destroyed.";
+         return
+           "You don't have a cockpit on your ship or the cockpit is destroyed.";
       end if;
       if Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-        (To_Unbounded_String("sentientships")) then
+          (To_Unbounded_String("sentientships")) then
          HavePilot := True;
          HaveEngineer := True;
       end if;
-      Find_Members_Loop:
+      Find_Members_Loop :
       for Member of PlayerShip.Crew loop
          if Member.Order = Pilot then
             HavePilot := True;
@@ -86,8 +88,7 @@ package body Ships.Movement is
    end HaveOrderRequirements;
 
    function MoveShip
-     (X, Y: Integer;
-      Message: in out Unbounded_String) return Natural is
+     (X, Y: Integer; Message: in out Unbounded_String) return Natural is
       NewX, NewY: Integer;
       TimePassed, FuelNeeded: Integer := 0;
       Speed: SpeedType;
@@ -97,7 +98,7 @@ package body Ships.Movement is
       begin
          MemberIndex := FindMember(Order);
          if MemberIndex = 0 then
-            Find_Member_Loop:
+            Find_Member_Loop :
             for Member of PlayerShip.Crew loop
                if Member.PreviousOrder = Order then
                   return True;
@@ -141,7 +142,7 @@ package body Ships.Movement is
               ").");
          return 0;
       end if;
-      Speed := (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+      Speed := (SpeedType(RealSpeed(PlayerShip)) / 1_000.0);
       if Speed < 0.5 then
          Message :=
            To_Unbounded_String
@@ -150,14 +151,13 @@ package body Ships.Movement is
       end if;
       NewX := PlayerShip.SkyX + X;
       NewY := PlayerShip.SkyY + Y;
-      if NewX < 1 or NewX > 1024 or NewY < 1 or NewY > 1024 then
+      if NewX < 1 or NewX > 1_024 or NewY < 1 or NewY > 1_024 then
          return 0;
       end if;
       PlayerShip.SkyX := NewX;
       PlayerShip.SkyY := NewY;
       UpdateCargo
-        (PlayerShip,
-         PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+        (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
          FuelNeeded);
       TimePassed := Integer(100.0 / Speed);
       if TimePassed > 0 then
@@ -183,15 +183,14 @@ package body Ships.Movement is
            FindItem(Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
          if FuelIndex = 0 then
             AddMessage
-              ("Ship falls from the sky due to a lack of fuel.",
-               OtherMessage,
+              ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
                RED);
             Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
             return 0;
          end if;
       end if;
       if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-        (To_Unbounded_String("sentientships")) then
+          (To_Unbounded_String("sentientships")) then
          if NeedRest(Pilot) then
             if not Game_Settings.Auto_Rest then
                return 6;
@@ -209,8 +208,7 @@ package body Ships.Movement is
    end MoveShip;
 
    function DockShip
-     (Docking: Boolean;
-      Escape: Boolean := False) return String is
+     (Docking: Boolean; Escape: Boolean := False) return String is
       BaseIndex: constant Extended_Base_Range :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       Message: Unbounded_String;
@@ -230,7 +228,7 @@ package body Ships.Movement is
             declare
                MemberIndex: Positive := 1;
             begin
-               Resign_Crew_Member_Loop:
+               Resign_Crew_Member_Loop :
                while MemberIndex <= PlayerShip.Crew.Last_Index loop
                   if PlayerShip.Crew(MemberIndex).ContractLength = 0 then
                      DeleteMember(MemberIndex, PlayerShip);
@@ -246,11 +244,10 @@ package body Ships.Movement is
                      DeleteMember(MemberIndex, PlayerShip);
                      SkyBases(BaseIndex).Population :=
                        SkyBases(BaseIndex).Population + 1;
-                     Drop_Morale_Loop:
+                     Drop_Morale_Loop :
                      for I in PlayerShip.Crew.Iterate loop
                         UpdateMorale
-                          (PlayerShip,
-                           Crew_Container.To_Index(I),
+                          (PlayerShip, Crew_Container.To_Index(I),
                            GetRandom(-5, -1));
                      end loop Drop_Morale_Loop;
                   else
@@ -266,8 +263,7 @@ package body Ships.Movement is
             end if;
          else
             AddMessage
-              ("Ship docked to base " &
-               To_String(SkyBases(BaseIndex).Name) &
+              ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name) &
                ".",
                OrderMessage);
          end if;
@@ -277,7 +273,7 @@ package body Ships.Movement is
          PlayerShip.Speed := Game_Settings.Undock_Speed;
          declare
             Speed: constant SpeedType :=
-              (SpeedType(RealSpeed(PlayerShip)) / 1000.0);
+              (SpeedType(RealSpeed(PlayerShip)) / 1_000.0);
          begin
             if Speed < 0.5 then
                return "You can't undock because your ship is overloaded.";
@@ -295,11 +291,11 @@ package body Ships.Movement is
                     FindMember(Talk);
                begin
                   if MoneyIndex2 = 0 then
-                     return "You can't undock from this base because you don't have any " &
-                       To_String(Money_Name) &
-                       " to pay for docking.";
+                     return
+                       "You can't undock from this base because you don't have any " &
+                       To_String(Money_Name) & " to pay for docking.";
                   end if;
-                  Count_Cost_Loop:
+                  Count_Cost_Loop :
                   for Module of PlayerShip.Modules loop
                      if Module.MType = HULL then
                         DockingCost := Module.MaxModules;
@@ -315,48 +311,43 @@ package body Ships.Movement is
                   end if;
                   CountPrice(DockingCost, TraderIndex);
                   if DockingCost > PlayerShip.Cargo(MoneyIndex2).Amount then
-                     return "You can't undock to this base because you don't have enough " &
-                       To_String(Money_Name) &
-                       " to pay for docking.";
+                     return
+                       "You can't undock to this base because you don't have enough " &
+                       To_String(Money_Name) & " to pay for docking.";
                   end if;
                   UpdateCargo
-                    (Ship => PlayerShip,
-                     CargoIndex => MoneyIndex2,
+                    (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                      Amount => (0 - DockingCost));
                   if TraderIndex > 0 then
                      GainExp(1, Talking_Skill, TraderIndex);
                   end if;
                   FuelIndex :=
                     FindItem
-                      (Inventory => PlayerShip.Cargo,
-                       ItemType => Fuel_Type);
+                      (Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
                   if FuelIndex = 0 then
-                     return "You can't undock from base because you don't have any fuel.";
+                     return
+                       "You can't undock from base because you don't have any fuel.";
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
-                     To_String(SkyBases(BaseIndex).Name) &
-                     ". You also paid" &
-                     Positive'Image(DockingCost) &
-                     " " &
-                     To_String(Money_Name) &
-                     " of docking fee.",
+                     To_String(SkyBases(BaseIndex).Name) & ". You also paid" &
+                     Positive'Image(DockingCost) & " " &
+                     To_String(Money_Name) & " of docking fee.",
                      OrderMessage);
                end;
             else
                declare
                   FuelIndex: constant Inventory_Container.Extended_Index :=
                     FindItem
-                      (Inventory => PlayerShip.Cargo,
-                       ItemType => Fuel_Type);
+                      (Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
                begin
                   if FuelIndex = 0 then
-                     return "You can't undock from base because you don't have any fuel.";
+                     return
+                       "You can't undock from base because you don't have any fuel.";
                   end if;
                   AddMessage
                     ("Ship undocked from base " &
-                     To_String(SkyBases(BaseIndex).Name) &
-                     ".",
+                     To_String(SkyBases(BaseIndex).Name) & ".",
                      OrderMessage);
                end;
             end if;
@@ -370,8 +361,7 @@ package body Ships.Movement is
                MessageText :=
                  To_Unbounded_String
                    ("Ship escaped from base " &
-                    To_String(SkyBases(BaseIndex).Name) &
-                    " without paying.");
+                    To_String(SkyBases(BaseIndex).Name) & " without paying.");
                case Roll is
                   when 1 .. 40 =>
                      ModuleIndex :=
@@ -385,9 +375,7 @@ package body Ships.Movement is
                         ") takes damage.");
                      Color := RED;
                      DamageModule
-                       (PlayerShip,
-                        ModuleIndex,
-                        GetRandom(1, 30),
+                       (PlayerShip, ModuleIndex, GetRandom(1, 30),
                         "damage during escaping from the base");
                   when others =>
                      null;
@@ -410,7 +398,7 @@ package body Ships.Movement is
    function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
       HaveEngine: Boolean := False;
    begin
-      Find_Engine_Loop:
+      Find_Engine_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE
            and then (Module.Durability > 0 and not Module.Disabled) then
@@ -419,11 +407,12 @@ package body Ships.Movement is
          end if;
       end loop Find_Engine_Loop;
       if not HaveEngine then
-         return "You don't have a working engine on your ship or all of the engines are destroyed.";
+         return
+           "You don't have a working engine on your ship or all of the engines are destroyed.";
       end if;
       if FindMember(Engineer) = 0 and
         not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-        (To_Unbounded_String("sentientships")) then
+          (To_Unbounded_String("sentientships")) then
          return "You don't have an engineer on duty.";
       end if;
       PlayerShip.Speed := SpeedValue;
@@ -431,8 +420,7 @@ package body Ships.Movement is
    end ChangeShipSpeed;
 
    function RealSpeed
-     (Ship: ShipRecord;
-      InfoOnly: Boolean := False) return Natural is
+     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       Message: Unbounded_String;
       ShipSetSpeed: ShipSpeed;
@@ -446,7 +434,7 @@ package body Ships.Movement is
       declare
          Damage: Damage_Factor := 0.0;
       begin
-         Find_Engine_Loop:
+         Find_Engine_Loop :
          for Module of Ship.Modules loop
             if Module.MType = ENGINE and then not Module.Disabled then
                BaseSpeed := Module.Power * 10;
@@ -461,11 +449,11 @@ package body Ships.Movement is
          end loop Find_Engine_Loop;
       end;
       Speed :=
-        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100000.0);
+        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100_000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
-           (To_Unbounded_String("sentientships")) then
-            Sentinent_Ship_Speed_Loop:
+             (To_Unbounded_String("sentientships")) then
+            Sentinent_Ship_Speed_Loop :
             for I in Ship.Crew.Iterate loop
                if Ship.Crew(I).Order = Pilot then
                   Speed :=
@@ -484,7 +472,7 @@ package body Ships.Movement is
                end if;
             end loop Sentinent_Ship_Speed_Loop;
          else
-            Normal_Ship_Speed_Loop:
+            Normal_Ship_Speed_Loop :
             for Module of Ship.Modules loop
                if Module.MType = HULL then
                   Speed :=
@@ -496,8 +484,7 @@ package body Ships.Movement is
             end loop Normal_Ship_Speed_Loop;
          end if;
       end if;
-      if Ship = PlayerShip and
-        (Ship.Speed in DOCKED | FULL_STOP) and
+      if Ship = PlayerShip and (Ship.Speed in DOCKED | FULL_STOP) and
         InfoOnly then
          ShipSetSpeed := Game_Settings.Undock_Speed;
          if ShipSetSpeed = FULL_STOP then
@@ -527,7 +514,7 @@ package body Ships.Movement is
       if Speed in DOCKED | FULL_STOP then
          Speed := Game_Settings.Undock_Speed;
       end if;
-      Count_Fuel_Needed_Loop:
+      Count_Fuel_Needed_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE and then not Module.Disabled then
             case Speed is
@@ -552,7 +539,7 @@ package body Ships.Movement is
       if PlayerShip.Speed = DOCKED then
          return;
       end if;
-      Needed_Fuel_Loop:
+      Needed_Fuel_Loop :
       for Module of PlayerShip.Modules loop
          if Module.MType = ENGINE and then not Module.Disabled then
             BaseFuelNeeded := BaseFuelNeeded - 1;
@@ -566,23 +553,20 @@ package body Ships.Movement is
         FindItem(Inventory => PlayerShip.Cargo, ItemType => Fuel_Type);
       if FuelIndex = 0 then
          AddMessage
-           ("Ship falls from the sky due to a lack of fuel.",
-            OtherMessage,
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
             RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
       if PlayerShip.Cargo(FuelIndex).Amount <= abs (FuelNeeded) then
          AddMessage
-           ("Ship falls from the sky due to a lack of fuel.",
-            OtherMessage,
+           ("Ship falls from the sky due to a lack of fuel.", OtherMessage,
             RED);
          Death(1, To_Unbounded_String("fall of the ship"), PlayerShip);
          return;
       end if;
       UpdateCargo
-        (PlayerShip,
-         PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
+        (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
          FuelNeeded);
    end WaitInPlace;
 

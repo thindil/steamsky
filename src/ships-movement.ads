@@ -34,8 +34,7 @@ package Ships.Movement is
    -- Message
    -- SOURCE
    function MoveShip
-     (X, Y: Integer;
-      Message: in out Unbounded_String) return Natural with
+     (X, Y: Integer; Message: in out Unbounded_String) return Natural with
       Test_Case => (Name => "Test_MoveShip", Mode => Robustness);
       -- ****
 
@@ -51,8 +50,7 @@ package Ships.Movement is
       -- wrong
       -- SOURCE
    function DockShip
-     (Docking: Boolean;
-      Escape: Boolean := False) return String with
+     (Docking: Boolean; Escape: Boolean := False) return String with
       Test_Case => (Name => "Test_DockShip", Mode => Robustness);
       -- ****
 
@@ -79,8 +77,7 @@ package Ships.Movement is
       -- Empty string if ship can move, otherwise message why it can't
       -- SOURCE
    function RealSpeed
-     (Ship: ShipRecord;
-      InfoOnly: Boolean := False) return Natural with
+     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural with
       Test_Case => (Name => "Test_RealSpeed", Mode => Robustness);
       -- ****
 

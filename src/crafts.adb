@@ -54,7 +54,7 @@ package body Crafts is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (MaterialTypes => TempMaterials, MaterialAmounts => TempAmount,
-            ResultIndex => Null_Unbounded_String, ResultAmount => 10000,
+            ResultIndex => Null_Unbounded_String, ResultAmount => 10_000,
             Workplace => ALCHEMY_LAB, Skill => 1, Time => 15, Difficulty => 1,
             Tool => To_Unbounded_String("None"), Reputation => -100,
             ToolQuality => 100);

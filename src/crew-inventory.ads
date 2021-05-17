@@ -39,8 +39,7 @@ package Crew.Inventory is
    -- Price          - Price of the item
    -- SOURCE
    procedure UpdateInventory
-     (MemberIndex: Positive;
-      Amount: Integer;
+     (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) with
@@ -61,8 +60,7 @@ package Crew.Inventory is
       -- Amount of available space in kilograms
       -- SOURCE
    function FreeInventory
-     (MemberIndex: Positive;
-      Amount: Integer) return Integer with
+     (MemberIndex: Positive; Amount: Integer) return Integer with
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index,
       Test_Case => (Name => "Test_FreeInventory", Mode => Nominal);
       -- ****
@@ -110,9 +108,7 @@ package Crew.Inventory is
       -- found
       -- SOURCE
    function FindTools
-     (MemberIndex: Positive;
-      ItemType: Unbounded_String;
-      Order: Crew_Orders;
+     (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural with
       Pre =>
       (MemberIndex <= PlayerShip.Crew.Last_Index and

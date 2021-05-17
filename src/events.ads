@@ -31,16 +31,8 @@ package Events is
    -- Types of events
    -- SOURCE
    type Events_Types is
-     (None,
-      EnemyShip,
-      AttackOnBase,
-      Disease,
-      DoublePrice,
-      BaseRecovery,
-      FullDocks,
-      EnemyPatrol,
-      Trader,
-      FriendlyShip);
+     (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
+      FullDocks, EnemyPatrol, Trader, FriendlyShip);
    -- ****
 
    -- ****s* Events/Events.EventData

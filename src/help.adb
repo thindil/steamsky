@@ -36,15 +36,13 @@ package body Help is
       HelpData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(HelpData, "entry");
-      Load_Help_Data:
+      Load_Help_Data :
       for I in 0 .. Length(NodesList) - 1 loop
          TmpHelp :=
            (Index => Null_Unbounded_String, Text => Null_Unbounded_String);
          HelpNode := Item(NodesList, I);
          Action :=
-           (if
-              Get_Attribute(HelpNode, "action")'Length > 0
-            then
+           (if Get_Attribute(HelpNode, "action")'Length > 0 then
               Data_Action'Value(Get_Attribute(HelpNode, "action"))
             else ADD);
          HelpIndex := To_Unbounded_String(Get_Attribute(HelpNode, "index"));
@@ -52,16 +50,13 @@ package body Help is
          if Action in UPDATE | REMOVE then
             if not Help_Container.Contains(Help_List, HelpTitle) then
                raise Data_Loading_Error
-                 with "Can't " &
-                 To_Lower(Data_Action'Image(Action)) &
-                 " help '" &
-                 To_String(HelpTitle) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                 " help '" & To_String(HelpTitle) &
                  "', there no help with that title.";
             end if;
          elsif Help_Container.Contains(Help_List, HelpTitle) then
             raise Data_Loading_Error
-              with "Can't add help '" &
-              To_String(HelpTitle) &
+              with "Can't add help '" & To_String(HelpTitle) &
               "', there is one with that title.";
          end if;
          if Action /= REMOVE then

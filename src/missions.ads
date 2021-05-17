@@ -157,8 +157,7 @@ package Missions is
       -- Failed       - If true, it is failed mission. Default is true.
       -- SOURCE
    procedure DeleteMission
-     (MissionIndex: Positive;
-      Failed: Boolean := True) with
+     (MissionIndex: Positive; Failed: Boolean := True) with
       Pre => MissionIndex <= AcceptedMissions.Last_Index,
       Test_Case => (Name => "Test_DeleteMission", Mode => Nominal);
       -- ****

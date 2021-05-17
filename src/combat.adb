@@ -140,7 +140,7 @@ package body Combat is
             ItemAmount :=
               (if EnemyShip.Crew.Length < 5 then GetRandom(1, 100)
                elsif EnemyShip.Crew.Length < 10 then GetRandom(1, 500)
-               else GetRandom(1, 1000));
+               else GetRandom(1, 1_000));
             CargoItemIndex := FindItem(EnemyShip.Cargo, NewItemIndex);
             if CargoItemIndex > 0 then
                EnemyShip.Cargo(CargoItemIndex).Amount :=
@@ -184,7 +184,7 @@ package body Combat is
          end if;
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
-        (Ship => EnemyShip, Accuracy => 0, Distance => 10000,
+        (Ship => EnemyShip, Accuracy => 0, Distance => 10_000,
          CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
          Loot => 0, Perception => 0, HarpoonDuration => 0, Guns => EnemyGuns);
       Enemy.Accuracy :=
@@ -292,7 +292,7 @@ package body Combat is
       DistanceTraveled, SpeedBonus: Integer;
       ShootMessage, Message: Unbounded_String;
       EnemyPilotOrder: Positive := 2;
-      DamageRange: Positive := 10000;
+      DamageRange: Positive := 10_000;
       FreeSpace: Integer := 0;
       procedure Attack(Ship, EnemyShip: in out ShipRecord) is
          GunnerIndex: Crew_Container.Extended_Index;
@@ -499,12 +499,12 @@ package body Combat is
                elsif Ship.Cargo(AmmoIndex).Amount < Shoots then
                   Shoots := Ship.Cargo(AmmoIndex).Amount;
                end if;
-               if Enemy.Distance > 5000 then
+               if Enemy.Distance > 5_000 then
                   Shoots := 0;
                end if;
                if Ship.Modules(K).MType = HARPOON_GUN and Shoots > 0 then
                   Shoots := 1;
-                  if Enemy.Distance > 2000 then
+                  if Enemy.Distance > 2_000 then
                      Shoots := 0;
                   end if;
                   if FindEnemyModule(ARMOR) > 0 then
@@ -656,8 +656,9 @@ package body Combat is
                           (if SpeedBonus < 0 then
                              WeaponDamage +
                              (abs (SpeedBonus) *
-                              (CountShipWeight(Ship) / 5000))
-                           else WeaponDamage + (CountShipWeight(Ship) / 5000));
+                              (CountShipWeight(Ship) / 5_000))
+                           else WeaponDamage +
+                             (CountShipWeight(Ship) / 5_000));
                      end if;
                      if WeaponDamage = 0 then
                         WeaponDamage := 1;
@@ -1231,10 +1232,10 @@ package body Combat is
             goto End_Of_Enemy_Weapon_Loop;
          end if;
          if Enemy.Ship.Modules(I).MType in GUN | HARPOON_GUN then
-            if Enemy.Ship.Modules(I).MType = GUN and DamageRange > 5000 then
-               DamageRange := 5000;
-            elsif DamageRange > 2000 then
-               DamageRange := 2000;
+            if Enemy.Ship.Modules(I).MType = GUN and DamageRange > 5_000 then
+               DamageRange := 5_000;
+            elsif DamageRange > 2_000 then
+               DamageRange := 2_000;
             end if;
             AmmoIndex2 :=
               (if Enemy.Ship.Modules(I).MType = GUN then
@@ -1314,7 +1315,7 @@ package body Combat is
                EnemyPilotOrder := 2;
             end if;
          when COWARD =>
-            if Enemy.Distance < 15000 and Enemy.Ship.Speed /= FULL_SPEED then
+            if Enemy.Distance < 15_000 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
                  ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
                AddMessage
@@ -1381,7 +1382,7 @@ package body Combat is
       if Enemy.Distance < 10 then
          Enemy.Distance := 10;
       end if;
-      if Enemy.Distance >= 15000 then
+      if Enemy.Distance >= 15_000 then
          if PilotOrder = 4 then
             AddMessage
               ("You escaped the " & To_String(EnemyName) & ".", CombatMessage);
@@ -1399,14 +1400,14 @@ package body Combat is
          end loop Kill_Boarding_Party_Loop;
          EndCombat := True;
          return;
-      elsif Enemy.Distance < 15000 and Enemy.Distance >= 10000 then
+      elsif Enemy.Distance < 15_000 and Enemy.Distance >= 10_000 then
          AccuracyBonus := AccuracyBonus - 10;
          EvadeBonus := EvadeBonus + 10;
          Log_Message("Distance: long", Log.COMBAT);
-      elsif Enemy.Distance < 5000 and Enemy.Distance >= 1000 then
+      elsif Enemy.Distance < 5_000 and Enemy.Distance >= 1_000 then
          AccuracyBonus := AccuracyBonus + 10;
          Log_Message("Distance: medium", Log.COMBAT);
-      elsif Enemy.Distance < 1000 then
+      elsif Enemy.Distance < 1_000 then
          AccuracyBonus := AccuracyBonus + 20;
          EvadeBonus := EvadeBonus - 10;
          Log_Message("Distance: short or close", Log.COMBAT);

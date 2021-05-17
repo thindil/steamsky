@@ -79,64 +79,40 @@ package body Maps.UI is
    begin
       Delete(GameMenu, "0", "end");
       Menu.Add
-        (GameMenu,
-         "command",
+        (GameMenu, "command",
          "-label {Ship information} -command ShowShipInfo");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Ship orders} -command ShowOrders");
+        (GameMenu, "command", "-label {Ship orders} -command ShowOrders");
       Menu.Add(GameMenu, "command", "-label {Crafting} -command ShowCrafting");
       Menu.Add
-        (GameMenu,
-         "command",
+        (GameMenu, "command",
          "-label {Last messages} -command ShowLastMessages");
       Menu.Add
-        (GameMenu,
-         "command",
+        (GameMenu, "command",
          "-label {Knowledge lists} -command ShowKnowledge");
       Menu.Add(GameMenu, "command", "-label {Wait orders} -command ShowWait");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Game statistics} -command ShowStats");
+        (GameMenu, "command", "-label {Game statistics} -command ShowStats");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Help} -command {ShowHelp general}");
+        (GameMenu, "command", "-label {Help} -command {ShowHelp general}");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Game options} -command ShowOptions");
+        (GameMenu, "command", "-label {Game options} -command ShowOptions");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Quit from game} -command QuitGame");
+        (GameMenu, "command", "-label {Quit from game} -command QuitGame");
       Menu.Add
-        (GameMenu,
-         "command",
-         "-label {Resign from game} -command ResignGame");
-      Set_Accelerators_Loop:
+        (GameMenu, "command", "-label {Resign from game} -command ResignGame");
+      Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Entry_Configure
-           (GameMenu,
-            Natural'Image(I - 1),
+           (GameMenu, Natural'Image(I - 1),
             "-accelerator {" & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
    end CreateGameMenu;
 
    procedure UpdateHeader is
       HaveWorker, HaveGunner: Boolean := True;
-      NeedCleaning,
-      NeedRepairs,
-      NeedWorker,
-      HavePilot,
-      HaveEngineer,
-      HaveTrader,
-      HaveUpgrader,
-      HaveCleaner,
-      HaveRepairman: Boolean :=
-        False;
+      NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
+      HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
       Label: Ttk_Label := Get_Widget(".gameframe.header.time");
       Frame: constant Ttk_Frame := Get_Widget(".gameframe.paned.combat");
@@ -145,11 +121,8 @@ package body Maps.UI is
       if Game_Settings.Show_Numbers then
          configure
            (Label,
-            "-text {" &
-            FormatedTime &
-            " Speed:" &
-            Natural'Image((RealSpeed(PlayerShip) * 60) / 1000) &
-            " km/h}");
+            "-text {" & FormatedTime & " Speed:" &
+            Natural'Image((RealSpeed(PlayerShip) * 60) / 1_000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;
       Label.Name := New_String(".gameframe.header.nofuel");
@@ -165,8 +138,7 @@ package body Maps.UI is
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of fuel on ship. Only" &
-            Natural'Image(ItemAmount) &
+            "Low level of fuel on ship. Only" & Natural'Image(ItemAmount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
@@ -183,8 +155,7 @@ package body Maps.UI is
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of drinks on ship. Only" &
-            Natural'Image(ItemAmount) &
+            "Low level of drinks on ship. Only" & Natural'Image(ItemAmount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
@@ -201,8 +172,7 @@ package body Maps.UI is
          configure(Label, "-style TLabel");
          Add
            (Label,
-            "Low level of food on ship. Only" &
-            Natural'Image(ItemAmount) &
+            "Low level of food on ship. Only" & Natural'Image(ItemAmount) &
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
@@ -229,17 +199,15 @@ package body Maps.UI is
       if HavePilot and
         (HaveEngineer or
          Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-         (To_Unbounded_String("sentientships"))) and
+           (To_Unbounded_String("sentientships"))) and
         (Winfo_Get(Frame, "exists") = "0"
          or else (Winfo_Get(Frame, "ismapped") = "0")) then
          declare
             type SpeedType is digits 2;
             Speed: constant SpeedType :=
-              (if
-                 PlayerShip.Speed /= DOCKED
-               then
-                 (SpeedType(RealSpeed(PlayerShip)) / 1000.0)
-               else (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0));
+              (if PlayerShip.Speed /= DOCKED then
+                 (SpeedType(RealSpeed(PlayerShip)) / 1_000.0)
+               else (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0));
          begin
             if Speed < 0.5 then
                configure(Label, "-style Headerred.TLabel");
@@ -249,7 +217,7 @@ package body Maps.UI is
             end if;
          end;
       end if;
-      Check_Workers_Loop:
+      Check_Workers_Loop :
       for Module of PlayerShip.Modules loop
          case Modules_List(Module.ProtoIndex).MType is
             when GUN | HARPOON_GUN =>
@@ -261,7 +229,7 @@ package body Maps.UI is
             when ALCHEMY_LAB .. GREENHOUSE =>
                if Module.CraftingIndex /= Null_Unbounded_String then
                   NeedWorker := True;
-                  Check_Owners_Loop:
+                  Check_Owners_Loop :
                   for Owner of Module.Owner loop
                      if Owner = 0 then
                         HaveWorker := False;
@@ -287,7 +255,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-           (To_Unbounded_String("sentientships")) then
+             (To_Unbounded_String("sentientships")) then
             configure(Label, "-style Headerred.TLabel");
             Add(Label, "No pilot assigned. Ship can't move.");
          else
@@ -301,7 +269,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
          if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-           (To_Unbounded_String("sentientships")) then
+             (To_Unbounded_String("sentientships")) then
             configure(Label, "-style Headerred.TLabel");
             Add(Label, "No engineer assigned. Ship can't move.");
          else
@@ -433,13 +401,13 @@ package body Maps.UI is
          StartX := 1;
          EndX := MapWidth;
       end if;
-      if EndY > 1024 then
-         EndY := 1024;
-         StartY := 1025 - MapHeight;
+      if EndY > 1_024 then
+         EndY := 1_024;
+         StartY := 1_025 - MapHeight;
       end if;
-      if EndX > 1024 then
-         EndX := 1024;
-         StartX := 1025 - MapWidth;
+      if EndX > 1_024 then
+         EndX := 1_024;
+         StartX := 1_025 - MapWidth;
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          GetStoryLocation(StoryX, StoryY);
@@ -452,7 +420,7 @@ package body Maps.UI is
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex = 0 then
          PlayerShip.Speed := Ships.FULL_STOP;
       end if;
-      Draw_Map_Loop:
+      Draw_Map_Loop :
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             MapTag := Null_Unbounded_String;
@@ -547,8 +515,7 @@ package body Maps.UI is
                end if;
             end if;
             Insert
-              (MapView,
-               "end",
+              (MapView, "end",
                Encode("" & MapChar) & " [list " & To_String(MapTag) & "]");
          end loop;
          if Y < EndY then
@@ -559,8 +526,7 @@ package body Maps.UI is
    end DrawMap;
 
    procedure UpdateMapInfo
-     (X: Positive := PlayerShip.SkyX;
-      Y: Positive := PlayerShip.SkyY) is
+     (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
       MapInfoText, EventInfoText: Unbounded_String;
       MapInfo: constant Ttk_Label :=
         Get_Widget(".gameframe.paned.mapframe.info.info");
@@ -568,8 +534,7 @@ package body Maps.UI is
         Get_Widget(".gameframe.paned.mapframe.info.eventinfo");
    begin
       Append
-        (MapInfoText,
-         "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
+        (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
       if PlayerShip.SkyX /= X or PlayerShip.SkyY /= Y then
          declare
             Distance: constant Positive := CountDistance(X, Y);
@@ -611,10 +576,8 @@ package body Maps.UI is
                end if;
                Append
                  (MapInfoText,
-                  LF &
-                  "Size: " &
-                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)) &
-                  LF);
+                  LF & "Size: " &
+                  To_Lower(Bases_Size'Image(SkyBases(BaseIndex).Size)) & LF);
                if SkyBases(BaseIndex).Population > 0 then
                   Append
                     (MapInfoText,
@@ -685,20 +648,16 @@ package body Maps.UI is
                when None | BaseRecovery =>
                   null;
             end case;
-            if Events_List(EventIndex).EType in
-                DoublePrice |
-                  FriendlyShip |
+            if Events_List(EventIndex).EType in DoublePrice | FriendlyShip |
                   Trader then
                configure
                  (EventInfo,
-                  "-text {" &
-                  To_String(EventInfoText) &
+                  "-text {" & To_String(EventInfoText) &
                   "} -style MapInfoGreen.TLabel");
             else
                configure
                  (EventInfo,
-                  "-text {" &
-                  To_String(EventInfoText) &
+                  "-text {" & To_String(EventInfoText) &
                   "} -style MapInfoRed.TLabel");
             end if;
          end;
@@ -749,19 +708,14 @@ package body Maps.UI is
             end if;
             if X = StoryX and Y = StoryY then
                FinishCondition :=
-                 (if
-                    CurrentStory.CurrentStep = 0
-                  then
+                 (if CurrentStory.CurrentStep = 0 then
                     Stories_List(CurrentStory.Index).StartingStep
                       .FinishCondition
-                  elsif
-                    CurrentStory.CurrentStep > 0
-                  then
+                  elsif CurrentStory.CurrentStep > 0 then
                     Stories_List(CurrentStory.Index).Steps
                       (CurrentStory.CurrentStep)
                       .FinishCondition
-                  else
-                    Stories_List(CurrentStory.Index).FinalStep
+                  else Stories_List(CurrentStory.Index).FinalStep
                       .FinishCondition);
                if FinishCondition in ASKINBASE | DESTROYSHIP | EXPLORE then
                   Append(MapInfoText, LF & "Story leads you here");
@@ -782,14 +736,10 @@ package body Maps.UI is
 
    procedure UpdateMoveButtons is
       MoveButtonsNames: constant array(1 .. 8) of Unbounded_String :=
-        (To_Unbounded_String("nw"),
-         To_Unbounded_String("n"),
-         To_Unbounded_String("ne"),
-         To_Unbounded_String("w"),
-         To_Unbounded_String("e"),
-         To_Unbounded_String("sw"),
-         To_Unbounded_String("s"),
-         To_Unbounded_String("se"));
+        (To_Unbounded_String("nw"), To_Unbounded_String("n"),
+         To_Unbounded_String("ne"), To_Unbounded_String("w"),
+         To_Unbounded_String("e"), To_Unbounded_String("sw"),
+         To_Unbounded_String("s"), To_Unbounded_String("se"));
       MoveButtonsTooltips: constant array(1 .. 8) of Unbounded_String :=
         (To_Unbounded_String("Move ship north and west"),
          To_Unbounded_String("Move ship north"),
@@ -811,7 +761,7 @@ package body Maps.UI is
          Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
          configure(Button, "-text Wait");
          Add(Button, "Wait 1 minute.");
-         Disable_Move_Buttons_Loop:
+         Disable_Move_Buttons_Loop :
          for ButtonName of MoveButtonsNames loop
             Button.Name :=
               New_String
@@ -844,7 +794,7 @@ package body Maps.UI is
             configure(Button, "-text Wait");
             Add(Button, "Wait 1 minute.");
          end if;
-         Enable_Move_Buttons_Loop:
+         Enable_Move_Buttons_Loop :
          for I in MoveButtonsNames'Range loop
             Button.Name :=
               New_String
@@ -876,11 +826,11 @@ package body Maps.UI is
             KeysFile: File_Type;
          begin
             Open(KeysFile, In_File, To_String(Save_Directory) & "keys.cfg");
-            Set_Menu_Accelerators_Loop:
+            Set_Menu_Accelerators_Loop :
             for Key of MenuAccelerators loop
                Key := To_Unbounded_String(Get_Line(KeysFile));
             end loop Set_Menu_Accelerators_Loop;
-            Set_Map_Accelerators_Loop:
+            Set_Map_Accelerators_Loop :
             for Key of MapAccelerators loop
                Key := To_Unbounded_String(Get_Line(KeysFile));
             end loop Set_Map_Accelerators_Loop;
@@ -922,8 +872,7 @@ package body Maps.UI is
             Bind(MapView, "<Button-1>", "{ShowDestinationMenu %X %Y}");
          end if;
          Bind
-           (MapView,
-            "<MouseWheel>",
+           (MapView, "<MouseWheel>",
             "{if {%D > 0}{ZoomMap raise}else{ZoomMap lower}}");
          Bind(MapView, "<Button-4>", "{ZoomMap raise}");
          Bind(MapView, "<Button-5>", "{ZoomMap lower}");
@@ -939,11 +888,10 @@ package body Maps.UI is
          Wm_Set(Get_Main_Window(Get_Context), "attributes", "-fullscreen 1");
       end if;
       CreateGameMenu;
-      Set_Accelerators_Loop:
+      Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
-           (Get_Context,
-            "<" & To_String(MenuAccelerators(I)) & ">",
+           (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
       if Index
@@ -955,18 +903,15 @@ package body Maps.UI is
       UpdateHeader;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;
-      Set_Tags_Loop:
+      Set_Tags_Loop :
       for I in BasesTypes_List.Iterate loop
          Tag_Configure
-           (MapView,
-            To_String(BasesTypes_Container.Key(I)),
+           (MapView, To_String(BasesTypes_Container.Key(I)),
             "-foreground #" & BasesTypes_List(I).Color);
       end loop Set_Tags_Loop;
       PanedPosition :=
-        (if
-           Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
-         then
-           Game_Settings.Window_Height
+        (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
+         then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
       SashPos(Paned, "0", Natural'Image(PanedPosition));
       if Index
@@ -979,8 +924,7 @@ package body Maps.UI is
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
-        (Get_Context,
-         "<Escape>",
+        (Get_Context, "<Escape>",
          "{InvokeButton .gameframe.header.closebutton}");
       UpdateMessages;
       UpdateMoveButtons;
@@ -1020,164 +964,125 @@ package body Maps.UI is
    procedure SetKeys is
    begin
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(1)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
          "{if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {tk_popup " &
-         Widget_Image(GameMenu) &
-         " %X %Y}}");
+         Widget_Image(GameMenu) & " %X %Y}}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(2)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
          "{.gameframe.paned.mapframe.buttons.wait invoke}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(3)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(3)) & ">",
          "{ZoomMap raise}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(4)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(4)) & ">",
          "{ZoomMap lower}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(5)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(5)) & ">",
          "{InvokeButton $bframe.nw}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(6)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(6)) & ">",
          "{InvokeButton $bframe.n}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(7)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(7)) & ">",
          "{InvokeButton $bframe.ne}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(8)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(8)) & ">",
          "{InvokeButton $bframe.w}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(9)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(9)) & ">",
          "{InvokeButton $bframe.wait}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(10)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(10)) & ">",
          "{InvokeButton $bframe.e}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(11)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(11)) & ">",
          "{InvokeButton $bframe.sw}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(12)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(12)) & ">",
          "{InvokeButton $bframe.s}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(13)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(13)) & ">",
          "{InvokeButton $bframe.se}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(14)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(14)) & ">",
          "{InvokeButton $bframe.moveto}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(15)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(15)) & ">",
          "{MoveMap centeronship}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(16)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(16)) & ">",
          "{MoveMap centeronhome}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(17)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(17)) & ">",
          "{MoveMap nw}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(18)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(18)) & ">",
          "{MoveMap n}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(19)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(19)) & ">",
          "{MoveMap ne}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(20)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(20)) & ">",
          "{MoveMap w}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(21)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(21)) & ">",
          "{MoveMap e}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(22)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(22)) & ">",
          "{MoveMap sw}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(23)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(23)) & ">",
          "{MoveMap s}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(24)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(24)) & ">",
          "{MoveMap se}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(25)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(25)) & ">",
          "{MoveCursor nw %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(26)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(26)) & ">",
          "{MoveCursor n %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(27)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(27)) & ">",
          "{MoveCursor ne %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(28)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(28)) & ">",
          "{MoveCursor w %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(29)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(29)) & ">",
          "{MoveCursor e %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(30)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(30)) & ">",
          "{MoveCursor sw %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(31)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(31)) & ">",
          "{MoveCursor s %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(32)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(32)) & ">",
          "{MoveCursor se %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(33)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(33)) & ">",
          "{MoveCursor click %x %y}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(34)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(34)) & ">",
          "{.gameframe.paned.controls.buttons.speed current 0}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(35)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(35)) & ">",
          "{.gameframe.paned.controls.buttons.speed current 1}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(36)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(36)) & ">",
          "{.gameframe.paned.controls.buttons.speed current 2}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(MapAccelerators(37)) & ">",
+        (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
          "{.gameframe.paned.controls.buttons.speed current 3}");
       Bind_To_Main_Window
-        (Get_Context,
-         "<" & To_String(FullScreenAccel) & ">",
+        (Get_Context, "<" & To_String(FullScreenAccel) & ">",
          "{ToggleFullScreen}");
    end SetKeys;
 
    procedure FinishStory is
    begin
-      GameStats.Points := GameStats.Points + (10000 * CurrentStory.MaxSteps);
+      GameStats.Points := GameStats.Points + (10_000 * CurrentStory.MaxSteps);
       ClearCurrentStory;
       ShowQuestion
         (To_String(Stories_List(CurrentStory.Index).EndText) &

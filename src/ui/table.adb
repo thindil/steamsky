@@ -32,8 +32,7 @@ with Config; use Config;
 package body Table is
 
    function CreateTable
-     (Parent: String;
-      Headers: Headers_Array;
+     (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
@@ -55,10 +54,8 @@ package body Table is
          Canvas :=
            Create
              (Parent & ".table",
-              "-yscrollcommand [list " &
-              Parent &
-              ".scrolly set] -xscrollcommand [list " &
-              Parent &
+              "-yscrollcommand [list " & Parent &
+              ".scrolly set] -xscrollcommand [list " & Parent &
               ".scrollx set]");
          Tcl.Tk.Ada.Pack.Pack(YScroll, "-side right -fill y");
          Tcl.Tk.Ada.Pack.Pack(Canvas, "-side top -fill both -padx {5 0}");
@@ -73,22 +70,18 @@ package body Table is
          Tcl.Tk.Ada.Grid.Row_Configure(Master, Canvas, "-weight 1");
          Table.Scrollbar := Scrollbar;
       end if;
-      Create_Headers_Loop:
+      Create_Headers_Loop :
       for I in Headers'Range loop
          Canvas_Create
-           (Canvas,
-            "text",
-            Trim(Natural'Image(X), Left) &
-            " 2 -anchor nw -text {" &
+           (Canvas, "text",
+            Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
             To_String(Headers(I)) &
             "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
             To_String(Game_Settings.Interface_Theme) &
             " -foreground] -tags [list header" &
-            Trim(Positive'Image(I), Left) &
-            "]");
+            Trim(Positive'Image(I), Left) & "]");
          Create
-           (Tokens,
-            BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
+           (Tokens, BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
             " ");
          X := Positive'Value(Slice(Tokens, 3)) + 10;
          Table.Columns_Width(I) := X - Positive'Value(Slice(Tokens, 1));
@@ -97,14 +90,9 @@ package body Table is
          end if;
       end loop Create_Headers_Loop;
       Canvas_Create
-        (Canvas,
-         "rectangle",
-         "0 0" &
-         Positive'Image(X) &
-         Positive'Image(Table.Row_Height - 3) &
-         " -fill " &
-         Style_Lookup("Table", "-headercolor") &
-         " -outline " &
+        (Canvas, "rectangle",
+         "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
+         " -fill " & Style_Lookup("Table", "-headercolor") & " -outline " &
          Style_Lookup("Table", "-rowcolor") &
          " -width 2 -tags [list headerback]");
       Lower(Canvas, "headerback");
@@ -126,28 +114,22 @@ package body Table is
          Destroy(Button);
          Destroy(ButtonsFrame);
       end if;
-      Clear_Rows_Loop:
+      Clear_Rows_Loop :
       for Row in 1 .. Table.Row loop
-         Clear_Columns_Loop:
+         Clear_Columns_Loop :
          for Column in 1 .. Table.Amount loop
             Delete
               (Table.Canvas,
-               "row" &
-               Trim(Positive'Image(Row), Left) &
-               "col" &
+               "row" & Trim(Positive'Image(Row), Left) & "col" &
                Trim(Positive'Image(Column), Left));
             Delete(Table.Canvas, "row" & Trim(Positive'Image(Row), Left));
             Delete
               (Table.Canvas,
-               "progressbar" &
-               Trim(Positive'Image(Row), Left) &
-               "back" &
+               "progressbar" & Trim(Positive'Image(Row), Left) & "back" &
                Trim(Positive'Image(Column), Left));
             Delete
               (Table.Canvas,
-               "progressbar" &
-               Trim(Positive'Image(Row), Left) &
-               "bar" &
+               "progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
                Trim(Positive'Image(Column), Left));
          end loop Clear_Columns_Loop;
       end loop Clear_Rows_Loop;
@@ -155,21 +137,14 @@ package body Table is
    end ClearTable;
 
    function AddBackground
-     (Table: Table_Widget;
-      NewRow: Boolean;
-      Command: String) return String is
+     (Table: Table_Widget; NewRow: Boolean; Command: String) return String is
       ItemId: Unbounded_String;
       Color: constant String :=
-        (if
-           Table.Row rem 2 > 0
-         then
+        (if Table.Row rem 2 > 0 then
            Style_Lookup
-             (To_String(Game_Settings.Interface_Theme),
-              "-troughcolor")
-         else
-           Style_Lookup
-             (To_String(Game_Settings.Interface_Theme),
-              "-background"));
+             (To_String(Game_Settings.Interface_Theme), "-troughcolor")
+         else Style_Lookup
+             (To_String(Game_Settings.Interface_Theme), "-background"));
    begin
       if not NewRow then
          return Color;
@@ -177,159 +152,95 @@ package body Table is
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
-             (Table.Canvas,
-              "rectangle",
-              " 0" &
-              Positive'Image((Table.Row * Table.Row_Height)) &
-              " 10" &
+             (Table.Canvas, "rectangle",
+              " 0" & Positive'Image((Table.Row * Table.Row_Height)) & " 10" &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height)) &
-              " -fill " &
-              Color &
-              " -width 0 -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) &
-              "]"));
+              " -fill " & Color & " -width 0 -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & "]"));
       Lower(Table.Canvas, To_String(ItemId));
       if Command'Length > 0 then
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Enter>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) &
-            " -fill " &
+           (Table.Canvas, To_String(ItemId), "<Enter>",
+            "{" & Table.Canvas & " itemconfigure row" &
+            Trim(Positive'Image(Table.Row), Left) & " -fill " &
             Style_Lookup
-              (To_String(Game_Settings.Interface_Theme),
-               "-selectbackground") &
-            ";" &
-            Table.Canvas &
-            " configure -cursor hand1}");
+              (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
+            ";" & Table.Canvas & " configure -cursor hand1}");
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Leave>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) &
-            " -fill " &
-            Color &
-            ";" &
-            Table.Canvas &
-            " configure -cursor left_ptr}");
+           (Table.Canvas, To_String(ItemId), "<Leave>",
+            "{" & Table.Canvas & " itemconfigure row" &
+            Trim(Positive'Image(Table.Row), Left) & " -fill " & Color & ";" &
+            Table.Canvas & " configure -cursor left_ptr}");
          if Game_Settings.Right_Button then
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Button-3>",
+              (Table.Canvas, To_String(ItemId), "<Button-3>",
                "{" & Command & "}");
          else
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Button-1>",
+              (Table.Canvas, To_String(ItemId), "<Button-1>",
                "{" & Command & "}");
          end if;
       else
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Enter>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure " &
-            To_String(ItemId) &
+           (Table.Canvas, To_String(ItemId), "<Enter>",
+            "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
             " -fill " &
             Style_Lookup
-              (To_String(Game_Settings.Interface_Theme),
-               "-selectbackground") &
+              (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
             "}");
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Leave>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure " &
-            To_String(ItemId) &
-            " -fill " &
-            Color &
-            "}");
+           (Table.Canvas, To_String(ItemId), "<Leave>",
+            "{" & Table.Canvas & " itemconfigure " & To_String(ItemId) &
+            " -fill " & Color & "}");
       end if;
       return Color;
    end AddBackground;
 
    procedure AddButton
-     (Table: in out Table_Widget;
-      Text, Tooltip, Command: String;
-      Column: Positive;
-      NewRow: Boolean := False;
-      Color: String := "") is
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False; Color: String := "") is
       Tag: constant String :=
-        "row" &
-        Trim(Positive'Image(Table.Row), Left) &
-        "col" &
+        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
         Trim(Positive'Image(Column), Left);
       X: Natural := 5;
       ItemId: Unbounded_String;
       Tokens: Slice_Set;
       Text_Color: constant String :=
         (if Color'Length > 0 then Color
-         else
-           Style_Lookup
-             (To_String(Game_Settings.Interface_Theme),
-              "-foreground"));
+         else Style_Lookup
+             (To_String(Game_Settings.Interface_Theme), "-foreground"));
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
    begin
-      Count_X_Loop:
+      Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
-             (Table.Canvas,
-              "text",
+             (Table.Canvas, "text",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -text {" &
-              Text &
-              "} -font InterfaceFont -fill " &
-              Text_Color &
-              " -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) &
-              "col" &
-              Trim(Positive'Image(Column), Left) &
-              "]"));
+              " -anchor nw -text {" & Text & "} -font InterfaceFont -fill " &
+              Text_Color & " -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & "col" &
+              Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
       Bind
-        (Table.Canvas,
-         To_String(ItemId),
-         "<Enter>",
-         "{" &
-         Table.Canvas &
-         " itemconfigure row" &
-         Trim(Positive'Image(Table.Row), Left) &
-         " -fill " &
+        (Table.Canvas, To_String(ItemId), "<Enter>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " &
          Style_Lookup
-           (To_String(Game_Settings.Interface_Theme),
-            "-selectbackground") &
+           (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
          "}");
       Bind
-        (Table.Canvas,
-         To_String(ItemId),
-         "<Leave>",
-         "{" &
-         Table.Canvas &
-         " itemconfigure row" &
-         Trim(Positive'Image(Table.Row), Left) &
-         " -fill " &
-         Background_Color &
+        (Table.Canvas, To_String(ItemId), "<Leave>",
+         "{" & Table.Canvas & " itemconfigure row" &
+         Trim(Positive'Image(Table.Row), Left) & " -fill " & Background_Color &
          "}");
       Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
       X :=
@@ -342,14 +253,10 @@ package body Table is
          Table.Row := Table.Row + 1;
       end if;
       Bind
-        (Table.Canvas,
-         Tag,
-         "<Enter>",
+        (Table.Canvas, Tag, "<Enter>",
          "{" & Table.Canvas & " configure -cursor hand1}");
       Bind
-        (Table.Canvas,
-         Tag,
-         "<Leave>",
+        (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
       if Game_Settings.Right_Button then
          Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");
@@ -363,48 +270,36 @@ package body Table is
       NewX: Natural := Table.Columns_Width(1);
       NewY: Natural := 2;
    begin
-      Update_Columns_Loop:
+      Update_Columns_Loop :
       for Column in 2 .. Table.Amount loop
          Tag :=
            To_Unbounded_String("header" & Trim(Natural'Image(Column), Left));
          Coords
-           (Table.Canvas,
-            To_String(Tag),
+           (Table.Canvas, To_String(Tag),
             Trim(Positive'Image(NewX), Left) & Positive'Image(NewY));
-         Update_Rows_Loop:
+         Update_Rows_Loop :
          for Row in 1 .. Table.Row loop
             NewY := NewY + Table.Row_Height;
             Tag :=
               To_Unbounded_String
-                ("row" &
-                 Trim(Positive'Image(Row), Left) &
-                 "col" &
+                ("row" & Trim(Positive'Image(Row), Left) & "col" &
                  Trim(Natural'Image(Column), Left));
             MoveTo
-              (Table.Canvas,
-               To_String(Tag),
-               Trim(Positive'Image(NewX), Left),
+              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
                Trim(Positive'Image(NewY), Left));
             Tag :=
               To_Unbounded_String
-                ("progressbar" &
-                 Trim(Positive'Image(Row), Left) &
-                 "back" &
+                ("progressbar" & Trim(Positive'Image(Row), Left) & "back" &
                  Trim(Natural'Image(Column), Left));
             MoveTo
-              (Table.Canvas,
-               To_String(Tag),
-               Trim(Positive'Image(NewX), Left),
+              (Table.Canvas, To_String(Tag), Trim(Positive'Image(NewX), Left),
                Trim(Positive'Image(NewY + 5), Left));
             Tag :=
               To_Unbounded_String
-                ("progressbar" &
-                 Trim(Positive'Image(Row), Left) &
-                 "bar" &
+                ("progressbar" & Trim(Positive'Image(Row), Left) & "bar" &
                  Trim(Natural'Image(Column), Left));
             MoveTo
-              (Table.Canvas,
-               To_String(Tag),
+              (Table.Canvas, To_String(Tag),
                Trim(Positive'Image(NewX + 2), Left),
                Trim(Positive'Image(NewY + 7), Left));
          end loop Update_Rows_Loop;
@@ -420,33 +315,23 @@ package body Table is
            Winfo_Get(Table.Scrollbar, "parent") then
             configure
               (Table.Canvas,
-               "-height [expr " &
-               Slice(Tokens, 4) &
-               " - " &
-               Slice(Tokens, 2) &
-               "] -width [expr " &
-               Slice(Tokens, 3) &
-               " - " &
-               Slice(Tokens, 1) &
-               " + 5]");
+               "-height [expr " & Slice(Tokens, 4) & " - " & Slice(Tokens, 2) &
+               "] -width [expr " & Slice(Tokens, 3) & " - " &
+               Slice(Tokens, 1) & " + 5]");
          end if;
          Coords
-           (Table.Canvas,
-            "headerback",
-            "0 0" &
-            Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
+           (Table.Canvas, "headerback",
+            "0 0" & Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
             Positive'Image(Table.Row_Height - 3));
          NewY := Table.Row_Height;
-         Resize_Background_Loop:
+         Resize_Background_Loop :
          for Row in 1 .. Table.Row loop
             NewY := NewY + Table.Row_Height;
             Tag :=
               To_Unbounded_String("row" & Trim(Positive'Image(Row), Left));
             Coords
-              (Table.Canvas,
-               To_String(Tag),
-               "0" &
-               Positive'Image(NewY - Table.Row_Height) &
+              (Table.Canvas, To_String(Tag),
+               "0" & Positive'Image(NewY - Table.Row_Height) &
                Positive'Image(Positive'Value(Slice(Tokens, 3)) - 1) &
                Positive'Image(NewY));
          end loop Resize_Background_Loop;
@@ -454,11 +339,8 @@ package body Table is
    end UpdateTable;
 
    procedure AddProgressBar
-     (Table: in out Table_Widget;
-      Value: Natural;
-      MaxValue: Positive;
-      Tooltip, Command: String;
-      Column: Positive;
+     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+      Tooltip, Command: String; Column: Positive;
       NewRow, InvertColors: Boolean := False) is
       X: Natural := 0;
       ItemId: Unbounded_String;
@@ -474,97 +356,63 @@ package body Table is
       begin
          if Command'Length > 0 then
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Enter>",
-               "{" &
-               Table.Canvas &
-               " itemconfigure row" &
-               Trim(Positive'Image(Table.Row), Left) &
-               " -fill " &
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Style_Lookup
                  (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
-               ";" &
-               Table.Canvas &
-               " configure -cursor hand1}");
+               ";" & Table.Canvas & " configure -cursor hand1}");
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Leave>",
-               "{" &
-               Table.Canvas &
-               " itemconfigure row" &
-               Trim(Positive'Image(Table.Row), Left) &
-               " -fill " &
-               Background_Color &
-               ";" &
-               Table.Canvas &
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & ";" & Table.Canvas &
                " configure -cursor left_ptr}");
             if Game_Settings.Right_Button then
                Bind
-                 (Table.Canvas,
-                  To_String(ItemId),
-                  "<Button-3>",
+                 (Table.Canvas, To_String(ItemId), "<Button-3>",
                   "{" & Command & "}");
             else
                Bind
-                 (Table.Canvas,
-                  To_String(ItemId),
-                  "<Button-1>",
+                 (Table.Canvas, To_String(ItemId), "<Button-1>",
                   "{" & Command & "}");
             end if;
          else
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Enter>",
-               "{" &
-               Table.Canvas &
-               " itemconfigure row" &
-               Trim(Positive'Image(Table.Row), Left) &
-               " -fill " &
+              (Table.Canvas, To_String(ItemId), "<Enter>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Style_Lookup
                  (To_String(Game_Settings.Interface_Theme),
                   "-selectbackground") &
                "}");
             Bind
-              (Table.Canvas,
-               To_String(ItemId),
-               "<Leave>",
-               "{" &
-               Table.Canvas &
-               " itemconfigure row" &
-               Trim(Positive'Image(Table.Row), Left) &
-               " -fill " &
-               Background_Color &
-               "}");
+              (Table.Canvas, To_String(ItemId), "<Leave>",
+               "{" & Table.Canvas & " itemconfigure row" &
+               Trim(Positive'Image(Table.Row), Left) & " -fill " &
+               Background_Color & "}");
          end if;
       end Add_Bindings;
    begin
-      Count_X_Loop:
+      Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
-             (Table.Canvas,
-              "rectangle",
+             (Table.Canvas, "rectangle",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 5) &
               Positive'Image(X + 102) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 10)) &
-              " -fill " &
-              Style_Lookup("TProgressbar", "-troughcolor") &
-              " -outline " &
-              Style_Lookup("TProgressbar", "-bordercolor") &
+              " -fill " & Style_Lookup("TProgressbar", "-troughcolor") &
+              " -outline " & Style_Lookup("TProgressbar", "-bordercolor") &
               " -tags [list progressbar" &
-              Trim(Positive'Image(Table.Row), Left) &
-              "back" &
-              Trim(Positive'Image(Column), Left) &
-              "]"));
+              Trim(Positive'Image(Table.Row), Left) & "back" &
+              Trim(Positive'Image(Column), Left) & "]"));
       Add_Bindings;
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
@@ -579,45 +427,32 @@ package body Table is
       if not InvertColors then
          Color :=
            To_Unbounded_String
-             (if
-                Length > 74
-              then
+             (if Length > 74 then
                 Style_Lookup("green.Horizontal.TProgressbar", "-background")
-              elsif
-                Length > 24
-              then
+              elsif Length > 24 then
                 Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
               else Style_Lookup("TProgressbar", "-background"));
       else
          Color :=
            To_Unbounded_String
-             (if
-                Length < 25
-              then
+             (if Length < 25 then
                 Style_Lookup("green.Horizontal.TProgressbar", "-background")
-              elsif
-                Length > 24 and Length < 75
-              then
+              elsif Length > 24 and Length < 75 then
                 Style_Lookup("yellow.Horizontal.TProgressbar", "-background")
               else Style_Lookup("TProgressbar", "-background"));
       end if;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
-             (Table.Canvas,
-              "rectangle",
+             (Table.Canvas, "rectangle",
               Trim(Natural'Image(X + 2), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 7) &
               Positive'Image(X + Length) &
               Positive'Image
                 ((Table.Row * Table.Row_Height) + (Table.Row_Height - 12)) &
-              " -fill " &
-              To_String(Color) &
-              " -tags [list progressbar" &
-              Trim(Positive'Image(Table.Row), Left) &
-              "bar" &
-              Trim(Positive'Image(Column), Left) &
-              "]"));
+              " -fill " & To_String(Color) & " -tags [list progressbar" &
+              Trim(Positive'Image(Table.Row), Left) & "bar" &
+              Trim(Positive'Image(Column), Left) & "]"));
       Add_Bindings;
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
@@ -628,8 +463,7 @@ package body Table is
    end AddProgressBar;
 
    procedure AddPagination
-     (Table: in out Table_Widget;
-      PreviousCommand, NextCommand: String) is
+     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) is
       ButtonsFrame: constant Ttk_Frame :=
         Create(Table.Canvas & ".buttonframe");
       Button: Ttk_Button;
@@ -652,24 +486,16 @@ package body Table is
       end if;
       Tcl_Eval(Get_Interp(Table.Canvas), "update");
       Canvas_Create
-        (Table.Canvas,
-         "window",
-         "0" &
-         Positive'Image(Table.Row * Table.Row_Height) &
-         " -anchor nw -window " &
-         ButtonsFrame);
+        (Table.Canvas, "window",
+         "0" & Positive'Image(Table.Row * Table.Row_Height) &
+         " -anchor nw -window " & ButtonsFrame);
    end AddPagination;
 
    procedure AddCheckButton
-     (Table: in out Table_Widget;
-      Tooltip, Command: String;
-      Checked: Boolean;
-      Column: Positive;
-      NewRow: Boolean := False) is
+     (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
+      Column: Positive; NewRow: Boolean := False) is
       Tag: constant String :=
-        "row" &
-        Trim(Positive'Image(Table.Row), Left) &
-        "col" &
+        "row" & Trim(Positive'Image(Table.Row), Left) & "col" &
         Trim(Positive'Image(Column), Left);
       X: Natural := 5;
       ItemId: Unbounded_String;
@@ -677,30 +503,22 @@ package body Table is
       Background_Color: constant String :=
         AddBackground(Table, NewRow, Command);
       ImageName: constant String :=
-        "${ttk::theme::" &
-        Theme_Use &
-        "::I(checkbox-" &
-        (if Checked then "checked" else "unchecked") &
-        ")}";
+        "${ttk::theme::" & Theme_Use & "::I(checkbox-" &
+        (if Checked then "checked" else "unchecked") & ")}";
    begin
-      Count_X_Loop:
+      Count_X_Loop :
       for I in 1 .. Column - 1 loop
          X := X + Table.Columns_Width(I);
       end loop Count_X_Loop;
       ItemId :=
         To_Unbounded_String
           (Canvas_Create
-             (Table.Canvas,
-              "image",
+             (Table.Canvas, "image",
               Trim(Natural'Image(X), Left) &
               Positive'Image((Table.Row * Table.Row_Height) + 2) &
-              " -anchor nw -image " &
-              ImageName &
-              " -tags [list row" &
-              Trim(Positive'Image(Table.Row), Left) &
-              "col" &
-              Trim(Positive'Image(Column), Left) &
-              "]"));
+              " -anchor nw -image " & ImageName & " -tags [list row" &
+              Trim(Positive'Image(Table.Row), Left) & "col" &
+              Trim(Positive'Image(Column), Left) & "]"));
       if Tooltip'Length > 0 then
          Add(Table.Canvas, Tooltip, "-item " & To_String(ItemId));
       end if;
@@ -716,39 +534,23 @@ package body Table is
       end if;
       if Command'Length > 0 then
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Enter>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) &
-            " -fill " &
+           (Table.Canvas, To_String(ItemId), "<Enter>",
+            "{" & Table.Canvas & " itemconfigure row" &
+            Trim(Positive'Image(Table.Row), Left) & " -fill " &
             Style_Lookup
-              (To_String(Game_Settings.Interface_Theme),
-               "-selectbackground") &
+              (To_String(Game_Settings.Interface_Theme), "-selectbackground") &
             "}");
          Bind
-           (Table.Canvas,
-            To_String(ItemId),
-            "<Leave>",
-            "{" &
-            Table.Canvas &
-            " itemconfigure row" &
-            Trim(Positive'Image(Table.Row), Left) &
-            " -fill " &
-            Background_Color &
-            "}");
+           (Table.Canvas, To_String(ItemId), "<Leave>",
+            "{" & Table.Canvas & " itemconfigure row" &
+            Trim(Positive'Image(Table.Row), Left) & " -fill " &
+            Background_Color & "}");
          Create(Tokens, BBox(Table.Canvas, To_String(ItemId)), " ");
          Bind
-           (Table.Canvas,
-            Tag,
-            "<Enter>",
+           (Table.Canvas, Tag, "<Enter>",
             "{" & Table.Canvas & " configure -cursor hand1}");
          Bind
-           (Table.Canvas,
-            Tag,
-            "<Leave>",
+           (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
          if Game_Settings.Right_Button then
             Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");

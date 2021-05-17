@@ -385,7 +385,8 @@ package body Bases.UI is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Base_UI_Command
+      return
+        Show_Base_UI_Command
           (ClientData, Interp, 2,
            CArgv.Empty & "ShowBaseUI" & CArgv.Arg(Argv, 1));
    end Base_Action_Command;
@@ -416,10 +417,12 @@ package body Bases.UI is
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       if SearchText'Length = 0 then
-         return Show_Base_UI_Command
+         return
+           Show_Base_UI_Command
              (ClientData, Interp, 2, CArgv.Empty & "ShowBaseUI" & "recipes");
       end if;
-      return Show_Base_UI_Command
+      return
+        Show_Base_UI_Command
           (ClientData, Interp, 3,
            CArgv.Empty & "ShowBaseUI" & "recipes" & SearchText);
    end Search_Recipes_Command;

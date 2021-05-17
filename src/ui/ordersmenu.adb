@@ -50,9 +50,7 @@ with WaitMenu; use WaitMenu;
 package body OrdersMenu is
 
    function Show_Orders_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       HaveTrader: Boolean := False;
@@ -76,13 +74,9 @@ package body OrdersMenu is
       if CurrentStory.Index /= Null_Unbounded_String then
          declare
             Step: constant Step_Data :=
-              (if
-                 CurrentStory.CurrentStep = 0
-               then
+              (if CurrentStory.CurrentStep = 0 then
                  Stories_List(CurrentStory.Index).StartingStep
-               elsif
-                 CurrentStory.CurrentStep > 0
-               then
+               elsif CurrentStory.CurrentStep > 0 then
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep)
                else Stories_List(CurrentStory.Index).FinalStep);
@@ -93,8 +87,7 @@ package body OrdersMenu is
                      if CurrentStory.Data = Null_Unbounded_String or
                        CurrentStory.Data = SkyBases(BaseIndex).Name then
                         Add
-                          (OrdersMenu,
-                           "command",
+                          (OrdersMenu, "command",
                            "-label {Ask for " &
                            To_String
                              (Items_List(GetStepData(Step.FinishData, "item"))
@@ -110,8 +103,7 @@ package body OrdersMenu is
                      if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
                         Add
-                          (OrdersMenu,
-                           "command",
+                          (OrdersMenu, "command",
                            "-label {Search for " &
                            To_String
                              (ProtoShips_List
@@ -128,8 +120,7 @@ package body OrdersMenu is
                      if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
                        PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
                         Add
-                          (OrdersMenu,
-                           "command",
+                          (OrdersMenu, "command",
                            "-label {Search area} -underline 0 -command ExecuteStory");
                      end if;
                   end;
@@ -140,84 +131,73 @@ package body OrdersMenu is
       end if;
       if PlayerShip.Speed = DOCKED then
          Add
-           (OrdersMenu,
-            "command",
+           (OrdersMenu, "command",
             "-label {Undock} -underline 0 -command {Docking}");
          if SkyBases(BaseIndex).Population > 0 then
             Add
-              (OrdersMenu,
-               "command",
+              (OrdersMenu, "command",
                "-label {Escape} -underline 3 -command {Docking escape}");
          end if;
          if HaveTrader and SkyBases(BaseIndex).Population > 0 then
             Add
-              (OrdersMenu,
-               "command",
+              (OrdersMenu, "command",
                "-label {Trade} -underline 0 -command ShowTrade");
             Add
-              (OrdersMenu,
-               "command",
+              (OrdersMenu, "command",
                "-label {School} -underline 0 -command ShowSchool");
             if SkyBases(BaseIndex).Recruits.Length > 0 then
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Recruit} -underline 0 -command ShowRecruit");
             end if;
             if DaysDifference(SkyBases(BaseIndex).AskedForEvents) > 6 then
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Ask for events} -underline 8 -command AskForEvents");
             end if;
             if not SkyBases(BaseIndex).AskedForBases then
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Ask for bases} -underline 8 -command AskForBases");
             end if;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
-              (To_Unbounded_String("temple")) then
+                (To_Unbounded_String("temple")) then
                Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
-            Add_Heal_Wounded_Menu_Loop:
+            Add_Heal_Wounded_Menu_Loop :
             for Member of PlayerShip.Crew loop
                if Member.Health < 100 then
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Heal wounded} -underline 5 -command {ShowBaseUI heal}");
                   exit Add_Heal_Wounded_Menu_Loop;
                end if;
             end loop Add_Heal_Wounded_Menu_Loop;
-            Add_Repair_Ship_Menu_Loop:
+            Add_Repair_Ship_Menu_Loop :
             for Module of PlayerShip.Modules loop
                if Module.Durability < Module.MaxDurability then
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Repair ship} -underline 2 -command {ShowBaseUI repair}");
                   exit Add_Repair_Ship_Menu_Loop;
                end if;
             end loop Add_Repair_Ship_Menu_Loop;
             if BasesTypes_List(SkyBases(BaseIndex).BaseType).Flags.Contains
-              (To_Unbounded_String("shipyard")) then
+                (To_Unbounded_String("shipyard")) then
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Shipyard} -underline 2 -command ShowShipyard");
             end if;
-            Add_Buy_Recipes_Menu_Loop:
+            Add_Buy_Recipes_Menu_Loop :
             for I in Recipes_List.Iterate loop
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(I)) =
                  UnboundedString_Container.No_Index and
                  BasesTypes_List(SkyBases(BaseIndex).BaseType).Recipes.Contains
-                 (Recipes_Container.Key(I)) and
+                   (Recipes_Container.Key(I)) and
                  Recipes_List(I).Reputation <=
                    SkyBases(BaseIndex).Reputation(1) then
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Buy recipes} -underline 2 -command {ShowBaseUI recipes}");
                   exit Add_Buy_Recipes_Menu_Loop;
                end if;
@@ -235,7 +215,7 @@ package body OrdersMenu is
                   when others =>
                      MissionsLimit := 0;
                end case;
-               Add_Mission_Menu_Loop:
+               Add_Mission_Menu_Loop :
                for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
                     (Mission.TargetX = PlayerShip.SkyX and
@@ -243,18 +223,14 @@ package body OrdersMenu is
                      case Mission.MType is
                         when Deliver =>
                            Insert
-                             (OrdersMenu,
-                              "0",
-                              "command",
+                             (OrdersMenu, "0", "command",
                               "-label {Complete delivery of " &
                               To_String(Items_List(Mission.ItemIndex).Name) &
                               "} -underline 0 -command CompleteMission");
                         when Destroy =>
                            if Mission.Finished then
                               Insert
-                                (OrdersMenu,
-                                 "0",
-                                 "command",
+                                (OrdersMenu, "0", "command",
                                  "-label {Complete destroy " &
                                  To_String
                                    (ProtoShips_List(Mission.ShipIndex).Name) &
@@ -263,25 +239,19 @@ package body OrdersMenu is
                         when Patrol =>
                            if Mission.Finished then
                               Insert
-                                (OrdersMenu,
-                                 "0",
-                                 "command",
+                                (OrdersMenu, "0", "command",
                                  "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
                            end if;
                         when Explore =>
                            if Mission.Finished then
                               Insert
-                                (OrdersMenu,
-                                 "0",
-                                 "command",
+                                (OrdersMenu, "0", "command",
                                  "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
                            end if;
                         when Passenger =>
                            if Mission.Finished then
                               Insert
-                                (OrdersMenu,
-                                 "0",
-                                 "command",
+                                (OrdersMenu, "0", "command",
                                  "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
                            end if;
                      end case;
@@ -292,22 +262,19 @@ package body OrdersMenu is
                end loop Add_Mission_Menu_Loop;
                if MissionsLimit > 0 then
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label Missions -underline 0 -command ShowBaseMissions");
                end if;
             end if;
             if PlayerShip.HomeBase /= BaseIndex then
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Set as home} -underline 7 -command SetAsHome");
             end if;
          end if;
          if SkyBases(BaseIndex).Population = 0 then
             Add
-              (OrdersMenu,
-               "command",
+              (OrdersMenu, "command",
                "-label {Loot} -underline 0 -command ShowLoot");
          end if;
       else
@@ -319,18 +286,15 @@ package body OrdersMenu is
          case Event is
             when EnemyShip | EnemyPatrol =>
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Attack} -underline 0 -command Attack");
             when FullDocks =>
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Wait (full docks)} -underline 0 -command ShowWait");
             when AttackOnBase =>
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Defend} -underline 0 -command Attack");
             when Disease =>
                if HaveTrader then
@@ -342,12 +306,10 @@ package body OrdersMenu is
                            .HealingTools);
                   if ItemIndex > 0 then
                      Add
-                       (OrdersMenu,
-                        "command",
+                       (OrdersMenu, "command",
                         "-label {Deliver medicines for free} -underline 0 -command {DeliverMedicines free}");
                      Add
-                       (OrdersMenu,
-                        "command",
+                       (OrdersMenu, "command",
                         "-label {Deliver medicines for price} -underline 8 -command {DeliverMedicines paid}");
                   end if;
                end if;
@@ -357,7 +319,7 @@ package body OrdersMenu is
                      declare
                         DockingCost: Positive;
                      begin
-                        Count_Docking_Cost_Loop:
+                        Count_Docking_Cost_Loop :
                         for Module of PlayerShip.Modules loop
                            if Module.MType = HULL then
                               DockingCost := Module.MaxModules;
@@ -366,32 +328,27 @@ package body OrdersMenu is
                         end loop Count_Docking_Cost_Loop;
                         if SkyBases(BaseIndex).Population > 0 then
                            Add
-                             (OrdersMenu,
-                              "command",
+                             (OrdersMenu, "command",
                               "-label {Dock (" &
-                              Trim(Positive'Image(DockingCost), Left) &
-                              " " &
+                              Trim(Positive'Image(DockingCost), Left) & " " &
                               To_String(Money_Name) &
                               ")} -underline 0 -command {Docking}");
                         else
                            Add
-                             (OrdersMenu,
-                              "command",
+                             (OrdersMenu, "command",
                               "-label {Dock} -underline 0 -command {Docking}");
                         end if;
                      end;
                   end if;
-                  Complete_Mission_Menu_Loop:
+                  Complete_Mission_Menu_Loop :
                   for Mission of AcceptedMissions loop
-                     if HaveTrader and
-                       Mission.TargetX = PlayerShip.SkyX and
+                     if HaveTrader and Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
                        Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
                               Add
-                                (OrdersMenu,
-                                 "command",
+                                (OrdersMenu, "command",
                                  "-label {Complete delivery of " &
                                  To_String
                                    (Items_List(Mission.ItemIndex).Name) &
@@ -399,8 +356,7 @@ package body OrdersMenu is
                            when Destroy =>
                               if Mission.Finished then
                                  Add
-                                   (OrdersMenu,
-                                    "command",
+                                   (OrdersMenu, "command",
                                     "-label {Complete destroy " &
                                     To_String
                                       (ProtoShips_List(Mission.ShipIndex)
@@ -410,29 +366,26 @@ package body OrdersMenu is
                            when Patrol =>
                               if Mission.Finished then
                                  Add
-                                   (OrdersMenu,
-                                    "command",
+                                   (OrdersMenu, "command",
                                     "-label {Complete Patrol area mission} -underline 0 -command CompleteMission");
                               end if;
                            when Explore =>
                               if Mission.Finished then
                                  Add
-                                   (OrdersMenu,
-                                    "command",
+                                   (OrdersMenu, "command",
                                     "-label {Complete Explore area mission} -underline 0 -command CompleteMission");
                               end if;
                            when Passenger =>
                               if Mission.Finished then
                                  Add
-                                   (OrdersMenu,
-                                    "command",
+                                   (OrdersMenu, "command",
                                     "-label {Complete Transport passenger mission} -underline 0 -command CompleteMission");
                               end if;
                         end case;
                      end if;
                   end loop Complete_Mission_Menu_Loop;
                else
-                  Progress_Mission_Loop:
+                  Progress_Mission_Loop :
                   for Mission of AcceptedMissions loop
                      if Mission.TargetX = PlayerShip.SkyX and
                        Mission.TargetY = PlayerShip.SkyY and
@@ -442,21 +395,18 @@ package body OrdersMenu is
                               null;
                            when Destroy =>
                               Add
-                                (OrdersMenu,
-                                 "command",
+                                (OrdersMenu, "command",
                                  "-label {Search for " &
                                  To_String
                                    (ProtoShips_List(Mission.ShipIndex).Name) &
                                  "} -underline 0 -command StartMission");
                            when Patrol =>
                               Add
-                                (OrdersMenu,
-                                 "command",
+                                (OrdersMenu, "command",
                                  "-label {Patrol area} -underline 0 -command StartMission");
                            when Explore =>
                               Add
-                                (OrdersMenu,
-                                 "command",
+                                (OrdersMenu, "command",
                                  "-label {Explore area} -underline 0 -command StartMission");
                         end case;
                      end if;
@@ -465,8 +415,7 @@ package body OrdersMenu is
             when Trader =>
                if HaveTrader then
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Trade} -underline 0 -command {ShowTrader " &
                      To_String
                        (Events_List
@@ -474,17 +423,14 @@ package body OrdersMenu is
                           .ShipIndex) &
                      "}");
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8 -command AskForEvents");
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Ask for bases} -underline 8 -command AskForBases");
                end if;
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Attack} -underline 0 -command Attack");
             when FriendlyShip =>
                if HaveTrader then
@@ -498,8 +444,7 @@ package body OrdersMenu is
                        To_String(Traders_Name)) >
                     0 then
                      Add
-                       (OrdersMenu,
-                        "command",
+                       (OrdersMenu, "command",
                         "-label {Trade} -underline 0 -command {ShowTrader " &
                         To_String
                           (Events_List
@@ -508,18 +453,15 @@ package body OrdersMenu is
                              .ShipIndex) &
                         "}");
                      Add
-                       (OrdersMenu,
-                        "command",
+                       (OrdersMenu, "command",
                         "-label {Ask for bases} -underline 8 -command AskForBases");
                   end if;
                   Add
-                    (OrdersMenu,
-                     "command",
+                    (OrdersMenu, "command",
                      "-label {Ask for events} -underline 8 -command AskForEvents");
                end if;
                Add
-                 (OrdersMenu,
-                  "command",
+                 (OrdersMenu, "command",
                   "-label {Attack} -underline 0 -command Attack");
          end case;
       end if;
@@ -531,8 +473,7 @@ package body OrdersMenu is
             Title => "No orders available");
       else
          Tk_Popup
-           (OrdersMenu,
-            Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+           (OrdersMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
             Winfo_Get(Get_Main_Window(Interp), "pointery"));
       end if;
       return TCL_OK;
@@ -554,17 +495,13 @@ package body OrdersMenu is
    -- otherwise normal docking or undocking operation
    -- SOURCE
    function Docking_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Docking_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message: Unbounded_String;
    begin
@@ -574,8 +511,7 @@ package body OrdersMenu is
             else To_Unbounded_String(DockShip(False, True)));
          if Length(Message) > 0 then
             ShowMessage
-              (Text => To_String(Message),
-               Title => "Can't undock from base");
+              (Text => To_String(Message), Title => "Can't undock from base");
             return TCL_OK;
          end if;
       else
@@ -589,8 +525,7 @@ package body OrdersMenu is
          Message := To_Unbounded_String(DockShip(True));
          if Length(Message) > 0 then
             ShowMessage
-              (Text => To_String(Message),
-               Title => "Can't dock to base");
+              (Text => To_String(Message), Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
@@ -615,17 +550,13 @@ package body OrdersMenu is
    -- AskForBases
    -- SOURCE
    function Ask_For_Bases_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ask_For_Bases_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -648,17 +579,13 @@ package body OrdersMenu is
    -- AskForEvents
    -- SOURCE
    function Ask_For_Events_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Ask_For_Events_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -681,17 +608,13 @@ package body OrdersMenu is
    -- Attack
    -- SOURCE
    function Attack_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Attack_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -713,21 +636,17 @@ package body OrdersMenu is
    -- Pray
    -- SOURCE
    function Pray_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Pray_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      Update_Morale_Loop:
+      Update_Morale_Loop :
       for I in PlayerShip.Crew.Iterate loop
          UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
       end loop Update_Morale_Loop;
@@ -753,29 +672,22 @@ package body OrdersMenu is
    -- SetAsHome
    -- SOURCE
    function Set_As_Home_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_As_Home_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       TraderIndex: constant Natural := FindMember(Talk);
-      Price: Positive := 1000;
+      Price: Positive := 1_000;
    begin
       CountPrice(Price, TraderIndex);
       ShowQuestion
         ("Are you sure want to change your home base (it cost" &
-         Positive'Image(Price) &
-         " " &
-         To_String(Money_Name) &
-         ")?",
+         Positive'Image(Price) & " " & To_String(Money_Name) & ")?",
          "sethomebase");
       return TCL_OK;
    end Set_As_Home_Command;
@@ -796,17 +708,13 @@ package body OrdersMenu is
    -- generated
    -- SOURCE
    function Show_Trader_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Trader_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
@@ -829,25 +737,20 @@ package body OrdersMenu is
    -- StartMission
    -- SOURCE
    function Start_Mission_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Start_Mission_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       StartsCombat: Boolean := False;
    begin
       for Mission of AcceptedMissions loop
          if Mission.TargetX = PlayerShip.SkyX and
-           Mission.TargetY = PlayerShip.SkyY and
-           not Mission.Finished then
+           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
             case Mission.MType is
                when Deliver | Passenger =>
                   null;
@@ -905,17 +808,13 @@ package body OrdersMenu is
    -- CompleteMission
    -- SOURCE
    function Complete_Mission_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Complete_Mission_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -940,17 +839,13 @@ package body OrdersMenu is
    -- ExecuteStory
    -- SOURCE
    function Execute_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Execute_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       Step: Step_Data;
@@ -979,8 +874,7 @@ package body OrdersMenu is
             case Step.FinishCondition is
                when DESTROYSHIP =>
                   if StartCombat
-                      (To_Unbounded_String(Slice(Tokens, 3)),
-                       False) then
+                      (To_Unbounded_String(Slice(Tokens, 3)), False) then
                      ShowCombatUI;
                      return TCL_OK;
                   end if;
@@ -1032,17 +926,13 @@ package body OrdersMenu is
    -- medicines for a price
    -- SOURCE
    function Deliver_Medicines_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Deliver_Medicines_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
@@ -1070,14 +960,12 @@ package body OrdersMenu is
             " for free to base.",
             TradeMessage);
          UpdateCargo
-           (PlayerShip,
-            PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
+           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
             (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
       else
          begin
             GainRep
-              (BaseIndex,
-               ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+              (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
             SellItems
               (ItemIndex,
                Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));

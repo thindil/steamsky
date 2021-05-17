@@ -58,17 +58,13 @@ package body Crafts.UI is
    -- ShowCrafting
    -- SOURCE
    function Show_Crafting_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Crafting_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
       CraftsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".craftframe", Interp);
@@ -85,7 +81,7 @@ package body Crafts.UI is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
             CanCraft := False;
-            Check_Tool_Loop:
+            Check_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType = ToolNeeded then
                   CargoIndex :=
@@ -111,9 +107,9 @@ package body Crafts.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
-      Find_Possible_Recipes_Loop:
+      Find_Possible_Recipes_Loop :
       for Item of PlayerShip.Cargo loop
-         Add_Recipes_Loop:
+         Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex then
                if Known_Recipes.Find_Index(Item => Recipes_Container.Key(J)) =
@@ -130,11 +126,11 @@ package body Crafts.UI is
          end loop Add_Recipes_Loop;
       end loop Find_Possible_Recipes_Loop;
       Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
-      Show_Recipes_Loop:
+      Show_Recipes_Loop :
       for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
          CanCraft := False;
          Recipe := Recipes_List(Known_Recipes(I));
-         Find_Workshop_Loop:
+         Find_Workshop_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
               and then Module.Durability > 0 then
@@ -148,22 +144,21 @@ package body Crafts.UI is
          if CanCraft then
             declare
                Materials: array
-               (Recipe.MaterialTypes.First_Index ..
-                    Recipe.MaterialTypes.Last_Index) of Boolean :=
+                 (Recipe.MaterialTypes.First_Index ..
+                      Recipe.MaterialTypes.Last_Index) of Boolean :=
                  (others => False);
             begin
-               Find_Materials_Loop:
+               Find_Materials_Loop :
                for K in
                  Recipe.MaterialTypes.First_Index ..
-                     Recipe.MaterialTypes.Last_Index loop
-                  Find_Cargo_Index_Loop:
+                   Recipe.MaterialTypes.Last_Index loop
+                  Find_Cargo_Index_Loop :
                   for J in Items_List.Iterate loop
                      if Items_List(J).IType = Recipe.MaterialTypes(K) then
                         CargoIndex :=
                           FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
                         if CargoIndex > 0
-                          and then
-                            PlayerShip.Cargo(CargoIndex).Amount >=
+                          and then PlayerShip.Cargo(CargoIndex).Amount >=
                             Recipe.MaterialAmounts(K) then
                            Materials(K) := True;
                         end if;
@@ -171,7 +166,7 @@ package body Crafts.UI is
                   end loop Find_Cargo_Index_Loop;
                end loop Find_Materials_Loop;
                CanCraft := True;
-               Set_Can_Craft_Loop:
+               Set_Can_Craft_Loop :
                for J in Materials'Range loop
                   if not Materials(J) then
                      CanCraft := False;
@@ -182,13 +177,10 @@ package body Crafts.UI is
          end if;
          Insert
            (RecipesView,
-            "{} end -id {" &
-            To_String(Known_Recipes(I)) &
-            "} -text {" &
+            "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
             To_String
               (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name) &
-            "}" &
-            (if not CanCraft then " -tag [list gray]" else ""));
+            "}" & (if not CanCraft then " -tag [list gray]" else ""));
          if FirstIndex = Null_Unbounded_String then
             FirstIndex := Known_Recipes(I);
          end if;
@@ -196,7 +188,7 @@ package body Crafts.UI is
       CheckTool(Alchemy_Tools);
       if CanCraft then
          CanCraft := False;
-         Find_Alchemy_Lab_Loop:
+         Find_Alchemy_Lab_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
               and then Module.Durability > 0 then
@@ -205,26 +197,21 @@ package body Crafts.UI is
             end if;
          end loop Find_Alchemy_Lab_Loop;
       end if;
-      Set_Study_Recipes_Loop:
+      Set_Study_Recipes_Loop :
       for I in Studies.Iterate loop
          Insert
            (RecipesView,
-            "{} end -id {Study " &
-            To_String(Studies(I)) &
-            "} -text {Study " &
-            To_String(Items_List(Studies(I)).Name) &
-            "}" &
+            "{} end -id {Study " & To_String(Studies(I)) & "} -text {Study " &
+            To_String(Items_List(Studies(I)).Name) & "}" &
             (if not CanCraft then " -tag [list gray]" else ""));
       end loop Set_Study_Recipes_Loop;
-      Set_Deconstruct_Recipes_Loop:
+      Set_Deconstruct_Recipes_Loop :
       for I in Deconstructs.Iterate loop
          Insert
            (RecipesView,
-            "{} end -id {Deconstruct " &
-            To_String(Deconstructs(I)) &
+            "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
             "} -text {Decontruct " &
-            To_String(Items_List(Deconstructs(I)).Name) &
-            "}" &
+            To_String(Items_List(Deconstructs(I)).Name) & "}" &
             (if not CanCraft then " -tag [list gray]" else ""));
       end loop Set_Deconstruct_Recipes_Loop;
       Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
@@ -232,14 +219,11 @@ package body Crafts.UI is
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
         (CraftsCanvas,
-         "-height [expr " &
-         SashPos(Main_Paned, "0") &
-         " - 20] -width " &
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
          cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (CraftsCanvas,
-         "window",
+        (CraftsCanvas, "window",
          "0 0 -anchor nw -window " & Widget_Image(CraftsFrame));
       Tcl_Eval(Get_Context, "update");
       configure
@@ -264,9 +248,7 @@ package body Crafts.UI is
       MaxLabel: constant Ttk_Label := Get_Widget(FrameName & ".maxamount");
       ModulesBox: constant Ttk_ComboBox := Get_Widget(FrameName & ".workshop");
       RecipeIndex: constant Unbounded_String :=
-        (if
-           Element(Index, 1) = '{'
-         then
+        (if Element(Index, 1) = '{' then
            Unbounded_Slice(Index, 2, Length(Index) - 1)
          else Index);
    begin
@@ -274,8 +256,7 @@ package body Crafts.UI is
       Set(AmountBox, "1");
       configure
         (AmountBox,
-         "-to" &
-         Positive'Image(MaxAmount) &
+         "-to" & Positive'Image(MaxAmount) &
          " -validatecommand {ValidateSpinbox %W %P}");
       if MaxAmount > 1 then
          configure(MaxLabel, "-text {max" & Positive'Image(MaxAmount) & "}");
@@ -298,7 +279,7 @@ package body Crafts.UI is
       else
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
-      Show_Workshops_List_Loop:
+      Show_Workshops_List_Loop :
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = MType then
             Append(ModulesList, " {" & Module.Name & "}");
@@ -311,15 +292,13 @@ package body Crafts.UI is
          ShowMessage
            (Text =>
               "You don't have enough materials to start " &
-              Exception_Message(An_Exception) &
-              ".",
+              Exception_Message(An_Exception) & ".",
             Title => "Can't set crafting recipe");
       when An_Exception : Crafting_No_Tools =>
          ShowMessage
            (Text =>
               "You don't have the proper tool to start " &
-              Exception_Message(An_Exception) &
-              ".",
+              Exception_Message(An_Exception) & ".",
             Title => "Can't set crafting recipe");
       when Trade_No_Free_Cargo =>
          ShowMessage
@@ -330,8 +309,7 @@ package body Crafts.UI is
          ShowMessage
            (Text =>
               "You don't have proper a workplace to start " &
-              Exception_Message(An_Exception) &
-              ".",
+              Exception_Message(An_Exception) & ".",
             Title => "Can't set crafting recipe");
    end ShowSetRecipe;
 
@@ -349,17 +327,13 @@ package body Crafts.UI is
    -- ShowRecipeInfo
    -- SOURCE
    function Show_Recipe_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Recipe_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := Main_Paned & ".craftframe.canvas.craft";
@@ -385,16 +359,16 @@ package body Crafts.UI is
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "{Stud" then
          Recipe.MaterialTypes.Append
-         (New_Item =>
-            Items_List
-              (Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1))
-              .IType);
+           (New_Item =>
+              Items_List
+                (Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1))
+                .IType);
          Recipe.ResultIndex :=
            Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
-         Set_Study_Recipe_Loop:
+         Set_Study_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
                Recipe.Skill := ProtoRecipe.Skill;
@@ -408,16 +382,16 @@ package body Crafts.UI is
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
          Recipe.MaterialTypes.Append
-         (New_Item =>
-            Items_List
-              (Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1))
-              .IType);
+           (New_Item =>
+              Items_List
+                (Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1))
+                .IType);
          Recipe.ResultIndex :=
            Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1);
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
-         Set_Deconstruct_Recipe_Loop:
+         Set_Deconstruct_Recipe_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = Recipe.ResultIndex then
                Recipe.Skill := ProtoRecipe.Skill;
@@ -437,24 +411,23 @@ package body Crafts.UI is
       else
          Recipe := Recipes_List(RecipeIndex);
          Insert
-           (RecipeText,
-            "end",
+           (RecipeText, "end",
             "{Amount:" & Integer'Image(Recipe.ResultAmount) & LF & "}");
       end if;
       Insert(RecipeText, "end", "{Materials needed: }");
       declare
          Materials: array
-         (Recipe.MaterialTypes.First_Index ..
-              Recipe.MaterialTypes.Last_Index) of Boolean :=
+           (Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index) of Boolean :=
            (others => False);
       begin
-         Check_Materials_Loop:
+         Check_Materials_Loop :
          for I in
            Recipe.MaterialTypes.First_Index ..
-               Recipe.MaterialTypes.Last_Index loop
+             Recipe.MaterialTypes.Last_Index loop
             Insert(RecipeText, "end", "{" & LF & "-}");
             MAmount := 0;
-            Find_Materials_Loop:
+            Find_Materials_Loop :
             for J in Items_List.Iterate loop
                IsMaterial := False;
                if Length(RecipeIndex) > 6
@@ -467,9 +440,7 @@ package body Crafts.UI is
                  and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
                   if Objects_Container.Key(J) =
                     Unbounded_Slice
-                      (RecipeIndex,
-                       14,
-                       Length(RecipeIndex) - 1) then
+                      (RecipeIndex, 14, Length(RecipeIndex) - 1) then
                      IsMaterial := True;
                   end if;
                else
@@ -484,45 +455,35 @@ package body Crafts.UI is
                   CargoIndex :=
                     FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
                   if CargoIndex > 0
-                    and then
-                      PlayerShip.Cargo(CargoIndex).Amount >=
+                    and then PlayerShip.Cargo(CargoIndex).Amount >=
                       Recipe.MaterialAmounts(I) then
                      Materials(I) := True;
                   end if;
                   if CargoIndex > 0
-                    and then
-                      PlayerShip.Cargo(CargoIndex).Amount >=
+                    and then PlayerShip.Cargo(CargoIndex).Amount >=
                       Recipe.MaterialAmounts(I) then
                      TextLength :=
                        Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'
                          Length;
                      Insert
-                       (RecipeText,
-                        "end",
-                        "{" &
-                        Integer'Image(Recipe.MaterialAmounts(I)) &
-                        "x" &
-                        To_String(Items_List(J).Name) &
-                        "(owned: " &
+                       (RecipeText, "end",
+                        "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                        To_String(Items_List(J).Name) & "(owned: " &
                         Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
                           (2 .. TextLength) &
                         ")}");
                   else
                      Insert
-                       (RecipeText,
-                        "end",
-                        "{" &
-                        Integer'Image(Recipe.MaterialAmounts(I)) &
-                        "x" &
-                        To_String(Items_List(J).Name) &
-                        "} [list red]");
+                       (RecipeText, "end",
+                        "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
+                        To_String(Items_List(J).Name) & "} [list red]");
                   end if;
                   MAmount := MAmount + 1;
                end if;
             end loop Find_Materials_Loop;
          end loop Check_Materials_Loop;
          HaveMaterials := True;
-         Have_Materials_Loop:
+         Have_Materials_Loop :
          for I in Materials'Range loop
             if not Materials(I) then
                HaveMaterials := False;
@@ -533,7 +494,7 @@ package body Crafts.UI is
       if Recipe.Tool /= To_Unbounded_String("None") then
          Insert(RecipeText, "end", "{" & LF & "Tool: }");
          MAmount := 0;
-         Check_Tool_Loop:
+         Check_Tool_Loop :
          for I in Items_List.Iterate loop
             if Items_List(I).IType = Recipe.Tool
               and then
@@ -551,11 +512,8 @@ package body Crafts.UI is
                   HaveTool := True;
                end if;
                Insert
-                 (RecipeText,
-                  "end",
-                  "{" &
-                  To_String(Items_List(I).Name) &
-                  "}" &
+                 (RecipeText, "end",
+                  "{" & To_String(Items_List(I).Name) & "}" &
                   (if not HaveTool then " [list red]" else ""));
                MAmount := MAmount + 1;
             end if;
@@ -565,7 +523,7 @@ package body Crafts.UI is
       end if;
       Insert(RecipeText, "end", "{" & LF & "Workplace: }");
       HaveWorkplace := False;
-      Have_Workplace_Loop:
+      Have_Workplace_Loop :
       for Module of PlayerShip.Modules loop
          if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
             WorkplaceName := Module.Name;
@@ -576,7 +534,7 @@ package body Crafts.UI is
          end if;
       end loop Have_Workplace_Loop;
       if WorkplaceName = Null_Unbounded_String then
-         Find_Workshop_Name_Loop:
+         Find_Workshop_Name_Loop :
          for I in Modules_List.Iterate loop
             if Modules_List(I).MType = Recipe.Workplace then
                WorkplaceName :=
@@ -587,25 +545,15 @@ package body Crafts.UI is
          end loop Find_Workshop_Name_Loop;
       end if;
       Insert
-        (RecipeText,
-         "end",
-         "{" &
-         To_String(WorkplaceName) &
-         "}" &
+        (RecipeText, "end",
+         "{" & To_String(WorkplaceName) & "}" &
          (if not HaveWorkplace then " [list red]" else ""));
       Insert
-        (RecipeText,
-         "end",
-         "{" &
-         LF &
-         "Skill: " &
-         To_String(Skills_List(Recipe.Skill).Name) &
+        (RecipeText, "end",
+         "{" & LF & "Skill: " & To_String(Skills_List(Recipe.Skill).Name) &
          "/" &
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name) &
-         LF &
-         "Time needed:" &
-         Positive'Image(Recipe.Time) &
-         " minutes}");
+         LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       if HaveMaterials and HaveTool and HaveWorkplace then
          ShowSetRecipe(RecipeIndex);
          Tcl.Tk.Ada.Grid.Grid(CraftFrame);
@@ -647,17 +595,13 @@ package body Crafts.UI is
    -- SetCrafting
    -- SOURCE
    function Set_Crafting_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Crafting_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := Main_Paned & ".craftframe.canvas.craft";
@@ -674,13 +618,12 @@ package body Crafts.UI is
          RecipeIndex :=
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
-      Set_Module_Loop:
+      Set_Module_Loop :
       for I in PlayerShip.Modules.Iterate loop
          if PlayerShip.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
             SetRecipe
-              (Modules_Container.To_Index(I),
-               Positive'Value(Get(AmountBox)),
+              (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
                RecipeIndex);
             UpdateMessages;
             exit Set_Module_Loop;

@@ -38,58 +38,44 @@ package body BasesTypes is
       Action, SubAction: Data_Action;
       BuyPrice, SellPrice: Natural;
       procedure AddChildNode
-        (Data: in out UnboundedString_Container.Vector;
-         Name: String;
+        (Data: in out UnboundedString_Container.Vector; Name: String;
          Index: Natural) is
          Value: Unbounded_String;
          DeleteIndex: Positive;
       begin
          ChildNodes :=
            DOM.Core.Elements.Get_Elements_By_Tag_Name
-             (Item(NodesList, Index),
-              Name);
-         Read_Child_Node_Loop:
+             (Item(NodesList, Index), Name);
+         Read_Child_Node_Loop :
          for J in 0 .. Length(ChildNodes) - 1 loop
             ChildNode := Item(ChildNodes, J);
             Value :=
-              (if
-                 Name = "flag"
-               then
+              (if Name = "flag" then
                  To_Unbounded_String(Get_Attribute(ChildNode, "name"))
                else To_Unbounded_String(Get_Attribute(ChildNode, "index")));
             SubAction :=
-              (if
-                 Get_Attribute(ChildNode, "action")'Length > 0
-               then
+              (if Get_Attribute(ChildNode, "action")'Length > 0 then
                  Data_Action'Value(Get_Attribute(ChildNode, "action"))
                else ADD);
             if Name = "recipe" then
                if not Recipes_List.Contains(Value) then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " base type '" &
-                    To_String(BaseIndex) &
-                    "', no recipe with index '" &
-                    To_String(Value) &
-                    "'.";
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', no recipe with index '" & To_String(Value) & "'.";
                end if;
                if Data.Contains(Value) and SubAction = ADD then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " base type '" &
-                    To_String(BaseIndex) &
-                    "', recipe '" &
-                    To_String(Value) &
-                    "' already added.";
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) & "', recipe '" &
+                    To_String(Value) & "' already added.";
                end if;
             end if;
             if SubAction /= REMOVE then
                Data.Append(New_Item => Value);
             else
                DeleteIndex := Data.First_Index;
-               Delete_Child_Data_Loop:
+               Delete_Child_Data_Loop :
                while DeleteIndex <= Data.Last_Index loop
                   if Data(DeleteIndex) = Value then
                      Data.Delete(Index => DeleteIndex);
@@ -104,38 +90,29 @@ package body BasesTypes is
       BasesData := Get_Tree(Reader);
       NodesList :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(BasesData, "base");
-      Read_Bases_Types_Loop:
+      Read_Bases_Types_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
-           (Name => Null_Unbounded_String,
-            Color => "ffffff",
-            Trades => TmpTrades,
-            Recipes => TmpRecipes,
-            Flags => TmpFlags,
+           (Name => Null_Unbounded_String, Color => "ffffff",
+            Trades => TmpTrades, Recipes => TmpRecipes, Flags => TmpFlags,
             Description => Null_Unbounded_String);
          BaseNode := Item(NodesList, I);
          BaseIndex := To_Unbounded_String(Get_Attribute(BaseNode, "index"));
          Action :=
-           (if
-              Get_Attribute(BaseNode, "action")'Length > 0
-            then
+           (if Get_Attribute(BaseNode, "action")'Length > 0 then
               Data_Action'Value(Get_Attribute(BaseNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not BasesTypes_Container.Contains
-                (BasesTypes_List,
-                 BaseIndex) then
+                (BasesTypes_List, BaseIndex) then
                raise Data_Loading_Error
-                 with "Can't " &
-                 To_Lower(Data_Action'Image(Action)) &
-                 " base type '" &
-                 To_String(BaseIndex) &
+                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                 " base type '" & To_String(BaseIndex) &
                  "', there no base type with that index.";
             end if;
          elsif BasesTypes_Container.Contains(BasesTypes_List, BaseIndex) then
             raise Data_Loading_Error
-              with "Can't add base type '" &
-              To_String(BaseIndex) &
+              with "Can't add base type '" & To_String(BaseIndex) &
               "', there is one with that index.";
          end if;
          if Action /= REMOVE then
@@ -151,8 +128,7 @@ package body BasesTypes is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (BaseNode,
-                 "description");
+                (BaseNode, "description");
             if Length(ChildNodes) > 0 then
                TempRecord.Description :=
                  To_Unbounded_String
@@ -160,38 +136,28 @@ package body BasesTypes is
             end if;
             ChildNodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Item(NodesList, I),
-                 "item");
-            Read_Items_Loop:
+                (Item(NodesList, I), "item");
+            Read_Items_Loop :
             for J in 0 .. Length(ChildNodes) - 1 loop
                ChildNode := Item(ChildNodes, J);
                ItemIndex :=
                  To_Unbounded_String(Get_Attribute(ChildNode, "index"));
                SubAction :=
-                 (if
-                    Get_Attribute(ChildNode, "action")'Length > 0
-                  then
+                 (if Get_Attribute(ChildNode, "action")'Length > 0 then
                     Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                if not Items_List.Contains(ItemIndex) then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " base type '" &
-                    To_String(BaseIndex) &
-                    "', no item with index '" &
-                    To_String(ItemIndex) &
-                    "'.";
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', no item with index '" & To_String(ItemIndex) & "'.";
                end if;
                if SubAction = ADD
                  and then TempRecord.Trades.Contains(ItemIndex) then
                   raise Data_Loading_Error
-                    with "Can't " &
-                    To_Lower(Data_Action'Image(Action)) &
-                    " base type '" &
-                    To_String(BaseIndex) &
-                    "', item with index '" &
-                    To_String(ItemIndex) &
+                    with "Can't " & To_Lower(Data_Action'Image(Action)) &
+                    " base type '" & To_String(BaseIndex) &
+                    "', item with index '" & To_String(ItemIndex) &
                     "' already added.";
                end if;
                if SubAction /= REMOVE then
@@ -206,7 +172,7 @@ package body BasesTypes is
                        Natural'Value(Get_Attribute(ChildNode, "buyprice"));
                   end if;
                   TempRecord.Trades.Include
-                  (Key => ItemIndex, New_Item => (SellPrice, BuyPrice));
+                    (Key => ItemIndex, New_Item => (SellPrice, BuyPrice));
                else
                   TempRecord.Trades.Delete(ItemIndex);
                end if;
@@ -215,9 +181,7 @@ package body BasesTypes is
             AddChildNode(TempRecord.Flags, "flag", I);
             if Action /= UPDATE then
                BasesTypes_Container.Include
-                 (BasesTypes_List,
-                  BaseIndex,
-                  TempRecord);
+                 (BasesTypes_List, BaseIndex, TempRecord);
                Log_Message
                  ("Base type added: " & To_String(TempRecord.Name),
                   EVERYTHING);
@@ -230,27 +194,24 @@ package body BasesTypes is
          else
             BasesTypes_Container.Exclude(BasesTypes_List, BaseIndex);
             Log_Message
-              ("Base type removed: " & To_String(BaseIndex),
-               EVERYTHING);
+              ("Base type removed: " & To_String(BaseIndex), EVERYTHING);
          end if;
       end loop Read_Bases_Types_Loop;
    end LoadBasesTypes;
 
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String;
-      CheckFlag: Boolean := True;
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
       BaseIndex: Extended_Base_Range := 0) return Boolean is
    begin
       if BaseIndex > 0
-        and then
-          SkyBases(BaseIndex).Reputation(1) <
+        and then SkyBases(BaseIndex).Reputation(1) <
           Items_List(ItemIndex).Reputation then
          return False;
       end if;
       if CheckFlag
         and then
         (BasesTypes_List(BaseType).Flags.Contains
-         (To_Unbounded_String("blackmarket")) and
+           (To_Unbounded_String("blackmarket")) and
          Get_Price(BaseType, ItemIndex) > 0) then
          return True;
       end if;

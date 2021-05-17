@@ -41,10 +41,7 @@ package BasesTypes is
    -- Used to store base buy and sell prices for items in selected base type
    -- SOURCE
    package BasesTrade_Container is new Hashed_Maps
-     (Unbounded_String,
-      Prices_Array,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, Prices_Array, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****s* BasesTypes/BasesTypes.BaseType_Data
@@ -76,10 +73,7 @@ package BasesTypes is
    -- Used to store information about all available bases types
    -- SOURCE
    package BasesTypes_Container is new Hashed_Maps
-     (Unbounded_String,
-      BaseType_Data,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, BaseType_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* BasesTypes/BasesTypes.BasesTypes_List
@@ -111,8 +105,7 @@ package BasesTypes is
    -- True if item is buyable in that type of bases otherwise false
    -- SOURCE
    function Is_Buyable
-     (BaseType, ItemIndex: Unbounded_String;
-      CheckFlag: Boolean := True;
+     (BaseType, ItemIndex: Unbounded_String; CheckFlag: Boolean := True;
       BaseIndex: Extended_Base_Range := 0) return Boolean with
       Pre => BasesTypes_List.Contains(BaseType) and
       Items_List.Contains(ItemIndex),

@@ -132,10 +132,9 @@ package body MainMenu is
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
       Wm_Set
-        (Widgt => Main_Window,
-         Action => "iconphoto",
+        (Widgt => Main_Window, Action => "iconphoto",
          Options => "-default " & Icon);
-      Load_Theme_Loop:
+      Load_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(Position => I) =
            Game_Settings.Interface_Theme then
@@ -148,8 +147,7 @@ package body MainMenu is
       Theme_Use
         (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
       Tcl_EvalFile
-        (interp => Get_Context,
-         fileName => Ui_Directory & "mainmenu.tcl");
+        (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");
       Main_Menu_Frame.Interp := Get_Context;
       Main_Menu_Frame.Name := New_String(Str => ".mainmenu");
       if not Game_Settings.Show_Tooltips then
@@ -185,21 +183,18 @@ package body MainMenu is
       end if;
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert
-        (TextEntry => Text_Entry,
-         Index => "0",
+        (TextEntry => Text_Entry, Index => "0",
          Text => To_String(Source => New_Game_Settings.Player_Name));
       Tcl_SetVar
-        (interp => Get_Context,
-         varName => "playergender",
+        (interp => Get_Context, varName => "playergender",
          newValue => "" & New_Game_Settings.Player_Gender);
       Text_Entry.Name :=
         New_String(Str => ".newgamemenu.canvas.player.shipname");
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert
-        (TextEntry => Text_Entry,
-         Index => "0",
+        (TextEntry => Text_Entry, Index => "0",
          Text => To_String(Source => New_Game_Settings.Ship_Name));
-      Load_Factions_Names_Loop:
+      Load_Factions_Names_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Careers.Length > 0 then
             Append
@@ -331,45 +326,36 @@ package body MainMenu is
       end if;
       if Game_Settings.Full_Screen then
          Wm_Set
-           (Widgt => Main_Window,
-            Action => "attributes",
+           (Widgt => Main_Window, Action => "attributes",
             Options => "-fullscreen 0");
       end if;
       if Tcl_GetVar(interp => Get_Context, varName => "tcl_platform(os)") =
         "Linux" then
          Wm_Set
-           (Widgt => Main_Window,
-            Action => "attributes",
+           (Widgt => Main_Window, Action => "attributes",
             Options => "-zoomed 0");
       else
          Wm_Set(Widgt => Main_Window, Action => "state", Options => "normal");
       end if;
       Wm_Set
-        (Widgt => Main_Window,
-         Action => "title",
+        (Widgt => Main_Window, Action => "title",
          Options => "{Steam Sky - Main Menu}");
       Wm_Set
-        (Widgt => Main_Window,
-         Action => "geometry",
+        (Widgt => Main_Window, Action => "geometry",
          Options =>
-           "600x400+" &
-           Trim(Source => Positive'Image(X), Side => Left) &
-           "+" &
+           "600x400+" & Trim(Source => Positive'Image(X), Side => Left) & "+" &
            Trim(Source => Positive'Image(Y), Side => Left));
       if Winfo_Get(Widgt => Game_Frame, Info => "exists") = "1" then
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Game_Frame);
       end if;
       Tcl.Tk.Ada.Pack.Pack
-        (Slave => Main_Menu_Frame,
-         Options => "-fill both -expand true");
+        (Slave => Main_Menu_Frame, Options => "-fill both -expand true");
       Start_Search
-        (Search => Files,
-         Directory => To_String(Source => Save_Directory),
+        (Search => Files, Directory => To_String(Source => Save_Directory),
          Pattern => "*.sav");
       if More_Entries(Search => Files) then
          Tcl.Tk.Ada.Pack.Pack
-           (Slave => Button,
-            Options => "-after .mainmenu.newgame");
+           (Slave => Button, Options => "-after .mainmenu.newgame");
          Focus(Widgt => Button);
       else
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
@@ -381,8 +367,7 @@ package body MainMenu is
       if Exists
           (Name => To_String(Source => Save_Directory) & "halloffame.dat") then
          Tcl.Tk.Ada.Pack.Pack
-           (Slave => Button,
-            Options => "-before .mainmenu.news");
+           (Slave => Button, Options => "-before .mainmenu.news");
       else
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
       end if;
@@ -393,11 +378,11 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
          ShowMessage
            (Text => "Can't load game data files. Error: " & Get_Data_Error,
-            ParentFrame => ".mainmenu",
-            Title => "The game data error");
+            ParentFrame => ".mainmenu", Title => "The game data error");
          return;
       end if;
-      Check_Permissions_Block: declare
+      Check_Permissions_Block :
+      declare
          use Ada.Text_IO;
 
          Test_File: File_Type;
@@ -405,14 +390,12 @@ package body MainMenu is
          Create
            (File => Test_File,
             Name =>
-              To_String(Source => Save_Directory) &
-              Dir_Separator &
+              To_String(Source => Save_Directory) & Dir_Separator &
               "test.txt");
          Close(File => Test_File);
          Delete_File
            (Name =>
-              To_String(Source => Save_Directory) &
-              Dir_Separator &
+              To_String(Source => Save_Directory) & Dir_Separator &
               "test.txt");
       exception
          when Ada.Text_IO.Use_Error =>
@@ -426,16 +409,14 @@ package body MainMenu is
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please select different directory.",
-                  ParentFrame => ".mainmenu",
-                  Title => "Can't save the game");
+                  ParentFrame => ".mainmenu", Title => "Can't save the game");
             else
                ShowMessage
                  (Text =>
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
-                  ParentFrame => ".mainmenu",
-                  Title => "Can't save the game");
+                  ParentFrame => ".mainmenu", Title => "Can't save the game");
             end if;
       end Check_Permissions_Block;
    end Show_Main_Menu;

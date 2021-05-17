@@ -275,7 +275,7 @@ package body Trades is
          elsif TraderShip.Crew.Length < 10 then GetRandom(1, 5)
          else GetRandom(1, 10));
       CargoItemIndex, ItemIndex: Inventory_Container.Extended_Index;
-      ItemAmount: Positive range 1 .. 1000;
+      ItemAmount: Positive range 1 .. 1_000;
       NewItemIndex: Unbounded_String;
    begin
       TraderCargo.Clear;
@@ -291,7 +291,7 @@ package body Trades is
          ItemAmount :=
            (if TraderShip.Crew.Length < 5 then GetRandom(1, 100)
             elsif TraderShip.Crew.Length < 10 then GetRandom(1, 500)
-            else GetRandom(1, 1000));
+            else GetRandom(1, 1_000));
          ItemIndex := GetRandom(1, Positive(Items_List.Length));
          Find_Item_Index_Loop :
          for I in Items_List.Iterate loop
