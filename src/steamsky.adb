@@ -146,7 +146,7 @@ begin
 
    Load_Config;
    Load_Hall_Of_Fame;
-   LoadThemes;
+   Load_Themes;
 
    -- Start Tk
 
