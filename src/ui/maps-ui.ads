@@ -29,16 +29,11 @@ package Maps.UI is
    -- Array with the game menu default accelerators
    -- SOURCE
    MenuAccelerators: array(1 .. 11) of Unbounded_String :=
-     (To_Unbounded_String("s"),
-      To_Unbounded_String("o"),
-      To_Unbounded_String("r"),
-      To_Unbounded_String("m"),
-      To_Unbounded_String("k"),
-      To_Unbounded_String("w"),
-      To_Unbounded_String("g"),
-      To_Unbounded_String("F1"),
-      To_Unbounded_String("p"),
-      To_Unbounded_String("q"),
+     (To_Unbounded_String("s"), To_Unbounded_String("o"),
+      To_Unbounded_String("r"), To_Unbounded_String("m"),
+      To_Unbounded_String("k"), To_Unbounded_String("w"),
+      To_Unbounded_String("g"), To_Unbounded_String("F1"),
+      To_Unbounded_String("p"), To_Unbounded_String("q"),
       To_Unbounded_String("x"));
    -- ****
 
@@ -47,24 +42,15 @@ package Maps.UI is
    -- Array with default map keyboard accelerators
    -- SOURCE
    MapAccelerators: array(1 .. 37) of Unbounded_String :=
-     (To_Unbounded_String("e"),
-      To_Unbounded_String("v"),
-      To_Unbounded_String("plus"),
-      To_Unbounded_String("minus"),
-      To_Unbounded_String("KP_7"),
-      To_Unbounded_String("KP_8"),
-      To_Unbounded_String("KP_9"),
-      To_Unbounded_String("KP_4"),
-      To_Unbounded_String("KP_5"),
-      To_Unbounded_String("KP_6"),
-      To_Unbounded_String("KP_1"),
-      To_Unbounded_String("KP_2"),
-      To_Unbounded_String("KP_3"),
-      To_Unbounded_String("KP_Divide"),
-      To_Unbounded_String("Shift-Return"),
-      To_Unbounded_String("H"),
-      To_Unbounded_String("Shift-KP_Home"),
-      To_Unbounded_String("Shift-KP_Up"),
+     (To_Unbounded_String("e"), To_Unbounded_String("v"),
+      To_Unbounded_String("plus"), To_Unbounded_String("minus"),
+      To_Unbounded_String("KP_7"), To_Unbounded_String("KP_8"),
+      To_Unbounded_String("KP_9"), To_Unbounded_String("KP_4"),
+      To_Unbounded_String("KP_5"), To_Unbounded_String("KP_6"),
+      To_Unbounded_String("KP_1"), To_Unbounded_String("KP_2"),
+      To_Unbounded_String("KP_3"), To_Unbounded_String("KP_Divide"),
+      To_Unbounded_String("Shift-Return"), To_Unbounded_String("H"),
+      To_Unbounded_String("Shift-KP_Home"), To_Unbounded_String("Shift-KP_Up"),
       To_Unbounded_String("Shift-KP_Prior"),
       To_Unbounded_String("Shift-KP_Left"),
       To_Unbounded_String("Shift-KP_Right"),
@@ -80,10 +66,8 @@ package Maps.UI is
       To_Unbounded_String("Control-KP_Down"),
       To_Unbounded_String("Control-KP_Next"),
       To_Unbounded_String("Control-KP_Begin"),
-      To_Unbounded_String("Control-1"),
-      To_Unbounded_String("Control-2"),
-      To_Unbounded_String("Control-3"),
-      To_Unbounded_String("Control-4"));
+      To_Unbounded_String("Control-1"), To_Unbounded_String("Control-2"),
+      To_Unbounded_String("Control-3"), To_Unbounded_String("Control-4"));
    -- ****
 
    -- ****v* MUI/MUI.FullScreenAccel
@@ -183,8 +167,7 @@ private
    -- Y - Y coordinate of the map cell
    -- SOURCE
    procedure UpdateMapInfo
-     (X: Positive := PlayerShip.SkyX;
-      Y: Positive := PlayerShip.SkyY);
+     (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
    -- ****
 
    -- ****f* MUI/MUI.UpdateMoveButtons_(private)

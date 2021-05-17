@@ -53,9 +53,8 @@ package body HallOfFame is
       --## rule on IMPROPER_INITIALIZATION
       Entries_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
-          (Doc => Hof_Data,
-           Tag_Name => "entry");
-      Load_Hall_Of_Fame_Loop:
+          (Doc => Hof_Data, Tag_Name => "entry");
+      Load_Hall_Of_Fame_Loop :
       for I in 0 .. Length(List => Entries_List) - 1 loop
          Entry_Node := Item(List => Entries_List, Index => I);
          Hall_Of_Fame_Array(I + 1).Name :=
@@ -87,7 +86,7 @@ package body HallOfFame is
       Entry_Node, Main_Node: DOM.Core.Element;
       Hof_Data: Document;
    begin
-      Find_New_Index_Loop:
+      Find_New_Index_Loop :
       for I in Hall_Of_Fame_Array'Range loop
          if Hall_Of_Fame_Array(I).Points < GetGamePoints then
             New_Index := I;
@@ -100,8 +99,7 @@ package body HallOfFame is
       Hall_Of_Fame_Array(New_Index + 1 .. Hall_Of_Fame_Array'Last) :=
         Hall_Of_Fame_Array(New_Index .. Hall_Of_Fame_Array'Last - 1);
       Hall_Of_Fame_Array(New_Index) :=
-        (Name => Player_Name,
-         Points => GetGamePoints,
+        (Name => Player_Name, Points => GetGamePoints,
          Death_Reason => Death_Reason);
       Hof_Data := Create_Document(Implementation => Hall_Of_Fame);
       Main_Node :=
@@ -109,7 +107,7 @@ package body HallOfFame is
           (N => Hof_Data,
            New_Child =>
              Create_Element(Doc => Hof_Data, Tag_Name => "halloffame"));
-      Update_Hall_Of_Fame_Loop:
+      Update_Hall_Of_Fame_Loop :
       for Element of Hall_Of_Fame_Array loop
          if Element.Name = Null_Unbounded_String then
             exit Update_Hall_Of_Fame_Loop;
@@ -120,28 +118,23 @@ package body HallOfFame is
               New_Child =>
                 Create_Element(Doc => Hof_Data, Tag_Name => "entry"));
          Set_Attribute
-           (Elem => Entry_Node,
-            Name => "name",
+           (Elem => Entry_Node, Name => "name",
             Value => To_String(Source => Element.Name));
          Set_Attribute
-           (Elem => Entry_Node,
-            Name => "points",
+           (Elem => Entry_Node, Name => "points",
             Value =>
               Trim
                 (Source => Integer'Image(Element.Points),
                  Side => Ada.Strings.Left));
          Set_Attribute
-           (Elem => Entry_Node,
-            Name => "Death_Reason",
+           (Elem => Entry_Node, Name => "Death_Reason",
             Value => To_String(Source => Element.Death_Reason));
       end loop Update_Hall_Of_Fame_Loop;
       Create
-        (File => Hof_File,
-         Mode => Out_File,
+        (File => Hof_File, Mode => Out_File,
          Name => To_String(Source => Save_Directory) & "halloffame.dat");
       Write
-        (Stream => Stream(File => Hof_File),
-         N => Hof_Data,
+        (Stream => Stream(File => Hof_File), N => Hof_Data,
          Pretty_Print => True);
       Close(File => Hof_File);
    end Update_Hall_Of_Fame;

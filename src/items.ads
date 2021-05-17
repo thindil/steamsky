@@ -67,10 +67,7 @@ package Items is
    -- Used to store items data
    -- SOURCE
    package Objects_Container is new Hashed_Maps
-     (Unbounded_String,
-      Object_Data,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, Object_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****t* Items/Items.Items_Durability
@@ -203,8 +200,8 @@ package Items is
       -- Description of item damage level
       -- SOURCE
    function GetItemDamage
-     (ItemDurability: Items_Durability;
-      ToLower: Boolean := False) return String with
+     (ItemDurability: Items_Durability; ToLower: Boolean := False)
+      return String with
       Test_Case => (Name => "Test_GetItemDamage", Mode => Robustness);
       -- ****
 
@@ -220,8 +217,8 @@ package Items is
       -- Name of item with additional damage level info
       -- SOURCE
    function GetItemName
-     (Item: InventoryData;
-      DamageInfo, ToLower: Boolean := True) return String with
+     (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
+      return String with
       Test_Case => (Name => "Test_GetItemName", Mode => Robustness);
       -- ****
 
@@ -239,8 +236,7 @@ package Items is
       -- Updated inventory in which item was
       -- SOURCE
    procedure DamageItem
-     (Inventory: in out Inventory_Container.Vector;
-      ItemIndex: Positive;
+     (Inventory: in out Inventory_Container.Vector; ItemIndex: Positive;
       SkillLevel, MemberIndex: Natural := 0) with
       Pre => (ItemIndex <= Inventory.Last_Index),
       Test_Case => (Name => "Test_DamageItem", Mode => Nominal);

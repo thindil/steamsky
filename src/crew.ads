@@ -46,19 +46,8 @@ package Crew is
    -- Available orders for ships crews
    -- SOURCE
    type Crew_Orders is
-     (Pilot,
-      Engineer,
-      Gunner,
-      Repair,
-      Craft,
-      Upgrading,
-      Talk,
-      Heal,
-      Clean,
-      Rest,
-      Defend,
-      Boarding,
-      Train);
+     (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
+      Rest, Defend, Boarding, Train);
    -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
@@ -232,8 +221,8 @@ package Crew is
       -- Random name for crew member
       -- SOURCE
    function GenerateMemberName
-     (Gender: Character;
-      FactionIndex: Unbounded_String) return Unbounded_String with
+     (Gender: Character; FactionIndex: Unbounded_String)
+      return Unbounded_String with
       Pre =>
       ((Gender = 'M' or Gender = 'F') and
        FactionIndex /= Null_Unbounded_String),
@@ -262,9 +251,7 @@ package Crew is
    -- InCombat    - If true, player is in combat. Default is false
    -- SOURCE
    procedure UpdateCrew
-     (Minutes: Positive;
-      TiredPoints: Natural;
-      InCombat: Boolean := False) with
+     (Minutes: Positive; TiredPoints: Natural; InCombat: Boolean := False) with
       Test_Case => (Name => "Test_UpdateCrew", Mode => Robustness);
       -- ****
 

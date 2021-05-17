@@ -71,9 +71,7 @@ package body Utils.UI is
    -- ****
 
    function Close_Dialog_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
@@ -115,17 +113,13 @@ package body Utils.UI is
    -- Dialogname is name of the dialog to update
    -- SOURCE
    function Update_Dialog_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Dialog_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       MessageButton: constant Ttk_Button :=
         Get_Widget(CArgv.Arg(Argv, 1) & ".button", Interp);
@@ -136,8 +130,7 @@ package body Utils.UI is
          return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
       end if;
       Widgets.configure
-        (MessageButton,
-         "-text {Close" & Positive'Image(Seconds) & "}");
+        (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & CArgv.Arg(Argv, 1)));
@@ -145,23 +138,18 @@ package body Utils.UI is
    end Update_Dialog_Command;
 
    procedure ShowMessage
-     (Text: String;
-      ParentFrame: String := ".gameframe";
-      Title: String) is
+     (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
       MessageDialog: constant Ttk_Frame :=
         Create(ParentFrame & ".message", "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
         Create
-          (MessageDialog & ".text",
-           "-text {" & Text & "} -wraplength 300");
+          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
       MessageButton: constant Ttk_Button :=
         Create
           (MessageDialog & ".button",
            "-text {Close" &
            Positive'Image(Game_Settings.Auto_Close_Messages_Time) &
-           "} -command {CloseDialog " &
-           MessageDialog &
-           "}");
+           "} -command {CloseDialog " & MessageDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Message_Header: constant Ttk_Label :=
         Create
@@ -182,8 +170,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
-        (MessageDialog,
-         "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
+        (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
       Focus(MessageButton);
       Bind(MessageButton, "<Tab>", "{break}");
       Bind(MessageButton, "<Escape>", "{" & MessageButton & " invoke;break}");
@@ -194,8 +181,7 @@ package body Utils.UI is
    end ShowMessage;
 
    procedure AddCommand
-     (Name: String;
-      AdaCommand: not null CreateCommands.Tcl_CmdProc) is
+     (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
       Command: Tcl.Tcl_Command;
       SteamSky_Add_Command_Error: exception;
    begin
@@ -206,11 +192,7 @@ package body Utils.UI is
       end if;
       Command :=
         CreateCommands.Tcl_CreateCommand
-          (Get_Context,
-           Name,
-           AdaCommand,
-           0,
-           null);
+          (Get_Context, Name, AdaCommand, 0, null);
       if Command = null then
          raise SteamSky_Add_Command_Error with "Can't add command " & Name;
       end if;
@@ -231,28 +213,21 @@ package body Utils.UI is
    -- is a new height
    -- SOURCE
    function Resize_Canvas_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resize_Canvas_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Canvas: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
       Widgets.configure
         (Canvas,
-         "-width " &
-         CArgv.Arg(Argv, 2) &
-         " -height [expr " &
-         CArgv.Arg(Argv, 3) &
-         " - 20]");
+         "-width " & CArgv.Arg(Argv, 2) & " -height [expr " &
+         CArgv.Arg(Argv, 3) & " - 20]");
       return TCL_OK;
    end Resize_Canvas_Command;
 
@@ -272,17 +247,13 @@ package body Utils.UI is
    -- the index of the item in the cargo
    -- SOURCE
    function Check_Amount_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Check_Amount_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       CargoIndex: constant Natural := Natural'Value(CArgv.Arg(Argv, 2));
@@ -290,9 +261,7 @@ package body Utils.UI is
       Amount: Integer;
       Label: Ttk_Label;
       Value: Integer :=
-        (if
-           CArgv.Arg(Argv, 3)'Length > 0
-         then
+        (if CArgv.Arg(Argv, 3)'Length > 0 then
            Integer'Value(CArgv.Arg(Argv, 3))
          else 0);
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
@@ -307,8 +276,7 @@ package body Utils.UI is
          LabelName := To_Unbounded_String(".itemdialog.errorlbl");
          WarningText :=
            To_Unbounded_String
-             ("You will " &
-              CArgv.Arg(Argv, 4) &
+             ("You will " & CArgv.Arg(Argv, 4) &
               " amount below low level of ");
       end if;
       if Value < 1 then
@@ -328,34 +296,31 @@ package body Utils.UI is
          Amount := GetItemAmount(Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
             Widgets.configure
-              (Label,
-               "-text {" & To_String(WarningText) & "fuel.}");
+              (Label, "-text {" & To_String(WarningText) & "fuel.}");
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl_SetResult(Interp, "1");
             return TCL_OK;
          end if;
       end if;
-      Check_Food_And_Drinks_Loop:
+      Check_Food_And_Drinks_Loop :
       for Member of PlayerShip.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
-           (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
-                 (Label,
-                  "-text {" & To_String(WarningText) & "drinks.}");
+                 (Label, "-text {" & To_String(WarningText) & "drinks.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
             end if;
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
-           (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
-                 (Label,
-                  "-text {" & To_String(WarningText) & "food.}");
+                 (Label, "-text {" & To_String(WarningText) & "food.}");
                Tcl.Tk.Ada.Grid.Grid(Label);
                Tcl_SetResult(Interp, "1");
                return TCL_OK;
@@ -387,17 +352,13 @@ package body Utils.UI is
    -- Name is the name of spinbox which value will be validated
    -- SOURCE
    function Validate_Amount_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Validate_Amount_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       NewArgv: CArgv.Chars_Ptr_Ptr := Argv;
@@ -406,18 +367,11 @@ package body Utils.UI is
          NewArgv := NewArgv & Get(SpinBox);
       else
          NewArgv :=
-           CArgv.Empty &
-           CArgv.Arg(Argv, 0) &
-           CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) &
-           Get(SpinBox) &
-           CArgv.Arg(Argv, 3);
+           CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
+           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3);
       end if;
-      return Check_Amount_Command
-          (ClientData,
-           Interp,
-           CArgv.Argc(NewArgv),
-           NewArgv);
+      return
+        Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
 
    -- ****o* UUI/UUI.Get_String_Command
@@ -435,17 +389,13 @@ package body Utils.UI is
    -- Title is the title of dialog to show to the player
    -- SOURCE
    function Get_String_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Get_String_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       StringDialog: constant Ttk_Frame :=
@@ -461,11 +411,8 @@ package body Utils.UI is
       OkButton: constant Ttk_Button :=
         Create
           (StringDialog & ".okbutton",
-           "-text {Ok} -command {SetTextVariable " &
-           CArgv.Arg(Argv, 2) &
-           "; CloseDialog " &
-           StringDialog &
-           "}");
+           "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
+           "; CloseDialog " & StringDialog & "}");
       CancelButton: constant Ttk_Button :=
         Create
           (StringDialog & ".closebutton",
@@ -486,8 +433,7 @@ package body Utils.UI is
       Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
       Tcl.Tk.Ada.Place.Place
-        (StringDialog,
-         "-in .gameframe -relx 0.3 -rely 0.3");
+        (StringDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(StringEntry);
       return TCL_OK;
    end Get_String_Command;
@@ -507,17 +453,13 @@ package body Utils.UI is
    -- Variablename is the name of variable to set
    -- SOURCE
    function Set_Text_Variable_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Text_Variable_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TEntry: constant Ttk_Entry := Get_Widget(".getstring.entry", Interp);
@@ -572,17 +514,13 @@ package body Utils.UI is
    -- Answer is the answer set for the selected question
    -- SOURCE
    function Process_Question_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Process_Question_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Result: constant String := CArgv.Arg(Argv, 1);
@@ -615,15 +553,14 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          declare
             TraderIndex: constant Natural := FindMember(Talk);
-            Price: Positive := 1000;
+            Price: Positive := 1_000;
             MoneyIndex2: constant Natural :=
               FindItem(PlayerShip.Cargo, Money_Index);
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
                  (Text =>
-                    "You don't have any " &
-                    To_String(Money_Name) &
+                    "You don't have any " & To_String(Money_Name) &
                     " for change ship home base.",
                   Title => "No money");
                return TCL_OK;
@@ -632,8 +569,7 @@ package body Utils.UI is
             if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
                ShowMessage
                  (Text =>
-                    "You don't have enough " &
-                    To_String(Money_Name) &
+                    "You don't have enough " & To_String(Money_Name) &
                     " for change ship home base.",
                   Title => "No money");
                return TCL_OK;
@@ -641,8 +577,7 @@ package body Utils.UI is
             PlayerShip.HomeBase :=
               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
             UpdateCargo
-              (Ship => PlayerShip,
-               CargoIndex => MoneyIndex2,
+              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                Amount => -(Price));
             AddMessage
               ("You changed your ship home base to: " &
@@ -721,8 +656,7 @@ package body Utils.UI is
          end;
       elsif Result = "retire" then
          Death
-           (1,
-            To_Unbounded_String("retired after finished the game"),
+           (1, To_Unbounded_String("retired after finished the game"),
             PlayerShip);
          ShowQuestion
            ("You are dead. Would you like to see your game statistics?",
@@ -736,18 +670,15 @@ package body Utils.UI is
          begin
             AddMessage
               ("You dismissed " &
-               To_String(PlayerShip.Crew(MemberIndex).Name) &
-               ".",
+               To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
                OrderMessage);
             DeleteMember(MemberIndex, PlayerShip);
             SkyBases(BaseIndex).Population :=
               SkyBases(BaseIndex).Population + 1;
-            Update_Morale_Loop:
+            Update_Morale_Loop :
             for I in PlayerShip.Crew.Iterate loop
                UpdateMorale
-                 (PlayerShip,
-                  Crew_Container.To_Index(I),
-                  GetRandom(-5, -1));
+                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;
@@ -774,17 +705,13 @@ package body Utils.UI is
    -- Ttk::scrollbar which to which bindings will be added
    -- SOURCE
    function Set_Scrollbar_Bindings_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Scrollbar_Bindings_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Widget: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
@@ -792,36 +719,22 @@ package body Utils.UI is
         Get_Widget(CArgv.Arg(Argv, 2), Interp);
    begin
       Bind
-        (Widget,
-         "<Button-4>",
-         "{if {[winfo ismapped " &
-         Scrollbar &
-         "]} {event generate " &
-         Scrollbar &
-         " <Button-4>}}");
+        (Widget, "<Button-4>",
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-4>}}");
       Bind
-        (Widget,
-         "<Button-5>",
-         "{if {[winfo ismapped " &
-         Scrollbar &
-         "]} {event generate " &
-         Scrollbar &
-         " <Button-5>}}");
+        (Widget, "<Button-5>",
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <Button-5>}}");
       Bind
-        (Widget,
-         "<MouseWheel>",
-         "{if {[winfo ismapped " &
-         Scrollbar &
-         "]} {event generate " &
-         Scrollbar &
-         " <MouseWheel>}}");
+        (Widget, "<MouseWheel>",
+         "{if {[winfo ismapped " & Scrollbar & "]} {event generate " &
+         Scrollbar & " <MouseWheel>}}");
       return TCL_OK;
    end Set_Scrollbar_Bindings_Command;
 
    function Show_On_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
@@ -834,9 +747,7 @@ package body Utils.UI is
    end Show_On_Map_Command;
 
    function Set_Destination_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
@@ -850,8 +761,7 @@ package body Utils.UI is
       PlayerShip.DestinationX := Positive'Value(CArgv.Arg(Argv, 1));
       PlayerShip.DestinationY := Positive'Value(CArgv.Arg(Argv, 2));
       AddMessage
-        ("You set the travel destination for your ship.",
-         OrderMessage);
+        ("You set the travel destination for your ship.", OrderMessage);
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
       Tcl_Eval(Interp, "InvokeButton " & Close_Button);
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -869,29 +779,27 @@ package body Utils.UI is
       AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
       AddCommand("ProcessQuestion", Process_Question_Command'Access);
       AddCommand
-        ("SetScrollbarBindings",
-         Set_Scrollbar_Bindings_Command'Access);
+        ("SetScrollbarBindings", Set_Scrollbar_Bindings_Command'Access);
       AddCommand("ShowOnMap", Show_On_Map_Command'Access);
       AddCommand("SetDestination2", Set_Destination_Command'Access);
    end AddCommands;
 
    procedure MinutesToDate
-     (Minutes: Natural;
-      InfoText: in out Unbounded_String) is
+     (Minutes: Natural; InfoText: in out Unbounded_String) is
       TravelTime: Date_Record := (others => 0);
       MinutesDiff: Integer := Minutes;
    begin
-      Count_Time_Loop:
+      Count_Time_Loop :
       while MinutesDiff > 0 loop
-         if MinutesDiff >= 518400 then
+         if MinutesDiff >= 518_400 then
             TravelTime.Year := TravelTime.Year + 1;
-            MinutesDiff := MinutesDiff - 518400;
-         elsif MinutesDiff >= 43200 then
+            MinutesDiff := MinutesDiff - 518_400;
+         elsif MinutesDiff >= 43_200 then
             TravelTime.Month := TravelTime.Month + 1;
-            MinutesDiff := MinutesDiff - 43200;
-         elsif MinutesDiff >= 1440 then
+            MinutesDiff := MinutesDiff - 43_200;
+         elsif MinutesDiff >= 1_440 then
             TravelTime.Day := TravelTime.Day + 1;
-            MinutesDiff := MinutesDiff - 1440;
+            MinutesDiff := MinutesDiff - 1_440;
          elsif MinutesDiff >= 60 then
             TravelTime.Hour := TravelTime.Hour + 1;
             MinutesDiff := MinutesDiff - 60;
@@ -918,12 +826,11 @@ package body Utils.UI is
    end MinutesToDate;
 
    procedure TravelInfo
-     (InfoText: in out Unbounded_String;
-      Distance: Positive;
+     (InfoText: in out Unbounded_String; Distance: Positive;
       ShowFuelName: Boolean := False) is
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
-        (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+        (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0);
       MinutesDiff: Integer;
       Rests, CabinIndex, RestTime: Natural := 0;
       Damage: Damage_Factor := 0.0;
@@ -952,7 +859,7 @@ package body Utils.UI is
       end case;
       Append(InfoText, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
-      Count_Rest_Time_Loop:
+      Count_Rest_Time_Loop :
       for I in PlayerShip.Crew.Iterate loop
          if PlayerShip.Crew(I).Order = Pilot or
            PlayerShip.Crew(I).Order = Engineer then
@@ -1004,15 +911,13 @@ package body Utils.UI is
       MinutesToDate(MinutesDiff, InfoText);
       Append
         (InfoText,
-         LF &
-         "Approx fuel usage:" &
+         LF & "Approx fuel usage:" &
          Natural'Image
            (abs (Distance * CountFuelNeeded) + (Rests * (RestTime / 10))) &
          " ");
       if ShowFuelName then
          Append
-           (InfoText,
-            Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
+           (InfoText, Items_List(FindProtoItem(ItemType => Fuel_Type)).Name);
       end if;
    end TravelInfo;
 
@@ -1020,10 +925,8 @@ package body Utils.UI is
       LoopStart: Integer := 0 - MessagesAmount;
       Message: Message_Data;
       TagNames: constant array(1 .. 5) of Unbounded_String :=
-        (To_Unbounded_String("yellow"),
-         To_Unbounded_String("green"),
-         To_Unbounded_String("red"),
-         To_Unbounded_String("blue"),
+        (To_Unbounded_String("yellow"), To_Unbounded_String("green"),
+         To_Unbounded_String("red"), To_Unbounded_String("blue"),
          To_Unbounded_String("cyan"));
       MessagesView: constant Tk_Text :=
         Get_Widget(".gameframe.paned.controls.messages.view");
@@ -1031,18 +934,12 @@ package body Utils.UI is
       begin
          if Message.Color = WHITE then
             Insert
-              (MessagesView,
-               "end",
-               "{" & To_String(Message.Message) & "}");
+              (MessagesView, "end", "{" & To_String(Message.Message) & "}");
          else
             Insert
-              (MessagesView,
-               "end",
-               "{" &
-               To_String(Message.Message) &
-               "} [list " &
-               To_String(TagNames(Message_Color'Pos(Message.Color))) &
-               "]");
+              (MessagesView, "end",
+               "{" & To_String(Message.Message) & "} [list " &
+               To_String(TagNames(Message_Color'Pos(Message.Color))) & "]");
          end if;
       end ShowMessage;
    begin
@@ -1055,7 +952,7 @@ package body Utils.UI is
          LoopStart := -10;
       end if;
       if Game_Settings.Messages_Order = OLDER_FIRST then
-         Show_Older_First_Loop:
+         Show_Older_First_Loop :
          for I in LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
@@ -1065,7 +962,7 @@ package body Utils.UI is
          end loop Show_Older_First_Loop;
          See(MessagesView, "end");
       else
-         Show_Newer_First_Loop:
+         Show_Newer_First_Loop :
          for I in reverse LoopStart .. -1 loop
             Message := GetMessage(I + 1);
             ShowMessage;
@@ -1099,11 +996,9 @@ package body Utils.UI is
          end if;
       else
          if Trim(Widget_Image(OldSubWindow), Both) in
-             Paned & ".messagesframe" |
-               Paned & ".optionsframe" then
+             Paned & ".messagesframe" | Paned & ".optionsframe" then
             SashPos
-              (Paned,
-               "0",
+              (Paned, "0",
                Natural'Image
                  (Game_Settings.Window_Height -
                   Game_Settings.Messages_Position));
@@ -1119,16 +1014,10 @@ package body Utils.UI is
    end ShowScreen;
 
    procedure ShowInventoryItemInfo
-     (Parent: String;
-      ItemIndex: Positive;
-      MemberIndex: Natural) is
+     (Parent: String; ItemIndex: Positive; MemberIndex: Natural) is
       ProtoIndex, ItemInfo: Unbounded_String;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
-        (Weapon_Type,
-         Chest_Armor,
-         Head_Armor,
-         Arms_Armor,
-         Legs_Armor,
+        (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
    begin
       if MemberIndex > 0 then
@@ -1158,10 +1047,8 @@ package body Utils.UI is
       if Items_List(ProtoIndex).IType = Weapon_Type then
          Append
            (ItemInfo,
-            LF &
-            "Skill: " &
-            Skills_List(Items_List(ProtoIndex).Value(3)).Name &
-            "/" &
+            LF & "Skill: " &
+            Skills_List(Items_List(ProtoIndex).Value(3)).Name & "/" &
             Attributes_List
               (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
               .Name);
@@ -1184,18 +1071,16 @@ package body Utils.UI is
                null;
          end case;
       end if;
-      Show_More_Item_Info_Loop:
+      Show_More_Item_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
             Append
               (ItemInfo,
-               LF &
-               "Damage chance: " &
+               LF & "Damage chance: " &
                GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
             Append
               (ItemInfo,
-               LF &
-               "Strength:" &
+               LF & "Strength:" &
                Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
@@ -1203,8 +1088,7 @@ package body Utils.UI is
       if Tools_List.Contains(Items_List(ProtoIndex).IType) then
          Append
            (ItemInfo,
-            LF &
-            "Damage chance: " &
+            LF & "Damage chance: " &
             GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Length(Items_List(ProtoIndex).IType) > 4
@@ -1217,8 +1101,7 @@ package body Utils.UI is
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
          Append
-           (ItemInfo,
-            LF & LF & To_String(Items_List(ProtoIndex).Description));
+           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if Parent = "." then
          ShowInfo(To_String(ItemInfo));
@@ -1250,20 +1133,14 @@ package body Utils.UI is
       end if;
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       InfoButton :=
-        (if
-           ParentName = ".gameframe"
-         then
+        (if ParentName = ".gameframe" then
            Create
              (InfoDialog & ".button",
               "-text Close -command {CloseDialog " & InfoDialog & "}")
-         else
-           Create
+         else Create
              (InfoDialog & ".button",
-              "-text Close -command {CloseDialog " &
-              InfoDialog &
-              " " &
-              ParentName &
-              "}"));
+              "-text Close -command {CloseDialog " & InfoDialog & " " &
+              ParentName & "}"));
       Tcl.Tk.Ada.Grid.Grid(InfoButton, "-pady {0 5}");
       Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(InfoButton);
@@ -1280,8 +1157,7 @@ package body Utils.UI is
         Create(".itemdialog", "-style Dialog.TFrame");
       Button: Ttk_Button :=
         Create
-          (ItemDialog & ".dropbutton",
-           "-text Ok -command {" & Command & "}");
+          (ItemDialog & ".dropbutton", "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
       AmountBox: Ttk_SpinBox;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
@@ -1292,38 +1168,19 @@ package body Utils.UI is
              (ItemDialog & ".amount",
               "-width 10 -from 1 -to" &
               Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
-              " -validate key -validatecommand {CheckAmount " &
-              ItemDialog &
-              ".amount" &
-              Positive'Image(ItemIndex) &
-              " %P " &
-              Action &
-              "} -command {ValidateAmount " &
-              ItemDialog &
-              ".amount" &
-              Positive'Image(ItemIndex) &
-              " " &
-              Action &
-              "}");
+              " -validate key -validatecommand {CheckAmount " & ItemDialog &
+              ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              "} -command {ValidateAmount " & ItemDialog & ".amount" &
+              Positive'Image(ItemIndex) & " " & Action & "}");
       else
          AmountBox :=
            Create
              (ItemDialog & ".amount",
-              "-width 10 -from 1 -to" &
-              Positive'Image(MaxAmount) &
-              " -validate key -validatecommand {CheckAmount " &
-              ItemDialog &
-              ".amount" &
-              Positive'Image(ItemIndex) &
-              " %P " &
-              Action &
-              "} -command {ValidateAmount " &
-              ItemDialog &
-              ".amount" &
-              Positive'Image(ItemIndex) &
-              " " &
-              Action &
-              "}");
+              "-width 10 -from 1 -to" & Positive'Image(MaxAmount) &
+              " -validate key -validatecommand {CheckAmount " & ItemDialog &
+              ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              "} -command {ValidateAmount " & ItemDialog & ".amount" &
+              Positive'Image(ItemIndex) & " " & Action & "}");
       end if;
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
@@ -1344,16 +1201,14 @@ package body Utils.UI is
          Label :=
            Create
              (ItemDialog & ".amountlbl",
-              "-text {Amount (max:" &
-              Positive'Image(MaxAmount) &
+              "-text {Amount (max:" & Positive'Image(MaxAmount) &
               "):} -takefocus 0");
       end if;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx {5 0}");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Bind
-        (AmountBox,
-         "<Escape>",
+        (AmountBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
       Label :=
         Create
@@ -1363,9 +1218,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
       Bind
-        (Button,
-         "<Escape>",
-         "{" & ItemDialog & ".cancelbutton invoke;break}");
+        (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
@@ -1378,8 +1231,7 @@ package body Utils.UI is
    end ShowManipulateItem;
 
    procedure ShowQuestion
-     (Question, Result: String;
-      In_Game: Boolean := True) is
+     (Question, Result: String; In_Game: Boolean := True) is
       QuestionDialog: constant Ttk_Frame :=
         Create(".questiondialog", "-style Dialog.TFrame");
       Label: constant Ttk_Label :=
@@ -1390,8 +1242,7 @@ package body Utils.UI is
         Create
           (QuestionDialog & ".yesbutton",
            "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
-           Result &
-           "}");
+           Result & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       if In_Game then
@@ -1405,9 +1256,7 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5} -padx 5");
       Bind
-        (Button,
-         "<Escape>",
-         "{" & QuestionDialog & ".nobutton invoke;break}");
+        (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
       if not In_Game then
          Button :=
            Create
@@ -1423,8 +1272,7 @@ package body Utils.UI is
       Focus(Button);
       if In_Game then
          Tcl.Tk.Ada.Place.Place
-           (QuestionDialog,
-            "-in .gameframe -relx 0.3 -rely 0.3");
+           (QuestionDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       else
          Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in . -relx 0.3 -rely 0.3");
       end if;
@@ -1434,34 +1282,31 @@ package body Utils.UI is
       if Result = "showstats" then
          Widgets.configure
            (Button,
-            "-command {CloseDialog " &
-            QuestionDialog &
+            "-command {CloseDialog " & QuestionDialog &
             "; ProcessQuestion mainmenu}");
          Button := Get_Widget(QuestionDialog & ".yesbutton");
          Widgets.configure
            (Button,
-            "-command {CloseDialog " &
-            QuestionDialog &
+            "-command {CloseDialog " & QuestionDialog &
             "; ProcessQuestion showstats}");
       end if;
    end ShowQuestion;
 
    procedure Delete_Widgets
-     (Start_Index, End_Index: Integer;
-      Frame: Tk_Widget'Class) is
+     (Start_Index, End_Index: Integer; Frame: Tk_Widget'Class) is
       Tokens: Slice_Set;
       Item: Ttk_Frame;
    begin
       if End_Index < Start_Index then
          return;
       end if;
-      Delete_Widgets_Loop:
+      Delete_Widgets_Loop :
       for I in Start_Index .. End_Index loop
          Create
            (Tokens,
             Tcl.Tk.Ada.Grid.Grid_Slaves(Frame, "-row" & Positive'Image(I)),
             " ");
-         Delete_Row_Loop:
+         Delete_Row_Loop :
          for J in 1 .. Slice_Count(Tokens) loop
             Item := Get_Widget(Slice(Tokens, J));
             Destroy(Item);

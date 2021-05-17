@@ -67,15 +67,15 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
-      Command: constant String := Locate_Exec_On_Path((if OsName = "Windows"
-         then "start" elsif OsName = "Darwin" then "open"
-            else "xdg-open")).all;
+      Command: constant String :=
+        Locate_Exec_On_Path
+          ((if OsName = "Windows" then "start"
+            elsif OsName = "Darwin" then "open" else "xdg-open")).all;
       ProcessId: Process_Id;
    begin
       ProcessId :=
         Non_Blocking_Spawn
-          (Command,
-           Argument_String_To_List(CArgv.Arg(Argv, 1)).all);
+          (Command, Argument_String_To_List(CArgv.Arg(Argv, 1)).all);
       if ProcessId = Invalid_Pid then
          return TCL_ERROR;
       end if;
@@ -430,8 +430,7 @@ package body MainMenu.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, Values: Unbounded_String;
       FrameName: constant String := ".newgamemenu.canvas.player";
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(FrameName & ".faction", Interp);
+      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".faction", Interp);
       Label: Ttk_Label;
       GenderFrame: constant Ttk_Frame :=
         Get_Widget(FrameName & ".gender", Interp);

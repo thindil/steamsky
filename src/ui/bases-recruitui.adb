@@ -561,7 +561,7 @@ package body Bases.RecruitUI is
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
-        (TradePayment * 5000);
+        (TradePayment * 5_000);
       Cost :=
         (case ContractLength is
            when 1 => Cost - Integer(Float(Recruit.Price) * 0.1),
@@ -635,7 +635,7 @@ package body Bases.RecruitUI is
       TradePayment := Natural(Float'Value(cget(Scale, "-value")));
       Cost :=
         Recruit.Price - ((DailyPayment - Recruit.Payment) * 50) -
-        (TradePayment * 5000);
+        (TradePayment * 5_000);
       case ContractLength is
          when 1 =>
             Cost := Cost - Integer(Float(Recruit.Price) * 0.1);

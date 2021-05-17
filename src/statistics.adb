@@ -26,7 +26,7 @@ package body Statistics is
       Updated: Boolean := False;
       ShipIndex: Unbounded_String;
    begin
-      Proto_Ships_Loop:
+      Proto_Ships_Loop :
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Name = ShipName then
             ShipIndex := ProtoShips_Container.Key(I);
@@ -38,7 +38,7 @@ package body Statistics is
       if ShipIndex = Null_Unbounded_String then
          return;
       end if;
-      Destroyed_Ships_Loop:
+      Destroyed_Ships_Loop :
       for DestroyedShip of GameStats.DestroyedShips loop
          if DestroyedShip.Index = ShipIndex then
             DestroyedShip.Amount := DestroyedShip.Amount + 1;
@@ -48,7 +48,7 @@ package body Statistics is
       end loop Destroyed_Ships_Loop;
       if not Updated then
          GameStats.DestroyedShips.Append
-         (New_Item => (Index => ShipIndex, Amount => 1));
+           (New_Item => (Index => ShipIndex, Amount => 1));
       end if;
    end UpdateDestroyedShips;
 
@@ -69,7 +69,7 @@ package body Statistics is
    procedure UpdateFinishedGoals(Index: Unbounded_String) is
       Updated: Boolean := False;
    begin
-      Find_Goal_Index_Loop:
+      Find_Goal_Index_Loop :
       for Goal of Goals_List loop
          if Goal.Index = Index then
             GameStats.Points :=
@@ -77,7 +77,7 @@ package body Statistics is
             exit Find_Goal_Index_Loop;
          end if;
       end loop Find_Goal_Index_Loop;
-      Update_Finished_Goals_Loop:
+      Update_Finished_Goals_Loop :
       for FinishedGoal of GameStats.FinishedGoals loop
          if FinishedGoal.Index = Index then
             FinishedGoal.Amount := FinishedGoal.Amount + 1;
@@ -86,11 +86,11 @@ package body Statistics is
          end if;
       end loop Update_Finished_Goals_Loop;
       if not Updated then
-         Add_Finished_Goal_Loop:
+         Add_Finished_Goal_Loop :
          for Goal of Goals_List loop
             if Goal.Index = Index then
                GameStats.FinishedGoals.Append
-               (New_Item => (Index => Goal.Index, Amount => 1));
+                 (New_Item => (Index => Goal.Index, Amount => 1));
                exit Add_Finished_Goal_Loop;
             end if;
          end loop Add_Finished_Goal_Loop;
@@ -100,7 +100,7 @@ package body Statistics is
    procedure UpdateFinishedMissions(MType: Unbounded_String) is
       Updated: Boolean := False;
    begin
-      Update_Finished_Missions_Loop:
+      Update_Finished_Missions_Loop :
       for FinishedMission of GameStats.FinishedMissions loop
          if FinishedMission.Index = MType then
             FinishedMission.Amount := FinishedMission.Amount + 1;
@@ -110,7 +110,7 @@ package body Statistics is
       end loop Update_Finished_Missions_Loop;
       if not Updated then
          GameStats.FinishedMissions.Append
-         (New_Item => (Index => MType, Amount => 1));
+           (New_Item => (Index => MType, Amount => 1));
       end if;
       GameStats.Points := GameStats.Points + 50;
    end UpdateFinishedMissions;
@@ -118,7 +118,7 @@ package body Statistics is
    procedure UpdateCraftingOrders(Index: Unbounded_String) is
       Updated: Boolean := False;
    begin
-      Update_Crafting_Loop:
+      Update_Crafting_Loop :
       for CraftingOrder of GameStats.CraftingOrders loop
          if CraftingOrder.Index = Index then
             CraftingOrder.Amount := CraftingOrder.Amount + 1;
@@ -128,25 +128,24 @@ package body Statistics is
       end loop Update_Crafting_Loop;
       if not Updated then
          GameStats.CraftingOrders.Append
-         (New_Item => (Index => Index, Amount => 1));
+           (New_Item => (Index => Index, Amount => 1));
       end if;
       GameStats.Points := GameStats.Points + 5;
    end UpdateCraftingOrders;
 
    procedure UpdateKilledMobs
-     (Mob: Member_Data;
-      FractionName: Unbounded_String) is
+     (Mob: Member_Data; FractionName: Unbounded_String) is
       Updated: Boolean := False;
    begin
-      Get_Attribute_Points_Loop:
+      Get_Attribute_Points_Loop :
       for Attribute of Mob.Attributes loop
          GameStats.Points := GameStats.Points + Attribute(1);
       end loop Get_Attribute_Points_Loop;
-      Get_Skill_Points_Loop:
+      Get_Skill_Points_Loop :
       for Skill of Mob.Skills loop
          GameStats.Points := GameStats.Points + Skill(2);
       end loop Get_Skill_Points_Loop;
-      Update_Killed_Mobs_Loop:
+      Update_Killed_Mobs_Loop :
       for KilledMob of GameStats.KilledMobs loop
          if To_Lower(To_String(KilledMob.Index)) = To_String(FractionName) then
             KilledMob.Amount := KilledMob.Amount + 1;
@@ -156,12 +155,12 @@ package body Statistics is
       end loop Update_Killed_Mobs_Loop;
       if not Updated then
          GameStats.KilledMobs.Append
-         (New_Item =>
-            (Index =>
-               To_Unbounded_String
-                 (To_Upper(Slice(FractionName, 1, 1)) &
-                  Slice(FractionName, 2, Length(FractionName))),
-             Amount => 1));
+           (New_Item =>
+              (Index =>
+                 To_Unbounded_String
+                   (To_Upper(Slice(FractionName, 1, 1)) &
+                    Slice(FractionName, 2, Length(FractionName))),
+               Amount => 1));
       end if;
    end UpdateKilledMobs;
 
@@ -178,10 +177,10 @@ package body Statistics is
          New_Game_Settings.Upgrade_Cost_Bonus);
       PointsBonus, Value: Float := 0.0;
    begin
-      Get_Game_Points_Loop:
+      Get_Game_Points_Loop :
       for I in DifficultyValues'Range loop
          Value := Float(DifficultyValues(I));
-         Update_Game_Points_Loop:
+         Update_Game_Points_Loop :
          for J in MalusIndexes'Range loop
             if I = MalusIndexes(J) then
                if Value < 1.0 then

@@ -37,9 +37,7 @@ with Utils.UI; use Utils.UI;
 package body WaitMenu is
 
    function Show_Wait_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       WaitDialog: Ttk_Frame := Get_Widget(".gameframe.wait", Interp);
@@ -62,17 +60,14 @@ package body WaitMenu is
       WaitDialog := Create(".gameframe.wait", "-style Dialog.TFrame");
       Button :=
         Create
-          (WaitDialog & ".wait1",
-           "-text {Wait 1 minute} -command {Wait 1}");
+          (WaitDialog & ".wait1", "-text {Wait 1 minute} -command {Wait 1}");
       Tcl.Tk.Ada.Grid.Grid
-        (Button,
-         "-sticky we -columnspan 3 -padx 5 -pady {5 0}");
+        (Button, "-sticky we -columnspan 3 -padx 5 -pady {5 0}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
       Add(Button, "Wait in place for 1 minute");
       Button :=
         Create
-          (WaitDialog & ".wait5",
-           "-text {Wait 5 minutes} -command {Wait 5}");
+          (WaitDialog & ".wait5", "-text {Wait 5 minutes} -command {Wait 5}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Add(Button, "Wait in place for 5 minutes");
       Button :=
@@ -96,8 +91,7 @@ package body WaitMenu is
       Add(Button, "Wait in place for 30 minutes");
       Button :=
         Create
-          (WaitDialog & ".wait1h",
-           "-text {Wait 1 hour} -command {Wait 60}");
+          (WaitDialog & ".wait1h", "-text {Wait 1 hour} -command {Wait 60}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Add(Button, "Wait in place for 1 hour");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
@@ -107,8 +101,7 @@ package body WaitMenu is
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
       Add
         (Button,
-         "Wait in place for the selected amount of minutes:" &
-         LF &
+         "Wait in place for the selected amount of minutes:" & LF &
          "from 1 to 1440 (the whole day)");
       AmountBox :=
         Create
@@ -119,13 +112,12 @@ package body WaitMenu is
       Set(AmountBox, "1");
       Add
         (AmountBox,
-         "Wait in place for the selected amount of minutes:" &
-         LF &
+         "Wait in place for the selected amount of minutes:" & LF &
          "from 1 to 1440 (the whole day)");
       AmountLabel :=
         Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
-      Check_Crew_Rest_Loop:
+      Check_Crew_Rest_Loop :
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Tired > 0 and
            PlayerShip.Crew(I).Order = Rest then
@@ -133,7 +125,7 @@ package body WaitMenu is
          end if;
          if PlayerShip.Crew(I).Health in 1 .. 99 and
            PlayerShip.Crew(I).Order = Rest then
-            Modules_Loop:
+            Modules_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN then
                   for Owner of Module.Owner loop
@@ -164,8 +156,7 @@ package body WaitMenu is
          Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
          Add
            (Button,
-            "Wait in place until the whole ship's crew is healed." &
-            LF &
+            "Wait in place until the whole ship's crew is healed." & LF &
             "Can take a large amount of time.");
       end if;
       Button :=
@@ -173,13 +164,11 @@ package body WaitMenu is
           (WaitDialog & ".close",
            "-text {Close} -command {CloseDialog " & WaitDialog & "}");
       Tcl.Tk.Ada.Grid.Grid
-        (Button,
-         "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
+        (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
       Add(Button, "Close dialog \[Escape\]");
       Tcl.Tk.Ada.Place.Place
-        (WaitDialog,
-         "-in .gameframe -relx 0.3 -rely 0.15");
+        (WaitDialog, "-in .gameframe -relx 0.3 -rely 0.15");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus " & WaitDialog & ".wait1;break}");
       return TCL_OK;
@@ -199,17 +188,13 @@ package body WaitMenu is
    -- Wait
    -- SOURCE
    function Wait_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Wait_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TimeNeeded: Natural := 0;
@@ -241,11 +226,11 @@ package body WaitMenu is
       elsif CArgv.Arg(Argv, 1) = "rest" then
          WaitForRest;
       elsif CArgv.Arg(Argv, 1) = "heal" then
-         Check_Crew_Heal_Loop:
+         Check_Crew_Heal_Loop :
          for I in PlayerShip.Crew.Iterate loop
             if PlayerShip.Crew(I).Health in 1 .. 99 and
               PlayerShip.Crew(I).Order = Rest then
-               Modules_Loop:
+               Modules_Loop :
                for Module of PlayerShip.Modules loop
                   if Module.MType = CABIN then
                      for Owner of Module.Owner loop

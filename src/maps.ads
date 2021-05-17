@@ -61,8 +61,7 @@ package Maps is
    -- Distance between player ship and destination point
    -- SOURCE
    function CountDistance
-     (DestinationX: Map_X_Range;
-      DestinationY: Map_Y_Range) return Natural with
+     (DestinationX: Map_X_Range; DestinationY: Map_Y_Range) return Natural with
       Test_Case => (Name => "Test_CountDistance", Mode => Robustness);
       -- ****
 
@@ -76,8 +75,7 @@ package Maps is
       -- Parameter Coord
       -- SOURCE
    procedure NormalizeCoord
-     (Coord: in out Integer;
-      IsXAxis: Boolean := True) with
+     (Coord: in out Integer; IsXAxis: Boolean := True) with
       Test_Case => (Name => "Test_NormalizeCoord", Mode => Robustness);
       -- ****
 

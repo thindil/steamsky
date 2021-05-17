@@ -112,8 +112,7 @@ package Trades is
    -- Amount        - Amount of items to buy
    -- SOURCE
    procedure BuyItems
-     (BaseItemIndex: BaseCargo_Container.Extended_Index;
-      Amount: String) with
+     (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) with
       Test_Case => (Name => "Test_BuyItems", Mode => Robustness);
       -- ****
 
@@ -125,8 +124,7 @@ package Trades is
       -- Amount    - Amount of items to sell
       -- SOURCE
    procedure SellItems
-     (ItemIndex: Inventory_Container.Extended_Index;
-      Amount: String) with
+     (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
       Pre => ItemIndex in
         PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index,
       Test_Case => (Name => "Test_SellItems", Mode => Nominal);

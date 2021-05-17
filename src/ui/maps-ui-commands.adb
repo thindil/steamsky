@@ -52,18 +52,12 @@ with Utils.UI; use Utils.UI;
 package body Maps.UI.Commands is
 
    ButtonNames: constant array(1 .. 13) of Unbounded_String :=
-     (To_Unbounded_String("show"),
-      To_Unbounded_String("nw"),
-      To_Unbounded_String("n"),
-      To_Unbounded_String("ne"),
-      To_Unbounded_String("w"),
-      To_Unbounded_String("wait"),
-      To_Unbounded_String("e"),
-      To_Unbounded_String("sw"),
-      To_Unbounded_String("s"),
-      To_Unbounded_String("se"),
-      To_Unbounded_String("hide"),
-      To_Unbounded_String("left"),
+     (To_Unbounded_String("show"), To_Unbounded_String("nw"),
+      To_Unbounded_String("n"), To_Unbounded_String("ne"),
+      To_Unbounded_String("w"), To_Unbounded_String("wait"),
+      To_Unbounded_String("e"), To_Unbounded_String("sw"),
+      To_Unbounded_String("s"), To_Unbounded_String("se"),
+      To_Unbounded_String("hide"), To_Unbounded_String("left"),
       To_Unbounded_String("right"));
 
    -- ****o* MapCommands/MapCommands.Hide_Map_Buttons_Command
@@ -80,23 +74,19 @@ package body Maps.UI.Commands is
    -- HideMapButtons
    -- SOURCE
    function Hide_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Hide_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
    begin
       Button.Interp := Interp;
-      Hide_Buttons_Loop:
+      Hide_Buttons_Loop :
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
@@ -123,17 +113,13 @@ package body Maps.UI.Commands is
    -- ShowMapButtons
    -- SOURCE
    function Show_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
@@ -141,7 +127,7 @@ package body Maps.UI.Commands is
         Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
    begin
       Button.Interp := Interp;
-      Show_Buttons_Loop:
+      Show_Buttons_Loop :
       for I in 2 .. 11 loop
          Button.Name :=
            New_String
@@ -151,9 +137,7 @@ package body Maps.UI.Commands is
       Button.Name := New_String(Widget_Image(ButtonsBox) & ".show");
       Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       Button.Name :=
-        (if
-           Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0
-         then
+        (if Index(Tcl.Tk.Ada.Grid.Grid_Info(ButtonsBox), "-sticky es") = 0 then
            New_String(Widget_Image(ButtonsBox) & ".right")
          else New_String(Widget_Image(ButtonsBox) & ".left"));
       Tcl.Tk.Ada.Grid.Grid(Button);
@@ -175,17 +159,13 @@ package body Maps.UI.Commands is
    -- Buttonname is the name of the button which was clicked
    -- SOURCE
    function Move_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Map_Buttons_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ButtonsBox: constant Ttk_Frame :=
@@ -219,17 +199,13 @@ package body Maps.UI.Commands is
    -- DrawMap
    -- SOURCE
    function Draw_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Draw_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapView: constant Tk_Text :=
@@ -279,17 +255,13 @@ package body Maps.UI.Commands is
    -- X and Y are coordinates of the map cell which info will be show
    -- SOURCE
    function Update_Map_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Map_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       MapView: constant Tk_Text :=
@@ -299,19 +271,16 @@ package body Maps.UI.Commands is
       MapIndex :=
         To_Unbounded_String
           (Index
-             (MapView,
-              "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
-      if StartY +
-        Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+             (MapView, "@" & CArgv.Arg(Argv, 1) & "," & CArgv.Arg(Argv, 2)));
+      if StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1 <
         1 then
          return TCL_OK;
       end if;
       MapY :=
-        StartY +
-        Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
+        StartY + Integer'Value(Slice(MapIndex, 1, Index(MapIndex, ".") - 1)) -
         1;
-      if MapY > 1024 then
+      if MapY > 1_024 then
          return TCL_OK;
       end if;
       if StartX +
@@ -324,7 +293,7 @@ package body Maps.UI.Commands is
         StartX +
         Integer'Value
           (Slice(MapIndex, Index(MapIndex, ".") + 1, Length(MapIndex)));
-      if MapX > 1024 then
+      if MapX > 1_024 then
          return TCL_OK;
       end if;
       UpdateMapInfo(MapX, MapY);
@@ -345,17 +314,13 @@ package body Maps.UI.Commands is
    -- MoveMapInfo
    -- SOURCE
    function Move_Map_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Map_Info_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapInfoFrame: constant Ttk_Frame :=
@@ -384,23 +349,18 @@ package body Maps.UI.Commands is
    -- X and Y are mouse coordinates on which the destination menu will be show
    -- SOURCE
    function Show_Destination_Menu_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Destination_Menu_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       DestinationMenu: constant Tk_Menu := Get_Widget(".destination", Interp);
    begin
       if (MapX = 0 or MapY = 0)
-        and then
-          Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
+        and then Update_Map_Info_Command(ClientData, Interp, Argc, Argv) /=
           TCL_OK then
          return TCL_ERROR;
       end if;
@@ -409,27 +369,22 @@ package body Maps.UI.Commands is
       end if;
       Delete(DestinationMenu, "0", "end");
       Add
-        (DestinationMenu,
-         "command",
+        (DestinationMenu, "command",
          "-label {Set destination} -command SetDestination");
       if PlayerShip.Speed /= DOCKED then
          Add
-           (DestinationMenu,
-            "command",
+           (DestinationMenu, "command",
             "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Add
-              (DestinationMenu,
-               "command",
+              (DestinationMenu, "command",
                "-label {Move to} -command {MoveShip moveto}");
          end if;
       end if;
       Add(DestinationMenu, "command", "-label {Close}");
       Tcl_Eval
         (Interp,
-         "tk_popup .destination " &
-         CArgv.Arg(Argv, 1) &
-         " " &
+         "tk_popup .destination " & CArgv.Arg(Argv, 1) & " " &
          CArgv.Arg(Argv, 2));
       return TCL_OK;
    end Show_Destination_Menu_Command;
@@ -448,25 +403,20 @@ package body Maps.UI.Commands is
    -- SetDestination
    -- SOURCE
    function Set_Ship_Destination_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Ship_Destination_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       PlayerShip.DestinationX := MapX;
       PlayerShip.DestinationY := MapY;
       AddMessage
-        ("You set the travel destination for your ship.",
-         OrderMessage);
+        ("You set the travel destination for your ship.", OrderMessage);
       if Game_Settings.Auto_Center then
          CenterX := PlayerShip.SkyX;
          CenterY := PlayerShip.SkyY;
@@ -491,17 +441,13 @@ package body Maps.UI.Commands is
    -- Direction in which the map will be moved
    -- SOURCE
    function Move_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       MapView: constant Tk_Text :=
@@ -527,7 +473,7 @@ package body Maps.UI.Commands is
             else CenterY - (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "s" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
       elsif CArgv.Arg(Argv, 1) = "w" then
          CenterX :=
@@ -535,7 +481,7 @@ package body Maps.UI.Commands is
             else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
          CenterY :=
@@ -549,31 +495,30 @@ package body Maps.UI.Commands is
            (if CenterY - (MapHeight / 3) < 1 then MapHeight / 3
             else CenterY - (MapHeight / 3));
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
          CenterX :=
            (if CenterX - (MapWidth / 3) < 1 then MapWidth / 3
             else CenterX - (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "se" then
          CenterY :=
-           (if CenterY + (MapHeight / 3) > 1024 then 1024 - (MapHeight / 3)
+           (if CenterY + (MapHeight / 3) > 1_024 then 1_024 - (MapHeight / 3)
             else CenterY + (MapHeight / 3));
          CenterX :=
-           (if CenterX + (MapWidth / 3) > 1024 then 1024 - (MapWidth / 3)
+           (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
          CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
          CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
       end if;
       DrawMap;
-      return Close_Dialog_Command
-          (ClientData,
-           Interp,
-           2,
+      return
+        Close_Dialog_Command
+          (ClientData, Interp, 2,
            Empty & "CloseDialog" & ".gameframe.movemapdialog");
    end Move_Map_Command;
 
@@ -591,17 +536,13 @@ package body Maps.UI.Commands is
    -- ZoomMap
    -- SOURCE
    function Zoom_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Zoom_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       Game_Settings.Map_Font_Size :=
@@ -634,17 +575,13 @@ package body Maps.UI.Commands is
    -- Direction in which the player's ship will be moved
    -- SOURCE
    function Move_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       Message: Unbounded_String;
@@ -689,8 +626,7 @@ package body Maps.UI.Commands is
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
-                 ("You reached your travel destination.",
-                  OrderMessage);
+                 ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if Game_Settings.Auto_Finish then
@@ -700,7 +636,7 @@ package body Maps.UI.Commands is
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "moveto" then -- Move to destination
-         Move_Loop:
+         Move_Loop :
          loop
             NewX := 0;
             NewY := 0;
@@ -724,7 +660,7 @@ package body Maps.UI.Commands is
             if Result = 8 then
                WaitForRest;
                if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-                 (To_Unbounded_String("sentientships"))
+                   (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
                   WaitForRest;
@@ -798,8 +734,7 @@ package body Maps.UI.Commands is
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
                AddMessage
-                 ("You reached your travel destination.",
-                  OrderMessage);
+                 ("You reached your travel destination.", OrderMessage);
                PlayerShip.DestinationX := 0;
                PlayerShip.DestinationY := 0;
                if Game_Settings.Auto_Finish then
@@ -832,7 +767,7 @@ package body Maps.UI.Commands is
             if not StartsCombat then
                WaitForRest;
                if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
-                 (To_Unbounded_String("sentientships"))
+                   (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
                   WaitForRest;
@@ -873,17 +808,13 @@ package body Maps.UI.Commands is
    -- QuitGame
    -- SOURCE
    function Quit_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Quit_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -906,17 +837,13 @@ package body Maps.UI.Commands is
    -- ResignGame
    -- SOURCE
    function Resign_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resign_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -938,17 +865,13 @@ package body Maps.UI.Commands is
    -- ShowStats
    -- SOURCE
    function Show_Stats_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Stats_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       CloseButton: constant Ttk_Button :=
@@ -975,17 +898,13 @@ package body Maps.UI.Commands is
    -- to do special actions when closing them
    -- SOURCE
    function Show_Sky_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Sky_Map_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       CloseButton: constant Ttk_Button :=
@@ -1016,17 +935,13 @@ package body Maps.UI.Commands is
    -- click if emulate clicking with the left button
    -- SOURCE
    function Move_Mouse_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Mouse_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       MapView: constant Tk_Text :=
@@ -1035,85 +950,53 @@ package body Maps.UI.Commands is
       if CArgv.Arg(Argv, 1) = "click" then
          if Game_Settings.Right_Button then
             Generate
-              (MapView,
-               "<Button-3>",
+              (MapView, "<Button-3>",
                "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
          else
             Generate
-              (MapView,
-               "<Button-1>",
+              (MapView, "<Button-1>",
                "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
          end if;
       elsif CArgv.Arg(Argv, 1) = "nw" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "-1] -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "-1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
       elsif CArgv.Arg(Argv, 1) = "n" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x " &
-            CArgv.Arg(Argv, 2) &
-            " -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "-1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
       elsif CArgv.Arg(Argv, 1) = "ne" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "+1] -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "-1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-1]");
       elsif CArgv.Arg(Argv, 1) = "w" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "-1] -y " &
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "+1] -y " &
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "-1] -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "+1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
       elsif CArgv.Arg(Argv, 1) = "s" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x " &
-            CArgv.Arg(Argv, 2) &
-            " -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "+1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
       elsif CArgv.Arg(Argv, 1) = "se" then
          Generate
-           (MapView,
-            "<Motion>",
-            "-warp 1 -x [expr " &
-            CArgv.Arg(Argv, 2) &
-            "+1] -y [expr " &
-            CArgv.Arg(Argv, 3) &
-            "+1]");
+           (MapView, "<Motion>",
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+1]");
       end if;
       return TCL_OK;
    end Move_Mouse_Command;
@@ -1132,17 +1015,13 @@ package body Maps.UI.Commands is
    -- ToggleFullScreen
    -- SOURCE
    function Toggle_Full_Screen_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Toggle_Full_Screen_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
    begin
@@ -1171,17 +1050,13 @@ package body Maps.UI.Commands is
    -- ResizeLastMessages
    -- SOURCE
    function Resize_Last_Messages_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Resize_Last_Messages_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       Paned: constant Ttk_PanedWindow :=
@@ -1194,10 +1069,8 @@ package body Maps.UI.Commands is
       Game_Settings.Window_Height :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "height"));
       PanedPosition :=
-        (if
-           Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
-         then
-           Game_Settings.Window_Height
+        (if Game_Settings.Window_Height - Game_Settings.Messages_Position < 0
+         then Game_Settings.Window_Height
          else Game_Settings.Window_Height - Game_Settings.Messages_Position);
       if SashPosition > 0 and then SashPosition /= PanedPosition then
          if Game_Settings.Window_Height - SashPosition > -1 then

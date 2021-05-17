@@ -38,7 +38,7 @@ package body Missions is
    procedure GenerateMissions is
       BaseIndex: constant Natural :=
         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
-      MissionX, MissionY: Positive range 1 .. 1024;
+      MissionX, MissionY: Positive range 1 .. 1_024;
       MissionsAmount: Positive range 1 .. 26;
       TmpBaseIndex: Bases_Range;
       Mission: Mission_Data;
@@ -80,18 +80,16 @@ package body Missions is
       NormalizeCoord(MinY, False);
       MaxY := PlayerShip.SkyY + 100;
       NormalizeCoord(MaxY, False);
-      Find_Bases_In_Range_Loop:
+      Find_Bases_In_Range_Loop :
       for I in SkyBases'Range loop
-         if I /= BaseIndex and
-           SkyBases(I).SkyX in MinX .. MaxX and
-           SkyBases(I).SkyY in MinY .. MaxY and
-           SkyBases(I).Population > 0 then
+         if I /= BaseIndex and SkyBases(I).SkyX in MinX .. MaxX and
+           SkyBases(I).SkyY in MinY .. MaxY and SkyBases(I).Population > 0 then
             BasesInRange.Append(New_Item => I);
          end if;
       end loop Find_Bases_In_Range_Loop;
-      Get_Random_Bases_Loop:
+      Get_Random_Bases_Loop :
       while MissionsAmount > Positive(BasesInRange.Length) loop
-         TmpBaseIndex := GetRandom(1, 1024);
+         TmpBaseIndex := GetRandom(1, 1_024);
          if BasesInRange.Find_Index(Item => TmpBaseIndex) =
            Positive_Container.No_Index and
            SkyBases(TmpBaseIndex).Population > 0 then
@@ -100,7 +98,7 @@ package body Missions is
       end loop Get_Random_Bases_Loop;
       SkyBases(BaseIndex).Missions.Clear;
       GenerateEnemies(Enemies);
-      Generate_Missions_Loop:
+      Generate_Missions_Loop :
       for I in 1 .. MissionsAmount loop
          <<Start_Of_Loop>>
          MType :=
@@ -109,37 +107,26 @@ package body Missions is
          case MType is
             when Deliver =>
                Mission :=
-                 (MType => Deliver,
-                  Time => 1,
-                  TargetX => 0,
-                  TargetY => 0,
-                  Reward => 1,
-                  StartBase => 1,
-                  Finished => False,
+                 (MType => Deliver, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
                   ItemIndex =>
                     MissionsItems
                       (GetRandom(1, Positive(MissionsItems.Length))),
                   Multiplier => 1.0);
             when Destroy =>
                Mission :=
-                 (MType => Destroy,
-                  Time => 1,
-                  TargetX => 0,
-                  TargetY => 0,
-                  Reward => 1,
-                  StartBase => 1,
-                  Finished => False,
+                 (MType => Destroy, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
                   Multiplier => 1.0,
                   ShipIndex =>
                     Enemies
                       (GetRandom(Enemies.First_Index, Enemies.Last_Index)));
-               Find_Mission_Location_Loop:
+               Find_Mission_Location_Loop :
                loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
                   exit Find_Mission_Location_Loop when SkyMap
-                      (MissionX,
-                       MissionY)
+                      (MissionX, MissionY)
                       .BaseIndex =
                     0 and
                     MissionX /= PlayerShip.SkyX and
@@ -147,16 +134,10 @@ package body Missions is
                end loop Find_Mission_Location_Loop;
             when Patrol =>
                Mission :=
-                 (MType => Patrol,
-                  Time => 1,
-                  TargetX => 0,
-                  TargetY => 0,
-                  Reward => 1,
-                  StartBase => 1,
-                  Finished => False,
-                  Multiplier => 1.0,
-                  Target => 1);
-               Find_Patrol_Mission_Location_Loop:
+                 (MType => Patrol, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
+                  Multiplier => 1.0, Target => 1);
+               Find_Patrol_Mission_Location_Loop :
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
@@ -171,16 +152,10 @@ package body Missions is
                end if;
             when Explore =>
                Mission :=
-                 (MType => Explore,
-                  Time => 1,
-                  TargetX => 0,
-                  TargetY => 0,
-                  Reward => 1,
-                  StartBase => 1,
-                  Finished => False,
-                  Multiplier => 1.0,
-                  Target => 1);
-               Find_Explore_Location_Loop:
+                 (MType => Explore, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
+                  Multiplier => 1.0, Target => 1);
+               Find_Explore_Location_Loop :
                for J in 1 .. 10 loop
                   MissionX := GetRandom(MinX, MaxX);
                   MissionY := GetRandom(MinY, MaxY);
@@ -195,20 +170,15 @@ package body Missions is
                end if;
             when Passenger =>
                Mission :=
-                 (MType => Passenger,
-                  Time => 1,
-                  TargetX => 0,
-                  TargetY => 0,
-                  Reward => 1,
-                  StartBase => 1,
-                  Finished => False,
+                 (MType => Passenger, Time => 1, TargetX => 0, TargetY => 0,
+                  Reward => 1, StartBase => 1, Finished => False,
                   Multiplier => 1.0,
                   Data =>
                     QualitiesArray
                       (GetRandom(QualitiesArray'First, QualitiesArray'Last)));
          end case;
          if Mission.MType in Deliver | Passenger then
-            Find_Base_Mission_Loop:
+            Find_Base_Mission_Loop :
             loop
                TmpBaseIndex :=
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
@@ -256,14 +226,11 @@ package body Missions is
       end if;
       declare
          MissionsLimit: Integer :=
-           (case SkyBases(BaseIndex).Reputation(1) is
-              when 0 .. 25 => 1,
-              when 26 .. 50 => 3,
-              when 51 .. 75 => 5,
-              when 76 .. 100 => 10,
+           (case SkyBases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+              when 26 .. 50 => 3, when 51 .. 75 => 5, when 76 .. 100 => 10,
               when others => 0);
       begin
-         Count_Missions_Limit_Loop:
+         Count_Missions_Limit_Loop :
          for Mission of AcceptedMissions loop
             if Mission.StartBase = BaseIndex then
                MissionsLimit := MissionsLimit - 1;
@@ -284,12 +251,12 @@ package body Missions is
          declare
             HaveCabin: Boolean := False;
          begin
-            Modules_Loop:
+            Modules_Loop :
             for Module of PlayerShip.Modules loop
                if (Module.MType = CABIN and not HaveCabin)
                  and then Module.Quality >= Mission.Data then
                   HaveCabin := True;
-                  Cabin_Owner_Loop:
+                  Cabin_Owner_Loop :
                   for Owner of Module.Owner loop
                      if Owner > 0 then
                         HaveCabin := False;
@@ -312,16 +279,14 @@ package body Missions is
          when Deliver =>
             Append
               (AcceptMessage,
-               "'Deliver " &
-               To_String(Items_List(Mission.ItemIndex).Name) &
+               "'Deliver " & To_String(Items_List(Mission.ItemIndex).Name) &
                "'.");
             UpdateCargo(PlayerShip, Mission.ItemIndex, 1);
          when Destroy =>
             Append
               (AcceptMessage,
                "'Destroy " &
-               To_String(ProtoShips_List(Mission.ShipIndex).Name) &
-               "'.");
+               To_String(ProtoShips_List(Mission.ShipIndex).Name) & "'.");
          when Patrol =>
             Append(AcceptMessage, "'Patrol selected area'.");
          when Explore =>
@@ -339,15 +304,15 @@ package body Missions is
                PassengerBase :=
                  (if GetRandom(1, 100) < 60 then BaseIndex
                   else GetRandom(SkyBases'First, SkyBases'Last));
-               if not Factions_List(SkyBases(PassengerBase).Owner)
-                   .Flags.Contains
-                 (To_Unbounded_String("nogender")) then
+               if not Factions_List(SkyBases(PassengerBase).Owner).Flags
+                   .Contains
+                   (To_Unbounded_String("nogender")) then
                   Gender := (if GetRandom(1, 2) = 1 then 'M' else 'F');
                else
                   Gender := 'M';
                end if;
                if Factions_List(SkyBases(PassengerBase).Owner).Flags.Contains
-                 (To_Unbounded_String("nomorale")) then
+                   (To_Unbounded_String("nomorale")) then
                   Morale := 50;
                else
                   Morale := 50 + SkyBases(PassengerBase).Reputation(1);
@@ -364,33 +329,24 @@ package body Missions is
                end if;
                for J in Attributes_List.Iterate loop
                   Attributes.Append
-                  (New_Item => (GetRandom(3, MaxAttributeLevel), 0));
+                    (New_Item => (GetRandom(3, MaxAttributeLevel), 0));
                end loop;
                PlayerShip.Crew.Append
-               (New_Item =>
-                  (Name =>
-                     GenerateMemberName(Gender, SkyBases(PassengerBase).Owner),
-                   Gender => Gender,
-                   Health => 100,
-                   Tired => 0,
-                   Skills => Skills,
-                   Hunger => 0,
-                   Thirst => 0,
-                   Order => Rest,
-                   PreviousOrder => Rest,
-                   OrderTime => 15,
-                   Orders => (others => 0),
-                   Attributes => Attributes,
-                   Inventory => Inventory,
-                   Equipment => (others => 0),
-                   Payment => (others => 0),
-                   ContractLength => Mission.Time,
-                   Morale => (Morale, 0),
-                   Loyalty => Morale,
-                   HomeBase => PassengerBase,
-                   Faction => SkyBases(PassengerBase).Owner));
+                 (New_Item =>
+                    (Name =>
+                       GenerateMemberName
+                         (Gender, SkyBases(PassengerBase).Owner),
+                     Gender => Gender, Health => 100, Tired => 0,
+                     Skills => Skills, Hunger => 0, Thirst => 0, Order => Rest,
+                     PreviousOrder => Rest, OrderTime => 15,
+                     Orders => (others => 0), Attributes => Attributes,
+                     Inventory => Inventory, Equipment => (others => 0),
+                     Payment => (others => 0), ContractLength => Mission.Time,
+                     Morale => (Morale, 0), Loyalty => Morale,
+                     HomeBase => PassengerBase,
+                     Faction => SkyBases(PassengerBase).Owner));
             end;
-            Find_Cabin_Loop:
+            Find_Cabin_Loop :
             for Module of PlayerShip.Modules loop
                if Module.MType = CABIN
                  and then
@@ -415,7 +371,7 @@ package body Missions is
       Time: Integer;
       I: Mission_Container.Extended_Index := AcceptedMissions.First_Index;
    begin
-      Update_Missions_Loop:
+      Update_Missions_Loop :
       while I <= AcceptedMissions.Last_Index loop
          Time := AcceptedMissions(I).Time - Minutes;
          if Time < 1 then
@@ -448,8 +404,7 @@ package body Missions is
                To_String
                  (Items_List(AcceptedMissions(MissionIndex).ItemIndex).Name) &
                "'.",
-               MissionMessage,
-               GREEN);
+               MissionMessage, GREEN);
          when Destroy =>
             AddMessage
               ("You finished mission 'Destroy " &
@@ -460,19 +415,16 @@ package body Missions is
                MissionMessage);
          when Patrol =>
             AddMessage
-              ("You finished mission 'Patrol selected area'.",
-               MissionMessage,
+              ("You finished mission 'Patrol selected area'.", MissionMessage,
                GREEN);
          when Explore =>
             AddMessage
-              ("You finished mission 'Explore selected area'.",
-               MissionMessage,
+              ("You finished mission 'Explore selected area'.", MissionMessage,
                GREEN);
          when Passenger =>
             AddMessage
               ("You finished mission 'Transport passenger to base'.",
-               MissionMessage,
-               GREEN);
+               MissionMessage, GREEN);
       end case;
       UpdateGoal
         (MISSION,
@@ -506,15 +458,13 @@ package body Missions is
             when Deliver =>
                Append
                  (MessageText,
-                  "'Deliver " &
-                  To_String(Items_List(Mission.ItemIndex).Name) &
+                  "'Deliver " & To_String(Items_List(Mission.ItemIndex).Name) &
                   "'.");
             when Destroy =>
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(ProtoShips_List(Mission.ShipIndex).Name) &
-                  "'.");
+                  To_String(ProtoShips_List(Mission.ShipIndex).Name) & "'.");
             when Patrol =>
                Append(MessageText, "'Patrol selected area'.");
             when Explore =>
@@ -549,11 +499,8 @@ package body Missions is
             end if;
             if RewardAmount > 0 then
                AddMessage
-                 ("You received" &
-                  Integer'Image(RewardAmount) &
-                  " " &
-                  To_String(Money_Name) &
-                  " for finishing your mission.",
+                 ("You received" & Integer'Image(RewardAmount) & " " &
+                  To_String(Money_Name) & " for finishing your mission.",
                   MissionMessage);
                UpdateCargo(PlayerShip, Money_Index, RewardAmount);
             end if;
@@ -561,8 +508,7 @@ package body Missions is
       end if;
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       SkyMap
-        (SkyBases(Mission.StartBase).SkyX,
-         SkyBases(Mission.StartBase).SkyY)
+        (SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         0;
       if Mission.MType = Deliver then
@@ -571,7 +517,7 @@ package body Missions is
          DeleteMember(Mission.Data, PlayerShip);
       end if;
       AcceptedMissions.Delete(Index => MissionIndex);
-      Update_Map_Loop:
+      Update_Map_Loop :
       for I in AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
          if AcceptedMissions(I).Finished then
             SkyMap
@@ -590,15 +536,13 @@ package body Missions is
    procedure UpdateMission(MissionIndex: Positive) is
       Mission: constant Mission_Data := AcceptedMissions(MissionIndex);
       MessageText: Unbounded_String :=
-        To_Unbounded_String("Return to ") &
-        SkyBases(Mission.StartBase).Name &
+        To_Unbounded_String("Return to ") & SkyBases(Mission.StartBase).Name &
         To_Unbounded_String(" to finish mission ");
    begin
       SkyMap(Mission.TargetX, Mission.TargetY).MissionIndex := 0;
       AcceptedMissions(MissionIndex).Finished := True;
       SkyMap
-        (SkyBases(Mission.StartBase).SkyX,
-         SkyBases(Mission.StartBase).SkyY)
+        (SkyBases(Mission.StartBase).SkyX, SkyBases(Mission.StartBase).SkyY)
         .MissionIndex :=
         MissionIndex;
       case AcceptedMissions(MissionIndex).MType is
@@ -629,8 +573,7 @@ package body Missions is
          PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
          PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
          AddMessage
-           ("You set the travel destination for your ship.",
-            OrderMessage);
+           ("You set the travel destination for your ship.", OrderMessage);
       end if;
    end UpdateMission;
 
@@ -652,7 +595,7 @@ package body Missions is
       if FindMember(Talk) = 0 then
          return "";
       end if;
-      Finish_Missions_Loop:
+      Finish_Missions_Loop :
       while I <= AcceptedMissions.Last_Index loop
          if
            (AcceptedMissions(I).Finished and

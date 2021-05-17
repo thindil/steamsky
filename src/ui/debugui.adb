@@ -66,17 +66,13 @@ package body DebugUI is
    -- RefreshModule
    -- SOURCE
    function Refresh_Module_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Module_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.ship";
@@ -90,8 +86,7 @@ package body DebugUI is
       ModuleIndex := Natural'Value(Current(ModuleCombo)) + 1;
       Delete(ProtoEntry, "0", "end");
       Insert
-        (ProtoEntry,
-         "0",
+        (ProtoEntry, "0",
          To_String
            (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Name));
       Set(SpinBox, Positive'Image(PlayerShip.Modules(ModuleIndex).Weight));
@@ -122,17 +117,13 @@ package body DebugUI is
    -- RefreshMember
    -- SOURCE
    function Refresh_Member_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Member_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.crew";
@@ -161,12 +152,11 @@ package body DebugUI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
-      Show_Stats_Loop:
+      Show_Stats_Loop :
       for I in Member.Attributes.Iterate loop
          Label :=
            Create
-             (MemberFrame &
-              ".label" &
+             (MemberFrame & ".label" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
               "-text {" &
               To_String
@@ -175,8 +165,7 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
            Create
-             (MemberFrame &
-              ".value" &
+             (MemberFrame & ".value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left),
               "-from 1 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P}");
          Set(SpinBox, Positive'Image(Member.Attributes(I)(1)));
@@ -189,21 +178,18 @@ package body DebugUI is
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, MemberFrame);
-      Show_Skills_Loop:
+      Show_Skills_Loop :
       for I in Member.Skills.Iterate loop
          Label :=
            Create
-             (MemberFrame &
-              ".label" &
+             (MemberFrame & ".label" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
-              "-text {" &
-              To_String(Skills_List(Member.Skills(I)(1)).Name) &
+              "-text {" & To_String(Skills_List(Member.Skills(I)(1)).Name) &
               "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          SpinBox :=
            Create
-             (MemberFrame &
-              ".value" &
+             (MemberFrame & ".value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left),
               "-from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P}");
          Set(SpinBox, Positive'Image(Member.Skills(I)(2)));
@@ -212,7 +198,7 @@ package body DebugUI is
             "-column 1 -row" & Positive'Image(Skills_Container.To_Index(I)));
          SkillsIndexes.Append(Member.Skills(I)(1));
       end loop Show_Skills_Loop;
-      Show_Add_Skills_Loop:
+      Show_Add_Skills_Loop :
       for I in Skills_List.Iterate loop
          if not SkillsIndexes.Contains(SkillsData_Container.To_Index(I)) then
             Append(SkillsList, " " & Skills_List(I).Name);
@@ -238,17 +224,13 @@ package body DebugUI is
    -- RefreshCargo
    -- SOURCE
    function Refresh_Cargo_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Cargo_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.cargo";
@@ -277,17 +259,13 @@ package body DebugUI is
    -- RefreshEvents
    -- SOURCE
    function Refresh_Events_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Events_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.world";
@@ -305,21 +283,19 @@ package body DebugUI is
          Tcl.Tk.Ada.Grid.Grid(EventsButton);
          Tcl.Tk.Ada.Grid.Grid(EventsBox);
       end if;
-      Update_Events_Loop:
+      Update_Events_Loop :
       for Event of Events_List loop
          case Event.EType is
             when EnemyShip =>
                Append
                  (ValuesList,
                   " {Enemy ship: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) &
-                  "}");
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when AttackOnBase =>
                Append
                  (ValuesList,
                   " {Attack on base: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) &
-                  "}");
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when Disease =>
                Append
                  (ValuesList,
@@ -345,20 +321,17 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy patrol: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) &
-                  "}");
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when Trader =>
                Append
                  (ValuesList,
                   " {Trader: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) &
-                  "}");
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when FriendlyShip =>
                Append
                  (ValuesList,
                   " {Friendly ship: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) &
-                  "}");
+                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
             when others =>
                null;
          end case;
@@ -382,17 +355,13 @@ package body DebugUI is
    -- Refresh
    -- SOURCE
    function Refresh_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use Interfaces.C;
 
@@ -404,7 +373,7 @@ package body DebugUI is
       Set(SpinBox, Positive'Image(PlayerShip.SkyX));
       SpinBox.Name := New_String(FrameName & ".ship.y");
       Set(SpinBox, Positive'Image(PlayerShip.SkyY));
-      Update_Modules_Loop:
+      Update_Modules_Loop :
       for Module of PlayerShip.Modules loop
          Append(ValuesList, " {" & Module.Name & "}");
       end loop Update_Modules_Loop;
@@ -415,7 +384,7 @@ package body DebugUI is
       end if;
       ComboBox.Name := New_String(FrameName & ".crew.member");
       ValuesList := Null_Unbounded_String;
-      Update_Members_Loop:
+      Update_Members_Loop :
       for Member of PlayerShip.Crew loop
          Append(ValuesList, " {" & Member.Name & "}");
       end loop Update_Members_Loop;
@@ -426,7 +395,7 @@ package body DebugUI is
       end if;
       ComboBox.Name := New_String(FrameName & ".cargo.update");
       ValuesList := Null_Unbounded_String;
-      Update_Cargo_Loop:
+      Update_Cargo_Loop :
       for Item of PlayerShip.Cargo loop
          Append(ValuesList, " {" & GetItemName(Item, False, False) & "}");
       end loop Update_Cargo_Loop;
@@ -455,17 +424,13 @@ package body DebugUI is
    -- RefreshBase
    -- SOURCE
    function Refresh_Base_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Refresh_Base_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.bases";
@@ -476,7 +441,7 @@ package body DebugUI is
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".type", Interp);
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
-      Find_Base_Index_Loop:
+      Find_Base_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
             BaseIndex := I;
@@ -493,8 +458,7 @@ package body DebugUI is
       Set(ComboBox, To_String(Factions_List(SkyBases(BaseIndex).Owner).Name));
       ComboBox.Name := New_String(FrameName & ".size");
       Current
-        (ComboBox,
-         Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
+        (ComboBox, Natural'Image(Bases_Size'Pos(SkyBases(BaseIndex).Size)));
       Set(SpinBox, Natural'Image(SkyBases(BaseIndex).Population));
       SpinBox.Name := New_String(FrameName & ".reputation");
       Set(SpinBox, Integer'Image(SkyBases(BaseIndex).Reputation(1)));
@@ -521,17 +485,13 @@ package body DebugUI is
    -- DebugSaveGame
    -- SOURCE
    function Save_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Save_Game_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
@@ -553,17 +513,13 @@ package body DebugUI is
    -- DebugMoveShip
    -- SOURCE
    function Move_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Move_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.ship";
@@ -590,17 +546,13 @@ package body DebugUI is
    -- DebugUpdateModule
    -- SOURCE
    function Update_Module_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Module_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.ship";
@@ -612,7 +564,7 @@ package body DebugUI is
       Value: Unbounded_String := To_Unbounded_String(Get(ModuleEntry));
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
    begin
-      Update_Proto_Index_Loop:
+      Update_Proto_Index_Loop :
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
             Value := Null_Unbounded_String;
@@ -648,17 +600,13 @@ package body DebugUI is
    -- DebugAddSkill
    -- SOURCE
    function Add_Skill_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Skill_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
@@ -667,11 +615,11 @@ package body DebugUI is
    begin
       ComboBox.Name := New_String(FrameName & ".addskill.skills");
       SkillName := To_Unbounded_String(Get(ComboBox));
-      Add_Skill_Loop:
+      Add_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
             PlayerShip.Crew(MemberIndex).Skills.Append
-            ((SkillsData_Container.To_Index(I), 1, 0));
+              ((SkillsData_Container.To_Index(I), 1, 0));
             return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;
       end loop Add_Skill_Loop;
@@ -692,17 +640,13 @@ package body DebugUI is
    -- DebugUpdateMember
    -- SOURCE
    function Update_Member_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Member_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.crew";
@@ -724,22 +668,20 @@ package body DebugUI is
         Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".loyalty");
       PlayerShip.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
-      Update_Stats_Loop:
+      Update_Stats_Loop :
       for I in PlayerShip.Crew(MemberIndex).Attributes.Iterate loop
          SpinBox.Name :=
            New_String
-             (FrameName &
-              ".stats.value" &
+             (FrameName & ".stats.value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Attributes(I)(1) :=
            Positive'Value(Get(SpinBox));
       end loop Update_Stats_Loop;
-      Update_Skills_Loop:
+      Update_Skills_Loop :
       for I in PlayerShip.Crew(MemberIndex).Skills.Iterate loop
          SpinBox.Name :=
            New_String
-             (FrameName &
-              ".skills.value" &
+             (FrameName & ".skills.value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
          PlayerShip.Crew(MemberIndex).Skills(I)(2) :=
            Positive'Value(Get(SpinBox));
@@ -761,17 +703,13 @@ package body DebugUI is
    -- DebugAddItem
    -- SOURCE
    function Add_Item_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Item_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       FrameName: constant String := ".debugdialog.main.cargo";
       ItemEntry: constant Ttk_Entry := Get_Widget(FrameName & ".add", Interp);
@@ -780,7 +718,7 @@ package body DebugUI is
       ItemIndex, ItemName: Unbounded_String;
    begin
       ItemName := To_Unbounded_String(Get(ItemEntry));
-      Find_Index_Loop:
+      Find_Index_Loop :
       for I in Items_List.Iterate loop
          if Items_List(I).Name = ItemName then
             ItemIndex := Objects_Container.Key(I);
@@ -808,17 +746,13 @@ package body DebugUI is
    -- DebugUpdateItem
    -- SOURCE
    function Update_Item_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Item_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       FrameName: constant String := ".debugdialog.main.cargo";
       ItemCombo: constant Ttk_ComboBox :=
@@ -829,8 +763,7 @@ package body DebugUI is
    begin
       ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
       UpdateCargo
-        (Ship => PlayerShip,
-         Amount => Positive'Value(Get(ItemBox)),
+        (Ship => PlayerShip, Amount => Positive'Value(Get(ItemBox)),
          CargoIndex => ItemIndex);
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
@@ -849,17 +782,13 @@ package body DebugUI is
    -- DebugUpdateBase
    -- SOURCE
    function Update_Base_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Update_Base_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.bases";
@@ -870,7 +799,7 @@ package body DebugUI is
       BaseBox: Ttk_SpinBox := Get_Widget(FrameName & ".population", Interp);
    begin
       BaseName := To_Unbounded_String(Get(BaseEntry));
-      Find_Index_Loop:
+      Find_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = BaseName then
             BaseIndex := I;
@@ -880,7 +809,7 @@ package body DebugUI is
       if BaseIndex = 0 then
          return TCL_OK;
       end if;
-      Update_Base_Type_Loop:
+      Update_Base_Type_Loop :
       for I in BasesTypes_List.Iterate loop
          if BasesTypes_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             SkyBases(BaseIndex).BaseType := BasesTypes_Container.Key(I);
@@ -888,7 +817,7 @@ package body DebugUI is
          end if;
       end loop Update_Base_Type_Loop;
       BaseCombo.Name := New_String(FrameName & ".owner");
-      Update_Base_Owner_Loop:
+      Update_Base_Owner_Loop :
       for I in Factions_List.Iterate loop
          if Factions_List(I).Name = To_Unbounded_String(Get(BaseCombo)) then
             SkyBases(BaseIndex).Owner := Factions_Container.Key(I);
@@ -919,17 +848,13 @@ package body DebugUI is
    -- DebugAddShip
    -- SOURCE
    function Add_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Ship_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       FrameName: constant String := ".debugdialog.main.world";
       ShipEntry: constant Ttk_Entry := Get_Widget(FrameName & ".ship", Interp);
@@ -943,33 +868,24 @@ package body DebugUI is
       NpcShipY := Positive'Value(Get(ShipBox));
       ShipBox.Name := New_String(FrameName & ".duration");
       Duration := Positive'Value(Get(ShipBox));
-      Add_Ship_Event_Loop:
+      Add_Ship_Event_Loop :
       for I in ProtoShips_List.Iterate loop
          if ProtoShips_List(I).Name = ShipName then
             if Traders.Contains(ProtoShips_Container.Key(I)) then
                Events_List.Append
-               (New_Item =>
-                  (Trader,
-                   NpcShipX,
-                   NpcShipY,
-                   Duration,
-                   ProtoShips_Container.Key(I)));
+                 (New_Item =>
+                    (Trader, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
             elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
                Events_List.Append
-               (New_Item =>
-                  (FriendlyShip,
-                   NpcShipX,
-                   NpcShipY,
-                   Duration,
-                   ProtoShips_Container.Key(I)));
+                 (New_Item =>
+                    (FriendlyShip, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
             else
                Events_List.Append
-               (New_Item =>
-                  (EnemyShip,
-                   NpcShipX,
-                   NpcShipY,
-                   Duration,
-                   ProtoShips_Container.Key(I)));
+                 (New_Item =>
+                    (EnemyShip, NpcShipX, NpcShipY, Duration,
+                     ProtoShips_Container.Key(I)));
             end if;
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
@@ -992,17 +908,13 @@ package body DebugUI is
    -- ToggleItemEntry
    -- SOURCE
    function Toggle_Item_Entry_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Toggle_Item_Entry_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.world";
@@ -1036,17 +948,13 @@ package body DebugUI is
    -- DebugAddEvent
    -- SOURCE
    function Add_Event_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Add_Event_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       FrameName: constant String := ".debugdialog.main.world";
       EventEntry: constant Ttk_Entry :=
@@ -1059,7 +967,7 @@ package body DebugUI is
       Added: Boolean := True;
    begin
       EventName := To_Unbounded_String(Get(EventEntry));
-      Find_Base_Index_Loop:
+      Find_Base_Index_Loop :
       for I in SkyBases'Range loop
          if SkyBases(I).Name = EventName then
             BaseIndex := I;
@@ -1073,38 +981,31 @@ package body DebugUI is
       case EventType is
          when 0 =>
             Events_List.Append
-            (New_Item =>
-               (Disease,
-                SkyBases(BaseIndex).SkyX,
-                SkyBases(BaseIndex).SkyY,
-                Positive'Value(Get(DurationBox)),
-                1));
+              (New_Item =>
+                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                  Positive'Value(Get(DurationBox)), 1));
          when 1 =>
             EventBox.Name := New_String(FrameName & ".item");
             EventName := To_Unbounded_String(Get(EventBox));
             Added := False;
-            Find_Item_Loop:
+            Find_Item_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).Name = EventName then
                   Events_List.Append
-                  (New_Item =>
-                     (DoublePrice,
-                      SkyBases(BaseIndex).SkyX,
-                      SkyBases(BaseIndex).SkyY,
-                      Positive'Value(Get(DurationBox)),
-                      Objects_Container.Key(I)));
+                    (New_Item =>
+                       (DoublePrice, SkyBases(BaseIndex).SkyX,
+                        SkyBases(BaseIndex).SkyY,
+                        Positive'Value(Get(DurationBox)),
+                        Objects_Container.Key(I)));
                   Added := True;
                   exit Find_Item_Loop;
                end if;
             end loop Find_Item_Loop;
          when 2 =>
             Events_List.Append
-            (New_Item =>
-               (Disease,
-                SkyBases(BaseIndex).SkyX,
-                SkyBases(BaseIndex).SkyY,
-                Positive'Value(Get(DurationBox)),
-                1));
+              (New_Item =>
+                 (Disease, SkyBases(BaseIndex).SkyX, SkyBases(BaseIndex).SkyY,
+                  Positive'Value(Get(DurationBox)), 1));
          when others =>
             null;
       end case;
@@ -1130,17 +1031,13 @@ package body DebugUI is
    -- DebugDeleteEvent
    -- SOURCE
    function Delete_Event_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Delete_Event_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       EventBox: constant Ttk_ComboBox :=
         Get_Widget(".debugdialog.main.world.delete", Interp);
@@ -1175,14 +1072,14 @@ package body DebugUI is
       AddCommand("ToggleItemEntry", Toggle_Item_Entry_Command'Access);
       AddCommand("DebugAddEvent", Add_Event_Command'Access);
       AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
-      Load_Bases_Types_Loop:
+      Load_Bases_Types_Loop :
       for BaseType of BasesTypes_List loop
          Append(ValuesList, " " & BaseType.Name);
       end loop Load_Bases_Types_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(FrameName & ".owner");
-      Load_Factions_Loop:
+      Load_Factions_Loop :
       for Faction of Factions_List loop
          Append(ValuesList, " " & Faction.Name);
       end loop Load_Factions_Loop;

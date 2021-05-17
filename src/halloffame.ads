@@ -44,8 +44,7 @@ package HallOfFame is
    -- Empty entry for Hall of Fame
    -- SOURCE
    Empty_Hall_Of_Fame_Entry: constant Hall_Of_Fame_Data :=
-     (Name => Null_Unbounded_String,
-      Points => 0,
+     (Name => Null_Unbounded_String, Points => 0,
       Death_Reason => Null_Unbounded_String);
    -- ****
 

@@ -66,20 +66,8 @@ package Ships is
    -- Types of ships modules
    -- SOURCE
    type ModuleType2 is
-     (WORKSHOP,
-      ANY,
-      MEDICAL_ROOM,
-      TRAINING_ROOM,
-      ENGINE,
-      CABIN,
-      COCKPIT,
-      TURRET,
-      GUN,
-      CARGO_ROOM,
-      HULL,
-      ARMOR,
-      BATTERING_RAM,
-      HARPOON_GUN);
+     (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
+      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    -- ****
 
    -- ****s* Ships/Ships.ModuleData
@@ -274,10 +262,7 @@ package Ships is
    -- Used to store prototype ships data
    -- SOURCE
    package ProtoShips_Container is new Hashed_Maps
-     (Unbounded_String,
-      ProtoShipData,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Ships/Ships.ProtoShips_List
@@ -338,11 +323,8 @@ package Ships is
    -- Newly created ship
    -- SOURCE
    function CreateShip
-     (ProtoIndex, Name: Unbounded_String;
-      X: Map_X_Range;
-      Y: Map_Y_Range;
-      Speed: ShipSpeed;
-      RandomUpgrades: Boolean := True) return ShipRecord with
+     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
@@ -415,10 +397,8 @@ package Ships is
       --               if module will be destroyed
       -- SOURCE
    procedure DamageModule
-     (Ship: in out ShipRecord;
-      ModuleIndex: Modules_Container.Extended_Index;
-      Damage: Positive;
-      DeathReason: String) with
+     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+      Damage: Positive; DeathReason: String) with
       Pre => ModuleIndex in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index,
       Test_Case => (Name => "Test_DamageModule", Mode => Nominal);

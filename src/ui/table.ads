@@ -71,8 +71,7 @@ package Table is
    -- 5.7 - Added
    -- SOURCE
    function CreateTable
-     (Parent: String;
-      Headers: Headers_Array;
+     (Parent: String; Headers: Headers_Array;
       Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
@@ -111,11 +110,8 @@ package Table is
    -- 5.7 - Added
    -- SOURCE
    procedure AddButton
-     (Table: in out Table_Widget;
-      Text, Tooltip, Command: String;
-      Column: Positive;
-      NewRow: Boolean := False;
-      Color: String := "") with
+     (Table: in out Table_Widget; Text, Tooltip, Command: String;
+      Column: Positive; NewRow: Boolean := False; Color: String := "") with
       Pre => Table.Row_Height > 1 and Command'Length > 0;
    -- ****
 
@@ -152,11 +148,8 @@ package Table is
    -- 5.7 - Added
    -- SOURCE
    procedure AddProgressBar
-     (Table: in out Table_Widget;
-      Value: Natural;
-      MaxValue: Positive;
-      Tooltip, Command: String;
-      Column: Positive;
+     (Table: in out Table_Widget; Value: Natural; MaxValue: Positive;
+      Tooltip, Command: String; Column: Positive;
       NewRow, InvertColors: Boolean := False) with
       Pre => Table.Row_Height > 1 and Value <= MaxValue;
    -- ****
@@ -174,8 +167,7 @@ package Table is
    -- 5.9 - Added
    -- SOURCE
    procedure AddPagination
-     (Table: in out Table_Widget;
-      PreviousCommand, NextCommand: String) with
+     (Table: in out Table_Widget; PreviousCommand, NextCommand: String) with
       Pre => Table.Row_Height > 1;
    -- ****
 
@@ -195,11 +187,8 @@ package Table is
    -- 6.0 - Added
    -- SOURCE
    procedure AddCheckButton
-     (Table: in out Table_Widget;
-      Tooltip, Command: String;
-      Checked: Boolean;
-      Column: Positive;
-      NewRow: Boolean := False) with
+     (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
+      Column: Positive; NewRow: Boolean := False) with
       Pre => Table.Row_Height > 1;
    -- ****
 

@@ -54,10 +54,7 @@ package Factions is
    -- Used to store relations data in faction
    -- SOURCE
    package Relations_Container is new Hashed_Maps
-     (Unbounded_String,
-      RelationsRecord,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, RelationsRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****s* Factions/Factions.CareerRecord
@@ -84,10 +81,7 @@ package Factions is
    -- Used to store careers data in faction
    -- SOURCE
    package Careers_Container is new Hashed_Maps
-     (Unbounded_String,
-      CareerRecord,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, CareerRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****t* Factions/Factions.BaseType_Container
@@ -95,10 +89,7 @@ package Factions is
    -- Used to store bases types data in faction
    -- SOURCE
    package BaseType_Container is new Hashed_Maps
-     (Unbounded_String,
-      Positive,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, Positive, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****s* Factions/Factions.FactionRecord
@@ -159,10 +150,7 @@ package Factions is
    -- Used to store factions data
    -- SOURCE
    package Factions_Container is new Hashed_Maps
-     (Unbounded_String,
-      FactionRecord,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, FactionRecord, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Factions/Factions.Factions_List

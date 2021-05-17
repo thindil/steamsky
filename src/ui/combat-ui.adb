@@ -571,7 +571,7 @@ package body Combat.UI is
           elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
           elsif Enemy.Distance in 1_000 .. 5_000 then "Short" else "Close") &
          LF & "Status: ");
-      if Enemy.Distance < 15000 then
+      if Enemy.Distance < 15_000 then
          if Enemy.Ship.Modules(1).Durability = 0 then
             Append(EnemyInfo, "Destroyed");
          else
@@ -609,7 +609,7 @@ package body Combat.UI is
          Append(EnemyInfo, "Unknown");
       end if;
       Append(EnemyInfo, LF & "Speed: ");
-      if Enemy.Distance < 15000 then
+      if Enemy.Distance < 15_000 then
          case Enemy.Ship.Speed is
             when Ships.FULL_STOP =>
                Append(EnemyInfo, "Stopped");
@@ -672,7 +672,7 @@ package body Combat.UI is
              (Frame & ".lbl" & Trim(Natural'Image(Row), Left),
               "-text {" &
               To_String
-                (if Enemy.Distance > 1000 then
+                (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
                      (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex))
                  else Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name) &

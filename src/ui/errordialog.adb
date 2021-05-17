@@ -58,18 +58,10 @@ package body ErrorDialog is
       Append
         (Source => Error_Text,
          New_Item =>
-           Current_Time &
-           LF &
-           Game_Version &
-           LF &
-           "Exception: " &
-           Exception_Name(X => An_Exception) &
-           LF &
-           "Message: " &
-           Exception_Message(X => An_Exception) &
-           LF &
-           "-------------------------------------------------" &
-           LF);
+           Current_Time & LF & Game_Version & LF & "Exception: " &
+           Exception_Name(X => An_Exception) & LF & "Message: " &
+           Exception_Message(X => An_Exception) & LF &
+           "-------------------------------------------------" & LF);
       if Directory_Separator = '/' then
          Append
            (Source => Error_Text,
@@ -82,22 +74,22 @@ package body ErrorDialog is
       Append
         (Source => Error_Text,
          New_Item => "-------------------------------------------------");
-      Open_Error_File_Block: begin
+      Open_Error_File_Block :
+      begin
          Open
-           (File => Error_File,
-            Mode => Append_File,
+           (File => Error_File, Mode => Append_File,
             Name => To_String(Source => Save_Directory) & "error.log");
       exception
          when Name_Error =>
             Create
-              (File => Error_File,
-               Mode => Append_File,
+              (File => Error_File, Mode => Append_File,
                Name => To_String(Source => Save_Directory) & "error.log");
       end Open_Error_File_Block;
       Put_Line(File => Error_File, Item => To_String(Source => Error_Text));
       Close(File => Error_File);
       End_Logging;
-      Show_Error_Dialog_Block: declare
+      Show_Error_Dialog_Block :
+      declare
          use type Interfaces.C.int;
          use GNAT.Directory_Operations;
          use Tcl;
@@ -109,7 +101,8 @@ package body ErrorDialog is
 
          Interp: Tcl.Tcl_Interp := Get_Context;
       begin
-         Destroy_Main_Window_Block: declare
+         Destroy_Main_Window_Block :
+         declare
             use Tcl.Tk.Ada.Widgets.Toplevel;
             use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 
@@ -139,22 +132,19 @@ package body ErrorDialog is
          Tcl_EvalFile
            (interp => Get_Context,
             fileName =>
-              To_String(Source => Data_Directory) &
-              "ui" &
-              Dir_Separator &
+              To_String(Source => Data_Directory) & "ui" & Dir_Separator &
               "errordialog.tcl");
          AddCommand
-           (Name => "OpenLink",
-            AdaCommand => Open_Link_Command'Access);
-         Show_Error_Message_Block: declare
+           (Name => "OpenLink", AdaCommand => Open_Link_Command'Access);
+         Show_Error_Message_Block :
+         declare
             use Tcl.Tk.Ada.Widgets.Text;
 
             Text_View: constant Tk_Text :=
               Get_Widget(pathName => ".technical.text", Interp => Interp);
          begin
             Insert
-              (TextWidget => Text_View,
-               Index => "end",
+              (TextWidget => Text_View, Index => "end",
                Text => "{" & To_String(Source => Error_Text) & "}");
             configure(Widgt => Text_View, options => "-state disabled");
          end Show_Error_Message_Block;

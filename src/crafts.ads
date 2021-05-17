@@ -64,10 +64,7 @@ package Crafts is
    -- ****t* Crafts/Crafts.Recipes_Container
    -- SOURCE
    package Recipes_Container is new Hashed_Maps
-     (Unbounded_String,
-      Craft_Data,
-      Ada.Strings.Unbounded.Hash,
-      "=");
+     (Unbounded_String, Craft_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Crafts/Recipes_List
@@ -148,8 +145,7 @@ package Crafts is
       --               existing item, "Study " + item name.
       -- SOURCE
    procedure SetRecipe
-     (Workshop, Amount: Positive;
-      RecipeIndex: Unbounded_String) with
+     (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
       Pre =>
       (Workshop <= PlayerShip.Modules.Last_Index and
        RecipeIndex /= Null_Unbounded_String),

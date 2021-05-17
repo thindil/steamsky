@@ -27,8 +27,7 @@ package body Ships.SaveLoad is
    procedure SavePlayerShip(SaveData: Document; MainNode: DOM.Core.Element) is
       CategoryNode, DataNode: DOM.Core.Element;
       procedure SaveNumber
-        (Value: Integer;
-         Name: String;
+        (Value: Integer; Name: String;
          Node: DOM.Core.Element := CategoryNode) is
          RawValue: constant String :=
            Trim(Integer'Image(Value), Ada.Strings.Left);
@@ -50,7 +49,7 @@ package body Ships.SaveLoad is
       declare
          ModuleDataNode: DOM.Core.Element;
       begin
-         Save_Modules_Loop:
+         Save_Modules_Loop :
          for Module of PlayerShip.Modules loop
             DataNode := Create_Element(SaveData, "module");
             DataNode := Append_Child(CategoryNode, DataNode);
@@ -59,7 +58,7 @@ package body Ships.SaveLoad is
             SaveNumber(Module.Weight, "weight", DataNode);
             SaveNumber(Module.Durability, "durability", DataNode);
             SaveNumber(Module.MaxDurability, "maxdurability", DataNode);
-            Save_Module_Owners_Loop:
+            Save_Module_Owners_Loop :
             for Owner of Module.Owner loop
                ModuleDataNode := Create_Element(SaveData, "owner");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
@@ -70,8 +69,7 @@ package body Ships.SaveLoad is
             end if;
             if Module.UpgradeAction /= NONE then
                SaveNumber
-                 (ShipUpgrade'Pos(Module.UpgradeAction),
-                  "upgradeaction",
+                 (ShipUpgrade'Pos(Module.UpgradeAction), "upgradeaction",
                   DataNode);
             end if;
             case Module.MType is
@@ -79,9 +77,7 @@ package body Ships.SaveLoad is
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   Set_Attribute
-                    (ModuleDataNode,
-                     "value",
-                     To_String(Module.CraftingIndex));
+                    (ModuleDataNode, "value", To_String(Module.CraftingIndex));
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.CraftingTime, "value", ModuleDataNode);
@@ -147,7 +143,7 @@ package body Ships.SaveLoad is
             end case;
          end loop Save_Modules_Loop;
       end;
-      Save_Cargo_Loop:
+      Save_Cargo_Loop :
       for Item of PlayerShip.Cargo loop
          DataNode := Create_Element(SaveData, "cargo");
          DataNode := Append_Child(CategoryNode, DataNode);
@@ -164,23 +160,18 @@ package body Ships.SaveLoad is
       declare
          StatNode: DOM.Core.Element;
          AttributesNames: constant array(1 .. 14) of Unbounded_String :=
-           (To_Unbounded_String("health"),
-            To_Unbounded_String("tired"),
-            To_Unbounded_String("hunger"),
-            To_Unbounded_String("thirst"),
-            To_Unbounded_String("order"),
-            To_Unbounded_String("previousorder"),
-            To_Unbounded_String("ordertime"),
-            To_Unbounded_String("dailypay"),
+           (To_Unbounded_String("health"), To_Unbounded_String("tired"),
+            To_Unbounded_String("hunger"), To_Unbounded_String("thirst"),
+            To_Unbounded_String("order"), To_Unbounded_String("previousorder"),
+            To_Unbounded_String("ordertime"), To_Unbounded_String("dailypay"),
             To_Unbounded_String("tradepay"),
             To_Unbounded_String("contractlength"),
             To_Unbounded_String("moralelevel"),
             To_Unbounded_String("moralepoints"),
-            To_Unbounded_String("loyalty"),
-            To_Unbounded_String("homebase"));
+            To_Unbounded_String("loyalty"), To_Unbounded_String("homebase"));
          AttributesValues: array(AttributesNames'Range) of Integer;
       begin
-         Save_Crew_Loop:
+         Save_Crew_Loop :
          for Member of PlayerShip.Crew loop
             DataNode := Create_Element(SaveData, "member");
             DataNode := Append_Child(CategoryNode, DataNode);
@@ -188,28 +179,19 @@ package body Ships.SaveLoad is
             Set_Attribute(DataNode, "gender", Member.Gender & "");
             Set_Attribute(DataNode, "faction", To_String(Member.Faction));
             AttributesValues :=
-              (Member.Health,
-               Member.Tired,
-               Member.Hunger,
-               Member.Thirst,
+              (Member.Health, Member.Tired, Member.Hunger, Member.Thirst,
                Crew_Orders'Pos(Member.Order),
-               Crew_Orders'Pos(Member.PreviousOrder),
-               Member.OrderTime,
-               Member.Payment(1),
-               Member.Payment(2),
-               Member.ContractLength,
-               Member.Morale(1),
-               Member.Morale(2),
-               Member.Loyalty,
+               Crew_Orders'Pos(Member.PreviousOrder), Member.OrderTime,
+               Member.Payment(1), Member.Payment(2), Member.ContractLength,
+               Member.Morale(1), Member.Morale(2), Member.Loyalty,
                Member.HomeBase);
-            Save_Characteristics_Loop:
+            Save_Characteristics_Loop :
             for I in AttributesNames'Range loop
                SaveNumber
-                 (AttributesValues(I),
-                  To_String(AttributesNames(I)),
+                 (AttributesValues(I), To_String(AttributesNames(I)),
                   DataNode);
             end loop Save_Characteristics_Loop;
-            Save_Skills_Loop:
+            Save_Skills_Loop :
             for Skill of Member.Skills loop
                StatNode := Create_Element(SaveData, "skill");
                StatNode := Append_Child(DataNode, StatNode);
@@ -219,13 +201,13 @@ package body Ships.SaveLoad is
                   SaveNumber(Skill(3), "experience", StatNode);
                end if;
             end loop Save_Skills_Loop;
-            Save_Priorities_Loop:
+            Save_Priorities_Loop :
             for J in Member.Orders'Range loop
                StatNode := Create_Element(SaveData, "priority");
                StatNode := Append_Child(DataNode, StatNode);
                SaveNumber(Member.Orders(J), "value", StatNode);
             end loop Save_Priorities_Loop;
-            Save_Attributes_Loop:
+            Save_Attributes_Loop :
             for Attribute of Member.Attributes loop
                StatNode := Create_Element(SaveData, "attribute");
                StatNode := Append_Child(DataNode, StatNode);
@@ -234,7 +216,7 @@ package body Ships.SaveLoad is
                   SaveNumber(Attribute(2), "experience", StatNode);
                end if;
             end loop Save_Attributes_Loop;
-            Save_Inventory_Loop:
+            Save_Inventory_Loop :
             for Item of Member.Inventory loop
                StatNode := Create_Element(SaveData, "item");
                StatNode := Append_Child(DataNode, StatNode);
@@ -248,7 +230,7 @@ package body Ships.SaveLoad is
                   SaveNumber(Item.Price, "price", StatNode);
                end if;
             end loop Save_Inventory_Loop;
-            Save_Equipment_Loop:
+            Save_Equipment_Loop :
             for I in Member.Equipment'Range loop
                StatNode := Create_Element(SaveData, "equipment");
                StatNode := Append_Child(DataNode, StatNode);
@@ -284,7 +266,7 @@ package body Ships.SaveLoad is
       PlayerShip.Cargo.Clear;
       PlayerShip.Crew.Clear;
       ChildNodes := Child_Nodes(LoadNode);
-      Load_Ship_Loop:
+      Load_Ship_Loop :
       for I in 0 .. Length(ChildNodes) - 1 loop
          ChildNode := Item(ChildNodes, I);
          if Node_Name(ChildNode) = "module" then
@@ -306,15 +288,15 @@ package body Ships.SaveLoad is
                Weight := Natural'Value(Get_Attribute(ChildNode, "weight"));
                if Get_Attribute(ChildNode, "owner") /= "" then
                   Owners.Append
-                  (Natural'Value(Get_Attribute(ChildNode, "owner")));
+                    (Natural'Value(Get_Attribute(ChildNode, "owner")));
                else
                   ModuleData := Child_Nodes(ChildNode);
-                  Load_Owners_Loop:
+                  Load_Owners_Loop :
                   for K in 0 .. Length(ModuleData) - 1 loop
                      ModuleNode := Item(ModuleData, K);
                      if Node_Name(ModuleNode) = "owner" then
                         Owners.Append
-                        (Integer'Value(Get_Attribute(ModuleNode, "value")));
+                          (Integer'Value(Get_Attribute(ModuleNode, "value")));
                      end if;
                   end loop Load_Owners_Loop;
                end if;
@@ -400,7 +382,7 @@ package body Ships.SaveLoad is
                      Data := (others => 0);
                      ModuleData := Child_Nodes(ChildNode);
                      DataIndex := 1;
-                     Load_Module_Data_Loop:
+                     Load_Module_Data_Loop :
                      for K in 0 .. Length(ModuleData) - 1 loop
                         ModuleNode := Item(ModuleData, K);
                         if Node_Name(ModuleNode) = "data" then
@@ -410,17 +392,13 @@ package body Ships.SaveLoad is
                         end if;
                      end loop Load_Module_Data_Loop;
                      PlayerShip.Modules.Append
-                     (New_Item =>
-                        (MType => ANY,
-                         Name => Name,
-                         ProtoIndex => ProtoIndex,
-                         Weight => Weight,
-                         Durability => Durability,
-                         MaxDurability => MaxDurability,
-                         Owner => Owners,
-                         UpgradeProgress => UpgradeProgress,
-                         UpgradeAction => UpgradeAction,
-                         Data => Data));
+                       (New_Item =>
+                          (MType => ANY, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owners,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction, Data => Data));
                   when ENGINE =>
                      declare
                         FuelUsage, Power: Positive;
@@ -428,7 +406,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Engine_Data_Loop:
+                        Load_Engine_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -455,19 +433,15 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Engine_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => ENGINE,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            FuelUsage => FuelUsage,
-                            Power => Power,
-                            Disabled => Disabled));
+                          (New_Item =>
+                             (MType => ENGINE, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              FuelUsage => FuelUsage, Power => Power,
+                              Disabled => Disabled));
                      end;
                   when CABIN =>
                      declare
@@ -475,7 +449,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Cabin_Data_Loop:
+                        Load_Cabin_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -495,31 +469,24 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Cabin_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => CABIN,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            Cleanliness => Cleanliness,
-                            Quality => Quality));
+                          (New_Item =>
+                             (MType => CABIN, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              Cleanliness => Cleanliness, Quality => Quality));
                      end;
                   when COCKPIT =>
                      PlayerShip.Modules.Append
-                     (New_Item =>
-                        (MType => COCKPIT,
-                         Name => Name,
-                         ProtoIndex => ProtoIndex,
-                         Weight => Weight,
-                         Durability => Durability,
-                         MaxDurability => MaxDurability,
-                         Owner => Owners,
-                         UpgradeProgress => UpgradeProgress,
-                         UpgradeAction => UpgradeAction));
+                       (New_Item =>
+                          (MType => COCKPIT, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owners,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
                   when WORKSHOP =>
                      declare
                         CraftingIndex: Unbounded_String;
@@ -527,7 +494,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Workshop_Data_Loop:
+                        Load_Workshop_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -555,39 +522,33 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Workshop_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => WORKSHOP,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            CraftingIndex => CraftingIndex,
-                            CraftingTime => CraftingTime,
-                            CraftingAmount => CraftingAmount));
+                          (New_Item =>
+                             (MType => WORKSHOP, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              CraftingIndex => CraftingIndex,
+                              CraftingTime => CraftingTime,
+                              CraftingAmount => CraftingAmount));
                      end;
                   when MEDICAL_ROOM =>
                      PlayerShip.Modules.Append
-                     (New_Item =>
-                        (MType => MEDICAL_ROOM,
-                         Name => Name,
-                         ProtoIndex => ProtoIndex,
-                         Weight => Weight,
-                         Durability => Durability,
-                         MaxDurability => MaxDurability,
-                         Owner => Owners,
-                         UpgradeProgress => UpgradeProgress,
-                         UpgradeAction => UpgradeAction));
+                       (New_Item =>
+                          (MType => MEDICAL_ROOM, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owners,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
                   when TRAINING_ROOM =>
                      declare
                         TrainedSkill: Natural;
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Training_Room_Data_Loop:
+                        Load_Training_Room_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -599,17 +560,14 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Training_Room_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => TRAINING_ROOM,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            TrainedSkill => TrainedSkill));
+                          (New_Item =>
+                             (MType => TRAINING_ROOM, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              TrainedSkill => TrainedSkill));
                      end;
                   when TURRET =>
                      declare
@@ -617,7 +575,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Turret_Data_Loop:
+                        Load_Turret_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -629,17 +587,14 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Turret_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => TURRET,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            GunIndex => GunIndex));
+                          (New_Item =>
+                             (MType => TURRET, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              GunIndex => GunIndex));
                      end;
                   when GUN =>
                      declare
@@ -647,7 +602,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Gun_Data_Loop:
+                        Load_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -667,38 +622,31 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Gun_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => GUN,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            Damage => Damage,
-                            AmmoIndex => AmmoIndex));
+                          (New_Item =>
+                             (MType => GUN, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction, Damage => Damage,
+                              AmmoIndex => AmmoIndex));
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
-                     (New_Item =>
-                        (MType => CARGO_ROOM,
-                         Name => Name,
-                         ProtoIndex => ProtoIndex,
-                         Weight => Weight,
-                         Durability => Durability,
-                         MaxDurability => MaxDurability,
-                         Owner => Owners,
-                         UpgradeProgress => UpgradeProgress,
-                         UpgradeAction => UpgradeAction));
+                       (New_Item =>
+                          (MType => CARGO_ROOM, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owners,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
                   when HULL =>
                      declare
                         InstalledModules, MaxModules: Natural;
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Hull_Data_Loop:
+                        Load_Hull_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -718,38 +666,32 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Hull_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => HULL,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            InstalledModules => InstalledModules,
-                            MaxModules => MaxModules));
+                          (New_Item =>
+                             (MType => HULL, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              InstalledModules => InstalledModules,
+                              MaxModules => MaxModules));
                      end;
                   when ARMOR =>
                      PlayerShip.Modules.Append
-                     (New_Item =>
-                        (MType => ARMOR,
-                         Name => Name,
-                         ProtoIndex => ProtoIndex,
-                         Weight => Weight,
-                         Durability => Durability,
-                         MaxDurability => MaxDurability,
-                         Owner => Owners,
-                         UpgradeProgress => UpgradeProgress,
-                         UpgradeAction => UpgradeAction));
+                       (New_Item =>
+                          (MType => ARMOR, Name => Name,
+                           ProtoIndex => ProtoIndex, Weight => Weight,
+                           Durability => Durability,
+                           MaxDurability => MaxDurability, Owner => Owners,
+                           UpgradeProgress => UpgradeProgress,
+                           UpgradeAction => UpgradeAction));
                   when BATTERING_RAM =>
                      declare
                         Damage: Natural;
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Battering_Ram_Data_Loop:
+                        Load_Battering_Ram_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" and
@@ -761,18 +703,14 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Battering_Ram_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => BATTERING_RAM,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            Damage2 => Damage,
-                            CoolingDown => False));
+                          (New_Item =>
+                             (MType => BATTERING_RAM, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              Damage2 => Damage, CoolingDown => False));
                      end;
                   when HARPOON_GUN =>
                      declare
@@ -780,7 +718,7 @@ package body Ships.SaveLoad is
                      begin
                         ModuleData := Child_Nodes(ChildNode);
                         DataIndex := 1;
-                        Load_Harpoon_Gun_Data_Loop:
+                        Load_Harpoon_Gun_Data_Loop :
                         for K in 0 .. Length(ModuleData) - 1 loop
                            ModuleNode := Item(ModuleData, K);
                            if Node_Name(ModuleNode) = "data" then
@@ -800,18 +738,15 @@ package body Ships.SaveLoad is
                            end if;
                         end loop Load_Harpoon_Gun_Data_Loop;
                         PlayerShip.Modules.Append
-                        (New_Item =>
-                           (MType => HARPOON_GUN,
-                            Name => Name,
-                            ProtoIndex => ProtoIndex,
-                            Weight => Weight,
-                            Durability => Durability,
-                            MaxDurability => MaxDurability,
-                            Owner => Owners,
-                            UpgradeProgress => UpgradeProgress,
-                            UpgradeAction => UpgradeAction,
-                            Duration => Duration,
-                            HarpoonIndex => HarpoonIndex));
+                          (New_Item =>
+                             (MType => HARPOON_GUN, Name => Name,
+                              ProtoIndex => ProtoIndex, Weight => Weight,
+                              Durability => Durability,
+                              MaxDurability => MaxDurability, Owner => Owners,
+                              UpgradeProgress => UpgradeProgress,
+                              UpgradeAction => UpgradeAction,
+                              Duration => Duration,
+                              HarpoonIndex => HarpoonIndex));
                      end;
                end case;
             end;
@@ -828,33 +763,21 @@ package body Ships.SaveLoad is
                Durability :=
                  Natural'Value(Get_Attribute(ChildNode, "durability"));
                Price :=
-                 (if
-                    Get_Attribute(ChildNode, "price")'Length > 0
-                  then
+                 (if Get_Attribute(ChildNode, "price")'Length > 0 then
                     Natural'Value(Get_Attribute(ChildNode, "price"))
                   else 0);
                PlayerShip.Cargo.Append
-               (New_Item =>
-                  (ProtoIndex => ProtoIndex,
-                   Amount => Amount,
-                   Name => Name,
-                   Durability => Durability,
-                   Price => Price));
+                 (New_Item =>
+                    (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
+                     Durability => Durability, Price => Price));
             end;
          elsif Node_Name(ChildNode) = "member" then
             declare
                MemberData: Node_List;
                Name, ItemName, FactionIndex, ItemIndex: Unbounded_String;
                Gender: String(1 .. 1);
-               Health,
-               Tired,
-               Hunger,
-               Thirst,
-               Index,
-               Level,
-               Experience,
-               Loyalty,
-               Price: Natural;
+               Health, Tired, Hunger, Thirst, Index, Level, Experience,
+               Loyalty, Price: Natural;
                Skills: Skills_Container.Vector;
                Attributes: Attributes_Container.Vector;
                Order, PreviousOrder: Crew_Orders;
@@ -862,10 +785,7 @@ package body Ships.SaveLoad is
                Inventory: Inventory_Container.Vector;
                Equipment: Equipment_Array;
                OrderTime, ContractLength: Integer;
-               Amount,
-               Durability,
-               EquipmentIndex,
-               PriorityIndex,
+               Amount, Durability, EquipmentIndex, PriorityIndex,
                HomeBase: Positive;
                Payment, Morale: Attributes_Array;
                MemberNode: Node;
@@ -903,7 +823,7 @@ package body Ships.SaveLoad is
                Morale(2) :=
                  Natural'Value(Get_Attribute(ChildNode, "moralepoints"));
                Loyalty := Natural'Value(Get_Attribute(ChildNode, "loyalty"));
-               Load_Crew_Loop:
+               Load_Crew_Loop :
                for K in 0 .. Length(MemberData) - 1 loop
                   MemberNode := Item(MemberData, K);
                   if Node_Name(MemberNode) = "skill" then
@@ -912,9 +832,7 @@ package body Ships.SaveLoad is
                      Level :=
                        Integer'Value(Get_Attribute(MemberNode, "level"));
                      Experience :=
-                       (if
-                          Get_Attribute(MemberNode, "experience") /= ""
-                        then
+                       (if Get_Attribute(MemberNode, "experience") /= "" then
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
@@ -927,9 +845,7 @@ package body Ships.SaveLoad is
                      Level :=
                        Integer'Value(Get_Attribute(MemberNode, "level"));
                      Experience :=
-                       (if
-                          Get_Attribute(MemberNode, "experience") /= ""
-                        then
+                       (if Get_Attribute(MemberNode, "experience") /= "" then
                           Integer'Value
                             (Get_Attribute(MemberNode, "experience"))
                         else 0);
@@ -944,18 +860,14 @@ package body Ships.SaveLoad is
                      Durability :=
                        Integer'Value(Get_Attribute(MemberNode, "durability"));
                      Price :=
-                       (if
-                          Get_Attribute(MemberNode, "price")'Length > 0
-                        then
+                       (if Get_Attribute(MemberNode, "price")'Length > 0 then
                           Integer'Value(Get_Attribute(MemberNode, "price"))
                         else 0);
                      Inventory.Append
-                     (New_Item =>
-                        (ProtoIndex => ItemIndex,
-                         Amount => Amount,
-                         Name => ItemName,
-                         Durability => Durability,
-                         Price => Price));
+                       (New_Item =>
+                          (ProtoIndex => ItemIndex, Amount => Amount,
+                           Name => ItemName, Durability => Durability,
+                           Price => Price));
                   elsif Node_Name(MemberNode) = "equipment" then
                      Equipment(EquipmentIndex) :=
                        Natural'Value(Get_Attribute(MemberNode, "index"));
@@ -963,39 +875,24 @@ package body Ships.SaveLoad is
                   end if;
                end loop Load_Crew_Loop;
                HomeBase :=
-                 (if
-                    Get_Attribute(ChildNode, "homebase") /= ""
-                  then
+                 (if Get_Attribute(ChildNode, "homebase") /= "" then
                     Natural'Value(Get_Attribute(ChildNode, "homebase"))
                   else PlayerShip.HomeBase);
                FactionIndex :=
-                 (if
-                    Get_Attribute(ChildNode, "faction") /= ""
-                  then
+                 (if Get_Attribute(ChildNode, "faction") /= "" then
                     To_Unbounded_String(Get_Attribute(ChildNode, "faction"))
                   else SkyBases(HomeBase).Owner);
                PlayerShip.Crew.Append
-               (New_Item =>
-                  (Name => Name,
-                   Gender => Gender(1),
-                   Health => Health,
-                   Tired => Tired,
-                   Skills => Skills,
-                   Hunger => Hunger,
-                   Thirst => Thirst,
-                   Order => Order,
-                   PreviousOrder => PreviousOrder,
-                   OrderTime => OrderTime,
-                   Orders => Orders,
-                   Attributes => Attributes,
-                   Inventory => Inventory,
-                   Equipment => Equipment,
-                   Payment => Payment,
-                   ContractLength => ContractLength,
-                   Morale => Morale,
-                   Loyalty => Loyalty,
-                   HomeBase => HomeBase,
-                   Faction => FactionIndex));
+                 (New_Item =>
+                    (Name => Name, Gender => Gender(1), Health => Health,
+                     Tired => Tired, Skills => Skills, Hunger => Hunger,
+                     Thirst => Thirst, Order => Order,
+                     PreviousOrder => PreviousOrder, OrderTime => OrderTime,
+                     Orders => Orders, Attributes => Attributes,
+                     Inventory => Inventory, Equipment => Equipment,
+                     Payment => Payment, ContractLength => ContractLength,
+                     Morale => Morale, Loyalty => Loyalty,
+                     HomeBase => HomeBase, Faction => FactionIndex));
             end;
          end if;
       end loop Load_Ship_Loop;

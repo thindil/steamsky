@@ -39,8 +39,7 @@ package Ships.Cargo is
    -- SOURCE
    procedure UpdateCargo
      (Ship: in out ShipRecord;
-      ProtoIndex: Unbounded_String := Null_Unbounded_String;
-      Amount: Integer;
+      ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) with
       Pre => CargoIndex <= Ship.Cargo.Last_Index,
@@ -60,8 +59,7 @@ package Ships.Cargo is
       -- of kilograms
       -- SOURCE
    function FreeCargo
-     (Amount: Integer;
-      Ship: ShipRecord := PlayerShip) return Integer with
+     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer with
       Test_Case => (Name => "Test_FreeCargo", Mode => Robustness);
       -- ****
 

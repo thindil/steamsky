@@ -51,17 +51,13 @@ package body Knowledge.Stories is
    -- ShowStory
    -- SOURCE
    function Show_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String :=
@@ -83,7 +79,7 @@ package body Knowledge.Stories is
       StoryIndex := Natural'Value(Current(StoriesBox)) + 1;
       configure(StoryView, "-state normal -width" & Positive'Image(LineWidth));
       Delete(StoryView, "1.0", "end");
-      Story_Steps_Info_Loop:
+      Story_Steps_Info_Loop :
       for StepText of FinishedStories(StoryIndex).StepsTexts loop
          Append(StoryText, StepText & LF);
          Rows := Rows + (Length(StepText) / LineWidth) + 1;
@@ -94,13 +90,9 @@ package body Knowledge.Stories is
          Rows := Rows + (Length(GetCurrentStoryText & LF) / LineWidth) + 1;
          if CurrentStory.Data /= Null_Unbounded_String then
             Step :=
-              (if
-                 CurrentStory.CurrentStep = 0
-               then
+              (if CurrentStory.CurrentStep = 0 then
                  Stories_List(CurrentStory.Index).StartingStep
-               elsif
-                 CurrentStory.CurrentStep > 0
-               then
+               elsif CurrentStory.CurrentStep > 0 then
                  Stories_List(CurrentStory.Index).Steps
                    (CurrentStory.CurrentStep)
                else Stories_List(CurrentStory.Index).FinalStep);
@@ -110,10 +102,9 @@ package body Knowledge.Stories is
                   if Slice_Count(Tokens) < 2 then
                      Append
                        (StoryText,
-                        "You must travel to base " &
-                        CurrentStory.Data &
+                        "You must travel to base " & CurrentStory.Data &
                         " at X:");
-                     Base_Location_Loop:
+                     Base_Location_Loop :
                      for I in SkyBases'Range loop
                         if SkyBases(I).Name = CurrentStory.Data then
                            Append(StoryText, Positive'Image(SkyBases(I).SkyX));
@@ -131,16 +122,11 @@ package body Knowledge.Stories is
                      "You must find " &
                      ProtoShips_List(To_Unbounded_String(Slice(Tokens, 3)))
                        .Name &
-                     " at X:" &
-                     Slice(Tokens, 1) &
-                     " Y:" &
-                     Slice(Tokens, 2));
+                     " at X:" & Slice(Tokens, 1) & " Y:" & Slice(Tokens, 2));
                when EXPLORE =>
                   Append
                     (StoryText,
-                     "You must travel to X:" &
-                     Slice(Tokens, 1) &
-                     " Y:" &
+                     "You must travel to X:" & Slice(Tokens, 1) & " Y:" &
                      Slice(Tokens, 2));
                when LOOT =>
                   Append
@@ -161,7 +147,7 @@ package body Knowledge.Stories is
                      end if;
                      Append(StoryText, " ship.");
                   else
-                     Find_Proto_Ship_Loop:
+                     Find_Proto_Ship_Loop :
                      for I in ProtoShips_List.Iterate loop
                         if ProtoShips_Container.Key(I) =
                           To_Unbounded_String(Slice(Tokens, 2)) then
@@ -202,29 +188,22 @@ package body Knowledge.Stories is
    -- ShowStoryLocation
    -- SOURCE
    function Show_Story_Location_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Show_Story_Location_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
-      return Show_On_Map_Command
-          (ClientData,
-           Interp,
-           3,
-           CArgv.Empty &
-           CArgv.Arg(Argv, 0) &
-           Positive'Image(NewX) &
+      return
+        Show_On_Map_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
            Positive'Image(NewY));
    end Show_Story_Location_Command;
 
@@ -242,29 +221,22 @@ package body Knowledge.Stories is
    -- SetStory
    -- SOURCE
    function Set_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
    function Set_Story_Command
-     (ClientData: Integer;
-      Interp: Tcl.Tcl_Interp;
-      Argc: Interfaces.C.int;
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       NewX, NewY: Positive := 1;
    begin
       GetStoryLocation(NewX, NewY);
-      return Set_Destination_Command
-          (ClientData,
-           Interp,
-           3,
-           CArgv.Empty &
-           CArgv.Arg(Argv, 0) &
-           Positive'Image(NewX) &
+      return
+        Set_Destination_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & CArgv.Arg(Argv, 0) & Positive'Image(NewX) &
            Positive'Image(NewY));
    end Set_Story_Command;
 
