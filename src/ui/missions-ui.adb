@@ -427,7 +427,9 @@ package body Missions.UI is
       return TCL_OK;
    exception
       when An_Exception : Missions_Accepting_Error =>
-         ShowMessage(Exception_Message(An_Exception));
+         ShowMessage
+           (Text => Exception_Message(An_Exception),
+            Title => "Can't accept mission");
          return TCL_OK;
    end Set_Mission_Command;
 
