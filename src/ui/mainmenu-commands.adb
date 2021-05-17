@@ -67,19 +67,14 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       OsName: constant String := Tcl_GetVar(Get_Context, "tcl_platform(os)");
-      Command: Unbounded_String;
+      Command: constant String := Locate_Exec_On_Path((if OsName = "Windows"
+         then "start" elsif OsName = "Darwin" then "open"
+            else "xdg-open")).all;
       ProcessId: Process_Id;
    begin
-      if OsName = "Windows" then
-         Command := To_Unbounded_String(Locate_Exec_On_Path("start").all);
-      elsif OsName = "Linux" then
-         Command := To_Unbounded_String(Locate_Exec_On_Path("xdg-open").all);
-      elsif OsName = "Darwin" then
-         Command := To_Unbounded_String(Locate_Exec_On_Path("open").all);
-      end if;
       ProcessId :=
         Non_Blocking_Spawn
-          (To_String(Command),
+          (Command,
            Argument_String_To_List(CArgv.Arg(Argv, 1)).all);
       if ProcessId = Invalid_Pid then
          return TCL_ERROR;
@@ -434,11 +429,12 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FactionName, Values: Unbounded_String;
+      FrameName: constant String := ".newgamemenu.canvas.player";
       ComboBox: Ttk_ComboBox :=
-        Get_Widget(".newgamemenu.canvas.player.faction", Interp);
+        Get_Widget(FrameName & ".faction", Interp);
       Label: Ttk_Label;
       GenderFrame: constant Ttk_Frame :=
-        Get_Widget(".newgamemenu.canvas.player.gender", Interp);
+        Get_Widget(FrameName & ".gender", Interp);
       procedure UpdateInfo(NewText: String) is
          InfoText: constant Tk_Text :=
            Get_Widget(".newgamemenu.info.text", Interp);
@@ -456,27 +452,27 @@ package body MainMenu.Commands is
       Label.Interp := Interp;
       FactionName := To_Unbounded_String(Get(ComboBox));
       if FactionName = To_Unbounded_String("Random") then
-         Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
+         Label.Name := New_String(FrameName & ".labelcareer");
          Grid_Remove(Label);
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         ComboBox.Name := New_String(FrameName & ".career");
          Set(ComboBox, "Random");
          Grid_Remove(ComboBox);
-         Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
+         Label.Name := New_String(FrameName & ".labelbase");
          Grid_Remove(Label);
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         ComboBox.Name := New_String(FrameName & ".base");
          Set(ComboBox, "Any");
          Grid_Remove(ComboBox);
          UpdateInfo
            ("{Faction, career and base type will be randomly selected for you during creating new game. Not recommended for new player.}");
          return TCL_OK;
       else
-         Label.Name := New_String(".newgamemenu.canvas.player.labelcareer");
+         Label.Name := New_String(FrameName & ".labelcareer");
          Tcl.Tk.Ada.Grid.Grid(Label);
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         ComboBox.Name := New_String(FrameName & ".career");
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
-         Label.Name := New_String(".newgamemenu.canvas.player.labelbase");
+         Label.Name := New_String(FrameName & ".labelbase");
          Tcl.Tk.Ada.Grid.Grid(Label);
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         ComboBox.Name := New_String(FrameName & ".base");
          Tcl.Tk.Ada.Grid.Grid(ComboBox);
       end if;
       Load_Faction_Based_Info_Loop :
@@ -485,12 +481,12 @@ package body MainMenu.Commands is
             goto End_Of_Faction_Info_Loop;
          end if;
          if Faction.Flags.Contains(To_Unbounded_String("nogender")) then
-            Label.Name := New_String(".newgamemenu.canvas.player.labelgender");
+            Label.Name := New_String(FrameName & ".labelgender");
             Grid_Remove(Label);
             Grid_Remove(GenderFrame);
             Tcl_SetVar(Interp, "playergender", "M");
          else
-            Label.Name := New_String(".newgamemenu.canvas.player.labelgender");
+            Label.Name := New_String(FrameName & ".labelgender");
             Tcl.Tk.Ada.Grid.Grid(Label);
             Tcl.Tk.Ada.Grid.Grid(GenderFrame);
          end if;
@@ -500,7 +496,7 @@ package body MainMenu.Commands is
             Append(Values, " " & Faction.Careers(I).Name);
          end loop Load_Careers_Loop;
          Append(Values, " Random");
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.career");
+         ComboBox.Name := New_String(FrameName & ".career");
          configure(ComboBox, "-values [list " & To_String(Values) & "]");
          Set(ComboBox, "General");
          Values := To_Unbounded_String(" Any");
@@ -510,7 +506,7 @@ package body MainMenu.Commands is
               (Values,
                " {" & BasesTypes_List(BaseType_Container.Key(I)).Name & "}");
          end loop Load_Bases_Types_Loop;
-         ComboBox.Name := New_String(".newgamemenu.canvas.player.base");
+         ComboBox.Name := New_String(FrameName & ".base");
          configure(ComboBox, "-values [list " & To_String(Values) & "]");
          Set(ComboBox, "Any");
          UpdateInfo("{" & To_String(Faction.Description) & "}");
