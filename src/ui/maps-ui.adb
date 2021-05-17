@@ -896,7 +896,7 @@ package body Maps.UI is
          Main_Paned := Get_Widget(".gameframe.paned");
          Game_Header := Get_Widget(".gameframe.header");
          Close_Button := Get_Widget(Game_Header & ".closebutton");
-         SetTheme;
+         Set_Theme;
          OrdersMenu.AddCommands;
          Maps.UI.Commands.AddCommands;
          WaitMenu.AddCommands;
