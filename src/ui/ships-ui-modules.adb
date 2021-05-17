@@ -1055,7 +1055,9 @@ package body Ships.UI.Modules is
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    exception
       when An_Exception : Crew_Order_Error =>
-         ShowMessage(Exception_Message(An_Exception));
+         ShowMessage
+           (Text => Exception_Message(An_Exception),
+            Title => "Can't assign crew");
          return TCL_OK;
    end Assign_Module_Command;
 
@@ -1099,7 +1101,9 @@ package body Ships.UI.Modules is
          end loop Check_Can_Disable_Loop;
          if not CanDisable then
             ShowMessage
-              ("You can't disable this engine because it is your last working engine.");
+              (Text =>
+                 "You can't disable this engine because it is your last working engine.",
+               Title => "Can't disable engine");
             return TCL_OK;
          end if;
          PlayerShip.Modules(ModuleIndex).Disabled := True;

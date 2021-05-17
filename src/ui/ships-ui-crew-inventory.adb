@@ -303,8 +303,10 @@ package body Ships.UI.Crew.Inventory is
               2 and
               PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
                ShowMessage
-                 (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                  " can't use this weapon because have shield equiped. Take off shield first.");
+                 (Text =>
+                    To_String(PlayerShip.Crew(MemberIndex).Name) &
+                    " can't use this weapon because have shield equiped. Take off shield first.",
+                  Title => "Shield in use");
                return TCL_OK;
             end if;
             PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
@@ -318,8 +320,10 @@ package body Ships.UI.Crew.Inventory is
                    (4) =
                  2 then
                   ShowMessage
-                    (To_String(PlayerShip.Crew(MemberIndex).Name) &
-                     " can't use shield because have equiped two-hand weapon. Take off weapon first.");
+                    (Text =>
+                       To_String(PlayerShip.Crew(MemberIndex).Name) &
+                       " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+                     Title => "Two handed weapon in use");
                   return TCL_OK;
                end if;
             end if;
@@ -472,8 +476,10 @@ package body Ships.UI.Crew.Inventory is
             Amount)) <
         0 then
          ShowMessage
-           ("No free space in ship cargo for that amount of " &
-            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)));
+           (Text =>
+              "No free space in ship cargo for that amount of " &
+              GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)),
+            Title => "No free space in cargo");
          return TCL_OK;
       end if;
       UpdateCargo
