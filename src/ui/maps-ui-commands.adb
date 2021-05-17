@@ -774,16 +774,22 @@ package body Maps.UI.Commands is
             begin
                if Winfo_Get(MessageDialog, "exists") = "0" then
                   if GetItemAmount(Fuel_Type) <= Game_Settings.Low_Fuel then
-                     ShowMessage("Your fuel level is dangerously low.");
+                     ShowMessage
+                       (Text => "Your fuel level is dangerously low.",
+                        Title => "Low fuel level");
                      Result := 4;
                      exit Move_Loop;
                   elsif GetItemsAmount("Food") <= Game_Settings.Low_Food then
-                     ShowMessage("Your food level is dangerously low.");
+                     ShowMessage
+                       (Text => "Your food level is dangerously low.",
+                        Title => "Low amount of food");
                      Result := 4;
                      exit Move_Loop;
                   elsif GetItemsAmount("Drinks") <=
                     Game_Settings.Low_Drinks then
-                     ShowMessage("Your drinks level is dangerously low.");
+                     ShowMessage
+                       (Text => "Your drinks level is dangerously low.",
+                        Title => "Low level of drinks");
                      Result := 4;
                      exit Move_Loop;
                   end if;
@@ -840,7 +846,7 @@ package body Maps.UI.Commands is
             null;
       end case;
       if Message /= Null_Unbounded_String then
-         ShowMessage(To_String(Message));
+         ShowMessage(Text => To_String(Message), Title => "Message");
       end if;
       CenterX := PlayerShip.SkyX;
       CenterY := PlayerShip.SkyY;

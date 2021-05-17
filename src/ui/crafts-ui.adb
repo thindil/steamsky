@@ -309,22 +309,30 @@ package body Crafts.UI is
    exception
       when An_Exception : Crafting_No_Materials =>
          ShowMessage
-           ("You don't have enough materials to start " &
-            Exception_Message(An_Exception) &
-            ".");
+           (Text =>
+              "You don't have enough materials to start " &
+              Exception_Message(An_Exception) &
+              ".",
+            Title => "Can't set crafting recipe");
       when An_Exception : Crafting_No_Tools =>
          ShowMessage
-           ("You don't have the proper tool to start " &
-            Exception_Message(An_Exception) &
-            ".");
+           (Text =>
+              "You don't have the proper tool to start " &
+              Exception_Message(An_Exception) &
+              ".",
+            Title => "Can't set crafting recipe");
       when Trade_No_Free_Cargo =>
          ShowMessage
-           ("You don't have that much free space in your ship's cargo.");
+           (Text =>
+              "You don't have that much free space in your ship's cargo.",
+            Title => "Can't set crafting recipe");
       when An_Exception : Crafting_No_Workshop =>
          ShowMessage
-           ("You don't have proper a workplace to start " &
-            Exception_Message(An_Exception) &
-            ".");
+           (Text =>
+              "You don't have proper a workplace to start " &
+              Exception_Message(An_Exception) &
+              ".",
+            Title => "Can't set crafting recipe");
    end ShowSetRecipe;
 
    -- ****o* CUI4/CUI4.Show_Recipe_Info_Command
