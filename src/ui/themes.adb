@@ -35,53 +35,14 @@ package body Themes is
       RawData, FieldName, Value: Unbounded_String;
       EqualIndex: Natural;
       TempRecord: Theme_Record;
-      procedure SetDefaultValues is
-      begin
-         TempRecord :=
-           (Name => Null_Unbounded_String, File_Name => Null_Unbounded_String,
-            Enemy_Ship_Icon => Wide_Character'Val(16#f51c#),
-            Attack_On_Base_Icon => Wide_Character'Val(16#f543#),
-            Disease_Icon => Wide_Character'Val(16#f5a6#),
-            Double_Price_Icon => Wide_Character'Val(16#f0d6#),
-            Full_Docks_Icon => Wide_Character'Val(16#f057#),
-            Enemy_Patrol_Icon => Wide_Character'Val(16#f51b#),
-            Trader_Icon => Wide_Character'Val(16#f197#),
-            Friendly_Ship_Icon => Wide_Character'Val(16#f197#),
-            Deliver_Icon => Wide_Character'Val(16#f53b#),
-            Destroy_Icon => Wide_Character'Val(16#fc6a#),
-            Patrol_Icon => Wide_Character'Val(16#f540#),
-            Explore_Icon => Wide_Character'Val(16#f707#),
-            Passenger_Icon => Wide_Character'Val(16#f183#),
-            Pilot_Icon => Wide_Character'Val(16#f655#),
-            Engineer_Icon => Wide_Character'Val(16#f013#),
-            Gunner_Icon => Wide_Character'Val(16#f4fb#),
-            Crew_Trader_Icon => Wide_Character'Val(16#f651#),
-            Repair_Icon => Wide_Character'Val(16#f54a#),
-            Upgrade_Icon => Wide_Character'Val(16#f6e3#),
-            Clean_Icon => Wide_Character'Val(16#f458#),
-            Manufacture_Icon => Wide_Character'Val(16#f0e3#),
-            Move_Map_Up_Icon => Wide_Character'Val(16#2191#),
-            Move_Map_Down_Icon => Wide_Character'Val(16#2193#),
-            Move_Map_Left_Icon => Wide_Character'Val(16#2190#),
-            Move_Map_Right_Icon => Wide_Character'Val(16#2192#),
-            No_Fuel_Icon => Wide_Character'Val(16#f2ca#),
-            No_Food_Icon => Wide_Character'Val(16#f787#),
-            No_Drinks_Icon => Wide_Character'Val(16#f72f#),
-            Not_Visited_Base_Icon => Wide_Character'Val(16#229b#),
-            Player_Ship_Icon => Wide_Character'Val(16#f135#),
-            Empty_Map_Icon => Wide_Character'Val(16#f0c8#),
-            Target_Icon => Wide_Character'Val(16#f05b#),
-            Story_Icon => Wide_Character'Val(16#f059#),
-            Overloaded_Icon => Wide_Character'Val(16#f55b#));
-      end SetDefaultValues;
    begin
-      SetDefaultValues;
+      TempRecord := Default_Theme;
       TempRecord.Name := To_Unbounded_String("Default theme");
       TempRecord.File_Name :=
         Data_Directory &
         To_Unbounded_String("ui" & Dir_Separator & "theme.tcl");
       Themes_Container.Include(Themes_List, "steamsky", TempRecord);
-      SetDefaultValues;
+      TempRecord := Default_Theme;
       Start_Search
         (Directories, To_String(Themes_Directory), "",
          (Directory => True, others => False));
@@ -249,7 +210,7 @@ package body Themes is
             Close(ConfigFile);
             Themes_Container.Include
               (Themes_List, Simple_Name(FoundDirectory), TempRecord);
-            SetDefaultValues;
+            TempRecord := Default_Theme;
          end loop Load_Config_Loop;
          End_Search(Files);
          <<End_Of_Load_Themes_Loop>>
