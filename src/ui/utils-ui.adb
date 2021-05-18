@@ -385,8 +385,9 @@ package body Utils.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- GetString title
-   -- Title is the title of dialog to show to the player
+   -- GetString caption closeaction title
+   -- Caption is the text showed above entry field in the dialog, variable
+   -- is the variable which will be set and title is the title of the dialog
    -- SOURCE
    function Get_String_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -418,15 +419,21 @@ package body Utils.UI is
           (StringDialog & ".closebutton",
            "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      String_Header: constant Ttk_Label :=
+        Create
+          (StringDialog & ".header",
+           "-text {" & CArgv.Arg(Argv, 3) &
+           "} -wraplength 200 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Grid.Grid(String_Header, "-sticky we -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 2 -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
       State(OkButton, "disabled");
-      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 2 -column 1 -pady 5 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 3 -column 1 -pady 5 -padx 5");
       Bind(CancelButton, "<Tab>", "{focus .getstring.entry;break}");
       Bind(CancelButton, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
