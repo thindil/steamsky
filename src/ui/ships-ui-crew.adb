@@ -837,7 +837,8 @@ package body Ships.UI.Crew is
       ShowInfo
         (To_String
            (Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Description),
-         CArgv.Arg(Argv, 2));
+         CArgv.Arg(Argv, 2),
+         To_String(Attributes_List(Positive'Value(CArgv.Arg(Argv, 1))).Name));
       return TCL_OK;
    end Show_Crew_Stats_Info_Command;
 
@@ -910,7 +911,9 @@ package body Ships.UI.Crew is
       end if;
       Append(MessageText, "." & LF);
       Append(MessageText, Skills_List(SkillIndex).Description);
-      ShowInfo(To_String(MessageText), CArgv.Arg(Argv, 3));
+      ShowInfo
+        (To_String(MessageText), CArgv.Arg(Argv, 3),
+         To_String(Skills_List(SkillIndex).Name));
       return TCL_OK;
    end Show_Crew_Skill_Info_Command;
 

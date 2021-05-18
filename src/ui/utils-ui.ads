@@ -196,8 +196,10 @@ package Utils.UI is
       -- ParentName - Name of the parent widget. If empty, then the main game
       --              window will be used as parent for widget. Default value
       --              is .gameframe
+      -- Title      - The text show in the dialog header.
       -- SOURCE
-   procedure ShowInfo(Text: String; ParentName: String := ".gameframe") with
+   procedure ShowInfo
+     (Text: String; ParentName: String := ".gameframe"; Title: String) with
       Pre => Text'Length > 0 and ParentName'Length > 0;
       -- ****
 

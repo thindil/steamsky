@@ -576,7 +576,9 @@ package body Trades.UI is
          Append
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
-      ShowInfo(To_String(ItemInfo));
+      ShowInfo
+        (Text => To_String(ItemInfo),
+         Title => To_String(Items_List(ProtoIndex).Name));
       return TCL_OK;
    end Show_Trade_Item_Info_Command;
 
