@@ -35,7 +35,7 @@ grid [ttk::label $shipcanvas.frame.name -textvariable shipname] -column 1 -row 1
 tooltip::tooltip $shipcanvas.frame.name {The name of your ship}
 SetScrollbarBindings $shipcanvas.frame.name $shipinfoframe.general.scrolly
 grid [ttk::button $shipcanvas.frame.rename -text "[format %c 0xf044]" -style Small.TButton -command {
-   GetString {Enter a new name:} shipname
+   GetString {Enter a new name:} shipname {Renaming the ship}
 }] -column 2 -row 1 -sticky w
 tooltip::tooltip $shipcanvas.frame.rename {Set a new name for the ship}
 bind $shipcanvas.frame.name <Enter> SetShipName

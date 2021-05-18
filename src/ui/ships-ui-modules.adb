@@ -109,7 +109,7 @@ package body Ships.UI.Modules is
         (ModuleMenu, "command",
          "-label {Rename module} -command {GetString {Enter a new name for the " &
          To_String(PlayerShip.Modules(ModuleIndex).Name) & ":} modulename" &
-         CArgv.Arg(Argv, 1) & "}");
+         CArgv.Arg(Argv, 1) & " {Renaming the module}}");
       if PlayerShip.RepairModule /= ModuleIndex then
          Menu.Add
            (ModuleMenu, "command",
