@@ -1,4 +1,4 @@
-name: AdaControl tests - temporary workflow
+name: AdaControl checks
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild
+    container: ghcr.io/thindil/adabuild:9
 
     steps:
     - name: Checkout
