@@ -1111,20 +1111,38 @@ package body Utils.UI is
            (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
       end if;
       if Parent = "." then
-         ShowInfo(To_String(ItemInfo));
+         ShowInfo
+           (Text => To_String(ItemInfo),
+            Title =>
+              (if MemberIndex > 0 then
+                 GetItemName
+                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex), False,
+                    False)
+               else GetItemName(PlayerShip.Cargo(ItemIndex), False, False)));
       else
-         ShowInfo(To_String(ItemInfo), Parent);
+         ShowInfo
+           (To_String(ItemInfo), Parent,
+            (if MemberIndex > 0 then
+               GetItemName
+                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex), False,
+                  False)
+             else GetItemName(PlayerShip.Cargo(ItemIndex), False, False)));
          Tcl_Eval(Get_Context, "raise .info");
       end if;
    end ShowInventoryItemInfo;
 
-   procedure ShowInfo(Text: String; ParentName: String := ".gameframe") is
+   procedure ShowInfo
+     (Text: String; ParentName: String := ".gameframe"; Title: String) is
       InfoDialog: constant Ttk_Frame :=
         Create(".info", "-style Dialog.TFrame");
       InfoLabel: constant Ttk_Label :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       InfoButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Info_Header: constant Ttk_Label :=
+        Create
+          (InfoDialog & ".header",
+           "-text {" & Title & "} -wraplength 200 -style Header.TLabel");
    begin
       if ParentName = ".gameframe" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -1138,6 +1156,7 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
+      Tcl.Tk.Ada.Grid.Grid(Info_Header, "-sticky we");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       InfoButton :=
         (if ParentName = ".gameframe" then

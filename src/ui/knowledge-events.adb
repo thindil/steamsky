@@ -160,7 +160,7 @@ package body Knowledge.Events is
          when None | BaseRecovery =>
             null;
       end case;
-      ShowInfo(To_String(EventInfo));
+      ShowInfo(Text => To_String(EventInfo), Title => "Event information");
       return TCL_OK;
    end Show_Event_Info_Command;
 

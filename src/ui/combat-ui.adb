@@ -1424,7 +1424,7 @@ package body Combat.UI is
             end if;
          end loop Show_Enemy_Crew_Equipment_Loop;
       end if;
-      ShowInfo(To_String(Info));
+      ShowInfo(Text => To_String(Info), Title => "More info");
       return TCL_OK;
    end Show_Combat_Info_Command;
 

@@ -862,7 +862,8 @@ package body OrdersMenu is
       if PlayerShip.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
          Message := To_Unbounded_String(DockShip(True));
          if Message /= Null_Unbounded_String then
-            ShowInfo(To_String(Message));
+            ShowInfo
+              (Text => To_String(Message), Title => "Can't dock to base");
             return TCL_OK;
          end if;
       end if;
@@ -891,7 +892,7 @@ package body OrdersMenu is
                end if;
                for Text of Step.Texts loop
                   if CurrentStory.FinishedStep = Text.Condition then
-                     ShowInfo(To_String(Text.Text));
+                     ShowInfo(Text => To_String(Text.Text), Title => "Story");
                      CurrentStory.ShowText := False;
                      exit;
                   end if;
@@ -901,7 +902,7 @@ package body OrdersMenu is
             end if;
          end;
       else
-         ShowInfo(To_String(Step.FailText));
+         ShowInfo(Text => To_String(Step.FailText), Title => "Story");
          CurrentStory.ShowText := False;
       end if;
       UpdateHeader;
