@@ -6,10 +6,11 @@ with Gnattest_Generated;
 
 package Log.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Log.Test_Data.Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Log.Test_Data
+     .Test with
+   null record;
 
-   procedure Test_Log_Message_6a7537_caf43b (Gnattest_T : in out Test);
+   procedure Test_Log_Message_6a7537_caf43b(Gnattest_T: in out Test);
    --  log.ads:65:4:Log_Message:Test_LogMessage
 
 end Log.Test_Data.Tests;

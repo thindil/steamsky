@@ -6,8 +6,12 @@ with Gnattest_Generated;
 
 package BasesTypes.Test_Data.Tests.BasesTypes_Container.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.BasesTypes.Test_Data.Tests.BasesTypes_Container.Test_Data.New_Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.BasesTypes.Test_Data
+     .Tests
+     .BasesTypes_Container
+     .Test_Data
+     .New_Test with
+   null record;
 
 end BasesTypes.Test_Data.Tests.BasesTypes_Container.Test_Data.Tests;
 --  end read only

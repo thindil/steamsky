@@ -29,25 +29,25 @@ package body ShipModules.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetModuleType_51fe9c_8ea853 (ModuleIndex: Unbounded_String)  return String
-   is
+   function Wrap_Test_GetModuleType_51fe9c_8ea853
+     (ModuleIndex: Unbounded_String) return String is
    begin
       begin
-         pragma Assert
-           (Length(ModuleIndex) > 0);
+         pragma Assert(Length(ModuleIndex) > 0);
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
       end;
       declare
-         Test_GetModuleType_51fe9c_8ea853_Result : constant String := GNATtest_Generated.GNATtest_Standard.ShipModules.GetModuleType (ModuleIndex);
+         Test_GetModuleType_51fe9c_8ea853_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.ShipModules.GetModuleType
+             (ModuleIndex);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -61,11 +61,14 @@ package body ShipModules.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GetModuleType_test_getmoduletype (Gnattest_T : in out Test);
-   procedure Test_GetModuleType_51fe9c_8ea853 (Gnattest_T : in out Test) renames Test_GetModuleType_test_getmoduletype;
+   procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test);
+   procedure Test_GetModuleType_51fe9c_8ea853(Gnattest_T: in out Test) renames
+     Test_GetModuleType_test_getmoduletype;
 --  id:2.2/51fe9c61c193b590/GetModuleType/1/0/test_getmoduletype/
-   procedure Test_GetModuleType_test_getmoduletype (Gnattest_T : in out Test) is
-      function GetModuleType (ModuleIndex: Unbounded_String) return String renames Wrap_Test_GetModuleType_51fe9c_8ea853;
+   procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test) is
+      function GetModuleType
+        (ModuleIndex: Unbounded_String) return String renames
+        Wrap_Test_GetModuleType_51fe9c_8ea853;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

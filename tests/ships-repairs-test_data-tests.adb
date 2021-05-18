@@ -32,19 +32,20 @@ package body Ships.Repairs.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_RepairShip_41c4af_831bda (Minutes: Positive) 
-   is
+   procedure Wrap_Test_RepairShip_41c4af_831bda(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Ships.Repairs.RepairShip (Minutes);
+      GNATtest_Generated.GNATtest_Standard.Ships.Repairs.RepairShip(Minutes);
    end Wrap_Test_RepairShip_41c4af_831bda;
 --  end read only
 
 --  begin read only
-   procedure Test_RepairShip_test_repairship (Gnattest_T : in out Test);
-   procedure Test_RepairShip_41c4af_831bda (Gnattest_T : in out Test) renames Test_RepairShip_test_repairship;
+   procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test);
+   procedure Test_RepairShip_41c4af_831bda(Gnattest_T: in out Test) renames
+     Test_RepairShip_test_repairship;
 --  id:2.2/41c4af333c446830/RepairShip/1/0/test_repairship/
-   procedure Test_RepairShip_test_repairship (Gnattest_T : in out Test) is
-   procedure RepairShip (Minutes: Positive) renames Wrap_Test_RepairShip_41c4af_831bda;
+   procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test) is
+      procedure RepairShip(Minutes: Positive) renames
+        Wrap_Test_RepairShip_41c4af_831bda;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
