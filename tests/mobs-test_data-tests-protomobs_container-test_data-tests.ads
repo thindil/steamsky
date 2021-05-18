@@ -6,8 +6,11 @@ with Gnattest_Generated;
 
 package Mobs.Test_Data.Tests.ProtoMobs_Container.Test_Data.Tests is
 
-   type Test is new GNATtest_Generated.GNATtest_Standard.Mobs.Test_Data.Tests.ProtoMobs_Container.Test_Data.New_Test
-   with null record;
+   type Test is new GNATtest_Generated.GNATtest_Standard.Mobs.Test_Data.Tests
+     .ProtoMobs_Container
+     .Test_Data
+     .New_Test with
+   null record;
 
 end Mobs.Test_Data.Tests.ProtoMobs_Container.Test_Data.Tests;
 --  end read only

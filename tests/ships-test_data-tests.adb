@@ -29,25 +29,27 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CreateShip_c5e851_13521c (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range; Speed: ShipSpeed; RandomUpgrades: Boolean := True)  return ShipRecord
-   is
+   function Wrap_Test_CreateShip_c5e851_13521c
+     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
    begin
       begin
          pragma Assert
            ((ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)));
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_CreateShip_c5e851_13521c_Result : constant ShipRecord := GNATtest_Generated.GNATtest_Standard.Ships.CreateShip (ProtoIndex, Name, X, Y, Speed, RandomUpgrades);
+         Test_CreateShip_c5e851_13521c_Result: constant ShipRecord :=
+           GNATtest_Generated.GNATtest_Standard.Ships.CreateShip
+             (ProtoIndex, Name, X, Y, Speed, RandomUpgrades);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -61,21 +63,22 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_CreateShip_test_createship (Gnattest_T : in out Test);
-   procedure Test_CreateShip_c5e851_13521c (Gnattest_T : in out Test) renames Test_CreateShip_test_createship;
+   procedure Test_CreateShip_test_createship(Gnattest_T: in out Test);
+   procedure Test_CreateShip_c5e851_13521c(Gnattest_T: in out Test) renames
+     Test_CreateShip_test_createship;
 --  id:2.2/c5e851ac0c40246a/CreateShip/1/0/test_createship/
-   procedure Test_CreateShip_test_createship (Gnattest_T : in out Test) is
-      function CreateShip (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range; Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord renames Wrap_Test_CreateShip_c5e851_13521c;
+   procedure Test_CreateShip_test_createship(Gnattest_T: in out Test) is
+      function CreateShip
+        (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+         Speed: ShipSpeed; RandomUpgrades: Boolean := True)
+         return ShipRecord renames
+        Wrap_Test_CreateShip_c5e851_13521c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       TestShip: constant ShipRecord :=
         CreateShip
-          (To_Unbounded_String("2"),
-           Null_Unbounded_String,
-           5,
-           5,
-           FULL_SPEED);
+          (To_Unbounded_String("2"), Null_Unbounded_String, 5, 5, FULL_SPEED);
 
    begin
 
@@ -88,11 +91,12 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_CountShipWeight_f01f93_0591fd (Ship: ShipRecord)  return Positive
-   is
+   function Wrap_Test_CountShipWeight_f01f93_0591fd
+     (Ship: ShipRecord) return Positive is
    begin
       declare
-         Test_CountShipWeight_f01f93_0591fd_Result : constant Positive := GNATtest_Generated.GNATtest_Standard.Ships.CountShipWeight (Ship);
+         Test_CountShipWeight_f01f93_0591fd_Result: constant Positive :=
+           GNATtest_Generated.GNATtest_Standard.Ships.CountShipWeight(Ship);
       begin
          return Test_CountShipWeight_f01f93_0591fd_Result;
       end;
@@ -100,11 +104,16 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_CountShipWeight_test_countshipweight (Gnattest_T : in out Test);
-   procedure Test_CountShipWeight_f01f93_0591fd (Gnattest_T : in out Test) renames Test_CountShipWeight_test_countshipweight;
+   procedure Test_CountShipWeight_test_countshipweight
+     (Gnattest_T: in out Test);
+   procedure Test_CountShipWeight_f01f93_0591fd
+     (Gnattest_T: in out Test) renames
+     Test_CountShipWeight_test_countshipweight;
 --  id:2.2/f01f93836329aac8/CountShipWeight/1/0/test_countshipweight/
-   procedure Test_CountShipWeight_test_countshipweight (Gnattest_T : in out Test) is
-      function CountShipWeight (Ship: ShipRecord) return Positive renames Wrap_Test_CountShipWeight_f01f93_0591fd;
+   procedure Test_CountShipWeight_test_countshipweight
+     (Gnattest_T: in out Test) is
+      function CountShipWeight(Ship: ShipRecord) return Positive renames
+        Wrap_Test_CountShipWeight_f01f93_0591fd;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -118,25 +127,24 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateShipName_26fd48_7313c0 (Owner: Unbounded_String)  return Unbounded_String
-   is
+   function Wrap_Test_GenerateShipName_26fd48_7313c0
+     (Owner: Unbounded_String) return Unbounded_String is
    begin
       begin
-         pragma Assert
-           (Owner /= Null_Unbounded_String);
+         pragma Assert(Owner /= Null_Unbounded_String);
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(ships.ads:0):Test_GenerateShipName test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships.ads:0):Test_GenerateShipName test requirement violated");
       end;
       declare
-         Test_GenerateShipName_26fd48_7313c0_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Ships.GenerateShipName (Owner);
+         Test_GenerateShipName_26fd48_7313c0_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Ships.GenerateShipName(Owner);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -150,11 +158,17 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateShipName_test_generateshipname (Gnattest_T : in out Test);
-   procedure Test_GenerateShipName_26fd48_7313c0 (Gnattest_T : in out Test) renames Test_GenerateShipName_test_generateshipname;
+   procedure Test_GenerateShipName_test_generateshipname
+     (Gnattest_T: in out Test);
+   procedure Test_GenerateShipName_26fd48_7313c0
+     (Gnattest_T: in out Test) renames
+     Test_GenerateShipName_test_generateshipname;
 --  id:2.2/26fd4844628732d9/GenerateShipName/1/0/test_generateshipname/
-   procedure Test_GenerateShipName_test_generateshipname (Gnattest_T : in out Test) is
-      function GenerateShipName (Owner: Unbounded_String) return Unbounded_String renames Wrap_Test_GenerateShipName_26fd48_7313c0;
+   procedure Test_GenerateShipName_test_generateshipname
+     (Gnattest_T: in out Test) is
+      function GenerateShipName
+        (Owner: Unbounded_String) return Unbounded_String renames
+        Wrap_Test_GenerateShipName_26fd48_7313c0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -171,11 +185,11 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_CountCombatValue_77d5b0_424a30 return Natural
-   is
+   function Wrap_Test_CountCombatValue_77d5b0_424a30 return Natural is
    begin
       declare
-         Test_CountCombatValue_77d5b0_424a30_Result : constant Natural := GNATtest_Generated.GNATtest_Standard.Ships.CountCombatValue;
+         Test_CountCombatValue_77d5b0_424a30_Result: constant Natural :=
+           GNATtest_Generated.GNATtest_Standard.Ships.CountCombatValue;
       begin
          return Test_CountCombatValue_77d5b0_424a30_Result;
       end;
@@ -183,11 +197,16 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_CountCombatValue_test_countcombatvalue (Gnattest_T : in out Test);
-   procedure Test_CountCombatValue_77d5b0_424a30 (Gnattest_T : in out Test) renames Test_CountCombatValue_test_countcombatvalue;
+   procedure Test_CountCombatValue_test_countcombatvalue
+     (Gnattest_T: in out Test);
+   procedure Test_CountCombatValue_77d5b0_424a30
+     (Gnattest_T: in out Test) renames
+     Test_CountCombatValue_test_countcombatvalue;
 --  id:2.2/77d5b05ac9b3095d/CountCombatValue/1/0/test_countcombatvalue/
-   procedure Test_CountCombatValue_test_countcombatvalue (Gnattest_T : in out Test) is
-      function CountCombatValue return Natural renames Wrap_Test_CountCombatValue_77d5b0_424a30;
+   procedure Test_CountCombatValue_test_countcombatvalue
+     (Gnattest_T: in out Test) is
+      function CountCombatValue return Natural renames
+        Wrap_Test_CountCombatValue_77d5b0_424a30;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -201,11 +220,12 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetCabinQuality_33b05d_0027a0 (Quality: Natural)  return String
-   is
+   function Wrap_Test_GetCabinQuality_33b05d_0027a0
+     (Quality: Natural) return String is
    begin
       declare
-         Test_GetCabinQuality_33b05d_0027a0_Result : constant String := GNATtest_Generated.GNATtest_Standard.Ships.GetCabinQuality (Quality);
+         Test_GetCabinQuality_33b05d_0027a0_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Ships.GetCabinQuality(Quality);
       begin
          return Test_GetCabinQuality_33b05d_0027a0_Result;
       end;
@@ -213,11 +233,16 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GetCabinQuality_test_getcabinquality (Gnattest_T : in out Test);
-   procedure Test_GetCabinQuality_33b05d_0027a0 (Gnattest_T : in out Test) renames Test_GetCabinQuality_test_getcabinquality;
+   procedure Test_GetCabinQuality_test_getcabinquality
+     (Gnattest_T: in out Test);
+   procedure Test_GetCabinQuality_33b05d_0027a0
+     (Gnattest_T: in out Test) renames
+     Test_GetCabinQuality_test_getcabinquality;
 --  id:2.2/33b05d3651ff8168/GetCabinQuality/1/0/test_getcabinquality/
-   procedure Test_GetCabinQuality_test_getcabinquality (Gnattest_T : in out Test) is
-      function GetCabinQuality (Quality: Natural) return String renames Wrap_Test_GetCabinQuality_33b05d_0027a0;
+   procedure Test_GetCabinQuality_test_getcabinquality
+     (Gnattest_T: in out Test) is
+      function GetCabinQuality(Quality: Natural) return String renames
+        Wrap_Test_GetCabinQuality_33b05d_0027a0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -233,12 +258,14 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DamageModule_0d948a_8bb198 (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index; Damage: Positive; DeathReason: String) 
-   is
+   procedure Wrap_Test_DamageModule_0d948a_8bb198
+     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+      Damage: Positive; DeathReason: String) is
    begin
       begin
          pragma Assert
-           (ModuleIndex in Ship.Modules.First_Index .. Ship.Modules.Last_Index);
+           (ModuleIndex in
+              Ship.Modules.First_Index .. Ship.Modules.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -246,10 +273,10 @@ package body Ships.Test_Data.Tests is
               (False,
                "req_sloc(ships.ads:0):Test_DamageModule test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Ships.DamageModule (Ship, ModuleIndex, Damage, DeathReason);
+      GNATtest_Generated.GNATtest_Standard.Ships.DamageModule
+        (Ship, ModuleIndex, Damage, DeathReason);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -261,11 +288,16 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_DamageModule_test_damagemodule (Gnattest_T : in out Test);
-   procedure Test_DamageModule_0d948a_8bb198 (Gnattest_T : in out Test) renames Test_DamageModule_test_damagemodule;
+   procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test);
+   procedure Test_DamageModule_0d948a_8bb198(Gnattest_T: in out Test) renames
+     Test_DamageModule_test_damagemodule;
 --  id:2.2/0d948a4ee9f63a43/DamageModule/1/0/test_damagemodule/
-   procedure Test_DamageModule_test_damagemodule (Gnattest_T : in out Test) is
-   procedure DamageModule (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index; Damage: Positive; DeathReason: String) renames Wrap_Test_DamageModule_0d948a_8bb198;
+   procedure Test_DamageModule_test_damagemodule(Gnattest_T: in out Test) is
+      procedure DamageModule
+        (Ship: in out ShipRecord;
+         ModuleIndex: Modules_Container.Extended_Index; Damage: Positive;
+         DeathReason: String) renames
+        Wrap_Test_DamageModule_0d948a_8bb198;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

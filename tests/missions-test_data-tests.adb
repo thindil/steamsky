@@ -33,19 +33,23 @@ package body Missions.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateMissions_2a8787_14c74a
-   is
+   procedure Wrap_Test_GenerateMissions_2a8787_14c74a is
    begin
       GNATtest_Generated.GNATtest_Standard.Missions.GenerateMissions;
    end Wrap_Test_GenerateMissions_2a8787_14c74a;
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateMissions_test_generatemissions (Gnattest_T : in out Test);
-   procedure Test_GenerateMissions_2a8787_14c74a (Gnattest_T : in out Test) renames Test_GenerateMissions_test_generatemissions;
+   procedure Test_GenerateMissions_test_generatemissions
+     (Gnattest_T: in out Test);
+   procedure Test_GenerateMissions_2a8787_14c74a
+     (Gnattest_T: in out Test) renames
+     Test_GenerateMissions_test_generatemissions;
 --  id:2.2/2a8787b975b577a4/GenerateMissions/1/0/test_generatemissions/
-   procedure Test_GenerateMissions_test_generatemissions (Gnattest_T : in out Test) is
-   procedure GenerateMissions renames Wrap_Test_GenerateMissions_2a8787_14c74a;
+   procedure Test_GenerateMissions_test_generatemissions
+     (Gnattest_T: in out Test) is
+      procedure GenerateMissions renames
+        Wrap_Test_GenerateMissions_2a8787_14c74a;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -63,12 +67,10 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_AcceptMission_979505_57ce38 (MissionIndex: Positive) 
-   is
+   procedure Wrap_Test_AcceptMission_979505_57ce38(MissionIndex: Positive) is
    begin
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -76,10 +78,10 @@ package body Missions.Test_Data.Tests is
               (False,
                "req_sloc(missions.ads:0):Test_AcceptMission test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Missions.AcceptMission (MissionIndex);
+      GNATtest_Generated.GNATtest_Standard.Missions.AcceptMission
+        (MissionIndex);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -91,11 +93,13 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_AcceptMission_test_acceptmission (Gnattest_T : in out Test);
-   procedure Test_AcceptMission_979505_57ce38 (Gnattest_T : in out Test) renames Test_AcceptMission_test_acceptmission;
+   procedure Test_AcceptMission_test_acceptmission(Gnattest_T: in out Test);
+   procedure Test_AcceptMission_979505_57ce38(Gnattest_T: in out Test) renames
+     Test_AcceptMission_test_acceptmission;
 --  id:2.2/9795058c0b298911/AcceptMission/1/0/test_acceptmission/
-   procedure Test_AcceptMission_test_acceptmission (Gnattest_T : in out Test) is
-   procedure AcceptMission (MissionIndex: Positive) renames Wrap_Test_AcceptMission_979505_57ce38;
+   procedure Test_AcceptMission_test_acceptmission(Gnattest_T: in out Test) is
+      procedure AcceptMission(MissionIndex: Positive) renames
+        Wrap_Test_AcceptMission_979505_57ce38;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -129,19 +133,21 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateMissions_b5358e_60a195 (Minutes: Positive) 
-   is
+   procedure Wrap_Test_UpdateMissions_b5358e_60a195(Minutes: Positive) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Missions.UpdateMissions (Minutes);
+      GNATtest_Generated.GNATtest_Standard.Missions.UpdateMissions(Minutes);
    end Wrap_Test_UpdateMissions_b5358e_60a195;
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateMissions_test_updatemissions (Gnattest_T : in out Test);
-   procedure Test_UpdateMissions_b5358e_60a195 (Gnattest_T : in out Test) renames Test_UpdateMissions_test_updatemissions;
+   procedure Test_UpdateMissions_test_updatemissions(Gnattest_T: in out Test);
+   procedure Test_UpdateMissions_b5358e_60a195(Gnattest_T: in out Test) renames
+     Test_UpdateMissions_test_updatemissions;
 --  id:2.2/b5358ee94cb1cec0/UpdateMissions/1/0/test_updatemissions/
-   procedure Test_UpdateMissions_test_updatemissions (Gnattest_T : in out Test) is
-   procedure UpdateMissions (Minutes: Positive) renames Wrap_Test_UpdateMissions_b5358e_60a195;
+   procedure Test_UpdateMissions_test_updatemissions
+     (Gnattest_T: in out Test) is
+      procedure UpdateMissions(Minutes: Positive) renames
+        Wrap_Test_UpdateMissions_b5358e_60a195;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -150,15 +156,9 @@ package body Missions.Test_Data.Tests is
 
       AcceptedMissions.Clear;
       AcceptedMissions.Append
-      ((MType => Explore,
-        Time => 10,
-        TargetX => 1,
-        TargetY => 1,
-        Reward => 1,
-        StartBase => 1,
-        Finished => True,
-        Multiplier => 0.0,
-        Target => 0));
+        ((MType => Explore, Time => 10, TargetX => 1, TargetY => 1,
+          Reward => 1, StartBase => 1, Finished => True, Multiplier => 0.0,
+          Target => 0));
       UpdateMissions(8);
       Assert(AcceptedMissions(1).Time = 2, "Missions wrongly updated.");
       UpdateMissions(2);
@@ -169,12 +169,10 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_FinishMission_c82383_b2ab56 (MissionIndex: Positive) 
-   is
+   procedure Wrap_Test_FinishMission_c82383_b2ab56(MissionIndex: Positive) is
    begin
       begin
-         pragma Assert
-           (MissionIndex <= AcceptedMissions.Last_Index);
+         pragma Assert(MissionIndex <= AcceptedMissions.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -182,10 +180,10 @@ package body Missions.Test_Data.Tests is
               (False,
                "req_sloc(missions.ads:0):Test_FinishMission test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Missions.FinishMission (MissionIndex);
+      GNATtest_Generated.GNATtest_Standard.Missions.FinishMission
+        (MissionIndex);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -197,11 +195,13 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_FinishMission_test_finishmission (Gnattest_T : in out Test);
-   procedure Test_FinishMission_c82383_b2ab56 (Gnattest_T : in out Test) renames Test_FinishMission_test_finishmission;
+   procedure Test_FinishMission_test_finishmission(Gnattest_T: in out Test);
+   procedure Test_FinishMission_c82383_b2ab56(Gnattest_T: in out Test) renames
+     Test_FinishMission_test_finishmission;
 --  id:2.2/c823837fea6a8759/FinishMission/1/0/test_finishmission/
-   procedure Test_FinishMission_test_finishmission (Gnattest_T : in out Test) is
-   procedure FinishMission (MissionIndex: Positive) renames Wrap_Test_FinishMission_c82383_b2ab56;
+   procedure Test_FinishMission_test_finishmission(Gnattest_T: in out Test) is
+      procedure FinishMission(MissionIndex: Positive) renames
+        Wrap_Test_FinishMission_c82383_b2ab56;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -210,15 +210,9 @@ package body Missions.Test_Data.Tests is
 
       AcceptedMissions.Clear;
       AcceptedMissions.Append
-      ((MType => Explore,
-        Time => 10,
-        TargetX => 1,
-        TargetY => 1,
-        Reward => 1,
-        StartBase => 1,
-        Finished => True,
-        Multiplier => 0.0,
-        Target => 0));
+        ((MType => Explore, Time => 10, TargetX => 1, TargetY => 1,
+          Reward => 1, StartBase => 1, Finished => True, Multiplier => 0.0,
+          Target => 0));
       FinishMission(1);
       Assert(AcceptedMissions.Length = 0, "Mission not finished correctly.");
 
@@ -227,12 +221,11 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DeleteMission_4bf0c5_8b646f (MissionIndex: Positive; Failed: Boolean := True) 
-   is
+   procedure Wrap_Test_DeleteMission_4bf0c5_8b646f
+     (MissionIndex: Positive; Failed: Boolean := True) is
    begin
       begin
-         pragma Assert
-           (MissionIndex <= AcceptedMissions.Last_Index);
+         pragma Assert(MissionIndex <= AcceptedMissions.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -240,10 +233,10 @@ package body Missions.Test_Data.Tests is
               (False,
                "req_sloc(missions.ads:0):Test_DeleteMission test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Missions.DeleteMission (MissionIndex, Failed);
+      GNATtest_Generated.GNATtest_Standard.Missions.DeleteMission
+        (MissionIndex, Failed);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -255,11 +248,14 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_DeleteMission_test_deletemission (Gnattest_T : in out Test);
-   procedure Test_DeleteMission_4bf0c5_8b646f (Gnattest_T : in out Test) renames Test_DeleteMission_test_deletemission;
+   procedure Test_DeleteMission_test_deletemission(Gnattest_T: in out Test);
+   procedure Test_DeleteMission_4bf0c5_8b646f(Gnattest_T: in out Test) renames
+     Test_DeleteMission_test_deletemission;
 --  id:2.2/4bf0c536f42cefa3/DeleteMission/1/0/test_deletemission/
-   procedure Test_DeleteMission_test_deletemission (Gnattest_T : in out Test) is
-   procedure DeleteMission (MissionIndex: Positive; Failed: Boolean := True) renames Wrap_Test_DeleteMission_4bf0c5_8b646f;
+   procedure Test_DeleteMission_test_deletemission(Gnattest_T: in out Test) is
+      procedure DeleteMission
+        (MissionIndex: Positive; Failed: Boolean := True) renames
+        Wrap_Test_DeleteMission_4bf0c5_8b646f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -268,15 +264,8 @@ package body Missions.Test_Data.Tests is
 
       AcceptedMissions.Clear;
       AcceptedMissions.Append
-      ((MType => Explore,
-        Time => 1,
-        TargetX => 1,
-        TargetY => 1,
-        Reward => 1,
-        StartBase => 1,
-        Finished => True,
-        Multiplier => 0.0,
-        Target => 0));
+        ((MType => Explore, Time => 1, TargetX => 1, TargetY => 1, Reward => 1,
+          StartBase => 1, Finished => True, Multiplier => 0.0, Target => 0));
       DeleteMission(1, False);
       Assert
         (AcceptedMissions.Length = 0,
@@ -287,12 +276,10 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateMission_06efd0_8b6bc6 (MissionIndex: Positive) 
-   is
+   procedure Wrap_Test_UpdateMission_06efd0_8b6bc6(MissionIndex: Positive) is
    begin
       begin
-         pragma Assert
-           (MissionIndex <= AcceptedMissions.Last_Index);
+         pragma Assert(MissionIndex <= AcceptedMissions.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -300,10 +287,10 @@ package body Missions.Test_Data.Tests is
               (False,
                "req_sloc(missions.ads:0):Test_UpdateMission test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Missions.UpdateMission (MissionIndex);
+      GNATtest_Generated.GNATtest_Standard.Missions.UpdateMission
+        (MissionIndex);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -315,11 +302,13 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_UpdateMission_test_updatemission (Gnattest_T : in out Test);
-   procedure Test_UpdateMission_06efd0_8b6bc6 (Gnattest_T : in out Test) renames Test_UpdateMission_test_updatemission;
+   procedure Test_UpdateMission_test_updatemission(Gnattest_T: in out Test);
+   procedure Test_UpdateMission_06efd0_8b6bc6(Gnattest_T: in out Test) renames
+     Test_UpdateMission_test_updatemission;
 --  id:2.2/06efd0aaaa7e1e74/UpdateMission/1/0/test_updatemission/
-   procedure Test_UpdateMission_test_updatemission (Gnattest_T : in out Test) is
-   procedure UpdateMission (MissionIndex: Positive) renames Wrap_Test_UpdateMission_06efd0_8b6bc6;
+   procedure Test_UpdateMission_test_updatemission(Gnattest_T: in out Test) is
+      procedure UpdateMission(MissionIndex: Positive) renames
+        Wrap_Test_UpdateMission_06efd0_8b6bc6;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -328,15 +317,8 @@ package body Missions.Test_Data.Tests is
 
       AcceptedMissions.Clear;
       AcceptedMissions.Append
-      ((MType => Explore,
-        Time => 1,
-        TargetX => 1,
-        TargetY => 1,
-        Reward => 1,
-        StartBase => 1,
-        Finished => True,
-        Multiplier => 0.0,
-        Target => 0));
+        ((MType => Explore, Time => 1, TargetX => 1, TargetY => 1, Reward => 1,
+          StartBase => 1, Finished => True, Multiplier => 0.0, Target => 0));
       UpdateMission(1);
       Assert(AcceptedMissions(1).Finished, "Failed to update mission.");
 
@@ -345,11 +327,11 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_AutoFinishMissions_ca7126_527254 return String
-   is
+   function Wrap_Test_AutoFinishMissions_ca7126_527254 return String is
    begin
       declare
-         Test_AutoFinishMissions_ca7126_527254_Result : constant String := GNATtest_Generated.GNATtest_Standard.Missions.AutoFinishMissions;
+         Test_AutoFinishMissions_ca7126_527254_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Missions.AutoFinishMissions;
       begin
          return Test_AutoFinishMissions_ca7126_527254_Result;
       end;
@@ -357,11 +339,16 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_AutoFinishMissions_test_autofinishmissions (Gnattest_T : in out Test);
-   procedure Test_AutoFinishMissions_ca7126_527254 (Gnattest_T : in out Test) renames Test_AutoFinishMissions_test_autofinishmissions;
+   procedure Test_AutoFinishMissions_test_autofinishmissions
+     (Gnattest_T: in out Test);
+   procedure Test_AutoFinishMissions_ca7126_527254
+     (Gnattest_T: in out Test) renames
+     Test_AutoFinishMissions_test_autofinishmissions;
 --  id:2.2/ca7126890331fcb0/AutoFinishMissions/1/0/test_autofinishmissions/
-   procedure Test_AutoFinishMissions_test_autofinishmissions (Gnattest_T : in out Test) is
-      function AutoFinishMissions return String renames Wrap_Test_AutoFinishMissions_ca7126_527254;
+   procedure Test_AutoFinishMissions_test_autofinishmissions
+     (Gnattest_T: in out Test) is
+      function AutoFinishMissions return String renames
+        Wrap_Test_AutoFinishMissions_ca7126_527254;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -370,15 +357,8 @@ package body Missions.Test_Data.Tests is
 
       AcceptedMissions.Clear;
       AcceptedMissions.Append
-      ((MType => Explore,
-        Time => 1,
-        TargetX => 1,
-        TargetY => 1,
-        Reward => 1,
-        StartBase => 1,
-        Finished => True,
-        Multiplier => 0.0,
-        Target => 0));
+        ((MType => Explore, Time => 1, TargetX => 1, TargetY => 1, Reward => 1,
+          StartBase => 1, Finished => True, Multiplier => 0.0, Target => 0));
       Assert(AutoFinishMissions'Length = 0, "Can't autoupdate missions.");
 
 --  begin read only

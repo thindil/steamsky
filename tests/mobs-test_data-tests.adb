@@ -31,25 +31,27 @@ package body Mobs.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GenerateMob_520182_3c2c38 (MobIndex, FactionIndex: Unbounded_String)  return Member_Data
-   is
+   function Wrap_Test_GenerateMob_520182_3c2c38
+     (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
    begin
       begin
          pragma Assert
-           ((ProtoMobs_List.Contains(MobIndex) and Factions_List.Contains(FactionIndex)));
+           ((ProtoMobs_List.Contains(MobIndex) and
+             Factions_List.Contains(FactionIndex)));
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(mobs.ads:0):Test_GenearateMob test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(mobs.ads:0):Test_GenearateMob test requirement violated");
       end;
       declare
-         Test_GenerateMob_520182_3c2c38_Result : constant Member_Data := GNATtest_Generated.GNATtest_Standard.Mobs.GenerateMob (MobIndex, FactionIndex);
+         Test_GenerateMob_520182_3c2c38_Result: constant Member_Data :=
+           GNATtest_Generated.GNATtest_Standard.Mobs.GenerateMob
+             (MobIndex, FactionIndex);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -63,11 +65,14 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GenerateMob_test_genearatemob (Gnattest_T : in out Test);
-   procedure Test_GenerateMob_520182_3c2c38 (Gnattest_T : in out Test) renames Test_GenerateMob_test_genearatemob;
+   procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test);
+   procedure Test_GenerateMob_520182_3c2c38(Gnattest_T: in out Test) renames
+     Test_GenerateMob_test_genearatemob;
 --  id:2.2/5201826c898ff8db/GenerateMob/1/0/test_genearatemob/
-   procedure Test_GenerateMob_test_genearatemob (Gnattest_T : in out Test) is
-      function GenerateMob (MobIndex, FactionIndex: Unbounded_String) return Member_Data renames Wrap_Test_GenerateMob_520182_3c2c38;
+   procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test) is
+      function GenerateMob
+        (MobIndex, FactionIndex: Unbounded_String) return Member_Data renames
+        Wrap_Test_GenerateMob_520182_3c2c38;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -87,25 +92,30 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetRandomItem_61c13c_8c2473 (ItemsIndexes: UnboundedString_Container.Vector; EquipIndex, HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String)  return Unbounded_String
-   is
+   function Wrap_Test_GetRandomItem_61c13c_8c2473
+     (ItemsIndexes: UnboundedString_Container.Vector;
+      EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+      FactionIndex: Unbounded_String) return Unbounded_String is
    begin
       begin
          pragma Assert
-           ((EquipIndex < 8 and HighestLevel < 101 and WeaponSkillLevel < 101 and Factions_List.Contains(FactionIndex)));
+           ((EquipIndex < 8 and HighestLevel < 101 and
+             WeaponSkillLevel < 101 and Factions_List.Contains(FactionIndex)));
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(mobs.ads:0):Test_GetRandomItem test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(mobs.ads:0):Test_GetRandomItem test requirement violated");
       end;
       declare
-         Test_GetRandomItem_61c13c_8c2473_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Mobs.GetRandomItem (ItemsIndexes, EquipIndex, HighestLevel, WeaponSkillLevel, FactionIndex);
+         Test_GetRandomItem_61c13c_8c2473_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Mobs.GetRandomItem
+             (ItemsIndexes, EquipIndex, HighestLevel, WeaponSkillLevel,
+              FactionIndex);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -119,11 +129,16 @@ package body Mobs.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GetRandomItem_test_getrandomitem (Gnattest_T : in out Test);
-   procedure Test_GetRandomItem_61c13c_8c2473 (Gnattest_T : in out Test) renames Test_GetRandomItem_test_getrandomitem;
+   procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test);
+   procedure Test_GetRandomItem_61c13c_8c2473(Gnattest_T: in out Test) renames
+     Test_GetRandomItem_test_getrandomitem;
 --  id:2.2/61c13cdf12147be3/GetRandomItem/1/0/test_getrandomitem/
-   procedure Test_GetRandomItem_test_getrandomitem (Gnattest_T : in out Test) is
-      function GetRandomItem (ItemsIndexes: UnboundedString_Container.Vector; EquipIndex, HighestLevel, WeaponSkillLevel: Positive; FactionIndex: Unbounded_String) return Unbounded_String renames Wrap_Test_GetRandomItem_61c13c_8c2473;
+   procedure Test_GetRandomItem_test_getrandomitem(Gnattest_T: in out Test) is
+      function GetRandomItem
+        (ItemsIndexes: UnboundedString_Container.Vector;
+         EquipIndex, HighestLevel, WeaponSkillLevel: Positive;
+         FactionIndex: Unbounded_String) return Unbounded_String renames
+        Wrap_Test_GetRandomItem_61c13c_8c2473;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -132,11 +147,7 @@ package body Mobs.Test_Data.Tests is
 
       Assert
         (GetRandomItem
-           (Weapons_List,
-            1,
-            20,
-            20,
-            To_Unbounded_String("POLEIS")) /=
+           (Weapons_List, 1, 20, 20, To_Unbounded_String("POLEIS")) /=
          Null_Unbounded_String,
          "Failed to get random item for mob.");
 

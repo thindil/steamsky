@@ -29,12 +29,11 @@ package body Stories.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_StartStory_edaf80_b2037e (FactionName: Unbounded_String; Condition: StartConditionType) 
-   is
+   procedure Wrap_Test_StartStory_edaf80_b2037e
+     (FactionName: Unbounded_String; Condition: StartConditionType) is
    begin
       begin
-         pragma Assert
-           (FactionName /= Null_Unbounded_String);
+         pragma Assert(FactionName /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -42,10 +41,10 @@ package body Stories.Test_Data.Tests is
               (False,
                "req_sloc(stories.ads:0):Test_StartStory test requirement violated");
       end;
-      GNATtest_Generated.GNATtest_Standard.Stories.StartStory (FactionName, Condition);
+      GNATtest_Generated.GNATtest_Standard.Stories.StartStory
+        (FactionName, Condition);
       begin
-         pragma Assert
-           (True);
+         pragma Assert(True);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -57,11 +56,14 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_StartStory_test_startstory (Gnattest_T : in out Test);
-   procedure Test_StartStory_edaf80_b2037e (Gnattest_T : in out Test) renames Test_StartStory_test_startstory;
+   procedure Test_StartStory_test_startstory(Gnattest_T: in out Test);
+   procedure Test_StartStory_edaf80_b2037e(Gnattest_T: in out Test) renames
+     Test_StartStory_test_startstory;
 --  id:2.2/edaf80b58d7d34e7/StartStory/1/0/test_startstory/
-   procedure Test_StartStory_test_startstory (Gnattest_T : in out Test) is
-   procedure StartStory (FactionName: Unbounded_String; Condition: StartConditionType) renames Wrap_Test_StartStory_edaf80_b2037e;
+   procedure Test_StartStory_test_startstory(Gnattest_T: in out Test) is
+      procedure StartStory
+        (FactionName: Unbounded_String; Condition: StartConditionType) renames
+        Wrap_Test_StartStory_edaf80_b2037e;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -79,19 +81,23 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_ClearCurrentStory_0648d1_ff8276
-   is
+   procedure Wrap_Test_ClearCurrentStory_0648d1_ff8276 is
    begin
       GNATtest_Generated.GNATtest_Standard.Stories.ClearCurrentStory;
    end Wrap_Test_ClearCurrentStory_0648d1_ff8276;
 --  end read only
 
 --  begin read only
-   procedure Test_ClearCurrentStory_test_clearcurrentstory (Gnattest_T : in out Test);
-   procedure Test_ClearCurrentStory_0648d1_ff8276 (Gnattest_T : in out Test) renames Test_ClearCurrentStory_test_clearcurrentstory;
+   procedure Test_ClearCurrentStory_test_clearcurrentstory
+     (Gnattest_T: in out Test);
+   procedure Test_ClearCurrentStory_0648d1_ff8276
+     (Gnattest_T: in out Test) renames
+     Test_ClearCurrentStory_test_clearcurrentstory;
 --  id:2.2/0648d16dba1bb959/ClearCurrentStory/1/0/test_clearcurrentstory/
-   procedure Test_ClearCurrentStory_test_clearcurrentstory (Gnattest_T : in out Test) is
-   procedure ClearCurrentStory renames Wrap_Test_ClearCurrentStory_0648d1_ff8276;
+   procedure Test_ClearCurrentStory_test_clearcurrentstory
+     (Gnattest_T: in out Test) is
+      procedure ClearCurrentStory renames
+        Wrap_Test_ClearCurrentStory_0648d1_ff8276;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -110,11 +116,13 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_ProgressStory_80c408_14aed6 (NextStep: Boolean := False)  return Boolean
-   is
+   function Wrap_Test_ProgressStory_80c408_14aed6
+     (NextStep: Boolean := False) return Boolean is
    begin
       declare
-         Test_ProgressStory_80c408_14aed6_Result : constant Boolean := GNATtest_Generated.GNATtest_Standard.Stories.ProgressStory (NextStep);
+         Test_ProgressStory_80c408_14aed6_Result: constant Boolean :=
+           GNATtest_Generated.GNATtest_Standard.Stories.ProgressStory
+             (NextStep);
       begin
          return Test_ProgressStory_80c408_14aed6_Result;
       end;
@@ -122,11 +130,13 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_ProgressStory_test_progressstory (Gnattest_T : in out Test);
-   procedure Test_ProgressStory_80c408_14aed6 (Gnattest_T : in out Test) renames Test_ProgressStory_test_progressstory;
+   procedure Test_ProgressStory_test_progressstory(Gnattest_T: in out Test);
+   procedure Test_ProgressStory_80c408_14aed6(Gnattest_T: in out Test) renames
+     Test_ProgressStory_test_progressstory;
 --  id:2.2/80c4088c0068e59a/ProgressStory/1/0/test_progressstory/
-   procedure Test_ProgressStory_test_progressstory (Gnattest_T : in out Test) is
-      function ProgressStory (NextStep: Boolean := False) return Boolean renames Wrap_Test_ProgressStory_80c408_14aed6;
+   procedure Test_ProgressStory_test_progressstory(Gnattest_T: in out Test) is
+      function ProgressStory(NextStep: Boolean := False) return Boolean renames
+        Wrap_Test_ProgressStory_80c408_14aed6;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -143,11 +153,12 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetCurrentStoryText_b9136f_8f71b5 return Unbounded_String
-   is
+   function Wrap_Test_GetCurrentStoryText_b9136f_8f71b5
+      return Unbounded_String is
    begin
       declare
-         Test_GetCurrentStoryText_b9136f_8f71b5_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Stories.GetCurrentStoryText;
+         Test_GetCurrentStoryText_b9136f_8f71b5_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Stories.GetCurrentStoryText;
       begin
          return Test_GetCurrentStoryText_b9136f_8f71b5_Result;
       end;
@@ -155,11 +166,16 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext (Gnattest_T : in out Test);
-   procedure Test_GetCurrentStoryText_b9136f_8f71b5 (Gnattest_T : in out Test) renames Test_GetCurrentStoryText_tets_getcurrentstorytext;
+   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext
+     (Gnattest_T: in out Test);
+   procedure Test_GetCurrentStoryText_b9136f_8f71b5
+     (Gnattest_T: in out Test) renames
+     Test_GetCurrentStoryText_tets_getcurrentstorytext;
 --  id:2.2/b9136fdf6bb9efe6/GetCurrentStoryText/1/0/tets_getcurrentstorytext/
-   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext (Gnattest_T : in out Test) is
-      function GetCurrentStoryText return Unbounded_String renames Wrap_Test_GetCurrentStoryText_b9136f_8f71b5;
+   procedure Test_GetCurrentStoryText_tets_getcurrentstorytext
+     (Gnattest_T: in out Test) is
+      function GetCurrentStoryText return Unbounded_String renames
+        Wrap_Test_GetCurrentStoryText_b9136f_8f71b5;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -175,25 +191,26 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetStepData_8e5120_5b2a80 (FinishData: StepData_Container.Vector; Name: String)  return Unbounded_String
-   is
+   function Wrap_Test_GetStepData_8e5120_5b2a80
+     (FinishData: StepData_Container.Vector; Name: String)
+      return Unbounded_String is
    begin
       begin
-         pragma Assert
-           (Name /= "");
+         pragma Assert(Name /= "");
          null;
       exception
-            when System.Assertions.Assert_Failure =>
-               AUnit.Assertions.Assert
-                 (False,
-                  "req_sloc(stories.ads:0):Test_GetStepData test requirement violated");
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(stories.ads:0):Test_GetStepData test requirement violated");
       end;
       declare
-         Test_GetStepData_8e5120_5b2a80_Result : constant Unbounded_String := GNATtest_Generated.GNATtest_Standard.Stories.GetStepData (FinishData, Name);
+         Test_GetStepData_8e5120_5b2a80_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Stories.GetStepData
+             (FinishData, Name);
       begin
          begin
-            pragma Assert
-              (True);
+            pragma Assert(True);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -207,11 +224,15 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Test_GetStepData_test_getstepdata (Gnattest_T : in out Test);
-   procedure Test_GetStepData_8e5120_5b2a80 (Gnattest_T : in out Test) renames Test_GetStepData_test_getstepdata;
+   procedure Test_GetStepData_test_getstepdata(Gnattest_T: in out Test);
+   procedure Test_GetStepData_8e5120_5b2a80(Gnattest_T: in out Test) renames
+     Test_GetStepData_test_getstepdata;
 --  id:2.2/8e51209e243a2f63/GetStepData/1/0/test_getstepdata/
-   procedure Test_GetStepData_test_getstepdata (Gnattest_T : in out Test) is
-      function GetStepData (FinishData: StepData_Container.Vector; Name: String) return Unbounded_String renames Wrap_Test_GetStepData_8e5120_5b2a80;
+   procedure Test_GetStepData_test_getstepdata(Gnattest_T: in out Test) is
+      function GetStepData
+        (FinishData: StepData_Container.Vector; Name: String)
+         return Unbounded_String renames
+        Wrap_Test_GetStepData_8e5120_5b2a80;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -236,19 +257,26 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GetStoryLocation_eee8ee_b0f396 (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) 
-   is
+   procedure Wrap_Test_GetStoryLocation_eee8ee_b0f396
+     (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) is
    begin
-      GNATtest_Generated.GNATtest_Standard.Stories.GetStoryLocation (StoryX, StoryY);
+      GNATtest_Generated.GNATtest_Standard.Stories.GetStoryLocation
+        (StoryX, StoryY);
    end Wrap_Test_GetStoryLocation_eee8ee_b0f396;
 --  end read only
 
 --  begin read only
-   procedure Test_GetStoryLocation_test_getstorylocation (Gnattest_T : in out Test);
-   procedure Test_GetStoryLocation_eee8ee_b0f396 (Gnattest_T : in out Test) renames Test_GetStoryLocation_test_getstorylocation;
+   procedure Test_GetStoryLocation_test_getstorylocation
+     (Gnattest_T: in out Test);
+   procedure Test_GetStoryLocation_eee8ee_b0f396
+     (Gnattest_T: in out Test) renames
+     Test_GetStoryLocation_test_getstorylocation;
 --  id:2.2/eee8eefa7464e271/GetStoryLocation/1/0/test_getstorylocation/
-   procedure Test_GetStoryLocation_test_getstorylocation (Gnattest_T : in out Test) is
-   procedure GetStoryLocation (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) renames Wrap_Test_GetStoryLocation_eee8ee_b0f396;
+   procedure Test_GetStoryLocation_test_getstorylocation
+     (Gnattest_T: in out Test) is
+      procedure GetStoryLocation
+        (StoryX: out Map_X_Range; StoryY: out Map_Y_Range) renames
+        Wrap_Test_GetStoryLocation_eee8ee_b0f396;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
