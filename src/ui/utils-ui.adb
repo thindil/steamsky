@@ -1270,6 +1270,12 @@ package body Utils.UI is
            "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
            Result & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (QuestionDialog & ".header",
+           "-text " &
+           (if Result = "showstats" then "Question" else "Confirmation") &
+           " -wraplength 275 -style Header.TLabel");
    begin
       if In_Game then
          Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -1279,8 +1285,9 @@ package body Utils.UI is
          Frame := Get_Widget(".");
          Tcl.Tk.Ada.Busy.Busy(Frame);
       end if;
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 1 -pady {0 5} -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 2 -pady {0 5} -padx 5");
       Bind
         (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
       if not In_Game then
@@ -1294,7 +1301,7 @@ package body Utils.UI is
              (QuestionDialog & ".nobutton",
               "-text No -command {CloseDialog " & QuestionDialog & "}");
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 1 -pady {0 5} -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -pady {0 5} -padx 5");
       Focus(Button);
       if In_Game then
          Tcl.Tk.Ada.Place.Place
