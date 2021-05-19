@@ -16,6 +16,7 @@
 ttk::frame .goalsdialog -style Dialog.TFrame
 set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -height 9]
 set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
+grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 -style Header.TLabel] -sticky we
 grid $view -padx 2 -pady {2 0}
 $view column #0 -width 450 -stretch 1
 $view insert {} end -id 0 -text Random
@@ -37,22 +38,22 @@ bind $view <<TreeviewSelect>> {
 }
 bind $view <Double-1> {$selectbutton invoke}
 bind $view <Return> {$selectbutton invoke}
-grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical -command [list $view yview]] -column 1 -row 0 -sticky ns -padx {0 3} -pady {2 0}
-grid $selectbutton -row 2 -columnspan 2 -sticky we -padx 5 -pady {2 0}
+grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical -command [list $view yview]] -column 1 -row 1 -sticky ns -padx {0 3} -pady {2 0}
+grid $selectbutton -row 3 -columnspan 2 -sticky we -padx 5 -pady {2 0}
 tooltip::tooltip $selectbutton "Select the goal for your character from the list.\nIf you choose Random option, a random goal will\nbe assigned. You can always change it later during\nthe game, but you will lose all progress then."
 if {[winfo exists .gameframe] && [winfo ismapped .gameframe]} {
    set parent .gameframe
 } else {
    set parent .
 }
-grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog $parent}] -row 3 -columnspan 2 -sticky we -padx 5 -pady 2
+grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog $parent}] -row 4 -columnspan 2 -sticky we -padx 5 -pady 2
 tooltip::tooltip .goalsdialog.closebutton {Close the goals list without any changes}
 bind .goalsdialog.closebutton <Escape> {.goalsdialog.closebutton invoke;break}
 bind .goalsdialog.closebutton <Tab> {focus $view;break}
 bind $selectbutton <Escape> {.goalsdialog.closebutton invoke;break}
 bind $view <Escape> {.goalsdialog.closebutton invoke;break}
 ::autoscroll::autoscroll .goalsdialog.yscroll
-place .goalsdialog -in $parent -relx 0.1 -rely 0.1
+place .goalsdialog -in $parent -relx 0.1 -rely 0.075
 focus .goalsdialog.closebutton
 tk busy $parent
 raise .goalsdialog
