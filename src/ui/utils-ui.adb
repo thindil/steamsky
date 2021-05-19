@@ -154,7 +154,7 @@ package body Utils.UI is
       Message_Header: constant Ttk_Label :=
         Create
           (MessageDialog & ".header",
-           "-text {" & Title & "} -wraplength 200 -style Header.TLabel");
+           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
    begin
       if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -423,7 +423,7 @@ package body Utils.UI is
         Create
           (StringDialog & ".header",
            "-text {" & CArgv.Arg(Argv, 3) &
-           "} -wraplength 200 -style Header.TLabel");
+           "} -wraplength 275 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
@@ -1142,7 +1142,7 @@ package body Utils.UI is
       Info_Header: constant Ttk_Label :=
         Create
           (InfoDialog & ".header",
-           "-text {" & Title & "} -wraplength 200 -style Header.TLabel");
+           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
    begin
       if ParentName = ".gameframe" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
