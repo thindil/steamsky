@@ -104,13 +104,15 @@ package body MainMenu is
       Icon_Path: constant String :=
         Ui_Directory & "images" & Dir_Separator & "icon.png";
       Icon: Tk_Photo;
+      PlayerFrameName: constant String := ".newgamemenu.canvas.player";
+      DifficultyFrameName: constant String := ".newgamemenu.canvas.difficulty";
       Text_Entry: Ttk_Entry :=
-        Get_Widget(pathName => ".newgamemenu.canvas.player.playername");
+        Get_Widget(pathName => PlayerFrameName & ".playername");
       Combo_Box: Ttk_ComboBox :=
-        Get_Widget(pathName => ".newgamemenu.canvas.player.faction");
+        Get_Widget(pathName => PlayerFrameName & ".faction");
       Values: Unbounded_String := Null_Unbounded_String;
       Spin_Box: Ttk_SpinBox :=
-        Get_Widget(pathName => ".newgamemenu.canvas.difficulty.enemydamage");
+        Get_Widget(pathName => DifficultyFrameName & ".enemydamage");
       Version_Label: constant Ttk_Label :=
         Get_Widget(pathName => ".mainmenu.version");
    begin
@@ -188,8 +190,7 @@ package body MainMenu is
       Tcl_SetVar
         (interp => Get_Context, varName => "playergender",
          newValue => "" & New_Game_Settings.Player_Gender);
-      Text_Entry.Name :=
-        New_String(Str => ".newgamemenu.canvas.player.shipname");
+      Text_Entry.Name := New_String(Str => PlayerFrameName & ".shipname");
       Delete(TextEntry => Text_Entry, FirstIndex => "0", LastIndex => "end");
       Insert
         (TextEntry => Text_Entry, Index => "0",
@@ -212,13 +213,13 @@ package body MainMenu is
            To_String
              (Source => Factions_List(New_Game_Settings.Player_Faction).Name));
       Tcl_Eval(interp => Get_Context, strng => "SetFaction");
-      Combo_Box.Name := New_String(Str => ".newgamemenu.canvas.player.career");
+      Combo_Box.Name := New_String(Str => PlayerFrameName & ".career");
       Set
         (ComboBox => Combo_Box,
          Value =>
            To_String
              (Source => Careers_List(New_Game_Settings.Player_Career).Name));
-      Combo_Box.Name := New_String(Str => ".newgamemenu.canvas.player.base");
+      Combo_Box.Name := New_String(Str => PlayerFrameName & ".base");
       if New_Game_Settings.Starting_Base =
         To_Unbounded_String(Source => "Any") then
          Set(ComboBox => Combo_Box, Value => "Any");
@@ -233,54 +234,50 @@ package body MainMenu is
               "}");
       end if;
       Combo_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.difficultylevel");
+        New_String(Str => DifficultyFrameName & ".difficultylevel");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Enemy_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.playerdamage");
+        New_String(Str => DifficultyFrameName & ".playerdamage");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Player_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.enemymeleedamage");
+        New_String(Str => DifficultyFrameName & ".enemymeleedamage");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Enemy_Melee_Damage_Bonus * 100.0)));
       Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.playermeleedamage");
+        New_String(Str => DifficultyFrameName & ".playermeleedamage");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Player_Melee_Damage_Bonus * 100.0)));
-      Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.experience");
+      Spin_Box.Name := New_String(Str => DifficultyFrameName & ".experience");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image(Natural(New_Game_Settings.Experience_Bonus * 100.0)));
-      Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.reputation");
+      Spin_Box.Name := New_String(Str => DifficultyFrameName & ".reputation");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image(Natural(New_Game_Settings.Reputation_Bonus * 100.0)));
-      Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.upgrade");
+      Spin_Box.Name := New_String(Str => DifficultyFrameName & ".upgrade");
       Set
         (SpinBox => Spin_Box,
          Value =>
            Natural'Image
              (Natural(New_Game_Settings.Upgrade_Cost_Bonus * 100.0)));
-      Spin_Box.Name :=
-        New_String(Str => ".newgamemenu.canvas.difficulty.prices");
+      Spin_Box.Name := New_String(Str => DifficultyFrameName & ".prices");
       Set
         (SpinBox => Spin_Box,
          Value =>
