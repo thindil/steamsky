@@ -1214,8 +1214,8 @@ package body Utils.UI is
       Label :=
         Create
           (ItemDialog & ".title",
-           "-text {" & Title & "} -wraplength 370 -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -sticky we -pady {0 5}");
       if MaxAmount = 0 then
          Label :=
            Create
