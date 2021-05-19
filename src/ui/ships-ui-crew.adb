@@ -380,11 +380,17 @@ package body Ships.UI.Crew is
       TabButton: Ttk_RadioButton;
       InfoButton: Ttk_Button;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (MemberDialog & ".header",
+           "-text {" & To_String(Member.Name) &
+           "} -wraplength 275 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Create(MemberDialog & ".buttonbox");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
         Create
@@ -965,14 +971,20 @@ package body Ships.UI.Crew is
          To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (MemberDialog & ".header",
+           "-text {Priorities for " & To_String(Member.Name) &
+           "} -wraplength 275 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 2");
       Label := Create(MemberDialog & ".name", "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Label := Create(MemberDialog & ".level", "-text {Level}");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 0 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-column 1 -row 1 -pady {5 0}");
       Load_Priorities_Loop :
       for I in Member.Orders'Range loop
          Label :=
@@ -990,7 +1002,8 @@ package body Ships.UI.Crew is
             "{SetPriority" & Positive'Image(I) & " [" & ComboBox &
             " current]" & Positive'Image(MemberIndex) & "}");
          Tcl.Tk.Ada.Grid.Grid
-           (ComboBox, "-column 1 -row" & Positive'Image(I) & " -padx {0 5}");
+           (ComboBox,
+            "-column 1 -row" & Positive'Image(I + 1) & " -padx {0 5}");
          Bind(ComboBox, "<Escape>", "{" & CloseButton & " invoke;break}");
       end loop Load_Priorities_Loop;
       Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
