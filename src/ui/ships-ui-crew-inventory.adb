@@ -211,10 +211,18 @@ package body Ships.UI.Crew.Inventory is
            Integer'Image
              (FreeInventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
            " kg} -wraplength 400");
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (MemberDialog & ".header",
+           "-text {Inventory of " &
+           To_String
+             (PlayerShip.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name) &
+           "} -wraplength 275 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x");
       Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
@@ -400,8 +408,8 @@ package body Ships.UI.Crew.Inventory is
           (ItemDialog & ".title",
            "-text {Move " &
            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
-           " to ship cargo} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+           " to ship cargo} -wraplength 400 -style Header.TLabel");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -sticky we");
       Label :=
         Create
           (ItemDialog & ".amountlbl",
@@ -409,7 +417,7 @@ package body Ships.UI.Crew.Inventory is
            Positive'Image
              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
            "):}");
-      Tcl.Tk.Ada.Grid.Grid(Label);
+      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
       Bind
