@@ -46,6 +46,7 @@ package body WaitMenu is
       AmountLabel: Ttk_Label;
       NeedHealing, NeedRest: Boolean := False;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Dialog_Header: Ttk_Label;
    begin
       if Winfo_Get(WaitDialog, "exists") = "1" then
          Button := Get_Widget(WaitDialog & ".frame.close");
@@ -58,6 +59,11 @@ package body WaitMenu is
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
       WaitDialog := Create(".gameframe.wait", "-style Dialog.TFrame");
+      Dialog_Header :=
+        Create
+          (WaitDialog & ".header",
+           "-text {Wait in place} -wraplength 275 -style Header.TLabel");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 3");
       Button :=
         Create
           (WaitDialog & ".wait1", "-text {Wait 1 minute} -command {Wait 1}");
