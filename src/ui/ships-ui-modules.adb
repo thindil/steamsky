@@ -426,6 +426,11 @@ package body Ships.UI.Modules is
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Height: Positive := 10;
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (ModuleDialog & ".header",
+           "-text {" & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           "} -wraplength 275 -style Header.TLabel");
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -456,6 +461,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x");
       Tcl.Tk.Ada.Pack.Pack
         (YScroll, " -side right -fill y -padx {0 5} -pady 5");
       Tcl.Tk.Ada.Pack.Pack
@@ -894,7 +900,8 @@ package body Ships.UI.Modules is
       configure
         (ModuleCanvas,
          "-scrollregion [list " & BBox(ModuleCanvas, "all") & "]");
-      Height := Height + 20;
+      Height :=
+        Height + 20 + Positive'Value(Winfo_Get(Dialog_Header, "reqheight"));
       declare
          Width: Positive;
       begin
