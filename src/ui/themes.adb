@@ -29,14 +29,13 @@ with Game; use Game;
 package body Themes is
 
    procedure Load_Themes is
-      Directories, Files: Search_Type;
+      Themes_Directories, Files: Search_Type;
       Found_Directory, Found_File: Directory_Entry_Type;
       Config_File: File_Type;
-      Raw_Data, Field_Name, Value: Unbounded_String;
-      Equal_Index: Natural;
-      Temp_Record: Theme_Record;
+      Raw_Data, Field_Name, Value: Unbounded_String := Null_Unbounded_String;
+      Equal_Index: Natural := 0;
+      Temp_Record: Theme_Record := Default_Theme;
    begin
-      Temp_Record := Default_Theme;
       Temp_Record.Name := To_Unbounded_String("Default theme");
       Temp_Record.File_Name :=
         Data_Directory &
@@ -44,11 +43,11 @@ package body Themes is
       Themes_Container.Include(Themes_List, "steamsky", Temp_Record);
       Temp_Record := Default_Theme;
       Start_Search
-        (Directories, To_String(Themes_Directory), "",
+        (Themes_Directories, To_String(Themes_Directory), "",
          (Directory => True, others => False));
       Load_Themes_Loop :
-      while More_Entries(Directories) loop
-         Get_Next_Entry(Directories, Found_Directory);
+      while More_Entries(Themes_Directories) loop
+         Get_Next_Entry(Themes_Directories, Found_Directory);
          if Simple_Name(Found_Directory) in "." | ".." then
             goto End_Of_Load_Themes_Loop;
          end if;
@@ -216,7 +215,7 @@ package body Themes is
          End_Search(Files);
          <<End_Of_Load_Themes_Loop>>
       end loop Load_Themes_Loop;
-      End_Search(Directories);
+      End_Search(Themes_Directories);
       if not Themes_List.Contains
           (To_String(Game_Settings.Interface_Theme)) then
          Game_Settings.Interface_Theme := To_Unbounded_String("steamsky");
