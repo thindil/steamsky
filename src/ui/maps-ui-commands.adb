@@ -38,6 +38,7 @@ with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Factions; use Factions;
 with Messages; use Messages;
@@ -90,11 +91,10 @@ package body Maps.UI.Commands is
       for I in 2 .. 13 loop
          Button.Name :=
            New_String
-             (".gameframe.paned.mapframe.buttons." &
-              To_String(ButtonNames(I)));
+             (Main_Paned & ".mapframe.buttons." & To_String(ButtonNames(I)));
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
       end loop Hide_Buttons_Loop;
-      Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
+      Button.Name := New_String(Main_Paned & ".mapframe.buttons.show");
       Tcl.Tk.Ada.Grid.Grid(Button);
       return TCL_OK;
    end Hide_Map_Buttons_Command;
@@ -124,7 +124,7 @@ package body Maps.UI.Commands is
       pragma Unreferenced(ClientData, Argc, Argv);
       Button: Ttk_Button;
       ButtonsBox: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
+        Get_Widget(Main_Paned & ".mapframe.buttons", Interp);
    begin
       Button.Interp := Interp;
       Show_Buttons_Loop :
@@ -169,7 +169,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       ButtonsBox: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.mapframe.buttons", Interp);
+        Get_Widget(Main_Paned & ".mapframe.buttons", Interp);
       Button: Ttk_Button :=
         Get_Widget(ButtonsBox & "." & CArgv.Arg(Argv, 1), Interp);
    begin
@@ -209,7 +209,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.mapframe.map", Interp);
+        Get_Widget(Main_Paned & ".mapframe.map", Interp);
    begin
       configure
         (MapView,
@@ -265,7 +265,7 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       MapView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.mapframe.map", Interp);
+        Get_Widget(Main_Paned & ".mapframe.map", Interp);
       MapIndex: Unbounded_String;
    begin
       MapIndex :=
@@ -324,13 +324,14 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       MapInfoFrame: constant Ttk_Frame :=
-        Get_Widget(".gameframe.paned.mapframe.info", Interp);
+        Get_Widget(Main_Paned & ".mapframe.info", Interp);
    begin
-      if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky ne");
-      else
-         Tcl.Tk.Ada.Grid.Grid_Configure(MapInfoFrame, "-sticky nw");
-      end if;
+      Tcl.Tk.Ada.Grid.Grid_Configure
+        (MapInfoFrame,
+         "-sticky " &
+         (if Index(Tcl.Tk.Ada.Grid.Grid_Info(MapInfoFrame), "-sticky ne") = 0
+          then "ne"
+          else "wn"));
       return TCL_OK;
    end Move_Map_Info_Command;
 
@@ -451,9 +452,10 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       MapView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.mapframe.map", Interp);
+        Get_Widget(Main_Paned & ".mapframe.map", Interp);
       MapHeight, MapWidth: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(".gameframe.movemapdialog.x", Interp);
+      DialogName: constant String := ".gameframe.movemapdialog";
+      SpinBox: Ttk_SpinBox := Get_Widget(DialogName & ".x", Interp);
    begin
       if Winfo_Get(MapView, "ismapped") = "0" then
          return TCL_OK;
@@ -465,7 +467,7 @@ package body Maps.UI.Commands is
          CenterY := PlayerShip.SkyY;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
          CenterX := Positive'Value(Get(SpinBox));
-         SpinBox.Name := New_String(".gameframe.movemapdialog.y");
+         SpinBox.Name := New_String(DialogName & ".y");
          CenterY := Positive'Value(Get(SpinBox));
       elsif CArgv.Arg(Argv, 1) = "n" then
          CenterY :=
@@ -518,8 +520,7 @@ package body Maps.UI.Commands is
       DrawMap;
       return
         Close_Dialog_Command
-          (ClientData, Interp, 2,
-           Empty & "CloseDialog" & ".gameframe.movemapdialog");
+          (ClientData, Interp, 2, Empty & "CloseDialog" & DialogName);
    end Move_Map_Command;
 
    -- ****o* MapCommands/MapCommands.Zoom_Map_Command
@@ -680,22 +681,20 @@ package body Maps.UI.Commands is
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
-                        if Events_List(EventIndex).EType = EnemyShip or
-                          Events_List(EventIndex).EType = Trader or
-                          Events_List(EventIndex).EType = FriendlyShip or
-                          Events_List(EventIndex).EType = EnemyPatrol then
+                        if Events_List(EventIndex).EType in EnemyShip |
+                              Trader | FriendlyShip | EnemyPatrol then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when FRIENDLY =>
-                        if Events_List(EventIndex).EType = Trader or
-                          Events_List(EventIndex).EType = FriendlyShip then
+                        if Events_List(EventIndex).EType in Trader |
+                              FriendlyShip then
                            Result := 0;
                            exit Move_Loop;
                         end if;
                      when Config.ENEMY =>
-                        if Events_List(EventIndex).EType = EnemyShip or
-                          Events_List(EventIndex).EType = EnemyPatrol then
+                        if Events_List(EventIndex).EType in EnemyShip |
+                              EnemyPatrol then
                            Result := 0;
                            exit Move_Loop;
                         end if;
