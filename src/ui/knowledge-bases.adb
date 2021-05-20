@@ -367,6 +367,11 @@ package body Knowledge.Bases is
            "-text Close -command {CloseDialog " & BaseDialog & "}");
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (BaseDialog & ".header",
+           "-text {" & To_String(SkyBases(BaseIndex).Name) &
+           "} -wraplength 275 -style Header.TLabel");
       procedure SetReputationText(ReputationText: String) is
          ReputationBar: constant Ttk_Frame :=
            Create
@@ -403,7 +408,7 @@ package body Knowledge.Bases is
             end if;
             Add(ReputationBar, ReputationText);
          end if;
-         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 1 -sticky w -padx {5 0}");
+         Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 2 -sticky w -padx {5 0}");
       end SetReputationText;
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
@@ -471,9 +476,10 @@ package body Knowledge.Bases is
         Create
           (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -row 0 -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid
-        (BaseLabel, "-row 0 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 2 -columnspan 2 -pady {0 5}");
+        (BaseLabel, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 3 -columnspan 2 -pady {0 5}");
       Focus(CloseButton);
       Tcl.Tk.Ada.Place.Place(BaseDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind(CloseButton, "<Tab>", "{focus " & CloseButton & ";break}");
