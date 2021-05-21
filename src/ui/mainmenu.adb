@@ -151,8 +151,7 @@ package body MainMenu is
         (ThemeName => To_String(Source => Game_Settings.Interface_Theme));
       Tcl_EvalFile
         (interp => Get_Context, fileName => Ui_Directory & "mainmenu.tcl");
-      Main_Menu_Frame.Interp := Get_Context;
-      Main_Menu_Frame.Name := New_String(Str => ".mainmenu");
+      Main_Menu_Frame := Get_Widget(pathName => ".mainmenu");
       if not Game_Settings.Show_Tooltips then
          Disable;
       end if;
@@ -221,19 +220,16 @@ package body MainMenu is
            To_String
              (Source => Careers_List(New_Game_Settings.Player_Career).Name));
       Combo_Box.Name := New_String(Str => Player_Frame_Name & ".base");
-      if New_Game_Settings.Starting_Base =
-        To_Unbounded_String(Source => "Any") then
-         Set(ComboBox => Combo_Box, Value => "Any");
-      else
-         Set
-           (ComboBox => Combo_Box,
-            Value =>
-              "{" &
+      Set
+        (ComboBox => Combo_Box,
+         Value =>
+           (if New_Game_Settings.Starting_Base = To_Unbounded_String("Any")
+            then "Any"
+            else "{" &
               To_String
                 (Source =>
                    BasesTypes_List(New_Game_Settings.Starting_Base).Name) &
-              "}");
-      end if;
+              "}"));
       Combo_Box.Name :=
         New_String(Str => Difficulty_Frame_Name & ".difficultylevel");
       Set
