@@ -29,19 +29,21 @@ if {$target != "x86_64-linux-gnu" && $target != "x86_64-windows"} {
 exec gprclean -P steamsky.gpr --target=$target >@stdout
 if {$target == "x86_64-linux-gnu"} {
    exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Unix --target=$target >@stdout
-   set os linux
+   set dirname steamsky-linux
    set extension {}
 } else {
    exec gprbuild -p -P steamsky.gpr -XMode=release -XOS=Windows --target=$target >@stdout
-   set os windows
+   set dirname steamsky-windows
    set extension .exe
 }
+
+# Copy all files and directories to release directory
 puts -nonewline {Copying files and directories ... }
-file mkdir [file join release $os]
-file copy [file join bin steamsky$extension] [file join release $os steamsky$extension]
-file copy [file join bin data] [file join release $os data]
-file delete -force [file join release $os data mods] [file join release $os data saves] [file join release $os data themes]
-file copy [file join bin doc] [file join release $os doc]
-file copy README.md [file join release $os doc]
+file mkdir [file join release $dirname]
+file copy [file join bin steamsky$extension] [file join release $dirname steamsky$extension]
+file copy [file join bin data] [file join release $dirname data]
+file delete -force [file join release $dirname data mods] [file join release $dirname data saves] [file join release $dirname data themes]
+file copy [file join bin doc] [file join release $dirname doc]
+file copy README.md [file join release $dirname doc]
 puts {done}
 exec gprclean -P steamsky.gpr --target=$target >@stdout
