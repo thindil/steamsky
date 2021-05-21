@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Added
+- Headers to dialog windows in the game
+
 ## [6.1] - 2021-05-16
 
 ### Added
