@@ -163,9 +163,14 @@ package body Knowledge.Missions is
          Label :=
            Create
              (MissionsFrame & ".nomissions",
-              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 400");
+              "-text {You didn't accept any mission yet. You may ask for missions in bases. When your ship is docked to base, check Missions from ship orders menu.} -wraplength 350");
          Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
+         Bind
+           (MissionsCanvas, "<Configure>",
+            "{" & Label & " configure -wraplength [expr [winfo width " &
+            MissionsCanvas & "] - 15]}");
       else
+         Unbind(MissionsCanvas, "<Configure>");
          Row := 2;
          MissionsTable :=
            CreateTable
