@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Headers to dialog windows in the game
 
+### Fixed
+- Removed frame around map after clicking on it
+
 ## [6.1] - 2021-05-16
 
 ### Added
