@@ -36,25 +36,31 @@ package body Themes is
       Equal_Index: Natural := 0;
       Temp_Record: Theme_Record := Default_Theme;
    begin
-      Temp_Record.Name := To_Unbounded_String("Default theme");
+      Temp_Record.Name := To_Unbounded_String(Source => "Default theme");
       Temp_Record.File_Name :=
         Data_Directory &
-        To_Unbounded_String("ui" & Dir_Separator & "theme.tcl");
-      Themes_Container.Include(Themes_List, "steamsky", Temp_Record);
+        To_Unbounded_String(Source => "ui" & Dir_Separator & "theme.tcl");
+      Themes_Container.Include
+        (Container => Themes_List, Key => "steamsky", New_Item => Temp_Record);
       Temp_Record := Default_Theme;
       Start_Search
-        (Themes_Directories, To_String(Themes_Directory), "",
-         (Directory => True, others => False));
+        (Search => Themes_Directories,
+         Directory => To_String(Source => Themes_Directory), Pattern => "",
+         Filter => (Directory => True, others => False));
       Load_Themes_Loop :
-      while More_Entries(Themes_Directories) loop
-         Get_Next_Entry(Themes_Directories, Found_Directory);
-         if Simple_Name(Found_Directory) in "." | ".." then
+      while More_Entries(Search => Themes_Directories) loop
+         Get_Next_Entry
+           (Search => Themes_Directories, Directory_Entry => Found_Directory);
+         if Simple_Name(Directory_Entry => Found_Directory) in "." | ".." then
             goto End_Of_Load_Themes_Loop;
          end if;
-         Start_Search(Files, Full_Name(Found_Directory), "*.cfg");
+         Start_Search
+           (Search => Files,
+            Directory => Full_Name(Directory_Entry => Found_Directory),
+            Pattern => "*.cfg");
          Load_Config_Loop :
-         while More_Entries(Files) loop
-            Get_Next_Entry(Files, Found_File);
+         while More_Entries(Search => Files) loop
+            Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
             Open(Config_File, In_File, Full_Name(Found_File));
             while not End_Of_File(Config_File) loop
                Raw_Data := To_Unbounded_String(Get_Line(Config_File));
