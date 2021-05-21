@@ -226,9 +226,14 @@ package body Knowledge.Events is
          Label :=
            Create
              (EventsFrame & ".noevents",
-              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 400");
+              "-text {You don't know any event yet. You may ask for events in bases. When your ship is docked to base, select Ask for Events from ship orders menu.} -wraplength 350");
          Tcl.Tk.Ada.Grid.Grid(Label, "-padx 10");
+         Bind
+           (EventsCanvas, "<Configure>",
+            "{" & Label & " configure -wraplength [expr [winfo width " &
+            EventsCanvas & "] - 10]}");
       else
+         Unbind(EventsCanvas, "<Configure>");
          Row := 2;
          EventsTable :=
            CreateTable
