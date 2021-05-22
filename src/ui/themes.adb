@@ -61,8 +61,11 @@ package body Themes is
          Load_Config_Loop :
          while More_Entries(Search => Files) loop
             Get_Next_Entry(Search => Files, Directory_Entry => Found_File);
-            Open(Config_File, In_File, Full_Name(Found_File));
-            while not End_Of_File(Config_File) loop
+            Open
+              (File => Config_File, Mode => In_File,
+               Name => Full_Name(Directory_Entry => Found_File));
+            Load_Config_Data_Loop :
+            while not End_Of_File(File => Config_File) loop
                Raw_Data := To_Unbounded_String(Get_Line(Config_File));
                if Length(Raw_Data) = 0 then
                   goto End_Of_Load_Config_Loop;
@@ -212,7 +215,7 @@ package body Themes is
                       (Natural'Value("16#" & To_String(Value) & "#"));
                end if;
                <<End_Of_Load_Config_Loop>>
-            end loop;
+            end loop Load_Config_Data_Loop;
             Close(Config_File);
             Themes_Container.Include
               (Themes_List, Simple_Name(Found_Directory), Temp_Record);
