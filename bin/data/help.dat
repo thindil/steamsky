@@ -82,8 +82,9 @@ Thus, if you find an Agricultural base near a Refinery, start travelling between
     5. After finishing upgrading engine, upgrade ship hull size by one. Then find any {shipyard} base and install second engine. And of course, upgrade it that same like first. This allows you to not only travel faster, but also escape from stronger enemies or catch them faster in the battle.
     6. Select one base as your home base (best is probably Agricultural if you need food and drinks to live, otherwise select Industrial), and start working on maximize reputation there. The best place for that main base should have one short trading route (one of described above) and {shipyard} base for buying upgrades to the ship.
     7. Sources of money are (from the best to the worst): Trading -> Missions (especially when selected only money as reward for them) -> Crafting -> Combat with boarding enemy ships -> Only ship combat.
-    8. Read other sections of this help, you can find a lot of useful information.
-    9. Enjoy the game and try to find your own, better way to play :)
+    8. {FuelName} is used as fuel for your ship and as money to trade. Don't allow it to go too low. If you lose all fuel during fly, your ship will fall from the sky, and you die.
+    9. Read other sections of this help, you can find a lot of useful information.
+   10. Enjoy the game and try to find your own, better way to play :)
 {u}Combat{/u}
     1. The fastest way to destroy enemy ship is to destroy one of its engines. If enemy is unarmored, set your Gunner order to {i}Aim for their engine{/i}. When enemy is armored, destroy they armor first by setting Gunner to {i}Fire at will{/i}.
     2. If the only weapon of enemy is battering ram and you have installed gun, try to stay outside they attack range. Go closer to enemy ship until your gun will start shooting and then set Pilot order on {i}Keep distance{/i} and Engineer on {i}Full speed{/i}. If you are faster than enemy, you can end combat even without damage to your ship.
