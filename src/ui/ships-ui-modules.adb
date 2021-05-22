@@ -461,7 +461,7 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x");
+      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Pack.Pack
         (YScroll, " -side right -fill y -padx {0 5} -pady 5");
       Tcl.Tk.Ada.Pack.Pack

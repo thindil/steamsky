@@ -63,7 +63,8 @@ package body WaitMenu is
         Create
           (WaitDialog & ".header",
            "-text {Wait in place} -wraplength 275 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 3");
+      Tcl.Tk.Ada.Grid.Grid
+        (Dialog_Header, "-sticky we -columnspan 3 -padx 2 -pady {2 0}");
       Button :=
         Create
           (WaitDialog & ".wait1", "-text {Wait 1 minute} -command {Wait 1}");

@@ -390,7 +390,7 @@ package body Ships.UI.Crew is
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Create(MemberDialog & ".buttonbox");
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
         Create
@@ -980,7 +980,8 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Dialog_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Label := Create(MemberDialog & ".name", "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Label := Create(MemberDialog & ".level", "-text {Level}");
