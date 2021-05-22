@@ -748,12 +748,12 @@ package body Maps.UI.Commands is
             end if;
          when 6 => -- Ship moved, but pilot needs rest, confirm
             ShowQuestion
-              ("You don't have pilot on duty. Did you want to wait until your pilot rest?",
+              ("You don't have pilot on duty. Do you want to wait until your pilot rest?",
                "nopilot");
             return TCL_OK;
          when 7 => -- Ship moved, but engineer needs rest, confirm
             ShowQuestion
-              ("You don't have engineer on duty. Did you want to wait until your engineer rest?",
+              ("You don't have engineer on duty. Do you want to wait until your engineer rest?",
                "nopilot");
             return TCL_OK;
          when 8 => -- Ship moved, but crew needs rest, autorest
