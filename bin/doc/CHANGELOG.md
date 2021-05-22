@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Removed frame around map after clicking on it
+
 ## [6.0.2] - 2021-05-09
 
 ### Changed
