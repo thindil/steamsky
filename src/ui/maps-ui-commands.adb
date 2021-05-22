@@ -589,6 +589,19 @@ package body Maps.UI.Commands is
       Result: Natural;
       StartsCombat: Boolean := False;
       NewX, NewY: Integer := 0;
+      procedure Update_Coordinates is
+      begin
+         if PlayerShip.DestinationX > PlayerShip.SkyX then
+            NewX := 1;
+         elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+            NewX := -1;
+         end if;
+         if PlayerShip.DestinationY > PlayerShip.SkyY then
+            NewY := 1;
+         elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+            NewY := -1;
+         end if;
+      end Update_Coordinates;
    begin
       if CArgv.Arg(Argv, 1) = "n" then -- Move up
          Result := MoveShip(0, -1, Message);
@@ -613,16 +626,7 @@ package body Maps.UI.Commands is
             Update_Game(1);
             WaitInPlace(1);
          else
-            if PlayerShip.DestinationX > PlayerShip.SkyX then
-               NewX := 1;
-            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
-               NewX := -1;
-            end if;
-            if PlayerShip.DestinationY > PlayerShip.SkyY then
-               NewY := 1;
-            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
-               NewY := -1;
-            end if;
+            Update_Coordinates;
             Result := MoveShip(NewX, NewY, Message);
             if PlayerShip.DestinationX = PlayerShip.SkyX and
               PlayerShip.DestinationY = PlayerShip.SkyY then
@@ -641,16 +645,7 @@ package body Maps.UI.Commands is
          loop
             NewX := 0;
             NewY := 0;
-            if PlayerShip.DestinationX > PlayerShip.SkyX then
-               NewX := 1;
-            elsif PlayerShip.DestinationX < PlayerShip.SkyX then
-               NewX := -1;
-            end if;
-            if PlayerShip.DestinationY > PlayerShip.SkyY then
-               NewY := 1;
-            elsif PlayerShip.DestinationY < PlayerShip.SkyY then
-               NewY := -1;
-            end if;
+            Update_Coordinates;
             Result := MoveShip(NewX, NewY, Message);
             exit Move_Loop when Result = 0;
             StartsCombat := CheckForEvent;
