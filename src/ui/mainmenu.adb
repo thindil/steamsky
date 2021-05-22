@@ -223,7 +223,9 @@ package body MainMenu is
       Set
         (ComboBox => Combo_Box,
          Value =>
-           (if New_Game_Settings.Starting_Base = To_Unbounded_String("Any")
+           (if
+              New_Game_Settings.Starting_Base =
+              To_Unbounded_String(Source => "Any")
             then "Any"
             else "{" &
               To_String
