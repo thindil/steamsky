@@ -231,7 +231,8 @@ package body Ships.UI.Cargo is
           (ItemDialog & ".title",
            "-text {Give " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
            " from the ship's cargo to the selected crew member} -wraplength 370 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -sticky we");
+      Tcl.Tk.Ada.Grid.Grid
+        (Label, "-columnspan 2 -sticky we -padx 2 -pady {2 0}");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");

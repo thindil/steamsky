@@ -222,7 +222,7 @@ package body Ships.UI.Crew.Inventory is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x");
+      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
       Tcl.Tk.Ada.Pack.Pack
         (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
@@ -409,7 +409,8 @@ package body Ships.UI.Crew.Inventory is
            "-text {Move " &
            GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
            " to ship cargo} -wraplength 400 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -sticky we");
+      Tcl.Tk.Ada.Grid.Grid
+        (Label, "-columnspan 2 -sticky we -padx 2 -pady {2 0}");
       Label :=
         Create
           (ItemDialog & ".amountlbl",

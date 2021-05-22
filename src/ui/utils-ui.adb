@@ -166,7 +166,7 @@ package body Utils.UI is
          TimerId := Null_Unbounded_String;
       end if;
       Tcl_Eval(Get_Context, "update");
-      Tcl.Tk.Ada.Grid.Grid(Message_Header, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(Message_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
@@ -428,7 +428,8 @@ package body Utils.UI is
       Tcl.Tk.Ada.Busy.Busy(Frame);
       Frame := Get_Widget(".gameframe.paned");
       Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Grid.Grid(String_Header, "-sticky we -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (String_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
@@ -1156,7 +1157,7 @@ package body Utils.UI is
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Info_Header, "-sticky we");
+      Tcl.Tk.Ada.Grid.Grid(Info_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       InfoButton :=
         (if ParentName = ".gameframe" then
@@ -1215,7 +1216,8 @@ package body Utils.UI is
         Create
           (ItemDialog & ".title",
            "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -sticky we -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Label, "-columnspan 2 -sticky we -pady {2 5} -padx 2");
       if MaxAmount = 0 then
          Label :=
            Create
@@ -1285,7 +1287,8 @@ package body Utils.UI is
          Frame := Get_Widget(".");
          Tcl.Tk.Ada.Busy.Busy(Frame);
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Dialog_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 2 -pady {0 5} -padx 5");
       Bind

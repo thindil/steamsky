@@ -476,7 +476,8 @@ package body Knowledge.Bases is
         Create
           (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -row 0 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid
+        (Dialog_Header, "-sticky we -row 0 -columnspan 2 -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid
         (BaseLabel, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 3 -columnspan 2 -pady {0 5}");
