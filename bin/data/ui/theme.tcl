@@ -280,5 +280,6 @@ namespace eval ttk::theme::steamsky {
       option add *font [ttk::style lookup . -font]
       option add *Text.relief flat
       option add *Text.cursor left_ptr
+      option add *Text.highlightThickness 0
    }
 }
