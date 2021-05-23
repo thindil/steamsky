@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated interface
+- Updated help
 
 ### Fixed
 - Removed frame around map after clicking on it
