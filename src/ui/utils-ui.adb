@@ -48,6 +48,7 @@ with Combat.UI; use Combat.UI;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Maps; use Maps;
@@ -140,7 +141,7 @@ package body Utils.UI is
    procedure ShowMessage
      (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
       MessageDialog: constant Ttk_Frame :=
-        Create(ParentFrame & ".message", "-style Dialog.TFrame");
+        Create_Dialog(ParentFrame & ".message", Title);
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
@@ -150,23 +151,12 @@ package body Utils.UI is
            "-text {Close" &
            Positive'Image(Game_Settings.Auto_Close_Messages_Time) &
            "} -command {CloseDialog " & MessageDialog & "}");
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
-      Message_Header: constant Ttk_Label :=
-        Create
-          (MessageDialog & ".header",
-           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
    begin
-      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-      end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
       Tcl_Eval(Get_Context, "update");
-      Tcl.Tk.Ada.Grid.Grid(Message_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
       Tcl.Tk.Ada.Place.Place
@@ -400,7 +390,7 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       StringDialog: constant Ttk_Frame :=
-        Create(".getstring", "-style Dialog.TFrame");
+        Create_Dialog(".getstring", CArgv.Arg(Argv, 3), 275, 2);
       StringLabel: constant Ttk_Label :=
         Create
           (StringDialog & ".text",
@@ -418,18 +408,7 @@ package body Utils.UI is
         Create
           (StringDialog & ".closebutton",
            "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
-      String_Header: constant Ttk_Label :=
-        Create
-          (StringDialog & ".header",
-           "-text {" & CArgv.Arg(Argv, 3) &
-           "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Grid.Grid
-        (String_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
       Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
@@ -1135,29 +1114,15 @@ package body Utils.UI is
    procedure ShowInfo
      (Text: String; ParentName: String := ".gameframe"; Title: String) is
       InfoDialog: constant Ttk_Frame :=
-        Create(".info", "-style Dialog.TFrame");
+        Create_Dialog(".info", Title, 275, 1, ParentName);
       InfoLabel: constant Ttk_Label :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
       InfoButton: Ttk_Button;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
-      Info_Header: constant Ttk_Label :=
-        Create
-          (InfoDialog & ".header",
-           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
    begin
-      if ParentName = ".gameframe" then
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-      else
-         Frame := Get_Widget(ParentName);
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-      end if;
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
-      Tcl.Tk.Ada.Grid.Grid(Info_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       InfoButton :=
         (if ParentName = ".gameframe" then
@@ -1181,13 +1146,12 @@ package body Utils.UI is
       ItemIndex: Inventory_Container.Extended_Index;
       MaxAmount: Natural := 0) is
       ItemDialog: constant Ttk_Frame :=
-        Create(".itemdialog", "-style Dialog.TFrame");
+        Create_Dialog(".itemdialog", Title, 275, 2);
       Button: Ttk_Button :=
         Create
           (ItemDialog & ".dropbutton", "-text Ok -command {" & Command & "}");
       Label: Ttk_Label;
       AmountBox: Ttk_SpinBox;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       if MaxAmount = 0 then
          AmountBox :=
@@ -1209,15 +1173,6 @@ package body Utils.UI is
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
               Positive'Image(ItemIndex) & " " & Action & "}");
       end if;
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Label :=
-        Create
-          (ItemDialog & ".title",
-           "-text {" & Title & "} -wraplength 275 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Label, "-columnspan 2 -sticky we -pady {2 5} -padx 2");
       if MaxAmount = 0 then
          Label :=
            Create
@@ -1261,7 +1216,10 @@ package body Utils.UI is
    procedure ShowQuestion
      (Question, Result: String; In_Game: Boolean := True) is
       QuestionDialog: constant Ttk_Frame :=
-        Create(".questiondialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".questiondialog",
+           (if Result = "showstats" then "Question" else "Confirmation"), 275,
+           2, (if In_Game then ".gameframe" else "."));
       Label: constant Ttk_Label :=
         Create
           (QuestionDialog & ".question",
@@ -1271,24 +1229,7 @@ package body Utils.UI is
           (QuestionDialog & ".yesbutton",
            "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
            Result & "}");
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (QuestionDialog & ".header",
-           "-text " &
-           (if Result = "showstats" then "Question" else "Confirmation") &
-           " -wraplength 275 -style Header.TLabel");
    begin
-      if In_Game then
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-      else
-         Frame := Get_Widget(".");
-         Tcl.Tk.Ada.Busy.Busy(Frame);
-      end if;
-      Tcl.Tk.Ada.Grid.Grid
-        (Dialog_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 2 -pady {0 5} -padx 5");
       Bind
