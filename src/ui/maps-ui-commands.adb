@@ -850,7 +850,7 @@ package body Maps.UI.Commands is
    -- Show the player's game statistics
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -867,11 +867,9 @@ package body Maps.UI.Commands is
    function Show_Stats_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShowStatistics;
       return TCL_OK;
    end Show_Stats_Command;
@@ -901,11 +899,9 @@ package body Maps.UI.Commands is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          ShowSkyMap(True);
       else
          Tcl_Eval(Interp, CArgv.Arg(Argv, 1));
@@ -939,18 +935,14 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       MapView: constant Tk_Text :=
-        Get_Widget(".gameframe.paned.mapframe.map", Interp);
+        Get_Widget(Main_Paned & ".mapframe.map", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "click" then
-         if Game_Settings.Right_Button then
-            Generate
-              (MapView, "<Button-3>",
-               "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
-         else
-            Generate
-              (MapView, "<Button-1>",
-               "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
-         end if;
+         Generate
+           (MapView,
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">",
+            "-x " & CArgv.Arg(Argv, 2) & " -y " & CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "nw" then
          Generate
            (MapView, "<Motion>",
@@ -1053,10 +1045,9 @@ package body Maps.UI.Commands is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
       PanedPosition: Positive;
-      SashPosition: constant Natural := Natural'Value(SashPos(Paned, "0"));
+      SashPosition: constant Natural :=
+        Natural'Value(SashPos(Main_Paned, "0"));
    begin
       Game_Settings.Window_Width :=
         Positive'Value(Winfo_Get(Get_Main_Window(Interp), "width"));
