@@ -66,153 +66,224 @@ package body Themes is
                Name => Full_Name(Directory_Entry => Found_File));
             Load_Config_Data_Loop :
             while not End_Of_File(File => Config_File) loop
-               Raw_Data := To_Unbounded_String(Get_Line(Config_File));
-               if Length(Raw_Data) = 0 then
+               Raw_Data :=
+                 To_Unbounded_String(Source => Get_Line(File => Config_File));
+               if Length(Source => Raw_Data) = 0 then
                   goto End_Of_Load_Config_Loop;
                end if;
-               Equal_Index := Index(Raw_Data, "=");
-               Field_Name := Head(Raw_Data, Equal_Index - 2);
-               Value := Tail(Raw_Data, (Length(Raw_Data) - Equal_Index - 1));
-               if Field_Name = To_Unbounded_String("Name") then
+               Equal_Index := Index(Source => Raw_Data, Pattern => "=");
+               Field_Name :=
+                 Head(Source => Raw_Data, Count => Equal_Index - 2);
+               Value :=
+                 Tail
+                   (Source => Raw_Data,
+                    Count => Length(Source => Raw_Data) - Equal_Index - 1);
+               if Field_Name = To_Unbounded_String(Source => "Name") then
                   Temp_Record.Name := Value;
-               elsif Field_Name = To_Unbounded_String("FileName") then
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "FileName") then
                   Temp_Record.File_Name :=
                     To_Unbounded_String
                       (Full_Name(Found_Directory) & Dir_Separator) &
                     Value;
-               elsif Field_Name = To_Unbounded_String("EnemyShipIcon") then
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "EnemyShipIcon") then
                   Temp_Record.Enemy_Ship_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("AttackOnBaseIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "AttackOnBaseIcon") then
                   Temp_Record.Attack_On_Base_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("DiseaseIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DiseaseIcon") then
                   Temp_Record.Disease_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("DoublePriceIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DoublePriceIcon") then
                   Temp_Record.Double_Price_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("FullDocksIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "FullDocksIcon") then
                   Temp_Record.Full_Docks_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("EnemyPatrolIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "EnemyPatrolIcon") then
                   Temp_Record.Enemy_Patrol_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("TraderIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "TraderIcon") then
                   Temp_Record.Trader_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("FriendlyShipIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "FriendlyShipIcon") then
                   Temp_Record.Friendly_Ship_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("DeliverIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DeliverIcon") then
                   Temp_Record.Deliver_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("DestroyIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "DestroyIcon") then
                   Temp_Record.Destroy_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("PatrolIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "PatrolIcon") then
                   Temp_Record.Patrol_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("ExploreIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ExploreIcon") then
                   Temp_Record.Explore_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("PassengerIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "PassengerIcon") then
                   Temp_Record.Passenger_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("PilotIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "PilotIcon") then
                   Temp_Record.Pilot_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("EngineerIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "EngineerIcon") then
                   Temp_Record.Engineer_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("GunnerIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "GunnerIcon") then
                   Temp_Record.Gunner_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("CrewTraderIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "CrewTraderIcon") then
                   Temp_Record.Crew_Trader_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("RepairIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "RepairIcon") then
                   Temp_Record.Repair_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("UpgradeIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "UpgradeIcon") then
                   Temp_Record.Upgrade_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("CleanIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "CleanIcon") then
                   Temp_Record.Clean_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("ManufactureIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "ManufactureIcon") then
                   Temp_Record.Manufacture_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("MoveMapUpIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapUpIcon") then
                   Temp_Record.Move_Map_Up_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("MoveMapDownIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapDownIcon") then
                   Temp_Record.Move_Map_Down_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("MoveMapLeftIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapLeftIcon") then
                   Temp_Record.Move_Map_Left_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("MoveMapRightIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "MoveMapRightIcon") then
                   Temp_Record.Move_Map_Right_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("NoFuelIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "NoFuelIcon") then
                   Temp_Record.No_Fuel_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("NoFoodIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "NoFoodIcon") then
                   Temp_Record.No_Food_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("NoDrinksIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "NoDrinksIcon") then
                   Temp_Record.No_Drinks_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
                elsif Field_Name =
-                 To_Unbounded_String("NotVisitedBaseIcon") then
+                 To_Unbounded_String(Source => "NotVisitedBaseIcon") then
                   Temp_Record.Not_Visited_Base_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("EmptyMapIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "EmptyMapIcon") then
                   Temp_Record.Empty_Map_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("TargetIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "TargetIcon") then
                   Temp_Record.Target_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("StoryIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "StoryIcon") then
                   Temp_Record.Story_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
-               elsif Field_Name = To_Unbounded_String("OverloadedIcon") then
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
+               elsif Field_Name =
+                 To_Unbounded_String(Source => "OverloadedIcon") then
                   Temp_Record.Overloaded_Icon :=
                     Wide_Character'Val
-                      (Natural'Value("16#" & To_String(Value) & "#"));
+                      (Natural'Value
+                         ("16#" & To_String(Source => Value) & "#"));
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
@@ -227,7 +298,8 @@ package body Themes is
       End_Search(Themes_Directories);
       if not Themes_List.Contains
           (To_String(Game_Settings.Interface_Theme)) then
-         Game_Settings.Interface_Theme := To_Unbounded_String("steamsky");
+         Game_Settings.Interface_Theme :=
+           To_Unbounded_String(Source => "steamsky");
       end if;
    end Load_Themes;
 
