@@ -145,12 +145,6 @@ package body Utils.UI is
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      MessageButton: constant Ttk_Button :=
-        Create
-          (MessageDialog & ".button",
-           "-text {Close" &
-           Positive'Image(Game_Settings.Auto_Close_Messages_Time) &
-           "} -command {CloseDialog " & MessageDialog & "}");
    begin
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
@@ -158,12 +152,12 @@ package body Utils.UI is
       end if;
       Tcl_Eval(Get_Context, "update");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
-      Tcl.Tk.Ada.Grid.Grid(MessageButton, "-pady 5");
+      Add_Close_Button
+        (MessageDialog & ".button",
+         "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
+         "CloseDialog " & MessageDialog);
       Tcl.Tk.Ada.Place.Place
         (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
-      Focus(MessageButton);
-      Bind(MessageButton, "<Tab>", "{break}");
-      Bind(MessageButton, "<Escape>", "{" & MessageButton & " invoke;break}");
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
@@ -1117,27 +1111,21 @@ package body Utils.UI is
         Create_Dialog(".info", Title, 275, 1, ParentName);
       InfoLabel: constant Ttk_Label :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
-      InfoButton: Ttk_Button;
    begin
       if TimerId /= Null_Unbounded_String then
          Cancel(To_String(TimerId));
          TimerId := Null_Unbounded_String;
       end if;
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
-      InfoButton :=
-        (if ParentName = ".gameframe" then
-           Create
-             (InfoDialog & ".button",
-              "-text Close -command {CloseDialog " & InfoDialog & "}")
-         else Create
-             (InfoDialog & ".button",
-              "-text Close -command {CloseDialog " & InfoDialog & " " &
-              ParentName & "}"));
-      Tcl.Tk.Ada.Grid.Grid(InfoButton, "-pady {0 5}");
+      if ParentName = ".gameframe" then
+         Add_Close_Button
+           (InfoDialog & ".button", "Close", "CloseDialog " & InfoDialog);
+      else
+         Add_Close_Button
+           (InfoDialog & ".button", "Close",
+            "CloseDialog " & InfoDialog & " " & ParentName);
+      end if;
       Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Focus(InfoButton);
-      Bind(InfoButton, "<Tab>", "{break}");
-      Bind(InfoButton, "<Escape>", "{" & InfoButton & " invoke;break}");
       Widget_Raise(InfoDialog);
    end ShowInfo;
 
