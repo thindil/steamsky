@@ -17,6 +17,7 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with CoreUI; use CoreUI;
 
@@ -46,5 +47,18 @@ package body Dialogs is
           else ""));
       return New_Dialog;
    end Create_Dialog;
+
+   procedure Add_Close_Button(Name, Text, Command: String) is
+      Button: constant Ttk_Button :=
+        Create
+          (Name,
+           "-text {" & Text &
+           "} -command {" & Command & "}");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
+      Focus(Button);
+      Bind(Button, "<Tab>", "{break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+   end Add_Close_Button;
 
 end Dialogs;

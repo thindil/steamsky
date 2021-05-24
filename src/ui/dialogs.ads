@@ -41,4 +41,16 @@ package Dialogs is
       return Ttk_Frame;
       -- ****
 
+      -- ****f* Dialogs/Dialogs.Add_Close_Button
+      -- FUNCTION
+      -- Add button to close the selected dialog and set proper bindings for
+      -- it.
+      -- PARAMETERS
+      -- Name    - The Tk path name for the button
+      -- Text    - The text to display on the button
+      -- Command - The Tcl command to run when the button was clicked
+      -- SOURCE
+   procedure Add_Close_Button(Name, Text, Command: String);
+   -- ****
+
 end Dialogs;
