@@ -61,13 +61,7 @@
 * 10. Missions: Starting and finishing missions, some detailed information about each type of mission and specific mission tips.
 * 11. Hiring crew members: Detailed information about hiring new crew members in sky bases.
 * 12. Tips: General tips for playing the game.
-   Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.
-
-{u}Ship info{/u}
-    On most screens you can see information about the required crew positions in the top right corner. First icon is for pilot, second: engineer, third: gunner, fourth: trader, fifth: repairs, sixth: upgrading ship modules, seventh: ship cleaning, and eighth: manufacturing.
-   For pilots and engineers: if their letter is green, the position is taken by a crew member, and if it's red you don't have anyone assigned to this position.
-For gunners and manufacturing: A green icon means all positions are taken (all guns, all crafting modules), a red icon means you have free positions (not all guns/crafting modules are taken), and a white icon means you don't have or need anyone assigned to this position. For {sentientships} a yellow icon means that you don't have anyone assigned to that position, but you don't need anyone either.
-Green color of repairs, upgrading ship modules, trader and cleaning ship icons means you have someone assigned to this position, red means you don't have anyone on that position but need someone, and a white icon means you don't have anyone assigned to this position, and you don't need anyone.</entry>
+    Some game modifications can show help topics as well. If it is your first time here, it is recommended to look at {b}First steps{/b}, {b}Ship movement{/b}, {b}Trading{/b}, {b}Combat{/b} and {b}Tips{/b} topics for basic information about the game.</entry>
  <entry index="firststeps" title=" 2. First steps">    {i}These steps are only suggestions on how to start a new game. After some time, you will probably find a better way which will suit your needs.{/i}
 {u}General tips{/u}
     1. When you start the game, the whole map is empty and covered by fog. It is recommended to first thing to do in new game to ask for bases in base to which you are currently docked. Select {b}Ask for bases{/b} from list of available orders. If you closed this list, you can show it with key {GameKey 12}.
@@ -84,7 +78,8 @@ Thus, if you find an Agricultural base near a Refinery, start travelling between
     7. Sources of money are (from the best to the worst): Trading -> Missions (especially when selected only money as reward for them) -> Crafting -> Combat with boarding enemy ships -> Only ship combat.
     8. {FuelName} is used as fuel for your ship and as money to trade. Don't allow it to go too low. If you lose all fuel during fly, your ship will fall from the sky, and you die.
     9. Read other sections of this help, you can find a lot of useful information.
-   10. Enjoy the game and try to find your own, better way to play :)
+   10. If you have any questions, problems or suggestions about the game, please read {b}Get involved{/b} page in {b}About{/b} screen in the start menu of the game.
+   11. Enjoy the game and try to find your own, better way to play :)
 {u}Combat{/u}
     1. The fastest way to destroy enemy ship is to destroy one of its engines. If enemy is unarmored, set your Gunner order to {i}Aim for their engine{/i}. When enemy is armored, destroy they armor first by setting Gunner to {i}Fire at will{/i}.
     2. If the only weapon of enemy is battering ram, and you have installed gun, try to stay outside they attack range. Go closer to enemy ship until your gun will start shooting and then set Pilot order on {i}Keep distance{/i} and Engineer on {i}Full speed{/i}. If you are faster than enemy, you can end combat even without damage to your ship.
