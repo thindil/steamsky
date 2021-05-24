@@ -84,8 +84,6 @@ package body Crafts.UI is
       CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       CargoIndex: Natural;
-      RecipesView: constant Ttk_Tree_View :=
-        Get_Widget(CraftsCanvas & ".craft.list.view", Interp);
       Row: Positive := 2;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
@@ -147,8 +145,9 @@ package body Crafts.UI is
                To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
                To_Unbounded_String("Materials")),
               Get_Widget(CraftsFrame & ".scrolly"));
+      else
+         ClearTable(RecipesTable);
       end if;
-      Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
       Show_Recipes_Loop :
       for I in Known_Recipes.Iterate loop
          if Current_Row < Start_Row then
@@ -267,7 +266,8 @@ package body Crafts.UI is
            (RecipesTable,
             "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "}", 1);
+            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "}",
+            1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
             "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
