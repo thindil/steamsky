@@ -506,9 +506,6 @@ package body Table is
       if X > Table.Columns_Width(Column) then
          Table.Columns_Width(Column) := X;
       end if;
-      if NewRow then
-         Table.Row := Table.Row + 1;
-      end if;
       if Command'Length > 0 then
          Bind
            (Table.Canvas, To_String(ItemId), "<Enter>",
@@ -530,6 +527,9 @@ package body Table is
            (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
          Bind(Table.Canvas, Tag, "<1>", "{" & Command & "}");
+      end if;
+      if NewRow then
+         Table.Row := Table.Row + 1;
       end if;
    end AddCheckButton;
 
