@@ -114,8 +114,8 @@ package body Maps.UI is
       NeedCleaning, NeedRepairs, NeedWorker, HavePilot, HaveEngineer,
       HaveTrader, HaveUpgrader, HaveCleaner, HaveRepairman: Boolean := False;
       ItemAmount: Natural := 0;
-      Label: Ttk_Label := Get_Widget(".gameframe.header.time");
-      Frame: constant Ttk_Frame := Get_Widget(".gameframe.paned.combat");
+      Label: Ttk_Label := Get_Widget(Game_Header & ".time");
+      Frame: constant Ttk_Frame := Get_Widget(Main_Paned & ".combat");
    begin
       configure(Label, "-text {" & FormatedTime & "}");
       if Game_Settings.Show_Numbers then
@@ -125,7 +125,7 @@ package body Maps.UI is
             Natural'Image((RealSpeed(PlayerShip) * 60) / 1_000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;
-      Label.Name := New_String(".gameframe.header.nofuel");
+      Label.Name := New_String(Game_Header & ".nofuel");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemAmount(Fuel_Type);
       if ItemAmount = 0 then
@@ -142,7 +142,7 @@ package body Maps.UI is
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.nodrink");
+      Label.Name := New_String(Game_Header & ".nodrink");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemsAmount("Drinks");
       if ItemAmount = 0 then
@@ -159,7 +159,7 @@ package body Maps.UI is
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.nofood");
+      Label.Name := New_String(Game_Header & ".nofood");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       ItemAmount := GetItemsAmount("Food");
       if ItemAmount = 0 then
@@ -194,7 +194,7 @@ package body Maps.UI is
                null;
          end case;
       end loop;
-      Label.Name := New_String(".gameframe.header.overloaded");
+      Label.Name := New_String(Game_Header & ".overloaded");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       if HavePilot and
         (HaveEngineer or
@@ -250,7 +250,7 @@ package body Maps.UI is
             NeedRepairs := True;
          end if;
       end loop Check_Workers_Loop;
-      Label.Name := New_String(".gameframe.header.pilot");
+      Label.Name := New_String(Game_Header & ".pilot");
       if HavePilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -264,7 +264,7 @@ package body Maps.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.engineer");
+      Label.Name := New_String(Game_Header & ".engineer");
       if HaveEngineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -278,7 +278,7 @@ package body Maps.UI is
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.gunner");
+      Label.Name := New_String(Game_Header & ".gunner");
       if HaveGunner then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
@@ -286,7 +286,7 @@ package body Maps.UI is
          Add(Label, "One or more guns don't have a gunner.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.repairs");
+      Label.Name := New_String(Game_Header & ".repairs");
       if NeedRepairs then
          if HaveRepairman then
             configure(Label, "-style Headergreen.TLabel");
@@ -299,7 +299,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.crafting");
+      Label.Name := New_String(Game_Header & ".crafting");
       if NeedWorker then
          if HaveWorker then
             configure(Label, "-style Headergreen.TLabel");
@@ -314,7 +314,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.upgrade");
+      Label.Name := New_String(Game_Header & ".upgrade");
       if PlayerShip.UpgradeModule > 0 then
          if HaveUpgrader then
             configure(Label, "-style Headergreen.TLabel");
@@ -329,7 +329,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.talk");
+      Label.Name := New_String(Game_Header & ".talk");
       if HaveTrader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       elsif SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
@@ -349,7 +349,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      Label.Name := New_String(".gameframe.header.clean");
+      Label.Name := New_String(Game_Header & ".clean");
       if NeedCleaning then
          if HaveCleaner then
             configure(Label, "-style Headergreen.TLabel");
@@ -529,9 +529,9 @@ package body Maps.UI is
      (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY) is
       MapInfoText, EventInfoText: Unbounded_String;
       MapInfo: constant Ttk_Label :=
-        Get_Widget(".gameframe.paned.mapframe.info.info");
+        Get_Widget(Main_Paned & ".mapframe.info.info");
       EventInfo: constant Ttk_Label :=
-        Get_Widget(".gameframe.paned.mapframe.info.eventinfo");
+        Get_Widget(Main_Paned & ".mapframe.info.eventinfo");
    begin
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
@@ -548,18 +548,15 @@ package body Maps.UI is
             BaseIndex: constant Bases_Range := SkyMap(X, Y).BaseIndex;
          begin
             if SkyBases(BaseIndex).Known then
-               Append(MapInfoText, LF);
-               Append(MapInfoText, "Base info:");
-               Append(MapInfoText, LF);
                Append
                  (MapInfoText,
-                  To_Unbounded_String("Name: ") & SkyBases(BaseIndex).Name);
+                  LF & "Base info:" & LF & To_Unbounded_String("Name: ") &
+                  SkyBases(BaseIndex).Name);
             end if;
             if SkyBases(BaseIndex).Visited.Year > 0 then
-               Append(MapInfoText, LF);
                Append
                  (MapInfoText,
-                  "Type: " &
+                  LF & "Type: " &
                   To_String
                     (BasesTypes_List(SkyBases(BaseIndex).BaseType).Name));
                if SkyBases(BaseIndex).Population > 0 then
@@ -612,8 +609,7 @@ package body Maps.UI is
                   end case;
                end if;
                if BaseIndex = PlayerShip.HomeBase then
-                  Append(MapInfoText, LF);
-                  Append(MapInfoText, "It is your home base");
+                  Append(MapInfoText, LF & "It is your home base");
                end if;
             end if;
          end;
