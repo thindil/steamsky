@@ -81,7 +81,7 @@ package body Crafts.UI is
       CraftsCanvas: constant Tk_Canvas :=
         Get_Widget(CraftsFrame & ".canvas", Interp);
       Studies, Deconstructs: UnboundedString_Container.Vector;
-      CanCraft: Boolean;
+      CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       CargoIndex: Natural;
       RecipesView: constant Ttk_Tree_View :=
@@ -94,14 +94,14 @@ package body Crafts.UI is
       procedure CheckTool(ToolNeeded: Unbounded_String) is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
-            CanCraft := False;
+            Has_Tool := False;
             Check_Tool_Loop :
             for I in Items_List.Iterate loop
                if Items_List(I).IType = ToolNeeded then
                   CargoIndex :=
                     FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
                   if CargoIndex > 0 then
-                     CanCraft := True;
+                     Has_Tool := True;
                      exit Check_Tool_Loop;
                   end if;
                end if;
@@ -156,90 +156,131 @@ package body Crafts.UI is
             goto End_Of_Loop;
          end if;
          CanCraft := False;
+         Has_Workplace := False;
          Recipe := Recipes_List(Known_Recipes(I));
          Find_Workshop_Loop :
          for Module of PlayerShip.Modules loop
             if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
               and then Module.Durability > 0 then
-               CanCraft := True;
+               Has_Workplace := True;
                exit Find_Workshop_Loop;
             end if;
          end loop Find_Workshop_Loop;
-         if CanCraft then
-            CheckTool(Recipe.Tool);
-         end if;
-         if CanCraft then
-            declare
-               Materials: array
-                 (Recipe.MaterialTypes.First_Index ..
-                      Recipe.MaterialTypes.Last_Index) of Boolean :=
-                 (others => False);
-            begin
-               Find_Materials_Loop :
-               for K in
-                 Recipe.MaterialTypes.First_Index ..
-                   Recipe.MaterialTypes.Last_Index loop
-                  Find_Cargo_Index_Loop :
-                  for J in Items_List.Iterate loop
-                     if Items_List(J).IType = Recipe.MaterialTypes(K) then
-                        CargoIndex :=
-                          FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
-                        if CargoIndex > 0
-                          and then PlayerShip.Cargo(CargoIndex).Amount >=
-                            Recipe.MaterialAmounts(K) then
-                           Materials(K) := True;
-                        end if;
+         CheckTool(Recipe.Tool);
+         declare
+            Materials: array
+              (Recipe.MaterialTypes.First_Index ..
+                   Recipe.MaterialTypes.Last_Index) of Boolean :=
+              (others => False);
+         begin
+            Find_Materials_Loop :
+            for K in
+              Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index loop
+               Find_Cargo_Index_Loop :
+               for J in Items_List.Iterate loop
+                  if Items_List(J).IType = Recipe.MaterialTypes(K) then
+                     CargoIndex :=
+                       FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                     if CargoIndex > 0
+                       and then PlayerShip.Cargo(CargoIndex).Amount >=
+                         Recipe.MaterialAmounts(K) then
+                        Materials(K) := True;
                      end if;
-                  end loop Find_Cargo_Index_Loop;
-               end loop Find_Materials_Loop;
-               CanCraft := True;
-               Set_Can_Craft_Loop :
-               for J in Materials'Range loop
-                  if not Materials(J) then
-                     CanCraft := False;
-                     exit Set_Can_Craft_Loop;
                   end if;
-               end loop Set_Can_Craft_Loop;
-            end;
+               end loop Find_Cargo_Index_Loop;
+            end loop Find_Materials_Loop;
+            Has_Materials := True;
+            Set_Can_Craft_Loop :
+            for J in Materials'Range loop
+               if not Materials(J) then
+                  Has_Materials := False;
+                  exit Set_Can_Craft_Loop;
+               end if;
+            end loop Set_Can_Craft_Loop;
+         end;
+         if Has_Tool and Has_Materials and Has_Workplace then
+            CanCraft := True;
          end if;
          AddButton
            (RecipesTable,
             To_String
               (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), 1, True);
+            "ShowRecipeMenu" & Positive'Image(Row - 1), 1);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu" & Positive'Image(Row - 1), CanCraft, 2);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Workplace, 3);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Tool, 4);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Materials, 5,
+            True);
          Row := Row + 1;
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
       CheckTool(Alchemy_Tools);
-      if CanCraft then
-         CanCraft := False;
-         Find_Alchemy_Lab_Loop :
-         for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
-              and then Module.Durability > 0 then
-               CanCraft := True;
-               exit Find_Alchemy_Lab_Loop;
-            end if;
-         end loop Find_Alchemy_Lab_Loop;
+      CanCraft := False;
+      Has_Workplace := False;
+      Find_Alchemy_Lab_Loop :
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
+           and then Module.Durability > 0 then
+            Has_Workplace := True;
+            exit Find_Alchemy_Lab_Loop;
+         end if;
+      end loop Find_Alchemy_Lab_Loop;
+      if Has_Workplace then
+         CanCraft := True;
       end if;
       Set_Study_Recipes_Loop :
       for I in Studies.Iterate loop
-         Insert
-           (RecipesView,
-            "{} end -id {Study " & To_String(Studies(I)) & "} -text {Study " &
-            To_String(Items_List(Studies(I)).Name) & "}" &
-            (if not CanCraft then " -tag [list gray]" else ""));
+         exit Set_Study_Recipes_Loop when RecipesTable.Row = 26;
+         AddButton
+           (RecipesTable, "Study " & To_String(Items_List(Studies(I)).Name),
+            "Show available recipe's options",
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", 1);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", CanCraft,
+            2);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}",
+            Has_Workplace, 3);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", Has_Tool,
+            4, True);
+         Row := Row + 1;
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
       for I in Deconstructs.Iterate loop
-         Insert
-           (RecipesView,
-            "{} end -id {Deconstruct " & To_String(Deconstructs(I)) &
-            "} -text {Decontruct " &
-            To_String(Items_List(Deconstructs(I)).Name) & "}" &
-            (if not CanCraft then " -tag [list gray]" else ""));
+         exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row = 26;
+         AddButton
+           (RecipesTable,
+            "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
+            "Show available recipe's options",
+            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "}", 1);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            CanCraft, 2);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            Has_Workplace, 3);
+         AddCheckButton
+           (RecipesTable, "Show available recipe's options",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            Has_Tool, 4, True);
+         Row := Row + 1;
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Page > 1 then
