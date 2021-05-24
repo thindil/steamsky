@@ -34,15 +34,24 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with CoreUI; use CoreUI;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
+with Table; use Table;
 with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
+
+   -- ****iv* CUI4/CUI$.BasesTable
+   -- FUNCTION
+   -- Table with info about available crafting recipes
+   -- SOURCE
+   RecipesTable: Table_Widget (5);
+   -- ****
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
@@ -51,11 +60,12 @@ package body Crafts.UI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowCrafting
+   -- ShowCrafting page
+   -- Page is the current page of recipes list to show
    -- SOURCE
    function Show_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -66,7 +76,7 @@ package body Crafts.UI is
    function Show_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
+      pragma Unreferenced(ClientData);
       CraftsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".craftframe", Interp);
       CraftsCanvas: constant Tk_Canvas :=
         Get_Widget(CraftsFrame & ".canvas", Interp);
@@ -76,7 +86,11 @@ package body Crafts.UI is
       CargoIndex: Natural;
       RecipesView: constant Ttk_Tree_View :=
         Get_Widget(CraftsCanvas & ".craft.list.view", Interp);
-      FirstIndex: Unbounded_String;
+      Row: Positive := 2;
+      Page: constant Positive :=
+        (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
       procedure CheckTool(ToolNeeded: Unbounded_String) is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
@@ -125,9 +139,22 @@ package body Crafts.UI is
             end if;
          end loop Add_Recipes_Loop;
       end loop Find_Possible_Recipes_Loop;
+      if RecipesTable.Row_Height = 1 then
+         RecipesTable :=
+           CreateTable
+             (CraftsCanvas & ".craft",
+              (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
+               To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
+               To_Unbounded_String("Materials")),
+              Get_Widget(CraftsFrame & ".scrolly"));
+      end if;
       Delete(RecipesView, "[list " & Children(RecipesView, "{}") & "]");
       Show_Recipes_Loop :
-      for I in Known_Recipes.First_Index .. Known_Recipes.Last_Index loop
+      for I in Known_Recipes.Iterate loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
          CanCraft := False;
          Recipe := Recipes_List(Known_Recipes(I));
          Find_Workshop_Loop :
@@ -175,15 +202,15 @@ package body Crafts.UI is
                end loop Set_Can_Craft_Loop;
             end;
          end if;
-         Insert
-           (RecipesView,
-            "{} end -id {" & To_String(Known_Recipes(I)) & "} -text {" &
+         AddButton
+           (RecipesTable,
             To_String
-              (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name) &
-            "}" & (if not CanCraft then " -tag [list gray]" else ""));
-         if FirstIndex = Null_Unbounded_String then
-            FirstIndex := Known_Recipes(I);
-         end if;
+              (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
+            "Show available recipe's options",
+            "ShowRecipeMenu" & Positive'Image(Row - 1), 1, True);
+         Row := Row + 1;
+         exit Show_Recipes_Loop when RecipesTable.Row = 26;
+         <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
       CheckTool(Alchemy_Tools);
       if CanCraft then
@@ -214,8 +241,21 @@ package body Crafts.UI is
             To_String(Items_List(Deconstructs(I)).Name) & "}" &
             (if not CanCraft then " -tag [list gray]" else ""));
       end loop Set_Deconstruct_Recipes_Loop;
-      Selection_Set(RecipesView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      if Page > 1 then
+         if RecipesTable.Row < 26 then
+            AddPagination
+              (RecipesTable, "ShowCrafting" & Positive'Image(Page - 1), "");
+         else
+            AddPagination
+              (RecipesTable, "ShowCrafting" & Positive'Image(Page - 1),
+               "ShowModules" & Positive'Image(Page + 1));
+         end if;
+      elsif RecipesTable.Row = 26 then
+         AddPagination
+           (RecipesTable, "", "ShowCrafting" & Positive'Image(Page + 1));
+      end if;
+      UpdateTable(RecipesTable);
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
       configure
         (CraftsCanvas,
