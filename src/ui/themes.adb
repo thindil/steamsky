@@ -24,6 +24,7 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Game; use Game;
 
 package body Themes is
@@ -84,7 +85,9 @@ package body Themes is
                  To_Unbounded_String(Source => "FileName") then
                   Temp_Record.File_Name :=
                     To_Unbounded_String
-                      (Full_Name(Found_Directory) & Dir_Separator) &
+                      (Source =>
+                         Full_Name(Directory_Entry => Found_Directory) &
+                         Dir_Separator) &
                     Value;
                elsif Field_Name =
                  To_Unbounded_String(Source => "EnemyShipIcon") then
@@ -287,28 +290,29 @@ package body Themes is
                end if;
                <<End_Of_Load_Config_Loop>>
             end loop Load_Config_Data_Loop;
-            Close(Config_File);
+            Close(File => Config_File);
             Themes_Container.Include
-              (Themes_List, Simple_Name(Found_Directory), Temp_Record);
+              (Container => Themes_List,
+               Key => Simple_Name(Directory_Entry => Found_Directory),
+               New_Item => Temp_Record);
             Temp_Record := Default_Theme;
          end loop Load_Config_Loop;
-         End_Search(Files);
+         End_Search(Search => Files);
          <<End_Of_Load_Themes_Loop>>
       end loop Load_Themes_Loop;
-      End_Search(Themes_Directories);
+      End_Search(Search => Themes_Directories);
       if not Themes_List.Contains
-          (To_String(Game_Settings.Interface_Theme)) then
+          (Key => To_String(Source => Game_Settings.Interface_Theme)) then
          Game_Settings.Interface_Theme :=
            To_Unbounded_String(Source => "steamsky");
       end if;
    end Load_Themes;
 
    procedure Set_Theme is
-      Label: Ttk_Label;
-      Button: Ttk_Button;
+      Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
+      Button: Ttk_Button :=
+        Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
    begin
-      Label.Interp := Get_Context;
-      Button.Interp := Get_Context;
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
          if Themes_Container.Key(I) /= Game_Settings.Interface_Theme then
