@@ -208,22 +208,28 @@ package body Crafts.UI is
             To_String
               (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", 1);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            Boolean'Image(CanCraft),
+            1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", CanCraft,
-            2);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            Boolean'Image(CanCraft),
+            CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}",
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", Has_Tool,
-            4);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            Boolean'Image(CanCraft),
+            Has_Tool, 4);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}",
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            Boolean'Image(CanCraft),
             Has_Materials, 5, True);
          Row := Row + 1;
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
@@ -249,19 +255,24 @@ package body Crafts.UI is
          AddButton
            (RecipesTable, "Study " & To_String(Items_List(Studies(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", 1);
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            Boolean'Image(CanCraft),
+            1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", CanCraft,
-            2);
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            Boolean'Image(CanCraft),
+            CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}",
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "}", Has_Tool,
-            4, True);
+            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            Boolean'Image(CanCraft),
+            Has_Tool, 4, True);
          Row := Row + 1;
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
@@ -271,19 +282,23 @@ package body Crafts.UI is
            (RecipesTable,
             "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "}",
+            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "} " &
+            Boolean'Image(CanCraft),
             1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "} " & Boolean'Image(CanCraft),
             CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "} " & Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) & "}",
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "} " & Boolean'Image(CanCraft),
             Has_Tool, 4, True);
          Row := Row + 1;
       end loop Set_Deconstruct_Recipes_Loop;
