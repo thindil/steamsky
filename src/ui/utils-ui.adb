@@ -25,7 +25,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -156,12 +155,10 @@ package body Utils.UI is
         (MessageDialog & ".button",
          "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
          "CloseDialog " & MessageDialog);
-      Tcl.Tk.Ada.Place.Place
-        (MessageDialog, "-in " & ParentFrame & " -relx 0.3 -rely 0.3");
+      Show_Dialog(MessageDialog, ParentFrame);
       TimerId :=
         To_Unbounded_String
           (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
-      Widget_Raise(MessageDialog);
    end ShowMessage;
 
    procedure AddCommand
@@ -413,9 +410,8 @@ package body Utils.UI is
       Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
       Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
-      Tcl.Tk.Ada.Place.Place
-        (StringDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Focus(StringEntry);
+      Show_Dialog(StringDialog);
       return TCL_OK;
    end Get_String_Command;
 
@@ -1125,8 +1121,7 @@ package body Utils.UI is
            (InfoDialog & ".button", "Close",
             "CloseDialog " & InfoDialog & " " & ParentName);
       end if;
-      Tcl.Tk.Ada.Place.Place(InfoDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Widget_Raise(InfoDialog);
+      Show_Dialog(InfoDialog);
    end ShowInfo;
 
    procedure ShowManipulateItem
@@ -1196,9 +1191,9 @@ package body Utils.UI is
            "-text Cancel -command {CloseDialog " & ItemDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3 -pady {0 5}");
       Focus(Button);
-      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Show_Dialog(ItemDialog);
    end ShowManipulateItem;
 
    procedure ShowQuestion
@@ -1236,14 +1231,12 @@ package body Utils.UI is
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -pady {0 5} -padx 5");
       Focus(Button);
       if In_Game then
-         Tcl.Tk.Ada.Place.Place
-           (QuestionDialog, "-in .gameframe -relx 0.3 -rely 0.3");
+         Show_Dialog(QuestionDialog);
       else
-         Tcl.Tk.Ada.Place.Place(QuestionDialog, "-in . -relx 0.3 -rely 0.3");
+         Show_Dialog(QuestionDialog, ".");
       end if;
       Bind(Button, "<Tab>", "{focus .questiondialog.yesbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
-      Widget_Raise(QuestionDialog);
       if Result = "showstats" then
          Widgets.configure
            (Button,

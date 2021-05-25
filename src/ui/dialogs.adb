@@ -16,6 +16,7 @@
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -50,15 +51,20 @@ package body Dialogs is
 
    procedure Add_Close_Button(Name, Text, Command: String) is
       Button: constant Ttk_Button :=
-        Create
-          (Name,
-           "-text {" & Text &
-           "} -command {" & Command & "}");
+        Create(Name, "-text {" & Text & "} -command {" & Command & "}");
    begin
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Focus(Button);
       Bind(Button, "<Tab>", "{break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
    end Add_Close_Button;
+
+   procedure Show_Dialog
+     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe") is
+   begin
+      Tcl.Tk.Ada.Place.Place
+        (Dialog, "-in " & Parent_Frame & " -relx 0.3 -rely 0.3");
+      Widget_Raise(Dialog);
+   end Show_Dialog;
 
 end Dialogs;
