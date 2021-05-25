@@ -660,7 +660,7 @@ package body Ships.UI.Crew is
                     Float(Member.Attributes(I)(1) * 250)) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "Experience need to reach next level");
+              (ProgressBar, "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
               (ProgressBar,
                "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
@@ -731,7 +731,7 @@ package body Ships.UI.Crew is
                     Float((Member.Skills(I)(2) * 25))) &
                  " -maximum 1.0 -length 200 -style experience.Horizontal.TProgressbar");
             Tcl.Tklib.Ada.Tooltip.Add
-              (ProgressBar, "Experience need to reach next level");
+              (ProgressBar, "Experience need to reach the next level");
             Tcl.Tk.Ada.Place.Place
               (ProgressBar,
                "-in " & ProgressFrame & " -relheight 1.0 -relwidth 1.0");
