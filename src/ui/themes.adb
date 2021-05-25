@@ -315,26 +315,40 @@ package body Themes is
    begin
       Set_Theme_Loop :
       for I in Themes_List.Iterate loop
-         if Themes_Container.Key(I) /= Game_Settings.Interface_Theme then
+         if Themes_Container.Key(Position => I) /=
+           Game_Settings.Interface_Theme then
             goto End_Of_Set_Theme_Loop;
          end if;
-         Label.Name := New_String(".gameframe.header.nofuel");
+         Label.Name := New_String(Str => ".gameframe.header.nofuel");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).No_Fuel_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.nofood");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).No_Fuel_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.nofood");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).No_Food_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.nodrink");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).No_Food_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.nodrink");
          configure
-           (Label,
-            "-text {" & Encode("" & Themes_List(I).No_Drinks_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.overloaded");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).No_Drinks_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.overloaded");
          configure
-           (Label,
-            "-text {" & Encode("" & Themes_List(I).Overloaded_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.pilot");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.pilot");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Pilot_Icon) & "}");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Pilot_Icon) &
+              "}");
          Label.Name := New_String(".gameframe.header.engineer");
          configure
            (Label,
