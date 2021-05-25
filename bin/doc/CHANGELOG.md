@@ -10,6 +10,8 @@ All notable changes to this project will be documented in this file.
 - Removed frame around map after clicking on it
 - Typo in asking for rest when crew members are tired
 - Typos and punctation in help
+- Typos in info about experience needed for the next level of skills and
+  statistics
 
 ## [6.0.2] - 2021-05-09
 
