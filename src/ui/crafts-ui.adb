@@ -27,6 +27,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -206,20 +208,23 @@ package body Crafts.UI is
             To_String
               (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), 1);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", 1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), CanCraft, 2);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", CanCraft,
+            2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Workplace, 3);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}",
+            Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Tool, 4);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}", Has_Tool,
+            4);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu" & Positive'Image(Row - 1), Has_Materials, 5,
-            True);
+            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "}",
+            Has_Materials, 5, True);
          Row := Row + 1;
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
          <<End_Of_Loop>>
@@ -290,7 +295,7 @@ package body Crafts.UI is
          else
             AddPagination
               (RecipesTable, "ShowCrafting" & Positive'Image(Page - 1),
-               "ShowModules" & Positive'Image(Page + 1));
+               "ShowCrafting" & Positive'Image(Page + 1));
          end if;
       elsif RecipesTable.Row = 26 then
          AddPagination
@@ -313,6 +318,53 @@ package body Crafts.UI is
       ShowScreen("craftframe");
       return TCL_OK;
    end Show_Crafting_Command;
+
+   -- ****o* CUI4/CUI4.Show_Recipe_Menu_Command
+   -- FUNCTION
+   -- Show menu with available actions for the selected recipe
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowRecipeMenu index craftable
+   -- Index is the index of the recipe to craft. If craftable is TRUE,
+   -- then the recipe can be crafted, otherwise FALSE
+   -- SOURCE
+   function Show_Recipe_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Recipe_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      RecipeMenu: Tk_Menu := Get_Widget(".recipemenu", Interp);
+   begin
+      if Winfo_Get(RecipeMenu, "exists") = "0" then
+         RecipeMenu := Create(".recipemenu", "-tearoff false");
+      end if;
+      Delete(RecipeMenu, "0", "end");
+      if CArgv.Arg(Argv, 2) = "TRUE" then
+         Menu.Add
+           (RecipeMenu, "command",
+            "-label {Set crafting order} -command {SetRecipe {" &
+            CArgv.Arg(Argv, 1) & "}}");
+      end if;
+      Menu.Add
+        (RecipeMenu, "command",
+         "-label {Show more info about the recipe} -command {ShowRecipe {" &
+         CArgv.Arg(Argv, 1) & "}}");
+      Tk_Popup
+        (RecipeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Recipe_Menu_Command;
 
    -- ****if* CUI4/CUI4.ShowSetRecipe
    -- FUNCTION
@@ -716,6 +768,7 @@ package body Crafts.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowCrafting", Show_Crafting_Command'Access);
+      AddCommand("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
       AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
       AddCommand("SetCrafting", Set_Crafting_Command'Access);
    end AddCommands;
