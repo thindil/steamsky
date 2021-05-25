@@ -53,4 +53,16 @@ package Dialogs is
    procedure Add_Close_Button(Name, Text, Command: String);
    -- ****
 
+   -- ****f* Dialogs/Dialogs.Show_Dialog
+   -- FUNCTION
+   -- Show the selected dialog to the player
+   -- PARAMETERS
+   -- Dialog       - The dialog which will be shown
+   -- Parent_Frame - The parent frame name for the dialog. Can be empty.
+   --                Default value is .gameframe
+   -- SOURCE
+   procedure Show_Dialog
+     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe");
+   -- ****
+
 end Dialogs;
