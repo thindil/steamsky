@@ -746,22 +746,20 @@ package body Maps.UI is
          To_Unbounded_String("Move ship south"),
          To_Unbounded_String("Move ship south and east"));
       Button: Ttk_Button;
-      Speedbox: constant Ttk_ComboBox :=
-        Get_Widget(".gameframe.paned.controls.buttons.speed");
+      FrameName: constant String := Main_Paned & ".controls.buttons";
+      Speedbox: constant Ttk_ComboBox := Get_Widget(FrameName & ".speed");
    begin
       Button.Interp := Get_Context;
       if PlayerShip.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
-         Button.Name := New_String(".gameframe.paned.controls.buttons.moveto");
+         Button.Name := New_String(FrameName & ".moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
-         Button.Name := New_String(".gameframe.paned.controls.buttons.wait");
+         Button.Name := New_String(FrameName & ".wait");
          configure(Button, "-text Wait");
          Add(Button, "Wait 1 minute.");
          Disable_Move_Buttons_Loop :
          for ButtonName of MoveButtonsNames loop
-            Button.Name :=
-              New_String
-                (".gameframe.paned.controls.buttons." & To_String(ButtonName));
+            Button.Name := New_String(FrameName & "." & To_String(ButtonName));
             State(Button, "disabled");
             Add
               (Button,
@@ -771,31 +769,25 @@ package body Maps.UI is
          Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
-            Button.Name :=
-              New_String(".gameframe.paned.controls.buttons.moveto");
+            Button.Name := New_String(FrameName & ".moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
-            Button.Name :=
-              New_String(".gameframe.paned.controls.buttons.wait");
+            Button.Name := New_String(FrameName & ".wait");
             configure(Button, "-text Move");
             Add(Button, "Move ship one map field toward destination.");
             Tcl.Tk.Ada.Grid.Grid(Button);
          else
-            Button.Name :=
-              New_String(".gameframe.paned.controls.buttons.moveto");
+            Button.Name := New_String(FrameName & ".moveto");
             Tcl.Tk.Ada.Grid.Grid_Remove(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 3");
-            Button.Name :=
-              New_String(".gameframe.paned.controls.buttons.wait");
+            Button.Name := New_String(FrameName & ".wait");
             configure(Button, "-text Wait");
             Add(Button, "Wait 1 minute.");
          end if;
          Enable_Move_Buttons_Loop :
          for I in MoveButtonsNames'Range loop
             Button.Name :=
-              New_String
-                (".gameframe.paned.controls.buttons." &
-                 To_String(MoveButtonsNames(I)));
+              New_String(FrameName & "." & To_String(MoveButtonsNames(I)));
             State(Button, "!disabled");
             Add(Button, To_String(MoveButtonsTooltips(I)));
          end loop Enable_Move_Buttons_Loop;
@@ -816,7 +808,7 @@ package body Maps.UI is
       PanedPosition: Natural;
    begin
       GameMenu := Get_Widget(".gamemenu");
-      MapView := Get_Widget(".gameframe.paned.mapframe.map");
+      MapView := Get_Widget(Paned & ".mapframe.map");
       if Winfo_Get(GameMenu, "exists") = "0" then
          declare
             KeysFile: File_Type;
@@ -839,8 +831,8 @@ package body Maps.UI is
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "game.tcl");
-         Main_Paned := Get_Widget(".gameframe.paned");
-         Game_Header := Get_Widget(".gameframe.header");
+         Main_Paned := Paned;
+         Game_Header := Header;
          Close_Button := Get_Widget(Game_Header & ".closebutton");
          Set_Theme;
          OrdersMenu.AddCommands;
@@ -862,11 +854,11 @@ package body Maps.UI is
          Bind(MessagesFrame, "<Configure>", "ResizeLastMessages");
          Bind(MapView, "<Configure>", "DrawMap");
          Bind(MapView, "<Motion>", "{UpdateMapInfo %x %y}");
-         if Game_Settings.Right_Button then
-            Bind(MapView, "<Button-3>", "{ShowDestinationMenu %X %Y}");
-         else
-            Bind(MapView, "<Button-1>", "{ShowDestinationMenu %X %Y}");
-         end if;
+         Bind
+           (MapView,
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">",
+            "{ShowDestinationMenu %X %Y}");
          Bind
            (MapView, "<MouseWheel>",
             "{if {%D > 0}{ZoomMap raise}else{ZoomMap lower}}");
@@ -920,8 +912,7 @@ package body Maps.UI is
          raise SteamSky_Map_Error with "Can't hide map buttons";
       end if;
       Bind_To_Main_Window
-        (Get_Context, "<Escape>",
-         "{InvokeButton .gameframe.header.closebutton}");
+        (Get_Context, "<Escape>", "{InvokeButton " & Close_Button & "}");
       UpdateMessages;
       UpdateMoveButtons;
       UpdateMapInfo;
