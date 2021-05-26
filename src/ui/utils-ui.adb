@@ -22,7 +22,6 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy; use Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -63,80 +62,6 @@ with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
 
-   -- ****iv* UUI/UUI.TimerId
-   -- FUNCTION
-   -- Id of timer for auto close command
-   -- SOURCE
-   TimerId: Unbounded_String := Null_Unbounded_String;
-   -- ****
-
-   function Close_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData);
-      Dialog: Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header", Interp);
-   begin
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
-      end if;
-      if Argc = 3 then
-         Frame := Get_Widget(CArgv.Arg(Argv, 2), Interp);
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-         Focus(Frame);
-         Destroy(Dialog);
-         return TCL_OK;
-      end if;
-      if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-         Frame := Get_Widget(".gameframe.paned");
-         Tcl.Tk.Ada.Busy.Forget(Frame);
-      end if;
-      Destroy(Dialog);
-      return TCL_OK;
-   end Close_Dialog_Command;
-
-   -- ****o* UUI/UUI.Update_Dialog_Command
-   -- FUNCTION
-   -- Update countdown timer on the selected dialog. If timer reach 0, close
-   -- dialog
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- UpdateDialog dialogname
-   -- Dialogname is name of the dialog to update
-   -- SOURCE
-   function Update_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Update_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      MessageButton: constant Ttk_Button :=
-        Get_Widget(CArgv.Arg(Argv, 1) & ".button", Interp);
-      Text: constant String := Widgets.cget(MessageButton, "-text");
-      Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
-   begin
-      if Seconds = 0 then
-         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
-      end if;
-      Widgets.configure
-        (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
-      TimerId :=
-        To_Unbounded_String
-          (After(1_000, "UpdateDialog " & CArgv.Arg(Argv, 1)));
-      return TCL_OK;
-   end Update_Dialog_Command;
-
    procedure ShowMessage
      (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
       MessageDialog: constant Ttk_Frame :=
@@ -145,20 +70,12 @@ package body Utils.UI is
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
    begin
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
-      end if;
-      Tcl_Eval(Get_Context, "update");
       Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
       Add_Close_Button
         (MessageDialog & ".button",
          "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
          "CloseDialog " & MessageDialog);
       Show_Dialog(MessageDialog, ParentFrame);
-      TimerId :=
-        To_Unbounded_String
-          (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
    end ShowMessage;
 
    procedure AddCommand
@@ -747,8 +664,6 @@ package body Utils.UI is
 
    procedure AddCommands is
    begin
-      AddCommand("CloseDialog", Close_Dialog_Command'Access);
-      AddCommand("UpdateDialog", Update_Dialog_Command'Access);
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
       AddCommand("CheckAmount", Check_Amount_Command'Access);
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
@@ -1108,10 +1023,6 @@ package body Utils.UI is
       InfoLabel: constant Ttk_Label :=
         Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
    begin
-      if TimerId /= Null_Unbounded_String then
-         Cancel(To_String(TimerId));
-         TimerId := Null_Unbounded_String;
-      end if;
       Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
       if ParentName = ".gameframe" then
          Add_Close_Button

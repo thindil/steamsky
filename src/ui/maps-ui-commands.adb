@@ -40,6 +40,7 @@ with Combat.UI; use Combat.UI;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Messages; use Messages;
 with OrdersMenu; use OrdersMenu;

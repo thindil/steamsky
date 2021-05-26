@@ -45,6 +45,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;

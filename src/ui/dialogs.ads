@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Interfaces.C; use Interfaces.C;
+with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 
 -- ****h* Dialogs/Dialogs
@@ -60,9 +62,39 @@ package Dialogs is
    -- Dialog       - The dialog which will be shown
    -- Parent_Frame - The parent frame name for the dialog. Can be empty.
    --                Default value is .gameframe
+   -- With_Timer   - If True, add timer to the dialog. Can be empty. Default
+   --                value is False
    -- SOURCE
    procedure Show_Dialog
-     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe");
+     (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
+      With_Timer: Boolean := False);
+   -- ****
+
+   -- ****o* Dialogs/Dialogs.Close_Dialog_Command
+   -- FUNCTION
+   -- Close the selected dialog
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- CloseDialog dialogname
+   -- Dialogname is name of the dialog to close
+   -- SOURCE
+   function Close_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+      -- ****f* Dialogs/Dialogs.Add_Commands
+      -- FUNCTION
+      -- Add Tcl commands related to dialogs
+      -- SOURCE
+   procedure Add_Commands;
    -- ****
 
 end Dialogs;

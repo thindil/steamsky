@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Crew.Inventory; use Crew.Inventory;
+with Dialogs; use Dialogs;
 with Maps.UI; use Maps.UI;
 with Messages; use Messages;
 with Missions; use Missions;

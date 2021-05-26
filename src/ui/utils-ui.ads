@@ -34,26 +34,6 @@ package Utils.UI is
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
    -- ****
 
-   -- ****o* UUI/UUI.Close_Dialog_Command
-   -- FUNCTION
-   -- Close the selected dialog
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- CloseDialog dialogname
-   -- Dialogname is name of the dialog to close
-   -- SOURCE
-   function Close_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
       -- ****f* UUI/UUI.ShowMessage
       -- FUNCTION
       -- Show the selected message to a player
