@@ -283,8 +283,8 @@ package body Crafts.UI is
            (RecipesTable,
             "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Decontruct " & To_String(Deconstructs(I)) & "} " &
-            Boolean'Image(CanCraft),
+            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "} " & Boolean'Image(CanCraft),
             1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
@@ -502,14 +502,13 @@ package body Crafts.UI is
    begin
       Tag_Configure(RecipeText, "red", "-foreground red");
       if Length(RecipeIndex) > 6
-        and then Slice(RecipeIndex, 1, 5) = "{Stud" then
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
          Recipe.MaterialTypes.Append
            (New_Item =>
-              Items_List
-                (Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1))
+              Items_List(Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex)))
                 .IType);
          Recipe.ResultIndex :=
-           Unbounded_Slice(RecipeIndex, 8, Length(RecipeIndex) - 1);
+           Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
@@ -525,14 +524,13 @@ package body Crafts.UI is
          Recipe.Tool := Alchemy_Tools;
          Recipe.ToolQuality := 100;
       elsif Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          Recipe.MaterialTypes.Append
            (New_Item =>
-              Items_List
-                (Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1))
+              Items_List(Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)))
                 .IType);
          Recipe.ResultIndex :=
-           Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1);
+           Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
          Recipe.MaterialAmounts.Append(New_Item => 1);
          Recipe.ResultAmount := 0;
          Recipe.Workplace := ALCHEMY_LAB;
