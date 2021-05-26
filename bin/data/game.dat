@@ -733,7 +733,7 @@ data file (if needed). To edit attribute name, just edit value of attribute
 `name`. To change attribute description, just edit text between `attribute`
 tags. To add new attribute, just append new line with tag `attribute` with
 it name as attribute `name` and description between tags `attribute`. -->
- <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity.Also used in some craftings.</attribute>
+ <attribute name="Strength">Physical strength of character, determines damage in combat and carrying capacity. Also used in some craftings.</attribute>
  <attribute name="Dexterity">Nimbleness of character, used in many crafts.</attribute>
  <attribute name="Intelligence">Intellect and perception of character, used in many crafts.</attribute>
  <attribute name="Condition">Endurance of character, determine how long he or she can work before they grow tired.</attribute>
