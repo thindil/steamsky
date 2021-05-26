@@ -952,11 +952,11 @@ package body Maps.UI is
    begin
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
-         "{if {[winfo class [focus]] != {TEntry} && [tk busy status .gameframe.header] == 0} {tk_popup " &
-         Widget_Image(GameMenu) & " %X %Y}}");
+         "{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
+         Game_Header & "] == 0} {tk_popup " & GameMenu & " %X %Y}}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
-         "{.gameframe.paned.mapframe.buttons.wait invoke}");
+         "{" & Main_Paned & ".mapframe.buttons.wait invoke}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(3)) & ">",
          "{ZoomMap raise}");
@@ -1052,16 +1052,16 @@ package body Maps.UI is
          "{MoveCursor click %x %y}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(34)) & ">",
-         "{.gameframe.paned.controls.buttons.speed current 0}");
+         "{" & Main_Paned & ".controls.buttons.speed current 0}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(35)) & ">",
-         "{.gameframe.paned.controls.buttons.speed current 1}");
+         "{" & Main_Paned & ".controls.buttons.speed current 1}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(36)) & ">",
-         "{.gameframe.paned.controls.buttons.speed current 2}");
+         "{" & Main_Paned & ".controls.buttons.speed current 2}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
-         "{.gameframe.paned.controls.buttons.speed current 3}");
+         "{" & Main_Paned & ".controls.buttons.speed current 3}");
       Bind_To_Main_Window
         (Get_Context, "<" & To_String(FullScreenAccel) & ">",
          "{ToggleFullScreen}");
