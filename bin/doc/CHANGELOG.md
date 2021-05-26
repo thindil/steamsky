@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Typos and punctation in help
 - Typos in info about experience needed for the next level of skills and
   statistics
+- Typo in Strength attribute description
 
 ## [6.0.2] - 2021-05-09
 
