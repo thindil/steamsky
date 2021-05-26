@@ -349,23 +349,36 @@ package body Themes is
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Pilot_Icon) &
               "}");
-         Label.Name := New_String(".gameframe.header.engineer");
+         Label.Name := New_String(Str => ".gameframe.header.engineer");
          configure
-           (Label,
-            "-text {" & Encode("" & Themes_List(I).Engineer_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.gunner");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Engineer_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.gunner");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Gunner_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.talk");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Gunner_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.talk");
          configure
-           (Label,
-            "-text {" & Encode("" & Themes_List(I).Crew_Trader_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.repairs");
+           (Widgt => Label,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Crew_Trader_Icon) & "}");
+         Label.Name := New_String(Str => ".gameframe.header.repairs");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Repair_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.upgrade");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Repair_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.upgrade");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Upgrade_Icon) & "}");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Upgrade_Icon) &
+              "}");
          Label.Name := New_String(".gameframe.header.clean");
          configure
            (Label, "-text {" & Encode("" & Themes_List(I).Clean_Icon) & "}");
