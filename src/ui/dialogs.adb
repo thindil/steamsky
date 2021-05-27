@@ -23,6 +23,7 @@ with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Config;use Config;
 with CoreUI; use CoreUI;
 with Utils.UI; use Utils.UI;
 
@@ -160,5 +161,21 @@ package body Dialogs is
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("UpdateDialog", Update_Dialog_Command'Access);
    end Add_Commands;
+
+   procedure ShowMessage
+     (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
+      MessageDialog: constant Ttk_Frame :=
+        Create_Dialog(ParentFrame & ".message", Title);
+      MessageLabel: constant Ttk_Label :=
+        Create
+          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
+      Add_Close_Button
+        (MessageDialog & ".button",
+         "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
+         "CloseDialog " & MessageDialog);
+      Show_Dialog(MessageDialog, ParentFrame);
+   end ShowMessage;
 
 end Dialogs;

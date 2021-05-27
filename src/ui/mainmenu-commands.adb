@@ -49,6 +49,7 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;

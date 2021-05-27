@@ -46,14 +46,14 @@ with Tcl.Tklib.Ada.Tooltip;
 with BasesTypes;
 with Careers;
 with Config; use Config;
-with Dialogs;
+with Dialogs; use Dialogs;
 with Factions;
 with Game; use Game;
 with Goals.UI;
 with MainMenu.Commands;
 with Maps.UI;
 with Themes;
-with Utils.UI; use Utils.UI;
+with Utils.UI;
 
 package body MainMenu is
 

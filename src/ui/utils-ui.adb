@@ -62,22 +62,6 @@ with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
 
-   procedure ShowMessage
-     (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
-      MessageDialog: constant Ttk_Frame :=
-        Create_Dialog(ParentFrame & ".message", Title);
-      MessageLabel: constant Ttk_Label :=
-        Create
-          (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
-   begin
-      Tcl.Tk.Ada.Grid.Grid(MessageLabel, "-sticky we -padx 5 -pady 5");
-      Add_Close_Button
-        (MessageDialog & ".button",
-         "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
-         "CloseDialog " & MessageDialog);
-      Show_Dialog(MessageDialog, ParentFrame);
-   end ShowMessage;
-
    procedure AddCommand
      (Name: String; AdaCommand: not null CreateCommands.Tcl_CmdProc) is
       Command: Tcl.Tcl_Command;
