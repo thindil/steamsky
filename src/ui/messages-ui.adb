@@ -27,7 +27,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -35,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
@@ -51,28 +51,17 @@ package body Messages.UI is
      (Message: Message_Data; MessagesView: Tk_Text;
       MessagesType: Message_Type) is
       -- ****
-      MessageTag: Unbounded_String;
+      MessageTag: constant String :=
+        (if Message.Color /= WHITE then
+           " [list " & To_Lower(Message_Color'Image(Message.Color)) & "]"
+         else "");
    begin
-      if Message.MType = MessagesType or MessagesType = Default then
-         case Message.Color is
-            when YELLOW =>
-               MessageTag := To_Unbounded_String(" [list yellow]");
-            when GREEN =>
-               MessageTag := To_Unbounded_String(" [list green]");
-            when RED =>
-               MessageTag := To_Unbounded_String(" [list red]");
-            when BLUE =>
-               MessageTag := To_Unbounded_String(" [list blue]");
-            when CYAN =>
-               MessageTag := To_Unbounded_String(" [list cyan]");
-            when others =>
-               MessageTag := Null_Unbounded_String;
-         end case;
-         Insert
-           (MessagesView, "end",
-            "{" & To_String(Message.Message) & LF & "}" &
-            To_String(MessageTag));
+      if Message.MType /= MessagesType and MessagesType /= Default then
+         return;
       end if;
+      Insert
+        (MessagesView, "end",
+         "{" & To_String(Message.Message) & LF & "}" & MessageTag);
    end ShowMessage;
 
    -- ****o* MUI2/MUI2.Show_Last_Messages_Command
@@ -99,13 +88,10 @@ package body Messages.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      MessagesFrame: Ttk_Frame := Get_Widget(Paned & ".messagesframe", Interp);
+      MessagesFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".messagesframe", Interp);
       MessagesCanvas: constant Tk_Canvas :=
         Get_Widget(MessagesFrame & ".canvas", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       MessagesType: constant Message_Type :=
         (if Argc = 1 then Default
          else Message_Type'Val(Natural'Value(CArgv.Arg(Argv, 1))));
@@ -122,8 +108,8 @@ package body Messages.UI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "messages.tcl");
          Bind(MessagesFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(MessagesCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       if Argc = 1 then
@@ -148,13 +134,13 @@ package body Messages.UI is
          end if;
       end if;
       configure(MessagesView, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       MessagesFrame.Name :=
         New_String(Widget_Image(MessagesCanvas) & ".messages");
       configure
         (MessagesCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
         (MessagesCanvas, "window",
@@ -192,7 +178,7 @@ package body Messages.UI is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types",
+          (Main_Paned & ".messagesframe.canvas.messages.options.types",
            Interp);
    begin
       return
@@ -252,14 +238,13 @@ package body Messages.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      FrameName: constant String :=
+        Main_Paned & ".messagesframe.canvas.messages";
       TypeBox: constant Ttk_ComboBox :=
-        Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.options.types",
-           Interp);
+        Get_Widget(FrameName & ".options.types", Interp);
       MessagesType: Message_Type;
       MessagesView: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.messagesframe.canvas.messages.list.view", Interp);
+        Get_Widget(FrameName & ".list.view", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       MessagesType := Message_Type'Val(Natural'Value(Current(TypeBox)));
