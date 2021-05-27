@@ -563,14 +563,14 @@ package body Crafts.UI is
          for J in Items_List.Iterate loop
             IsMaterial := False;
             if Length(RecipeIndex) > 6
-              and then Slice(RecipeIndex, 1, 5) = "{Stud" then
+              and then Slice(RecipeIndex, 1, 5) = "Study" then
                if Items_List(J).Name = Items_List(Recipe.ResultIndex).Name then
                   IsMaterial := True;
                end if;
             elsif Length(RecipeIndex) > 12
-              and then Slice(RecipeIndex, 1, 11) = "{Deconstruc" then
+              and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
                if Objects_Container.Key(J) =
-                 Unbounded_Slice(RecipeIndex, 14, Length(RecipeIndex) - 1) then
+                 Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex)) then
                   IsMaterial := True;
                end if;
             else
