@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Default keyboard shortcuts for change the player's ship speed
 
 ### Fixed
 - Removed frame around map after clicking on it
