@@ -29,6 +29,7 @@ with Combat; use Combat;
 with Combat.UI; use Combat.UI;
 with Crafts; use Crafts;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;

@@ -50,6 +50,7 @@ with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
 with Crafts; use Crafts;
+with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;

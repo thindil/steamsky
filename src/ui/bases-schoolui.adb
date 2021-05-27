@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Maps.UI; use Maps.UI;
 with Trades; use Trades;
 with Utils.UI; use Utils.UI;

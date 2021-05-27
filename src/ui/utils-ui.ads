@@ -34,20 +34,6 @@ package Utils.UI is
    package CreateCommands is new Tcl.Ada.Generic_Command(Integer);
    -- ****
 
-      -- ****f* UUI/UUI.ShowMessage
-      -- FUNCTION
-      -- Show the selected message to a player
-      -- PARAMETERS
-      -- Text        - Text of message to show
-      -- ParentFrame - The parent frame of the message widget. Default is
-      --               the game frame. Can be empty
-      -- Title       - The text show in the dialog header.
-      -- SOURCE
-   procedure ShowMessage
-     (Text: String; ParentFrame: String := ".gameframe"; Title: String) with
-      Pre => Text'Length > 0 and ParentFrame'Length > 0;
-   -- ****
-
    -- ****o* UUI/UUI.Show_On_Map_Command
    -- FUNCTION
    -- Show the selected point on map
