@@ -34,7 +34,7 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
--- with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -369,7 +369,7 @@ package body Crafts.UI is
       if CArgv.Arg(Argv, 2) = "TRUE" then
          Menu.Add
            (RecipeMenu, "command",
-            "-label {Set crafting order} -command {SetRecipe {" &
+            "-label {Set crafting order} -command {ShowSetRecipe {" &
             CArgv.Arg(Argv, 1) & "}}");
       end if;
       Menu.Add
@@ -382,85 +382,80 @@ package body Crafts.UI is
       return TCL_OK;
    end Show_Recipe_Menu_Command;
 
-   -- ****if* CUI4/CUI4.ShowSetRecipe
+   -- ****o* CUI4/CUI4.Show_Set_Recipe_Command
    -- FUNCTION
-   -- Show UI to set selected recipe as crafting order
+   -- Show dialog to set the selected recipe as crafting order
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetRecipe index
+   -- Index is the index of the recipe to craft.
    -- SOURCE
---   procedure ShowSetRecipe(Index: Unbounded_String) is
---      -- ****
---      MaxAmount: Positive;
---      MType: ModuleType;
---      ModulesList: Unbounded_String;
---      FrameName: constant String :=
---        Main_Paned & ".craftframe.canvas.craft.item.set";
---      AmountBox: constant Ttk_SpinBox := Get_Widget(FrameName & ".amount");
---      MaxLabel: constant Ttk_Label := Get_Widget(FrameName & ".maxamount");
---      ModulesBox: constant Ttk_ComboBox := Get_Widget(FrameName & ".workshop");
---      RecipeIndex: constant Unbounded_String :=
---        (if Element(Index, 1) = '{' then
---           Unbounded_Slice(Index, 2, Length(Index) - 1)
---         else Index);
---   begin
---      MaxAmount := CheckRecipe(RecipeIndex);
---      Set(AmountBox, "1");
---      configure
---        (AmountBox,
---         "-to" & Positive'Image(MaxAmount) &
---         " -validatecommand {ValidateSpinbox %W %P}");
---      if MaxAmount > 1 then
---         configure(MaxLabel, "-text {max" & Positive'Image(MaxAmount) & "}");
---         Tcl.Tk.Ada.Grid.Grid(MaxLabel);
---      else
---         Tcl.Tk.Ada.Grid.Grid_Remove(MaxLabel);
---      end if;
---      if Length(RecipeIndex) > 6
---        and then Slice(RecipeIndex, 1, 5) = "Study" then
---         Tcl.Tk.Ada.Grid.Grid_Remove(AmountBox);
---      else
---         Tcl.Tk.Ada.Grid.Grid(AmountBox);
---      end if;
---      if Length(RecipeIndex) > 6
---        and then Slice(RecipeIndex, 1, 5) = "Study" then
---         MType := ALCHEMY_LAB;
---      elsif Length(RecipeIndex) > 12
---        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
---         MType := ALCHEMY_LAB;
---      else
---         MType := Recipes_List(RecipeIndex).Workplace;
---      end if;
---      Show_Workshops_List_Loop :
---      for Module of PlayerShip.Modules loop
---         if Modules_List(Module.ProtoIndex).MType = MType then
---            Append(ModulesList, " {" & Module.Name & "}");
---         end if;
---      end loop Show_Workshops_List_Loop;
---      configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
---      Current(ModulesBox, "0");
---   exception
---      when An_Exception : Crafting_No_Materials =>
---         ShowMessage
---           (Text =>
---              "You don't have enough materials to start " &
---              Exception_Message(An_Exception) & ".",
---            Title => "Can't set crafting recipe");
---      when An_Exception : Crafting_No_Tools =>
---         ShowMessage
---           (Text =>
---              "You don't have the proper tool to start " &
---              Exception_Message(An_Exception) & ".",
---            Title => "Can't set crafting recipe");
---      when Trade_No_Free_Cargo =>
---         ShowMessage
---           (Text =>
---              "You don't have that much free space in your ship's cargo.",
---            Title => "Can't set crafting recipe");
---      when An_Exception : Crafting_No_Workshop =>
---         ShowMessage
---           (Text =>
---              "You don't have proper a workplace to start " &
---              Exception_Message(An_Exception) & ".",
---            Title => "Can't set crafting recipe");
---   end ShowSetRecipe;
+   function Show_Set_Recipe_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Set_Recipe_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      MType: ModuleType;
+      ModulesList: Unbounded_String;
+      CraftDialog: constant Ttk_Frame :=
+        Create_Dialog(".craftdialog", "Set crafting recipe");
+      MaxLabel: constant Ttk_Label := Create(CraftDialog & ".maxamount");
+      ModulesBox: constant Ttk_ComboBox := Create(CraftDialog & ".workshop");
+      RecipeIndex: constant Unbounded_String :=
+        To_Unbounded_String(CArgv.Arg(Argv, 1));
+      MaxAmount: constant Positive := CheckRecipe(RecipeIndex);
+      AmountBox: constant Ttk_SpinBox :=
+        Create
+          (CraftDialog & ".amount",
+           "-to" & Positive'Image(MaxAmount) &
+           " -validatecommand {ValidateSpinbox %W %P}");
+   begin
+      Set(AmountBox, "1");
+      if MaxAmount > 1 then
+         configure(MaxLabel, "-text {max" & Positive'Image(MaxAmount) & "}");
+         Tcl.Tk.Ada.Grid.Grid(MaxLabel);
+      else
+         Tcl.Tk.Ada.Grid.Grid_Remove(MaxLabel);
+      end if;
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
+         Tcl.Tk.Ada.Grid.Grid_Remove(AmountBox);
+      else
+         Tcl.Tk.Ada.Grid.Grid(AmountBox);
+      end if;
+      if Length(RecipeIndex) > 6
+        and then Slice(RecipeIndex, 1, 5) = "Study" then
+         MType := ALCHEMY_LAB;
+      elsif Length(RecipeIndex) > 12
+        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+         MType := ALCHEMY_LAB;
+      else
+         MType := Recipes_List(RecipeIndex).Workplace;
+      end if;
+      Show_Workshops_List_Loop :
+      for Module of PlayerShip.Modules loop
+         if Modules_List(Module.ProtoIndex).MType = MType then
+            Append(ModulesList, " {" & Module.Name & "}");
+         end if;
+      end loop Show_Workshops_List_Loop;
+      configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
+      Current(ModulesBox, "0");
+      Add_Close_Button
+        (CraftDialog & ".close", "Cancel", "CloseDialog " & CraftDialog);
+      Show_Dialog(CraftDialog);
+      return TCL_OK;
+   end Show_Set_Recipe_Command;
 
    -- ****o* CUI4/CUI4.Show_Recipe_Info_Command
    -- FUNCTION
@@ -737,6 +732,7 @@ package body Crafts.UI is
    begin
       AddCommand("ShowCrafting", Show_Crafting_Command'Access);
       AddCommand("ShowRecipeMenu", Show_Recipe_Menu_Command'Access);
+      AddCommand("ShowSetRecipe", Show_Set_Recipe_Command'Access);
       AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
       AddCommand("SetCrafting", Set_Crafting_Command'Access);
    end AddCommands;
