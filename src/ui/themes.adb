@@ -379,25 +379,39 @@ package body Themes is
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Upgrade_Icon) &
               "}");
-         Label.Name := New_String(".gameframe.header.clean");
+         Label.Name := New_String(Str => ".gameframe.header.clean");
          configure
-           (Label, "-text {" & Encode("" & Themes_List(I).Clean_Icon) & "}");
-         Label.Name := New_String(".gameframe.header.crafting");
+           (Widgt => Label,
+            options =>
+              "-text {" & Encode(Item => "" & Themes_List(I).Clean_Icon) &
+              "}");
+         Label.Name := New_String(Str => ".gameframe.header.crafting");
          configure
-           (Label,
-            "-text {" & Encode("" & Themes_List(I).Manufacture_Icon) & "}");
-         Button.Name := New_String(".gameframe.paned.mapframe.buttons.show");
+           (Widgt => Label,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Manufacture_Icon) & "}");
+         Button.Name :=
+           New_String(Str => ".gameframe.paned.mapframe.buttons.show");
          configure
-           (Button,
-            "-text {" & Encode("" & Themes_List(I).Move_Map_Up_Icon) & "}");
-         Button.Name := New_String(".gameframe.paned.mapframe.buttons.hide");
+           (Widgt => Button,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Move_Map_Up_Icon) & "}");
+         Button.Name :=
+           New_String(Str => ".gameframe.paned.mapframe.buttons.hide");
          configure
-           (Button,
-            "-text {" & Encode("" & Themes_List(I).Move_Map_Down_Icon) & "}");
-         Button.Name := New_String(".gameframe.paned.mapframe.buttons.left");
+           (Widgt => Button,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Move_Map_Down_Icon) & "}");
+         Button.Name :=
+           New_String(Str => ".gameframe.paned.mapframe.buttons.left");
          configure
-           (Button,
-            "-text {" & Encode("" & Themes_List(I).Move_Map_Left_Icon) & "}");
+           (Widgt => Button,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Move_Map_Left_Icon) & "}");
          Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
          configure
            (Button,
