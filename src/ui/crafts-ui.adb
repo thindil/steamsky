@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
--- with Ada.Exceptions; use Ada.Exceptions;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -29,6 +28,7 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -44,7 +44,6 @@ with Dialogs; use Dialogs;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
 with Table; use Table;
--- with Trades; use Trades;
 with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
@@ -408,13 +407,40 @@ package body Crafts.UI is
       pragma Unreferenced(ClientData, Interp, Argc);
       MType: ModuleType;
       ModulesList: Unbounded_String;
-      CraftDialog: constant Ttk_Frame :=
-        Create_Dialog(".craftdialog", "Set crafting recipe");
-      MaxLabel: constant Ttk_Label := Create(CraftDialog & ".maxamount");
-      ModulesBox: constant Ttk_ComboBox := Create(CraftDialog & ".workshop");
       RecipeIndex: constant Unbounded_String :=
         To_Unbounded_String(CArgv.Arg(Argv, 1));
+      RecipeLength: constant Positive := Length(RecipeIndex);
+      RecipeType: constant String :=
+        (if RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Study" then
+           "Study"
+         elsif RecipeLength > 6 and then Slice(RecipeIndex, 1, 5) = "Decon"
+         then "Deconstruct"
+         else "Craft");
+      CraftDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (".craftdialog",
+           (if RecipeType = "Study" then
+              "Study " &
+              To_String
+                (Items_List(Unbounded_Slice(RecipeIndex, 7, RecipeLength))
+                   .Name)
+            elsif RecipeType = "Deconstruct" then
+              "Deconstruct " &
+              To_String
+                (Items_List(Unbounded_Slice(RecipeIndex, 13, RecipeLength))
+                   .Name)
+            else "Craft " &
+              To_String
+                (Items_List(Recipes_List(RecipeIndex).ResultIndex).Name)),
+           275, 2);
       MaxAmount: constant Positive := CheckRecipe(RecipeIndex);
+      AmountLabel: constant Ttk_Label :=
+        Create(CraftDialog & ".amountlabel", "-text {Amount:}");
+      ModulesBox: constant Ttk_ComboBox := Create(CraftDialog & ".workshop");
+      MaxButton: constant Ttk_Button :=
+        Create
+          (CraftDialog & ".maxamount",
+           "-text {max" & Positive'Image(MaxAmount) & "}");
       AmountBox: constant Ttk_SpinBox :=
         Create
           (CraftDialog & ".amount",
@@ -422,23 +448,14 @@ package body Crafts.UI is
            " -validatecommand {ValidateSpinbox %W %P}");
    begin
       Set(AmountBox, "1");
-      if MaxAmount > 1 then
-         configure(MaxLabel, "-text {max" & Positive'Image(MaxAmount) & "}");
-         Tcl.Tk.Ada.Grid.Grid(MaxLabel);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(MaxLabel);
+      if RecipeType /= "Study" then
+         Tcl.Tk.Ada.Grid.Grid(AmountLabel);
+         if MaxAmount > 1 then
+            Tcl.Tk.Ada.Grid.Grid(MaxButton, "-row 1 -column 1");
+         end if;
+         Tcl.Tk.Ada.Grid.Grid(AmountBox, "-columnspan 2");
       end if;
-      if Length(RecipeIndex) > 6
-        and then Slice(RecipeIndex, 1, 5) = "Study" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(AmountBox);
-      else
-         Tcl.Tk.Ada.Grid.Grid(AmountBox);
-      end if;
-      if Length(RecipeIndex) > 6
-        and then Slice(RecipeIndex, 1, 5) = "Study" then
-         MType := ALCHEMY_LAB;
-      elsif Length(RecipeIndex) > 12
-        and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
+      if RecipeType in "Study" | "Deconstruct" then
          MType := ALCHEMY_LAB;
       else
          MType := Recipes_List(RecipeIndex).Workplace;
