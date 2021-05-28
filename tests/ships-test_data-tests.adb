@@ -29,9 +29,9 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CreateShip_c5e851_13521c
+   function Wrap_Test_CreateShip_2535ca_13521c
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
+      Speed: Ship_Speed; RandomUpgrades: Boolean := True) return ShipRecord is
    begin
       begin
          pragma Assert
@@ -44,7 +44,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_CreateShip_c5e851_13521c_Result: constant ShipRecord :=
+         Test_CreateShip_2535ca_13521c_Result: constant ShipRecord :=
            GNATtest_Generated.GNATtest_Standard.Ships.CreateShip
              (ProtoIndex, Name, X, Y, Speed, RandomUpgrades);
       begin
@@ -57,22 +57,22 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_CreateShip_c5e851_13521c_Result;
+         return Test_CreateShip_2535ca_13521c_Result;
       end;
-   end Wrap_Test_CreateShip_c5e851_13521c;
+   end Wrap_Test_CreateShip_2535ca_13521c;
 --  end read only
 
 --  begin read only
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test);
-   procedure Test_CreateShip_c5e851_13521c(Gnattest_T: in out Test) renames
+   procedure Test_CreateShip_2535ca_13521c(Gnattest_T: in out Test) renames
      Test_CreateShip_test_createship;
---  id:2.2/c5e851ac0c40246a/CreateShip/1/0/test_createship/
+--  id:2.2/2535ca3e4e12981b/CreateShip/1/0/test_createship/
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test) is
       function CreateShip
         (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-         Speed: ShipSpeed; RandomUpgrades: Boolean := True)
+         Speed: Ship_Speed; RandomUpgrades: Boolean := True)
          return ShipRecord renames
-        Wrap_Test_CreateShip_c5e851_13521c;
+        Wrap_Test_CreateShip_2535ca_13521c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

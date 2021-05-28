@@ -131,30 +131,30 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_ChangeShipSpeed_b9c437_17b968
-     (SpeedValue: ShipSpeed) return String is
+   function Wrap_Test_ChangeShipSpeed_a103ef_17b968
+     (SpeedValue: Ship_Speed) return String is
    begin
       declare
-         Test_ChangeShipSpeed_b9c437_17b968_Result: constant String :=
+         Test_ChangeShipSpeed_a103ef_17b968_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Ships.Movement.ChangeShipSpeed
              (SpeedValue);
       begin
-         return Test_ChangeShipSpeed_b9c437_17b968_Result;
+         return Test_ChangeShipSpeed_a103ef_17b968_Result;
       end;
-   end Wrap_Test_ChangeShipSpeed_b9c437_17b968;
+   end Wrap_Test_ChangeShipSpeed_a103ef_17b968;
 --  end read only
 
 --  begin read only
    procedure Test_ChangeShipSpeed_test_changeshipspeed
      (Gnattest_T: in out Test);
-   procedure Test_ChangeShipSpeed_b9c437_17b968
+   procedure Test_ChangeShipSpeed_a103ef_17b968
      (Gnattest_T: in out Test) renames
      Test_ChangeShipSpeed_test_changeshipspeed;
---  id:2.2/b9c4372651d37990/ChangeShipSpeed/1/0/test_changeshipspeed/
+--  id:2.2/a103efdf9c3f9d91/ChangeShipSpeed/1/0/test_changeshipspeed/
    procedure Test_ChangeShipSpeed_test_changeshipspeed
      (Gnattest_T: in out Test) is
-      function ChangeShipSpeed(SpeedValue: ShipSpeed) return String renames
-        Wrap_Test_ChangeShipSpeed_b9c437_17b968;
+      function ChangeShipSpeed(SpeedValue: Ship_Speed) return String renames
+        Wrap_Test_ChangeShipSpeed_a103ef_17b968;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

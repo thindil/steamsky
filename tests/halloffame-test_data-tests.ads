@@ -11,7 +11,7 @@ package HallOfFame.Test_Data.Tests is
    null record;
 
    procedure Test_Update_Hall_Of_Fame_45b65a_b0b945(Gnattest_T: in out Test);
-   --  halloffame.ads:74:4:Update_Hall_Of_Fame:Test_UpdateHallOfFame
+   --  halloffame.ads:73:4:Update_Hall_Of_Fame:Test_UpdateHallOfFame
 
 end HallOfFame.Test_Data.Tests;
 --  end read only
