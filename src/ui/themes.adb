@@ -13,23 +13,27 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Text_IO; use Ada.Text_IO;
-with Ada.Directories; use Ada.Directories;
+with Ada.Text_IO;
+with Ada.Directories;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
-use Ada.Strings.UTF_Encoding.Wide_Strings;
-with Interfaces.C.Strings; use Interfaces.C.Strings;
-with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Interfaces.C.Strings;
+with GNAT.Directory_Operations;
+with Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkLabel;
 with Config; use Config;
-with CoreUI; use CoreUI;
-with Game; use Game;
+with CoreUI;
+with Game;
 
 package body Themes is
 
    procedure Load_Themes is
+      use Ada.Text_IO;
+      use Ada.Directories;
+      use GNAT.Directory_Operations;
+      use Game;
+
       Themes_Directories, Files: Search_Type;
       Found_Directory, Found_File: Directory_Entry_Type;
       Config_File: File_Type;
@@ -309,6 +313,13 @@ package body Themes is
    end Load_Themes;
 
    procedure Set_Theme is
+      use Ada.Strings.UTF_Encoding.Wide_Strings;
+      use Interfaces.C.Strings;
+      use Tcl.Tk.Ada.Widgets;
+      use Tcl.Tk.Ada.Widgets.TtkButton;
+      use Tcl.Tk.Ada.Widgets.TtkLabel;
+      use CoreUI;
+
       Label: Ttk_Label := Get_Widget(pathName => Game_Header & ".nofuel");
       Button: Ttk_Button :=
         Get_Widget(pathName => Main_Paned & ".mapframe.buttons.show");
@@ -412,10 +423,13 @@ package body Themes is
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Move_Map_Left_Icon) & "}");
-         Button.Name := New_String(".gameframe.paned.mapframe.buttons.right");
+         Button.Name :=
+           New_String(Str => ".gameframe.paned.mapframe.buttons.right");
          configure
-           (Button,
-            "-text {" & Encode("" & Themes_List(I).Move_Map_Right_Icon) & "}");
+           (Widgt => Button,
+            options =>
+              "-text {" &
+              Encode(Item => "" & Themes_List(I).Move_Map_Right_Icon) & "}");
          <<End_Of_Set_Theme_Loop>>
       end loop Set_Theme_Loop;
    end Set_Theme;
