@@ -437,23 +437,24 @@ package body Crafts.UI is
       AmountLabel: constant Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
       ModulesBox: constant Ttk_ComboBox := Create(CraftDialog & ".workshop");
-      MaxButton: constant Ttk_Button :=
-        Create
-          (CraftDialog & ".maxamount",
-           "-text {max" & Positive'Image(MaxAmount) & "}");
       AmountBox: constant Ttk_SpinBox :=
         Create
           (CraftDialog & ".amount",
            "-to" & Positive'Image(MaxAmount) &
-           " -validatecommand {ValidateSpinbox %W %P}");
+           " -validatecommand {ValidateSpinbox %W %P} -width 21");
+      MaxButton: constant Ttk_Button :=
+        Create
+          (CraftDialog & ".maxamount",
+           "-text {max" & Positive'Image(MaxAmount) & "} -command {" &
+           AmountBox & " set" & Positive'Image(MaxAmount) & "}");
    begin
       Set(AmountBox, "1");
       if RecipeType /= "Study" then
          Tcl.Tk.Ada.Grid.Grid(AmountLabel);
          if MaxAmount > 1 then
-            Tcl.Tk.Ada.Grid.Grid(MaxButton, "-row 1 -column 1");
+            Tcl.Tk.Ada.Grid.Grid(MaxButton, "-row 1 -column 1 -padx {0 5}");
          end if;
-         Tcl.Tk.Ada.Grid.Grid(AmountBox, "-columnspan 2");
+         Tcl.Tk.Ada.Grid.Grid(AmountBox, "-columnspan 2 -padx 5");
       end if;
       if RecipeType in "Study" | "Deconstruct" then
          MType := ALCHEMY_LAB;
