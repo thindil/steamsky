@@ -186,6 +186,14 @@ namespace eval ttk::theme::steamsky {
 
       # Entry setting
       ttk::style configure TEntry -insertcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4 -lightcolor black -bordercolor $colors(-darkorange)
+      bind TEntry <KeyPress-Return> {
+         focus [winfo parent %W]
+         break
+      }
+      bind TEntry <KeyPress-Escape> {
+         focus [winfo parent %W]
+         break
+      }
 
       # Spinbox setting
       ttk::style configure TSpinbox -arrowcolor $colors(-goldenyellow) -foreground $colors(-goldenyellow) -insertcolor $colors(-goldenyellow) -fieldbackground $colors(-almostblackred) -padding 4
