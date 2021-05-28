@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
+with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Items; use Items;
 with Maps; use Maps;
@@ -74,28 +75,21 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String :=
+        Main_Paned & ".missionsframe.canvas.missions";
       MissionsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
-           Interp);
+        Get_Widget(FrameName & ".missions.missionsview", Interp);
       MissionInfo: Unbounded_String;
       MissionText: constant Tk_Text :=
-        Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.info.text",
-           Interp);
+        Get_Widget(FrameName & ".info.info.text", Interp);
       MissionLabel: constant Ttk_Label :=
-        Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.missioninfo",
-           Interp);
+        Get_Widget(FrameName & ".info.missioninfo", Interp);
       Button: constant Ttk_Button :=
-        Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.set", Interp);
+        Get_Widget(FrameName & ".info.set", Interp);
       CanAccept: Boolean := True;
       CabinTaken: Boolean := False;
       MissionScale: constant Ttk_Scale :=
-        Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.info.reward.amount",
-           Interp);
+        Get_Widget(FrameName & ".info.reward.amount", Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
       Mission: Mission_Data :=
@@ -206,20 +200,13 @@ package body Missions.UI is
          declare
             MissionsLimit: Natural;
          begin
-            case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
-              .Reputation
-              (1) is
-               when 0 .. 25 =>
-                  MissionsLimit := 1;
-               when 26 .. 50 =>
-                  MissionsLimit := 3;
-               when 51 .. 75 =>
-                  MissionsLimit := 5;
-               when 76 .. 100 =>
-                  MissionsLimit := 10;
-               when others =>
-                  MissionsLimit := 0;
-            end case;
+            MissionsLimit :=
+              (case SkyBases
+                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                 .Reputation
+                 (1) is
+                 when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
+                 when 76 .. 100 => 10, when others => 0);
             Count_Missions_Limit_Loop :
             for Mission of AcceptedMissions loop
                if Mission.StartBase =
@@ -228,11 +215,7 @@ package body Missions.UI is
                   exit Count_Missions_Limit_Loop when MissionsLimit = 0;
                end if;
             end loop Count_Missions_Limit_Loop;
-            if CanAccept then
-               State(Button, "!disabled");
-            else
-               State(Button, "disabled");
-            end if;
+            State(Button, (if CanAccept then "!disabled" else "disabled"));
             if MissionsLimit > 0 then
                configure
                  (MissionLabel,
@@ -277,7 +260,7 @@ package body Missions.UI is
       pragma Unreferenced(Argc);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
+          (Main_Paned & ".missionsframe.canvas.missions.missions.missionsview",
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
@@ -295,12 +278,11 @@ package body Missions.UI is
    procedure RefreshMissionsList(List: Mission_Container.Vector) is
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview");
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Get_Context);
+          (Main_Paned &
+           ".missionsframe.canvas.missions.missions.missionsview");
    begin
       if List.Length = 0 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          ShowSkyMap(True);
          return;
       end if;
@@ -378,7 +360,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc, Argv);
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
-          (".gameframe.paned.missionsframe.canvas.missions.missions.missionsview",
+          (Main_Paned & ".missionsframe.canvas.missions.missions.missionsview",
            Interp);
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
@@ -418,15 +400,12 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      MissionsFrame: Ttk_Frame := Get_Widget(Paned & ".missionsframe", Interp);
+      MissionsFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".missionsframe", Interp);
       MissionsCanvas: constant Tk_Canvas :=
         Get_Widget(MissionsFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
         Get_Widget(MissionsCanvas & ".missions.info.missioninfo", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -441,7 +420,7 @@ package body Missions.UI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp missions}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
       if SkyBases(BaseIndex).Missions.Length = 0 then
          ShowSkyMap(True);
@@ -450,8 +429,8 @@ package body Missions.UI is
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
       configure
         (MissionsCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       MissionsFrame.Name :=
         New_String(Widget_Image(MissionsCanvas) & ".missions");
