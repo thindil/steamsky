@@ -1000,25 +1000,6 @@ package body Utils.UI is
       end if;
    end ShowInventoryItemInfo;
 
-   procedure ShowInfo
-     (Text: String; ParentName: String := ".gameframe"; Title: String) is
-      InfoDialog: constant Ttk_Frame :=
-        Create_Dialog(".info", Title, 275, 1, ParentName);
-      InfoLabel: constant Ttk_Label :=
-        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
-   begin
-      Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
-      if ParentName = ".gameframe" then
-         Add_Close_Button
-           (InfoDialog & ".button", "Close", "CloseDialog " & InfoDialog);
-      else
-         Add_Close_Button
-           (InfoDialog & ".button", "Close",
-            "CloseDialog " & InfoDialog & " " & ParentName);
-      end if;
-      Show_Dialog(InfoDialog);
-   end ShowInfo;
-
    procedure ShowManipulateItem
      (Title, Command, Action: String;
       ItemIndex: Inventory_Container.Extended_Index;
