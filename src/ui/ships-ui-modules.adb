@@ -401,7 +401,7 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Module: constant ModuleData := PlayerShip.Modules(ModuleIndex);
+      Module: constant Module_Data := PlayerShip.Modules(ModuleIndex);
       MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;

@@ -62,7 +62,7 @@ package Ships.Movement is
       -- RESULT
       -- Empty string if speed was changed, otherwise message what goes wrong
       -- SOURCE
-   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String with
+   function ChangeShipSpeed(SpeedValue: Ship_Speed) return String with
       Test_Case => (Name => "Test_ChangeShipSpeed", Mode => Robustness);
       -- ****
 

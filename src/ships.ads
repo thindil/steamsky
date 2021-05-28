@@ -32,26 +32,26 @@ with Mobs; use Mobs;
 package Ships is
 -- ****
 
-   -- ****t* Ships/Ships.ShipSpeed
+   -- ****t* Ships/Ships.Ship_Speed
    -- FUNCTION
    -- Ship speed states
    -- SOURCE
-   type ShipSpeed is
+   type Ship_Speed is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
    -- ****
 
-   -- ****t* Ships/Ships.ShipCombatAi
+   -- ****t* Ships/Ships.Ship_Combat_Ai
    -- FUNCTION
    -- NPC ships combat AI types
    -- SOURCE
-   type ShipCombatAi is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
+   type Ship_Combat_Ai is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
    -- ****
 
-   -- ****t* Ships/Ships.ShipUpgrade
+   -- ****t* Ships/Ships.Ship_Upgrade
    -- FUNCTION
    -- Player ship types of module upgrades
    -- SOURCE
-   type ShipUpgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
+   type Ship_Upgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    -- ****
 
    -- ****t* Ships/Ships.Data_Array
@@ -61,16 +61,16 @@ package Ships is
    type Data_Array is array(1 .. 3) of Integer;
    -- ****
 
-   -- ****t* Ships/Ships.ModuleType2
+   -- ****t* Ships/Ships.Module_Type_2
    -- FUNCTION
    -- Types of ships modules
    -- SOURCE
-   type ModuleType2 is
+   type Module_Type_2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
    -- ****
 
-   -- ****s* Ships/Ships.ModuleData
+   -- ****s* Ships/Ships.Module_Data
    -- FUNCTION
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
    -- bays don't have any special fields
@@ -105,7 +105,7 @@ package Ships is
    --                    gun
    -- Data             - Various data for module (depends on module)
    -- SOURCE
-   type ModuleData(MType: ModuleType2 := ANY) is record
+   type Module_Data(MType: Module_Type_2 := ANY) is record
       Name: Unbounded_String;
       ProtoIndex: Unbounded_String;
       Weight: Natural;
@@ -113,7 +113,7 @@ package Ships is
       MaxDurability: Natural;
       Owner: Natural_Container.Vector;
       UpgradeProgress: Integer;
-      UpgradeAction: ShipUpgrade;
+      UpgradeAction: Ship_Upgrade;
       case MType is
          when ENGINE =>
             FuelUsage: Positive;
@@ -154,7 +154,7 @@ package Ships is
    -- FUNCTION
    -- Used to store modules data in ships
    -- SOURCE
-   package Modules_Container is new Vectors(Positive, ModuleData);
+   package Modules_Container is new Vectors(Positive, Module_Data);
    -- ****
 
    -- ****t* Ships/Ships.Crew_Container
@@ -186,7 +186,7 @@ package Ships is
       Name: Unbounded_String;
       SkyX: Map_X_Range;
       SkyY: Map_Y_Range;
-      Speed: ShipSpeed;
+      Speed: Ship_Speed;
       Modules: Modules_Container.Vector;
       Cargo: Inventory_Container.Vector;
       Crew: Crew_Container.Vector;
@@ -244,7 +244,7 @@ package Ships is
       Name: Unbounded_String;
       Modules: UnboundedString_Container.Vector;
       Accuracy: Natural_Array(1 .. 2);
-      CombatAI: ShipCombatAi;
+      CombatAI: Ship_Combat_Ai;
       Evasion: Natural_Array(1 .. 2);
       Loot: Natural_Array(1 .. 2);
       Perception: Natural_Array(1 .. 2);
@@ -324,7 +324,8 @@ package Ships is
    -- SOURCE
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord with
+      Speed: Ship_Speed; RandomUpgrades: Boolean := True)
+      return ShipRecord with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****

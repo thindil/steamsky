@@ -197,7 +197,7 @@ package Config is
    -- SOURCE
    type Game_Settings_Record is record
       Auto_Rest: Boolean;
-      Undock_Speed: ShipSpeed;
+      Undock_Speed: Ship_Speed;
       Auto_Center: Boolean;
       Auto_Return: Boolean;
       Auto_Finish: Boolean;

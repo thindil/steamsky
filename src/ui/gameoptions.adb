@@ -229,7 +229,7 @@ package body GameOptions is
       ComboBox_Array: constant array(Positive range <>) of Widget_Data :=
         ((To_Unbounded_String(OptionsCanvas & ".options.general.speed"),
           To_Unbounded_String
-            (Natural'Image(ShipSpeed'Pos(Game_Settings.Undock_Speed) - 1))),
+            (Natural'Image(Ship_Speed'Pos(Game_Settings.Undock_Speed) - 1))),
          (To_Unbounded_String(OptionsCanvas & ".options.general.automovestop"),
           To_Unbounded_String
             (Natural'Image
@@ -503,7 +503,7 @@ package body GameOptions is
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       Game_Settings.Auto_Rest := Get_Checkbox_Value(".general.autorest");
       Game_Settings.Undock_Speed :=
-        ShipSpeed'Val(Get_Combobox_Value(".general.speed") + 1);
+        Ship_Speed'Val(Get_Combobox_Value(".general.speed") + 1);
       Game_Settings.Auto_Center := Get_Checkbox_Value(".general.autocenter");
       Game_Settings.Auto_Return := Get_Checkbox_Value(".general.autoreturn");
       Game_Settings.Auto_Finish := Get_Checkbox_Value(".general.autofinish");

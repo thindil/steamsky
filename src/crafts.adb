@@ -406,7 +406,7 @@ package body Crafts is
       CraftingMaterial: Natural;
       CrafterIndex: Crew_Container.Extended_Index;
       CargoIndex, ToolIndex: Inventory_Container.Extended_Index;
-      procedure ResetOrder(Module: in out ModuleData; ModuleOwner: Natural) is
+      procedure ResetOrder(Module: in out Module_Data; ModuleOwner: Natural) is
          HaveWorker: Boolean := False;
       begin
          if ToolIndex in

@@ -1213,7 +1213,7 @@ package body Combat is
         Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) then
          Message :=
-           To_Unbounded_String(ChangeShipSpeed(ShipSpeed'Val(EngineerOrder)));
+           To_Unbounded_String(ChangeShipSpeed(Ship_Speed'Val(EngineerOrder)));
          if Length(Message) > 0 then
             AddMessage(To_String(Message), OrderMessage, RED);
          end if;
@@ -1287,13 +1287,13 @@ package body Combat is
          when BERSERKER =>
             if Enemy.Distance > 10 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
-                 ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                 Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                AddMessage
                  (To_String(EnemyName) & " increases speed.", CombatMessage);
                EnemyPilotOrder := 1;
             elsif Enemy.Distance <= 10 and Enemy.Ship.Speed = FULL_SPEED then
                Enemy.Ship.Speed :=
-                 ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
+                 Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                AddMessage
                  (To_String(EnemyName) & " decreases speed.", CombatMessage);
                EnemyPilotOrder := 2;
@@ -1302,14 +1302,14 @@ package body Combat is
             if Enemy.Distance > DamageRange and
               Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
-                 ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                 Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                AddMessage
                  (To_String(EnemyName) & " increases speed.", CombatMessage);
                EnemyPilotOrder := 1;
             elsif Enemy.Distance < DamageRange and
               Enemy.Ship.Speed > QUARTER_SPEED then
                Enemy.Ship.Speed :=
-                 ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) - 1);
+                 Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) - 1);
                AddMessage
                  (To_String(EnemyName) & " decreases speed.", CombatMessage);
                EnemyPilotOrder := 2;
@@ -1317,7 +1317,7 @@ package body Combat is
          when COWARD =>
             if Enemy.Distance < 15_000 and Enemy.Ship.Speed /= FULL_SPEED then
                Enemy.Ship.Speed :=
-                 ShipSpeed'Val(ShipSpeed'Pos(Enemy.Ship.Speed) + 1);
+                 Ship_Speed'Val(Ship_Speed'Pos(Enemy.Ship.Speed) + 1);
                AddMessage
                  (To_String(EnemyName) & " increases speed.", CombatMessage);
             end if;

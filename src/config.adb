@@ -108,7 +108,7 @@ package body Config is
             Game_Settings.Auto_Rest := Load_Boolean;
          elsif Field_Name = To_Unbounded_String(Source => "UndockSpeed") then
             Game_Settings.Undock_Speed :=
-              ShipSpeed'Value(To_String(Source => Value));
+              Ship_Speed'Value(To_String(Source => Value));
          elsif Field_Name = To_Unbounded_String(Source => "AutoCenter") then
             Game_Settings.Auto_Center := Load_Boolean;
          elsif Field_Name = To_Unbounded_String(Source => "AutoReturn") then
@@ -285,7 +285,7 @@ package body Config is
       Put_Line
         (File => Config_File,
          Item =>
-           "UndockSpeed = " & ShipSpeed'Image(Game_Settings.Undock_Speed));
+           "UndockSpeed = " & Ship_Speed'Image(Game_Settings.Undock_Speed));
       Save_Boolean(Value => Game_Settings.Auto_Center, Name => "AutoCenter");
       Save_Boolean(Value => Game_Settings.Auto_Return, Name => "AutoReturn");
       Save_Boolean(Value => Game_Settings.Auto_Finish, Name => "AutoFinish");
