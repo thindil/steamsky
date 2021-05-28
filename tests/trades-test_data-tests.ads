@@ -14,10 +14,10 @@ package Trades.Test_Data.Tests is
    --  trades.ads:114:4:BuyItems:Test_BuyItems
 
    procedure Test_SellItems_079195_3394dd(Gnattest_T: in out Test);
-   --  trades.ads:127:4:SellItems:Test_SellItems
+   --  trades.ads:126:4:SellItems:Test_SellItems
 
    procedure Test_GenerateTraderCargo_9d8e19_802161(Gnattest_T: in out Test);
-   --  trades.ads:142:4:GenerateTraderCargo:Test_GenerateTraderCargo
+   --  trades.ads:140:4:GenerateTraderCargo:Test_GenerateTraderCargo
 
 end Trades.Test_Data.Tests;
 --  end read only
