@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Typos in info about experience needed for the next level of skills and
   statistics
 - Typo in Strength attribute description
+- Losing focus by text fields when setting keyboard shortcuts
 
 ## [6.0.2] - 2021-05-09
 
