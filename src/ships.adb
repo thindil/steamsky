@@ -33,7 +33,7 @@ package body Ships is
 
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: ShipSpeed; RandomUpgrades: Boolean := True) return ShipRecord is
+      Speed: Ship_Speed; RandomUpgrades: Boolean := True) return ShipRecord is
       TmpShip: ShipRecord;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
@@ -538,7 +538,7 @@ package body Ships is
             end if;
             if Get_Attribute(ShipNode, "combatai") /= "" then
                TempRecord.CombatAI :=
-                 ShipCombatAi'Value(Get_Attribute(ShipNode, "combatai"));
+                 Ship_Combat_Ai'Value(Get_Attribute(ShipNode, "combatai"));
             end if;
             if Get_Attribute(ShipNode, "evasion") /= "" then
                TempRecord.Evasion(1) :=
