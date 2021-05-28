@@ -23,7 +23,7 @@ with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Config;use Config;
+with Config; use Config;
 with CoreUI; use CoreUI;
 with Utils.UI; use Utils.UI;
 
@@ -177,5 +177,24 @@ package body Dialogs is
          "CloseDialog " & MessageDialog);
       Show_Dialog(MessageDialog, ParentFrame);
    end ShowMessage;
+
+   procedure ShowInfo
+     (Text: String; ParentName: String := ".gameframe"; Title: String) is
+      InfoDialog: constant Ttk_Frame :=
+        Create_Dialog(".info", Title, 275, 1, ParentName);
+      InfoLabel: constant Ttk_Label :=
+        Create(InfoDialog & ".text", "-text {" & Text & "} -wraplength 300");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(InfoLabel, "-sticky we -padx 5 -pady {5 0}");
+      if ParentName = ".gameframe" then
+         Add_Close_Button
+           (InfoDialog & ".button", "Close", "CloseDialog " & InfoDialog);
+      else
+         Add_Close_Button
+           (InfoDialog & ".button", "Close",
+            "CloseDialog " & InfoDialog & " " & ParentName);
+      end if;
+      Show_Dialog(InfoDialog);
+   end ShowInfo;
 
 end Dialogs;

@@ -50,6 +50,7 @@ with Config; use Config;
 with Crafts.UI;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with DebugUI; use DebugUI;
 with Factions; use Factions;
 with GameOptions;
@@ -766,7 +767,8 @@ package body Maps.UI is
                "You have to give order 'Undock' from\nMenu->Ship orders first to move ship.");
          end loop Disable_Move_Buttons_Loop;
       else
-         Current(Speedbox, Natural'Image(ShipSpeed'Pos(PlayerShip.Speed) - 1));
+         Current
+           (Speedbox, Natural'Image(Ship_Speed'Pos(PlayerShip.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
          if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
             Button.Name := New_String(FrameName & ".moveto");

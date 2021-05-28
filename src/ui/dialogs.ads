@@ -111,4 +111,19 @@ package Dialogs is
       Pre => Text'Length > 0 and ParentFrame'Length > 0;
    -- ****
 
+      -- ****f* Dialogs/Dialogs.ShowInfo
+      -- FUNCTION
+      -- Show the selected info to a player
+      -- PARAMETERS
+      -- Text       - Text of info to show
+      -- ParentName - Name of the parent widget. If empty, then the main game
+      --              window will be used as parent for widget. Default value
+      --              is .gameframe
+      -- Title      - The text show in the dialog header.
+      -- SOURCE
+   procedure ShowInfo
+     (Text: String; ParentName: String := ".gameframe"; Title: String) with
+      Pre => Text'Length > 0 and ParentName'Length > 0;
+      -- ****
+
 end Dialogs;

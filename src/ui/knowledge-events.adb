@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Events; use Events;
 with Factions; use Factions;
 with Game; use Game;
