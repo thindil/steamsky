@@ -16,7 +16,7 @@
 proc InvokeButton {name} {
    set focused [focus]
    if {$focused != {} && [winfo class $focused] == "TEntry"} {
-      focus [winfo parent $focused]
+      return
    } elseif {[winfo ismapped $name] == "1"} {
       focus $name
       $name invoke
