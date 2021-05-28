@@ -27,7 +27,7 @@ package body Ships.Upgrade is
    procedure StartUpgrading
      (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
       MaxValue, UpgradeProgress: Natural;
-      UpgradeAction: ShipUpgrade;
+      UpgradeAction: Ship_Upgrade;
    begin
       if PlayerShip.Modules(ModuleIndex).Durability = 0 and
         UpgradeType /= 3 then
@@ -234,7 +234,7 @@ package body Ships.Upgrade is
       WeightGain: Natural;
       Times: Natural := 0;
       OrderTime, CurrentMinutes: Integer;
-      UpgradedModule: ModuleData;
+      UpgradedModule: Module_Data;
       UpgradeMaterial, UpgradeTools: Inventory_Container.Extended_Index;
       WorkerIndex: Crew_Container.Extended_Index;
       procedure FindMatsAndTools is

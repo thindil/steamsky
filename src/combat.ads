@@ -90,7 +90,7 @@ package Combat is
       Ship: ShipRecord;
       Accuracy: Natural;
       Distance: Integer;
-      CombatAI: ShipCombatAi;
+      CombatAI: Ship_Combat_Ai;
       Evasion: Natural;
       Loot: Natural;
       Perception: Natural;
@@ -124,7 +124,7 @@ package Combat is
    -- FUNCTION
    -- Speed of player ship before combat
    -- SOURCE
-   OldSpeed: ShipSpeed := FULL_SPEED;
+   OldSpeed: Ship_Speed := FULL_SPEED;
    -- ****
 
    -- ****v* Combat/Combat.HarpoonDuration

@@ -40,7 +40,7 @@ package body Ships.SaveLoad is
       Set_Attribute(CategoryNode, "name", To_String(PlayerShip.Name));
       SaveNumber(PlayerShip.SkyX, "x");
       SaveNumber(PlayerShip.SkyY, "y");
-      SaveNumber(ShipSpeed'Pos(PlayerShip.Speed), "speed");
+      SaveNumber(Ship_Speed'Pos(PlayerShip.Speed), "speed");
       SaveNumber(PlayerShip.UpgradeModule, "upgrademodule");
       SaveNumber(PlayerShip.DestinationX, "destinationx");
       SaveNumber(PlayerShip.DestinationY, "destinationy");
@@ -69,7 +69,7 @@ package body Ships.SaveLoad is
             end if;
             if Module.UpgradeAction /= NONE then
                SaveNumber
-                 (ShipUpgrade'Pos(Module.UpgradeAction), "upgradeaction",
+                 (Ship_Upgrade'Pos(Module.UpgradeAction), "upgradeaction",
                   DataNode);
             end if;
             case Module.MType is
@@ -251,7 +251,7 @@ package body Ships.SaveLoad is
       PlayerShip.SkyX := Integer'Value(Get_Attribute(LoadNode, "x"));
       PlayerShip.SkyY := Integer'Value(Get_Attribute(LoadNode, "y"));
       PlayerShip.Speed :=
-        ShipSpeed'Val(Integer'Value(Get_Attribute(LoadNode, "speed")));
+        Ship_Speed'Val(Integer'Value(Get_Attribute(LoadNode, "speed")));
       PlayerShip.UpgradeModule :=
         Integer'Value(Get_Attribute(LoadNode, "upgrademodule"));
       PlayerShip.DestinationX :=
@@ -276,10 +276,10 @@ package body Ships.SaveLoad is
                DataIndex: Positive;
                Weight: Natural := 0;
                Durability, MaxDurability, UpgradeProgress: Integer := 0;
-               UpgradeAction: ShipUpgrade := NONE;
+               UpgradeAction: Ship_Upgrade := NONE;
                Data: Data_Array;
                ModuleNode: Node;
-               MType: ModuleType2;
+               MType: Module_Type_2;
                Owners: Natural_Container.Vector;
             begin
                Name := To_Unbounded_String(Get_Attribute(ChildNode, "name"));
@@ -306,7 +306,7 @@ package body Ships.SaveLoad is
                  Integer'Value(Get_Attribute(ChildNode, "maxdurability"));
                if Get_Attribute(ChildNode, "upgradeaction") /= "" then
                   UpgradeAction :=
-                    ShipUpgrade'Val
+                    Ship_Upgrade'Val
                       (Integer'Value
                          (Get_Attribute(ChildNode, "upgradeaction")));
                end if;
@@ -343,7 +343,8 @@ package body Ships.SaveLoad is
                         MType := HARPOON_GUN;
                      when others =>
                         MType :=
-                          ModuleType2'Value(Get_Attribute(ChildNode, "mtype"));
+                          Module_Type_2'Value
+                            (Get_Attribute(ChildNode, "mtype"));
                   end case;
                else
                   case Modules_List(ProtoIndex).MType is

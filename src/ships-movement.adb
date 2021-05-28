@@ -395,7 +395,7 @@ package body Ships.Movement is
       return "";
    end DockShip;
 
-   function ChangeShipSpeed(SpeedValue: ShipSpeed) return String is
+   function ChangeShipSpeed(SpeedValue: Ship_Speed) return String is
       HaveEngine: Boolean := False;
    begin
       Find_Engine_Loop :
@@ -423,7 +423,7 @@ package body Ships.Movement is
      (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       Message: Unbounded_String;
-      ShipSetSpeed: ShipSpeed;
+      ShipSetSpeed: Ship_Speed;
    begin
       if Ship = PlayerShip and not InfoOnly then
          Message := To_Unbounded_String(HaveOrderRequirements);
@@ -509,7 +509,7 @@ package body Ships.Movement is
 
    function CountFuelNeeded return Integer is
       FuelNeeded: Integer := 0;
-      Speed: ShipSpeed := PlayerShip.Speed;
+      Speed: Ship_Speed := PlayerShip.Speed;
    begin
       if Speed in DOCKED | FULL_STOP then
          Speed := Game_Settings.Undock_Speed;
