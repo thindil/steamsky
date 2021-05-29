@@ -123,7 +123,7 @@ package body Missions.UI is
             CanAccept := False;
             Modules_Loop :
             for Module of PlayerShip.Modules loop
-               if (Module.MType = CABIN and not CanAccept)
+               if (Module.M_Type = CABIN and not CanAccept)
                  and then Module.Quality >= Mission.Data then
                   CanAccept := True;
                   CabinTaken := False;

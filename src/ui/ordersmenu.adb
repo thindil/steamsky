@@ -176,7 +176,7 @@ package body OrdersMenu is
             end loop Add_Heal_Wounded_Menu_Loop;
             Add_Repair_Ship_Menu_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.Durability < Module.MaxDurability then
+               if Module.Durability < Module.Max_Durability then
                   Add
                     (OrdersMenu, "command",
                      "-label {Repair ship} -underline 2 -command {ShowBaseUI repair}");
@@ -314,7 +314,7 @@ package body OrdersMenu is
                      begin
                         Count_Docking_Cost_Loop :
                         for Module of PlayerShip.Modules loop
-                           if Module.MType = HULL then
+                           if Module.M_Type = HULL then
                               DockingCost := Module.MaxModules;
                               exit Count_Docking_Cost_Loop;
                            end if;

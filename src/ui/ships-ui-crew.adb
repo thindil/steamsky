@@ -89,10 +89,10 @@ package body Ships.UI.Crew is
       ButtonsFrame := Create(CrewInfoFrame & ".ordersbuttons");
       Check_Modules_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
+         if Module.Durability < Module.Max_Durability then
             NeedRepair := True;
          end if;
-         if (Module.Durability > 0 and Module.MType = CABIN)
+         if (Module.Durability > 0 and Module.M_Type = CABIN)
            and then Module.Cleanliness < Module.Quality then
             NeedClean := True;
          end if;
@@ -1118,10 +1118,10 @@ package body Ships.UI.Crew is
    begin
       Check_Modules_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.Durability < Module.MaxDurability then
+         if Module.Durability < Module.Max_Durability then
             NeedRepair := True;
          end if;
-         if (Module.Durability > 0 and Module.MType = CABIN)
+         if (Module.Durability > 0 and Module.M_Type = CABIN)
            and then Module.Cleanliness < Module.Quality then
             NeedClean := True;
          end if;
@@ -1160,11 +1160,11 @@ package body Ships.UI.Crew is
          Set_Work_Orders_Loop :
          for J in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(J).Durability <
-              PlayerShip.Modules(J).MaxDurability then
+              PlayerShip.Modules(J).Max_Durability then
                NeedRepair := True;
             end if;
             if PlayerShip.Modules(J).Durability > 0 then
-               case PlayerShip.Modules(J).MType is
+               case PlayerShip.Modules(J).M_Type is
                   when GUN | HARPOON_GUN =>
                      if PlayerShip.Modules(J).Owner(1) /=
                        Positive'Value(CArgv.Arg(Argv, 1)) then
@@ -1222,7 +1222,7 @@ package body Ships.UI.Crew is
                      null;
                end case;
                if PlayerShip.Modules(J).Durability <
-                 PlayerShip.Modules(J).MaxDurability and
+                 PlayerShip.Modules(J).Max_Durability and
                  NeedRepair then
                   Menu.Add
                     (CrewMenu, "command",

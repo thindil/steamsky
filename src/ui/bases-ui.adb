@@ -131,7 +131,7 @@ package body Bases.UI is
          Show_Damaged_Modules_Loop :
          for I in PlayerShip.Modules.Iterate loop
             if PlayerShip.Modules(I).Durability <
-              PlayerShip.Modules(I).MaxDurability then
+              PlayerShip.Modules(I).Max_Durability then
                if FirstIndex = Null_Unbounded_String then
                   FirstIndex :=
                     To_Unbounded_String

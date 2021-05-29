@@ -88,18 +88,18 @@ package body DebugUI is
       Insert
         (ProtoEntry, "0",
          To_String
-           (Modules_List(PlayerShip.Modules(ModuleIndex).ProtoIndex).Name));
+           (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index).Name));
       Set(SpinBox, Positive'Image(PlayerShip.Modules(ModuleIndex).Weight));
       SpinBox.Name := New_String(FrameName & ".dur");
       Set(SpinBox, Integer'Image(PlayerShip.Modules(ModuleIndex).Durability));
       SpinBox.Name := New_String(FrameName & ".maxdur");
       Set
         (SpinBox,
-         Positive'Image(PlayerShip.Modules(ModuleIndex).MaxDurability));
+         Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Durability));
       SpinBox.Name := New_String(FrameName & ".upgrade");
       Set
         (SpinBox,
-         Natural'Image(PlayerShip.Modules(ModuleIndex).UpgradeProgress));
+         Natural'Image(PlayerShip.Modules(ModuleIndex).Upgrade_Progress));
       return TCL_OK;
    end Refresh_Module_Command;
 
@@ -568,7 +568,7 @@ package body DebugUI is
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
             Value := Null_Unbounded_String;
-            PlayerShip.Modules(ModuleIndex).ProtoIndex :=
+            PlayerShip.Modules(ModuleIndex).Proto_Index :=
               BaseModules_Container.Key(I);
             exit Update_Proto_Index_Loop;
          end if;
@@ -578,10 +578,10 @@ package body DebugUI is
       PlayerShip.Modules(ModuleIndex).Durability :=
         Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".maxdur");
-      PlayerShip.Modules(ModuleIndex).MaxDurability :=
+      PlayerShip.Modules(ModuleIndex).Max_Durability :=
         Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".upgrade");
-      PlayerShip.Modules(ModuleIndex).UpgradeProgress :=
+      PlayerShip.Modules(ModuleIndex).Upgrade_Progress :=
         Natural'Value(Get(SpinBox));
       return TCL_OK;
    end Update_Module_Command;

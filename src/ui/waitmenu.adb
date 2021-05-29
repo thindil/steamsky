@@ -134,7 +134,7 @@ package body WaitMenu is
            PlayerShip.Crew(I).Order = Rest then
             Modules_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN then
+               if Module.M_Type = CABIN then
                   for Owner of Module.Owner loop
                      if Owner = I then
                         NeedHealing := True;
@@ -239,7 +239,7 @@ package body WaitMenu is
               PlayerShip.Crew(I).Order = Rest then
                Modules_Loop :
                for Module of PlayerShip.Modules loop
-                  if Module.MType = CABIN then
+                  if Module.M_Type = CABIN then
                      for Owner of Module.Owner loop
                         if Owner = Crew_Container.To_Index(I) then
                            if TimeNeeded <

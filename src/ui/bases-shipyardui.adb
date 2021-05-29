@@ -157,8 +157,8 @@ package body Bases.ShipyardUI is
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
       Find_Max_Module_Size_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = HULL then
-            MaxSize := Modules_List(Module.ProtoIndex).Value;
+         if Module.M_Type = HULL then
+            MaxSize := Modules_List(Module.Proto_Index).Value;
             UsedSpace := Module.InstalledModules;
             AllSpace := Module.MaxModules;
             exit Find_Max_Module_Size_Loop;
@@ -270,7 +270,7 @@ package body Bases.ShipyardUI is
       Current_Row := 1;
       Load_Remove_Modules_Loop :
       for I in PlayerShip.Modules.Iterate loop
-         if Modules_List(PlayerShip.Modules(I).ProtoIndex).MType /= HULL then
+         if Modules_List(PlayerShip.Modules(I).Proto_Index).MType /= HULL then
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Remove_Loop;
@@ -282,7 +282,7 @@ package body Bases.ShipyardUI is
                Positive'Image(Modules_Container.To_Index(I)) & "} remove",
                1);
             AddButton
-              (RemoveTable, GetModuleType(PlayerShip.Modules(I).ProtoIndex),
+              (RemoveTable, GetModuleType(PlayerShip.Modules(I).Proto_Index),
                "Show available options for module",
                "ShowShipyardModuleMenu {" &
                Positive'Image(Modules_Container.To_Index(I)) & "} remove",
@@ -290,7 +290,7 @@ package body Bases.ShipyardUI is
             AddButton
               (RemoveTable,
                Integer'Image
-                 (Modules_List(PlayerShip.Modules(I).ProtoIndex).Size),
+                 (Modules_List(PlayerShip.Modules(I).Proto_Index).Size),
                "Show available options for module",
                "ShowShipyardModuleMenu {" &
                Positive'Image(Modules_Container.To_Index(I)) & "} remove",
@@ -298,7 +298,7 @@ package body Bases.ShipyardUI is
             AddButton
               (RemoveTable,
                To_String
-                 (Modules_List(PlayerShip.Modules(I).ProtoIndex)
+                 (Modules_List(PlayerShip.Modules(I).Proto_Index)
                     .RepairMaterial),
                "Show available options for module",
                "ShowShipyardModuleMenu {" &
@@ -307,11 +307,11 @@ package body Bases.ShipyardUI is
             Damage :=
               1.0 -
               Float(PlayerShip.Modules(I).Durability) /
-                Float(PlayerShip.Modules(I).MaxDurability);
+                Float(PlayerShip.Modules(I).Max_Durability);
             Cost :=
-              Modules_List(PlayerShip.Modules(I).ProtoIndex).Price -
+              Modules_List(PlayerShip.Modules(I).Proto_Index).Price -
               Integer
-                (Float(Modules_List(PlayerShip.Modules(I).ProtoIndex).Price) *
+                (Float(Modules_List(PlayerShip.Modules(I).Proto_Index).Price) *
                  Damage);
             if Cost = 0 then
                Cost := 1;
@@ -380,35 +380,35 @@ package body Bases.ShipyardUI is
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).MType;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index).MType;
          case MType is
             when HARPOON_GUN =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).Duration;
                Value :=
-                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
             when ENGINE =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).Power;
-               Value := PlayerShip.Modules(ShipModuleIndex).FuelUsage;
+               Value := PlayerShip.Modules(ShipModuleIndex).Fuel_Usage;
             when CABIN =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).Quality;
                Value := PlayerShip.Modules(ShipModuleIndex).Cleanliness;
             when GUN =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage;
                Value :=
-                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
             when ShipModules.CARGO =>
                MaxValue :=
-                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .MaxValue;
                Value :=
-                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
             when HULL =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).MaxModules;
                Value :=
-                 Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                 Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
             when BATTERING_RAM =>
                MaxValue := PlayerShip.Modules(ShipModuleIndex).Damage2;
@@ -418,14 +418,15 @@ package body Bases.ShipyardUI is
                Value := 0;
          end case;
          Size :=
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Size;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index).Size;
          Weight :=
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Weight;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
+             .Weight;
          MaxOwners :=
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
              .MaxOwners;
          Speed :=
-           Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Speed;
+           Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index).Speed;
          ModuleText := Get_Widget(".moduledialog.info");
       end if;
       case MType is
@@ -511,8 +512,8 @@ package body Bases.ShipyardUI is
          if Installing then
             Check_Module_Size_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.MType = HULL
-                 and then Size > Modules_List(Module.ProtoIndex).Value then
+               if Module.M_Type = HULL
+                 and then Size > Modules_List(Module.Proto_Index).Value then
                   Insert
                     (ModuleText, "end",
                      "{" & Natural'Image(Size) & " (too big)} [list red]");
@@ -628,8 +629,8 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
       Find_Hull_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = HULL then
-            MaxSize := Modules_List(Module.ProtoIndex).Value;
+         if Module.M_Type = HULL then
+            MaxSize := Modules_List(Module.Proto_Index).Value;
             UsedSpace := Module.InstalledModules;
             AllSpace := Module.MaxModules;
             exit Find_Hull_Loop;
@@ -775,12 +776,12 @@ package body Bases.ShipyardUI is
       Damage :=
         1.0 -
         Float(PlayerShip.Modules(ShipModuleIndex).Durability) /
-          Float(PlayerShip.Modules(ShipModuleIndex).MaxDurability);
+          Float(PlayerShip.Modules(ShipModuleIndex).Max_Durability);
       Cost :=
-        Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex).Price -
+        Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index).Price -
         Integer
           (Float
-             (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+             (Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                 .Price) *
            Damage);
       if Cost = 0 then
@@ -794,7 +795,7 @@ package body Bases.ShipyardUI is
         (ModuleText, "end",
          "{Remove gain:" & Positive'Image(Cost) & LF & "Removing time:" &
          Positive'Image
-           (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+           (Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
               .InstallTime) &
          " minutes}");
       SetModuleInfo(False);
@@ -814,7 +815,7 @@ package body Bases.ShipyardUI is
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(DamageBar);
       end if;
-      if Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+      if Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
           .Description /=
         Null_Unbounded_String then
          Label :=
@@ -822,7 +823,7 @@ package body Bases.ShipyardUI is
              (ModuleDialog & ".description",
               "-text {" & LF &
               To_String
-                (Modules_List(PlayerShip.Modules(ShipModuleIndex).ProtoIndex)
+                (Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Description) &
               "} -wraplength 450");
          Tcl.Tk.Ada.Grid.Grid(Label, "-sticky w -padx 5");
