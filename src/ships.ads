@@ -75,55 +75,55 @@ package Ships is
    -- Data structure for ship modules, medical room, cockpit, armor and cargo
    -- bays don't have any special fields
    -- PARAMETERS
-   -- Name             - Name of module
-   -- ProtoIndex       - Index of module prototype
-   -- Weight           - Weight of module
-   -- Durability       - 0 = destroyed
-   -- MaxDurability    - Base durability
-   -- Owner            - Crew member indexes for owners of module
-   -- UpgradeProgress  - Progress of module upgrade
-   -- UpgradeAction    - Type of module upgrade
-   -- FuelUsage        - Amount of fuel used for each move on map
-   -- Power            - Power of engine used for counting ship speed
-   -- Disabled         - Did engine is disabled or not
-   -- Cleanliness      - Cleanliness of selected cabin
-   -- Quality          - Quality of selected cabin
-   -- GunIndex         - Index of installed gun
-   -- Damage           - Damage bonus for selected gun
-   -- AmmoIndex        - Cargo index of ammunition used by selected gun
-   -- InstalledModules - Amount of installed modules on ship
-   -- MaxModules       - Amount of maximum installed modules for this hull
-   -- CraftingIndex    - Index of crafting recipe or item which is
-   --                    deconstructed
-   -- CraftingTime     - Time needed to finish crating order
-   -- CraftingAmount   - How many times repeat crafting order
-   -- TrainedSkill     - Index of skill set to training
-   -- Damage2          - Damage done by battering ram
-   -- CoolingDown      - If true, battering ram can't attack
-   -- Duration         - Duration bonus for selected harpoon gun
-   -- HarpoonIndex     - Cargo index of ammunition used by selected harpoon
-   --                    gun
-   -- Data             - Various data for module (depends on module)
+   -- Name              - Name of module
+   -- Proto_Index       - Index of module prototype
+   -- Weight            - Weight of module
+   -- Durability        - 0 = destroyed
+   -- Max_Durability    - Base durability
+   -- Owner             - Crew member indexes for owners of module
+   -- Upgrade_Progress  - Progress of module upgrade
+   -- Upgrade_Action    - Type of module upgrade
+   -- Fuel_Usage        - Amount of fuel used for each move on map
+   -- Power             - Power of engine used for counting ship speed
+   -- Disabled          - Did engine is disabled or not
+   -- Cleanliness       - Cleanliness of selected cabin
+   -- Quality           - Quality of selected cabin
+   -- Gun_Index         - Index of installed gun
+   -- Damage            - Damage bonus for selected gun
+   -- AmmoIndex         - Cargo index of ammunition used by selected gun
+   -- InstalledModules  - Amount of installed modules on ship
+   -- MaxModules        - Amount of maximum installed modules for this hull
+   -- CraftingIndex     - Index of crafting recipe or item which is
+   --                     deconstructed or studies
+   -- CraftingTime      - Time needed to finish crating order
+   -- CraftingAmount    - How many times repeat crafting order
+   -- TrainedSkill      - Index of skill set to training
+   -- Damage2           - Damage done by battering ram
+   -- CoolingDown       - If true, battering ram can't attack
+   -- Duration          - Duration bonus for selected harpoon gun
+   -- HarpoonIndex      - Cargo index of ammunition used by selected harpoon
+   --                     gun
+   -- Data              - Various data for module (depends on module)
    -- SOURCE
-   type Module_Data(MType: Module_Type_2 := ANY) is record
+   type Module_Data(M_Type: Module_Type_2 := ANY) is record
       Name: Unbounded_String;
-      ProtoIndex: Unbounded_String;
+      Proto_Index: Unbounded_String;
       Weight: Natural;
       Durability: Integer;
-      MaxDurability: Natural;
+      Max_Durability: Natural;
       Owner: Natural_Container.Vector;
-      UpgradeProgress: Integer;
-      UpgradeAction: Ship_Upgrade;
-      case MType is
+      Upgrade_Progress: Integer;
+      Upgrade_Action: Ship_Upgrade;
+      case M_Type is
          when ENGINE =>
-            FuelUsage: Positive;
+            Fuel_Usage: Positive;
             Power: Positive;
             Disabled: Boolean;
          when CABIN =>
             Cleanliness: Natural;
             Quality: Natural;
          when TURRET =>
-            GunIndex: Natural;
+            Gun_Index: Natural;
          when GUN =>
             Damage: Positive;
             AmmoIndex: Inventory_Container.Extended_Index;

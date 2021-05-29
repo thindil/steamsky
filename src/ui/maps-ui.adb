@@ -220,7 +220,7 @@ package body Maps.UI is
       end if;
       Check_Workers_Loop :
       for Module of PlayerShip.Modules loop
-         case Modules_List(Module.ProtoIndex).MType is
+         case Modules_List(Module.Proto_Index).MType is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
                   HaveGunner := False;
@@ -247,7 +247,7 @@ package body Maps.UI is
             when others =>
                null;
          end case;
-         if Module.Durability /= Module.MaxDurability then
+         if Module.Durability /= Module.Max_Durability then
             NeedRepairs := True;
          end if;
       end loop Check_Workers_Loop;

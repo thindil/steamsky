@@ -174,7 +174,7 @@ package body Crew is
    begin
       Find_Cabin_Loop :
       for I in PlayerShip.Modules.Iterate loop
-         if PlayerShip.Modules(I).MType = CABIN then
+         if PlayerShip.Modules(I).M_Type = CABIN then
             Check_Owner_Loop :
             for Owner of PlayerShip.Modules(I).Owner loop
                if Owner = MemberIndex then
@@ -266,13 +266,13 @@ package body Crew is
             if Member.PreviousOrder in Gunner | Craft then
                Module_Loop :
                for Module of PlayerShip.Modules loop
-                  if (Member.PreviousOrder = Gunner and Module.MType = GUN)
+                  if (Member.PreviousOrder = Gunner and Module.M_Type = GUN)
                     and then (Module.Owner(1) in I | 0) then
                      BackToWork := True;
                      Module.Owner(1) := I;
                      exit Module_Loop;
                   elsif
-                    (Member.PreviousOrder = Craft and Module.MType = WORKSHOP)
+                    (Member.PreviousOrder = Craft and Module.M_Type = WORKSHOP)
                     and then Module.CraftingIndex /= Null_Unbounded_String then
                      Module_Is_Owner_Loop :
                      for Owner of Module.Owner loop
@@ -333,7 +333,7 @@ package body Crew is
                   if FindCabin(I) = 0 then
                      Modules_Loop :
                      for Module of PlayerShip.Modules loop
-                        if Module.MType = CABIN and Module.Durability > 0 then
+                        if Module.M_Type = CABIN and Module.Durability > 0 then
                            Find_Cabin_Owner_Loop :
                            for Owner of Module.Owner loop
                               if Owner = 0 then
@@ -445,7 +445,7 @@ package body Crew is
                     1.0 -
                     Damage_Factor
                       (Float(PlayerShip.Modules(CabinIndex).Durability) /
-                       Float(PlayerShip.Modules(CabinIndex).MaxDurability));
+                       Float(PlayerShip.Modules(CabinIndex).Max_Durability));
                   RestAmount :=
                     PlayerShip.Modules(CabinIndex).Cleanliness -
                     Natural
@@ -510,7 +510,7 @@ package body Crew is
                   HaveMedicalRoom := False;
                   Heal_Module_Loop :
                   for Module of PlayerShip.Modules loop
-                     if Modules_List(Module.ProtoIndex).MType =
+                     if Modules_List(Module.Proto_Index).MType =
                        MEDICAL_ROOM and
                        Module.Durability > 0 and Module.Owner.Contains(I) then
                         HaveMedicalRoom := True;
@@ -660,7 +660,7 @@ package body Crew is
                   if ToolIndex > 0 then
                      Update_Clean_Tools_Loop :
                      for Module of PlayerShip.Modules loop
-                        if Module.MType = CABIN
+                        if Module.M_Type = CABIN
                           and then Module.Cleanliness < Module.Quality then
                            Module.Cleanliness :=
                              (if Module.Cleanliness + Times > Module.Quality
@@ -674,7 +674,7 @@ package body Crew is
                      end loop Update_Clean_Tools_Loop;
                      Check_Dirty_Modules_Loop :
                      for Module of PlayerShip.Modules loop
-                        if Module.MType = CABIN
+                        if Module.M_Type = CABIN
                           and then Module.Cleanliness < Module.Quality then
                            NeedCleaning := True;
                            exit Check_Dirty_Modules_Loop;
@@ -703,7 +703,7 @@ package body Crew is
                when Train =>
                   Modules_Loop :
                   for Module of PlayerShip.Modules loop
-                     if Module.MType = TRAINING_ROOM then
+                     if Module.M_Type = TRAINING_ROOM then
                         for Owner of Module.Owner loop
                            if Owner = I then
                               SkillIndex := Module.TrainedSkill;
@@ -812,7 +812,7 @@ package body Crew is
                  1.0 -
                  Damage_Factor
                    (Float(PlayerShip.Modules(CabinIndex).Durability) /
-                    Float(PlayerShip.Modules(CabinIndex).MaxDurability));
+                    Float(PlayerShip.Modules(CabinIndex).Max_Durability));
                CabinBonus :=
                  PlayerShip.Modules(CabinIndex).Cleanliness -
                  Natural

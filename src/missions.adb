@@ -253,7 +253,7 @@ package body Missions is
          begin
             Modules_Loop :
             for Module of PlayerShip.Modules loop
-               if (Module.MType = CABIN and not HaveCabin)
+               if (Module.M_Type = CABIN and not HaveCabin)
                  and then Module.Quality >= Mission.Data then
                   HaveCabin := True;
                   Cabin_Owner_Loop :
@@ -348,7 +348,7 @@ package body Missions is
             end;
             Find_Cabin_Loop :
             for Module of PlayerShip.Modules loop
-               if Module.MType = CABIN
+               if Module.M_Type = CABIN
                  and then
                  (Module.Quality >= Mission.Data and Module.Owner(1) = 0) then
                   Module.Owner(1) := PlayerShip.Crew.Last_Index;

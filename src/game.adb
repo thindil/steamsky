@@ -409,7 +409,7 @@ package body Game is
                   Owner := Owner + 1;
                end if;
             end loop Module_Owner_Loop;
-            if Modules_List(Module.ProtoIndex).MType = CABIN and
+            if Modules_List(Module.Proto_Index).MType = CABIN and
               not Cabin_Assigned then
                Assign_Cabin_Loop :
                for I in Module.Owner.Iterate loop
@@ -483,7 +483,7 @@ package body Game is
          Game_Date.Day := Game_Date.Day + 1;
          Get_Dirty_Loop :
          for Module of PlayerShip.Modules loop
-            if Module.MType = CABIN and then Module.Cleanliness > 0 then
+            if Module.M_Type = CABIN and then Module.Cleanliness > 0 then
                Module.Cleanliness := Module.Cleanliness - 1;
                Need_Cleaning := True;
             end if;
