@@ -95,23 +95,23 @@ package body Ships.UI is
          UpgradeInfo :=
            "Upgrade:" & PlayerShip.Modules(PlayerShip.UpgradeModule).Name &
            " ";
-         case PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeAction is
+         case PlayerShip.Modules(PlayerShip.UpgradeModule).Upgrade_Action is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
                MaxUpgrade :=
                  Modules_List
-                   (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                   (PlayerShip.Modules(PlayerShip.UpgradeModule).Proto_Index)
                    .Durability;
             when MAX_VALUE =>
                case Modules_List
-                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                 (PlayerShip.Modules(PlayerShip.UpgradeModule).Proto_Index)
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(power)");
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .MaxValue /
                        20;
                   when CABIN =>
@@ -119,14 +119,14 @@ package body Ships.UI is
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .MaxValue;
                   when GUN | BATTERING_RAM =>
                      Append(UpgradeInfo, "(damage)");
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .MaxValue *
                        2;
                   when HULL =>
@@ -134,7 +134,7 @@ package body Ships.UI is
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .MaxValue *
                        40;
                   when HARPOON_GUN =>
@@ -142,7 +142,7 @@ package body Ships.UI is
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .MaxValue *
                        10;
                   when others =>
@@ -150,14 +150,14 @@ package body Ships.UI is
                end case;
             when VALUE =>
                case Modules_List
-                 (PlayerShip.Modules(PlayerShip.UpgradeModule).ProtoIndex)
+                 (PlayerShip.Modules(PlayerShip.UpgradeModule).Proto_Index)
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(fuel usage)");
                      MaxUpgrade :=
                        Modules_List
                          (PlayerShip.Modules(PlayerShip.UpgradeModule)
-                            .ProtoIndex)
+                            .Proto_Index)
                          .Value *
                        20;
                   when others =>
@@ -175,7 +175,7 @@ package body Ships.UI is
          UpgradePercent :=
            1.0 -
            (Float
-              (PlayerShip.Modules(PlayerShip.UpgradeModule).UpgradeProgress) /
+              (PlayerShip.Modules(PlayerShip.UpgradeModule).Upgrade_Progress) /
             Float(MaxUpgrade));
          ProgressBarStyle :=
            (if UpgradePercent > 0.74 then

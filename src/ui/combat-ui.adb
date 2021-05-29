@@ -77,7 +77,7 @@ package body Combat.UI is
       Firerate: Unbounded_String;
    begin
       GunSpeed :=
-        Modules_List(PlayerShip.Modules(Guns(Position)(1)).ProtoIndex).Speed;
+        Modules_List(PlayerShip.Modules(Guns(Position)(1)).Proto_Index).Speed;
       case Index is
          when 1 =>
             GunSpeed := 0;
@@ -301,7 +301,7 @@ package body Combat.UI is
          Has_Gunner := False;
          declare
             AmmoIndex: constant Natural :=
-              (if PlayerShip.Modules(Guns(I)(1)).MType = GUN then
+              (if PlayerShip.Modules(Guns(I)(1)).M_Type = GUN then
                  PlayerShip.Modules(Guns(I)(1)).AmmoIndex
                else PlayerShip.Modules(Guns(I)(1)).HarpoonIndex);
          begin
@@ -311,7 +311,7 @@ package body Combat.UI is
               and then
                 Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
                 Items_Types
-                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
                AmmoAmount := PlayerShip.Cargo(AmmoIndex).Amount;
                HaveAmmo := True;
@@ -323,7 +323,7 @@ package body Combat.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).IType =
                  Items_Types
-                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).ProtoIndex)
+                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
                   AmmoIndex :=
                     FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
@@ -511,7 +511,7 @@ package body Combat.UI is
       HasDamage := False;
       Show_Player_Ship_Damage_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.Durability = Module.MaxDurability then
+         if Module.Durability = Module.Max_Durability then
             goto End_Of_Player_Ship_Damage_Loop;
          end if;
          Label :=
@@ -527,7 +527,7 @@ package body Combat.UI is
            (Get_Context,
             "SetScrollbarBindings " & Label & " $combatframe.damage.scrolly");
          DamagePercent :=
-           (Float(Module.Durability) / Float(Module.MaxDurability));
+           (Float(Module.Durability) / Float(Module.Max_Durability));
          ProgressBar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
@@ -581,7 +581,7 @@ package body Combat.UI is
             begin
                Check_Enemy_Ship_Status_Loop :
                for Module of Enemy.Ship.Modules loop
-                  if Module.Durability < Module.MaxDurability then
+                  if Module.Durability < Module.Max_Durability then
                      EnemyStatus := To_Unbounded_String("Damaged");
                      exit Check_Enemy_Ship_Status_Loop;
                   end if;
@@ -591,7 +591,7 @@ package body Combat.UI is
             Check_Enemy_Status_Loop :
             for Module of Enemy.Ship.Modules loop
                if Module.Durability > 0 then
-                  case Modules_List(Module.ProtoIndex).MType is
+                  case Modules_List(Module.Proto_Index).MType is
                      when ARMOR =>
                         Append(EnemyInfo, " (armored)");
                      when GUN =>
@@ -675,8 +675,8 @@ package body Combat.UI is
               To_String
                 (if Enemy.Distance > 1_000 then
                    To_Unbounded_String
-                     (GetModuleType(Enemy.Ship.Modules(I).ProtoIndex))
-                 else Modules_List(Enemy.Ship.Modules(I).ProtoIndex).Name) &
+                     (GetModuleType(Enemy.Ship.Modules(I).Proto_Index))
+                 else Modules_List(Enemy.Ship.Modules(I).Proto_Index).Name) &
               "}" &
               (if Enemy.Ship.Modules(I).Durability = 0 then
                  " -font OverstrikedFont -style Gray.TLabel"
@@ -689,7 +689,7 @@ package body Combat.UI is
             "SetScrollbarBindings " & Label & " $combatframe.status.scrolly");
          DamagePercent :=
            ((Float(Enemy.Ship.Modules(I).Durability) /
-             Float(Enemy.Ship.Modules(I).MaxDurability)));
+             Float(Enemy.Ship.Modules(I).Max_Durability)));
          ProgressBar :=
            Create
              (Frame & ".dmg" & Trim(Natural'Image(Row), Left),
@@ -1141,7 +1141,8 @@ package body Combat.UI is
          Guns(GunIndex)(2) := Positive'Value(Current(ComboBox)) + 1;
          Guns(GunIndex)(3) :=
            (if Current(ComboBox) = "0" then 0
-            else Modules_List(PlayerShip.Modules(Guns(GunIndex)(1)).ProtoIndex)
+            else Modules_List
+                (PlayerShip.Modules(Guns(GunIndex)(1)).Proto_Index)
                 .Speed);
          AddMessage
            ("Order for " &

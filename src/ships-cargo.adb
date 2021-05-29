@@ -59,7 +59,7 @@ package body Ships.Cargo is
                Ship.Cargo.Delete(Index => ItemIndex);
                Update_Ammo_Index_Loop :
                for Module of Ship.Modules loop
-                  if Module.MType = GUN then
+                  if Module.M_Type = GUN then
                      if Module.AmmoIndex > ItemIndex then
                         Module.AmmoIndex := Module.AmmoIndex - 1;
                      elsif Module.AmmoIndex = ItemIndex then
@@ -81,8 +81,8 @@ package body Ships.Cargo is
    begin
       Count_Cargo_Size_Loop :
       for Module of Ship.Modules loop
-         if Module.MType = CARGO_ROOM and Module.Durability > 0 then
-            FreeCargo := FreeCargo + Modules_List(Module.ProtoIndex).MaxValue;
+         if Module.M_Type = CARGO_ROOM and Module.Durability > 0 then
+            FreeCargo := FreeCargo + Modules_List(Module.Proto_Index).MaxValue;
          end if;
       end loop Count_Cargo_Size_Loop;
       Count_Cargo_Weight_Loop :

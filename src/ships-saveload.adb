@@ -54,25 +54,26 @@ package body Ships.SaveLoad is
             DataNode := Create_Element(SaveData, "module");
             DataNode := Append_Child(CategoryNode, DataNode);
             Set_Attribute(DataNode, "name", To_String(Module.Name));
-            Set_Attribute(DataNode, "index", To_String(Module.ProtoIndex));
+            Set_Attribute(DataNode, "index", To_String(Module.Proto_Index));
             SaveNumber(Module.Weight, "weight", DataNode);
             SaveNumber(Module.Durability, "durability", DataNode);
-            SaveNumber(Module.MaxDurability, "maxdurability", DataNode);
+            SaveNumber(Module.Max_Durability, "maxdurability", DataNode);
             Save_Module_Owners_Loop :
             for Owner of Module.Owner loop
                ModuleDataNode := Create_Element(SaveData, "owner");
                ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                SaveNumber(Owner, "value", ModuleDataNode);
             end loop Save_Module_Owners_Loop;
-            if Module.UpgradeProgress > 0 then
-               SaveNumber(Module.UpgradeProgress, "upgradeprogress", DataNode);
-            end if;
-            if Module.UpgradeAction /= NONE then
+            if Module.Upgrade_Progress > 0 then
                SaveNumber
-                 (Ship_Upgrade'Pos(Module.UpgradeAction), "upgradeaction",
+                 (Module.Upgrade_Progress, "upgradeprogress", DataNode);
+            end if;
+            if Module.Upgrade_Action /= NONE then
+               SaveNumber
+                 (Ship_Upgrade'Pos(Module.Upgrade_Action), "upgradeaction",
                   DataNode);
             end if;
-            case Module.MType is
+            case Module.M_Type is
                when WORKSHOP =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
@@ -93,7 +94,7 @@ package body Ships.SaveLoad is
                when ENGINE =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.FuelUsage, "value", ModuleDataNode);
+                  SaveNumber(Module.Fuel_Usage, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Power, "value", ModuleDataNode);
@@ -114,7 +115,7 @@ package body Ships.SaveLoad is
                when TURRET =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.GunIndex, "value", ModuleDataNode);
+                  SaveNumber(Module.Gun_Index, "value", ModuleDataNode);
                when GUN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
@@ -394,12 +395,12 @@ package body Ships.SaveLoad is
                      end loop Load_Module_Data_Loop;
                      PlayerShip.Modules.Append
                        (New_Item =>
-                          (MType => ANY, Name => Name,
-                           ProtoIndex => ProtoIndex, Weight => Weight,
+                          (M_Type => ANY, Name => Name,
+                           Proto_Index => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owner => Owners,
-                           UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction, Data => Data));
+                           Max_Durability => MaxDurability, Owner => Owners,
+                           Upgrade_Progress => UpgradeProgress,
+                           Upgrade_Action => UpgradeAction, Data => Data));
                   when ENGINE =>
                      declare
                         FuelUsage, Power: Positive;
@@ -435,13 +436,13 @@ package body Ships.SaveLoad is
                         end loop Load_Engine_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => ENGINE, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => ENGINE, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
-                              FuelUsage => FuelUsage, Power => Power,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
+                              Fuel_Usage => FuelUsage, Power => Power,
                               Disabled => Disabled));
                      end;
                   when CABIN =>
@@ -471,23 +472,23 @@ package body Ships.SaveLoad is
                         end loop Load_Cabin_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => CABIN, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => CABIN, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               Cleanliness => Cleanliness, Quality => Quality));
                      end;
                   when COCKPIT =>
                      PlayerShip.Modules.Append
                        (New_Item =>
-                          (MType => COCKPIT, Name => Name,
-                           ProtoIndex => ProtoIndex, Weight => Weight,
+                          (M_Type => COCKPIT, Name => Name,
+                           Proto_Index => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owner => Owners,
-                           UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           Max_Durability => MaxDurability, Owner => Owners,
+                           Upgrade_Progress => UpgradeProgress,
+                           Upgrade_Action => UpgradeAction));
                   when WORKSHOP =>
                      declare
                         CraftingIndex: Unbounded_String;
@@ -524,12 +525,12 @@ package body Ships.SaveLoad is
                         end loop Load_Workshop_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => WORKSHOP, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => WORKSHOP, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               CraftingIndex => CraftingIndex,
                               CraftingTime => CraftingTime,
                               CraftingAmount => CraftingAmount));
@@ -537,12 +538,12 @@ package body Ships.SaveLoad is
                   when MEDICAL_ROOM =>
                      PlayerShip.Modules.Append
                        (New_Item =>
-                          (MType => MEDICAL_ROOM, Name => Name,
-                           ProtoIndex => ProtoIndex, Weight => Weight,
+                          (M_Type => MEDICAL_ROOM, Name => Name,
+                           Proto_Index => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owner => Owners,
-                           UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           Max_Durability => MaxDurability, Owner => Owners,
+                           Upgrade_Progress => UpgradeProgress,
+                           Upgrade_Action => UpgradeAction));
                   when TRAINING_ROOM =>
                      declare
                         TrainedSkill: Natural;
@@ -562,12 +563,12 @@ package body Ships.SaveLoad is
                         end loop Load_Training_Room_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => TRAINING_ROOM, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => TRAINING_ROOM, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               TrainedSkill => TrainedSkill));
                      end;
                   when TURRET =>
@@ -589,13 +590,13 @@ package body Ships.SaveLoad is
                         end loop Load_Turret_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => TURRET, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => TURRET, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
-                              GunIndex => GunIndex));
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
+                              Gun_Index => GunIndex));
                      end;
                   when GUN =>
                      declare
@@ -624,23 +625,23 @@ package body Ships.SaveLoad is
                         end loop Load_Gun_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => GUN, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => GUN, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction, Damage => Damage,
-                              AmmoIndex => AmmoIndex));
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
+                              Damage => Damage, AmmoIndex => AmmoIndex));
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
                        (New_Item =>
-                          (MType => CARGO_ROOM, Name => Name,
-                           ProtoIndex => ProtoIndex, Weight => Weight,
+                          (M_Type => CARGO_ROOM, Name => Name,
+                           Proto_Index => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owner => Owners,
-                           UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           Max_Durability => MaxDurability, Owner => Owners,
+                           Upgrade_Progress => UpgradeProgress,
+                           Upgrade_Action => UpgradeAction));
                   when HULL =>
                      declare
                         InstalledModules, MaxModules: Natural;
@@ -668,24 +669,24 @@ package body Ships.SaveLoad is
                         end loop Load_Hull_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => HULL, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => HULL, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               InstalledModules => InstalledModules,
                               MaxModules => MaxModules));
                      end;
                   when ARMOR =>
                      PlayerShip.Modules.Append
                        (New_Item =>
-                          (MType => ARMOR, Name => Name,
-                           ProtoIndex => ProtoIndex, Weight => Weight,
+                          (M_Type => ARMOR, Name => Name,
+                           Proto_Index => ProtoIndex, Weight => Weight,
                            Durability => Durability,
-                           MaxDurability => MaxDurability, Owner => Owners,
-                           UpgradeProgress => UpgradeProgress,
-                           UpgradeAction => UpgradeAction));
+                           Max_Durability => MaxDurability, Owner => Owners,
+                           Upgrade_Progress => UpgradeProgress,
+                           Upgrade_Action => UpgradeAction));
                   when BATTERING_RAM =>
                      declare
                         Damage: Natural;
@@ -705,12 +706,12 @@ package body Ships.SaveLoad is
                         end loop Load_Battering_Ram_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => BATTERING_RAM, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => BATTERING_RAM, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               Damage2 => Damage, CoolingDown => False));
                      end;
                   when HARPOON_GUN =>
@@ -740,12 +741,12 @@ package body Ships.SaveLoad is
                         end loop Load_Harpoon_Gun_Data_Loop;
                         PlayerShip.Modules.Append
                           (New_Item =>
-                             (MType => HARPOON_GUN, Name => Name,
-                              ProtoIndex => ProtoIndex, Weight => Weight,
+                             (M_Type => HARPOON_GUN, Name => Name,
+                              Proto_Index => ProtoIndex, Weight => Weight,
                               Durability => Durability,
-                              MaxDurability => MaxDurability, Owner => Owners,
-                              UpgradeProgress => UpgradeProgress,
-                              UpgradeAction => UpgradeAction,
+                              Max_Durability => MaxDurability, Owner => Owners,
+                              Upgrade_Progress => UpgradeProgress,
+                              Upgrade_Action => UpgradeAction,
                               Duration => Duration,
                               HarpoonIndex => HarpoonIndex));
                      end;
