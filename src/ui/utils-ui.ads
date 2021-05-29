@@ -154,28 +154,6 @@ package Utils.UI is
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
-      -- ****f* UUI/UUI.ShowManipulateItem
-      -- FUNCTION
-      -- Show the dialog for manipulate items amount in cargo (like selling,
-      -- dropping, etc).
-      -- PARAMETERS
-      -- Title     - Title of the dialog
-      -- Command   - Tcl command which will be executed when the player hit
-      --             the button Ok
-      -- Action    - The name of action which the player is doing (like drop,
-      --             sell, ect)
-      -- ItemIndex - The index of the item which will be manipulated
-      -- MaxAmount - Max amount of the items to manipualate. If zero, use max
-      --             amount of items from player ship cargo. Default value is
-      --             zero.
-      -- SOURCE
-   procedure ShowManipulateItem
-     (Title, Command, Action: String;
-      ItemIndex: Inventory_Container.Extended_Index;
-      MaxAmount: Natural := 0) with
-      Pre => Title'Length > 0 and Command'Length > 0;
-      -- ****
-
       -- ****f* UUI/UUI.ShowQuestion
       -- FUNCTION
       -- Show the dialog with question to the player

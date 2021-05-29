@@ -125,133 +125,135 @@ package body Ships is
                when ENGINE =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => ENGINE, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => ENGINE, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, FuelUsage => TempModule.Value,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE, Fuel_Usage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => CABIN, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => CABIN, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Cleanliness => TempModule.Value,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE,
+                        Cleanliness => TempModule.Value,
                         Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => WORKSHOP, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => WORKSHOP, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE,
                         CraftingIndex => Null_Unbounded_String,
                         CraftingTime => 0, CraftingAmount => 0));
                when MEDICAL_ROOM =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => MEDICAL_ROOM,
+                       (M_Type => MEDICAL_ROOM,
                         Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE));
                when COCKPIT =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => COCKPIT, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => COCKPIT, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE));
                when TRAINING_ROOM =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => TRAINING_ROOM,
+                       (M_Type => TRAINING_ROOM,
                         Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, TrainedSkill => 0));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE, TrainedSkill => 0));
                when TURRET =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => TURRET, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => TURRET, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, GunIndex => 0));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE, Gun_Index => 0));
                when GUN =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => GUN, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => GUN, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Damage => TempModule.MaxValue,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE, Damage => TempModule.MaxValue,
                         AmmoIndex => 0));
                when CARGO =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => CARGO_ROOM, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => CARGO_ROOM,
+                        Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE));
                when HULL =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => HULL, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => HULL, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE,
                         InstalledModules => TempModule.Value,
                         MaxModules => TempModule.MaxValue));
                when ARMOR =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => ARMOR, Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                       (M_Type => ARMOR, Name => Modules_List(Module).Name,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE));
                when BATTERING_RAM =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => BATTERING_RAM,
+                       (M_Type => BATTERING_RAM,
                         Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Damage2 => TempModule.MaxValue,
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE, Damage2 => TempModule.MaxValue,
                         CoolingDown => False));
                when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>
-                       (MType => HARPOON_GUN,
+                       (M_Type => HARPOON_GUN,
                         Name => Modules_List(Module).Name,
-                        ProtoIndex => Module, Weight => TempModule.Weight,
+                        Proto_Index => Module, Weight => TempModule.Weight,
                         Durability => TempModule.Durability,
-                        MaxDurability => TempModule.Durability,
-                        Owner => Owners, UpgradeProgress => 0,
-                        UpgradeAction => NONE, Duration => TempModule.MaxValue,
-                        HarpoonIndex => 0));
+                        Max_Durability => TempModule.Durability,
+                        Owner => Owners, Upgrade_Progress => 0,
+                        Upgrade_Action => NONE,
+                        Duration => TempModule.MaxValue, HarpoonIndex => 0));
                when ANY =>
                   null;
             end case;
@@ -275,7 +277,7 @@ package body Ships is
                ShipCrew.Append(New_Item => Member);
                Modules_Loop :
                for Module of ShipModules loop
-                  if Module.MType = CABIN then
+                  if Module.M_Type = CABIN then
                      Set_Cabin_Name_Loop :
                      for I in Module.Owner.Iterate loop
                         if Module.Owner(I) = 0 then
@@ -293,11 +295,12 @@ package body Ships is
                for Module of ShipModules loop
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
-                       ((Module.MType in GUN | HARPOON_GUN) and
+                       ((Module.M_Type in GUN | HARPOON_GUN) and
                         Member.Order = Gunner) then
                         Module.Owner(1) := ShipCrew.Last_Index;
                         exit Set_Module_Owner_Loop;
-                     elsif Module.MType = COCKPIT and Member.Order = Pilot then
+                     elsif Module.M_Type = COCKPIT and
+                       Member.Order = Pilot then
                         Module.Owner(1) := ShipCrew.Last_Index;
                         exit Set_Module_Owner_Loop;
                      end if;
@@ -331,33 +334,33 @@ package body Ships is
          Amount := 0;
          Count_Modules_Loop :
          for I in TmpShip.Modules.Iterate loop
-            if TmpShip.Modules(I).MType = TURRET then
+            if TmpShip.Modules(I).M_Type = TURRET then
                Count_Guns_Loop :
                for J in TmpShip.Modules.Iterate loop
-                  if TmpShip.Modules(J).MType in GUN | HARPOON_GUN then
+                  if TmpShip.Modules(J).M_Type in GUN | HARPOON_GUN then
                      GunAssigned := False;
                      Check_Assigned_Guns_Loop :
                      for K in TmpShip.Modules.Iterate loop
-                        if TmpShip.Modules(K).MType = TURRET
-                          and then TmpShip.Modules(K).GunIndex =
+                        if TmpShip.Modules(K).M_Type = TURRET
+                          and then TmpShip.Modules(K).Gun_Index =
                             Modules_Container.To_Index(J) then
                            GunAssigned := True;
                            exit Check_Assigned_Guns_Loop;
                         end if;
                      end loop Check_Assigned_Guns_Loop;
                      if not GunAssigned then
-                        TmpShip.Modules(I).GunIndex :=
+                        TmpShip.Modules(I).Gun_Index :=
                           Modules_Container.To_Index(J);
                      end if;
                   end if;
                end loop Count_Guns_Loop;
-            elsif TmpShip.Modules(I).MType = HULL then
+            elsif TmpShip.Modules(I).M_Type = HULL then
                HullIndex := Modules_Container.To_Index(I);
             end if;
-            if Modules_List(TmpShip.Modules(I).ProtoIndex).MType not in GUN |
+            if Modules_List(TmpShip.Modules(I).Proto_Index).MType not in GUN |
                   HARPOON_GUN | ARMOR | HULL then
                Amount :=
-                 Amount + Modules_List(TmpShip.Modules(I).ProtoIndex).Size;
+                 Amount + Modules_List(TmpShip.Modules(I).Proto_Index).Size;
             end if;
          end loop Count_Modules_Loop;
          TmpShip.Modules(HullIndex).InstalledModules := Amount;
@@ -925,23 +928,24 @@ package body Ships is
    begin
       Count_Combat_Value_Loop :
       for Module of PlayerShip.Modules loop
-         case Modules_List(Module.ProtoIndex).MType is
+         case Modules_List(Module.Proto_Index).MType is
             when BATTERING_RAM =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.Damage2 * 10);
+                 CombatValue + Module.Max_Durability + (Module.Damage2 * 10);
             when GUN =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.Damage * 10);
-               CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 10);
+                 CombatValue + Module.Max_Durability + (Module.Damage * 10);
+               CountAmmoValue(Modules_List(Module.Proto_Index).Value, 10);
             when ARMOR =>
-               CombatValue := CombatValue + Module.MaxDurability;
+               CombatValue := CombatValue + Module.Max_Durability;
             when HARPOON_GUN =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.Duration * 5);
-               CountAmmoValue(Modules_List(Module.ProtoIndex).Value, 5);
+                 CombatValue + Module.Max_Durability + (Module.Duration * 5);
+               CountAmmoValue(Modules_List(Module.Proto_Index).Value, 5);
             when HULL =>
                CombatValue :=
-                 CombatValue + Module.MaxDurability + (Module.MaxModules * 10);
+                 CombatValue + Module.Max_Durability +
+                 (Module.MaxModules * 10);
             when others =>
                null;
          end case;
@@ -995,13 +999,13 @@ package body Ships is
       Ship.Modules(ModuleIndex).Durability :=
         Ship.Modules(ModuleIndex).Durability - RealDamage;
       if Ship.Modules(ModuleIndex).Durability = 0 then
-         case Modules_List(Ship.Modules(ModuleIndex).ProtoIndex).MType is
+         case Modules_List(Ship.Modules(ModuleIndex).Proto_Index).MType is
             when HULL | ENGINE =>
                if Ship = PlayerShip then
                   Death(1, To_Unbounded_String(DeathReason), PlayerShip);
                end if;
             when TURRET =>
-               WeaponIndex := Ship.Modules(ModuleIndex).GunIndex;
+               WeaponIndex := Ship.Modules(ModuleIndex).Gun_Index;
                if WeaponIndex > 0 then
                   Ship.Modules(WeaponIndex).Durability := 0;
                   RemoveGun(WeaponIndex);

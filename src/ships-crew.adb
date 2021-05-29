@@ -247,7 +247,7 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if MType /= CABIN then
-                  if Modules_List(Ship.Modules(I).ProtoIndex).MType = MType and
+                  if Modules_List(Ship.Modules(I).Proto_Index).MType = MType and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
                         GiveOrders
@@ -258,7 +258,7 @@ package body Ships.Crew is
                      exit Modules_Loop;
                   end if;
                else
-                  if Ship.Modules(I).MType = CABIN and
+                  if Ship.Modules(I).M_Type = CABIN and
                     Ship.Modules(I).Durability > 0 then
                      Cabin_Owners_Loop :
                      for Owner of Ship.Modules(I).Owner loop
@@ -291,7 +291,7 @@ package body Ships.Crew is
             when Rest =>
                Modules_Loop2 :
                for Module of Ship.Modules loop
-                  if Module.MType = CABIN and Module.Durability > 0 then
+                  if Module.M_Type = CABIN and Module.Durability > 0 then
                      Owners_Loop2 :
                      for Owner of Module.Owner loop
                         if Owner = 0 then
@@ -311,7 +311,7 @@ package body Ships.Crew is
       end if;
       Modules_Loop3 :
       for Module of Ship.Modules loop
-         if Module.MType /= CABIN then
+         if Module.M_Type /= CABIN then
             Owners_Loop3 :
             for Owner of Module.Owner loop
                if Owner = MemberIndex then
@@ -542,7 +542,7 @@ package body Ships.Crew is
             Find_Module_Index_Loop :
             for I in Ship.Modules.Iterate loop
                if Ship.Modules(I).Durability > 0 then
-                  case Ship.Modules(I).MType is
+                  case Ship.Modules(I).M_Type is
                      when GUN =>
                         if Order = Gunner and Ship.Modules(I).Owner(1) = 0 then
                            ModuleIndex := Modules_Container.To_Index(I);
@@ -642,7 +642,7 @@ package body Ships.Crew is
       Modules_Need_Loop :
       for Module of Ship.Modules loop
          if Module.Durability > 0 then
-            case Module.MType is
+            case Module.M_Type is
                when GUN =>
                   if Module.Owner(1) = 0 and not NeedGunners then
                      NeedGunners := True;
@@ -666,11 +666,11 @@ package body Ships.Crew is
                   null;
             end case;
          end if;
-         if Module.Durability < Module.MaxDurability and not NeedRepairs then
+         if Module.Durability < Module.Max_Durability and not NeedRepairs then
             Find_Need_Repairs_Loop :
             for Item of Ship.Cargo loop
                if Items_List(Item.ProtoIndex).IType =
-                 Modules_List(Module.ProtoIndex).RepairMaterial then
+                 Modules_List(Module.Proto_Index).RepairMaterial then
                   NeedRepairs := True;
                   exit Find_Need_Repairs_Loop;
                end if;
@@ -703,7 +703,7 @@ package body Ships.Crew is
          if FindItem
              (Inventory => Ship.Cargo,
               ItemType =>
-                Modules_List(Ship.Modules(Ship.UpgradeModule).ProtoIndex)
+                Modules_List(Ship.Modules(Ship.UpgradeModule).Proto_Index)
                   .RepairMaterial) >
            0
            and then UpdatePosition(Upgrading) then
@@ -756,7 +756,7 @@ package body Ships.Crew is
          if FindItem
              (Inventory => Ship.Cargo,
               ItemType =>
-                Modules_List(Ship.Modules(Ship.UpgradeModule).ProtoIndex)
+                Modules_List(Ship.Modules(Ship.UpgradeModule).Proto_Index)
                   .RepairMaterial) >
            0
            and then UpdatePosition(Upgrading, False) then

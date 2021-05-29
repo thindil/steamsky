@@ -290,7 +290,7 @@ package body Crafts is
       begin
          Check_For_Workshop_Loop :
          for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = MType and
+            if Modules_List(Module.Proto_Index).MType = MType and
               Module.Durability > 0 then
                HaveWorkshop := True;
                exit Check_For_Workshop_Loop;
@@ -444,7 +444,7 @@ package body Crafts is
    begin
       Modules_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType /= WORKSHOP then
+         if Module.M_Type /= WORKSHOP then
             goto End_Of_Loop;
          end if;
          if Module.CraftingIndex = Null_Unbounded_String then
@@ -598,7 +598,8 @@ package body Crafts is
                   Damage :=
                     1.0 -
                     Damage_Factor
-                      (Float(Module.Durability) / Float(Module.MaxDurability));
+                      (Float(Module.Durability) /
+                       Float(Module.Max_Durability));
                   ResultAmount :=
                     ResultAmount -
                     Natural(Float(ResultAmount) * Float(Damage));

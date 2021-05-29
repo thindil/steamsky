@@ -90,7 +90,7 @@ package body Events is
                         RED);
                      Count_Engines_Loop :
                      for I in PlayerShip.Modules.Iterate loop
-                        if PlayerShip.Modules(I).MType = ENGINE
+                        if PlayerShip.Modules(I).M_Type = ENGINE
                           and then not PlayerShip.Modules(I).Disabled then
                            Engines.Append
                              (New_Item => Modules_Container.To_Index(I));
