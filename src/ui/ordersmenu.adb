@@ -204,18 +204,10 @@ package body OrdersMenu is
                end if;
             end loop Add_Buy_Recipes_Menu_Loop;
             if SkyBases(BaseIndex).Missions.Length > 0 then
-               case SkyBases(BaseIndex).Reputation(1) is
-                  when 0 .. 25 =>
-                     MissionsLimit := 1;
-                  when 26 .. 50 =>
-                     MissionsLimit := 3;
-                  when 51 .. 75 =>
-                     MissionsLimit := 5;
-                  when 76 .. 100 =>
-                     MissionsLimit := 10;
-                  when others =>
-                     MissionsLimit := 0;
-               end case;
+               MissionsLimit :=
+                 (case SkyBases(BaseIndex).Reputation(1) is when 0 .. 25 => 1,
+                    when 26 .. 50 => 3, when 51 .. 75 => 5,
+                    when 76 .. 100 => 10, when others => 0);
                Add_Mission_Menu_Loop :
                for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
@@ -849,17 +841,14 @@ package body OrdersMenu is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
-      Step: Step_Data;
+      Step: Step_Data :=
+        (if CurrentStory.CurrentStep = 0 then
+           Stories_List(CurrentStory.Index).StartingStep
+         elsif CurrentStory.CurrentStep > 0 then
+           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep)
+         else Stories_List(CurrentStory.Index).FinalStep);
       Message: Unbounded_String;
    begin
-      if CurrentStory.CurrentStep = 0 then
-         Step := Stories_List(CurrentStory.Index).StartingStep;
-      elsif CurrentStory.CurrentStep > 0 then
-         Step :=
-           Stories_List(CurrentStory.Index).Steps(CurrentStory.CurrentStep);
-      else
-         Step := Stories_List(CurrentStory.Index).FinalStep;
-      end if;
       if PlayerShip.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
          Message := To_Unbounded_String(DockShip(True));
          if Message /= Null_Unbounded_String then
@@ -884,13 +873,11 @@ package body OrdersMenu is
                   null;
             end case;
             if CurrentStory.CurrentStep > -2 then
-               if CurrentStory.CurrentStep > 0 then
-                  Step :=
+               Step :=
+                 (if CurrentStory.CurrentStep > 0 then
                     Stories_List(CurrentStory.Index).Steps
-                      (CurrentStory.CurrentStep);
-               else
-                  Step := Stories_List(CurrentStory.Index).FinalStep;
-               end if;
+                      (CurrentStory.CurrentStep)
+                  else Stories_List(CurrentStory.Index).FinalStep);
                for Text of Step.Texts loop
                   if CurrentStory.FinishedStep = Text.Condition then
                      ShowInfo(Text => To_String(Text.Text), Title => "Story");
