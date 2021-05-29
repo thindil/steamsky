@@ -161,7 +161,7 @@ package body Crafts.UI is
          Recipe := Recipes_List(Known_Recipes(I));
          Find_Workshop_Loop :
          for Module of PlayerShip.Modules loop
-            if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace
+            if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
               and then Module.Durability > 0 then
                Has_Workplace := True;
                exit Find_Workshop_Loop;
@@ -240,7 +240,7 @@ package body Crafts.UI is
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = ALCHEMY_LAB
+         if Modules_List(Module.Proto_Index).MType = ALCHEMY_LAB
            and then Module.Durability > 0 then
             Has_Workplace := True;
             exit Find_Alchemy_Lab_Loop;
@@ -463,7 +463,7 @@ package body Crafts.UI is
       end if;
       Show_Workshops_List_Loop :
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = MType then
+         if Modules_List(Module.Proto_Index).MType = MType then
             Append(ModulesList, " {" & Module.Name & "}");
          end if;
       end loop Show_Workshops_List_Loop;
@@ -658,7 +658,7 @@ package body Crafts.UI is
       HaveWorkplace := False;
       Have_Workplace_Loop :
       for Module of PlayerShip.Modules loop
-         if Modules_List(Module.ProtoIndex).MType = Recipe.Workplace then
+         if Modules_List(Module.Proto_Index).MType = Recipe.Workplace then
             WorkplaceName := Module.Name;
             if Module.Durability > 0 then
                HaveWorkplace := True;
