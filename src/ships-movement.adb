@@ -48,9 +48,9 @@ package body Ships.Movement is
    begin
       Find_Modules_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = COCKPIT and Module.Durability > 0 then
+         if Module.M_Type = COCKPIT and Module.Durability > 0 then
             HaveCockpit := True;
-         elsif Module.MType = ENGINE
+         elsif Module.M_Type = ENGINE
            and then (Module.Durability > 1 and not Module.Disabled) then
             HaveEngine := True;
          end if;
@@ -297,7 +297,7 @@ package body Ships.Movement is
                   end if;
                   Count_Cost_Loop :
                   for Module of PlayerShip.Modules loop
-                     if Module.MType = HULL then
+                     if Module.M_Type = HULL then
                         DockingCost := Module.MaxModules;
                         exit Count_Cost_Loop;
                      end if;
@@ -400,7 +400,7 @@ package body Ships.Movement is
    begin
       Find_Engine_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = ENGINE
+         if Module.M_Type = ENGINE
            and then (Module.Durability > 0 and not Module.Disabled) then
             HaveEngine := True;
             exit Find_Engine_Loop;
@@ -436,12 +436,12 @@ package body Ships.Movement is
       begin
          Find_Engine_Loop :
          for Module of Ship.Modules loop
-            if Module.MType = ENGINE and then not Module.Disabled then
+            if Module.M_Type = ENGINE and then not Module.Disabled then
                BaseSpeed := Module.Power * 10;
                Damage :=
                  1.0 -
                  Damage_Factor
-                   (Float(Module.Durability) / Float(Module.MaxDurability));
+                   (Float(Module.Durability) / Float(Module.Max_Durability));
                Speed :=
                  Speed +
                  (BaseSpeed - Natural(Float(BaseSpeed) * Float(Damage)));
@@ -474,7 +474,7 @@ package body Ships.Movement is
          else
             Normal_Ship_Speed_Loop :
             for Module of Ship.Modules loop
-               if Module.MType = HULL then
+               if Module.M_Type = HULL then
                   Speed :=
                     Speed +
                     Natural
@@ -516,14 +516,14 @@ package body Ships.Movement is
       end if;
       Count_Fuel_Needed_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = ENGINE and then not Module.Disabled then
+         if Module.M_Type = ENGINE and then not Module.Disabled then
             case Speed is
                when QUARTER_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.FuelUsage / 4);
+                  FuelNeeded := FuelNeeded - (Module.Fuel_Usage / 4);
                when HALF_SPEED =>
-                  FuelNeeded := FuelNeeded - (Module.FuelUsage / 2);
+                  FuelNeeded := FuelNeeded - (Module.Fuel_Usage / 2);
                when FULL_SPEED =>
-                  FuelNeeded := FuelNeeded - Module.FuelUsage;
+                  FuelNeeded := FuelNeeded - Module.Fuel_Usage;
                when others =>
                   null;
             end case;
@@ -541,7 +541,7 @@ package body Ships.Movement is
       end if;
       Needed_Fuel_Loop :
       for Module of PlayerShip.Modules loop
-         if Module.MType = ENGINE and then not Module.Disabled then
+         if Module.M_Type = ENGINE and then not Module.Disabled then
             BaseFuelNeeded := BaseFuelNeeded - 1;
          end if;
       end loop Needed_Fuel_Loop;
