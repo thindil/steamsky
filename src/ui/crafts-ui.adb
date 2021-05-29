@@ -434,27 +434,32 @@ package body Crafts.UI is
                 (Items_List(Recipes_List(RecipeIndex).ResultIndex).Name)),
            275, 2);
       MaxAmount: constant Positive := CheckRecipe(RecipeIndex);
-      AmountLabel: constant Ttk_Label :=
+      Label: Ttk_Label :=
         Create(CraftDialog & ".amountlabel", "-text {Amount:}");
-      ModulesBox: constant Ttk_ComboBox := Create(CraftDialog & ".workshop");
+      ModulesBox: constant Ttk_ComboBox :=
+        Create(CraftDialog & ".workshop", "-state readonly");
       AmountBox: constant Ttk_SpinBox :=
         Create
           (CraftDialog & ".amount",
            "-to" & Positive'Image(MaxAmount) &
-           " -validatecommand {ValidateSpinbox %W %P} -width 21");
-      MaxButton: constant Ttk_Button :=
+           " -validatecommand {ValidateSpinbox %W %P} -width 20");
+      Button: Ttk_Button :=
         Create
           (CraftDialog & ".maxamount",
            "-text {max" & Positive'Image(MaxAmount) & "} -command {" &
            AmountBox & " set" & Positive'Image(MaxAmount) & "}");
+      ButtonRow: Positive := 1;
    begin
       Set(AmountBox, "1");
       if RecipeType /= "Study" then
-         Tcl.Tk.Ada.Grid.Grid(AmountLabel);
          if MaxAmount > 1 then
-            Tcl.Tk.Ada.Grid.Grid(MaxButton, "-row 1 -column 1 -padx {0 5}");
+            Tcl.Tk.Ada.Grid.Grid(Label);
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1 -padx {0 5}");
+         else
+            Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2");
          end if;
          Tcl.Tk.Ada.Grid.Grid(AmountBox, "-columnspan 2 -padx 5");
+         ButtonRow := ButtonRow + 2;
       end if;
       if RecipeType in "Study" | "Deconstruct" then
          MType := ALCHEMY_LAB;
@@ -469,8 +474,23 @@ package body Crafts.UI is
       end loop Show_Workshops_List_Loop;
       configure(ModulesBox, "-values [list" & To_String(ModulesList) & "]");
       Current(ModulesBox, "0");
-      Add_Close_Button
-        (CraftDialog & ".close", "Cancel", "CloseDialog " & CraftDialog);
+      if RecipeType = "Craft" then
+         Label := Create(CraftDialog & ".workshoplabel", "-text {Wokshop:}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
+         Tcl.Tk.Ada.Grid.Grid(ModulesBox, "-columnspan 2 -padx 5");
+         ButtonRow := ButtonRow + 2;
+      end if;
+      Button :=
+        Create
+          (CraftDialog & ".craft",
+           "-text {Craft} -command {CloseDialog " & CraftDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
+      Button :=
+        Create
+          (CraftDialog & ".cancel",
+           "-text {Cancel} -command {CloseDialog " & CraftDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button, "-pady 5 -padx 5 -column 1 -row" & Positive'Image(ButtonRow));
       Show_Dialog(CraftDialog);
       return TCL_OK;
    end Show_Set_Recipe_Command;
