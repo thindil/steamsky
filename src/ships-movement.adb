@@ -298,7 +298,7 @@ package body Ships.Movement is
                   Count_Cost_Loop :
                   for Module of PlayerShip.Modules loop
                      if Module.M_Type = HULL then
-                        DockingCost := Module.MaxModules;
+                        DockingCost := Module.Max_Modules;
                         exit Count_Cost_Loop;
                      end if;
                   end loop Count_Cost_Loop;
@@ -478,7 +478,7 @@ package body Ships.Movement is
                   Speed :=
                     Speed +
                     Natural
-                      (Float(Speed) * (Float(Module.MaxModules * 2) / 300.0));
+                      (Float(Speed) * (Float(Module.Max_Modules * 2) / 300.0));
                   exit Normal_Ship_Speed_Loop;
                end if;
             end loop Normal_Ship_Speed_Loop;

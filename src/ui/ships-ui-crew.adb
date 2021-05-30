@@ -1182,7 +1182,7 @@ package body Ships.UI.Crew is
                      if not IsWorking
                          (PlayerShip.Modules(J).Owner,
                           Positive'Value(CArgv.Arg(Argv, 1))) and
-                       PlayerShip.Modules(J).CraftingIndex /=
+                       PlayerShip.Modules(J).Crafting_Index /=
                          Null_Unbounded_String then
                         Menu.Add
                           (CrewMenu, "command",

@@ -252,8 +252,8 @@ package body Ships.UI.Modules is
             declare
                AmmoIndex: constant Natural :=
                  (if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
-                    PlayerShip.Modules(ModuleIndex).AmmoIndex
-                  else PlayerShip.Modules(ModuleIndex).HarpoonIndex);
+                    PlayerShip.Modules(ModuleIndex).Ammo_Index
+                  else PlayerShip.Modules(ModuleIndex).Harpoon_Index);
                AmmoMenu: Tk_Menu :=
                  Get_Widget(Widget_Image(ModuleMenu) & ".ammomenu");
                NotEmpty: Boolean := False;
@@ -320,14 +320,14 @@ package body Ships.UI.Modules is
               PlayerShip.UpgradeModule = ModuleIndex then
                MaxValue := 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).MaxModules < MaxValue then
+            if PlayerShip.Modules(ModuleIndex).Max_Modules < MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
                   CArgv.Arg(Argv, 1) & "}");
             end if;
          when WORKSHOP =>
-            if PlayerShip.Modules(ModuleIndex).CraftingIndex /=
+            if PlayerShip.Modules(ModuleIndex).Crafting_Index /=
               Null_Unbounded_String then
                Menu.Add
                  (ModuleMenu, "command",
@@ -356,7 +356,7 @@ package body Ships.UI.Modules is
                end if;
             end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
-            if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
+            if PlayerShip.Modules(ModuleIndex).Trained_Skill > 0 then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
@@ -566,11 +566,11 @@ package body Ships.UI.Modules is
               Create
                 (ModuleFrame & ".modules",
                  "-text {Modules installed:" &
-                 Integer'Image(Module.InstalledModules) & " /" &
-                 Integer'Image(Module.MaxModules) & "}");
+                 Integer'Image(Module.Installed_Modules) & " /" &
+                 Integer'Image(Module.Max_Modules) & "}");
             MaxValue :=
               Positive(Float(Modules_List(Module.Proto_Index).MaxValue) * 1.5);
-            if Module.MaxModules = MaxValue then
+            if Module.Max_Modules = MaxValue then
                configure
                  (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
             end if;
@@ -651,8 +651,8 @@ package body Ships.UI.Modules is
             HaveAmmo := False;
             declare
                AmmoIndex: constant Natural :=
-                 (if Module.M_Type = GUN then Module.AmmoIndex
-                  else Module.HarpoonIndex);
+                 (if Module.M_Type = GUN then Module.Ammo_Index
+                  else Module.Harpoon_Index);
             begin
                if AmmoIndex in
                    PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index
@@ -733,21 +733,21 @@ package body Ships.UI.Modules is
          when WORKSHOP =>
             AddOwnersInfo("Worker");
             Insert(ModuleText, "end", "{" & LF & "}");
-            if Module.CraftingIndex /= Null_Unbounded_String then
-               if Length(Module.CraftingIndex) > 6
-                 and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
+            if Module.Crafting_Index /= Null_Unbounded_String then
+               if Length(Module.Crafting_Index) > 6
+                 and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
                   Insert
                     (ModuleText, "end",
                      "{Studying " &
                      To_String
                        (Items_List
                           (Unbounded_Slice
-                             (Module.CraftingIndex, 7,
-                              Length(Module.CraftingIndex)))
+                             (Module.Crafting_Index, 7,
+                              Length(Module.Crafting_Index)))
                           .Name) &
                      "}");
-               elsif Length(Module.CraftingIndex) > 12
-                 and then Slice(Module.CraftingIndex, 1, 11) =
+               elsif Length(Module.Crafting_Index) > 12
+                 and then Slice(Module.Crafting_Index, 1, 11) =
                    "Deconstruct" then
                   Insert
                     (ModuleText, "end",
@@ -755,36 +755,36 @@ package body Ships.UI.Modules is
                      To_String
                        (Items_List
                           (Unbounded_Slice
-                             (Module.CraftingIndex, 13,
-                              Length(Module.CraftingIndex)))
+                             (Module.Crafting_Index, 13,
+                              Length(Module.Crafting_Index)))
                           .Name) &
                      "}");
                else
                   Insert
                     (ModuleText, "end",
                      "{Manufacturing:" &
-                     Positive'Image(Module.CraftingAmount) & "x " &
+                     Positive'Image(Module.Crafting_Amount) & "x " &
                      To_String
                        (Items_List
-                          (Recipes_List(Module.CraftingIndex).ResultIndex)
+                          (Recipes_List(Module.Crafting_Index).ResultIndex)
                           .Name) &
                      "}");
                end if;
                Insert
                  (ModuleText, "end",
                   "{" & LF & "Time to complete current:" &
-                  Positive'Image(Module.CraftingTime) & " mins}");
+                  Positive'Image(Module.Crafting_Time) & " mins}");
             else
                Insert(ModuleText, "end", "{Manufacturing: nothing}");
             end if;
          when MEDICAL_ROOM =>
             AddOwnersInfo("Medic");
          when TRAINING_ROOM =>
-            if Module.TrainedSkill > 0 then
+            if Module.Trained_Skill > 0 then
                Insert
                  (ModuleText, "end",
                   "{" & LF & "Set for training " &
-                  To_String(Skills_List(Module.TrainedSkill).Name) & ".}");
+                  To_String(Skills_List(Module.Trained_Skill).Name) & ".}");
             else
                Insert
                  (ModuleText, "end", "{" & LF & "Must be set for training.}");
@@ -1043,9 +1043,9 @@ package body Ships.UI.Modules is
          UpdateHeader;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
          if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
-            PlayerShip.Modules(ModuleIndex).AmmoIndex := AssignIndex;
+            PlayerShip.Modules(ModuleIndex).Ammo_Index := AssignIndex;
          else
-            PlayerShip.Modules(ModuleIndex).HarpoonIndex := AssignIndex;
+            PlayerShip.Modules(ModuleIndex).Harpoon_Index := AssignIndex;
          end if;
          AddMessage
            ("You assigned " &
@@ -1054,10 +1054,10 @@ package body Ships.UI.Modules is
             " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         if PlayerShip.Modules(ModuleIndex).TrainedSkill = AssignIndex then
+         if PlayerShip.Modules(ModuleIndex).Trained_Skill = AssignIndex then
             return TCL_OK;
          end if;
-         PlayerShip.Modules(ModuleIndex).TrainedSkill := AssignIndex;
+         PlayerShip.Modules(ModuleIndex).Trained_Skill := AssignIndex;
          AddMessage
            ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
@@ -1550,15 +1550,15 @@ package body Ships.UI.Modules is
             To_String(SkillName) & "} {" & To_String(ToolName) & "}]" &
             To_String(Tags));
       end loop Load_Skills_List_Loop;
-      if PlayerShip.Modules(ModuleIndex).TrainedSkill > 0 then
+      if PlayerShip.Modules(ModuleIndex).Trained_Skill > 0 then
          Selection_Set
            (SkillsView,
             "[list" &
-            Positive'Image(PlayerShip.Modules(ModuleIndex).TrainedSkill) &
+            Positive'Image(PlayerShip.Modules(ModuleIndex).Trained_Skill) &
             "]");
          TtkTreeView.Focus
            (SkillsView,
-            Positive'Image(PlayerShip.Modules(ModuleIndex).TrainedSkill));
+            Positive'Image(PlayerShip.Modules(ModuleIndex).Trained_Skill));
       end if;
       Bind
         (SkillsView, "<<TreeviewSelect>>",
@@ -1606,9 +1606,9 @@ package body Ships.UI.Modules is
       pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      PlayerShip.Modules(ModuleIndex).CraftingIndex := Null_Unbounded_String;
-      PlayerShip.Modules(ModuleIndex).CraftingAmount := 0;
-      PlayerShip.Modules(ModuleIndex).CraftingTime := 0;
+      PlayerShip.Modules(ModuleIndex).Crafting_Index := Null_Unbounded_String;
+      PlayerShip.Modules(ModuleIndex).Crafting_Amount := 0;
+      PlayerShip.Modules(ModuleIndex).Crafting_Time := 0;
       Give_Orders_Loop :
       for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
          if Owner > 0 then
