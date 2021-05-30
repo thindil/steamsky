@@ -152,8 +152,8 @@ package body Ships is
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        CraftingIndex => Null_Unbounded_String,
-                        CraftingTime => 0, CraftingAmount => 0));
+                        Crafting_Index => Null_Unbounded_String,
+                        Crafting_Time => 0, Crafting_Amount => 0));
                when MEDICAL_ROOM =>
                   ShipModules.Append
                     (New_Item =>
@@ -182,7 +182,7 @@ package body Ships is
                         Durability => TempModule.Durability,
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
-                        Upgrade_Action => NONE, TrainedSkill => 0));
+                        Upgrade_Action => NONE, Trained_Skill => 0));
                when TURRET =>
                   ShipModules.Append
                     (New_Item =>
@@ -201,7 +201,7 @@ package body Ships is
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Damage => TempModule.MaxValue,
-                        AmmoIndex => 0));
+                        Ammo_Index => 0));
                when CARGO =>
                   ShipModules.Append
                     (New_Item =>
@@ -221,8 +221,8 @@ package body Ships is
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        InstalledModules => TempModule.Value,
-                        MaxModules => TempModule.MaxValue));
+                        Installed_Modules => TempModule.Value,
+                        Max_Modules => TempModule.MaxValue));
                when ARMOR =>
                   ShipModules.Append
                     (New_Item =>
@@ -242,7 +242,7 @@ package body Ships is
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Damage2 => TempModule.MaxValue,
-                        CoolingDown => False));
+                        Cooling_Down => False));
                when HARPOON_GUN =>
                   ShipModules.Append
                     (New_Item =>
@@ -253,7 +253,7 @@ package body Ships is
                         Max_Durability => TempModule.Durability,
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE,
-                        Duration => TempModule.MaxValue, HarpoonIndex => 0));
+                        Duration => TempModule.MaxValue, Harpoon_Index => 0));
                when ANY =>
                   null;
             end case;
@@ -363,7 +363,7 @@ package body Ships is
                  Amount + Modules_List(TmpShip.Modules(I).Proto_Index).Size;
             end if;
          end loop Count_Modules_Loop;
-         TmpShip.Modules(HullIndex).InstalledModules := Amount;
+         TmpShip.Modules(HullIndex).Installed_Modules := Amount;
       end;
       -- Set known crafting recipes
       Set_Known_Recipes_Loop :
@@ -945,7 +945,7 @@ package body Ships is
             when HULL =>
                CombatValue :=
                  CombatValue + Module.Max_Durability +
-                 (Module.MaxModules * 10);
+                 (Module.Max_Modules * 10);
             when others =>
                null;
          end case;

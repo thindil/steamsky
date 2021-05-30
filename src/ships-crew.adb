@@ -205,7 +205,7 @@ package body Ships.Crew is
          end if;
       end if;
       if GivenOrder = Train
-        and then Ship.Modules(ModuleIndex).TrainedSkill = 0 then
+        and then Ship.Modules(ModuleIndex).Trained_Skill = 0 then
          raise Crew_Order_Error
            with MemberName & " can't start training because " &
            To_String(Ship.Modules(ModuleIndex).Name) & " isn't prepared.";
@@ -247,7 +247,8 @@ package body Ships.Crew is
             Modules_Loop :
             for I in Ship.Modules.Iterate loop
                if MType /= CABIN then
-                  if Modules_List(Ship.Modules(I).Proto_Index).MType = MType and
+                  if Modules_List(Ship.Modules(I).Proto_Index).MType =
+                    MType and
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
                         GiveOrders
@@ -352,10 +353,10 @@ package body Ships.Crew is
             RequiredTool := Cleaning_Tools;
          elsif GivenOrder = Train then
             RequiredTool :=
-              Skills_List(Ship.Modules(ModuleIndex).TrainedSkill).Tool;
+              Skills_List(Ship.Modules(ModuleIndex).Trained_Skill).Tool;
             ToolQuality :=
               GetTrainingToolQuality
-                (MemberIndex, Ship.Modules(ModuleIndex).TrainedSkill);
+                (MemberIndex, Ship.Modules(ModuleIndex).Trained_Skill);
          else
             RequiredTool := Repair_Tools;
          end if;
@@ -550,7 +551,7 @@ package body Ships.Crew is
                         end if;
                      when WORKSHOP =>
                         if Order = Craft and
-                          Ship.Modules(I).CraftingIndex /=
+                          Ship.Modules(I).Crafting_Index /=
                             Null_Unbounded_String then
                            Find_Empty_Workplace_Loop :
                            for Owner of Ship.Modules(I).Owner loop
@@ -584,7 +585,7 @@ package body Ships.Crew is
                         end if;
                      when TRAINING_ROOM =>
                         if Order = Train and
-                          Ship.Modules(I).TrainedSkill > 0 then
+                          Ship.Modules(I).Trained_Skill > 0 then
                            Find_Empty_Training_Loop :
                            for Owner of Ship.Modules(I).Owner loop
                               if Owner = 0 then
@@ -648,7 +649,7 @@ package body Ships.Crew is
                      NeedGunners := True;
                   end if;
                when WORKSHOP =>
-                  if Module.CraftingIndex /= Null_Unbounded_String and
+                  if Module.Crafting_Index /= Null_Unbounded_String and
                     not NeedCrafters then
                      Find_Empty_Crafting_Loop :
                      for Owner of Module.Owner loop

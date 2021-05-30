@@ -78,17 +78,18 @@ package body Ships.SaveLoad is
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   Set_Attribute
-                    (ModuleDataNode, "value", To_String(Module.CraftingIndex));
+                    (ModuleDataNode, "value",
+                     To_String(Module.Crafting_Index));
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.CraftingTime, "value", ModuleDataNode);
+                  SaveNumber(Module.Crafting_Time, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.CraftingAmount, "value", ModuleDataNode);
+                  SaveNumber(Module.Crafting_Amount, "value", ModuleDataNode);
                when TRAINING_ROOM =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.TrainedSkill, "value", ModuleDataNode);
+                  SaveNumber(Module.Trained_Skill, "value", ModuleDataNode);
                when MEDICAL_ROOM | COCKPIT | ARMOR | ANY | CARGO_ROOM =>
                   null;
                when ENGINE =>
@@ -119,17 +120,18 @@ package body Ships.SaveLoad is
                when GUN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.AmmoIndex, "value", ModuleDataNode);
+                  SaveNumber(Module.Ammo_Index, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Damage, "value", ModuleDataNode);
                when HULL =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.InstalledModules, "value", ModuleDataNode);
+                  SaveNumber
+                    (Module.Installed_Modules, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.MaxModules, "value", ModuleDataNode);
+                  SaveNumber(Module.Max_Modules, "value", ModuleDataNode);
                when BATTERING_RAM =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
@@ -137,7 +139,7 @@ package body Ships.SaveLoad is
                when HARPOON_GUN =>
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
-                  SaveNumber(Module.HarpoonIndex, "value", ModuleDataNode);
+                  SaveNumber(Module.Harpoon_Index, "value", ModuleDataNode);
                   ModuleDataNode := Create_Element(SaveData, "data");
                   ModuleDataNode := Append_Child(DataNode, ModuleDataNode);
                   SaveNumber(Module.Duration, "value", ModuleDataNode);
@@ -531,9 +533,9 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              CraftingIndex => CraftingIndex,
-                              CraftingTime => CraftingTime,
-                              CraftingAmount => CraftingAmount));
+                              Crafting_Index => CraftingIndex,
+                              Crafting_Time => CraftingTime,
+                              Crafting_Amount => CraftingAmount));
                      end;
                   when MEDICAL_ROOM =>
                      PlayerShip.Modules.Append
@@ -569,7 +571,7 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              TrainedSkill => TrainedSkill));
+                              Trained_Skill => TrainedSkill));
                      end;
                   when TURRET =>
                      declare
@@ -631,7 +633,7 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              Damage => Damage, AmmoIndex => AmmoIndex));
+                              Damage => Damage, Ammo_Index => AmmoIndex));
                      end;
                   when CARGO_ROOM =>
                      PlayerShip.Modules.Append
@@ -675,8 +677,8 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              InstalledModules => InstalledModules,
-                              MaxModules => MaxModules));
+                              Installed_Modules => InstalledModules,
+                              Max_Modules => MaxModules));
                      end;
                   when ARMOR =>
                      PlayerShip.Modules.Append
@@ -712,7 +714,7 @@ package body Ships.SaveLoad is
                               Max_Durability => MaxDurability, Owner => Owners,
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
-                              Damage2 => Damage, CoolingDown => False));
+                              Damage2 => Damage, Cooling_Down => False));
                      end;
                   when HARPOON_GUN =>
                      declare
@@ -748,7 +750,7 @@ package body Ships.SaveLoad is
                               Upgrade_Progress => UpgradeProgress,
                               Upgrade_Action => UpgradeAction,
                               Duration => Duration,
-                              HarpoonIndex => HarpoonIndex));
+                              Harpoon_Index => HarpoonIndex));
                      end;
                end case;
             end;

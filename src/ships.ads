@@ -90,18 +90,18 @@ package Ships is
    -- Quality           - Quality of selected cabin
    -- Gun_Index         - Index of installed gun
    -- Damage            - Damage bonus for selected gun
-   -- AmmoIndex         - Cargo index of ammunition used by selected gun
-   -- InstalledModules  - Amount of installed modules on ship
-   -- MaxModules        - Amount of maximum installed modules for this hull
-   -- CraftingIndex     - Index of crafting recipe or item which is
+   -- Ammo_Index        - Cargo index of ammunition used by selected gun
+   -- Installed_Modules - Amount of installed modules on ship
+   -- Max_Modules       - Amount of maximum installed modules for this hull
+   -- Crafting_Index    - Index of crafting recipe or item which is
    --                     deconstructed or studies
-   -- CraftingTime      - Time needed to finish crating order
-   -- CraftingAmount    - How many times repeat crafting order
-   -- TrainedSkill      - Index of skill set to training
+   -- Crafting_Time     - Time needed to finish crating order
+   -- Crafting_Amount   - How many times repeat crafting order
+   -- Trained_Skill     - Index of skill set to training
    -- Damage2           - Damage done by battering ram
-   -- CoolingDown       - If true, battering ram can't attack
+   -- Cooling_Down      - If true, battering ram can't attack
    -- Duration          - Duration bonus for selected harpoon gun
-   -- HarpoonIndex      - Cargo index of ammunition used by selected harpoon
+   -- Harpoon_Index     - Cargo index of ammunition used by selected harpoon
    --                     gun
    -- Data              - Various data for module (depends on module)
    -- SOURCE
@@ -126,24 +126,24 @@ package Ships is
             Gun_Index: Natural;
          when GUN =>
             Damage: Positive;
-            AmmoIndex: Inventory_Container.Extended_Index;
+            Ammo_Index: Inventory_Container.Extended_Index;
          when HULL =>
-            InstalledModules: Natural;
-            MaxModules: Positive;
+            Installed_Modules: Natural;
+            Max_Modules: Positive;
          when WORKSHOP =>
-            CraftingIndex: Unbounded_String;
-            CraftingTime: Natural;
-            CraftingAmount: Natural;
+            Crafting_Index: Unbounded_String;
+            Crafting_Time: Natural;
+            Crafting_Amount: Natural;
          when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM =>
             null;
          when TRAINING_ROOM =>
-            TrainedSkill: SkillsData_Container.Extended_Index;
+            Trained_Skill: SkillsData_Container.Extended_Index;
          when BATTERING_RAM =>
             Damage2: Positive;
-            CoolingDown: Boolean;
+            Cooling_Down: Boolean;
          when HARPOON_GUN =>
             Duration: Positive;
-            HarpoonIndex: Inventory_Container.Extended_Index;
+            Harpoon_Index: Inventory_Container.Extended_Index;
          when ANY =>
             Data: Data_Array;
       end case;

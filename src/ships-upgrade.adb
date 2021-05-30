@@ -112,7 +112,8 @@ package body Ships.Upgrade is
                           2) *
                        Float(New_Game_Settings.Upgrade_Cost_Bonus));
                when HULL =>
-                  if PlayerShip.Modules(ModuleIndex).MaxModules = MaxValue then
+                  if PlayerShip.Modules(ModuleIndex).Max_Modules =
+                    MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further enlarge the size of" &
                        To_String(PlayerShip.Modules(ModuleIndex).Name) & ".";
@@ -443,9 +444,9 @@ package body Ships.Upgrade is
                   case UpgradedModule.M_Type is
                      when HULL =>
                         WeightGain := WeightGain * 10;
-                        UpgradedModule.MaxModules :=
-                          UpgradedModule.MaxModules + 1;
-                        UpgradeValue := UpgradedModule.MaxModules;
+                        UpgradedModule.Max_Modules :=
+                          UpgradedModule.Max_Modules + 1;
+                        UpgradeValue := UpgradedModule.Max_Modules;
                      when ENGINE =>
                         WeightGain :=
                           (Modules_List(UpgradedModule.Proto_Index).MaxValue /

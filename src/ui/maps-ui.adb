@@ -228,7 +228,7 @@ package body Maps.UI is
                   HaveGunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
-               if Module.CraftingIndex /= Null_Unbounded_String then
+               if Module.Crafting_Index /= Null_Unbounded_String then
                   NeedWorker := True;
                   Check_Owners_Loop :
                   for Owner of Module.Owner loop

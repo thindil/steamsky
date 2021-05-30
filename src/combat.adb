@@ -83,7 +83,7 @@ package body Combat is
          Count_Modules_Loop :
          for Module of Spotted.Modules loop
             if Module.M_Type = HULL then
-               Result := Result + Module.MaxModules;
+               Result := Result + Module.Max_Modules;
                exit Count_Modules_Loop;
             end if;
          end loop Count_Modules_Loop;
@@ -361,9 +361,9 @@ package body Combat is
             GunnerIndex := 0;
             AmmoIndex := 0;
             if Ship.Modules(K).M_Type = HARPOON_GUN then
-               AmmoIndex2 := Ship.Modules(K).HarpoonIndex;
+               AmmoIndex2 := Ship.Modules(K).Harpoon_Index;
             elsif Ship.Modules(K).M_Type = GUN then
-               AmmoIndex2 := Ship.Modules(K).AmmoIndex;
+               AmmoIndex2 := Ship.Modules(K).Ammo_Index;
             end if;
             if Ship.Modules(K).M_Type in GUN | HARPOON_GUN then
                GunnerIndex := Ship.Modules(K).Owner(1);
@@ -479,9 +479,9 @@ package body Combat is
                              Objects_Container.Key(I) then
                               AmmoIndex := Inventory_Container.To_Index(J);
                               if Ship.Modules(K).M_Type = HARPOON_GUN then
-                                 Ship.Modules(K).HarpoonIndex := AmmoIndex;
+                                 Ship.Modules(K).Harpoon_Index := AmmoIndex;
                               elsif Ship.Modules(K).M_Type = GUN then
-                                 Ship.Modules(K).AmmoIndex := AmmoIndex;
+                                 Ship.Modules(K).Ammo_Index := AmmoIndex;
                               end if;
                               exit Get_Ammo_Index_Loop;
                            end if;
@@ -535,9 +535,10 @@ package body Combat is
                if Enemy.Distance > 100 then
                   Shoots := 0;
                else
-                  Shoots := (if Ship.Modules(K).CoolingDown then 0 else 1);
+                  Shoots := (if Ship.Modules(K).Cooling_Down then 0 else 1);
                end if;
-               Ship.Modules(K).CoolingDown := not Ship.Modules(K).CoolingDown;
+               Ship.Modules(K).Cooling_Down :=
+                 not Ship.Modules(K).Cooling_Down;
             end if;
             Log_Message("Shoots:" & Integer'Image(Shoots), Log.COMBAT);
             if Shoots > 0 then
@@ -685,7 +686,7 @@ package body Combat is
                            for Module of EnemyShip.Modules loop
                               if Module.M_Type = HULL then
                                  WeaponDamage :=
-                                   WeaponDamage - (Module.MaxModules / 10);
+                                   WeaponDamage - (Module.Max_Modules / 10);
                                  if WeaponDamage < 1 then
                                     WeaponDamage := 1;
                                  end if;
@@ -1241,8 +1242,8 @@ package body Combat is
             end if;
             AmmoIndex2 :=
               (if Enemy.Ship.Modules(I).M_Type = GUN then
-                 Enemy.Ship.Modules(I).AmmoIndex
-               else Enemy.Ship.Modules(I).HarpoonIndex);
+                 Enemy.Ship.Modules(I).Ammo_Index
+               else Enemy.Ship.Modules(I).Harpoon_Index);
             if AmmoIndex2 in
                 Enemy.Ship.Cargo.First_Index ..
                       Enemy.Ship.Cargo.Last_Index then

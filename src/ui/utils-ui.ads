@@ -154,21 +154,6 @@ package Utils.UI is
       Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
-      -- ****f* UUI/UUI.ShowQuestion
-      -- FUNCTION
-      -- Show the dialog with question to the player
-      -- PARAMETERS
-      -- Question - The question which will be the player asked for
-      -- Result   - The value set for Ok button
-      -- In_Game  - The question in show during game
-      -- HISTORY
-      -- 5.9 - Added
-      -- SOURCE
-   procedure ShowQuestion
-     (Question, Result: String; In_Game: Boolean := True) with
-      Pre => Question'Length > 0;
-      -- ****
-
       -- ****f* UUI/UUI.Delete_Widgets
       -- FUNCTION
       -- Remove widgets from the selected frame

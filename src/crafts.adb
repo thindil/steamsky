@@ -436,9 +436,9 @@ package body Crafts is
             end if;
          end loop Check_Owner_Loop;
          if not HaveWorker then
-            Module.CraftingIndex := Null_Unbounded_String;
-            Module.CraftingTime := 0;
-            Module.CraftingAmount := 0;
+            Module.Crafting_Index := Null_Unbounded_String;
+            Module.Crafting_Time := 0;
+            Module.Crafting_Amount := 0;
          end if;
       end ResetOrder;
    begin
@@ -447,7 +447,7 @@ package body Crafts is
          if Module.M_Type /= WORKSHOP then
             goto End_Of_Loop;
          end if;
-         if Module.CraftingIndex = Null_Unbounded_String then
+         if Module.Crafting_Index = Null_Unbounded_String then
             goto End_Of_Loop;
          end if;
          Owners_Loop :
@@ -458,22 +458,22 @@ package body Crafts is
             CrafterIndex := Owner;
             if PlayerShip.Crew(CrafterIndex).Order = Craft then
                CurrentMinutes := Minutes;
-               RecipeTime := Module.CraftingTime;
-               Recipe := SetRecipeData(Module.CraftingIndex);
-               if Length(Module.CraftingIndex) > 6
-                 and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
+               RecipeTime := Module.Crafting_Time;
+               Recipe := SetRecipeData(Module.Crafting_Index);
+               if Length(Module.Crafting_Index) > 6
+                 and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
                   RecipeName :=
                     To_Unbounded_String("studying ") &
                     Items_List(Recipe.ResultIndex).Name;
-               elsif Length(Module.CraftingIndex) > 12
-                 and then Slice(Module.CraftingIndex, 1, 11) =
+               elsif Length(Module.Crafting_Index) > 12
+                 and then Slice(Module.Crafting_Index, 1, 11) =
                    "Deconstruct" then
                   RecipeName :=
                     To_Unbounded_String("deconstructing ") &
                     Items_List
                       (Unbounded_Slice
-                         (Module.CraftingIndex, 13,
-                          Length(Module.CraftingIndex)))
+                         (Module.Crafting_Index, 13,
+                          Length(Module.Crafting_Index)))
                       .Name;
                else
                   RecipeName :=
@@ -506,8 +506,8 @@ package body Crafts is
                   WorkTime := WorkTime - RecipeTime;
                   RecipeTime := Recipe.Time;
                   MaterialIndexes.Clear;
-                  if Length(Module.CraftingIndex) > 6
-                    and then Slice(Module.CraftingIndex, 1, 5) = "Study" then
+                  if Length(Module.Crafting_Index) > 6
+                    and then Slice(Module.Crafting_Index, 1, 5) = "Study" then
                      Study_Materials_Loop :
                      for J in Items_List.Iterate loop
                         if Items_List(J).Name =
@@ -517,14 +517,14 @@ package body Crafts is
                            exit Study_Materials_Loop;
                         end if;
                      end loop Study_Materials_Loop;
-                  elsif Length(Module.CraftingIndex) > 12
-                    and then Slice(Module.CraftingIndex, 1, 11) =
+                  elsif Length(Module.Crafting_Index) > 12
+                    and then Slice(Module.Crafting_Index, 1, 11) =
                       "Deconstruct" then
                      MaterialIndexes.Append
                        (New_Item =>
                           Unbounded_Slice
-                            (Module.CraftingIndex, 13,
-                             Length(Module.CraftingIndex)));
+                            (Module.Crafting_Index, 13,
+                             Length(Module.Crafting_Index)));
                   else
                      Recipe_Loop :
                      for K in Recipe.MaterialTypes.Iterate loop
@@ -631,7 +631,7 @@ package body Crafts is
                      exit Craft_Loop;
                   end if;
                   CraftedAmount := CraftedAmount + ResultAmount;
-                  Module.CraftingAmount := Module.CraftingAmount - 1;
+                  Module.Crafting_Amount := Module.Crafting_Amount - 1;
                   Remove_Materials_Loop :
                   for J in MaterialIndexes.Iterate loop
                      CargoIndex := 1;
@@ -670,10 +670,10 @@ package body Crafts is
                           (PlayerShip.Crew(CrafterIndex), Recipe.Skill),
                         CrafterIndex);
                   end if;
-                  if Length(Module.CraftingIndex) < 6
+                  if Length(Module.Crafting_Index) < 6
                     or else
-                    (Length(Module.CraftingIndex) > 6
-                     and then Slice(Module.CraftingIndex, 1, 5) /=
+                    (Length(Module.Crafting_Index) > 6
+                     and then Slice(Module.Crafting_Index, 1, 5) /=
                        "Study") then
                      Amount :=
                        Amount -
@@ -686,15 +686,15 @@ package body Crafts is
                         ResetOrder(Module, Owner);
                         exit Craft_Loop;
                      end if;
-                     if Length(Module.CraftingIndex) > 11
-                       and then Slice(Module.CraftingIndex, 1, 11) =
+                     if Length(Module.Crafting_Index) > 11
+                       and then Slice(Module.Crafting_Index, 1, 11) =
                          "Deconstruct" then
                         UpdateCargo
                           (PlayerShip, Recipe.ResultIndex, ResultAmount);
                      else
                         UpdateCargo
                           (PlayerShip,
-                           Recipes_List(Module.CraftingIndex).ResultIndex,
+                           Recipes_List(Module.Crafting_Index).ResultIndex,
                            ResultAmount);
                      end if;
                      Update_Crafting_Orders_Loop :
@@ -717,14 +717,14 @@ package body Crafts is
                      end loop Learn_Recipe_Loop;
                      exit Craft_Loop;
                   end if;
-                  exit Craft_Loop when Module.CraftingAmount = 0;
+                  exit Craft_Loop when Module.Crafting_Amount = 0;
                   <<End_Of_Craft_Loop>>
                end loop Craft_Loop;
-               Module.CraftingTime := RecipeTime;
+               Module.Crafting_Time := RecipeTime;
                if CraftedAmount > 0 then
                   if Recipe.ResultAmount > 0 then
-                     if Length(Module.CraftingIndex) > 12
-                       and then Slice(Module.CraftingIndex, 1, 11) =
+                     if Length(Module.Crafting_Index) > 12
+                       and then Slice(Module.Crafting_Index, 1, 11) =
                          "Deconstruct" then
                         AddMessage
                           (To_String(PlayerShip.Crew(CrafterIndex).Name) &
@@ -781,7 +781,7 @@ package body Crafts is
                      GainExp(GainedExp, Recipe.Skill, CrafterIndex);
                   end if;
                   PlayerShip.Crew(CrafterIndex).OrderTime := WorkTime;
-                  if Module.CraftingAmount = 0 then
+                  if Module.Crafting_Amount = 0 then
                      ResetOrder(Module, Owner);
                   end if;
                end if;
@@ -800,38 +800,38 @@ package body Crafts is
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) is
       RecipeName, ItemIndex: Unbounded_String;
    begin
-      PlayerShip.Modules(Workshop).CraftingAmount := Amount;
+      PlayerShip.Modules(Workshop).Crafting_Amount := Amount;
       if Length(RecipeIndex) > 6
         and then Slice(RecipeIndex, 1, 5) = "Study" then
          ItemIndex := Unbounded_Slice(RecipeIndex, 7, Length(RecipeIndex));
          Set_Study_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = ItemIndex then
-               PlayerShip.Modules(Workshop).CraftingTime :=
+               PlayerShip.Modules(Workshop).Crafting_Time :=
                  ProtoRecipe.Difficulty * 15;
                exit Set_Study_Difficulty_Loop;
             end if;
          end loop Set_Study_Difficulty_Loop;
          RecipeName :=
            To_Unbounded_String("Studying ") & Items_List(ItemIndex).Name;
-         PlayerShip.Modules(Workshop).CraftingIndex := RecipeIndex;
+         PlayerShip.Modules(Workshop).Crafting_Index := RecipeIndex;
       elsif Length(RecipeIndex) > 12
         and then Slice(RecipeIndex, 1, 11) = "Deconstruct" then
          ItemIndex := Unbounded_Slice(RecipeIndex, 13, Length(RecipeIndex));
          Set_Deconstruct_Difficulty_Loop :
          for ProtoRecipe of Recipes_List loop
             if ProtoRecipe.ResultIndex = ItemIndex then
-               PlayerShip.Modules(Workshop).CraftingTime :=
+               PlayerShip.Modules(Workshop).Crafting_Time :=
                  ProtoRecipe.Difficulty * 15;
                exit Set_Deconstruct_Difficulty_Loop;
             end if;
          end loop Set_Deconstruct_Difficulty_Loop;
          RecipeName :=
            To_Unbounded_String("Deconstructing ") & Items_List(ItemIndex).Name;
-         PlayerShip.Modules(Workshop).CraftingIndex := RecipeIndex;
+         PlayerShip.Modules(Workshop).Crafting_Index := RecipeIndex;
       else
-         PlayerShip.Modules(Workshop).CraftingIndex := RecipeIndex;
-         PlayerShip.Modules(Workshop).CraftingTime :=
+         PlayerShip.Modules(Workshop).Crafting_Index := RecipeIndex;
+         PlayerShip.Modules(Workshop).Crafting_Time :=
            Recipes_List(RecipeIndex).Time;
          RecipeName := Items_List(Recipes_List(RecipeIndex).ResultIndex).Name;
       end if;
