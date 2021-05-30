@@ -302,8 +302,8 @@ package body Combat.UI is
          declare
             AmmoIndex: constant Natural :=
               (if PlayerShip.Modules(Guns(I)(1)).M_Type = GUN then
-                 PlayerShip.Modules(Guns(I)(1)).AmmoIndex
-               else PlayerShip.Modules(Guns(I)(1)).HarpoonIndex);
+                 PlayerShip.Modules(Guns(I)(1)).Ammo_Index
+               else PlayerShip.Modules(Guns(I)(1)).Harpoon_Index);
          begin
             if
               (AmmoIndex in

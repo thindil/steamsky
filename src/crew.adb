@@ -273,7 +273,8 @@ package body Crew is
                      exit Module_Loop;
                   elsif
                     (Member.PreviousOrder = Craft and Module.M_Type = WORKSHOP)
-                    and then Module.CraftingIndex /= Null_Unbounded_String then
+                    and then Module.Crafting_Index /=
+                      Null_Unbounded_String then
                      Module_Is_Owner_Loop :
                      for Owner of Module.Owner loop
                         if Owner = I then
@@ -706,7 +707,7 @@ package body Crew is
                      if Module.M_Type = TRAINING_ROOM then
                         for Owner of Module.Owner loop
                            if Owner = I then
-                              SkillIndex := Module.TrainedSkill;
+                              SkillIndex := Module.Trained_Skill;
                               exit Modules_Loop;
                            end if;
                         end loop;
