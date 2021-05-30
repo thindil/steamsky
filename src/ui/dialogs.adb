@@ -272,4 +272,58 @@ package body Dialogs is
       Show_Dialog(ItemDialog);
    end ShowManipulateItem;
 
+   procedure ShowQuestion
+     (Question, Result: String; In_Game: Boolean := True) is
+      QuestionDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (".questiondialog",
+           (if Result = "showstats" then "Question" else "Confirmation"), 275,
+           2, (if In_Game then ".gameframe" else "."));
+      Label: constant Ttk_Label :=
+        Create
+          (QuestionDialog & ".question",
+           "-text {" & Question & "} -wraplength 370 -takefocus 0");
+      Button: Ttk_Button :=
+        Create
+          (QuestionDialog & ".yesbutton",
+           "-text Yes -command {.questiondialog.nobutton invoke; ProcessQuestion " &
+           Result & "}");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -pady {5 0}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 2 -pady {0 5} -padx 5");
+      Bind
+        (Button, "<Escape>", "{" & QuestionDialog & ".nobutton invoke;break}");
+      if not In_Game then
+         Button :=
+           Create
+             (QuestionDialog & ".nobutton",
+              "-text No -command {CloseDialog " & QuestionDialog & " .}");
+      else
+         Button :=
+           Create
+             (QuestionDialog & ".nobutton",
+              "-text No -command {CloseDialog " & QuestionDialog & "}");
+      end if;
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -pady {0 5} -padx 5");
+      Focus(Button);
+      if In_Game then
+         Show_Dialog(QuestionDialog);
+      else
+         Show_Dialog(QuestionDialog, ".");
+      end if;
+      Bind(Button, "<Tab>", "{focus .questiondialog.yesbutton;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      if Result = "showstats" then
+         Widgets.configure
+           (Button,
+            "-command {CloseDialog " & QuestionDialog &
+            "; ProcessQuestion mainmenu}");
+         Button := Get_Widget(QuestionDialog & ".yesbutton");
+         Widgets.configure
+           (Button,
+            "-command {CloseDialog " & QuestionDialog &
+            "; ProcessQuestion showstats}");
+      end if;
+   end ShowQuestion;
+
 end Dialogs;
