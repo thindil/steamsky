@@ -34,6 +34,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
 with Maps.UI; use Maps.UI;
@@ -78,7 +79,7 @@ package body Ships.UI.Cargo is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
       ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(".gameframe.paned.shipinfoframe.cargo.canvas", Interp);
+        Get_Widget(Main_Paned & ".shipinfoframe.cargo.canvas", Interp);
       CargoInfoFrame: constant Ttk_Frame :=
         Get_Widget(ShipCanvas & ".frame", Interp);
       Tokens: Slice_Set;
@@ -104,7 +105,7 @@ package body Ships.UI.Cargo is
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
-           Get_Widget(".gameframe.paned.shipinfoframe.cargo.scrolly"));
+           Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"));
       configure
         (Free_Space_Label,
          "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");
@@ -157,14 +158,10 @@ package body Ships.UI.Cargo is
          <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
       if Page > 1 then
-         if CargoTable.Row < 26 then
-            AddPagination
-              (CargoTable, "ShowCargo" & Positive'Image(Page - 1), "");
-         else
-            AddPagination
-              (CargoTable, "ShowCargo" & Positive'Image(Page - 1),
-               "ShowCargo" & Positive'Image(Page + 1));
-         end if;
+         AddPagination
+           (CargoTable, "ShowCargo" & Positive'Image(Page - 1),
+            (if CargoTable.Row < 26 then ""
+             else "ShowCargo" & Positive'Image(Page + 1)));
       elsif CargoTable.Row = 26 then
          AddPagination(CargoTable, "", "ShowCargo" & Positive'Image(Page + 1));
       end if;
@@ -222,11 +219,9 @@ package body Ships.UI.Cargo is
       CrewBox: constant Ttk_ComboBox :=
         Create(ItemDialog & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Label :=
         Create
           (ItemDialog & ".title",
@@ -404,12 +399,11 @@ package body Ships.UI.Cargo is
          Check_Drop_Items_Loop :
          for J in 1 .. DropAmount2 loop
             Delete_Missions_Loop :
-            for I in
-              AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+            for I in AcceptedMissions.Iterate loop
                if AcceptedMissions(I).MType = Deliver and
                  AcceptedMissions(I).ItemIndex =
                    PlayerShip.Cargo(ItemIndex).ProtoIndex then
-                  DeleteMission(I);
+                  DeleteMission(Mission_Container.To_Index(I));
                   DropAmount := DropAmount - 1;
                   exit Delete_Missions_Loop;
                end if;
