@@ -161,7 +161,7 @@ package body Crafts.Test_Data.Tests is
       UpdateCargo(PlayerShip, To_Unbounded_String("6"), 10);
       SetRecipe(9, 10, To_Unbounded_String("1"));
       Assert
-        (PlayerShip.Modules(9).CraftingAmount = 10,
+        (PlayerShip.Modules(9).Crafting_Amount = 10,
          "Failed to set crafting recipe.");
 
 --  begin read only
