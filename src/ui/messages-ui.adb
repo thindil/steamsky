@@ -35,6 +35,7 @@ with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Config; use Config;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Utils.UI; use Utils.UI;
 
 package body Messages.UI is
