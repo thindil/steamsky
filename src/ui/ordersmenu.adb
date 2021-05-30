@@ -315,7 +315,7 @@ package body OrdersMenu is
                         Count_Docking_Cost_Loop :
                         for Module of PlayerShip.Modules loop
                            if Module.M_Type = HULL then
-                              DockingCost := Module.MaxModules;
+                              DockingCost := Module.Max_Modules;
                               exit Count_Docking_Cost_Loop;
                            end if;
                         end loop Count_Docking_Cost_Loop;

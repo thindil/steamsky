@@ -159,8 +159,8 @@ package body Bases.ShipyardUI is
       for Module of PlayerShip.Modules loop
          if Module.M_Type = HULL then
             MaxSize := Modules_List(Module.Proto_Index).Value;
-            UsedSpace := Module.InstalledModules;
-            AllSpace := Module.MaxModules;
+            UsedSpace := Module.Installed_Modules;
+            AllSpace := Module.Max_Modules;
             exit Find_Max_Module_Size_Loop;
          end if;
       end loop Find_Max_Module_Size_Loop;
@@ -406,7 +406,7 @@ package body Bases.ShipyardUI is
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
             when HULL =>
-               MaxValue := PlayerShip.Modules(ShipModuleIndex).MaxModules;
+               MaxValue := PlayerShip.Modules(ShipModuleIndex).Max_Modules;
                Value :=
                  Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
                    .Value;
@@ -631,8 +631,8 @@ package body Bases.ShipyardUI is
       for Module of PlayerShip.Modules loop
          if Module.M_Type = HULL then
             MaxSize := Modules_List(Module.Proto_Index).Value;
-            UsedSpace := Module.InstalledModules;
-            AllSpace := Module.MaxModules;
+            UsedSpace := Module.Installed_Modules;
+            AllSpace := Module.Max_Modules;
             exit Find_Hull_Loop;
          end if;
       end loop Find_Hull_Loop;

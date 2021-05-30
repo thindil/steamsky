@@ -60,10 +60,10 @@ package body Ships.Cargo is
                Update_Ammo_Index_Loop :
                for Module of Ship.Modules loop
                   if Module.M_Type = GUN then
-                     if Module.AmmoIndex > ItemIndex then
-                        Module.AmmoIndex := Module.AmmoIndex - 1;
-                     elsif Module.AmmoIndex = ItemIndex then
-                        Module.AmmoIndex := 0;
+                     if Module.Ammo_Index > ItemIndex then
+                        Module.Ammo_Index := Module.Ammo_Index - 1;
+                     elsif Module.Ammo_Index = ItemIndex then
+                        Module.Ammo_Index := 0;
                      end if;
                   end if;
                end loop Update_Ammo_Index_Loop;
