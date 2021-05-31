@@ -291,6 +291,11 @@ package body Bases.RecruitUI is
         Create
           (RecruitDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (RecruitDialog & ".header",
+           "-text {" & To_String(Recruit.Name) &
+           "} -wraplength 275 -style Header.TLabel");
       CloseButton, InfoButton, Button: Ttk_Button;
       Height, NewHeight: Positive := 1;
       Width, NewWidth: Positive := 1;
@@ -305,6 +310,7 @@ package body Bases.RecruitUI is
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
       for I in TabNames'Range loop
          TabButton :=
