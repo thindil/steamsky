@@ -36,6 +36,7 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
+with CoreUI; use CoreUI;
 with Crew.Inventory; use Crew.Inventory;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
@@ -141,20 +142,12 @@ package body Ships.UI.Crew.Inventory is
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
       if Page > 1 then
-         if InventoryTable.Row < 26 then
-            AddPagination
-              (InventoryTable,
-               "UpdateInventory " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Page - 1),
-               "");
-         else
-            AddPagination
-              (InventoryTable,
-               "UpdateInventory " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Page - 1),
-               "UpdateInventory " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Page + 1));
-         end if;
+         AddPagination
+           (InventoryTable,
+            "UpdateInventory " & CArgv.Arg(Argv, 1) & Positive'Image(Page - 1),
+            (if InventoryTable.Row < 26 then ""
+             else "UpdateInventory " & CArgv.Arg(Argv, 1) &
+               Positive'Image(Page + 1)));
       elsif InventoryTable.Row = 26 then
          AddPagination
            (InventoryTable, "",
@@ -204,7 +197,6 @@ package body Ships.UI.Crew.Inventory is
           (MemberFrame & ".button",
            "-text Close -command {CloseDialog " & MemberDialog & "}");
       Height, Width: Positive := 10;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       FreeSpaceLabel: constant Ttk_Label :=
         Create
           (MemberFrame & ".freespace",
@@ -220,9 +212,8 @@ package body Ships.UI.Crew.Inventory is
              (PlayerShip.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name) &
            "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
       Tcl.Tk.Ada.Pack.Pack
@@ -303,54 +294,54 @@ package body Ships.UI.Crew.Inventory is
           (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
    begin
-      if not ItemIsUsed(MemberIndex, ItemIndex) then
-         if ItemType = Weapon_Type then
+      if ItemIsUsed(MemberIndex, ItemIndex) then
+         TakeOffItem(MemberIndex, ItemIndex);
+         return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
+      end if;
+      if ItemType = Weapon_Type then
+         if Items_List
+             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+             .Value
+             (4) =
+           2 and
+           PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
+            ShowMessage
+              (Text =>
+                 To_String(PlayerShip.Crew(MemberIndex).Name) &
+                 " can't use this weapon because have shield equiped. Take off shield first.",
+               Title => "Shield in use");
+            return TCL_OK;
+         end if;
+         PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+      elsif ItemType = Shield_Type then
+         if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
             if Items_List
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+                (PlayerShip.Crew(MemberIndex).Inventory
+                   (PlayerShip.Crew(MemberIndex).Equipment(1))
+                   .ProtoIndex)
                 .Value
                 (4) =
-              2 and
-              PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
+              2 then
                ShowMessage
                  (Text =>
                     To_String(PlayerShip.Crew(MemberIndex).Name) &
-                    " can't use this weapon because have shield equiped. Take off shield first.",
-                  Title => "Shield in use");
+                    " can't use shield because have equiped two-hand weapon. Take off weapon first.",
+                  Title => "Two handed weapon in use");
                return TCL_OK;
             end if;
-            PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
-         elsif ItemType = Shield_Type then
-            if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
-               if Items_List
-                   (PlayerShip.Crew(MemberIndex).Inventory
-                      (PlayerShip.Crew(MemberIndex).Equipment(1))
-                      .ProtoIndex)
-                   .Value
-                   (4) =
-                 2 then
-                  ShowMessage
-                    (Text =>
-                       To_String(PlayerShip.Crew(MemberIndex).Name) &
-                       " can't use shield because have equiped two-hand weapon. Take off weapon first.",
-                     Title => "Two handed weapon in use");
-                  return TCL_OK;
-               end if;
-            end if;
-            PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
-         elsif ItemType = Head_Armor then
-            PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
-         elsif ItemType = Chest_Armor then
-            PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
-         elsif ItemType = Arms_Armor then
-            PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
-         elsif ItemType = Legs_Armor then
-            PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
-         elsif Tools_List.Find_Index(Item => ItemType) /=
-           UnboundedString_Container.No_Index then
-            PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
          end if;
-      else
-         TakeOffItem(MemberIndex, ItemIndex);
+         PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+      elsif ItemType = Head_Armor then
+         PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+      elsif ItemType = Chest_Armor then
+         PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+      elsif ItemType = Arms_Armor then
+         PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+      elsif ItemType = Legs_Armor then
+         PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+      elsif Tools_List.Find_Index(Item => ItemType) /=
+        UnboundedString_Container.No_Index then
+         PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
       end if;
       return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Set_Use_Item_Command;
@@ -390,17 +381,14 @@ package body Ships.UI.Crew.Inventory is
            "-text Move -command {MoveItem " & CArgv.Arg(Argv, 1) & " " &
            CArgv.Arg(Argv, 2) & "}");
       Label: Ttk_Label;
+      MaxAmount: constant Positive :=
+        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".amount",
-           "-width 5 -from 1.0 -to" &
-           Float'Image
-             (Float
-                (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount)) &
+           "-width 5 -from 1.0 -to" & Float'Image(Float(MaxAmount)) &
            " -validate key -validatecommand {ValidateMoveAmount" &
-           Positive'Image
-             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
-           " %P}");
+           Positive'Image(MaxAmount) & " %P}");
       Frame: constant Ttk_Frame := Get_Widget(".memberdialog");
    begin
       Tcl.Tk.Ada.Busy.Busy(Frame);
@@ -415,10 +403,7 @@ package body Ships.UI.Crew.Inventory is
       Label :=
         Create
           (ItemDialog & ".amountlbl",
-           "-text {Amount (max:" &
-           Positive'Image
-             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount) &
-           "):}");
+           "-text {Amount (max:" & Positive'Image(MaxAmount) & "):}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Set(AmountBox, "1");
       Tcl.Tk.Ada.Grid.Grid(AmountBox, "-column 1 -row 1");
@@ -474,7 +459,7 @@ package body Ships.UI.Crew.Inventory is
         Get_Widget(ItemDialog & ".amount", Interp);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo",
+          (Main_Paned & ".shipinfoframe.cargo.canvas.frame.selecttype.combo",
            Interp);
    begin
       Amount := Positive'Value(Get(AmountBox));
