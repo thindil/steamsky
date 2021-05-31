@@ -37,7 +37,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
@@ -483,7 +482,8 @@ package body Crafts.UI is
       Button :=
         Create
           (CraftDialog & ".craft",
-           "-text {Craft} -command {CloseDialog " & CraftDialog & "}");
+           "-text {Craft} -command {SetCrafting {" & CArgv.Arg(Argv, 1) &
+           "};CloseDialog " & CraftDialog & "}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5 -padx 5");
       Button :=
         Create
@@ -726,7 +726,8 @@ package body Crafts.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetCrafting
+   -- SetCrafting index
+   -- Index is the index of the crafting recipe to set
    -- SOURCE
    function Set_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -737,16 +738,11 @@ package body Crafts.UI is
    function Set_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := Main_Paned & ".craftframe.canvas.craft";
-      RecipesView: constant Ttk_Tree_View :=
-        Get_Widget(FrameName & ".list.view", Interp);
-      RecipeIndex: Unbounded_String :=
-        To_Unbounded_String(Selection(RecipesView));
-      ModulesBox: constant Ttk_ComboBox :=
-        Get_Widget(FrameName & ".item.set.workshop");
+      pragma Unreferenced(ClientData, Argc);
+      RecipeIndex: Unbounded_String := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      ModulesBox: constant Ttk_ComboBox := Get_Widget(".craftdialog.workshop");
       AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".item.set.amount", Interp);
+        Get_Widget(".craftdialog.amount", Interp);
    begin
       if Element(RecipeIndex, 1) = '{' then
          RecipeIndex :=
