@@ -16,9 +16,7 @@
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -202,7 +200,11 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(ClientData, Interp, Argc);
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemDialog: constant Ttk_Frame :=
-        Create(".itemdialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".itemdialog",
+           "Give " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
+           " from the ship's cargo to the selected crew member",
+           370, 2);
       Button: Ttk_Button :=
         Create
           (ItemDialog & ".givebutton",
@@ -220,15 +222,6 @@ package body Ships.UI.Cargo is
         Create(ItemDialog & ".member", "-state readonly -width 14");
       MembersNames: Unbounded_String;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Label :=
-        Create
-          (ItemDialog & ".title",
-           "-text {Give " & GetItemName(PlayerShip.Cargo(ItemIndex)) &
-           " from the ship's cargo to the selected crew member} -wraplength 370 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Label, "-columnspan 2 -sticky we -padx 2 -pady {2 0}");
       Label := Create(ItemDialog & ".amountlbl", "-text {Amount:}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {0 5}");
       Set(AmountBox, "1");
@@ -264,9 +257,9 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Grid.Grid
         (Button, "-column 1 -row 4 -padx {0 5} -pady 5 -sticky e");
       Focus(Button);
-      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
       Bind(Button, "<Tab>", "{focus .itemdialog.givebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Show_Dialog(ItemDialog);
       return TCL_OK;
    end Show_Give_Item_Command;
 
