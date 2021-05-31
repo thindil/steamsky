@@ -39,7 +39,7 @@ package body Bases is
       NewPoints :=
         SkyBases(BaseIndex).Reputation(2) +
         Integer(Float(Points) * Float(New_Game_Settings.Reputation_Bonus));
-      if BaseIndex = PlayerShip.HomeBase then
+      if BaseIndex = PlayerShip.Home_Base then
          NewPoints := NewPoints + Points;
       end if;
       Reduce_Reputation_Loop :
@@ -82,8 +82,8 @@ package body Bases is
                        (PlayerShip.Crew(TraderIndex), Talking_Skill)) /
                   200.0)));
       end if;
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex > 0 then
-         case SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+      if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex > 0 then
+         case SkyBases(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex)
            .Reputation
            (1) is
             when -24 .. -1 =>
@@ -145,7 +145,7 @@ package body Bases is
 
    procedure GenerateRecruits is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       RecruitBase: Bases_Range;
       BaseRecruits: Recruit_Container.Vector;
       Skills: Skills_Container.Vector;
@@ -328,7 +328,7 @@ package body Bases is
 
    procedure AskForBases is
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       TmpBaseIndex: Extended_Base_Range;
       ShipIndex: Unbounded_String;
       UnknownBases: Extended_Base_Range := 0;
@@ -361,7 +361,7 @@ package body Bases is
       else -- asking friendly ship
          Radius := 40;
          ShipIndex :=
-           (Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+           (Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
               .ShipIndex);
          Amount :=
            (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 3
@@ -371,15 +371,15 @@ package body Bases is
             To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
-         DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
+         DeleteEvent(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex);
          UpdateOrders(PlayerShip);
       end if;
       Bases_Loop :
       for X in -Radius .. Radius loop
          for Y in -Radius .. Radius loop
-            TempX := PlayerShip.SkyX + X;
+            TempX := PlayerShip.Sky_X + X;
             NormalizeCoord(TempX);
-            TempY := PlayerShip.SkyY + Y;
+            TempY := PlayerShip.Sky_Y + Y;
             NormalizeCoord(TempY, False);
             TmpBaseIndex := SkyMap(TempX, TempY).BaseIndex;
             if TmpBaseIndex > 0 and then not SkyBases(TmpBaseIndex).Known then
@@ -436,7 +436,7 @@ package body Bases is
 
    procedure AskForEvents is
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       EventTime, DiffX, DiffY: Positive;
       Event: Events_Types;
       MinX, MinY, MaxX, MaxY: Integer range -100 .. 1_124;
@@ -465,7 +465,7 @@ package body Bases is
          GainRep(BaseIndex, 1);
       else -- asking friendly ship
          ShipIndex :=
-           Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+           Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
              .ShipIndex;
          MaxEvents :=
            (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
@@ -475,17 +475,17 @@ package body Bases is
             To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
             "' for recent events.",
             OrderMessage);
-         DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
+         DeleteEvent(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex);
          UpdateOrders(PlayerShip);
       end if;
       EventsAmount := GetRandom(1, MaxEvents);
-      MinX := PlayerShip.SkyX - 100;
+      MinX := PlayerShip.Sky_X - 100;
       NormalizeCoord(MinX);
-      MaxX := PlayerShip.SkyX + 100;
+      MaxX := PlayerShip.Sky_X + 100;
       NormalizeCoord(MaxX);
-      MinY := PlayerShip.SkyY - 100;
+      MinY := PlayerShip.Sky_Y - 100;
       NormalizeCoord(MinY, False);
-      MaxY := PlayerShip.SkyY + 100;
+      MaxY := PlayerShip.Sky_Y + 100;
       NormalizeCoord(MaxY, False);
       GenerateEnemies(Enemies);
       Generate_Events_Loop :
@@ -500,7 +500,7 @@ package body Bases is
                exit Generate_Event_Location_Loop when SkyMap(EventX, EventY)
                    .BaseIndex =
                  0 and
-                 EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and
+                 EventX /= PlayerShip.Sky_X and EventY /= PlayerShip.Sky_Y and
                  SkyMap(EventX, EventY).EventIndex = 0;
             else
                TmpBaseIndex := GetRandom(1, 1_024);
@@ -517,13 +517,13 @@ package body Bases is
                          (EventX, EventY)
                          .BaseIndex =
                        0 and
-                       EventX /= PlayerShip.SkyX and
-                       EventY /= PlayerShip.SkyY and
+                       EventX /= PlayerShip.Sky_X and
+                       EventY /= PlayerShip.Sky_Y and
                        SkyMap(EventX, EventY).EventIndex = 0;
                   end loop Regenerate_Event_Location_Loop;
                   exit Generate_Event_Location_Loop;
                end if;
-               if EventX /= PlayerShip.SkyX and EventY /= PlayerShip.SkyY and
+               if EventX /= PlayerShip.Sky_X and EventY /= PlayerShip.Sky_Y and
                  SkyMap(EventX, EventY).EventIndex = 0 and
                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                   if Event = AttackOnBase and
@@ -556,8 +556,8 @@ package body Bases is
                end if;
             end if;
          end loop Generate_Event_Location_Loop;
-         DiffX := abs (PlayerShip.SkyX - EventX);
-         DiffY := abs (PlayerShip.SkyY - EventY);
+         DiffX := abs (PlayerShip.Sky_X - EventX);
+         DiffY := abs (PlayerShip.Sky_Y - EventY);
          EventTime := Positive(60.0 * Sqrt(Float((DiffX**2) + (DiffY**2))));
          case Event is
             when EnemyShip =>
@@ -618,7 +618,7 @@ package body Bases is
 
    procedure UpdatePopulation is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       PopulationDiff: Integer;
    begin
       if DaysDifference(SkyBases(BaseIndex).RecruitDate) < 30 then
@@ -650,7 +650,7 @@ package body Bases is
 
    procedure UpdatePrices is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Roll: Positive range 1 .. 100;
       Chance: Positive;
    begin

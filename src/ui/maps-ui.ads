@@ -167,7 +167,7 @@ private
    -- Y - Y coordinate of the map cell
    -- SOURCE
    procedure UpdateMapInfo
-     (X: Positive := PlayerShip.SkyX; Y: Positive := PlayerShip.SkyY);
+     (X: Positive := PlayerShip.Sky_X; Y: Positive := PlayerShip.Sky_Y);
    -- ****
 
    -- ****f* MUI/MUI.UpdateMoveButtons_(private)

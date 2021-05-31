@@ -154,48 +154,48 @@ package Ships is
    -- FUNCTION
    -- Used to store modules data in ships
    -- SOURCE
-   package Modules_Container is new Vectors(Positive, Module_Data);
+   package Modules_Container is new Vectors(Index_Type => Positive, Element_Type => Module_Data);
    -- ****
 
    -- ****t* Ships/Ships.Crew_Container
    -- FUNCTION
    -- Used to store crew data in ships
    -- SOURCE
-   package Crew_Container is new Vectors(Positive, Member_Data);
+   package Crew_Container is new Vectors(Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
    -- ****s* Ships/Ships.ShipRecord
    -- FUNCTION
    -- Data structure for ships
    -- PARAMETERS
-   -- Name          - Ship name
-   -- SkyX          - X coordinate on sky map
-   -- SKyY          - Y coordinate on sky map
-   -- Speed         - Speed of ship
-   -- Modules       - List of ship modules
-   -- Cargo         - List of ship cargo
-   -- Crew          - List of ship crew
-   -- UpgradeModule - Number of module to upgrade
-   -- DestinationX  - Destination X coordinate
-   -- DestinationY  - Destination Y coordinate
-   -- RepairModule  - Number of module to repair as first
-   -- Description   - Description of ship
-   -- HomeBase      - Index of home base of ship
+   -- Name           - Ship name
+   -- Sky_X          - X coordinate on sky map
+   -- SKy_Y          - Y coordinate on sky map
+   -- Speed          - Speed of ship
+   -- Modules        - List of ship modules
+   -- Cargo          - List of ship cargo
+   -- Crew           - List of ship crew
+   -- Upgrade_Module - Number of module to upgrade
+   -- Destination_X  - Destination X coordinate
+   -- Destination_Y  - Destination Y coordinate
+   -- Repair_Module  - Number of module to repair as first
+   -- Description    - Description of ship
+   -- Home_Base      - Index of home base of ship
    -- SOURCE
    type ShipRecord is record
       Name: Unbounded_String;
-      SkyX: Map_X_Range;
-      SkyY: Map_Y_Range;
+      Sky_X: Map_X_Range;
+      Sky_Y: Map_Y_Range;
       Speed: Ship_Speed;
       Modules: Modules_Container.Vector;
       Cargo: Inventory_Container.Vector;
       Crew: Crew_Container.Vector;
-      UpgradeModule: Modules_Container.Extended_Index;
-      DestinationX: Natural range 0 .. Map_X_Range'Last;
-      DestinationY: Natural range 0 .. Map_Y_Range'Last;
-      RepairModule: Modules_Container.Extended_Index;
+      Upgrade_Module: Modules_Container.Extended_Index;
+      Destination_X: Natural range 0 .. Map_X_Range'Last;
+      Destination_Y: Natural range 0 .. Map_Y_Range'Last;
+      Repair_Module: Modules_Container.Extended_Index;
       Description: Unbounded_String;
-      HomeBase: Extended_Base_Range;
+      Home_Base: Extended_Base_Range;
    end record;
    -- ****
 

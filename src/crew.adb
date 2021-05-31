@@ -697,7 +697,7 @@ package body Crew is
                      end loop Remove_Clean_Order_Loop;
                   end if;
                when Talk =>
-                  if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex =
+                  if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex =
                     0 then
                      GiveOrders(PlayerShip, I, Rest);
                   end if;
@@ -965,10 +965,11 @@ package body Crew is
                   GiveOrders(PlayerShip, MemberIndex, Rest);
                else
                   DeleteMember(MemberIndex, PlayerShip);
-                  SkyBases(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                  SkyBases
+                    (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex)
                     .Population :=
                     SkyBases
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                      (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex)
                       .Population +
                     1;
                   MemberIndex := MemberIndex - 1;

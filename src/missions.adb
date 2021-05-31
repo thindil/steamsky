@@ -37,7 +37,7 @@ package body Missions is
 
    procedure GenerateMissions is
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       MissionX, MissionY: Positive range 1 .. 1_024;
       MissionsAmount: Positive range 1 .. 26;
       TmpBaseIndex: Bases_Range;
@@ -72,13 +72,13 @@ package body Missions is
             MissionsItems.Append(New_Item => Objects_Container.Key(I));
          end if;
       end loop;
-      MinX := PlayerShip.SkyX - 100;
+      MinX := PlayerShip.Sky_X - 100;
       NormalizeCoord(MinX);
-      MaxX := PlayerShip.SkyX + 100;
+      MaxX := PlayerShip.Sky_X + 100;
       NormalizeCoord(MaxX);
-      MinY := PlayerShip.SkyY - 100;
+      MinY := PlayerShip.Sky_Y - 100;
       NormalizeCoord(MinY, False);
-      MaxY := PlayerShip.SkyY + 100;
+      MaxY := PlayerShip.Sky_Y + 100;
       NormalizeCoord(MaxY, False);
       Find_Bases_In_Range_Loop :
       for I in SkyBases'Range loop
@@ -129,8 +129,8 @@ package body Missions is
                       (MissionX, MissionY)
                       .BaseIndex =
                     0 and
-                    MissionX /= PlayerShip.SkyX and
-                    MissionY /= PlayerShip.SkyY;
+                    MissionX /= PlayerShip.Sky_X and
+                    MissionY /= PlayerShip.Sky_Y;
                end loop Find_Mission_Location_Loop;
             when Patrol =>
                Mission :=
@@ -184,14 +184,15 @@ package body Missions is
                  GetRandom(BasesInRange.First_Index, BasesInRange.Last_Index);
                MissionX := SkyBases(BasesInRange(TmpBaseIndex)).SkyX;
                MissionY := SkyBases(BasesInRange(TmpBaseIndex)).SkyY;
-               exit Find_Base_Mission_Loop when MissionX /= PlayerShip.SkyX and
-                 MissionY /= PlayerShip.SkyY;
+               exit Find_Base_Mission_Loop when MissionX /=
+                 PlayerShip.Sky_X and
+                 MissionY /= PlayerShip.Sky_Y;
             end loop Find_Base_Mission_Loop;
          end if;
          Mission.TargetX := MissionX;
          Mission.TargetY := MissionY;
-         DiffX := abs (PlayerShip.SkyX - MissionX);
-         DiffY := abs (PlayerShip.SkyY - MissionY);
+         DiffX := abs (PlayerShip.Sky_X - MissionX);
+         DiffY := abs (PlayerShip.Sky_Y - MissionY);
          case Mission.MType is
             when Deliver =>
                Mission.Time :=
@@ -215,7 +216,7 @@ package body Missions is
 
    procedure AcceptMission(MissionIndex: Positive) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Mission: Mission_Data := SkyBases(BaseIndex).Missions(MissionIndex);
       AcceptMessage: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
@@ -476,7 +477,7 @@ package body Missions is
       else
          if Mission.MType in Deliver | Passenger then
             GainRep
-              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex,
+              (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex,
                (Reputation / 2));
             GainRep(Mission.StartBase, (Reputation / 2));
          else
@@ -570,8 +571,8 @@ package body Missions is
       end case;
       AddMessage(To_String(MessageText), MissionMessage);
       if Game_Settings.Auto_Return then
-         PlayerShip.DestinationX := SkyBases(Mission.StartBase).SkyX;
-         PlayerShip.DestinationY := SkyBases(Mission.StartBase).SkyY;
+         PlayerShip.Destination_X := SkyBases(Mission.StartBase).SkyX;
+         PlayerShip.Destination_Y := SkyBases(Mission.StartBase).SkyY;
          AddMessage
            ("You set the travel destination for your ship.", OrderMessage);
       end if;
@@ -579,15 +580,15 @@ package body Missions is
 
    function AutoFinishMissions return String is
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       I: Natural := AcceptedMissions.First_Index;
    begin
       if BaseIndex = 0 then
          return "";
       end if;
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
+      if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0
         and then
-          Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+          Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
             .EType /=
           DoublePrice then
          return "";
@@ -600,8 +601,8 @@ package body Missions is
          if
            (AcceptedMissions(I).Finished and
             AcceptedMissions(I).StartBase = BaseIndex) or
-           (AcceptedMissions(I).TargetX = PlayerShip.SkyX and
-            AcceptedMissions(I).TargetY = PlayerShip.SkyY) then
+           (AcceptedMissions(I).TargetX = PlayerShip.Sky_X and
+            AcceptedMissions(I).TargetY = PlayerShip.Sky_Y) then
             FinishMission(I);
             I := I - 1;
          end if;

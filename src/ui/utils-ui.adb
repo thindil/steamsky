@@ -452,14 +452,14 @@ package body Utils.UI is
                   Title => "No money");
                return TCL_OK;
             end if;
-            PlayerShip.HomeBase :=
-              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+            PlayerShip.Home_Base :=
+              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
             UpdateCargo
               (Ship => PlayerShip, CargoIndex => MoneyIndex2,
                Amount => -(Price));
             AddMessage
               ("You changed your ship home base to: " &
-               To_String(SkyBases(PlayerShip.HomeBase).Name),
+               To_String(SkyBases(PlayerShip.Home_Base).Name),
                OtherMessage);
             GainExp(1, Talking_Skill, TraderIndex);
             Update_Game(10);
@@ -477,8 +477,8 @@ package body Utils.UI is
             if Message /= Null_Unbounded_String then
                ShowMessage(Text => To_String(Message), Title => "Error");
             end if;
-            CenterX := PlayerShip.SkyX;
-            CenterY := PlayerShip.SkyY;
+            CenterX := PlayerShip.Sky_X;
+            CenterY := PlayerShip.Sky_Y;
             if StartsCombat then
                ShowCombatUI;
             else
@@ -542,7 +542,7 @@ package body Utils.UI is
       else
          declare
             BaseIndex: constant Positive :=
-              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
             MemberIndex: constant Positive :=
               Positive'Value(CArgv.Arg(Argv, 1));
          begin
@@ -629,15 +629,15 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
-      if Positive'Value(CArgv.Arg(Argv, 1)) = PlayerShip.SkyX and
-        Positive'Value(CArgv.Arg(Argv, 2)) = PlayerShip.SkyY then
+      if Positive'Value(CArgv.Arg(Argv, 1)) = PlayerShip.Sky_X and
+        Positive'Value(CArgv.Arg(Argv, 2)) = PlayerShip.Sky_Y then
          ShowMessage
            (Text => "You are at this location now.",
             Title => "Can't set destination");
          return TCL_OK;
       end if;
-      PlayerShip.DestinationX := Positive'Value(CArgv.Arg(Argv, 1));
-      PlayerShip.DestinationY := Positive'Value(CArgv.Arg(Argv, 2));
+      PlayerShip.Destination_X := Positive'Value(CArgv.Arg(Argv, 1));
+      PlayerShip.Destination_Y := Positive'Value(CArgv.Arg(Argv, 2));
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");

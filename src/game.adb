@@ -430,7 +430,7 @@ package body Game is
       -- Set current map field/sky base info
       SkyBases(Random_Base).Visited := Game_Date;
       SkyBases(Random_Base).Known := True;
-      SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
+      SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited := True;
       GenerateRecruits;
       GenerateMissions;
       GenerateCargo;
@@ -459,7 +459,7 @@ package body Game is
 
       Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Tired_Points: Natural := 0;
       Need_Cleaning: Boolean := False;
    begin
@@ -548,11 +548,11 @@ package body Game is
          UpdateOrders(Ship => PlayerShip);
       end if;
       -- Update map cell
-      if not SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited then
+      if not SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited then
          GameStats.MapVisited := GameStats.MapVisited + 1;
          GameStats.Points := GameStats.Points + 1;
          UpdateGoal(GType => DISCOVER, TargetIndex => Null_Unbounded_String);
-         SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).Visited := True;
+         SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited := True;
       end if;
       -- Update events
       UpdateEvents(Minutes => Minutes);

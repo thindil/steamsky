@@ -153,10 +153,10 @@ package body Ships.Repairs is
       if CrewRepairPoints.Length = 0 then
          return;
       end if;
-      if PlayerShip.RepairModule > 0
-        and then PlayerShip.Modules(PlayerShip.RepairModule).Durability <
-          PlayerShip.Modules(PlayerShip.RepairModule).Max_Durability then
-         RepairModule(PlayerShip.RepairModule);
+      if PlayerShip.Repair_Module > 0
+        and then PlayerShip.Modules(PlayerShip.Repair_Module).Durability <
+          PlayerShip.Modules(PlayerShip.Repair_Module).Max_Durability then
+         RepairModule(PlayerShip.Repair_Module);
       end if;
       Repair_Loop :
       for I in PlayerShip.Modules.Iterate loop
