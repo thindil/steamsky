@@ -26,8 +26,8 @@ package body Maps is
       DiffY: Natural range 0 .. Map_Y_Range'Last;
       Distance: Float range 0.0 .. Float(Map_X_Range'Last * Map_Y_Range'Last);
    begin
-      DiffX := abs (PlayerShip.SkyX - DestinationX);
-      DiffY := abs (PlayerShip.SkyY - DestinationY);
+      DiffX := abs (PlayerShip.Sky_X - DestinationX);
+      DiffY := abs (PlayerShip.Sky_Y - DestinationY);
       Distance := Sqrt(Float((DiffX**2) + (DiffY**2)));
       return Natural(Float'Floor(Distance));
    end CountDistance;

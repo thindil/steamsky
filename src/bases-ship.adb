@@ -71,7 +71,7 @@ package body Bases.Ship is
         (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
-      GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+      GainRep(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex, 1);
       Update_Game(Time);
    end RepairShip;
 
@@ -84,7 +84,7 @@ package body Bases.Ship is
       ModulesAmount: Positive;
       Price: Natural := 0;
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Owners: Natural_Container.Vector;
    begin
       if MoneyIndex2 = 0 then
@@ -163,7 +163,7 @@ package body Bases.Ship is
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
-         GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+         GainRep(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex, 1);
          Update_Game(Modules_List(ModuleIndex).InstallTime);
          if Modules_List(ModuleIndex).MType /= HULL then
             Set_Empty_Owners_Loop :
@@ -409,8 +409,8 @@ package body Bases.Ship is
                 .Size;
             PlayerShip.Modules(HullIndex).Installed_Modules := ModulesAmount;
          end if;
-         if PlayerShip.UpgradeModule = ShipModuleIndex then
-            PlayerShip.UpgradeModule := 0;
+         if PlayerShip.Upgrade_Module = ShipModuleIndex then
+            PlayerShip.Upgrade_Module := 0;
             Remove_Upgrade_Order_Loop :
             for C in PlayerShip.Crew.Iterate loop
                if PlayerShip.Crew(C).Order = Upgrading then
@@ -433,7 +433,7 @@ package body Bases.Ship is
            (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => Price);
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
-         GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 1);
+         GainRep(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex, 1);
          Update_Game
            (Modules_List(PlayerShip.Modules(ShipModuleIndex).Proto_Index)
               .InstallTime);
@@ -444,13 +444,13 @@ package body Bases.Ship is
             To_String(Money_Name) & ".",
             TradeMessage);
          PlayerShip.Modules.Delete(ShipModuleIndex);
-         if PlayerShip.RepairModule > ShipModuleIndex then
-            PlayerShip.RepairModule := PlayerShip.RepairModule - 1;
-         elsif PlayerShip.RepairModule = ShipModuleIndex then
-            PlayerShip.RepairModule := 0;
+         if PlayerShip.Repair_Module > ShipModuleIndex then
+            PlayerShip.Repair_Module := PlayerShip.Repair_Module - 1;
+         elsif PlayerShip.Repair_Module = ShipModuleIndex then
+            PlayerShip.Repair_Module := 0;
          end if;
-         if PlayerShip.UpgradeModule > ShipModuleIndex then
-            PlayerShip.UpgradeModule := PlayerShip.UpgradeModule - 1;
+         if PlayerShip.Upgrade_Module > ShipModuleIndex then
+            PlayerShip.Upgrade_Module := PlayerShip.Upgrade_Module - 1;
          end if;
          for Module of PlayerShip.Modules loop
             if Module.M_Type = TURRET
@@ -463,7 +463,7 @@ package body Bases.Ship is
 
    procedure PayForDock is
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       MoneyIndex2: constant Inventory_Container.Extended_Index :=
         FindItem(PlayerShip.Cargo, Money_Index);
       DockingCost: Natural;
@@ -512,7 +512,7 @@ package body Bases.Ship is
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) is
       ProtoIndex: Unbounded_String;
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
    begin
       if ModuleIndex > 0 then
          Time :=

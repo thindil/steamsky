@@ -445,7 +445,7 @@ package body Ships.Crew is
             when Upgrading =>
                AddMessage
                  (MemberName & " starts upgrading " &
-                  To_String(Ship.Modules(Ship.UpgradeModule).Name) & ".",
+                  To_String(Ship.Modules(Ship.Upgrade_Module).Name) & ".",
                   OrderMessage);
             when Talk =>
                AddMessage

@@ -323,11 +323,11 @@ package body Ships is
                Name => Null_Unbounded_String, Durability => 100, Price => 0));
       end loop Set_Cargo_Loop;
       TmpShip :=
-        (Name => NewName, SkyX => X, SkyY => Y, Speed => Speed,
+        (Name => NewName, Sky_X => X, Sky_Y => Y, Speed => Speed,
          Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
-         UpgradeModule => 0, DestinationX => 0, DestinationY => 0,
-         RepairModule => 0, Description => ProtoShip.Description,
-         HomeBase => 0);
+         Upgrade_Module => 0, Destination_X => 0, Destination_Y => 0,
+         Repair_Module => 0, Description => ProtoShip.Description,
+         Home_Base => 0);
       declare
          GunAssigned: Boolean;
       begin
@@ -372,7 +372,7 @@ package body Ships is
       end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
       if SkyMap(X, Y).BaseIndex > 0 then
-         TmpShip.HomeBase := SkyMap(X, Y).BaseIndex;
+         TmpShip.Home_Base := SkyMap(X, Y).BaseIndex;
       else
          declare
             StartX, StartY, EndX, EndY: Integer;
@@ -392,17 +392,17 @@ package body Ships is
                   if SkyMap(SkyX, SkyY).BaseIndex > 0 then
                      if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
                        ProtoShip.Owner then
-                        TmpShip.HomeBase := SkyMap(SkyX, SkyY).BaseIndex;
+                        TmpShip.Home_Base := SkyMap(SkyX, SkyY).BaseIndex;
                         exit Bases_X_Loop;
                      end if;
                   end if;
                end loop Bases_Y_Loop;
             end loop Bases_X_Loop;
-            if TmpShip.HomeBase = 0 then
+            if TmpShip.Home_Base = 0 then
                Set_Home_Base_Loop :
                for I in SkyBases'Range loop
                   if SkyBases(I).Owner = ProtoShip.Owner then
-                     TmpShip.HomeBase := I;
+                     TmpShip.Home_Base := I;
                      exit Set_Home_Base_Loop;
                   end if;
                end loop Set_Home_Base_Loop;
@@ -413,7 +413,7 @@ package body Ships is
       Set_Home_For_Members_Loop :
       for Member of TmpShip.Crew loop
          Member.HomeBase :=
-           (if GetRandom(1, 100) < 99 then TmpShip.HomeBase
+           (if GetRandom(1, 100) < 99 then TmpShip.Home_Base
             else GetRandom(SkyBases'First, SkyBases'Last));
       end loop Set_Home_For_Members_Loop;
       return TmpShip;

@@ -38,7 +38,7 @@ package body Events is
       Roll2: Integer range -20 .. 120;
       Engines: Positive_Container.Vector;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Enemies: UnboundedString_Container.Vector;
       procedure GainPerception is
       begin
@@ -50,14 +50,15 @@ package body Events is
          end loop Gain_Perception_Loop;
       end GainPerception;
    begin
-      if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-         case Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+      if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+         case Events_List
+           (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
            .EType is
             when EnemyShip =>
                return
                  StartCombat
                    (Events_List
-                      (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                      (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                       .ShipIndex);
             when others =>
                return False;
@@ -135,11 +136,11 @@ package body Events is
             when 21 .. 23 => -- Friendly trader
                Events_List.Append
                  (New_Item =>
-                    (Trader, PlayerShip.SkyX, PlayerShip.SkyY,
+                    (Trader, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                      GetRandom(30, 45),
                      Traders
                        (GetRandom(Traders.First_Index, Traders.Last_Index))));
-               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+               SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've meet a friendly trader.", OtherMessage);
                GainPerception;
@@ -147,13 +148,13 @@ package body Events is
             when 24 .. 30 => -- Friendly ship
                Events_List.Append
                  (New_Item =>
-                    (FriendlyShip, PlayerShip.SkyX, PlayerShip.SkyY,
+                    (FriendlyShip, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                      GetRandom(30, 45),
                      FriendlyShips
                        (GetRandom
                           (FriendlyShips.First_Index,
                            FriendlyShips.Last_Index))));
-               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+               SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                AddMessage("You've spotted a friendly ship.", OtherMessage);
                GainPerception;
@@ -162,11 +163,11 @@ package body Events is
                GenerateEnemies(Enemies);
                Events_List.Append
                  (New_Item =>
-                    (EnemyShip, PlayerShip.SkyX, PlayerShip.SkyY,
+                    (EnemyShip, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                      GetRandom(30, 45),
                      Enemies
                        (GetRandom(Enemies.First_Index, Enemies.Last_Index))));
-               SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+               SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex :=
                  Events_List.Last_Index;
                return
                  StartCombat(Events_List(Events_List.Last_Index).ShipIndex);
@@ -194,7 +195,7 @@ package body Events is
                   GenerateEnemies(Enemies, To_Unbounded_String("Any"), False);
                   Events_List.Append
                     (New_Item =>
-                       (AttackOnBase, PlayerShip.SkyX, PlayerShip.SkyY,
+                       (AttackOnBase, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                         GetRandom(60, 90),
                         Enemies
                           (GetRandom
@@ -207,7 +208,7 @@ package body Events is
                when 21 => -- Disease in base
                   Events_List.Append
                     (New_Item =>
-                       (Disease, PlayerShip.SkyX, PlayerShip.SkyY,
+                       (Disease, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                         GetRandom(10_080, 12_000), 1));
                   AddMessage
                     ("You can't dock to base now, it is closed due to disease.",
@@ -226,7 +227,8 @@ package body Events is
                            if ItemIndex = 0 then
                               if Get_Price
                                   (SkyBases
-                                     (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                                     (SkyMap
+                                        (PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                         .BaseIndex)
                                      .BaseType,
                                    Objects_Container.Key(J)) >
@@ -238,7 +240,7 @@ package body Events is
                         end loop Find_Item_Index_Loop;
                         exit Get_Price_Loop when Get_Price
                             (SkyBases
-                               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                               (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                   .BaseIndex)
                                .BaseType,
                              NewItemIndex) >
@@ -246,7 +248,7 @@ package body Events is
                      end loop Get_Price_Loop;
                      Events_List.Append
                        (New_Item =>
-                          (DoublePrice, PlayerShip.SkyX, PlayerShip.SkyY,
+                          (DoublePrice, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                            GetRandom(1_440, 2_880), NewItemIndex));
                   end;
                when others => -- Full docks or enemy patrol
@@ -258,12 +260,12 @@ package body Events is
                        (Enemies, SkyBases(BaseIndex).Owner, False);
                      Events_List.Append
                        (New_Item =>
-                          (EnemyPatrol, PlayerShip.SkyX, PlayerShip.SkyY,
+                          (EnemyPatrol, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                            GetRandom(30, 45),
                            Enemies
                              (GetRandom
                                 (Enemies.First_Index, Enemies.Last_Index))));
-                     SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+                     SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex :=
                        Events_List.Last_Index;
                      return
                        StartCombat
@@ -271,13 +273,13 @@ package body Events is
                   end if;
                   Events_List.Append
                     (New_Item =>
-                       (FullDocks, PlayerShip.SkyX, PlayerShip.SkyY,
+                       (FullDocks, PlayerShip.Sky_X, PlayerShip.Sky_Y,
                         GetRandom(15, 30), 1));
                   AddMessage
                     ("You can't dock to base now, because it's docks are full.",
                      OtherMessage, RED);
             end case;
-            SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex :=
+            SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex :=
               Events_List.Last_Index;
          else
             if Roll < 5 and
