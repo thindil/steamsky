@@ -370,9 +370,9 @@ package body DebugUI is
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".ship.module", Interp);
       ValuesList: Unbounded_String;
    begin
-      Set(SpinBox, Positive'Image(PlayerShip.SkyX));
+      Set(SpinBox, Positive'Image(PlayerShip.Sky_X));
       SpinBox.Name := New_String(FrameName & ".ship.y");
-      Set(SpinBox, Positive'Image(PlayerShip.SkyY));
+      Set(SpinBox, Positive'Image(PlayerShip.Sky_Y));
       Update_Modules_Loop :
       for Module of PlayerShip.Modules loop
          Append(ValuesList, " {" & Module.Name & "}");
@@ -525,9 +525,9 @@ package body DebugUI is
       FrameName: constant String := ".debugdialog.main.ship";
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
    begin
-      PlayerShip.SkyX := Positive'Value(Get(SpinBox));
+      PlayerShip.Sky_X := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".y");
-      PlayerShip.SkyY := Positive'Value(Get(SpinBox));
+      PlayerShip.Sky_Y := Positive'Value(Get(SpinBox));
       ShowSkyMap(True);
       return TCL_OK;
    end Move_Ship_Command;

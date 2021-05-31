@@ -566,7 +566,7 @@ package body Combat.UI is
       Append
         (EnemyInfo,
          "Name: " & EnemyName & LF & "Type: " & Enemy.Ship.Name & LF &
-         "Home: " & SkyBases(Enemy.Ship.HomeBase).Name & LF & "Distance: " &
+         "Home: " & SkyBases(Enemy.Ship.Home_Base).Name & LF & "Distance: " &
          (if Enemy.Distance >= 15_000 then "Escaped"
           elsif Enemy.Distance in 10_000 .. 15_000 then "Long"
           elsif Enemy.Distance in 5_000 .. 10_000 then "Medium"
@@ -1439,17 +1439,17 @@ package body Combat.UI is
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if NewCombat then
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0
+         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0
            and then EnemyName /=
              ProtoShips_List
                (Events_List
-                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                  (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                   .ShipIndex)
                .Name then
             CombatStarted :=
               StartCombat
                 (Events_List
-                   (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                   (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                    .ShipIndex,
                  False);
             if not CombatStarted then

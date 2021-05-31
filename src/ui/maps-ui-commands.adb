@@ -366,7 +366,7 @@ package body Maps.UI.Commands is
           TCL_OK then
          return TCL_ERROR;
       end if;
-      if PlayerShip.SkyX = MapX and PlayerShip.SkyY = MapY then
+      if PlayerShip.Sky_X = MapX and PlayerShip.Sky_Y = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       Delete(DestinationMenu, "0", "end");
@@ -377,7 +377,7 @@ package body Maps.UI.Commands is
          Add
            (DestinationMenu, "command",
             "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
-         if PlayerShip.DestinationX > 0 and PlayerShip.DestinationY > 0 then
+         if PlayerShip.Destination_X > 0 and PlayerShip.Destination_Y > 0 then
             Add
               (DestinationMenu, "command",
                "-label {Move to} -command {MoveShip moveto}");
@@ -415,13 +415,13 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      PlayerShip.DestinationX := MapX;
-      PlayerShip.DestinationY := MapY;
+      PlayerShip.Destination_X := MapX;
+      PlayerShip.Destination_Y := MapY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       if Game_Settings.Auto_Center then
-         CenterX := PlayerShip.SkyX;
-         CenterY := PlayerShip.SkyY;
+         CenterX := PlayerShip.Sky_X;
+         CenterY := PlayerShip.Sky_Y;
       end if;
       DrawMap;
       UpdateMoveButtons;
@@ -464,8 +464,8 @@ package body Maps.UI.Commands is
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       if CArgv.Arg(Argv, 1) = "centeronship" then
-         CenterX := PlayerShip.SkyX;
-         CenterY := PlayerShip.SkyY;
+         CenterX := PlayerShip.Sky_X;
+         CenterY := PlayerShip.Sky_Y;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
          CenterX := Positive'Value(Get(SpinBox));
          SpinBox.Name := New_String(DialogName & ".y");
@@ -515,8 +515,8 @@ package body Maps.UI.Commands is
            (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
-         CenterX := SkyBases(PlayerShip.HomeBase).SkyX;
-         CenterY := SkyBases(PlayerShip.HomeBase).SkyY;
+         CenterX := SkyBases(PlayerShip.Home_Base).SkyX;
+         CenterY := SkyBases(PlayerShip.Home_Base).SkyY;
       end if;
       DrawMap;
       return
@@ -592,14 +592,14 @@ package body Maps.UI.Commands is
       NewX, NewY: Integer := 0;
       procedure Update_Coordinates is
       begin
-         if PlayerShip.DestinationX > PlayerShip.SkyX then
+         if PlayerShip.Destination_X > PlayerShip.Sky_X then
             NewX := 1;
-         elsif PlayerShip.DestinationX < PlayerShip.SkyX then
+         elsif PlayerShip.Destination_X < PlayerShip.Sky_X then
             NewX := -1;
          end if;
-         if PlayerShip.DestinationY > PlayerShip.SkyY then
+         if PlayerShip.Destination_Y > PlayerShip.Sky_Y then
             NewY := 1;
-         elsif PlayerShip.DestinationY < PlayerShip.SkyY then
+         elsif PlayerShip.Destination_Y < PlayerShip.Sky_Y then
             NewY := -1;
          end if;
       end Update_Coordinates;
@@ -622,19 +622,19 @@ package body Maps.UI.Commands is
          Result := MoveShip(1, -1, Message);
       elsif CArgv.Arg(Argv, 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
-         if PlayerShip.DestinationX = 0 and PlayerShip.DestinationY = 0 then
+         if PlayerShip.Destination_X = 0 and PlayerShip.Destination_Y = 0 then
             Result := 1;
             Update_Game(1);
             WaitInPlace(1);
          else
             Update_Coordinates;
             Result := MoveShip(NewX, NewY, Message);
-            if PlayerShip.DestinationX = PlayerShip.SkyX and
-              PlayerShip.DestinationY = PlayerShip.SkyY then
+            if PlayerShip.Destination_X = PlayerShip.Sky_X and
+              PlayerShip.Destination_Y = PlayerShip.Sky_Y then
                AddMessage
                  ("You reached your travel destination.", OrderMessage);
-               PlayerShip.DestinationX := 0;
-               PlayerShip.DestinationY := 0;
+               PlayerShip.Destination_X := 0;
+               PlayerShip.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
@@ -670,10 +670,10 @@ package body Maps.UI.Commands is
                end if;
             end if;
             if Game_Settings.Auto_Move_Stop /= NEVER and
-              SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
                declare
                   EventIndex: constant Positive :=
-                    SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+                    SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
@@ -726,12 +726,12 @@ package body Maps.UI.Commands is
                   end if;
                end if;
             end;
-            if PlayerShip.DestinationX = PlayerShip.SkyX and
-              PlayerShip.DestinationY = PlayerShip.SkyY then
+            if PlayerShip.Destination_X = PlayerShip.Sky_X and
+              PlayerShip.Destination_Y = PlayerShip.Sky_Y then
                AddMessage
                  ("You reached your travel destination.", OrderMessage);
-               PlayerShip.DestinationX := 0;
-               PlayerShip.DestinationY := 0;
+               PlayerShip.Destination_X := 0;
+               PlayerShip.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
@@ -778,8 +778,8 @@ package body Maps.UI.Commands is
       if Message /= Null_Unbounded_String then
          ShowMessage(Text => To_String(Message), Title => "Message");
       end if;
-      CenterX := PlayerShip.SkyX;
-      CenterY := PlayerShip.SkyY;
+      CenterX := PlayerShip.Sky_X;
+      CenterY := PlayerShip.Sky_Y;
       if StartsCombat then
          ShowCombatUI;
       else

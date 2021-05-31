@@ -38,14 +38,14 @@ package body Ships.SaveLoad is
       CategoryNode := Create_Element(SaveData, "playership");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "name", To_String(PlayerShip.Name));
-      SaveNumber(PlayerShip.SkyX, "x");
-      SaveNumber(PlayerShip.SkyY, "y");
+      SaveNumber(PlayerShip.Sky_X, "x");
+      SaveNumber(PlayerShip.Sky_Y, "y");
       SaveNumber(Ship_Speed'Pos(PlayerShip.Speed), "speed");
-      SaveNumber(PlayerShip.UpgradeModule, "upgrademodule");
-      SaveNumber(PlayerShip.DestinationX, "destinationx");
-      SaveNumber(PlayerShip.DestinationY, "destinationy");
-      SaveNumber(PlayerShip.RepairModule, "repairpriority");
-      SaveNumber(PlayerShip.HomeBase, "homebase");
+      SaveNumber(PlayerShip.Upgrade_Module, "upgrademodule");
+      SaveNumber(PlayerShip.Destination_X, "destinationx");
+      SaveNumber(PlayerShip.Destination_Y, "destinationy");
+      SaveNumber(PlayerShip.Repair_Module, "repairpriority");
+      SaveNumber(PlayerShip.Home_Base, "homebase");
       declare
          ModuleDataNode: DOM.Core.Element;
       begin
@@ -251,19 +251,19 @@ package body Ships.SaveLoad is
         DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playership");
       LoadNode := Item(ShipNode, 0);
       PlayerShip.Name := To_Unbounded_String(Get_Attribute(LoadNode, "name"));
-      PlayerShip.SkyX := Integer'Value(Get_Attribute(LoadNode, "x"));
-      PlayerShip.SkyY := Integer'Value(Get_Attribute(LoadNode, "y"));
+      PlayerShip.Sky_X := Integer'Value(Get_Attribute(LoadNode, "x"));
+      PlayerShip.Sky_Y := Integer'Value(Get_Attribute(LoadNode, "y"));
       PlayerShip.Speed :=
         Ship_Speed'Val(Integer'Value(Get_Attribute(LoadNode, "speed")));
-      PlayerShip.UpgradeModule :=
+      PlayerShip.Upgrade_Module :=
         Integer'Value(Get_Attribute(LoadNode, "upgrademodule"));
-      PlayerShip.DestinationX :=
+      PlayerShip.Destination_X :=
         Integer'Value(Get_Attribute(LoadNode, "destinationx"));
-      PlayerShip.DestinationY :=
+      PlayerShip.Destination_Y :=
         Integer'Value(Get_Attribute(LoadNode, "destinationy"));
-      PlayerShip.RepairModule :=
+      PlayerShip.Repair_Module :=
         Integer'Value(Get_Attribute(LoadNode, "repairpriority"));
-      PlayerShip.HomeBase :=
+      PlayerShip.Home_Base :=
         Integer'Value(Get_Attribute(LoadNode, "homebase"));
       PlayerShip.Modules.Clear;
       PlayerShip.Cargo.Clear;
@@ -881,7 +881,7 @@ package body Ships.SaveLoad is
                HomeBase :=
                  (if Get_Attribute(ChildNode, "homebase") /= "" then
                     Natural'Value(Get_Attribute(ChildNode, "homebase"))
-                  else PlayerShip.HomeBase);
+                  else PlayerShip.Home_Base);
                FactionIndex :=
                  (if Get_Attribute(ChildNode, "faction") /= "" then
                     To_Unbounded_String(Get_Attribute(ChildNode, "faction"))

@@ -96,8 +96,8 @@ package body Combat is
       BoardingOrders.Clear;
       EnemyShip :=
         CreateShip
-          (EnemyIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
-           FULL_SPEED);
+          (EnemyIndex, Null_Unbounded_String, PlayerShip.Sky_X,
+           PlayerShip.Sky_Y, FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
       if Index(ProtoShips_List(EnemyIndex).Name, To_String(Traders_Name)) >
         0 then
@@ -1565,29 +1565,31 @@ package body Combat is
          end;
          Enemy.Ship.Speed := FULL_STOP;
          PlayerShip.Speed := OldSpeed;
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+            if Events_List
+                (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                 .EType =
               AttackOnBase then
-               GainRep(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex, 5);
+               GainRep
+                 (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex, 5);
             end if;
-            DeleteEvent(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex);
+            DeleteEvent(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex);
          end if;
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex > 0
+         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex > 0
            and then
              AcceptedMissions
-               (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+               (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex)
                .MType =
              Destroy
            and then
              ProtoShips_List
                (AcceptedMissions
-                  (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex)
+                  (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex)
                   .ShipIndex)
                .Name =
              Enemy.Ship.Name then
             UpdateMission
-              (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+              (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex);
          end if;
          declare
             LostReputationChance: Positive range 10 .. 40 := 10;
@@ -1597,7 +1599,7 @@ package body Combat is
                LostReputationChance := 40;
             end if;
             if GetRandom(1, 100) < LostReputationChance then
-               GainRep(Enemy.Ship.HomeBase, -100);
+               GainRep(Enemy.Ship.Home_Base, -100);
             end if;
          end;
          UpdateDestroyedShips(Enemy.Ship.Name);
@@ -1623,8 +1625,8 @@ package body Combat is
                   return;
                end if;
                Create(Tokens, To_String(CurrentStory.Data), ";");
-               if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
-                 PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) and
+               if PlayerShip.Sky_X = Positive'Value(Slice(Tokens, 1)) and
+                 PlayerShip.Sky_Y = Positive'Value(Slice(Tokens, 2)) and
                  EnemyShipIndex = To_Unbounded_String(Slice(Tokens, 3)) then
                   if not ProgressStory(True) then
                      return;

@@ -211,7 +211,7 @@ package body Ships.Upgrade is
             end loop Materials_Loop;
          end if;
       end;
-      PlayerShip.UpgradeModule := ModuleIndex;
+      PlayerShip.Upgrade_Module := ModuleIndex;
       if PlayerShip.Modules(ModuleIndex).Upgrade_Action /= UpgradeAction then
          PlayerShip.Modules(ModuleIndex).Upgrade_Progress :=
            Integer
@@ -254,19 +254,19 @@ package body Ships.Upgrade is
             YELLOW);
          UpgradedModule.Upgrade_Progress := 0;
          UpgradedModule.Upgrade_Action := NONE;
-         PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
-         PlayerShip.UpgradeModule := 0;
+         PlayerShip.Modules(PlayerShip.Upgrade_Module) := UpgradedModule;
+         PlayerShip.Upgrade_Module := 0;
          GiveOrders(PlayerShip, WorkerIndex, Rest);
       end MaxUpgradeReached;
    begin
-      if PlayerShip.UpgradeModule = 0 then
+      if PlayerShip.Upgrade_Module = 0 then
          return;
       end if;
       WorkerIndex := FindMember(Upgrading);
       if WorkerIndex = 0 then
          return;
       end if;
-      UpgradedModule := PlayerShip.Modules(PlayerShip.UpgradeModule);
+      UpgradedModule := PlayerShip.Modules(PlayerShip.Upgrade_Module);
       CurrentMinutes := Minutes;
       OrderTime := PlayerShip.Crew(WorkerIndex).OrderTime;
       if UpgradedModule.Durability = 0 then
@@ -531,7 +531,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .MaxValue /
                                    20) *
@@ -542,7 +542,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .MaxValue *
                                    10) *
@@ -553,7 +553,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .MaxValue *
                                    2) *
@@ -564,7 +564,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .MaxValue) *
                                 Float(New_Game_Settings.Upgrade_Cost_Bonus));
@@ -574,7 +574,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .MaxValue *
                                    40) *
@@ -617,7 +617,7 @@ package body Ships.Upgrade is
                                (Float
                                   (Modules_List
                                      (PlayerShip.Modules
-                                        (PlayerShip.UpgradeModule)
+                                        (PlayerShip.Upgrade_Module)
                                         .Proto_Index)
                                      .Value *
                                    20) *
@@ -636,7 +636,7 @@ package body Ships.Upgrade is
             UpgradedModule.Upgrade_Progress := UpgradeProgress;
          end if;
       end loop Upgrade_Loop;
-      PlayerShip.Modules(PlayerShip.UpgradeModule) := UpgradedModule;
+      PlayerShip.Modules(PlayerShip.Upgrade_Module) := UpgradedModule;
    end UpgradeShip;
 
 end Ships.Upgrade;

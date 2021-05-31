@@ -149,13 +149,13 @@ package body Ships.Movement is
              ("You can't fly because your ship is overloaded.");
          return 0;
       end if;
-      NewX := PlayerShip.SkyX + X;
-      NewY := PlayerShip.SkyY + Y;
+      NewX := PlayerShip.Sky_X + X;
+      NewY := PlayerShip.Sky_Y + Y;
       if NewX < 1 or NewX > 1_024 or NewY < 1 or NewY > 1_024 then
          return 0;
       end if;
-      PlayerShip.SkyX := NewX;
-      PlayerShip.SkyY := NewY;
+      PlayerShip.Sky_X := NewX;
+      PlayerShip.Sky_Y := NewY;
       UpdateCargo
         (PlayerShip, PlayerShip.Cargo.Element(FuelIndex).ProtoIndex,
          FuelNeeded);
@@ -210,7 +210,7 @@ package body Ships.Movement is
    function DockShip
      (Docking: Boolean; Escape: Boolean := False) return String is
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Message: Unbounded_String;
    begin
       Message := To_Unbounded_String(HaveOrderRequirements);

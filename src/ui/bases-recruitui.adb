@@ -87,7 +87,7 @@ package body Bases.RecruitUI is
       RecruitFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       HighestLevel, HighestIndex: Positive;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
@@ -277,7 +277,7 @@ package body Bases.RecruitUI is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
@@ -542,7 +542,7 @@ package body Bases.RecruitUI is
       DialogName: constant String := ".negotiatedialog";
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
@@ -620,7 +620,7 @@ package body Bases.RecruitUI is
       DialogName: constant String := ".negotiatedialog";
       Cost, ContractLength2: Integer;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
@@ -739,7 +739,7 @@ package body Bases.RecruitUI is
           (NegotiateDialog & ".contract",
            "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
