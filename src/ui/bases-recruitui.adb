@@ -748,11 +748,17 @@ package body Bases.RecruitUI is
         SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
+      Dialog_Header: constant Ttk_Label :=
+        Create
+          (NegotiateDialog & ".header",
+           "-text {Negotiate with " & To_String(Recruit.Name) &
+           "} -wraplength 275 -style Header.TLabel");
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       Cost: Positive;
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Label :=
         Create
           (NegotiateDialog & ".dailylbl",
