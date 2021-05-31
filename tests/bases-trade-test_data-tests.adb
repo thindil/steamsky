@@ -107,7 +107,7 @@ package body Bases.Trade.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       Amount: Positive := Positive(Known_Recipes.Length);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
 
    begin

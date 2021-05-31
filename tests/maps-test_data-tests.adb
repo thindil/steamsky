@@ -57,16 +57,16 @@ package body Maps.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      X: Positive := PlayerShip.SkyX + 1;
-      Y: Positive := PlayerShip.SkyY + 1;
+      X: Positive := PlayerShip.Sky_X + 1;
+      Y: Positive := PlayerShip.Sky_Y + 1;
 
    begin
 
       if X > Map_X_Range'Last then
-         X := PlayerShip.SkyX - 1;
+         X := PlayerShip.Sky_X - 1;
       end if;
       if Y > Map_Y_Range'Last then
-         Y := PlayerShip.SkyY - 1;
+         Y := PlayerShip.Sky_Y - 1;
       end if;
       Assert
         (CountDistance(X, Y) = 1,

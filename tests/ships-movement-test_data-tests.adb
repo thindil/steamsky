@@ -59,31 +59,31 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldX: constant Natural := PlayerShip.SkyX;
-      OldY: constant Natural := PlayerShip.SkyY;
+      OldX: constant Natural := PlayerShip.Sky_X;
+      OldY: constant Natural := PlayerShip.Sky_Y;
       Message: Unbounded_String;
       NewX, NewY: Natural := 0;
 
    begin
 
       PlayerShip.Speed := FULL_SPEED;
-      if PlayerShip.SkyX + 1 <= 1_024 then
+      if PlayerShip.Sky_X + 1 <= 1_024 then
          NewX := 1;
       end if;
-      if PlayerShip.SkyY + 1 <= 1_024 then
+      if PlayerShip.Sky_Y + 1 <= 1_024 then
          NewY := 1;
       end if;
       if MoveShip(NewX, NewY, Message) = 0 then
          Ada.Text_IO.Put_Line(To_String(Message));
       end if;
       Assert
-        (PlayerShip.SkyX - NewX = OldX,
+        (PlayerShip.Sky_X - NewX = OldX,
          "Failed to move player ship in X axis");
       Assert
-        (PlayerShip.SkyY - NewY = OldY,
+        (PlayerShip.Sky_Y - NewY = OldY,
          "Failed to move player ship in Y axis");
-      PlayerShip.SkyX := OldX;
-      PlayerShip.SkyY := OldY;
+      PlayerShip.Sky_X := OldX;
+      PlayerShip.Sky_Y := OldY;
       PlayerShip.Speed := DOCKED;
 
 --  begin read only
