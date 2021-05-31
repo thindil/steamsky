@@ -55,7 +55,7 @@ package body Trades.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       OldAmount: Natural := SkyBases(BaseIndex).Cargo(2).Amount;
 
    begin

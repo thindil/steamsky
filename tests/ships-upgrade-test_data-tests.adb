@@ -105,7 +105,7 @@ package body Ships.Upgrade.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       Progress: constant Natural := PlayerShip.Modules(1).Upgrade_Progress;
-      OldUpgrade: constant Natural := PlayerShip.UpgradeModule;
+      OldUpgrade: constant Natural := PlayerShip.Upgrade_Module;
 
    begin
 
@@ -116,10 +116,10 @@ package body Ships.Upgrade.Test_Data.Tests is
       Assert
         (PlayerShip.Modules(1).Upgrade_Progress < Progress,
          "Failed to upgrade ship.");
-      PlayerShip.UpgradeModule := 0;
+      PlayerShip.Upgrade_Module := 0;
       UpgradeShip(15);
       Assert(True, "This test can only crash");
-      PlayerShip.UpgradeModule := OldUpgrade;
+      PlayerShip.Upgrade_Module := OldUpgrade;
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");

@@ -105,13 +105,13 @@ package body Combat.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldX: constant Positive := PlayerShip.SkyX;
-      OldY: constant Positive := PlayerShip.SkyY;
+      OldX: constant Positive := PlayerShip.Sky_X;
+      OldY: constant Positive := PlayerShip.Sky_Y;
 
    begin
 
-      PlayerShip.SkyX := 5;
-      PlayerShip.SkyY := 5;
+      PlayerShip.Sky_X := 5;
+      PlayerShip.Sky_Y := 5;
       PlayerShip.Speed := FULL_SPEED;
       if StartCombat(To_Unbounded_String("2")) then
          CombatTurn;
@@ -121,8 +121,8 @@ package body Combat.Test_Data.Tests is
          Assert(True, "This test can only crash.");
       end if;
       PlayerShip.Speed := DOCKED;
-      PlayerShip.SkyX := OldX;
-      PlayerShip.SkyY := OldY;
+      PlayerShip.Sky_X := OldX;
+      PlayerShip.Sky_Y := OldY;
 
 --  begin read only
    end Test_CombatTurn_test_combatturn;
