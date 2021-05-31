@@ -350,8 +350,8 @@ package body Stories is
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known and
            SkyBases(BaseIndex).Reputation(1) > -25 then
-            PlayerShip.DestinationX := SkyBases(BaseIndex).SkyX;
-            PlayerShip.DestinationY := SkyBases(BaseIndex).SkyY;
+            PlayerShip.Destination_X := SkyBases(BaseIndex).SkyX;
+            PlayerShip.Destination_Y := SkyBases(BaseIndex).SkyY;
             return SkyBases(BaseIndex).Name;
          end if;
       end loop Select_Base_Loop;
@@ -381,7 +381,7 @@ package body Stories is
          LocationData := Value;
          Append(LocationData, ";");
       end if;
-      PlayerShip.DestinationX := LocationX;
+      PlayerShip.Destination_X := LocationX;
       Value := GetStepData(StepData, "y");
       if Value = To_Unbounded_String("random") then
          Random_Location_Loop :
@@ -390,7 +390,7 @@ package body Stories is
             exit Random_Location_Loop when SkyMap(LocationX, LocationY)
                 .BaseIndex =
               0 and
-              LocationY /= PlayerShip.SkyY;
+              LocationY /= PlayerShip.Sky_Y;
          end loop Random_Location_Loop;
          Append(LocationData, Integer'Image(LocationY));
          Append(LocationData, ";");
@@ -399,7 +399,7 @@ package body Stories is
          Append(LocationData, Value);
          Append(LocationData, ";");
       end if;
-      PlayerShip.DestinationY := LocationY;
+      PlayerShip.Destination_Y := LocationY;
       return LocationData;
    end SelectLocation;
 
@@ -740,8 +740,8 @@ package body Stories is
             StoryY := Integer'Value(Slice(Tokens, 2));
          end if;
       else
-         StoryX := PlayerShip.SkyX;
-         StoryY := PlayerShip.SkyY;
+         StoryX := PlayerShip.Sky_X;
+         StoryY := PlayerShip.Sky_Y;
       end if;
    end GetStoryLocation;
 

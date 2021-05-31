@@ -56,7 +56,7 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Argc, Argv);
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       MissionsLimit: Integer;
       Event: Events_Types := None;
       ItemIndex: Natural;
@@ -101,8 +101,8 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
-                       PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
+                     if PlayerShip.Sky_X = Positive'Value(Slice(Tokens, 1)) and
+                       PlayerShip.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search for " &
@@ -118,8 +118,8 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if PlayerShip.SkyX = Positive'Value(Slice(Tokens, 1)) and
-                       PlayerShip.SkyY = Positive'Value(Slice(Tokens, 2)) then
+                     if PlayerShip.Sky_X = Positive'Value(Slice(Tokens, 1)) and
+                       PlayerShip.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search area} -underline 0 -command ExecuteStory");
@@ -211,8 +211,8 @@ package body OrdersMenu is
                Add_Mission_Menu_Loop :
                for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
-                    (Mission.TargetX = PlayerShip.SkyX and
-                     Mission.TargetY = PlayerShip.SkyY) then
+                    (Mission.TargetX = PlayerShip.Sky_X and
+                     Mission.TargetY = PlayerShip.Sky_Y) then
                      case Mission.MType is
                         when Deliver =>
                            Insert
@@ -259,7 +259,7 @@ package body OrdersMenu is
                      "-label Missions -underline 0 -command ShowBaseMissions");
                end if;
             end if;
-            if PlayerShip.HomeBase /= BaseIndex then
+            if PlayerShip.Home_Base /= BaseIndex then
                Add
                  (OrdersMenu, "command",
                   "-label {Set as home} -underline 7 -command SetAsHome");
@@ -271,9 +271,10 @@ package body OrdersMenu is
                "-label {Loot} -underline 0 -command ShowLoot");
          end if;
       else
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
+         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
             Event :=
-              Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+              Events_List
+                (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                 .EType;
          end if;
          case Event is
@@ -335,8 +336,8 @@ package body OrdersMenu is
                   end if;
                   Complete_Mission_Menu_Loop :
                   for Mission of AcceptedMissions loop
-                     if HaveTrader and Mission.TargetX = PlayerShip.SkyX and
-                       Mission.TargetY = PlayerShip.SkyY and
+                     if HaveTrader and Mission.TargetX = PlayerShip.Sky_X and
+                       Mission.TargetY = PlayerShip.Sky_Y and
                        Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
@@ -380,8 +381,8 @@ package body OrdersMenu is
                else
                   Progress_Mission_Loop :
                   for Mission of AcceptedMissions loop
-                     if Mission.TargetX = PlayerShip.SkyX and
-                       Mission.TargetY = PlayerShip.SkyY and
+                     if Mission.TargetX = PlayerShip.Sky_X and
+                       Mission.TargetY = PlayerShip.Sky_Y and
                        not Mission.Finished then
                         case Mission.MType is
                            when Deliver | Passenger =>
@@ -412,7 +413,8 @@ package body OrdersMenu is
                      "-label {Trade} -underline 0 -command {ShowTrader " &
                      To_String
                        (Events_List
-                          (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+                          (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                             .EventIndex)
                           .ShipIndex) &
                      "}");
                   Add
@@ -430,7 +432,7 @@ package body OrdersMenu is
                   if Index
                       (ProtoShips_List
                          (Events_List
-                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                            (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                .EventIndex)
                             .ShipIndex)
                          .Name,
@@ -441,7 +443,7 @@ package body OrdersMenu is
                         "-label {Trade} -underline 0 -command {ShowTrader " &
                         To_String
                           (Events_List
-                             (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                             (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                 .EventIndex)
                              .ShipIndex) &
                         "}");
@@ -508,8 +510,9 @@ package body OrdersMenu is
             return TCL_OK;
          end if;
       else
-         if SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex > 0 then
-            if Events_List(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex)
+         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+            if Events_List
+                (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
                 .EType =
               FullDocks then
                return Show_Wait_Command(ClientData, Interp, Argc, Argv);
@@ -742,8 +745,8 @@ package body OrdersMenu is
       StartsCombat: Boolean := False;
    begin
       for Mission of AcceptedMissions loop
-         if Mission.TargetX = PlayerShip.SkyX and
-           Mission.TargetY = PlayerShip.SkyY and not Mission.Finished then
+         if Mission.TargetX = PlayerShip.Sky_X and
+           Mission.TargetY = PlayerShip.Sky_Y and not Mission.Finished then
             case Mission.MType is
                when Deliver | Passenger =>
                   null;
@@ -754,7 +757,7 @@ package body OrdersMenu is
                      StartsCombat :=
                        StartCombat
                          (AcceptedMissions
-                            (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY)
+                            (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                .MissionIndex)
                             .ShipIndex,
                           False);
@@ -764,14 +767,16 @@ package body OrdersMenu is
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                       (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                          .MissionIndex);
                   end if;
                when Explore =>
                   Update_Game(GetRandom(30, 60));
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+                       (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                          .MissionIndex);
                   end if;
             end case;
             exit;
@@ -811,7 +816,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      FinishMission(SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).MissionIndex);
+      FinishMission(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex);
       UpdateHeader;
       UpdateMessages;
       ShowSkyMap;
@@ -925,9 +930,9 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       EventIndex: constant Natural :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
       ItemIndex: constant Natural :=
         FindItem
           (Inventory => PlayerShip.Cargo,

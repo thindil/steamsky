@@ -1245,7 +1245,7 @@ package body Ships.UI.Crew is
                exit Check_Heal_Order_Loop;
             end if;
          end loop Check_Heal_Order_Loop;
-         if PlayerShip.UpgradeModule > 0 and Member.Order /= Upgrading then
+         if PlayerShip.Upgrade_Module > 0 and Member.Order /= Upgrading then
             Menu.Add
               (CrewMenu, "command",
                "-label {Upgrade module} -command {SetCrewOrder Upgrading " &

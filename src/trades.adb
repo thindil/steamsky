@@ -33,11 +33,11 @@ package body Trades is
      (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
       BuyAmount, Price: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
       ItemName, ItemIndex: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
@@ -121,13 +121,13 @@ package body Trades is
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
       SellAmount: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       ProtoIndex: constant Unbounded_String :=
         PlayerShip.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).EventIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
@@ -268,8 +268,8 @@ package body Trades is
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
       TraderShip: ShipRecord :=
         CreateShip
-          (ProtoIndex, Null_Unbounded_String, PlayerShip.SkyX, PlayerShip.SkyY,
-           FULL_STOP);
+          (ProtoIndex, Null_Unbounded_String, PlayerShip.Sky_X,
+           PlayerShip.Sky_Y, FULL_STOP);
       CargoAmount: Natural range 0 .. 10 :=
         (if TraderShip.Crew.Length < 5 then GetRandom(1, 3)
          elsif TraderShip.Crew.Length < 10 then GetRandom(1, 5)

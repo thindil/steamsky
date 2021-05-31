@@ -154,14 +154,16 @@ package Ships is
    -- FUNCTION
    -- Used to store modules data in ships
    -- SOURCE
-   package Modules_Container is new Vectors(Index_Type => Positive, Element_Type => Module_Data);
+   package Modules_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Module_Data);
    -- ****
 
    -- ****t* Ships/Ships.Crew_Container
    -- FUNCTION
    -- Used to store crew data in ships
    -- SOURCE
-   package Crew_Container is new Vectors(Index_Type => Positive, Element_Type => Member_Data);
+   package Crew_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
    -- ****s* Ships/Ships.ShipRecord

@@ -81,7 +81,7 @@ package body Bases.UI is
         Get_Widget(BaseCanvas & ".base.items.view", Interp);
       FirstIndex, ButtonText: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
    begin
       if Winfo_Get(BaseCanvas, "exists") = "0" then
@@ -252,7 +252,7 @@ package body Bases.UI is
       Cost, Time: Natural := 0;
       InfoLabel: Ttk_Label := Get_Widget(FrameName & ".info.info", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       MoneyIndex2: Natural;
       ActionButton: constant Ttk_Button :=
         Get_Widget(FrameName & ".info.accept", Interp);

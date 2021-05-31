@@ -202,7 +202,7 @@ package body Missions.UI is
          begin
             MissionsLimit :=
               (case SkyBases
-                 (SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex)
+                 (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex)
                  .Reputation
                  (1) is
                  when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
@@ -210,7 +210,7 @@ package body Missions.UI is
             Count_Missions_Limit_Loop :
             for Mission of AcceptedMissions loop
                if Mission.StartBase =
-                 SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex then
+                 SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex then
                   MissionsLimit := MissionsLimit - 1;
                   exit Count_Missions_Limit_Loop when MissionsLimit = 0;
                end if;
@@ -421,7 +421,7 @@ package body Missions.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp missions}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
-      BaseIndex := SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+      BaseIndex := SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       if SkyBases(BaseIndex).Missions.Length = 0 then
          ShowSkyMap(True);
          return TCL_OK;

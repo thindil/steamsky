@@ -100,7 +100,7 @@ package body Bases.ShipyardUI is
       ShipyardCanvas: constant Tk_Canvas :=
         Get_Widget(ShipyardFrame & ".canvas", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.SkyX, PlayerShip.SkyY).BaseIndex;
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
       ModuleSize: Integer;
       ModuleTypeBox: constant Ttk_ComboBox :=
         Get_Widget

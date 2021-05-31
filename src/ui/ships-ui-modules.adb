@@ -111,7 +111,7 @@ package body Ships.UI.Modules is
          "-label {Rename module} -command {GetString {Enter a new name for the " &
          To_String(PlayerShip.Modules(ModuleIndex).Name) & ":} modulename" &
          CArgv.Arg(Argv, 1) & " {Renaming the module}}");
-      if PlayerShip.RepairModule /= ModuleIndex then
+      if PlayerShip.Repair_Module /= ModuleIndex then
          Menu.Add
            (ModuleMenu, "command",
             "-label {Repair selected module as first when damaged} -command {SetRepair assign " &
@@ -124,7 +124,7 @@ package body Ships.UI.Modules is
                 .Durability) *
            1.5);
       if PlayerShip.Modules(ModuleIndex).Upgrade_Action = DURABILITY and
-        PlayerShip.UpgradeModule = ModuleIndex then
+        PlayerShip.Upgrade_Module = ModuleIndex then
          MaxValue := 1;
       end if;
       if PlayerShip.Modules(ModuleIndex).Max_Durability < MaxValue then
@@ -142,7 +142,7 @@ package body Ships.UI.Modules is
                       .MaxValue) *
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.UpgradeModule = ModuleIndex then
+              PlayerShip.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
@@ -158,7 +158,7 @@ package body Ships.UI.Modules is
                       .Value) /
                  2.0);
             if PlayerShip.Modules(ModuleIndex).Upgrade_Action = VALUE and
-              PlayerShip.UpgradeModule = ModuleIndex then
+              PlayerShip.Upgrade_Module = ModuleIndex then
                MaxValue := PlayerShip.Modules(ModuleIndex).Fuel_Usage + 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Fuel_Usage > MaxValue then
@@ -186,7 +186,7 @@ package body Ships.UI.Modules is
                       .MaxValue) *
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.UpgradeModule = ModuleIndex then
+              PlayerShip.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
@@ -228,7 +228,7 @@ package body Ships.UI.Modules is
                     1.5);
                if PlayerShip.Modules(ModuleIndex).Upgrade_Action =
                  MAX_VALUE and
-                 PlayerShip.UpgradeModule = ModuleIndex then
+                 PlayerShip.Upgrade_Module = ModuleIndex then
                   MaxValue := 1;
                end if;
                if CurrentValue < MaxValue then
@@ -300,7 +300,7 @@ package body Ships.UI.Modules is
                       .MaxValue) *
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.UpgradeModule = ModuleIndex then
+              PlayerShip.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
@@ -317,7 +317,7 @@ package body Ships.UI.Modules is
                       .MaxValue) *
                  1.5);
             if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.UpgradeModule = ModuleIndex then
+              PlayerShip.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
             if PlayerShip.Modules(ModuleIndex).Max_Modules < MaxValue then
@@ -1158,7 +1158,7 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      PlayerShip.UpgradeModule := 0;
+      PlayerShip.Upgrade_Module := 0;
       Give_Orders_Loop :
       for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
          if PlayerShip.Crew(I).Order = Upgrading then
@@ -1198,7 +1198,7 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       if CArgv.Arg(Argv, 1) = "assign" then
-         PlayerShip.RepairModule := Positive'Value(CArgv.Arg(Argv, 2));
+         PlayerShip.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
          AddMessage
            ("You assigned " &
             To_String
@@ -1206,7 +1206,7 @@ package body Ships.UI.Modules is
             " as repair priority.",
             OrderMessage);
       else
-         PlayerShip.RepairModule := 0;
+         PlayerShip.Repair_Module := 0;
          AddMessage("You removed repair priority.", OrderMessage);
       end if;
       UpdateMessages;
@@ -1237,8 +1237,8 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      PlayerShip.DestinationX := 0;
-      PlayerShip.DestinationY := 0;
+      PlayerShip.Destination_X := 0;
+      PlayerShip.Destination_Y := 0;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 

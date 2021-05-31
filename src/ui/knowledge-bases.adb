@@ -469,7 +469,7 @@ package body Knowledge.Bases is
       end;
       SetReputationText
         (Get_Reputation_Text(SkyBases(BaseIndex).Reputation(1)));
-      if BaseIndex = PlayerShip.HomeBase then
+      if BaseIndex = PlayerShip.Home_Base then
          Append(BaseInfo, LF & "It is your home base.");
       end if;
       BaseLabel :=
