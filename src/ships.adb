@@ -33,14 +33,14 @@ package body Ships is
 
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; RandomUpgrades: Boolean := True) return ShipRecord is
-      TmpShip: ShipRecord;
+      Speed: Ship_Speed; RandomUpgrades: Boolean := True) return Ship_Record is
+      TmpShip: Ship_Record;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
       HullIndex: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
-      ProtoShip: constant ProtoShipData := ProtoShips_List(ProtoIndex);
+      ProtoShip: constant Proto_Ship_Data := ProtoShips_List(ProtoIndex);
       ShipCargo: Inventory_Container.Vector;
       Owners: Natural_Container.Vector;
    begin
@@ -269,11 +269,11 @@ package body Ships is
          Set_Crew_Loop :
          for ProtoMember of ProtoShip.Crew loop
             Amount :=
-              (if ProtoMember.MaxAmount = 0 then ProtoMember.MinAmount
-               else GetRandom(ProtoMember.MinAmount, ProtoMember.MaxAmount));
+              (if ProtoMember.Max_Amount = 0 then ProtoMember.Min_Amount
+               else GetRandom(ProtoMember.Min_Amount, ProtoMember.Max_Amount));
             Add_Crew_Member_Loop :
             for I in 1 .. Amount loop
-               Member := GenerateMob(ProtoMember.ProtoIndex, ProtoShip.Owner);
+               Member := GenerateMob(ProtoMember.Proto_Index, ProtoShip.Owner);
                ShipCrew.Append(New_Item => Member);
                Modules_Loop :
                for Module of ShipModules loop
@@ -422,10 +422,10 @@ package body Ships is
    procedure LoadShips(Reader: Tree_Reader) is
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
-      TempRecord: ProtoShipData;
+      TempRecord: Proto_Ship_Data;
       TempModules: UnboundedString_Container.Vector;
       TempCargo: MobInventory_Container.Vector;
-      TempCrew: ProtoCrew_Container.Vector;
+      TempCrew: Proto_Crew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
       Action, SubAction: Data_Action;
       ShipNode, ChildNode: Node;
@@ -767,12 +767,12 @@ package body Ships is
                   when UPDATE =>
                      Update_Crew_Loop :
                      for Member of TempRecord.Crew loop
-                        if Member.ProtoIndex = MobIndex then
+                        if Member.Proto_Index = MobIndex then
                            if Get_Attribute(ChildNode, "amount") /= "" then
-                              Member.MinAmount :=
+                              Member.Min_Amount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "amount"));
-                              Member.MaxAmount := 0;
+                              Member.Max_Amount := 0;
                            elsif Get_Attribute(ChildNode, "minamount") /=
                              "" then
                               if Integer'Value
@@ -784,15 +784,15 @@ package body Ships is
                                    Get_Attribute(ChildNode, "index") &
                                    "| in " & To_String(TempRecord.Name) & ".";
                               end if;
-                              Member.MinAmount :=
+                              Member.Min_Amount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "minamount"));
-                              Member.MaxAmount :=
+                              Member.Max_Amount :=
                                 Integer'Value
                                   (Get_Attribute(ChildNode, "maxamount"));
                            else
-                              Member.MinAmount := 1;
-                              Member.MaxAmount := 0;
+                              Member.Min_Amount := 1;
+                              Member.Max_Amount := 0;
                            end if;
                            exit Update_Crew_Loop;
                         end if;
@@ -800,8 +800,8 @@ package body Ships is
                   when REMOVE =>
                      Find_Delete_Crew_Loop :
                      for K in TempRecord.Crew.Iterate loop
-                        if TempRecord.Crew(K).ProtoIndex = MobIndex then
-                           DeleteIndex := ProtoCrew_Container.To_Index(K);
+                        if TempRecord.Crew(K).Proto_Index = MobIndex then
+                           DeleteIndex := Proto_Crew_Container.To_Index(K);
                            exit Find_Delete_Crew_Loop;
                         end if;
                      end loop Find_Delete_Crew_Loop;
@@ -857,7 +857,7 @@ package body Ships is
       end loop Load_Proto_Ships_Loop;
    end LoadShips;
 
-   function CountShipWeight(Ship: ShipRecord) return Positive is
+   function CountShipWeight(Ship: Ship_Record) return Positive is
       Weight: Natural := 0;
       CargoWeight: Positive;
    begin
@@ -980,7 +980,7 @@ package body Ships is
    end GetCabinQuality;
 
    procedure DamageModule
-     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+     (Ship: in out Ship_Record; ModuleIndex: Modules_Container.Extended_Index;
       Damage: Positive; DeathReason: String) is
       RealDamage: Natural := Damage;
       WeaponIndex: Natural;

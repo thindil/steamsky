@@ -166,7 +166,7 @@ package Ships is
      (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
-   -- ****s* Ships/Ships.ShipRecord
+   -- ****s* Ships/Ships.Ship_Record
    -- FUNCTION
    -- Data structure for ships
    -- PARAMETERS
@@ -184,7 +184,7 @@ package Ships is
    -- Description    - Description of ship
    -- Home_Base      - Index of home base of ship
    -- SOURCE
-   type ShipRecord is record
+   type Ship_Record is record
       Name: Unbounded_String;
       Sky_X: Map_X_Range;
       Sky_Y: Map_Y_Range;
@@ -201,30 +201,30 @@ package Ships is
    end record;
    -- ****
 
-   -- ****s* Ships/Ships.ProtoMember_Data
+   -- ****s* Ships/Ships.Proto_Member_Data
    -- FUNCTION
    -- Data structure for proto crew info
    -- PARAMETERS
-   -- ProtoIndex - Index of proto mob which will be used as crew member
-   -- MinAmount  - Mininum amount of that mob in crew
-   -- MaxAmount  - Maximum amount of that mob in crew. If 0 then MinAmount
-   --              will be amount
+   -- Proto_Index - Index of proto mob which will be used as crew member
+   -- Min_Amount  - Mininum amount of that mob in crew
+   -- Max_Amount  - Maximum amount of that mob in crew. If 0 then MinAmount
+   --               will be amount
    -- SOURCE
-   type ProtoMember_Data is record
-      ProtoIndex: Unbounded_String;
-      MinAmount: Positive;
-      MaxAmount: Natural;
+   type Proto_Member_Data is record
+      Proto_Index: Unbounded_String;
+      Min_Amount: Positive;
+      Max_Amount: Natural;
    end record;
    -- ****
 
-   -- ****t* Ships/Ships.ProtoCrew_Container
+   -- ****t* Ships/Ships.Proto_Crew_Container
    -- FUNCTION
    -- Used to store crew info in ships prototypes
    -- SOURCE
-   package ProtoCrew_Container is new Vectors(Positive, ProtoMember_Data);
+   package Proto_Crew_Container is new Vectors(Positive, Proto_Member_Data);
    -- ****
 
-   -- ****s* Ships/Ships.ProtoShipData
+   -- ****s* Ships/Ships.Proto_Ship_Data
    -- FUNCTION
    -- Data structure for ship prototypes
    -- PARAMETERS
@@ -242,7 +242,7 @@ package Ships is
    -- Owner        - Index of faction to which ship belong
    -- KnownRecipes - List of known recipes
    -- SOURCE
-   type ProtoShipData is record
+   type Proto_Ship_Data is record
       Name: Unbounded_String;
       Modules: UnboundedString_Container.Vector;
       Accuracy: Natural_Array(1 .. 2);
@@ -252,7 +252,7 @@ package Ships is
       Perception: Natural_Array(1 .. 2);
       Cargo: MobInventory_Container.Vector;
       CombatValue: Positive;
-      Crew: ProtoCrew_Container.Vector;
+      Crew: Proto_Crew_Container.Vector;
       Description: Unbounded_String;
       Owner: Unbounded_String;
       KnownRecipes: UnboundedString_Container.Vector;
@@ -264,7 +264,7 @@ package Ships is
    -- Used to store prototype ships data
    -- SOURCE
    package ProtoShips_Container is new Hashed_Maps
-     (Unbounded_String, ProtoShipData, Ada.Strings.Unbounded.Hash, "=");
+     (Unbounded_String, Proto_Ship_Data, Ada.Strings.Unbounded.Hash, "=");
    -- ****
 
    -- ****v* Ships/Ships.ProtoShips_List
@@ -278,7 +278,7 @@ package Ships is
    -- FUNCTION
    -- The player ship
    -- SOURCE
-   PlayerShip: ShipRecord;
+   PlayerShip: Ship_Record;
    -- ****
 
    -- ****v* Ships/Ships.ShipSyllablesStart
@@ -327,7 +327,7 @@ package Ships is
    function CreateShip
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; RandomUpgrades: Boolean := True)
-      return ShipRecord with
+      return Ship_Record with
       Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
@@ -349,7 +349,7 @@ package Ships is
    -- RESULT
    -- Ship weight in kilograms
    -- SOURCE
-   function CountShipWeight(Ship: ShipRecord) return Positive with
+   function CountShipWeight(Ship: Ship_Record) return Positive with
       Test_Case => (Name => "Test_CountShipWeight", Mode => Robustness);
       -- ****
 
@@ -400,7 +400,7 @@ package Ships is
       --               if module will be destroyed
       -- SOURCE
    procedure DamageModule
-     (Ship: in out ShipRecord; ModuleIndex: Modules_Container.Extended_Index;
+     (Ship: in out Ship_Record; ModuleIndex: Modules_Container.Extended_Index;
       Damage: Positive; DeathReason: String) with
       Pre => ModuleIndex in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index,

@@ -52,7 +52,7 @@ package Ships.Crew is
       -- SOURCE
    procedure Death
      (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out ShipRecord; CreateBody: Boolean := True) with
+      Ship: in out Ship_Record; CreateBody: Boolean := True) with
       Pre =>
       (MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index and
        Reason /= Null_Unbounded_String),
@@ -69,7 +69,8 @@ package Ships.Crew is
       -- Parameter Ship with modified data (crew and modules)
       -- SOURCE
    procedure DeleteMember
-     (MemberIndex: Crew_Container.Extended_Index; Ship: in out ShipRecord) with
+     (MemberIndex: Crew_Container.Extended_Index;
+      Ship: in out Ship_Record) with
       Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_DeleteMember", Mode => Nominal);
       -- ****
@@ -104,7 +105,7 @@ package Ships.Crew is
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
    procedure GiveOrders
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       GivenOrder: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) with
@@ -124,7 +125,7 @@ package Ships.Crew is
       -- Parameter Ship with modified data (crew, modules, cargo)
       -- SOURCE
    procedure UpdateOrders
-     (Ship: in out ShipRecord; Combat: Boolean := False) with
+     (Ship: in out Ship_Record; Combat: Boolean := False) with
       Test_Case => (Name => "Test_UpdateOrders", Mode => Robustness);
       -- ****
 
@@ -139,7 +140,7 @@ package Ships.Crew is
       -- Parameter Ship with modified crew info
       -- SOURCE
    procedure UpdateMorale
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       Value: Integer) with
       Pre => MemberIndex in Ship.Crew.First_Index .. Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_UpdateMorale", Mode => Nominal);

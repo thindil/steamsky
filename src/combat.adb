@@ -55,10 +55,10 @@ package body Combat is
    function StartCombat
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
-      EnemyShip: ShipRecord;
+      EnemyShip: Ship_Record;
       EnemyGuns: Guns_Container.Vector;
       ShootingSpeed: Integer;
-      function CountPerception(Spotter, Spotted: ShipRecord) return Natural is
+      function CountPerception(Spotter, Spotted: Ship_Record) return Natural is
          Result: Natural := 0;
       begin
          Count_Spotter_Perception_Loop :
@@ -294,7 +294,7 @@ package body Combat is
       EnemyPilotOrder: Positive := 2;
       DamageRange: Positive := 10_000;
       FreeSpace: Integer := 0;
-      procedure Attack(Ship, EnemyShip: in out ShipRecord) is
+      procedure Attack(Ship, EnemyShip: in out Ship_Record) is
          GunnerIndex: Crew_Container.Extended_Index;
          AmmoIndex: Inventory_Container.Extended_Index;
          ArmorIndex, WeaponIndex: Modules_Container.Extended_Index;

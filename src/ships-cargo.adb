@@ -22,7 +22,7 @@ with Config; use Config;
 package body Ships.Cargo is
 
    procedure UpdateCargo
-     (Ship: in out ShipRecord;
+     (Ship: in out Ship_Record;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
@@ -76,7 +76,7 @@ package body Ships.Cargo is
    end UpdateCargo;
 
    function FreeCargo
-     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
+     (Amount: Integer; Ship: Ship_Record := PlayerShip) return Integer is
       FreeCargo: Integer := 0;
    begin
       Count_Cargo_Size_Loop :

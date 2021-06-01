@@ -266,7 +266,7 @@ package body Trades is
    end SellItems;
 
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
-      TraderShip: ShipRecord :=
+      TraderShip: Ship_Record :=
         CreateShip
           (ProtoIndex, Null_Unbounded_String, PlayerShip.Sky_X,
            PlayerShip.Sky_Y, FULL_STOP);
