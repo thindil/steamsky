@@ -10,10 +10,10 @@ package Ships.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_CreateShip_2535ca_13521c(Gnattest_T: in out Test);
+   procedure Test_CreateShip_1a2f4d_13521c(Gnattest_T: in out Test);
    --  ships.ads:327:4:CreateShip:Test_CreateShip
 
-   procedure Test_CountShipWeight_f01f93_0591fd(Gnattest_T: in out Test);
+   procedure Test_CountShipWeight_dd08c2_0591fd(Gnattest_T: in out Test);
    --  ships.ads:352:4:CountShipWeight:Test_CountShipWeight
 
    procedure Test_GenerateShipName_26fd48_7313c0(Gnattest_T: in out Test);
@@ -25,7 +25,7 @@ package Ships.Test_Data.Tests is
    procedure Test_GetCabinQuality_33b05d_0027a0(Gnattest_T: in out Test);
    --  ships.ads:388:4:GetCabinQuality:Test_GetCabinQuality
 
-   procedure Test_DamageModule_0d948a_8bb198(Gnattest_T: in out Test);
+   procedure Test_DamageModule_225e80_8bb198(Gnattest_T: in out Test);
    --  ships.ads:402:4:DamageModule:Test_DamageModule
 
 end Ships.Test_Data.Tests;

@@ -90,9 +90,9 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Death_211a27_acf44b
+   procedure Wrap_Test_Death_af2fea_acf44b
      (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out ShipRecord; CreateBody: Boolean := True) is
+      Ship: in out Ship_Record; CreateBody: Boolean := True) is
    begin
       begin
          pragma Assert
@@ -116,19 +116,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_Death test commitment violated");
       end;
-   end Wrap_Test_Death_211a27_acf44b;
+   end Wrap_Test_Death_af2fea_acf44b;
 --  end read only
 
 --  begin read only
    procedure Test_Death_test_death(Gnattest_T: in out Test);
-   procedure Test_Death_211a27_acf44b(Gnattest_T: in out Test) renames
+   procedure Test_Death_af2fea_acf44b(Gnattest_T: in out Test) renames
      Test_Death_test_death;
---  id:2.2/211a277189388faa/Death/1/0/test_death/
+--  id:2.2/af2fea911992db88/Death/1/0/test_death/
    procedure Test_Death_test_death(Gnattest_T: in out Test) is
       procedure Death
         (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-         Ship: in out ShipRecord; CreateBody: Boolean := True) renames
-        Wrap_Test_Death_211a27_acf44b;
+         Ship: in out Ship_Record; CreateBody: Boolean := True) renames
+        Wrap_Test_Death_af2fea_acf44b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -151,8 +151,8 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_DeleteMember_a2fb7d_2b7835
-     (MemberIndex: Crew_Container.Extended_Index; Ship: in out ShipRecord) is
+   procedure Wrap_Test_DeleteMember_9fa01a_2b7835
+     (MemberIndex: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
    begin
       begin
          pragma Assert
@@ -175,19 +175,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_DeleteMember test commitment violated");
       end;
-   end Wrap_Test_DeleteMember_a2fb7d_2b7835;
+   end Wrap_Test_DeleteMember_9fa01a_2b7835;
 --  end read only
 
 --  begin read only
    procedure Test_DeleteMember_test_deletemember(Gnattest_T: in out Test);
-   procedure Test_DeleteMember_a2fb7d_2b7835(Gnattest_T: in out Test) renames
+   procedure Test_DeleteMember_9fa01a_2b7835(Gnattest_T: in out Test) renames
      Test_DeleteMember_test_deletemember;
---  id:2.2/a2fb7d07cd83aaf9/DeleteMember/1/0/test_deletemember/
+--  id:2.2/9fa01a2852ec5515/DeleteMember/1/0/test_deletemember/
    procedure Test_DeleteMember_test_deletemember(Gnattest_T: in out Test) is
       procedure DeleteMember
         (MemberIndex: Crew_Container.Extended_Index;
-         Ship: in out ShipRecord) renames
-        Wrap_Test_DeleteMember_a2fb7d_2b7835;
+         Ship: in out Ship_Record) renames
+        Wrap_Test_DeleteMember_9fa01a_2b7835;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -249,8 +249,8 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_GiveOrders_cc73d8_56eedb
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+   procedure Wrap_Test_GiveOrders_fd3de0_56eedb
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       GivenOrder: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) is
@@ -277,25 +277,25 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_GiveOrders test commitment violated");
       end;
-   end Wrap_Test_GiveOrders_cc73d8_56eedb;
+   end Wrap_Test_GiveOrders_fd3de0_56eedb;
 --  end read only
 
 --  begin read only
    procedure Test_GiveOrders_test_giveorders(Gnattest_T: in out Test);
-   procedure Test_GiveOrders_cc73d8_56eedb(Gnattest_T: in out Test) renames
+   procedure Test_GiveOrders_fd3de0_56eedb(Gnattest_T: in out Test) renames
      Test_GiveOrders_test_giveorders;
---  id:2.2/cc73d8053807a27a/GiveOrders/1/0/test_giveorders/
+--  id:2.2/fd3de09254cf8892/GiveOrders/1/0/test_giveorders/
    procedure Test_GiveOrders_test_giveorders(Gnattest_T: in out Test) is
       procedure GiveOrders
-        (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+        (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
          GivenOrder: Crew_Orders;
          ModuleIndex: Modules_Container.Extended_Index := 0;
          CheckPriorities: Boolean := True) renames
-        Wrap_Test_GiveOrders_cc73d8_56eedb;
+        Wrap_Test_GiveOrders_fd3de0_56eedb;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      EnemyShip: ShipRecord :=
+      EnemyShip: Ship_Record :=
         CreateShip
           (To_Unbounded_String("2"), Null_Unbounded_String, 10, 10,
            FULL_SPEED);
@@ -316,23 +316,23 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateOrders_23e1c7_cad1b0
-     (Ship: in out ShipRecord; Combat: Boolean := False) is
+   procedure Wrap_Test_UpdateOrders_388ab3_cad1b0
+     (Ship: in out Ship_Record; Combat: Boolean := False) is
    begin
       GNATtest_Generated.GNATtest_Standard.Ships.Crew.UpdateOrders
         (Ship, Combat);
-   end Wrap_Test_UpdateOrders_23e1c7_cad1b0;
+   end Wrap_Test_UpdateOrders_388ab3_cad1b0;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateOrders_test_updateorders(Gnattest_T: in out Test);
-   procedure Test_UpdateOrders_23e1c7_cad1b0(Gnattest_T: in out Test) renames
+   procedure Test_UpdateOrders_388ab3_cad1b0(Gnattest_T: in out Test) renames
      Test_UpdateOrders_test_updateorders;
---  id:2.2/23e1c7f66f6cc7c5/UpdateOrders/1/0/test_updateorders/
+--  id:2.2/388ab351ab0e26d6/UpdateOrders/1/0/test_updateorders/
    procedure Test_UpdateOrders_test_updateorders(Gnattest_T: in out Test) is
       procedure UpdateOrders
-        (Ship: in out ShipRecord; Combat: Boolean := False) renames
-        Wrap_Test_UpdateOrders_23e1c7_cad1b0;
+        (Ship: in out Ship_Record; Combat: Boolean := False) renames
+        Wrap_Test_UpdateOrders_388ab3_cad1b0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -350,8 +350,8 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_UpdateMorale_0fa9f7_5147b1
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+   procedure Wrap_Test_UpdateMorale_5618e2_5147b1
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       Value: Integer) is
    begin
       begin
@@ -375,19 +375,19 @@ package body Ships.Crew.Test_Data.Tests is
               (False,
                "ens_sloc(ships-crew.ads:0:):Test_UpdateMorale test commitment violated");
       end;
-   end Wrap_Test_UpdateMorale_0fa9f7_5147b1;
+   end Wrap_Test_UpdateMorale_5618e2_5147b1;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateMorale_test_updatemorale(Gnattest_T: in out Test);
-   procedure Test_UpdateMorale_0fa9f7_5147b1(Gnattest_T: in out Test) renames
+   procedure Test_UpdateMorale_5618e2_5147b1(Gnattest_T: in out Test) renames
      Test_UpdateMorale_test_updatemorale;
---  id:2.2/0fa9f73bf6ccf79e/UpdateMorale/1/0/test_updatemorale/
+--  id:2.2/5618e2d744921821/UpdateMorale/1/0/test_updatemorale/
    procedure Test_UpdateMorale_test_updatemorale(Gnattest_T: in out Test) is
       procedure UpdateMorale
-        (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+        (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
          Value: Integer) renames
-        Wrap_Test_UpdateMorale_0fa9f7_5147b1;
+        Wrap_Test_UpdateMorale_5618e2_5147b1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

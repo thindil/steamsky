@@ -196,28 +196,28 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_RealSpeed_60d629_f7fd56
-     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
+   function Wrap_Test_RealSpeed_da7fcb_f7fd56
+     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural is
    begin
       declare
-         Test_RealSpeed_60d629_f7fd56_Result: constant Natural :=
+         Test_RealSpeed_da7fcb_f7fd56_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Ships.Movement.RealSpeed
              (Ship, InfoOnly);
       begin
-         return Test_RealSpeed_60d629_f7fd56_Result;
+         return Test_RealSpeed_da7fcb_f7fd56_Result;
       end;
-   end Wrap_Test_RealSpeed_60d629_f7fd56;
+   end Wrap_Test_RealSpeed_da7fcb_f7fd56;
 --  end read only
 
 --  begin read only
    procedure Test_RealSpeed_test_realspeed(Gnattest_T: in out Test);
-   procedure Test_RealSpeed_60d629_f7fd56(Gnattest_T: in out Test) renames
+   procedure Test_RealSpeed_da7fcb_f7fd56(Gnattest_T: in out Test) renames
      Test_RealSpeed_test_realspeed;
---  id:2.2/60d629cbf68bcea4/RealSpeed/1/0/test_realspeed/
+--  id:2.2/da7fcba60b6babad/RealSpeed/1/0/test_realspeed/
    procedure Test_RealSpeed_test_realspeed(Gnattest_T: in out Test) is
       function RealSpeed
-        (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural renames
-        Wrap_Test_RealSpeed_60d629_f7fd56;
+        (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural renames
+        Wrap_Test_RealSpeed_da7fcb_f7fd56;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

@@ -29,8 +29,8 @@ package body Ships.Cargo.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateCargo_87d3a7_53988c
-     (Ship: in out ShipRecord;
+   procedure Wrap_Test_UpdateCargo_590faf_53988c
+     (Ship: in out Ship_Record;
       ProtoIndex: Unbounded_String := Null_Unbounded_String; Amount: Integer;
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex, Price: Natural := 0) is
@@ -55,22 +55,22 @@ package body Ships.Cargo.Test_Data.Tests is
               (False,
                "ens_sloc(ships-cargo.ads:0:):Test_UpdateCargo test commitment violated");
       end;
-   end Wrap_Test_UpdateCargo_87d3a7_53988c;
+   end Wrap_Test_UpdateCargo_590faf_53988c;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test);
-   procedure Test_UpdateCargo_87d3a7_53988c(Gnattest_T: in out Test) renames
+   procedure Test_UpdateCargo_590faf_53988c(Gnattest_T: in out Test) renames
      Test_UpdateCargo_test_updatecargo;
---  id:2.2/87d3a721378c9b6a/UpdateCargo/1/0/test_updatecargo/
+--  id:2.2/590faffaf5e0f839/UpdateCargo/1/0/test_updatecargo/
    procedure Test_UpdateCargo_test_updatecargo(Gnattest_T: in out Test) is
       procedure UpdateCargo
-        (Ship: in out ShipRecord;
+        (Ship: in out Ship_Record;
          ProtoIndex: Unbounded_String := Null_Unbounded_String;
          Amount: Integer;
          Durability: Items_Durability := Default_Item_Durability;
          CargoIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateCargo_87d3a7_53988c;
+        Wrap_Test_UpdateCargo_590faf_53988c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -95,29 +95,29 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FreeCargo_2845af_4f2f60
-     (Amount: Integer; Ship: ShipRecord := PlayerShip) return Integer is
+   function Wrap_Test_FreeCargo_f63648_4f2f60
+     (Amount: Integer; Ship: Ship_Record := PlayerShip) return Integer is
    begin
       declare
-         Test_FreeCargo_2845af_4f2f60_Result: constant Integer :=
+         Test_FreeCargo_f63648_4f2f60_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Ships.Cargo.FreeCargo
              (Amount, Ship);
       begin
-         return Test_FreeCargo_2845af_4f2f60_Result;
+         return Test_FreeCargo_f63648_4f2f60_Result;
       end;
-   end Wrap_Test_FreeCargo_2845af_4f2f60;
+   end Wrap_Test_FreeCargo_f63648_4f2f60;
 --  end read only
 
 --  begin read only
    procedure Test_FreeCargo_test_freecargo(Gnattest_T: in out Test);
-   procedure Test_FreeCargo_2845af_4f2f60(Gnattest_T: in out Test) renames
+   procedure Test_FreeCargo_f63648_4f2f60(Gnattest_T: in out Test) renames
      Test_FreeCargo_test_freecargo;
---  id:2.2/2845af0c133e2533/FreeCargo/1/0/test_freecargo/
+--  id:2.2/f63648bac828f01c/FreeCargo/1/0/test_freecargo/
    procedure Test_FreeCargo_test_freecargo(Gnattest_T: in out Test) is
       function FreeCargo
-        (Amount: Integer; Ship: ShipRecord := PlayerShip)
+        (Amount: Integer; Ship: Ship_Record := PlayerShip)
          return Integer renames
-        Wrap_Test_FreeCargo_2845af_4f2f60;
+        Wrap_Test_FreeCargo_f63648_4f2f60;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

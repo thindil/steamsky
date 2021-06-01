@@ -4,13 +4,13 @@
 --  begin read only
 with Gnattest_Generated;
 
-package Ships.Test_Data.Tests.ProtoCrew_Container.Test_Data.Tests is
+package Ships.Test_Data.Tests.Proto_Crew_Container.Test_Data.Tests is
 
    type Test is new GNATtest_Generated.GNATtest_Standard.Ships.Test_Data.Tests
-     .ProtoCrew_Container
+     .Proto_Crew_Container
      .Test_Data
      .New_Test with
    null record;
 
-end Ships.Test_Data.Tests.ProtoCrew_Container.Test_Data.Tests;
+end Ships.Test_Data.Tests.Proto_Crew_Container.Test_Data.Tests;
 --  end read only
