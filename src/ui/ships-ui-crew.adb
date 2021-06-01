@@ -48,6 +48,7 @@ with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Maps; use Maps;
@@ -70,7 +71,7 @@ package body Ships.UI.Crew is
    -- ****
 
    procedure UpdateCrewInfo(Page: Positive := 1) is
-      CrewInfoFrame, ButtonsFrame: Ttk_Frame;
+      ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
       Rows: Natural := 0;
       ShipCanvas: Tk_Canvas;
@@ -79,10 +80,9 @@ package body Ships.UI.Crew is
       TiredLevel: Integer;
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
+      CrewInfoFrame: constant Ttk_Frame :=
+        Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas.frame");
    begin
-      CrewInfoFrame.Interp := Get_Context;
-      CrewInfoFrame.Name :=
-        New_String(".gameframe.paned.shipinfoframe.crew.canvas.frame");
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(CrewInfoFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, CrewInfoFrame);
@@ -185,22 +185,16 @@ package body Ships.UI.Crew is
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
       if Page > 1 then
-         if CrewTable.Row < 26 then
-            AddPagination
-              (CrewTable, "ShowCrew" & Positive'Image(Page - 1), "");
-         else
-            AddPagination
-              (CrewTable, "ShowCrew" & Positive'Image(Page - 1),
-               "ShowCrew" & Positive'Image(Page + 1));
-         end if;
+         AddPagination
+           (CrewTable, "ShowCrew" & Positive'Image(Page - 1),
+            (if CrewTable.Row < 26 then ""
+             else "ShowCrew" & Positive'Image(Page + 1)));
       elsif CrewTable.Row = 26 then
          AddPagination(CrewTable, "", "ShowCrew" & Positive'Image(Page + 1));
       end if;
       UpdateTable(CrewTable);
       Tcl_Eval(Get_Context, "update");
-      ShipCanvas.Interp := Get_Context;
-      ShipCanvas.Name :=
-        New_String(".gameframe.paned.shipinfoframe.crew.canvas");
+      ShipCanvas := Get_Widget(Main_Paned & ".shipinfoframe.crew.canvas");
       configure
         (ShipCanvas, "-scrollregion [list " & BBox(ShipCanvas, "all") & "]");
       Xview_Move_To(ShipCanvas, "0.0");
@@ -380,16 +374,15 @@ package body Ships.UI.Crew is
       ProgressBar: Ttk_ProgressBar;
       TabButton: Ttk_RadioButton;
       InfoButton: Ttk_Button;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
+      Frame: Ttk_Frame;
       Dialog_Header: constant Ttk_Label :=
         Create
           (MemberDialog & ".header",
            "-text {" & To_String(Member.Name) &
            "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Frame := Create(MemberDialog & ".buttonbox");
       Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl_SetVar(Interp, "newtab", "general");
@@ -564,10 +557,10 @@ package body Ships.UI.Crew is
            (if Member.Gender = 'M' then To_Unbounded_String("Male")
             else To_Unbounded_String("Female"));
       end if;
-      Append(MemberInfo, LF & "Faction: ");
-      Append(MemberInfo, Factions_List(Member.Faction).Name);
-      Append(MemberInfo, LF & "Home base: ");
-      Append(MemberInfo, SkyBases(Member.HomeBase).Name);
+      Append
+        (MemberInfo,
+         LF & "Faction: " & Factions_List(Member.Faction).Name & LF &
+         "Home base: " & SkyBases(Member.HomeBase).Name);
       if Member.Skills.Length = 0 or Member.ContractLength = 0 then
          Append(MemberInfo, LF & "Passenger");
          if Member.ContractLength > 0 then
@@ -577,14 +570,11 @@ package body Ships.UI.Crew is
       else
          if MemberIndex > 1 then
             Append(MemberInfo, LF & "Contract length:");
-            if Member.ContractLength > 0 then
-               Append
-                 (MemberInfo, Integer'Image(Member.ContractLength) & " days.");
-            else
-               Append(MemberInfo, " pernament.");
-            end if;
             Append
               (MemberInfo,
+               (if Member.ContractLength > 0 then
+                  Integer'Image(Member.ContractLength) & " days."
+                else " pernament.") &
                LF & "Payment:" & Natural'Image(Member.Payment(1)) & " " &
                To_String(Money_Name) & " each day");
             if Member.Payment(2) > 0 then
