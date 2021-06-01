@@ -81,10 +81,13 @@ package body Dialogs is
 
    procedure Show_Dialog
      (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
-      With_Timer: Boolean := False) is
+      With_Timer: Boolean := False;
+      Relative_X, Relative_Y: Damage_Factor := 0.3) is
    begin
       Tcl.Tk.Ada.Place.Place
-        (Dialog, "-in " & Parent_Frame & " -relx 0.3 -rely 0.3");
+        (Dialog,
+         "-in " & Parent_Frame & " -relx" & Damage_Factor'Image(Relative_X) &
+         " -rely" & Damage_Factor'Image(Relative_Y));
       Widget_Raise(Dialog);
       if With_Timer then
          TimerId :=

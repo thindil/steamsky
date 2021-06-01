@@ -16,6 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with CArgv;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Game; use Game;
 with Items; use Items;
 
 -- ****h* Dialogs/Dialogs
@@ -65,10 +66,17 @@ package Dialogs is
    --                Default value is .gameframe
    -- With_Timer   - If True, add timer to the dialog. Can be empty. Default
    --                value is False
+   -- Relative_X   - Relative X coordinate inside of parent frame for the
+   --                dialog. 0.0 is left border. Can be empty. Default value
+   --                is 0.3
+   -- Relative_Y   - Relative Y coordinate inside of parent frame for the
+   --                dialog. 0.0 is top border. Can be empty. Default value is
+   --                0.3
    -- SOURCE
    procedure Show_Dialog
      (Dialog: Ttk_Frame; Parent_Frame: String := ".gameframe";
-      With_Timer: Boolean := False);
+      With_Timer: Boolean := False;
+      Relative_X, Relative_Y: Damage_Factor := 0.3);
    -- ****
 
    -- ****o* Dialogs/Dialogs.Close_Dialog_Command
