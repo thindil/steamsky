@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
   statistics
 - Typo in Strength attribute description
 - Losing focus by text fields when setting keyboard shortcuts
+- Can't assign 1-5 keys to shorcuts
 
 ## [6.1] - 2021-05-16
 
