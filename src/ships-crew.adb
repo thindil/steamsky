@@ -83,7 +83,7 @@ package body Ships.Crew is
 
    procedure Death
      (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
-      Ship: in out ShipRecord; CreateBody: Boolean := True) is
+      Ship: in out Ship_Record; CreateBody: Boolean := True) is
    begin
       if Ship = PlayerShip then
          if MemberIndex > 1 then
@@ -116,7 +116,7 @@ package body Ships.Crew is
    end Death;
 
    procedure DeleteMember
-     (MemberIndex: Crew_Container.Extended_Index; Ship: in out ShipRecord) is
+     (MemberIndex: Crew_Container.Extended_Index; Ship: in out Ship_Record) is
       TempValue: Integer;
    begin
       Ship.Crew.Delete(Index => MemberIndex);
@@ -167,7 +167,7 @@ package body Ships.Crew is
    end FindMember;
 
    procedure GiveOrders
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       GivenOrder: Crew_Orders;
       ModuleIndex: Modules_Container.Extended_Index := 0;
       CheckPriorities: Boolean := True) is
@@ -500,7 +500,8 @@ package body Ships.Crew is
          end if;
    end GiveOrders;
 
-   procedure UpdateOrders(Ship: in out ShipRecord; Combat: Boolean := False) is
+   procedure UpdateOrders
+     (Ship: in out Ship_Record; Combat: Boolean := False) is
       HavePilot, HaveEngineer, HaveUpgrade, HaveTrader, NeedClean, NeedRepairs,
       NeedGunners, NeedCrafters, CanHeal, NeedTrader: Boolean := False;
       EventIndex: constant Events_Container.Extended_Index :=
@@ -797,7 +798,7 @@ package body Ships.Crew is
    end UpdateOrders;
 
    procedure UpdateMorale
-     (Ship: in out ShipRecord; MemberIndex: Crew_Container.Extended_Index;
+     (Ship: in out Ship_Record; MemberIndex: Crew_Container.Extended_Index;
       Value: Integer) is
       NewMorale, NewLoyalty, NewValue: Integer;
       FactionIndex: constant Unbounded_String :=

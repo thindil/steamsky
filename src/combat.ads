@@ -87,7 +87,7 @@ package Combat is
    -- Guns            - List of guns installed on the enemy ship
    -- SOURCE
    type Enemy_Record is record
-      Ship: ShipRecord;
+      Ship: Ship_Record;
       Accuracy: Natural;
       Distance: Integer;
       CombatAI: Ship_Combat_Ai;

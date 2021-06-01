@@ -77,7 +77,7 @@ package Ships.Movement is
       -- Empty string if ship can move, otherwise message why it can't
       -- SOURCE
    function RealSpeed
-     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural with
+     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural with
       Test_Case => (Name => "Test_RealSpeed", Mode => Robustness);
       -- ****
 

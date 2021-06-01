@@ -420,7 +420,7 @@ package body Ships.Movement is
    end ChangeShipSpeed;
 
    function RealSpeed
-     (Ship: ShipRecord; InfoOnly: Boolean := False) return Natural is
+     (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
       Message: Unbounded_String;
       ShipSetSpeed: Ship_Speed;
