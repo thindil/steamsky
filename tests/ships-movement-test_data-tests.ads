@@ -20,7 +20,7 @@ package Ships.Movement.Test_Data.Tests is
    procedure Test_ChangeShipSpeed_a103ef_17b968(Gnattest_T: in out Test);
    --  ships-movement.ads:65:4:ChangeShipSpeed:Test_ChangeShipSpeed
 
-   procedure Test_RealSpeed_60d629_f7fd56(Gnattest_T: in out Test);
+   procedure Test_RealSpeed_da7fcb_f7fd56(Gnattest_T: in out Test);
    --  ships-movement.ads:79:4:RealSpeed:Test_RealSpeed
 
    procedure Test_CountFuelNeeded_db602d_18e85d(Gnattest_T: in out Test);

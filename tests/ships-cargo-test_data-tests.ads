@@ -10,10 +10,10 @@ package Ships.Cargo.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_UpdateCargo_87d3a7_53988c(Gnattest_T: in out Test);
+   procedure Test_UpdateCargo_590faf_53988c(Gnattest_T: in out Test);
    --  ships-cargo.ads:40:4:UpdateCargo:Test_UpdateCargo
 
-   procedure Test_FreeCargo_2845af_4f2f60(Gnattest_T: in out Test);
+   procedure Test_FreeCargo_f63648_4f2f60(Gnattest_T: in out Test);
    --  ships-cargo.ads:61:4:FreeCargo:Test_FreeCargo
 
    procedure Test_GetItemAmount_57499f_15cacd(Gnattest_T: in out Test);
