@@ -46,6 +46,7 @@ with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
@@ -281,7 +282,7 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
-        Create(".recruitdialog", "-style Dialog.TFrame");
+        Create_Dialog(".recruidialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
         Create
           (RecruitDialog & ".yscroll",
@@ -291,11 +292,6 @@ package body Bases.RecruitUI is
         Create
           (RecruitDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (RecruitDialog & ".header",
-           "-text {" & To_String(Recruit.Name) &
-           "} -wraplength 275 -style Header.TLabel");
       CloseButton, InfoButton, Button: Ttk_Button;
       Height, NewHeight: Positive := 1;
       Width, NewWidth: Positive := 1;
@@ -308,9 +304,6 @@ package body Bases.RecruitUI is
         (To_Unbounded_String("General"), To_Unbounded_String("Statistics"),
          To_Unbounded_String("Skills"), To_Unbounded_String("Inventory"));
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
       for I in TabNames'Range loop
          TabButton :=
