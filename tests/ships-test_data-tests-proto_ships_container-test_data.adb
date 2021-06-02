@@ -3,7 +3,7 @@
 --  automatically. Contents of this package can be modified in any way
 --  except for sections surrounded by a 'read only' marker.
 
-package body Ships.Test_Data.Tests.ProtoShips_Container.Test_Data is
+package body Ships.Test_Data.Tests.Proto_Ships_Container.Test_Data is
 
    procedure Set_Up(Gnattest_T: in out Test) is
       pragma Unreferenced(Gnattest_T);
@@ -29,4 +29,4 @@ package body Ships.Test_Data.Tests.ProtoShips_Container.Test_Data is
       null;
    end User_Tear_Down;
 
-end Ships.Test_Data.Tests.ProtoShips_Container.Test_Data;
+end Ships.Test_Data.Tests.Proto_Ships_Container.Test_Data;

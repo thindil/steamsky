@@ -29,13 +29,13 @@ package body Combat.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_StartCombat_523cd4_8ba7bd
+   function Wrap_Test_StartCombat_523cd4_1d4469
      (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
       return Boolean is
    begin
       begin
          pragma Assert
-           (ProtoShips_Container.Contains(ProtoShips_List, EnemyIndex));
+           (Proto_Ships_Container.Contains(Proto_Ships_List, EnemyIndex));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,7 +44,7 @@ package body Combat.Test_Data.Tests is
                "req_sloc(combat.ads:0):Test_StartCombat test requirement violated");
       end;
       declare
-         Test_StartCombat_523cd4_8ba7bd_Result: constant Boolean :=
+         Test_StartCombat_523cd4_1d4469_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Combat.StartCombat
              (EnemyIndex, NewCombat);
       begin
@@ -57,21 +57,21 @@ package body Combat.Test_Data.Tests is
                  (False,
                   "ens_sloc(combat.ads:0:):Test_StartCombat test commitment violated");
          end;
-         return Test_StartCombat_523cd4_8ba7bd_Result;
+         return Test_StartCombat_523cd4_1d4469_Result;
       end;
-   end Wrap_Test_StartCombat_523cd4_8ba7bd;
+   end Wrap_Test_StartCombat_523cd4_1d4469;
 --  end read only
 
 --  begin read only
    procedure Test_StartCombat_test_startcombat(Gnattest_T: in out Test);
-   procedure Test_StartCombat_523cd4_8ba7bd(Gnattest_T: in out Test) renames
+   procedure Test_StartCombat_523cd4_1d4469(Gnattest_T: in out Test) renames
      Test_StartCombat_test_startcombat;
 --  id:2.2/523cd4ef15c88057/StartCombat/1/0/test_startcombat/
    procedure Test_StartCombat_test_startcombat(Gnattest_T: in out Test) is
       function StartCombat
         (EnemyIndex: Unbounded_String; NewCombat: Boolean := True)
          return Boolean renames
-        Wrap_Test_StartCombat_523cd4_8ba7bd;
+        Wrap_Test_StartCombat_523cd4_1d4469;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
