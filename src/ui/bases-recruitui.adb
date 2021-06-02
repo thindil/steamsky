@@ -23,9 +23,7 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -505,13 +503,12 @@ package body Bases.RecruitUI is
         (RecruitCanvas,
          "-scrollregion [list " & BBox(RecruitCanvas, "all") & "] -width" &
          Positive'Image(Width) & " -height" & Positive'Image(Height));
-      Tcl.Tk.Ada.Place.Place
-        (RecruitDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind
         (CloseButton, "<Tab>",
          "{focus " & RecruitDialog & ".buttonbox.general;break}");
       Bind(RecruitDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => RecruitDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Recruit_Info_Command;
 
@@ -727,8 +724,13 @@ package body Bases.RecruitUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      BaseIndex: constant Positive :=
+        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+      Recruit: constant Recruit_Data :=
+        SkyBases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
-        Create(".negotiatedialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".negotiatedialog", "Negotiate with " & To_String(Recruit.Name));
       CloseButton, HireButton: Ttk_Button;
       Frame: constant Ttk_Frame := Create(NegotiateDialog & ".buttonbox");
       Label: Ttk_Label;
@@ -737,21 +739,9 @@ package body Bases.RecruitUI is
         Create
           (NegotiateDialog & ".contract",
            "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
-      BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
-      Recruit: constant Recruit_Data :=
-        SkyBases(BaseIndex).Recruits(RecruitIndex);
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (NegotiateDialog & ".header",
-           "-text {Negotiate with " & To_String(Recruit.Name) &
-           "} -wraplength 275 -style Header.TLabel");
       MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
       Cost: Positive;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Label :=
         Create
           (NegotiateDialog & ".dailylbl",
@@ -821,12 +811,11 @@ package body Bases.RecruitUI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place
-        (NegotiateDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Tab>", "{focus " & HireButton & ";break}");
       Bind(HireButton, "<Tab>", "{focus " & CloseButton & ";break}");
       Bind(NegotiateDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => NegotiateDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Negotiate_Command;
 
