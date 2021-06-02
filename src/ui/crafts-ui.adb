@@ -373,7 +373,7 @@ package body Crafts.UI is
       Menu.Add
         (RecipeMenu, "command",
          "-label {Show more info about the recipe} -command {ShowRecipeInfo {" &
-         CArgv.Arg(Argv, 1) & "}}");
+         CArgv.Arg(Argv, 1) & "} " & CArgv.Arg(Argv, 2) & "}");
       Tk_Popup
         (RecipeMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
@@ -506,8 +506,9 @@ package body Crafts.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowRecipeInfo index
-   -- Index is the index of the crafting recipe to show
+   -- ShowRecipeInfo index cancraft
+   -- Index is the index of the crafting recipe to show, cancraft if TRUE
+   -- then recipe can be crafted (show craft button)
    -- SOURCE
    function Show_Recipe_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -709,8 +710,31 @@ package body Crafts.UI is
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       configure(RecipeText, "-state disabled");
       Tcl.Tk.Ada.Grid.Grid(RecipeText);
-      Add_Close_Button
-        (RecipeDialog & ".close", "Close", "CloseDialog " & RecipeDialog);
+      if CArgv.Arg(Argv, 2) = "TRUE" then
+         declare
+            ButtonBox: constant Ttk_Frame := Create(RecipeDialog & ".buttons");
+            Button: Ttk_Button;
+         begin
+            Button :=
+              Create
+                (ButtonBox & ".craft",
+                 "-text Craft -command {ShowSetRecipe {" & CArgv.Arg(Argv, 1) &
+                 "};CloseDialog " & RecipeDialog & "}");
+            Tcl.Tk.Ada.Grid.Grid(Button);
+            Button :=
+              Create
+                (ButtonBox & ".close",
+                 "-text Close -command {CloseDialog " & RecipeDialog & "}");
+            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1 -padx {5 0}");
+            Focus(Button);
+            Bind(Button, "<Tab>", "{focus " & ButtonBox & ".craft;break}");
+            Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+            Tcl.Tk.Ada.Grid.Grid(ButtonBox, "-pady 5");
+         end;
+      else
+         Add_Close_Button
+           (RecipeDialog & ".close", "Close", "CloseDialog " & RecipeDialog);
+      end if;
       Show_Dialog(RecipeDialog);
       return TCL_OK;
    end Show_Recipe_Info_Command;
