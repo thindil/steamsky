@@ -91,7 +91,7 @@ package body Combat is
       end CountPerception;
    begin
       EnemyShipIndex := EnemyIndex;
-      FactionName := Factions_List(ProtoShips_List(EnemyIndex).Owner).Name;
+      FactionName := Factions_List(Proto_Ships_List(EnemyIndex).Owner).Name;
       HarpoonDuration := 0;
       BoardingOrders.Clear;
       EnemyShip :=
@@ -99,7 +99,7 @@ package body Combat is
           (EnemyIndex, Null_Unbounded_String, PlayerShip.Sky_X,
            PlayerShip.Sky_Y, FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
-      if Index(ProtoShips_List(EnemyIndex).Name, To_String(Traders_Name)) >
+      if Index(Proto_Ships_List(EnemyIndex).Name, To_String(Traders_Name)) >
         0 then
          GenerateTraderCargo(EnemyIndex);
          Update_Cargo_Loop :
@@ -165,7 +165,7 @@ package body Combat is
            EnemyShip.Modules(I).Durability > 0 then
             if Modules_List(EnemyShip.Modules(I).Proto_Index).Speed > 0 then
                ShootingSpeed :=
-                 (if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
+                 (if Proto_Ships_List(EnemyIndex).Combat_Ai = DISARMER then
                     Natural
                       (Float'Ceiling
                          (Float
@@ -175,7 +175,7 @@ package body Combat is
                   else Modules_List(EnemyShip.Modules(I).Proto_Index).Speed);
             else
                ShootingSpeed :=
-                 (if ProtoShips_List(EnemyIndex).CombatAI = DISARMER then
+                 (if Proto_Ships_List(EnemyIndex).Combat_Ai = DISARMER then
                     Modules_List(EnemyShip.Modules(I).Proto_Index).Speed - 1
                   else Modules_List(EnemyShip.Modules(I).Proto_Index).Speed);
             end if;
@@ -185,38 +185,38 @@ package body Combat is
       end loop Count_Enemy_Shooting_Speed_Loop;
       Enemy :=
         (Ship => EnemyShip, Accuracy => 0, Distance => 10_000,
-         CombatAI => ProtoShips_List(EnemyIndex).CombatAI, Evasion => 0,
+         CombatAI => Proto_Ships_List(EnemyIndex).Combat_Ai, Evasion => 0,
          Loot => 0, Perception => 0, HarpoonDuration => 0, Guns => EnemyGuns);
       Enemy.Accuracy :=
-        (if ProtoShips_List(EnemyIndex).Accuracy(2) = 0 then
-           ProtoShips_List(EnemyIndex).Accuracy(1)
+        (if Proto_Ships_List(EnemyIndex).Accuracy(2) = 0 then
+           Proto_Ships_List(EnemyIndex).Accuracy(1)
          else GetRandom
-             (ProtoShips_List(EnemyIndex).Accuracy(1),
-              ProtoShips_List(EnemyIndex).Accuracy(2)));
+             (Proto_Ships_List(EnemyIndex).Accuracy(1),
+              Proto_Ships_List(EnemyIndex).Accuracy(2)));
       Enemy.Evasion :=
-        (if ProtoShips_List(EnemyIndex).Evasion(2) = 0 then
-           ProtoShips_List(EnemyIndex).Evasion(1)
+        (if Proto_Ships_List(EnemyIndex).Evasion(2) = 0 then
+           Proto_Ships_List(EnemyIndex).Evasion(1)
          else GetRandom
-             (ProtoShips_List(EnemyIndex).Evasion(1),
-              ProtoShips_List(EnemyIndex).Evasion(2)));
+             (Proto_Ships_List(EnemyIndex).Evasion(1),
+              Proto_Ships_List(EnemyIndex).Evasion(2)));
       Enemy.Perception :=
-        (if ProtoShips_List(EnemyIndex).Perception(2) = 0 then
-           ProtoShips_List(EnemyIndex).Perception(1)
+        (if Proto_Ships_List(EnemyIndex).Perception(2) = 0 then
+           Proto_Ships_List(EnemyIndex).Perception(1)
          else GetRandom
-             (ProtoShips_List(EnemyIndex).Perception(1),
-              ProtoShips_List(EnemyIndex).Perception(2)));
+             (Proto_Ships_List(EnemyIndex).Perception(1),
+              Proto_Ships_List(EnemyIndex).Perception(2)));
       Enemy.Loot :=
-        (if ProtoShips_List(EnemyIndex).Loot(2) = 0 then
-           ProtoShips_List(EnemyIndex).Loot(1)
+        (if Proto_Ships_List(EnemyIndex).Loot(2) = 0 then
+           Proto_Ships_List(EnemyIndex).Loot(1)
          else GetRandom
-             (ProtoShips_List(EnemyIndex).Loot(1),
-              ProtoShips_List(EnemyIndex).Loot(2)));
+             (Proto_Ships_List(EnemyIndex).Loot(1),
+              Proto_Ships_List(EnemyIndex).Loot(2)));
       if PilotOrder = 0 then
          PilotOrder := 2;
          EngineerOrder := 3;
       end if;
       EndCombat := False;
-      EnemyName := GenerateShipName(ProtoShips_List(EnemyIndex).Owner);
+      EnemyName := GenerateShipName(Proto_Ships_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
@@ -1582,7 +1582,7 @@ package body Combat is
                .MType =
              Destroy
            and then
-             ProtoShips_List
+             Proto_Ships_List
                (AcceptedMissions
                   (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex)
                   .ShipIndex)
@@ -1594,7 +1594,7 @@ package body Combat is
          declare
             LostReputationChance: Positive range 10 .. 40 := 10;
          begin
-            if ProtoShips_List(EnemyShipIndex).Owner =
+            if Proto_Ships_List(EnemyShipIndex).Owner =
               PlayerShip.Crew(1).Faction then
                LostReputationChance := 40;
             end if;
@@ -1605,7 +1605,7 @@ package body Combat is
          UpdateDestroyedShips(Enemy.Ship.Name);
          UpdateGoal(DESTROY, EnemyShipIndex);
          if CurrentGoal.TargetIndex /= Null_Unbounded_String then
-            UpdateGoal(DESTROY, ProtoShips_List(EnemyShipIndex).Owner);
+            UpdateGoal(DESTROY, Proto_Ships_List(EnemyShipIndex).Owner);
          end if;
          if CurrentStory.Index /= Null_Unbounded_String then
             declare

@@ -40,7 +40,7 @@ package body Ships is
       NewName: Unbounded_String;
       HullIndex: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
-      ProtoShip: constant Proto_Ship_Data := ProtoShips_List(ProtoIndex);
+      ProtoShip: constant Proto_Ship_Data := Proto_Ships_List(ProtoIndex);
       ShipCargo: Inventory_Container.Vector;
       Owners: Natural_Container.Vector;
    begin
@@ -367,7 +367,7 @@ package body Ships is
       end;
       -- Set known crafting recipes
       Set_Known_Recipes_Loop :
-      for Recipe of ProtoShip.KnownRecipes loop
+      for Recipe of ProtoShip.Known_Recipes loop
          Known_Recipes.Append(New_Item => Recipe);
       end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
@@ -438,8 +438,8 @@ package body Ships is
          for I in TempRecord.Cargo.Iterate loop
             if Items_List(TempRecord.Cargo(I).ProtoIndex).IType =
               Items_Types(ItemTypeIndex) then
-               TempRecord.CombatValue :=
-                 TempRecord.CombatValue +
+               TempRecord.Combat_Value :=
+                 TempRecord.Combat_Value +
                  (Items_List(TempRecord.Cargo(I).ProtoIndex).Value(1) *
                   Multiple);
             end if;
@@ -453,12 +453,12 @@ package body Ships is
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
            (Name => Null_Unbounded_String, Modules => TempModules,
-            Accuracy => (0, 0), CombatAI => NONE, Evasion => (0, 0),
+            Accuracy => (0, 0), Combat_Ai => NONE, Evasion => (0, 0),
             Loot => (0, 0), Perception => (0, 0), Cargo => TempCargo,
-            CombatValue => 1, Crew => TempCrew,
+            Combat_Value => 1, Crew => TempCrew,
             Description => Null_Unbounded_String,
             Owner => Factions_Container.Key(Factions_List.First),
-            KnownRecipes => TempRecipes);
+            Known_Recipes => TempRecipes);
          ShipNode := Item(NodesList, I);
          ShipIndex := To_Unbounded_String(Get_Attribute(ShipNode, "index"));
          Action :=
@@ -466,21 +466,21 @@ package body Ships is
               Data_Action'Value(Get_Attribute(ShipNode, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not ProtoShips_Container.Contains
-                (ProtoShips_List, ShipIndex) then
+            if not Proto_Ships_Container.Contains
+                (Proto_Ships_List, ShipIndex) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
                  " ship '" & To_String(ShipIndex) &
                  "', there is no ship with that index.";
             end if;
-         elsif ProtoShips_Container.Contains(ProtoShips_List, ShipIndex) then
+         elsif Proto_Ships_Container.Contains(Proto_Ships_List, ShipIndex) then
             raise Data_Loading_Error
               with "Can't add ship '" & To_String(ShipIndex) &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               TempRecord := ProtoShips_List(ShipIndex);
+               TempRecord := Proto_Ships_List(ShipIndex);
             end if;
             if Get_Attribute(ShipNode, "name")'Length > 0 then
                TempRecord.Name :=
@@ -540,7 +540,7 @@ package body Ships is
                end if;
             end if;
             if Get_Attribute(ShipNode, "combatai") /= "" then
-               TempRecord.CombatAI :=
+               TempRecord.Combat_Ai :=
                  Ship_Combat_Ai'Value(Get_Attribute(ShipNode, "combatai"));
             end if;
             if Get_Attribute(ShipNode, "evasion") /= "" then
@@ -705,16 +705,16 @@ package body Ships is
                     Data_Action'Value(Get_Attribute(ChildNode, "action"))
                   else ADD);
                if SubAction = ADD then
-                  TempRecord.KnownRecipes.Append(New_Item => RecipeIndex);
+                  TempRecord.Known_Recipes.Append(New_Item => RecipeIndex);
                else
                   Find_Delete_Recipe_Loop :
-                  for K in TempRecord.KnownRecipes.Iterate loop
-                     if TempRecord.KnownRecipes(K) = RecipeIndex then
+                  for K in TempRecord.Known_Recipes.Iterate loop
+                     if TempRecord.Known_Recipes(K) = RecipeIndex then
                         DeleteIndex := UnboundedString_Container.To_Index(K);
                         exit Find_Delete_Recipe_Loop;
                      end if;
                   end loop Find_Delete_Recipe_Loop;
-                  TempRecord.KnownRecipes.Delete(Index => DeleteIndex);
+                  TempRecord.Known_Recipes.Delete(Index => DeleteIndex);
                end if;
             end loop Load_Known_Recipes_Loop;
             ChildNodes :=
@@ -820,20 +820,20 @@ package body Ships is
             for ModuleIndex of TempRecord.Modules loop
                case Modules_List(ModuleIndex).MType is
                   when HULL | GUN | BATTERING_RAM =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
+                     TempRecord.Combat_Value :=
+                       TempRecord.Combat_Value +
                        Modules_List(ModuleIndex).Durability +
                        (Modules_List(ModuleIndex).MaxValue * 10);
                      if Modules_List(ModuleIndex).MType = GUN then
                         CountAmmoValue(Modules_List(ModuleIndex).Value, 10);
                      end if;
                   when ARMOR =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
+                     TempRecord.Combat_Value :=
+                       TempRecord.Combat_Value +
                        Modules_List(ModuleIndex).Durability;
                   when HARPOON_GUN =>
-                     TempRecord.CombatValue :=
-                       TempRecord.CombatValue +
+                     TempRecord.Combat_Value :=
+                       TempRecord.Combat_Value +
                        Modules_List(ModuleIndex).Durability +
                        (Modules_List(ModuleIndex).MaxValue * 5);
                      CountAmmoValue(Modules_List(ModuleIndex).Value, 5);
@@ -841,17 +841,17 @@ package body Ships is
                      null;
                end case;
             end loop Count_Combat_Value_Loop;
-            TempRecord.CombatValue := TempRecord.CombatValue - 1;
+            TempRecord.Combat_Value := TempRecord.Combat_Value - 1;
             if Action /= UPDATE then
-               ProtoShips_Container.Include
-                 (ProtoShips_List, ShipIndex, TempRecord);
+               Proto_Ships_Container.Include
+                 (Proto_Ships_List, ShipIndex, TempRecord);
                Log_Message
                  ("Ship added: " & To_String(TempRecord.Name), EVERYTHING);
             else
-               ProtoShips_List(ShipIndex) := TempRecord;
+               Proto_Ships_List(ShipIndex) := TempRecord;
             end if;
          else
-            ProtoShips_Container.Exclude(ProtoShips_List, ShipIndex);
+            Proto_Ships_Container.Exclude(Proto_Ships_List, ShipIndex);
             Log_Message("Ship removed: " & To_String(ShipIndex), EVERYTHING);
          end if;
       end loop Load_Proto_Ships_Loop;

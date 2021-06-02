@@ -287,7 +287,7 @@ package body Missions is
             Append
               (AcceptMessage,
                "'Destroy " &
-               To_String(ProtoShips_List(Mission.ShipIndex).Name) & "'.");
+               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "'.");
          when Patrol =>
             Append(AcceptMessage, "'Patrol selected area'.");
          when Explore =>
@@ -410,7 +410,7 @@ package body Missions is
             AddMessage
               ("You finished mission 'Destroy " &
                To_String
-                 (ProtoShips_List(AcceptedMissions(MissionIndex).ShipIndex)
+                 (Proto_Ships_List(AcceptedMissions(MissionIndex).ShipIndex)
                     .Name) &
                "'.",
                MissionMessage);
@@ -465,7 +465,7 @@ package body Missions is
                Append
                  (MessageText,
                   "'Destroy " &
-                  To_String(ProtoShips_List(Mission.ShipIndex).Name) & "'.");
+                  To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "'.");
             when Patrol =>
                Append(MessageText, "'Patrol selected area'.");
             when Explore =>
@@ -559,7 +559,7 @@ package body Missions is
               (MessageText,
                "'Destroy " &
                To_String
-                 (ProtoShips_List(AcceptedMissions(MissionIndex).ShipIndex)
+                 (Proto_Ships_List(AcceptedMissions(MissionIndex).ShipIndex)
                     .Name) &
                "'.");
          when Patrol =>

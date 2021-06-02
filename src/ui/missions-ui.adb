@@ -116,7 +116,7 @@ package body Missions.UI is
             Insert
               (MissionText, "end",
                "{Target: " &
-               To_String(ProtoShips_List(Mission.ShipIndex).Name) & "}");
+               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "}");
          when Explore =>
             Insert(MissionText, "end", "{Explore selected area}");
          when Passenger =>

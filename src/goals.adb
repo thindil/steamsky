@@ -196,9 +196,9 @@ package body Goals is
                   GetFactionName(Goal.TargetIndex, NAME) & " ");
             when DESTROY =>
                Destroy_Ship_Loop :
-               for I in ProtoShips_List.Iterate loop
-                  if ProtoShips_Container.Key(I) = Goal.TargetIndex then
-                     Append(Text, ": " & To_String(ProtoShips_List(I).Name));
+               for I in Proto_Ships_List.Iterate loop
+                  if Proto_Ships_Container.Key(I) = Goal.TargetIndex then
+                     Append(Text, ": " & To_String(Proto_Ships_List(I).Name));
                      Added := True;
                      exit Destroy_Ship_Loop;
                   end if;

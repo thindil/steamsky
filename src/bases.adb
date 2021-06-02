@@ -364,11 +364,11 @@ package body Bases is
            (Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
               .ShipIndex);
          Amount :=
-           (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 3
-            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 5 else 10);
+           (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 3
+            elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 5 else 10);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
-            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
+            To_String(GenerateShipName(Proto_Ships_List(ShipIndex).Owner)) &
             "' for directions to other bases.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex);
@@ -400,8 +400,8 @@ package body Bases is
             end if;
          else -- asking friendly ship
             Amount :=
-              (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
-               elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 2
+              (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 1
+               elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 2
                else 4);
          end if;
          Count_Unknown_Bases :
@@ -468,11 +468,11 @@ package body Bases is
            Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
              .ShipIndex;
          MaxEvents :=
-           (if ProtoShips_List(ShipIndex).Crew.Length < 5 then 1
-            elsif ProtoShips_List(ShipIndex).Crew.Length < 10 then 3 else 5);
+           (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 1
+            elsif Proto_Ships_List(ShipIndex).Crew.Length < 10 then 3 else 5);
          AddMessage
            (To_String(PlayerShip.Crew(TraderIndex).Name) & " asked ship '" &
-            To_String(GenerateShipName(ProtoShips_List(ShipIndex).Owner)) &
+            To_String(GenerateShipName(Proto_Ships_List(ShipIndex).Owner)) &
             "' for recent events.",
             OrderMessage);
          DeleteEvent(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex);

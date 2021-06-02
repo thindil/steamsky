@@ -426,18 +426,18 @@ package body Events is
       PlayerShips: UnboundedString_Container.Vector;
    begin
       Count_Traders_Loop :
-      for I in ProtoShips_List.Iterate loop
-         if Index(ProtoShips_List(I).Name, To_String(Traders_Name)) > 0 then
-            Traders.Append(New_Item => ProtoShips_Container.Key(I));
+      for I in Proto_Ships_List.Iterate loop
+         if Index(Proto_Ships_List(I).Name, To_String(Traders_Name)) > 0 then
+            Traders.Append(New_Item => Proto_Ships_Container.Key(I));
          end if;
       end loop Count_Traders_Loop;
       GetPlayerShips(PlayerShips);
       Count_Friendly_Loop :
-      for I in ProtoShips_List.Iterate loop
+      for I in Proto_Ships_List.Iterate loop
          if IsFriendly
-             (PlayerShip.Crew(1).Faction, ProtoShips_List(I).Owner) and
-           not PlayerShips.Contains(ProtoShips_Container.Key(I)) then
-            FriendlyShips.Append(New_Item => ProtoShips_Container.Key(I));
+             (PlayerShip.Crew(1).Faction, Proto_Ships_List(I).Owner) and
+           not PlayerShips.Contains(Proto_Ships_Container.Key(I)) then
+            FriendlyShips.Append(New_Item => Proto_Ships_Container.Key(I));
          end if;
       end loop Count_Friendly_Loop;
    end GenerateTraders;
@@ -485,16 +485,16 @@ package body Events is
       end if;
       GetPlayerShips(PlayerShips);
       Generate_Enemies_Loop :
-      for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).CombatValue <= PlayerValue and
+      for I in Proto_Ships_List.Iterate loop
+         if Proto_Ships_List(I).Combat_Value <= PlayerValue and
            (Owner = To_Unbounded_String("Any") or
-            ProtoShips_List(I).Owner = Owner) and
+            Proto_Ships_List(I).Owner = Owner) and
            not IsFriendly
-             (PlayerShip.Crew(1).Faction, ProtoShips_List(I).Owner) and
-           not PlayerShips.Contains(ProtoShips_Container.Key(I)) and
+             (PlayerShip.Crew(1).Faction, Proto_Ships_List(I).Owner) and
+           not PlayerShips.Contains(Proto_Ships_Container.Key(I)) and
            (WithTraders or
-            Index(ProtoShips_List(I).Name, To_String(Traders_Name)) = 0) then
-            Enemies.Append(New_Item => ProtoShips_Container.Key(I));
+            Index(Proto_Ships_List(I).Name, To_String(Traders_Name)) = 0) then
+            Enemies.Append(New_Item => Proto_Ships_Container.Key(I));
          end if;
       end loop Generate_Enemies_Loop;
    end GenerateEnemies;
