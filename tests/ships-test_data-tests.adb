@@ -29,13 +29,13 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_CreateShip_1a2f4d_13521c
+   function Wrap_Test_CreateShip_1a2f4d_ff8887
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; RandomUpgrades: Boolean := True) return Ship_Record is
    begin
       begin
          pragma Assert
-           ((ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)));
+           ((Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,7 +44,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_CreateShip_1a2f4d_13521c_Result: constant Ship_Record :=
+         Test_CreateShip_1a2f4d_ff8887_Result: constant Ship_Record :=
            GNATtest_Generated.GNATtest_Standard.Ships.CreateShip
              (ProtoIndex, Name, X, Y, Speed, RandomUpgrades);
       begin
@@ -57,14 +57,14 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_CreateShip_1a2f4d_13521c_Result;
+         return Test_CreateShip_1a2f4d_ff8887_Result;
       end;
-   end Wrap_Test_CreateShip_1a2f4d_13521c;
+   end Wrap_Test_CreateShip_1a2f4d_ff8887;
 --  end read only
 
 --  begin read only
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test);
-   procedure Test_CreateShip_1a2f4d_13521c(Gnattest_T: in out Test) renames
+   procedure Test_CreateShip_1a2f4d_ff8887(Gnattest_T: in out Test) renames
      Test_CreateShip_test_createship;
 --  id:2.2/1a2f4d8dd86b513c/CreateShip/1/0/test_createship/
    procedure Test_CreateShip_test_createship(Gnattest_T: in out Test) is
@@ -72,7 +72,7 @@ package body Ships.Test_Data.Tests is
         (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
          Speed: Ship_Speed; RandomUpgrades: Boolean := True)
          return Ship_Record renames
-        Wrap_Test_CreateShip_1a2f4d_13521c;
+        Wrap_Test_CreateShip_1a2f4d_ff8887;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

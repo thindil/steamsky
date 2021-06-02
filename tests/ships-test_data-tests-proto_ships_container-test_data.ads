@@ -6,7 +6,7 @@
 with Ada.Containers.Hashed_Maps.Test_Data;
 with Ada.Containers.Hashed_Maps.Test_Data.Tests;
 
-package Ships.Test_Data.Tests.ProtoShips_Container.Test_Data is
+package Ships.Test_Data.Tests.Proto_Ships_Container.Test_Data is
 
 --  begin read only
    type Test is new AUnit.Test_Fixtures.Test_Fixture
@@ -18,7 +18,7 @@ package Ships.Test_Data.Tests.ProtoShips_Container.Test_Data is
 
 --  begin read only
    package Gnattest_Data_Inst is new GNATtest_Generated.GNATtest_Standard.Ships
-     .ProtoShips_Container
+     .Proto_Ships_Container
      .Test_Data
      (Test);
    package Gnattest_Tests_Inst is new Gnattest_Data_Inst.Tests;
@@ -29,4 +29,4 @@ package Ships.Test_Data.Tests.ProtoShips_Container.Test_Data is
    procedure User_Set_Up(Gnattest_T: in out New_Test);
    procedure User_Tear_Down(Gnattest_T: in out New_Test);
 
-end Ships.Test_Data.Tests.ProtoShips_Container.Test_Data;
+end Ships.Test_Data.Tests.Proto_Ships_Container.Test_Data;
