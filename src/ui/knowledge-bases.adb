@@ -386,7 +386,7 @@ package body Knowledge.Bases is
             configure(ReputationLabel, "-text {Reputation: Unknown}");
          else
             configure(ReputationLabel, "-text {Reputation:}");
-            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 1 -column 1 -padx 5");
+            Tcl.Tk.Ada.Grid.Grid(ReputationBar, "-row 2 -column 1 -padx 5");
             Tcl.Tk.Ada.Grid.Grid_Propagate(ReputationBar, "off");
             configure
               (ReputationProgress,
