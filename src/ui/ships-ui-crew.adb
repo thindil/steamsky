@@ -961,16 +961,14 @@ package body Ships.UI.Crew is
          To_Unbounded_String("Board enemy ship"),
          To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Dialog_Header: constant Ttk_Label :=
         Create
           (MemberDialog & ".header",
            "-text {Priorities for " & To_String(Member.Name) &
            "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Grid.Grid
         (Dialog_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Label := Create(MemberDialog & ".name", "-text {Priority}");
