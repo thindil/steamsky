@@ -21,3 +21,5 @@ pack [ttk::scrollbar .gameframe.paned.craftframe.scrollx -orient horizontal -com
 ::autoscroll::autoscroll .gameframe.paned.craftframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.craftframe.scrollx
 set craftframe [ttk::frame $craftcanvas.craft]
+SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
+SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
