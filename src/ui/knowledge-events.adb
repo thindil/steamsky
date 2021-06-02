@@ -145,7 +145,7 @@ package body Knowledge.Events is
               (EventInfo,
                LF & "Ship type: " &
                To_String
-                 (ProtoShips_List(Events_List(EventIndex).ShipIndex).Name));
+                 (Proto_Ships_List(Events_List(EventIndex).ShipIndex).Name));
          when FullDocks | AttackOnBase | Disease =>
             Append
               (EventInfo,
@@ -319,7 +319,7 @@ package body Knowledge.Events is
                when EnemyShip | Trader | FriendlyShip =>
                   AddButton
                     (EventsTable,
-                     To_String(ProtoShips_List(Event.ShipIndex).Name),
+                     To_String(Proto_Ships_List(Event.ShipIndex).Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
                when None | BaseRecovery =>

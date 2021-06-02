@@ -221,57 +221,59 @@ package Ships is
    -- FUNCTION
    -- Used to store crew info in ships prototypes
    -- SOURCE
-   package Proto_Crew_Container is new Vectors(Positive, Proto_Member_Data);
+   package Proto_Crew_Container is new Vectors
+     (Index_Type => Positive, Element_Type => Proto_Member_Data);
    -- ****
 
    -- ****s* Ships/Ships.Proto_Ship_Data
    -- FUNCTION
    -- Data structure for ship prototypes
    -- PARAMETERS
-   -- Name         - Prototype name
-   -- Modules      - List of ship modules
-   -- Accuracy     - Bonus to hit for ship
-   -- CombatAI     - Behaviour of ship in combat
-   -- Evasion      - Bonus to evade attacks
-   -- Loot         - Amount of loot(moneys) gained for destroying ship
-   -- Perception   - Bonus to spot player ship first
-   -- Cargo        - List of ship cargo
-   -- CombatValue  - Combat value of ship (used to generate enemies)
-   -- Crew         - List of mobs used as ship crew
-   -- Description  - Description of ship
-   -- Owner        - Index of faction to which ship belong
-   -- KnownRecipes - List of known recipes
+   -- Name          - Prototype name
+   -- Modules       - List of ship modules
+   -- Accuracy      - Bonus to hit for ship
+   -- Combat_Ai     - Behaviour of ship in combat
+   -- Evasion       - Bonus to evade attacks
+   -- Loot          - Amount of loot(moneys) gained for destroying ship
+   -- Perception    - Bonus to spot player ship first
+   -- Cargo         - List of ship cargo
+   -- Combat_Value  - Combat value of ship (used to generate enemies)
+   -- Crew          - List of mobs used as ship crew
+   -- Description   - Description of ship
+   -- Owner         - Index of faction to which ship belong
+   -- Known_Recipes - List of known recipes
    -- SOURCE
    type Proto_Ship_Data is record
       Name: Unbounded_String;
       Modules: UnboundedString_Container.Vector;
       Accuracy: Natural_Array(1 .. 2);
-      CombatAI: Ship_Combat_Ai;
+      Combat_Ai: Ship_Combat_Ai;
       Evasion: Natural_Array(1 .. 2);
       Loot: Natural_Array(1 .. 2);
       Perception: Natural_Array(1 .. 2);
       Cargo: MobInventory_Container.Vector;
-      CombatValue: Positive;
+      Combat_Value: Positive;
       Crew: Proto_Crew_Container.Vector;
       Description: Unbounded_String;
       Owner: Unbounded_String;
-      KnownRecipes: UnboundedString_Container.Vector;
+      Known_Recipes: UnboundedString_Container.Vector;
    end record;
    -- ****
 
-   -- ****t* Ships/Ships.ProtoShips_Container
+   -- ****t* Ships/Ships.Proto_Ships_Container
    -- FUNCTION
    -- Used to store prototype ships data
    -- SOURCE
-   package ProtoShips_Container is new Hashed_Maps
-     (Unbounded_String, Proto_Ship_Data, Ada.Strings.Unbounded.Hash, "=");
+   package Proto_Ships_Container is new Hashed_Maps
+     (Key_Type => Unbounded_String, Element_Type => Proto_Ship_Data,
+      Hash => Ada.Strings.Unbounded.Hash, Equivalent_Keys => "=");
    -- ****
 
-   -- ****v* Ships/Ships.ProtoShips_List
+   -- ****v* Ships/Ships.Proto_Ships_List
    -- FUNCTION
    -- List of all prototypes of ships
    -- SOURCE
-   ProtoShips_List: ProtoShips_Container.Map;
+   Proto_Ships_List: Proto_Ships_Container.Map;
    -- ****
 
    -- ****v* Ships/Ships.PlayerShip
@@ -328,7 +330,7 @@ package Ships is
      (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; RandomUpgrades: Boolean := True)
       return Ship_Record with
-      Pre => (ProtoShips_Container.Contains(ProtoShips_List, ProtoIndex)),
+      Pre => (Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex)),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
 

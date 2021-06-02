@@ -283,12 +283,12 @@ package body Statistics.UI is
          Count_Destroyed_Ships_Loop :
          for DestroyedShip of GameStats.DestroyedShips loop
             Get_Proto_Ship_Loop :
-            for J in ProtoShips_List.Iterate loop
-               if ProtoShips_Container.Key(J) = DestroyedShip.Index then
+            for J in Proto_Ships_List.Iterate loop
+               if Proto_Ships_Container.Key(J) = DestroyedShip.Index then
                   Insert
                     (TreeView,
                      "{} end -values [list {" &
-                     To_String(ProtoShips_List(J).Name) & "} {" &
+                     To_String(Proto_Ships_List(J).Name) & "} {" &
                      Positive'Image(DestroyedShip.Amount) & "}]");
                   exit Get_Proto_Ship_Loop;
                end if;

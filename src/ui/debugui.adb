@@ -290,12 +290,12 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy ship: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
             when AttackOnBase =>
                Append
                  (ValuesList,
                   " {Attack on base: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
             when Disease =>
                Append
                  (ValuesList,
@@ -321,17 +321,17 @@ package body DebugUI is
                Append
                  (ValuesList,
                   " {Enemy patrol: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
             when Trader =>
                Append
                  (ValuesList,
                   " {Trader: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
             when FriendlyShip =>
                Append
                  (ValuesList,
                   " {Friendly ship: " &
-                  To_String(ProtoShips_List(Event.ShipIndex).Name) & "}");
+                  To_String(Proto_Ships_List(Event.ShipIndex).Name) & "}");
             when others =>
                null;
          end case;
@@ -869,23 +869,23 @@ package body DebugUI is
       ShipBox.Name := New_String(FrameName & ".duration");
       Duration := Positive'Value(Get(ShipBox));
       Add_Ship_Event_Loop :
-      for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).Name = ShipName then
-            if Traders.Contains(ProtoShips_Container.Key(I)) then
+      for I in Proto_Ships_List.Iterate loop
+         if Proto_Ships_List(I).Name = ShipName then
+            if Traders.Contains(Proto_Ships_Container.Key(I)) then
                Events_List.Append
                  (New_Item =>
                     (Trader, NpcShipX, NpcShipY, Duration,
-                     ProtoShips_Container.Key(I)));
-            elsif FriendlyShips.Contains(ProtoShips_Container.Key(I)) then
+                     Proto_Ships_Container.Key(I)));
+            elsif FriendlyShips.Contains(Proto_Ships_Container.Key(I)) then
                Events_List.Append
                  (New_Item =>
                     (FriendlyShip, NpcShipX, NpcShipY, Duration,
-                     ProtoShips_Container.Key(I)));
+                     Proto_Ships_Container.Key(I)));
             else
                Events_List.Append
                  (New_Item =>
                     (EnemyShip, NpcShipX, NpcShipY, Duration,
-                     ProtoShips_Container.Key(I)));
+                     Proto_Ships_Container.Key(I)));
             end if;
             SkyMap(NpcShipX, NpcShipY).EventIndex := Events_List.Last_Index;
             return Refresh_Events_Command(ClientData, Interp, Argc, Argv);

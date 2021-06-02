@@ -107,7 +107,7 @@ package body OrdersMenu is
                           (OrdersMenu, "command",
                            "-label {Search for " &
                            To_String
-                             (ProtoShips_List
+                             (Proto_Ships_List
                                 (To_Unbounded_String(Slice(Tokens, 3)))
                                 .Name) &
                            "} -underline 0 -command ExecuteStory");
@@ -226,7 +226,7 @@ package body OrdersMenu is
                                 (OrdersMenu, "0", "command",
                                  "-label {Complete destroy " &
                                  To_String
-                                   (ProtoShips_List(Mission.ShipIndex).Name) &
+                                   (Proto_Ships_List(Mission.ShipIndex).Name) &
                                  "} -underline 0 -command CompleteMission");
                            end if;
                         when Patrol =>
@@ -353,7 +353,7 @@ package body OrdersMenu is
                                    (OrdersMenu, "command",
                                     "-label {Complete destroy " &
                                     To_String
-                                      (ProtoShips_List(Mission.ShipIndex)
+                                      (Proto_Ships_List(Mission.ShipIndex)
                                          .Name) &
                                     "} -underline 0 -command CompleteMission");
                               end if;
@@ -392,7 +392,7 @@ package body OrdersMenu is
                                 (OrdersMenu, "command",
                                  "-label {Search for " &
                                  To_String
-                                   (ProtoShips_List(Mission.ShipIndex).Name) &
+                                   (Proto_Ships_List(Mission.ShipIndex).Name) &
                                  "} -underline 0 -command StartMission");
                            when Patrol =>
                               Add
@@ -430,7 +430,7 @@ package body OrdersMenu is
             when FriendlyShip =>
                if HaveTrader then
                   if Index
-                      (ProtoShips_List
+                      (Proto_Ships_List
                          (Events_List
                             (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
                                .EventIndex)

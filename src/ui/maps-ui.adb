@@ -627,7 +627,7 @@ package body Maps.UI is
                when EnemyShip | Trader | FriendlyShip =>
                   Append
                     (EventInfoText,
-                     ProtoShips_List(Events_List(EventIndex).ShipIndex).Name);
+                     Proto_Ships_List(Events_List(EventIndex).ShipIndex).Name);
                when FullDocks =>
                   Append(EventInfoText, "Full docks in base");
                when AttackOnBase =>
@@ -681,7 +681,7 @@ package body Maps.UI is
                     (MapInfoText,
                      "Destroy " &
                      To_String
-                       (ProtoShips_List
+                       (Proto_Ships_List
                           (AcceptedMissions(MissionIndex).ShipIndex)
                           .Name));
                when Patrol =>

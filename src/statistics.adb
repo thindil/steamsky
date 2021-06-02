@@ -27,11 +27,11 @@ package body Statistics is
       ShipIndex: Unbounded_String;
    begin
       Proto_Ships_Loop :
-      for I in ProtoShips_List.Iterate loop
-         if ProtoShips_List(I).Name = ShipName then
-            ShipIndex := ProtoShips_Container.Key(I);
+      for I in Proto_Ships_List.Iterate loop
+         if Proto_Ships_List(I).Name = ShipName then
+            ShipIndex := Proto_Ships_Container.Key(I);
             GameStats.Points :=
-              GameStats.Points + (ProtoShips_List(I).CombatValue / 10);
+              GameStats.Points + (Proto_Ships_List(I).Combat_Value / 10);
             exit Proto_Ships_Loop;
          end if;
       end loop Proto_Ships_Loop;
