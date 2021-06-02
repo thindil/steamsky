@@ -69,11 +69,18 @@ package body Dialogs is
       return New_Dialog;
    end Create_Dialog;
 
-   procedure Add_Close_Button(Name, Text, Command: String) is
+   procedure Add_Close_Button
+     (Name, Text, Command: String; ColumnSpan: Positive := 1;
+      Row: Natural := 0) is
       Button: constant Ttk_Button :=
         Create(Name, "-text {" & Text & "} -command {" & Command & "}");
    begin
-      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (Button,
+         "-pady 5" &
+         (if ColumnSpan > 1 then " -columnspan" & Positive'Image(ColumnSpan)
+          else "") &
+         (if Row > 0 then " -row" & Positive'Image(Row) else ""));
       Focus(Button);
       Bind(Button, "<Tab>", "{break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");

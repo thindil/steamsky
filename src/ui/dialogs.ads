@@ -50,11 +50,17 @@ package Dialogs is
       -- Add button to close the selected dialog and set proper bindings for
       -- it.
       -- PARAMETERS
-      -- Name    - The Tk path name for the button
-      -- Text    - The text to display on the button
-      -- Command - The Tcl command to run when the button was clicked
+      -- Name       - The Tk path name for the button
+      -- Text       - The text to display on the button
+      -- Command    - The Tcl command to run when the button was clicked
+      -- Columnspan - The amount of columns to merge when placing the close
+      --              button. Can be empty. Default value is 1 (no merging).
+      -- Row        - The row in which the button will be placed. Can be empty.
+      --              Default value is 0 (place button in the next row)
       -- SOURCE
-   procedure Add_Close_Button(Name, Text, Command: String);
+   procedure Add_Close_Button
+     (Name, Text, Command: String; ColumnSpan: Positive := 1;
+      Row: Natural := 0);
    -- ****
 
    -- ****f* Dialogs/Dialogs.Show_Dialog
