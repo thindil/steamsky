@@ -22,9 +22,11 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
+with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Config; use Config;
 with CoreUI; use CoreUI;
 with Ships; use Ships;
@@ -169,10 +171,71 @@ package body Dialogs is
       return TCL_OK;
    end Update_Dialog_Command;
 
+   -- ****o* UUI/UUI.Get_String_Command
+   -- FUNCTION
+   -- Get string value from the player, like new ship or module name
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- GetString caption closeaction title
+   -- Caption is the text showed above entry field in the dialog, variable
+   -- is the variable which will be set and title is the title of the dialog
+   -- SOURCE
+   function Get_String_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Get_String_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      StringDialog: constant Ttk_Frame :=
+        Create_Dialog(".getstring", CArgv.Arg(Argv, 3), 275, 2);
+      StringLabel: constant Ttk_Label :=
+        Create
+          (StringDialog & ".text",
+           "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
+      StringEntry: constant Ttk_Entry :=
+        Create
+          (StringDialog & ".entry",
+           "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
+      OkButton: constant Ttk_Button :=
+        Create
+          (StringDialog & ".okbutton",
+           "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
+           "; CloseDialog " & StringDialog & "}");
+      CancelButton: constant Ttk_Button :=
+        Create
+          (StringDialog & ".closebutton",
+           "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
+      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
+      State(OkButton, "disabled");
+      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 3 -column 1 -pady 5 -padx 5");
+      Bind(CancelButton, "<Tab>", "{focus .getstring.entry;break}");
+      Bind(CancelButton, "<Escape>", "{" & CancelButton & " invoke;break}");
+      Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
+      Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
+      Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
+      Focus(StringEntry);
+      Show_Dialog(StringDialog);
+      return TCL_OK;
+   end Get_String_Command;
+
    procedure Add_Commands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("UpdateDialog", Update_Dialog_Command'Access);
+      AddCommand("GetString", Get_String_Command'Access);
    end Add_Commands;
 
    procedure ShowMessage

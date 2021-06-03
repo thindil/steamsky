@@ -39,7 +39,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
@@ -255,66 +254,6 @@ package body Utils.UI is
       return
         Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
-
-   -- ****o* UUI/UUI.Get_String_Command
-   -- FUNCTION
-   -- Get string value from the player, like new ship or module name
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- GetString caption closeaction title
-   -- Caption is the text showed above entry field in the dialog, variable
-   -- is the variable which will be set and title is the title of the dialog
-   -- SOURCE
-   function Get_String_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Get_String_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
-      StringDialog: constant Ttk_Frame :=
-        Create_Dialog(".getstring", CArgv.Arg(Argv, 3), 275, 2);
-      StringLabel: constant Ttk_Label :=
-        Create
-          (StringDialog & ".text",
-           "-text {" & CArgv.Arg(Argv, 1) & "} -wraplength 300");
-      StringEntry: constant Ttk_Entry :=
-        Create
-          (StringDialog & ".entry",
-           "-validate key -validatecommand {set value %P;if {$value == {}} {.getstring.okbutton state disabled; return 1} else {.getstring.okbutton state !disabled; return 1}}");
-      OkButton: constant Ttk_Button :=
-        Create
-          (StringDialog & ".okbutton",
-           "-text {Ok} -command {SetTextVariable " & CArgv.Arg(Argv, 2) &
-           "; CloseDialog " & StringDialog & "}");
-      CancelButton: constant Ttk_Button :=
-        Create
-          (StringDialog & ".closebutton",
-           "-text {Cancel} -command {CloseDialog " & StringDialog & "}");
-   begin
-      Tcl.Tk.Ada.Grid.Grid(StringLabel, "-padx 5 -pady {5 0} -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(StringEntry, "-sticky we -padx 5 -columnspan 2");
-      Tcl.Tk.Ada.Grid.Grid(OkButton, "-row 3 -pady 5 -padx 5");
-      State(OkButton, "disabled");
-      Tcl.Tk.Ada.Grid.Grid(CancelButton, "-row 3 -column 1 -pady 5 -padx 5");
-      Bind(CancelButton, "<Tab>", "{focus .getstring.entry;break}");
-      Bind(CancelButton, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(OkButton, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(StringEntry, "<Escape>", "{" & CancelButton & " invoke;break}");
-      Bind(StringEntry, "<Return>", "{" & OkButton & " invoke;break}");
-      Focus(StringEntry);
-      Show_Dialog(StringDialog);
-      return TCL_OK;
-   end Get_String_Command;
 
    -- ****o* UUI/UUI.Set_Text_Variable_Command
    -- FUNCTION
@@ -652,7 +591,6 @@ package body Utils.UI is
       AddCommand("ResizeCanvas", Resize_Canvas_Command'Access);
       AddCommand("CheckAmount", Check_Amount_Command'Access);
       AddCommand("ValidateAmount", Validate_Amount_Command'Access);
-      AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetTextVariable", Set_Text_Variable_Command'Access);
       AddCommand("ProcessQuestion", Process_Question_Command'Access);
       AddCommand
