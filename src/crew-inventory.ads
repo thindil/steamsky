@@ -44,8 +44,8 @@ package Crew.Inventory is
       Durability: Items_Durability := 0;
       InventoryIndex, Price: Natural := 0) with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
-       InventoryIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
+       InventoryIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
       Test_Case => (Name => "Test_UpdateInventory", Mode => Nominal);
       -- ****
 
@@ -61,7 +61,7 @@ package Crew.Inventory is
       -- SOURCE
    function FreeInventory
      (MemberIndex: Positive; Amount: Integer) return Integer with
-      Pre => MemberIndex <= PlayerShip.Crew.Last_Index,
+      Pre => MemberIndex <= Player_Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_FreeInventory", Mode => Nominal);
       -- ****
 
@@ -75,8 +75,8 @@ package Crew.Inventory is
       -- SOURCE
    procedure TakeOffItem(MemberIndex, ItemIndex: Positive) with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
+       ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
       Test_Case => (Name => "Test_TakeOffItem", Mode => Nominal);
       -- ****
 
@@ -89,8 +89,8 @@ package Crew.Inventory is
       -- SOURCE
    function ItemIsUsed(MemberIndex, ItemIndex: Positive) return Boolean with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
-       ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index),
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
+       ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index),
       Test_Case => (Name => "Test_ItemIsUsed", Mode => Nominal);
       -- ****
 
@@ -111,7 +111,7 @@ package Crew.Inventory is
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
        ItemType /= Null_Unbounded_String),
       Test_Case => (Name => "Test_FindTools", Mode => Nominal);
       -- ****

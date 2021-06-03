@@ -227,7 +227,7 @@ package body Dialogs is
            Create
              (ItemDialog & ".amount",
               "-width 10 -from 1 -to" &
-              Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+              Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
               ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
@@ -247,7 +247,7 @@ package body Dialogs is
            Create
              (ItemDialog & ".amountlbl",
               "-text {Amount (max:" &
-              Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
+              Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
               "):} -takefocus 0");
       else
          Label :=

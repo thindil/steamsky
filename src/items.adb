@@ -245,7 +245,7 @@ package body Items is
       if Inventory(ItemIndex).Durability = 0 then -- Item destroyed
          if MemberIndex = 0 then
             UpdateCargo
-              (Ship => PlayerShip, CargoIndex => ItemIndex, Amount => -1);
+              (Ship => Player_Ship, CargoIndex => ItemIndex, Amount => -1);
          else
             UpdateInventory
               (MemberIndex => MemberIndex, Amount => -1,
@@ -261,10 +261,10 @@ package body Items is
               Inventory(I).Durability = Inventory(J).Durability and I /= J then
                if MemberIndex = 0 then
                   UpdateCargo
-                    (Ship => PlayerShip, CargoIndex => J,
+                    (Ship => Player_Ship, CargoIndex => J,
                      Amount => (0 - Inventory.Element(J).Amount));
                   UpdateCargo
-                    (Ship => PlayerShip, CargoIndex => I,
+                    (Ship => Player_Ship, CargoIndex => I,
                      Amount => Inventory.Element(J).Amount);
                else
                   UpdateInventory

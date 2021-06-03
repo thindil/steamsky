@@ -151,7 +151,7 @@ package Utils.UI is
    -- SOURCE
    procedure ShowInventoryItemInfo
      (Parent: String; ItemIndex: Positive; MemberIndex: Natural) with
-      Pre => MemberIndex <= PlayerShip.Crew.Last_Index and Parent'Length > 0;
+      Pre => MemberIndex <= Player_Ship.Crew.Last_Index and Parent'Length > 0;
       -- ****
 
       -- ****f* UUI/UUI.Delete_Widgets

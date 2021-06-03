@@ -205,7 +205,7 @@ package Bases is
    procedure CountPrice
      (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) with
-      Pre => TraderIndex <= PlayerShip.Crew.Last_Index,
+      Pre => TraderIndex <= Player_Ship.Crew.Last_Index,
       Test_Case => (Name => "Test_CountPrice", Mode => Nominal);
       -- ****
 

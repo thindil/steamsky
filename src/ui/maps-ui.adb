@@ -123,7 +123,7 @@ package body Maps.UI is
          configure
            (Label,
             "-text {" & FormatedTime & " Speed:" &
-            Natural'Image((RealSpeed(PlayerShip) * 60) / 1_000) & " km/h}");
+            Natural'Image((RealSpeed(Player_Ship) * 60) / 1_000) & " km/h}");
          Add(Label, "Game time and current ship speed.");
       end if;
       Label.Name := New_String(Game_Header & ".nofuel");
@@ -177,7 +177,7 @@ package body Maps.UI is
             " left.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       end if;
-      for Member of PlayerShip.Crew loop
+      for Member of Player_Ship.Crew loop
          case Member.Order is
             when Pilot =>
                HavePilot := True;
@@ -199,16 +199,16 @@ package body Maps.UI is
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       if HavePilot and
         (HaveEngineer or
-         Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+         Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
            (To_Unbounded_String("sentientships"))) and
         (Winfo_Get(Frame, "exists") = "0"
          or else (Winfo_Get(Frame, "ismapped") = "0")) then
          declare
             type SpeedType is digits 2;
             Speed: constant SpeedType :=
-              (if PlayerShip.Speed /= DOCKED then
-                 (SpeedType(RealSpeed(PlayerShip)) / 1_000.0)
-               else (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0));
+              (if Player_Ship.Speed /= DOCKED then
+                 (SpeedType(RealSpeed(Player_Ship)) / 1_000.0)
+               else (SpeedType(RealSpeed(Player_Ship, True)) / 1_000.0));
          begin
             if Speed < 0.5 then
                configure(Label, "-style Headerred.TLabel");
@@ -219,12 +219,12 @@ package body Maps.UI is
          end;
       end if;
       Check_Workers_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          case Modules_List(Module.Proto_Index).MType is
             when GUN | HARPOON_GUN =>
                if Module.Owner(1) = 0 then
                   HaveGunner := False;
-               elsif PlayerShip.Crew(Module.Owner(1)).Order /= Gunner then
+               elsif Player_Ship.Crew(Module.Owner(1)).Order /= Gunner then
                   HaveGunner := False;
                end if;
             when ALCHEMY_LAB .. GREENHOUSE =>
@@ -234,7 +234,7 @@ package body Maps.UI is
                   for Owner of Module.Owner loop
                      if Owner = 0 then
                         HaveWorker := False;
-                     elsif PlayerShip.Crew(Owner).Order /= Craft then
+                     elsif Player_Ship.Crew(Owner).Order /= Craft then
                         HaveWorker := False;
                      end if;
                      exit Check_Owners_Loop when not HaveWorker;
@@ -255,7 +255,7 @@ package body Maps.UI is
       if HavePilot then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
-         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             configure(Label, "-style Headerred.TLabel");
             Add(Label, "No pilot assigned. Ship can't move.");
@@ -269,7 +269,7 @@ package body Maps.UI is
       if HaveEngineer then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       else
-         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             configure(Label, "-style Headerred.TLabel");
             Add(Label, "No engineer assigned. Ship can't move.");
@@ -316,7 +316,7 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
       Label.Name := New_String(Game_Header & ".upgrade");
-      if PlayerShip.Upgrade_Module > 0 then
+      if Player_Ship.Upgrade_Module > 0 then
          if HaveUpgrader then
             configure(Label, "-style Headergreen.TLabel");
             Add(Label, "A ship module upgrade in progress.");
@@ -333,12 +333,12 @@ package body Maps.UI is
       Label.Name := New_String(Game_Header & ".talk");
       if HaveTrader then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      elsif SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex > 0 then
+      elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex > 0 then
          configure(Label, "-style Headerred.TLabel");
          Add(Label, "No trader assigned. You need one to talk/trade.");
          Tcl.Tk.Ada.Grid.Grid(Label);
-      elsif SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
-         if Events_List(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
+      elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
+         if Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
              .EType =
            FriendlyShip then
             configure(Label, "-style Headerred.TLabel");
@@ -363,7 +363,7 @@ package body Maps.UI is
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
       end if;
-      if PlayerShip.Crew(1).Health = 0 then
+      if Player_Ship.Crew(1).Health = 0 then
          ShowQuestion
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
@@ -412,28 +412,28 @@ package body Maps.UI is
       end if;
       if CurrentStory.Index /= Null_Unbounded_String then
          GetStoryLocation(StoryX, StoryY);
-         if StoryX = PlayerShip.Sky_X and StoryY = PlayerShip.Sky_Y then
+         if StoryX = Player_Ship.Sky_X and StoryY = Player_Ship.Sky_Y then
             StoryX := 0;
             StoryY := 0;
          end if;
       end if;
-      if PlayerShip.Speed = DOCKED and
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex = 0 then
-         PlayerShip.Speed := Ships.FULL_STOP;
+      if Player_Ship.Speed = DOCKED and
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex = 0 then
+         Player_Ship.Speed := Ships.FULL_STOP;
       end if;
       Draw_Map_Loop :
       for Y in StartY .. EndY loop
          for X in StartX .. EndX loop
             MapTag := Null_Unbounded_String;
-            if X = PlayerShip.Sky_X and Y = PlayerShip.Sky_Y then
+            if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
                MapChar := CurrentTheme.Player_Ship_Icon;
             else
                MapChar := CurrentTheme.Empty_Map_Icon;
                MapTag :=
                  (if SkyMap(X, Y).Visited then To_Unbounded_String("black")
                   else To_Unbounded_String("unvisited gray"));
-               if X = PlayerShip.Destination_X and
-                 Y = PlayerShip.Destination_Y then
+               if X = Player_Ship.Destination_X and
+                 Y = Player_Ship.Destination_Y then
                   MapChar := CurrentTheme.Target_Icon;
                   MapTag :=
                     (if SkyMap(X, Y).Visited then Null_Unbounded_String
@@ -527,7 +527,7 @@ package body Maps.UI is
    end DrawMap;
 
    procedure UpdateMapInfo
-     (X: Positive := PlayerShip.Sky_X; Y: Positive := PlayerShip.Sky_Y) is
+     (X: Positive := Player_Ship.Sky_X; Y: Positive := Player_Ship.Sky_Y) is
       MapInfoText, EventInfoText: Unbounded_String;
       MapInfo: constant Ttk_Label :=
         Get_Widget(Main_Paned & ".mapframe.info.info");
@@ -536,7 +536,7 @@ package body Maps.UI is
    begin
       Append
         (MapInfoText, "X:" & Positive'Image(X) & " Y:" & Positive'Image(Y));
-      if PlayerShip.Sky_X /= X or PlayerShip.Sky_Y /= Y then
+      if Player_Ship.Sky_X /= X or Player_Ship.Sky_Y /= Y then
          declare
             Distance: constant Positive := CountDistance(X, Y);
          begin
@@ -609,7 +609,7 @@ package body Maps.UI is
                         null;
                   end case;
                end if;
-               if BaseIndex = PlayerShip.Home_Base then
+               if BaseIndex = Player_Ship.Home_Base then
                   Append(MapInfoText, LF & "It is your home base");
                end if;
             end if;
@@ -699,7 +699,7 @@ package body Maps.UI is
             FinishCondition: StepConditionType;
          begin
             GetStoryLocation(StoryX, StoryY);
-            if StoryX = PlayerShip.Sky_X and StoryY = PlayerShip.Sky_Y then
+            if StoryX = Player_Ship.Sky_X and StoryY = Player_Ship.Sky_Y then
                StoryX := 0;
                StoryY := 0;
             end if;
@@ -720,7 +720,7 @@ package body Maps.UI is
             end if;
          end;
       end if;
-      if X = PlayerShip.Sky_X and Y = PlayerShip.Sky_Y then
+      if X = Player_Ship.Sky_X and Y = Player_Ship.Sky_Y then
          Append(MapInfoText, LF & "You are here");
       end if;
       configure(MapInfo, "-text {" & To_String(MapInfoText) & "}");
@@ -751,7 +751,7 @@ package body Maps.UI is
       Speedbox: constant Ttk_ComboBox := Get_Widget(FrameName & ".speed");
    begin
       Button.Interp := Get_Context;
-      if PlayerShip.Speed = DOCKED then
+      if Player_Ship.Speed = DOCKED then
          Tcl.Tk.Ada.Grid.Grid_Remove(Speedbox);
          Button.Name := New_String(FrameName & ".moveto");
          Tcl.Tk.Ada.Grid.Grid_Remove(Button);
@@ -768,9 +768,9 @@ package body Maps.UI is
          end loop Disable_Move_Buttons_Loop;
       else
          Current
-           (Speedbox, Natural'Image(Ship_Speed'Pos(PlayerShip.Speed) - 1));
+           (Speedbox, Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
-         if PlayerShip.Destination_X > 0 and PlayerShip.Destination_Y > 0 then
+         if Player_Ship.Destination_X > 0 and Player_Ship.Destination_Y > 0 then
             Button.Name := New_String(FrameName & ".moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");
@@ -891,8 +891,8 @@ package body Maps.UI is
          Tcl.Tk.Ada.Grid.Grid(Header);
       end if;
       UpdateHeader;
-      CenterX := PlayerShip.Sky_X;
-      CenterY := PlayerShip.Sky_Y;
+      CenterX := Player_Ship.Sky_X;
+      CenterY := Player_Ship.Sky_Y;
       Set_Tags_Loop :
       for I in BasesTypes_List.Iterate loop
          Tag_Configure
@@ -921,7 +921,7 @@ package body Maps.UI is
       if not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
       end if;
-      Tcl_SetVar(Get_Context, "shipname", To_String(PlayerShip.Name));
+      Tcl_SetVar(Get_Context, "shipname", To_String(Player_Ship.Name));
    end CreateGameUI;
 
    procedure ShowSkyMap(Clear: Boolean := False) is
@@ -940,7 +940,7 @@ package body Maps.UI is
             ShowInfo(Text => To_String(GetCurrentStoryText), Title => "Story");
          else
             FinishStory;
-            if PlayerShip.Crew(1).Health = 0 then
+            if Player_Ship.Crew(1).Health = 0 then
                ShowQuestion
                  ("You are dead. Would you like to see your game statistics?",
                   "showstats");

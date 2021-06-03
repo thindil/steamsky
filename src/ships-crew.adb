@@ -85,7 +85,7 @@ package body Ships.Crew is
      (MemberIndex: Crew_Container.Extended_Index; Reason: Unbounded_String;
       Ship: in out Ship_Record; CreateBody: Boolean := True) is
    begin
-      if Ship = PlayerShip then
+      if Ship = Player_Ship then
          if MemberIndex > 1 then
             AddMessage
               (To_String(Ship.Crew(MemberIndex).Name) & " died from " &
@@ -94,9 +94,9 @@ package body Ships.Crew is
          else
             AddMessage
               ("You died from " & To_String(Reason) & ".", CombatMessage, RED);
-            PlayerShip.Crew(MemberIndex).Order := Rest;
-            PlayerShip.Crew(MemberIndex).Health := 0;
-            Update_Hall_Of_Fame(PlayerShip.Crew(MemberIndex).Name, Reason);
+            Player_Ship.Crew(MemberIndex).Order := Rest;
+            Player_Ship.Crew(MemberIndex).Health := 0;
+            Update_Hall_Of_Fame(Player_Ship.Crew(MemberIndex).Name, Reason);
             return;
          end if;
       end if;
@@ -131,7 +131,7 @@ package body Ships.Crew is
             end if;
          end loop Owners_Loop;
       end loop Module_Loop;
-      if Ship = PlayerShip then
+      if Ship = Player_Ship then
          Delete_Missions_Loop :
          for I in
            AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
@@ -154,7 +154,7 @@ package body Ships.Crew is
    end DeleteMember;
 
    function FindMember
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
+     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Natural is
    begin
       Find_Member_Loop :
@@ -197,7 +197,7 @@ package body Ships.Crew is
       if GivenOrder /= Rest and
         ((Ship.Crew(MemberIndex).Morale(1) < 11 and GetRandom(1, 100) < 50) or
          Ship.Crew(MemberIndex).Loyalty < 20) then
-         if Ship = PlayerShip then
+         if Ship = Player_Ship then
             raise Crew_Order_Error
               with MemberName & " refuses to execute order.";
          else
@@ -214,7 +214,7 @@ package body Ships.Crew is
          Give_Crew_Orders_Loop :
          for I in Ship.Crew.First_Index .. Ship.Crew.Last_Index loop
             if Ship.Crew(I).Order = GivenOrder then
-               GiveOrders(PlayerShip, I, Rest, 0, False);
+               GiveOrders(Player_Ship, I, Rest, 0, False);
                exit Give_Crew_Orders_Loop;
             end if;
          end loop Give_Crew_Orders_Loop;
@@ -232,7 +232,7 @@ package body Ships.Crew is
             end loop Free_Position_Loop;
             if not FreePosition then
                GiveOrders
-                 (PlayerShip, Ship.Modules(ModuleIndex).Owner(1), Rest, 0,
+                 (Player_Ship, Ship.Modules(ModuleIndex).Owner(1), Rest, 0,
                   False);
             end if;
          end;
@@ -252,7 +252,7 @@ package body Ships.Crew is
                     Ship.Modules(I).Durability > 0 then
                      if Ship.Modules(I).Owner(1) /= 0 then
                         GiveOrders
-                          (PlayerShip, Ship.Modules(I).Owner(1), Rest, 0,
+                          (Player_Ship, Ship.Modules(I).Owner(1), Rest, 0,
                            False);
                      end if;
                      ModuleIndex2 := Modules_Container.To_Index(I);
@@ -275,7 +275,7 @@ package body Ships.Crew is
       else
          ModuleIndex2 := ModuleIndex;
       end if;
-      if ModuleIndex2 = 0 and Ship = PlayerShip then
+      if ModuleIndex2 = 0 and Ship = Player_Ship then
          case GivenOrder is
             when Pilot =>
                raise Crew_Order_Error
@@ -418,7 +418,7 @@ package body Ships.Crew is
             end if;
          end if;
       end if;
-      if Ship = PlayerShip then
+      if Ship = Player_Ship then
          case GivenOrder is
             when Pilot =>
                AddMessage(MemberName & " starts piloting.", OrderMessage);
@@ -493,7 +493,7 @@ package body Ships.Crew is
       end if;
    exception
       when An_Exception : Crew_No_Space_Error =>
-         if Ship = PlayerShip then
+         if Ship = Player_Ship then
             raise Crew_Order_Error with Exception_Message(An_Exception);
          else
             return;
@@ -612,7 +612,7 @@ package body Ships.Crew is
          return True;
       exception
          when An_Exception : Crew_Order_Error | Crew_No_Space_Error =>
-            if Ship = PlayerShip then
+            if Ship = Player_Ship then
                AddMessage(Exception_Message(An_Exception), OrderMessage, RED);
             end if;
             return False;
@@ -841,7 +841,7 @@ package body Ships.Crew is
          NewMorale := 0;
       end if;
       Ship.Crew(MemberIndex).Morale := (NewMorale, NewValue);
-      if Ship = PlayerShip and MemberIndex = 1 then
+      if Ship = Player_Ship and MemberIndex = 1 then
          return;
       end if;
       NewLoyalty := Ship.Crew(MemberIndex).Loyalty;

@@ -85,7 +85,7 @@ package Ships.Crew is
    -- Crew index of crew member with selected order or 0 if nothing was found
    -- SOURCE
    function FindMember
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
+     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index with
       Test_Case => (Name => "Test_FindMember", Mode => Robustness);
       -- ****

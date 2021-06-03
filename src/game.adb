@@ -336,7 +336,7 @@ package body Game is
          end if;
       end loop Place_Player_Loop;
       -- Create player ship
-      PlayerShip :=
+      Player_Ship :=
         CreateShip
           (ProtoIndex =>
              Factions_List(New_Game_Settings.Player_Faction).Careers
@@ -380,7 +380,7 @@ package body Game is
                   Amount => Amount, Name => Null_Unbounded_String,
                   Durability => 100, Price => 0));
          end loop Player_Inventory_Loop;
-         PlayerShip.Crew.Prepend
+         Player_Ship.Crew.Prepend
            (New_Item =>
               (Name => New_Game_Settings.Player_Name,
                Gender => New_Game_Settings.Player_Gender, Health => 100,
@@ -401,8 +401,8 @@ package body Game is
       declare
          Cabin_Assigned: Boolean := False;
       begin
-         PlayerShip_Modules_Loop :
-         for Module of PlayerShip.Modules loop
+         Player_Ship_Modules_Loop :
+         for Module of Player_Ship.Modules loop
             Module_Owner_Loop :
             for Owner of Module.Owner loop
                if Owner > 0 then
@@ -425,12 +425,12 @@ package body Game is
                   end if;
                end loop Assign_Cabin_Loop;
             end if;
-         end loop PlayerShip_Modules_Loop;
+         end loop Player_Ship_Modules_Loop;
       end Assign_Cabin_Block;
       -- Set current map field/sky base info
       SkyBases(Random_Base).Visited := Game_Date;
       SkyBases(Random_Base).Known := True;
-      SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited := True;
+      SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       GenerateRecruits;
       GenerateMissions;
       GenerateCargo;
@@ -459,7 +459,7 @@ package body Game is
 
       Added_Hours, Added_Minutes: Natural := 0;
       Base_Index: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Tired_Points: Natural := 0;
       Need_Cleaning: Boolean := False;
    begin
@@ -482,16 +482,16 @@ package body Game is
          Game_Date.Hour := Game_Date.Hour - 24;
          Game_Date.Day := Game_Date.Day + 1;
          Get_Dirty_Loop :
-         for Module of PlayerShip.Modules loop
+         for Module of Player_Ship.Modules loop
             if Module.M_Type = CABIN and then Module.Cleanliness > 0 then
                Module.Cleanliness := Module.Cleanliness - 1;
                Need_Cleaning := True;
             end if;
          end loop Get_Dirty_Loop;
          if Need_Cleaning then
-            UpdateOrders(Ship => PlayerShip);
+            UpdateOrders(Ship => Player_Ship);
          end if;
-         if PlayerShip.Speed = DOCKED then
+         if Player_Ship.Speed = DOCKED then
             PayForDock;
          end if;
          DailyPayment;
@@ -545,14 +545,14 @@ package body Game is
          GenerateMissions;
          GenerateCargo;
          UpdatePrices;
-         UpdateOrders(Ship => PlayerShip);
+         UpdateOrders(Ship => Player_Ship);
       end if;
       -- Update map cell
-      if not SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited then
+      if not SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited then
          GameStats.MapVisited := GameStats.MapVisited + 1;
          GameStats.Points := GameStats.Points + 1;
          UpdateGoal(GType => DISCOVER, TargetIndex => Null_Unbounded_String);
-         SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).Visited := True;
+         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).Visited := True;
       end if;
       -- Update events
       UpdateEvents(Minutes => Minutes);
@@ -798,7 +798,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllablestart" then
-                     ShipSyllablesStart.Append
+                     Ship_Syllables_Start.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -806,7 +806,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllablemiddle" then
-                     ShipSyllablesMiddle.Append
+                     Ship_Syllables_Middle.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
@@ -814,7 +814,7 @@ package body Game is
                                  (Elem => Data_Node, Name => "value")));
                   elsif To_String(Source => Node_Name) =
                     "shipssyllableend" then
-                     ShipSyllablesEnd.Append
+                     Ship_Syllables_End.Append
                        (New_Item =>
                           To_Unbounded_String
                             (Source =>
