@@ -56,7 +56,7 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Argc, Argv);
       HaveTrader: Boolean := False;
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MissionsLimit: Integer;
       Event: Events_Types := None;
       ItemIndex: Natural;
@@ -101,8 +101,8 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if PlayerShip.Sky_X = Positive'Value(Slice(Tokens, 1)) and
-                       PlayerShip.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
+                     if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
+                       Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search for " &
@@ -118,8 +118,8 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if PlayerShip.Sky_X = Positive'Value(Slice(Tokens, 1)) and
-                       PlayerShip.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
+                     if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
+                       Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search area} -underline 0 -command ExecuteStory");
@@ -130,7 +130,7 @@ package body OrdersMenu is
             end case;
          end;
       end if;
-      if PlayerShip.Speed = DOCKED then
+      if Player_Ship.Speed = DOCKED then
          Add
            (OrdersMenu, "command",
             "-label {Undock} -underline 0 -command {Docking}");
@@ -166,7 +166,7 @@ package body OrdersMenu is
                Add(OrdersMenu, "command", "-label {Pray} -command Pray");
             end if;
             Add_Heal_Wounded_Menu_Loop :
-            for Member of PlayerShip.Crew loop
+            for Member of Player_Ship.Crew loop
                if Member.Health < 100 then
                   Add
                     (OrdersMenu, "command",
@@ -175,7 +175,7 @@ package body OrdersMenu is
                end if;
             end loop Add_Heal_Wounded_Menu_Loop;
             Add_Repair_Ship_Menu_Loop :
-            for Module of PlayerShip.Modules loop
+            for Module of Player_Ship.Modules loop
                if Module.Durability < Module.Max_Durability then
                   Add
                     (OrdersMenu, "command",
@@ -211,8 +211,8 @@ package body OrdersMenu is
                Add_Mission_Menu_Loop :
                for Mission of AcceptedMissions loop
                   if (Mission.Finished and Mission.StartBase = BaseIndex) or
-                    (Mission.TargetX = PlayerShip.Sky_X and
-                     Mission.TargetY = PlayerShip.Sky_Y) then
+                    (Mission.TargetX = Player_Ship.Sky_X and
+                     Mission.TargetY = Player_Ship.Sky_Y) then
                      case Mission.MType is
                         when Deliver =>
                            Insert
@@ -259,7 +259,7 @@ package body OrdersMenu is
                      "-label Missions -underline 0 -command ShowBaseMissions");
                end if;
             end if;
-            if PlayerShip.Home_Base /= BaseIndex then
+            if Player_Ship.Home_Base /= BaseIndex then
                Add
                  (OrdersMenu, "command",
                   "-label {Set as home} -underline 7 -command SetAsHome");
@@ -271,10 +271,10 @@ package body OrdersMenu is
                "-label {Loot} -underline 0 -command ShowLoot");
          end if;
       else
-         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
             Event :=
               Events_List
-                (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
+                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                 .EType;
          end if;
          case Event is
@@ -294,7 +294,7 @@ package body OrdersMenu is
                if HaveTrader then
                   ItemIndex :=
                     FindItem
-                      (Inventory => PlayerShip.Cargo,
+                      (Inventory => Player_Ship.Cargo,
                        ItemType =>
                          Factions_List(SkyBases(BaseIndex).Owner)
                            .HealingTools);
@@ -314,7 +314,7 @@ package body OrdersMenu is
                         DockingCost: Positive;
                      begin
                         Count_Docking_Cost_Loop :
-                        for Module of PlayerShip.Modules loop
+                        for Module of Player_Ship.Modules loop
                            if Module.M_Type = HULL then
                               DockingCost := Module.Max_Modules;
                               exit Count_Docking_Cost_Loop;
@@ -336,8 +336,8 @@ package body OrdersMenu is
                   end if;
                   Complete_Mission_Menu_Loop :
                   for Mission of AcceptedMissions loop
-                     if HaveTrader and Mission.TargetX = PlayerShip.Sky_X and
-                       Mission.TargetY = PlayerShip.Sky_Y and
+                     if HaveTrader and Mission.TargetX = Player_Ship.Sky_X and
+                       Mission.TargetY = Player_Ship.Sky_Y and
                        Mission.Finished then
                         case Mission.MType is
                            when Deliver =>
@@ -381,8 +381,8 @@ package body OrdersMenu is
                else
                   Progress_Mission_Loop :
                   for Mission of AcceptedMissions loop
-                     if Mission.TargetX = PlayerShip.Sky_X and
-                       Mission.TargetY = PlayerShip.Sky_Y and
+                     if Mission.TargetX = Player_Ship.Sky_X and
+                       Mission.TargetY = Player_Ship.Sky_Y and
                        not Mission.Finished then
                         case Mission.MType is
                            when Deliver | Passenger =>
@@ -413,7 +413,7 @@ package body OrdersMenu is
                      "-label {Trade} -underline 0 -command {ShowTrader " &
                      To_String
                        (Events_List
-                          (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                          (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                              .EventIndex)
                           .ShipIndex) &
                      "}");
@@ -432,7 +432,7 @@ package body OrdersMenu is
                   if Index
                       (Proto_Ships_List
                          (Events_List
-                            (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                            (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .EventIndex)
                             .ShipIndex)
                          .Name,
@@ -443,7 +443,7 @@ package body OrdersMenu is
                         "-label {Trade} -underline 0 -command {ShowTrader " &
                         To_String
                           (Events_List
-                             (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                             (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                 .EventIndex)
                              .ShipIndex) &
                         "}");
@@ -500,7 +500,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       Message: Unbounded_String;
    begin
-      if PlayerShip.Speed = DOCKED then
+      if Player_Ship.Speed = DOCKED then
          Message :=
            (if Argc = 1 then To_Unbounded_String(DockShip(False))
             else To_Unbounded_String(DockShip(False, True)));
@@ -510,9 +510,9 @@ package body OrdersMenu is
             return TCL_OK;
          end if;
       else
-         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
             if Events_List
-                (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
+                (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                 .EType =
               FullDocks then
                return Show_Wait_Command(ClientData, Interp, Argc, Argv);
@@ -526,7 +526,7 @@ package body OrdersMenu is
          end if;
       end if;
       ShowSkyMap;
-      if PlayerShip.Speed = DOCKED then
+      if Player_Ship.Speed = DOCKED then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       return TCL_OK;
@@ -643,8 +643,8 @@ package body OrdersMenu is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
       Update_Morale_Loop :
-      for I in PlayerShip.Crew.Iterate loop
-         UpdateMorale(PlayerShip, Crew_Container.To_Index(I), 10);
+      for I in Player_Ship.Crew.Iterate loop
+         UpdateMorale(Player_Ship, Crew_Container.To_Index(I), 10);
       end loop Update_Morale_Loop;
       AddMessage
         ("You and your crew were praying for some time. Now you all feel a bit better.",
@@ -745,8 +745,8 @@ package body OrdersMenu is
       StartsCombat: Boolean := False;
    begin
       for Mission of AcceptedMissions loop
-         if Mission.TargetX = PlayerShip.Sky_X and
-           Mission.TargetY = PlayerShip.Sky_Y and not Mission.Finished then
+         if Mission.TargetX = Player_Ship.Sky_X and
+           Mission.TargetY = Player_Ship.Sky_Y and not Mission.Finished then
             case Mission.MType is
                when Deliver | Passenger =>
                   null;
@@ -757,7 +757,7 @@ package body OrdersMenu is
                      StartsCombat :=
                        StartCombat
                          (AcceptedMissions
-                            (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                            (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                                .MissionIndex)
                             .ShipIndex,
                           False);
@@ -767,7 +767,7 @@ package body OrdersMenu is
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .MissionIndex);
                   end if;
                when Explore =>
@@ -775,7 +775,7 @@ package body OrdersMenu is
                   StartsCombat := CheckForEvent;
                   if not StartsCombat then
                      UpdateMission
-                       (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y)
+                       (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y)
                           .MissionIndex);
                   end if;
             end case;
@@ -816,7 +816,7 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      FinishMission(SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).MissionIndex);
+      FinishMission(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex);
       UpdateHeader;
       UpdateMessages;
       ShowSkyMap;
@@ -854,7 +854,7 @@ package body OrdersMenu is
          else Stories_List(CurrentStory.Index).FinalStep);
       Message: Unbounded_String;
    begin
-      if PlayerShip.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
+      if Player_Ship.Speed /= DOCKED and Step.FinishCondition = ASKINBASE then
          Message := To_Unbounded_String(DockShip(True));
          if Message /= Null_Unbounded_String then
             ShowInfo
@@ -930,15 +930,15 @@ package body OrdersMenu is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       EventIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       ItemIndex: constant Natural :=
         FindItem
-          (Inventory => PlayerShip.Cargo,
+          (Inventory => Player_Ship.Cargo,
            ItemType => Factions_List(SkyBases(BaseIndex).Owner).HealingTools);
       NewTime: constant Integer :=
-        Events_List(EventIndex).Time - PlayerShip.Cargo(ItemIndex).Amount;
+        Events_List(EventIndex).Time - Player_Ship.Cargo(ItemIndex).Amount;
    begin
       if NewTime < 1 then
          DeleteEvent(EventIndex);
@@ -946,23 +946,23 @@ package body OrdersMenu is
          Events_List(EventIndex).Time := NewTime;
       end if;
       if CArgv.Arg(Argv, 1) = "free" then
-         GainRep(BaseIndex, (PlayerShip.Cargo(ItemIndex).Amount / 10));
+         GainRep(BaseIndex, (Player_Ship.Cargo(ItemIndex).Amount / 10));
          AddMessage
            ("You gave " &
             To_String
-              (Items_List(PlayerShip.Cargo(ItemIndex).ProtoIndex).Name) &
+              (Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Name) &
             " for free to base.",
             TradeMessage);
          UpdateCargo
-           (PlayerShip, PlayerShip.Cargo.Element(ItemIndex).ProtoIndex,
-            (0 - PlayerShip.Cargo.Element(ItemIndex).Amount));
+           (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).ProtoIndex,
+            (0 - Player_Ship.Cargo.Element(ItemIndex).Amount));
       else
          begin
             GainRep
-              (BaseIndex, ((PlayerShip.Cargo(ItemIndex).Amount / 20) * (-1)));
+              (BaseIndex, ((Player_Ship.Cargo(ItemIndex).Amount / 20) * (-1)));
             SellItems
               (ItemIndex,
-               Integer'Image(PlayerShip.Cargo.Element(ItemIndex).Amount));
+               Integer'Image(Player_Ship.Cargo.Element(ItemIndex).Amount));
          exception
             when Trade_No_Free_Cargo =>
                ShowMessage

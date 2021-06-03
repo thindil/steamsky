@@ -81,7 +81,7 @@ package body Bases.UI is
         Get_Widget(BaseCanvas & ".base.items.view", Interp);
       FirstIndex, ButtonText: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
    begin
       if Winfo_Get(BaseCanvas, "exists") = "0" then
@@ -109,8 +109,8 @@ package body Bases.UI is
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Health < 100 then
+         for I in Player_Ship.Crew.Iterate loop
+            if Player_Ship.Crew(I).Health < 100 then
                if FirstIndex = Null_Unbounded_String then
                   FirstIndex :=
                     To_Unbounded_String
@@ -119,7 +119,7 @@ package body Bases.UI is
                Insert
                  (ItemsView,
                   "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
-                  " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+                  " -text {" & To_String(Player_Ship.Crew(I).Name) & "}");
             end if;
          end loop Show_Wounded_Crew_Loop;
          Insert
@@ -129,9 +129,9 @@ package body Bases.UI is
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
-         for I in PlayerShip.Modules.Iterate loop
-            if PlayerShip.Modules(I).Durability <
-              PlayerShip.Modules(I).Max_Durability then
+         for I in Player_Ship.Modules.Iterate loop
+            if Player_Ship.Modules(I).Durability <
+              Player_Ship.Modules(I).Max_Durability then
                if FirstIndex = Null_Unbounded_String then
                   FirstIndex :=
                     To_Unbounded_String
@@ -141,7 +141,7 @@ package body Bases.UI is
                  (ItemsView,
                   "{} end -id" &
                   Positive'Image(Modules_Container.To_Index(I)) & " -text {" &
-                  To_String(PlayerShip.Modules(I).Name) & "}");
+                  To_String(Player_Ship.Modules(I).Name) & "}");
             end if;
          end loop Show_Damaged_Modules_Loop;
          Insert
@@ -252,7 +252,7 @@ package body Bases.UI is
       Cost, Time: Natural := 0;
       InfoLabel: Ttk_Label := Get_Widget(FrameName & ".info.info", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: Natural;
       ActionButton: constant Ttk_Button :=
         Get_Widget(FrameName & ".info.accept", Interp);
@@ -325,16 +325,16 @@ package body Bases.UI is
             "-text {Base price:" & Positive'Image(Cost) & " " &
             To_String(Money_Name) & "}");
       end if;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       InfoLabel.Name :=
         New_String(".gameframe.paned.baseframe.canvas.base.info.money");
       if MoneyIndex2 > 0 then
          configure
            (InfoLabel,
             "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
             To_String(Money_Name) & ".}");
-         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
             configure(ActionButton, "-state disabled");
          else
             configure(ActionButton, "-state !disabled");

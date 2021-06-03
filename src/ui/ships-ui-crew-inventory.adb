@@ -81,7 +81,7 @@ package body Ships.UI.Crew.Inventory is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Member: constant Member_Data := PlayerShip.Crew(MemberIndex);
+      Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -209,7 +209,7 @@ package body Ships.UI.Crew.Inventory is
           (MemberDialog & ".header",
            "-text {Inventory of " &
            To_String
-             (PlayerShip.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name) &
+             (Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name) &
            "} -wraplength 275 -style Header.TLabel");
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
@@ -291,7 +291,7 @@ package body Ships.UI.Crew.Inventory is
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=
         Items_List
-          (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+          (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
           .IType;
    begin
       if ItemIsUsed(MemberIndex, ItemIndex) then
@@ -300,48 +300,48 @@ package body Ships.UI.Crew.Inventory is
       end if;
       if ItemType = Weapon_Type then
          if Items_List
-             (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+             (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
              .Value
              (4) =
            2 and
-           PlayerShip.Crew(MemberIndex).Equipment(2) /= 0 then
+           Player_Ship.Crew(MemberIndex).Equipment(2) /= 0 then
             ShowMessage
               (Text =>
-                 To_String(PlayerShip.Crew(MemberIndex).Name) &
+                 To_String(Player_Ship.Crew(MemberIndex).Name) &
                  " can't use this weapon because have shield equiped. Take off shield first.",
                Title => "Shield in use");
             return TCL_OK;
          end if;
-         PlayerShip.Crew(MemberIndex).Equipment(1) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(1) := ItemIndex;
       elsif ItemType = Shield_Type then
-         if PlayerShip.Crew(MemberIndex).Equipment(1) > 0 then
+         if Player_Ship.Crew(MemberIndex).Equipment(1) > 0 then
             if Items_List
-                (PlayerShip.Crew(MemberIndex).Inventory
-                   (PlayerShip.Crew(MemberIndex).Equipment(1))
+                (Player_Ship.Crew(MemberIndex).Inventory
+                   (Player_Ship.Crew(MemberIndex).Equipment(1))
                    .ProtoIndex)
                 .Value
                 (4) =
               2 then
                ShowMessage
                  (Text =>
-                    To_String(PlayerShip.Crew(MemberIndex).Name) &
+                    To_String(Player_Ship.Crew(MemberIndex).Name) &
                     " can't use shield because have equiped two-hand weapon. Take off weapon first.",
                   Title => "Two handed weapon in use");
                return TCL_OK;
             end if;
          end if;
-         PlayerShip.Crew(MemberIndex).Equipment(2) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(2) := ItemIndex;
       elsif ItemType = Head_Armor then
-         PlayerShip.Crew(MemberIndex).Equipment(3) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(3) := ItemIndex;
       elsif ItemType = Chest_Armor then
-         PlayerShip.Crew(MemberIndex).Equipment(4) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(4) := ItemIndex;
       elsif ItemType = Arms_Armor then
-         PlayerShip.Crew(MemberIndex).Equipment(5) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(5) := ItemIndex;
       elsif ItemType = Legs_Armor then
-         PlayerShip.Crew(MemberIndex).Equipment(6) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(6) := ItemIndex;
       elsif Tools_List.Find_Index(Item => ItemType) /=
         UnboundedString_Container.No_Index then
-         PlayerShip.Crew(MemberIndex).Equipment(7) := ItemIndex;
+         Player_Ship.Crew(MemberIndex).Equipment(7) := ItemIndex;
       end if;
       return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
    end Set_Use_Item_Command;
@@ -382,7 +382,7 @@ package body Ships.UI.Crew.Inventory is
            CArgv.Arg(Argv, 2) & "}");
       Label: Ttk_Label;
       MaxAmount: constant Positive :=
-        PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Amount;
+        Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Amount;
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".amount",
@@ -396,7 +396,7 @@ package body Ships.UI.Crew.Inventory is
         Create
           (ItemDialog & ".title",
            "-text {Move " &
-           GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)) &
+           GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
            " to ship cargo} -wraplength 400 -style Header.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Label, "-columnspan 2 -sticky we -padx 2 -pady {2 0}");
@@ -466,41 +466,41 @@ package body Ships.UI.Crew.Inventory is
       if FreeCargo
           (0 -
            (Items_List
-              (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
+              (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex)
               .Weight *
             Amount)) <
         0 then
          ShowMessage
            (Text =>
               "No free space in ship cargo for that amount of " &
-              GetItemName(PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)),
+              GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)),
             Title => "No free space in cargo");
          return TCL_OK;
       end if;
       UpdateCargo
-        (Ship => PlayerShip,
+        (Ship => Player_Ship,
          ProtoIndex =>
-           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex,
+           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex,
          Amount => Amount,
          Durability =>
-           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability,
-         Price => PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Price);
+           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Durability,
+         Price => Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Price);
       UpdateInventory
         (MemberIndex => MemberIndex, Amount => (0 - Amount),
          InventoryIndex => ItemIndex);
       if
-        (PlayerShip.Crew(MemberIndex).Order = Clean and
+        (Player_Ship.Crew(MemberIndex).Order = Clean and
          FindItem
-             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+             (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
               ItemType => Cleaning_Tools) =
            0) or
-        ((PlayerShip.Crew(MemberIndex).Order = Upgrading or
-          PlayerShip.Crew(MemberIndex).Order = Repair) and
+        ((Player_Ship.Crew(MemberIndex).Order = Upgrading or
+          Player_Ship.Crew(MemberIndex).Order = Repair) and
          FindItem
-             (Inventory => PlayerShip.Crew(MemberIndex).Inventory,
+             (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
               ItemType => Repair_Tools) =
            0) then
-         GiveOrders(PlayerShip, MemberIndex, Rest);
+         GiveOrders(Player_Ship, MemberIndex, Rest);
       end if;
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");

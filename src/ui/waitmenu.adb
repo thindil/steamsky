@@ -125,15 +125,15 @@ package body WaitMenu is
         Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
       Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
       Check_Crew_Rest_Loop :
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Crew(I).Tired > 0 and
-           PlayerShip.Crew(I).Order = Rest then
+      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+         if Player_Ship.Crew(I).Tired > 0 and
+           Player_Ship.Crew(I).Order = Rest then
             NeedRest := True;
          end if;
-         if PlayerShip.Crew(I).Health in 1 .. 99 and
-           PlayerShip.Crew(I).Order = Rest then
+         if Player_Ship.Crew(I).Health in 1 .. 99 and
+           Player_Ship.Crew(I).Order = Rest then
             Modules_Loop :
-            for Module of PlayerShip.Modules loop
+            for Module of Player_Ship.Modules loop
                if Module.M_Type = CABIN then
                   for Owner of Module.Owner loop
                      if Owner = I then
@@ -234,18 +234,18 @@ package body WaitMenu is
          WaitForRest;
       elsif CArgv.Arg(Argv, 1) = "heal" then
          Check_Crew_Heal_Loop :
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Health in 1 .. 99 and
-              PlayerShip.Crew(I).Order = Rest then
+         for I in Player_Ship.Crew.Iterate loop
+            if Player_Ship.Crew(I).Health in 1 .. 99 and
+              Player_Ship.Crew(I).Order = Rest then
                Modules_Loop :
-               for Module of PlayerShip.Modules loop
+               for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
                      for Owner of Module.Owner loop
                         if Owner = Crew_Container.To_Index(I) then
                            if TimeNeeded <
-                             (100 - PlayerShip.Crew(I).Health) * 15 then
+                             (100 - Player_Ship.Crew(I).Health) * 15 then
                               TimeNeeded :=
-                                (100 - PlayerShip.Crew(I).Health) * 15;
+                                (100 - Player_Ship.Crew(I).Health) * 15;
                            end if;
                            exit Modules_Loop;
                         end if;

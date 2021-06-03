@@ -84,11 +84,11 @@ package body Bases.SchoolUI is
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
       Load_Crew_Loop :
-      for I in PlayerShip.Crew.Iterate loop
+      for I in Player_Ship.Crew.Iterate loop
          Insert
            (CrewView,
             "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -text {" & To_String(PlayerShip.Crew(I).Name) & "}");
+            " -text {" & To_String(Player_Ship.Crew(I).Name) & "}");
       end loop Load_Crew_Loop;
       Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
@@ -165,12 +165,12 @@ package body Bases.SchoolUI is
                Natural'Image(Cost) & "]");
          end if;
       end loop Load_Skills_List_Loop;
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       if MoneyIndex2 > 0 then
          configure
            (MoneyLabel,
             "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
             To_String(Money_Name) & ".}");
       else
          configure

@@ -366,18 +366,18 @@ package body Maps.UI.Commands is
           TCL_OK then
          return TCL_ERROR;
       end if;
-      if PlayerShip.Sky_X = MapX and PlayerShip.Sky_Y = MapY then
+      if Player_Ship.Sky_X = MapX and Player_Ship.Sky_Y = MapY then
          return Show_Orders_Command(ClientData, Interp, Argc, Argv);
       end if;
       Delete(DestinationMenu, "0", "end");
       Add
         (DestinationMenu, "command",
          "-label {Set destination} -command SetDestination");
-      if PlayerShip.Speed /= DOCKED then
+      if Player_Ship.Speed /= DOCKED then
          Add
            (DestinationMenu, "command",
             "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
-         if PlayerShip.Destination_X > 0 and PlayerShip.Destination_Y > 0 then
+         if Player_Ship.Destination_X > 0 and Player_Ship.Destination_Y > 0 then
             Add
               (DestinationMenu, "command",
                "-label {Move to} -command {MoveShip moveto}");
@@ -415,13 +415,13 @@ package body Maps.UI.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      PlayerShip.Destination_X := MapX;
-      PlayerShip.Destination_Y := MapY;
+      Player_Ship.Destination_X := MapX;
+      Player_Ship.Destination_Y := MapY;
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       if Game_Settings.Auto_Center then
-         CenterX := PlayerShip.Sky_X;
-         CenterY := PlayerShip.Sky_Y;
+         CenterX := Player_Ship.Sky_X;
+         CenterY := Player_Ship.Sky_Y;
       end if;
       DrawMap;
       UpdateMoveButtons;
@@ -464,8 +464,8 @@ package body Maps.UI.Commands is
       MapHeight := Positive'Value(cget(MapView, "-height"));
       MapWidth := Positive'Value(cget(MapView, "-width"));
       if CArgv.Arg(Argv, 1) = "centeronship" then
-         CenterX := PlayerShip.Sky_X;
-         CenterY := PlayerShip.Sky_Y;
+         CenterX := Player_Ship.Sky_X;
+         CenterY := Player_Ship.Sky_Y;
       elsif CArgv.Arg(Argv, 1) = "movemapto" then
          CenterX := Positive'Value(Get(SpinBox));
          SpinBox.Name := New_String(DialogName & ".y");
@@ -515,8 +515,8 @@ package body Maps.UI.Commands is
            (if CenterX + (MapWidth / 3) > 1_024 then 1_024 - (MapWidth / 3)
             else CenterX + (MapWidth / 3));
       elsif CArgv.Arg(Argv, 1) = "centeronhome" then
-         CenterX := SkyBases(PlayerShip.Home_Base).SkyX;
-         CenterY := SkyBases(PlayerShip.Home_Base).SkyY;
+         CenterX := SkyBases(Player_Ship.Home_Base).SkyX;
+         CenterY := SkyBases(Player_Ship.Home_Base).SkyY;
       end if;
       DrawMap;
       return
@@ -592,14 +592,14 @@ package body Maps.UI.Commands is
       NewX, NewY: Integer := 0;
       procedure Update_Coordinates is
       begin
-         if PlayerShip.Destination_X > PlayerShip.Sky_X then
+         if Player_Ship.Destination_X > Player_Ship.Sky_X then
             NewX := 1;
-         elsif PlayerShip.Destination_X < PlayerShip.Sky_X then
+         elsif Player_Ship.Destination_X < Player_Ship.Sky_X then
             NewX := -1;
          end if;
-         if PlayerShip.Destination_Y > PlayerShip.Sky_Y then
+         if Player_Ship.Destination_Y > Player_Ship.Sky_Y then
             NewY := 1;
-         elsif PlayerShip.Destination_Y < PlayerShip.Sky_Y then
+         elsif Player_Ship.Destination_Y < Player_Ship.Sky_Y then
             NewY := -1;
          end if;
       end Update_Coordinates;
@@ -622,19 +622,19 @@ package body Maps.UI.Commands is
          Result := MoveShip(1, -1, Message);
       elsif CArgv.Arg(Argv, 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
-         if PlayerShip.Destination_X = 0 and PlayerShip.Destination_Y = 0 then
+         if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
             Result := 1;
             Update_Game(1);
             WaitInPlace(1);
          else
             Update_Coordinates;
             Result := MoveShip(NewX, NewY, Message);
-            if PlayerShip.Destination_X = PlayerShip.Sky_X and
-              PlayerShip.Destination_Y = PlayerShip.Sky_Y then
+            if Player_Ship.Destination_X = Player_Ship.Sky_X and
+              Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                AddMessage
                  ("You reached your travel destination.", OrderMessage);
-               PlayerShip.Destination_X := 0;
-               PlayerShip.Destination_Y := 0;
+               Player_Ship.Destination_X := 0;
+               Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
@@ -656,7 +656,7 @@ package body Maps.UI.Commands is
             end if;
             if Result = 8 then
                WaitForRest;
-               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+               if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
@@ -670,10 +670,10 @@ package body Maps.UI.Commands is
                end if;
             end if;
             if Game_Settings.Auto_Move_Stop /= NEVER and
-              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0 then
+              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
                declare
                   EventIndex: constant Positive :=
-                    SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
+                    SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
                begin
                   case Game_Settings.Auto_Move_Stop is
                      when ANY =>
@@ -726,12 +726,12 @@ package body Maps.UI.Commands is
                   end if;
                end if;
             end;
-            if PlayerShip.Destination_X = PlayerShip.Sky_X and
-              PlayerShip.Destination_Y = PlayerShip.Sky_Y then
+            if Player_Ship.Destination_X = Player_Ship.Sky_X and
+              Player_Ship.Destination_Y = Player_Ship.Sky_Y then
                AddMessage
                  ("You reached your travel destination.", OrderMessage);
-               PlayerShip.Destination_X := 0;
-               PlayerShip.Destination_Y := 0;
+               Player_Ship.Destination_X := 0;
+               Player_Ship.Destination_Y := 0;
                if Game_Settings.Auto_Finish then
                   Message := To_Unbounded_String(AutoFinishMissions);
                end if;
@@ -761,7 +761,7 @@ package body Maps.UI.Commands is
             StartsCombat := CheckForEvent;
             if not StartsCombat then
                WaitForRest;
-               if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+               if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
                    (To_Unbounded_String("sentientships"))
                  and then
                  (FindMember(Pilot) = 0 or FindMember(Engineer) = 0) then
@@ -778,8 +778,8 @@ package body Maps.UI.Commands is
       if Message /= Null_Unbounded_String then
          ShowMessage(Text => To_String(Message), Title => "Message");
       end if;
-      CenterX := PlayerShip.Sky_X;
-      CenterY := PlayerShip.Sky_Y;
+      CenterX := Player_Ship.Sky_X;
+      CenterY := Player_Ship.Sky_Y;
       if StartsCombat then
          ShowCombatUI;
       else

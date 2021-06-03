@@ -86,7 +86,7 @@ package body Bases.RecruitUI is
       RecruitFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       HighestLevel, HighestIndex: Positive;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
@@ -276,7 +276,7 @@ package body Bases.RecruitUI is
       pragma Unreferenced(ClientData, Argc, Argv);
       RecruitInfo: Unbounded_String;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
@@ -536,9 +536,9 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       DialogName: constant String := ".negotiatedialog";
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Cost: Integer;
@@ -582,7 +582,7 @@ package body Bases.RecruitUI is
          "-text {Percent of profit from trades: " &
          Natural'Image(TradePayment) & "}");
       if MoneyIndex2 > 0
-        and then PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+        and then Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
          configure(HireButton, "-state disabled");
       else
          configure(HireButton, "-state !disabled");
@@ -616,7 +616,7 @@ package body Bases.RecruitUI is
       DialogName: constant String := ".negotiatedialog";
       Cost, ContractLength2: Integer;
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       Scale: Ttk_Scale := Get_Widget(DialogName & ".daily", Interp);
@@ -725,7 +725,7 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       NegotiateDialog: constant Ttk_Frame :=
@@ -739,7 +739,7 @@ package body Bases.RecruitUI is
         Create
           (NegotiateDialog & ".contract",
            "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
       Cost: Positive;
    begin
       Label :=
@@ -785,9 +785,9 @@ package body Bases.RecruitUI is
          configure
            (Label,
             "-text {You have" &
-            Natural'Image(PlayerShip.Cargo(MoneyIndex2).Amount) & " " &
+            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
             To_String(Money_Name) & ".}");
-         if PlayerShip.Cargo(MoneyIndex2).Amount < Cost then
+         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
             configure(HireButton, "-state disabled");
          else
             configure(HireButton, "-state !disabled");

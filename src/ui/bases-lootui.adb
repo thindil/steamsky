@@ -89,7 +89,7 @@ package body Bases.LootUI is
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
       ComboBox: Ttk_ComboBox;
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex, BaseAmount: Natural;
       IndexesList: Positive_Container.Vector;
@@ -125,10 +125,10 @@ package body Bases.LootUI is
       BaseCargo := SkyBases(BaseIndex).Cargo;
       ClearTable(LootTable);
       Add_Player_Cargo_Loop :
-      for I in PlayerShip.Cargo.Iterate loop
-         ProtoIndex := PlayerShip.Cargo(I).ProtoIndex;
+      for I in Player_Ship.Cargo.Iterate loop
+         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo(ProtoIndex, PlayerShip.Cargo(I).Durability);
+           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             IndexesList.Append(New_Item => BaseCargoIndex);
          end if;
@@ -148,7 +148,7 @@ package body Bases.LootUI is
             goto End_Of_Cargo_Loop;
          end if;
          ItemName :=
-           To_Unbounded_String(GetItemName(PlayerShip.Cargo(I), False, False));
+           To_Unbounded_String(GetItemName(Player_Ship.Cargo(I), False, False));
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu" &
@@ -160,18 +160,18 @@ package body Bases.LootUI is
             Positive'Image(Inventory_Container.To_Index(I)),
             2);
          ItemDurability :=
-           (if PlayerShip.Cargo(I).Durability < 100 then
+           (if Player_Ship.Cargo(I).Durability < 100 then
               To_Unbounded_String
-                (GetItemDamage(PlayerShip.Cargo(I).Durability))
+                (GetItemDamage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
-           (LootTable, PlayerShip.Cargo(I).Durability, Default_Item_Durability,
+           (LootTable, Player_Ship.Cargo(I).Durability, Default_Item_Durability,
             To_String(ItemDurability),
             "ShowLootItemMenu" &
             Positive'Image(Inventory_Container.To_Index(I)),
             3);
          AddButton
-           (LootTable, Natural'Image(PlayerShip.Cargo(I).Amount),
+           (LootTable, Natural'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
             "ShowLootItemMenu" &
             Positive'Image(Inventory_Container.To_Index(I)),
@@ -310,7 +310,7 @@ package body Bases.LootUI is
       ItemInfo, ProtoIndex: Unbounded_String;
       CargoIndex, BaseCargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       ItemTypes: constant array(1 .. 6) of Unbounded_String :=
         (Weapon_Type, Chest_Armor, Head_Armor, Arms_Armor, Legs_Armor,
          Shield_Type);
@@ -320,12 +320,12 @@ package body Bases.LootUI is
       else
          CargoIndex := ItemIndex;
       end if;
-      if CargoIndex > Natural(PlayerShip.Cargo.Length) or
+      if CargoIndex > Natural(Player_Ship.Cargo.Length) or
         BaseCargoIndex > Natural(SkyBases(BaseIndex).Cargo.Length) then
          return TCL_OK;
       end if;
       ProtoIndex :=
-        (if CargoIndex > 0 then PlayerShip.Cargo(CargoIndex).ProtoIndex
+        (if CargoIndex > 0 then Player_Ship.Cargo(CargoIndex).ProtoIndex
          else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       Append
         (ItemInfo,
@@ -422,7 +422,7 @@ package body Bases.LootUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex, CargoIndex: Natural := 0;
       Amount: Natural;
       ProtoIndex: Unbounded_String;
@@ -437,7 +437,7 @@ package body Bases.LootUI is
          CargoIndex := ItemIndex;
       end if;
       if CargoIndex > 0 then
-         ProtoIndex := PlayerShip.Cargo(CargoIndex).ProtoIndex;
+         ProtoIndex := Player_Ship.Cargo(CargoIndex).ProtoIndex;
          if BaseCargoIndex = 0 then
             BaseCargoIndex := FindBaseCargo(ProtoIndex);
          end if;
@@ -447,20 +447,20 @@ package body Bases.LootUI is
       if CArgv.Arg(Argv, 1) in "drop" | "dropall" then
          Amount :=
            (if CArgv.Arg(Argv, 1) = "drop" then Positive'Value(Get(AmountBox))
-            else PlayerShip.Cargo(CargoIndex).Amount);
+            else Player_Ship.Cargo(CargoIndex).Amount);
          if BaseCargoIndex > 0 then
             UpdateBaseCargo
               (CargoIndex => BaseCargoIndex, Amount => Amount,
-               Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
+               Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
          else
             UpdateBaseCargo
               (ProtoIndex, Amount,
-               PlayerShip.Cargo.Element(CargoIndex).Durability);
+               Player_Ship.Cargo.Element(CargoIndex).Durability);
          end if;
          UpdateCargo
-           (Ship => PlayerShip, CargoIndex => CargoIndex,
+           (Ship => Player_Ship, CargoIndex => CargoIndex,
             Amount => (0 - Amount),
-            Durability => PlayerShip.Cargo.Element(CargoIndex).Durability);
+            Durability => Player_Ship.Cargo.Element(CargoIndex).Durability);
          AddMessage
            ("You drop" & Positive'Image(Amount) & " " &
             To_String(Items_List(ProtoIndex).Name) & ".",
@@ -479,12 +479,12 @@ package body Bases.LootUI is
          end if;
          if CargoIndex > 0 then
             UpdateCargo
-              (Ship => PlayerShip, CargoIndex => CargoIndex, Amount => Amount,
+              (Ship => Player_Ship, CargoIndex => CargoIndex, Amount => Amount,
                Durability =>
                  SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          else
             UpdateCargo
-              (PlayerShip, ProtoIndex, Amount,
+              (Player_Ship, ProtoIndex, Amount,
                SkyBases(BaseIndex).Cargo(BaseCargoIndex).Durability);
          end if;
          UpdateBaseCargo
@@ -538,7 +538,7 @@ package body Bases.LootUI is
       ItemMenu: Tk_Menu := Get_Widget(".itemmenu", Interp);
       BaseCargoIndex, CargoIndex: Natural := 0;
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
    begin
       ItemIndex := Integer'Value(CArgv.Arg(Argv, 1));
       if ItemIndex < 0 then
@@ -548,7 +548,7 @@ package body Bases.LootUI is
       end if;
       if CargoIndex > 0 and then BaseCargoIndex = 0 then
          BaseCargoIndex :=
-           FindBaseCargo(PlayerShip.Cargo(CargoIndex).ProtoIndex);
+           FindBaseCargo(Player_Ship.Cargo(CargoIndex).ProtoIndex);
       end if;
       if Winfo_Get(ItemMenu, "exists") = "0" then
          ItemMenu := Create(".itemmenu", "-tearoff false");
@@ -568,7 +568,7 @@ package body Bases.LootUI is
          Menu.Add
            (ItemMenu, "command",
             "-label {Drop selected amount} -command {LootAmount drop" &
-            Natural'Image(PlayerShip.Cargo(CargoIndex).Amount) & "}");
+            Natural'Image(Player_Ship.Cargo(CargoIndex).Amount) & "}");
          Menu.Add
            (ItemMenu, "command",
             "-label {Drop all owned} -command {LootItem dropall}");
@@ -608,16 +608,16 @@ package body Bases.LootUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
    begin
       if CArgv.Arg(Argv, 1) = "drop" then
          ShowManipulateItem
-           ("Drop " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+           ("Drop " & GetItemName(Player_Ship.Cargo(ItemIndex)),
             "LootItem drop", "drop", ItemIndex);
       else
          if ItemIndex > 0 then
             ShowManipulateItem
-              ("Take " & GetItemName(PlayerShip.Cargo(ItemIndex)),
+              ("Take " & GetItemName(Player_Ship.Cargo(ItemIndex)),
                "LootItem take", "take", ItemIndex,
                Natural'Value(CArgv.Arg(Argv, 2)));
          else

@@ -82,35 +82,35 @@ package body Ships.UI is
         New_String
           (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
       Label := Get_Widget(ShipInfoFrame & ".name");
-      configure(Label, "-text {Name: " & To_String(PlayerShip.Name) & "}");
+      configure(Label, "-text {Name: " & To_String(Player_Ship.Name) & "}");
       Label.Name := New_String(ShipInfoFrame & ".upgradelabel");
       UpgradeProgress := Get_Widget(ShipInfoFrame & ".upgrade");
       CancelButton := Get_Widget(ShipInfoFrame & ".cancelupgrade");
       -- Show or hide upgrade module info
-      if PlayerShip.Upgrade_Module = 0 then
+      if Player_Ship.Upgrade_Module = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(UpgradeProgress);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          UpgradeInfo :=
-           "Upgrade:" & PlayerShip.Modules(PlayerShip.Upgrade_Module).Name &
+           "Upgrade:" & Player_Ship.Modules(Player_Ship.Upgrade_Module).Name &
            " ";
-         case PlayerShip.Modules(PlayerShip.Upgrade_Module).Upgrade_Action is
+         case Player_Ship.Modules(Player_Ship.Upgrade_Module).Upgrade_Action is
             when DURABILITY =>
                Append(UpgradeInfo, "(durability)");
                MaxUpgrade :=
                  Modules_List
-                   (PlayerShip.Modules(PlayerShip.Upgrade_Module).Proto_Index)
+                   (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
                    .Durability;
             when MAX_VALUE =>
                case Modules_List
-                 (PlayerShip.Modules(PlayerShip.Upgrade_Module).Proto_Index)
+                 (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(power)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .MaxValue /
                        20;
@@ -118,14 +118,14 @@ package body Ships.UI is
                      Append(UpgradeInfo, "(quality)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .MaxValue;
                   when GUN | BATTERING_RAM =>
                      Append(UpgradeInfo, "(damage)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .MaxValue *
                        2;
@@ -133,7 +133,7 @@ package body Ships.UI is
                      Append(UpgradeInfo, "(enlarge)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .MaxValue *
                        40;
@@ -141,7 +141,7 @@ package body Ships.UI is
                      Append(UpgradeInfo, "(strength)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .MaxValue *
                        10;
@@ -150,13 +150,13 @@ package body Ships.UI is
                end case;
             when VALUE =>
                case Modules_List
-                 (PlayerShip.Modules(PlayerShip.Upgrade_Module).Proto_Index)
+                 (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
                  .MType is
                   when ENGINE =>
                      Append(UpgradeInfo, "(fuel usage)");
                      MaxUpgrade :=
                        Modules_List
-                         (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+                         (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                             .Proto_Index)
                          .Value *
                        20;
@@ -175,7 +175,7 @@ package body Ships.UI is
          UpgradePercent :=
            1.0 -
            (Float
-              (PlayerShip.Modules(PlayerShip.Upgrade_Module)
+              (Player_Ship.Modules(Player_Ship.Upgrade_Module)
                  .Upgrade_Progress) /
             Float(MaxUpgrade));
          ProgressBarStyle :=
@@ -196,14 +196,14 @@ package body Ships.UI is
       -- Show or hide repair priority info
       Label.Name := New_String(ShipInfoFrame & ".repairlabel");
       CancelButton.Name := New_String(ShipInfoFrame & ".cancelpriority");
-      if PlayerShip.Repair_Module = 0 then
+      if Player_Ship.Repair_Module = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
          configure
            (Label,
             "-text {Repair first: " &
-            To_String(PlayerShip.Modules(PlayerShip.Repair_Module).Name) &
+            To_String(Player_Ship.Modules(Player_Ship.Repair_Module).Name) &
             "}");
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
@@ -211,11 +211,11 @@ package body Ships.UI is
       -- Show or hide destination info
       Label.Name := New_String(ShipInfoFrame & ".destinationlabel");
       CancelButton.Name := New_String(ShipInfoFrame & ".canceldestination");
-      if PlayerShip.Destination_X = 0 and PlayerShip.Destination_Y = 0 then
+      if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Label);
          Tcl.Tk.Ada.Grid.Grid_Remove(CancelButton);
       else
-         if SkyMap(PlayerShip.Destination_X, PlayerShip.Destination_Y)
+         if SkyMap(Player_Ship.Destination_X, Player_Ship.Destination_Y)
              .BaseIndex >
            0 then
             configure
@@ -223,7 +223,7 @@ package body Ships.UI is
                "-text {Destination: " &
                To_String
                  (SkyBases
-                    (SkyMap(PlayerShip.Destination_X, PlayerShip.Destination_Y)
+                    (SkyMap(Player_Ship.Destination_X, Player_Ship.Destination_Y)
                        .BaseIndex)
                     .Name) &
                "}");
@@ -231,8 +231,8 @@ package body Ships.UI is
             configure
               (Label,
                "-text {Destination: X:" &
-               Positive'Image(PlayerShip.Destination_X) & " Y:" &
-               Positive'Image(PlayerShip.Destination_Y) & "}");
+               Positive'Image(Player_Ship.Destination_X) & " Y:" &
+               Positive'Image(Player_Ship.Destination_Y) & "}");
          end if;
          Tcl.Tk.Ada.Grid.Grid(Label);
          Tcl.Tk.Ada.Grid.Grid(CancelButton);
@@ -240,12 +240,12 @@ package body Ships.UI is
       Label.Name := New_String(ShipInfoFrame & ".homelabel");
       configure
         (Label,
-         "-text {Home: " & To_String(SkyBases(PlayerShip.Home_Base).Name) &
+         "-text {Home: " & To_String(SkyBases(Player_Ship.Home_Base).Name) &
          "}");
       Label.Name := New_String(ShipInfoFrame & ".weight");
       configure
         (Label,
-         "-text {Weight:" & Integer'Image(CountShipWeight(PlayerShip)) &
+         "-text {Weight:" & Integer'Image(CountShipWeight(Player_Ship)) &
          "kg}");
       Tcl_Eval(Get_Context, "update");
       configure
@@ -295,7 +295,7 @@ package body Ships.UI is
       if Argc = 1 then
          return TCL_OK;
       end if;
-      PlayerShip.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
+      Player_Ship.Name := To_Unbounded_String(CArgv.Arg(Argv, 1));
       configure(NameEntry, "-text {Name: " & CArgv.Arg(Argv, 1) & "}");
       return TCL_OK;
    end Set_Ship_Name_Command;

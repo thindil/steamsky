@@ -81,7 +81,7 @@ package Bases.Trade is
       --               all wounded crew members
       -- SOURCE
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex <= PlayerShip.Crew.Last_Index),
+      Pre => (MemberIndex <= Player_Ship.Crew.Last_Index),
       Test_Case => (Name => "Test_HealWounded", Mode => Nominal);
       -- ****
 
@@ -99,7 +99,7 @@ package Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex <= PlayerShip.Crew.Last_Index),
+      Pre => (MemberIndex <= Player_Ship.Crew.Last_Index),
       Test_Case => (Name => "Test_HealCost", Mode => Nominal);
       -- ****
 
@@ -117,7 +117,7 @@ package Bases.Trade is
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) return Natural with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
       Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
@@ -126,14 +126,14 @@ package Bases.Trade is
       -- FUNCTION
       -- Train selected skill
       -- PARAMETERS
-      -- MemberIndex - Index of playership crew member which train
+      -- MemberIndex - Index of Player_Ship crew member which train
       -- SkillIndex  - Index of skill of selected crew member to train
       -- SOURCE
    procedure TrainSkill
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) with
       Pre =>
-      (MemberIndex <= PlayerShip.Crew.Last_Index and
+      (MemberIndex <= Player_Ship.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
       Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
       -- ****

@@ -98,7 +98,7 @@ package body Crafts.UI is
             for I in Items_List.Iterate loop
                if Items_List(I).IType = ToolNeeded then
                   CargoIndex :=
-                    FindItem(PlayerShip.Cargo, Objects_Container.Key(I));
+                    FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
                   if CargoIndex > 0 then
                      Has_Tool := True;
                      exit Check_Tool_Loop;
@@ -121,7 +121,7 @@ package body Crafts.UI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
       Find_Possible_Recipes_Loop :
-      for Item of PlayerShip.Cargo loop
+      for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
          for J in Recipes_List.Iterate loop
             if Recipes_List(J).ResultIndex = Item.ProtoIndex then
@@ -159,7 +159,7 @@ package body Crafts.UI is
          Has_Workplace := False;
          Recipe := Recipes_List(Known_Recipes(I));
          Find_Workshop_Loop :
-         for Module of PlayerShip.Modules loop
+         for Module of Player_Ship.Modules loop
             if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
               and then Module.Durability > 0 then
                Has_Workplace := True;
@@ -181,9 +181,9 @@ package body Crafts.UI is
                for J in Items_List.Iterate loop
                   if Items_List(J).IType = Recipe.MaterialTypes(K) then
                      CargoIndex :=
-                       FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                       FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
                      if CargoIndex > 0
-                       and then PlayerShip.Cargo(CargoIndex).Amount >=
+                       and then Player_Ship.Cargo(CargoIndex).Amount >=
                          Recipe.MaterialAmounts(K) then
                         Materials(K) := True;
                      end if;
@@ -238,7 +238,7 @@ package body Crafts.UI is
       CanCraft := False;
       Has_Workplace := False;
       Find_Alchemy_Lab_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).MType = ALCHEMY_LAB
            and then Module.Durability > 0 then
             Has_Workplace := True;
@@ -466,7 +466,7 @@ package body Crafts.UI is
          MType := Recipes_List(RecipeIndex).Workplace;
       end if;
       Show_Workshops_List_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).MType = MType then
             Append(ModulesList, " {" & Module.Name & "}");
          end if;
@@ -622,17 +622,17 @@ package body Crafts.UI is
                   Insert(RecipeText, "end", "{ or}");
                end if;
                CargoIndex :=
-                 FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                 FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
                if CargoIndex > 0
-                 and then PlayerShip.Cargo(CargoIndex).Amount >=
+                 and then Player_Ship.Cargo(CargoIndex).Amount >=
                    Recipe.MaterialAmounts(I) then
                   TextLength :=
-                    Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)'Length;
+                    Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)'Length;
                   Insert
                     (RecipeText, "end",
                      "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &
                      To_String(Items_List(J).Name) & "(owned: " &
-                     Positive'Image(PlayerShip.Cargo(CargoIndex).Amount)
+                     Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)
                        (2 .. TextLength) &
                      ")}");
                else
@@ -659,7 +659,7 @@ package body Crafts.UI is
                end if;
                CargoIndex :=
                  FindItem
-                   (Inventory => PlayerShip.Cargo,
+                   (Inventory => Player_Ship.Cargo,
                     ProtoIndex => Objects_Container.Key(I),
                     Quality => Recipe.ToolQuality);
                if CargoIndex > 0 then
@@ -678,7 +678,7 @@ package body Crafts.UI is
       Insert(RecipeText, "end", "{" & LF & "Workplace: }");
       HaveWorkplace := False;
       Have_Workplace_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          if Modules_List(Module.Proto_Index).MType = Recipe.Workplace then
             WorkplaceName := Module.Name;
             if Module.Durability > 0 then
@@ -773,8 +773,8 @@ package body Crafts.UI is
            Unbounded_Slice(RecipeIndex, 2, Length(RecipeIndex) - 1);
       end if;
       Set_Module_Loop :
-      for I in PlayerShip.Modules.Iterate loop
-         if PlayerShip.Modules(I).Name =
+      for I in Player_Ship.Modules.Iterate loop
+         if Player_Ship.Modules(I).Name =
            To_Unbounded_String(Get(ModulesBox)) then
             SetRecipe
               (Modules_Container.To_Index(I), Positive'Value(Get(AmountBox)),
