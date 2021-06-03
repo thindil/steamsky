@@ -49,6 +49,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Crafts; use Crafts;
 with Dialogs; use Dialogs;
 with Factions; use Factions;
@@ -428,7 +429,6 @@ package body Ships.UI.Modules is
         Create
           (ModuleFrame & ".button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Height: Positive := 10;
       Dialog_Header: constant Ttk_Label :=
         Create
@@ -462,9 +462,8 @@ package body Ships.UI.Modules is
          end if;
       end AddOwnersInfo;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Pack.Pack
         (YScroll, " -side right -fill y -padx {0 5} -pady 5");
@@ -509,15 +508,15 @@ package body Ships.UI.Modules is
             if Mamount > 0 then
                Insert(ModuleText, "end", "{ or }");
             end if;
-            if FindItem
-                (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
-              0 then
-               Insert
-                 (ModuleText, "end",
-                  "{" & To_String(Item.Name) & "} [list red]");
-            else
-               Insert(ModuleText, "end", "{" & To_String(Item.Name) & "}");
-            end if;
+            Insert
+              (ModuleText, "end",
+               "{" & To_String(Item.Name) & "}" &
+               (if
+                  FindItem
+                    (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
+                  0
+                then " [list red]"
+                else ""));
             Mamount := Mamount + 1;
          end if;
       end loop Find_Repair_Material_Loop;
@@ -637,17 +636,13 @@ package body Ships.UI.Modules is
             Tcl.Tk.Ada.Grid.Grid(ProgressBar, "-row 2 -column 1 -sticky we");
             Height := Height + Positive'Value(Winfo_Get(Label, "reqheight"));
          when GUN | HARPOON_GUN =>
-            Insert(ModuleText, "end", "{" & LF & "Strength:}");
-            if Modules_List(Module.Proto_Index).MType = GUN then
-               Insert
-                 (ModuleText, "end",
-                  "{" & Positive'Image(Module.Damage) & "}");
-            else
-               Insert
-                 (ModuleText, "end",
-                  "{" & Positive'Image(Module.Duration) & "}");
-            end if;
-            Insert(ModuleText, "end", "{" & LF & "Ammunition: }");
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Strength:" &
+               (if Modules_List(Module.Proto_Index).MType = GUN then
+                  Positive'Image(Module.Damage)
+                else Positive'Image(Module.Duration)) &
+               LF & "Ammunition: }");
             HaveAmmo := False;
             declare
                AmmoIndex: constant Natural :=
@@ -678,58 +673,48 @@ package body Ships.UI.Modules is
                      if Mamount > 0 then
                         Insert(ModuleText, "end", "{ or }");
                      end if;
-                     if FindItem(PlayerShip.Cargo, Objects_Container.Key(I)) >
-                       0 then
-                        Insert
-                          (ModuleText, "end",
-                           "{" & To_String(Items_List(I).Name) & "}");
-                     else
-                        Insert
-                          (ModuleText, "end",
-                           "{" & To_String(Items_List(I).Name) &
-                           "} [list red]");
-                     end if;
+                     Insert
+                       (ModuleText, "end",
+                        "{" & To_String(Items_List(I).Name) & "}" &
+                        (if
+                           FindItem
+                             (PlayerShip.Cargo, Objects_Container.Key(I)) >
+                           0
+                         then ""
+                         else " [list red]"));
                      Mamount := Mamount + 1;
                   end if;
                end loop Find_Ammo_Info_Loop;
             end if;
-            Insert(ModuleText, "end", "{" & LF & "}");
-            if Module.Owner(1) > 0 then
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Gunner: " &
+               (if Module.Owner(1) > 0 then
+                  To_String(PlayerShip.Crew(Module.Owner(1)).Name)
+                else "none") &
+               "}");
+            if Module.M_Type = GUN then
                Insert
                  (ModuleText, "end",
-                  "{Gunner: " &
-                  To_String(PlayerShip.Crew(Module.Owner(1)).Name) & "}");
-            else
-               Insert(ModuleText, "end", "Gunner: none");
-            end if;
-            if Module.M_Type = GUN then
-               Insert(ModuleText, "end", "{" & LF & "}");
-               if Modules_List(Module.Proto_Index).Speed > 0 then
-                  Insert
-                    (ModuleText, "end",
-                     "{Max fire rate:" &
+                  "{" & LF & "Max fire rate:" &
+                  (if Modules_List(Module.Proto_Index).Speed > 0 then
                      Positive'Image(Modules_List(Module.Proto_Index).Speed) &
-                     "/round}");
-               else
-                  Insert
-                    (ModuleText, "end",
-                     "{Max fire rate: 1/" &
+                     "/round}"
+                   else "1/" &
                      Trim
                        (Integer'Image
                           (abs (Modules_List(Module.Proto_Index).Speed)),
                         Left) &
-                     " rounds}");
-               end if;
+                     " rounds}"));
             end if;
          when TURRET =>
-            if Module.Gun_Index > 0 then
-               Insert
-                 (ModuleText, "end",
-                  "{" & LF & "Weapon: " &
-                  To_String(PlayerShip.Modules(Module.Gun_Index).Name) & "}");
-            else
-               Insert(ModuleText, "end", "{Weapon: none}");
-            end if;
+            Insert
+              (ModuleText, "end",
+               "{" & LF & "Weapon: " &
+               (if Module.Gun_Index > 0 then
+                  To_String(PlayerShip.Modules(Module.Gun_Index).Name)
+                else "none") &
+               "}");
          when WORKSHOP =>
             AddOwnersInfo("Worker");
             Insert(ModuleText, "end", "{" & LF & "}");
@@ -780,16 +765,14 @@ package body Ships.UI.Modules is
          when MEDICAL_ROOM =>
             AddOwnersInfo("Medic");
          when TRAINING_ROOM =>
-            if Module.Trained_Skill > 0 then
-               Insert
-                 (ModuleText, "end",
-                  "{" & LF & "Set for training " &
-                  To_String(Skills_List(Module.Trained_Skill).Name) & ".}");
-            else
-               Insert
-                 (ModuleText, "end", "{" & LF & "Must be set for training.}");
-            end if;
-            Insert(ModuleText, "end", "{" & LF & "}");
+            Insert
+              (ModuleText, "end",
+               "{" & LF &
+               (if Module.Trained_Skill > 0 then
+                  "Set for training " &
+                  To_String(Skills_List(Module.Trained_Skill).Name)
+                else "Must be set for training") &
+               "." & LF & "}");
             AddOwnersInfo("Trainee");
          when BATTERING_RAM =>
             Insert
