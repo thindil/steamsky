@@ -650,7 +650,8 @@ package body Ships.UI.Modules is
                   else Module.Harpoon_Index);
             begin
                if AmmoIndex in
-                   Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index
+                   Player_Ship.Cargo.First_Index ..
+                         Player_Ship.Cargo.Last_Index
                  and then
                    Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex).IType =
                    Items_Types(Modules_List(Module.Proto_Index).Value) then
@@ -1042,7 +1043,8 @@ package body Ships.UI.Modules is
          end if;
          Player_Ship.Modules(ModuleIndex).Trained_Skill := AssignIndex;
          AddMessage
-           ("You prepared " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
+           ("You prepared " &
+            To_String(Player_Ship.Modules(ModuleIndex).Name) &
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
             OrderMessage);
       end if;
@@ -1103,8 +1105,8 @@ package body Ships.UI.Modules is
          end if;
          Player_Ship.Modules(ModuleIndex).Disabled := True;
          AddMessage
-           ("You disabled " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
-            ".",
+           ("You disabled " &
+            To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       else
          Player_Ship.Modules(ModuleIndex).Disabled := False;
@@ -1299,7 +1301,8 @@ package body Ships.UI.Modules is
             Assigned := Assigned + 1;
          end if;
       end loop;
-      if Assigned = Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) then
+      if Assigned =
+        Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) then
          Disable_Buttons_Loop :
          for I in Player_Ship.Crew.Iterate loop
             ButtonName :=

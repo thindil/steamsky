@@ -627,7 +627,8 @@ package body Crafts.UI is
                  and then Player_Ship.Cargo(CargoIndex).Amount >=
                    Recipe.MaterialAmounts(I) then
                   TextLength :=
-                    Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)'Length;
+                    Positive'Image(Player_Ship.Cargo(CargoIndex).Amount)'
+                      Length;
                   Insert
                     (RecipeText, "end",
                      "{" & Integer'Image(Recipe.MaterialAmounts(I)) & "x" &

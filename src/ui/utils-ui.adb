@@ -356,7 +356,8 @@ package body Utils.UI is
                 (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
                  Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
-            Player_Ship.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
+            Player_Ship.Modules(ModuleIndex).Name :=
+              To_Unbounded_String(Value);
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
@@ -765,7 +766,8 @@ package body Utils.UI is
                      CabinBonus := 1;
                   end if;
                   TempTime :=
-                    ((80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) /
+                    ((80 +
+                      Player_Ship.Crew(I).Attributes(Condition_Index)(1)) /
                      CabinBonus) *
                     15;
                   if TempTime = 0 then

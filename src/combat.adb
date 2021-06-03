@@ -1573,7 +1573,8 @@ package body Combat is
                GainRep
                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 5);
             end if;
-            DeleteEvent(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
+            DeleteEvent
+              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex);
          end if;
          if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).MissionIndex > 0
            and then

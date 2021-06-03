@@ -377,7 +377,8 @@ package body Maps.UI.Commands is
          Add
            (DestinationMenu, "command",
             "-label {Set destination and move} -command {SetDestination;MoveShip moveto}");
-         if Player_Ship.Destination_X > 0 and Player_Ship.Destination_Y > 0 then
+         if Player_Ship.Destination_X > 0 and
+           Player_Ship.Destination_Y > 0 then
             Add
               (DestinationMenu, "command",
                "-label {Move to} -command {MoveShip moveto}");
@@ -622,7 +623,8 @@ package body Maps.UI.Commands is
          Result := MoveShip(1, -1, Message);
       elsif CArgv.Arg(Argv, 1) =
         "waitormove" then -- Move to destination or wait 1 game minute
-         if Player_Ship.Destination_X = 0 and Player_Ship.Destination_Y = 0 then
+         if Player_Ship.Destination_X = 0 and
+           Player_Ship.Destination_Y = 0 then
             Result := 1;
             Update_Game(1);
             WaitInPlace(1);

@@ -148,7 +148,8 @@ package body Bases.LootUI is
             goto End_Of_Cargo_Loop;
          end if;
          ItemName :=
-           To_Unbounded_String(GetItemName(Player_Ship.Cargo(I), False, False));
+           To_Unbounded_String
+             (GetItemName(Player_Ship.Cargo(I), False, False));
          AddButton
            (LootTable, To_String(ItemName), "Show available options for item",
             "ShowLootItemMenu" &
@@ -165,8 +166,8 @@ package body Bases.LootUI is
                 (GetItemDamage(Player_Ship.Cargo(I).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
-           (LootTable, Player_Ship.Cargo(I).Durability, Default_Item_Durability,
-            To_String(ItemDurability),
+           (LootTable, Player_Ship.Cargo(I).Durability,
+            Default_Item_Durability, To_String(ItemDurability),
             "ShowLootItemMenu" &
             Positive'Image(Inventory_Container.To_Index(I)),
             3);

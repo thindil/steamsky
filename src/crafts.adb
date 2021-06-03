@@ -647,7 +647,8 @@ package body Crafts is
                                 Player_Ship.Cargo(CargoIndex).Amount -
                                 Recipe.MaterialAmounts
                                   (UnboundedString_Container.To_Index(J));
-                              Player_Ship.Cargo(CargoIndex).Amount := NewAmount;
+                              Player_Ship.Cargo(CargoIndex).Amount :=
+                                NewAmount;
                               exit Remove_Materials_From_Cargo_Loop;
                            elsif Player_Ship.Cargo(CargoIndex).Amount =
                              Recipe.MaterialAmounts

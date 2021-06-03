@@ -160,7 +160,8 @@ package body Bases.Ship is
             Player_Ship.Modules.Delete(HullIndex);
          end if;
          UpdateCargo
-           (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
+           (Ship => Player_Ship, CargoIndex => MoneyIndex2,
+            Amount => -(Price));
          UpdateBaseCargo(Money_Index, Price);
          GainExp(1, Talking_Skill, TraderIndex);
          GainRep(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex, 1);

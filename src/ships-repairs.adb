@@ -70,7 +70,8 @@ package body Ships.Repairs is
                  FindItem
                    (Inventory => Player_Ship.Cargo,
                     ItemType =>
-                      Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
+                      Modules_List
+                        (Player_Ship.Modules(ModuleIndex).Proto_Index)
                         .RepairMaterial);
                if RepairMaterial > 0
                  and then Player_Ship.Cargo(RepairMaterial).Amount <

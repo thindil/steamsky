@@ -45,12 +45,14 @@ package body Crew is
          end if;
          AttributeExp :=
            Player_Ship.Crew(CrewIndex).Attributes(Attribute)(2) + NewAmount;
-         AttributeLevel := Player_Ship.Crew(CrewIndex).Attributes(Attribute)(1);
+         AttributeLevel :=
+           Player_Ship.Crew(CrewIndex).Attributes(Attribute)(1);
          if AttributeExp >= (AttributeLevel * 250) then
             AttributeExp := AttributeExp - (AttributeLevel * 250);
             AttributeLevel := AttributeLevel + 1;
          end if;
-         Player_Ship.Crew(CrewIndex).Attributes(Attribute)(1) := AttributeLevel;
+         Player_Ship.Crew(CrewIndex).Attributes(Attribute)(1) :=
+           AttributeLevel;
          Player_Ship.Crew(CrewIndex).Attributes(Attribute)(2) := AttributeExp;
       end GainExpInAttribute;
    begin
@@ -214,15 +216,18 @@ package body Crew is
                 0 then
                UpdateMorale
                  (Player_Ship, I,
-                  Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Value(2));
+                  Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Value
+                    (2));
             end if;
             UpdateCargo
-              (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).ProtoIndex, -1);
+              (Player_Ship, Player_Ship.Cargo.Element(ItemIndex).ProtoIndex,
+               -1);
             return ConsumeValue;
          end if;
          ItemIndex :=
            FindItem
-             (Inventory => Player_Ship.Crew(I).Inventory, ItemType => ItemType);
+             (Inventory => Player_Ship.Crew(I).Inventory,
+              ItemType => ItemType);
          if ItemIndex > 0 then
             ConsumeValue :=
               Items_List(Player_Ship.Crew(I).Inventory(ItemIndex).ProtoIndex)
@@ -232,7 +237,8 @@ package body Crew is
               0 then
                UpdateMorale
                  (Player_Ship, I,
-                  Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Value(2));
+                  Items_List(Player_Ship.Cargo(ItemIndex).ProtoIndex).Value
+                    (2));
             end if;
             UpdateInventory
               (MemberIndex => I, Amount => -1, InventoryIndex => ItemIndex);
@@ -917,7 +923,8 @@ package body Crew is
                HaveMoney := False;
             end if;
             if HaveMoney then
-               if Player_Ship.Cargo(MoneyIndex2).Amount < Member.Payment(1) then
+               if Player_Ship.Cargo(MoneyIndex2).Amount <
+                 Member.Payment(1) then
                   MoneyNeeded := Player_Ship.Cargo(MoneyIndex2).Amount;
                   UpdateCargo
                     (Ship => Player_Ship, ProtoIndex => Money_Index,
@@ -958,7 +965,8 @@ package body Crew is
             if Player_Ship.Crew(MemberIndex).ContractLength = 0 then
                AddMessage
                  ("Your contract with " &
-                  To_String(Player_Ship.Crew(MemberIndex).Name) & " has ended.",
+                  To_String(Player_Ship.Crew(MemberIndex).Name) &
+                  " has ended.",
                   TradeMessage, RED);
                if Player_Ship.Speed /= DOCKED then
                   Player_Ship.Crew(MemberIndex).Orders := (others => 0);

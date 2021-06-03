@@ -41,7 +41,8 @@ package body Bases.Trade is
    function CheckMoney
      (Price: Positive; Message: String := "") return Positive is
       -- ****
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
    begin
       if MoneyIndex2 = 0 then
          if Message /= "" then

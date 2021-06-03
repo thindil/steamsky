@@ -356,7 +356,8 @@ package body Combat.UI is
               "-values [list " & GetCrewList(2) &
               "] -width 10 -state readonly");
          if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
-            if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1)).Order =
+            if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1))
+                .Order =
               Gunner then
                Current
                  (ComboBox,
@@ -1147,7 +1148,8 @@ package body Combat.UI is
          AddMessage
            ("Order for " &
             To_String
-              (Player_Ship.Crew(Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1))
+              (Player_Ship.Crew
+                 (Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1))
                  .Name) &
             " was set on: " & Get(ComboBox),
             CombatMessage);

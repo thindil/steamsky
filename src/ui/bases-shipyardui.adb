@@ -107,7 +107,8 @@ package body Bases.ShipyardUI is
           (ShipyardCanvas & ".shipyard.install.options.modules", Interp);
       Cost, UsedSpace: Natural;
       Damage: Float;
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
       MaxSize, AllSpace: Positive;
       InstallInfo: Unbounded_String;
       MoneyLabel: constant Ttk_Label :=
@@ -311,7 +312,8 @@ package body Bases.ShipyardUI is
             Cost :=
               Modules_List(Player_Ship.Modules(I).Proto_Index).Price -
               Integer
-                (Float(Modules_List(Player_Ship.Modules(I).Proto_Index).Price) *
+                (Float
+                   (Modules_List(Player_Ship.Modules(I).Proto_Index).Price) *
                  Damage);
             if Cost = 0 then
                Cost := 1;
@@ -380,7 +382,8 @@ package body Bases.ShipyardUI is
       else
          ShipModuleIndex := Integer'Value(To_String(ModuleIndex));
          MType :=
-           Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index).MType;
+           Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+             .MType;
          case MType is
             when HARPOON_GUN =>
                MaxValue := Player_Ship.Modules(ShipModuleIndex).Duration;
@@ -426,7 +429,8 @@ package body Bases.ShipyardUI is
            Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
              .MaxOwners;
          Speed :=
-           Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index).Speed;
+           Modules_List(Player_Ship.Modules(ShipModuleIndex).Proto_Index)
+             .Speed;
          ModuleText := Get_Widget(".moduledialog.info");
       end if;
       case MType is
@@ -613,7 +617,8 @@ package body Bases.ShipyardUI is
         (ModuleText, "end",
          "{" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}" &
          (if
-            MoneyIndex2 = 0 or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost
+            MoneyIndex2 = 0
+            or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost
           then " [list red]"
           else ""));
       Insert

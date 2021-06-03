@@ -536,7 +536,8 @@ package body Bases.RecruitUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       DialogName: constant String := ".negotiatedialog";
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Recruit: constant Recruit_Data :=
@@ -739,7 +740,8 @@ package body Bases.RecruitUI is
         Create
           (NegotiateDialog & ".contract",
            "-state readonly -values [list {Pernament} {100 days} {30 days} {20 days} {10 days}]");
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
       Cost: Positive;
    begin
       Label :=
