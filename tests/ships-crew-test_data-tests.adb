@@ -79,10 +79,10 @@ package body Ships.Crew.Test_Data.Tests is
    begin
 
       Assert
-        (GetSkillLevel(PlayerShip.Crew(1), 1) = 0,
+        (GetSkillLevel(Player_Ship.Crew(1), 1) = 0,
          "Failed to get real level of not owned skill.");
       Assert
-        (GetSkillLevel(PlayerShip.Crew(1), 4) = 9,
+        (GetSkillLevel(Player_Ship.Crew(1), 4) = 9,
          "Failed to get real level of skill.");
 
 --  begin read only
@@ -132,19 +132,19 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Crew: constant Crew_Container.Vector := PlayerShip.Crew;
-      Amount: constant Positive := Positive(PlayerShip.Cargo.Length);
+      Crew: constant Crew_Container.Vector := Player_Ship.Crew;
+      Amount: constant Positive := Positive(Player_Ship.Cargo.Length);
 
    begin
 
-      Death(2, To_Unbounded_String("Test death"), PlayerShip);
+      Death(2, To_Unbounded_String("Test death"), Player_Ship);
       Assert
-        (PlayerShip.Crew.Length + 1 = Crew.Length,
+        (Player_Ship.Crew.Length + 1 = Crew.Length,
          "Failed to remove crew member on death.");
       Assert
-        (Amount + 1 = Positive(PlayerShip.Cargo.Length),
+        (Amount + 1 = Positive(Player_Ship.Cargo.Length),
          "Failed to add body of dead crew member.");
-      PlayerShip.Crew := Crew;
+      Player_Ship.Crew := Crew;
 
 --  begin read only
    end Test_Death_test_death;
@@ -191,15 +191,15 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Crew: constant Crew_Container.Vector := PlayerShip.Crew;
+      Crew: constant Crew_Container.Vector := Player_Ship.Crew;
 
    begin
 
-      DeleteMember(2, PlayerShip);
+      DeleteMember(2, Player_Ship);
       Assert
-        (Crew.Length = PlayerShip.Crew.Length + 1,
+        (Crew.Length = Player_Ship.Crew.Length + 1,
          "Failed to delete member from the player ship crew.");
-      PlayerShip.Crew := Crew;
+      Player_Ship.Crew := Crew;
 
 --  begin read only
    end Test_DeleteMember_test_deletemember;
@@ -207,7 +207,7 @@ package body Ships.Crew.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_FindMember_b270de_38c9c9
-     (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
+     (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
       return Crew_Container.Extended_Index is
    begin
       declare
@@ -228,7 +228,7 @@ package body Ships.Crew.Test_Data.Tests is
 --  id:2.2/b270debda44d8b87/FindMember/1/0/test_findmember/
    procedure Test_FindMember_test_findmember(Gnattest_T: in out Test) is
       function FindMember
-        (Order: Crew_Orders; Crew: Crew_Container.Vector := PlayerShip.Crew)
+        (Order: Crew_Orders; Crew: Crew_Container.Vector := Player_Ship.Crew)
          return Crew_Container.Extended_Index renames
         Wrap_Test_FindMember_b270de_38c9c9;
 --  end read only
@@ -301,12 +301,12 @@ package body Ships.Crew.Test_Data.Tests is
            FULL_SPEED);
    begin
 
-      GiveOrders(PlayerShip, 1, Rest);
+      GiveOrders(Player_Ship, 1, Rest);
       Assert
-        (PlayerShip.Crew(1).Order = Talk, "Failed to give order to player.");
-      GiveOrders(PlayerShip, 4, Rest);
+        (Player_Ship.Crew(1).Order = Talk, "Failed to give order to player.");
+      GiveOrders(Player_Ship, 4, Rest);
       Assert
-        (PlayerShip.Crew(4).Order = Rest, "Failed to give order to gunner.");
+        (Player_Ship.Crew(4).Order = Rest, "Failed to give order to gunner.");
       EnemyShip.Crew(1).Morale(1) := 5;
       GiveOrders(EnemyShip, 1, Talk);
       Assert(True, "This test can only crash");
@@ -339,10 +339,10 @@ package body Ships.Crew.Test_Data.Tests is
 
    begin
 
-      GiveOrders(PlayerShip, 1, Rest, 0, False);
-      UpdateOrders(PlayerShip);
+      GiveOrders(Player_Ship, 1, Rest, 0, False);
+      UpdateOrders(Player_Ship);
       Assert
-        (PlayerShip.Crew(1).Order = Talk,
+        (Player_Ship.Crew(1).Order = Talk,
          "Failed to update orders for player ship crew.");
 
 --  begin read only
@@ -391,19 +391,19 @@ package body Ships.Crew.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldMorale: constant Natural := PlayerShip.Crew(1).Morale(2);
-      OldLevel: constant Natural := PlayerShip.Crew(1).Morale(1);
+      OldMorale: constant Natural := Player_Ship.Crew(1).Morale(2);
+      OldLevel: constant Natural := Player_Ship.Crew(1).Morale(1);
 
    begin
 
-      UpdateMorale(PlayerShip, 1, 1);
+      UpdateMorale(Player_Ship, 1, 1);
       Assert
-        (PlayerShip.Crew(1).Morale(2) - 1 = OldMorale or
-         PlayerShip.Crew(1).Morale(1) - 1 = OldLevel,
+        (Player_Ship.Crew(1).Morale(2) - 1 = OldMorale or
+         Player_Ship.Crew(1).Morale(1) - 1 = OldLevel,
          "Failed to raise player morale.");
-      UpdateMorale(PlayerShip, 1, -1);
+      UpdateMorale(Player_Ship, 1, -1);
       Assert
-        (PlayerShip.Crew(1).Morale(2) = OldMorale,
+        (Player_Ship.Crew(1).Morale(2) = OldMorale,
          "Failed to lower player morale.");
 
 --  begin read only

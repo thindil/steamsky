@@ -75,7 +75,7 @@ package body Crew.Test_Data.Tests is
 
       GainExp(1, 4, 1);
       Assert
-        (PlayerShip.Crew(1).Skills(1)(3) = 8,
+        (Player_Ship.Crew(1).Skills(1)(3) = 8,
          "Failed to gain experience in skill.");
 
 --  begin read only
@@ -208,7 +208,7 @@ package body Crew.Test_Data.Tests is
    begin
 
       UpdateCrew(1, 1);
-      PlayerShip.Crew(1).Health := 0;
+      Player_Ship.Crew(1).Health := 0;
       UpdateCrew(1, 1);
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");

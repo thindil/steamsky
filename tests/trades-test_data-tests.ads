@@ -13,7 +13,7 @@ package Trades.Test_Data.Tests is
    procedure Test_BuyItems_295d66_69cd52(Gnattest_T: in out Test);
    --  trades.ads:114:4:BuyItems:Test_BuyItems
 
-   procedure Test_SellItems_079195_3394dd(Gnattest_T: in out Test);
+   procedure Test_SellItems_079195_f1c0a2(Gnattest_T: in out Test);
    --  trades.ads:126:4:SellItems:Test_SellItems
 
    procedure Test_GenerateTraderCargo_9d8e19_e2d9dd(Gnattest_T: in out Test);

@@ -29,10 +29,10 @@ package body Bases.Ship.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_RepairShip_41c4af_d40bee(ModuleIndex: Integer) is
+   procedure Wrap_Test_RepairShip_41c4af_3016a0(ModuleIndex: Integer) is
    begin
       begin
-         pragma Assert((ModuleIndex <= PlayerShip.Modules.Last_Index));
+         pragma Assert((ModuleIndex <= Player_Ship.Modules.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -50,35 +50,35 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "ens_sloc(bases-ship.ads:0:):Test_RepairShip test commitment violated");
       end;
-   end Wrap_Test_RepairShip_41c4af_d40bee;
+   end Wrap_Test_RepairShip_41c4af_3016a0;
 --  end read only
 
 --  begin read only
    procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test);
-   procedure Test_RepairShip_41c4af_d40bee(Gnattest_T: in out Test) renames
+   procedure Test_RepairShip_41c4af_3016a0(Gnattest_T: in out Test) renames
      Test_RepairShip_test_repairship;
 --  id:2.2/41c4af333c446830/RepairShip/1/0/test_repairship/
    procedure Test_RepairShip_test_repairship(Gnattest_T: in out Test) is
       procedure RepairShip(ModuleIndex: Integer) renames
-        Wrap_Test_RepairShip_41c4af_d40bee;
+        Wrap_Test_RepairShip_41c4af_3016a0;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Durability: constant Positive := PlayerShip.Modules(1).Durability;
+      Durability: constant Positive := Player_Ship.Modules(1).Durability;
 
    begin
 
-      PlayerShip.Modules(1).Durability :=
-        PlayerShip.Modules(1).Durability - 10;
+      Player_Ship.Modules(1).Durability :=
+        Player_Ship.Modules(1).Durability - 10;
       RepairShip(1);
       Assert
-        (PlayerShip.Modules(1).Durability = Durability,
+        (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair selected player ship module in base.");
-      PlayerShip.Modules(1).Durability :=
-        PlayerShip.Modules(1).Durability - 10;
+      Player_Ship.Modules(1).Durability :=
+        Player_Ship.Modules(1).Durability - 10;
       RepairShip(0);
       Assert
-        (PlayerShip.Modules(1).Durability = Durability,
+        (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair player ship module in base.");
 
 --  begin read only
@@ -129,11 +129,11 @@ package body Bases.Ship.Test_Data.Tests is
 
       UpgradeShip(False, To_Unbounded_String("10"));
       Assert
-        (PlayerShip.Modules.Length = 12,
+        (Player_Ship.Modules.Length = 12,
          "Failed to remove module on player ship.");
       UpgradeShip(True, To_Unbounded_String("6"));
       Assert
-        (PlayerShip.Modules.Length = 13,
+        (Player_Ship.Modules.Length = 13,
          "Failed to install module on player ship.");
 
 --  begin read only
@@ -157,23 +157,23 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Money: constant Positive := PlayerShip.Cargo(1).Amount;
+      Money: constant Positive := Player_Ship.Cargo(1).Amount;
 
    begin
 
       PayForDock;
-      Assert(PlayerShip.Cargo(1).Amount < Money, "Failed to pay for docks.");
+      Assert(Player_Ship.Cargo(1).Amount < Money, "Failed to pay for docks.");
 
 --  begin read only
    end Test_PayForDock_test_payfordock;
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_RepairCost_2d9781_2dee42
+   procedure Wrap_Test_RepairCost_2d9781_2bca1c
      (Cost, Time: in out Natural; ModuleIndex: Integer) is
    begin
       begin
-         pragma Assert((ModuleIndex <= PlayerShip.Modules.Last_Index));
+         pragma Assert((ModuleIndex <= Player_Ship.Modules.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -192,18 +192,18 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "ens_sloc(bases-ship.ads:0:):Test_RepairCost test commitment violated");
       end;
-   end Wrap_Test_RepairCost_2d9781_2dee42;
+   end Wrap_Test_RepairCost_2d9781_2bca1c;
 --  end read only
 
 --  begin read only
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test);
-   procedure Test_RepairCost_2d9781_2dee42(Gnattest_T: in out Test) renames
+   procedure Test_RepairCost_2d9781_2bca1c(Gnattest_T: in out Test) renames
      Test_RepairCost_test_repaircost;
 --  id:2.2/2d9781143dbec48d/RepairCost/1/0/test_repaircost/
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test) is
       procedure RepairCost
         (Cost, Time: in out Natural; ModuleIndex: Integer) renames
-        Wrap_Test_RepairCost_2d9781_2dee42;
+        Wrap_Test_RepairCost_2d9781_2bca1c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -212,7 +212,8 @@ package body Bases.Ship.Test_Data.Tests is
 
    begin
 
-      PlayerShip.Modules(1).Durability := PlayerShip.Modules(1).Durability - 5;
+      Player_Ship.Modules(1).Durability :=
+        Player_Ship.Modules(1).Durability - 5;
       RepairCost(Cost, Time, 1);
       Assert(Cost > 0, "Failed to count player ship repair costs.");
       Assert(Time > 0, "Failed to count player ship repair time.");

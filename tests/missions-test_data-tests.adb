@@ -54,7 +54,7 @@ package body Missions.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Natural :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
 
    begin
 
@@ -105,7 +105,7 @@ package body Missions.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
 
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MissionIndex: Positive :=
         Positive(SkyBases(BaseIndex).Missions.Length + 1);
    begin

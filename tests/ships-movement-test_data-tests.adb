@@ -59,32 +59,32 @@ package body Ships.Movement.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldX: constant Natural := PlayerShip.Sky_X;
-      OldY: constant Natural := PlayerShip.Sky_Y;
+      OldX: constant Natural := Player_Ship.Sky_X;
+      OldY: constant Natural := Player_Ship.Sky_Y;
       Message: Unbounded_String;
       NewX, NewY: Natural := 0;
 
    begin
 
-      PlayerShip.Speed := FULL_SPEED;
-      if PlayerShip.Sky_X + 1 <= 1_024 then
+      Player_Ship.Speed := FULL_SPEED;
+      if Player_Ship.Sky_X + 1 <= 1_024 then
          NewX := 1;
       end if;
-      if PlayerShip.Sky_Y + 1 <= 1_024 then
+      if Player_Ship.Sky_Y + 1 <= 1_024 then
          NewY := 1;
       end if;
       if MoveShip(NewX, NewY, Message) = 0 then
          Ada.Text_IO.Put_Line(To_String(Message));
       end if;
       Assert
-        (PlayerShip.Sky_X - NewX = OldX,
+        (Player_Ship.Sky_X - NewX = OldX,
          "Failed to move player ship in X axis");
       Assert
-        (PlayerShip.Sky_Y - NewY = OldY,
+        (Player_Ship.Sky_Y - NewY = OldY,
          "Failed to move player ship in Y axis");
-      PlayerShip.Sky_X := OldX;
-      PlayerShip.Sky_Y := OldY;
-      PlayerShip.Speed := DOCKED;
+      Player_Ship.Sky_X := OldX;
+      Player_Ship.Sky_Y := OldY;
+      Player_Ship.Speed := DOCKED;
 
 --  begin read only
    end Test_MoveShip_test_moveship;
@@ -162,29 +162,29 @@ package body Ships.Movement.Test_Data.Tests is
 
    begin
 
-      PlayerShip.Crew(2).Order := Pilot;
-      PlayerShip.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := Pilot;
+      Player_Ship.Crew(3).Order := Engineer;
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_SPEED));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of docked ship.");
       end if;
-      PlayerShip.Crew(2).Order := Pilot;
-      PlayerShip.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := Pilot;
+      Player_Ship.Crew(3).Order := Engineer;
       Message := To_Unbounded_String(DockShip(False));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to dock ship again.");
       end if;
-      PlayerShip.Crew(2).Order := Pilot;
-      PlayerShip.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := Pilot;
+      Player_Ship.Crew(3).Order := Engineer;
       Message := To_Unbounded_String(ChangeShipSpeed(FULL_STOP));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
          Assert(False, "Failed to change speed of ship.");
       end if;
-      PlayerShip.Crew(2).Order := Pilot;
-      PlayerShip.Crew(3).Order := Engineer;
+      Player_Ship.Crew(2).Order := Pilot;
+      Player_Ship.Crew(3).Order := Engineer;
       Message := To_Unbounded_String(DockShip(True));
       if Message /= Null_Unbounded_String then
          Ada.Text_IO.Put_Line(To_String(Message));
@@ -224,14 +224,15 @@ package body Ships.Movement.Test_Data.Tests is
 
    begin
 
-      Assert(RealSpeed(PlayerShip) = 0, "Failed to get speed of docked ship.");
-      PlayerShip.Speed := FULL_SPEED;
       Assert
-        (RealSpeed(PlayerShip) /= 0,
+        (RealSpeed(Player_Ship) = 0, "Failed to get speed of docked ship.");
+      Player_Ship.Speed := FULL_SPEED;
+      Assert
+        (RealSpeed(Player_Ship) /= 0,
          "Failed to get speed of ship with full speed.");
-      PlayerShip.Speed := DOCKED;
+      Player_Ship.Speed := DOCKED;
       Assert
-        (RealSpeed(PlayerShip, True) /= 0,
+        (RealSpeed(Player_Ship, True) /= 0,
          "Failed to get potential speed of docked ship.");
 
 --  begin read only

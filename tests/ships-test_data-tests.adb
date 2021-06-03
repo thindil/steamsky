@@ -120,7 +120,7 @@ package body Ships.Test_Data.Tests is
 
    begin
 
-      Assert(CountShipWeight(PlayerShip) > 0, "This test can only crash.");
+      Assert(CountShipWeight(Player_Ship) > 0, "This test can only crash.");
 
 --  begin read only
    end Test_CountShipWeight_test_countshipweight;
@@ -301,15 +301,15 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      OldDurability: constant Positive := PlayerShip.Modules(1).Durability;
+      OldDurability: constant Positive := Player_Ship.Modules(1).Durability;
 
    begin
 
-      DamageModule(PlayerShip, 1, 10, "during tests");
+      DamageModule(Player_Ship, 1, 10, "during tests");
       AUnit.Assertions.Assert
-        (PlayerShip.Modules(1).Durability + 10 = OldDurability,
+        (Player_Ship.Modules(1).Durability + 10 = OldDurability,
          "Failed to damage player ship hull.");
-      PlayerShip.Modules(1).Durability := OldDurability;
+      Player_Ship.Modules(1).Durability := OldDurability;
 
 --  begin read only
    end Test_DamageModule_test_damagemodule;

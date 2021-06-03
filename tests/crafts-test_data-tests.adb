@@ -105,7 +105,7 @@ package body Crafts.Test_Data.Tests is
 
    begin
 
-      UpdateCargo(PlayerShip, To_Unbounded_String("6"), 10);
+      UpdateCargo(Player_Ship, To_Unbounded_String("6"), 10);
       Assert
         (CheckRecipe(To_Unbounded_String("1")) > 0,
          "Failed to check crafting recipe requirements.");
@@ -115,12 +115,12 @@ package body Crafts.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_SetRecipe_d9013b_dcc889
+   procedure Wrap_Test_SetRecipe_d9013b_447571
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) is
    begin
       begin
          pragma Assert
-           ((Workshop <= PlayerShip.Modules.Last_Index and
+           ((Workshop <= Player_Ship.Modules.Last_Index and
              RecipeIndex /= Null_Unbounded_String));
          null;
       exception
@@ -140,28 +140,28 @@ package body Crafts.Test_Data.Tests is
               (False,
                "ens_sloc(crafts.ads:0:):Test_SetRecipe test commitment violated");
       end;
-   end Wrap_Test_SetRecipe_d9013b_dcc889;
+   end Wrap_Test_SetRecipe_d9013b_447571;
 --  end read only
 
 --  begin read only
    procedure Test_SetRecipe_test_setrecipe(Gnattest_T: in out Test);
-   procedure Test_SetRecipe_d9013b_dcc889(Gnattest_T: in out Test) renames
+   procedure Test_SetRecipe_d9013b_447571(Gnattest_T: in out Test) renames
      Test_SetRecipe_test_setrecipe;
 --  id:2.2/d9013bfcb0ae8d7e/SetRecipe/1/0/test_setrecipe/
    procedure Test_SetRecipe_test_setrecipe(Gnattest_T: in out Test) is
       procedure SetRecipe
         (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) renames
-        Wrap_Test_SetRecipe_d9013b_dcc889;
+        Wrap_Test_SetRecipe_d9013b_447571;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
 
    begin
 
-      UpdateCargo(PlayerShip, To_Unbounded_String("6"), 10);
+      UpdateCargo(Player_Ship, To_Unbounded_String("6"), 10);
       SetRecipe(9, 10, To_Unbounded_String("1"));
       Assert
-        (PlayerShip.Modules(9).Crafting_Amount = 10,
+        (Player_Ship.Modules(9).Crafting_Amount = 10,
          "Failed to set crafting recipe.");
 
 --  begin read only
