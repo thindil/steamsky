@@ -41,7 +41,7 @@ package body Bases.Trade is
    function CheckMoney
      (Price: Positive; Message: String := "") return Positive is
       -- ****
-      MoneyIndex2: constant Natural := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
    begin
       if MoneyIndex2 = 0 then
          if Message /= "" then
@@ -50,7 +50,7 @@ package body Bases.Trade is
             raise Trade_No_Money;
          end if;
       end if;
-      if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+      if Player_Ship.Cargo(MoneyIndex2).Amount < Price then
          if Message /= "" then
             raise Trade_Not_Enough_Money with Message;
          else
@@ -64,7 +64,7 @@ package body Bases.Trade is
      (RecruitIndex: Recruit_Container.Extended_Index; Cost: Positive;
       DailyPayment, TradePayment: Natural; ContractLenght: Integer) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Price: Natural;
       Recruit: constant Recruit_Data :=
@@ -94,7 +94,7 @@ package body Bases.Trade is
            (if 50 + SkyBases(BaseIndex).Reputation(1) > 100 then 100
             else 50 + SkyBases(BaseIndex).Reputation(1));
       end if;
-      PlayerShip.Crew.Append
+      Player_Ship.Crew.Append
         (New_Item =>
            (Name => Recruit.Name, Gender => Recruit.Gender, Health => 100,
             Tired => 0, Skills => Recruit.Skills, Hunger => 0, Thirst => 0,
@@ -106,7 +106,7 @@ package body Bases.Trade is
             Loyalty => Morale, HomeBase => Recruit.HomeBase,
             Faction => Recruit.Faction));
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Price));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Price));
       GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
       AddMessage
@@ -120,7 +120,7 @@ package body Bases.Trade is
 
    procedure BuyRecipe(RecipeIndex: Unbounded_String) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index;
       Cost: Natural;
       RecipeName: constant String :=
@@ -157,7 +157,7 @@ package body Bases.Trade is
       CountPrice(Cost, TraderIndex);
       MoneyIndex2 := CheckMoney(Cost, RecipeName);
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       Known_Recipes.Append(New_Item => RecipeIndex);
       AddMessage
@@ -171,7 +171,7 @@ package body Bases.Trade is
 
    procedure HealWounded(MemberIndex: Crew_Container.Extended_Index) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       MoneyIndex2: Inventory_Container.Extended_Index := 0;
       Cost, Time: Natural := 0;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
@@ -185,20 +185,20 @@ package body Bases.Trade is
       end if;
       MoneyIndex2 := CheckMoney(Cost);
       if MemberIndex > 0 then
-         PlayerShip.Crew(MemberIndex).Health := 100;
+         Player_Ship.Crew(MemberIndex).Health := 100;
          AddMessage
            ("You paid for healing " &
-            To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
+            To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
             Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
             TradeMessage);
-         GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
+         GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
       else
          Give_Rest_Order_Loop :
-         for I in PlayerShip.Crew.Iterate loop
-            if PlayerShip.Crew(I).Health < 100 then
-               PlayerShip.Crew(I).Health := 100;
+         for I in Player_Ship.Crew.Iterate loop
+            if Player_Ship.Crew(I).Health < 100 then
+               Player_Ship.Crew(I).Health := 100;
                GiveOrders
-                 (PlayerShip, Crew_Container.To_Index(I), Rest, 0, False);
+                 (Player_Ship, Crew_Container.To_Index(I), Rest, 0, False);
             end if;
          end loop Give_Rest_Order_Loop;
          AddMessage
@@ -207,7 +207,7 @@ package body Bases.Trade is
             TradeMessage);
       end if;
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       GainExp(1, Talking_Skill, TraderIndex);
       GainRep(BaseIndex, 1);
@@ -218,21 +218,21 @@ package body Bases.Trade is
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
    begin
       if MemberIndex > 0 then
-         Time := 5 * (100 - PlayerShip.Crew(MemberIndex).Health);
+         Time := 5 * (100 - Player_Ship.Crew(MemberIndex).Health);
          Cost :=
-           (5 * (100 - PlayerShip.Crew(MemberIndex).Health)) *
+           (5 * (100 - Player_Ship.Crew(MemberIndex).Health)) *
            Get_Price
              (To_Unbounded_String("0"),
               FindProtoItem
                 (ItemType =>
-                   Factions_List(PlayerShip.Crew(MemberIndex).Faction)
+                   Factions_List(Player_Ship.Crew(MemberIndex).Faction)
                      .HealingTools));
       else
          Count_Heal_Cost_Loop :
-         for Member of PlayerShip.Crew loop
+         for Member of Player_Ship.Crew loop
             if Member.Health < 100 then
                Time := Time + (5 * (100 - Member.Health));
                Cost :=
@@ -269,7 +269,7 @@ package body Bases.Trade is
       Cost: Natural := Natural(100.0 * New_Game_Settings.Prices_Bonus);
    begin
       Count_Train_Cost_Loop :
-      for Skill of PlayerShip.Crew(MemberIndex).Skills loop
+      for Skill of Player_Ship.Crew(MemberIndex).Skills loop
          if Skill(1) = SkillIndex then
             if Skill(2) = 100 then
                return 0;
@@ -295,7 +295,7 @@ package body Bases.Trade is
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
       if Cost = 0 then
@@ -305,13 +305,13 @@ package body Bases.Trade is
       AddMessage
         ("You purchased a training session in " &
          To_String(Skills_List(SkillIndex).Name) & " for " &
-         To_String(PlayerShip.Crew(MemberIndex).Name) & " for" &
+         To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
          Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
          TradeMessage);
-      GiveOrders(PlayerShip, MemberIndex, Rest, 0, False);
+      GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
       GainedExp :=
         GetRandom(10, 60) +
-        PlayerShip.Crew(MemberIndex).Attributes
+        Player_Ship.Crew(MemberIndex).Attributes
           (Skills_List(SkillIndex).Attribute)
           (1);
       if GainedExp > 100 then
@@ -319,7 +319,7 @@ package body Bases.Trade is
       end if;
       GainExp(GainedExp, SkillIndex, MemberIndex);
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => -(Cost));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
       UpdateBaseCargo(Money_Index, Cost);
       if TraderIndex > 0 then
          GainExp(5, Talking_Skill, TraderIndex);
