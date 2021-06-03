@@ -101,8 +101,10 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
-                       Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
+                     if Player_Ship.Sky_X =
+                       Positive'Value(Slice(Tokens, 1)) and
+                       Player_Ship.Sky_Y =
+                         Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search for " &
@@ -118,8 +120,10 @@ package body OrdersMenu is
                      Tokens: Slice_Set;
                   begin
                      Create(Tokens, To_String(CurrentStory.Data), ";");
-                     if Player_Ship.Sky_X = Positive'Value(Slice(Tokens, 1)) and
-                       Player_Ship.Sky_Y = Positive'Value(Slice(Tokens, 2)) then
+                     if Player_Ship.Sky_X =
+                       Positive'Value(Slice(Tokens, 1)) and
+                       Player_Ship.Sky_Y =
+                         Positive'Value(Slice(Tokens, 2)) then
                         Add
                           (OrdersMenu, "command",
                            "-label {Search area} -underline 0 -command ExecuteStory");

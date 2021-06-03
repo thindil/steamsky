@@ -34,7 +34,8 @@ package body Crew.Inventory is
               FindItem
                 (Inventory => Player_Ship.Crew(MemberIndex).Inventory,
                  ProtoIndex => ProtoIndex, Durability => Durability)
-            else FindItem(Player_Ship.Crew(MemberIndex).Inventory, ProtoIndex));
+            else FindItem
+                (Player_Ship.Crew(MemberIndex).Inventory, ProtoIndex));
       else
          ItemIndex := InventoryIndex;
       end if;

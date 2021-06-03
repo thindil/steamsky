@@ -175,7 +175,8 @@ package body Events is
       else
          if SkyBases(BaseIndex).Population = 0 then
             if Roll < 6 and
-              Player_Ship.Speed /= DOCKED then -- Change owner of abandoned base
+              Player_Ship.Speed /=
+                DOCKED then -- Change owner of abandoned base
                RecoverBase(BaseIndex);
             end if;
             return False;
@@ -302,7 +303,8 @@ package body Events is
                      Injuries := GetRandom(1, 10);
                      if Injuries >
                        Player_Ship.Crew(RestingCrew(Roll2)).Health then
-                        Injuries := Player_Ship.Crew(RestingCrew(Roll2)).Health;
+                        Injuries :=
+                          Player_Ship.Crew(RestingCrew(Roll2)).Health;
                      end if;
                      Player_Ship.Crew(RestingCrew(Roll2)).Health :=
                        Player_Ship.Crew(RestingCrew(Roll2)).Health - Injuries;

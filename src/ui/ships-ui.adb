@@ -100,7 +100,8 @@ package body Ships.UI is
                Append(UpgradeInfo, "(durability)");
                MaxUpgrade :=
                  Modules_List
-                   (Player_Ship.Modules(Player_Ship.Upgrade_Module).Proto_Index)
+                   (Player_Ship.Modules(Player_Ship.Upgrade_Module)
+                      .Proto_Index)
                    .Durability;
             when MAX_VALUE =>
                case Modules_List
@@ -223,7 +224,8 @@ package body Ships.UI is
                "-text {Destination: " &
                To_String
                  (SkyBases
-                    (SkyMap(Player_Ship.Destination_X, Player_Ship.Destination_Y)
+                    (SkyMap
+                       (Player_Ship.Destination_X, Player_Ship.Destination_Y)
                        .BaseIndex)
                     .Name) &
                "}");

@@ -160,7 +160,8 @@ package body Ships.Upgrade is
                   if MaxValue < 1 then
                      MaxValue := 1;
                   end if;
-                  if Player_Ship.Modules(ModuleIndex).Fuel_Usage = MaxValue then
+                  if Player_Ship.Modules(ModuleIndex).Fuel_Usage =
+                    MaxValue then
                      raise Ship_Upgrade_Error
                        with "You can't further reduce the fuel usage of " &
                        To_String(Player_Ship.Modules(ModuleIndex).Name) & ".";

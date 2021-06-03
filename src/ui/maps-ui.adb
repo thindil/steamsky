@@ -338,7 +338,8 @@ package body Maps.UI is
          Add(Label, "No trader assigned. You need one to talk/trade.");
          Tcl.Tk.Ada.Grid.Grid(Label);
       elsif SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0 then
-         if Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+         if Events_List
+             (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
              .EType =
            FriendlyShip then
             configure(Label, "-style Headerred.TLabel");
@@ -770,7 +771,8 @@ package body Maps.UI is
          Current
            (Speedbox, Natural'Image(Ship_Speed'Pos(Player_Ship.Speed) - 1));
          Tcl.Tk.Ada.Grid.Grid(Speedbox);
-         if Player_Ship.Destination_X > 0 and Player_Ship.Destination_Y > 0 then
+         if Player_Ship.Destination_X > 0 and
+           Player_Ship.Destination_Y > 0 then
             Button.Name := New_String(FrameName & ".moveto");
             Tcl.Tk.Ada.Grid.Grid(Button);
             Tcl.Tk.Ada.Grid.Grid_Configure(Speedbox, "-columnspan 2");

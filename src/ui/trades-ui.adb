@@ -113,7 +113,8 @@ package body Trades.UI is
       EventIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       Profit: Integer;
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(TradeCanvas & ".trade.options.search", Interp);
       Page: constant Positive :=
@@ -187,7 +188,8 @@ package body Trades.UI is
             goto End_Of_Cargo_Loop;
          end if;
          ItemName :=
-           To_Unbounded_String(GetItemName(Player_Ship.Cargo(I), False, False));
+           To_Unbounded_String
+             (GetItemName(Player_Ship.Cargo(I), False, False));
          if Argc = 3
            and then
              Index
@@ -798,7 +800,8 @@ package body Trades.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       TradeMenu: Tk_Menu := Get_Widget(".trademenu", Interp);
-      MoneyIndex2: constant Natural := FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseCargoIndex2, Price: Natural;

@@ -361,7 +361,8 @@ package body Bases is
       else -- asking friendly ship
          Radius := 40;
          ShipIndex :=
-           (Events_List(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
+           (Events_List
+              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
               .ShipIndex);
          Amount :=
            (if Proto_Ships_List(ShipIndex).Crew.Length < 5 then 3
@@ -500,7 +501,8 @@ package body Bases is
                exit Generate_Event_Location_Loop when SkyMap(EventX, EventY)
                    .BaseIndex =
                  0 and
-                 EventX /= Player_Ship.Sky_X and EventY /= Player_Ship.Sky_Y and
+                 EventX /= Player_Ship.Sky_X and
+                 EventY /= Player_Ship.Sky_Y and
                  SkyMap(EventX, EventY).EventIndex = 0;
             else
                TmpBaseIndex := GetRandom(1, 1_024);
@@ -523,7 +525,8 @@ package body Bases is
                   end loop Regenerate_Event_Location_Loop;
                   exit Generate_Event_Location_Loop;
                end if;
-               if EventX /= Player_Ship.Sky_X and EventY /= Player_Ship.Sky_Y and
+               if EventX /= Player_Ship.Sky_X and
+                 EventY /= Player_Ship.Sky_Y and
                  SkyMap(EventX, EventY).EventIndex = 0 and
                  SkyBases(SkyMap(EventX, EventY).BaseIndex).Known then
                   if Event = AttackOnBase and
