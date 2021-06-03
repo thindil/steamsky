@@ -77,7 +77,7 @@ package body Combat.UI is
       Firerate: Unbounded_String;
    begin
       GunSpeed :=
-        Modules_List(PlayerShip.Modules(Guns(Position)(1)).Proto_Index).Speed;
+        Modules_List(Player_Ship.Modules(Guns(Position)(1)).Proto_Index).Speed;
       case Index is
          when 1 =>
             GunSpeed := 0;
@@ -211,49 +211,49 @@ package body Combat.UI is
       begin
          Get_Highest_Skills_Loop :
          for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
+           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
             case Position is
                when 0 =>
-                  if GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill) >
+                  if GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill);
+                       GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill);
                   end if;
                when 1 =>
-                  if GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill) >
+                  if GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill);
+                       GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill);
                   end if;
                when others =>
-                  if GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill) >
+                  if GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill) >
                     SkillValue then
                      SkillIndex := I;
                      SkillValue :=
-                       GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill);
+                       GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill);
                   end if;
             end case;
          end loop Get_Highest_Skills_Loop;
          Mark_Skills_Loop :
          for I in
-           PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-            if PlayerShip.Crew(I).Skills.Length > 0 then
+           Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+            if Player_Ship.Crew(I).Skills.Length > 0 then
                SkillString := Null_Unbounded_String;
                case Position is
                   when 0 =>
-                     if GetSkillLevel(PlayerShip.Crew(I), Piloting_Skill) >
+                     if GetSkillLevel(Player_Ship.Crew(I), Piloting_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
                   when 1 =>
-                     if GetSkillLevel(PlayerShip.Crew(I), Engineering_Skill) >
+                     if GetSkillLevel(Player_Ship.Crew(I), Engineering_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
                   when others =>
-                     if GetSkillLevel(PlayerShip.Crew(I), Gunnery_Skill) >
+                     if GetSkillLevel(Player_Ship.Crew(I), Gunnery_Skill) >
                        0 then
                         SkillString := To_Unbounded_String(" +");
                      end if;
@@ -263,7 +263,7 @@ package body Combat.UI is
                end if;
                Append
                  (CrewList,
-                  " {" & PlayerShip.Crew(I).Name & SkillString & "}");
+                  " {" & Player_Ship.Crew(I).Name & SkillString & "}");
             end if;
          end loop Mark_Skills_Loop;
          return To_String(CrewList);
@@ -273,7 +273,7 @@ package body Combat.UI is
       Current(ComboBox, Natural'Image(FindMember(Pilot)));
       ComboBox.Name := New_String(Frame & ".pilotorder");
       Current(ComboBox, Integer'Image(PilotOrder - 1));
-      if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+      if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         FindMember(Pilot) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
@@ -285,7 +285,7 @@ package body Combat.UI is
       Current(ComboBox, Natural'Image(FindMember(Engineer)));
       ComboBox.Name := New_String(Frame & ".engineerorder");
       Current(ComboBox, Natural'Image(EngineerOrder - 1));
-      if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+      if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
           (To_Unbounded_String("sentientships")) and
         FindMember(Engineer) = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(ComboBox);
@@ -301,19 +301,19 @@ package body Combat.UI is
          Has_Gunner := False;
          declare
             AmmoIndex: constant Natural :=
-              (if PlayerShip.Modules(Guns(I)(1)).M_Type = GUN then
-                 PlayerShip.Modules(Guns(I)(1)).Ammo_Index
-               else PlayerShip.Modules(Guns(I)(1)).Harpoon_Index);
+              (if Player_Ship.Modules(Guns(I)(1)).M_Type = GUN then
+                 Player_Ship.Modules(Guns(I)(1)).Ammo_Index
+               else Player_Ship.Modules(Guns(I)(1)).Harpoon_Index);
          begin
             if
               (AmmoIndex in
-                 PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index)
+                 Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index)
               and then
-                Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex).IType =
                 Items_Types
-                  (Modules_List(PlayerShip.Modules(Guns(I)(1)).Proto_Index)
+                  (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                      .Value) then
-               AmmoAmount := PlayerShip.Cargo(AmmoIndex).Amount;
+               AmmoAmount := Player_Ship.Cargo(AmmoIndex).Amount;
                HaveAmmo := True;
             end if;
          end;
@@ -323,13 +323,13 @@ package body Combat.UI is
             for J in Items_List.Iterate loop
                if Items_List(J).IType =
                  Items_Types
-                   (Modules_List(PlayerShip.Modules(Guns(I)(1)).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(Guns(I)(1)).Proto_Index)
                       .Value) then
                   AmmoIndex :=
-                    FindItem(PlayerShip.Cargo, Objects_Container.Key(J));
+                    FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
                   if AmmoIndex > 0 then
                      AmmoAmount :=
-                       AmmoAmount + PlayerShip.Cargo(AmmoIndex).Amount;
+                       AmmoAmount + Player_Ship.Cargo(AmmoIndex).Amount;
                   end if;
                end if;
             end loop Find_Ammo_Loop;
@@ -340,7 +340,7 @@ package body Combat.UI is
          Label :=
            Create
              (Frame & ".gunlabel" & To_String(GunIndex),
-              "-text {" & To_String(PlayerShip.Modules(Guns(I)(1)).Name) &
+              "-text {" & To_String(Player_Ship.Modules(Guns(I)(1)).Name) &
               ":" & LF & "(Ammo:" & Natural'Image(AmmoAmount) & ")}");
          Tcl.Tk.Ada.Grid.Grid
            (Label,
@@ -355,12 +355,12 @@ package body Combat.UI is
              (Frame & ".guncrew" & To_String(GunIndex),
               "-values [list " & GetCrewList(2) &
               "] -width 10 -state readonly");
-         if PlayerShip.Modules(Guns(I)(1)).Owner(1) /= 0 then
-            if PlayerShip.Crew(PlayerShip.Modules(Guns(I)(1)).Owner(1)).Order =
+         if Player_Ship.Modules(Guns(I)(1)).Owner(1) /= 0 then
+            if Player_Ship.Crew(Player_Ship.Modules(Guns(I)(1)).Owner(1)).Order =
               Gunner then
                Current
                  (ComboBox,
-                  Positive'Image(PlayerShip.Modules(Guns(I)(1)).Owner(1)));
+                  Positive'Image(Player_Ship.Modules(Guns(I)(1)).Owner(1)));
                Has_Gunner := True;
             else
                Current(ComboBox, "0");
@@ -454,7 +454,7 @@ package body Combat.UI is
             Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -padx 5 -pady 5");
             Add(Button, "Set your ship's defenders against the enemy party.");
             Set_Boarding_And_Defenders_Loop :
-            for Member of PlayerShip.Crew loop
+            for Member of Player_Ship.Crew loop
                if Member.Order = Boarding then
                   Append(BoardingParty, Member.Name & ", ");
                elsif Member.Order = Defend then
@@ -510,7 +510,7 @@ package body Combat.UI is
       Delete_Widgets(0, Rows - 1, Frame);
       HasDamage := False;
       Show_Player_Ship_Damage_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          if Module.Durability = Module.Max_Durability then
             goto End_Of_Player_Ship_Damage_Loop;
          end if;
@@ -626,7 +626,7 @@ package body Combat.UI is
          if Enemy.Ship.Speed /= Ships.FULL_STOP then
             declare
                SpeedDiff: constant Integer :=
-                 RealSpeed(Enemy.Ship) - RealSpeed(PlayerShip);
+                 RealSpeed(Enemy.Ship) - RealSpeed(Player_Ship);
             begin
                if SpeedDiff > 250 then
                   Append(EnemyInfo, " (much faster)");
@@ -753,18 +753,18 @@ package body Combat.UI is
         (if CArgv.Arg(Argv, 2) = "boarding" then Boarding else Defend);
    begin
       Give_Boarding_Orders_Loop :
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Order = Boarding then
+      for I in Player_Ship.Crew.Iterate loop
+         if Player_Ship.Crew(I).Order = Boarding then
             OrderIndex := OrderIndex + 1;
          end if;
          if Crew_Container.To_Index(I) = MemberIndex then
-            if PlayerShip.Crew(I).Order /= Order then
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Order, 0);
+            if Player_Ship.Crew(I).Order /= Order then
+               GiveOrders(Player_Ship, Crew_Container.To_Index(I), Order, 0);
                if Order = Boarding then
                   BoardingOrders.Append(New_Item => 0);
                end if;
             else
-               GiveOrders(PlayerShip, Crew_Container.To_Index(I), Rest);
+               GiveOrders(Player_Ship, Crew_Container.To_Index(I), Rest);
                if Order = Boarding then
                   BoardingOrders.Delete(Index => OrderIndex);
                end if;
@@ -917,15 +917,15 @@ package body Combat.UI is
       Rows := Natural'Value(Slice(Tokens, 2));
       Delete_Widgets(1, Rows - 1, Frame);
       Show_Boarding_Party_Loop :
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Order /= Boarding then
+      for I in Player_Ship.Crew.Iterate loop
+         if Player_Ship.Crew(I).Order /= Boarding then
             goto End_Of_Loop;
          end if;
          Button :=
            Create
              (Frame & ".name" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "-text {" & To_String(Player_Ship.Crew(I).Name) &
               "} -command {ShowCombatInfo player" &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Add(Button, "Show more information about the crew member.");
@@ -938,10 +938,10 @@ package body Combat.UI is
              (Frame & ".health" &
               Trim(Natural'Image(Crew_Container.To_Index(I)), Left),
               "-orient horizontal -value " &
-              Natural'Image(PlayerShip.Crew(I).Health) & " -length 150" &
-              (if PlayerShip.Crew(I).Health > 74 then
+              Natural'Image(Player_Ship.Crew(I).Health) & " -length 150" &
+              (if Player_Ship.Crew(I).Health > 74 then
                  " -style green.Horizontal.TProgressbar"
-               elsif PlayerShip.Crew(I).Health > 24 then
+               elsif Player_Ship.Crew(I).Health > 24 then
                  " -style yellow.Horizontal.TProgressbar"
                else " -style Horizontal.TProgressbar"));
          Add(ProgressBar, "The crew member health.");
@@ -1027,13 +1027,13 @@ package body Combat.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(Next_Button);
          return TCL_OK;
       end if;
-      if PlayerShip.Crew(1).Order = Boarding and
+      if Player_Ship.Crew(1).Order = Boarding and
         Winfo_Get(Frame, "ismapped") = "1" then
          UpdateBoardingUI;
          ShowCombatFrame(".boarding");
          return TCL_OK;
       end if;
-      if PlayerShip.Crew(1).Order /= Boarding and
+      if Player_Ship.Crew(1).Order /= Boarding and
         Winfo_Get(Frame, "ismapped") = "0" then
          UpdateCombatUI;
          ShowCombatFrame(".combat");
@@ -1109,11 +1109,11 @@ package body Combat.UI is
       if CArgv.Arg(Argv, 1) = "pilot" then
          ComboBox.Name := New_String(FrameName & ".pilotorder");
          PilotOrder := Positive'Value(Current(ComboBox)) + 1;
-         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             AddMessage
               ("Order for " &
-               To_String(PlayerShip.Crew(FindMember(Pilot)).Name) &
+               To_String(Player_Ship.Crew(FindMember(Pilot)).Name) &
                " was set on: " & Get(ComboBox),
                CombatMessage);
          else
@@ -1123,11 +1123,11 @@ package body Combat.UI is
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineerorder");
          EngineerOrder := Positive'Value(Current(ComboBox)) + 1;
-         if not Factions_List(PlayerShip.Crew(1).Faction).Flags.Contains
+         if not Factions_List(Player_Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then
             AddMessage
               ("Order for " &
-               To_String(PlayerShip.Crew(FindMember(Engineer)).Name) &
+               To_String(Player_Ship.Crew(FindMember(Engineer)).Name) &
                " was set on: " & Get(ComboBox),
                CombatMessage);
          else
@@ -1142,12 +1142,12 @@ package body Combat.UI is
          Guns(GunIndex)(3) :=
            (if Current(ComboBox) = "0" then 0
             else Modules_List
-                (PlayerShip.Modules(Guns(GunIndex)(1)).Proto_Index)
+                (Player_Ship.Modules(Guns(GunIndex)(1)).Proto_Index)
                 .Speed);
          AddMessage
            ("Order for " &
             To_String
-              (PlayerShip.Crew(PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1))
+              (Player_Ship.Crew(Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1))
                  .Name) &
             " was set on: " & Get(ComboBox),
             CombatMessage);
@@ -1261,16 +1261,16 @@ package body Combat.UI is
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Show_Player_Ship_Crew_Loop :
-      for I in PlayerShip.Crew.Iterate loop
+      for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
            Create
              (CrewFrame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "-text {" & To_String(Player_Ship.Crew(I).Name) &
               "} -command {SetPartyOrder" &
               Positive'Image(Crew_Container.To_Index(I)) & " " &
               CArgv.Arg(Argv, 1) & "}");
-         if PlayerShip.Crew(I).Order /= Order then
+         if Player_Ship.Crew(I).Order /= Order then
             Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          else
             Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
@@ -1341,22 +1341,22 @@ package body Combat.UI is
          ComboBox.Name := New_String(FrameName & ".pilotcrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(PlayerShip, CrewIndex, Pilot);
+            GiveOrders(Player_Ship, CrewIndex, Pilot);
          else
             CrewIndex := FindMember(Pilot);
             if CrewIndex > 0 then
-               GiveOrders(PlayerShip, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, Rest);
             end if;
          end if;
       elsif CArgv.Arg(Argv, 1) = "engineer" then
          ComboBox.Name := New_String(FrameName & ".engineercrew");
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(PlayerShip, CrewIndex, Engineer);
+            GiveOrders(Player_Ship, CrewIndex, Engineer);
          else
             CrewIndex := FindMember(Engineer);
             if CrewIndex > 0 then
-               GiveOrders(PlayerShip, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, Rest);
             end if;
          end if;
       else
@@ -1365,11 +1365,11 @@ package body Combat.UI is
          GunIndex := Positive'Value(CArgv.Arg(Argv, 2));
          CrewIndex := Natural'Value(Current(ComboBox));
          if CrewIndex > 0 then
-            GiveOrders(PlayerShip, CrewIndex, Gunner, Guns(GunIndex)(1));
+            GiveOrders(Player_Ship, CrewIndex, Gunner, Guns(GunIndex)(1));
          else
-            CrewIndex := PlayerShip.Modules(Guns(GunIndex)(1)).Owner(1);
+            CrewIndex := Player_Ship.Modules(Guns(GunIndex)(1)).Owner(1);
             if CrewIndex > 0 then
-               GiveOrders(PlayerShip, CrewIndex, Rest);
+               GiveOrders(Player_Ship, CrewIndex, Rest);
             end if;
          end if;
       end if;
@@ -1407,12 +1407,12 @@ package body Combat.UI is
       Info := To_Unbounded_String("Uses: ");
       if CArgv.Arg(Argv, 1) = "player" then
          Show_Player_Crew_Equipment_Loop :
-         for Item of PlayerShip.Crew(CrewIndex).Equipment loop
+         for Item of Player_Ship.Crew(CrewIndex).Equipment loop
             if Item /= 0 then
                Append
                  (Info,
                   LF &
-                  GetItemName(PlayerShip.Crew(CrewIndex).Inventory(Item)));
+                  GetItemName(Player_Ship.Crew(CrewIndex).Inventory(Item)));
             end if;
          end loop Show_Player_Crew_Equipment_Loop;
       else
@@ -1439,17 +1439,17 @@ package body Combat.UI is
    begin
       Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
       if NewCombat then
-         if SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex > 0
+         if SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex > 0
            and then EnemyName /=
              Proto_Ships_List
                (Events_List
-                  (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
+                  (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                   .ShipIndex)
                .Name then
             CombatStarted :=
               StartCombat
                 (Events_List
-                   (SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex)
+                   (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex)
                    .ShipIndex,
                  False);
             if not CombatStarted then
@@ -1478,7 +1478,7 @@ package body Combat.UI is
          end if;
          configure(Close_Button, "-command ShowCombatUI");
          Back_To_Work_Loop :
-         for Member of PlayerShip.Crew loop
+         for Member of Player_Ship.Crew loop
             if Member.Order = Rest
               and then Member.PreviousOrder in Pilot | Engineer | Gunner then
                Member.Order := Member.PreviousOrder;

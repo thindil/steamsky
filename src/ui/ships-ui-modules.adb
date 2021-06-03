@@ -110,9 +110,9 @@ package body Ships.UI.Modules is
       Menu.Add
         (ModuleMenu, "command",
          "-label {Rename module} -command {GetString {Enter a new name for the " &
-         To_String(PlayerShip.Modules(ModuleIndex).Name) & ":} modulename" &
+         To_String(Player_Ship.Modules(ModuleIndex).Name) & ":} modulename" &
          CArgv.Arg(Argv, 1) & " {Renaming the module}}");
-      if PlayerShip.Repair_Module /= ModuleIndex then
+      if Player_Ship.Repair_Module /= ModuleIndex then
          Menu.Add
            (ModuleMenu, "command",
             "-label {Repair selected module as first when damaged} -command {SetRepair assign " &
@@ -121,32 +121,32 @@ package body Ships.UI.Modules is
       MaxValue :=
         Natural
           (Float
-             (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+             (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .Durability) *
            1.5);
-      if PlayerShip.Modules(ModuleIndex).Upgrade_Action = DURABILITY and
-        PlayerShip.Upgrade_Module = ModuleIndex then
+      if Player_Ship.Modules(ModuleIndex).Upgrade_Action = DURABILITY and
+        Player_Ship.Upgrade_Module = ModuleIndex then
          MaxValue := 1;
       end if;
-      if PlayerShip.Modules(ModuleIndex).Max_Durability < MaxValue then
+      if Player_Ship.Modules(ModuleIndex).Max_Durability < MaxValue then
          Menu.Add
            (ModuleMenu, "command",
             "-label {Start upgrading module durability} -command {SetUpgrade 1 " &
             CArgv.Arg(Argv, 1) & "}");
       end if;
-      case PlayerShip.Modules(ModuleIndex).M_Type is
+      case Player_Ship.Modules(ModuleIndex).M_Type is
          when ENGINE =>
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.Upgrade_Module = ModuleIndex then
+            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).Power < MaxValue then
+            if Player_Ship.Modules(ModuleIndex).Power < MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading engine power} -command {SetUpgrade 2 " &
@@ -155,20 +155,20 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .Value) /
                  2.0);
-            if PlayerShip.Modules(ModuleIndex).Upgrade_Action = VALUE and
-              PlayerShip.Upgrade_Module = ModuleIndex then
-               MaxValue := PlayerShip.Modules(ModuleIndex).Fuel_Usage + 1;
+            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = VALUE and
+              Player_Ship.Upgrade_Module = ModuleIndex then
+               MaxValue := Player_Ship.Modules(ModuleIndex).Fuel_Usage + 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).Fuel_Usage > MaxValue then
+            if Player_Ship.Modules(ModuleIndex).Fuel_Usage > MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start working on reduce fuel usage of this engine} -command {SetUpgrade 3 " &
                   CArgv.Arg(Argv, 1) & "}");
             end if;
-            if not PlayerShip.Modules(ModuleIndex).Disabled then
+            if not Player_Ship.Modules(ModuleIndex).Disabled then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Turn off engine so it stop using fuel} -command {DisableEngine " &
@@ -183,14 +183,14 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.Upgrade_Module = ModuleIndex then
+            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).Quality < MaxValue then
+            if Player_Ship.Modules(ModuleIndex).Quality < MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading cabin quality} -command {SetUpgrade 2 " &
@@ -199,7 +199,7 @@ package body Ships.UI.Modules is
             Missions_Loop :
             for Mission of AcceptedMissions loop
                if Mission.MType = Passenger then
-                  for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+                  for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
                      if Mission.Data = Owner then
                         IsPassenger := True;
                         exit Missions_Loop;
@@ -216,24 +216,24 @@ package body Ships.UI.Modules is
          when GUN | HARPOON_GUN =>
             declare
                CurrentValue: constant Positive :=
-                 (if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
-                    PlayerShip.Modules(ModuleIndex).Damage
-                  else PlayerShip.Modules(ModuleIndex).Duration);
+                 (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
+                    Player_Ship.Modules(ModuleIndex).Damage
+                  else Player_Ship.Modules(ModuleIndex).Duration);
             begin
                MaxValue :=
                  Natural
                    (Float
                       (Modules_List
-                         (PlayerShip.Modules(ModuleIndex).Proto_Index)
+                         (Player_Ship.Modules(ModuleIndex).Proto_Index)
                          .MaxValue) *
                     1.5);
-               if PlayerShip.Modules(ModuleIndex).Upgrade_Action =
+               if Player_Ship.Modules(ModuleIndex).Upgrade_Action =
                  MAX_VALUE and
-                 PlayerShip.Upgrade_Module = ModuleIndex then
+                 Player_Ship.Upgrade_Module = ModuleIndex then
                   MaxValue := 1;
                end if;
                if CurrentValue < MaxValue then
-                  if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
+                  if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
                      Menu.Add
                        (ModuleMenu, "command",
                         "-label {Start upgrading damage of gun} -command {SetUpgrade 2 " &
@@ -252,9 +252,9 @@ package body Ships.UI.Modules is
                CArgv.Arg(Argv, 1) & "}");
             declare
                AmmoIndex: constant Natural :=
-                 (if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
-                    PlayerShip.Modules(ModuleIndex).Ammo_Index
-                  else PlayerShip.Modules(ModuleIndex).Harpoon_Index);
+                 (if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
+                    Player_Ship.Modules(ModuleIndex).Ammo_Index
+                  else Player_Ship.Modules(ModuleIndex).Harpoon_Index);
                AmmoMenu: Tk_Menu :=
                  Get_Widget(Widget_Image(ModuleMenu) & ".ammomenu");
                NotEmpty: Boolean := False;
@@ -268,19 +268,19 @@ package body Ships.UI.Modules is
                Delete(AmmoMenu, "0", "end");
                Find_Ammo_Loop :
                for I in
-                 PlayerShip.Cargo.First_Index ..
-                   PlayerShip.Cargo.Last_Index loop
-                  if Items_List(PlayerShip.Cargo(I).ProtoIndex).IType =
+                 Player_Ship.Cargo.First_Index ..
+                   Player_Ship.Cargo.Last_Index loop
+                  if Items_List(Player_Ship.Cargo(I).ProtoIndex).IType =
                     Items_Types
                       (Modules_List
-                         (PlayerShip.Modules(ModuleIndex).Proto_Index)
+                         (Player_Ship.Modules(ModuleIndex).Proto_Index)
                          .Value) and
                     I /= AmmoIndex then
                      Menu.Add
                        (AmmoMenu, "command",
                         "-label {" &
                         To_String
-                          (Items_List(PlayerShip.Cargo(I).ProtoIndex).Name) &
+                          (Items_List(Player_Ship.Cargo(I).ProtoIndex).Name) &
                         "} -command {AssignModule ammo " & CArgv.Arg(Argv, 1) &
                         Positive'Image(I) & "}");
                      NotEmpty := True;
@@ -297,14 +297,14 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.Upgrade_Module = ModuleIndex then
+            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).Damage2 < MaxValue then
+            if Player_Ship.Modules(ModuleIndex).Damage2 < MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start upgrading damage of battering ram} -command {SetUpgrade 2 " &
@@ -314,21 +314,21 @@ package body Ships.UI.Modules is
             MaxValue :=
               Natural
                 (Float
-                   (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+                   (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                       .MaxValue) *
                  1.5);
-            if PlayerShip.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
-              PlayerShip.Upgrade_Module = ModuleIndex then
+            if Player_Ship.Modules(ModuleIndex).Upgrade_Action = MAX_VALUE and
+              Player_Ship.Upgrade_Module = ModuleIndex then
                MaxValue := 1;
             end if;
-            if PlayerShip.Modules(ModuleIndex).Max_Modules < MaxValue then
+            if Player_Ship.Modules(ModuleIndex).Max_Modules < MaxValue then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Start enlarging hull so it can have more modules installed} -command {SetUpgrade 2 " &
                   CArgv.Arg(Argv, 1) & "}");
             end if;
          when WORKSHOP =>
-            if PlayerShip.Modules(ModuleIndex).Crafting_Index /=
+            if Player_Ship.Modules(ModuleIndex).Crafting_Index /=
               Null_Unbounded_String then
                Menu.Add
                  (ModuleMenu, "command",
@@ -341,12 +341,12 @@ package body Ships.UI.Modules is
             end if;
          when MEDICAL_ROOM =>
             Find_Healing_Tool_Loop :
-            for Member of PlayerShip.Crew loop
+            for Member of Player_Ship.Crew loop
                if Member.Health < 100 and
                  FindItem
-                     (Inventory => PlayerShip.Cargo,
+                     (Inventory => Player_Ship.Cargo,
                       ItemType =>
-                        Factions_List(PlayerShip.Crew(1).Faction)
+                        Factions_List(Player_Ship.Crew(1).Faction)
                           .HealingTools) >
                    0 then
                   Menu.Add
@@ -357,7 +357,7 @@ package body Ships.UI.Modules is
                end if;
             end loop Find_Healing_Tool_Loop;
          when TRAINING_ROOM =>
-            if PlayerShip.Modules(ModuleIndex).Trained_Skill > 0 then
+            if Player_Ship.Modules(ModuleIndex).Trained_Skill > 0 then
                Menu.Add
                  (ModuleMenu, "command",
                   "-label {Assign selected crew member as worker...} -command {ShowAssignCrew " &
@@ -405,7 +405,7 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Module: constant Module_Data := PlayerShip.Modules(ModuleIndex);
+      Module: constant Module_Data := Player_Ship.Modules(ModuleIndex);
       MaxValue: Positive;
       HaveAmmo: Boolean;
       Mamount, MaxUpgrade: Natural := 0;
@@ -433,7 +433,7 @@ package body Ships.UI.Modules is
       Dialog_Header: constant Ttk_Label :=
         Create
           (ModuleDialog & ".header",
-           "-text {" & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           "-text {" & To_String(Player_Ship.Modules(ModuleIndex).Name) &
            "} -wraplength 275 -style Header.TLabel");
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
@@ -454,7 +454,7 @@ package body Ships.UI.Modules is
                HaveOwner := True;
                Insert
                  (ModuleText, "end",
-                  To_String(PlayerShip.Crew(Module.Owner(I)).Name));
+                  To_String(Player_Ship.Crew(Module.Owner(I)).Name));
             end if;
          end loop Add_Owners_Info_Loop;
          if not HaveOwner then
@@ -513,7 +513,7 @@ package body Ships.UI.Modules is
                "{" & To_String(Item.Name) & "}" &
                (if
                   FindItem
-                    (Inventory => PlayerShip.Cargo, ItemType => Item.IType) =
+                    (Inventory => Player_Ship.Cargo, ItemType => Item.IType) =
                   0
                 then " [list red]"
                 else ""));
@@ -650,15 +650,15 @@ package body Ships.UI.Modules is
                   else Module.Harpoon_Index);
             begin
                if AmmoIndex in
-                   PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index
+                   Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index
                  and then
-                   Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex).IType =
+                   Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex).IType =
                    Items_Types(Modules_List(Module.Proto_Index).Value) then
                   Insert
                     (ModuleText, "end",
                      "{" &
                      To_String
-                       (Items_List(PlayerShip.Cargo(AmmoIndex).ProtoIndex)
+                       (Items_List(Player_Ship.Cargo(AmmoIndex).ProtoIndex)
                           .Name) &
                      " (assigned)}");
                   HaveAmmo := True;
@@ -678,7 +678,7 @@ package body Ships.UI.Modules is
                         "{" & To_String(Items_List(I).Name) & "}" &
                         (if
                            FindItem
-                             (PlayerShip.Cargo, Objects_Container.Key(I)) >
+                             (Player_Ship.Cargo, Objects_Container.Key(I)) >
                            0
                          then ""
                          else " [list red]"));
@@ -690,7 +690,7 @@ package body Ships.UI.Modules is
               (ModuleText, "end",
                "{" & LF & "Gunner: " &
                (if Module.Owner(1) > 0 then
-                  To_String(PlayerShip.Crew(Module.Owner(1)).Name)
+                  To_String(Player_Ship.Crew(Module.Owner(1)).Name)
                 else "none") &
                "}");
             if Module.M_Type = GUN then
@@ -712,7 +712,7 @@ package body Ships.UI.Modules is
               (ModuleText, "end",
                "{" & LF & "Weapon: " &
                (if Module.Gun_Index > 0 then
-                  To_String(PlayerShip.Modules(Module.Gun_Index).Name)
+                  To_String(Player_Ship.Modules(Module.Gun_Index).Name)
                 else "none") &
                "}");
          when WORKSHOP =>
@@ -935,7 +935,7 @@ package body Ships.UI.Modules is
       StartUpgrading
         (Positive'Value(CArgv.Arg(Argv, 2)),
          Positive'Value(CArgv.Arg(Argv, 1)));
-      UpdateOrders(PlayerShip);
+      UpdateOrders(Player_Ship);
       UpdateMessages;
       return Show_Ship_Info_Command(ClientData, Interp, Argc, Argv);
    end Set_Upgrade_Command;
@@ -953,7 +953,7 @@ package body Ships.UI.Modules is
    -- COMMANDS
    -- AssignModule assigntype moduleindex assignindex
    -- assigntype is type of item to assing to module: crew, ammo, skills.
-   -- moduleindex is the index of the playership module to which item will be
+   -- moduleindex is the index of the Player_Ship module to which item will be
    -- assigned. assignindex is the index of the item which will be assigned
    -- to the module
    -- SOURCE
@@ -971,8 +971,8 @@ package body Ships.UI.Modules is
       Assigned: Boolean;
       procedure UpdateOrder(Order: Crew_Orders) is
       begin
-         GiveOrders(PlayerShip, AssignIndex, Order, ModuleIndex);
-         if PlayerShip.Crew(AssignIndex).Order /= Order then
+         GiveOrders(Player_Ship, AssignIndex, Order, ModuleIndex);
+         if Player_Ship.Crew(AssignIndex).Order /= Order then
             Tcl_SetVar
               (Interp,
                ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 3),
@@ -981,11 +981,11 @@ package body Ships.UI.Modules is
       end UpdateOrder;
    begin
       if CArgv.Arg(Argv, 1) = "crew" then
-         case Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+         case Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
            .MType is
             when CABIN =>
                Modules_Loop :
-               for Module of PlayerShip.Modules loop
+               for Module of Player_Ship.Modules loop
                   if Module.M_Type = CABIN then
                      for Owner of Module.Owner loop
                         if Owner = AssignIndex then
@@ -997,7 +997,7 @@ package body Ships.UI.Modules is
                end loop Modules_Loop;
                Assigned := False;
                Check_Assigned_Loop :
-               for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+               for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
                   if Owner = 0 then
                      Owner := AssignIndex;
                      Assigned := True;
@@ -1005,12 +1005,12 @@ package body Ships.UI.Modules is
                   end if;
                end loop Check_Assigned_Loop;
                if not Assigned then
-                  PlayerShip.Modules(ModuleIndex).Owner(1) := AssignIndex;
+                  Player_Ship.Modules(ModuleIndex).Owner(1) := AssignIndex;
                end if;
                AddMessage
                  ("You assigned " &
-                  To_String(PlayerShip.Modules(ModuleIndex).Name) & " to " &
-                  To_String(PlayerShip.Crew(AssignIndex).Name) & ".",
+                  To_String(Player_Ship.Modules(ModuleIndex).Name) & " to " &
+                  To_String(Player_Ship.Crew(AssignIndex).Name) & ".",
                   OrderMessage);
             when GUN | HARPOON_GUN =>
                UpdateOrder(Gunner);
@@ -1025,24 +1025,24 @@ package body Ships.UI.Modules is
          end case;
          UpdateHeader;
       elsif CArgv.Arg(Argv, 1) = "ammo" then
-         if PlayerShip.Modules(ModuleIndex).M_Type = GUN then
-            PlayerShip.Modules(ModuleIndex).Ammo_Index := AssignIndex;
+         if Player_Ship.Modules(ModuleIndex).M_Type = GUN then
+            Player_Ship.Modules(ModuleIndex).Ammo_Index := AssignIndex;
          else
-            PlayerShip.Modules(ModuleIndex).Harpoon_Index := AssignIndex;
+            Player_Ship.Modules(ModuleIndex).Harpoon_Index := AssignIndex;
          end if;
          AddMessage
            ("You assigned " &
             To_String
-              (Items_List(PlayerShip.Cargo(AssignIndex).ProtoIndex).Name) &
-            " to " & To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+              (Items_List(Player_Ship.Cargo(AssignIndex).ProtoIndex).Name) &
+            " to " & To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
             OrderMessage);
       elsif CArgv.Arg(Argv, 1) = "skill" then
-         if PlayerShip.Modules(ModuleIndex).Trained_Skill = AssignIndex then
+         if Player_Ship.Modules(ModuleIndex).Trained_Skill = AssignIndex then
             return TCL_OK;
          end if;
-         PlayerShip.Modules(ModuleIndex).Trained_Skill := AssignIndex;
+         Player_Ship.Modules(ModuleIndex).Trained_Skill := AssignIndex;
          AddMessage
-           ("You prepared " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You prepared " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
             " for training " & To_String(Skills_List(AssignIndex).Name) & ".",
             OrderMessage);
       end if;
@@ -1083,12 +1083,12 @@ package body Ships.UI.Modules is
       CanDisable: Boolean := False;
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      if not PlayerShip.Modules(ModuleIndex).Disabled then
+      if not Player_Ship.Modules(ModuleIndex).Disabled then
          Check_Can_Disable_Loop :
-         for I in PlayerShip.Modules.Iterate loop
-            if PlayerShip.Modules(I).M_Type = ENGINE
+         for I in Player_Ship.Modules.Iterate loop
+            if Player_Ship.Modules(I).M_Type = ENGINE
               and then
-              (not PlayerShip.Modules(I).Disabled and
+              (not Player_Ship.Modules(I).Disabled and
                Modules_Container.To_Index(I) /= ModuleIndex) then
                CanDisable := True;
                exit Check_Can_Disable_Loop;
@@ -1101,15 +1101,15 @@ package body Ships.UI.Modules is
                Title => "Can't disable engine");
             return TCL_OK;
          end if;
-         PlayerShip.Modules(ModuleIndex).Disabled := True;
+         Player_Ship.Modules(ModuleIndex).Disabled := True;
          AddMessage
-           ("You disabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You disabled " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       else
-         PlayerShip.Modules(ModuleIndex).Disabled := False;
+         Player_Ship.Modules(ModuleIndex).Disabled := False;
          AddMessage
-           ("You enabled " & To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           ("You enabled " & To_String(Player_Ship.Modules(ModuleIndex).Name) &
             ".",
             OrderMessage);
       end if;
@@ -1141,11 +1141,11 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      PlayerShip.Upgrade_Module := 0;
+      Player_Ship.Upgrade_Module := 0;
       Give_Orders_Loop :
-      for I in PlayerShip.Crew.First_Index .. PlayerShip.Crew.Last_Index loop
-         if PlayerShip.Crew(I).Order = Upgrading then
-            GiveOrders(PlayerShip, I, Rest);
+      for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
+         if Player_Ship.Crew(I).Order = Upgrading then
+            GiveOrders(Player_Ship, I, Rest);
             exit Give_Orders_Loop;
          end if;
       end loop Give_Orders_Loop;
@@ -1181,15 +1181,15 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
    begin
       if CArgv.Arg(Argv, 1) = "assign" then
-         PlayerShip.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
+         Player_Ship.Repair_Module := Positive'Value(CArgv.Arg(Argv, 2));
          AddMessage
            ("You assigned " &
             To_String
-              (PlayerShip.Modules(Positive'Value(CArgv.Arg(Argv, 2))).Name) &
+              (Player_Ship.Modules(Positive'Value(CArgv.Arg(Argv, 2))).Name) &
             " as repair priority.",
             OrderMessage);
       else
-         PlayerShip.Repair_Module := 0;
+         Player_Ship.Repair_Module := 0;
          AddMessage("You removed repair priority.", OrderMessage);
       end if;
       UpdateMessages;
@@ -1220,8 +1220,8 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
    begin
-      PlayerShip.Destination_X := 0;
-      PlayerShip.Destination_Y := 0;
+      Player_Ship.Destination_X := 0;
+      Player_Ship.Destination_Y := 0;
       return Show_Ship_Info_Command(ClientData, Interp, 2, Argv);
    end Reset_Destination_Command;
 
@@ -1265,16 +1265,16 @@ package body Ships.UI.Modules is
               ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 2)) =
            "0" then
             Remove_Owner_Loop :
-            for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+            for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
                if Owner = CrewIndex then
                   Owner := 0;
                   exit Remove_Owner_Loop;
                end if;
             end loop Remove_Owner_Loop;
-            if Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index)
+            if Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index)
                 .MType /=
               CABIN then
-               GiveOrders(PlayerShip, CrewIndex, Rest, 0, False);
+               GiveOrders(Player_Ship, CrewIndex, Rest, 0, False);
             end if;
          elsif Assign_Module_Command
              (ClientData, Interp, 4,
@@ -1286,7 +1286,7 @@ package body Ships.UI.Modules is
       end if;
       CrewButton.Interp := Interp;
       Enable_Buttons_Loop :
-      for I in PlayerShip.Crew.Iterate loop
+      for I in Player_Ship.Crew.Iterate loop
          CrewButton.Name :=
            New_String
              (".moduledialog.canvas.frame.crewbutton" &
@@ -1294,14 +1294,14 @@ package body Ships.UI.Modules is
          State(CrewButton, "!disabled");
          configure(CrewButton, "-takefocus 1");
       end loop Enable_Buttons_Loop;
-      for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+      for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
          if Owner /= 0 then
             Assigned := Assigned + 1;
          end if;
       end loop;
-      if Assigned = Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) then
+      if Assigned = Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) then
          Disable_Buttons_Loop :
-         for I in PlayerShip.Crew.Iterate loop
+         for I in Player_Ship.Crew.Iterate loop
             ButtonName :=
               To_Unbounded_String
                 (".moduledialog.canvas.frame.crewbutton" &
@@ -1318,7 +1318,7 @@ package body Ships.UI.Modules is
            (InfoLabel,
             "-text {Available:" &
             Natural'Image
-              (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+              (Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) -
                Assigned) &
             "}");
          UpdateHeader;
@@ -1375,7 +1375,7 @@ package body Ships.UI.Modules is
         Create
           (CrewFrame & ".titlelabel",
            "-text {Assign a crew member to " &
-           To_String(PlayerShip.Modules(ModuleIndex).Name) &
+           To_String(Player_Ship.Modules(ModuleIndex).Name) &
            "} -wraplength 250");
       Assigned: Natural := 0;
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
@@ -1392,17 +1392,17 @@ package body Ships.UI.Modules is
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Load_Crew_List_Loop :
-      for I in PlayerShip.Crew.Iterate loop
+      for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
            Create
              (CrewFrame & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left),
-              "-text {" & To_String(PlayerShip.Crew(I).Name) &
+              "-text {" & To_String(Player_Ship.Crew(I).Name) &
               "} -command {UpdateAssignCrew" & Positive'Image(ModuleIndex) &
               Positive'Image(Crew_Container.To_Index(I)) & "}");
          Tcl_SetVar(Interp, Widget_Image(CrewButton), "0");
          Count_Assigned_Loop :
-         for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+         for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
             if Owner = Crew_Container.To_Index(I) then
                Tcl_SetVar(Interp, Widget_Image(CrewButton), "1");
                Assigned := Assigned + 1;
@@ -1429,7 +1429,7 @@ package body Ships.UI.Modules is
           (CrewFrame & ".infolabel",
            "-text {Available:" &
            Natural'Image
-             (Positive(PlayerShip.Modules(ModuleIndex).Owner.Length) -
+             (Positive(Player_Ship.Modules(ModuleIndex).Owner.Length) -
               Assigned) &
            "}");
       Tcl.Tk.Ada.Pack.Pack(InfoLabel);
@@ -1491,7 +1491,7 @@ package body Ships.UI.Modules is
         Create
           (ModuleDialog & ".titlelabel",
            "-text {Assign skill to " &
-           To_String(PlayerShip.Modules(ModuleIndex).Name) & "}");
+           To_String(Player_Ship.Modules(ModuleIndex).Name) & "}");
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ScrollSkillY: constant Ttk_Scrollbar :=
         Create
@@ -1533,15 +1533,15 @@ package body Ships.UI.Modules is
             To_String(SkillName) & "} {" & To_String(ToolName) & "}]" &
             To_String(Tags));
       end loop Load_Skills_List_Loop;
-      if PlayerShip.Modules(ModuleIndex).Trained_Skill > 0 then
+      if Player_Ship.Modules(ModuleIndex).Trained_Skill > 0 then
          Selection_Set
            (SkillsView,
             "[list" &
-            Positive'Image(PlayerShip.Modules(ModuleIndex).Trained_Skill) &
+            Positive'Image(Player_Ship.Modules(ModuleIndex).Trained_Skill) &
             "]");
          TtkTreeView.Focus
            (SkillsView,
-            Positive'Image(PlayerShip.Modules(ModuleIndex).Trained_Skill));
+            Positive'Image(Player_Ship.Modules(ModuleIndex).Trained_Skill));
       end if;
       Bind
         (SkillsView, "<<TreeviewSelect>>",
@@ -1589,18 +1589,18 @@ package body Ships.UI.Modules is
       pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
-      PlayerShip.Modules(ModuleIndex).Crafting_Index := Null_Unbounded_String;
-      PlayerShip.Modules(ModuleIndex).Crafting_Amount := 0;
-      PlayerShip.Modules(ModuleIndex).Crafting_Time := 0;
+      Player_Ship.Modules(ModuleIndex).Crafting_Index := Null_Unbounded_String;
+      Player_Ship.Modules(ModuleIndex).Crafting_Amount := 0;
+      Player_Ship.Modules(ModuleIndex).Crafting_Time := 0;
       Give_Orders_Loop :
-      for Owner of PlayerShip.Modules(ModuleIndex).Owner loop
+      for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
          if Owner > 0 then
-            GiveOrders(PlayerShip, Owner, Rest);
+            GiveOrders(Player_Ship, Owner, Rest);
          end if;
       end loop Give_Orders_Loop;
       AddMessage
         ("You cancelled crafting order in " &
-         To_String(PlayerShip.Modules(ModuleIndex).Name) & ".",
+         To_String(Player_Ship.Modules(ModuleIndex).Name) & ".",
          CraftMessage, RED);
       UpdateMessages;
       UpdateHeader;
@@ -1638,7 +1638,7 @@ package body Ships.UI.Modules is
       Button: Ttk_CheckButton;
    begin
       Find_Active_Button_Loop :
-      for I in PlayerShip.Crew.Iterate loop
+      for I in Player_Ship.Crew.Iterate loop
          ButtonName :=
            To_Unbounded_String
              (".moduledialog.canvas.frame.crewbutton" &
@@ -1675,7 +1675,7 @@ package body Ships.UI.Modules is
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;

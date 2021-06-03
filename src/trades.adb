@@ -33,11 +33,11 @@ package body Trades is
      (BaseItemIndex: BaseCargo_Container.Extended_Index; Amount: String) is
       BuyAmount, Price: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       ItemName, ItemIndex: Unbounded_String;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
    begin
@@ -65,18 +65,18 @@ package body Trades is
       end if;
       Cost := BuyAmount * Price;
       CountPrice(Cost, TraderIndex);
-      MoneyIndex2 := FindItem(PlayerShip.Cargo, Money_Index);
+      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
       if FreeCargo(Cost - (Items_List(ItemIndex).Weight * BuyAmount)) < 0 then
          raise Trade_No_Free_Cargo;
       end if;
       if MoneyIndex2 = 0 then
          raise Trade_No_Money with To_String(ItemName);
       end if;
-      if Cost > PlayerShip.Cargo(MoneyIndex2).Amount then
+      if Cost > Player_Ship.Cargo(MoneyIndex2).Amount then
          raise Trade_Not_Enough_Money with To_String(ItemName);
       end if;
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
+        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => (0 - Cost));
       if BaseIndex > 0 then
          UpdateBaseCargo(Money_Index, Cost);
       else
@@ -84,7 +84,7 @@ package body Trades is
       end if;
       if BaseIndex > 0 then
          UpdateCargo
-           (Ship => PlayerShip, ProtoIndex => ItemIndex, Amount => BuyAmount,
+           (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
             Durability => SkyBases(BaseIndex).Cargo(BaseItemIndex).Durability,
             Price => Price);
          UpdateBaseCargo
@@ -94,7 +94,7 @@ package body Trades is
          GainRep(BaseIndex, 1);
       else
          UpdateCargo
-           (Ship => PlayerShip, ProtoIndex => ItemIndex, Amount => BuyAmount,
+           (Ship => Player_Ship, ProtoIndex => ItemIndex, Amount => BuyAmount,
             Durability => TraderCargo(BaseItemIndex).Durability,
             Price => Price);
          TraderCargo(BaseItemIndex).Amount :=
@@ -121,13 +121,13 @@ package body Trades is
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) is
       SellAmount: Positive;
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       ProtoIndex: constant Unbounded_String :=
-        PlayerShip.Cargo(ItemIndex).ProtoIndex;
+        Player_Ship.Cargo(ItemIndex).ProtoIndex;
       ItemName: constant String := To_String(Items_List(ProtoIndex).Name);
       Price: Positive;
       EventIndex: constant Events_Container.Extended_Index :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).EventIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       BaseItemIndex: Natural := 0;
       CargoAdded: Boolean := False;
       TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
@@ -161,24 +161,24 @@ package body Trades is
          Price := Price * 2;
       end if;
       Profit := Price * SellAmount;
-      if PlayerShip.Cargo(ItemIndex).Durability < 100 then
+      if Player_Ship.Cargo(ItemIndex).Durability < 100 then
          Profit :=
            Positive
              (Float'Floor
                 (Float(Profit) *
-                 (Float(PlayerShip.Cargo(ItemIndex).Durability) / 100.0)));
+                 (Float(Player_Ship.Cargo(ItemIndex).Durability) / 100.0)));
       end if;
       CountPrice(Profit, TraderIndex, False);
       Pay_Trade_Profit_Loop :
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Payment(2) = 0 then
+      for I in Player_Ship.Crew.Iterate loop
+         if Player_Ship.Crew(I).Payment(2) = 0 then
             goto End_Of_Loop;
          end if;
          if Profit < 1 then
             UpdateMorale
-              (PlayerShip, Crew_Container.To_Index(I), GetRandom(-25, -5));
+              (Player_Ship, Crew_Container.To_Index(I), GetRandom(-25, -5));
             AddMessage
-              (To_String(PlayerShip.Crew(I).Name) &
+              (To_String(Player_Ship.Crew(I).Name) &
                " is sad because doesn't get own part of profit.",
                TradeMessage, RED);
             Profit := 0;
@@ -189,13 +189,13 @@ package body Trades is
            Positive
              (Float'Ceiling
                 (Float(Profit) *
-                 (Float(PlayerShip.Crew(I).Payment(2)) / 100.0)));
+                 (Float(Player_Ship.Crew(I).Payment(2)) / 100.0)));
          if Profit < 1 then
             if Profit < 0 then
                UpdateMorale
-                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-12, -2));
+                 (Player_Ship, Crew_Container.To_Index(I), GetRandom(-12, -2));
                AddMessage
-                 (To_String(PlayerShip.Crew(I).Name) &
+                 (To_String(Player_Ship.Crew(I).Name) &
                   " is sad because doesn't get own part of profit.",
                   TradeMessage, RED);
             end if;
@@ -213,7 +213,7 @@ package body Trades is
          end if;
          UpdateBaseCargo
            (ProtoIndex, SellAmount,
-            PlayerShip.Cargo.Element(ItemIndex).Durability);
+            Player_Ship.Cargo.Element(ItemIndex).Durability);
       else
          if Profit > TraderCargo(1).Amount then
             raise Trade_No_Money_In_Base with ItemName;
@@ -222,7 +222,7 @@ package body Trades is
          for I in TraderCargo.Iterate loop
             if TraderCargo(I).ProtoIndex = ProtoIndex and
               TraderCargo(I).Durability =
-                PlayerShip.Cargo(ItemIndex).Durability then
+                Player_Ship.Cargo(ItemIndex).Durability then
                TraderCargo(I).Amount := TraderCargo(I).Amount + SellAmount;
                CargoAdded := True;
                exit Update_Trader_Cargo_Loop;
@@ -232,15 +232,15 @@ package body Trades is
             TraderCargo.Append
               (New_Item =>
                  (ProtoIndex => ProtoIndex, Amount => SellAmount,
-                  Durability => PlayerShip.Cargo(ItemIndex).Durability,
+                  Durability => Player_Ship.Cargo(ItemIndex).Durability,
                   Price => Items_List(ProtoIndex).Price));
          end if;
       end if;
       UpdateCargo
-        (Ship => PlayerShip, CargoIndex => ItemIndex,
+        (Ship => Player_Ship, CargoIndex => ItemIndex,
          Amount => (0 - SellAmount),
-         Price => PlayerShip.Cargo.Element(ItemIndex).Price);
-      UpdateCargo(PlayerShip, Money_Index, Profit);
+         Price => Player_Ship.Cargo.Element(ItemIndex).Price);
+      UpdateCargo(Player_Ship, Money_Index, Profit);
       if BaseIndex > 0 then
          UpdateBaseCargo(Money_Index, (0 - Profit));
          GainRep(BaseIndex, 1);
@@ -268,8 +268,8 @@ package body Trades is
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
       TraderShip: Ship_Record :=
         CreateShip
-          (ProtoIndex, Null_Unbounded_String, PlayerShip.Sky_X,
-           PlayerShip.Sky_Y, FULL_STOP);
+          (ProtoIndex, Null_Unbounded_String, Player_Ship.Sky_X,
+           Player_Ship.Sky_Y, FULL_STOP);
       CargoAmount: Natural range 0 .. 10 :=
         (if TraderShip.Crew.Length < 5 then GetRandom(1, 3)
          elsif TraderShip.Crew.Length < 10 then GetRandom(1, 5)

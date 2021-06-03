@@ -88,18 +88,18 @@ package body DebugUI is
       Insert
         (ProtoEntry, "0",
          To_String
-           (Modules_List(PlayerShip.Modules(ModuleIndex).Proto_Index).Name));
-      Set(SpinBox, Positive'Image(PlayerShip.Modules(ModuleIndex).Weight));
+           (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index).Name));
+      Set(SpinBox, Positive'Image(Player_Ship.Modules(ModuleIndex).Weight));
       SpinBox.Name := New_String(FrameName & ".dur");
-      Set(SpinBox, Integer'Image(PlayerShip.Modules(ModuleIndex).Durability));
+      Set(SpinBox, Integer'Image(Player_Ship.Modules(ModuleIndex).Durability));
       SpinBox.Name := New_String(FrameName & ".maxdur");
       Set
         (SpinBox,
-         Positive'Image(PlayerShip.Modules(ModuleIndex).Max_Durability));
+         Positive'Image(Player_Ship.Modules(ModuleIndex).Max_Durability));
       SpinBox.Name := New_String(FrameName & ".upgrade");
       Set
         (SpinBox,
-         Natural'Image(PlayerShip.Modules(ModuleIndex).Upgrade_Progress));
+         Natural'Image(Player_Ship.Modules(ModuleIndex).Upgrade_Progress));
       return TCL_OK;
    end Refresh_Module_Command;
 
@@ -137,7 +137,7 @@ package body DebugUI is
       SkillsIndexes: Positive_Container.Vector;
       SkillsList: Unbounded_String;
    begin
-      Member := PlayerShip.Crew(Natural'Value(Current(ComboBox)) + 1);
+      Member := Player_Ship.Crew(Natural'Value(Current(ComboBox)) + 1);
       Set(SpinBox, Positive'Image(Member.Health));
       SpinBox.Name := New_String(FrameName & ".thirst");
       Set(SpinBox, Positive'Image(Member.Thirst));
@@ -241,7 +241,7 @@ package body DebugUI is
         Get_Widget(FrameName & ".updateamount", Interp);
    begin
       ItemIndex := Natural'Value(Current(CargoCombo)) + 1;
-      Set(AmountBox, Positive'Image(PlayerShip.Cargo(ItemIndex).Amount));
+      Set(AmountBox, Positive'Image(Player_Ship.Cargo(ItemIndex).Amount));
       return TCL_OK;
    end Refresh_Cargo_Command;
 
@@ -370,11 +370,11 @@ package body DebugUI is
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".ship.module", Interp);
       ValuesList: Unbounded_String;
    begin
-      Set(SpinBox, Positive'Image(PlayerShip.Sky_X));
+      Set(SpinBox, Positive'Image(Player_Ship.Sky_X));
       SpinBox.Name := New_String(FrameName & ".ship.y");
-      Set(SpinBox, Positive'Image(PlayerShip.Sky_Y));
+      Set(SpinBox, Positive'Image(Player_Ship.Sky_Y));
       Update_Modules_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          Append(ValuesList, " {" & Module.Name & "}");
       end loop Update_Modules_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
@@ -385,7 +385,7 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".crew.member");
       ValuesList := Null_Unbounded_String;
       Update_Members_Loop :
-      for Member of PlayerShip.Crew loop
+      for Member of Player_Ship.Crew loop
          Append(ValuesList, " {" & Member.Name & "}");
       end loop Update_Members_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
@@ -396,7 +396,7 @@ package body DebugUI is
       ComboBox.Name := New_String(FrameName & ".cargo.update");
       ValuesList := Null_Unbounded_String;
       Update_Cargo_Loop :
-      for Item of PlayerShip.Cargo loop
+      for Item of Player_Ship.Cargo loop
          Append(ValuesList, " {" & GetItemName(Item, False, False) & "}");
       end loop Update_Cargo_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
@@ -525,9 +525,9 @@ package body DebugUI is
       FrameName: constant String := ".debugdialog.main.ship";
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".x", Interp);
    begin
-      PlayerShip.Sky_X := Positive'Value(Get(SpinBox));
+      Player_Ship.Sky_X := Positive'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".y");
-      PlayerShip.Sky_Y := Positive'Value(Get(SpinBox));
+      Player_Ship.Sky_Y := Positive'Value(Get(SpinBox));
       ShowSkyMap(True);
       return TCL_OK;
    end Move_Ship_Command;
@@ -568,20 +568,20 @@ package body DebugUI is
       for I in Modules_List.Iterate loop
          if Modules_List(I).Name = Value then
             Value := Null_Unbounded_String;
-            PlayerShip.Modules(ModuleIndex).Proto_Index :=
+            Player_Ship.Modules(ModuleIndex).Proto_Index :=
               BaseModules_Container.Key(I);
             exit Update_Proto_Index_Loop;
          end if;
       end loop Update_Proto_Index_Loop;
-      PlayerShip.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
+      Player_Ship.Modules(ModuleIndex).Weight := Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".dur");
-      PlayerShip.Modules(ModuleIndex).Durability :=
+      Player_Ship.Modules(ModuleIndex).Durability :=
         Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".maxdur");
-      PlayerShip.Modules(ModuleIndex).Max_Durability :=
+      Player_Ship.Modules(ModuleIndex).Max_Durability :=
         Natural'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".upgrade");
-      PlayerShip.Modules(ModuleIndex).Upgrade_Progress :=
+      Player_Ship.Modules(ModuleIndex).Upgrade_Progress :=
         Natural'Value(Get(SpinBox));
       return TCL_OK;
    end Update_Module_Command;
@@ -618,7 +618,7 @@ package body DebugUI is
       Add_Skill_Loop :
       for I in Skills_List.Iterate loop
          if Skills_List(I).Name = SkillName then
-            PlayerShip.Crew(MemberIndex).Skills.Append
+            Player_Ship.Crew(MemberIndex).Skills.Append
               ((SkillsData_Container.To_Index(I), 1, 0));
             return Refresh_Member_Command(ClientData, Interp, Argc, Argv);
          end if;
@@ -656,34 +656,34 @@ package body DebugUI is
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".health", Interp);
    begin
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
-      PlayerShip.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
+      Player_Ship.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".thirst");
-      PlayerShip.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
+      Player_Ship.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".hunger");
-      PlayerShip.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
+      Player_Ship.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".tired");
-      PlayerShip.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
+      Player_Ship.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".morale");
-      PlayerShip.Crew(MemberIndex).Morale(1) :=
+      Player_Ship.Crew(MemberIndex).Morale(1) :=
         Skill_Range'Value(Get(SpinBox));
       SpinBox.Name := New_String(FrameName & ".loyalty");
-      PlayerShip.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
+      Player_Ship.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
       Update_Stats_Loop :
-      for I in PlayerShip.Crew(MemberIndex).Attributes.Iterate loop
+      for I in Player_Ship.Crew(MemberIndex).Attributes.Iterate loop
          SpinBox.Name :=
            New_String
              (FrameName & ".stats.value" &
               Trim(Positive'Image(Attributes_Container.To_Index(I)), Left));
-         PlayerShip.Crew(MemberIndex).Attributes(I)(1) :=
+         Player_Ship.Crew(MemberIndex).Attributes(I)(1) :=
            Positive'Value(Get(SpinBox));
       end loop Update_Stats_Loop;
       Update_Skills_Loop :
-      for I in PlayerShip.Crew(MemberIndex).Skills.Iterate loop
+      for I in Player_Ship.Crew(MemberIndex).Skills.Iterate loop
          SpinBox.Name :=
            New_String
              (FrameName & ".skills.value" &
               Trim(Positive'Image(Skills_Container.To_Index(I)), Left));
-         PlayerShip.Crew(MemberIndex).Skills(I)(2) :=
+         Player_Ship.Crew(MemberIndex).Skills(I)(2) :=
            Positive'Value(Get(SpinBox));
       end loop Update_Skills_Loop;
       return TCL_OK;
@@ -728,7 +728,7 @@ package body DebugUI is
       if ItemIndex = Null_Unbounded_String then
          return TCL_OK;
       end if;
-      UpdateCargo(PlayerShip, ItemIndex, Positive'Value(Get(ItemBox)));
+      UpdateCargo(Player_Ship, ItemIndex, Positive'Value(Get(ItemBox)));
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Add_Item_Command;
 
@@ -763,7 +763,7 @@ package body DebugUI is
    begin
       ItemIndex := Natural'Value(Current(ItemCombo)) + 1;
       UpdateCargo
-        (Ship => PlayerShip, Amount => Positive'Value(Get(ItemBox)),
+        (Ship => Player_Ship, Amount => Positive'Value(Get(ItemBox)),
          CargoIndex => ItemIndex);
       return Refresh_Command(ClientData, Interp, Argc, Argv);
    end Update_Item_Command;
