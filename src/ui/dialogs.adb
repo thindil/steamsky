@@ -251,7 +251,7 @@ package body Dialogs is
         (MessageDialog & ".button",
          "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
          "CloseDialog " & MessageDialog);
-      Show_Dialog(MessageDialog, ParentFrame);
+      Show_Dialog(MessageDialog, ParentFrame, True);
    end ShowMessage;
 
    procedure ShowInfo
