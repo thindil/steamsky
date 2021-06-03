@@ -58,7 +58,7 @@ package Bases.Ship is
    --               ship
    -- SOURCE
    procedure RepairShip(ModuleIndex: Integer) with
-      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
+      Pre => (ModuleIndex <= Player_Ship.Modules.Last_Index),
       Test_Case => (Name => "Test_RepairShip", Mode => Nominal);
       -- ****
 
@@ -95,7 +95,7 @@ package Bases.Ship is
       -- Parameters Cost and Time
       -- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
-      Pre => (ModuleIndex <= PlayerShip.Modules.Last_Index),
+      Pre => (ModuleIndex <= Player_Ship.Modules.Last_Index),
       Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
       -- ****
 

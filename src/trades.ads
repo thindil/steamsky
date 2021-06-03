@@ -126,7 +126,7 @@ package Trades is
    procedure SellItems
      (ItemIndex: Inventory_Container.Extended_Index; Amount: String) with
       Pre => ItemIndex in
-        PlayerShip.Cargo.First_Index .. PlayerShip.Cargo.Last_Index,
+        Player_Ship.Cargo.First_Index .. Player_Ship.Cargo.Last_Index,
       Test_Case => (Name => "Test_SellItems", Mode => Nominal);
       -- ****
 

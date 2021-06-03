@@ -147,7 +147,7 @@ package Crafts is
    procedure SetRecipe
      (Workshop, Amount: Positive; RecipeIndex: Unbounded_String) with
       Pre =>
-      (Workshop <= PlayerShip.Modules.Last_Index and
+      (Workshop <= Player_Ship.Modules.Last_Index and
        RecipeIndex /= Null_Unbounded_String),
       Test_Case => (Name => "Test_SetRecipe", Mode => Nominal);
       -- ****

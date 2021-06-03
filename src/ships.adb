@@ -886,24 +886,24 @@ package body Ships is
             NewName := GenerateRoboticName;
          else
             NewName :=
-              ShipSyllablesStart
+              Ship_Syllables_Start
                 (GetRandom
-                   (ShipSyllablesStart.First_Index,
-                    ShipSyllablesStart.Last_Index));
+                   (Ship_Syllables_Start.First_Index,
+                    Ship_Syllables_Start.Last_Index));
             if GetRandom(1, 100) < 51 then
                Append
                  (NewName,
-                  ShipSyllablesMiddle
+                  Ship_Syllables_Middle
                     (GetRandom
-                       (ShipSyllablesMiddle.First_Index,
-                        ShipSyllablesMiddle.Last_Index)));
+                       (Ship_Syllables_Middle.First_Index,
+                        Ship_Syllables_Middle.Last_Index)));
             end if;
             Append
               (NewName,
-               ShipSyllablesEnd
+               Ship_Syllables_End
                  (GetRandom
-                    (ShipSyllablesEnd.First_Index,
-                     ShipSyllablesEnd.Last_Index)));
+                    (Ship_Syllables_End.First_Index,
+                     Ship_Syllables_End.Last_Index)));
          end if;
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
@@ -916,7 +916,7 @@ package body Ships is
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
-         for Item of PlayerShip.Cargo loop
+         for Item of Player_Ship.Cargo loop
             if Items_List(Item.ProtoIndex).IType =
               Items_Types(ItemTypeIndex) then
                CombatValue :=
@@ -927,7 +927,7 @@ package body Ships is
       end CountAmmoValue;
    begin
       Count_Combat_Value_Loop :
-      for Module of PlayerShip.Modules loop
+      for Module of Player_Ship.Modules loop
          case Modules_List(Module.Proto_Index).MType is
             when BATTERING_RAM =>
                CombatValue :=
@@ -1001,8 +1001,8 @@ package body Ships is
       if Ship.Modules(ModuleIndex).Durability = 0 then
          case Modules_List(Ship.Modules(ModuleIndex).Proto_Index).MType is
             when HULL | ENGINE =>
-               if Ship = PlayerShip then
-                  Death(1, To_Unbounded_String(DeathReason), PlayerShip);
+               if Ship = Player_Ship then
+                  Death(1, To_Unbounded_String(DeathReason), Player_Ship);
                end if;
             when TURRET =>
                WeaponIndex := Ship.Modules(ModuleIndex).Gun_Index;

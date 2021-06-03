@@ -350,8 +350,8 @@ package body Stories is
          BaseIndex := GetRandom(SkyBases'First, SkyBases'Last);
          if SkyBases(BaseIndex).Known and
            SkyBases(BaseIndex).Reputation(1) > -25 then
-            PlayerShip.Destination_X := SkyBases(BaseIndex).SkyX;
-            PlayerShip.Destination_Y := SkyBases(BaseIndex).SkyY;
+            Player_Ship.Destination_X := SkyBases(BaseIndex).SkyX;
+            Player_Ship.Destination_Y := SkyBases(BaseIndex).SkyY;
             return SkyBases(BaseIndex).Name;
          end if;
       end loop Select_Base_Loop;
@@ -381,7 +381,7 @@ package body Stories is
          LocationData := Value;
          Append(LocationData, ";");
       end if;
-      PlayerShip.Destination_X := LocationX;
+      Player_Ship.Destination_X := LocationX;
       Value := GetStepData(StepData, "y");
       if Value = To_Unbounded_String("random") then
          Random_Location_Loop :
@@ -390,7 +390,7 @@ package body Stories is
             exit Random_Location_Loop when SkyMap(LocationX, LocationY)
                 .BaseIndex =
               0 and
-              LocationY /= PlayerShip.Sky_Y;
+              LocationY /= Player_Ship.Sky_Y;
          end loop Random_Location_Loop;
          Append(LocationData, Integer'Image(LocationY));
          Append(LocationData, ";");
@@ -399,7 +399,7 @@ package body Stories is
          Append(LocationData, Value);
          Append(LocationData, ";");
       end if;
-      PlayerShip.Destination_Y := LocationY;
+      Player_Ship.Destination_Y := LocationY;
       return LocationData;
    end SelectLocation;
 
@@ -480,7 +480,7 @@ package body Stories is
          Check_Faction_Loop :
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
-              To_Lower(To_String(PlayerShip.Crew(1).Faction)) then
+              To_Lower(To_String(Player_Ship.Crew(1).Faction)) then
                CanStart := False;
                exit Check_Faction_Loop;
             end if;
@@ -527,7 +527,7 @@ package body Stories is
                              Stories_List(I).MaxSteps),
                         ShowText => True, Data => StepData,
                         FinishedStep => ANY);
-                     UpdateCargo(PlayerShip, Stories_List(I).StartData(1), 1);
+                     UpdateCargo(Player_Ship, Stories_List(I).StartData(1), 1);
                      FinishedStories.Append
                        (New_Item =>
                           (Index => CurrentStory.Index,
@@ -577,13 +577,13 @@ package body Stories is
                   if TraderIndex > 0 then
                      Chance :=
                        GetSkillLevel
-                         (PlayerShip.Crew(TraderIndex),
+                         (Player_Ship.Crew(TraderIndex),
                           Find_Skill_Index(FinishCondition));
                   end if;
                end;
             when DESTROYSHIP | EXPLORE =>
                Count_Explore_Chance_Loop :
-               for Member of PlayerShip.Crew loop
+               for Member of Player_Ship.Crew loop
                   if Member.Order = Pilot or Member.Order = Gunner then
                      Chance :=
                        Chance +
@@ -593,7 +593,7 @@ package body Stories is
                end loop Count_Explore_Chance_Loop;
             when LOOT =>
                Count_Loot_Chance_Loop :
-               for Member of PlayerShip.Crew loop
+               for Member of Player_Ship.Crew loop
                   if Member.Order = Boarding then
                      Chance :=
                        Chance +
@@ -626,9 +626,9 @@ package body Stories is
                end;
             when DESTROYSHIP | EXPLORE =>
                Count_Explore_Experience_Loop :
-               for I in PlayerShip.Crew.Iterate loop
-                  if PlayerShip.Crew(I).Order = Pilot or
-                    PlayerShip.Crew(I).Order = Gunner then
+               for I in Player_Ship.Crew.Iterate loop
+                  if Player_Ship.Crew(I).Order = Pilot or
+                    Player_Ship.Crew(I).Order = Gunner then
                      GainExp
                        (10, Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
@@ -636,8 +636,8 @@ package body Stories is
                end loop Count_Explore_Experience_Loop;
             when LOOT =>
                Count_Loot_Experience_Loop :
-               for I in PlayerShip.Crew.Iterate loop
-                  if PlayerShip.Crew(I).Order = Boarding then
+               for I in Player_Ship.Crew.Iterate loop
+                  if Player_Ship.Crew(I).Order = Boarding then
                      GainExp
                        (10, Find_Skill_Index(FinishCondition),
                         Crew_Container.To_Index(I));
@@ -740,8 +740,8 @@ package body Stories is
             StoryY := Integer'Value(Slice(Tokens, 2));
          end if;
       else
-         StoryX := PlayerShip.Sky_X;
-         StoryY := PlayerShip.Sky_Y;
+         StoryX := Player_Ship.Sky_X;
+         StoryY := Player_Ship.Sky_Y;
       end if;
    end GetStoryLocation;
 

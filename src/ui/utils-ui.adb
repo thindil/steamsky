@@ -173,7 +173,7 @@ package body Utils.UI is
          return TCL_OK;
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
-      if Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType =
+      if Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType =
         Fuel_Type then
          Amount := GetItemAmount(Fuel_Type) - Value;
          if Amount <= Game_Settings.Low_Fuel then
@@ -185,9 +185,9 @@ package body Utils.UI is
          end if;
       end if;
       Check_Food_And_Drinks_Loop :
-      for Member of PlayerShip.Crew loop
+      for Member of Player_Ship.Crew loop
          if Factions_List(Member.Faction).DrinksTypes.Contains
-             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Drinks") - Value;
             if Amount <= Game_Settings.Low_Drinks then
                Widgets.configure
@@ -198,7 +198,7 @@ package body Utils.UI is
             end if;
             exit Check_Food_And_Drinks_Loop;
          elsif Factions_List(Member.Faction).FoodTypes.Contains
-             (Items_List(PlayerShip.Cargo(CargoIndex).ProtoIndex).IType) then
+             (Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType) then
             Amount := GetItemsAmount("Food") - Value;
             if Amount <= Game_Settings.Low_Food then
                Widgets.configure
@@ -346,7 +346,7 @@ package body Utils.UI is
    begin
       Tcl_SetVar(Interp, VarName, Value);
       if VarName = "shipname" then
-         PlayerShip.Name := To_Unbounded_String(Value);
+         Player_Ship.Name := To_Unbounded_String(Value);
       elsif VarName'Length > 10 and then VarName(1 .. 10) = "modulename" then
          declare
             ModuleIndex: constant Positive :=
@@ -356,7 +356,7 @@ package body Utils.UI is
                 (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
                  Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
-            PlayerShip.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
+            Player_Ship.Modules(ModuleIndex).Name := To_Unbounded_String(Value);
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
@@ -369,7 +369,7 @@ package body Utils.UI is
                 (".gameframe.paned.shipinfoframe.crew.canvas.frame.name" &
                  Trim(Positive'Image(CrewIndex), Left));
          begin
-            PlayerShip.Crew(CrewIndex).Name := To_Unbounded_String(Value);
+            Player_Ship.Crew(CrewIndex).Name := To_Unbounded_String(Value);
             Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
          end;
@@ -433,7 +433,7 @@ package body Utils.UI is
             TraderIndex: constant Natural := FindMember(Talk);
             Price: Positive := 1_000;
             MoneyIndex2: constant Natural :=
-              FindItem(PlayerShip.Cargo, Money_Index);
+              FindItem(Player_Ship.Cargo, Money_Index);
          begin
             if MoneyIndex2 = 0 then
                ShowMessage
@@ -444,7 +444,7 @@ package body Utils.UI is
                return TCL_OK;
             end if;
             CountPrice(Price, TraderIndex);
-            if PlayerShip.Cargo(MoneyIndex2).Amount < Price then
+            if Player_Ship.Cargo(MoneyIndex2).Amount < Price then
                ShowMessage
                  (Text =>
                     "You don't have enough " & To_String(Money_Name) &
@@ -452,14 +452,14 @@ package body Utils.UI is
                   Title => "No money");
                return TCL_OK;
             end if;
-            PlayerShip.Home_Base :=
-              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+            Player_Ship.Home_Base :=
+              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
             UpdateCargo
-              (Ship => PlayerShip, CargoIndex => MoneyIndex2,
+              (Ship => Player_Ship, CargoIndex => MoneyIndex2,
                Amount => -(Price));
             AddMessage
               ("You changed your ship home base to: " &
-               To_String(SkyBases(PlayerShip.Home_Base).Name),
+               To_String(SkyBases(Player_Ship.Home_Base).Name),
                OtherMessage);
             GainExp(1, Talking_Skill, TraderIndex);
             Update_Game(10);
@@ -477,8 +477,8 @@ package body Utils.UI is
             if Message /= Null_Unbounded_String then
                ShowMessage(Text => To_String(Message), Title => "Error");
             end if;
-            CenterX := PlayerShip.Sky_X;
-            CenterY := PlayerShip.Sky_Y;
+            CenterX := Player_Ship.Sky_X;
+            CenterY := Player_Ship.Sky_Y;
             if StartsCombat then
                ShowCombatUI;
             else
@@ -496,7 +496,7 @@ package body Utils.UI is
             Show_Main_Menu;
          end;
       elsif Result = "resign" then
-         Death(1, To_Unbounded_String("resignation"), PlayerShip);
+         Death(1, To_Unbounded_String("resignation"), Player_Ship);
          ShowQuestion
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
@@ -535,28 +535,28 @@ package body Utils.UI is
       elsif Result = "retire" then
          Death
            (1, To_Unbounded_String("retired after finished the game"),
-            PlayerShip);
+            Player_Ship);
          ShowQuestion
            ("You are dead. Would you like to see your game statistics?",
             "showstats");
       else
          declare
             BaseIndex: constant Positive :=
-              SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
             MemberIndex: constant Positive :=
               Positive'Value(CArgv.Arg(Argv, 1));
          begin
             AddMessage
               ("You dismissed " &
-               To_String(PlayerShip.Crew(MemberIndex).Name) & ".",
+               To_String(Player_Ship.Crew(MemberIndex).Name) & ".",
                OrderMessage);
-            DeleteMember(MemberIndex, PlayerShip);
+            DeleteMember(MemberIndex, Player_Ship);
             SkyBases(BaseIndex).Population :=
               SkyBases(BaseIndex).Population + 1;
             Update_Morale_Loop :
-            for I in PlayerShip.Crew.Iterate loop
+            for I in Player_Ship.Crew.Iterate loop
                UpdateMorale
-                 (PlayerShip, Crew_Container.To_Index(I), GetRandom(-5, -1));
+                 (Player_Ship, Crew_Container.To_Index(I), GetRandom(-5, -1));
             end loop Update_Morale_Loop;
             UpdateCrewInfo;
             UpdateHeader;
@@ -629,15 +629,15 @@ package body Utils.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
    begin
-      if Positive'Value(CArgv.Arg(Argv, 1)) = PlayerShip.Sky_X and
-        Positive'Value(CArgv.Arg(Argv, 2)) = PlayerShip.Sky_Y then
+      if Positive'Value(CArgv.Arg(Argv, 1)) = Player_Ship.Sky_X and
+        Positive'Value(CArgv.Arg(Argv, 2)) = Player_Ship.Sky_Y then
          ShowMessage
            (Text => "You are at this location now.",
             Title => "Can't set destination");
          return TCL_OK;
       end if;
-      PlayerShip.Destination_X := Positive'Value(CArgv.Arg(Argv, 1));
-      PlayerShip.Destination_Y := Positive'Value(CArgv.Arg(Argv, 2));
+      Player_Ship.Destination_X := Positive'Value(CArgv.Arg(Argv, 1));
+      Player_Ship.Destination_Y := Positive'Value(CArgv.Arg(Argv, 2));
       AddMessage
         ("You set the travel destination for your ship.", OrderMessage);
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -706,7 +706,7 @@ package body Utils.UI is
       ShowFuelName: Boolean := False) is
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
-        (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0);
+        (SpeedType(RealSpeed(Player_Ship, True)) / 1_000.0);
       MinutesDiff: Integer;
       Rests, CabinIndex, RestTime: Natural := 0;
       Damage: Damage_Factor := 0.0;
@@ -717,7 +717,7 @@ package body Utils.UI is
          return;
       end if;
       MinutesDiff := Integer(100.0 / Speed);
-      case PlayerShip.Speed is
+      case Player_Ship.Speed is
          when QUARTER_SPEED =>
             if MinutesDiff < 60 then
                MinutesDiff := 60;
@@ -736,17 +736,17 @@ package body Utils.UI is
       Append(InfoText, LF & "ETA:");
       MinutesDiff := MinutesDiff * Distance;
       Count_Rest_Time_Loop :
-      for I in PlayerShip.Crew.Iterate loop
-         if PlayerShip.Crew(I).Order = Pilot or
-           PlayerShip.Crew(I).Order = Engineer then
-            Tired := (MinutesDiff / 15) + PlayerShip.Crew(I).Tired;
+      for I in Player_Ship.Crew.Iterate loop
+         if Player_Ship.Crew(I).Order = Pilot or
+           Player_Ship.Crew(I).Order = Engineer then
+            Tired := (MinutesDiff / 15) + Player_Ship.Crew(I).Tired;
             if
               (Tired /
-               (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1))) >
+               (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1))) >
               Rests then
                Rests :=
                  (Tired /
-                  (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)));
+                  (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)));
             end if;
             if Rests > 0 then
                CabinIndex := FindCabin(Crew_Container.To_Index(I));
@@ -754,18 +754,18 @@ package body Utils.UI is
                   Damage :=
                     1.0 -
                     Damage_Factor
-                      (Float(PlayerShip.Modules(CabinIndex).Durability) /
-                       Float(PlayerShip.Modules(CabinIndex).Max_Durability));
+                      (Float(Player_Ship.Modules(CabinIndex).Durability) /
+                       Float(Player_Ship.Modules(CabinIndex).Max_Durability));
                   CabinBonus :=
-                    PlayerShip.Modules(CabinIndex).Cleanliness -
+                    Player_Ship.Modules(CabinIndex).Cleanliness -
                     Natural
-                      (Float(PlayerShip.Modules(CabinIndex).Cleanliness) *
+                      (Float(Player_Ship.Modules(CabinIndex).Cleanliness) *
                        Float(Damage));
                   if CabinBonus = 0 then
                      CabinBonus := 1;
                   end if;
                   TempTime :=
-                    ((80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) /
+                    ((80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) /
                      CabinBonus) *
                     15;
                   if TempTime = 0 then
@@ -773,7 +773,7 @@ package body Utils.UI is
                   end if;
                else
                   TempTime :=
-                    (80 + PlayerShip.Crew(I).Attributes(Condition_Index)(1)) *
+                    (80 + Player_Ship.Crew(I).Attributes(Condition_Index)(1)) *
                     15;
                end if;
                TempTime := TempTime + 15;
@@ -898,23 +898,23 @@ package body Utils.UI is
    begin
       if MemberIndex > 0 then
          ProtoIndex :=
-           PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
-         if PlayerShip.Crew(MemberIndex).Inventory(ItemIndex).Durability <
+           Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).ProtoIndex;
+         if Player_Ship.Crew(MemberIndex).Inventory(ItemIndex).Durability <
            Default_Item_Durability then
             Append
               (ItemInfo,
                GetItemDamage
-                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex)
+                 (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)
                     .Durability) &
                LF);
          end if;
       else
-         ProtoIndex := PlayerShip.Cargo(ItemIndex).ProtoIndex;
-         if PlayerShip.Cargo(ItemIndex).Durability <
+         ProtoIndex := Player_Ship.Cargo(ItemIndex).ProtoIndex;
+         if Player_Ship.Cargo(ItemIndex).Durability <
            Default_Item_Durability then
             Append
               (ItemInfo,
-               GetItemDamage(PlayerShip.Cargo(ItemIndex).Durability) & LF);
+               GetItemDamage(Player_Ship.Cargo(ItemIndex).Durability) & LF);
          end if;
       end if;
       Append
@@ -985,17 +985,17 @@ package body Utils.UI is
             Title =>
               (if MemberIndex > 0 then
                  GetItemName
-                   (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex), False,
+                   (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex), False,
                     False)
-               else GetItemName(PlayerShip.Cargo(ItemIndex), False, False)));
+               else GetItemName(Player_Ship.Cargo(ItemIndex), False, False)));
       else
          ShowInfo
            (To_String(ItemInfo), Parent,
             (if MemberIndex > 0 then
                GetItemName
-                 (PlayerShip.Crew(MemberIndex).Inventory(ItemIndex), False,
+                 (Player_Ship.Crew(MemberIndex).Inventory(ItemIndex), False,
                   False)
-             else GetItemName(PlayerShip.Cargo(ItemIndex), False, False)));
+             else GetItemName(Player_Ship.Cargo(ItemIndex), False, False)));
          Tcl_Eval(Get_Context, "raise .info");
       end if;
    end ShowInventoryItemInfo;

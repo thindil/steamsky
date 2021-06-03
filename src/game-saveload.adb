@@ -809,7 +809,7 @@ package body Game.SaveLoad is
    exception
       when An_Exception : others =>
          Free(Reader);
-         PlayerShip.Crew.Clear;
+         Player_Ship.Crew.Clear;
          raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
    end LoadGame;
 
@@ -819,8 +819,8 @@ package body Game.SaveLoad is
       Generate_Save_Name_Loop :
       loop
          SaveName :=
-           Save_Directory & PlayerShip.Crew(1).Name &
-           To_Unbounded_String("_") & PlayerShip.Name &
+           Save_Directory & Player_Ship.Crew(1).Name &
+           To_Unbounded_String("_") & Player_Ship.Name &
            To_Unbounded_String
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
          exit Generate_Save_Name_Loop when not Exists(To_String(SaveName)) and

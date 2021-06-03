@@ -276,32 +276,32 @@ package Ships is
    Proto_Ships_List: Proto_Ships_Container.Map;
    -- ****
 
-   -- ****v* Ships/Ships.PlayerShip
+   -- ****v* Ships/Ships.Player_Ship
    -- FUNCTION
    -- The player ship
    -- SOURCE
-   PlayerShip: Ship_Record;
+   Player_Ship: Ship_Record;
    -- ****
 
-   -- ****v* Ships/Ships.ShipSyllablesStart
+   -- ****v* Ships/Ships.Ship_Syllables_Start
    -- FUNCTION
    -- List of first syllables for generating ships names
    -- SOURCE
-   ShipSyllablesStart: UnboundedString_Container.Vector;
+   Ship_Syllables_Start: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Ships/Ships.ShipSyllablesMiddle
+   -- ****v* Ships/Ships.Ship_Syllables_Middle
    -- FUNCTION
    -- List of middle syllables for generating ships names
    -- SOURCE
-   ShipSyllablesMiddle: UnboundedString_Container.Vector;
+   Ship_Syllables_Middle: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****v* Ships/Ships.ShipSyllablesEnd
+   -- ****v* Ships/Ships.Ship_Syllables_End
    -- FUNCTION
    -- List of last syllables for generating ships names
    -- SOURCE
-   ShipSyllablesEnd: UnboundedString_Container.Vector;
+   Ship_Syllables_End: UnboundedString_Container.Vector;
    -- ****
 
    -- ****e* Ships/Ships.Ships_Invalid_Data

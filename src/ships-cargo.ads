@@ -59,7 +59,7 @@ package Ships.Cargo is
       -- of kilograms
       -- SOURCE
    function FreeCargo
-     (Amount: Integer; Ship: Ship_Record := PlayerShip) return Integer with
+     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer with
       Test_Case => (Name => "Test_FreeCargo", Mode => Robustness);
       -- ****
 

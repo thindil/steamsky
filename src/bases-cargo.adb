@@ -24,7 +24,7 @@ package body Bases.Cargo is
 
    procedure GenerateCargo is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Population: constant Positive :=
         (if SkyBases(BaseIndex).Population > 0 then
            SkyBases(BaseIndex).Population
@@ -134,7 +134,7 @@ package body Bases.Cargo is
       Durability: Items_Durability := Default_Item_Durability;
       CargoIndex: Inventory_Container.Extended_Index := 0) is
       BaseIndex: constant Bases_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       ItemIndex: constant Natural range 0 ..
           Natural(SkyBases(BaseIndex).Cargo.Length) :=
         (if ProtoIndex /= Null_Unbounded_String then
@@ -170,7 +170,7 @@ package body Bases.Cargo is
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
       BaseIndex: constant Extended_Base_Range :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       function FindCargo(Cargo: BaseCargo_Container.Vector) return Natural is
       begin
          Find_Cargo_Loop :
