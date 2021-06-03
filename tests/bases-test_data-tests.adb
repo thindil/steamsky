@@ -66,12 +66,12 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_CountPrice_173272_bef05e
+   procedure Wrap_Test_CountPrice_173272_672242
      (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
       Reduce: Boolean := True) is
    begin
       begin
-         pragma Assert(TraderIndex <= PlayerShip.Crew.Last_Index);
+         pragma Assert(TraderIndex <= Player_Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -90,19 +90,19 @@ package body Bases.Test_Data.Tests is
               (False,
                "ens_sloc(bases.ads:0:):Test_CountPrice test commitment violated");
       end;
-   end Wrap_Test_CountPrice_173272_bef05e;
+   end Wrap_Test_CountPrice_173272_672242;
 --  end read only
 
 --  begin read only
    procedure Test_CountPrice_test_countprice(Gnattest_T: in out Test);
-   procedure Test_CountPrice_173272_bef05e(Gnattest_T: in out Test) renames
+   procedure Test_CountPrice_173272_672242(Gnattest_T: in out Test) renames
      Test_CountPrice_test_countprice;
 --  id:2.2/17327298eafedc9a/CountPrice/1/0/test_countprice/
    procedure Test_CountPrice_test_countprice(Gnattest_T: in out Test) is
       procedure CountPrice
         (Price: in out Natural; TraderIndex: Crew_Container.Extended_Index;
          Reduce: Boolean := True) renames
-        Wrap_Test_CountPrice_173272_bef05e;
+        Wrap_Test_CountPrice_173272_672242;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -202,7 +202,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       OldReputation: constant Integer := SkyBases(BaseIndex).Reputation(1);
 
    begin
@@ -252,7 +252,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
 
    begin
 
@@ -282,7 +282,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Amount: constant Natural := Natural(Events_List.Length);
 
    begin
@@ -319,7 +319,7 @@ package body Bases.Test_Data.Tests is
 
       pragma Unreferenced(Gnattest_T);
       BaseIndex: constant Positive :=
-        SkyMap(PlayerShip.Sky_X, PlayerShip.Sky_Y).BaseIndex;
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
 
    begin
 

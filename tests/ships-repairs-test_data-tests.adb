@@ -49,17 +49,17 @@ package body Ships.Repairs.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Durability: constant Positive := PlayerShip.Modules(1).Durability;
+      Durability: constant Positive := Player_Ship.Modules(1).Durability;
 
    begin
 
-      PlayerShip.Cargo.Swap(5, 12);
-      PlayerShip.Cargo(10).Amount := 1;
-      PlayerShip.Modules(1).Durability := Durability - 1;
-      GiveOrders(PlayerShip, 4, Repair, 0, False);
+      Player_Ship.Cargo.Swap(5, 12);
+      Player_Ship.Cargo(10).Amount := 1;
+      Player_Ship.Modules(1).Durability := Durability - 1;
+      GiveOrders(Player_Ship, 4, Repair, 0, False);
       RepairShip(15);
       Assert
-        (PlayerShip.Modules(1).Durability = Durability,
+        (Player_Ship.Modules(1).Durability = Durability,
          "Failed to repair ship.");
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");

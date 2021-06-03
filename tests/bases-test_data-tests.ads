@@ -13,7 +13,7 @@ package Bases.Test_Data.Tests is
    procedure Test_GainRep_6338e6_901e58(Gnattest_T: in out Test);
    --  bases.ads:189:4:GainRep:Test_GainRep
 
-   procedure Test_CountPrice_173272_bef05e(Gnattest_T: in out Test);
+   procedure Test_CountPrice_173272_672242(Gnattest_T: in out Test);
    --  bases.ads:205:4:CountPrice:Test_CountPrice
 
    procedure Test_GenerateBaseName_e09aa7_c4cd74(Gnattest_T: in out Test);

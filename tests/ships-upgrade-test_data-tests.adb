@@ -32,14 +32,14 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_StartUpgrading_9699a2_bf0e24
+   procedure Wrap_Test_StartUpgrading_9699a2_1fb812
      (ModuleIndex: Modules_Container.Extended_Index; UpgradeType: Positive) is
    begin
       begin
          pragma Assert
            ((ModuleIndex in
-               PlayerShip.Modules.First_Index ..
-                     PlayerShip.Modules.Last_Index and
+               Player_Ship.Modules.First_Index ..
+                     Player_Ship.Modules.Last_Index and
              UpgradeType < 5));
          null;
       exception
@@ -59,12 +59,12 @@ package body Ships.Upgrade.Test_Data.Tests is
               (False,
                "ens_sloc(ships-upgrade.ads:0:):Test_StartUpgrading test commitment violated");
       end;
-   end Wrap_Test_StartUpgrading_9699a2_bf0e24;
+   end Wrap_Test_StartUpgrading_9699a2_1fb812;
 --  end read only
 
 --  begin read only
    procedure Test_StartUpgrading_test_startupgrading(Gnattest_T: in out Test);
-   procedure Test_StartUpgrading_9699a2_bf0e24(Gnattest_T: in out Test) renames
+   procedure Test_StartUpgrading_9699a2_1fb812(Gnattest_T: in out Test) renames
      Test_StartUpgrading_test_startupgrading;
 --  id:2.2/9699a2ac94abe86f/StartUpgrading/1/0/test_startupgrading/
    procedure Test_StartUpgrading_test_startupgrading
@@ -72,7 +72,7 @@ package body Ships.Upgrade.Test_Data.Tests is
       procedure StartUpgrading
         (ModuleIndex: Modules_Container.Extended_Index;
          UpgradeType: Positive) renames
-        Wrap_Test_StartUpgrading_9699a2_bf0e24;
+        Wrap_Test_StartUpgrading_9699a2_1fb812;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -104,22 +104,22 @@ package body Ships.Upgrade.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Progress: constant Natural := PlayerShip.Modules(1).Upgrade_Progress;
-      OldUpgrade: constant Natural := PlayerShip.Upgrade_Module;
+      Progress: constant Natural := Player_Ship.Modules(1).Upgrade_Progress;
+      OldUpgrade: constant Natural := Player_Ship.Upgrade_Module;
 
    begin
 
-      PlayerShip.Cargo.Swap(5, 12);
-      PlayerShip.Cargo(10).Amount := 1;
-      GiveOrders(PlayerShip, 4, Upgrading);
+      Player_Ship.Cargo.Swap(5, 12);
+      Player_Ship.Cargo(10).Amount := 1;
+      GiveOrders(Player_Ship, 4, Upgrading);
       UpgradeShip(15);
       Assert
-        (PlayerShip.Modules(1).Upgrade_Progress < Progress,
+        (Player_Ship.Modules(1).Upgrade_Progress < Progress,
          "Failed to upgrade ship.");
-      PlayerShip.Upgrade_Module := 0;
+      Player_Ship.Upgrade_Module := 0;
       UpgradeShip(15);
       Assert(True, "This test can only crash");
-      PlayerShip.Upgrade_Module := OldUpgrade;
+      Player_Ship.Upgrade_Module := OldUpgrade;
       New_Game_Settings.Player_Faction := To_Unbounded_String("POLEIS");
       New_Game_Settings.Player_Career := To_Unbounded_String("general");
       New_Game_Settings.Starting_Base := To_Unbounded_String("1");

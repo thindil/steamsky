@@ -29,7 +29,7 @@ package body Crew.Inventory.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_UpdateInventory_5fa756_ea0095
+   procedure Wrap_Test_UpdateInventory_5fa756_83591c
      (MemberIndex: Positive; Amount: Integer;
       ProtoIndex: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := 0;
@@ -37,9 +37,9 @@ package body Crew.Inventory.Test_Data.Tests is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= PlayerShip.Crew.Last_Index and
+           ((MemberIndex <= Player_Ship.Crew.Last_Index and
              InventoryIndex <=
-               PlayerShip.Crew(MemberIndex).Inventory.Last_Index));
+               Player_Ship.Crew(MemberIndex).Inventory.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -58,13 +58,13 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "ens_sloc(crew-inventory.ads:0:):Test_UpdateInventory test commitment violated");
       end;
-   end Wrap_Test_UpdateInventory_5fa756_ea0095;
+   end Wrap_Test_UpdateInventory_5fa756_83591c;
 --  end read only
 
 --  begin read only
    procedure Test_UpdateInventory_test_updateinventory
      (Gnattest_T: in out Test);
-   procedure Test_UpdateInventory_5fa756_ea0095
+   procedure Test_UpdateInventory_5fa756_83591c
      (Gnattest_T: in out Test) renames
      Test_UpdateInventory_test_updateinventory;
 --  id:2.2/5fa7563a0327adb0/UpdateInventory/1/0/test_updateinventory/
@@ -75,22 +75,22 @@ package body Crew.Inventory.Test_Data.Tests is
          ProtoIndex: Unbounded_String := Null_Unbounded_String;
          Durability: Items_Durability := 0;
          InventoryIndex, Price: Natural := 0) renames
-        Wrap_Test_UpdateInventory_5fa756_ea0095;
+        Wrap_Test_UpdateInventory_5fa756_83591c;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
       Amount: constant Positive :=
-        Positive(PlayerShip.Crew(1).Inventory.Length);
+        Positive(Player_Ship.Crew(1).Inventory.Length);
 
    begin
 
       UpdateInventory(1, 1, To_Unbounded_String("1"));
       Assert
-        (Positive(PlayerShip.Crew(1).Inventory.Length) = Amount + 1,
+        (Positive(Player_Ship.Crew(1).Inventory.Length) = Amount + 1,
          "Failed to add item to crew member inventory.");
       UpdateInventory(1, -1, To_Unbounded_String("1"));
       Assert
-        (Positive(PlayerShip.Crew(1).Inventory.Length) = Amount,
+        (Positive(Player_Ship.Crew(1).Inventory.Length) = Amount,
          "Failed to remove item from crew member inventory.");
       begin
          UpdateInventory(1, 10_000, To_Unbounded_String("1"));
@@ -111,11 +111,11 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FreeInventory_df8fe5_59014f
+   function Wrap_Test_FreeInventory_df8fe5_1b9261
      (MemberIndex: Positive; Amount: Integer) return Integer is
    begin
       begin
-         pragma Assert(MemberIndex <= PlayerShip.Crew.Last_Index);
+         pragma Assert(MemberIndex <= Player_Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -124,7 +124,7 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_FreeInventory test requirement violated");
       end;
       declare
-         Test_FreeInventory_df8fe5_59014f_Result: constant Integer :=
+         Test_FreeInventory_df8fe5_1b9261_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FreeInventory
              (MemberIndex, Amount);
       begin
@@ -137,20 +137,20 @@ package body Crew.Inventory.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew-inventory.ads:0:):Test_FreeInventory test commitment violated");
          end;
-         return Test_FreeInventory_df8fe5_59014f_Result;
+         return Test_FreeInventory_df8fe5_1b9261_Result;
       end;
-   end Wrap_Test_FreeInventory_df8fe5_59014f;
+   end Wrap_Test_FreeInventory_df8fe5_1b9261;
 --  end read only
 
 --  begin read only
    procedure Test_FreeInventory_test_freeinventory(Gnattest_T: in out Test);
-   procedure Test_FreeInventory_df8fe5_59014f(Gnattest_T: in out Test) renames
+   procedure Test_FreeInventory_df8fe5_1b9261(Gnattest_T: in out Test) renames
      Test_FreeInventory_test_freeinventory;
 --  id:2.2/df8fe5d066a1fde9/FreeInventory/1/0/test_freeinventory/
    procedure Test_FreeInventory_test_freeinventory(Gnattest_T: in out Test) is
       function FreeInventory
         (MemberIndex: Positive; Amount: Integer) return Integer renames
-        Wrap_Test_FreeInventory_df8fe5_59014f;
+        Wrap_Test_FreeInventory_df8fe5_1b9261;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -166,13 +166,13 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_TakeOffItem_a8b09e_c7fb64
+   procedure Wrap_Test_TakeOffItem_a8b09e_af73e9
      (MemberIndex, ItemIndex: Positive) is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= PlayerShip.Crew.Last_Index and
-             ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index));
+           ((MemberIndex <= Player_Ship.Crew.Last_Index and
+             ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -191,17 +191,17 @@ package body Crew.Inventory.Test_Data.Tests is
               (False,
                "ens_sloc(crew-inventory.ads:0:):Test_TakeOffItem test commitment violated");
       end;
-   end Wrap_Test_TakeOffItem_a8b09e_c7fb64;
+   end Wrap_Test_TakeOffItem_a8b09e_af73e9;
 --  end read only
 
 --  begin read only
    procedure Test_TakeOffItem_test_takeoffitem(Gnattest_T: in out Test);
-   procedure Test_TakeOffItem_a8b09e_c7fb64(Gnattest_T: in out Test) renames
+   procedure Test_TakeOffItem_a8b09e_af73e9(Gnattest_T: in out Test) renames
      Test_TakeOffItem_test_takeoffitem;
 --  id:2.2/a8b09e84477e626f/TakeOffItem/1/0/test_takeoffitem/
    procedure Test_TakeOffItem_test_takeoffitem(Gnattest_T: in out Test) is
       procedure TakeOffItem(MemberIndex, ItemIndex: Positive) renames
-        Wrap_Test_TakeOffItem_a8b09e_c7fb64;
+        Wrap_Test_TakeOffItem_a8b09e_af73e9;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -218,13 +218,13 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_ItemIsUsed_9a8ce5_fa2743
+   function Wrap_Test_ItemIsUsed_9a8ce5_329a6e
      (MemberIndex, ItemIndex: Positive) return Boolean is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= PlayerShip.Crew.Last_Index and
-             ItemIndex <= PlayerShip.Crew(MemberIndex).Inventory.Last_Index));
+           ((MemberIndex <= Player_Ship.Crew.Last_Index and
+             ItemIndex <= Player_Ship.Crew(MemberIndex).Inventory.Last_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -233,7 +233,7 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_ItemIsUsed test requirement violated");
       end;
       declare
-         Test_ItemIsUsed_9a8ce5_fa2743_Result: constant Boolean :=
+         Test_ItemIsUsed_9a8ce5_329a6e_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Crew.Inventory.ItemIsUsed
              (MemberIndex, ItemIndex);
       begin
@@ -246,20 +246,20 @@ package body Crew.Inventory.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew-inventory.ads:0:):Test_ItemIsUsed test commitment violated");
          end;
-         return Test_ItemIsUsed_9a8ce5_fa2743_Result;
+         return Test_ItemIsUsed_9a8ce5_329a6e_Result;
       end;
-   end Wrap_Test_ItemIsUsed_9a8ce5_fa2743;
+   end Wrap_Test_ItemIsUsed_9a8ce5_329a6e;
 --  end read only
 
 --  begin read only
    procedure Test_ItemIsUsed_test_itemisused(Gnattest_T: in out Test);
-   procedure Test_ItemIsUsed_9a8ce5_fa2743(Gnattest_T: in out Test) renames
+   procedure Test_ItemIsUsed_9a8ce5_329a6e(Gnattest_T: in out Test) renames
      Test_ItemIsUsed_test_itemisused;
 --  id:2.2/9a8ce5527fb6a663/ItemIsUsed/1/0/test_itemisused/
    procedure Test_ItemIsUsed_test_itemisused(Gnattest_T: in out Test) is
       function ItemIsUsed
         (MemberIndex, ItemIndex: Positive) return Boolean renames
-        Wrap_Test_ItemIsUsed_9a8ce5_fa2743;
+        Wrap_Test_ItemIsUsed_9a8ce5_329a6e;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -275,13 +275,13 @@ package body Crew.Inventory.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindTools_9ef8ba_61150c
+   function Wrap_Test_FindTools_9ef8ba_dbafa3
      (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
       ToolQuality: Positive := 100) return Natural is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= PlayerShip.Crew.Last_Index and
+           ((MemberIndex <= Player_Ship.Crew.Last_Index and
              ItemType /= Null_Unbounded_String));
          null;
       exception
@@ -291,7 +291,7 @@ package body Crew.Inventory.Test_Data.Tests is
                "req_sloc(crew-inventory.ads:0):Test_FindTools test requirement violated");
       end;
       declare
-         Test_FindTools_9ef8ba_61150c_Result: constant Natural :=
+         Test_FindTools_9ef8ba_dbafa3_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Crew.Inventory.FindTools
              (MemberIndex, ItemType, Order, ToolQuality);
       begin
@@ -304,21 +304,21 @@ package body Crew.Inventory.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew-inventory.ads:0:):Test_FindTools test commitment violated");
          end;
-         return Test_FindTools_9ef8ba_61150c_Result;
+         return Test_FindTools_9ef8ba_dbafa3_Result;
       end;
-   end Wrap_Test_FindTools_9ef8ba_61150c;
+   end Wrap_Test_FindTools_9ef8ba_dbafa3;
 --  end read only
 
 --  begin read only
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test);
-   procedure Test_FindTools_9ef8ba_61150c(Gnattest_T: in out Test) renames
+   procedure Test_FindTools_9ef8ba_dbafa3(Gnattest_T: in out Test) renames
      Test_FindTools_test_findtools;
 --  id:2.2/9ef8baa51d571ac0/FindTools/1/0/test_findtools/
    procedure Test_FindTools_test_findtools(Gnattest_T: in out Test) is
       function FindTools
         (MemberIndex: Positive; ItemType: Unbounded_String; Order: Crew_Orders;
          ToolQuality: Positive := 100) return Natural renames
-        Wrap_Test_FindTools_9ef8ba_61150c;
+        Wrap_Test_FindTools_9ef8ba_dbafa3;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

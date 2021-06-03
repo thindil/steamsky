@@ -74,20 +74,20 @@ package body Ships.Cargo.Test_Data.Tests is
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
-      Amount: constant Natural := PlayerShip.Cargo(1).Amount;
+      Amount: constant Natural := Player_Ship.Cargo(1).Amount;
 
    begin
 
-      UpdateCargo(PlayerShip, To_Unbounded_String("1"), -1);
+      UpdateCargo(Player_Ship, To_Unbounded_String("1"), -1);
       Assert
-        (Amount = PlayerShip.Cargo(1).Amount + 1,
+        (Amount = Player_Ship.Cargo(1).Amount + 1,
          "Failed to remove some items from player ship cargo.");
-      UpdateCargo(PlayerShip, To_Unbounded_String("1"), 1);
+      UpdateCargo(Player_Ship, To_Unbounded_String("1"), 1);
       Assert
-        (Amount = PlayerShip.Cargo(1).Amount,
+        (Amount = Player_Ship.Cargo(1).Amount,
          "Failed to add some items to player ship cargo.");
-      UpdateCargo(PlayerShip, Null_Unbounded_String, -1);
-      UpdateCargo(PlayerShip, To_Unbounded_String("40"), -1);
+      UpdateCargo(Player_Ship, Null_Unbounded_String, -1);
+      UpdateCargo(Player_Ship, To_Unbounded_String("40"), -1);
       Assert(True, "This tests can only crash");
 
 --  begin read only
@@ -96,7 +96,7 @@ package body Ships.Cargo.Test_Data.Tests is
 
 --  begin read only
    function Wrap_Test_FreeCargo_f63648_4f2f60
-     (Amount: Integer; Ship: Ship_Record := PlayerShip) return Integer is
+     (Amount: Integer; Ship: Ship_Record := Player_Ship) return Integer is
    begin
       declare
          Test_FreeCargo_f63648_4f2f60_Result: constant Integer :=
@@ -115,7 +115,7 @@ package body Ships.Cargo.Test_Data.Tests is
 --  id:2.2/f63648bac828f01c/FreeCargo/1/0/test_freecargo/
    procedure Test_FreeCargo_test_freecargo(Gnattest_T: in out Test) is
       function FreeCargo
-        (Amount: Integer; Ship: Ship_Record := PlayerShip)
+        (Amount: Integer; Ship: Ship_Record := Player_Ship)
          return Integer renames
         Wrap_Test_FreeCargo_f63648_4f2f60;
 --  end read only
@@ -178,7 +178,7 @@ package body Ships.Cargo.Test_Data.Tests is
 
    begin
 
-      PlayerShip.Cargo(1).Amount := 2_000;
+      Player_Ship.Cargo(1).Amount := 2_000;
       Assert
         (GetItemAmount(To_Unbounded_String("Fuel")) = 2_000,
          "Failed to get proper amount of item.");
@@ -234,10 +234,10 @@ package body Ships.Cargo.Test_Data.Tests is
 
    begin
 
-      for Member of PlayerShip.Crew loop
+      for Member of Player_Ship.Crew loop
          Member.Faction := To_Unbounded_String("POLEIS");
       end loop;
-      PlayerShip.Cargo(3).Amount := 200;
+      Player_Ship.Cargo(3).Amount := 200;
       Assert
         (GetItemsAmount("Drinks") = 200, "Failed to get amount of drinks.");
 

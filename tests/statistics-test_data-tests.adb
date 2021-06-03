@@ -329,7 +329,7 @@ package body Statistics.Test_Data.Tests is
 
    begin
 
-      UpdateKilledMobs(PlayerShip.Crew(2), To_Unbounded_String("POLEIS"));
+      UpdateKilledMobs(Player_Ship.Crew(2), To_Unbounded_String("POLEIS"));
       Assert
         (GameStats.KilledMobs.Length = 1,
          "Failed to add killed mob to game statistics.");
