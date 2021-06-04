@@ -374,7 +374,7 @@ package body Ships.Movement is
                         To_String(Player_Ship.Modules(ModuleIndex).Name) &
                         ") takes damage.");
                      Color := RED;
-                     DamageModule
+                     Damage_Module
                        (Player_Ship, ModuleIndex, GetRandom(1, 30),
                         "damage during escaping from the base");
                   when others =>
@@ -449,7 +449,7 @@ package body Ships.Movement is
          end loop Find_Engine_Loop;
       end;
       Speed :=
-        Natural((Float(Speed) / Float(CountShipWeight(Ship))) * 100_000.0);
+        Natural((Float(Speed) / Float(Count_Ship_Weight(Ship))) * 100_000.0);
       if Ship.Crew.Length > 0 then
          if not Factions_List(Ship.Crew(1).Faction).Flags.Contains
              (To_Unbounded_String("sentientships")) then

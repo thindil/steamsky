@@ -680,7 +680,7 @@ package body MainMenu.Commands is
          return TCL_OK;
       end if;
       Delete(NameEntry, "0", "end");
-      Insert(NameEntry, "end", To_String(GenerateShipName(FactionIndex)));
+      Insert(NameEntry, "end", To_String(Generate_Ship_Name(FactionIndex)));
       return TCL_OK;
    end Random_Name_Command;
 

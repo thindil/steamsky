@@ -267,7 +267,7 @@ package body Trades is
 
    procedure GenerateTraderCargo(ProtoIndex: Unbounded_String) is
       TraderShip: Ship_Record :=
-        CreateShip
+        Create_Ship
           (ProtoIndex, Null_Unbounded_String, Player_Ship.Sky_X,
            Player_Ship.Sky_Y, FULL_STOP);
       CargoAmount: Natural range 0 .. 10 :=

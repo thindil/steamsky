@@ -247,7 +247,7 @@ package body Ships.UI is
       Label.Name := New_String(ShipInfoFrame & ".weight");
       configure
         (Label,
-         "-text {Weight:" & Integer'Image(CountShipWeight(Player_Ship)) &
+         "-text {Weight:" & Integer'Image(Count_Ship_Weight(Player_Ship)) &
          "kg}");
       Tcl_Eval(Get_Context, "update");
       configure
