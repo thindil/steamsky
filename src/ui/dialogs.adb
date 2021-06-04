@@ -241,7 +241,9 @@ package body Dialogs is
    procedure ShowMessage
      (Text: String; ParentFrame: String := ".gameframe"; Title: String) is
       MessageDialog: constant Ttk_Frame :=
-        Create_Dialog(ParentFrame & ".message", Title);
+        Create_Dialog
+          (Name => ParentFrame & ".message", Title => Title,
+           Parent_Name => ParentFrame);
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
