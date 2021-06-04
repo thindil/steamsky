@@ -35,7 +35,7 @@ package body Ships.SaveLoad is
          Set_Attribute(Node, Name, RawValue);
       end SaveNumber;
    begin
-      CategoryNode := Create_Element(SaveData, "Player_Ship");
+      CategoryNode := Create_Element(SaveData, "playership");
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "name", To_String(Player_Ship.Name));
       SaveNumber(Player_Ship.Sky_X, "x");
@@ -248,7 +248,7 @@ package body Ships.SaveLoad is
       LoadNode, ChildNode: Node;
    begin
       ShipNode :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "Player_Ship");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(SaveData, "playership");
       LoadNode := Item(ShipNode, 0);
       Player_Ship.Name := To_Unbounded_String(Get_Attribute(LoadNode, "name"));
       Player_Ship.Sky_X := Integer'Value(Get_Attribute(LoadNode, "x"));
