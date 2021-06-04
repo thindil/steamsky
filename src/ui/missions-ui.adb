@@ -141,19 +141,11 @@ package body Missions.UI is
                CanAccept := True;
             end if;
             Insert(MissionText, "end", "{Needed quality of cabin: }");
-            if CanAccept then
-               Insert
-                 (MissionText, "end",
-                  "{" & GetCabinQuality(Mission.Data) & "}");
-            elsif CabinTaken then
-               Insert
-                 (MissionText, "end",
-                  "{" & GetCabinQuality(Mission.Data) & "} [list yellow]");
-            else
-               Insert
-                 (MissionText, "end",
-                  "{" & GetCabinQuality(Mission.Data) & "} [list red]");
-            end if;
+            Insert
+              (MissionText, "end",
+               "{" & Get_Cabin_Quality(Mission.Data) & "}" &
+               (if CanAccept then "" elsif CabinTaken then " [list yellow]"
+                else " [list red]"));
             Insert
               (MissionText, "end",
                "{" & LF & "To base: " &
