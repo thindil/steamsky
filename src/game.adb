@@ -337,14 +337,14 @@ package body Game is
       end loop Place_Player_Loop;
       -- Create player ship
       Player_Ship :=
-        CreateShip
-          (ProtoIndex =>
+        Create_Ship
+          (Proto_Index =>
              Factions_List(New_Game_Settings.Player_Faction).Careers
                (New_Game_Settings.Player_Career)
                .ShipIndex,
            Name => New_Game_Settings.Ship_Name,
            X => SkyBases(Random_Base).SkyX, Y => SkyBases(Random_Base).SkyY,
-           Speed => DOCKED, RandomUpgrades => False);
+           Speed => DOCKED, Random_Upgrades => False);
       -- Add player to ship
       Add_Player_Block :
       declare
@@ -1140,7 +1140,7 @@ package body Game is
                elsif To_String(Source => Data_Type) = "modules" then
                   LoadShipModules(Reader => Reader);
                elsif To_String(Source => Data_Type) = "ships" then
-                  LoadShips(Reader => Reader);
+                  Load_Ships(Reader => Reader);
                elsif To_String(Source => Data_Type) = "stories" then
                   LoadStories(Reader => Reader);
                elsif To_String(Source => Data_Type) = "data" then

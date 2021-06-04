@@ -625,7 +625,7 @@ package body Ships.UI.Modules is
             Label :=
               Create
                 (ModuleFrame & ".qualitylbl",
-                 "-text {" & GetCabinQuality(Module.Quality) & "}");
+                 "-text {" & Get_Cabin_Quality(Module.Quality) & "}");
             MaxValue :=
               Positive(Float(Modules_List(Module.Proto_Index).MaxValue) * 1.5);
             if Module.Quality = MaxValue then

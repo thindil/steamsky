@@ -315,35 +315,36 @@ package Ships is
    -- FUNCTION
    -- Create new ship
    -- PARAMETERS
-   -- ProtoIndex     - Index of prototype ship which will be used to create
-   --                  the new ship
-   -- Name           - Name of the new ship
-   -- X              - X coordinate of newly created ship on map
-   -- Y              - Y coordinate of newly created ship on map
-   -- Speed          - Starting speed of newly created ship
-   -- RandomUpgrades - If true, newly created ship will be have
-   --                  random upgrades to own modules. Default is true.
+   -- Proto_Index     - Index of prototype ship which will be used to create
+   --                   the new ship
+   -- Name            - Name of the new ship
+   -- X               - X coordinate of newly created ship on map
+   -- Y               - Y coordinate of newly created ship on map
+   -- Speed           - Starting speed of newly created ship
+   -- Random_Upgrades - If true, newly created ship will be have
+   --                   random upgrades to own modules. Default is true.
    -- RESULT
    -- Newly created ship
    -- SOURCE
-   function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; RandomUpgrades: Boolean := True)
+   function Create_Ship
+     (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record with
-      Pre => (Proto_Ships_Container.Contains(Proto_Ships_List, ProtoIndex)),
+      Pre => Proto_Ships_Container.Contains
+        (Container => Proto_Ships_List, Key => Proto_Index),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
 
-      -- ****f* Ships/Ships.LoadShips
+      -- ****f* Ships/Ships.Load_Ships
       -- FUNCTION
       -- Load ships from files
       -- PARAMETERS
       -- Reader - XML Reader from which ships data will be read
       -- SOURCE
-   procedure LoadShips(Reader: Tree_Reader);
+   procedure Load_Ships(Reader: Tree_Reader);
    -- ****
 
-   -- ****f* Ships/Ships.CountShipWeight
+   -- ****f* Ships/Ships.Count_Ship_Weight
    -- FUNCTION
    -- Count weight of ship (with modules and cargo)
    -- PARAMETERS
@@ -351,11 +352,11 @@ package Ships is
    -- RESULT
    -- Ship weight in kilograms
    -- SOURCE
-   function CountShipWeight(Ship: Ship_Record) return Positive with
+   function Count_Ship_Weight(Ship: Ship_Record) return Positive with
       Test_Case => (Name => "Test_CountShipWeight", Mode => Robustness);
       -- ****
 
-      -- ****f* Ships/Ships.GenerateShipName
+      -- ****f* Ships/Ships.Generate_Ship_Name
       -- FUNCTION
       -- Generate random name for ship
       -- PARAMETERS
@@ -363,23 +364,23 @@ package Ships is
       -- RESULT
       -- Random name for a ship
       -- SOURCE
-   function GenerateShipName
+   function Generate_Ship_Name
      (Owner: Unbounded_String) return Unbounded_String with
       Pre => Owner /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenerateShipName", Mode => Nominal);
       -- ****
 
-      -- ****f* Ships/Ships.CountCombatValue
+      -- ****f* Ships/Ships.Count_Combat_Value
       -- FUNCTION
       -- Count combat value of player ship
       -- RESULT
       -- Numeric level of combat value of player ship
       -- SOURCE
-   function CountCombatValue return Natural with
+   function Count_Combat_Value return Natural with
       Test_Case => (Name => "Test_CountCombatValue", Mode => Robustness);
       -- ****
 
-      -- ****f* Ships/Ships.GetCabinQuality
+      -- ****f* Ships/Ships.Get_Cabin_Quality
       -- FUNCTION
       -- Get description of quality of selected cabin in player ship
       -- PARAMETERS
@@ -387,24 +388,24 @@ package Ships is
       -- RESULT
       -- Description of cabin quality
       -- SOURCE
-   function GetCabinQuality(Quality: Natural) return String with
+   function Get_Cabin_Quality(Quality: Natural) return String with
       Test_Case => (Name => "Test_GetCabinQuality", Mode => Robustness);
       -- ****
 
-      -- ****f* Ships/Ships.DamageModule
+      -- ****f* Ships/Ships.Damage_Module
       -- FUNCTION
       -- Damage the selected module
       -- PARAMETERS
-      -- Ship        - Ship in which the module will be damaged
-      -- ModuleIndex - Index of the module to damage
-      -- Damage      - Amount of damage which the module will take
-      -- DeathReason - If module has owner, reason of owner's death
-      --               if module will be destroyed
+      -- Ship         - Ship in which the module will be damaged
+      -- Module_Index - Index of the module to damage
+      -- Damage       - Amount of damage which the module will take
+      -- Death_Reason - If module has owner, reason of owner's death
+      --                if module will be destroyed
       -- SOURCE
-   procedure DamageModule
-     (Ship: in out Ship_Record; ModuleIndex: Modules_Container.Extended_Index;
-      Damage: Positive; DeathReason: String) with
-      Pre => ModuleIndex in
+   procedure Damage_Module
+     (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
+      Damage: Positive; Death_Reason: String) with
+      Pre => Module_Index in
         Ship.Modules.First_Index .. Ship.Modules.Last_Index,
       Test_Case => (Name => "Test_DamageModule", Mode => Nominal);
       -- ****

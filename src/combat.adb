@@ -95,7 +95,7 @@ package body Combat is
       HarpoonDuration := 0;
       BoardingOrders.Clear;
       EnemyShip :=
-        CreateShip
+        Create_Ship
           (EnemyIndex, Null_Unbounded_String, Player_Ship.Sky_X,
            Player_Ship.Sky_Y, FULL_SPEED);
       -- Enemy ship is trader, generate cargo for it
@@ -216,7 +216,7 @@ package body Combat is
          EngineerOrder := 3;
       end if;
       EndCombat := False;
-      EnemyName := GenerateShipName(Proto_Ships_List(EnemyIndex).Owner);
+      EnemyName := Generate_Ship_Name(Proto_Ships_List(EnemyIndex).Owner);
       MessagesStarts := GetLastMessageIndex + 1;
       declare
          Old_Guns_List: constant Guns_Container.Vector := Guns;
@@ -659,9 +659,9 @@ package body Combat is
                           (if SpeedBonus < 0 then
                              WeaponDamage +
                              (abs (SpeedBonus) *
-                              (CountShipWeight(Ship) / 5_000))
+                              (Count_Ship_Weight(Ship) / 5_000))
                            else WeaponDamage +
-                             (CountShipWeight(Ship) / 5_000));
+                             (Count_Ship_Weight(Ship) / 5_000));
                      end if;
                      if WeaponDamage = 0 then
                         WeaponDamage := 1;
@@ -710,7 +710,7 @@ package body Combat is
                            end if;
                         end if;
                      end if;
-                     DamageModule
+                     Damage_Module
                        (EnemyShip, HitLocation, WeaponDamage,
                         "enemy fire in ship combat");
                      if EnemyShip.Modules(HitLocation).Durability = 0 then

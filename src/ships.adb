@@ -31,16 +31,17 @@ with Ships.Crew; use Ships.Crew;
 
 package body Ships is
 
-   function CreateShip
-     (ProtoIndex, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
-      Speed: Ship_Speed; RandomUpgrades: Boolean := True) return Ship_Record is
+   function Create_Ship
+     (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
+      Speed: Ship_Speed; Random_Upgrades: Boolean := True)
+      return Ship_Record is
       TmpShip: Ship_Record;
       ShipModules: Modules_Container.Vector;
       ShipCrew: Crew_Container.Vector;
       NewName: Unbounded_String;
       HullIndex: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
-      ProtoShip: constant Proto_Ship_Data := Proto_Ships_List(ProtoIndex);
+      ProtoShip: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
       ShipCargo: Inventory_Container.Vector;
       Owners: Natural_Container.Vector;
    begin
@@ -51,7 +52,7 @@ package body Ships is
          TempModule: BaseModule_Data;
          Roll: Positive range 1 .. 100;
          UpgradesAmount: Natural :=
-           (if RandomUpgrades then
+           (if Random_Upgrades then
               GetRandom(0, Positive(ProtoShip.Modules.Length))
             else 0);
       begin
@@ -417,9 +418,9 @@ package body Ships is
             else GetRandom(SkyBases'First, SkyBases'Last));
       end loop Set_Home_For_Members_Loop;
       return TmpShip;
-   end CreateShip;
+   end Create_Ship;
 
-   procedure LoadShips(Reader: Tree_Reader) is
+   procedure Load_Ships(Reader: Tree_Reader) is
       NodesList, ChildNodes: Node_List;
       ShipsData: Document;
       TempRecord: Proto_Ship_Data;
@@ -855,9 +856,9 @@ package body Ships is
             Log_Message("Ship removed: " & To_String(ShipIndex), EVERYTHING);
          end if;
       end loop Load_Proto_Ships_Loop;
-   end LoadShips;
+   end Load_Ships;
 
-   function CountShipWeight(Ship: Ship_Record) return Positive is
+   function Count_Ship_Weight(Ship: Ship_Record) return Positive is
       Weight: Natural := 0;
       CargoWeight: Positive;
    begin
@@ -871,9 +872,9 @@ package body Ships is
          Weight := Weight + CargoWeight;
       end loop Count_Cargo_Weight_Loop;
       return Weight;
-   end CountShipWeight;
+   end Count_Ship_Weight;
 
-   function GenerateShipName
+   function Generate_Ship_Name
      (Owner: Unbounded_String) return Unbounded_String is
       NewName: Unbounded_String := Null_Unbounded_String;
    begin
@@ -909,9 +910,9 @@ package body Ships is
          <<End_Of_Generate_Name_Loop>>
       end loop Generate_Ship_Name_Loop;
       return NewName;
-   end GenerateShipName;
+   end Generate_Ship_Name;
 
-   function CountCombatValue return Natural is
+   function Count_Combat_Value return Natural is
       CombatValue: Natural := 0;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -951,9 +952,9 @@ package body Ships is
          end case;
       end loop Count_Combat_Value_Loop;
       return CombatValue;
-   end CountCombatValue;
+   end Count_Combat_Value;
 
-   function GetCabinQuality(Quality: Natural) return String is
+   function Get_Cabin_Quality(Quality: Natural) return String is
    begin
       case Quality is
          when 0 .. 10 =>
@@ -977,11 +978,11 @@ package body Ships is
          when others =>
             return "Palace room";
       end case;
-   end GetCabinQuality;
+   end Get_Cabin_Quality;
 
-   procedure DamageModule
-     (Ship: in out Ship_Record; ModuleIndex: Modules_Container.Extended_Index;
-      Damage: Positive; DeathReason: String) is
+   procedure Damage_Module
+     (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
+      Damage: Positive; Death_Reason: String) is
       RealDamage: Natural := Damage;
       WeaponIndex: Natural;
       procedure RemoveGun(ModuleIndex2: Positive) is
@@ -989,49 +990,49 @@ package body Ships is
          if Ship.Modules(ModuleIndex2).Owner(1) > 0 then
             Death
               (Ship.Modules(ModuleIndex2).Owner(1),
-               To_Unbounded_String(DeathReason), Ship);
+               To_Unbounded_String(Death_Reason), Ship);
          end if;
       end RemoveGun;
    begin
-      if Damage > Ship.Modules(ModuleIndex).Durability then
-         RealDamage := Ship.Modules(ModuleIndex).Durability;
+      if Damage > Ship.Modules(Module_Index).Durability then
+         RealDamage := Ship.Modules(Module_Index).Durability;
       end if;
-      Ship.Modules(ModuleIndex).Durability :=
-        Ship.Modules(ModuleIndex).Durability - RealDamage;
-      if Ship.Modules(ModuleIndex).Durability = 0 then
-         case Modules_List(Ship.Modules(ModuleIndex).Proto_Index).MType is
+      Ship.Modules(Module_Index).Durability :=
+        Ship.Modules(Module_Index).Durability - RealDamage;
+      if Ship.Modules(Module_Index).Durability = 0 then
+         case Modules_List(Ship.Modules(Module_Index).Proto_Index).MType is
             when HULL | ENGINE =>
                if Ship = Player_Ship then
-                  Death(1, To_Unbounded_String(DeathReason), Player_Ship);
+                  Death(1, To_Unbounded_String(Death_Reason), Player_Ship);
                end if;
             when TURRET =>
-               WeaponIndex := Ship.Modules(ModuleIndex).Gun_Index;
+               WeaponIndex := Ship.Modules(Module_Index).Gun_Index;
                if WeaponIndex > 0 then
                   Ship.Modules(WeaponIndex).Durability := 0;
                   RemoveGun(WeaponIndex);
                end if;
             when GUN =>
-               RemoveGun(ModuleIndex);
+               RemoveGun(Module_Index);
             when CABIN =>
                Kill_Owners_Loop :
-               for Owner of Ship.Modules(ModuleIndex).Owner loop
+               for Owner of Ship.Modules(Module_Index).Owner loop
                   if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
-                     Death(Owner, To_Unbounded_String(DeathReason), Ship);
+                     Death(Owner, To_Unbounded_String(Death_Reason), Ship);
                   end if;
                end loop Kill_Owners_Loop;
             when others =>
-               if Ship.Modules(ModuleIndex).Owner.Length > 0 then
-                  if Ship.Modules(ModuleIndex).Owner(1) > 0
+               if Ship.Modules(Module_Index).Owner.Length > 0 then
+                  if Ship.Modules(Module_Index).Owner(1) > 0
                     and then
-                      Ship.Crew(Ship.Modules(ModuleIndex).Owner(1)).Order /=
+                      Ship.Crew(Ship.Modules(Module_Index).Owner(1)).Order /=
                       Rest then
                      Death
-                       (Ship.Modules(ModuleIndex).Owner(1),
-                        To_Unbounded_String(DeathReason), Ship);
+                       (Ship.Modules(Module_Index).Owner(1),
+                        To_Unbounded_String(Death_Reason), Ship);
                   end if;
                end if;
          end case;
       end if;
-   end DamageModule;
+   end Damage_Module;
 
 end Ships;

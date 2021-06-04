@@ -481,7 +481,7 @@ package body Events is
       PlayerValue: Natural := 0;
       Player_Ships: UnboundedString_Container.Vector;
    begin
-      PlayerValue := CountCombatValue;
+      PlayerValue := Count_Combat_Value;
       if GetRandom(1, 100) > 98 then
          PlayerValue := PlayerValue * 2;
       end if;
