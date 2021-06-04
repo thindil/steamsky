@@ -100,7 +100,12 @@ package body Dialogs is
       Widget_Raise(Dialog);
       if With_Timer then
          TimerId :=
-           To_Unbounded_String(After(1_000, "UpdateDialog " & Dialog));
+           To_Unbounded_String
+             (After
+                (1_000,
+                 "UpdateDialog " & Dialog &
+                 (if Parent_Frame = ".gameframe" then ""
+                  else " " & Parent_Frame)));
       end if;
    end Show_Dialog;
 
@@ -167,7 +172,10 @@ package body Dialogs is
         (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
       TimerId :=
         To_Unbounded_String
-          (After(1_000, "UpdateDialog " & CArgv.Arg(Argv, 1)));
+          (After
+             (1_000,
+              "UpdateDialog " & CArgv.Arg(Argv, 1) &
+              (if Argc = 3 then " " & CArgv.Arg(Argv, 2) else "")));
       return TCL_OK;
    end Update_Dialog_Command;
 
@@ -252,7 +260,8 @@ package body Dialogs is
       Add_Close_Button
         (MessageDialog & ".button",
          "Close" & Positive'Image(Game_Settings.Auto_Close_Messages_Time),
-         "CloseDialog " & MessageDialog);
+         "CloseDialog " & MessageDialog &
+         (if ParentFrame = ".gameframe" then "" else " " & ParentFrame));
       Show_Dialog(MessageDialog, ParentFrame, True);
    end ShowMessage;
 
