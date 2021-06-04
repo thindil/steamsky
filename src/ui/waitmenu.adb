@@ -114,7 +114,7 @@ package body WaitMenu is
         Create
           (WaitDialog & ".amount",
            "-from 1.0 -to 1440 -width 6 -validate key -validatecommand {ValidateSpinbox %W %P}");
-      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 6 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(AmountBox, "-row 7 -column 1");
       Bind(AmountBox, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
       Set(AmountBox, "1");
       Add
@@ -123,7 +123,7 @@ package body WaitMenu is
          "from 1 to 1440 (the whole day)");
       AmountLabel :=
         Create(WaitDialog & ".mins", "-text minutes. -takefocus 0");
-      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 6 -column 2 -padx {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(AmountLabel, "-row 7 -column 2 -padx {0 5}");
       Check_Crew_Rest_Loop :
       for I in Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index loop
          if Player_Ship.Crew(I).Tired > 0 and
