@@ -18,7 +18,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -182,7 +181,13 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       MemberDialog: constant Ttk_Frame :=
-        Create(".memberdialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (Name => ".memberdialog",
+           Title =>
+             "Inventory of " &
+             To_String
+               (Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name),
+           Columns => 2);
       YScroll: constant Ttk_Scrollbar :=
         Create
           (MemberDialog & ".yscroll",
@@ -192,10 +197,7 @@ package body Ships.UI.Crew.Inventory is
           (MemberDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
       MemberFrame: constant Ttk_Frame := Create(MemberCanvas & ".frame");
-      CloseButton: constant Ttk_Button :=
-        Create
-          (MemberFrame & ".button",
-           "-text Close -command {CloseDialog " & MemberDialog & "}");
+      CloseButton: constant Ttk_Button := Get_Widget(MemberFrame & ".button");
       Height, Width: Positive := 10;
       FreeSpaceLabel: constant Ttk_Label :=
         Create
@@ -204,20 +206,10 @@ package body Ships.UI.Crew.Inventory is
            Integer'Image
              (FreeInventory(Positive'Value(CArgv.Arg(Argv, 1)), 0)) &
            " kg} -wraplength 400");
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (MemberDialog & ".header",
-           "-text {Inventory of " &
-           To_String
-             (Player_Ship.Crew(Positive'Value(CArgv.Arg(Argv, 1))).Name) &
-           "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
-      Tcl.Tk.Ada.Pack.Pack(YScroll, " -side right -fill y -padx 5 -pady 5");
-      Tcl.Tk.Ada.Pack.Pack
-        (MemberCanvas, "-expand true -fill both -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, "-row 1 -column 1 -padx 5 -pady 5 -sticky ns");
       Autoscroll(YScroll);
       Tcl.Tk.Ada.Grid.Grid(FreeSpaceLabel);
       Height :=
@@ -236,9 +228,9 @@ package body Ships.UI.Crew.Inventory is
       Height :=
         Height + Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqheight"));
       Width := Positive'Value(Winfo_Get(InventoryTable.Canvas, "reqwidth"));
-      Tcl.Tk.Ada.Grid.Grid(CloseButton);
+      Add_Close_Button
+        (MemberFrame & ".button", "Close", "CloseDialog " & MemberDialog);
       Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
-      Focus(CloseButton);
       if Height > 500 then
          Height := 500;
       end if;
@@ -256,10 +248,8 @@ package body Ships.UI.Crew.Inventory is
       configure
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "]");
-      Tcl.Tk.Ada.Place.Place
-        (MemberDialog, "-in .gameframe -relx 0.2 -rely 0.2");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog
+        (Dialog => MemberDialog, Relative_X => 0.2, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Member_Inventory_Command;
 
