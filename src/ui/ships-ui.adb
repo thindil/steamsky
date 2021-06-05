@@ -27,11 +27,11 @@ with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Config; use Config;
+with CoreUI; use CoreUI;
 with Factions; use Factions;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
@@ -48,23 +48,19 @@ package body Ships.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argv);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      ShipInfoFrame: Ttk_Frame := Get_Widget(Paned & ".shipinfoframe", Interp);
+      ShipInfoFrame: Ttk_Frame :=
+        Get_Widget(Main_Paned & ".shipinfoframe", Interp);
       Label: Ttk_Label;
       UpgradeInfo, ProgressBarStyle: Unbounded_String;
       MaxUpgrade: Integer;
       UpgradePercent: Float;
       UpgradeProgress: Ttk_ProgressBar;
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       CancelButton: Ttk_Button;
       ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(Paned & ".shipinfoframe.general.canvas");
+        Get_Widget(ShipInfoFrame & ".general.canvas");
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.cargo.canvas.frame.selecttype.combo",
-           Interp);
+          (ShipInfoFrame & ".cargo.canvas.frame.selecttype.combo", Interp);
    begin
       if Winfo_Get(ShipInfoFrame, "exists") = "0" then
          Tcl_EvalFile
@@ -72,15 +68,14 @@ package body Ships.UI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "shipinfo.tcl");
       elsif Winfo_Get(ShipInfoFrame, "ismapped") = "1" and Argc = 1 then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         Tcl_Eval(Interp, "InvokeButton " & CloseButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl_Eval(Interp, "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp repair}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       ShipInfoFrame.Name :=
-        New_String
-          (Widget_Image(Paned) & ".shipinfoframe.general.canvas.frame");
+        New_String(Main_Paned & ".shipinfoframe.general.canvas.frame");
       Label := Get_Widget(ShipInfoFrame & ".name");
       configure(Label, "-text {Name: " & To_String(Player_Ship.Name) & "}");
       Label.Name := New_String(ShipInfoFrame & ".upgradelabel");
@@ -292,7 +287,7 @@ package body Ships.UI is
       pragma Unreferenced(ClientData);
       NameEntry: constant Ttk_Label :=
         Get_Widget
-          (".gameframe.paned.shipinfoframe.general.canvas.frame.name", Interp);
+          (Main_Paned & ".shipinfoframe.general.canvas.frame.name", Interp);
    begin
       if Argc = 1 then
          return TCL_OK;
@@ -336,7 +331,7 @@ package body Ships.UI is
          (To_Unbounded_String("modules"), 0, 1),
          (To_Unbounded_String("crew"), 1, 0),
          (To_Unbounded_String("cargo"), 1, 1));
-      Frame: Ttk_Frame := Get_Widget(".gameframe.paned.shipinfoframe", Interp);
+      Frame: Ttk_Frame := Get_Widget(Main_Paned & ".shipinfoframe", Interp);
       Button: constant Ttk_Button :=
         Get_Widget
           (Frame & "." & CArgv.Arg(Argv, 1) & ".canvas.frame.maxmin", Interp);
@@ -346,8 +341,7 @@ package body Ships.UI is
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (".gameframe.paned.shipinfoframe." &
-                 To_String(FrameInfo.Name));
+                (Main_Paned & ".shipinfoframe." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid(Frame);
             else
@@ -367,8 +361,7 @@ package body Ships.UI is
          for FrameInfo of Frames loop
             Frame.Name :=
               New_String
-                (".gameframe.paned.shipinfoframe." &
-                 To_String(FrameInfo.Name));
+                (Main_Paned & ".shipinfoframe." & To_String(FrameInfo.Name));
             if To_String(FrameInfo.Name) /= CArgv.Arg(Argv, 1) then
                Tcl.Tk.Ada.Grid.Grid_Remove(Frame);
             else
