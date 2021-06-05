@@ -168,16 +168,6 @@ package body GameOptions is
               LabelName);
          configure(Label, "-text {" & To_String(Path) & " }");
       end Set_Path;
-      function Accel_To_Text
-        (Accelerator: Unbounded_String) return Unbounded_String is
-         StartIndex: constant Natural :=
-           Index(Accelerator, "KeyPress-", Backward);
-      begin
-         if StartIndex = 0 then
-            return Accelerator;
-         end if;
-         return Delete(Accelerator, StartIndex, StartIndex + 8);
-      end Accel_To_Text;
    begin
       Label.Interp := Interp;
       ComboBox.Interp := Interp;
@@ -297,14 +287,13 @@ package body GameOptions is
         New_String(Widget_Image(OptionsCanvas) & ".options.notebook");
       Load_Menu_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
-         Accels(I).ShortCut := Accel_To_Text(MenuAccelerators(I));
+         Accels(I).ShortCut := MenuAccelerators(I);
       end loop Load_Menu_Accelerators_Loop;
       Load_Map_Accelerators_Loop :
       for I in MapAccelerators'Range loop
-         Accels(I + MenuAccelerators'Last).ShortCut :=
-           Accel_To_Text(MapAccelerators(I));
+         Accels(I + MenuAccelerators'Last).ShortCut := MapAccelerators(I);
       end loop Load_Map_Accelerators_Loop;
-      Accels(Accels'Last).ShortCut := Accel_To_Text(FullScreenAccel);
+      Accels(Accels'Last).ShortCut := FullScreenAccel;
       Load_Accelerators_Loop :
       for Accel of Accels loop
          KeyEntry.Name :=
@@ -579,20 +568,20 @@ package body GameOptions is
          KeyEntry.Name :=
            New_String(RootName & To_String(Accels(I).EntryName));
          if I < 12 then
-            MenuAccelerators(I) :=
-              Insert
-                (To_Unbounded_String(Get(KeyEntry)),
-                 Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) + 1,
-                 "KeyPress-");
+            MenuAccelerators(I) := To_Unbounded_String(Get(KeyEntry));
             Bind_To_Main_Window
-              (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
+              (Get_Context,
+               "<" &
+               To_String
+                 (Insert
+                    (To_Unbounded_String(Get(KeyEntry)),
+                     Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) +
+                     1,
+                     "KeyPress-")) &
+               ">",
                "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
          else
-            MapAccelerators(I - 11) :=
-              Insert
-                (To_Unbounded_String(Get(KeyEntry)),
-                 Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) + 1,
-                 "KeyPress-");
+            MapAccelerators(I - 11) := To_Unbounded_String(Get(KeyEntry));
          end if;
       end loop Set_Accelerators_Loop;
       Unbind_From_Main_Window
@@ -606,11 +595,7 @@ package body GameOptions is
          ">");
       KeyEntry.Name :=
         New_String(RootName & To_String(Accels(Accels'Last).EntryName));
-      FullScreenAccel :=
-        Insert
-          (To_Unbounded_String(Get(KeyEntry)),
-           Index(To_Unbounded_String(Get(KeyEntry)), "-", Backward) + 1,
-           "KeyPress-");
+      FullScreenAccel := To_Unbounded_String(Get(KeyEntry));
       Create(KeysFile, Append_File, To_String(Save_Directory) & "keys.cfg");
       Save_Menu_Accelerators_Loop :
       for Key of MenuAccelerators loop
