@@ -40,7 +40,6 @@ with Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 use Tcl.Tk.Ada.Widgets.TtkButton.TtkCheckButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
-with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -1254,17 +1253,17 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Assigned: Natural := 0;
+      FrameName: constant String := ".moduledialog.canvas.frame";
       CrewButton: Ttk_CheckButton;
       ButtonName: Unbounded_String;
       CrewIndex: constant Natural :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 0);
       InfoLabel: constant Ttk_Label :=
-        Get_Widget(".moduledialog.canvas.frame.infolabel", Interp);
+        Get_Widget(FrameName & ".infolabel", Interp);
    begin
       if Argc = 3 then
          if Tcl_GetVar
-             (Interp,
-              ".moduledialog.canvas.frame.crewbutton" & CArgv.Arg(Argv, 2)) =
+             (Interp, FrameName & ".crewbutton" & CArgv.Arg(Argv, 2)) =
            "0" then
             Remove_Owner_Loop :
             for Owner of Player_Ship.Modules(ModuleIndex).Owner loop
@@ -1291,7 +1290,7 @@ package body Ships.UI.Modules is
       for I in Player_Ship.Crew.Iterate loop
          CrewButton.Name :=
            New_String
-             (".moduledialog.canvas.frame.crewbutton" &
+             (FrameName & ".crewbutton" &
               Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
          State(CrewButton, "!disabled");
          configure(CrewButton, "-takefocus 1");
@@ -1307,7 +1306,7 @@ package body Ships.UI.Modules is
          for I in Player_Ship.Crew.Iterate loop
             ButtonName :=
               To_Unbounded_String
-                (".moduledialog.canvas.frame.crewbutton" &
+                (FrameName & ".crewbutton" &
                  Trim(Positive'Image(Crew_Container.To_Index(I)), Left));
             if Tcl_GetVar(Interp, To_String(ButtonName)) = "0" then
                CrewButton.Name := New_String(To_String(ButtonName));
@@ -1379,20 +1378,18 @@ package body Ships.UI.Modules is
           (CrewFrame & ".titlelabel",
            "-text {Assign a crew member to " &
            To_String(Player_Ship.Modules(ModuleIndex).Name) &
-           "} -wraplength 250");
+           "} -wraplength 250 -style Header.TLabel");
       Assigned: Natural := 0;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
       Autoscroll(YScroll);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 2 -pady 2 -fill x");
       Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Load_Crew_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
@@ -1494,7 +1491,7 @@ package body Ships.UI.Modules is
         Create
           (ModuleDialog & ".titlelabel",
            "-text {Assign skill to " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) & "}");
+           To_String(Player_Ship.Modules(ModuleIndex).Name) & "} -style Header.TLabel");
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ScrollSkillY: constant Ttk_Scrollbar :=
         Create
@@ -1506,12 +1503,10 @@ package body Ships.UI.Modules is
            "-columns [list name tool] -show headings -yscrollcommand [list " &
            SkillsFrame & ".scrolly set]");
       ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 5 -pady 5");
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
+      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 2 -pady 2 -fill x");
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
       Tag_Configure(SkillsView, "gray", "-foreground gray");
@@ -1661,9 +1656,8 @@ package body Ships.UI.Modules is
    end Get_Active_Button_Command;
 
    procedure UpdateModulesInfo(Page: Positive := 1) is
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       ShipCanvas: constant Tk_Canvas :=
-        Get_Widget(Paned & ".shipinfoframe.modules.canvas");
+        Get_Widget(Main_Paned & ".shipinfoframe.modules.canvas");
       ShipInfoFrame: constant Ttk_Frame := Get_Widget(ShipCanvas & ".frame");
       Row: Positive := 2;
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -1674,7 +1668,7 @@ package body Ships.UI.Modules is
            CreateTable
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
-              Get_Widget(".gameframe.paned.shipinfoframe.modules.scrolly"));
+              Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"));
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
