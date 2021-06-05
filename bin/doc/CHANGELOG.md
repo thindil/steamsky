@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Typo in Strength attribute description
 - Losing focus by text fields when setting keyboard shortcuts
 - Can't assign 1-5 keys to shorcuts
+- Giving crew members items from the ship's cargo
 
 ## [6.1] - 2021-05-16
 
