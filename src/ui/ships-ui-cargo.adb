@@ -212,8 +212,8 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".giveamount",
-           "-width 15 -from 1.0 -to" &
-           Float'Image(Float(PlayerShip.Cargo(ItemIndex).Amount)) &
+           "-width 15 -from 1 -to" &
+           Positive'Image(PlayerShip.Cargo(ItemIndex).Amount) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
@@ -301,6 +301,7 @@ package body Ships.UI.Cargo is
       ItemDialog: Tk_Toplevel := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox := Get_Widget(ItemDialog & ".giveamount");
       ComboBox: constant Ttk_ComboBox := Get_Widget(ItemDialog & ".member");
+      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       Amount := Natural'Value(Get(SpinBox));
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
@@ -326,6 +327,9 @@ package body Ships.UI.Cargo is
         (Ship => PlayerShip, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);
       Destroy(ItemDialog);
+      Tcl.Tk.Ada.Busy.Forget(Frame);
+      Frame := Get_Widget(".gameframe.paned");
+      Tcl.Tk.Ada.Busy.Forget(Frame);
       UpdateHeader;
       UpdateMessages;
       return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
