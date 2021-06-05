@@ -40,11 +40,25 @@ package Ships is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
    -- ****
 
+   -- ****d* Ships/Ships.Default_Ship_Speed
+   -- FUNCTION
+   -- Default speed setting for ships
+   -- SOURCE
+   Default_Ship_Speed: constant Ship_Speed := FULL_SPEED;
+   -- ****
+
    -- ****t* Ships/Ships.Ship_Combat_Ai
    -- FUNCTION
    -- NPC ships combat AI types
    -- SOURCE
    type Ship_Combat_Ai is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
+   -- ****
+
+   -- ****d* Ships/Ships.Default_Combat_Ai
+   -- FUNCTION
+   -- Default value for NPC's ships combat behavior
+   -- SOURCE
+   Default_Combat_Ai: constant Ship_Combat_Ai := NONE;
    -- ****
 
    -- ****t* Ships/Ships.Ship_Upgrade
@@ -54,11 +68,25 @@ package Ships is
    type Ship_Upgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
    -- ****
 
+   -- ****d* Ships/Ships.Default_Ship_Upgrade
+   -- FUNCTION
+   -- Default ship upgrade (no upgrade)
+   -- SOURCE
+   Default_Ship_Upgrade: constant Ship_Upgrade := NONE;
+   -- ****
+
    -- ****t* Ships/Ships.Data_Array
    -- FUNCTION
    -- Used to store ship modules data
    -- SOURCE
    type Data_Array is array(1 .. 3) of Integer;
+   -- ****
+
+   -- ****d* Ships/Ships.Empty_Data_Array
+   -- FUNCTION
+   -- Empty modules data
+   -- SOURCE
+   Empty_Data_Array: constant Data_Array := (others => 0);
    -- ****
 
    -- ****t* Ships/Ships.Module_Type_2
@@ -68,6 +96,13 @@ package Ships is
    type Module_Type_2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
       TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
+   -- ****
+
+   -- ****d* Ships/Ships.Default_Module_Type
+   -- FUNCTION
+   -- Default type of ships modules
+   -- SOURCE
+   Default_Module_Type: constant Module_Type_2 := ANY;
    -- ****
 
    -- ****s* Ships/Ships.Module_Data
@@ -105,7 +140,7 @@ package Ships is
    --                     gun
    -- Data              - Various data for module (depends on module)
    -- SOURCE
-   type Module_Data(M_Type: Module_Type_2 := ANY) is record
+   type Module_Data(M_Type: Module_Type_2 := Default_Module_Type) is record
       Name: Unbounded_String;
       Proto_Index: Unbounded_String;
       Weight: Natural;
@@ -148,6 +183,13 @@ package Ships is
             Data: Data_Array;
       end case;
    end record;
+   -- ****
+
+   -- ****d* Ships/Ships.Default_Module
+   -- FUNCTION
+   -- Default empty module without type
+   -- SOURCE
+   Default_Module: constant Module_Data := (others => <>);
    -- ****
 
    -- ****t* Ships/Ships.Modules_Container
@@ -201,6 +243,13 @@ package Ships is
    end record;
    -- ****
 
+   -- ****d* Ships/Ships.Empty_Ship
+   -- FUNCTION
+   -- Empty record for ship data
+   -- SOURCE
+   Empty_Ship: constant Ship_Record := (others => <>);
+   -- ****
+
    -- ****s* Ships/Ships.Proto_Member_Data
    -- FUNCTION
    -- Data structure for proto crew info
@@ -215,6 +264,13 @@ package Ships is
       Min_Amount: Positive;
       Max_Amount: Natural;
    end record;
+   -- ****
+
+   -- ****d* Ships/Ships.Empty_Proto_Member
+   -- FUNCTION
+   -- Empty record for proto crew info
+   -- SOURCE
+   Empty_Proto_Member: constant Proto_Member_Data := (others => <>);
    -- ****
 
    -- ****t* Ships/Ships.Proto_Crew_Container
@@ -258,6 +314,13 @@ package Ships is
       Owner: Unbounded_String;
       Known_Recipes: UnboundedString_Container.Vector;
    end record;
+   -- ****
+
+   -- ****d* Ships/Ships.Empty_Proto_Ship
+   -- FUNCTION
+   -- Empty record for ships prototypes
+   -- SOURCE
+   Empty_Proto_Ship: constant Proto_Ship_Data := (others => <>);
    -- ****
 
    -- ****t* Ships/Ships.Proto_Ships_Container
