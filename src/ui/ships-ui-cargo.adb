@@ -16,6 +16,7 @@
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
+with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
@@ -213,8 +214,8 @@ package body Ships.UI.Cargo is
       AmountBox: constant Ttk_SpinBox :=
         Create
           (ItemDialog & ".giveamount",
-           "-width 15 -from 1.0 -to" &
-           Float'Image(Float(Player_Ship.Cargo(ItemIndex).Amount)) &
+           "-width 15 -from 1 -to" &
+           Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
            " -validate key -validatecommand {CheckAmount %W" &
            Positive'Image(ItemIndex) & " %P} -command {ValidateAmount " &
            ItemDialog & ".giveamount" & Positive'Image(ItemIndex) & "}");
@@ -319,6 +320,8 @@ package body Ships.UI.Cargo is
         (Ship => Player_Ship, Amount => (0 - Amount), CargoIndex => ItemIndex,
          Price => Item.Price);
       Destroy(ItemDialog);
+      Tcl.Tk.Ada.Busy.Forget(Main_Paned);
+      Tcl.Tk.Ada.Busy.Forget(Game_Header);
       UpdateHeader;
       UpdateMessages;
       return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
