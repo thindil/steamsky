@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.UTF_Encoding.Wide_Strings;
 use Ada.Strings.UTF_Encoding.Wide_Strings;
@@ -883,7 +884,14 @@ package body Maps.UI is
       Set_Accelerators_Loop :
       for I in MenuAccelerators'Range loop
          Bind_To_Main_Window
-           (Get_Context, "<" & To_String(MenuAccelerators(I)) & ">",
+           (Get_Context,
+            "<" &
+            To_String
+              (Insert
+                 (MenuAccelerators(I),
+                  Index(MenuAccelerators(I), "-", Backward) + 1,
+                  "KeyPress-")) &
+            ">",
             "{InvokeMenu " & To_String(MenuAccelerators(I)) & "}");
       end loop Set_Accelerators_Loop;
       if Index
@@ -953,121 +961,71 @@ package body Maps.UI is
    end ShowSkyMap;
 
    procedure SetKeys is
+      Commands: constant array(MapAccelerators'Range) of Unbounded_String :=
+        (To_Unbounded_String
+           ("{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
+            Game_Header & "] == 0} {tk_popup " & GameMenu & " %X %Y}}"),
+         To_Unbounded_String
+           ("{" & Main_Paned & ".mapframe.buttons.wait invoke}"),
+         To_Unbounded_String("{ZoomMap raise}"),
+         To_Unbounded_String("{ZoomMap lower}"),
+         To_Unbounded_String("{InvokeButton $bframe.nw}"),
+         To_Unbounded_String("{InvokeButton $bframe.n}"),
+         To_Unbounded_String("{InvokeButton $bframe.ne}"),
+         To_Unbounded_String("{InvokeButton $bframe.w}"),
+         To_Unbounded_String("{InvokeButton $bframe.wait}"),
+         To_Unbounded_String("{InvokeButton $bframe.e}"),
+         To_Unbounded_String("{InvokeButton $bframe.sw}"),
+         To_Unbounded_String("{InvokeButton $bframe.s}"),
+         To_Unbounded_String("{InvokeButton $bframe.se}"),
+         To_Unbounded_String("{InvokeButton $bframe.moveto}"),
+         To_Unbounded_String("{MoveMap centeronship}"),
+         To_Unbounded_String("{MoveMap centeronhome}"),
+         To_Unbounded_String("{MoveMap nw}"),
+         To_Unbounded_String("{MoveMap n}"),
+         To_Unbounded_String("{MoveMap ne}"),
+         To_Unbounded_String("{MoveMap w}"),
+         To_Unbounded_String("{MoveMap e}"),
+         To_Unbounded_String("{MoveMap sw}"),
+         To_Unbounded_String("{MoveMap s}"),
+         To_Unbounded_String("{MoveMap se}"),
+         To_Unbounded_String("{MoveCursor nw %x %y}"),
+         To_Unbounded_String("{MoveCursor n %x %y}"),
+         To_Unbounded_String("{MoveCursor ne %x %y}"),
+         To_Unbounded_String("{MoveCursor w %x %y}"),
+         To_Unbounded_String("{MoveCursor e %x %y}"),
+         To_Unbounded_String("{MoveCursor sw %x %y}"),
+         To_Unbounded_String("{MoveCursor s %x %y}"),
+         To_Unbounded_String("{MoveCursor se %x %y}"),
+         To_Unbounded_String("{MoveCursor click %x %y}"),
+         To_Unbounded_String
+           ("{" & Main_Paned & ".controls.buttons.speed current 0}"),
+         To_Unbounded_String
+           ("{" & Main_Paned & ".controls.buttons.speed current 1}"),
+         To_Unbounded_String
+           ("{" & Main_Paned & ".controls.buttons.speed current 2}"),
+         To_Unbounded_String
+           ("{" & Main_Paned & ".controls.buttons.speed current 3}"));
    begin
+      for I in Commands'Range loop
+         Bind_To_Main_Window
+           (Get_Context,
+            "<" &
+            To_String
+              (Insert
+                 (MapAccelerators(I),
+                  Index(MapAccelerators(I), "-", Backward) + 1, "KeyPress-")) &
+            ">",
+            To_String(Commands(I)));
+      end loop;
       Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(1)) & ">",
-         "{if {[winfo class [focus]] != {TEntry} && [tk busy status " &
-         Game_Header & "] == 0} {tk_popup " & GameMenu & " %X %Y}}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(2)) & ">",
-         "{" & Main_Paned & ".mapframe.buttons.wait invoke}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(3)) & ">",
-         "{ZoomMap raise}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(4)) & ">",
-         "{ZoomMap lower}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(5)) & ">",
-         "{InvokeButton $bframe.nw}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(6)) & ">",
-         "{InvokeButton $bframe.n}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(7)) & ">",
-         "{InvokeButton $bframe.ne}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(8)) & ">",
-         "{InvokeButton $bframe.w}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(9)) & ">",
-         "{InvokeButton $bframe.wait}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(10)) & ">",
-         "{InvokeButton $bframe.e}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(11)) & ">",
-         "{InvokeButton $bframe.sw}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(12)) & ">",
-         "{InvokeButton $bframe.s}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(13)) & ">",
-         "{InvokeButton $bframe.se}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(14)) & ">",
-         "{InvokeButton $bframe.moveto}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(15)) & ">",
-         "{MoveMap centeronship}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(16)) & ">",
-         "{MoveMap centeronhome}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(17)) & ">",
-         "{MoveMap nw}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(18)) & ">",
-         "{MoveMap n}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(19)) & ">",
-         "{MoveMap ne}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(20)) & ">",
-         "{MoveMap w}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(21)) & ">",
-         "{MoveMap e}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(22)) & ">",
-         "{MoveMap sw}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(23)) & ">",
-         "{MoveMap s}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(24)) & ">",
-         "{MoveMap se}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(25)) & ">",
-         "{MoveCursor nw %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(26)) & ">",
-         "{MoveCursor n %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(27)) & ">",
-         "{MoveCursor ne %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(28)) & ">",
-         "{MoveCursor w %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(29)) & ">",
-         "{MoveCursor e %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(30)) & ">",
-         "{MoveCursor sw %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(31)) & ">",
-         "{MoveCursor s %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(32)) & ">",
-         "{MoveCursor se %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(33)) & ">",
-         "{MoveCursor click %x %y}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(34)) & ">",
-         "{" & Main_Paned & ".controls.buttons.speed current 0}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(35)) & ">",
-         "{" & Main_Paned & ".controls.buttons.speed current 1}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(36)) & ">",
-         "{" & Main_Paned & ".controls.buttons.speed current 2}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(MapAccelerators(37)) & ">",
-         "{" & Main_Paned & ".controls.buttons.speed current 3}");
-      Bind_To_Main_Window
-        (Get_Context, "<" & To_String(FullScreenAccel) & ">",
+        (Get_Context,
+         "<" &
+         To_String
+           (Insert
+              (FullScreenAccel, Index(FullScreenAccel, "-", Backward) + 1,
+               "KeyPress-")) &
+         ">",
          "{ToggleFullScreen}");
    end SetKeys;
 
