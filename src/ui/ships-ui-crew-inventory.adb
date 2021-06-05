@@ -15,10 +15,8 @@
 
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -364,7 +362,12 @@ package body Ships.UI.Crew.Inventory is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemDialog: constant Ttk_Frame :=
-        Create(".itemdialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".itemdialog",
+           "Move " &
+           GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
+           " to ship cargo",
+           400, 2, ".memberdialog");
       Button: Ttk_Button :=
         Create
           (ItemDialog & ".movebutton",
@@ -379,17 +382,7 @@ package body Ships.UI.Crew.Inventory is
            "-width 5 -from 1.0 -to" & Float'Image(Float(MaxAmount)) &
            " -validate key -validatecommand {ValidateMoveAmount" &
            Positive'Image(MaxAmount) & " %P}");
-      Frame: constant Ttk_Frame := Get_Widget(".memberdialog");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Label :=
-        Create
-          (ItemDialog & ".title",
-           "-text {Move " &
-           GetItemName(Player_Ship.Crew(MemberIndex).Inventory(ItemIndex)) &
-           " to ship cargo} -wraplength 400 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Label, "-columnspan 2 -sticky we -padx 2 -pady {2 0}");
       Label :=
         Create
           (ItemDialog & ".amountlbl",
@@ -410,10 +403,9 @@ package body Ships.UI.Crew.Inventory is
            " .memberdialog;focus .memberdialog.canvas.frame.button}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 2 -padx {0 5} -pady {0 5}");
       Focus(Button);
-      Tcl.Tk.Ada.Place.Place(ItemDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Widget_Raise(ItemDialog);
       Bind(Button, "<Tab>", "{focus " & ItemDialog & ".movebutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
+      Show_Dialog(ItemDialog);
       return TCL_OK;
    end Show_Move_Item_Command;
 
