@@ -406,7 +406,7 @@ package body MainMenu.Commands is
          ShowMainMenu;
          ShowMessage
            ("Can't load this game. Reason: " & Exception_Message(An_Exception),
-            ".mainmenu");
+            ".");
          return TCL_OK;
    end Load_Game_Command;
 

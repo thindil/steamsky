@@ -119,13 +119,15 @@ package body Utils.UI is
    function Update_Dialog_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
       MessageButton: constant Ttk_Button :=
         Get_Widget(CArgv.Arg(Argv, 1) & ".button", Interp);
       Text: constant String := Widgets.cget(MessageButton, "-text");
       Seconds: constant Natural := Natural'Value(Text(6 .. Text'Last)) - 1;
    begin
       if Seconds = 0 then
-         return Close_Dialog_Command(ClientData, Interp, Argc, Argv);
+         Tcl_Eval(Interp, MessageButton & " invoke");
+         return TCL_OK;
       end if;
       Widgets.configure
         (MessageButton, "-text {Close" & Positive'Image(Seconds) & "}");
@@ -137,7 +139,9 @@ package body Utils.UI is
 
    procedure ShowMessage(Text: String; ParentFrame: String := ".gameframe") is
       MessageDialog: constant Ttk_Frame :=
-        Create(ParentFrame & ".message", "-style Dialog.TFrame");
+        Create
+          ((if ParentFrame = "." then "" else ParentFrame) & ".message",
+           "-style Dialog.TFrame");
       MessageLabel: constant Ttk_Label :=
         Create
           (MessageDialog & ".text", "-text {" & Text & "} -wraplength 300");
@@ -146,12 +150,17 @@ package body Utils.UI is
           (MessageDialog & ".button",
            "-text {Close" &
            Positive'Image(Game_Settings.Auto_Close_Messages_Time) &
-           "} -command {CloseDialog " & MessageDialog & "}");
+           "} -command {CloseDialog " & MessageDialog & " " &
+           (if ParentFrame = ".gameframe" then "" else ParentFrame) & "}");
       Frame: Ttk_Frame := Get_Widget(".gameframe.header");
    begin
       if Tcl.Tk.Ada.Busy.Status(Frame) = "1" then
          Tcl.Tk.Ada.Busy.Busy(Frame);
          Frame := Get_Widget(".gameframe.paned");
+         Tcl.Tk.Ada.Busy.Busy(Frame);
+      end if;
+      if ParentFrame = "." then
+         Frame := Get_Widget(".");
          Tcl.Tk.Ada.Busy.Busy(Frame);
       end if;
       if TimerId /= Null_Unbounded_String then
@@ -167,8 +176,7 @@ package body Utils.UI is
       Bind(MessageButton, "<Tab>", "{break}");
       Bind(MessageButton, "<Escape>", "{" & MessageButton & " invoke;break}");
       TimerId :=
-        To_Unbounded_String
-          (After(1_000, "UpdateDialog " & ParentFrame & ".message"));
+        To_Unbounded_String(After(1_000, "UpdateDialog " & MessageDialog));
       Widget_Raise(MessageDialog);
    end ShowMessage;
 
@@ -362,8 +370,8 @@ package body Utils.UI is
            CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
            CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3);
       end if;
-      return Check_Amount_Command
-          (ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
+      return
+        Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
 
    -- ****o* UUI/UUI.Get_String_Command
@@ -545,7 +553,7 @@ package body Utils.UI is
       elsif Result = "sethomebase" then
          declare
             TraderIndex: constant Natural := FindMember(Talk);
-            Price: Positive := 1000;
+            Price: Positive := 1_000;
             MoneyIndex2: constant Natural :=
               FindItem(PlayerShip.Cargo, Money_Index);
          begin
@@ -695,15 +703,15 @@ package body Utils.UI is
    begin
       Count_Time_Loop :
       while MinutesDiff > 0 loop
-         if MinutesDiff >= 518400 then
+         if MinutesDiff >= 518_400 then
             TravelTime.Year := TravelTime.Year + 1;
-            MinutesDiff := MinutesDiff - 518400;
-         elsif MinutesDiff >= 43200 then
+            MinutesDiff := MinutesDiff - 518_400;
+         elsif MinutesDiff >= 43_200 then
             TravelTime.Month := TravelTime.Month + 1;
-            MinutesDiff := MinutesDiff - 43200;
-         elsif MinutesDiff >= 1440 then
+            MinutesDiff := MinutesDiff - 43_200;
+         elsif MinutesDiff >= 1_440 then
             TravelTime.Day := TravelTime.Day + 1;
-            MinutesDiff := MinutesDiff - 1440;
+            MinutesDiff := MinutesDiff - 1_440;
          elsif MinutesDiff >= 60 then
             TravelTime.Hour := TravelTime.Hour + 1;
             MinutesDiff := MinutesDiff - 60;
@@ -734,7 +742,7 @@ package body Utils.UI is
       ShowFuelName: Boolean := False) is
       type SpeedType is digits 2;
       Speed: constant SpeedType :=
-        (SpeedType(RealSpeed(PlayerShip, True)) / 1000.0);
+        (SpeedType(RealSpeed(PlayerShip, True)) / 1_000.0);
       MinutesDiff: Integer;
       Rests, CabinIndex, RestTime: Natural := 0;
       Damage: Damage_Factor := 0.0;
