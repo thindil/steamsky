@@ -35,14 +35,14 @@ package body Ships is
      (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
-      TmpShip: Ship_Record;
-      ShipModules: Modules_Container.Vector;
-      ShipCrew: Crew_Container.Vector;
-      NewName: Unbounded_String;
-      HullIndex: Modules_Container.Extended_Index := 0;
+      Tmp_Ship: Ship_Record;
+      Ship_Modules: Modules_Container.Vector;
+      Ship_Crew: Crew_Container.Vector;
+      New_Name: Unbounded_String;
+      Hull_Index: Modules_Container.Extended_Index := 0;
       Amount: Natural := 0;
-      ProtoShip: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
-      ShipCargo: Inventory_Container.Vector;
+      Proto_Ship: constant Proto_Ship_Data := Proto_Ships_List(Proto_Index);
+      Ship_Cargo: Inventory_Container.Vector;
       Owners: Natural_Container.Vector;
    begin
       -- Set ship modules
@@ -53,11 +53,11 @@ package body Ships is
          Roll: Positive range 1 .. 100;
          UpgradesAmount: Natural :=
            (if Random_Upgrades then
-              GetRandom(0, Positive(ProtoShip.Modules.Length))
+              GetRandom(0, Positive(Proto_Ship.Modules.Length))
             else 0);
       begin
          Set_Modules_Loop :
-         for Module of ProtoShip.Modules loop
+         for Module of Proto_Ship.Modules loop
             TempModule := Modules_List(Module);
             if UpgradesAmount = 0 or GetRandom(1, 100) < 51 then
                goto End_Of_Setting_Upgrades;
@@ -124,7 +124,7 @@ package body Ships is
             end if;
             case TempModule.MType is
                when ENGINE =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => ENGINE, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -134,7 +134,7 @@ package body Ships is
                         Upgrade_Action => NONE, Fuel_Usage => TempModule.Value,
                         Power => TempModule.MaxValue, Disabled => False));
                when CABIN =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => CABIN, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -145,7 +145,7 @@ package body Ships is
                         Cleanliness => TempModule.Value,
                         Quality => TempModule.Value));
                when ALCHEMY_LAB .. GREENHOUSE =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => WORKSHOP, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -156,7 +156,7 @@ package body Ships is
                         Crafting_Index => Null_Unbounded_String,
                         Crafting_Time => 0, Crafting_Amount => 0));
                when MEDICAL_ROOM =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => MEDICAL_ROOM,
                         Name => Modules_List(Module).Name,
@@ -166,7 +166,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when COCKPIT =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => COCKPIT, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -175,7 +175,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when TRAINING_ROOM =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => TRAINING_ROOM,
                         Name => Modules_List(Module).Name,
@@ -185,7 +185,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Trained_Skill => 0));
                when TURRET =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => TURRET, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -194,7 +194,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE, Gun_Index => 0));
                when GUN =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => GUN, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -204,7 +204,7 @@ package body Ships is
                         Upgrade_Action => NONE, Damage => TempModule.MaxValue,
                         Ammo_Index => 0));
                when CARGO =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => CARGO_ROOM,
                         Name => Modules_List(Module).Name,
@@ -214,7 +214,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when HULL =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => HULL, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -225,7 +225,7 @@ package body Ships is
                         Installed_Modules => TempModule.Value,
                         Max_Modules => TempModule.MaxValue));
                when ARMOR =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => ARMOR, Name => Modules_List(Module).Name,
                         Proto_Index => Module, Weight => TempModule.Weight,
@@ -234,7 +234,7 @@ package body Ships is
                         Owner => Owners, Upgrade_Progress => 0,
                         Upgrade_Action => NONE));
                when BATTERING_RAM =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => BATTERING_RAM,
                         Name => Modules_List(Module).Name,
@@ -245,7 +245,7 @@ package body Ships is
                         Upgrade_Action => NONE, Damage2 => TempModule.MaxValue,
                         Cooling_Down => False));
                when HARPOON_GUN =>
-                  ShipModules.Append
+                  Ship_Modules.Append
                     (New_Item =>
                        (M_Type => HARPOON_GUN,
                         Name => Modules_List(Module).Name,
@@ -261,28 +261,29 @@ package body Ships is
          end loop Set_Modules_Loop;
       end;
       -- Set ship name
-      NewName :=
-        (if Name = Null_Unbounded_String then ProtoShip.Name else Name);
+      New_Name :=
+        (if Name = Null_Unbounded_String then Proto_Ship.Name else Name);
       -- Set ship crew
       declare
          Member: Member_Data;
       begin
          Set_Crew_Loop :
-         for ProtoMember of ProtoShip.Crew loop
+         for ProtoMember of Proto_Ship.Crew loop
             Amount :=
               (if ProtoMember.Max_Amount = 0 then ProtoMember.Min_Amount
                else GetRandom(ProtoMember.Min_Amount, ProtoMember.Max_Amount));
             Add_Crew_Member_Loop :
             for I in 1 .. Amount loop
-               Member := GenerateMob(ProtoMember.Proto_Index, ProtoShip.Owner);
-               ShipCrew.Append(New_Item => Member);
+               Member :=
+                 GenerateMob(ProtoMember.Proto_Index, Proto_Ship.Owner);
+               Ship_Crew.Append(New_Item => Member);
                Modules_Loop :
-               for Module of ShipModules loop
+               for Module of Ship_Modules loop
                   if Module.M_Type = CABIN then
                      Set_Cabin_Name_Loop :
                      for I in Module.Owner.Iterate loop
                         if Module.Owner(I) = 0 then
-                           Module.Owner(I) := ShipCrew.Last_Index;
+                           Module.Owner(I) := Ship_Crew.Last_Index;
                            if Natural_Container.To_Index(I) = 1 then
                               Module.Name :=
                                 Member.Name & To_Unbounded_String("'s Cabin");
@@ -293,16 +294,16 @@ package body Ships is
                   end if;
                end loop Modules_Loop;
                Set_Module_Owner_Loop :
-               for Module of ShipModules loop
+               for Module of Ship_Modules loop
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
                        ((Module.M_Type in GUN | HARPOON_GUN) and
                         Member.Order = Gunner) then
-                        Module.Owner(1) := ShipCrew.Last_Index;
+                        Module.Owner(1) := Ship_Crew.Last_Index;
                         exit Set_Module_Owner_Loop;
                      elsif Module.M_Type = COCKPIT and
                        Member.Order = Pilot then
-                        Module.Owner(1) := ShipCrew.Last_Index;
+                        Module.Owner(1) := Ship_Crew.Last_Index;
                         exit Set_Module_Owner_Loop;
                      end if;
                   end if;
@@ -312,68 +313,68 @@ package body Ships is
       end;
       -- Set ship cargo
       Set_Cargo_Loop :
-      for I in ProtoShip.Cargo.Iterate loop
+      for I in Proto_Ship.Cargo.Iterate loop
          Amount :=
-           (if ProtoShip.Cargo(I).MaxAmount > 0 then
+           (if Proto_Ship.Cargo(I).MaxAmount > 0 then
               GetRandom
-                (ProtoShip.Cargo(I).MinAmount, ProtoShip.Cargo(I).MaxAmount)
-            else ProtoShip.Cargo(I).MinAmount);
-         ShipCargo.Append
+                (Proto_Ship.Cargo(I).MinAmount, Proto_Ship.Cargo(I).MaxAmount)
+            else Proto_Ship.Cargo(I).MinAmount);
+         Ship_Cargo.Append
            (New_Item =>
-              (ProtoIndex => ProtoShip.Cargo(I).ProtoIndex, Amount => Amount,
+              (ProtoIndex => Proto_Ship.Cargo(I).ProtoIndex, Amount => Amount,
                Name => Null_Unbounded_String, Durability => 100, Price => 0));
       end loop Set_Cargo_Loop;
-      TmpShip :=
-        (Name => NewName, Sky_X => X, Sky_Y => Y, Speed => Speed,
-         Modules => ShipModules, Cargo => ShipCargo, Crew => ShipCrew,
+      Tmp_Ship :=
+        (Name => New_Name, Sky_X => X, Sky_Y => Y, Speed => Speed,
+         Modules => Ship_Modules, Cargo => Ship_Cargo, Crew => Ship_Crew,
          Upgrade_Module => 0, Destination_X => 0, Destination_Y => 0,
-         Repair_Module => 0, Description => ProtoShip.Description,
+         Repair_Module => 0, Description => Proto_Ship.Description,
          Home_Base => 0);
       declare
          GunAssigned: Boolean;
       begin
          Amount := 0;
          Count_Modules_Loop :
-         for I in TmpShip.Modules.Iterate loop
-            if TmpShip.Modules(I).M_Type = TURRET then
+         for I in Tmp_Ship.Modules.Iterate loop
+            if Tmp_Ship.Modules(I).M_Type = TURRET then
                Count_Guns_Loop :
-               for J in TmpShip.Modules.Iterate loop
-                  if TmpShip.Modules(J).M_Type in GUN | HARPOON_GUN then
+               for J in Tmp_Ship.Modules.Iterate loop
+                  if Tmp_Ship.Modules(J).M_Type in GUN | HARPOON_GUN then
                      GunAssigned := False;
                      Check_Assigned_Guns_Loop :
-                     for K in TmpShip.Modules.Iterate loop
-                        if TmpShip.Modules(K).M_Type = TURRET
-                          and then TmpShip.Modules(K).Gun_Index =
+                     for K in Tmp_Ship.Modules.Iterate loop
+                        if Tmp_Ship.Modules(K).M_Type = TURRET
+                          and then Tmp_Ship.Modules(K).Gun_Index =
                             Modules_Container.To_Index(J) then
                            GunAssigned := True;
                            exit Check_Assigned_Guns_Loop;
                         end if;
                      end loop Check_Assigned_Guns_Loop;
                      if not GunAssigned then
-                        TmpShip.Modules(I).Gun_Index :=
+                        Tmp_Ship.Modules(I).Gun_Index :=
                           Modules_Container.To_Index(J);
                      end if;
                   end if;
                end loop Count_Guns_Loop;
-            elsif TmpShip.Modules(I).M_Type = HULL then
-               HullIndex := Modules_Container.To_Index(I);
+            elsif Tmp_Ship.Modules(I).M_Type = HULL then
+               Hull_Index := Modules_Container.To_Index(I);
             end if;
-            if Modules_List(TmpShip.Modules(I).Proto_Index).MType not in GUN |
+            if Modules_List(Tmp_Ship.Modules(I).Proto_Index).MType not in GUN |
                   HARPOON_GUN | ARMOR | HULL then
                Amount :=
-                 Amount + Modules_List(TmpShip.Modules(I).Proto_Index).Size;
+                 Amount + Modules_List(Tmp_Ship.Modules(I).Proto_Index).Size;
             end if;
          end loop Count_Modules_Loop;
-         TmpShip.Modules(HullIndex).Installed_Modules := Amount;
+         Tmp_Ship.Modules(Hull_Index).Installed_Modules := Amount;
       end;
       -- Set known crafting recipes
       Set_Known_Recipes_Loop :
-      for Recipe of ProtoShip.Known_Recipes loop
+      for Recipe of Proto_Ship.Known_Recipes loop
          Known_Recipes.Append(New_Item => Recipe);
       end loop Set_Known_Recipes_Loop;
       -- Set home base for ship
       if SkyMap(X, Y).BaseIndex > 0 then
-         TmpShip.Home_Base := SkyMap(X, Y).BaseIndex;
+         Tmp_Ship.Home_Base := SkyMap(X, Y).BaseIndex;
       else
          declare
             StartX, StartY, EndX, EndY: Integer;
@@ -392,18 +393,18 @@ package body Ships is
                for SkyY in StartY .. EndY loop
                   if SkyMap(SkyX, SkyY).BaseIndex > 0 then
                      if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
-                       ProtoShip.Owner then
-                        TmpShip.Home_Base := SkyMap(SkyX, SkyY).BaseIndex;
+                       Proto_Ship.Owner then
+                        Tmp_Ship.Home_Base := SkyMap(SkyX, SkyY).BaseIndex;
                         exit Bases_X_Loop;
                      end if;
                   end if;
                end loop Bases_Y_Loop;
             end loop Bases_X_Loop;
-            if TmpShip.Home_Base = 0 then
+            if Tmp_Ship.Home_Base = 0 then
                Set_Home_Base_Loop :
                for I in SkyBases'Range loop
-                  if SkyBases(I).Owner = ProtoShip.Owner then
-                     TmpShip.Home_Base := I;
+                  if SkyBases(I).Owner = Proto_Ship.Owner then
+                     Tmp_Ship.Home_Base := I;
                      exit Set_Home_Base_Loop;
                   end if;
                end loop Set_Home_Base_Loop;
@@ -412,12 +413,12 @@ package body Ships is
       end if;
       -- Set home base for crew members
       Set_Home_For_Members_Loop :
-      for Member of TmpShip.Crew loop
+      for Member of Tmp_Ship.Crew loop
          Member.HomeBase :=
-           (if GetRandom(1, 100) < 99 then TmpShip.Home_Base
+           (if GetRandom(1, 100) < 99 then Tmp_Ship.Home_Base
             else GetRandom(SkyBases'First, SkyBases'Last));
       end loop Set_Home_For_Members_Loop;
-      return TmpShip;
+      return Tmp_Ship;
    end Create_Ship;
 
    procedure Load_Ships(Reader: Tree_Reader) is
