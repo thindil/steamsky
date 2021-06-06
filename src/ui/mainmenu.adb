@@ -378,7 +378,7 @@ package body MainMenu is
          Tcl.Tk.Ada.Pack.Pack_Forget(Slave => Button);
          ShowMessage
            (Text => "Can't load game data files. Error: " & Get_Data_Error,
-            ParentFrame => ".mainmenu", Title => "The game data error");
+            ParentFrame => ".", Title => "The game data error");
          return;
       end if;
       Check_Permissions_Block :
@@ -409,14 +409,14 @@ package body MainMenu is
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please select different directory.",
-                  ParentFrame => ".mainmenu", Title => "Can't save the game");
+                  ParentFrame => ".", Title => "Can't save the game");
             else
                ShowMessage
                  (Text =>
                     "You don't have permissions to write to directory """ &
                     To_String(Source => Save_Directory) &
                     """ which is set as directory for saved games. Please run the game as Administrator or select different directory.",
-                  ParentFrame => ".mainmenu", Title => "Can't save the game");
+                  ParentFrame => ".", Title => "Can't save the game");
             end if;
       end Check_Permissions_Block;
    end Show_Main_Menu;
