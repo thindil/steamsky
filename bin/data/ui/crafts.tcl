@@ -23,7 +23,7 @@ pack [ttk::scrollbar .gameframe.paned.craftframe.scrollx -orient horizontal -com
 set craftframe [ttk::frame $craftcanvas.craft]
 # Recipes list
 grid [ttk::frame $craftframe.list] -sticky nwes -padx 5 -pady 5
-set craftview [ttk::treeview $craftframe.list.view -yscrollcommand [list $craftframe.list.scrolly set] -height 12]
+set craftview [ttk::treeview $craftframe.list.view -yscrollcommand [list $craftframe.list.scrolly set] -height 17]
 $craftview heading #0 -text {Name}
 $craftview column #0 -width 300 -minwidth 300
 $craftview tag configure gray -foreground gray -font OverstrikedFont
@@ -37,7 +37,7 @@ grid rowconfigure $craftframe 0 -weight 1
 set recipeframe [ttk::frame $craftframe.item]
 grid $recipeframe -row 0 -column 1 -sticky n -padx 5 -pady 5
 grid [ttk::labelframe $recipeframe.info -text {Recipe Info:}]
-grid [text $recipeframe.info.text -wrap char -height 10 -width 40]
+grid [text $recipeframe.info.text -wrap char -height 15 -width 40]
 $recipeframe.info.text tag configure red -foreground red
 update
 # Recipe actions
