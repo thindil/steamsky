@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Losing focus by text fields when setting keyboard shortcuts
 - Can't assign 1-5 keys to shorcuts
 - Giving crew members items from the ship's cargo
+- Showing error messages in main menu blocks error message
 
 ## [6.1] - 2021-05-16
 
