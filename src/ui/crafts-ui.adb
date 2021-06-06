@@ -532,7 +532,7 @@ package body Crafts.UI is
       TextLength: Positive;
       RecipeText: constant Tk_Text :=
         Create
-          (RecipeDialog & ".text", "-wrap char -height 10 -width 40", Interp);
+          (RecipeDialog & ".text", "-wrap char -height 15 -width 40", Interp);
    begin
       Tag_Configure(RecipeText, "red", "-foreground red");
       if Length(RecipeIndex) > 6
@@ -736,7 +736,8 @@ package body Crafts.UI is
          Add_Close_Button
            (RecipeDialog & ".close", "Close", "CloseDialog " & RecipeDialog);
       end if;
-      Show_Dialog(RecipeDialog);
+      Show_Dialog
+        (Dialog => RecipeDialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Recipe_Info_Command;
 
