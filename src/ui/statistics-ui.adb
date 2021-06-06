@@ -23,7 +23,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -31,6 +30,7 @@ with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Crafts; use Crafts;
+with CoreUI; use CoreUI;
 with Goals; use Goals;
 with Items; use Items;
 with Maps.UI; use Maps.UI;
@@ -44,13 +44,10 @@ package body Statistics.UI is
       TotalFinished, TotalDestroyed: Natural := 0;
       StatsText: Unbounded_String;
       ProtoIndex: Positive;
-      Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
-      StatsFrame: Ttk_Frame := Get_Widget(Paned & ".statsframe");
+      StatsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".statsframe");
       StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
       Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.stats");
       TreeView: Ttk_Tree_View;
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Get_Context);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -58,8 +55,8 @@ package body Statistics.UI is
             To_String(Data_Directory) & "ui" & Dir_Separator & "stats.tcl");
          Bind(StatsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
       elsif Winfo_Get(Label, "ismapped") = "1" then
-         Tcl_Eval(Get_Context, "InvokeButton " & CloseButton);
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
+         Tcl_Eval(Get_Context, "InvokeButton " & Close_Button);
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -112,13 +109,13 @@ package body Statistics.UI is
          "Bases visited - the amount of sky bases visited and total percentage of all bases" &
          LF & "Map discovered - the amount of unique map's fields visited" &
          LF & "Distance traveled - the total amount of map's fields visited");
-      StatsFrame.Name := New_String(Widget_Image(StatsCanvas) & ".stats");
+      StatsFrame.Name := New_String(StatsCanvas & ".stats");
       TotalFinished := 0;
       Count_Finished_Crafting_Loop :
       for CraftingOrder of GameStats.CraftingOrders loop
          TotalFinished := TotalFinished + CraftingOrder.Amount;
       end loop Count_Finished_Crafting_Loop;
-      Label.Name := New_String(Widget_Image(StatsFrame) & ".left.crafts");
+      Label.Name := New_String(StatsFrame & ".left.crafts");
       configure
         (Label,
          "-text {Crafting orders finished:" & Natural'Image(TotalFinished) &
@@ -139,14 +136,12 @@ package body Statistics.UI is
                  (Items_List(Recipes_List(Order.Index).ResultIndex).Name) &
                "} {" & Positive'Image(Order.Amount) & "}]");
          end loop Show_Finished_Crafting_Loop;
-         if GameStats.CraftingOrders.Length < 10 then
-            configure
-              (TreeView,
-               "-height" &
-               Positive'Image(Positive(GameStats.CraftingOrders.Length)));
-         else
-            configure(TreeView, "-height 10");
-         end if;
+         configure
+           (TreeView,
+            "-height" &
+            (if GameStats.CraftingOrders.Length < 10 then
+               Positive'Image(Positive(GameStats.CraftingOrders.Length))
+             else " 10"));
          Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
@@ -214,24 +209,23 @@ package body Statistics.UI is
                      Positive'Image(FinishedMission.Amount) & "}]");
             end case;
          end loop Show_Finished_Missions_Loop;
-         if GameStats.FinishedMissions.Length < 10 then
-            configure
-              (TreeView,
-               "-height" &
-               Positive'Image(Positive(GameStats.FinishedMissions.Length)));
-         else
-            configure(TreeView, "-height 10");
-         end if;
+         configure
+           (TreeView,
+            "-height" &
+            (if GameStats.FinishedMissions.Length < 10 then
+               Positive'Image(Positive(GameStats.FinishedMissions.Length))
+             else " 10"));
          Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
       end if;
       Label.Name := New_String(StatsCanvas & ".stats.left.goal");
-      if GoalText(0)'Length < 16 then
-         configure(Label, "-text {" & GoalText(0) & "}");
-      else
-         configure(Label, "-text {" & GoalText(0)(1 .. 17) & "...}");
-      end if;
+      configure
+        (Label,
+         "-text {" &
+         (if GoalText(0)'Length < 16 then GoalText(0)
+          else GoalText(0)(1 .. 17)) &
+         "}");
       Add(Label, "The current goal: " & GoalText(0));
       TotalFinished := 0;
       Count_Finished_Goals_Loop :
@@ -262,14 +256,12 @@ package body Statistics.UI is
                "{} end -values [list {" & GoalText(ProtoIndex) & "} {" &
                Positive'Image(Goal.Amount) & "}]");
          end loop Show_Finished_Goals_Loop;
-         if GameStats.FinishedGoals.Length < 10 then
-            configure
-              (TreeView,
-               "-height" &
-               Positive'Image(Positive(GameStats.FinishedGoals.Length)));
-         else
-            configure(TreeView, "-height 10");
-         end if;
+         configure
+           (TreeView,
+            "-height" &
+            (if GameStats.FinishedGoals.Length < 10 then
+               Positive'Image(Positive(GameStats.FinishedGoals.Length))
+             else " 10"));
          Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
@@ -295,14 +287,12 @@ package body Statistics.UI is
             end loop Get_Proto_Ship_Loop;
             TotalDestroyed := TotalDestroyed + DestroyedShip.Amount;
          end loop Count_Destroyed_Ships_Loop;
-         if GameStats.DestroyedShips.Length < 10 then
-            configure
-              (TreeView,
-               "-height" &
-               Positive'Image(Positive(GameStats.DestroyedShips.Length)));
-         else
-            configure(TreeView, "-height 10");
-         end if;
+         configure
+           (TreeView,
+            "-height" &
+            (if GameStats.DestroyedShips.Length < 10 then
+               Positive'Image(Positive(GameStats.DestroyedShips.Length))
+             else " 10"));
          Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
@@ -328,14 +318,12 @@ package body Statistics.UI is
                Positive'Image(KilledMob.Amount) & "}]");
             TotalDestroyed := TotalDestroyed + KilledMob.Amount;
          end loop Show_Killed_Mobs_Loop;
-         if GameStats.KilledMobs.Length < 10 then
-            configure
-              (TreeView,
-               "-height" &
-               Positive'Image(Positive(GameStats.KilledMobs.Length)));
-         else
-            configure(TreeView, "-height 10");
-         end if;
+         configure
+           (TreeView,
+            "-height" &
+            (if GameStats.KilledMobs.Length < 10 then
+               Positive'Image(Positive(GameStats.KilledMobs.Length))
+             else " 10"));
          Tcl.Tk.Ada.Grid.Grid(StatsFrame);
       else
          Tcl.Tk.Ada.Grid.Grid_Remove(StatsFrame);
@@ -350,8 +338,8 @@ package body Statistics.UI is
          "The total amount of enemies killed in melee combat in this game");
       configure
         (StatsCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       StatsFrame := Get_Widget(StatsCanvas & ".stats");
       Canvas_Create
