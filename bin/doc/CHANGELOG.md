@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 - Can't assign 1-5 keys to shorcuts
 - Giving crew members items from the ship's cargo
 - Showing error messages in main menu don't blocks main window
+- Crafting info window don't show all information
 
 ## [6.0.2] - 2021-05-09
 
