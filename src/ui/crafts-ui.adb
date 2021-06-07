@@ -130,7 +130,7 @@ package body Crafts.UI is
       if RecipeName'Length = 0 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
-         configure(SearchEntry, "-validatecommand {SearchCraft %P}");
+         configure(SearchEntry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
       Find_Possible_Recipes_Loop :
@@ -277,7 +277,7 @@ package body Crafts.UI is
          if RecipeName'Length > 0
            and then
              Index
-               (To_Lower(To_String(Items_List(Studies(I)).Name)),
+               (To_Lower("Study " & To_String(Items_List(Studies(I)).Name)),
                 To_Lower(RecipeName), 1) =
              0 then
             goto End_Of_Study_Loop;
@@ -315,7 +315,9 @@ package body Crafts.UI is
          if RecipeName'Length > 0
            and then
              Index
-               (To_Lower(To_String(Items_List(Deconstructs(I)).Name)),
+               (To_Lower
+                  ("Deconstruct " &
+                   To_String(Items_List(Deconstructs(I)).Name)),
                 To_Lower(RecipeName), 1) =
              0 then
             goto End_Of_Deconstruct_Loop;
@@ -386,6 +388,7 @@ package body Crafts.UI is
         (CraftsCanvas,
          "-scrollregion [list " & BBox(CraftsCanvas, "all") & "]");
       ShowScreen("craftframe");
+      Tcl_SetResult(Interp, "1");
       return TCL_OK;
    end Show_Crafting_Command;
 

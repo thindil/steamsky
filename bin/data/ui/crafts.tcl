@@ -24,7 +24,7 @@ set craftframe [ttk::frame $craftcanvas.craft]
 grid [ttk::frame $craftframe.sframe] -sticky w
 grid [ttk::label $craftframe.sframe.searchlabel -text {Name:}]
 tooltip::tooltip $craftframe.sframe.searchlabel {Search for the selected recipe.}
-grid [ttk::entry $craftframe.sframe.search -validate key -validatecommand {SearchCraft %P} -width 30] -sticky w -row 0 -column 1
+grid [ttk::entry $craftframe.sframe.search -validate key -validatecommand {ShowCrafting 1 %P} -width 30] -sticky w -row 0 -column 1
 tooltip::tooltip $craftframe.sframe.search {Search for the selected recipe.}
 SetScrollbarBindings $craftcanvas .gameframe.paned.craftframe.scrolly
 SetScrollbarBindings $craftframe .gameframe.paned.craftframe.scrolly
