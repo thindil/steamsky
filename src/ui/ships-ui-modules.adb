@@ -411,10 +411,12 @@ package body Ships.UI.Modules is
       DamagePercent, UpgradePercent: Float;
       ProgressBar: Ttk_ProgressBar;
       Label: Ttk_Label;
-      ModuleText: Tk_Text;
       ModuleInfo, ProgressBarStyle: Unbounded_String;
       ModuleDialog: constant Ttk_Frame :=
-        Create(".moduledialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (Name => ".moduledialog",
+           Title => To_String(Player_Ship.Modules(ModuleIndex).Name),
+           Columns => 2);
       YScroll: constant Ttk_Scrollbar :=
         Create
           (ModuleDialog & ".yscroll",
@@ -424,16 +426,13 @@ package body Ships.UI.Modules is
           (ModuleDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
       ModuleFrame: constant Ttk_Frame := Create(ModuleCanvas & ".frame");
+      ModuleText: constant Tk_Text :=
+        Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
       CloseButton: constant Ttk_Button :=
         Create
           (ModuleFrame & ".button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
       Height: Positive := 10;
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (ModuleDialog & ".header",
-           "-text {" & To_String(Player_Ship.Modules(ModuleIndex).Name) &
-           "} -wraplength 275 -style Header.TLabel");
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
       begin
@@ -461,14 +460,13 @@ package body Ships.UI.Modules is
          end if;
       end AddOwnersInfo;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Pack.Pack(Dialog_Header, "-fill x -padx 2 -pady {2 0}");
-      Tcl.Tk.Ada.Pack.Pack
-        (YScroll, " -side right -fill y -padx {0 5} -pady 5");
-      Tcl.Tk.Ada.Pack.Pack
-        (ModuleCanvas, "-expand true -fill both -padx 5 -pady 5");
-      Tcl.Tk.Ada.Pack.Pack_Propagate(ModuleDialog, False);
+      Tcl.Tk.Ada.Grid.Grid(ModuleCanvas, "-sticky nwes -padx 5 -pady 5");
+      Tcl.Tk.Ada.Grid.Grid
+        (YScroll, "-sticky ns -column 1 -row 1 -padx {0 5} -pady 5");
+      Tcl.Tk.Ada.Grid.Grid_Propagate(ModuleDialog, "off");
+      Tcl.Tk.Ada.Grid.Column_Configure
+        (ModuleDialog, ModuleCanvas, "-weight 1");
+      Tcl.Tk.Ada.Grid.Row_Configure(ModuleDialog, ModuleCanvas, "-weight 1");
       Autoscroll(YScroll);
       if Module.Durability < Module.Max_Durability then
          Label := Create(ModuleFrame & ".damagelbl");
@@ -494,8 +492,6 @@ package body Ships.UI.Modules is
               (Label, "-text {" & cget(Label, "-text") & " (max upgrade)}");
          end if;
       end if;
-      ModuleText :=
-        Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
       Tag_Configure(ModuleText, "red", "-foreground red");
       Insert
         (ModuleText, "end",
@@ -868,7 +864,8 @@ package body Ships.UI.Modules is
          "-state disabled -height" &
          Positive'Image
            (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
-            Positive'Value(Metrics("InterfaceFont", "-linespace"))));
+            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+            1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
@@ -888,7 +885,10 @@ package body Ships.UI.Modules is
         (ModuleCanvas,
          "-scrollregion [list " & BBox(ModuleCanvas, "all") & "]");
       Height :=
-        Height + 20 + Positive'Value(Winfo_Get(Dialog_Header, "reqheight"));
+        Height + 15 +
+        Positive'Value
+          (Winfo_Get
+             (Ttk_Frame'(Get_Widget(ModuleDialog & ".header")), "reqheight"));
       declare
          Width: Positive;
       begin
@@ -900,10 +900,10 @@ package body Ships.UI.Modules is
             "-height" & Positive'Image(Height) & " -width" &
             Positive'Image(Width));
       end;
-      Tcl.Tk.Ada.Place.Place
-        (ModuleDialog, "-in .gameframe -relx 0.2 -rely 0.1");
       Bind(CloseButton, "<Tab>", "{break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog
+        (Dialog => ModuleDialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
    end Show_Module_Info_Command;
 
@@ -1491,7 +1491,8 @@ package body Ships.UI.Modules is
         Create
           (ModuleDialog & ".titlelabel",
            "-text {Assign skill to " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) & "} -style Header.TLabel");
+           To_String(Player_Ship.Modules(ModuleIndex).Name) &
+           "} -style Header.TLabel");
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ScrollSkillY: constant Ttk_Scrollbar :=
         Create
