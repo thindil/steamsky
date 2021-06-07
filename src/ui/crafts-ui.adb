@@ -710,7 +710,7 @@ package body Crafts.UI is
          To_String(Attributes_List(Skills_List(Recipe.Skill).Attribute).Name) &
          LF & "Time needed:" & Positive'Image(Recipe.Time) & " minutes}");
       configure(RecipeText, "-state disabled");
-      Tcl.Tk.Ada.Grid.Grid(RecipeText);
+      Tcl.Tk.Ada.Grid.Grid(RecipeText, "-padx 5");
       if CArgv.Arg(Argv, 2) = "TRUE" then
          declare
             ButtonBox: constant Ttk_Frame := Create(RecipeDialog & ".buttons");
