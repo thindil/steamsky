@@ -172,15 +172,11 @@ package body Table is
             "{" & Table.Canvas & " itemconfigure row" &
             Trim(Positive'Image(Table.Row), Left) & " -fill " & Color & ";" &
             Table.Canvas & " configure -cursor left_ptr}");
-         if Game_Settings.Right_Button then
-            Bind
-              (Table.Canvas, To_String(ItemId), "<Button-3>",
-               "{" & Command & "}");
-         else
-            Bind
-              (Table.Canvas, To_String(ItemId), "<Button-1>",
-               "{" & Command & "}");
-         end if;
+         Bind
+           (Table.Canvas, To_String(ItemId),
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">",
+            "{" & Command & "}");
       else
          Bind
            (Table.Canvas, To_String(ItemId), "<Enter>",
@@ -258,11 +254,10 @@ package body Table is
       Bind
         (Table.Canvas, Tag, "<Leave>",
          "{" & Table.Canvas & " configure -cursor left_ptr}");
-      if Game_Settings.Right_Button then
-         Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");
-      else
-         Bind(Table.Canvas, Tag, "<Button-1>", "{" & Command & "}");
-      end if;
+      Bind
+        (Table.Canvas, Tag,
+         "<Button-" & (if Game_Settings.Right_Button then "3" else "1") & ">",
+         "{" & Command & "}");
    end AddButton;
 
    procedure UpdateTable(Table: in out Table_Widget) is
@@ -369,15 +364,11 @@ package body Table is
                Trim(Positive'Image(Table.Row), Left) & " -fill " &
                Background_Color & ";" & Table.Canvas &
                " configure -cursor left_ptr}");
-            if Game_Settings.Right_Button then
-               Bind
-                 (Table.Canvas, To_String(ItemId), "<Button-3>",
-                  "{" & Command & "}");
-            else
-               Bind
-                 (Table.Canvas, To_String(ItemId), "<Button-1>",
-                  "{" & Command & "}");
-            end if;
+            Bind
+              (Table.Canvas, To_String(ItemId),
+               "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+               ">",
+               "{" & Command & "}");
          else
             Bind
               (Table.Canvas, To_String(ItemId), "<Enter>",
@@ -549,11 +540,11 @@ package body Table is
          Bind
            (Table.Canvas, Tag, "<Leave>",
             "{" & Table.Canvas & " configure -cursor left_ptr}");
-         if Game_Settings.Right_Button then
-            Bind(Table.Canvas, Tag, "<Button-3>", "{" & Command & "}");
-         else
-            Bind(Table.Canvas, Tag, "<Button-1>", "{" & Command & "}");
-         end if;
+         Bind
+           (Table.Canvas, Tag,
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">",
+            "{" & Command & "}");
       end if;
       if NewRow then
          Table.Row := Table.Row + 1;
