@@ -85,7 +85,6 @@ package body Crafts.UI is
       CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       CargoIndex: Natural;
-      Row: Positive := 2;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -230,7 +229,6 @@ package body Crafts.UI is
             "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Materials, 5, True);
-         Row := Row + 1;
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
@@ -251,6 +249,10 @@ package body Crafts.UI is
       Set_Study_Recipes_Loop :
       for I in Studies.Iterate loop
          exit Set_Study_Recipes_Loop when RecipesTable.Row = 26;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Study_Loop;
+         end if;
          AddButton
            (RecipesTable, "Study " & To_String(Items_List(Studies(I)).Name),
             "Show available recipe's options",
@@ -272,11 +274,15 @@ package body Crafts.UI is
             "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4, True);
-         Row := Row + 1;
+         <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
       for I in Deconstructs.Iterate loop
          exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row = 26;
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Deconstruct_Loop;
+         end if;
          AddButton
            (RecipesTable,
             "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
@@ -299,7 +305,7 @@ package body Crafts.UI is
             "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Tool, 4, True);
-         Row := Row + 1;
+         <<End_Of_Deconstruct_Loop>>
       end loop Set_Deconstruct_Recipes_Loop;
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       if Page > 1 then
