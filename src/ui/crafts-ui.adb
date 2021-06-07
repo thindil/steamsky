@@ -13,7 +13,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -29,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -65,8 +68,10 @@ package body Crafts.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowCrafting page
-   -- Page is the current page of recipes list to show
+   -- ShowCrafting page recipename
+   -- Page is the current page of recipes list to show, recipename is the
+   -- text which will be searching in the recipes names. Can be empty, then
+   -- show all recipes.
    -- SOURCE
    function Show_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -89,6 +94,10 @@ package body Crafts.UI is
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
+      RecipeName: constant String :=
+        (if Argc = 3 then CArgv.Arg(Argv, 2) else "");
+      SearchEntry: constant Ttk_Entry :=
+        Get_Widget(CraftsCanvas & ".craft.sframe.search");
       procedure CheckTool(ToolNeeded: Unbounded_String) is
       begin
          if ToolNeeded /= To_Unbounded_String("None") then
@@ -117,6 +126,11 @@ package body Crafts.UI is
          Tcl_Eval(Interp, "InvokeButton " & Close_Button);
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          return TCL_OK;
+      end if;
+      if RecipeName'Length = 0 then
+         configure(SearchEntry, "-validatecommand {}");
+         Delete(SearchEntry, "0", "end");
+         configure(SearchEntry, "-validatecommand {SearchCraft %P}");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
       Find_Possible_Recipes_Loop :
@@ -150,6 +164,17 @@ package body Crafts.UI is
       end if;
       Show_Recipes_Loop :
       for I in Known_Recipes.Iterate loop
+         if RecipeName'Length > 0
+           and then
+             Index
+               (To_Lower
+                  (To_String
+                     (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                        .Name)),
+                To_Lower(RecipeName), 1) =
+             0 then
+            goto End_Of_Loop;
+         end if;
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -249,6 +274,14 @@ package body Crafts.UI is
       Set_Study_Recipes_Loop :
       for I in Studies.Iterate loop
          exit Set_Study_Recipes_Loop when RecipesTable.Row = 26;
+         if RecipeName'Length > 0
+           and then
+             Index
+               (To_Lower(To_String(Items_List(Studies(I)).Name)),
+                To_Lower(RecipeName), 1) =
+             0 then
+            goto End_Of_Study_Loop;
+         end if;
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Study_Loop;
@@ -279,6 +312,14 @@ package body Crafts.UI is
       Set_Deconstruct_Recipes_Loop :
       for I in Deconstructs.Iterate loop
          exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row = 26;
+         if RecipeName'Length > 0
+           and then
+             Index
+               (To_Lower(To_String(Items_List(Deconstructs(I)).Name)),
+                To_Lower(RecipeName), 1) =
+             0 then
+            goto End_Of_Deconstruct_Loop;
+         end if;
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Deconstruct_Loop;
@@ -311,15 +352,24 @@ package body Crafts.UI is
       if Page > 1 then
          if RecipesTable.Row < 26 then
             AddPagination
-              (RecipesTable, "ShowCrafting" & Positive'Image(Page - 1), "");
+              (RecipesTable,
+               "ShowCrafting" & Positive'Image(Page - 1) &
+               (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
+               "");
          else
             AddPagination
-              (RecipesTable, "ShowCrafting" & Positive'Image(Page - 1),
-               "ShowCrafting" & Positive'Image(Page + 1));
+              (RecipesTable,
+               "ShowCrafting" & Positive'Image(Page - 1) &
+               (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""),
+               "ShowCrafting" & Positive'Image(Page + 1) &
+               (if RecipeName'Length > 0 then " {" & RecipeName & "}"
+                else ""));
          end if;
       elsif RecipesTable.Row = 26 then
          AddPagination
-           (RecipesTable, "", "ShowCrafting" & Positive'Image(Page + 1));
+           (RecipesTable, "",
+            "ShowCrafting" & Positive'Image(Page + 1) &
+            (if RecipeName'Length > 0 then " {" & RecipeName & "}" else ""));
       end if;
       UpdateTable(RecipesTable);
       CraftsFrame.Name := New_String(Widget_Image(CraftsCanvas) & ".craft");
