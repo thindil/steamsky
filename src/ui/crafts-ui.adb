@@ -50,7 +50,7 @@ with Utils.UI; use Utils.UI;
 
 package body Crafts.UI is
 
-   -- ****iv* CUI4/CUI$.BasesTable
+   -- ****iv* CUI4/CUI4.RecipesTable
    -- FUNCTION
    -- Table with info about available crafting recipes
    -- SOURCE
