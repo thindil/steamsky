@@ -330,101 +330,101 @@ package body Themes is
            Game_Settings.Interface_Theme then
             goto End_Of_Set_Theme_Loop;
          end if;
-         Label.Name := New_String(Str => ".gameframe.header.nofuel");
+         Label.Name := New_String(Str => Game_Header & ".nofuel");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).No_Fuel_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.nofood");
+         Label.Name := New_String(Str => Game_Header & ".nofood");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).No_Food_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.nodrink");
+         Label.Name := New_String(Str => Game_Header & ".nodrink");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).No_Drinks_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.overloaded");
+         Label.Name := New_String(Str => Game_Header & ".overloaded");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Overloaded_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.pilot");
+         Label.Name := New_String(Str => Game_Header & ".pilot");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Pilot_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.engineer");
+         Label.Name := New_String(Str => Game_Header & ".engineer");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Engineer_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.gunner");
+         Label.Name := New_String(Str => Game_Header & ".gunner");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Gunner_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.talk");
+         Label.Name := New_String(Str => Game_Header & ".talk");
          configure
            (Widgt => Label,
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Crew_Trader_Icon) & "}");
-         Label.Name := New_String(Str => ".gameframe.header.repairs");
+         Label.Name := New_String(Str => Game_Header & ".repairs");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Repair_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.upgrade");
+         Label.Name := New_String(Str => Game_Header & ".upgrade");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Upgrade_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.clean");
+         Label.Name := New_String(Str => Game_Header & ".clean");
          configure
            (Widgt => Label,
             options =>
               "-text {" & Encode(Item => "" & Themes_List(I).Clean_Icon) &
               "}");
-         Label.Name := New_String(Str => ".gameframe.header.crafting");
+         Label.Name := New_String(Str => Game_Header & ".crafting");
          configure
            (Widgt => Label,
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Manufacture_Icon) & "}");
          Button.Name :=
-           New_String(Str => ".gameframe.paned.mapframe.buttons.show");
+           New_String(Str => Main_Paned & ".mapframe.buttons.show");
          configure
            (Widgt => Button,
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Move_Map_Up_Icon) & "}");
          Button.Name :=
-           New_String(Str => ".gameframe.paned.mapframe.buttons.hide");
+           New_String(Str => Main_Paned & ".mapframe.buttons.hide");
          configure
            (Widgt => Button,
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Move_Map_Down_Icon) & "}");
          Button.Name :=
-           New_String(Str => ".gameframe.paned.mapframe.buttons.left");
+           New_String(Str => Main_Paned & ".mapframe.buttons.left");
          configure
            (Widgt => Button,
             options =>
               "-text {" &
               Encode(Item => "" & Themes_List(I).Move_Map_Left_Icon) & "}");
          Button.Name :=
-           New_String(Str => ".gameframe.paned.mapframe.buttons.right");
+           New_String(Str => Main_Paned & ".mapframe.buttons.right");
          configure
            (Widgt => Button,
             options =>
