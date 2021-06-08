@@ -32,6 +32,7 @@ with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
@@ -43,9 +44,17 @@ with Crafts; use Crafts;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships.Crew; use Ships.Crew;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Bases.UI is
+
+   -- ****iv* BUI/BUI.BaseTable
+   -- FUNCTION
+   -- Table with info about available base actions
+   -- SOURCE
+   BaseTable: Table_Widget (3);
+   -- ****
 
    -- ****o* BUI/BUI.Show_Base_UI_Command
    -- FUNCTION
@@ -98,11 +107,23 @@ package body Bases.UI is
       BaseFrame.Name := New_String(BaseCanvas & ".base");
       if CArgv.Arg(Argv, 1) /= "recipes" then
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
+         BaseTable :=
+           CreateTable
+             (Widget_Image(BaseFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
+               To_Unbounded_String("Time")),
+              Get_Widget(Main_Paned & ".baseframe.scrolly"));
       else
          Tcl.Tk.Ada.Grid.Grid(SearchEntry);
          if Argc < 3 then
             Delete(SearchEntry, "0", "end");
          end if;
+         BaseTable :=
+           CreateTable
+             (Widget_Image(BaseFrame),
+              (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
+               Null_Unbounded_String),
+              Get_Widget(Main_Paned & ".baseframe.scrolly"));
       end if;
       Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
       ActionButton := Get_Widget(BaseFrame & ".info.accept", Interp);
@@ -120,6 +141,12 @@ package body Bases.UI is
                  (ItemsView,
                   "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
                   " -text {" & To_String(Player_Ship.Crew(I).Name) & "}");
+               AddButton
+                 (BaseTable, To_String(Player_Ship.Crew(I).Name),
+                  "Show available options",
+                  "ShowBaseMenu {heal" &
+                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  1, True);
             end if;
          end loop Show_Wounded_Crew_Loop;
          Insert
@@ -142,6 +169,12 @@ package body Bases.UI is
                   "{} end -id" &
                   Positive'Image(Modules_Container.To_Index(I)) & " -text {" &
                   To_String(Player_Ship.Modules(I).Name) & "}");
+               AddButton
+                 (BaseTable, To_String(Player_Ship.Modules(I).Name),
+                  "Show available options",
+                  "ShowBaseMenu {repair" &
+                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  1, True);
             end if;
          end loop Show_Damaged_Modules_Loop;
          Insert
@@ -185,11 +218,19 @@ package body Bases.UI is
                "{} end -id " & To_String(Recipes_Container.Key(I)) &
                " -text {" &
                To_String(Items_List(Recipes_List(I).ResultIndex).Name & "}"));
+            AddButton
+              (BaseTable,
+               To_String(Items_List(Recipes_List(I).ResultIndex).Name),
+               "Show available options",
+               "ShowBaseMenu {recipe" & To_String(Recipes_Container.Key(I)) &
+               "} ",
+               1, True);
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
          ButtonText := To_Unbounded_String("Buy recipe");
          Heading(ItemsView, "#0", "-text Recipes");
       end if;
+      UpdateTable(BaseTable);
       Bind
         (ItemsView, "<<TreeviewSelect>>",
          "{ShowItemInfo " & CArgv.Arg(Argv, 1) & "}");
