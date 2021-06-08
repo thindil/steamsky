@@ -88,10 +88,35 @@ package body Bases.UI is
         Get_Widget(BaseCanvas & ".base.search", Interp);
       ItemsView: constant Ttk_Tree_View :=
         Get_Widget(BaseCanvas & ".base.items.view", Interp);
-      FirstIndex, ButtonText: Unbounded_String;
+      FirstIndex, ButtonText, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
+      Cost, Time: Natural := 0;
+      procedure Format_Time is
+      begin
+         if Time < 60 then
+            FormattedTime :=
+              To_Unbounded_String(Natural'Image(Time) & " minute");
+            if Time > 1 then
+               Append(FormattedTime, "s");
+            end if;
+         else
+            FormattedTime :=
+              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
+            if (Time / 60) > 1 then
+               Append(FormattedTime, "s");
+            end if;
+            if (Time mod 60) > 0 then
+               Append
+                 (FormattedTime,
+                  " and" & Positive'Image(Time mod 60) & " minute");
+               if (Time mod 60) > 1 then
+                  Append(FormattedTime, "s");
+               end if;
+            end if;
+         end if;
+      end Format_Time;
    begin
       if Winfo_Get(BaseCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -105,6 +130,10 @@ package body Bases.UI is
          return TCL_OK;
       end if;
       BaseFrame.Name := New_String(BaseCanvas & ".base");
+      if Winfo_Get(Ttk_Frame'(Get_Widget(BaseFrame & ".table")), "exists") =
+        "1" then
+         Destroy(BaseTable.Canvas);
+      end if;
       if CArgv.Arg(Argv, 1) /= "recipes" then
          Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
          BaseTable :=
@@ -146,7 +175,22 @@ package body Bases.UI is
                   "Show available options",
                   "ShowBaseMenu {heal" &
                   Positive'Image(Crew_Container.To_Index(I)) & "} ",
-                  1, True);
+                  1);
+               HealCost(Cost, Time, Crew_Container.To_Index(I));
+               AddButton
+                 (BaseTable,
+                  Positive'Image(Cost) & " " & To_String(Money_Name),
+                  "Show available options",
+                  "ShowBaseMenu {heal" &
+                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  2);
+               Format_Time;
+               AddButton
+                 (BaseTable, To_String(FormattedTime),
+                  "Show available options",
+                  "ShowBaseMenu {heal" &
+                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  3, True);
             end if;
          end loop Show_Wounded_Crew_Loop;
          Insert
@@ -174,7 +218,23 @@ package body Bases.UI is
                   "Show available options",
                   "ShowBaseMenu {repair" &
                   Positive'Image(Modules_Container.To_Index(I)) & "} ",
-                  1, True);
+                  1);
+               RepairCost(Cost, Time, Modules_Container.To_Index(I));
+               CountPrice(Cost, FindMember(Talk));
+               AddButton
+                 (BaseTable,
+                  Positive'Image(Cost) & " " & To_String(Money_Name),
+                  "Show available options",
+                  "ShowBaseMenu {repair" &
+                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  2);
+               Format_Time;
+               AddButton
+                 (BaseTable, To_String(FormattedTime),
+                  "Show available options",
+                  "ShowBaseMenu {repair" &
+                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  3, True);
             end if;
          end loop Show_Damaged_Modules_Loop;
          Insert
@@ -224,7 +284,31 @@ package body Bases.UI is
                "Show available options",
                "ShowBaseMenu {recipe" & To_String(Recipes_Container.Key(I)) &
                "} ",
-               1, True);
+               1);
+            Cost :=
+              (if
+                 Get_Price
+                   (SkyBases(BaseIndex).BaseType,
+                    Recipes_List(I).ResultIndex) >
+                 0
+               then
+                 Get_Price
+                   (SkyBases(BaseIndex).BaseType,
+                    Recipes_List(I).ResultIndex) *
+                 Recipes_List(I).Difficulty * 10
+               else Recipes_List(I).Difficulty * 10);
+            Cost :=
+              Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+            if Cost = 0 then
+               Cost := 1;
+            end if;
+            CountPrice(Cost, FindMember(Talk));
+            AddButton
+              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
+               "Show available options",
+               "ShowBaseMenu {recipe" & To_String(Recipes_Container.Key(I)) &
+               "} ",
+               2, True);
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
          ButtonText := To_Unbounded_String("Buy recipe");
