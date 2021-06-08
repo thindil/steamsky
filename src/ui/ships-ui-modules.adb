@@ -428,10 +428,6 @@ package body Ships.UI.Modules is
       ModuleFrame: constant Ttk_Frame := Create(ModuleCanvas & ".frame");
       ModuleText: constant Tk_Text :=
         Create(ModuleFrame & ".info", "-wrap char -height 15 -width 40");
-      CloseButton: constant Ttk_Button :=
-        Create
-          (ModuleFrame & ".button",
-           "-text Close -command {CloseDialog " & ModuleDialog & "}");
       Height: Positive := 10;
       procedure AddOwnersInfo(OwnersName: String) is
          HaveOwner: Boolean := False;
@@ -868,9 +864,13 @@ package body Ships.UI.Modules is
             1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-columnspan 2");
       Height := Height + Positive'Value(Winfo_Get(ModuleText, "reqheight"));
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
-      Height := Height + Positive'Value(Winfo_Get(CloseButton, "reqheight"));
-      Focus(CloseButton);
+      Add_Close_Button
+        (ModuleFrame & ".button", "Close", "CloseDialog " & ModuleDialog, 2);
+      Height :=
+        Height +
+        Positive'Value
+          (Winfo_Get
+             (Ttk_Frame'(Get_Widget(ModuleFrame & ".button")), "reqheight"));
       if Height > 500 then
          Height := 500;
       end if;
@@ -900,8 +900,6 @@ package body Ships.UI.Modules is
             "-height" & Positive'Image(Height) & " -width" &
             Positive'Image(Width));
       end;
-      Bind(CloseButton, "<Tab>", "{break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Show_Dialog
         (Dialog => ModuleDialog, Relative_X => 0.2, Relative_Y => 0.1);
       return TCL_OK;
