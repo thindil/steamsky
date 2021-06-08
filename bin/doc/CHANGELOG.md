@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Default keyboard shortcuts for change the player's ship speed
 - Redesigned crafting screen
+- Updated README.md
 
 ### Fixed
 - Removed frame around map after clicking on it
