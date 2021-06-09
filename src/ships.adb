@@ -77,12 +77,13 @@ package body Ships is
                   Temp_Module.Durability :=
                     GetRandom
                       (Modules_List(Module).Durability, Max_Upgrade_Value);
+                  --# rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Module.Weight :=
                     Temp_Module.Weight +
-                    (Weight_Gain * --# rule line off SIMPLIFIABLE_EXPRESSIONS
-
+                    (Weight_Gain *
                      (Temp_Module.Durability -
                       Modules_List(Module).Durability));
+                  --# rule on SIMPLIFIABLE_EXPRESSIONS
                when 51 .. 75 => -- Upgrade value (depends on module) of module
                   if Modules_List(Module).MType = ENGINE then
                      Weight_Gain := Weight_Gain * 10;
@@ -91,11 +92,12 @@ package body Ships is
                      Temp_Module.Value :=
                        GetRandom
                          (Max_Upgrade_Value, Modules_List(Module).Value);
+                     --# rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
-                       (Weight_Gain * --# rule line off SIMPLIFIABLE_EXPRESSIONS
-
+                       (Weight_Gain *
                         (Modules_List(Module).Value - Temp_Module.Value));
+                     --# rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
                when 76 ..
                      100 => -- Upgrade max_value (depends on module) of module
@@ -114,12 +116,13 @@ package body Ships is
                      Temp_Module.MaxValue :=
                        GetRandom
                          (Modules_List(Module).MaxValue, Max_Upgrade_Value);
+                     --# rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
-                       (Weight_Gain *  --# rule line off SIMPLIFIABLE_EXPRESSIONS
-
+                       (Weight_Gain *
                         (Temp_Module.MaxValue -
                          Modules_List(Module).MaxValue));
+                     --# rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
             end case;
             Upgrades_Amount := Upgrades_Amount - 1;
@@ -277,7 +280,7 @@ package body Ships is
       -- Set ship crew
       Set_Ship_Crew_Block :
       declare
-         Member: Member_Data;
+         Member: Member_Data := Member_Data'(others => <>);
       begin
          Set_Crew_Loop :
          for ProtoMember of Proto_Ship.Crew loop
