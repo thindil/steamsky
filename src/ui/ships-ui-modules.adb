@@ -1353,7 +1353,11 @@ package body Ships.UI.Modules is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Ttk_Frame :=
-        Create(".moduledialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".moduledialog",
+           "Assign a crew member to " &
+           To_String(Player_Ship.Modules(ModuleIndex).Name),
+           250);
       YScroll: constant Ttk_Scrollbar :=
         Create
           (ModuleDialog & ".yscroll",
@@ -1371,24 +1375,15 @@ package body Ships.UI.Modules is
       Height: Positive := 10;
       Width: Positive := 250;
       CrewButton: Ttk_CheckButton;
-      InfoLabel: Ttk_Label :=
-        Create
-          (CrewFrame & ".titlelabel",
-           "-text {Assign a crew member to " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) &
-           "} -wraplength 250 -style Header.TLabel");
+      InfoLabel: Ttk_Label;
       Assigned: Natural := 0;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
       Autoscroll(YScroll);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 2 -pady 2 -fill x");
-      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Load_Crew_List_Loop :
       for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
@@ -1446,10 +1441,9 @@ package body Ships.UI.Modules is
         (CrewCanvas,
          "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
          Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Tcl.Tk.Ada.Place.Place
-        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
+      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
