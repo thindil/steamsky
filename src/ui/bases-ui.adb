@@ -14,7 +14,6 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -32,7 +31,6 @@ use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
-with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
@@ -403,131 +401,6 @@ package body Bases.UI is
       return TCL_OK;
    end Show_Base_UI_Command;
 
-   -- ****o* BUI/BUI.Show_Item_Info_Command
-   -- FUNCTION
-   -- Show the information about the selected item
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowItemInfo ItemType
-   -- ItemType can be heal, repair, recipes
-   -- SOURCE
-   function Show_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Item_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc);
-      FrameName: constant String := Main_Paned & ".baseframe.canvas.base";
-      ItemsView: constant Ttk_Tree_View :=
-        Get_Widget(FrameName & ".items.view", Interp);
-      FormattedTime, ItemIndex: Unbounded_String;
-      Cost, Time: Natural := 0;
-      InfoLabel: Ttk_Label := Get_Widget(FrameName & ".info.info", Interp);
-      BaseIndex: constant Positive :=
-        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      MoneyIndex2: Natural;
-      ActionButton: constant Ttk_Button :=
-        Get_Widget(FrameName & ".info.accept", Interp);
-      procedure Format_Time is
-      begin
-         if Time < 60 then
-            FormattedTime :=
-              To_Unbounded_String(Natural'Image(Time) & " minute");
-            if Time > 1 then
-               Append(FormattedTime, "s");
-            end if;
-         else
-            FormattedTime :=
-              To_Unbounded_String(Positive'Image(Time / 60) & " hour");
-            if (Time / 60) > 1 then
-               Append(FormattedTime, "s");
-            end if;
-            if (Time mod 60) > 0 then
-               Append
-                 (FormattedTime,
-                  " and" & Positive'Image(Time mod 60) & " minute");
-               if (Time mod 60) > 1 then
-                  Append(FormattedTime, "s");
-               end if;
-            end if;
-         end if;
-      end Format_Time;
-   begin
-      if Selection(ItemsView) = "" then
-         return TCL_OK;
-      end if;
-      ItemIndex := To_Unbounded_String(Selection(ItemsView));
-      if CArgv.Arg(Argv, 1) = "heal" then
-         HealCost(Cost, Time, Natural'Value(To_String(ItemIndex)));
-         Format_Time;
-         configure
-           (InfoLabel,
-            "-text {Heal cost:" & Natural'Image(Cost) & " " &
-            To_String(Money_Name) & LF & "Heal time:" &
-            To_String(FormattedTime) & "}");
-      elsif CArgv.Arg(Argv, 1) = "repair" then
-         RepairCost(Cost, Time, Integer'Value(To_String(ItemIndex)));
-         CountPrice(Cost, FindMember(Talk));
-         Format_Time;
-         configure
-           (InfoLabel,
-            "-text {Repair cost:" & Natural'Image(Cost) & " " &
-            To_String(Money_Name) & LF & "Repair time:" &
-            To_String(FormattedTime) & "}");
-      elsif CArgv.Arg(Argv, 1) = "recipes" then
-         Cost :=
-           (if
-              Get_Price
-                (SkyBases(BaseIndex).BaseType,
-                 Recipes_List(ItemIndex).ResultIndex) >
-              0
-            then
-              Get_Price
-                (SkyBases(BaseIndex).BaseType,
-                 Recipes_List(ItemIndex).ResultIndex) *
-              Recipes_List(ItemIndex).Difficulty * 10
-            else Recipes_List(ItemIndex).Difficulty * 10);
-         Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
-         if Cost = 0 then
-            Cost := 1;
-         end if;
-         CountPrice(Cost, FindMember(Talk));
-         configure
-           (InfoLabel,
-            "-text {Base price:" & Positive'Image(Cost) & " " &
-            To_String(Money_Name) & "}");
-      end if;
-      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
-      InfoLabel.Name :=
-        New_String(".gameframe.paned.baseframe.canvas.base.info.money");
-      if MoneyIndex2 > 0 then
-         configure
-           (InfoLabel,
-            "-text {You have" &
-            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(Money_Name) & ".}");
-         if Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
-            configure(ActionButton, "-state disabled");
-         else
-            configure(ActionButton, "-state !disabled");
-         end if;
-      else
-         configure(ActionButton, "-state disabled");
-         configure(InfoLabel, "-text {You don't have any money.}");
-      end if;
-      return TCL_OK;
-   end Show_Item_Info_Command;
-
    -- ****o* BUI/BUI.Base_Action_Command
    -- FUNCTION
    -- Execute the selected action
@@ -688,7 +561,6 @@ package body Bases.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
-      AddCommand("ShowItemInfo", Show_Item_Info_Command'Access);
       AddCommand("BaseAction", Base_Action_Command'Access);
       AddCommand("SearchRecipes", Search_Recipes_Command'Access);
       AddCommand("ShowBaseMenu", Show_Base_Menu_Command'Access);
