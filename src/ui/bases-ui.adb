@@ -27,6 +27,8 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
@@ -337,7 +339,7 @@ package body Bases.UI is
               (BaseTable,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name),
                "Show available options",
-               "ShowBaseMenu {recipe" & To_String(Recipes_Container.Key(I)) &
+               "ShowBaseMenu {recipes " & To_String(Recipes_Container.Key(I)) &
                "} ",
                1);
             Cost :=
@@ -361,7 +363,7 @@ package body Bases.UI is
             AddButton
               (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
                "Show available options",
-               "ShowBaseMenu {recipe" & To_String(Recipes_Container.Key(I)) &
+               "ShowBaseMenu {recipes " & To_String(Recipes_Container.Key(I)) &
                "} ",
                2, True);
             <<End_Of_Recipes_Loop>>
@@ -550,18 +552,14 @@ package body Bases.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      ItemsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (".gameframe.paned.baseframe.canvas.base.items.view", Interp);
-      ItemIndex: Unbounded_String;
+      ItemIndex: constant String := CArgv.Arg(Argv, 2);
    begin
-      ItemIndex := To_Unbounded_String(Selection(ItemsView));
       if CArgv.Arg(Argv, 1) = "heal" then
-         HealWounded(Natural'Value(To_String(ItemIndex)));
+         HealWounded(Natural'Value(ItemIndex));
       elsif CArgv.Arg(Argv, 1) = "repair" then
-         Bases.Ship.RepairShip(Integer'Value(To_String(ItemIndex)));
+         Bases.Ship.RepairShip(Integer'Value(ItemIndex));
       elsif CArgv.Arg(Argv, 1) = "recipes" then
-         BuyRecipe(ItemIndex);
+         BuyRecipe(To_Unbounded_String(ItemIndex));
       end if;
       UpdateHeader;
       UpdateMessages;
@@ -607,12 +605,93 @@ package body Bases.UI is
            CArgv.Empty & "ShowBaseUI" & "recipes" & SearchText);
    end Search_Recipes_Command;
 
+   -- ****o* BUI/BUI.Show_Base_Menu_Command
+   -- FUNCTION
+   -- Show menu with options for the selected item
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseMenu action index
+   -- Action is name of action (heal,repair or recipe) and index is the index
+   -- of the item
+   -- SOURCE
+   function Show_Base_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Base_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      BaseMenu: Tk_Menu := Get_Widget(".basemenu", Interp);
+      Cost, Time: Natural := 0;
+      BaseIndex: constant Positive :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
+      Action: constant String := CArgv.Arg(Argv, 1);
+      ItemIndex: constant String := CArgv.Arg(Argv, 2);
+   begin
+      if Winfo_Get(BaseMenu, "exists") = "0" then
+         BaseMenu := Create(".basemenu", "-tearoff false");
+      end if;
+      Delete(BaseMenu, "0", "end");
+      if Action = "heal" then
+         HealCost(Cost, Time, Integer'Value(ItemIndex));
+      elsif Action = "repair" then
+         RepairCost(Cost, Time, Integer'Value(ItemIndex));
+         CountPrice(Cost, FindMember(Talk));
+      else
+         Cost :=
+           (if
+              Get_Price
+                (SkyBases(BaseIndex).BaseType,
+                 Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) >
+              0
+            then
+              Get_Price
+                (SkyBases(BaseIndex).BaseType,
+                 Recipes_List(To_Unbounded_String(ItemIndex)).ResultIndex) *
+              Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10
+            else Recipes_List(To_Unbounded_String(ItemIndex)).Difficulty * 10);
+         Cost := Natural(Float(Cost) * Float(New_Game_Settings.Prices_Bonus));
+         if Cost = 0 then
+            Cost := 1;
+         end if;
+         CountPrice(Cost, FindMember(Talk));
+      end if;
+      if MoneyIndex2 = 0
+        or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+         Menu.Add
+           (BaseMenu, "command", "-label {You don't have money for this}");
+      else
+         Menu.Add
+           (BaseMenu, "command",
+            "-label {" &
+            (if Action = "heal" then "Buy healing"
+             elsif Action = "repair" then "Buy repair" else "Buy recipe") &
+            "} -command {BaseAction " & Action & " " & ItemIndex & "}");
+      end if;
+      Tk_Popup
+        (BaseMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Base_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseUI", Show_Base_UI_Command'Access);
       AddCommand("ShowItemInfo", Show_Item_Info_Command'Access);
       AddCommand("BaseAction", Base_Action_Command'Access);
       AddCommand("SearchRecipes", Search_Recipes_Command'Access);
+      AddCommand("ShowBaseMenu", Show_Base_Menu_Command'Access);
    end AddCommands;
 
 end Bases.UI;
