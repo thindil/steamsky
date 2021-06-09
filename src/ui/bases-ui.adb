@@ -193,6 +193,19 @@ package body Bases.UI is
                   3, True);
             end if;
          end loop Show_Wounded_Crew_Loop;
+         AddButton
+           (BaseTable, "Heal all wounded crew members",
+            "Show available options", "ShowBaseMenu {heal 0} ", 1);
+         Cost := 0;
+         Time := 0;
+         HealCost(Cost, Time, 0);
+         AddButton
+           (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
+            "Show available options", "ShowBaseMenu {heal 0} ", 2);
+         Format_Time;
+         AddButton
+           (BaseTable, To_String(FormattedTime), "Show available options",
+            "ShowBaseMenu {heal 0} ", 3, True);
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          ButtonText := To_Unbounded_String("Buy healing");
@@ -237,15 +250,57 @@ package body Bases.UI is
                   3, True);
             end if;
          end loop Show_Damaged_Modules_Loop;
+         AddButton
+           (BaseTable, "Slowly repair the whole ship",
+            "Show available options", "ShowBaseMenu {repair 0} ", 1);
+         Cost := 0;
+         Time := 0;
+         RepairCost(Cost, Time, 0);
+         CountPrice(Cost, FindMember(Talk));
+         AddButton
+           (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
+            "Show available options", "ShowBaseMenu {repair 0} ", 2);
+         Format_Time;
+         AddButton
+           (BaseTable, To_String(FormattedTime), "Show available options",
+            "ShowBaseMenu {repair 0} ", 3, True);
          Insert
            (ItemsView, "{} end -id 0 -text {Slowly repair the whole ship}");
          if SkyBases(BaseIndex).Population > 149 then
             Insert(ItemsView, "{} end -id {-1} -text {Repair the whole ship}");
+            AddButton
+              (BaseTable, "Repair the whole ship", "Show available options",
+               "ShowBaseMenu {repair -1} ", 1);
+            Cost := 0;
+            Time := 0;
+            RepairCost(Cost, Time, -1);
+            CountPrice(Cost, FindMember(Talk));
+            AddButton
+              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
+               "Show available options", "ShowBaseMenu {repair -1} ", 2);
+            Format_Time;
+            AddButton
+              (BaseTable, To_String(FormattedTime), "Show available options",
+               "ShowBaseMenu {repair -1} ", 3, True);
          end if;
          if SkyBases(BaseIndex).Population > 299 then
             Insert
               (ItemsView,
                "{} end -id {-2} -text {Quickly repair the whole ship}");
+            AddButton
+              (BaseTable, "Quickly repair the whole ship",
+               "Show available options", "ShowBaseMenu {repair -2} ", 1);
+            Cost := 0;
+            Time := 0;
+            RepairCost(Cost, Time, -2);
+            CountPrice(Cost, FindMember(Talk));
+            AddButton
+              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
+               "Show available options", "ShowBaseMenu {repair -2} ", 2);
+            Format_Time;
+            AddButton
+              (BaseTable, To_String(FormattedTime), "Show available options",
+               "ShowBaseMenu {repair -2} ", 3, True);
          end if;
          ButtonText := To_Unbounded_String("Buy repairs");
          Heading(ItemsView, "#0", "-text Damaged");
