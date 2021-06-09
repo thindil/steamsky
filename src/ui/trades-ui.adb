@@ -31,7 +31,6 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -44,6 +43,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Cargo; use Bases.Cargo;
 with BasesTypes; use BasesTypes;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Dialogs; use Dialogs;
 with Events; use Events;
@@ -91,15 +91,11 @@ package body Trades.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData);
-      Paned: constant Ttk_PanedWindow :=
-        Get_Widget(".gameframe.paned", Interp);
-      TradeFrame: Ttk_Frame := Get_Widget(Paned & ".tradeframe", Interp);
+      TradeFrame: Ttk_Frame := Get_Widget(Main_Paned & ".tradeframe", Interp);
       TradeCanvas: constant Tk_Canvas :=
         Get_Widget(TradeFrame & ".canvas", Interp);
       Label: Ttk_Label :=
         Get_Widget(TradeCanvas & ".trade.options.typelabel", Interp);
-      CloseButton: constant Ttk_Button :=
-        Get_Widget(".gameframe.header.closebutton", Interp);
       ItemType, ProtoIndex, BaseType, ItemName, TradeInfo,
       ItemDurability: Unbounded_String;
       ItemsTypes: Unbounded_String := To_Unbounded_String("All");
@@ -139,10 +135,10 @@ package body Trades.UI is
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
                To_Unbounded_String("Profit"), To_Unbounded_String("Owned"),
                To_Unbounded_String("Available")),
-              Get_Widget(".gameframe.paned.tradeframe.scrolly"));
+              Get_Widget(Main_Paned & ".tradeframe.scrolly"));
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
-         configure(CloseButton, "-command ShowSkyMap");
+         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+         configure(Close_Button, "-command ShowSkyMap");
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          if BaseIndex = 0 and EventIndex > 0 then
             DeleteEvent(EventIndex);
@@ -153,7 +149,7 @@ package body Trades.UI is
       if Argc < 3 then
          Delete(SearchEntry, "0", "end");
       end if;
-      configure(CloseButton, "-command {ShowSkyMap ShowTrade}");
+      configure(Close_Button, "-command {ShowSkyMap ShowTrade}");
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp trade}");
       TradeFrame.Name := New_String(TradeCanvas & ".trade");
       ComboBox := Get_Widget(TradeFrame & ".options.type", Interp);
@@ -245,28 +241,16 @@ package body Trades.UI is
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             4);
-         if Profit > 0 then
-            AddButton
-              (TradeTable, Positive'Image(Profit),
-               "Show available options for item",
-               "ShowTradeMenu" &
-               Positive'Image(Inventory_Container.To_Index(I)),
-               5, False, "green");
-         elsif Profit < 0 then
-            AddButton
-              (TradeTable, Positive'Image(Profit),
-               "Show available options for item",
-               "ShowTradeMenu" &
-               Positive'Image(Inventory_Container.To_Index(I)),
-               5, False, "red");
-         else
-            AddButton
-              (TradeTable, Positive'Image(Profit),
-               "Show available options for item",
-               "ShowTradeMenu" &
-               Positive'Image(Inventory_Container.To_Index(I)),
-               5);
-         end if;
+         AddButton
+           (Table => TradeTable, Text => Positive'Image(Profit),
+            Tooltip => "Show available options for item",
+            Command =>
+              "ShowTradeMenu" &
+              Positive'Image(Inventory_Container.To_Index(I)),
+            Column => 5,
+            Color =>
+              (if Profit > 0 then "green" elsif Profit < 0 then "red"
+               else ""));
          AddButton
            (TradeTable, Positive'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
@@ -400,9 +384,7 @@ package body Trades.UI is
            (TradeInfo,
             LF & "Free cargo space:" & Integer'Image(FreeSpace) & " kg.");
       end;
-      Label.Name :=
-        New_String
-          (".gameframe.paned.tradeframe.canvas.trade.options.playerinfo");
+      Label.Name := New_String(TradeFrame & ".options.playerinfo");
       configure(Label, "-text {" & To_String(TradeInfo) & "}");
       TradeInfo := Null_Unbounded_String;
       if BaseIndex > 0 then
@@ -431,20 +413,16 @@ package body Trades.UI is
                To_String(Money_Name) & ".");
          end if;
       end if;
-      Label.Name :=
-        New_String
-          (".gameframe.paned.tradeframe.canvas.trade.options.baseinfo");
+      Label.Name := New_String(TradeFrame & ".options.baseinfo");
       configure(Label, "-text {" & To_String(TradeInfo) & "}");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1");
-      TradeFrame.Name := New_String(Widget_Image(TradeCanvas) & ".trade");
+      Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (TradeCanvas,
-         "-height [expr " & SashPos(Paned, "0") & " - 20] -width " &
-         cget(Paned, "-width"));
+         "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
+         cget(Main_Paned, "-width"));
       Tcl_Eval(Get_Context, "update");
       Canvas_Create
-        (TradeCanvas, "window",
-         "0 0 -anchor nw -window " & Widget_Image(TradeFrame));
+        (TradeCanvas, "window", "0 0 -anchor nw -window " & TradeFrame);
       Tcl_Eval(Get_Context, "update");
       configure
         (TradeCanvas, "-scrollregion [list " & BBox(TradeCanvas, "all") & "]");
@@ -527,15 +505,11 @@ package body Trades.UI is
             To_String
               (Attributes_List
                  (Skills_List(Items_List(ProtoIndex).Value(3)).Attribute)
-                 .Name));
-         if Items_List(ProtoIndex).Value(4) = 1 then
-            Append(ItemInfo, LF & "Can be used with shield.");
-         else
-            Append
-              (ItemInfo,
-               LF & "Can't be used with shield (two-handed weapon).");
-         end if;
-         Append(ItemInfo, LF & "Damage type: ");
+                 .Name) &
+            (if Items_List(ProtoIndex).Value(4) = 1 then
+               LF & "Can be used with shield."
+             else LF & "Can't be used with shield (two-handed weapon).") &
+            LF & "Damage type: ");
          case Items_List(ProtoIndex).Value(5) is
             when 1 =>
                Append(ItemInfo, "cutting");
@@ -553,11 +527,8 @@ package body Trades.UI is
             Append
               (ItemInfo,
                LF & "Damage chance: " &
-               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
-            Append
-              (ItemInfo,
-               LF & "Strength:" &
-               Integer'Image(Items_List(ProtoIndex).Value(2)));
+               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)) & LF &
+               "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
