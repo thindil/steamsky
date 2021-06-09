@@ -175,39 +175,39 @@ package body Bases.UI is
                AddButton
                  (BaseTable, To_String(Player_Ship.Crew(I).Name),
                   "Show available options",
-                  "ShowBaseMenu {heal" &
-                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu heal" &
+                  Positive'Image(Crew_Container.To_Index(I)),
                   1);
                HealCost(Cost, Time, Crew_Container.To_Index(I));
                AddButton
                  (BaseTable,
                   Positive'Image(Cost) & " " & To_String(Money_Name),
                   "Show available options",
-                  "ShowBaseMenu {heal" &
-                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu heal" &
+                  Positive'Image(Crew_Container.To_Index(I)),
                   2);
                Format_Time;
                AddButton
                  (BaseTable, To_String(FormattedTime),
                   "Show available options",
-                  "ShowBaseMenu {heal" &
-                  Positive'Image(Crew_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu heal" &
+                  Positive'Image(Crew_Container.To_Index(I)),
                   3, True);
             end if;
          end loop Show_Wounded_Crew_Loop;
          AddButton
            (BaseTable, "Heal all wounded crew members",
-            "Show available options", "ShowBaseMenu {heal 0} ", 1);
+            "Show available options", "ShowBaseMenu heal 0", 1);
          Cost := 0;
          Time := 0;
          HealCost(Cost, Time, 0);
          AddButton
            (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-            "Show available options", "ShowBaseMenu {heal 0} ", 2);
+            "Show available options", "ShowBaseMenu heal 0", 2);
          Format_Time;
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
-            "ShowBaseMenu {heal 0} ", 3, True);
+            "ShowBaseMenu heal 0", 3, True);
          Insert
            (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
          ButtonText := To_Unbounded_String("Buy healing");
@@ -231,8 +231,8 @@ package body Bases.UI is
                AddButton
                  (BaseTable, To_String(Player_Ship.Modules(I).Name),
                   "Show available options",
-                  "ShowBaseMenu {repair" &
-                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu repair" &
+                  Positive'Image(Modules_Container.To_Index(I)),
                   1);
                RepairCost(Cost, Time, Modules_Container.To_Index(I));
                CountPrice(Cost, FindMember(Talk));
@@ -240,39 +240,39 @@ package body Bases.UI is
                  (BaseTable,
                   Positive'Image(Cost) & " " & To_String(Money_Name),
                   "Show available options",
-                  "ShowBaseMenu {repair" &
-                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu repair" &
+                  Positive'Image(Modules_Container.To_Index(I)),
                   2);
                Format_Time;
                AddButton
                  (BaseTable, To_String(FormattedTime),
                   "Show available options",
-                  "ShowBaseMenu {repair" &
-                  Positive'Image(Modules_Container.To_Index(I)) & "} ",
+                  "ShowBaseMenu repair" &
+                  Positive'Image(Modules_Container.To_Index(I)),
                   3, True);
             end if;
          end loop Show_Damaged_Modules_Loop;
          AddButton
            (BaseTable, "Slowly repair the whole ship",
-            "Show available options", "ShowBaseMenu {repair 0} ", 1);
+            "Show available options", "ShowBaseMenu repair 0", 1);
          Cost := 0;
          Time := 0;
          RepairCost(Cost, Time, 0);
          CountPrice(Cost, FindMember(Talk));
          AddButton
            (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-            "Show available options", "ShowBaseMenu {repair 0} ", 2);
+            "Show available options", "ShowBaseMenu repair 0", 2);
          Format_Time;
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
-            "ShowBaseMenu {repair 0} ", 3, True);
+            "ShowBaseMenu repair 0", 3, True);
          Insert
            (ItemsView, "{} end -id 0 -text {Slowly repair the whole ship}");
          if SkyBases(BaseIndex).Population > 149 then
             Insert(ItemsView, "{} end -id {-1} -text {Repair the whole ship}");
             AddButton
               (BaseTable, "Repair the whole ship", "Show available options",
-               "ShowBaseMenu {repair -1} ", 1);
+               "ShowBaseMenu repair -1", 1);
             Cost := 0;
             Time := 0;
             RepairCost(Cost, Time, -1);
@@ -283,7 +283,7 @@ package body Bases.UI is
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu {repair -1} ", 3, True);
+               "ShowBaseMenu repair -1", 3, True);
          end if;
          if SkyBases(BaseIndex).Population > 299 then
             Insert
@@ -291,18 +291,18 @@ package body Bases.UI is
                "{} end -id {-2} -text {Quickly repair the whole ship}");
             AddButton
               (BaseTable, "Quickly repair the whole ship",
-               "Show available options", "ShowBaseMenu {repair -2} ", 1);
+               "Show available options", "ShowBaseMenu repair -2", 1);
             Cost := 0;
             Time := 0;
             RepairCost(Cost, Time, -2);
             CountPrice(Cost, FindMember(Talk));
             AddButton
               (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-               "Show available options", "ShowBaseMenu {repair -2} ", 2);
+               "Show available options", "ShowBaseMenu repair -2", 2);
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
-               "ShowBaseMenu {repair -2} ", 3, True);
+               "ShowBaseMenu repair -2", 3, True);
          end if;
          ButtonText := To_Unbounded_String("Buy repairs");
          Heading(ItemsView, "#0", "-text Damaged");
@@ -339,8 +339,8 @@ package body Bases.UI is
               (BaseTable,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name),
                "Show available options",
-               "ShowBaseMenu {recipes " & To_String(Recipes_Container.Key(I)) &
-               "} ",
+               "ShowBaseMenu recipes {" & To_String(Recipes_Container.Key(I)) &
+               "}",
                1);
             Cost :=
               (if
@@ -363,8 +363,8 @@ package body Bases.UI is
             AddButton
               (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
                "Show available options",
-               "ShowBaseMenu {recipes " & To_String(Recipes_Container.Key(I)) &
-               "} ",
+               "ShowBaseMenu recipes {" & To_String(Recipes_Container.Key(I)) &
+               "}",
                2, True);
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
