@@ -586,7 +586,7 @@ package body Trades.UI is
       ProtoIndex: Unbounded_String;
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.tradeframe.canvas.trade.options.type", Interp);
+          (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".itemdialog.amount", Interp);
    begin
@@ -730,7 +730,7 @@ package body Trades.UI is
       pragma Unreferenced(Argc);
       TypeBox: constant Ttk_ComboBox :=
         Get_Widget
-          (".gameframe.paned.tradeframe.canvas.trade.options.type", Interp);
+          (Main_Paned & ".tradeframe.canvas.trade.options.type", Interp);
       SearchText: constant String := CArgv.Arg(Argv, 1);
    begin
       if SearchText'Length = 0 then
