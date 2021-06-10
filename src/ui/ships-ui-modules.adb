@@ -23,11 +23,9 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -1474,32 +1472,27 @@ package body Ships.UI.Modules is
       pragma Unreferenced(ClientData, Interp, Argc);
       ModuleIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ModuleDialog: constant Ttk_Frame :=
-        Create(".moduledialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (Name => ".moduledialog",
+           Title =>
+             "Assign skill to " &
+             To_String(Player_Ship.Modules(ModuleIndex).Name),
+           Title_Width => 300, Columns => 2);
       CloseButton: constant Ttk_Button :=
         Create
           (ModuleDialog & ".button",
            "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      InfoLabel: constant Ttk_Label :=
-        Create
-          (ModuleDialog & ".titlelabel",
-           "-text {Assign skill to " &
-           To_String(Player_Ship.Modules(ModuleIndex).Name) &
-           "} -style Header.TLabel");
-      SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ScrollSkillY: constant Ttk_Scrollbar :=
         Create
-          (SkillsFrame & ".scrolly",
-           "-orient vertical -command [list " & SkillsFrame & ".view yview]");
+          (ModuleDialog & ".scrolly",
+           "-orient vertical -command [list " & ModuleDialog & ".view yview]");
       SkillsView: constant Ttk_Tree_View :=
         Create
-          (SkillsFrame & ".view",
+          (ModuleDialog & ".view",
            "-columns [list name tool] -show headings -yscrollcommand [list " &
-           SkillsFrame & ".scrolly set]");
+           ScrollSkillY & " set]");
       ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel, "-padx 2 -pady 2 -fill x");
       Heading(SkillsView, "name", "-text {Skill}");
       Heading(SkillsView, "tool", "-text {Training tool}");
       Tag_Configure(SkillsView, "gray", "-foreground gray");
@@ -1540,16 +1533,13 @@ package body Ships.UI.Modules is
          SkillsView & " focus]}");
       Bind(SkillsView, "<Tab>", "{focus " & CloseButton & ";break}");
       Bind(SkillsView, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Tcl.Tk.Ada.Pack.Pack(ScrollSkillY, "-side right -fill y");
-      Tcl.Tk.Ada.Pack.Pack(SkillsView);
-      Tcl.Tk.Ada.Pack.Pack(SkillsFrame, "-padx 5");
-      configure(InfoLabel, "-wraplength " & Winfo_Get(SkillsView, "reqwidth"));
-      Tcl.Tk.Ada.Pack.Pack(CloseButton, "-side bottom -pady 5");
+      Tcl.Tk.Ada.Grid.Grid(SkillsView, "-sticky nwes");
+      Tcl.Tk.Ada.Grid.Grid(ScrollSkillY, "-sticky ns -column 1 -row 1");
+      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
       Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place
-        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus " & SkillsView & ";break}");
+      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
