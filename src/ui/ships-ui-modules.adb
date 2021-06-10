@@ -779,7 +779,6 @@ package body Ships.UI.Modules is
                Insert
                  (ModuleText, "end", "{" & LF & "Must be set for training.}");
             end if;
-            Insert(ModuleText, "end", "{" & LF & "}");
             AddOwnersInfo("Trainee");
          when BATTERING_RAM =>
             Insert
