@@ -762,7 +762,7 @@ package body Ships.UI.Modules is
                   "Set for training " &
                   To_String(Skills_List(Module.Trained_Skill).Name)
                 else "Must be set for training") &
-               "." & LF & "}");
+               ".}");
             AddOwnersInfo("Trainee");
          when BATTERING_RAM =>
             Insert
