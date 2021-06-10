@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Giving crew members items from the ship's cargo
 - Showing error messages in main menu blocks error message
 - Crafting info window don't show all information
+- Showing info about training room
 
 ## [6.1] - 2021-05-16
 
