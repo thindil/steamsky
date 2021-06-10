@@ -28,12 +28,10 @@ with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Ship; use Bases.Ship;
 with Bases.Trade; use Bases.Trade;
@@ -83,12 +81,9 @@ package body Bases.UI is
       BaseFrame: Ttk_Frame := Get_Widget(Main_Paned & ".baseframe", Interp);
       BaseCanvas: constant Tk_Canvas :=
         Get_Widget(BaseFrame & ".canvas", Interp);
-      ActionButton: Ttk_Button;
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(BaseCanvas & ".base.search", Interp);
-      ItemsView: constant Ttk_Tree_View :=
-        Get_Widget(BaseCanvas & ".base.items.view", Interp);
-      FirstIndex, ButtonText, FormattedTime: Unbounded_String;
+      FirstIndex, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
@@ -154,8 +149,6 @@ package body Bases.UI is
                Null_Unbounded_String),
               Get_Widget(Main_Paned & ".baseframe.scrolly"));
       end if;
-      Delete(ItemsView, "[list " & Children(ItemsView, "{}") & "]");
-      ActionButton := Get_Widget(BaseFrame & ".info.accept", Interp);
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
@@ -166,10 +159,6 @@ package body Bases.UI is
                     To_Unbounded_String
                       (Natural'Image(Crew_Container.To_Index(I)));
                end if;
-               Insert
-                 (ItemsView,
-                  "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
-                  " -text {" & To_String(Player_Ship.Crew(I).Name) & "}");
                AddButton
                  (BaseTable, To_String(Player_Ship.Crew(I).Name),
                   "Show available options",
@@ -206,10 +195,6 @@ package body Bases.UI is
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
             "ShowBaseMenu heal 0", 3, True);
-         Insert
-           (ItemsView, "{} end -id 0 -text {Heal all wounded crew members}");
-         ButtonText := To_Unbounded_String("Buy healing");
-         Heading(ItemsView, "#0", "-text Wounded");
       elsif CArgv.Arg(Argv, 1) = "repair" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
@@ -221,11 +206,6 @@ package body Bases.UI is
                     To_Unbounded_String
                       (Natural'Image(Modules_Container.To_Index(I)));
                end if;
-               Insert
-                 (ItemsView,
-                  "{} end -id" &
-                  Positive'Image(Modules_Container.To_Index(I)) & " -text {" &
-                  To_String(Player_Ship.Modules(I).Name) & "}");
                AddButton
                  (BaseTable, To_String(Player_Ship.Modules(I).Name),
                   "Show available options",
@@ -264,10 +244,7 @@ package body Bases.UI is
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
             "ShowBaseMenu repair 0", 3, True);
-         Insert
-           (ItemsView, "{} end -id 0 -text {Slowly repair the whole ship}");
          if SkyBases(BaseIndex).Population > 149 then
-            Insert(ItemsView, "{} end -id {-1} -text {Repair the whole ship}");
             AddButton
               (BaseTable, "Repair the whole ship", "Show available options",
                "ShowBaseMenu repair -1", 1);
@@ -284,9 +261,6 @@ package body Bases.UI is
                "ShowBaseMenu repair -1", 3, True);
          end if;
          if SkyBases(BaseIndex).Population > 299 then
-            Insert
-              (ItemsView,
-               "{} end -id {-2} -text {Quickly repair the whole ship}");
             AddButton
               (BaseTable, "Quickly repair the whole ship",
                "Show available options", "ShowBaseMenu repair -2", 1);
@@ -302,8 +276,6 @@ package body Bases.UI is
               (BaseTable, To_String(FormattedTime), "Show available options",
                "ShowBaseMenu repair -2", 3, True);
          end if;
-         ButtonText := To_Unbounded_String("Buy repairs");
-         Heading(ItemsView, "#0", "-text Damaged");
       elsif CArgv.Arg(Argv, 1) = "recipes" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
          Show_Available_Recipes_Loop :
@@ -328,11 +300,6 @@ package body Bases.UI is
             if FirstIndex = Null_Unbounded_String then
                FirstIndex := Recipes_Container.Key(I);
             end if;
-            Insert
-              (ItemsView,
-               "{} end -id " & To_String(Recipes_Container.Key(I)) &
-               " -text {" &
-               To_String(Items_List(Recipes_List(I).ResultIndex).Name & "}"));
             AddButton
               (BaseTable,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name),
@@ -366,24 +333,14 @@ package body Bases.UI is
                2, True);
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
-         ButtonText := To_Unbounded_String("Buy recipe");
-         Heading(ItemsView, "#0", "-text Recipes");
       end if;
       UpdateTable(BaseTable);
-      Bind
-        (ItemsView, "<<TreeviewSelect>>",
-         "{ShowItemInfo " & CArgv.Arg(Argv, 1) & "}");
-      configure
-        (ActionButton,
-         "-text {" & To_String(ButtonText) & "} -command {BaseAction " &
-         CArgv.Arg(Argv, 1) & "}");
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      Selection_Set(ItemsView, "[list " & To_String(FirstIndex) & "]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       BaseFrame.Name := New_String(BaseCanvas & ".base");
       configure

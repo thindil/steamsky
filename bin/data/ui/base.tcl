@@ -25,20 +25,3 @@ set baseframe [ttk::frame $basecanvas.base]
 SetScrollbarBindings $baseframe .gameframe.paned.baseframe.scrolly
 grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2 -sticky w -padx 5 -pady 5
 tooltip::tooltip $baseframe.search "Search for the selected recipe."
-# Items list
-grid [ttk::frame $baseframe.items] -sticky nwes -padx 5 -pady {5 0}
-SetScrollbarBindings $baseframe.items .gameframe.paned.baseframe.scrolly
-set baseview [ttk::treeview $baseframe.items.view -yscrollcommand [list $baseframe.items.scrolly set]]
-$baseview column #0 -width 400
-grid $baseview -sticky nwes
-grid [ttk::scrollbar $baseframe.items.scrolly -orient vertical -command [list $baseview yview]] -row 0 -column 1 -sticky ns
-::autoscroll::autoscroll $baseframe.items.scrolly
-# Item info
-set infoframe [ttk::frame $baseframe.info]
-SetScrollbarBindings $infoframe .gameframe.paned.baseframe.scrolly
-grid [ttk::label $infoframe.info]
-SetScrollbarBindings $infoframe.info .gameframe.paned.baseframe.scrolly
-grid [ttk::label $infoframe.money]
-SetScrollbarBindings $infoframe.money .gameframe.paned.baseframe.scrolly
-grid [ttk::button $infoframe.accept]
-grid $infoframe -column 1 -row 1 -sticky n -padx 5 -pady {5 0}
