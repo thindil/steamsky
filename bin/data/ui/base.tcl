@@ -15,8 +15,8 @@
 
 ttk::frame .gameframe.paned.baseframe
 set basecanvas [canvas .gameframe.paned.baseframe.canvas -yscrollcommand [list .gameframe.paned.baseframe.scrolly set] -xscrollcommand [list .gameframe.paned.baseframe.scrollx set]]
-pack [ttk::scrollbar .gameframe.paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -side right -fill y
-pack $basecanvas -side top -fill both
+pack [ttk::scrollbar .gameframe.paned.baseframe.scrolly -orient vertical -command [list $basecanvas yview]] -side right -fill y -pady 5
+pack $basecanvas -side top -fill both -pady 5
 pack [ttk::scrollbar .gameframe.paned.baseframe.scrollx -orient horizontal -command [list $basecanvas xview]] -fill x
 SetScrollbarBindings $basecanvas .gameframe.paned.baseframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.baseframe.scrolly
