@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing info about training room
+
 ## [6.0.3] - 2021-06-06
 
 ### Changed
