@@ -55,13 +55,13 @@ package body Ships is
          Roll: Positive range 1 .. 100 := 1;
          Upgrades_Amount: Natural :=
            (if Random_Upgrades then
-              GetRandom(0, Positive(Proto_Ship.Modules.Length))
+              GetRandom(Min => 0, Max => Positive(Proto_Ship.Modules.Length))
             else 0);
       begin
          Set_Modules_Loop :
          for Module of Proto_Ship.Modules loop
             Temp_Module := Modules_List(Module);
-            if Upgrades_Amount = 0 or GetRandom(1, 100) < 51 then
+            if Upgrades_Amount = 0 or GetRandom(Min => 1, Max => 100) < 51 then
                goto End_Of_Setting_Upgrades;
             end if;
             Weight_Gain :=
@@ -69,21 +69,22 @@ package body Ships is
             if Weight_Gain < 1 then
                Weight_Gain := 1;
             end if;
-            Roll := GetRandom(1, 100);
+            Roll := GetRandom(Min => 1, Max => 100);
             case Roll is
                when 1 .. 50 => -- Upgrade durability of module
                   Max_Upgrade_Value :=
                     Positive(Float(Modules_List(Module).Durability) * 1.5);
                   Temp_Module.Durability :=
                     GetRandom
-                      (Modules_List(Module).Durability, Max_Upgrade_Value);
-                  --# rule off SIMPLIFIABLE_EXPRESSIONS
+                      (Min => Modules_List(Module).Durability,
+                       Max => Max_Upgrade_Value);
+                  --## rule off SIMPLIFIABLE_EXPRESSIONS
                   Temp_Module.Weight :=
                     Temp_Module.Weight +
                     (Weight_Gain *
                      (Temp_Module.Durability -
                       Modules_List(Module).Durability));
-                  --# rule on SIMPLIFIABLE_EXPRESSIONS
+                  --## rule on SIMPLIFIABLE_EXPRESSIONS
                when 51 .. 75 => -- Upgrade value (depends on module) of module
                   if Modules_List(Module).MType = ENGINE then
                      Weight_Gain := Weight_Gain * 10;
@@ -91,13 +92,14 @@ package body Ships is
                        Positive(Float(Modules_List(Module).Value) / 2.0);
                      Temp_Module.Value :=
                        GetRandom
-                         (Max_Upgrade_Value, Modules_List(Module).Value);
-                     --# rule off SIMPLIFIABLE_EXPRESSIONS
+                         (Min => Max_Upgrade_Value,
+                          Max => Modules_List(Module).Value);
+                     --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
                        (Weight_Gain *
                         (Modules_List(Module).Value - Temp_Module.Value));
-                     --# rule on SIMPLIFIABLE_EXPRESSIONS
+                     --## rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
                when 76 ..
                      100 => -- Upgrade max_value (depends on module) of module
@@ -115,14 +117,15 @@ package body Ships is
                        Positive(Float(Modules_List(Module).MaxValue) * 1.5);
                      Temp_Module.MaxValue :=
                        GetRandom
-                         (Modules_List(Module).MaxValue, Max_Upgrade_Value);
-                     --# rule off SIMPLIFIABLE_EXPRESSIONS
+                         (Min => Modules_List(Module).MaxValue,
+                          Max => Max_Upgrade_Value);
+                     --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Module.Weight :=
                        Temp_Module.Weight +
                        (Weight_Gain *
                         (Temp_Module.MaxValue -
                          Modules_List(Module).MaxValue));
-                     --# rule on SIMPLIFIABLE_EXPRESSIONS
+                     --## rule on SIMPLIFIABLE_EXPRESSIONS
                   end if;
             end case;
             Upgrades_Amount := Upgrades_Amount - 1;
@@ -131,7 +134,7 @@ package body Ships is
             if Temp_Module.MaxOwners > 0 then
                Set_Module_Owners_Loop :
                for I in 1 .. Temp_Module.MaxOwners loop
-                  Owners.Append(0);
+                  Owners.Append(New_Item => 0);
                end loop Set_Module_Owners_Loop;
             end if;
             case Temp_Module.MType is
@@ -286,11 +289,15 @@ package body Ships is
          for ProtoMember of Proto_Ship.Crew loop
             Amount :=
               (if ProtoMember.Max_Amount = 0 then ProtoMember.Min_Amount
-               else GetRandom(ProtoMember.Min_Amount, ProtoMember.Max_Amount));
+               else GetRandom
+                   (Min => ProtoMember.Min_Amount,
+                    Max => ProtoMember.Max_Amount));
             Add_Crew_Member_Loop :
             for I in 1 .. Amount loop
                Member :=
-                 GenerateMob(ProtoMember.Proto_Index, Proto_Ship.Owner);
+                 GenerateMob
+                   (MobIndex => ProtoMember.Proto_Index,
+                    FactionIndex => Proto_Ship.Owner);
                Ship_Crew.Append(New_Item => Member);
                Modules_Loop :
                for Module of Ship_Modules loop
