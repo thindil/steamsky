@@ -81,8 +81,10 @@ package body Bases.UI is
       BaseFrame: Ttk_Frame := Get_Widget(Main_Paned & ".baseframe", Interp);
       BaseCanvas: constant Tk_Canvas :=
         Get_Widget(BaseFrame & ".canvas", Interp);
+      SearchFrame: constant Ttk_Frame :=
+        Get_Widget(BaseCanvas & ".base.searchframe", Interp);
       SearchEntry: constant Ttk_Entry :=
-        Get_Widget(BaseCanvas & ".base.search", Interp);
+        Get_Widget(SearchFrame & ".search", Interp);
       FirstIndex, FormattedTime: Unbounded_String;
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
@@ -130,7 +132,7 @@ package body Bases.UI is
          Destroy(BaseTable.Canvas);
       end if;
       if CArgv.Arg(Argv, 1) /= "recipes" then
-         Tcl.Tk.Ada.Grid.Grid_Remove(SearchEntry);
+         Tcl.Tk.Ada.Grid.Grid_Remove(SearchFrame);
          BaseTable :=
            CreateTable
              (Widget_Image(BaseFrame),
@@ -138,7 +140,7 @@ package body Bases.UI is
                To_Unbounded_String("Time")),
               Get_Widget(Main_Paned & ".baseframe.scrolly"));
       else
-         Tcl.Tk.Ada.Grid.Grid(SearchEntry);
+         Tcl.Tk.Ada.Grid.Grid(SearchFrame);
          if Argc < 3 then
             Delete(SearchEntry, "0", "end");
          end if;

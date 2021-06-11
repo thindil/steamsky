@@ -23,5 +23,8 @@ SetScrollbarBindings $basecanvas .gameframe.paned.baseframe.scrolly
 ::autoscroll::autoscroll .gameframe.paned.baseframe.scrollx
 set baseframe [ttk::frame $basecanvas.base]
 SetScrollbarBindings $baseframe .gameframe.paned.baseframe.scrolly
-grid [ttk::entry $baseframe.search -validate key -validatecommand {SearchRecipes %P}] -columnspan 2 -sticky w -padx 5 -pady 5
-tooltip::tooltip $baseframe.search "Search for the selected recipe."
+grid [ttk::frame $baseframe.searchframe] -sticky w -padx 5 -pady 5
+grid [ttk::label $baseframe.searchframe.searchlabel -text {Name:}]
+tooltip::tooltip $baseframe.searchframe.searchlabel "Search for the selected recipe."
+grid [ttk::entry $baseframe.searchframe.search -validate key -validatecommand {SearchRecipes %P}] -row 0 -column 1
+tooltip::tooltip $baseframe.searchframe.search "Search for the selected recipe."
