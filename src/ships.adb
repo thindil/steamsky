@@ -303,10 +303,10 @@ package body Ships is
                for Module of Ship_Modules loop
                   if Module.M_Type = CABIN then
                      Set_Cabin_Name_Loop :
-                     for I in Module.Owner.Iterate loop
-                        if Module.Owner(I) = 0 then
-                           Module.Owner(I) := Ship_Crew.Last_Index;
-                           if Natural_Container.To_Index(I) = 1 then
+                     for J in Module.Owner.Iterate loop
+                        if Module.Owner(J) = 0 then
+                           Module.Owner(J) := Ship_Crew.Last_Index;
+                           if Natural_Container.To_Index(J) = 1 then
                               Module.Name :=
                                 Member.Name & To_Unbounded_String("'s Cabin");
                            end if;
@@ -319,7 +319,7 @@ package body Ships is
                for Module of Ship_Modules loop
                   if Module.Owner.Length > 0 then
                      if Module.Owner(1) = 0 and
-                       ((Module.M_Type in GUN | HARPOON_GUN) and
+                       (Module.M_Type in GUN | HARPOON_GUN and
                         Member.Order = Gunner) then
                         Module.Owner(1) := Ship_Crew.Last_Index;
                         exit Set_Module_Owner_Loop;
@@ -352,8 +352,9 @@ package body Ships is
          Upgrade_Module => 0, Destination_X => 0, Destination_Y => 0,
          Repair_Module => 0, Description => Proto_Ship.Description,
          Home_Base => 0);
+      Assing_Gun_Block :
       declare
-         GunAssigned: Boolean;
+         Gun_Assigned: Boolean := False;
       begin
          Amount := 0;
          Count_Modules_Loop :
@@ -362,17 +363,17 @@ package body Ships is
                Count_Guns_Loop :
                for J in Tmp_Ship.Modules.Iterate loop
                   if Tmp_Ship.Modules(J).M_Type in GUN | HARPOON_GUN then
-                     GunAssigned := False;
+                     Gun_Assigned := False;
                      Check_Assigned_Guns_Loop :
                      for K in Tmp_Ship.Modules.Iterate loop
                         if Tmp_Ship.Modules(K).M_Type = TURRET
                           and then Tmp_Ship.Modules(K).Gun_Index =
                             Modules_Container.To_Index(J) then
-                           GunAssigned := True;
+                           Gun_Assigned := True;
                            exit Check_Assigned_Guns_Loop;
                         end if;
                      end loop Check_Assigned_Guns_Loop;
-                     if not GunAssigned then
+                     if not Gun_Assigned then
                         Tmp_Ship.Modules(I).Gun_Index :=
                           Modules_Container.To_Index(J);
                      end if;
@@ -388,7 +389,7 @@ package body Ships is
             end if;
          end loop Count_Modules_Loop;
          Tmp_Ship.Modules(Hull_Index).Installed_Modules := Amount;
-      end;
+      end Assing_Gun_Block;
       -- Set known crafting recipes
       Set_Known_Recipes_Loop :
       for Recipe of Proto_Ship.Known_Recipes loop
@@ -398,21 +399,22 @@ package body Ships is
       if SkyMap(X, Y).BaseIndex > 0 then
          Tmp_Ship.Home_Base := SkyMap(X, Y).BaseIndex;
       else
+         Find_Home_Base_Block :
          declare
-            StartX, StartY, EndX, EndY: Integer;
+            Start_X, Start_Y, End_X, End_Y: Integer;
          begin
-            StartX := X - 100;
-            NormalizeCoord(StartX);
-            StartY := Y - 100;
-            NormalizeCoord(StartY, False);
-            EndX := X + 100;
-            NormalizeCoord(EndX);
-            EndY := Y + 100;
-            NormalizeCoord(EndY, False);
+            Start_X := X - 100;
+            NormalizeCoord(Start_X);
+            Start_Y := Y - 100;
+            NormalizeCoord(Start_Y, False);
+            End_X := X + 100;
+            NormalizeCoord(End_X);
+            End_Y := Y + 100;
+            NormalizeCoord(End_Y, False);
             Bases_X_Loop :
-            for SkyX in StartX .. EndX loop
+            for SkyX in Start_X .. End_X loop
                Bases_Y_Loop :
-               for SkyY in StartY .. EndY loop
+               for SkyY in Start_Y .. End_Y loop
                   if SkyMap(SkyX, SkyY).BaseIndex > 0 then
                      if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
                        Proto_Ship.Owner then
@@ -431,7 +433,7 @@ package body Ships is
                   end if;
                end loop Set_Home_Base_Loop;
             end if;
-         end;
+         end Find_Home_Base_Block;
       end if;
       -- Set home base for crew members
       Set_Home_For_Members_Loop :
