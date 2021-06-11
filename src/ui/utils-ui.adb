@@ -242,15 +242,11 @@ package body Utils.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      NewArgv: CArgv.Chars_Ptr_Ptr := Argv;
+      NewArgv: constant CArgv.Chars_Ptr_Ptr :=
+        (if Argc < 4 then Argv & Get(SpinBox)
+         else CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
+           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3));
    begin
-      if Argc < 4 then
-         NewArgv := NewArgv & Get(SpinBox);
-      else
-         NewArgv :=
-           CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3);
-      end if;
       return
         Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
    end Validate_Amount_Command;
@@ -292,7 +288,7 @@ package body Utils.UI is
               Positive'Value(VarName(11 .. VarName'Last));
             Button: constant Ttk_Button :=
               Get_Widget
-                (".gameframe.paned.shipinfoframe.modules.canvas.frame.name" &
+                (Main_Paned & ".shipinfoframe.modules.canvas.frame.name" &
                  Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
             Player_Ship.Modules(ModuleIndex).Name :=
@@ -306,7 +302,7 @@ package body Utils.UI is
               Positive'Value(VarName(9 .. VarName'Last));
             Button: constant Ttk_Button :=
               Get_Widget
-                (".gameframe.paned.shipinfoframe.crew.canvas.frame.name" &
+                (Main_Paned & ".shipinfoframe.crew.canvas.frame.name" &
                  Trim(Positive'Image(CrewIndex), Left));
          begin
             Player_Ship.Crew(CrewIndex).Name := To_Unbounded_String(Value);
@@ -426,15 +422,11 @@ package body Utils.UI is
             end if;
          end;
       elsif Result = "quit" then
-         declare
-            Paned: constant Ttk_PanedWindow :=
-              Get_Widget(".gameframe.paned", Interp);
-         begin
-            Game_Settings.Messages_Position :=
-              Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
-            End_Game(True);
-            Show_Main_Menu;
-         end;
+         Game_Settings.Messages_Position :=
+           Game_Settings.Window_Height -
+           Natural'Value(SashPos(Main_Paned, "0"));
+         End_Game(True);
+         Show_Main_Menu;
       elsif Result = "resign" then
          Death(1, To_Unbounded_String("resignation"), Player_Ship);
          ShowQuestion
@@ -442,30 +434,27 @@ package body Utils.UI is
             "showstats");
       elsif Result = "showstats" then
          declare
-            Button: Ttk_Button := Get_Widget(".gameframe.header.menubutton");
+            Button: constant Ttk_Button :=
+              Get_Widget(Game_Header & ".menubutton");
          begin
             Tcl.Tk.Ada.Grid.Grid(Button);
-            Button.Name := New_String(".gameframe.header.closebutton");
-            Widgets.configure(Button, "-command ShowMainMenu");
-            Tcl.Tk.Ada.Grid.Grid(Button, "-row 0 -column 1");
+            Widgets.configure(Close_Button, "-command ShowMainMenu");
+            Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
             Delete(GameMenu, "3", "4");
             Delete(GameMenu, "6", "14");
             ShowStatistics;
          end;
       elsif Result = "mainmenu" then
-         declare
-            Paned: constant Ttk_PanedWindow := Get_Widget(".gameframe.paned");
-         begin
-            Game_Settings.Messages_Position :=
-              Game_Settings.Window_Height - Natural'Value(SashPos(Paned, "0"));
-            End_Game(False);
-            Show_Main_Menu;
-         end;
+         Game_Settings.Messages_Position :=
+           Game_Settings.Window_Height -
+           Natural'Value(SashPos(Main_Paned, "0"));
+         End_Game(False);
+         Show_Main_Menu;
       elsif Result = "messages" then
          declare
             TypeBox: constant Ttk_ComboBox :=
               Get_Widget
-                (".gameframe.paned.messagesframe.canvas.messages.options.types",
+                (Main_Paned & ".messagesframe.canvas.messages.options.types",
                  Get_Context);
          begin
             ClearMessages;
@@ -791,37 +780,37 @@ package body Utils.UI is
    end UpdateMessages;
 
    procedure ShowScreen(NewScreenName: String) is
-      Paned: Ttk_PanedWindow := Get_Widget(".gameframe.paned");
       SubWindow, OldSubWindow: Ttk_Frame;
       SubWindows: Unbounded_String;
       MessagesFrame: constant Ttk_Frame :=
-        Get_Widget(Paned & ".controls.messages");
+        Get_Widget(Main_Paned & ".controls.messages");
+      Paned: constant Ttk_PanedWindow :=
+        Get_Widget(Main_Paned & ".controls.buttons");
    begin
-      SubWindows := To_Unbounded_String(Panes(Paned));
+      SubWindows := To_Unbounded_String(Panes(Main_Paned));
       OldSubWindow :=
         (if Index(SubWindows, " ") = 0 then Get_Widget(To_String(SubWindows))
          else Get_Widget(Slice(SubWindows, 1, Index(SubWindows, " "))));
-      Forget(Paned, OldSubWindow);
+      Forget(Main_Paned, OldSubWindow);
       SubWindow.Name := New_String(".gameframe.paned." & NewScreenName);
-      Insert(Paned, "0", SubWindow, "-weight 1");
+      Insert(Main_Paned, "0", SubWindow, "-weight 1");
       if NewScreenName in "optionsframe" | "messagesframe" or
         not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
          if NewScreenName /= "mapframe" then
-            SashPos(Paned, "0", Winfo_Get(Paned, "height"));
+            SashPos(Main_Paned, "0", Winfo_Get(Paned, "height"));
          end if;
       else
          if Trim(Widget_Image(OldSubWindow), Both) in
-             Paned & ".messagesframe" | Paned & ".optionsframe" then
+             Main_Paned & ".messagesframe" | Paned & ".optionsframe" then
             SashPos
-              (Paned, "0",
+              (Main_Paned, "0",
                Natural'Image
                  (Game_Settings.Window_Height -
                   Game_Settings.Messages_Position));
          end if;
          Tcl.Tk.Ada.Grid.Grid(MessagesFrame);
       end if;
-      Paned.Name := New_String(".gameframe.paned.controls.buttons");
       if NewScreenName = "mapframe" then
          Tcl.Tk.Ada.Grid.Grid(Paned);
       else
@@ -875,28 +864,18 @@ package body Utils.UI is
               (ItemInfo,
                LF & "Can't be used with shield (two-handed weapon).");
          end if;
-         Append(ItemInfo, LF & "Damage type: ");
-         case Items_List(ProtoIndex).Value(5) is
-            when 1 =>
-               Append(ItemInfo, "cutting");
-            when 2 =>
-               Append(ItemInfo, "impaling");
-            when 3 =>
-               Append(ItemInfo, "blunt");
-            when others =>
-               null;
-         end case;
+         Append
+           (ItemInfo,
+            LF & "Damage type: " &
+            (case Items_List(ProtoIndex).Value(5) is when 1 => "cutting",
+               when 2 => "impaling", when 3 => "blunt", when others => ""));
       end if;
       Show_More_Item_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
             Append
               (ItemInfo,
-               LF & "Damage chance: " &
-               GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
-            Append
-              (ItemInfo,
-               LF & "Strength:" &
+               LF & "Damage chance: " & LF & "Strength:" &
                Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Item_Info_Loop;
          end if;
