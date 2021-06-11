@@ -28,3 +28,4 @@ grid [ttk::label $baseframe.searchframe.searchlabel -text {Name:}]
 tooltip::tooltip $baseframe.searchframe.searchlabel "Search for the selected recipe."
 grid [ttk::entry $baseframe.searchframe.search -validate key -validatecommand {SearchRecipes %P}] -row 0 -column 1
 tooltip::tooltip $baseframe.searchframe.search "Search for the selected recipe."
+grid [ttk::label $baseframe.lblmoney] -sticky w
