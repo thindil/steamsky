@@ -22,16 +22,13 @@ with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place; use Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
@@ -43,6 +40,7 @@ with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with BasesTypes; use BasesTypes;
 with CoreUI; use CoreUI;
+with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Game; use Game;
 with Maps; use Maps;
@@ -360,18 +358,11 @@ package body Knowledge.Bases is
       pragma Unreferenced(ClientData, Interp, Argc);
       BaseIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       BaseDialog: constant Ttk_Frame :=
-        Create(".basedialog", "-style Dialog.TFrame");
-      CloseButton: constant Ttk_Button :=
-        Create
-          (BaseDialog & ".button",
-           "-text Close -command {CloseDialog " & BaseDialog & "}");
+        Create_Dialog
+          (Name => ".basedialog", Title => To_String(SkyBases(BaseIndex).Name),
+           Columns => 2);
       BaseLabel: Ttk_Label;
       BaseInfo: Unbounded_String;
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (BaseDialog & ".header",
-           "-text {" & To_String(SkyBases(BaseIndex).Name) &
-           "} -wraplength 275 -style Header.TLabel");
       procedure SetReputationText(ReputationText: String) is
          ReputationBar: constant Ttk_Frame :=
            Create
@@ -411,8 +402,6 @@ package body Knowledge.Bases is
          Tcl.Tk.Ada.Grid.Grid(ReputationLabel, "-row 2 -sticky w -padx {5 0}");
       end SetReputationText;
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       BaseInfo :=
         To_Unbounded_String
           ("Coordinates X:" & Positive'Image(SkyBases(BaseIndex).SkyX) &
@@ -477,14 +466,10 @@ package body Knowledge.Bases is
           (BaseDialog & ".info",
            "-text {" & To_String(BaseInfo) & "} -wraplength 400");
       Tcl.Tk.Ada.Grid.Grid
-        (Dialog_Header, "-sticky we -row 0 -columnspan 2 -padx 2 -pady {2 0}");
-      Tcl.Tk.Ada.Grid.Grid
         (BaseLabel, "-row 1 -columnspan 2 -padx 5 -pady {5 0} -sticky w");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 3 -columnspan 2 -pady {0 5}");
-      Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place(BaseDialog, "-in .gameframe -relx 0.3 -rely 0.3");
-      Bind(CloseButton, "<Tab>", "{focus " & CloseButton & ";break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Add_Close_Button
+        (BaseDialog & ".button", "Close", "CloseDialog " & BaseDialog, 2);
+      Show_Dialog(BaseDialog);
       return TCL_OK;
    end Show_Base_Info_Command;
 
