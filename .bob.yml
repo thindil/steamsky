@@ -71,9 +71,7 @@ version: 2.0
 - command:
    name: check
    execute:
-      - gprclean -P steamsky.gpr
-      - cd obj
-      - adactl -f ../others/rules.aru -p ../steamsky.gpr -o ../adacontrol.log -r steamsky-tcl-cargv-chelper-unicode-sax-dom-input_sources
+      - tclsh others/check.tcl
    description: Run AdaControl to check correctness of the code
    flags:
       - unixpath
@@ -87,9 +85,7 @@ version: 2.0
 - command:
    name: checkfile
    execute:
-      - gprclean -P steamsky.gpr
-      - cd obj
-      - adactl -f ../others/rules.aru -p ../steamsky.gpr ../src/$1
+      - tclsh others/check.tcl $1
    description: Run AdaControl to check correctness of the selected file
    flags:
       - unixpath
