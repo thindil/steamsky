@@ -136,7 +136,7 @@ package body Bases.UI is
          BaseTable :=
            CreateTable
              (Widget_Image(BaseFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
+              (To_Unbounded_String("Action"), To_Unbounded_String("Cost"),
                To_Unbounded_String("Time")),
               Get_Widget(Main_Paned & ".baseframe.scrolly"));
       else
