@@ -142,7 +142,9 @@ package body Bases.UI is
       else
          Tcl.Tk.Ada.Grid.Grid(SearchFrame);
          if Argc < 3 then
+            configure(SearchEntry, "-validatecommand {}");
             Delete(SearchEntry, "0", "end");
+            configure(SearchEntry, "-validatecommand {SearchRecipes %P}");
          end if;
          BaseTable :=
            CreateTable
