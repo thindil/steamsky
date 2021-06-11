@@ -30,6 +30,7 @@ with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -90,6 +91,10 @@ package body Bases.UI is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       BaseType: constant Unbounded_String := SkyBases(BaseIndex).BaseType;
       Cost, Time: Natural := 0;
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
+      MoneyLabel: constant Ttk_Label :=
+        Get_Widget(BaseCanvas & ".base.lblmoney", Interp);
       procedure Format_Time is
       begin
          if Time < 60 then
@@ -152,6 +157,18 @@ package body Bases.UI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Cost"),
                Null_Unbounded_String),
               Get_Widget(Main_Paned & ".baseframe.scrolly"));
+      end if;
+      if MoneyIndex2 > 0 then
+         configure
+           (MoneyLabel,
+            "-text {You have" &
+            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(Money_Name) & ".}");
+      else
+         configure
+           (MoneyLabel,
+            "-text {You don't have any " & To_String(Money_Name) &
+            " to buy anything.}");
       end if;
       if CArgv.Arg(Argv, 1) = "heal" then
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
