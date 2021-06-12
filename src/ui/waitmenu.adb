@@ -14,6 +14,8 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
@@ -27,6 +29,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with CoreUI; use CoreUI;
 with Crew; use Crew;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
@@ -45,8 +48,25 @@ package body WaitMenu is
       AmountBox: Ttk_SpinBox;
       AmountLabel: Ttk_Label;
       NeedHealing, NeedRest: Boolean := False;
-      Frame: Ttk_Frame := Get_Widget(".gameframe.header");
       Dialog_Header: Ttk_Label;
+      procedure AddButton(Time: Positive) is
+      begin
+         Button :=
+           Create
+             (WaitDialog & ".wait" & Trim(Positive'Image(Time), Left),
+              "-text {Wait" & Positive'Image(Time) & " minute" &
+              (if Time > 1 then "s" else "") & "} -command {Wait" &
+              Positive'Image(Time) & "}");
+         Tcl.Tk.Ada.Grid.Grid
+           (Button,
+            "-sticky we -columnspan 3 -padx 5" &
+            (if Time = 1 then " -pady {5 0}" else ""));
+         Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
+         Add
+           (Button,
+            "Wait in place for" & Positive'Image(Time) & " minute" &
+            (if Time > 1 then "s" else ""));
+      end AddButton;
    begin
       if Winfo_Get(WaitDialog, "exists") = "1" then
          Button := Get_Widget(WaitDialog & ".frame.close");
@@ -55,9 +75,8 @@ package body WaitMenu is
          end if;
          return TCL_OK;
       end if;
-      Tcl.Tk.Ada.Busy.Busy(Frame);
-      Frame := Get_Widget(".gameframe.paned");
-      Tcl.Tk.Ada.Busy.Busy(Frame);
+      Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       WaitDialog := Create(".gameframe.wait", "-style Dialog.TFrame");
       Dialog_Header :=
         Create
@@ -65,37 +84,11 @@ package body WaitMenu is
            "-text {Wait in place} -wraplength 275 -style Header.TLabel");
       Tcl.Tk.Ada.Grid.Grid
         (Dialog_Header, "-sticky we -columnspan 3 -padx 2 -pady {2 0}");
-      Button :=
-        Create
-          (WaitDialog & ".wait1", "-text {Wait 1 minute} -command {Wait 1}");
-      Tcl.Tk.Ada.Grid.Grid
-        (Button, "-sticky we -columnspan 3 -padx 5 -pady {5 0}");
-      Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
-      Add(Button, "Wait in place for 1 minute");
-      Button :=
-        Create
-          (WaitDialog & ".wait5", "-text {Wait 5 minutes} -command {Wait 5}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-      Add(Button, "Wait in place for 5 minutes");
-      Button :=
-        Create
-          (WaitDialog & ".wait10",
-           "-text {Wait 10 minutes} -command {Wait 10}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-      Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
-      Button :=
-        Create
-          (WaitDialog & ".wait15",
-           "-text {Wait 15 minutes} -command {Wait 15}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-      Add(Button, "Wait in place for 15 minutes");
-      Button :=
-        Create
-          (WaitDialog & ".wait30",
-           "-text {Wait 30 minutes} -command {Wait 30}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
-      Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
-      Add(Button, "Wait in place for 30 minutes");
+      AddButton(1);
+      AddButton(5);
+      AddButton(10);
+      AddButton(15);
+      AddButton(30);
       Button :=
         Create
           (WaitDialog & ".wait1h", "-text {Wait 1 hour} -command {Wait 60}");
@@ -210,7 +203,7 @@ package body WaitMenu is
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget(".gameframe.wait.amount", Interp);
       CurrentFrame: Ttk_Frame :=
-        Get_Widget(".gameframe.paned.shipinfoframe", Interp);
+        Get_Widget(Main_Paned & ".shipinfoframe", Interp);
    begin
       if CArgv.Arg(Argv, 1) = "1" then
          Update_Game(1);
@@ -270,7 +263,7 @@ package body WaitMenu is
         and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
          Tcl_Eval(Interp, "ShowShipInfo 1");
       else
-         CurrentFrame := Get_Widget(".gameframe.paned.knowledgeframe", Interp);
+         CurrentFrame := Get_Widget(Main_Paned & ".knowledgeframe", Interp);
          if Winfo_Get(CurrentFrame, "exists") = "1"
            and then Winfo_Get(CurrentFrame, "ismapped") = "1" then
             Tcl_Eval(Interp, "ShowKnowledge 1");
