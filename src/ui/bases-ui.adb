@@ -119,6 +119,14 @@ package body Bases.UI is
             end if;
          end if;
       end Format_Time;
+      function Get_Color(Cost: Positive) return String is
+      begin
+         if MoneyIndex2 = 0
+           or else Player_Ship.Cargo(MoneyIndex2).Amount < Cost then
+            return "red";
+         end if;
+         return "";
+      end Get_Color;
    begin
       if Winfo_Get(BaseCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -188,12 +196,13 @@ package body Bases.UI is
                   1);
                HealCost(Cost, Time, Crew_Container.To_Index(I));
                AddButton
-                 (BaseTable,
-                  Positive'Image(Cost) & " " & To_String(Money_Name),
-                  "Show available options",
-                  "ShowBaseMenu heal" &
-                  Positive'Image(Crew_Container.To_Index(I)),
-                  2);
+                 (Table => BaseTable,
+                  Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+                  Tooltip => "Show available options",
+                  Command =>
+                    "ShowBaseMenu heal" &
+                    Positive'Image(Crew_Container.To_Index(I)),
+                  Column => 2, Color => Get_Color(Cost));
                Format_Time;
                AddButton
                  (BaseTable, To_String(FormattedTime),
@@ -210,8 +219,11 @@ package body Bases.UI is
          Time := 0;
          HealCost(Cost, Time, 0);
          AddButton
-           (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-            "Show available options", "ShowBaseMenu heal 0", 2);
+           (Table => BaseTable,
+            Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+            Tooltip => "Show available options",
+            Command => "ShowBaseMenu heal 0", Column => 2,
+            Color => Get_Color(Cost));
          Format_Time;
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
@@ -236,12 +248,13 @@ package body Bases.UI is
                RepairCost(Cost, Time, Modules_Container.To_Index(I));
                CountPrice(Cost, FindMember(Talk));
                AddButton
-                 (BaseTable,
-                  Positive'Image(Cost) & " " & To_String(Money_Name),
-                  "Show available options",
-                  "ShowBaseMenu repair" &
-                  Positive'Image(Modules_Container.To_Index(I)),
-                  2);
+                 (Table => BaseTable,
+                  Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+                  Tooltip => "Show available options",
+                  Command =>
+                    "ShowBaseMenu repair" &
+                    Positive'Image(Modules_Container.To_Index(I)),
+                  Column => 2, Color => Get_Color(Cost));
                Format_Time;
                AddButton
                  (BaseTable, To_String(FormattedTime),
@@ -259,8 +272,11 @@ package body Bases.UI is
          RepairCost(Cost, Time, 0);
          CountPrice(Cost, FindMember(Talk));
          AddButton
-           (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-            "Show available options", "ShowBaseMenu repair 0", 2);
+           (Table => BaseTable,
+            Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+            Tooltip => "Show available options",
+            Command => "ShowBaseMenu repair 0", Column => 2,
+            Color => Get_Color(Cost));
          Format_Time;
          AddButton
            (BaseTable, To_String(FormattedTime), "Show available options",
@@ -274,8 +290,11 @@ package body Bases.UI is
             RepairCost(Cost, Time, -1);
             CountPrice(Cost, FindMember(Talk));
             AddButton
-              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-               "Show available options", "ShowBaseMenu {repair -1} ", 2);
+              (Table => BaseTable,
+               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu repair -1", Column => 2,
+               Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
@@ -290,8 +309,11 @@ package body Bases.UI is
             RepairCost(Cost, Time, -2);
             CountPrice(Cost, FindMember(Talk));
             AddButton
-              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-               "Show available options", "ShowBaseMenu repair -2", 2);
+              (Table => BaseTable,
+               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Tooltip => "Show available options",
+               Command => "ShowBaseMenu repair -2", Column => 2,
+               Color => Get_Color(Cost));
             Format_Time;
             AddButton
               (BaseTable, To_String(FormattedTime), "Show available options",
@@ -347,11 +369,13 @@ package body Bases.UI is
             end if;
             CountPrice(Cost, FindMember(Talk));
             AddButton
-              (BaseTable, Positive'Image(Cost) & " " & To_String(Money_Name),
-               "Show available options",
-               "ShowBaseMenu recipes {" & To_String(Recipes_Container.Key(I)) &
-               "}",
-               2, True);
+              (Table => BaseTable,
+               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Tooltip => "Show available options",
+               Command =>
+                 "ShowBaseMenu recipes {" &
+                 To_String(Recipes_Container.Key(I)) & "}",
+               Column => 2, NewRow => True, Color => Get_Color(Cost));
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
