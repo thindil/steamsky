@@ -66,8 +66,10 @@ package body Bases.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowBaseUI UIType
-   -- UIType can be heal, repair, recipes
+   -- ShowBaseUI UIType search page
+   -- UIType can be heal, repair, recipes. Search is a string which will be
+   -- looked for in names of recipes (only). Page is the number of current
+   -- page on the list to show
    -- SOURCE
    function Show_Base_UI_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -95,6 +97,10 @@ package body Bases.UI is
         FindItem(Player_Ship.Cargo, Money_Index);
       MoneyLabel: constant Ttk_Label :=
         Get_Widget(BaseCanvas & ".base.lblmoney", Interp);
+      Page: constant Positive :=
+        (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
       procedure Format_Time is
       begin
          if Time < 60 then
@@ -154,7 +160,7 @@ package body Bases.UI is
               Get_Widget(Main_Paned & ".baseframe.scrolly"));
       else
          Tcl.Tk.Ada.Grid.Grid(SearchFrame);
-         if Argc < 3 then
+         if Argc /= 3 then
             configure(SearchEntry, "-validatecommand {}");
             Delete(SearchEntry, "0", "end");
             configure(SearchEntry, "-validatecommand {SearchRecipes %P}");
@@ -182,35 +188,36 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
          Show_Wounded_Crew_Loop :
          for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I).Health < 100 then
-               if FirstIndex = Null_Unbounded_String then
-                  FirstIndex :=
-                    To_Unbounded_String
-                      (Natural'Image(Crew_Container.To_Index(I)));
-               end if;
-               AddButton
-                 (BaseTable, To_String(Player_Ship.Crew(I).Name),
-                  "Show available options",
-                  "ShowBaseMenu heal" &
-                  Positive'Image(Crew_Container.To_Index(I)),
-                  1);
-               HealCost(Cost, Time, Crew_Container.To_Index(I));
-               AddButton
-                 (Table => BaseTable,
-                  Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-                  Tooltip => "Show available options",
-                  Command =>
-                    "ShowBaseMenu heal" &
-                    Positive'Image(Crew_Container.To_Index(I)),
-                  Column => 2, Color => Get_Color(Cost));
-               Format_Time;
-               AddButton
-                 (BaseTable, To_String(FormattedTime),
-                  "Show available options",
-                  "ShowBaseMenu heal" &
-                  Positive'Image(Crew_Container.To_Index(I)),
-                  3, True);
+            if Player_Ship.Crew(I).Health = 100 then
+               goto End_Of_Wounded_Loop;
             end if;
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex :=
+                 To_Unbounded_String
+                   (Natural'Image(Crew_Container.To_Index(I)));
+            end if;
+            AddButton
+              (BaseTable, To_String(Player_Ship.Crew(I).Name),
+               "Show available options",
+               "ShowBaseMenu heal" &
+               Positive'Image(Crew_Container.To_Index(I)),
+               1);
+            HealCost(Cost, Time, Crew_Container.To_Index(I));
+            AddButton
+              (Table => BaseTable,
+               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Tooltip => "Show available options",
+               Command =>
+                 "ShowBaseMenu heal" &
+                 Positive'Image(Crew_Container.To_Index(I)),
+               Column => 2, Color => Get_Color(Cost));
+            Format_Time;
+            AddButton
+              (BaseTable, To_String(FormattedTime), "Show available options",
+               "ShowBaseMenu heal" &
+               Positive'Image(Crew_Container.To_Index(I)),
+               3, True);
+            <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
          AddButton
            (BaseTable, "Heal all wounded crew members",
@@ -232,37 +239,38 @@ package body Bases.UI is
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp ship}");
          Show_Damaged_Modules_Loop :
          for I in Player_Ship.Modules.Iterate loop
-            if Player_Ship.Modules(I).Durability <
+            if Player_Ship.Modules(I).Durability =
               Player_Ship.Modules(I).Max_Durability then
-               if FirstIndex = Null_Unbounded_String then
-                  FirstIndex :=
-                    To_Unbounded_String
-                      (Natural'Image(Modules_Container.To_Index(I)));
-               end if;
-               AddButton
-                 (BaseTable, To_String(Player_Ship.Modules(I).Name),
-                  "Show available options",
-                  "ShowBaseMenu repair" &
-                  Positive'Image(Modules_Container.To_Index(I)),
-                  1);
-               RepairCost(Cost, Time, Modules_Container.To_Index(I));
-               CountPrice(Cost, FindMember(Talk));
-               AddButton
-                 (Table => BaseTable,
-                  Text => Positive'Image(Cost) & " " & To_String(Money_Name),
-                  Tooltip => "Show available options",
-                  Command =>
-                    "ShowBaseMenu repair" &
-                    Positive'Image(Modules_Container.To_Index(I)),
-                  Column => 2, Color => Get_Color(Cost));
-               Format_Time;
-               AddButton
-                 (BaseTable, To_String(FormattedTime),
-                  "Show available options",
-                  "ShowBaseMenu repair" &
-                  Positive'Image(Modules_Container.To_Index(I)),
-                  3, True);
+               goto End_Of_Damaged_Modules_Loop;
             end if;
+            if FirstIndex = Null_Unbounded_String then
+               FirstIndex :=
+                 To_Unbounded_String
+                   (Natural'Image(Modules_Container.To_Index(I)));
+            end if;
+            AddButton
+              (BaseTable, To_String(Player_Ship.Modules(I).Name),
+               "Show available options",
+               "ShowBaseMenu repair" &
+               Positive'Image(Modules_Container.To_Index(I)),
+               1);
+            RepairCost(Cost, Time, Modules_Container.To_Index(I));
+            CountPrice(Cost, FindMember(Talk));
+            AddButton
+              (Table => BaseTable,
+               Text => Positive'Image(Cost) & " " & To_String(Money_Name),
+               Tooltip => "Show available options",
+               Command =>
+                 "ShowBaseMenu repair" &
+                 Positive'Image(Modules_Container.To_Index(I)),
+               Column => 2, Color => Get_Color(Cost));
+            Format_Time;
+            AddButton
+              (BaseTable, To_String(FormattedTime), "Show available options",
+               "ShowBaseMenu repair" &
+               Positive'Image(Modules_Container.To_Index(I)),
+               3, True);
+            <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
          AddButton
            (BaseTable, "Slowly repair the whole ship",
@@ -331,7 +339,7 @@ package body Bases.UI is
                 SkyBases(BaseIndex).Reputation(1) then
                goto End_Of_Recipes_Loop;
             end if;
-            if Argc = 3
+            if Argc > 2 and then CArgv.Arg(Argv, 2)'Length > 0
               and then
                 Index
                   (To_Lower
