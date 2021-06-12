@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Missing tooltip in wait menu
+
 ### Fixed
 - Showing info about training room
 
