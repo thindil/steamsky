@@ -100,6 +100,10 @@ package body Bases.UI is
       Page: constant Positive :=
         (if Argc = 4 then Positive'Value(CArgv.Arg(Argv, 3)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Arguments: constant String :=
+        (if Argc > 2 then
+           "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
+         else CArgv.Arg(Argv, 1) & " {}");
       Current_Row: Positive := 1;
       procedure Format_Time is
       begin
@@ -196,6 +200,10 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Natural'Image(Crew_Container.To_Index(I)));
             end if;
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Wounded_Loop;
+            end if;
             AddButton
               (BaseTable, To_String(Player_Ship.Crew(I).Name),
                "Show available options",
@@ -217,6 +225,7 @@ package body Bases.UI is
                "ShowBaseMenu heal" &
                Positive'Image(Crew_Container.To_Index(I)),
                3, True);
+            exit Show_Wounded_Crew_Loop when BaseTable.Row = 26;
             <<End_Of_Wounded_Loop>>
          end loop Show_Wounded_Crew_Loop;
          AddButton
@@ -248,6 +257,10 @@ package body Bases.UI is
                  To_Unbounded_String
                    (Natural'Image(Modules_Container.To_Index(I)));
             end if;
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Damaged_Modules_Loop;
+            end if;
             AddButton
               (BaseTable, To_String(Player_Ship.Modules(I).Name),
                "Show available options",
@@ -270,6 +283,7 @@ package body Bases.UI is
                "ShowBaseMenu repair" &
                Positive'Image(Modules_Container.To_Index(I)),
                3, True);
+            exit Show_Damaged_Modules_Loop when BaseTable.Row = 26;
             <<End_Of_Damaged_Modules_Loop>>
          end loop Show_Damaged_Modules_Loop;
          AddButton
@@ -351,6 +365,10 @@ package body Bases.UI is
             if FirstIndex = Null_Unbounded_String then
                FirstIndex := Recipes_Container.Key(I);
             end if;
+            if Current_Row < Start_Row then
+               Current_Row := Current_Row + 1;
+               goto End_Of_Recipes_Loop;
+            end if;
             AddButton
               (BaseTable,
                To_String(Items_List(Recipes_List(I).ResultIndex).Name),
@@ -384,9 +402,16 @@ package body Bases.UI is
                  "ShowBaseMenu recipes {" &
                  To_String(Recipes_Container.Key(I)) & "}",
                Column => 2, NewRow => True, Color => Get_Color(Cost));
+            exit Show_Available_Recipes_Loop when BaseTable.Row = 26;
             <<End_Of_Recipes_Loop>>
          end loop Show_Available_Recipes_Loop;
       end if;
+      AddPagination
+        (BaseTable,
+         (if Page > 1 then "ShowBaseUI " & Arguments & Positive'Image(Page - 1)
+          else ""),
+         (if BaseTable.Row < 26 then ""
+          else "ShowBaseUI " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(BaseTable);
       if FirstIndex = Null_Unbounded_String and Argc < 3 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
