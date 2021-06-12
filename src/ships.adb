@@ -412,13 +412,13 @@ package body Ships is
             End_Y := Y + 100;
             NormalizeCoord(End_Y, False);
             Bases_X_Loop :
-            for SkyX in Start_X .. End_X loop
+            for Sky_X in Start_X .. End_X loop
                Bases_Y_Loop :
-               for SkyY in Start_Y .. End_Y loop
-                  if SkyMap(SkyX, SkyY).BaseIndex > 0 then
-                     if SkyBases(SkyMap(SkyX, SkyY).BaseIndex).Owner =
+               for Sky_Y in Start_Y .. End_Y loop
+                  if SkyMap(Sky_X, Sky_Y).BaseIndex > 0 then
+                     if SkyBases(SkyMap(Sky_X, Sky_Y).BaseIndex).Owner =
                        Proto_Ship.Owner then
-                        Tmp_Ship.Home_Base := SkyMap(SkyX, SkyY).BaseIndex;
+                        Tmp_Ship.Home_Base := SkyMap(Sky_X, Sky_Y).BaseIndex;
                         exit Bases_X_Loop;
                      end if;
                   end if;
@@ -453,7 +453,7 @@ package body Ships is
       TempCargo: MobInventory_Container.Vector;
       TempCrew: Proto_Crew_Container.Vector;
       ModuleAmount, DeleteIndex: Positive;
-      Action, SubAction: Data_Action;
+      Action, SubAction: Data_Action := Default_Data_Action;
       ShipNode, ChildNode: Node;
       ItemIndex, RecipeIndex, MobIndex, ModuleIndex,
       ShipIndex: Unbounded_String;
