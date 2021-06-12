@@ -352,7 +352,7 @@ package body Ships.UI.Crew is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
-        Create(".memberdialog", "-style Dialog.TFrame");
+        Create_Dialog(".memberdialog", To_String(Member.Name));
       YScroll: constant Ttk_Scrollbar :=
         Create
           (MemberDialog & ".yscroll",
@@ -362,9 +362,7 @@ package body Ships.UI.Crew is
           (MemberDialog & ".canvas",
            "-yscrollcommand [list " & YScroll & " set]");
       CloseButton: constant Ttk_Button :=
-        Create
-          (MemberDialog & ".button",
-           "-text Close -command {CloseDialog " & MemberDialog & "}");
+        Get_Widget(MemberDialog & ".button", Interp);
       Height, NewHeight: Positive := 1;
       ProgressFrame: Ttk_Frame;
       MemberInfo: Unbounded_String;
@@ -375,16 +373,8 @@ package body Ships.UI.Crew is
       TabButton: Ttk_RadioButton;
       InfoButton: Ttk_Button;
       Frame: Ttk_Frame;
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (MemberDialog & ".header",
-           "-text {" & To_String(Member.Name) &
-           "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Frame := Create(MemberDialog & ".buttonbox");
-      Tcl.Tk.Ada.Grid.Grid(Dialog_Header, "-sticky we -padx 2 -pady {2 0}");
       Tcl_SetVar(Interp, "newtab", "general");
       TabButton :=
         Create
@@ -414,8 +404,8 @@ package body Ships.UI.Crew is
       Tcl.Tk.Ada.Grid.Grid(MemberCanvas, "-sticky nwes -pady 5 -padx 5");
       Tcl.Tk.Ada.Grid.Grid
         (YScroll, " -sticky ns -pady 5 -padx {0 5} -row 1 -column 1");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
-      Focus(CloseButton);
+      Add_Close_Button
+        (MemberDialog & ".button", "Close", "CloseDialog " & MemberDialog, 2);
       Autoscroll(YScroll);
       -- General info about the selected crew member
       Frame := Create(MemberCanvas & ".general");
@@ -752,13 +742,10 @@ package body Ships.UI.Crew is
         (MemberCanvas,
          "-scrollregion [list " & BBox(MemberCanvas, "all") & "] -width" &
          Positive'Image(Width) & " -height" & Positive'Image(Height));
-      Tcl.Tk.Ada.Place.Place
-        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind
         (CloseButton, "<Tab>",
          "{focus " & MemberDialog & ".buttonbox.general;break}");
-      Bind(MemberDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => MemberDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Member_Info_Command;
 
