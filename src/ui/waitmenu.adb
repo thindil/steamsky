@@ -76,6 +76,7 @@ package body WaitMenu is
            "-text {Wait 10 minutes} -command {Wait 10}");
       Tcl.Tk.Ada.Grid.Grid(Button, "-sticky we -columnspan 3 -padx 5");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
+      Add(Button, "Wait in place for 10 minutes");
       Button :=
         Create
           (WaitDialog & ".wait15",
