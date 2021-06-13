@@ -10,7 +10,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild
+    container: ghcr.io/thindil/adabuild:10
 
     steps:
     - name: Checkout
@@ -31,7 +31,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuild
+    container: ghcr.io/thindil/adabuild:10
 
     steps:
     - name: Checkout
@@ -55,7 +55,7 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    container: ghcr.io/thindil/adabuildwin64
+    container: ghcr.io/thindil/adabuildwin64:10
 
     steps:
     - name: Checkout
