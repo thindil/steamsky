@@ -306,9 +306,11 @@ package body Ships is
                      for J in Module.Owner.Iterate loop
                         if Module.Owner(J) = 0 then
                            Module.Owner(J) := Ship_Crew.Last_Index;
-                           if Natural_Container.To_Index(J) = 1 then
+                           if Natural_Container.To_Index(Position => J) =
+                             1 then
                               Module.Name :=
-                                Member.Name & To_Unbounded_String("'s Cabin");
+                                Member.Name &
+                                To_Unbounded_String(Source => "'s Cabin");
                            end if;
                            exit Modules_Loop;
                         end if;
@@ -339,7 +341,8 @@ package body Ships is
          Amount :=
            (if Proto_Ship.Cargo(I).MaxAmount > 0 then
               GetRandom
-                (Proto_Ship.Cargo(I).MinAmount, Proto_Ship.Cargo(I).MaxAmount)
+                (Min => Proto_Ship.Cargo(I).MinAmount,
+                 Max => Proto_Ship.Cargo(I).MaxAmount)
             else Proto_Ship.Cargo(I).MinAmount);
          Ship_Cargo.Append
            (New_Item =>
@@ -368,19 +371,19 @@ package body Ships is
                      for K in Tmp_Ship.Modules.Iterate loop
                         if Tmp_Ship.Modules(K).M_Type = TURRET
                           and then Tmp_Ship.Modules(K).Gun_Index =
-                            Modules_Container.To_Index(J) then
+                            Modules_Container.To_Index(Position => J) then
                            Gun_Assigned := True;
                            exit Check_Assigned_Guns_Loop;
                         end if;
                      end loop Check_Assigned_Guns_Loop;
                      if not Gun_Assigned then
                         Tmp_Ship.Modules(I).Gun_Index :=
-                          Modules_Container.To_Index(J);
+                          Modules_Container.To_Index(Position => J);
                      end if;
                   end if;
                end loop Count_Guns_Loop;
             elsif Tmp_Ship.Modules(I).M_Type = HULL then
-               Hull_Index := Modules_Container.To_Index(I);
+               Hull_Index := Modules_Container.To_Index(Position => I);
             end if;
             if Modules_List(Tmp_Ship.Modules(I).Proto_Index).MType not in GUN |
                   HARPOON_GUN | ARMOR | HULL then
@@ -404,13 +407,13 @@ package body Ships is
             Start_X, Start_Y, End_X, End_Y: Integer;
          begin
             Start_X := X - 100;
-            NormalizeCoord(Start_X);
+            NormalizeCoord(Coord => Start_X);
             Start_Y := Y - 100;
-            NormalizeCoord(Start_Y, False);
+            NormalizeCoord(Coord => Start_Y, IsXAxis => False);
             End_X := X + 100;
-            NormalizeCoord(End_X);
+            NormalizeCoord(Coord => End_X);
             End_Y := Y + 100;
-            NormalizeCoord(End_Y, False);
+            NormalizeCoord(Coord => End_Y, IsXAxis => False);
             Bases_X_Loop :
             for Sky_X in Start_X .. End_X loop
                Bases_Y_Loop :
@@ -439,24 +442,26 @@ package body Ships is
       Set_Home_For_Members_Loop :
       for Member of Tmp_Ship.Crew loop
          Member.HomeBase :=
-           (if GetRandom(1, 100) < 99 then Tmp_Ship.Home_Base
-            else GetRandom(SkyBases'First, SkyBases'Last));
+           (if GetRandom(Min => 1, Max => 100) < 99 then Tmp_Ship.Home_Base
+            else GetRandom(Min => SkyBases'First, Max => SkyBases'Last));
       end loop Set_Home_For_Members_Loop;
       return Tmp_Ship;
    end Create_Ship;
 
    procedure Load_Ships(Reader: Tree_Reader) is
-      NodesList, ChildNodes: Node_List;
-      ShipsData: Document;
+      ShipsData: constant Document := Get_Tree(Reader);
+      NodesList: constant Node_List :=
+        DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
+      ChildNodes: Node_List;
       TempRecord: Proto_Ship_Data;
       Temp_Modules: UnboundedString_Container.Vector;
       TempCargo: MobInventory_Container.Vector;
       TempCrew: Proto_Crew_Container.Vector;
-      ModuleAmount, DeleteIndex: Positive;
+      ModuleAmount, DeleteIndex: Positive := 1;
       Action, SubAction: Data_Action := Default_Data_Action;
       ShipNode, ChildNode: Node;
       ItemIndex, RecipeIndex, MobIndex, ModuleIndex,
-      ShipIndex: Unbounded_String;
+      ShipIndex: Unbounded_String := Null_Unbounded_String;
       TempRecipes: UnboundedString_Container.Vector;
       procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
       begin
@@ -472,9 +477,6 @@ package body Ships is
          end loop Count_Ammo_Value_Loop;
       end CountAmmoValue;
    begin
-      ShipsData := Get_Tree(Reader);
-      NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(ShipsData, "ship");
       Load_Proto_Ships_Loop :
       for I in 0 .. Length(NodesList) - 1 loop
          TempRecord :=
