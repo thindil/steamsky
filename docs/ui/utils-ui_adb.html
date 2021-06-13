@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,38 +30,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo354">UUI/UUI.TimerId</a></li>
-<li>2. <a href="#robo804">UUI/UUI.Check_Amount_Command</a></li>
-<li>3. <a href="#robo806">UUI/UUI.Get_String_Command</a></li>
-<li>4. <a href="#robo807">UUI/UUI.Process_Question_Command</a></li>
-<li>5. <a href="#robo808">UUI/UUI.Resize_Canvas_Command</a></li>
-<li>6. <a href="#robo810">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
-<li>7. <a href="#robo811">UUI/UUI.Set_Text_Variable_Command</a></li>
-<li>8. <a href="#robo813">UUI/UUI.Update_Dialog_Command</a></li>
-<li>9. <a href="#robo814">UUI/UUI.Validate_Amount_Command</a></li>
+<li>1. <a href="#robo825">UUI/UUI.Check_Amount_Command</a></li>
+<li>2. <a href="#robo827">UUI/UUI.Process_Question_Command</a></li>
+<li>3. <a href="#robo828">UUI/UUI.Resize_Canvas_Command</a></li>
+<li>4. <a href="#robo830">UUI/UUI.Set_Scrollbar_Bindings_Command</a></li>
+<li>5. <a href="#robo831">UUI/UUI.Set_Text_Variable_Command</a></li>
+<li>6. <a href="#robo833">UUI/UUI.Validate_Amount_Command</a></li>
 </ul>
 <hr />
-<a name="UUI2fUUI2eTimerId"></a>
-<a name="robo354"></a><h2>UUI/UUI.TimerId [ Variables ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Id of timer for auto close command
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   TimerId<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
-</pre>
-
-<hr />
 <a name="UUI2fUUI2eCheck5fAmount5fCommand"></a>
-<a name="robo804"></a><h2>UUI/UUI.Check_Amount_Command [ Commands ]</h2>
+<a name="robo825"></a><h2>UUI/UUI.Check_Amount_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Check_Amount_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -83,48 +66,16 @@
 </pre>
 
 <hr />
-<a name="UUI2fUUI2eGet5fString5fCommand"></a>
-<a name="robo806"></a><h2>UUI/UUI.Get_String_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Get string value from the player, like new ship or module name
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Get_String_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed. Unused
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> GetString title
- Title is the title of dialog to show to the player
-</pre>
-
-<hr />
 <a name="UUI2fUUI2eProcess5fQuestion5fCommand"></a>
-<a name="robo807"></a><h2>UUI/UUI.Process_Question_Command [ Commands ]</h2>
+<a name="robo827"></a><h2>UUI/UUI.Process_Question_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Process question from dialog when the player answer Yes there
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Process_Question_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -144,14 +95,12 @@
 
 <hr />
 <a name="UUI2fUUI2eResize5fCanvas5fCommand"></a>
-<a name="robo808"></a><h2>UUI/UUI.Resize_Canvas_Command [ Commands ]</h2>
+<a name="robo828"></a><h2>UUI/UUI.Resize_Canvas_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Resize_Canvas_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -173,18 +122,16 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fScrollbar5fBindings5fCommand"></a>
-<a name="robo810"></a><h2>UUI/UUI.Set_Scrollbar_Bindings_Command [ Commands ]</h2>
+<a name="robo830"></a><h2>UUI/UUI.Set_Scrollbar_Bindings_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Assign scrolling events with mouse wheel to the selected vertical
  scrollbar from the selected widget
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Set_Scrollbar_Bindings_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -205,17 +152,15 @@
 
 <hr />
 <a name="UUI2fUUI2eSet5fText5fVariable5fCommand"></a>
-<a name="robo811"></a><h2>UUI/UUI.Set_Text_Variable_Command [ Commands ]</h2>
+<a name="robo831"></a><h2>UUI/UUI.Set_Text_Variable_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set the selected Tcl text variable and the proper the Ada its equivalent
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Set_Text_Variable_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -234,46 +179,13 @@
 </pre>
 
 <hr />
-<a name="UUI2fUUI2eUpdate5fDialog5fCommand"></a>
-<a name="robo813"></a><h2>UUI/UUI.Update_Dialog_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Update countdown timer on the selected dialog. If timer reach 0, close
- dialog
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Update_Dialog_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command.
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command.
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> UpdateDialog dialogname
- Dialogname is name of the dialog to update
-</pre>
-
-<hr />
 <a name="UUI2fUUI2eValidate5fAmount5fCommand"></a>
-<a name="robo814"></a><h2>UUI/UUI.Validate_Amount_Command [ Commands ]</h2>
+<a name="robo833"></a><h2>UUI/UUI.Validate_Amount_Command [ Commands ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo71">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./utils-ui_ads.html#robo72">UUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Validate_Amount_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span>
-      Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span>
-      Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
 </pre>
@@ -295,7 +207,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
+<p>Generated from ./src/ui/utils-ui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
 </p>
 </div> <!-- footer -->
 </body>

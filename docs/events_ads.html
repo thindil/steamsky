@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -30,26 +30,26 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo22">Events/Events</a></li>
+<li>1. <a href="#robo23">Events/Events</a></li>
 <ul>
-<li>1.1. <a href="#robo93">Events/Events.Events_Container</a></li>
-<li>1.2. <a href="#robo94">Events/Events.Events_Types</a></li>
-<li>1.3. <a href="#robo169">Events/Events.EventData</a></li>
-<li>1.4. <a href="#robo252">Events/Events.Events_List</a></li>
-<li>1.5. <a href="#robo253">Events/Events.FriendlyShips</a></li>
-<li>1.6. <a href="#robo254">Events/Events.Traders</a></li>
-<li>1.7. <a href="#robo443">Events/Events.CheckForEvent</a></li>
-<li>1.8. <a href="#robo444">Events/Events.DeleteEvent</a></li>
-<li>1.9. <a href="#robo445">Events/Events.GenerateEnemies</a></li>
-<li>1.10. <a href="#robo446">Events/Events.GenerateTraders</a></li>
-<li>1.11. <a href="./events_adb.html#robo447">Events/Events.GetPlayerShips</a></li>
-<li>1.12. <a href="#robo448">Events/Events.RecoverBase</a></li>
-<li>1.13. <a href="#robo449">Events/Events.UpdateEvents</a></li>
+<li>1.1. <a href="#robo94">Events/Events.Events_Container</a></li>
+<li>1.2. <a href="#robo95">Events/Events.Events_Types</a></li>
+<li>1.3. <a href="#robo170">Events/Events.EventData</a></li>
+<li>1.4. <a href="#robo267">Events/Events.Events_List</a></li>
+<li>1.5. <a href="#robo268">Events/Events.FriendlyShips</a></li>
+<li>1.6. <a href="#robo269">Events/Events.Traders</a></li>
+<li>1.7. <a href="#robo464">Events/Events.CheckForEvent</a></li>
+<li>1.8. <a href="#robo465">Events/Events.DeleteEvent</a></li>
+<li>1.9. <a href="#robo466">Events/Events.GenerateEnemies</a></li>
+<li>1.10. <a href="#robo467">Events/Events.GenerateTraders</a></li>
+<li>1.11. <a href="./events_adb.html#robo468">Events/Events.GetPlayer_Ships</a></li>
+<li>1.12. <a href="#robo469">Events/Events.RecoverBase</a></li>
+<li>1.13. <a href="#robo470">Events/Events.UpdateEvents</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Events2fEvents"></a>
-<a name="robo22"></a><h2>Events/Events [ Packages ]</h2>
+<a name="robo23"></a><h2>Events/Events [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -61,9 +61,9 @@
 
 <hr />
 <a name="Events2fEvents2eEvents5fContainer"></a>
-<a name="robo93"></a><h2>Events/Events.Events_Container [ Types ]</h2>
+<a name="robo94"></a><h2>Events/Events.Events_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store events data
 </pre>
@@ -73,31 +73,23 @@
 
 <hr />
 <a name="Events2fEvents2eEvents5fTypes"></a>
-<a name="robo94"></a><h2>Events/Events.Events_Types [ Types ]</h2>
+<a name="robo95"></a><h2>Events/Events.Events_Types [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of events
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Events_Types <span class="keyword">is</span>
-     <span class="sign">(</span>None<span class="sign">,</span>
-      EnemyShip<span class="sign">,</span>
-      AttackOnBase<span class="sign">,</span>
-      Disease<span class="sign">,</span>
-      DoublePrice<span class="sign">,</span>
-      BaseRecovery<span class="sign">,</span>
-      FullDocks<span class="sign">,</span>
-      EnemyPatrol<span class="sign">,</span>
-      Trader<span class="sign">,</span>
-      FriendlyShip<span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>None<span class="sign">,</span> EnemyShip<span class="sign">,</span> AttackOnBase<span class="sign">,</span> Disease<span class="sign">,</span> DoublePrice<span class="sign">,</span> BaseRecovery<span class="sign">,</span>
+      FullDocks<span class="sign">,</span> EnemyPatrol<span class="sign">,</span> Trader<span class="sign">,</span> FriendlyShip<span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Events2fEvents2eEventData"></a>
-<a name="robo169"></a><h2>Events/Events.EventData [ Records ]</h2>
+<a name="robo170"></a><h2>Events/Events.EventData [ Records ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_records.html#robo_top_of_doc">Records</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for random events
 </pre>
@@ -127,9 +119,9 @@
 
 <hr />
 <a name="Events2fEvents2eEvents5fList"></a>
-<a name="robo252"></a><h2>Events/Events.Events_List [ Variables ]</h2>
+<a name="robo267"></a><h2>Events/Events.Events_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all events in the game
 </pre>
@@ -139,9 +131,9 @@
 
 <hr />
 <a name="Events2fEvents2eFriendlyShips"></a>
-<a name="robo253"></a><h2>Events/Events.FriendlyShips [ Variables ]</h2>
+<a name="robo268"></a><h2>Events/Events.FriendlyShips [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly ships in the game
 </pre>
@@ -151,9 +143,9 @@
 
 <hr />
 <a name="Events2fEvents2eTraders"></a>
-<a name="robo254"></a><h2>Events/Events.Traders [ Variables ]</h2>
+<a name="robo269"></a><h2>Events/Events.Traders [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of indexes of all friendly traders in the game
 </pre>
@@ -163,9 +155,9 @@
 
 <hr />
 <a name="Events2fEvents2eCheckForEvent"></a>
-<a name="robo443"></a><h2>Events/Events.CheckForEvent [ Subprograms ]</h2>
+<a name="robo464"></a><h2>Events/Events.CheckForEvent [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Check if event happen
 </pre>
@@ -179,9 +171,9 @@
 
 <hr />
 <a name="Events2fEvents2eDeleteEvent"></a>
-<a name="robo444"></a><h2>Events/Events.DeleteEvent [ Subprograms ]</h2>
+<a name="robo465"></a><h2>Events/Events.DeleteEvent [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Delete selected event
 </pre>
@@ -196,9 +188,9 @@
 
 <hr />
 <a name="Events2fEvents2eGenerateEnemies"></a>
-<a name="robo445"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
+<a name="robo466"></a><h2>Events/Events.GenerateEnemies [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create list of enemies ships
 </pre>
@@ -219,9 +211,9 @@
 
 <hr />
 <a name="Events2fEvents2eGenerateTraders"></a>
-<a name="robo446"></a><h2>Events/Events.GenerateTraders [ Subprograms ]</h2>
+<a name="robo467"></a><h2>Events/Events.GenerateTraders [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Create list of traders needed for trader event
 </pre>
@@ -232,9 +224,9 @@
 
 <hr />
 <a name="Events2fEvents2eRecoverBase"></a>
-<a name="robo448"></a><h2>Events/Events.RecoverBase [ Subprograms ]</h2>
+<a name="robo469"></a><h2>Events/Events.RecoverBase [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Recover abandoned base
 </pre>
@@ -248,9 +240,9 @@
 
 <hr />
 <a name="Events2fEvents2eUpdateEvents"></a>
-<a name="robo449"></a><h2>Events/Events.UpdateEvents [ Subprograms ]</h2>
+<a name="robo470"></a><h2>Events/Events.UpdateEvents [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo22">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo23">Events</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Update all events timers
 </pre>
@@ -264,7 +256,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
+<p>Generated from ./src/events.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
 </p>
 </div> <!-- footer -->
 </body>

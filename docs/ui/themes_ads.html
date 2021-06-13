@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.1 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,19 +30,21 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo67">Themes/Themes</a></li>
+<li>1. <a href="#robo68">Themes/Themes</a></li>
 <ul>
-<li>1.1. <a href="#robo155">Themes/Themes.FontTypes</a></li>
-<li>1.2. <a href="#robo156">Themes/Themes.Theme_Record</a></li>
-<li>1.3. <a href="#robo157">Themes/Themes.Themes_Container</a></li>
-<li>1.4. <a href="#robo351">Themes/Themes.Themes_List</a></li>
-<li>1.5. <a href="#robo627">Themes/Themes.LoadThemes</a></li>
-<li>1.6. <a href="#robo628">Themes/Themes.SetTheme</a></li>
+<li>1.1. <a href="#robo156">Themes/Themes.FontTypes</a></li>
+<li>1.2. <a href="#robo157">Themes/Themes.Theme_Record</a></li>
+<li>1.3. <a href="#robo158">Themes/Themes.Themes_Container</a></li>
+<li>1.4. <a href="#robo227">Themes/Themes.All_Fonts</a></li>
+<li>1.5. <a href="#robo228">Themes/Themes.Default_Theme</a></li>
+<li>1.6. <a href="#robo366">Themes/Themes.Themes_List</a></li>
+<li>1.7. <a href="#robo648">Themes/Themes.Load_Themes</a></li>
+<li>1.8. <a href="#robo649">Themes/Themes.Set_Theme</a></li>
 </ul>
 </ul>
 <hr />
 <a name="Themes2fThemes"></a>
-<a name="robo67"></a><h2>Themes/Themes [ Packages ]</h2>
+<a name="robo68"></a><h2>Themes/Themes [ Packages ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="../robo_packages.html#robo_top_of_doc">Packages</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -54,9 +56,9 @@
 
 <hr />
 <a name="Themes2fThemes2eFontTypes"></a>
-<a name="robo155"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
+<a name="robo156"></a><h2>Themes/Themes.FontTypes [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Types of font available in game
 </pre>
@@ -66,9 +68,9 @@
 
 <hr />
 <a name="Themes2fThemes2eTheme5fRecord"></a>
-<a name="robo156"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
+<a name="robo157"></a><h2>Themes/Themes.Theme_Record [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Data structure for themes settings
 </pre>
@@ -153,25 +155,82 @@
 
 <hr />
 <a name="Themes2fThemes2eThemes5fContainer"></a>
-<a name="robo157"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
+<a name="robo158"></a><h2>Themes/Themes.Themes_Container [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Used to store themes data
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">package</span> Themes_Container <span class="keyword">is</span> <span class="keyword">new</span> Ada<span class="sign">.</span>Containers<span class="sign">.</span>Indefinite_Hashed_Maps
-     <span class="sign">(</span>String<span class="sign">,</span>
-      Theme_Record<span class="sign">,</span>
-      Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span>
-      <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+     <span class="sign">(</span>Key_Type <span class="sign">=</span><span class="sign">&gt;</span> String<span class="sign">,</span> Element_Type <span class="sign">=</span><span class="sign">&gt;</span> Theme_Record<span class="sign">,</span>
+      Hash <span class="sign">=</span><span class="sign">&gt;</span> Ada<span class="sign">.</span>Strings<span class="sign">.</span>Hash<span class="sign">,</span> Equivalent_Keys <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"="</span><span class="sign">)</span><span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fThemes2eAll5fFonts"></a>
+<a name="robo227"></a><h2>Themes/Themes.All_Fonts [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default value for FontTypes, all fonts
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   All_Fonts<span class="sign">:</span> <span class="keyword">constant</span> Font_Types <span class="sign">:</span><span class="sign">=</span> ALLFONTS<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="Themes2fThemes2eDefault5fTheme"></a>
+<a name="robo228"></a><h2>Themes/Themes.Default_Theme [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default the game theme
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Theme<span class="sign">:</span> <span class="keyword">constant</span> Theme_Record <span class="sign">:</span><span class="sign">=</span>
+     <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span> File_Name <span class="sign">=</span><span class="sign">&gt;</span> Null_Unbounded_String<span class="sign">,</span>
+      Enemy_Ship_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f51c#<span class="sign">),</span>
+      Attack_On_Base_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f543<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Disease_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f5a6#<span class="sign">),</span>
+      Double_Price_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f0d6<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Full_Docks_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f057#<span class="sign">),</span>
+      Enemy_Patrol_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f51b<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Trader_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f197#<span class="sign">),</span>
+      Friendly_Ship_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f197<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Deliver_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f53b#<span class="sign">),</span>
+      Destroy_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>fc6a<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Patrol_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f540#<span class="sign">),</span>
+      Explore_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f707<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Passenger_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f183#<span class="sign">),</span>
+      Pilot_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f655<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Engineer_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f013#<span class="sign">),</span>
+      Gunner_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f4fb<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Crew_Trader_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f651#<span class="sign">),</span>
+      Repair_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f54a<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Upgrade_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f6e3#<span class="sign">),</span>
+      Clean_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f458<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Manufacture_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0e3#<span class="sign">),</span>
+      Move_Map_Up_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>2191<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Move_Map_Down_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#2193#<span class="sign">),</span>
+      Move_Map_Left_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>2190<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Move_Map_Right_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#2192#<span class="sign">),</span>
+      No_Fuel_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f2ca<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      No_Food_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f787#<span class="sign">),</span>
+      No_Drinks_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f72f<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Not_Visited_Base_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#229b#<span class="sign">),</span>
+      Player_Ship_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f135<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Empty_Map_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f0c8#<span class="sign">),</span>
+      Target_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f05b<span class="sign">#</span><span class="sign">)</span><span class="sign">,</span>
+      Story_Icon <span class="sign">=</span><span class="sign">&gt;</span> Wide_Character<span class="keyword">'Val</span><span class="sign">(</span>16#f059#<span class="sign">),</span>
+      Overloaded_Icon =<span class="sign">&gt;</span> Wide_Character'</span>Val<span class="sign">(</span>16<span class="sign">#</span>f55b<span class="sign">#</span><span class="sign">)</span><span class="sign">)</span><span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="Themes2fThemes2eThemes5fList"></a>
-<a name="robo351"></a><h2>Themes/Themes.Themes_List [ Variables ]</h2>
+<a name="robo366"></a><h2>Themes/Themes.Themes_List [ Variables ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> List of all available themes
 </pre>
@@ -180,32 +239,32 @@
 </pre>
 
 <hr />
-<a name="Themes2fThemes2eLoadThemes"></a>
-<a name="robo627"></a><h2>Themes/Themes.LoadThemes [ Subprograms ]</h2>
+<a name="Themes2fThemes2eLoad5fThemes"></a>
+<a name="robo648"></a><h2>Themes/Themes.Load_Themes [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Load data for all themes
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> LoadThemes<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Load_Themes<span class="sign">;</span>
 </pre>
 
 <hr />
-<a name="Themes2fThemes2eSetTheme"></a>
-<a name="robo628"></a><h2>Themes/Themes.SetTheme [ Subprograms ]</h2>
+<a name="Themes2fThemes2eSet5fTheme"></a>
+<a name="robo649"></a><h2>Themes/Themes.Set_Theme [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo67">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo68">Themes</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Set values for the current theme
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> SetTheme<span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> Set_Theme<span class="sign">;</span>
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun May 16 2021 06:39:14
+<p>Generated from ./src/ui/themes.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
 </p>
 </div> <!-- footer -->
 </body>
