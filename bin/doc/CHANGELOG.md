@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Updated help
 - Default keyboard shortcuts for change the player's ship speed
-- Redesigned crafting screen
+- Redesigned crafting, buying recipes, heal wounded and buying repairs screens
 - Updated README.md
 
 ### Fixed
