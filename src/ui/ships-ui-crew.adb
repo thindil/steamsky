@@ -25,7 +25,6 @@ with GNAT.String_Split; use GNAT.String_Split;
 with CArgv;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -928,7 +927,9 @@ package body Ships.UI.Crew is
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
       MemberDialog: constant Ttk_Frame :=
-        Create(".memberdialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (Name => ".memberdialog",
+           Title => "Priorities for " & To_String(Member.Name), Columns => 2);
       CloseButton: constant Ttk_Button :=
         Create
           (MemberDialog & ".button",
@@ -948,16 +949,7 @@ package body Ships.UI.Crew is
          To_Unbounded_String("Board enemy ship"),
          To_Unbounded_String("Train skill"));
       ComboBox: Ttk_ComboBox;
-      Dialog_Header: constant Ttk_Label :=
-        Create
-          (MemberDialog & ".header",
-           "-text {Priorities for " & To_String(Member.Name) &
-           "} -wraplength 275 -style Header.TLabel");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Grid.Grid
-        (Dialog_Header, "-sticky we -columnspan 2 -padx 2 -pady {2 0}");
       Label := Create(MemberDialog & ".name", "-text {Priority}");
       Tcl.Tk.Ada.Grid.Grid(Label, "-pady {5 0}");
       Label := Create(MemberDialog & ".level", "-text {Level}");
@@ -986,10 +978,9 @@ package body Ships.UI.Crew is
       Bind(ComboBox, "<Tab>", "{focus " & CloseButton & ";break}");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2 -pady {0 5}");
       Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place
-        (MemberDialog, "-in .gameframe -relx 0.3 -rely 0.05");
       Bind(CloseButton, "<Tab>", "{focus " & MemberDialog & ".level1;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => MemberDialog, Relative_Y => 0.05);
       return TCL_OK;
    end Show_Member_Priorities_Command;
 
