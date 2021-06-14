@@ -603,9 +603,15 @@ package body Bases.ShipyardUI is
           (ModuleDialog & ".buttonbox.install",
            "-text Install -command {CloseDialog " & ModuleDialog &
            ";ManipulateModule install}");
+      Header_Label: constant Ttk_Label :=
+        Create
+          (ModuleDialog & ".header",
+           "-text {" & To_String(Modules_List(ModuleIndex).Name) &
+           "} -style Header.TLabel -wraplength 275");
    begin
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
+      Tcl.Tk.Ada.Grid.Grid(Header_Label, "-sticky we -padx 2 -pady {2 0}");
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
