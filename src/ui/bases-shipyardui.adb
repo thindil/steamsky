@@ -781,6 +781,11 @@ package body Bases.ShipyardUI is
       Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
       RemoveButton, CloseButton: Ttk_Button;
       Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
+      Header_Label: constant Ttk_Label :=
+        Create
+          (ModuleDialog & ".header",
+           "-text {" & To_String(Player_Ship.Modules(ShipModuleIndex).Name) &
+           "} -style Header.TLabel -wraplength 275");
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
@@ -799,6 +804,7 @@ package body Bases.ShipyardUI is
          Cost := 1;
       end if;
       CountPrice(Cost, FindMember(Talk), False);
+      Tcl.Tk.Ada.Grid.Grid(Header_Label, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
