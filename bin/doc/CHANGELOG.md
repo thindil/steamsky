@@ -4,8 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
-- Added missing header to dialog with information about module to install in
-  bases shipyards
+- Added missing headers to dialogs with information about modules to install or
+  remove in bases shipyards
 
 ## [6.2] - 2021-06-13
 
