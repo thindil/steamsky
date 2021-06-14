@@ -26,6 +26,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
+with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
@@ -590,7 +591,8 @@ package body Bases.ShipyardUI is
       Cost: Positive;
       MoneyIndex2, UsedSpace, AllSpace, MaxSize: Natural;
       ModuleDialog: constant Ttk_Frame :=
-        Create(".moduledialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".moduledialog", To_String(Modules_List(ModuleIndex).Name));
       ModuleText: constant Tk_Text :=
         Create(ModuleDialog & ".info", "-height 10 -width 40");
       Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
@@ -603,15 +605,7 @@ package body Bases.ShipyardUI is
           (ModuleDialog & ".buttonbox.install",
            "-text Install -command {CloseDialog " & ModuleDialog &
            ";ManipulateModule install}");
-      Header_Label: constant Ttk_Label :=
-        Create
-          (ModuleDialog & ".header",
-           "-text {" & To_String(Modules_List(ModuleIndex).Name) &
-           "} -style Header.TLabel -wraplength 275");
    begin
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Grid.Grid(Header_Label, "-sticky we -padx 2 -pady {2 0}");
       Cost := Modules_List(ModuleIndex).Price;
       CountPrice(Cost, FindMember(Talk));
       MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
@@ -634,8 +628,11 @@ package body Bases.ShipyardUI is
       SetModuleInfo(True);
       configure
         (ModuleText,
-         "-state disabled -height [expr " &
-         Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
+         "-state disabled -height" &
+         Positive'Image
+           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+            1));
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       Tcl.Tk.Ada.Grid.Grid(InstallButton, "-padx {0 5}");
       Find_Hull_Loop :
@@ -665,11 +662,10 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place
-        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Tab>", "{focus " & InstallButton & ";break}");
       Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Install_Info_Command;
 
