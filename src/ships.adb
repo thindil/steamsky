@@ -459,22 +459,22 @@ package body Ships is
       Module_Amount, Delete_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
-      ItemIndex, RecipeIndex, MobIndex, ModuleIndex,
-      ShipIndex: Unbounded_String := Null_Unbounded_String;
-      TempRecipes: UnboundedString_Container.Vector;
-      procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
+      Item_Index, Recipe_Index, Mob_Index, Module_Index,
+      Ship_Index: Unbounded_String := Null_Unbounded_String;
+      Temp_Recipes: UnboundedString_Container.Vector;
+      procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
          for I in Temp_Record.Cargo.Iterate loop
             if Items_List(Temp_Record.Cargo(I).ProtoIndex).IType =
-              Items_Types(ItemTypeIndex) then
+              Items_Types(Item_Type_Index) then
                Temp_Record.Combat_Value :=
                  Temp_Record.Combat_Value +
                  (Items_List(Temp_Record.Cargo(I).ProtoIndex).Value(1) *
                   Multiple);
             end if;
          end loop Count_Ammo_Value_Loop;
-      end CountAmmoValue;
+      end Count_Ammo_Value;
    begin
       Load_Proto_Ships_Loop :
       for I in 0 .. Length(Nodes_List) - 1 loop
@@ -485,29 +485,30 @@ package body Ships is
             Combat_Value => 1, Crew => Temp_Crew,
             Description => Null_Unbounded_String,
             Owner => Factions_Container.Key(Factions_List.First),
-            Known_Recipes => TempRecipes);
+            Known_Recipes => Temp_Recipes);
          Ship_Node := Item(Nodes_List, I);
-         ShipIndex := To_Unbounded_String(Get_Attribute(Ship_Node, "index"));
+         Ship_Index := To_Unbounded_String(Get_Attribute(Ship_Node, "index"));
          Action :=
            (if Get_Attribute(Ship_Node, "action")'Length > 0 then
               Data_Action'Value(Get_Attribute(Ship_Node, "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Proto_Ships_Container.Contains
-                (Proto_Ships_List, ShipIndex) then
+                (Proto_Ships_List, Ship_Index) then
                raise Data_Loading_Error
                  with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " ship '" & To_String(ShipIndex) &
+                 " ship '" & To_String(Ship_Index) &
                  "', there is no ship with that index.";
             end if;
-         elsif Proto_Ships_Container.Contains(Proto_Ships_List, ShipIndex) then
+         elsif Proto_Ships_Container.Contains
+             (Proto_Ships_List, Ship_Index) then
             raise Data_Loading_Error
-              with "Can't add ship '" & To_String(ShipIndex) &
+              with "Can't add ship '" & To_String(Ship_Index) &
               "', there is already a ship with that index.";
          end if;
          if Action /= REMOVE then
             if Action = UPDATE then
-               Temp_Record := Proto_Ships_List(ShipIndex);
+               Temp_Record := Proto_Ships_List(Ship_Index);
             end if;
             if Get_Attribute(Ship_Node, "name")'Length > 0 then
                Temp_Record.Name :=
@@ -522,10 +523,10 @@ package body Ships is
                  (if Get_Attribute(Child_Node, "amount") /= "" then
                     Positive'Value(Get_Attribute(Child_Node, "amount"))
                   else 1);
-               ModuleIndex :=
+               Module_Index :=
                  To_Unbounded_String(Get_Attribute(Child_Node, "index"));
                if not BaseModules_Container.Contains
-                   (Modules_List, ModuleIndex) then
+                   (Modules_List, Module_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
                     Get_Attribute(Child_Node, "index") & "| in " &
@@ -537,12 +538,12 @@ package body Ships is
                   else ADD);
                if Sub_Action = ADD then
                   Temp_Record.Modules.Append
-                    (New_Item => ModuleIndex,
+                    (New_Item => Module_Index,
                      Count => Count_Type(Module_Amount));
                else
                   Find_Delete_Module_Loop :
                   for K in Temp_Record.Modules.Iterate loop
-                     if Temp_Record.Modules(K) = ModuleIndex then
+                     if Temp_Record.Modules(K) = Module_Index then
                         Delete_Index := UnboundedString_Container.To_Index(K);
                         exit Find_Delete_Module_Loop;
                      end if;
@@ -563,7 +564,7 @@ package body Ships is
                  Integer'Value(Get_Attribute(Ship_Node, "maxaccuracy"));
                if Temp_Record.Accuracy(2) < Temp_Record.Accuracy(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(ShipIndex) &
+                    with "Can't add ship '" & To_String(Ship_Index) &
                     "', invalid range for accuracy.";
                end if;
             end if;
@@ -582,7 +583,7 @@ package body Ships is
                  Integer'Value(Get_Attribute(Ship_Node, "maxevasion"));
                if Temp_Record.Evasion(2) < Temp_Record.Evasion(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(ShipIndex) &
+                    with "Can't add ship '" & To_String(Ship_Index) &
                     "', invalid range for evasion.";
                end if;
             end if;
@@ -597,7 +598,7 @@ package body Ships is
                  Integer'Value(Get_Attribute(Ship_Node, "maxloot"));
                if Temp_Record.Loot(2) < Temp_Record.Loot(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(ShipIndex) &
+                    with "Can't add ship '" & To_String(Ship_Index) &
                     "', invalid range for loot.";
                end if;
             end if;
@@ -612,7 +613,7 @@ package body Ships is
                  Integer'Value(Get_Attribute(Ship_Node, "maxperception"));
                if Temp_Record.Perception(2) < Temp_Record.Perception(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(ShipIndex) &
+                    with "Can't add ship '" & To_String(Ship_Index) &
                     "', invalid range for perception.";
                end if;
             end if;
@@ -621,9 +622,9 @@ package body Ships is
             Load_Cargo_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
-               ItemIndex :=
+               Item_Index :=
                  To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               if not Objects_Container.Contains(Items_List, ItemIndex) then
+               if not Objects_Container.Contains(Items_List, Item_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
                     Get_Attribute(Child_Node, "index") & "| in " &
@@ -638,7 +639,7 @@ package body Ships is
                      if Get_Attribute(Child_Node, "amount")'Length /= 0 then
                         Temp_Record.Cargo.Append
                           (New_Item =>
-                             (ItemIndex,
+                             (Item_Index,
                               Integer'Value
                                 (Get_Attribute(Child_Node, "amount")),
                               0));
@@ -654,7 +655,7 @@ package body Ships is
                         end if;
                         Temp_Record.Cargo.Append
                           (New_Item =>
-                             (ItemIndex,
+                             (Item_Index,
                               Integer'Value
                                 (Get_Attribute(Child_Node, "minamount")),
                               Integer'Value
@@ -663,11 +664,11 @@ package body Ships is
                   when UPDATE =>
                      Update_Cargo_Loop :
                      for Item of Temp_Record.Cargo loop
-                        if Item.ProtoIndex = ItemIndex then
+                        if Item.ProtoIndex = Item_Index then
                            if Get_Attribute(Child_Node, "amount")'Length /=
                              0 then
                               Item :=
-                                (ItemIndex,
+                                (Item_Index,
                                  Integer'Value
                                    (Get_Attribute(Child_Node, "amount")),
                                  0);
@@ -682,7 +683,7 @@ package body Ships is
                                    "| in " & To_String(Temp_Record.Name) & ".";
                               end if;
                               Item :=
-                                (ItemIndex,
+                                (Item_Index,
                                  Integer'Value
                                    (Get_Attribute(Child_Node, "minamount")),
                                  Integer'Value
@@ -699,7 +700,7 @@ package body Ships is
                         for K in
                           Temp_Record.Cargo.First_Index ..
                             Temp_Record.Cargo.Last_Index loop
-                           if Temp_Record.Cargo(K).ProtoIndex = ItemIndex then
+                           if Temp_Record.Cargo(K).ProtoIndex = Item_Index then
                               Delete_Index := K;
                               exit Find_Delete_Cargo_Loop;
                            end if;
@@ -718,11 +719,11 @@ package body Ships is
               DOM.Core.Elements.Get_Elements_By_Tag_Name(Ship_Node, "recipe");
             Load_Known_Recipes_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
-               RecipeIndex :=
+               Recipe_Index :=
                  To_Unbounded_String
                    (Get_Attribute(Item(Child_Nodes, J), "index"));
                if not Recipes_Container.Contains
-                   (Recipes_List, RecipeIndex) then
+                   (Recipes_List, Recipe_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid recipe index: |" &
                     Get_Attribute(Item(Child_Nodes, J), "index") & "| in " &
@@ -733,11 +734,11 @@ package body Ships is
                     Data_Action'Value(Get_Attribute(Child_Node, "action"))
                   else ADD);
                if Sub_Action = ADD then
-                  Temp_Record.Known_Recipes.Append(New_Item => RecipeIndex);
+                  Temp_Record.Known_Recipes.Append(New_Item => Recipe_Index);
                else
                   Find_Delete_Recipe_Loop :
                   for K in Temp_Record.Known_Recipes.Iterate loop
-                     if Temp_Record.Known_Recipes(K) = RecipeIndex then
+                     if Temp_Record.Known_Recipes(K) = Recipe_Index then
                         Delete_Index := UnboundedString_Container.To_Index(K);
                         exit Find_Delete_Recipe_Loop;
                      end if;
@@ -750,10 +751,10 @@ package body Ships is
             Load_Crew_Loop :
             for J in 0 .. Length(Child_Nodes) - 1 loop
                Child_Node := Item(Child_Nodes, J);
-               MobIndex :=
+               Mob_Index :=
                  To_Unbounded_String(Get_Attribute(Child_Node, "index"));
                if not ProtoMobs_Container.Contains
-                   (ProtoMobs_List, MobIndex) then
+                   (ProtoMobs_List, Mob_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
                     Get_Attribute(Child_Node, "index") & "| in " &
@@ -768,7 +769,7 @@ package body Ships is
                      if Get_Attribute(Child_Node, "amount") /= "" then
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (MobIndex,
+                             (Mob_Index,
                               Integer'Value
                                 (Get_Attribute(Child_Node, "amount")),
                               0));
@@ -784,18 +785,18 @@ package body Ships is
                         end if;
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (MobIndex,
+                             (Mob_Index,
                               Integer'Value
                                 (Get_Attribute(Child_Node, "minamount")),
                               Integer'Value
                                 (Get_Attribute(Child_Node, "maxamount"))));
                      else
-                        Temp_Record.Crew.Append(New_Item => (MobIndex, 1, 0));
+                        Temp_Record.Crew.Append(New_Item => (Mob_Index, 1, 0));
                      end if;
                   when UPDATE =>
                      Update_Crew_Loop :
                      for Member of Temp_Record.Crew loop
-                        if Member.Proto_Index = MobIndex then
+                        if Member.Proto_Index = Mob_Index then
                            if Get_Attribute(Child_Node, "amount") /= "" then
                               Member.Min_Amount :=
                                 Integer'Value
@@ -828,7 +829,7 @@ package body Ships is
                   when REMOVE =>
                      Find_Delete_Crew_Loop :
                      for K in Temp_Record.Crew.Iterate loop
-                        if Temp_Record.Crew(K).Proto_Index = MobIndex then
+                        if Temp_Record.Crew(K).Proto_Index = Mob_Index then
                            Delete_Index := Proto_Crew_Container.To_Index(K);
                            exit Find_Delete_Crew_Loop;
                         end if;
@@ -845,26 +846,26 @@ package body Ships is
                    (Node_Value(First_Child(Item(Child_Nodes, 0))));
             end if;
             Count_Combat_Value_Loop :
-            for ModuleIndex of Temp_Record.Modules loop
-               case Modules_List(ModuleIndex).MType is
+            for Module_Index of Temp_Record.Modules loop
+               case Modules_List(Module_Index).MType is
                   when HULL | GUN | BATTERING_RAM =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(ModuleIndex).Durability +
-                       (Modules_List(ModuleIndex).MaxValue * 10);
-                     if Modules_List(ModuleIndex).MType = GUN then
-                        CountAmmoValue(Modules_List(ModuleIndex).Value, 10);
+                       Modules_List(Module_Index).Durability +
+                       (Modules_List(Module_Index).MaxValue * 10);
+                     if Modules_List(Module_Index).MType = GUN then
+                        Count_Ammo_Value(Modules_List(Module_Index).Value, 10);
                      end if;
                   when ARMOR =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(ModuleIndex).Durability;
+                       Modules_List(Module_Index).Durability;
                   when HARPOON_GUN =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(ModuleIndex).Durability +
-                       (Modules_List(ModuleIndex).MaxValue * 5);
-                     CountAmmoValue(Modules_List(ModuleIndex).Value, 5);
+                       Modules_List(Module_Index).Durability +
+                       (Modules_List(Module_Index).MaxValue * 5);
+                     Count_Ammo_Value(Modules_List(Module_Index).Value, 5);
                   when others =>
                      null;
                end case;
@@ -872,15 +873,15 @@ package body Ships is
             Temp_Record.Combat_Value := Temp_Record.Combat_Value - 1;
             if Action /= UPDATE then
                Proto_Ships_Container.Include
-                 (Proto_Ships_List, ShipIndex, Temp_Record);
+                 (Proto_Ships_List, Ship_Index, Temp_Record);
                Log_Message
                  ("Ship added: " & To_String(Temp_Record.Name), EVERYTHING);
             else
-               Proto_Ships_List(ShipIndex) := Temp_Record;
+               Proto_Ships_List(Ship_Index) := Temp_Record;
             end if;
          else
-            Proto_Ships_Container.Exclude(Proto_Ships_List, ShipIndex);
-            Log_Message("Ship removed: " & To_String(ShipIndex), EVERYTHING);
+            Proto_Ships_Container.Exclude(Proto_Ships_List, Ship_Index);
+            Log_Message("Ship removed: " & To_String(Ship_Index), EVERYTHING);
          end if;
       end loop Load_Proto_Ships_Loop;
    end Load_Ships;
@@ -941,18 +942,18 @@ package body Ships is
 
    function Count_Combat_Value return Natural is
       CombatValue: Natural := 0;
-      procedure CountAmmoValue(ItemTypeIndex, Multiple: Positive) is
+      procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
             if Items_List(Item.ProtoIndex).IType =
-              Items_Types(ItemTypeIndex) then
+              Items_Types(Item_Type_Index) then
                CombatValue :=
                  CombatValue +
                  (Items_List(Item.ProtoIndex).Value(1) * Multiple);
             end if;
          end loop Count_Ammo_Value_Loop;
-      end CountAmmoValue;
+      end Count_Ammo_Value;
    begin
       Count_Combat_Value_Loop :
       for Module of Player_Ship.Modules loop
@@ -963,13 +964,13 @@ package body Ships is
             when GUN =>
                CombatValue :=
                  CombatValue + Module.Max_Durability + (Module.Damage * 10);
-               CountAmmoValue(Modules_List(Module.Proto_Index).Value, 10);
+               Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 10);
             when ARMOR =>
                CombatValue := CombatValue + Module.Max_Durability;
             when HARPOON_GUN =>
                CombatValue :=
                  CombatValue + Module.Max_Durability + (Module.Duration * 5);
-               CountAmmoValue(Modules_List(Module.Proto_Index).Value, 5);
+               Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 5);
             when HULL =>
                CombatValue :=
                  CombatValue + Module.Max_Durability +
@@ -1012,11 +1013,11 @@ package body Ships is
       Damage: Positive; Death_Reason: String) is
       RealDamage: Natural := Damage;
       WeaponIndex: Natural;
-      procedure RemoveGun(ModuleIndex2: Positive) is
+      procedure RemoveGun(Module_Index2: Positive) is
       begin
-         if Ship.Modules(ModuleIndex2).Owner(1) > 0 then
+         if Ship.Modules(Module_Index2).Owner(1) > 0 then
             Death
-              (Ship.Modules(ModuleIndex2).Owner(1),
+              (Ship.Modules(Module_Index2).Owner(1),
                To_Unbounded_String(Death_Reason), Ship);
          end if;
       end RemoveGun;
