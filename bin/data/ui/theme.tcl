@@ -79,6 +79,12 @@ namespace eval ttk::theme::steamsky {
    set I(checkbox-unchecked) [image create photo -file \
       [file join [file dirname [info script]] images checkbox-unchecked.svg] \
       -format {svg -scaletoheight 22}]
+   set I(radiobox-checked) [image create photo -file \
+      [file join [file dirname [info script]] images radiobox-checked.svg] \
+      -format {svg -scaletoheight 22}]
+   set I(radiobox-unchecked) [image create photo -file \
+      [file join [file dirname [info script]] images radiobox-unchecked.svg] \
+      -format {svg -scaletoheight 22}]
 
    #
    # Create theme
@@ -107,6 +113,10 @@ namespace eval ttk::theme::steamsky {
 
       ttk::style element create Checkbutton.indicator image [list $I(checkbox-unchecked) \
          selected            $I(checkbox-checked) \
+         ] -width 22 -sticky w
+
+      ttk::style element create Radiobutton.indicator image [list $I(radiobox-unchecked) \
+         selected            $I(radiobox-checked) \
          ] -width 22 -sticky w
 
       #
