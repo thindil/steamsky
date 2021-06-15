@@ -48,3 +48,15 @@ grid [ttk::label $schoolskillsframe.money]
 SetScrollbarBindings $schoolskillsframe.money .gameframe.paned.schoolframe.scrolly
 grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command TrainSkill]
 grid $schoolskillsframe -row 0 -column 1 -sticky nwes
+# New UI
+set traintype amount
+grid [ttk::frame $schoolframe.setting]
+grid [ttk::button $schoolframe.setting.train -text {Train:}]
+grid [ttk::combobox $schoolframe.setting.crew] -row 0 -column 1
+grid [ttk::label $schoolframe.setting.skilllbl -text {in skill:}] -row 0 -column 2
+grid [ttk::combobox $schoolframe.setting.skill] -row 0 -column 2
+grid [ttk::frame $schoolframe.amountbox] -sticky w
+grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
+grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}]
+grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 1000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1
+$schoolframe.amountbox.amount set 1
