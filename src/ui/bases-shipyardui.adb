@@ -28,7 +28,6 @@ with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Font; use Tcl.Tk.Ada.Font;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -770,18 +769,15 @@ package body Bases.ShipyardUI is
       ShipModuleIndex: constant Natural :=
         Natural'Value(To_String(ModuleIndex));
       ModuleDialog: constant Ttk_Frame :=
-        Create(".moduledialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".moduledialog",
+           To_String(Player_Ship.Modules(ShipModuleIndex).Name));
       DamageBar: constant Ttk_ProgressBar := Create(ModuleDialog & ".damage");
       ModuleText: constant Tk_Text :=
         Create(ModuleDialog & ".info", "-height 10 -width 40");
       Label: Ttk_Label := Create(ModuleDialog & ".damagelbl");
       RemoveButton, CloseButton: Ttk_Button;
       Frame: constant Ttk_Frame := Create(ModuleDialog & ".buttonbox");
-      Header_Label: constant Ttk_Label :=
-        Create
-          (ModuleDialog & ".header",
-           "-text {" & To_String(Player_Ship.Modules(ShipModuleIndex).Name) &
-           "} -style Header.TLabel -wraplength 275");
    begin
       Tcl.Tk.Ada.Busy.Busy(Game_Header);
       Tcl.Tk.Ada.Busy.Busy(Main_Paned);
@@ -800,7 +796,6 @@ package body Bases.ShipyardUI is
          Cost := 1;
       end if;
       CountPrice(Cost, FindMember(Talk), False);
-      Tcl.Tk.Ada.Grid.Grid(Header_Label, "-sticky we -padx 2 -pady {2 0}");
       Tcl.Tk.Ada.Grid.Grid(ModuleText, "-padx 5 -pady {5 0}");
       configure(ModuleText, "-state normal");
       Delete(ModuleText, "1.0", "end");
@@ -843,8 +838,11 @@ package body Bases.ShipyardUI is
       end if;
       configure
         (ModuleText,
-         "-state disabled -height [expr " &
-         Count(ModuleText, "-lines", "1.0", "end") & " + 5]");
+         "-state disabled -height" &
+         Positive'Image
+           (Positive'Value(Count(ModuleText, "-displaylines", "0.0", "end")) /
+            Positive'Value(Metrics("InterfaceFont", "-linespace")) +
+            1));
       RemoveButton :=
         Create
           (ModuleDialog & ".buttonbox.install",
@@ -858,11 +856,10 @@ package body Bases.ShipyardUI is
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-row 0 -column 1 -padx {5 0}");
       Tcl.Tk.Ada.Grid.Grid(Frame, "-pady {0 5}");
       Focus(CloseButton);
-      Tcl.Tk.Ada.Place.Place
-        (ModuleDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Tab>", "{focus " & RemoveButton & ";break}");
       Bind(ModuleDialog, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
+      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Remove_Info_Command;
 
