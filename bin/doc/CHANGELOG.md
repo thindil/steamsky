@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated interface
+
 ### Fixed
 - Added missing headers to dialogs with information about modules to install or
   remove in bases shipyards
