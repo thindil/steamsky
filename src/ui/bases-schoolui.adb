@@ -67,13 +67,20 @@ package body Bases.SchoolUI is
       FrameName: constant String :=
         Main_Paned & ".schoolframe.canvas.school.setting";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".crew", Interp);
-      -- MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
+      MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
       ComboList: Unbounded_String;
    begin
       ComboBox := Get_Widget(FrameName & ".skill");
       Add_Skills_Loop :
       for I in Skills_List.Iterate loop
+         for Skill of Player_Ship.Crew(MemberIndex).Skills loop
+            if Skill(1) = SkillsData_Container.To_Index(I)
+              and then Skill(2) = 100 then
+               goto End_Of_Add_Skills_Loop;
+            end if;
+         end loop;
          Append(ComboList, " " & Skills_List(I).Name);
+         <<End_Of_Add_Skills_Loop>>
       end loop Add_Skills_Loop;
       configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
       Current(ComboBox, "0");
@@ -130,7 +137,8 @@ package body Bases.SchoolUI is
       end loop Add_Crew_Loop;
       configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
       Current(ComboBox, "0");
-      if Set_School_Skills_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+      if Set_School_Skills_Command(ClientData, Interp, Argc, Argv) /=
+        TCL_OK then
          return TCL_ERROR;
       end if;
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
