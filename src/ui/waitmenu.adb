@@ -18,9 +18,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -31,6 +29,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with CoreUI; use CoreUI;
 with Crew; use Crew;
+with Dialogs; use Dialogs;
 with Game; use Game;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
@@ -48,7 +47,6 @@ package body WaitMenu is
       AmountBox: Ttk_SpinBox;
       AmountLabel: Ttk_Label;
       NeedHealing, NeedRest: Boolean := False;
-      Dialog_Header: Ttk_Label;
       procedure AddButton(Time: Positive) is
       begin
          Button :=
@@ -75,15 +73,9 @@ package body WaitMenu is
          end if;
          return TCL_OK;
       end if;
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
-      WaitDialog := Create(".gameframe.wait", "-style Dialog.TFrame");
-      Dialog_Header :=
-        Create
-          (WaitDialog & ".header",
-           "-text {Wait in place} -wraplength 275 -style Header.TLabel");
-      Tcl.Tk.Ada.Grid.Grid
-        (Dialog_Header, "-sticky we -columnspan 3 -padx 2 -pady {2 0}");
+      WaitDialog :=
+        Create_Dialog
+          (Name => ".gameframe.wait", Title => "Wait in place", Columns => 3);
       AddButton(1);
       AddButton(5);
       AddButton(10);
@@ -167,10 +159,9 @@ package body WaitMenu is
         (Button, "-sticky we -columnspan 3 -padx 5 -pady {0 5}");
       Bind(Button, "<Escape>", "{CloseDialog " & WaitDialog & ";break}");
       Add(Button, "Close dialog \[Escape\]");
-      Tcl.Tk.Ada.Place.Place
-        (WaitDialog, "-in .gameframe -relx 0.3 -rely 0.15");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus " & WaitDialog & ".wait1;break}");
+      Show_Dialog(Dialog => WaitDialog, Relative_Y => 0.15);
       return TCL_OK;
    end Show_Wait_Command;
 
