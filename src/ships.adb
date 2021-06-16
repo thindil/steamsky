@@ -451,17 +451,13 @@ package body Ships is
    procedure Load_Ships(Reader: Tree_Reader) is
       Nodes_List: constant Node_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Get_Tree(Reader), "ship");
-      Child_Nodes: Node_List;
-      Temp_Record: Proto_Ship_Data;
-      Temp_Modules: UnboundedString_Container.Vector;
-      Temp_Cargo: MobInventory_Container.Vector;
-      Temp_Crew: Proto_Crew_Container.Vector;
+      Child_Nodes: Node_List; --## rule line off IMPROPER_INITIALIZATION
+      Temp_Record: Proto_Ship_Data := Empty_Proto_Ship;
       Module_Amount, Delete_Index: Positive := 1;
       Action, Sub_Action: Data_Action := Default_Data_Action;
       Ship_Node, Child_Node: Node;
       Item_Index, Recipe_Index, Mob_Index, Module_Index,
       Ship_Index: Unbounded_String := Null_Unbounded_String;
-      Temp_Recipes: UnboundedString_Container.Vector;
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
@@ -479,13 +475,15 @@ package body Ships is
       Load_Proto_Ships_Loop :
       for I in 0 .. Length(Nodes_List) - 1 loop
          Temp_Record :=
-           (Name => Null_Unbounded_String, Modules => Temp_Modules,
+           (Name => Null_Unbounded_String,
+            Modules => UnboundedString_Container.Empty_Vector,
             Accuracy => (0, 0), Combat_Ai => NONE, Evasion => (0, 0),
-            Loot => (0, 0), Perception => (0, 0), Cargo => Temp_Cargo,
-            Combat_Value => 1, Crew => Temp_Crew,
+            Loot => (0, 0), Perception => (0, 0),
+            Cargo => MobInventory_Container.Empty_Vector, Combat_Value => 1,
+            Crew => Proto_Crew_Container.Empty_Vector,
             Description => Null_Unbounded_String,
             Owner => Factions_Container.Key(Factions_List.First),
-            Known_Recipes => Temp_Recipes);
+            Known_Recipes => UnboundedString_Container.Empty_Vector);
          Ship_Node := Item(Nodes_List, I);
          Ship_Index := To_Unbounded_String(Get_Attribute(Ship_Node, "index"));
          Action :=
