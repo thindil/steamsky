@@ -52,9 +52,9 @@ grid $schoolskillsframe -row 0 -column 1 -sticky nwes
 set traintype amount
 grid [ttk::frame $schoolframe.setting]
 grid [ttk::button $schoolframe.setting.train -text {Train:}]
-grid [ttk::combobox $schoolframe.setting.crew] -row 0 -column 1
-grid [ttk::label $schoolframe.setting.skilllbl -text {in skill:}] -row 0 -column 2
-grid [ttk::combobox $schoolframe.setting.skill] -row 0 -column 2
+grid [ttk::combobox $schoolframe.setting.crew -state readonly] -row 0 -column 1
+grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -padx 5
+grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
 grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}]
