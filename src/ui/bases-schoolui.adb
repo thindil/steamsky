@@ -300,12 +300,45 @@ package body Bases.SchoolUI is
          return TCL_OK;
    end Train_Skill_Command;
 
+   -- ****o* SchoolUI/SchoolUI.Update_School_Cost_Command
+   -- FUNCTION
+   -- Update the cost of training
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- TrainSkill
+   -- SOURCE
+   function Update_School_Cost_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_School_Cost_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      ComboBox: constant Ttk_ComboBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Label: constant Ttk_Label := Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
+   begin
+      Tcl_Eval(Interp, "puts {" & Get(ComboBox) & "}");
+      configure(Label, "-text {" & Get(ComboBox) & "}");
+      Tcl_SetResult(Interp, "1");
+      return TCL_OK;
+   end Update_School_Cost_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowSchool", Show_School_Command'Access);
       AddCommand("ShowTrainingInfo", Show_Training_Info_Command'Access);
       AddCommand("TrainSkill", Train_Skill_Command'Access);
       AddCommand("SetSchoolSkills", Set_School_Skills_Command'Access);
+      AddCommand("UpdateSchoolCost", Update_School_Cost_Command'Access);
    end AddCommands;
 
 end Bases.SchoolUI;
