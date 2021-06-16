@@ -59,5 +59,9 @@ grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
 grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}]
-grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 1000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1
+grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 1000 -validate key -validatecommand {ValidateSpinbox %W %P;UpdateSchoolCost %W %P} -width 5] -row 1 -column 1
 $schoolframe.amountbox.amount set 1
+bind $schoolframe.amountbox.amount <<Increment>> {UpdateSchoolCost %W %P}
+bind $schoolframe.amountbox.amount <<Decrement>> {UpdateSchoolCost %W %P}
+grid [ttk::label $schoolframe.amountbox.costlbl -text {Approx cost:}]
+grid [ttk::label $schoolframe.amountbox.cost] -row 2 -column 1
