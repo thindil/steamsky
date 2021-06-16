@@ -53,6 +53,7 @@ set traintype amount
 grid [ttk::frame $schoolframe.setting]
 grid [ttk::button $schoolframe.setting.train -text {Train:}]
 grid [ttk::combobox $schoolframe.setting.crew -state readonly] -row 0 -column 1
+bind $schoolframe.setting.crew <<ComboboxSelected>> SetSchoolSkills
 grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -padx 5
 grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
 grid [ttk::frame $schoolframe.amountbox] -sticky w

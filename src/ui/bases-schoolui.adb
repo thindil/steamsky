@@ -41,14 +41,53 @@ with Utils.UI; use Utils.UI;
 
 package body Bases.SchoolUI is
 
+   -- ****o* SchoolUI/Set_School_Skills_Command
+   -- FUNCTION
+   -- Set list of available to train skills for the selected crew member
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetSchoolSkills
+   -- SOURCE
+   function Set_School_Skills_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Set_School_Skills_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv);
+      FrameName: constant String :=
+        Main_Paned & ".schoolframe.canvas.school.setting";
+      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".crew", Interp);
+      -- MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
+      ComboList: Unbounded_String;
+   begin
+      ComboBox := Get_Widget(FrameName & ".skill");
+      Add_Skills_Loop :
+      for I in Skills_List.Iterate loop
+         Append(ComboList, " " & Skills_List(I).Name);
+      end loop Add_Skills_Loop;
+      configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
+      Current(ComboBox, "0");
+      return TCL_OK;
+   end Set_School_Skills_Command;
+
    -- ****o* SchoolUI/SchoolUI.Show_School_Command
    -- FUNCTION
    -- Show the selected base school
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
+   -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -63,27 +102,20 @@ package body Bases.SchoolUI is
    function Show_School_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argv);
       SchoolFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
       CrewView: Ttk_Tree_View;
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(SchoolCanvas & ".school.setting.skill", Interp);
-      ComboList: Unbounded_String;
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(SchoolCanvas & ".school.setting.crew", Interp);
+      ComboList: Unbounded_String := Null_Unbounded_String;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         Add_Skills_Loop :
-         for I in Skills_List.Iterate loop
-            Append(ComboList, " " & Skills_List(I).Name);
-         end loop Add_Skills_Loop;
-         configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
-         Current(ComboBox, "0");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -92,14 +124,15 @@ package body Bases.SchoolUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       SchoolFrame.Name := New_String(SchoolCanvas & ".school");
-      ComboBox.Name := New_String(SchoolFrame & ".setting.crew");
-      ComboList := Null_Unbounded_String;
-      Add_Crew_Loop:
+      Add_Crew_Loop :
       for Member of Player_Ship.Crew loop
          Append(ComboList, " " & Member.Name);
       end loop Add_Crew_Loop;
       configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
       Current(ComboBox, "0");
+      if Set_School_Skills_Command(ClientData, Interp, Argc, Argv) /= TCL_OK then
+         return TCL_ERROR;
+      end if;
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
       Load_Crew_Loop :
@@ -264,6 +297,7 @@ package body Bases.SchoolUI is
       AddCommand("ShowSchool", Show_School_Command'Access);
       AddCommand("ShowTrainingInfo", Show_Training_Info_Command'Access);
       AddCommand("TrainSkill", Train_Skill_Command'Access);
+      AddCommand("SetSchoolSkills", Set_School_Skills_Command'Access);
    end AddCommands;
 
 end Bases.SchoolUI;
