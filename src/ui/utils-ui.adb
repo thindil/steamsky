@@ -798,7 +798,7 @@ package body Utils.UI is
         not Game_Settings.Show_Last_Messages then
          Tcl.Tk.Ada.Grid.Grid_Remove(MessagesFrame);
          if NewScreenName /= "mapframe" then
-            SashPos(Main_Paned, "0", Winfo_Get(Paned, "height"));
+            SashPos(Main_Paned, "0", Winfo_Get(Main_Paned, "height"));
          end if;
       else
          if Trim(Widget_Image(OldSubWindow), Both) in
