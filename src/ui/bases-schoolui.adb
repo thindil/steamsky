@@ -25,6 +25,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -67,12 +69,21 @@ package body Bases.SchoolUI is
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
       CrewView: Ttk_Tree_View;
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(SchoolCanvas & ".school.setting.skill", Interp);
+      ComboList: Unbounded_String;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "school.tcl");
          Bind(SchoolFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
+         Add_Skills_Loop :
+         for I in Skills_List.Iterate loop
+            Append(ComboList, " " & Skills_List(I).Name);
+         end loop Add_Skills_Loop;
+         configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
+         Current(ComboBox, "0");
       elsif Winfo_Get(SchoolCanvas, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -81,6 +92,14 @@ package body Bases.SchoolUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       SchoolFrame.Name := New_String(SchoolCanvas & ".school");
+      ComboBox.Name := New_String(SchoolFrame & ".setting.crew");
+      ComboList := Null_Unbounded_String;
+      Add_Crew_Loop:
+      for Member of Player_Ship.Crew loop
+         Append(ComboList, " " & Member.Name);
+      end loop Add_Crew_Loop;
+      configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
+      Current(ComboBox, "0");
       CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
       Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
       Load_Crew_Loop :
