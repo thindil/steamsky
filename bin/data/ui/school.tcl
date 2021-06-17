@@ -58,10 +58,10 @@ grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -pad
 grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
-grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}]
-grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 1000 -validate key -validatecommand {ValidateSpinbox %W %P;UpdateSchoolCost %W %P} -width 5] -row 1 -column 1
+grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}] -sticky w -padx {50 0}
+grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P;UpdateSchoolCost %W %P} -width 5] -row 1 -column 1 -sticky w
 $schoolframe.amountbox.amount set 1
-bind $schoolframe.amountbox.amount <<Increment>> {UpdateSchoolCost %W %P}
-bind $schoolframe.amountbox.amount <<Decrement>> {UpdateSchoolCost %W %P}
-grid [ttk::label $schoolframe.amountbox.costlbl -text {Approx cost:}]
-grid [ttk::label $schoolframe.amountbox.cost] -row 2 -column 1
+bind $schoolframe.amountbox.amount <<Increment>> {UpdateSchoolCost %W [expr [$schoolframe.amountbox.amount get] + 1]}
+bind $schoolframe.amountbox.amount <<Decrement>> {UpdateSchoolCost %W [expr [$schoolframe.amountbox.amount get] - 1]}
+grid [ttk::label $schoolframe.amountbox.costlbl -text {Approx cost:}] -sticky w -padx {50 0}
+grid [ttk::label $schoolframe.amountbox.cost] -row 2 -column 1 -sticky w

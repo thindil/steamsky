@@ -323,13 +323,25 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      ComboBox: constant Ttk_ComboBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
-      Label: constant Ttk_Label := Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      Label: constant Ttk_Label :=
+        Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
+      Amount: Natural;
    begin
-      Tcl_Eval(Interp, "puts {" & Get(ComboBox) & "}");
-      configure(Label, "-text {" & Get(ComboBox) & "}");
+      Amount := Natural'Value(CArgv.Arg(Argv, 2));
+      if Amount < 1 then
+         Amount := 1;
+      elsif Amount > 100 then
+         Amount := 100;
+      end if;
+      configure(Label, "-text {" & Positive'Image(Amount) & "}");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
+   exception
+      when Constraint_Error =>
+         Tcl_SetResult(Interp, "0");
+         return TCL_OK;
    end Update_School_Cost_Command;
 
    procedure AddCommands is
