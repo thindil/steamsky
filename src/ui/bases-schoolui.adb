@@ -71,7 +71,8 @@ package body Bases.SchoolUI is
         Get_Widget(FrameName & ".setting.crew", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
       ComboList: Unbounded_String;
-      SpinBox: constant Ttk_SpinBox := Get_Widget(FrameName & ".amountbox.amount", Interp);
+      SpinBox: constant Ttk_SpinBox :=
+        Get_Widget(FrameName & ".amountbox.amount", Interp);
    begin
       ComboBox := Get_Widget(FrameName & ".setting.skill");
       Add_Skills_Loop :
@@ -88,8 +89,7 @@ package body Bases.SchoolUI is
       configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
       Current(ComboBox, "0");
       Set(SpinBox, "1");
-      Tcl_Eval
-        (Interp, "UpdateSchoolCost " & SpinBox & " 1");
+      Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " 1");
       return TCL_OK;
    end Set_School_Skills_Command;
 
@@ -329,11 +329,11 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      ComboBox: constant Ttk_ComboBox :=
-        Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      ComboBox: Ttk_ComboBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Label: constant Ttk_Label :=
         Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
-      Amount: Natural;
+      Amount, Cost: Natural := 0;
+      MemberIndex, SkillIndex: Positive;
    begin
       Amount := Natural'Value(CArgv.Arg(Argv, 2));
       if Amount < 1 then
@@ -341,7 +341,18 @@ package body Bases.SchoolUI is
       elsif Amount > 100 then
          Amount := 100;
       end if;
-      configure(Label, "-text {" & Positive'Image(Amount) & "}");
+      ComboBox :=
+        Get_Widget
+          (Main_Paned & ".schoolframe.canvas.school.setting.crew", Interp);
+      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      ComboBox :=
+        Get_Widget
+          (Main_Paned & ".schoolframe.canvas.school.setting.skill", Interp);
+      SkillIndex := Natural'Value(Current(ComboBox)) + 1;
+      Cost := TrainCost(MemberIndex, SkillIndex) * Amount;
+      configure
+        (Label,
+         "-text {" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
       Tcl_SetResult(Interp, "1");
       return TCL_OK;
    exception
