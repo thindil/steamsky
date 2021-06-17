@@ -450,7 +450,8 @@ package body Ships is
 
    procedure Load_Ships(Reader: Tree_Reader) is
       Nodes_List: constant Node_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Get_Tree(Reader), "ship");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Get_Tree(Read => Reader), Tag_Name => "ship");
       Child_Nodes: Node_List; --## rule line off IMPROPER_INITIALIZATION
       Temp_Record: Proto_Ship_Data := Empty_Proto_Ship;
       Module_Amount, Delete_Index: Positive := 1;
@@ -464,10 +465,12 @@ package body Ships is
          for I in Temp_Record.Cargo.Iterate loop
             if Items_List(Temp_Record.Cargo(I).ProtoIndex).IType =
               Items_Types(Item_Type_Index) then
+               -- rule off SIMPLIFIABLE_EXPRESSIONS
                Temp_Record.Combat_Value :=
                  Temp_Record.Combat_Value +
                  (Items_List(Temp_Record.Cargo(I).ProtoIndex).Value(1) *
                   Multiple);
+               -- rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Count_Ammo_Value_Loop;
       end Count_Ammo_Value;
