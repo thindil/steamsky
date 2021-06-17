@@ -27,6 +27,8 @@ with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
+with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
+use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
@@ -64,13 +66,14 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String :=
-        Main_Paned & ".schoolframe.canvas.school.setting";
-      ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".crew", Interp);
+      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(FrameName & ".setting.crew", Interp);
       MemberIndex: constant Positive := Natural'Value(Current(ComboBox)) + 1;
       ComboList: Unbounded_String;
+      SpinBox: constant Ttk_SpinBox := Get_Widget(FrameName & ".amountbox.amount", Interp);
    begin
-      ComboBox := Get_Widget(FrameName & ".skill");
+      ComboBox := Get_Widget(FrameName & ".setting.skill");
       Add_Skills_Loop :
       for I in Skills_List.Iterate loop
          for Skill of Player_Ship.Crew(MemberIndex).Skills loop
@@ -84,6 +87,9 @@ package body Bases.SchoolUI is
       end loop Add_Skills_Loop;
       configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
       Current(ComboBox, "0");
+      Set(SpinBox, "1");
+      Tcl_Eval
+        (Interp, "UpdateSchoolCost " & SpinBox & " 1");
       return TCL_OK;
    end Set_School_Skills_Command;
 
