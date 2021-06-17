@@ -333,7 +333,7 @@ package body Bases.SchoolUI is
       Label: constant Ttk_Label :=
         Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
       Amount, Cost: Natural := 0;
-      MemberIndex, SkillIndex: Positive;
+      MemberIndex, SkillIndex: Positive := 1;
    begin
       Amount := Natural'Value(CArgv.Arg(Argv, 2));
       if Amount < 1 then
@@ -344,11 +344,17 @@ package body Bases.SchoolUI is
       ComboBox :=
         Get_Widget
           (Main_Paned & ".schoolframe.canvas.school.setting.crew", Interp);
-      MemberIndex := Natural'Value(Current(ComboBox)) + 1;
+      for Member of Player_Ship.Crew loop
+         exit when Member.Name = To_Unbounded_String(Get(ComboBox));
+         MemberIndex := MemberIndex + 1;
+      end loop;
       ComboBox :=
         Get_Widget
           (Main_Paned & ".schoolframe.canvas.school.setting.skill", Interp);
-      SkillIndex := Natural'Value(Current(ComboBox)) + 1;
+      for Skill of Skills_List loop
+         exit when Skill.Name = To_Unbounded_String(Get(ComboBox));
+         SkillIndex := SkillIndex + 1;
+      end loop;
       Cost := TrainCost(MemberIndex, SkillIndex) * Amount;
       configure
         (Label,
