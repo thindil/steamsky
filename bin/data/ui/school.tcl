@@ -56,6 +56,7 @@ grid [ttk::combobox $schoolframe.setting.crew -state readonly] -row 0 -column 1
 bind $schoolframe.setting.crew <<ComboboxSelected>> SetSchoolSkills
 grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -padx 5
 grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
+bind $schoolframe.setting.skill <<ComboboxSelected>> {$schoolframe.amountbox.amount set 1;UpdateSchoolCost $schoolframe.amountbox.amount 1}
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
 grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}] -sticky w -padx {50 0}
