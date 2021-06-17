@@ -24,10 +24,8 @@ with CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
-with Tcl.Tk.Ada.Busy;
 with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Pack;
-with Tcl.Tk.Ada.Place;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
@@ -1224,7 +1222,12 @@ package body Combat.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
       CrewDialog: constant Ttk_Frame :=
-        Create(".boardingdialog", "-style Dialog.TFrame");
+        Create_Dialog
+          (".boardingdialog",
+           "Assign a crew members to " &
+           (if CArgv.Arg(Argv, 1) = "boarding" then "boarding party"
+            else "defenders"),
+           245);
       YScroll: constant Ttk_Scrollbar :=
         Create
           (CrewDialog & ".yscroll",
@@ -1242,26 +1245,15 @@ package body Combat.UI is
       Height: Positive := 10;
       Width: Positive := 250;
       CrewButton: Ttk_CheckButton;
-      InfoLabel: constant Ttk_Label :=
-        Create
-          (CrewFrame & ".titlelabel",
-           "-text {Assign a crew members to " &
-           (if CArgv.Arg(Argv, 1) = "boarding" then "boarding party"
-            else "defenders") &
-           "} -wraplength 250");
       Order: constant Crew_Orders :=
         (if CArgv.Arg(Argv, 1) = "boarding" then Boarding else Defend);
    begin
-      Tcl.Tk.Ada.Busy.Busy(Game_Header);
-      Tcl.Tk.Ada.Busy.Busy(Main_Paned);
       Tcl.Tk.Ada.Grid.Grid(CrewCanvas, "-sticky nwes -padx 5 -pady 5");
       Tcl.Tk.Ada.Grid.Grid
-        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 0 -column 1");
+        (YScroll, "-sticky ns -padx {0 5} -pady {5 0} -row 1 -column 1");
       Tcl.Tk.Ada.Grid.Grid(CloseButton, "-pady {0 5} -columnspan 2");
       Focus(CloseButton);
       Autoscroll(YScroll);
-      Tcl.Tk.Ada.Pack.Pack(InfoLabel);
-      Height := Height + Positive'Value(Winfo_Get(InfoLabel, "reqheight"));
       Show_Player_Ship_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          CrewButton :=
@@ -1288,9 +1280,6 @@ package body Combat.UI is
             "{focus [GetActiveButton" &
             Positive'Image(Crew_Container.To_Index(I)) & "];break}");
       end loop Show_Player_Ship_Crew_Loop;
-      if Positive'Value(Winfo_Get(InfoLabel, "reqwidth")) > Width then
-         Width := Positive'Value(Winfo_Get(InfoLabel, "reqwidth"));
-      end if;
       if Height > 500 then
          Height := 500;
       end if;
@@ -1302,9 +1291,9 @@ package body Combat.UI is
         (CrewCanvas,
          "-scrollregion [list " & BBox(CrewCanvas, "all") & "] -height" &
          Positive'Image(Height) & " -width" & Positive'Image(Width));
-      Tcl.Tk.Ada.Place.Place(CrewDialog, "-in .gameframe -relx 0.3 -rely 0.2");
       Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
       Bind(CloseButton, "<Tab>", "{focus [GetActiveButton 0];break}");
+      Show_Dialog(Dialog => CrewDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Set_Combat_Party_Command;
 
