@@ -123,6 +123,8 @@ package body Bases.SchoolUI is
       ComboBox: constant Ttk_ComboBox :=
         Get_Widget(SchoolCanvas & ".school.setting.crew", Interp);
       ComboList: Unbounded_String := Null_Unbounded_String;
+      MoneyLabel: constant Ttk_Label := Get_Widget(SchoolCanvas & ".school.money", Interp);
+      MoneyIndex2: Natural;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -136,6 +138,19 @@ package body Bases.SchoolUI is
          return TCL_OK;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
+      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
+      if MoneyIndex2 > 0 then
+         configure
+           (MoneyLabel,
+            "-text {You have" &
+            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
+            To_String(Money_Name) & ".}");
+      else
+         configure
+           (MoneyLabel,
+            "-text {You don't have any " & To_String(Money_Name) &
+            " to pay for learning.}");
+      end if;
       SchoolFrame.Name := New_String(SchoolCanvas & ".school");
       Add_Crew_Loop :
       for Member of Player_Ship.Crew loop
