@@ -37,13 +37,6 @@ package Bases.Trade is
    Trade_Cant_Heal: exception;
    -- ****
 
-   -- ****e* BTrade/BTrade.Trade_Cant_Train
-   -- FUNCTION
-   -- Raised when skill is maxed and can't be trained
-   -- SOURCE
-   Trade_Cant_Train: exception;
-   -- ****
-
    -- ****f* BTrade/BTrade.HireRecruit
    -- FUNCTION
    -- Hire selected recruit from bases and add him/her to player ship crew
@@ -128,10 +121,14 @@ package Bases.Trade is
       -- PARAMETERS
       -- MemberIndex - Index of Player_Ship crew member which train
       -- SkillIndex  - Index of skill of selected crew member to train
+      -- Amount      - How many times train or how many money spend on training
+      -- Is_Amount   - If true, Amount variable is how many times train,
+      --               otherwise it is amount of money to spend
       -- SOURCE
    procedure TrainSkill
      (MemberIndex: Crew_Container.Extended_Index;
-      SkillIndex: Skills_Container.Extended_Index) with
+      SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
+      Is_Amount: Boolean := True) with
       Pre =>
       (MemberIndex <= Player_Ship.Crew.Last_Index and
        SkillIndex <= Skills_List.Last_Index),
