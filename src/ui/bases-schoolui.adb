@@ -123,7 +123,8 @@ package body Bases.SchoolUI is
       ComboBox: constant Ttk_ComboBox :=
         Get_Widget(SchoolCanvas & ".school.setting.crew", Interp);
       ComboList: Unbounded_String := Null_Unbounded_String;
-      MoneyLabel: constant Ttk_Label := Get_Widget(SchoolCanvas & ".school.money", Interp);
+      MoneyLabel: constant Ttk_Label :=
+        Get_Widget(SchoolCanvas & ".school.money", Interp);
       MoneyIndex2: Natural;
    begin
       if Winfo_Get(SchoolCanvas, "exists") = "0" then
@@ -290,13 +291,23 @@ package body Bases.SchoolUI is
    function Train_Skill_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      SkillsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.skills.view", Interp);
-      SkillIndex: Positive;
+      SkillIndex, MemberIndex: Positive := 1;
+      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
+      ComboBox: Ttk_ComboBox :=
+        Get_Widget(FrameName & ".setting.crew", Interp);
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget(FrameName & ".amountbox.amount", Interp);
    begin
-      SkillIndex := Positive'Value(Selection(SkillsView));
-      TrainSkill(MemberIndex, SkillIndex);
+      for Member of Player_Ship.Crew loop
+         exit when Member.Name = To_Unbounded_String(Get(ComboBox));
+         MemberIndex := MemberIndex + 1;
+      end loop;
+      ComboBox := Get_Widget(FrameName & ".setting.skill", Interp);
+      for Skill of Skills_List loop
+         exit when Skill.Name = To_Unbounded_String(Get(ComboBox));
+         SkillIndex := SkillIndex + 1;
+      end loop;
+      TrainSkill(MemberIndex, SkillIndex, Positive'Value(Get(AmountBox)));
       UpdateMessages;
       return Show_Training_Info_Command(ClientData, Interp, Argc, Argv);
    exception
@@ -312,11 +323,6 @@ package body Bases.SchoolUI is
            (Text =>
               "You don't have enough " & To_String(Money_Name) &
               " to pay for learning this skill.",
-            Title => "Can't train");
-         return TCL_OK;
-      when Trade_Cant_Train =>
-         ShowMessage
-           (Text => "You can't train this skill any more.",
             Title => "Can't train");
          return TCL_OK;
    end Train_Skill_Command;
