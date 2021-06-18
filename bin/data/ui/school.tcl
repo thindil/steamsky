@@ -52,17 +52,25 @@ grid $schoolskillsframe -row 0 -column 1 -sticky nwes
 set traintype amount
 grid [ttk::frame $schoolframe.setting]
 grid [ttk::button $schoolframe.setting.train -text {Train:}]
+tooltip::tooltip $schoolframe.setting.train {Train the selected skill of the selected crew member}
 grid [ttk::combobox $schoolframe.setting.crew -state readonly] -row 0 -column 1
+tooltip::tooltip $schoolframe.setting.crew {Select the crew member which skills will be trained}
 bind $schoolframe.setting.crew <<ComboboxSelected>> SetSchoolSkills
 grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -padx 5
 grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
+tooltip::tooltip $schoolframe.setting.skill {Select the skill whichVy will be trained}
 bind $schoolframe.setting.skill <<ComboboxSelected>> {$schoolframe.amountbox.amount set 1;UpdateSchoolCost $schoolframe.amountbox.amount 1}
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount]
+tooltip::tooltip $schoolframe.amountbox.radioamount {Train the selected skill the selected amount of times}
 grid [ttk::label $schoolframe.amountbox.amountlbl -text {Amount:}] -sticky w -padx {50 0}
+tooltip::tooltip $schoolframe.amountbox.amountlbl {Enter amount of training sessions between 1 and 100}
 grid [ttk::spinbox $schoolframe.amountbox.amount -from 1 -to 100 -validate key -validatecommand {ValidateSpinbox %W %P;UpdateSchoolCost %W %P} -width 5] -row 1 -column 1 -sticky w
+tooltip::tooltip $schoolframe.amountbox.amount {Enter amount of training sessions between 1 and 100}
 $schoolframe.amountbox.amount set 1
 bind $schoolframe.amountbox.amount <<Increment>> {UpdateSchoolCost %W [expr [$schoolframe.amountbox.amount get] + 1]}
 bind $schoolframe.amountbox.amount <<Decrement>> {UpdateSchoolCost %W [expr [$schoolframe.amountbox.amount get] - 1]}
-grid [ttk::label $schoolframe.amountbox.costlbl -text {Approx cost:}] -sticky w -padx {50 0}
+grid [ttk::label $schoolframe.amountbox.costlbl -text {Minimal cost:}] -sticky w -padx {50 0}
+tooltip::tooltip $schoolframe.amountbox.costlbl {Minimal cost of training. The real cost can be higher that this.}
 grid [ttk::label $schoolframe.amountbox.cost] -row 2 -column 1 -sticky w
+tooltip::tooltip $schoolframe.amountbox.cost {Minimal cost of training. The real cost can be higher that this.}
