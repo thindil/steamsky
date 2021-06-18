@@ -476,22 +476,27 @@ package body Ships is
       end Count_Ammo_Value;
    begin
       Load_Proto_Ships_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
          Temp_Record :=
            (Name => Null_Unbounded_String,
             Modules => UnboundedString_Container.Empty_Vector,
-            Accuracy => (0, 0), Combat_Ai => NONE, Evasion => (0, 0),
-            Loot => (0, 0), Perception => (0, 0),
+            Accuracy => (1 => 0, 2 => 0), Combat_Ai => NONE,
+            Evasion => (1 => 0, 2 => 0), Loot => (1 => 0, 2 => 0),
+            Perception => (1 => 0, 2 => 0),
             Cargo => MobInventory_Container.Empty_Vector, Combat_Value => 1,
             Crew => Proto_Crew_Container.Empty_Vector,
             Description => Null_Unbounded_String,
-            Owner => Factions_Container.Key(Factions_List.First),
+            Owner => Factions_Container.Key(Position => Factions_List.First),
             Known_Recipes => UnboundedString_Container.Empty_Vector);
-         Ship_Node := Item(Nodes_List, I);
-         Ship_Index := To_Unbounded_String(Get_Attribute(Ship_Node, "index"));
+         Ship_Node := Item(List => Nodes_List, Index => I);
+         Ship_Index :=
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Ship_Node, Name => "index"));
          Action :=
-           (if Get_Attribute(Ship_Node, "action")'Length > 0 then
-              Data_Action'Value(Get_Attribute(Ship_Node, "action"))
+           (if Get_Attribute(Elem => Ship_Node, Name => "action")'Length > 0
+            then
+              Data_Action'Value
+                (Get_Attribute(Elem => Ship_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
             if not Proto_Ships_Container.Contains
