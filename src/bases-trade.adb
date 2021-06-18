@@ -291,42 +291,56 @@ package body Bases.Trade is
 
    procedure TrainSkill
      (MemberIndex: Crew_Container.Extended_Index;
-      SkillIndex: Skills_Container.Extended_Index) is
-      Cost: constant Natural := TrainCost(MemberIndex, SkillIndex);
+      SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
+      Is_Amount: Boolean := True) is
+      Cost, MaxAmount: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;
       BaseIndex: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      TraderIndex: constant Crew_Container.Extended_Index := FindMember(Talk);
+      TraderIndex: Crew_Container.Extended_Index;
+      Sessions, OverallCost: Natural := 0;
    begin
-      if Cost = 0 then
-         raise Trade_Cant_Train;
+      if Is_Amount then
+         MaxAmount := Amount;
       end if;
-      MoneyIndex2 := CheckMoney(Cost);
-      AddMessage
-        ("You purchased a training session in " &
-         To_String(Skills_List(SkillIndex).Name) & " for " &
-         To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
-         Positive'Image(Cost) & " " & To_String(Money_Name) & ".",
-         TradeMessage);
       GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
-      GainedExp :=
-        GetRandom(10, 60) +
-        Player_Ship.Crew(MemberIndex).Attributes
-          (Skills_List(SkillIndex).Attribute)
-          (1);
-      if GainedExp > 100 then
-         GainedExp := 100;
+      Train_Skill_Loop :
+      for I in 1 .. MaxAmount loop
+         Cost := TrainCost(MemberIndex, SkillIndex);
+         MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
+         exit Train_Skill_Loop when Cost = 0 or
+           Player_Ship.Cargo(MoneyIndex2).Amount < Cost;
+         GainedExp :=
+           GetRandom(10, 60) +
+           Player_Ship.Crew(MemberIndex).Attributes
+             (Skills_List(SkillIndex).Attribute)
+             (1);
+         if GainedExp > 100 then
+            GainedExp := 100;
+         end if;
+         GainExp(GainedExp, SkillIndex, MemberIndex);
+         UpdateCargo
+           (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
+         UpdateBaseCargo(Money_Index, Cost);
+         TraderIndex := FindMember(Talk);
+         if TraderIndex > 0 then
+            GainExp(5, Talking_Skill, TraderIndex);
+         end if;
+         GainRep(BaseIndex, 5);
+         Update_Game(60);
+         Sessions := I;
+         OverallCost := OverallCost + Cost;
+      end loop Train_Skill_Loop;
+      if Sessions > 0 then
+         AddMessage
+           ("You purchased" & Positive'Image(Sessions) &
+            " training session(s) in " &
+            To_String(Skills_List(SkillIndex).Name) & " for " &
+            To_String(Player_Ship.Crew(MemberIndex).Name) & " for" &
+            Positive'Image(OverallCost) & " " & To_String(Money_Name) & ".",
+            TradeMessage);
       end if;
-      GainExp(GainedExp, SkillIndex, MemberIndex);
-      UpdateCargo
-        (Ship => Player_Ship, CargoIndex => MoneyIndex2, Amount => -(Cost));
-      UpdateBaseCargo(Money_Index, Cost);
-      if TraderIndex > 0 then
-         GainExp(5, Talking_Skill, TraderIndex);
-      end if;
-      GainRep(BaseIndex, 5);
-      Update_Game(60);
    end TrainSkill;
 
 end Bases.Trade;
