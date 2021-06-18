@@ -23,32 +23,6 @@ pack [ttk::scrollbar .gameframe.paned.schoolframe.scrollx -orient horizontal -co
 ::autoscroll::autoscroll .gameframe.paned.schoolframe.scrollx
 set schoolframe [ttk::frame $schoolcanvas.school]
 SetScrollbarBindings $schoolframe .gameframe.paned.schoolframe.scrolly
-# Crew members list
-grid [ttk::frame $schoolframe.crew] -sticky nwes -padx 5 -pady {5 0}
-SetScrollbarBindings $schoolframe.crew .gameframe.paned.schoolframe.scrolly
-set schoolview [ttk::treeview $schoolframe.crew.view -yscrollcommand [list $schoolframe.crew.scrolly set]]
-$schoolview heading #0 -text {Crew member}
-grid $schoolview -sticky nwes
-bind $schoolview <<TreeviewSelect>> ShowTrainingInfo
-grid [ttk::scrollbar $schoolframe.crew.scrolly -orient vertical -command [list $schoolview yview]] -row 0 -column 1 -sticky ns
-::autoscroll::autoscroll $schoolframe.crew.scrolly
-# Skills list
-set schoolskillsframe [ttk::frame $schoolframe.skills]
-SetScrollbarBindings $schoolskillsframe .gameframe.paned.schoolframe.scrolly
-set schoolskillsview [ttk::treeview $schoolskillsframe.view -show headings -columns [list name price] -yscrollcommand [list $schoolskillsframe.scrolly set]]
-$schoolskillsview heading name -text {Name}
-$schoolskillsview column name -width 200
-$schoolskillsview heading price -text {Price}
-$schoolskillsview column price -width 150 -anchor center
-grid $schoolskillsview -sticky nwes -padx 5 -pady {5 0}
-grid [ttk::scrollbar $schoolskillsframe.scrolly -orient vertical -command [list $schoolskillsview yview]] -row 0 -column 1 -sticky ns
-::autoscroll::autoscroll $schoolskillsframe.scrolly
-# Skills options
-grid [ttk::label $schoolskillsframe.money]
-SetScrollbarBindings $schoolskillsframe.money .gameframe.paned.schoolframe.scrolly
-grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command TrainSkill]
-grid $schoolskillsframe -row 0 -column 1 -sticky nwes
-# New UI
 set traintype amount
 grid [ttk::label $schoolframe.money]
 grid [ttk::frame $schoolframe.setting]
