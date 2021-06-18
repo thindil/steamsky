@@ -465,12 +465,12 @@ package body Ships is
          for I in Temp_Record.Cargo.Iterate loop
             if Items_List(Temp_Record.Cargo(I).ProtoIndex).IType =
               Items_Types(Item_Type_Index) then
-               -- rule off SIMPLIFIABLE_EXPRESSIONS
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
                Temp_Record.Combat_Value :=
                  Temp_Record.Combat_Value +
                  (Items_List(Temp_Record.Cargo(I).ProtoIndex).Value(1) *
                   Multiple);
-               -- rule on SIMPLIFIABLE_EXPRESSIONS
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Count_Ammo_Value_Loop;
       end Count_Ammo_Value;
