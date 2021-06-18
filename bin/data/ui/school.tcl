@@ -50,8 +50,9 @@ grid [ttk::button $schoolskillsframe.train -text {Train selected skill} -command
 grid $schoolskillsframe -row 0 -column 1 -sticky nwes
 # New UI
 set traintype amount
+grid [ttk::label $schoolframe.money]
 grid [ttk::frame $schoolframe.setting]
-grid [ttk::button $schoolframe.setting.train -text {Train:}]
+grid [ttk::button $schoolframe.setting.train -text {Train:} -command TrainSkill]
 tooltip::tooltip $schoolframe.setting.train {Train the selected skill of the selected crew member}
 grid [ttk::combobox $schoolframe.setting.crew -state readonly] -row 0 -column 1
 tooltip::tooltip $schoolframe.setting.crew {Select the crew member which skills will be trained}
