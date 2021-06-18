@@ -16,7 +16,7 @@
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -275,8 +275,8 @@ package body Bases.SchoolUI is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
-   -- Argv       - Values of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -291,6 +291,7 @@ package body Bases.SchoolUI is
    function Train_Skill_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc, Argv);
       SkillIndex, MemberIndex: Positive := 1;
       FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
       ComboBox: Ttk_ComboBox :=
@@ -309,7 +310,9 @@ package body Bases.SchoolUI is
       end loop;
       TrainSkill(MemberIndex, SkillIndex, Positive'Value(Get(AmountBox)));
       UpdateMessages;
-      return Show_Training_Info_Command(ClientData, Interp, Argc, Argv);
+      return
+        Show_School_Command
+          (ClientData, Interp, 2, CArgv.Empty & "TrainSkill" & "1");
    exception
       when Trade_No_Money =>
          ShowMessage
