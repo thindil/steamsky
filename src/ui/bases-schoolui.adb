@@ -24,7 +24,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 use Tcl.Tk.Ada.Widgets.TtkEntry.TtkComboBox;
 with Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
@@ -32,7 +31,6 @@ use Tcl.Tk.Ada.Widgets.TtkEntry.TtkSpinBox;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases.Trade; use Bases.Trade;
 with CoreUI; use CoreUI;
@@ -119,7 +117,6 @@ package body Bases.SchoolUI is
         Get_Widget(Main_Paned & ".schoolframe", Interp);
       SchoolCanvas: constant Tk_Canvas :=
         Get_Widget(SchoolFrame & ".canvas", Interp);
-      CrewView: Ttk_Tree_View;
       ComboBox: constant Ttk_ComboBox :=
         Get_Widget(SchoolCanvas & ".school.setting.crew", Interp);
       ComboList: Unbounded_String := Null_Unbounded_String;
@@ -163,16 +160,6 @@ package body Bases.SchoolUI is
         TCL_OK then
          return TCL_ERROR;
       end if;
-      CrewView := Get_Widget(SchoolFrame & ".crew.view", Interp);
-      Delete(CrewView, "[list " & Children(CrewView, "{}") & "]");
-      Load_Crew_Loop :
-      for I in Player_Ship.Crew.Iterate loop
-         Insert
-           (CrewView,
-            "{} end -id" & Positive'Image(Crew_Container.To_Index(I)) &
-            " -text {" & To_String(Player_Ship.Crew(I).Name) & "}");
-      end loop Load_Crew_Loop;
-      Selection_Set(CrewView, "[list 1]");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
       configure
         (SchoolCanvas,
@@ -188,86 +175,6 @@ package body Bases.SchoolUI is
       ShowScreen("schoolframe");
       return TCL_OK;
    end Show_School_Command;
-
-      -- ****iv* SchoolUI/SchoolUI.MemberIndex
-      -- FUNCTION
-      -- The currently selected crew member index
-      -- SOURCE
-   MemberIndex: Positive;
-   -- ****
-
-   -- ****o* SchoolUI/SchoolUI.Show_Training_Info_Command
-   -- FUNCTION
-   -- Show training costs for the selected crew member
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowTrainingInfo
-   -- SOURCE
-   function Show_Training_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Training_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
-      CrewView: constant Ttk_Tree_View :=
-        Get_Widget(FrameName & ".crew.view", Interp);
-      SkillsView: constant Ttk_Tree_View :=
-        Get_Widget(FrameName & ".skills.view", Interp);
-      Cost, MoneyIndex2, FirstIndex: Natural := 0;
-      MoneyLabel: constant Ttk_Label :=
-        Get_Widget(FrameName & ".skills.money", Interp);
-      TrainButton: constant Ttk_Button :=
-        Get_Widget(FrameName & ".skills.train", Interp);
-   begin
-      MemberIndex := Positive'Value(Selection(CrewView));
-      Delete(SkillsView, "[list " & Children(SkillsView, "{}") & "]");
-      Load_Skills_List_Loop :
-      for I in Skills_List.Iterate loop
-         Cost := TrainCost(MemberIndex, SkillsData_Container.To_Index(I));
-         if Cost > 0 then
-            if FirstIndex = 0 then
-               FirstIndex := SkillsData_Container.To_Index(I);
-            end if;
-            Insert
-              (SkillsView,
-               "{} end -id" &
-               Positive'Image(SkillsData_Container.To_Index(I)) &
-               " -values [list {" & To_String(Skills_List(I).Name) & "}" &
-               Natural'Image(Cost) & "]");
-         end if;
-      end loop Load_Skills_List_Loop;
-      MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
-      if MoneyIndex2 > 0 then
-         configure
-           (MoneyLabel,
-            "-text {You have" &
-            Natural'Image(Player_Ship.Cargo(MoneyIndex2).Amount) & " " &
-            To_String(Money_Name) & ".}");
-      else
-         configure
-           (MoneyLabel,
-            "-text {You don't have any " & To_String(Money_Name) &
-            " to pay for learning.}");
-      end if;
-      if Children(SkillsView, "{}") /= "{}" then
-         Selection_Set(SkillsView, "[list" & Positive'Image(FirstIndex) & "]");
-         configure(TrainButton, "-state normal");
-      else
-         configure(TrainButton, "-state disabled");
-      end if;
-      return TCL_OK;
-   end Show_Training_Info_Command;
 
    -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
    -- FUNCTION
@@ -394,7 +301,6 @@ package body Bases.SchoolUI is
    procedure AddCommands is
    begin
       AddCommand("ShowSchool", Show_School_Command'Access);
-      AddCommand("ShowTrainingInfo", Show_Training_Info_Command'Access);
       AddCommand("TrainSkill", Train_Skill_Command'Access);
       AddCommand("SetSchoolSkills", Set_School_Skills_Command'Access);
       AddCommand("UpdateSchoolCost", Update_School_Cost_Command'Access);
