@@ -296,9 +296,10 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_TrainSkill_4a3ab1_55c1cb
+   procedure Wrap_Test_TrainSkill_97d670_55c1cb
      (MemberIndex: Crew_Container.Extended_Index;
-      SkillIndex: Skills_Container.Extended_Index) is
+      SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
+      Is_Amount: Boolean := True) is
    begin
       begin
          pragma Assert
@@ -312,7 +313,7 @@ package body Bases.Trade.Test_Data.Tests is
                "req_sloc(bases-trade.ads:0):Test_TrainSkill test requirement violated");
       end;
       GNATtest_Generated.GNATtest_Standard.Bases.Trade.TrainSkill
-        (MemberIndex, SkillIndex);
+        (MemberIndex, SkillIndex, Amount, Is_Amount);
       begin
          pragma Assert(True);
          null;
@@ -322,19 +323,20 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_TrainSkill test commitment violated");
       end;
-   end Wrap_Test_TrainSkill_4a3ab1_55c1cb;
+   end Wrap_Test_TrainSkill_97d670_55c1cb;
 --  end read only
 
 --  begin read only
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test);
-   procedure Test_TrainSkill_4a3ab1_55c1cb(Gnattest_T: in out Test) renames
+   procedure Test_TrainSkill_97d670_55c1cb(Gnattest_T: in out Test) renames
      Test_TrainSkill_test_trainskill;
---  id:2.2/4a3ab1eb708b24d4/TrainSkill/1/0/test_trainskill/
+--  id:2.2/97d67059a26fe921/TrainSkill/1/0/test_trainskill/
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test) is
       procedure TrainSkill
         (MemberIndex: Crew_Container.Extended_Index;
-         SkillIndex: Skills_Container.Extended_Index) renames
-        Wrap_Test_TrainSkill_4a3ab1_55c1cb;
+         SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
+         Is_Amount: Boolean := True) renames
+        Wrap_Test_TrainSkill_97d670_55c1cb;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -343,7 +345,7 @@ package body Bases.Trade.Test_Data.Tests is
 
    begin
 
-      TrainSkill(1, 1);
+      TrainSkill(1, 1, 1);
       Assert
         (Positive(Player_Ship.Crew(1).Skills.Length) > SkillsAmount,
          "Failed to train new skill.");
