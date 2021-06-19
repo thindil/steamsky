@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -48,7 +50,7 @@ package body Bases.SchoolUI is
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -63,7 +65,7 @@ package body Bases.SchoolUI is
    function Set_School_Skills_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData, Argv);
       FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
       ComboBox: Ttk_ComboBox :=
         Get_Widget(FrameName & ".setting.crew", Interp);
@@ -72,6 +74,10 @@ package body Bases.SchoolUI is
       SpinBox: constant Ttk_SpinBox :=
         Get_Widget(FrameName & ".amountbox.amount", Interp);
    begin
+      if Argc > 1 then
+         Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " " & Get(SpinBox));
+         return TCL_OK;
+      end if;
       ComboBox := Get_Widget(FrameName & ".setting.skill");
       Add_Skills_Loop :
       for I in Skills_List.Iterate loop
@@ -150,12 +156,14 @@ package body Bases.SchoolUI is
             " to pay for learning.}");
       end if;
       SchoolFrame.Name := New_String(SchoolCanvas & ".school");
-      Add_Crew_Loop :
-      for Member of Player_Ship.Crew loop
-         Append(ComboList, " " & Member.Name);
-      end loop Add_Crew_Loop;
-      configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
-      Current(ComboBox, "0");
+      if Argc = 1 then
+         Add_Crew_Loop :
+         for Member of Player_Ship.Crew loop
+            Append(ComboList, " " & Member.Name);
+         end loop Add_Crew_Loop;
+         configure(ComboBox, "-values [list" & To_String(ComboList) & "]");
+         Current(ComboBox, "0");
+      end if;
       if Set_School_Skills_Command(ClientData, Interp, Argc, Argv) /=
         TCL_OK then
          return TCL_ERROR;
@@ -219,7 +227,9 @@ package body Bases.SchoolUI is
       UpdateMessages;
       return
         Show_School_Command
-          (ClientData, Interp, 2, CArgv.Empty & "TrainSkill" & "1");
+          (ClientData, Interp, 2,
+           CArgv.Empty & "TrainSkill" &
+           Trim(Positive'Image(MemberIndex), Left));
    exception
       when Trade_No_Money =>
          ShowMessage
