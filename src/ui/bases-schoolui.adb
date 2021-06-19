@@ -258,7 +258,10 @@ package body Bases.SchoolUI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- TrainSkill
+   -- UpdateSchoolCost combobox amount
+   -- Combobox is the Tk path to the ttk::combobox with the amount of
+   -- training sessions, amount is the amount of the requested training
+   -- sessions
    -- SOURCE
    function Update_School_Cost_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
