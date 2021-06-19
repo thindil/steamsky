@@ -802,7 +802,7 @@ package body Utils.UI is
          end if;
       else
          if Trim(Widget_Image(OldSubWindow), Both) in
-             Main_Paned & ".messagesframe" | Paned & ".optionsframe" then
+             Main_Paned & ".messagesframe" | Main_Paned & ".optionsframe" then
             SashPos
               (Main_Paned, "0",
                Natural'Image
