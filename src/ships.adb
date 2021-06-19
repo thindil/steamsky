@@ -499,35 +499,38 @@ package body Ships is
                 (Get_Attribute(Elem => Ship_Node, Name => "action"))
             else ADD);
          if Action in UPDATE | REMOVE then
-            if not Proto_Ships_Container.Contains
-                (Proto_Ships_List, Ship_Index) then
+            if not Proto_Ships_List.Contains(Key => Ship_Index) then
                raise Data_Loading_Error
-                 with "Can't " & To_Lower(Data_Action'Image(Action)) &
-                 " ship '" & To_String(Ship_Index) &
+                 with "Can't " & To_Lower(Item => Data_Action'Image(Action)) &
+                 " ship '" & To_String(Source => Ship_Index) &
                  "', there is no ship with that index.";
             end if;
-         elsif Proto_Ships_Container.Contains
-             (Proto_Ships_List, Ship_Index) then
+         elsif Proto_Ships_List.Contains(Key => Ship_Index) then
             raise Data_Loading_Error
-              with "Can't add ship '" & To_String(Ship_Index) &
+              with "Can't add ship '" & To_String(Source => Ship_Index) &
               "', there is already a ship with that index.";
          end if;
          if Action = REMOVE then
-            Proto_Ships_Container.Exclude(Proto_Ships_List, Ship_Index);
-            Log_Message("Ship removed: " & To_String(Ship_Index), EVERYTHING);
+            Proto_Ships_List.Exclude(Key => Ship_Index);
+            Log_Message
+              (Message => "Ship removed: " & To_String(Source => Ship_Index),
+               Message_Type => EVERYTHING);
          else
             if Action = UPDATE then
                Temp_Record := Proto_Ships_List(Ship_Index);
             end if;
-            if Get_Attribute(Ship_Node, "name")'Length > 0 then
+            if Get_Attribute(Elem => Ship_Node, Name => "name")'Length > 0 then
                Temp_Record.Name :=
-                 To_Unbounded_String(Get_Attribute(Ship_Node, "name"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Ship_Node, Name => "name"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Ship_Node, "module");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Ship_Node, Name => "module");
             Load_Modules_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Module_Amount :=
                  (if Get_Attribute(Child_Node, "amount") /= "" then
                     Positive'Value(Get_Attribute(Child_Node, "amount"))
