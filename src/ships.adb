@@ -512,7 +512,10 @@ package body Ships is
               with "Can't add ship '" & To_String(Ship_Index) &
               "', there is already a ship with that index.";
          end if;
-         if Action /= REMOVE then
+         if Action = REMOVE then
+            Proto_Ships_Container.Exclude(Proto_Ships_List, Ship_Index);
+            Log_Message("Ship removed: " & To_String(Ship_Index), EVERYTHING);
+         else
             if Action = UPDATE then
                Temp_Record := Proto_Ships_List(Ship_Index);
             end if;
@@ -885,9 +888,6 @@ package body Ships is
             else
                Proto_Ships_List(Ship_Index) := Temp_Record;
             end if;
-         else
-            Proto_Ships_Container.Exclude(Proto_Ships_List, Ship_Index);
-            Log_Message("Ship removed: " & To_String(Ship_Index), EVERYTHING);
          end if;
       end loop Load_Proto_Ships_Loop;
    end Load_Ships;
