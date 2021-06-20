@@ -34,7 +34,11 @@ bind $schoolframe.setting.crew <<ComboboxSelected>> SetSchoolSkills
 grid [ttk::label $schoolframe.setting.skilllbl -text {in}] -row 0 -column 2 -padx 5
 grid [ttk::combobox $schoolframe.setting.skill -state readonly] -row 0 -column 3
 tooltip::tooltip $schoolframe.setting.skill {Select the skill whichVy will be trained}
-bind $schoolframe.setting.skill <<ComboboxSelected>> {$schoolframe.amountbox.amount set 1;UpdateSchoolCost $schoolframe.amountbox.amount 1}
+bind $schoolframe.setting.skill <<ComboboxSelected>> {
+   $schoolframe.amountbox.amount set 1
+   UpdateSchoolCost $schoolframe.amountbox.amount 1
+   UpdateSchoolSelectedCost
+}
 grid [ttk::frame $schoolframe.amountbox] -sticky w
 grid [ttk::radiobutton $schoolframe.amountbox.radioamount -text {Selected amount of times} -variable traintype -value amount] -columnspan 2 -sticky w
 tooltip::tooltip $schoolframe.amountbox.radioamount {Train the selected skill the selected amount of times}
@@ -54,6 +58,6 @@ grid [ttk::radiobutton $schoolframe.costbox.radioamount -text {Selected maximum 
 tooltip::tooltip $schoolframe.costbox.radioamount "Train the selected skill as long as you don't spend the selected\namount of money"
 grid [ttk::label $schoolframe.costbox.amountlbl -text {Cost:}] -sticky w -padx {50 0}
 tooltip::tooltip $schoolframe.costbox.amountlbl {Enter amount of money which you want to spend}
-grid [ttk::spinbox $schoolframe.costbox.amount -from 1 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1 -sticky w
+grid [ttk::spinbox $schoolframe.costbox.amount -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1 -sticky w
 tooltip::tooltip $schoolframe.costbox.amount {Enter amount of money which you want to spend}
 $schoolframe.costbox.amount set 1

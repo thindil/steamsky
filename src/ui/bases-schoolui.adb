@@ -184,6 +184,44 @@ package body Bases.SchoolUI is
       return TCL_OK;
    end Show_School_Command;
 
+   -- ****if* SchoolUI/SchoolUI.Get_Member_Index
+   -- FUNCTION
+   -- Get the index in the player ship of the currently selected member
+   -- RESULT
+   -- The index of the currently selected crew member
+   -- SOURCE
+   function Get_Member_Index return Positive is
+      -- ****
+      Member_Box: constant Ttk_ComboBox :=
+        Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.crew");
+      MemberIndex: Positive := 1;
+   begin
+      for Member of Player_Ship.Crew loop
+         exit when Member.Name = To_Unbounded_String(Get(Member_Box));
+         MemberIndex := MemberIndex + 1;
+      end loop;
+      return MemberIndex;
+   end Get_Member_Index;
+
+   -- ****if* SchoolUI/SchoolUI.Get_Skill_Index
+   -- FUNCTION
+   -- Get the index of the currently selected skill
+   -- RESULT
+   -- The index of the currently selected skill
+   -- SOURCE
+   function Get_Skill_Index return Positive is
+      -- ****
+      Skill_Box: constant Ttk_ComboBox :=
+        Get_Widget(Main_Paned & ".schoolframe.canvas.school.setting.skill");
+      SkillIndex: Positive := 1;
+   begin
+      for Skill of Skills_List loop
+         exit when Skill.Name = To_Unbounded_String(Get(Skill_Box));
+         SkillIndex := SkillIndex + 1;
+      end loop;
+      return SkillIndex;
+   end Get_Skill_Index;
+
    -- ****o* SchoolUI/SchoolUI.Train_Skill_Command
    -- FUNCTION
    -- Train the selected skill
@@ -207,29 +245,18 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc, Argv);
-      SkillIndex, MemberIndex: Positive := 1;
-      FrameName: constant String := Main_Paned & ".schoolframe.canvas.school";
-      ComboBox: Ttk_ComboBox :=
-        Get_Widget(FrameName & ".setting.crew", Interp);
       AmountBox: constant Ttk_SpinBox :=
-        Get_Widget(FrameName & ".amountbox.amount", Interp);
+        Get_Widget
+          (Main_Paned & ".schoolframe.canvas.school.amountbox.amount", Interp);
    begin
-      for Member of Player_Ship.Crew loop
-         exit when Member.Name = To_Unbounded_String(Get(ComboBox));
-         MemberIndex := MemberIndex + 1;
-      end loop;
-      ComboBox := Get_Widget(FrameName & ".setting.skill", Interp);
-      for Skill of Skills_List loop
-         exit when Skill.Name = To_Unbounded_String(Get(ComboBox));
-         SkillIndex := SkillIndex + 1;
-      end loop;
-      TrainSkill(MemberIndex, SkillIndex, Positive'Value(Get(AmountBox)));
+      TrainSkill
+        (Get_Member_Index, Get_Skill_Index, Positive'Value(Get(AmountBox)));
       UpdateMessages;
       return
         Show_School_Command
           (ClientData, Interp, 2,
            CArgv.Empty & "TrainSkill" &
-           Trim(Positive'Image(MemberIndex), Left));
+           Trim(Positive'Image(Get_Member_Index), Left));
    exception
       when Trade_No_Money =>
          ShowMessage
@@ -273,11 +300,11 @@ package body Bases.SchoolUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
-      ComboBox: Ttk_ComboBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      ComboBox: constant Ttk_ComboBox :=
+        Get_Widget(CArgv.Arg(Argv, 1), Interp);
       Label: constant Ttk_Label :=
         Get_Widget(Winfo_Get(ComboBox, "parent") & ".cost", Interp);
       Amount, Cost: Natural := 0;
-      MemberIndex, SkillIndex: Positive := 1;
    begin
       Amount := Natural'Value(CArgv.Arg(Argv, 2));
       if Amount < 1 then
@@ -285,21 +312,7 @@ package body Bases.SchoolUI is
       elsif Amount > 100 then
          Amount := 100;
       end if;
-      ComboBox :=
-        Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.setting.crew", Interp);
-      for Member of Player_Ship.Crew loop
-         exit when Member.Name = To_Unbounded_String(Get(ComboBox));
-         MemberIndex := MemberIndex + 1;
-      end loop;
-      ComboBox :=
-        Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.setting.skill", Interp);
-      for Skill of Skills_List loop
-         exit when Skill.Name = To_Unbounded_String(Get(ComboBox));
-         SkillIndex := SkillIndex + 1;
-      end loop;
-      Cost := TrainCost(MemberIndex, SkillIndex) * Amount;
+      Cost := TrainCost(Get_Member_Index, Get_Skill_Index) * Amount;
       configure
         (Label,
          "-text {" & Positive'Image(Cost) & " " & To_String(Money_Name) & "}");
@@ -311,12 +324,43 @@ package body Bases.SchoolUI is
          return TCL_OK;
    end Update_School_Cost_Command;
 
+   -- ****o* SchoolUI/SchoolUI.Update_School_Selected_Cost_Command
+   -- FUNCTION
+   -- Update the minimal and maximum values of spinbox with training cost
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateSchoolCost2
+   -- SOURCE
+   function Update_School_Selected_Cost_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_School_Selected_Cost_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Argv, Interp);
+      -- AmountBox: Ttk_SpinBox := Get_Widget(Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
+   begin
+      return TCL_OK;
+   end Update_School_Selected_Cost_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowSchool", Show_School_Command'Access);
       AddCommand("TrainSkill", Train_Skill_Command'Access);
       AddCommand("SetSchoolSkills", Set_School_Skills_Command'Access);
       AddCommand("UpdateSchoolCost", Update_School_Cost_Command'Access);
+      AddCommand
+        ("UpdateSchoolSelectedCost",
+         Update_School_Selected_Cost_Command'Access);
    end AddCommands;
 
 end Bases.SchoolUI;
