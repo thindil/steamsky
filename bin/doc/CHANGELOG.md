@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing info about training room
+- Default keyboard shortcuts for moving map
 
 ## [6.0.3] - 2021-06-06
 
