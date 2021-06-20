@@ -923,9 +923,9 @@ package body Maps.UI.Commands is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- MoveMouse direction
+   -- MoveCursor direction
    -- Direction is the direction in which the mouse cursor should be moves or
-   -- click if emulate clicking with the left button
+   -- click if emulate clicking with the left or right button
    -- SOURCE
    function Move_Mouse_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
