@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
   remove in bases shipyards
 - Restoring position on last messages window after closing the game options
   screen
+- Default keyboard shortcuts for moving map
 
 ## [6.2] - 2021-06-13
 
