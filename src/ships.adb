@@ -532,21 +532,29 @@ package body Ships is
             for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Child_Node := Item(List => Child_Nodes, Index => J);
                Module_Amount :=
-                 (if Get_Attribute(Child_Node, "amount") /= "" then
-                    Positive'Value(Get_Attribute(Child_Node, "amount"))
+                 (if Get_Attribute(Elem => Child_Node, Name => "amount") /= ""
+                  then
+                    Positive'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "amount"))
                   else 1);
                Module_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               if not BaseModules_Container.Contains
-                   (Modules_List, Module_Index) then
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               if not Modules_List.Contains(Key => Module_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid module index: |" &
-                    Get_Attribute(Child_Node, "index") & "| in " &
-                    To_String(Temp_Record.Name) & ".";
+                    Get_Attribute(Elem => Child_Node, Name => "index") &
+                    "| in " & To_String(Source => Temp_Record.Name) & ".";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Sub_Action = ADD then
                   Temp_Record.Modules.Append
@@ -556,7 +564,8 @@ package body Ships is
                   Find_Delete_Module_Loop :
                   for K in Temp_Record.Modules.Iterate loop
                      if Temp_Record.Modules(K) = Module_Index then
-                        Delete_Index := UnboundedString_Container.To_Index(K);
+                        Delete_Index :=
+                          UnboundedString_Container.To_Index(Position => K);
                         exit Find_Delete_Module_Loop;
                      end if;
                   end loop Find_Delete_Module_Loop;
@@ -565,9 +574,10 @@ package body Ships is
                      Count => Count_Type(Module_Amount));
                end if;
             end loop Load_Modules_Loop;
-            if Get_Attribute(Ship_Node, "accuracy") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "accuracy") /= "" then
                Temp_Record.Accuracy(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "accuracy"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "accuracy"));
                Temp_Record.Accuracy(2) := 0;
             elsif Get_Attribute(Ship_Node, "minaccuracy") /= "" then
                Temp_Record.Accuracy(1) :=
