@@ -94,6 +94,7 @@ package body Bases.SchoolUI is
       Current(ComboBox, "0");
       Set(SpinBox, "1");
       Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " 1");
+      Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
       return TCL_OK;
    end Set_School_Skills_Command;
 
@@ -349,9 +350,22 @@ package body Bases.SchoolUI is
    function Update_School_Selected_Cost_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv, Interp);
-      -- AmountBox: Ttk_SpinBox := Get_Widget(Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
+      pragma Unreferenced(ClientData, Argc, Argv);
+      AmountBox: constant Ttk_SpinBox :=
+        Get_Widget
+          (Main_Paned & ".schoolframe.canvas.school.costbox.amount", Interp);
+      MoneyIndex2: constant Natural :=
+        FindItem(Player_Ship.Cargo, Money_Index);
    begin
+      if MoneyIndex2 > 0 then
+         configure
+           (AmountBox,
+            "-from 1 -to" &
+            Positive'Image(Player_Ship.Cargo(MoneyIndex2).Amount));
+      else
+         configure(AmountBox, "-from 1 -to 1");
+      end if;
+      Set(AmountBox, "1");
       return TCL_OK;
    end Update_School_Selected_Cost_Command;
 
