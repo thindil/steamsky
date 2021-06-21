@@ -579,30 +579,38 @@ package body Ships is
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "accuracy"));
                Temp_Record.Accuracy(2) := 0;
-            elsif Get_Attribute(Ship_Node, "minaccuracy") /= "" then
+            elsif Get_Attribute(Elem => Ship_Node, Name => "minaccuracy") /=
+              "" then
                Temp_Record.Accuracy(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "minaccuracy"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "minaccuracy"));
                Temp_Record.Accuracy(2) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "maxaccuracy"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "maxaccuracy"));
                if Temp_Record.Accuracy(2) < Temp_Record.Accuracy(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Ship_Index) &
+                    with "Can't add ship '" & To_String(Source => Ship_Index) &
                     "', invalid range for accuracy.";
                end if;
             end if;
-            if Get_Attribute(Ship_Node, "combatai") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "combatai") /= "" then
                Temp_Record.Combat_Ai :=
-                 Ship_Combat_Ai'Value(Get_Attribute(Ship_Node, "combatai"));
+                 Ship_Combat_Ai'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "combatai"));
             end if;
-            if Get_Attribute(Ship_Node, "evasion") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "evasion") /= "" then
                Temp_Record.Evasion(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "evasion"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "evasion"));
                Temp_Record.Evasion(2) := 0;
-            elsif Get_Attribute(Ship_Node, "minevasion") /= "" then
+            elsif Get_Attribute(Elem => Ship_Node, Name => "minevasion") /=
+              "" then
                Temp_Record.Evasion(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "minevasion"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "minevasion"));
                Temp_Record.Evasion(2) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "maxevasion"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
                if Temp_Record.Evasion(2) < Temp_Record.Evasion(1) then
                   raise Ships_Invalid_Data
                     with "Can't add ship '" & To_String(Ship_Index) &
