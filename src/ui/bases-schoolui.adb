@@ -247,10 +247,13 @@ package body Bases.SchoolUI is
       pragma Unreferenced(Argc, Argv);
       AmountBox: constant Ttk_SpinBox :=
         Get_Widget
-          (Main_Paned & ".schoolframe.canvas.school.amountbox.amount", Interp);
+          (Main_Paned & ".schoolframe.canvas.school." &
+           Tcl_GetVar(Interp, "traintype") & "box.amount",
+           Interp);
    begin
       TrainSkill
-        (Get_Member_Index, Get_Skill_Index, Positive'Value(Get(AmountBox)));
+        (Get_Member_Index, Get_Skill_Index, Positive'Value(Get(AmountBox)),
+         (if Tcl_GetVar(Interp, "traintype") = "amount" then True else False));
       UpdateMessages;
       return
         Show_School_Command
