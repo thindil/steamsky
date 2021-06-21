@@ -60,7 +60,8 @@ package Bases.Cargo is
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last)
       return Natural with
-      Test_Case => (Name => "Test_FindBaseCargo", Mode => Robustness);
+      Pre => Length(ProtoIndex) > 0,
+      Test_Case => (Name => "Test_FindBaseCargo", Mode => Nominal);
       -- ****
 
 end Bases.Cargo;
