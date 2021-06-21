@@ -293,20 +293,21 @@ package body Bases.Trade is
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) is
-      Cost, MaxAmount: Natural;
+      Cost: Natural;
       MoneyIndex2: Inventory_Container.Extended_Index;
       GainedExp: Positive;
       BaseIndex: constant Bases_Range :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       TraderIndex: Crew_Container.Extended_Index;
       Sessions, OverallCost: Natural := 0;
+      MaxAmount: Integer;
    begin
       if Is_Amount then
          MaxAmount := Amount;
       end if;
       GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
       Train_Skill_Loop :
-      for I in 1 .. MaxAmount loop
+      while MaxAmount > 0 loop
          Cost := TrainCost(MemberIndex, SkillIndex);
          MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
@@ -329,8 +330,9 @@ package body Bases.Trade is
          end if;
          GainRep(BaseIndex, 5);
          Update_Game(60);
-         Sessions := I;
+         Sessions := Sessions + 1;
          OverallCost := OverallCost + Cost;
+         MaxAmount := MaxAmount - (if Is_Amount then 1 else Cost);
       end loop Train_Skill_Loop;
       if Sessions > 0 then
          AddMessage
