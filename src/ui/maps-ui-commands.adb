@@ -940,6 +940,10 @@ package body Maps.UI.Commands is
       MapView: constant Tk_Text :=
         Get_Widget(Main_Paned & ".mapframe.map", Interp);
    begin
+      if Focus /= Widget_Image(MapView) then
+         Focus(MapView, "-force");
+         return TCL_OK;
+      end if;
       if CArgv.Arg(Argv, 1) = "click" then
          Generate
            (MapView,
