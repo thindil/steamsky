@@ -58,6 +58,6 @@ grid [ttk::radiobutton $schoolframe.costbox.radioamount -text {Selected maximum 
 tooltip::tooltip $schoolframe.costbox.radioamount "Train the selected skill as long as you don't spend the selected\namount of money"
 grid [ttk::label $schoolframe.costbox.amountlbl -text {Cost:}] -sticky w -padx {50 0}
 tooltip::tooltip $schoolframe.costbox.amountlbl {Enter amount of money which you want to spend}
-grid [ttk::spinbox $schoolframe.costbox.amount -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 1 -column 1 -sticky w
+grid [ttk::spinbox $schoolframe.costbox.amount -validate key -validatecommand {ValidateSpinbox %W %P} -width 10] -row 1 -column 1 -sticky w
 tooltip::tooltip $schoolframe.costbox.amount {Enter amount of money which you want to spend}
 $schoolframe.costbox.amount set 1
