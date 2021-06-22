@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Missing tooltip in wait menu
 
+### Changed
+- Move mouse cursor on map a bit faster
+
 ### Fixed
 - Showing info about training room
 - Default keyboard shortcuts for moving the map
