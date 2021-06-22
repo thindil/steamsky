@@ -613,32 +613,40 @@ package body Ships is
                    (Get_Attribute(Elem => Ship_Node, Name => "maxevasion"));
                if Temp_Record.Evasion(2) < Temp_Record.Evasion(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Ship_Index) &
+                    with "Can't add ship '" & To_String(Source => Ship_Index) &
                     "', invalid range for evasion.";
                end if;
             end if;
-            if Get_Attribute(Ship_Node, "loot") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "loot") /= "" then
                Temp_Record.Loot(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "loot"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "loot"));
                Temp_Record.Loot(2) := 0;
-            elsif Get_Attribute(Ship_Node, "minloot") /= "" then
+            elsif Get_Attribute(Elem => Ship_Node, Name => "minloot") /=
+              "" then
                Temp_Record.Loot(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "minloot"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "minloot"));
                Temp_Record.Loot(2) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "maxloot"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "maxloot"));
                if Temp_Record.Loot(2) < Temp_Record.Loot(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Ship_Index) &
+                    with "Can't add ship '" & To_String(Source => Ship_Index) &
                     "', invalid range for loot.";
                end if;
             end if;
-            if Get_Attribute(Ship_Node, "perception") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "perception") /=
+              "" then
                Temp_Record.Perception(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "perception"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "perception"));
                Temp_Record.Perception(2) := 0;
-            elsif Get_Attribute(Ship_Node, "minperception") /= "" then
+            elsif Get_Attribute(Elem => Ship_Node, Name => "minperception") /=
+              "" then
                Temp_Record.Perception(1) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "minperception"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "minperception"));
                Temp_Record.Perception(2) :=
                  Integer'Value(Get_Attribute(Ship_Node, "maxperception"));
                if Temp_Record.Perception(2) < Temp_Record.Perception(1) then
