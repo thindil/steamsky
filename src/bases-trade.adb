@@ -300,18 +300,16 @@ package body Bases.Trade is
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       TraderIndex: Crew_Container.Extended_Index;
       Sessions, OverallCost: Natural := 0;
-      MaxAmount: Integer;
+      MaxAmount: Integer := Amount;
    begin
-      if Is_Amount then
-         MaxAmount := Amount;
-      end if;
       GiveOrders(Player_Ship, MemberIndex, Rest, 0, False);
       Train_Skill_Loop :
       while MaxAmount > 0 loop
          Cost := TrainCost(MemberIndex, SkillIndex);
          MoneyIndex2 := FindItem(Player_Ship.Cargo, Money_Index);
          exit Train_Skill_Loop when Cost = 0 or
-           Player_Ship.Cargo(MoneyIndex2).Amount < Cost;
+           Player_Ship.Cargo(MoneyIndex2).Amount < Cost or
+           (not Is_Amount and MaxAmount < Cost);
          GainedExp :=
            GetRandom(10, 60) +
            Player_Ship.Crew(MemberIndex).Attributes
