@@ -1,4 +1,4 @@
---    Copyright 2017-2020 Bartek thindil Jasicki
+--    Copyright 2017-2021 Bartek thindil Jasicki
 --
 --    This file is part of Steam Sky.
 --
@@ -31,7 +31,8 @@ package Bases.SaveLoad is
    -- SaveData - XML structure to which sky bases data will be saved
    -- MainNode - XML main node to which sky bases data will be saved
    -- SOURCE
-   procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element);
+   procedure SaveBases
+     (SaveData: not null Document; MainNode: not null DOM.Core.Element);
    -- ****
 
    -- ****f* BSaveLoad/BSaveLoad.LoadBases
@@ -40,7 +41,7 @@ package Bases.SaveLoad is
    -- PARAMETERS
    -- SaveData - XML structure from which sky bases data will be loaded
    -- SOURCE
-   procedure LoadBases(SaveData: Document);
+   procedure LoadBases(SaveData: not null Document);
    -- ****
 
 end Bases.SaveLoad;
