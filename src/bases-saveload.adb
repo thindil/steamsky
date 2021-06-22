@@ -23,7 +23,7 @@ with Maps; use Maps;
 
 package body Bases.SaveLoad is
 
-   procedure SaveBases(SaveData: Document; MainNode: DOM.Core.Element) is
+   procedure SaveBases(SaveData: not null Document; MainNode: not null DOM.Core.Element) is
       RawValue: Unbounded_String;
       BaseNode, SubNode: DOM.Core.Element;
       procedure SaveNumber
@@ -198,7 +198,7 @@ package body Bases.SaveLoad is
       end loop Save_Bases_Loop;
    end SaveBases;
 
-   procedure LoadBases(SaveData: Document) is
+   procedure LoadBases(SaveData: not null Document) is
       BaseRecruits: Recruit_Container.Vector;
       BaseMissions: Mission_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
