@@ -951,43 +951,43 @@ package body Maps.UI.Commands is
       elsif CArgv.Arg(Argv, 1) = "nw" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
-            CArgv.Arg(Argv, 3) & "-1]");
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "n" then
          Generate
            (MapView, "<Motion>",
             "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
-            CArgv.Arg(Argv, 3) & "-1]");
+            CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "ne" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
-            CArgv.Arg(Argv, 3) & "-1]");
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y [expr " &
+            CArgv.Arg(Argv, 3) & "-5]");
       elsif CArgv.Arg(Argv, 1) = "w" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y " &
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "e" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y " &
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y " &
             CArgv.Arg(Argv, 3));
       elsif CArgv.Arg(Argv, 1) = "sw" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-1] -y [expr " &
-            CArgv.Arg(Argv, 3) & "+1]");
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "-5] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+5]");
       elsif CArgv.Arg(Argv, 1) = "s" then
          Generate
            (MapView, "<Motion>",
             "-warp 1 -x " & CArgv.Arg(Argv, 2) & " -y [expr " &
-            CArgv.Arg(Argv, 3) & "+1]");
+            CArgv.Arg(Argv, 3) & "+5]");
       elsif CArgv.Arg(Argv, 1) = "se" then
          Generate
            (MapView, "<Motion>",
-            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+1] -y [expr " &
-            CArgv.Arg(Argv, 3) & "+1]");
+            "-warp 1 -x [expr " & CArgv.Arg(Argv, 2) & "+5] -y [expr " &
+            CArgv.Arg(Argv, 3) & "+5]");
       end if;
       return TCL_OK;
    end Move_Mouse_Command;
