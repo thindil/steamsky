@@ -75,6 +75,7 @@ package body Bases.SchoolUI is
         Get_Widget(FrameName & ".amountbox.amount", Interp);
    begin
       if Argc > 1 then
+         UpdateHeader;
          Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " " & Get(SpinBox));
          Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
          return TCL_OK;
