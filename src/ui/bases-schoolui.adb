@@ -76,6 +76,7 @@ package body Bases.SchoolUI is
    begin
       if Argc > 1 then
          Tcl_Eval(Interp, "UpdateSchoolCost " & SpinBox & " " & Get(SpinBox));
+         Tcl_Eval(Interp, "UpdateSchoolSelectedCost");
          return TCL_OK;
       end if;
       ComboBox := Get_Widget(FrameName & ".setting.skill");
