@@ -41,7 +41,10 @@ package Bases.SaveLoad is
    -- PARAMETERS
    -- SaveData - XML structure from which sky bases data will be loaded
    -- SOURCE
-   procedure LoadBases(SaveData: not null Document);
+   procedure LoadBases(SaveData: not null Document) with
+      Post =>
+      (for all I in SkyBases'Range =>
+         SkyBases(I).Name /= Null_Unbounded_String);
    -- ****
 
 end Bases.SaveLoad;
