@@ -365,8 +365,18 @@ package body Bases.SchoolUI is
            (AmountBox,
             "-from" & Positive'Image(Cost) & " -to" &
             Positive'Image(Player_Ship.Cargo(MoneyIndex2).Amount));
+         Bind
+           (AmountBox, "<<Increment>>",
+            "{" & AmountBox & " set [expr [" & AmountBox & " get] +" &
+            Positive'Image(Cost) & " - 1]}");
+         Bind
+           (AmountBox, "<<Decrement>>",
+            "{" & AmountBox & " set [expr [" & AmountBox & " get] -" &
+            Positive'Image(Cost) & " + 1]}");
       else
          configure(AmountBox, "-from 1 -to 1");
+         Unbind(AmountBox, "<<Increment>>");
+         Unbind(AmountBox, "<<Decrement>>");
       end if;
       Set(AmountBox, Positive'Image(Cost));
       return TCL_OK;
