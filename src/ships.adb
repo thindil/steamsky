@@ -648,29 +648,38 @@ package body Ships is
                  Integer'Value
                    (Get_Attribute(Elem => Ship_Node, Name => "minperception"));
                Temp_Record.Perception(2) :=
-                 Integer'Value(Get_Attribute(Ship_Node, "maxperception"));
+                 Integer'Value
+                   (Get_Attribute(Elem => Ship_Node, Name => "maxperception"));
                if Temp_Record.Perception(2) < Temp_Record.Perception(1) then
                   raise Ships_Invalid_Data
-                    with "Can't add ship '" & To_String(Ship_Index) &
+                    with "Can't add ship '" & To_String(Source => Ship_Index) &
                     "', invalid range for perception.";
                end if;
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Ship_Node, "cargo");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Ship_Node, Name => "cargo");
             Load_Cargo_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Item_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               if not Objects_Container.Contains(Items_List, Item_Index) then
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               if not Items_List.Contains(Key => Item_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid item index: |" &
-                    Get_Attribute(Child_Node, "index") & "| in " &
-                    To_String(Temp_Record.Name) & ".";
+                    Get_Attribute(Elem => Child_Node, Name => "index") &
+                    "| in " & To_String(Source => Temp_Record.Name) & ".";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
