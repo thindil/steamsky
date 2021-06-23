@@ -19,7 +19,7 @@ package Bases.Ship.Test_Data.Tests is
    procedure Test_PayForDock_b46f8e_d92d34(Gnattest_T: in out Test);
    --  bases-ship.ads:82:4:PayForDock:Test_PayForDock
 
-   procedure Test_RepairCost_2d9781_2bca1c(Gnattest_T: in out Test);
+   procedure Test_RepairCost_2d9781_397802(Gnattest_T: in out Test);
    --  bases-ship.ads:97:4:RepairCost:Test_RepairCost
 
 end Bases.Ship.Test_Data.Tests;
