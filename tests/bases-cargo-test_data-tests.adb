@@ -116,23 +116,41 @@ package body Bases.Cargo.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_FindBaseCargo_7cc62c_be492f
+   function Wrap_Test_FindBaseCargo_7cc62c_04452f
      (ProtoIndex: Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last) return Natural is
    begin
+      begin
+         pragma Assert(Length(ProtoIndex) > 0);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(bases-cargo.ads:0):Test_FindBaseCargo test requirement violated");
+      end;
       declare
-         Test_FindBaseCargo_7cc62c_be492f_Result: constant Natural :=
+         Test_FindBaseCargo_7cc62c_04452f_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Bases.Cargo.FindBaseCargo
              (ProtoIndex, Durability);
       begin
-         return Test_FindBaseCargo_7cc62c_be492f_Result;
+         begin
+            pragma Assert(True);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(bases-cargo.ads:0:):Test_FindBaseCargo test commitment violated");
+         end;
+         return Test_FindBaseCargo_7cc62c_04452f_Result;
       end;
-   end Wrap_Test_FindBaseCargo_7cc62c_be492f;
+   end Wrap_Test_FindBaseCargo_7cc62c_04452f;
 --  end read only
 
 --  begin read only
    procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test);
-   procedure Test_FindBaseCargo_7cc62c_be492f(Gnattest_T: in out Test) renames
+   procedure Test_FindBaseCargo_7cc62c_04452f(Gnattest_T: in out Test) renames
      Test_FindBaseCargo_test_findbasecargo;
 --  id:2.2/7cc62c290354667f/FindBaseCargo/1/0/test_findbasecargo/
    procedure Test_FindBaseCargo_test_findbasecargo(Gnattest_T: in out Test) is
@@ -140,7 +158,7 @@ package body Bases.Cargo.Test_Data.Tests is
         (ProtoIndex: Unbounded_String;
          Durability: Items_Durability := Items_Durability'Last)
          return Natural renames
-        Wrap_Test_FindBaseCargo_7cc62c_be492f;
+        Wrap_Test_FindBaseCargo_7cc62c_04452f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
