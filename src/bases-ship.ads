@@ -90,7 +90,8 @@ package Bases.Ship is
       -- Cost        - Overall cost of repair of player ship
       -- Time        - Time needed for repair of player ship
       -- ModuleIndex - Index of module on player ship to repair or 0 to repair
-      --               all damage modules
+      --               all damage modules, -1 for fast repair all ship and -2
+      --               for very fast repair all ship
       -- RESULT
       -- Parameters Cost and Time
       -- SOURCE
