@@ -385,10 +385,9 @@ package body Maps.UI.Commands is
          end if;
       end if;
       Add(DestinationMenu, "command", "-label {Close}");
-      Tcl_Eval
-        (Interp,
-         "tk_popup .destination " & CArgv.Arg(Argv, 1) & " " &
-         CArgv.Arg(Argv, 2));
+      Tk_Popup
+        (DestinationMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Destination_Menu_Command;
 
