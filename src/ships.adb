@@ -683,14 +683,7 @@ package body Ships is
                   else ADD);
                case Sub_Action is
                   when ADD =>
-                     if Get_Attribute(Child_Node, "amount")'Length /= 0 then
-                        Temp_Record.Cargo.Append
-                          (New_Item =>
-                             (Item_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "amount")),
-                              0));
-                     else
+                     if Get_Attribute(Child_Node, "amount")'Length = 0 then
                         if Integer'Value
                             (Get_Attribute(Child_Node, "maxamount")) <
                           Integer'Value
@@ -707,6 +700,13 @@ package body Ships is
                                 (Get_Attribute(Child_Node, "minamount")),
                               Integer'Value
                                 (Get_Attribute(Child_Node, "maxamount"))));
+                     else
+                        Temp_Record.Cargo.Append
+                          (New_Item =>
+                             (Item_Index,
+                              Integer'Value
+                                (Get_Attribute(Child_Node, "amount")),
+                              0));
                      end if;
                   when UPDATE =>
                      Update_Cargo_Loop :
