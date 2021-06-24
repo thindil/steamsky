@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Updated interface
 - Move mouse cursor on map a bit faster
 - Redesigned school screen
+- Updated help
 
 ### Fixed
 - Added missing headers to dialogs with information about modules to install or
