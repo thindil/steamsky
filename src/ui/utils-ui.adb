@@ -765,6 +765,7 @@ package body Utils.UI is
                Insert(MessagesView, "end", "{" & LF & "}");
             end if;
          end loop Show_Older_First_Loop;
+         Tcl_Eval(Get_Context, "update");
          See(MessagesView, "end");
       else
          Show_Newer_First_Loop :
