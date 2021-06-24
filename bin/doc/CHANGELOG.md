@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about training room
 - Default keyboard shortcuts for moving the map
 - Moving cursor on the map with keyboard
+- Scrolling the last messages window to the bottom when there are long messages
 
 ## [6.0.3] - 2021-06-06
 
