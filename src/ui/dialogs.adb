@@ -305,8 +305,10 @@ package body Dialogs is
               Positive'Image(Player_Ship.Cargo(ItemIndex).Amount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
               ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              (if Cost > 0 then Positive'Image(Cost) else "") &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
-              Positive'Image(ItemIndex) & " " & Action & "}");
+              Positive'Image(ItemIndex) & " " & Action &
+              (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       else
          AmountBox :=
            Create
@@ -314,8 +316,10 @@ package body Dialogs is
               "-width 10 -from 1 -to" & Positive'Image(MaxAmount) &
               " -validate key -validatecommand {CheckAmount " & ItemDialog &
               ".amount" & Positive'Image(ItemIndex) & " %P " & Action &
+              (if Cost > 0 then Positive'Image(Cost) else "") &
               "} -command {ValidateAmount " & ItemDialog & ".amount" &
-              Positive'Image(ItemIndex) & " " & Action & "}");
+              Positive'Image(ItemIndex) & " " & Action &
+              (if Cost > 0 then Positive'Image(Cost) else "") & "}");
       end if;
       if MaxAmount = 0 then
          Label :=

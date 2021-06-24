@@ -167,9 +167,29 @@ package body Utils.UI is
          Set(SpinBox, Positive'Image(MaxValue));
          Value := MaxValue;
       end if;
-      if Argc > 4 and then CArgv.Arg(Argv, 4) in "buy" | "take" then
-         Tcl_SetResult(Interp, "1");
-         return TCL_OK;
+      if Argc > 4 then
+         if CArgv.Arg(Argv, 4) = "take" then
+            Tcl_SetResult(Interp, "1");
+            return TCL_OK;
+         elsif CArgv.Arg(Argv, 4) in "buy" | "sell" then
+            declare
+               Cost: Natural := Value * Positive'Value(CArgv.Arg(Argv, 5));
+            begin
+               Label := Get_Widget(".itemdialog.costlbl", Interp);
+               CountPrice
+                 (Cost, FindMember(Talk),
+                  (if CArgv.Arg(Argv, 4) = "buy" then True else False));
+               configure
+                 (Label,
+                  "-text {" &
+                  (if CArgv.Arg(Argv, 4) = "buy" then "Cost:" else "Gain:") &
+                  Natural'Image(Cost) & " " & To_String(Money_Name) & "}");
+               if CArgv.Arg(Argv, 4) = "buy" then
+                  Tcl_SetResult(Interp, "1");
+                  return TCL_OK;
+               end if;
+            end;
+         end if;
       end if;
       Label := Get_Widget(To_String(LabelName), Interp);
       if Items_List(Player_Ship.Cargo(CargoIndex).ProtoIndex).IType =
@@ -244,8 +264,12 @@ package body Utils.UI is
       SpinBox: constant Ttk_SpinBox := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       NewArgv: constant CArgv.Chars_Ptr_Ptr :=
         (if Argc < 4 then Argv & Get(SpinBox)
+         elsif Argc = 4 then
+           CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
+           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3)
          else CArgv.Empty & CArgv.Arg(Argv, 0) & CArgv.Arg(Argv, 1) &
-           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3));
+           CArgv.Arg(Argv, 2) & Get(SpinBox) & CArgv.Arg(Argv, 3) &
+           CArgv.Arg(Argv, 4));
    begin
       return
         Check_Amount_Command(ClientData, Interp, CArgv.Argc(NewArgv), NewArgv);
