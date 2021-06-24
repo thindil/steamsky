@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
   screen
 - Default keyboard shortcuts for moving map
 - Moving cursor on the map with keyboard
+- Scrolling the last messages window to the bottom when there are long messages
 
 ## [6.2] - 2021-06-13
 
