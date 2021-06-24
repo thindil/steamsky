@@ -155,11 +155,13 @@ package Dialogs is
       -- MaxAmount - Max amount of the items to manipualate. If zero, use max
       --             amount of items from player ship cargo. Default value is
       --             zero.
+      -- Cost      - The cost (in buying) or gain (in selling) for one item in
+      --             the game money. Can be zero. Default value is zero.
       -- SOURCE
    procedure ShowManipulateItem
      (Title, Command, Action: String;
       ItemIndex: Inventory_Container.Extended_Index;
-      MaxAmount: Natural := 0) with
+      MaxAmount, Cost: Natural := 0) with
       Pre => Title'Length > 0 and Command'Length > 0;
       -- ****
 

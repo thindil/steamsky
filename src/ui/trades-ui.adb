@@ -869,7 +869,7 @@ package body Trades.UI is
                Menu.Add
                  (TradeMenu, "command",
                   "-label {Sell selected amount} -command {TradeAmount sell " &
-                  Natural'Image(MaxSellAmount) & "}");
+                  Natural'Image(MaxSellAmount) & Natural'Image(Price) & "}");
                Menu.Add
                  (TradeMenu, "command",
                   "-label {Sell" & Natural'Image(MaxSellAmount) &
@@ -931,7 +931,7 @@ package body Trades.UI is
                   Menu.Add
                     (TradeMenu, "command",
                      "-label {Buy selected amount} -command {TradeAmount buy" &
-                     Natural'Image(MaxBuyAmount) & "}");
+                     Natural'Image(MaxBuyAmount) & Natural'Image(Price) & "}");
                   Menu.Add
                     (TradeMenu, "command",
                      "-label {Buy" & Natural'Image(MaxBuyAmount) &
@@ -983,13 +983,15 @@ package body Trades.UI is
          ShowManipulateItem
            ("Sell " & GetItemName(Player_Ship.Cargo(ItemIndex)),
             "TradeItem sell", "sell", ItemIndex,
-            Natural'Value(CArgv.Arg(Argv, 2)));
+            Natural'Value(CArgv.Arg(Argv, 2)),
+            Natural'Value(CArgv.Arg(Argv, 3)));
       else
          if ItemIndex > 0 then
             ShowManipulateItem
               ("Buy " & GetItemName(Player_Ship.Cargo(ItemIndex)),
                "TradeItem buy", "buy", ItemIndex,
-               Natural'Value(CArgv.Arg(Argv, 2)));
+               Natural'Value(CArgv.Arg(Argv, 2)),
+               Natural'Value(CArgv.Arg(Argv, 3)));
          else
             if BaseIndex > 0 then
                ShowManipulateItem
@@ -999,14 +1001,16 @@ package body Trades.UI is
                        (SkyBases(BaseIndex).Cargo(abs (ItemIndex)).ProtoIndex)
                        .Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
-                  Natural'Value(CArgv.Arg(Argv, 2)));
+                  Natural'Value(CArgv.Arg(Argv, 2)),
+                  Natural'Value(CArgv.Arg(Argv, 3)));
             else
                ShowManipulateItem
                  ("Buy " &
                   To_String
                     (Items_List(TraderCargo(abs (ItemIndex)).ProtoIndex).Name),
                   "TradeItem buy", "buy", abs (ItemIndex),
-                  Natural'Value(CArgv.Arg(Argv, 2)));
+                  Natural'Value(CArgv.Arg(Argv, 2)),
+                  Natural'Value(CArgv.Arg(Argv, 3)));
             end if;
          end if;
       end if;
