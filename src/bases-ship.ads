@@ -97,6 +97,7 @@ package Bases.Ship is
       -- SOURCE
    procedure RepairCost(Cost, Time: in out Natural; ModuleIndex: Integer) with
       Pre => ModuleIndex in -2 .. Player_Ship.Modules.Last_Index,
+      Post => Cost > 0 and Time > 0,
       Test_Case => (Name => "Test_RepairCost", Mode => Nominal);
       -- ****
 
