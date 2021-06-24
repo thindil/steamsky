@@ -288,7 +288,7 @@ package body Dialogs is
    procedure ShowManipulateItem
      (Title, Command, Action: String;
       ItemIndex: Inventory_Container.Extended_Index;
-      MaxAmount: Natural := 0) is
+      MaxAmount, Cost: Natural := 0) is
       ItemDialog: constant Ttk_Frame :=
         Create_Dialog(".itemdialog", Title, 275, 2);
       Button: Ttk_Button :=
@@ -337,20 +337,29 @@ package body Dialogs is
       Bind
         (AmountBox, "<Escape>",
          "{" & ItemDialog & ".cancelbutton invoke;break}");
+      if Cost > 0 then
+         Label :=
+           Create
+             (ItemDialog & ".costlbl",
+              "-wraplength 370 -text {" &
+              (if Action = "buy" then "Cost:" else "Gain:") &
+              Natural'Image(Cost) & " " & To_String(Money_Name) & "}");
+         Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5 -sticky w");
+      end if;
       Label :=
         Create
           (ItemDialog & ".errorlbl",
-           "-style Headerred.TLabel -wraplength 370 -takefocus 0");
+           "-style Headerred.TLabel -wraplength 370");
       Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid_Remove(Label);
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 3 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 0 -row 4 -pady {0 5}");
       Bind
         (Button, "<Escape>", "{" & ItemDialog & ".cancelbutton invoke;break}");
       Button :=
         Create
           (ItemDialog & ".cancelbutton",
            "-text Cancel -command {CloseDialog " & ItemDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 3 -pady {0 5}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-column 1 -row 4 -pady {0 5}");
       Focus(Button);
       Bind(Button, "<Tab>", "{focus .itemdialog.dropbutton;break}");
       Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
