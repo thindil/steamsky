@@ -262,7 +262,7 @@ package body Table is
 
    procedure UpdateTable(Table: in out Table_Widget) is
       Tag: Unbounded_String;
-      NewX: Natural := Table.Columns_Width(1);
+      NewX: Natural := Table.Columns_Width(1) + 20;
       NewY: Natural := 2;
    begin
       Update_Columns_Loop :
@@ -298,7 +298,7 @@ package body Table is
                Trim(Positive'Image(NewX + 2), Left),
                Trim(Positive'Image(NewY + 7), Left));
          end loop Update_Rows_Loop;
-         NewX := NewX + Table.Columns_Width(Column);
+         NewX := NewX + Table.Columns_Width(Column) + 20;
          NewY := 2;
       end loop Update_Columns_Loop;
       declare
