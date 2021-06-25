@@ -23,10 +23,7 @@ with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
-with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
-with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
-use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkEntry; use Tcl.Tk.Ada.Widgets.TtkEntry;
@@ -38,7 +35,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Bases; use Bases;
 with Combat.UI; use Combat.UI;
@@ -365,28 +361,11 @@ package body Utils.UI is
    begin
       if Result = "deletesave" then
          declare
-            Frame: constant Ttk_Frame := Get_Widget(".loadmenu", Interp);
-            LoadView: constant Ttk_Tree_View := Get_Widget(Frame & ".view");
-            ItemIndex, Items: Unbounded_String;
          begin
-            ItemIndex := To_Unbounded_String(Selection(LoadView));
-            Delete_File(To_String(Save_Directory & ItemIndex));
-            Delete(LoadView, To_String(ItemIndex));
-            Items := To_Unbounded_String(Children(LoadView, "{}"));
-            if Items = Null_Unbounded_String then
-               Unbind_From_Main_Window(Interp, "<Alt-b>");
-               Unbind_From_Main_Window(Interp, "<Alt-l>");
-               Unbind_From_Main_Window(Interp, "<Alt-d>");
-               Unbind_From_Main_Window(Interp, "<Escape>");
-               Tcl.Tk.Ada.Pack.Pack_Forget(Frame);
-               Show_Main_Menu;
-            else
-               ItemIndex := Unbounded_Slice(Items, 1, Index(Items, " "));
-               if ItemIndex = Null_Unbounded_String then
-                  ItemIndex := Items;
-               end if;
-               Selection_Set(LoadView, To_String(ItemIndex));
-            end if;
+            Delete_File
+              (To_String(Save_Directory & Tcl_GetVar(Interp, "deletesave")));
+            Tcl_UnsetVar(Interp, "deletesave");
+            Tcl_Eval(Interp, "ShowLoadGame");
          end;
       elsif Result = "sethomebase" then
          declare
