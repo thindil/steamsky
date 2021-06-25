@@ -268,7 +268,7 @@ package body MainMenu.Commands is
    -- Show available saved games
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -285,7 +285,7 @@ package body MainMenu.Commands is
    function Show_Load_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv, Interp);
+      pragma Unreferenced(ClientData, Argc, Argv);
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       Tokens: Slice_Set;
@@ -320,6 +320,12 @@ package body MainMenu.Commands is
       end loop Load_Saves_List_Loop;
       End_Search(Files);
       UpdateTable(LoadTable);
+      if LoadTable.Row = 1 then
+         Unbind_From_Main_Window(Interp, "<Alt-b>");
+         Unbind_From_Main_Window(Interp, "<Escape>");
+         Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
+         Show_Main_Menu;
+      end if;
       return TCL_OK;
    end Show_Load_Game_Command;
 
