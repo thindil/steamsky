@@ -58,6 +58,7 @@ with Goals; use Goals;
 with HallOfFame; use HallOfFame;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Table; use Table;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
 
@@ -253,12 +254,19 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Hall_Of_Fame_Command;
 
+   -- ****iv* MCommands/MCommands.LoadTable
+   -- FUNCTION
+   -- Table with info about the available saved games
+   -- SOURCE
+   LoadTable: Table_Widget (3);
+   -- ****
+
    -- ****o* MCommands/Show_Load_Game_Command
    -- FUNCTION
    -- Show available saved games
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
@@ -275,32 +283,40 @@ package body MainMenu.Commands is
    function Show_Load_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
+      pragma Unreferenced(ClientData, Argc, Argv, Interp);
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       Tokens: Slice_Set;
-      Selected: Boolean := False;
    begin
-      Delete(LoadView, "[list " & Children(LoadView, "{}") & "]");
+      if LoadTable.Row_Height = 1 then
+         LoadTable :=
+           CreateTable
+             (".loadmenu.list",
+              (To_Unbounded_String("Player name"),
+               To_Unbounded_String("Ship name"),
+               To_Unbounded_String("Last saved")));
+      else
+         ClearTable(LoadTable);
+      end if;
       Start_Search(Files, To_String(Save_Directory), "*.sav");
       Load_Saves_List_Loop :
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
-         Insert
-           (LoadView,
-            "{} end -id {" & Simple_Name(FoundFile) & "} -values [list " &
-            Slice(Tokens, 1) & " " & Slice(Tokens, 2) & " {" &
+         AddButton
+           (LoadTable, Slice(Tokens, 1), "Show available options",
+            "ShowLoadGameMenu", 1);
+         AddButton
+           (LoadTable, Slice(Tokens, 2), "Show available options",
+            "ShowLoadGameMenu", 2);
+         AddButton
+           (LoadTable,
             Ada.Calendar.Formatting.Image
-              (Modification_Time(FoundFile), False, UTC_Time_Offset) &
-            "}] -tags [list itemrow]");
-         if not Selected then
-            Selection_Set(LoadView, "{" & Simple_Name(FoundFile) & "}");
-            Selected := True;
-         end if;
+              (Modification_Time(FoundFile), False, UTC_Time_Offset),
+            "Show available options", "ShowLoadGameMenu", 3, True);
       end loop Load_Saves_List_Loop;
       End_Search(Files);
+      UpdateTable(LoadTable);
       return TCL_OK;
    end Show_Load_Game_Command;
 
