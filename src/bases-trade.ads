@@ -92,7 +92,8 @@ package Bases.Trade is
    procedure HealCost
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) with
-      Pre => (MemberIndex <= Player_Ship.Crew.Last_Index),
+      Pre => MemberIndex <= Player_Ship.Crew.Last_Index,
+      Post => Cost > 0 and Time > 0,
       Test_Case => (Name => "Test_HealCost", Mode => Nominal);
       -- ****
 
@@ -104,14 +105,15 @@ package Bases.Trade is
       -- SkillIndex  - Index of skill of selected crew member which will be
       --               training
       -- RESULT
-      -- Overall cost of training selected skill by selected crew member
+      -- Overall cost of training selected skill by selected crew member.
+      -- Return 0 if the skill can't be trained because is maxed.
       -- SOURCE
    function TrainCost
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) return Natural with
-      Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
-       SkillIndex <= Skills_List.Last_Index),
+      Pre => MemberIndex in
+        Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
+      SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
       Test_Case => (Name => "Test_TrainCost", Mode => Nominal);
       -- ****
 
@@ -129,9 +131,9 @@ package Bases.Trade is
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) with
-      Pre =>
-      (MemberIndex <= Player_Ship.Crew.Last_Index and
-       SkillIndex <= Skills_List.Last_Index),
+      Pre => MemberIndex in
+        Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
+      SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index,
       Test_Case => (Name => "Test_TrainSkill", Mode => Nominal);
       -- ****
 
