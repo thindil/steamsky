@@ -29,6 +29,7 @@ with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
+with Tcl.Tk.Ada.Pack;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
@@ -333,7 +334,8 @@ package body MainMenu.Commands is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- DeleteGame
+   -- DeleteGame file
+   -- File is the name of the saved game to delete
    -- SOURCE
    function Delete_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -344,8 +346,9 @@ package body MainMenu.Commands is
    function Delete_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+      pragma Unreferenced(ClientData, Argc);
    begin
+      Tcl_SetVar(Interp, "deletesave", CArgv.Arg(Argv, 1));
       ShowQuestion
         ("Are you sure you want delete this savegame?", "deletesave", False);
       return TCL_OK;
@@ -408,6 +411,7 @@ package body MainMenu.Commands is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
+      Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
       SaveName := Save_Directory & CArgv.Arg(Argv, 1);
       LoadGame;
       StartGame;
@@ -860,7 +864,8 @@ package body MainMenu.Commands is
          "}");
       Menu.Add
         (LoadMenu, "command",
-         "-label {Delete the game} -command {DeleteGame}");
+         "-label {Delete the game} -command {DeleteGame " &
+         CArgv.Arg(Argv, 1) & "}");
       Tk_Popup
         (LoadMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
