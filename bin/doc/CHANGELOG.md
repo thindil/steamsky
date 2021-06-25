@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Info about current gain or cost when selling or buying items
+
 ### Changed
 - Updated interface
 - Move mouse cursor on map a bit faster
