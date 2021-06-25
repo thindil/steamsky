@@ -30,6 +30,7 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid; use Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
+with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel; use Tcl.Tk.Ada.Widgets.Toplevel;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
@@ -305,15 +306,16 @@ package body MainMenu.Commands is
          Create(Tokens, Simple_Name(FoundFile), "_");
          AddButton
            (LoadTable, Slice(Tokens, 1), "Show available options",
-            "ShowLoadGameMenu", 1);
+            "ShowLoadGameMenu " & Simple_Name(FoundFile), 1);
          AddButton
            (LoadTable, Slice(Tokens, 2), "Show available options",
-            "ShowLoadGameMenu", 2);
+            "ShowLoadGameMenu " & Simple_Name(FoundFile), 2);
          AddButton
            (LoadTable,
             Ada.Calendar.Formatting.Image
               (Modification_Time(FoundFile), False, UTC_Time_Offset),
-            "Show available options", "ShowLoadGameMenu", 3, True);
+            "Show available options",
+            "ShowLoadGameMenu " & Simple_Name(FoundFile), 3, True);
       end loop Load_Saves_List_Loop;
       End_Search(Files);
       UpdateTable(LoadTable);
@@ -386,13 +388,14 @@ package body MainMenu.Commands is
    -- Load the selected save file and start the game
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- LoadGame
+   -- LoadGame file
+   -- File is the name of the saved game which will be loaded
    -- SOURCE
    function Load_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -403,13 +406,9 @@ package body MainMenu.Commands is
    function Load_Game_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      LoadView: constant Ttk_Tree_View := Get_Widget(".loadmenu.view", Interp);
+      pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      if Selection(LoadView) = "" then
-         return TCL_OK;
-      end if;
-      SaveName := Save_Directory & Selection(LoadView);
+      SaveName := Save_Directory & CArgv.Arg(Argv, 1);
       LoadGame;
       StartGame;
       return TCL_OK;
@@ -825,6 +824,49 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Main_Menu_Command;
 
+   -- ****o* MCommands/Show_Load_Game_Menu_Command
+   -- FUNCTION
+   -- Show available options for the selected saved game
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowLoadGameMenu file
+   -- File is the filename of the saved game to manipulate
+   -- SOURCE
+   function Show_Load_Game_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Load_Game_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      LoadMenu: Tk_Menu := Get_Widget(".loadfilemenu", Interp);
+   begin
+      if (Winfo_Get(LoadMenu, "exists")) = "0" then
+         LoadMenu := Create(".loadfilemenu", "-tearoff false");
+      end if;
+      Delete(LoadMenu, "0", "end");
+      Menu.Add
+        (LoadMenu, "command",
+         "-label {Load the game} -command {LoadGame " & CArgv.Arg(Argv, 1) &
+         "}");
+      Menu.Add
+        (LoadMenu, "command",
+         "-label {Delete the game} -command {DeleteGame}");
+      Tk_Popup
+        (LoadMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Load_Game_Menu_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
@@ -840,6 +882,7 @@ package body MainMenu.Commands is
       AddCommand("RandomName", Random_Name_Command'Access);
       AddCommand("NewGame", New_Game_Command'Access);
       AddCommand("ShowMainMenu", Show_Main_Menu_Command'Access);
+      AddCommand("ShowLoadGameMenu", Show_Load_Game_Menu_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
