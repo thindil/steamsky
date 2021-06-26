@@ -98,7 +98,8 @@ package Bases is
    -- FUNCTION
    -- Bases sizes
    -- SOURCE
-   type Bases_Size is (Small, Medium, Big);
+   type Bases_Size is (Small, Medium, Big) with
+      Default_Value => Medium;
    -- ****
 
    -- ****s* Bases/Bases.BaseRecord
@@ -220,6 +221,7 @@ package Bases is
    function GenerateBaseName
      (FactionIndex: Unbounded_String) return Unbounded_String with
       Pre => Factions_Container.Contains(Factions_List, FactionIndex),
+      Post => Length(GenerateBaseName'Result) > 0,
       Test_Case => (Name => "Test_GenerateBaseName", Mode => Nominal);
       -- ****
 
