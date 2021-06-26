@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Move mouse cursor on map a bit faster
-- Redesigned school screen
+- Redesigned school and load game screens
 - Updated help
 
 ### Fixed
