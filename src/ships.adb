@@ -726,29 +726,44 @@ package body Ships is
                      Update_Cargo_Loop :
                      for Item of Temp_Record.Cargo loop
                         if Item.ProtoIndex = Item_Index then
-                           if Get_Attribute(Child_Node, "amount")'Length /=
+                           if Get_Attribute
+                               (Elem => Child_Node, Name => "amount")'
+                               Length =
                              0 then
-                              Item :=
-                                (Item_Index,
-                                 Integer'Value
-                                   (Get_Attribute(Child_Node, "amount")),
-                                 0);
-                           else
                               if Integer'Value
-                                  (Get_Attribute(Child_Node, "maxamount")) <
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxamount")) <
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "minamount")) then
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minamount")) then
                                  raise Ships_Invalid_Data
                                    with "Invalid amount range for item : |" &
-                                   Get_Attribute(Child_Node, "index") &
-                                   "| in " & To_String(Temp_Record.Name) & ".";
+                                   Get_Attribute
+                                     (Elem => Child_Node, Name => "index") &
+                                   "| in " &
+                                   To_String(Source => Temp_Record.Name) & ".";
                               end if;
+                              Item :=
+                                (ProtoIndex => Item_Index,
+                                 MinAmount =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "minamount")),
+                                 MaxAmount =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "maxamount")));
+                           else
                               Item :=
                                 (Item_Index,
                                  Integer'Value
-                                   (Get_Attribute(Child_Node, "minamount")),
-                                 Integer'Value
-                                   (Get_Attribute(Child_Node, "maxamount")));
+                                   (Get_Attribute
+                                      (Elem => Child_Node, Name => "amount")),
+                                 0);
                            end if;
                            exit Update_Cargo_Loop;
                         end if;
