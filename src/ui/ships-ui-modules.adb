@@ -40,7 +40,6 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkProgressBar; use Tcl.Tk.Ada.Widgets.TtkProgressBar;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
@@ -1445,6 +1444,13 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
+   -- ****iv* SUI2/SUI2.SkillsTable
+   -- FUNCTION
+   -- Table to set the training skill for the selected training room
+   -- SOURCE
+   SkillsTable: Table_Widget (2);
+   -- ****
+
    -- ****o* SUModules/SUModules.Show_Assign_Skill_Command
    -- FUNCTION
    -- Show assign the skill UI
@@ -1478,24 +1484,14 @@ package body Ships.UI.Modules is
              "Assign skill to " &
              To_String(Player_Ship.Modules(ModuleIndex).Name),
            Title_Width => 300, Columns => 2);
-      CloseButton: constant Ttk_Button :=
-        Create
-          (ModuleDialog & ".button",
-           "-text Close -command {CloseDialog " & ModuleDialog & "}");
-      ScrollSkillY: constant Ttk_Scrollbar :=
-        Create
-          (ModuleDialog & ".scrolly",
-           "-orient vertical -command [list " & ModuleDialog & ".view yview]");
-      SkillsView: constant Ttk_Tree_View :=
-        Create
-          (ModuleDialog & ".view",
-           "-columns [list name tool] -show headings -yscrollcommand [list " &
-           ScrollSkillY & " set]");
-      ToolName, ProtoIndex, Tags, SkillName: Unbounded_String;
+      SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
+      ToolName, ProtoIndex, SkillName, ToolColor: Unbounded_String;
    begin
-      Heading(SkillsView, "name", "-text {Skill}");
-      Heading(SkillsView, "tool", "-text {Training tool}");
-      Tag_Configure(SkillsView, "gray", "-foreground gray");
+      SkillsTable :=
+        CreateTable
+          (Widget_Image(SkillsFrame),
+           (To_Unbounded_String("Skill"),
+            To_Unbounded_String("Training tool")));
       Load_Skills_List_Loop :
       for I in Skills_List.First_Index .. Skills_List.Last_Index loop
          if Skills_List(I).Tool /= Null_Unbounded_String then
@@ -1505,40 +1501,27 @@ package body Ships.UI.Modules is
                  Items_List(ProtoIndex).ShowType
                else Items_List(ProtoIndex).IType);
          end if;
-         Tags := Null_Unbounded_String;
          SkillName := Skills_List(I).Name;
+         ToolColor := To_Unbounded_String("green");
          if GetItemAmount(Items_List(ProtoIndex).IType) = 0 then
-            Tags := To_Unbounded_String(" -tags [list gray]");
             Append(SkillName, " (no tool)");
+            ToolColor := To_Unbounded_String("red");
          end if;
-         Insert
-           (SkillsView,
-            "{} end -id" & Positive'Image(I) & " -values [list {" &
-            To_String(SkillName) & "} {" & To_String(ToolName) & "}]" &
-            To_String(Tags));
+         AddButton
+           (SkillsTable, To_String(SkillName), "Press to set as trained skill",
+            "AssignModule skill" & Positive'Image(ModuleIndex) &
+            Positive'Image(I),
+            1);
+         AddButton
+           (SkillsTable, To_String(ToolName), "Press to set as trained skill",
+            "AssignModule skill" & Positive'Image(ModuleIndex) &
+            Positive'Image(I),
+            2, True, To_String(ToolColor));
       end loop Load_Skills_List_Loop;
-      if Player_Ship.Modules(ModuleIndex).Trained_Skill > 0 then
-         Selection_Set
-           (SkillsView,
-            "[list" &
-            Positive'Image(Player_Ship.Modules(ModuleIndex).Trained_Skill) &
-            "]");
-         TtkTreeView.Focus
-           (SkillsView,
-            Positive'Image(Player_Ship.Modules(ModuleIndex).Trained_Skill));
-      end if;
-      Bind
-        (SkillsView, "<<TreeviewSelect>>",
-         "{AssignModule skill" & Positive'Image(ModuleIndex) & " [" &
-         SkillsView & " focus]}");
-      Bind(SkillsView, "<Tab>", "{focus " & CloseButton & ";break}");
-      Bind(SkillsView, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Tcl.Tk.Ada.Grid.Grid(SkillsView, "-sticky nwes");
-      Tcl.Tk.Ada.Grid.Grid(ScrollSkillY, "-sticky ns -column 1 -row 1");
-      Tcl.Tk.Ada.Grid.Grid(CloseButton, "-columnspan 2");
-      Focus(CloseButton);
-      Bind(CloseButton, "<Escape>", "{" & CloseButton & " invoke;break}");
-      Bind(CloseButton, "<Tab>", "{focus " & SkillsView & ";break}");
+      UpdateTable(SkillsTable);
+      Tcl.Tk.Ada.Grid.Grid(SkillsFrame);
+      Add_Close_Button
+        (ModuleDialog & ".button", "Close", "CloseDialog " & ModuleDialog);
       Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
