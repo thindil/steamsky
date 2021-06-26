@@ -66,7 +66,7 @@ package body Ships.UI.Modules is
 
    -- ****iv* SUI2/SUI2.ModulesTable
    -- FUNCTION
-   -- Table with info about the available items to trade
+   -- Table with info about the installed modules on the player ship
    -- SOURCE
    ModulesTable: Table_Widget (2);
    -- ****
