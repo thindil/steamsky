@@ -50,7 +50,8 @@ project steamsky is
             for Default_Switches ("ada") use ("-O2",
                "-ffunction-sections",
                "-fdata-sections",
-               "-s");
+               "-s",
+               "-flto");
          when "analyze" =>
             for Default_Switches ("ada") use ("-pg",
                "-fprofile-arcs",
@@ -59,7 +60,7 @@ project steamsky is
    end Compiler;
 
    package Linker is
-      Release_Switches := ("-Wl,--gc-sections", "-s", "-O2");
+      Release_Switches := ("-Wl,--gc-sections", "-s", "-O2", "-flto");
       case Mode is
          when "debug" =>
             for Default_Switches ("ada") use ("-no-pie");
