@@ -40,13 +40,10 @@ pack [ttk::button .mainmenu.newgame -text {New game} -underline 0 -command {
 }]
 tooltip::tooltip .mainmenu.newgame {Set and start a new game}
 ttk::button .mainmenu.loadgame -text {Load game} -underline 0 -command {
-   bind . <Alt-d> {InvokeButton .loadmenu.delete}
-   bind . <Alt-l> {InvokeButton .loadmenu.load}
    bind . <Alt-b> {InvokeButton .loadmenu.back}
    bind . <Escape> {InvokeButton .loadmenu.back}
    pack forget .mainmenu
    pack .loadmenu -fill both -expand true
-   focus .loadmenu.load
    ShowLoadGame
 }
 tooltip::tooltip .mainmenu.loadgame {Load one of the previously saved games}
@@ -183,26 +180,12 @@ grid rowconfigure .hofmenu 0 -weight 1
 
 # Load game menu
 ttk::frame .loadmenu -style Main.TFrame
-grid [ttk::frame .loadmenu.list] -columnspan 3 -sticky we -padx {2cm 2}
-grid [ttk::button .loadmenu.delete -text {Delete game} -command DeleteGame -underline 0] -row 1 -column 0 -sticky e -pady 2 -padx 2
-tooltip::tooltip .loadmenu.delete {Delete the selected saved game}
-grid [ttk::button .loadmenu.load -text {Load game} -underline 0 -command {
-   bind . <Alt-b> {}
-   bind . <Alt-l> {}
-   bind . <Alt-d> {}
-   bind . <Escape> {}
-   pack forget .loadmenu
-   LoadGame
-}] -row 1 -column 1 -sticky e -pady 2 -padx 2
-tooltip::tooltip .loadmenu.load {Start the selected saved game}
+grid [ttk::frame .loadmenu.list] -sticky we -padx {2cm 2}
 grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command {
    bind . <Alt-b> {}
-   bind . <Alt-l> {}
-   bind . <Alt-d> {}
-   bind . <Escape> {}
    pack forget .loadmenu
    pack .mainmenu -fill both -expand true
-}] -row 1 -column 2 -sticky e -padx 2 -pady 2
+}] -sticky e -padx 2 -pady 2
 tooltip::tooltip .loadmenu.back {Back to the main menu}
 grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
