@@ -1487,7 +1487,6 @@ package body Ships.UI.Modules is
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ToolName, ProtoIndex, SkillName, ToolColor: Unbounded_String;
    begin
-      Tcl.Tk.Ada.Grid.Grid(SkillsFrame, "-padx 2");
       SkillsTable :=
         CreateTable
           (Widget_Image(SkillsFrame),
@@ -1520,9 +1519,16 @@ package body Ships.UI.Modules is
             2, True, To_String(ToolColor));
       end loop Load_Skills_List_Loop;
       UpdateTable(SkillsTable);
+      Tcl.Tk.Ada.Grid.Grid(SkillsFrame, "-padx 2");
+      Tcl_Eval(Get_Context, "update");
+      configure
+        (SkillsTable.Canvas,
+         "-scrollregion [list " & BBox(SkillsTable.Canvas, "all") & "]");
+      Xview_Move_To(SkillsTable.Canvas, "0.0");
+      Yview_Move_To(SkillsTable.Canvas, "0.0");
       Add_Close_Button
         (ModuleDialog & ".button", "Close", "CloseDialog " & ModuleDialog);
-      Show_Dialog(Dialog => ModuleDialog, Relative_X => 0.2, Relative_Y => 0.2);
+      Show_Dialog(Dialog => ModuleDialog, Relative_Y => 0.2);
       return TCL_OK;
    end Show_Assign_Skill_Command;
 
