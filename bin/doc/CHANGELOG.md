@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0.4] - 2021-06-27
 
 ### Added
 - Missing tooltip in wait menu
