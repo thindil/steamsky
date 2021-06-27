@@ -22,8 +22,8 @@ project steamsky is
             for Default_Switches("ada") use ("-j0", "-gnat2012");
          when others =>
             for Default_Switches("ada") use ("-j0", "-gnat2012", "-g");
+            for Global_Configuration_Pragmas use "gnat.adc";
       end case;
-      for Global_Configuration_Pragmas use "gnat.adc";
    end Builder;
 
    package Binder is
