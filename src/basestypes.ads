@@ -33,7 +33,8 @@ package BasesTypes is
    -- FUNCTION
    -- Buy and sell prices for the item in selected base type
    -- SOURCE
-   type Prices_Array is array(1 .. 2) of Natural;
+   type Prices_Array is array(1 .. 2) of Natural with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****t* BasesTypes/BasesTypes.BasesTrade_Container
