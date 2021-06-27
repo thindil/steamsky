@@ -769,22 +769,23 @@ package body Ships is
                         end if;
                      end loop Update_Cargo_Loop;
                   when REMOVE =>
+                     Remove_Cargo_Block :
                      declare
-                        Delete_Index: Natural := 0;
+                        Delete_Cargo_Index: Natural := 0;
                      begin
                         Find_Delete_Cargo_Loop :
                         for K in
                           Temp_Record.Cargo.First_Index ..
                             Temp_Record.Cargo.Last_Index loop
                            if Temp_Record.Cargo(K).ProtoIndex = Item_Index then
-                              Delete_Index := K;
+                              Delete_Cargo_Index := K;
                               exit Find_Delete_Cargo_Loop;
                            end if;
                         end loop Find_Delete_Cargo_Loop;
-                        if Delete_Index > 0 then
-                           Temp_Record.Cargo.Delete(Delete_Index);
+                        if Delete_Cargo_Index > 0 then
+                           Temp_Record.Cargo.Delete(Delete_Cargo_Index);
                         end if;
-                     end;
+                     end Remove_Cargo_Block;
                end case;
             end loop Load_Cargo_Loop;
             if Get_Attribute(Ship_Node, "owner") /= "" then
