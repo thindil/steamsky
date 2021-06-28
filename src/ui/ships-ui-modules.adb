@@ -1501,12 +1501,18 @@ package body Ships.UI.Modules is
             ToolColor := To_Unbounded_String("red");
          end if;
          AddButton
-           (SkillsTable, To_String(SkillName), "Press to set as trained skill",
+           (SkillsTable, To_String(SkillName),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to set as trained skill",
             "AssignModule skill" & Positive'Image(ModuleIndex) &
             Positive'Image(I),
             1);
          AddButton
-           (SkillsTable, To_String(ToolName), "Press to set as trained skill",
+           (SkillsTable, To_String(ToolName),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to set as trained skill",
             "AssignModule skill" & Positive'Image(ModuleIndex) &
             Positive'Image(I),
             2, True, To_String(ToolColor));
