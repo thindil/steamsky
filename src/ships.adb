@@ -759,11 +759,13 @@ package body Ships is
                                          Name => "maxamount")));
                            else
                               Item :=
-                                (Item_Index,
-                                 Integer'Value
-                                   (Get_Attribute
-                                      (Elem => Child_Node, Name => "amount")),
-                                 0);
+                                (ProtoIndex => Item_Index,
+                                 MinAmount =>
+                                   Integer'Value
+                                     (Get_Attribute
+                                        (Elem => Child_Node,
+                                         Name => "amount")),
+                                 MaxAmount => 0);
                            end if;
                            exit Update_Cargo_Loop;
                         end if;
@@ -783,28 +785,36 @@ package body Ships is
                            end if;
                         end loop Find_Delete_Cargo_Loop;
                         if Delete_Cargo_Index > 0 then
-                           Temp_Record.Cargo.Delete(Delete_Cargo_Index);
+                           Temp_Record.Cargo.Delete
+                             (Index => Delete_Cargo_Index);
                         end if;
                      end Remove_Cargo_Block;
                end case;
             end loop Load_Cargo_Loop;
-            if Get_Attribute(Ship_Node, "owner") /= "" then
+            if Get_Attribute(Elem => Ship_Node, Name => "owner") /= "" then
                Temp_Record.Owner :=
-                 To_Unbounded_String(Get_Attribute(Ship_Node, "owner"));
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Ship_Node, Name => "owner"));
             end if;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Ship_Node, "recipe");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Ship_Node, Name => "recipe");
             Load_Known_Recipes_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
                Recipe_Index :=
                  To_Unbounded_String
-                   (Get_Attribute(Item(Child_Nodes, J), "index"));
-               if not Recipes_Container.Contains
-                   (Recipes_List, Recipe_Index) then
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Item(List => Child_Nodes, Index => J),
+                         Name => "index"));
+               if not Recipes_List.Contains(Key => Recipe_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid recipe index: |" &
-                    Get_Attribute(Item(Child_Nodes, J), "index") & "| in " &
-                    To_String(Temp_Record.Name) & ".";
+                    Get_Attribute
+                      (Elem => Item(List => Child_Nodes, Index => J),
+                       Name => "index") &
+                    "| in " & To_String(Source => Temp_Record.Name) & ".";
                end if;
                Sub_Action :=
                  (if Get_Attribute(Child_Node, "action")'Length > 0 then
