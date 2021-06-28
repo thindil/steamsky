@@ -1444,13 +1444,6 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Assign_Crew_Command;
 
-   -- ****iv* SUI2/SUI2.SkillsTable
-   -- FUNCTION
-   -- Table to set the training skill for the selected training room
-   -- SOURCE
-   SkillsTable: Table_Widget (2);
-   -- ****
-
    -- ****o* SUModules/SUModules.Show_Assign_Skill_Command
    -- FUNCTION
    -- Show assign the skill UI
@@ -1486,12 +1479,12 @@ package body Ships.UI.Modules is
            Title_Width => 400);
       SkillsFrame: constant Ttk_Frame := Create(ModuleDialog & ".frame");
       ToolName, ProtoIndex, SkillName, ToolColor: Unbounded_String;
-   begin
-      SkillsTable :=
+      SkillsTable: Table_Widget (2) :=
         CreateTable
           (Widget_Image(SkillsFrame),
            (To_Unbounded_String("Skill"),
             To_Unbounded_String("Training tool")));
+   begin
       Load_Skills_List_Loop :
       for I in Skills_List.First_Index .. Skills_List.Last_Index loop
          if Skills_List(I).Tool /= Null_Unbounded_String then
