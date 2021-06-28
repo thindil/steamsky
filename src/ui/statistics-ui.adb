@@ -223,8 +223,8 @@ package body Statistics.UI is
       configure
         (Label,
          "-text {" &
-         (if GoalText(0)'Length < 16 then GoalText(0)
-          else GoalText(0)(1 .. 17)) &
+         (if GoalText(0)'Length < 22 then GoalText(0)
+          else GoalText(0)(1 .. 22)) &
          "...}");
       Add(Label, "The current goal: " & GoalText(0));
       TotalFinished := 0;
