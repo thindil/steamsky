@@ -47,7 +47,8 @@ package Combat is
    -- list, 2 - Gunner order, 3 - Amount of shoots from the gun, value below
    -- zero means that gun shoot once per that amount of rounds
    -- SOURCE
-   type GunsInfoArray is array(1 .. 3) of Integer;
+   type GunsInfoArray is array(1 .. 3) of Integer with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****t* Combat/Combat.Guns_Container
@@ -88,13 +89,13 @@ package Combat is
    -- SOURCE
    type Enemy_Record is record
       Ship: Ship_Record;
-      Accuracy: Natural;
-      Distance: Integer;
+      Accuracy: Natural := 0;
+      Distance: Integer := 0;
       CombatAI: Ship_Combat_Ai;
-      Evasion: Natural;
-      Loot: Natural;
-      Perception: Natural;
-      HarpoonDuration: Natural;
+      Evasion: Natural := 0;
+      Loot: Natural := 0;
+      Perception: Natural := 0;
+      HarpoonDuration: Natural := 0;
       Guns: Guns_Container.Vector;
    end record;
    -- ****
