@@ -306,16 +306,24 @@ package body MainMenu.Commands is
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
          AddButton
-           (LoadTable, Slice(Tokens, 1), "Show available options",
+           (LoadTable, Slice(Tokens, 1),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
             "ShowLoadGameMenu " & Simple_Name(FoundFile), 1);
          AddButton
-           (LoadTable, Slice(Tokens, 2), "Show available options",
+           (LoadTable, Slice(Tokens, 2),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
             "ShowLoadGameMenu " & Simple_Name(FoundFile), 2);
          AddButton
            (LoadTable,
             Ada.Calendar.Formatting.Image
               (Modification_Time(FoundFile), False, UTC_Time_Offset),
-            "Show available options",
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
             "ShowLoadGameMenu " & Simple_Name(FoundFile), 3, True);
       end loop Load_Saves_List_Loop;
       End_Search(Files);
