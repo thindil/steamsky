@@ -19,7 +19,7 @@ with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -601,7 +601,7 @@ package body Bases.RecruitUI is
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command. Unused
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
@@ -616,7 +616,7 @@ package body Bases.RecruitUI is
    function Hire_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
+      pragma Unreferenced(Argc, Argv);
       DialogName: constant String := ".negotiatedialog";
       Cost, ContractLength2: Integer;
       BaseIndex: constant Positive :=
@@ -658,7 +658,10 @@ package body Bases.RecruitUI is
       HireRecruit
         (RecruitIndex, Cost, DailyPayment, TradePayment, ContractLength2);
       UpdateMessages;
-      return Show_Recruit_Command(ClientData, Interp, 2, Argv);
+      Tcl_Eval(Interp, "CloseDialog " & DialogName);
+      return
+        Show_Recruit_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowRecruit" & "1");
    end Hire_Command;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Tab_Command
