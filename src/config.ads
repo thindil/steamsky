@@ -36,7 +36,9 @@ package Config is
    -- FUNCTION
    -- Used to set the game difficulty level
    -- SOURCE
-   type Difficulty_Type is (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM);
+   type Difficulty_Type is
+     (VERY_EASY, EASY, NORMAL, HARD, VERY_HARD, CUSTOM) with
+      Default_Value => NORMAL;
    -- ****
 
    -- ****d* Config/Config.Default_Difficulty_Type
@@ -111,7 +113,8 @@ package Config is
    -- FUNCTION
    -- Options when stop auto move of player ship
    -- SOURCE
-   type Auto_Move_Break is (NEVER, ANY, FRIENDLY, ENEMY);
+   type Auto_Move_Break is (NEVER, ANY, FRIENDLY, ENEMY) with
+      Default_Value => NEVER;
    -- ****
 
    -- ****d* Config/Config.Default_Auto_Move_Stop
@@ -125,7 +128,8 @@ package Config is
    -- FUNCTION
    -- Options to set showing messages order
    -- SOURCE
-   type Messages_Order_Type is (OLDER_FIRST, NEWER_FIRST);
+   type Messages_Order_Type is (OLDER_FIRST, NEWER_FIRST) with
+      Default_Value => OLDER_FIRST;
    -- ****
 
    -- ****d* Config/Config.Default_Messages_Order
@@ -139,7 +143,8 @@ package Config is
    -- FUNCTION
    -- Type used to set how often autosave is done
    -- SOURCE
-   type Auto_Save_Type is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY);
+   type Auto_Save_Type is (NONE, DOCK, UNDOCK, DAILY, MONTHLY, YEARLY) with
+      Default_Value => NONE;
    -- ****
 
    -- ****d* Config/Config.Default_Auto_Save_Time
@@ -205,8 +210,8 @@ package Config is
       Low_Drinks: Positive range 1 .. 10_000;
       Low_Food: Positive range 1 .. 10_000;
       Auto_Move_Stop: Auto_Move_Break;
-      Window_Width: Positive;
-      Window_Height: Positive;
+      Window_Width: Positive := 800;
+      Window_Height: Positive := 600;
       Messages_Limit: Positive range 10 .. 5_000;
       Saved_Messages: Positive range 5 .. 200;
       Help_Font_Size: Positive range 2 .. 51;
