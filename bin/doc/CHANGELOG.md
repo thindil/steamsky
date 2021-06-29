@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Move mouse cursor on map a bit faster
 - Redesigned school, load game and assign skills screens
 - Updated help
+- Made scrollbars more visible
 
 ### Fixed
 - Added missing headers to dialogs with information about modules to install or
