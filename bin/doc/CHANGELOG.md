@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Moving cursor on the map with keyboard
 - Scrolling the last messages window to the bottom when there are long messages
 - Showing long goals names in the game statistics screen
+- Crash after recruit a new crew member in bases
 
 ## [6.2] - 2021-06-13
 
