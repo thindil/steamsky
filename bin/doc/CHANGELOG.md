@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Made scrollbars more visible
+
 ### Fixed
 - Crash after recruit the new crew member in bases
 
