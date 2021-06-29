@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash after recruit the new crew member in bases
+
 ## [6.0.4] - 2021-06-27
 
 ### Added
