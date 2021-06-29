@@ -817,8 +817,13 @@ package body Ships is
                     "| in " & To_String(Source => Temp_Record.Name) & ".";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                if Sub_Action = ADD then
                   Temp_Record.Known_Recipes.Append(New_Item => Recipe_Index);
@@ -826,7 +831,8 @@ package body Ships is
                   Find_Delete_Recipe_Loop :
                   for K in Temp_Record.Known_Recipes.Iterate loop
                      if Temp_Record.Known_Recipes(K) = Recipe_Index then
-                        Delete_Index := UnboundedString_Container.To_Index(K);
+                        Delete_Index :=
+                          UnboundedString_Container.To_Index(Position => K);
                         exit Find_Delete_Recipe_Loop;
                      end if;
                   end loop Find_Delete_Recipe_Loop;
@@ -834,22 +840,29 @@ package body Ships is
                end if;
             end loop Load_Known_Recipes_Loop;
             Child_Nodes :=
-              DOM.Core.Elements.Get_Elements_By_Tag_Name(Ship_Node, "member");
+              DOM.Core.Elements.Get_Elements_By_Tag_Name
+                (Elem => Ship_Node, Name => "member");
             Load_Crew_Loop :
-            for J in 0 .. Length(Child_Nodes) - 1 loop
-               Child_Node := Item(Child_Nodes, J);
+            for J in 0 .. Length(List => Child_Nodes) - 1 loop
+               Child_Node := Item(List => Child_Nodes, Index => J);
                Mob_Index :=
-                 To_Unbounded_String(Get_Attribute(Child_Node, "index"));
-               if not ProtoMobs_Container.Contains
-                   (ProtoMobs_List, Mob_Index) then
+                 To_Unbounded_String
+                   (Source =>
+                      Get_Attribute(Elem => Child_Node, Name => "index"));
+               if not ProtoMobs_List.Contains(Key => Mob_Index) then
                   raise Ships_Invalid_Data
                     with "Invalid mob index: |" &
-                    Get_Attribute(Child_Node, "index") & "| in " &
-                    To_String(Temp_Record.Name) & ".";
+                    Get_Attribute(Elem => Child_Node, Name => "index") &
+                    "| in " & To_String(Source => Temp_Record.Name) & ".";
                end if;
                Sub_Action :=
-                 (if Get_Attribute(Child_Node, "action")'Length > 0 then
-                    Data_Action'Value(Get_Attribute(Child_Node, "action"))
+                 (if
+                    Get_Attribute(Elem => Child_Node, Name => "action")'
+                      Length >
+                    0
+                  then
+                    Data_Action'Value
+                      (Get_Attribute(Elem => Child_Node, Name => "action"))
                   else ADD);
                case Sub_Action is
                   when ADD =>
