@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Crash after recruit the new crew member in bases
+- Reset the selected modules type in shipyard after buying a module
 
 ## [6.0.4] - 2021-06-27
 
