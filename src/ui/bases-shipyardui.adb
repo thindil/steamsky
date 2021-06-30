@@ -147,11 +147,15 @@ package body Bases.ShipyardUI is
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Price")),
               Get_Widget(".gameframe.paned.shipyardframe.scrolly"));
-      elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" and Argc = 1 then
-         Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
-         Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-         ShowSkyMap(True);
-         return TCL_OK;
+      elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" then
+         if Argc = 1 then
+            Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
+            Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
+            ShowSkyMap(True);
+            return TCL_OK;
+         else
+            Current(ModuleTypeBox, CArgv.Arg(Argv, 1));
+         end if;
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "0" and Argc = 1 then
          Current(ModuleTypeBox, "0");
       end if;
