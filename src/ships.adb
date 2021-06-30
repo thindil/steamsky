@@ -866,30 +866,45 @@ package body Ships is
                   else ADD);
                case Sub_Action is
                   when ADD =>
-                     if Get_Attribute(Child_Node, "amount") /= "" then
+                     if Get_Attribute(Elem => Child_Node, Name => "amount") /=
+                       "" then
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Mob_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "amount")),
-                              0));
-                     elsif Get_Attribute(Child_Node, "minamount") /= "" then
+                             (Proto_Index => Mob_Index,
+                              Min_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node, Name => "amount")),
+                              Max_Amount => 0));
+                     elsif Get_Attribute
+                         (Elem => Child_Node, Name => "minamount") /=
+                       "" then
                         if Integer'Value
-                            (Get_Attribute(Child_Node, "maxamount")) <
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "maxamount")) <
                           Integer'Value
-                            (Get_Attribute(Child_Node, "minamount")) then
+                            (Get_Attribute
+                               (Elem => Child_Node, Name => "minamount")) then
                            raise Ships_Invalid_Data
                              with "Invalid amount range for member : |" &
-                             Get_Attribute(Child_Node, "index") & "| in " &
-                             To_String(Temp_Record.Name) & ".";
+                             Get_Attribute
+                               (Elem => Child_Node, Name => "index") &
+                             "| in " & To_String(Source => Temp_Record.Name) &
+                             ".";
                         end if;
                         Temp_Record.Crew.Append
                           (New_Item =>
-                             (Mob_Index,
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "minamount")),
-                              Integer'Value
-                                (Get_Attribute(Child_Node, "maxamount"))));
+                             (Proto_Index => Mob_Index,
+                              Min_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minamount")),
+                              Max_Amount =>
+                                Integer'Value
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxamount"))));
                      else
                         Temp_Record.Crew.Append(New_Item => (Mob_Index, 1, 0));
                      end if;
