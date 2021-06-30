@@ -141,6 +141,7 @@ package Crafts is
       -- PARAMETERS
       -- Workshop    - Index of player ship module (workplace) to which
       --               selected recipe will be set
+      -- Amount      - How many times the recipe will be crafted
       -- RecipeIndex - Index of the prototype recipe to check or if deconstruct
       --               existing item, "Study " + item name.
       -- SOURCE
