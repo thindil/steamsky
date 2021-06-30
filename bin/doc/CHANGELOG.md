@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Info about current gain or cost when selling or buying items
+- Info about items weight to the trade screen
 
 ### Changed
 - Updated interface
