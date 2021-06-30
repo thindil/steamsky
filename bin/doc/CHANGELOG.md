@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
 - Scrolling the last messages window to the bottom when there are long messages
 - Showing long goals names in the game statistics screen
 - Crash after recruit a new crew member in bases
+- Reset the selected modules type in shipyard after buying a module
 
 ## [6.2] - 2021-06-13
 
