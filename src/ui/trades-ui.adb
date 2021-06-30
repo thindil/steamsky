@@ -63,7 +63,7 @@ package body Trades.UI is
    -- FUNCTION
    -- Table with info about the available items to trade
    -- SOURCE
-   TradeTable: Table_Widget (7);
+   TradeTable: Table_Widget (8);
    -- ****
 
    -- ****o* TUI/TUI.Show_Trade_Command
@@ -133,8 +133,8 @@ package body Trades.UI is
              (Widget_Image(TradeFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
-               To_Unbounded_String("Profit"), To_Unbounded_String("Owned"),
-               To_Unbounded_String("Available")),
+               To_Unbounded_String("Profit"), To_Unbounded_String("Weight"),
+               To_Unbounded_String("Owned"), To_Unbounded_String("Available")),
               Get_Widget(Main_Paned & ".tradeframe.scrolly"));
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -252,15 +252,20 @@ package body Trades.UI is
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
          AddButton
-           (TradeTable, Positive'Image(Player_Ship.Cargo(I).Amount),
+           (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
             6);
          AddButton
+           (TradeTable, Positive'Image(Player_Ship.Cargo(I).Amount),
+            "Show available options for item",
+            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
+            7);
+         AddButton
            (TradeTable, Positive'Image(BaseAmount),
             "Show available options for item",
             "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            7, True);
+            8, True);
          exit Show_Cargo_Items_Loop when TradeTable.Row = 26;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
@@ -333,12 +338,16 @@ package body Trades.UI is
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 5, False,
             "red");
          AddButton
-           (TradeTable, " 0", "Show available options for item",
+           (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
+            "Show available options for item",
             "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 6);
+         AddButton
+           (TradeTable, " 0", "Show available options for item",
+            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 7);
          AddButton
            (TradeTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 7, True);
+            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 8, True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
@@ -493,13 +502,10 @@ package body Trades.UI is
            (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).ProtoIndex
             else SkyBases(BaseIndex).Cargo(BaseCargoIndex).ProtoIndex);
       end if;
-      Append
-        (ItemInfo,
-         "Weight:" & Integer'Image(Items_List(ProtoIndex).Weight) & " kg");
       if Items_List(ProtoIndex).IType = Weapon_Type then
          Append
            (ItemInfo,
-            LF & "Skill: " &
+            "Skill: " &
             To_String(Skills_List(Items_List(ProtoIndex).Value(3)).Name) &
             "/" &
             To_String
@@ -524,31 +530,42 @@ package body Trades.UI is
       Show_More_Info_Loop :
       for ItemType of ItemTypes loop
          if Items_List(ProtoIndex).IType = ItemType then
+            if ItemInfo /= Null_Unbounded_String then
+               Append(ItemInfo, LF);
+            end if;
             Append
               (ItemInfo,
-               LF & "Damage chance: " &
+               "Damage chance: " &
                GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)) & LF &
                "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(2)));
             exit Show_More_Info_Loop;
          end if;
       end loop Show_More_Info_Loop;
       if Tools_List.Contains(Items_List(ProtoIndex).IType) then
+         if ItemInfo /= Null_Unbounded_String then
+            Append(ItemInfo, LF);
+         end if;
          Append
            (ItemInfo,
-            LF & "Damage chance: " &
+            "Damage chance: " &
             GetItemChanceToDamage(Items_List(ProtoIndex).Value(1)));
       end if;
       if Length(Items_List(ProtoIndex).IType) > 4
         and then
         (Slice(Items_List(ProtoIndex).IType, 1, 4) = "Ammo" or
          Items_List(ProtoIndex).IType = To_Unbounded_String("Harpoon")) then
+         if ItemInfo /= Null_Unbounded_String then
+            Append(ItemInfo, LF);
+         end if;
          Append
            (ItemInfo,
-            LF & "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
+            "Strength:" & Integer'Image(Items_List(ProtoIndex).Value(1)));
       end if;
       if Items_List(ProtoIndex).Description /= Null_Unbounded_String then
-         Append
-           (ItemInfo, LF & LF & To_String(Items_List(ProtoIndex).Description));
+         if ItemInfo /= Null_Unbounded_String then
+            Append(ItemInfo, LF & LF);
+         end if;
+         Append(ItemInfo, Items_List(ProtoIndex).Description);
       end if;
       ShowInfo
         (Text => To_String(ItemInfo),
