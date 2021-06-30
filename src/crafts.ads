@@ -50,14 +50,14 @@ package Crafts is
       MaterialTypes: UnboundedString_Container.Vector;
       MaterialAmounts: Positive_Container.Vector;
       ResultIndex: Unbounded_String;
-      ResultAmount: Natural;
+      ResultAmount: Natural := 0;
       Workplace: ModuleType;
       Skill: SkillsData_Container.Extended_Index;
-      Time: Positive;
-      Difficulty: Positive;
+      Time: Positive := 1;
+      Difficulty: Positive := 1;
       Tool: Unbounded_String;
       Reputation: Reputation_Range;
-      ToolQuality: Positive;
+      ToolQuality: Positive := 1;
    end record;
    -- ****
 
