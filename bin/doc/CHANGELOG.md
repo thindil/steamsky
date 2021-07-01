@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
 - Showing long goals names in the game statistics screen
 - Crash after recruit a new crew member in bases
 - Reset the selected modules type in shipyard after buying a module
+- Showing items with zero amount in trading screen
 
 ## [6.2] - 2021-06-13
 
