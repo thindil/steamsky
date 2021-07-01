@@ -83,14 +83,13 @@ package body Crew.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateMemberName_b4591b_2ce78d
+   function Wrap_Test_GenerateMemberName_b4591b_b29bd9
      (Gender: Character; FactionIndex: Unbounded_String)
       return Unbounded_String is
    begin
       begin
          pragma Assert
-           (((Gender = 'M' or Gender = 'F') and
-             FactionIndex /= Null_Unbounded_String));
+           (Gender in 'M' | 'F' and FactionIndex /= Null_Unbounded_String);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -99,7 +98,7 @@ package body Crew.Test_Data.Tests is
                "req_sloc(crew.ads:0):Test_GenerateMemberName test requirement violated");
       end;
       declare
-         Test_GenerateMemberName_b4591b_2ce78d_Result: constant Unbounded_String :=
+         Test_GenerateMemberName_b4591b_b29bd9_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Crew.GenerateMemberName
              (Gender, FactionIndex);
       begin
@@ -112,15 +111,15 @@ package body Crew.Test_Data.Tests is
                  (False,
                   "ens_sloc(crew.ads:0:):Test_GenerateMemberName test commitment violated");
          end;
-         return Test_GenerateMemberName_b4591b_2ce78d_Result;
+         return Test_GenerateMemberName_b4591b_b29bd9_Result;
       end;
-   end Wrap_Test_GenerateMemberName_b4591b_2ce78d;
+   end Wrap_Test_GenerateMemberName_b4591b_b29bd9;
 --  end read only
 
 --  begin read only
    procedure Test_GenerateMemberName_test_generatemembername
      (Gnattest_T: in out Test);
-   procedure Test_GenerateMemberName_b4591b_2ce78d
+   procedure Test_GenerateMemberName_b4591b_b29bd9
      (Gnattest_T: in out Test) renames
      Test_GenerateMemberName_test_generatemembername;
 --  id:2.2/b4591b69c6a992ff/GenerateMemberName/1/0/test_generatemembername/
@@ -129,7 +128,7 @@ package body Crew.Test_Data.Tests is
       function GenerateMemberName
         (Gender: Character; FactionIndex: Unbounded_String)
          return Unbounded_String renames
-        Wrap_Test_GenerateMemberName_b4591b_2ce78d;
+        Wrap_Test_GenerateMemberName_b4591b_b29bd9;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

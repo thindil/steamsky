@@ -121,7 +121,7 @@ package body Bases.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GenerateBaseName_e09aa7_c4cd74
+   function Wrap_Test_GenerateBaseName_e09aa7_c0e7b5
      (FactionIndex: Unbounded_String) return Unbounded_String is
    begin
       begin
@@ -135,12 +135,13 @@ package body Bases.Test_Data.Tests is
                "req_sloc(bases.ads:0):Test_GenerateBaseName test requirement violated");
       end;
       declare
-         Test_GenerateBaseName_e09aa7_c4cd74_Result: constant Unbounded_String :=
+         Test_GenerateBaseName_e09aa7_c0e7b5_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Bases.GenerateBaseName
              (FactionIndex);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert
+              (Length(Test_GenerateBaseName_e09aa7_c0e7b5_Result) > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -148,15 +149,15 @@ package body Bases.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases.ads:0:):Test_GenerateBaseName test commitment violated");
          end;
-         return Test_GenerateBaseName_e09aa7_c4cd74_Result;
+         return Test_GenerateBaseName_e09aa7_c0e7b5_Result;
       end;
-   end Wrap_Test_GenerateBaseName_e09aa7_c4cd74;
+   end Wrap_Test_GenerateBaseName_e09aa7_c0e7b5;
 --  end read only
 
 --  begin read only
    procedure Test_GenerateBaseName_test_generatebasename
      (Gnattest_T: in out Test);
-   procedure Test_GenerateBaseName_e09aa7_c4cd74
+   procedure Test_GenerateBaseName_e09aa7_c0e7b5
      (Gnattest_T: in out Test) renames
      Test_GenerateBaseName_test_generatebasename;
 --  id:2.2/e09aa72173a8bcc3/GenerateBaseName/1/0/test_generatebasename/
@@ -164,7 +165,7 @@ package body Bases.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function GenerateBaseName
         (FactionIndex: Unbounded_String) return Unbounded_String renames
-        Wrap_Test_GenerateBaseName_e09aa7_c4cd74;
+        Wrap_Test_GenerateBaseName_e09aa7_c0e7b5;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

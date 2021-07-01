@@ -169,7 +169,7 @@ package body Bases.Ship.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_RepairCost_2d9781_397802
+   procedure Wrap_Test_RepairCost_2d9781_862779
      (Cost, Time: in out Natural; ModuleIndex: Integer) is
    begin
       begin
@@ -184,7 +184,7 @@ package body Bases.Ship.Test_Data.Tests is
       GNATtest_Generated.GNATtest_Standard.Bases.Ship.RepairCost
         (Cost, Time, ModuleIndex);
       begin
-         pragma Assert(True);
+         pragma Assert(Cost > 0 and Time > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -192,18 +192,18 @@ package body Bases.Ship.Test_Data.Tests is
               (False,
                "ens_sloc(bases-ship.ads:0:):Test_RepairCost test commitment violated");
       end;
-   end Wrap_Test_RepairCost_2d9781_397802;
+   end Wrap_Test_RepairCost_2d9781_862779;
 --  end read only
 
 --  begin read only
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test);
-   procedure Test_RepairCost_2d9781_397802(Gnattest_T: in out Test) renames
+   procedure Test_RepairCost_2d9781_862779(Gnattest_T: in out Test) renames
      Test_RepairCost_test_repaircost;
 --  id:2.2/2d9781143dbec48d/RepairCost/1/0/test_repaircost/
    procedure Test_RepairCost_test_repaircost(Gnattest_T: in out Test) is
       procedure RepairCost
         (Cost, Time: in out Natural; ModuleIndex: Integer) renames
-        Wrap_Test_RepairCost_2d9781_397802;
+        Wrap_Test_RepairCost_2d9781_862779;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

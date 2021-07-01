@@ -183,12 +183,12 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_HealCost_772065_801463
+   procedure Wrap_Test_HealCost_772065_168081
      (Cost, Time: in out Natural;
       MemberIndex: Crew_Container.Extended_Index) is
    begin
       begin
-         pragma Assert((MemberIndex <= Player_Ship.Crew.Last_Index));
+         pragma Assert(MemberIndex <= Player_Ship.Crew.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -199,7 +199,7 @@ package body Bases.Trade.Test_Data.Tests is
       GNATtest_Generated.GNATtest_Standard.Bases.Trade.HealCost
         (Cost, Time, MemberIndex);
       begin
-         pragma Assert(True);
+         pragma Assert(Cost > 0 and Time > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -207,19 +207,19 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_HealCost test commitment violated");
       end;
-   end Wrap_Test_HealCost_772065_801463;
+   end Wrap_Test_HealCost_772065_168081;
 --  end read only
 
 --  begin read only
    procedure Test_HealCost_test_healcost(Gnattest_T: in out Test);
-   procedure Test_HealCost_772065_801463(Gnattest_T: in out Test) renames
+   procedure Test_HealCost_772065_168081(Gnattest_T: in out Test) renames
      Test_HealCost_test_healcost;
 --  id:2.2/77206542a3e2c8c9/HealCost/1/0/test_healcost/
    procedure Test_HealCost_test_healcost(Gnattest_T: in out Test) is
       procedure HealCost
         (Cost, Time: in out Natural;
          MemberIndex: Crew_Container.Extended_Index) renames
-        Wrap_Test_HealCost_772065_801463;
+        Wrap_Test_HealCost_772065_168081;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -237,14 +237,15 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_TrainCost_976ed7_4d4645
+   function Wrap_Test_TrainCost_976ed7_9e5841
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index) return Natural is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= Player_Ship.Crew.Last_Index and
-             SkillIndex <= Skills_List.Last_Index));
+           (MemberIndex in
+              Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
+            SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -253,7 +254,7 @@ package body Bases.Trade.Test_Data.Tests is
                "req_sloc(bases-trade.ads:0):Test_TrainCost test requirement violated");
       end;
       declare
-         Test_TrainCost_976ed7_4d4645_Result: constant Natural :=
+         Test_TrainCost_976ed7_9e5841_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Bases.Trade.TrainCost
              (MemberIndex, SkillIndex);
       begin
@@ -266,21 +267,21 @@ package body Bases.Trade.Test_Data.Tests is
                  (False,
                   "ens_sloc(bases-trade.ads:0:):Test_TrainCost test commitment violated");
          end;
-         return Test_TrainCost_976ed7_4d4645_Result;
+         return Test_TrainCost_976ed7_9e5841_Result;
       end;
-   end Wrap_Test_TrainCost_976ed7_4d4645;
+   end Wrap_Test_TrainCost_976ed7_9e5841;
 --  end read only
 
 --  begin read only
    procedure Test_TrainCost_test_traincost(Gnattest_T: in out Test);
-   procedure Test_TrainCost_976ed7_4d4645(Gnattest_T: in out Test) renames
+   procedure Test_TrainCost_976ed7_9e5841(Gnattest_T: in out Test) renames
      Test_TrainCost_test_traincost;
 --  id:2.2/976ed7988ae3d183/TrainCost/1/0/test_traincost/
    procedure Test_TrainCost_test_traincost(Gnattest_T: in out Test) is
       function TrainCost
         (MemberIndex: Crew_Container.Extended_Index;
          SkillIndex: Skills_Container.Extended_Index) return Natural renames
-        Wrap_Test_TrainCost_976ed7_4d4645;
+        Wrap_Test_TrainCost_976ed7_9e5841;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -296,15 +297,16 @@ package body Bases.Trade.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_TrainSkill_97d670_55c1cb
+   procedure Wrap_Test_TrainSkill_97d670_bf5e1b
      (MemberIndex: Crew_Container.Extended_Index;
       SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
       Is_Amount: Boolean := True) is
    begin
       begin
          pragma Assert
-           ((MemberIndex <= Player_Ship.Crew.Last_Index and
-             SkillIndex <= Skills_List.Last_Index));
+           (MemberIndex in
+              Player_Ship.Crew.First_Index .. Player_Ship.Crew.Last_Index and
+            SkillIndex in Skills_List.First_Index .. Skills_List.Last_Index);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -323,12 +325,12 @@ package body Bases.Trade.Test_Data.Tests is
               (False,
                "ens_sloc(bases-trade.ads:0:):Test_TrainSkill test commitment violated");
       end;
-   end Wrap_Test_TrainSkill_97d670_55c1cb;
+   end Wrap_Test_TrainSkill_97d670_bf5e1b;
 --  end read only
 
 --  begin read only
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test);
-   procedure Test_TrainSkill_97d670_55c1cb(Gnattest_T: in out Test) renames
+   procedure Test_TrainSkill_97d670_bf5e1b(Gnattest_T: in out Test) renames
      Test_TrainSkill_test_trainskill;
 --  id:2.2/97d67059a26fe921/TrainSkill/1/0/test_trainskill/
    procedure Test_TrainSkill_test_trainskill(Gnattest_T: in out Test) is
@@ -336,7 +338,7 @@ package body Bases.Trade.Test_Data.Tests is
         (MemberIndex: Crew_Container.Extended_Index;
          SkillIndex: Skills_Container.Extended_Index; Amount: Positive;
          Is_Amount: Boolean := True) renames
-        Wrap_Test_TrainSkill_97d670_55c1cb;
+        Wrap_Test_TrainSkill_97d670_bf5e1b;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
