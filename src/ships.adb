@@ -906,34 +906,51 @@ package body Ships is
                                      (Elem => Child_Node,
                                       Name => "maxamount"))));
                      else
-                        Temp_Record.Crew.Append(New_Item => (Mob_Index, 1, 0));
+                        Temp_Record.Crew.Append
+                          (New_Item =>
+                             (Proto_Index => Mob_Index, Min_Amount => 1,
+                              Max_Amount => 0));
                      end if;
                   when UPDATE =>
                      Update_Crew_Loop :
                      for Member of Temp_Record.Crew loop
                         if Member.Proto_Index = Mob_Index then
-                           if Get_Attribute(Child_Node, "amount") /= "" then
+                           if Get_Attribute
+                               (Elem => Child_Node, Name => "amount") /=
+                             "" then
                               Member.Min_Amount :=
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "amount"));
+                                  (Get_Attribute
+                                     (Elem => Child_Node, Name => "amount"));
                               Member.Max_Amount := 0;
-                           elsif Get_Attribute(Child_Node, "minamount") /=
+                           elsif Get_Attribute
+                               (Elem => Child_Node, Name => "minamount") /=
                              "" then
                               if Integer'Value
-                                  (Get_Attribute(Child_Node, "maxamount")) <
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxamount")) <
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "minamount")) then
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minamount")) then
                                  raise Ships_Invalid_Data
                                    with "Invalid amount range for member : |" &
-                                   Get_Attribute(Child_Node, "index") &
-                                   "| in " & To_String(Temp_Record.Name) & ".";
+                                   Get_Attribute
+                                     (Elem => Child_Node, Name => "index") &
+                                   "| in " &
+                                   To_String(Source => Temp_Record.Name) & ".";
                               end if;
                               Member.Min_Amount :=
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "minamount"));
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "minamount"));
                               Member.Max_Amount :=
                                 Integer'Value
-                                  (Get_Attribute(Child_Node, "maxamount"));
+                                  (Get_Attribute
+                                     (Elem => Child_Node,
+                                      Name => "maxamount"));
                            else
                               Member.Min_Amount := 1;
                               Member.Max_Amount := 0;
