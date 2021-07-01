@@ -31,7 +31,8 @@ package Crew is
    -- FUNCTION
    -- Data structure for skills: 1 - Skill index, 2 - skill level, 3 - current experience in skill
    -- SOURCE
-   type Skill_Array is array(1 .. 3) of Natural;
+   type Skill_Array is array(1 .. 3) of Natural with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****t* Crew/Crew.Skills_Container
@@ -47,7 +48,8 @@ package Crew is
    -- SOURCE
    type Crew_Orders is
      (Pilot, Engineer, Gunner, Repair, Craft, Upgrading, Talk, Heal, Clean,
-      Rest, Defend, Boarding, Train);
+      Rest, Defend, Boarding, Train) with
+      Default_Value => Rest;
    -- ****
 
    -- ****t* Crew/Crew.Equipment_Array
@@ -55,7 +57,8 @@ package Crew is
    -- Data structure for currently equipped items for crew members. 1 - weapon,
    -- 2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
    -- SOURCE
-   type Equipment_Array is array(1 .. 7) of Natural;
+   type Equipment_Array is array(1 .. 7) of Natural with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****t* Crew/Crew.Skill_Range
@@ -101,19 +104,19 @@ package Crew is
       Name: Unbounded_String;
       Gender: Character;
       Health: Skill_Range;
-      Tired: Natural range 0 .. 150;
+      Tired: Natural range 0 .. 150 := 0;
       Skills: Skills_Container.Vector;
       Hunger: Skill_Range;
       Thirst: Skill_Range;
       Order: Crew_Orders;
       PreviousOrder: Crew_Orders;
-      OrderTime: Integer;
+      OrderTime: Integer := 15;
       Orders: Natural_Array(1 .. 12);
       Attributes: Attributes_Container.Vector;
       Inventory: Inventory_Container.Vector;
       Equipment: Equipment_Array;
       Payment: Attributes_Array;
-      ContractLength: Integer;
+      ContractLength: Integer := 0;
       Morale: Attributes_Array;
       Loyalty: Skill_Range;
       HomeBase: Bases_Range;
@@ -223,9 +226,7 @@ package Crew is
    function GenerateMemberName
      (Gender: Character; FactionIndex: Unbounded_String)
       return Unbounded_String with
-      Pre =>
-      ((Gender = 'M' or Gender = 'F') and
-       FactionIndex /= Null_Unbounded_String),
+      Pre => Gender in 'M' | 'F' and FactionIndex /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenerateMemberName", Mode => Nominal);
       -- ****
 
