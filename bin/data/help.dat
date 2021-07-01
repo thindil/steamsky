@@ -127,7 +127,7 @@ Reputation levels, starting from lowest: Hated, Outlaw, Hostile, Unfriendly, Unk
 * Temple (dark gold color): Available only for Inquisition faction: Produces basic food, drinks and medicines. Also, it provides option to Pray, which raise your character and your crew members morale.
 * Black market (grey color): Available only for Pirates faction: they always offer random goods for sale. Depends on your luck, it can be good or bad place to start any trade route.
 * Factory (red color): Available only for Drones faction: Produces tools and materials for crafting things. Generally you may bring here items produced in other bases types and buy here metal plates or tools. Additionally, in this base you can install or remove modules from your ship.
-* Market (light blue): Available only for Independet faction: they are always offers random goods for sale. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
+* Market (light blue): Available only for Independent faction: they are always offers random goods for sale. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
 * Agora (purple): Available only for Poleis faction: they are always offers random goods for sale and have more recruits which are also cheaper than in other bases. Additionally, in this base you can install or remove modules from your ship. Depends on your luck, it can be good or bad place to start any trade route.
 More information about trading you may find in {b}Trading{/b} help topic and about installing new ship modules in {b}Repair/upgrade ship{/b} topic.</entry>
  <entry index="trade" title=" 5. Trading">{u}General info{/u}
@@ -170,7 +170,7 @@ For gunners available orders are:
 * {b}Precise fire{/b}: Shoot less but more precise. Gunner will still shoot to random enemy modules or to armor if enemy ship has it, but there will be bigger chance to hit in enemy ship.
 * {b}Fire at will{/b}: Fire more but less precise. As for {b}Precise fire{/b} order: gunner will shoot to random enemy modules or to armor if enemy ship has it.
 * {b}Aim for their engine{/b}, {b}Aim for their weapon{/b}, {b}Aim for their hull{/b}: All this orders works similar: Gunner will be shooting as often as for {b}Precise fire{/b} but in selected parts of enemy ship. If enemy have more engines or weapons, it will be randomly selected to which one.
-If you send your characted to boarding enemy ships, you will be able to give your boarding ship party member two types of orders:
+If you send your character to boarding enemy ships, you will be able to give your boarding ship party member two types of orders:
 * {b}Attack [enemy name]{/b}: Attack selected crew member of enemy ship.
 * {b}Back to ship{/b}: Remove selected crew member from boarding party and let him back to your ship.
 
@@ -269,7 +269,7 @@ To set orders priorities, click button {b}'Set orders priorities'{/b} and select
 * Speed of rest of crew members depends on quality, damage level and cleanliness of cabin which they owned. Without cabin, they rest very slow.
 * If your ship is docked to base, you can dismiss crew members. Go to ship info screen and use {b}Dismiss{/b} option on selected crew member. Dismissed crew members joins to base population. Dismissing crew member little reduces morale of rest of crew (if they are not from {nomorale} factions).
 * Hunger, thirst, wounds, very low and very high morale (except for members of {nomorale} factions) have impact on your crew members skills. Wounded or hungry crew members have penalties to their skills.
-* When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory and equipping it if he/she doensn't have proper tool equipped. You can manually set which tool he/she should use in inventory screen.
+* When crew member start working on duty which needs any tool (like crafting, cleaning, upgrading or repairing ship) he/she takes needed tool to own inventory and equipping it if he/she doesn't have proper tool equipped. You can manually set which tool he/she should use in inventory screen.
 * Each crew member have maximum encumbrance for inventory which depends on his/her {StrengthName}.
 * Crew members skills levels, starting from lowest: {i}Beginner, Novice, Apprentice, Practitioner, Competent, Respected, Renowned, Master, Grand-Master, Legendary, Ultimate{/i}.
 * Crew members attributes levels, starting from lowest: {i}Very low, Low, Below average, Average, Above average, High, Very high, Outstanding{/i}.
@@ -311,7 +311,7 @@ If you successfully finish mission, your character gain some morale, if you fail
 * You can assign crew members to selected module (cabins, guns, workplaces) on ship info screen. All workplaces first must have set crafting order, before you can assign someone.
 * You can reduce how long disease affect selected base by delivering medicines to it. What exactly medical supplies are needed depends on faction which belongs base. If you select to deliver supplies for free, you can gain some reputation otherwise, you gain {MoneyName} and may lose some reputation.
 * What enemy you meet depends on how much upgraded ship you have: especially on upgrades of hull, armor, weapons and type of ammo. At beginning of game you can meet the weakest enemies, with every ship upgrade you meet stronger. Of course, there is always small chance that you encounter enemy stronger than you.
-* Each enemy can be different: very often enemy ships have some modules upgrades installed (stronger version of weapon, more durability, etc).
+* Each enemy can be different: very often enemy ships have some modules upgrades installed (stronger version of weapon, more durability, etc.).
 * Which orders are available for crew members, depends on orders prerequisites. For example, if you don't have set any crafting order set, you can't assign crew member to manufacturing.
 * Your ship gets dirty at the start of every day. You can send as many crew members as you want to clean the ship or give an order to the whole crew. It is the only order which don't give any experience to assigned crew members. You need any type of bucket to execute this order.
 * A base's population may change with time. Don't be surprised when a small base may be abandoned after a successful attack on it or after disease. A base's population may grow with time.
