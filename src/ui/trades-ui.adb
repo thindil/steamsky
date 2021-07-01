@@ -282,7 +282,8 @@ package body Trades.UI is
          if IndexesList.Find_Index(Item => I) > 0 or
            not Is_Buyable
              (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
-              BaseIndex => BaseIndex) then
+              BaseIndex => BaseIndex) or
+           BaseCargo(I).Amount = 0 then
             goto End_Of_Trader_Loop;
          end if;
          ProtoIndex := BaseCargo(I).ProtoIndex;
