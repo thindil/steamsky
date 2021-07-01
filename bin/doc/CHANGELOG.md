@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Crash after recruit the new crew member in bases
 - Reset the selected modules type in shipyard after buying a module
 - Showing items with zero amount in trade screen
+- Typos in help
 
 ## [6.0.4] - 2021-06-27
 
