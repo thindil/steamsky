@@ -524,7 +524,8 @@ package body Bases.ShipyardUI is
                  and then Size > Modules_List(Module.Proto_Index).Value then
                   Insert
                     (ModuleText, "end",
-                     "{" & Natural'Image(Size) & " (too big)} [list red]");
+                     "{" & Natural'Image(Size) &
+                     " (needs a bigger hull)} [list red]");
                   Added := True;
                   exit Check_Module_Size_Loop;
                end if;
