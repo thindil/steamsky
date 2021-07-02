@@ -608,11 +608,11 @@ package body Game is
            (Name => To_Unbounded_String(Source => "data"),
             File_Name => To_Unbounded_String(Source => "game.dat")),
          2 =>
-           (Name => To_Unbounded_String(Source => "help"),
-            File_Name => To_Unbounded_String(Source => "help.dat")),
-         3 =>
            (Name => To_Unbounded_String(Source => "items"),
             File_Name => To_Unbounded_String(Source => "items.dat")),
+         3 =>
+           (Name => To_Unbounded_String(Source => "help"),
+            File_Name => To_Unbounded_String(Source => "help.dat")),
          4 =>
            (Name => To_Unbounded_String(Source => "modules"),
             File_Name => To_Unbounded_String(Source => "shipmodules.dat")),
