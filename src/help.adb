@@ -25,6 +25,7 @@ with DOM.Core.Nodes; use DOM.Core.Nodes;
 with DOM.Core.Elements; use DOM.Core.Elements;
 with Log; use Log;
 with Game; use Game;
+with Items; use Items;
 
 package body Help is
 
@@ -95,15 +96,27 @@ package body Help is
          Append
            (TmpHelp.Text,
             "{b}" & Attribute.Name & "{/b}" & LF & "    " &
-            Attribute.Description & LF);
+            Attribute.Description & LF & LF);
       end loop;
       Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
       for Skill of Skills_List loop
          Append
            (TmpHelp.Text,
-            "{b}" & Skill.Name & "{/b}" & LF & "    Related attribute: " &
+            "{b}" & Skill.Name & "{/b}" & LF &
+            "    {i}Related attribute:{/i} " &
             Attributes_List(Skill.Attribute).Name & LF);
-         Append(TmpHelp.Text, "    " & Skill.Description & LF);
+         for Item of Items_List loop
+            if Item.IType = Skill.Tool then
+               Append
+                 (TmpHelp.Text,
+                  "    {i}Training tool:{/i} " &
+                  (if Item.ShowType = Null_Unbounded_String then Item.IType
+                   else Item.ShowType) &
+                  LF);
+               exit;
+            end if;
+         end loop;
+         Append(TmpHelp.Text, "    " & Skill.Description & LF & LF);
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
       Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
