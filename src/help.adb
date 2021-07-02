@@ -15,7 +15,10 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Characters.Handling; use Ada.Characters.Handling;
+with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with DOM.Core; use DOM.Core;
 with DOM.Core.Documents;
 with DOM.Core.Nodes; use DOM.Core.Nodes;
@@ -79,6 +82,30 @@ package body Help is
             Log_Message("Help removed: " & To_String(HelpTitle), EVERYTHING);
          end if;
       end loop Load_Help_Data;
+      TmpHelp.Index := To_Unbounded_String("stats");
+      HelpTitle :=
+        To_Unbounded_String
+          (Trim(Positive'Image(Positive(Help_List.Length) + 1), Left) &
+           ". Attributes and skills");
+      TmpHelp.Text :=
+        To_Unbounded_String
+          ("Here you will find information about all available attributes and skills in the game" &
+           LF & LF & "{u}Attributes{/u}" & LF);
+      for Attribute of Attributes_List loop
+         Append
+           (TmpHelp.Text,
+            "{b}" & Attribute.Name & "{/b}" & LF & "    " &
+            Attribute.Description & LF);
+      end loop;
+      Append(TmpHelp.Text, LF & "{u}Skills{/u}" & LF);
+      for Skill of Skills_List loop
+         Append
+           (TmpHelp.Text,
+            "{b}" & Skill.Name & "{/b}" & LF & "    " & Skill.Description &
+            LF);
+      end loop;
+      Help_List.Include(HelpTitle, TmpHelp);
+      Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
    end LoadHelp;
 
 end Help;
