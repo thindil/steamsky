@@ -1102,20 +1102,15 @@ package body Game is
                end loop Load_Game_Data_Loop;
             end Load_Data;
          begin
-            Parse
-              (Parser => Reader, --## rule line off IMPROPER_INITIALIZATION
-
-               Input => Data_File);
+            --## rule off IMPROPER_INITIALIZATION
+            Parse(Parser => Reader,
+Input => Data_File);
             Data_Type :=
               To_Unbounded_String
                 (Source =>
                    Node_Name
-                     (N =>
-                        Get_Element
-                          (Doc =>
-                             Get_Tree
-                               (Read =>
-                                  Reader)))); --## rule line off IMPROPER_INITIALIZATION
+                     (N => Get_Element(Doc => Get_Tree(Read => Reader))));
+            --## rule on IMPROPER_INITIALIZATION
             if Data_Type = To_Unbounded_String(Source => Local_Data_Name) or
               Local_Data_Name = "" then
                Log_Message
