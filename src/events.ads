@@ -32,7 +32,8 @@ package Events is
    -- SOURCE
    type Events_Types is
      (None, EnemyShip, AttackOnBase, Disease, DoublePrice, BaseRecovery,
-      FullDocks, EnemyPatrol, Trader, FriendlyShip);
+      FullDocks, EnemyPatrol, Trader, FriendlyShip) with
+      Default_Value => None;
    -- ****
 
    -- ****s* Events/Events.EventData
@@ -56,7 +57,7 @@ package Events is
          when AttackOnBase | EnemyShip | EnemyPatrol | Trader | FriendlyShip =>
             ShipIndex: Unbounded_String;
          when others =>
-            Data: Natural;
+            Data: Natural := 0;
       end case;
    end record;
    -- ****
