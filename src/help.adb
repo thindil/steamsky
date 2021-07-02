@@ -101,8 +101,9 @@ package body Help is
       for Skill of Skills_List loop
          Append
            (TmpHelp.Text,
-            "{b}" & Skill.Name & "{/b}" & LF & "    " & Skill.Description &
-            LF);
+            "{b}" & Skill.Name & "{/b}" & LF & "    Related attribute: " &
+            Attributes_List(Skill.Attribute).Name & LF);
+         Append(TmpHelp.Text, "    " & Skill.Description & LF);
       end loop;
       Help_List.Include(HelpTitle, TmpHelp);
       Log_Message("Help added: " & To_String(HelpTitle), EVERYTHING);
