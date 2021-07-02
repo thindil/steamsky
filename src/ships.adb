@@ -962,7 +962,8 @@ package body Ships is
                      Find_Delete_Crew_Loop :
                      for K in Temp_Record.Crew.Iterate loop
                         if Temp_Record.Crew(K).Proto_Index = Mob_Index then
-                           Delete_Index := Proto_Crew_Container.To_Index(K);
+                           Delete_Index :=
+                             Proto_Crew_Container.To_Index(Position => K);
                            exit Find_Delete_Crew_Loop;
                         end if;
                      end loop Find_Delete_Crew_Loop;
@@ -971,45 +972,54 @@ package body Ships is
             end loop Load_Crew_Loop;
             Child_Nodes :=
               DOM.Core.Elements.Get_Elements_By_Tag_Name
-                (Ship_Node, "description");
-            if Length(Child_Nodes) > 0 then
+                (Elem => Ship_Node, Name => "description");
+            if Length(List => Child_Nodes) > 0 then
                Temp_Record.Description :=
                  To_Unbounded_String
-                   (Node_Value(First_Child(Item(Child_Nodes, 0))));
+                   (Source =>
+                      Node_Value
+                        (N =>
+                           First_Child
+                             (N => Item(List => Child_Nodes, Index => 0))));
             end if;
             Count_Combat_Value_Loop :
-            for Module_Index of Temp_Record.Modules loop
-               case Modules_List(Module_Index).MType is
+            for Module_Index2 of Temp_Record.Modules loop
+               case Modules_List(Module_Index2).MType is
                   when HULL | GUN | BATTERING_RAM =>
+                     --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(Module_Index).Durability +
-                       (Modules_List(Module_Index).MaxValue * 10);
-                     if Modules_List(Module_Index).MType = GUN then
-                        Count_Ammo_Value(Modules_List(Module_Index).Value, 10);
+                       Modules_List(Module_Index2).Durability +
+                       (Modules_List(Module_Index2).MaxValue * 10);
+                     --## rule on SIMPLIFIABLE_EXPRESSIONS
+                     if Modules_List(Module_Index2).MType = GUN then
+                        Count_Ammo_Value
+                          (Modules_List(Module_Index2).Value, 10);
                      end if;
                   when ARMOR =>
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(Module_Index).Durability;
+                       Modules_List(Module_Index2).Durability;
                   when HARPOON_GUN =>
+                     --## rule off SIMPLIFIABLE_EXPRESSIONS
                      Temp_Record.Combat_Value :=
                        Temp_Record.Combat_Value +
-                       Modules_List(Module_Index).Durability +
-                       (Modules_List(Module_Index).MaxValue * 5);
-                     Count_Ammo_Value(Modules_List(Module_Index).Value, 5);
+                       Modules_List(Module_Index2).Durability +
+                       (Modules_List(Module_Index2).MaxValue * 5);
+                     --## rule on SIMPLIFIABLE_EXPRESSIONS
+                     Count_Ammo_Value(Modules_List(Module_Index2).Value, 5);
                   when others =>
                      null;
                end case;
             end loop Count_Combat_Value_Loop;
             Temp_Record.Combat_Value := Temp_Record.Combat_Value - 1;
-            if Action /= UPDATE then
+            if Action = UPDATE then
+               Proto_Ships_List(Ship_Index) := Temp_Record;
+            else
                Proto_Ships_Container.Include
                  (Proto_Ships_List, Ship_Index, Temp_Record);
                Log_Message
                  ("Ship added: " & To_String(Temp_Record.Name), EVERYTHING);
-            else
-               Proto_Ships_List(Ship_Index) := Temp_Record;
             end if;
          end if;
       end loop Load_Proto_Ships_Loop;
