@@ -103,7 +103,7 @@ namespace eval ttk::theme::steamsky {
          -borderwidth 1 \
          -focuscolor $colors(-goldenyellow) \
          -bordercolor $colors(-verydarkorange) \
-         -lightcolor $colors(-darkorange) \
+         -lightcolor $colors(-almostdarkorange) \
          -darkcolor black
 
       ttk::style map . -foreground [list disabled $colors(-gray)]
@@ -145,7 +145,7 @@ namespace eval ttk::theme::steamsky {
 
       # Icon and switch buttons setting
       # Default icon and switch button
-      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -lightcolor $colors(-darkorange) -darkcolor black -relief raised
+      ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -lightcolor $colors(-almostdarkorange) -darkcolor black -relief raised
       ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list active raised selected sunken]
       ttk::style map Toolbutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
       ttk::style map Toolbutton -bordercolor [list active $colors(-palegoldenrod)]
