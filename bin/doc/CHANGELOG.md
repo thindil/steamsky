@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Redesigned school, load game and assign skills screens
 - Updated help
 - Made scrollbars more visible
+- Updated the game default UI theme
 
 ### Fixed
 - Added missing headers to dialogs with information about modules to install or
