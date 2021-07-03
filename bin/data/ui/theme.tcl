@@ -121,6 +121,18 @@ namespace eval ttk::theme::steamsky {
          ] -width 22 -sticky w
 
       #
+      # Layouts:
+      #
+
+      ttk::style layout Heading {
+         Treeheading.cell -sticky nswe Treeheading.border -sticky nswe -children {
+            Treeheading.padding -sticky nswe -children {
+               Treeheading.image -side right -sticky {} Treeheading.text -sticky w
+            }
+         }
+      }
+
+      #
       # Settings:
       #
 
@@ -244,14 +256,14 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure Treeview -fieldbackground $colors(-almostblackred) -background $colors(-almostblackred)
       ttk::style configure Treeview.Item -padding {2 0 0 0}
       ttk::style configure Treeview -rowheight [expr {[font metrics InterfaceFont -linespace] + 2}]
-      ttk::style configure Heading -relief raised
+      ttk::style configure Heading -background $colors(-darkorange)
       ttk::style map Treeview \
          -background [list selected $colors(-darkred)] \
          -foreground [list selected $colors(-goldenyellow)]
       # Help topics list
       ttk::style configure Help.Treeview -font HelpFont
 
-      # Table widget (like looting, shipyard) screen
+      # Table widget (like looting, shipyard) setting
       ttk::style configure Table -headercolor $colors(-darkorange) -rowcolor $colors(-almostblackred)
 
       # Check button setting
