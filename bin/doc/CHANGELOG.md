@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file.
 - Reset the selected modules type in shipyard after buying a module
 - Showing items with zero amount in trading screen
 - Typos in help
+- Showing header for the goals selection dialog when scollbar is visible
 
 ## [6.2] - 2021-06-13
 
