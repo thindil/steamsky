@@ -994,7 +994,9 @@ package body Ships is
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
                      if Modules_List(Module_Index2).MType = GUN then
                         Count_Ammo_Value
-                          (Modules_List(Module_Index2).Value, 10);
+                          (Item_Type_Index =>
+                             Modules_List(Module_Index2).Value,
+                           Multiple => 10);
                      end if;
                   when ARMOR =>
                      Temp_Record.Combat_Value :=
@@ -1007,7 +1009,9 @@ package body Ships is
                        Modules_List(Module_Index2).Durability +
                        (Modules_List(Module_Index2).MaxValue * 5);
                      --## rule on SIMPLIFIABLE_EXPRESSIONS
-                     Count_Ammo_Value(Modules_List(Module_Index2).Value, 5);
+                     Count_Ammo_Value
+                       (Item_Type_Index => Modules_List(Module_Index2).Value,
+                        Multiple => 5);
                   when others =>
                      null;
                end case;
@@ -1016,10 +1020,12 @@ package body Ships is
             if Action = UPDATE then
                Proto_Ships_List(Ship_Index) := Temp_Record;
             else
-               Proto_Ships_Container.Include
-                 (Proto_Ships_List, Ship_Index, Temp_Record);
+               Proto_Ships_List.Include
+                 (Key => Ship_Index, New_Item => Temp_Record);
                Log_Message
-                 ("Ship added: " & To_String(Temp_Record.Name), EVERYTHING);
+                 (Message =>
+                    "Ship added: " & To_String(Source => Temp_Record.Name),
+                  Message_Type => EVERYTHING);
             end if;
          end if;
       end loop Load_Proto_Ships_Loop;
@@ -1027,7 +1033,7 @@ package body Ships is
 
    function Count_Ship_Weight(Ship: Ship_Record) return Positive is
       Weight: Natural := 0;
-      CargoWeight: Positive;
+      Cargo_Weight: Positive := 1;
    begin
       Count_Ship_Weight_Loop :
       for Module of Ship.Modules loop
@@ -1035,39 +1041,40 @@ package body Ships is
       end loop Count_Ship_Weight_Loop;
       Count_Cargo_Weight_Loop :
       for Item of Ship.Cargo loop
-         CargoWeight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
-         Weight := Weight + CargoWeight;
+         Cargo_Weight := Item.Amount * Items_List(Item.ProtoIndex).Weight;
+         Weight := Weight + Cargo_Weight;
       end loop Count_Cargo_Weight_Loop;
       return Weight;
    end Count_Ship_Weight;
 
    function Generate_Ship_Name
      (Owner: Unbounded_String) return Unbounded_String is
-      NewName: Unbounded_String := Null_Unbounded_String;
+      New_Name: Unbounded_String := Null_Unbounded_String;
    begin
       Generate_Ship_Name_Loop :
       for I in Factions_List.Iterate loop
-         if Factions_Container.Key(I) /= Owner then
+         if Factions_Container.Key(Position => I) /= Owner then
             goto End_Of_Generate_Name_Loop;
          end if;
          if Factions_List(I).NamesType = ROBOTIC then
-            NewName := GenerateRoboticName;
+            New_Name := GenerateRoboticName;
          else
-            NewName :=
+            New_Name :=
               Ship_Syllables_Start
                 (GetRandom
-                   (Ship_Syllables_Start.First_Index,
-                    Ship_Syllables_Start.Last_Index));
-            if GetRandom(1, 100) < 51 then
+                   (Min => Ship_Syllables_Start.First_Index,
+                    Max => Ship_Syllables_Start.Last_Index));
+            if GetRandom(Min => 1, Max => 100) < 51 then
                Append
-                 (NewName,
-                  Ship_Syllables_Middle
-                    (GetRandom
-                       (Ship_Syllables_Middle.First_Index,
-                        Ship_Syllables_Middle.Last_Index)));
+                 (Source => New_Name,
+                  New_Item =>
+                    Ship_Syllables_Middle
+                      (GetRandom
+                         (Min => Ship_Syllables_Middle.First_Index,
+                          Max => Ship_Syllables_Middle.Last_Index)));
             end if;
             Append
-              (NewName,
+              (New_Name,
                Ship_Syllables_End
                  (GetRandom
                     (Ship_Syllables_End.First_Index,
@@ -1076,7 +1083,7 @@ package body Ships is
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
       end loop Generate_Ship_Name_Loop;
-      return NewName;
+      return New_Name;
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is
