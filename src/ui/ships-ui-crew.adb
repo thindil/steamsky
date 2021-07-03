@@ -608,7 +608,7 @@ package body Ships.UI.Crew is
                  " .memberdialog}");
             Tcl.Tklib.Ada.Tooltip.Add
               (InfoButton,
-               "Show detailed information about the selected statistic.");
+               "Show detailed information about the selected attribute.");
             Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
             NewHeight :=
               NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
@@ -854,7 +854,7 @@ package body Ships.UI.Crew is
       MessageText, ItemIndex: Unbounded_String;
       Quality: Natural;
    begin
-      Append(MessageText, "Related statistic: ");
+      Append(MessageText, "Related attribute: ");
       Append
         (MessageText, Attributes_List(Skills_List(SkillIndex).Attribute).Name);
       if Skills_List(SkillIndex).Tool /= Null_Unbounded_String then

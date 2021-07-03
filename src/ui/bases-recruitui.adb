@@ -384,7 +384,7 @@ package body Bases.RecruitUI is
               " .recruitdialog}");
          Tcl.Tklib.Ada.Tooltip.Add
            (InfoButton,
-            "Show detailed information about the selected statistic.");
+            "Show detailed information about the selected attribute.");
          Tcl.Tk.Ada.Grid.Grid(InfoButton, "-column 1 -row 0");
          NewHeight :=
            NewHeight + Positive'Value(Winfo_Get(InfoButton, "reqheight"));
