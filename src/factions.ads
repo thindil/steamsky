@@ -32,7 +32,8 @@ package Factions is
    -- FUNCTION
    -- Types of names of members and bases factions
    -- SOURCE
-   type NamesTypes is (STANDARD, ROBOTIC);
+   type NamesTypes is (STANDARD, ROBOTIC) with
+      Default_Value => STANDARD;
    -- ****
 
    -- ****s* Factions/Factions.RelationsRecord
@@ -128,7 +129,7 @@ package Factions is
       Name: Unbounded_String;
       MemberName: Unbounded_String;
       PluralMemberName: Unbounded_String;
-      SpawnChance: Natural;
+      SpawnChance: Natural := 0;
       Population: Attributes_Array;
       NamesType: NamesTypes;
       Relations: Relations_Container.Map;
@@ -179,8 +180,8 @@ package Factions is
    function GetReputation
      (SourceFaction, TargetFaction: Unbounded_String) return Integer with
       Pre =>
-      (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains(Factions_List, TargetFaction)),
+      (Factions_List.Contains(SourceFaction) and
+       Factions_List.Contains(TargetFaction)),
       Test_Case => (Name => "Test_GetReputation", Mode => Nominal);
       -- ****
 
@@ -196,8 +197,8 @@ package Factions is
    function IsFriendly
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean with
       Pre =>
-      (Factions_Container.Contains(Factions_List, SourceFaction) and
-       Factions_Container.Contains(Factions_List, TargetFaction)),
+      (Factions_List.Contains(SourceFaction) and
+       Factions_List.Contains(TargetFaction)),
       Test_Case => (Name => "Test_IsFriendly", Mode => Nominal);
       -- ****
 
