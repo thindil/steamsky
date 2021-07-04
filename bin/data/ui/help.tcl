@@ -13,12 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-toplevel .help -class Dialog
+toplevel .help
 wm title .help {Steam Sky - Help}
 wm transient .help .
-if {$tcl_platform(os) == "Linux"} {
-   wm attributes .help -type dialog
-}
 grid [ttk::panedwindow .help.paned] -sticky nwes
 grid columnconfigure .help .help.paned -weight 1
 grid rowconfigure .help .help.paned -weight 1
