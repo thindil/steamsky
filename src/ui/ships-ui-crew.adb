@@ -386,7 +386,7 @@ package body Ships.UI.Crew is
          TabButton :=
            Create
              (Frame & ".stats",
-              " -text Statistics -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
+              " -text Attributes -style Radio.Toolbutton -value stats -variable newtab -command ShowMemberTab");
          Tcl.Tk.Ada.Grid.Grid(TabButton, "-column 1 -row 0");
          Bind(TabButton, "<Escape>", "{" & CloseButton & " invoke;break}");
          TabButton :=
