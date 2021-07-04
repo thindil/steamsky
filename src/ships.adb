@@ -1074,11 +1074,12 @@ package body Ships is
                           Max => Ship_Syllables_Middle.Last_Index)));
             end if;
             Append
-              (New_Name,
-               Ship_Syllables_End
-                 (GetRandom
-                    (Ship_Syllables_End.First_Index,
-                     Ship_Syllables_End.Last_Index)));
+              (Source => New_Name,
+               New_Item =>
+                 Ship_Syllables_End
+                   (GetRandom
+                      (Min => Ship_Syllables_End.First_Index,
+                       Max => Ship_Syllables_End.Last_Index)));
          end if;
          exit Generate_Ship_Name_Loop;
          <<End_Of_Generate_Name_Loop>>
@@ -1087,16 +1088,18 @@ package body Ships is
    end Generate_Ship_Name;
 
    function Count_Combat_Value return Natural is
-      CombatValue: Natural := 0;
+      Combat_Value: Natural := 0;
       procedure Count_Ammo_Value(Item_Type_Index, Multiple: Positive) is
       begin
          Count_Ammo_Value_Loop :
          for Item of Player_Ship.Cargo loop
             if Items_List(Item.ProtoIndex).IType =
               Items_Types(Item_Type_Index) then
-               CombatValue :=
-                 CombatValue +
+              --## rule off SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value :=
+                 Combat_Value +
                  (Items_List(Item.ProtoIndex).Value(1) * Multiple);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             end if;
          end loop Count_Ammo_Value_Loop;
       end Count_Ammo_Value;
@@ -1105,27 +1108,35 @@ package body Ships is
       for Module of Player_Ship.Modules loop
          case Modules_List(Module.Proto_Index).MType is
             when BATTERING_RAM =>
-               CombatValue :=
-                 CombatValue + Module.Max_Durability + (Module.Damage2 * 10);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value :=
+                 Combat_Value + Module.Max_Durability + (Module.Damage2 * 10);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             when GUN =>
-               CombatValue :=
-                 CombatValue + Module.Max_Durability + (Module.Damage * 10);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value :=
+                 Combat_Value + Module.Max_Durability + (Module.Damage * 10);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 10);
             when ARMOR =>
-               CombatValue := CombatValue + Module.Max_Durability;
+               Combat_Value := Combat_Value + Module.Max_Durability;
             when HARPOON_GUN =>
-               CombatValue :=
-                 CombatValue + Module.Max_Durability + (Module.Duration * 5);
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value :=
+                 Combat_Value + Module.Max_Durability + (Module.Duration * 5);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
                Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 5);
             when HULL =>
-               CombatValue :=
-                 CombatValue + Module.Max_Durability +
+               --## rule off SIMPLIFIABLE_EXPRESSIONS
+               Combat_Value :=
+                 Combat_Value + Module.Max_Durability +
                  (Module.Max_Modules * 10);
+               --## rule on SIMPLIFIABLE_EXPRESSIONS
             when others =>
                null;
          end case;
       end loop Count_Combat_Value_Loop;
-      return CombatValue;
+      return Combat_Value;
    end Count_Combat_Value;
 
    function Get_Cabin_Quality(Quality: Natural) return String is
@@ -1157,22 +1168,22 @@ package body Ships is
    procedure Damage_Module
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
-      RealDamage: Natural := Damage;
-      WeaponIndex: Natural;
-      procedure RemoveGun(Module_Index2: Positive) is
+      Real_Damage: Natural := Damage;
+      Weapon_Index: Natural;
+      procedure Remove_Gun(Module_Index2: Positive) is
       begin
          if Ship.Modules(Module_Index2).Owner(1) > 0 then
             Death
               (Ship.Modules(Module_Index2).Owner(1),
                To_Unbounded_String(Death_Reason), Ship);
          end if;
-      end RemoveGun;
+      end Remove_Gun;
    begin
       if Damage > Ship.Modules(Module_Index).Durability then
-         RealDamage := Ship.Modules(Module_Index).Durability;
+         Real_Damage := Ship.Modules(Module_Index).Durability;
       end if;
       Ship.Modules(Module_Index).Durability :=
-        Ship.Modules(Module_Index).Durability - RealDamage;
+        Ship.Modules(Module_Index).Durability - Real_Damage;
       if Ship.Modules(Module_Index).Durability = 0 then
          case Modules_List(Ship.Modules(Module_Index).Proto_Index).MType is
             when HULL | ENGINE =>
@@ -1180,13 +1191,13 @@ package body Ships is
                   Death(1, To_Unbounded_String(Death_Reason), Player_Ship);
                end if;
             when TURRET =>
-               WeaponIndex := Ship.Modules(Module_Index).Gun_Index;
-               if WeaponIndex > 0 then
-                  Ship.Modules(WeaponIndex).Durability := 0;
-                  RemoveGun(WeaponIndex);
+               Weapon_Index := Ship.Modules(Module_Index).Gun_Index;
+               if Weapon_Index > 0 then
+                  Ship.Modules(Weapon_Index).Durability := 0;
+                  Remove_Gun(Weapon_Index);
                end if;
             when GUN =>
-               RemoveGun(Module_Index);
+               Remove_Gun(Module_Index);
             when CABIN =>
                Kill_Owners_Loop :
                for Owner of Ship.Modules(Module_Index).Owner loop
