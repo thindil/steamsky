@@ -29,13 +29,13 @@ package body Factions.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetReputation_f138bb_fd71d1
+   function Wrap_Test_GetReputation_f138bb_ad6480
      (SourceFaction, TargetFaction: Unbounded_String) return Integer is
    begin
       begin
          pragma Assert
-           ((Factions_Container.Contains(Factions_List, SourceFaction) and
-             Factions_Container.Contains(Factions_List, TargetFaction)));
+           ((Factions_List.Contains(SourceFaction) and
+             Factions_List.Contains(TargetFaction)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -44,7 +44,7 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_GetReputation test requirement violated");
       end;
       declare
-         Test_GetReputation_f138bb_fd71d1_Result: constant Integer :=
+         Test_GetReputation_f138bb_ad6480_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Factions.GetReputation
              (SourceFaction, TargetFaction);
       begin
@@ -57,20 +57,20 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_GetReputation test commitment violated");
          end;
-         return Test_GetReputation_f138bb_fd71d1_Result;
+         return Test_GetReputation_f138bb_ad6480_Result;
       end;
-   end Wrap_Test_GetReputation_f138bb_fd71d1;
+   end Wrap_Test_GetReputation_f138bb_ad6480;
 --  end read only
 
 --  begin read only
    procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test);
-   procedure Test_GetReputation_f138bb_fd71d1(Gnattest_T: in out Test) renames
+   procedure Test_GetReputation_f138bb_ad6480(Gnattest_T: in out Test) renames
      Test_GetReputation_test_getreputation;
 --  id:2.2/f138bbb5c8b2b971/GetReputation/1/0/test_getreputation/
    procedure Test_GetReputation_test_getreputation(Gnattest_T: in out Test) is
       function GetReputation
         (SourceFaction, TargetFaction: Unbounded_String) return Integer renames
-        Wrap_Test_GetReputation_f138bb_fd71d1;
+        Wrap_Test_GetReputation_f138bb_ad6480;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -93,13 +93,13 @@ package body Factions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_IsFriendly_868bec_b689c9
+   function Wrap_Test_IsFriendly_868bec_4ae8b6
      (SourceFaction, TargetFaction: Unbounded_String) return Boolean is
    begin
       begin
          pragma Assert
-           ((Factions_Container.Contains(Factions_List, SourceFaction) and
-             Factions_Container.Contains(Factions_List, TargetFaction)));
+           ((Factions_List.Contains(SourceFaction) and
+             Factions_List.Contains(TargetFaction)));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -108,7 +108,7 @@ package body Factions.Test_Data.Tests is
                "req_sloc(factions.ads:0):Test_IsFriendly test requirement violated");
       end;
       declare
-         Test_IsFriendly_868bec_b689c9_Result: constant Boolean :=
+         Test_IsFriendly_868bec_4ae8b6_Result: constant Boolean :=
            GNATtest_Generated.GNATtest_Standard.Factions.IsFriendly
              (SourceFaction, TargetFaction);
       begin
@@ -121,20 +121,20 @@ package body Factions.Test_Data.Tests is
                  (False,
                   "ens_sloc(factions.ads:0:):Test_IsFriendly test commitment violated");
          end;
-         return Test_IsFriendly_868bec_b689c9_Result;
+         return Test_IsFriendly_868bec_4ae8b6_Result;
       end;
-   end Wrap_Test_IsFriendly_868bec_b689c9;
+   end Wrap_Test_IsFriendly_868bec_4ae8b6;
 --  end read only
 
 --  begin read only
    procedure Test_IsFriendly_test_isfriendly(Gnattest_T: in out Test);
-   procedure Test_IsFriendly_868bec_b689c9(Gnattest_T: in out Test) renames
+   procedure Test_IsFriendly_868bec_4ae8b6(Gnattest_T: in out Test) renames
      Test_IsFriendly_test_isfriendly;
 --  id:2.2/868bec8bf6fd9c98/IsFriendly/1/0/test_isfriendly/
    procedure Test_IsFriendly_test_isfriendly(Gnattest_T: in out Test) is
       function IsFriendly
         (SourceFaction, TargetFaction: Unbounded_String) return Boolean renames
-        Wrap_Test_IsFriendly_868bec_b689c9;
+        Wrap_Test_IsFriendly_868bec_4ae8b6;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

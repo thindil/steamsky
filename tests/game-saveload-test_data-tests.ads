@@ -11,7 +11,7 @@ package Game.SaveLoad.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_GenerateSaveName_ddf358_e85ed1(Gnattest_T: in out Test);
+   procedure Test_GenerateSaveName_ddf358_d26994(Gnattest_T: in out Test);
    --  game-saveload.ads:62:4:GenerateSaveName:Test_GenerateSaveName
 
 end Game.SaveLoad.Test_Data.Tests;
