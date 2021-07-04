@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Reset the selected modules type in shipyard after buying a module
 - Showing items with zero amount in trade screen
 - Typos in help
+- Help window blocks the main game window
 
 ## [6.0.4] - 2021-06-27
 
