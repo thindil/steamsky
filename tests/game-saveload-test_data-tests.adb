@@ -29,25 +29,44 @@ package body Game.SaveLoad.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   procedure Wrap_Test_GenerateSaveName_ddf358_e85ed1
+   procedure Wrap_Test_GenerateSaveName_ddf358_d26994
      (RenameSave: Boolean := False) is
+      Gnattest_1_SaveName: constant Unbounded_String := SaveName;
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(game-saveload.ads:0):Test_GenerateSaveName test requirement violated");
+      end;
       GNATtest_Generated.GNATtest_Standard.Game.SaveLoad.GenerateSaveName
         (RenameSave);
-   end Wrap_Test_GenerateSaveName_ddf358_e85ed1;
+      begin
+         pragma Assert(SaveName /= Gnattest_1_SaveName);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(game-saveload.ads:0:):Test_GenerateSaveName test commitment violated");
+      end;
+   end Wrap_Test_GenerateSaveName_ddf358_d26994;
 --  end read only
 
 --  begin read only
    procedure Test_GenerateSaveName_test_generatesavename
      (Gnattest_T: in out Test);
-   procedure Test_GenerateSaveName_ddf358_e85ed1
+   procedure Test_GenerateSaveName_ddf358_d26994
      (Gnattest_T: in out Test) renames
      Test_GenerateSaveName_test_generatesavename;
 --  id:2.2/ddf358647b83b861/GenerateSaveName/1/0/test_generatesavename/
    procedure Test_GenerateSaveName_test_generatesavename
      (Gnattest_T: in out Test) is
       procedure GenerateSaveName(RenameSave: Boolean := False) renames
-        Wrap_Test_GenerateSaveName_ddf358_e85ed1;
+        Wrap_Test_GenerateSaveName_ddf358_d26994;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
