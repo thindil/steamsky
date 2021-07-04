@@ -30,6 +30,7 @@ All notable changes to this project will be documented in this file.
 - Showing items with zero amount in trading screen
 - Typos in help
 - Showing header for the goals selection dialog when scollbar is visible
+- Help window blocks the main game window
 
 ## [6.2] - 2021-06-13
 
