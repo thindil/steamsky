@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.0.5] - 2021-07-04
 
 ### Changed
 - Made scrollbars more visible
