@@ -299,7 +299,7 @@ package body Bases.RecruitUI is
       RecruitLabel: Ttk_Label;
       ProgressFrame: Ttk_Frame;
       TabNames: constant array(1 .. 4) of Unbounded_String :=
-        (To_Unbounded_String("General"), To_Unbounded_String("Statistics"),
+        (To_Unbounded_String("General"), To_Unbounded_String("Attributes"),
          To_Unbounded_String("Skills"), To_Unbounded_String("Inventory"));
    begin
       Tcl_SetVar(Interp, "newtab", To_Lower(To_String(TabNames(1))));
