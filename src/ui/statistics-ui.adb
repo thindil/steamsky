@@ -13,7 +13,6 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
@@ -46,7 +45,7 @@ package body Statistics.UI is
       ProtoIndex: Positive;
       StatsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".statsframe");
       StatsCanvas: constant Tk_Canvas := Get_Widget(StatsFrame & ".canvas");
-      Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.stats");
+      Label: Ttk_Label := Get_Widget(StatsCanvas & ".stats.left.points");
       TreeView: Ttk_Tree_View;
    begin
       if Winfo_Get(Label, "exists") = "0" then
@@ -60,9 +59,9 @@ package body Statistics.UI is
          return;
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
-      StatsText :=
-        To_Unbounded_String("Points:" & Natural'Image(GetGamePoints));
-      Append(StatsText, LF & "Time passed:");
+      configure(Label, "-text {Points:" & Natural'Image(GetGamePoints) & "}");
+      Add(Label, "The amount of points gained in this game");
+      StatsText := To_Unbounded_String("Time passed:");
       declare
          MinutesDiff: constant Natural :=
            (Game_Date.Minutes + (Game_Date.Hour * 60) +
@@ -72,6 +71,9 @@ package body Statistics.UI is
       begin
          MinutesToDate(MinutesDiff, StatsText);
       end;
+      Label := Get_Widget(StatsCanvas & ".stats.left.time");
+      configure(Label, "-text {" & To_String(StatsText) & "}");
+      Add(Label, "In game time which was passed since it started");
       declare
          type VisitedFactor is digits 4 range 0.0 .. 100.0;
          VisitedPercent: VisitedFactor;
@@ -82,10 +84,15 @@ package body Statistics.UI is
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
-         Append
-           (StatsText,
-            LF & "Bases visited:" & Positive'Image(GameStats.BasesVisited) &
-            " (" & VisitedString & "%)");
+         StatsText :=
+           To_Unbounded_String
+             ("Bases visited:" & Positive'Image(GameStats.BasesVisited) &
+              " (" & VisitedString & "%)");
+         Label := Get_Widget(StatsCanvas & ".stats.left.bases");
+         configure(Label, "-text {" & To_String(StatsText) & "}");
+         Add
+           (Label,
+            "The amount of sky bases visited and total percentage of all bases");
          VisitedPercent :=
            VisitedFactor(Float(GameStats.MapVisited) / (1_024.0 * 1_024.0)) *
            100.0;
@@ -95,20 +102,18 @@ package body Statistics.UI is
          Put
            (To => VisitedString, Item => Float(VisitedPercent), Aft => 3,
             Exp => 0);
-         Append(StatsText, LF & "Map discovered: " & VisitedString & "%");
+         StatsText :=
+           To_Unbounded_String("Map discovered: " & VisitedString & "%");
+         Label := Get_Widget(StatsCanvas & ".stats.left.map");
+         configure(Label, "-text {" & To_String(StatsText) & "}");
+         Add(Label, "The amount of unique map's fields visited");
       end;
-      Append
-        (StatsText,
-         LF & "Distance traveled:" &
-         Natural'Image(GameStats.DistanceTraveled));
+      StatsText :=
+        To_Unbounded_String
+          ("Distance traveled:" & Natural'Image(GameStats.DistanceTraveled));
+      Label := Get_Widget(StatsCanvas & ".stats.left.distance");
       configure(Label, "-text {" & To_String(StatsText) & "}");
-      Add
-        (Label,
-         "Points - the amount of points gained in this game" & LF &
-         "Time passed - in game time which was passed since it started" & LF &
-         "Bases visited - the amount of sky bases visited and total percentage of all bases" &
-         LF & "Map discovered - the amount of unique map's fields visited" &
-         LF & "Distance traveled - the total amount of map's fields visited");
+      Add(Label, "The total amount of map's fields visited");
       StatsFrame.Name := New_String(StatsCanvas & ".stats");
       TotalFinished := 0;
       Count_Finished_Crafting_Loop :
