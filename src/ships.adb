@@ -1117,7 +1117,9 @@ package body Ships is
                Combat_Value :=
                  Combat_Value + Module.Max_Durability + (Module.Damage * 10);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
-               Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 10);
+               Count_Ammo_Value
+                 (Item_Type_Index => Modules_List(Module.Proto_Index).Value,
+                  Multiple => 10);
             when ARMOR =>
                Combat_Value := Combat_Value + Module.Max_Durability;
             when HARPOON_GUN =>
@@ -1125,7 +1127,9 @@ package body Ships is
                Combat_Value :=
                  Combat_Value + Module.Max_Durability + (Module.Duration * 5);
                --## rule on SIMPLIFIABLE_EXPRESSIONS
-               Count_Ammo_Value(Modules_List(Module.Proto_Index).Value, 5);
+               Count_Ammo_Value
+                 (Item_Type_Index => Modules_List(Module.Proto_Index).Value,
+                  Multiple => 5);
             when HULL =>
                --## rule off SIMPLIFIABLE_EXPRESSIONS
                Combat_Value :=
@@ -1169,13 +1173,14 @@ package body Ships is
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
       Real_Damage: Natural := Damage;
-      Weapon_Index: Natural;
+      Weapon_Index: Natural := 0;
       procedure Remove_Gun(Module_Index2: Positive) is
       begin
          if Ship.Modules(Module_Index2).Owner(1) > 0 then
             Death
-              (Ship.Modules(Module_Index2).Owner(1),
-               To_Unbounded_String(Death_Reason), Ship);
+              (MemberIndex => Ship.Modules(Module_Index2).Owner(1),
+               Reason => To_Unbounded_String(Source => Death_Reason),
+               Ship => Ship);
          end if;
       end Remove_Gun;
    begin
@@ -1188,21 +1193,27 @@ package body Ships is
          case Modules_List(Ship.Modules(Module_Index).Proto_Index).MType is
             when HULL | ENGINE =>
                if Ship = Player_Ship then
-                  Death(1, To_Unbounded_String(Death_Reason), Player_Ship);
+                  Death
+                    (MemberIndex => 1,
+                     Reason => To_Unbounded_String(Source => Death_Reason),
+                     Ship => Player_Ship);
                end if;
             when TURRET =>
                Weapon_Index := Ship.Modules(Module_Index).Gun_Index;
                if Weapon_Index > 0 then
                   Ship.Modules(Weapon_Index).Durability := 0;
-                  Remove_Gun(Weapon_Index);
+                  Remove_Gun(Module_Index2 => Weapon_Index);
                end if;
             when GUN =>
-               Remove_Gun(Module_Index);
+               Remove_Gun(Module_Index2 => Module_Index);
             when CABIN =>
                Kill_Owners_Loop :
                for Owner of Ship.Modules(Module_Index).Owner loop
                   if Owner > 0 and then Ship.Crew(Owner).Order = Rest then
-                     Death(Owner, To_Unbounded_String(Death_Reason), Ship);
+                     Death
+                       (MemberIndex => Owner,
+                        Reason => To_Unbounded_String(Source => Death_Reason),
+                        Ship => Ship);
                   end if;
                end loop Kill_Owners_Loop;
             when others =>
@@ -1212,8 +1223,9 @@ package body Ships is
                       Ship.Crew(Ship.Modules(Module_Index).Owner(1)).Order /=
                       Rest then
                      Death
-                       (Ship.Modules(Module_Index).Owner(1),
-                        To_Unbounded_String(Death_Reason), Ship);
+                       (MemberIndex => Ship.Modules(Module_Index).Owner(1),
+                        Reason => To_Unbounded_String(Source => Death_Reason),
+                        Ship => Ship);
                   end if;
                end if;
          end case;
