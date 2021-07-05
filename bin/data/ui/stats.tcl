@@ -24,8 +24,16 @@ SetScrollbarBindings $statscanvas .gameframe.paned.statsframe.scrolly
 set statsframe [ttk::frame $statscanvas.stats]
 grid [ttk::frame $statsframe.left] -sticky nwes -padx 5
 SetScrollbarBindings $statsframe.left .gameframe.paned.statsframe.scrolly
-grid [ttk::label $statsframe.left.stats] -sticky w
-SetScrollbarBindings $statsframe.left.stats .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.points] -sticky w
+SetScrollbarBindings $statsframe.left.points .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.time] -sticky w
+SetScrollbarBindings $statsframe.left.time .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.bases] -sticky w
+SetScrollbarBindings $statsframe.left.bases .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.map] -sticky w
+SetScrollbarBindings $statsframe.left.map .gameframe.paned.statsframe.scrolly
+grid [ttk::label $statsframe.left.distance] -sticky w
+SetScrollbarBindings $statsframe.left.distance .gameframe.paned.statsframe.scrolly
 grid [ttk::label $statsframe.left.crafts] -sticky w
 SetScrollbarBindings $statsframe.left.crafts .gameframe.paned.statsframe.scrolly
 grid [ttk::frame $statsframe.left.craftsframe] -sticky w
