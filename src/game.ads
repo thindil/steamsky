@@ -102,7 +102,8 @@ package Game is
    -- FUNCTION
    -- Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
    -- SOURCE
-   type Attributes_Array is array(1 .. 2) of Natural;
+   type Attributes_Array is array(1 .. 2) of Natural with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****d* Game/Game.Empty_Attributes_Array
@@ -423,7 +424,8 @@ package Game is
    -- FUNCTION
    -- Possible actions to do when loading game data
    -- SOURCE
-   type Data_Action is (ADD, UPDATE, REMOVE);
+   type Data_Action is (ADD, UPDATE, REMOVE) with
+      Default_Value => ADD;
    -- ****
 
    -- ****d* Game/Game.Default_Data_Action
@@ -438,7 +440,8 @@ package Game is
    -- FUNCTION
    -- General purpose array of Natural
    -- SOURCE
-   type Natural_Array is array(Positive range <>) of Natural;
+   type Natural_Array is array(Positive range <>) of Natural with
+      Default_Component_Value => 0;
    -- ****
    --## rule on TYPE_INITIAL_VALUES
 
@@ -446,7 +449,8 @@ package Game is
    -- FUNCTION
    -- Used mostly for count percentage of damage of modules
    -- SOURCE
-   type Damage_Factor is digits 2 range 0.0 .. 1.0;
+   type Damage_Factor is digits 2 range 0.0 .. 1.0 with
+      Default_Value => 0.0;
    -- ****
 
    -- ****d* Game/Game.No_Damage
@@ -460,7 +464,8 @@ package Game is
    -- FUNCTION
    -- Data structure for reputation, 1 = level, 2 = points to next level
    -- SOURCE
-   type Reputation_Array is array(1 .. 2) of Integer;
+   type Reputation_Array is array(1 .. 2) of Integer with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****d* Game/Default_Reputation
@@ -550,6 +555,7 @@ package Game is
       -- SOURCE
    function Find_Skill_Index(Skill_Name: Unbounded_String) return Natural with
       Pre => Skill_Name /= Null_Unbounded_String,
+      Post => Find_Skill_Index'Result <= Natural(Skills_List.Length),
       Test_Case => (Name => "Test_FindSkillIndex", Mode => Nominal);
       -- ****
 
