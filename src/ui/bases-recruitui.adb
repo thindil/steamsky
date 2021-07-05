@@ -280,7 +280,7 @@ package body Bases.RecruitUI is
       Recruit: constant Recruit_Data :=
         SkyBases(BaseIndex).Recruits(RecruitIndex);
       RecruitDialog: constant Ttk_Frame :=
-        Create_Dialog(".recruidialog", To_String(Recruit.Name));
+        Create_Dialog(".recruitdialog", To_String(Recruit.Name));
       YScroll: constant Ttk_Scrollbar :=
         Create
           (RecruitDialog & ".yscroll",
@@ -361,7 +361,7 @@ package body Bases.RecruitUI is
       Width := Positive'Value(Winfo_Get(RecruitLabel, "reqwidth"));
       Tcl.Tk.Ada.Grid.Grid(Frame);
       -- Statistics of the selected recruit
-      Frame := Create(RecruitCanvas & ".statistics");
+      Frame := Create(RecruitCanvas & ".attributes");
       Show_Recruit_Stats_Loop :
       for I in Recruit.Attributes.Iterate loop
          ProgressFrame :=
