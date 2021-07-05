@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Made scrollbars more visible
 - Updated the game default UI theme
+- Use word *attributes* everywhere when referencing to characters' statistics
 
 ### Fixed
 - Added missing headers to dialogs with information about modules to install or
