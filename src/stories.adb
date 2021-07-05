@@ -459,7 +459,6 @@ package body Stories is
      (FactionName: Unbounded_String; Condition: StartConditionType) is
       FactionIndex, StepData: Unbounded_String := Null_Unbounded_String;
       TempTexts: UnboundedString_Container.Vector;
-      CanStart: Boolean;
    begin
       if CurrentStory.Index /= Null_Unbounded_String then
          return;
@@ -476,67 +475,60 @@ package body Stories is
       end if;
       Check_Stories_Loop :
       for I in Stories_List.Iterate loop
-         CanStart := True;
          Check_Faction_Loop :
          for ForbiddenFaction of Stories_List(I).ForbiddenFactions loop
             if To_Lower(To_String(ForbiddenFaction)) =
               To_Lower(To_String(Player_Ship.Crew(1).Faction)) then
-               CanStart := False;
-               exit Check_Faction_Loop;
+               goto End_Of_Check_Stories_Loop;
             end if;
          end loop Check_Faction_Loop;
-         if CanStart then
-            case Condition is
-               when DROPITEM =>
-                  if Stories_List(I).StartData(2) = FactionIndex
-                    and then
-                      GetRandom
-                        (1,
-                         Positive'Value
-                           (To_String(Stories_List(I).StartData(3)))) =
-                      1 then
-                     case Stories_List(I).StartingStep.FinishCondition is
-                        when ASKINBASE =>
-                           StepData :=
-                             SelectBase
-                               (To_String
-                                  (GetStepData
-                                     (Stories_List(I).StartingStep.FinishData,
-                                      "base")));
-                        when DESTROYSHIP =>
-                           StepData :=
-                             SelectEnemy
-                               (Stories_List(I).StartingStep.FinishData);
-                        when EXPLORE =>
-                           StepData :=
-                             SelectLocation
-                               (Stories_List(I).StartingStep.FinishData);
-                        when LOOT =>
-                           StepData :=
-                             SelectLoot
-                               (Stories_List(I).StartingStep.FinishData);
-                        when ANY =>
-                           null;
-                     end case;
-                     CurrentStory :=
-                       (Index => Stories_Container.Key(I), Step => 1,
-                        CurrentStep => 0,
-                        MaxSteps =>
-                          GetRandom
-                            (Stories_List(I).MinSteps,
-                             Stories_List(I).MaxSteps),
-                        ShowText => True, Data => StepData,
-                        FinishedStep => ANY);
-                     UpdateCargo(Player_Ship, Stories_List(I).StartData(1), 1);
-                     FinishedStories.Append
-                       (New_Item =>
-                          (Index => CurrentStory.Index,
-                           StepsAmount => CurrentStory.MaxSteps,
-                           StepsTexts => TempTexts));
-                     return;
-                  end if;
-            end case;
-         end if;
+         case Condition is
+            when DROPITEM =>
+               if Stories_List(I).StartData(2) = FactionIndex
+                 and then
+                   GetRandom
+                     (1,
+                      Positive'Value
+                        (To_String(Stories_List(I).StartData(3)))) =
+                   1 then
+                  case Stories_List(I).StartingStep.FinishCondition is
+                     when ASKINBASE =>
+                        StepData :=
+                          SelectBase
+                            (To_String
+                               (GetStepData
+                                  (Stories_List(I).StartingStep.FinishData,
+                                   "base")));
+                     when DESTROYSHIP =>
+                        StepData :=
+                          SelectEnemy(Stories_List(I).StartingStep.FinishData);
+                     when EXPLORE =>
+                        StepData :=
+                          SelectLocation
+                            (Stories_List(I).StartingStep.FinishData);
+                     when LOOT =>
+                        StepData :=
+                          SelectLoot(Stories_List(I).StartingStep.FinishData);
+                     when ANY =>
+                        null;
+                  end case;
+                  CurrentStory :=
+                    (Index => Stories_Container.Key(I), Step => 1,
+                     CurrentStep => 0,
+                     MaxSteps =>
+                       GetRandom
+                         (Stories_List(I).MinSteps, Stories_List(I).MaxSteps),
+                     ShowText => True, Data => StepData, FinishedStep => ANY);
+                  UpdateCargo(Player_Ship, Stories_List(I).StartData(1), 1);
+                  FinishedStories.Append
+                    (New_Item =>
+                       (Index => CurrentStory.Index,
+                        StepsAmount => CurrentStory.MaxSteps,
+                        StepsTexts => TempTexts));
+                  return;
+               end if;
+         end case;
+         <<End_Of_Check_Stories_Loop>>
       end loop Check_Stories_Loop;
    end StartStory;
 
