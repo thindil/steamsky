@@ -140,9 +140,7 @@ package body Table is
      (Table: Table_Widget; NewRow: Boolean; Command: String) return String is
       ItemId: Unbounded_String;
       Color: constant String :=
-        (if Table.Row rem 2 > 0 then
-           Style_Lookup
-             (To_String(Game_Settings.Interface_Theme), "-troughcolor")
+        (if Table.Row rem 2 > 0 then Style_Lookup("Table", "-rowcolor")
          else Style_Lookup
              (To_String(Game_Settings.Interface_Theme), "-background"));
    begin
