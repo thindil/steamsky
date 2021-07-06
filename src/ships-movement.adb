@@ -223,7 +223,7 @@ package body Ships.Movement is
               ("Ship docked to base " & To_String(SkyBases(BaseIndex).Name),
                OrderMessage);
             if Game_Settings.Auto_Save = DOCK then
-               SaveGame;
+               Save_Game;
             end if;
             declare
                MemberIndex: Positive := 1;
@@ -388,7 +388,7 @@ package body Ships.Movement is
             Player_Ship.Speed := Game_Settings.Undock_Speed;
             Update_Game(5);
             if Game_Settings.Auto_Save = UNDOCK then
-               SaveGame;
+               Save_Game;
             end if;
          end if;
       end if;

@@ -442,7 +442,7 @@ package body Game is
                 (Min => Goals_List.First_Index, Max => Goals_List.Last_Index));
       end if;
       -- Set name of savegame
-      GenerateSaveName;
+      Generate_Save_Name;
       -- Set player career
       Player_Career := New_Game_Settings.Player_Career;
       -- Add welcoming message
@@ -496,21 +496,21 @@ package body Game is
          end if;
          DailyPayment;
          if Game_Settings.Auto_Save = DAILY then
-            SaveGame;
+            Save_Game;
          end if;
       end if;
       if Game_Date.Day > 30 then
          Game_Date.Day := 1;
          Game_Date.Month := Game_Date.Month + 1;
          if Game_Settings.Auto_Save = MONTHLY then
-            SaveGame;
+            Save_Game;
          end if;
       end if;
       if Game_Date.Month > 12 then
          Game_Date.Month := 1;
          Game_Date.Year := Game_Date.Year + 1;
          if Game_Settings.Auto_Save = YEARLY then
-            SaveGame;
+            Save_Game;
          end if;
       end if;
       -- Update crew
@@ -563,11 +563,11 @@ package body Game is
    procedure End_Game(Save: Boolean) is
    begin
       if Save then
-         SaveGame;
+         Save_Game;
       else
          Delete_Save_Block :
          begin
-            Delete_File(Name => To_String(Source => SaveName));
+            Delete_File(Name => To_String(Source => Save_Name));
          exception
             when Name_Error =>
                null;

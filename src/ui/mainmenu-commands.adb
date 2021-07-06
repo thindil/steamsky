@@ -426,12 +426,12 @@ package body MainMenu.Commands is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
       Tcl.Tk.Ada.Pack.Pack_Forget(Ttk_Frame'(Get_Widget(".loadmenu")));
-      SaveName := Save_Directory & CArgv.Arg(Argv, 1);
-      LoadGame;
+      Save_Name := Save_Directory & CArgv.Arg(Argv, 1);
+      Load_Game;
       StartGame;
       return TCL_OK;
    exception
-      when An_Exception : SaveGame_Invalid_Data =>
+      when An_Exception : Save_Game_Invalid_Data =>
          Show_Main_Menu;
          ShowMessage
            ("Can't load this game. Reason: " & Exception_Message(An_Exception),

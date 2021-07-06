@@ -53,7 +53,7 @@ package body ErrorDialog is
       Error_Text: Unbounded_String := Null_Unbounded_String;
    begin
       if Natural(Player_Ship.Crew.Length) > 0 then
-         SaveGame;
+         Save_Game;
       end if;
       Append
         (Source => Error_Text,
