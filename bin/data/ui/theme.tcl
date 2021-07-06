@@ -95,7 +95,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure . \
          -background $colors(-verydarkorange) \
          -foreground $colors(-palegoldenrod) \
-         -troughcolor $colors(-almostblackred) \
+         -troughcolor black \
          -selectbackground $colors(-darkred) \
          -selectforeground $colors(-goldenyellow) \
          -fieldbackground $colors(-verydarkorange) \
@@ -223,7 +223,7 @@ namespace eval ttk::theme::steamsky {
       ttk::style map TSpinbox -arrowcolor [list active $colors(-palegoldenrod)]
 
       # Scrollbar setting
-      ttk::style configure TScrollbar -arrowcolor $colors(-goldenyellow) -troughcolor black -background $colors(-darkorange) -lightcolor $colors(-almostdarkorange)
+      ttk::style configure TScrollbar -arrowcolor $colors(-goldenyellow) -background $colors(-darkorange) -lightcolor $colors(-almostdarkorange)
       ttk::style map TScrollbar -arrowcolor [list active $colors(-palegoldenrod)]
       bind TScrollbar <Motion> {
          if {[%W cget -orient] == "horizontal"} {
