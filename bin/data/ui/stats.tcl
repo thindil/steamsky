@@ -42,6 +42,7 @@ $statsframe.left.craftsframe.craftsview heading name -text {Name}
 $statsframe.left.craftsframe.craftsview column name -width 250
 $statsframe.left.craftsframe.craftsview heading amount -text {Amount}
 $statsframe.left.craftsframe.craftsview column amount -width 75 -anchor center
+tooltip::tooltip $statsframe.left.craftsframe.craftsview {The list of finished crafting orders}
 grid [ttk::scrollbar $statsframe.left.craftsframe.scrolly -orient vertical -command [list $statsframe.left.craftsframe.craftsview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.left.craftsframe.scrolly
 grid [ttk::label $statsframe.left.missions] -sticky w
@@ -52,6 +53,7 @@ $statsframe.left.missionsframe.missionsview heading name -text {Name}
 $statsframe.left.missionsframe.missionsview column name -width 250
 $statsframe.left.missionsframe.missionsview heading amount -text {Amount}
 $statsframe.left.missionsframe.missionsview column amount -width 75 -anchor center
+tooltip::tooltip $statsframe.left.missionsframe.missionsview {The list of finished missions}
 grid [ttk::scrollbar $statsframe.left.missionsframe.scrolly -orient vertical -command [list $statsframe.left.missionsframe.missionsview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.left.missionsframe.scrolly
 grid [ttk::button $statsframe.left.goal -text {Goals} -command {ShowGoals $statsframe.left.goal}] -sticky w
@@ -63,6 +65,7 @@ $statsframe.left.goalsframe.goalsview heading name -text {Name}
 $statsframe.left.goalsframe.goalsview column name -width 250
 $statsframe.left.goalsframe.goalsview heading amount -text {Amount}
 $statsframe.left.goalsframe.goalsview column amount -width 75 -anchor center
+tooltip::tooltip $statsframe.left.goalsframe.goalsview {The list of finished goals}
 grid [ttk::scrollbar $statsframe.left.goalsframe.scrolly -orient vertical -command [list $statsframe.left.goalsframe.goalsview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.left.goalsframe.scrolly
 grid [ttk::frame $statsframe.right] -row 0 -column 1 -sticky nwes -padx 5
@@ -75,6 +78,7 @@ $statsframe.right.destroyedframe.destroyedview heading name -text {Name}
 $statsframe.right.destroyedframe.destroyedview column name -width 250
 $statsframe.right.destroyedframe.destroyedview heading amount -text {Amount}
 $statsframe.right.destroyedframe.destroyedview column amount -width 75 -anchor center
+tooltip::tooltip $statsframe.right.destroyedframe.destroyedview {The list of destroyed ships}
 grid [ttk::scrollbar $statsframe.right.destroyedframe.scrolly -orient vertical -command [list $statsframe.right.destroyedframe.destroyedview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.right.destroyedframe.scrolly
 grid [ttk::label $statsframe.right.killed] -sticky w
@@ -85,6 +89,7 @@ $statsframe.right.killedframe.killedview heading name -text {Name}
 $statsframe.right.killedframe.killedview column name -width 250
 $statsframe.right.killedframe.killedview heading amount -text {Amount}
 $statsframe.right.killedframe.killedview column amount -width 75 -anchor center
+tooltip::tooltip $statsframe.right.killedframe.killedview {The list of killed enemies in melee combat}
 grid [ttk::scrollbar $statsframe.right.killedframe.scrolly -orient vertical -command [list $statsframe.right.killedframe.destroyedview yview]] -row 0 -column 1 -sticky ns
 ::autoscroll::autoscroll $statsframe.right.killedframe.scrolly
 grid columnconfigure .gameframe.paned.statsframe 0 -weight 1
