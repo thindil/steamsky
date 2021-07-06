@@ -59,7 +59,7 @@ package body Game.SaveLoad is
    SaveVersion: constant Positive := 5;
    -- ****
 
-   procedure SaveGame(PrettyPrint: Boolean := False) is
+   procedure Save_Game(Pretty_Print: Boolean := False) is
       Save: DOM_Implementation;
       CategoryNode, MainNode: DOM.Core.Element;
       RawValue: Unbounded_String;
@@ -110,7 +110,7 @@ package body Game.SaveLoad is
          (To_Unbounded_String("pricesbonus"), New_Game_Settings.Prices_Bonus));
    begin
       Log_Message
-        ("Start saving game in file " & To_String(SaveName) & ".", EVERYTHING);
+        ("Start saving game in file " & To_String(Save_Name) & ".", EVERYTHING);
       SaveData := Create_Document(Save);
       MainNode := Create_Element(SaveData, "save");
       MainNode := Append_Child(SaveData, MainNode);
@@ -361,24 +361,24 @@ package body Game.SaveLoad is
       CategoryNode := Append_Child(MainNode, CategoryNode);
       Set_Attribute(CategoryNode, "index", To_String(Player_Career));
       Log_Message("done.", EVERYTHING, True, False);
-      Create(SaveFile, Out_File, To_String(SaveName));
+      Create(SaveFile, Out_File, To_String(Save_Name));
       Write
         (Stream => Stream(SaveFile), N => SaveData,
-         Pretty_Print => PrettyPrint);
+         Pretty_Print => Pretty_Print);
       Close(SaveFile);
       Log_Message("Finished saving game.", EVERYTHING);
-   end SaveGame;
+   end Save_Game;
 
-   procedure LoadGame is
+   procedure Load_Game is
       SaveFile: File_Input;
       Reader: Tree_Reader;
       NodesList, ChildNodes: Node_List;
       SavedNode: Node;
    begin
       Log_Message
-        ("Start loading game from file " & To_String(SaveName) & ".",
+        ("Start loading game from file " & To_String(Save_Name) & ".",
          EVERYTHING);
-      Open(To_String(SaveName), SaveFile);
+      Open(To_String(Save_Name), SaveFile);
       Parse(Reader, SaveFile);
       Close(SaveFile);
       SaveData := Get_Tree(Reader);
@@ -389,7 +389,7 @@ package body Game.SaveLoad is
       if Get_Attribute(SavedNode, "version") /= "" then
          if Positive'Value(Get_Attribute(SavedNode, "version")) >
            SaveVersion then
-            raise SaveGame_Invalid_Data
+            raise Save_Game_Invalid_Data
               with "This save is incompatible with this version of the game";
          end if;
       end if;
@@ -810,27 +810,27 @@ package body Game.SaveLoad is
       when An_Exception : others =>
          Free(Reader);
          Player_Ship.Crew.Clear;
-         raise SaveGame_Invalid_Data with Exception_Message(An_Exception);
-   end LoadGame;
+         raise Save_Game_Invalid_Data with Exception_Message(An_Exception);
+   end Load_Game;
 
-   procedure GenerateSaveName(RenameSave: Boolean := False) is
-      OldSaveName: constant String := To_String(SaveName);
+   procedure Generate_Save_Name(Rename_Save: Boolean := False) is
+      OldSave_Name: constant String := To_String(Save_Name);
    begin
       Generate_Save_Name_Loop :
       loop
-         SaveName :=
+         Save_Name :=
            Save_Directory & Player_Ship.Crew(1).Name &
            To_Unbounded_String("_") & Player_Ship.Name &
            To_Unbounded_String
              ("_" & Positive'Image(GetRandom(100, 999))(2 .. 4) & ".sav");
-         exit Generate_Save_Name_Loop when not Exists(To_String(SaveName)) and
-           SaveName /= OldSaveName;
+         exit Generate_Save_Name_Loop when not Exists(To_String(Save_Name)) and
+           Save_Name /= OldSave_Name;
       end loop Generate_Save_Name_Loop;
-      if RenameSave then
-         if Exists(OldSaveName) then
-            Rename(OldSaveName, To_String(SaveName));
+      if Rename_Save then
+         if Exists(OldSave_Name) then
+            Rename(OldSave_Name, To_String(Save_Name));
          end if;
       end if;
-   end GenerateSaveName;
+   end Generate_Save_Name;
 
 end Game.SaveLoad;

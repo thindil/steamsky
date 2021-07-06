@@ -495,7 +495,7 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc, Argv);
    begin
-      SaveGame(True);
+      Save_Game(True);
       return TCL_OK;
    end Save_Game_Command;
 
