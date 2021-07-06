@@ -29,7 +29,7 @@ package body Goals.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GoalText_c541ba_267fe9
+   function Wrap_Test_GoalText_c541ba_7395a3
      (Index: Goals_Container.Extended_Index) return String is
    begin
       begin
@@ -42,11 +42,11 @@ package body Goals.Test_Data.Tests is
                "req_sloc(goals.ads:0):Test_GoalText test requirement violated");
       end;
       declare
-         Test_GoalText_c541ba_267fe9_Result: constant String :=
+         Test_GoalText_c541ba_7395a3_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Goals.GoalText(Index);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert(Test_GoalText_c541ba_7395a3_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -54,20 +54,20 @@ package body Goals.Test_Data.Tests is
                  (False,
                   "ens_sloc(goals.ads:0:):Test_GoalText test commitment violated");
          end;
-         return Test_GoalText_c541ba_267fe9_Result;
+         return Test_GoalText_c541ba_7395a3_Result;
       end;
-   end Wrap_Test_GoalText_c541ba_267fe9;
+   end Wrap_Test_GoalText_c541ba_7395a3;
 --  end read only
 
 --  begin read only
    procedure Test_GoalText_test_goaltext(Gnattest_T: in out Test);
-   procedure Test_GoalText_c541ba_267fe9(Gnattest_T: in out Test) renames
+   procedure Test_GoalText_c541ba_7395a3(Gnattest_T: in out Test) renames
      Test_GoalText_test_goaltext;
 --  id:2.2/c541bacce47cf44b/GoalText/1/0/test_goaltext/
    procedure Test_GoalText_test_goaltext(Gnattest_T: in out Test) is
       function GoalText
         (Index: Goals_Container.Extended_Index) return String renames
-        Wrap_Test_GoalText_c541ba_267fe9;
+        Wrap_Test_GoalText_c541ba_7395a3;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -83,23 +83,41 @@ package body Goals.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_ClearCurrentGoal_cb9255_08f1aa is
+   procedure Wrap_Test_ClearCurrentGoal_cb9255_59ac81 is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(goals.ads:0):Test_ClearCurrentGoal test requirement violated");
+      end;
       GNATtest_Generated.GNATtest_Standard.Goals.ClearCurrentGoal;
-   end Wrap_Test_ClearCurrentGoal_cb9255_08f1aa;
+      begin
+         pragma Assert(CurrentGoal.Index = Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(goals.ads:0:):Test_ClearCurrentGoal test commitment violated");
+      end;
+   end Wrap_Test_ClearCurrentGoal_cb9255_59ac81;
 --  end read only
 
 --  begin read only
    procedure Test_ClearCurrentGoal_test_clearcurrentgoal
      (Gnattest_T: in out Test);
-   procedure Test_ClearCurrentGoal_cb9255_08f1aa
+   procedure Test_ClearCurrentGoal_cb9255_59ac81
      (Gnattest_T: in out Test) renames
      Test_ClearCurrentGoal_test_clearcurrentgoal;
 --  id:2.2/cb92551f0de5a16e/ClearCurrentGoal/1/0/test_clearcurrentgoal/
    procedure Test_ClearCurrentGoal_test_clearcurrentgoal
      (Gnattest_T: in out Test) is
       procedure ClearCurrentGoal renames
-        Wrap_Test_ClearCurrentGoal_cb9255_08f1aa;
+        Wrap_Test_ClearCurrentGoal_cb9255_59ac81;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

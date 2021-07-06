@@ -96,7 +96,7 @@ package body Game.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Find_Skill_Index_2a5948_bcc9a6
+   function Wrap_Test_Find_Skill_Index_2a5948_39ca51
      (Skill_Name: Unbounded_String) return Natural is
    begin
       begin
@@ -109,12 +109,14 @@ package body Game.Test_Data.Tests is
                "req_sloc(game.ads:0):Test_FindSkillIndex test requirement violated");
       end;
       declare
-         Test_Find_Skill_Index_2a5948_bcc9a6_Result: constant Natural :=
+         Test_Find_Skill_Index_2a5948_39ca51_Result: constant Natural :=
            GNATtest_Generated.GNATtest_Standard.Game.Find_Skill_Index
              (Skill_Name);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert
+              (Test_Find_Skill_Index_2a5948_39ca51_Result <=
+               Natural(Skills_List.Length));
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -122,15 +124,15 @@ package body Game.Test_Data.Tests is
                  (False,
                   "ens_sloc(game.ads:0:):Test_FindSkillIndex test commitment violated");
          end;
-         return Test_Find_Skill_Index_2a5948_bcc9a6_Result;
+         return Test_Find_Skill_Index_2a5948_39ca51_Result;
       end;
-   end Wrap_Test_Find_Skill_Index_2a5948_bcc9a6;
+   end Wrap_Test_Find_Skill_Index_2a5948_39ca51;
 --  end read only
 
 --  begin read only
    procedure Test_Find_Skill_Index_test_findskillindex
      (Gnattest_T: in out Test);
-   procedure Test_Find_Skill_Index_2a5948_bcc9a6
+   procedure Test_Find_Skill_Index_2a5948_39ca51
      (Gnattest_T: in out Test) renames
      Test_Find_Skill_Index_test_findskillindex;
 --  id:2.2/2a5948be5170f7b8/Find_Skill_Index/1/0/test_findskillindex/
@@ -138,7 +140,7 @@ package body Game.Test_Data.Tests is
      (Gnattest_T: in out Test) is
       function Find_Skill_Index
         (Skill_Name: Unbounded_String) return Natural renames
-        Wrap_Test_Find_Skill_Index_2a5948_bcc9a6;
+        Wrap_Test_Find_Skill_Index_2a5948_39ca51;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
