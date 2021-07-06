@@ -31,7 +31,8 @@ package Goals is
    -- Types of goals
    -- SOURCE
    type GoalTypes is
-     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL);
+     (RANDOM, REPUTATION, DESTROY, DISCOVER, VISIT, CRAFT, MISSION, KILL) with
+      Default_Value => RANDOM;
    -- ****
 
    -- ****s* Goals/Goals.Goal_Data
@@ -94,6 +95,7 @@ package Goals is
    -- SOURCE
    function GoalText(Index: Goals_Container.Extended_Index) return String with
       Pre => Index <= Goals_List.Last_Index,
+      Post => GoalText'Result'Length > 0,
       Test_Case => (Name => "Test_GoalText", Mode => Nominal);
       -- ****
 
@@ -102,7 +104,8 @@ package Goals is
       -- Reset current goal
       -- SOURCE
    procedure ClearCurrentGoal with
-      Test_Case => (Name => "Test_ClearCurrentGoal", Mode => Robustness);
+      Post => CurrentGoal.Index = Null_Unbounded_String,
+      Test_Case => (Name => "Test_ClearCurrentGoal", Mode => Nominal);
       -- ****
 
       -- ****f* Goals/Goals.UpdateGoal
