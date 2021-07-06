@@ -22,46 +22,46 @@
 package Game.SaveLoad is
 -- ****
 
-   -- ****v* GSaveLoad/GSaveLoad.SaveName
+   -- ****v* GSaveLoad/GSaveLoad.Save_Name
    -- FUNCTION
    -- Full path with file name for current savegame
    -- SOURCE
-   SaveName: Unbounded_String;
+   Save_Name: Unbounded_String;
    -- ****
 
-   -- ****e* GSaveLoad/GSaveLoad.SaveGame_Invalid_Data
+   -- ****e* GSaveLoad/GSaveLoad.Save_Game_Invalid_Data
    -- FUNCTION
    -- Raised when invalid data found in savegame
    -- SOURCE
-   SaveGame_Invalid_Data: exception;
+   Save_Game_Invalid_Data: exception;
    -- ****
 
-   -- ****f* GSaveLoad/GSaveLoad.SaveGame
+   -- ****f* GSaveLoad/GSaveLoad.Save_Game
    -- FUNCTION
    -- Save game to file
    -- PARAMETERS
-   -- PrettyPrint - Did data stored in file should be pretty printed. Default
+   -- Pretty_Print - Did data stored in file should be pretty printed. Default
    --               false
    -- SOURCE
-   procedure SaveGame(PrettyPrint: Boolean := False);
+   procedure Save_Game(Pretty_Print: Boolean := False);
    -- ****
 
-   -- ****f* GSaveLoad/GSaveLoad.LoadGame
+   -- ****f* GSaveLoad/GSaveLoad.Load_Game
    -- FUNCTION
    -- Load game from file
    -- SOURCE
-   procedure LoadGame;
+   procedure Load_Game;
    -- ****
 
-   -- ****f* GSaveLoad/GSaveLoad.GenerateSaveName
+   -- ****f* GSaveLoad/GSaveLoad.Generate_Save_Name
    -- FUNCTION
    -- Generate unique name for save game file
    -- PARAMETERS
-   -- RenameSave - If true, rename existing save game file. Default false.
+   -- Rename_Save - If true, rename existing save game file. Default false.
    -- SOURCE
-   procedure GenerateSaveName(RenameSave: Boolean := False) with
-      Post => SaveName /= SaveName'Old,
-      Test_Case => (Name => "Test_GenerateSaveName", Mode => Nominal);
+   procedure Generate_Save_Name(Rename_Save: Boolean := False) with
+      Post => Save_Name /= Save_Name'Old,
+      Test_Case => (Name => "Test_GenerateSave_Name", Mode => Nominal);
       -- ****
 
 end Game.SaveLoad;
