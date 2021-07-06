@@ -15,19 +15,19 @@
 --    You should have received a copy of the GNU General Public License
 --    along with Steam Sky.  If not, see <http://www.gnu.org/licenses/>.
 
-with Ada.Characters.Handling; use Ada.Characters.Handling;
-with DOM.Core; use DOM.Core;
+with Ada.Characters.Handling;
+with DOM.Core;
 with DOM.Core.Documents;
-with DOM.Core.Nodes; use DOM.Core.Nodes;
-with DOM.Core.Elements; use DOM.Core.Elements;
-with Utils; use Utils;
-with Log; use Log;
+with DOM.Core.Nodes;
+with DOM.Core.Elements;
+with Bases;
 with Crafts; use Crafts;
-with Maps; use Maps;
 with Factions; use Factions;
-with Bases; use Bases;
+with Log;
+with Maps;
+with Ships.Crew;
 with ShipModules; use ShipModules;
-with Ships.Crew; use Ships.Crew;
+with Utils; use Utils;
 
 package body Ships is
 
@@ -35,6 +35,9 @@ package body Ships is
      (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
+      use Bases;
+      use Maps;
+
       Tmp_Ship: Ship_Record := Empty_Ship;
       Ship_Modules: Modules_Container.Vector := Modules_Container.Empty_Vector;
       Ship_Crew: Crew_Container.Vector := Crew_Container.Empty_Vector;
@@ -449,6 +452,12 @@ package body Ships is
    end Create_Ship;
 
    procedure Load_Ships(Reader: Tree_Reader) is
+      use Ada.Characters.Handling;
+      use DOM.Core;
+      use DOM.Core.Elements;
+      use DOM.Core.Nodes;
+      use Log;
+
       Nodes_List: constant Node_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Get_Tree(Read => Reader), Tag_Name => "ship");
@@ -1172,6 +1181,8 @@ package body Ships is
    procedure Damage_Module
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
+      use Ships.Crew;
+
       Real_Damage: Natural := Damage;
       Weapon_Index: Natural := 0;
       procedure Remove_Gun(Module_Index2: Positive) is
