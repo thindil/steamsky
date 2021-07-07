@@ -26,6 +26,8 @@ with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
 with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
+with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
+use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
 with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
@@ -276,6 +278,59 @@ package body Missions.UI is
    MissionsTable: Table_Widget (5);
    -- ****
 
+   -- ****if* MUI3/MUI3.Show_Base_Missions_Menu_Command
+   -- FUNCTION
+   -- Show the menu with available the selected mission options
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- ShowBaseMissionsMenu missionindex
+   -- MissionIndex is the index of the mission's menu to show
+   -- SOURCE
+   function Show_Base_Missions_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Show_Base_Missions_Menu_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      EventMenu: Tk_Menu := Get_Widget(".missionslistmenu", Interp);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+   begin
+      if Winfo_Get(EventMenu, "exists") = "0" then
+         EventMenu := Create(".missionslistmenu", "-tearoff false");
+      end if;
+      Delete(EventMenu, "0", "end");
+      Menu.Add
+        (EventMenu, "command",
+         "-label {Show the mission on map} -command {ShowOnMap " &
+         Map_X_Range'Image
+           (SkyBases(BaseIndex).Missions(MissionIndex).TargetX) &
+         Map_Y_Range'Image
+           (SkyBases(BaseIndex).Missions(MissionIndex).TargetY) &
+         "}");
+      Menu.Add
+        (EventMenu, "command",
+         "-label {Accept the mission} -command {AcceptMission2 " &
+         Map_X_Range'Image
+           (SkyBases(BaseIndex).Missions(MissionIndex).TargetX) &
+         Map_Y_Range'Image
+           (SkyBases(BaseIndex).Missions(MissionIndex).TargetY) &
+         "}");
+      Tk_Popup
+        (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
+         Winfo_Get(Get_Main_Window(Interp), "pointery"));
+      return TCL_OK;
+   end Show_Base_Missions_Menu_Command;
+
    -- ****if* MUI3/MUI3.RefreshMissionsList
    -- FUNCTION
    -- Refresh the list of available missions
@@ -315,7 +370,7 @@ package body Missions.UI is
                AddButton
                  (MissionsTable, "Deliver item to base",
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   To_String(Items_List(List(I).ItemIndex).Name) & " to " &
@@ -324,44 +379,44 @@ package body Missions.UI is
                        (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
                        .Name),
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Patrol =>
                AddButton
                  (MissionsTable, "Patrol area",
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
                   Natural'Image(List(I).TargetY),
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Destroy =>
                AddButton
                  (MissionsTable, "Destroy ship",
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   To_String(Proto_Ships_List(List(I).ShipIndex).Name),
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Explore =>
                AddButton
                  (MissionsTable, "Explore area",
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
                   Natural'Image(List(I).TargetY),
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Passenger =>
                AddButton
                  (MissionsTable, "Transport passenger to base",
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   "To " &
@@ -370,7 +425,7 @@ package body Missions.UI is
                        (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
                        .Name),
                   "Show available mission's options",
-                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
          end case;
          case List(I).MType is
             when Deliver =>
@@ -418,20 +473,20 @@ package body Missions.UI is
            (MissionsTable,
             Natural'Image(CountDistance(List(I).TargetX, List(I).TargetY)),
             "The distance to the mission",
-            "ShowMissionMenu" & Positive'Image(Row - 1), 2);
+            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 2);
          Mission_Time := Null_Unbounded_String;
          MinutesToDate(List(I).Time, Mission_Time);
          AddButton
            (MissionsTable, To_String(Mission_Time),
             "The time limit for finish and return the mission",
-            "ShowMissionMenu" & Positive'Image(Row - 1), 4);
+            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 4);
          AddButton
            (MissionsTable,
             Natural'Image
               (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
             " " & To_String(Money_Name),
             "The base money reward for the mission",
-            "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
+            "ShowBaseMissionMenu" & Positive'Image(Row - 1), 5, True);
          Row := Row + 1;
          Rows := Rows + 1;
          exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
@@ -562,6 +617,8 @@ package body Missions.UI is
    procedure AddCommands is
    begin
       AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
+      AddCommand
+        ("ShowBaseMissionMenu", Show_Base_Missions_Menu_Command'Access);
    end AddCommands;
 
 end Missions.UI;
