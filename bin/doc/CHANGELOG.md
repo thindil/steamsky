@@ -33,6 +33,7 @@ All notable changes to this project will be documented in this file.
 - Showing header for the goals selection dialog when scollbar is visible
 - Help window blocks the main game window
 - Crash when trying to preview recruit's attributes
+- Typo in description of barley seeds
 
 ## [6.2] - 2021-06-13
 
