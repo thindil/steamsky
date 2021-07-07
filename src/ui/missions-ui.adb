@@ -31,6 +31,7 @@ with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
 with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
+with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
@@ -41,6 +42,7 @@ with Items; use Items;
 with Maps; use Maps;
 with Maps.UI; use Maps.UI;
 with Ships; use Ships;
+with Table; use Table;
 with Utils.UI; use Utils.UI;
 
 package body Missions.UI is
@@ -267,27 +269,109 @@ package body Missions.UI is
              (SkyBases(BaseIndex).Missions(MissionIndex).TargetY));
    end Show_Mission_Command;
 
+   -- ****iv* MUI3/MUI3.MissionsTable
+   -- FUNCTION
+   -- Table with info about the known Missions
+   -- SOURCE
+   MissionsTable: Table_Widget (5);
+   -- ****
+
    -- ****if* MUI3/MUI3.RefreshMissionsList
    -- FUNCTION
    -- Refresh the list of available missions
    -- PARAMETERS
    -- List - The list of available missions in the selected base
    -- SOURCE
-   procedure RefreshMissionsList(List: Mission_Container.Vector) is
+   procedure RefreshMissionsList
+     (List: Mission_Container.Vector; Page: Positive := 1) is
       -- ****
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
           (Main_Paned &
            ".missionsframe.canvas.missions.missions.missionsview");
+      Row: Positive := 2;
+      Rows: Natural := 0;
+      Start_Row: constant Positive := ((Page - 1) * 25) + 1;
+      Current_Row: Positive := 1;
+      Mission_Time: Unbounded_String;
    begin
       if List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          ShowSkyMap(True);
          return;
       end if;
+      if MissionsTable.Row > 1 then
+         ClearTable(MissionsTable);
+      end if;
       Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       Show_Missions_List_Loop :
       for I in List.First_Index .. List.Last_Index loop
+         if Current_Row < Start_Row then
+            Current_Row := Current_Row + 1;
+            goto End_Of_Loop;
+         end if;
+         case List(I).MType is
+            when Deliver =>
+               AddButton
+                 (MissionsTable, "Deliver item to base",
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+               AddButton
+                 (MissionsTable,
+                  To_String(Items_List(List(I).ItemIndex).Name) & " to " &
+                  To_String
+                    (SkyBases
+                       (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
+                       .Name),
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            when Patrol =>
+               AddButton
+                 (MissionsTable, "Patrol area",
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+               AddButton
+                 (MissionsTable,
+                  "X:" & Natural'Image(List(I).TargetX) & " Y:" &
+                  Natural'Image(List(I).TargetY),
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            when Destroy =>
+               AddButton
+                 (MissionsTable, "Destroy ship",
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+               AddButton
+                 (MissionsTable,
+                  To_String(Proto_Ships_List(List(I).ShipIndex).Name),
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            when Explore =>
+               AddButton
+                 (MissionsTable, "Explore area",
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+               AddButton
+                 (MissionsTable,
+                  "X:" & Natural'Image(List(I).TargetX) & " Y:" &
+                  Natural'Image(List(I).TargetY),
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+            when Passenger =>
+               AddButton
+                 (MissionsTable, "Transport passenger to base",
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 1);
+               AddButton
+                 (MissionsTable,
+                  "To " &
+                  To_String
+                    (SkyBases
+                       (SkyMap(List(I).TargetX, List(I).TargetY).BaseIndex)
+                       .Name),
+                  "Show available mission's options",
+                  "ShowMissionMenu" & Positive'Image(Row - 1), 3);
+         end case;
          case List(I).MType is
             when Deliver =>
                Insert
@@ -330,6 +414,28 @@ package body Missions.UI is
                     (CountDistance(List(I).TargetX, List(I).TargetY)) &
                   "]");
          end case;
+         AddButton
+           (MissionsTable,
+            Natural'Image(CountDistance(List(I).TargetX, List(I).TargetY)),
+            "The distance to the mission",
+            "ShowMissionMenu" & Positive'Image(Row - 1), 2);
+         Mission_Time := Null_Unbounded_String;
+         MinutesToDate(List(I).Time, Mission_Time);
+         AddButton
+           (MissionsTable, To_String(Mission_Time),
+            "The time limit for finish and return the mission",
+            "ShowMissionMenu" & Positive'Image(Row - 1), 4);
+         AddButton
+           (MissionsTable,
+            Natural'Image
+              (Natural(Float(List(I).Reward) * Float(List(I).Multiplier))) &
+            " " & To_String(Money_Name),
+            "The base money reward for the mission",
+            "ShowMissionMenu" & Positive'Image(Row - 1), 5, True);
+         Row := Row + 1;
+         Rows := Rows + 1;
+         exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
+         <<End_Of_Loop>>
       end loop Show_Missions_List_Loop;
       Selection_Set(MissionsView, "[list 1]");
    end RefreshMissionsList;
@@ -414,6 +520,14 @@ package body Missions.UI is
          AddCommand("ShowMissionInfo", Show_Mission_Info_Command'Access);
          AddCommand("ShowMission", Show_Mission_Command'Access);
          AddCommand("SetMission", Set_Mission_Command'Access);
+         MissionsTable :=
+           CreateTable
+             (MissionsCanvas & ".missions",
+              (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
+               To_Unbounded_String("Details"),
+               To_Unbounded_String("Time limit"),
+               To_Unbounded_String("Base reward")),
+              Get_Widget(Main_Paned & ".missionsframe.scrolly"));
       elsif Winfo_Get(Label, "ismapped") = "1" then
          ShowSkyMap(True);
          return TCL_OK;
@@ -426,6 +540,7 @@ package body Missions.UI is
          return TCL_OK;
       end if;
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
+      UpdateTable(MissionsTable);
       configure
         (MissionsCanvas,
          "-height [expr " & SashPos(Main_Paned, "0") & " - 20] -width " &
