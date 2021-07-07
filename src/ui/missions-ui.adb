@@ -267,7 +267,14 @@ package body Missions.UI is
              (SkyBases(BaseIndex).Missions(MissionIndex).TargetY));
    end Show_Mission_Command;
 
+   -- ****if* MUI3/MUI3.RefreshMissionsList
+   -- FUNCTION
+   -- Refresh the list of available missions
+   -- PARAMETERS
+   -- List - The list of available missions in the selected base
+   -- SOURCE
    procedure RefreshMissionsList(List: Mission_Container.Vector) is
+      -- ****
       MissionsView: constant Ttk_Tree_View :=
         Get_Widget
           (Main_Paned &
