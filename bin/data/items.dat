@@ -237,7 +237,7 @@ type (1 - cutting damage, 2 - impaling damage, 3 - blunt damage).
   <description>A simple wooden bucket.</description>
  </item>
  <item index="54" name="Barley seeds" showtype="Seeds" type="BarleySeeds" weight="1" price="2" reputation="0">
-  <description>A Seeds used to cultivate barley.</description>
+  <description>Seeds used to cultivate barley.</description>
  </item>
  <item index="55" name="Barley" showtype="Grain" type="Barley" weight="1" price="3" reputation="0">
   <description>A standard grain used in cooking or brewery.</description>
