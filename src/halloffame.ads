@@ -34,7 +34,7 @@ package HallOfFame is
    -- SOURCE
    type Hall_Of_Fame_Data is record
       Name: Unbounded_String;
-      Points: Natural;
+      Points: Natural := 0;
       Death_Reason: Unbounded_String;
    end record;
    -- ****
