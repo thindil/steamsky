@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Typo in description of Barley seeds
+
 ## [6.0.5] - 2021-07-04
 
 ### Changed
