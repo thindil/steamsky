@@ -387,6 +387,8 @@ package body Missions.UI is
       MissionIndex: constant Positive :=
         Positive'Value(Selection(MissionsView));
    begin
+      SkyBases(BaseIndex).Missions(MissionIndex).Multiplier :=
+        RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       AcceptMission(MissionIndex);
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
       UpdateMessages;
