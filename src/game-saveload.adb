@@ -60,9 +60,11 @@ package body Game.SaveLoad is
    -- ****
 
    procedure Save_Game(Pretty_Print: Boolean := False) is
+      --## rule off IMPROPER_INITIALIZATION
       Save: DOM_Implementation;
+      --## rule on IMPROPER_INITIALIZATION
       Category_Node, Main_Node: DOM.Core.Element;
-      Raw_Value: Unbounded_String;
+      Raw_Value: Unbounded_String := Null_Unbounded_String;
       Save_File: File_Type;
       procedure Save_Statistics
         (Statistics_Vector: in out Statistics_Container.Vector;
@@ -71,8 +73,9 @@ package body Game.SaveLoad is
       begin
          Save_Statistics_Loop :
          for Statistic of Statistics_Vector loop
-            Stat_Node := Create_Element(Save_Data, Stat_Name);
-            Stat_Node := Append_Child(Category_Node, Stat_Node);
+            Stat_Node :=
+              Append_Child
+                (Category_Node, Create_Element(Save_Data, Stat_Name));
             Set_Attribute(Stat_Node, "index", To_String(Statistic.Index));
             Raw_Value := To_Unbounded_String(Integer'Image(Statistic.Amount));
             Set_Attribute
@@ -112,7 +115,9 @@ package body Game.SaveLoad is
       Log_Message
         ("Start saving game in file " & To_String(Save_Name) & ".",
          EVERYTHING);
+      --## rule off IMPROPER_INITIALIZATION
       Save_Data := Create_Document(Save);
+      --## rule on IMPROPER_INITIALIZATION
       Main_Node := Create_Element(Save_Data, "save");
       Main_Node := Append_Child(Save_Data, Main_Node);
       -- Write save game version
@@ -234,7 +239,8 @@ package body Game.SaveLoad is
                   Raw_Value := To_Unbounded_String(Integer'Image(Event.Data));
             end case;
             Set_Attribute
-              (EventNode, "data", To_String(Trim(Raw_Value, Ada.Strings.Left)));
+              (EventNode, "data",
+               To_String(Trim(Raw_Value, Ada.Strings.Left)));
          end loop Save_Events_Loop;
       end;
       Log_Message("done.", EVERYTHING, True, False);
@@ -271,7 +277,8 @@ package body Game.SaveLoad is
          Set_Attribute(Category_Node, "index", To_String(CurrentStory.Index));
          Raw_Value := To_Unbounded_String(Positive'Image(CurrentStory.Step));
          Set_Attribute
-           (Category_Node, "step", To_String(Trim(Raw_Value, Ada.Strings.Left)));
+           (Category_Node, "step",
+            To_String(Trim(Raw_Value, Ada.Strings.Left)));
          if CurrentStory.CurrentStep = 0 then
             Set_Attribute(Category_Node, "currentstep", "start");
          elsif CurrentStory.CurrentStep = -1 then
@@ -670,7 +677,8 @@ package body Game.SaveLoad is
       end if;
       -- Load finished stories data
       NodesList :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "finishedstory");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Save_Data, "finishedstory");
       declare
          StepsAmount: Positive;
          TempTexts: UnboundedString_Container.Vector;
