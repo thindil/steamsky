@@ -52,9 +52,9 @@ package Items is
    -- SOURCE
    type Object_Data is record
       Name: Unbounded_String;
-      Weight: Positive;
+      Weight: Positive := 1;
       IType: Unbounded_String;
-      Price: Natural;
+      Price: Natural := 0;
       Value: Integer_Container.Vector;
       ShowType: Unbounded_String;
       Description: Unbounded_String;
@@ -96,10 +96,10 @@ package Items is
    -- SOURCE
    type InventoryData is record
       ProtoIndex: Unbounded_String;
-      Amount: Positive;
+      Amount: Positive := 1;
       Name: Unbounded_String;
       Durability: Items_Durability;
-      Price: Natural;
+      Price: Natural := 0;
    end record;
    -- ****
 
@@ -202,7 +202,8 @@ package Items is
    function GetItemDamage
      (ItemDurability: Items_Durability; ToLower: Boolean := False)
       return String with
-      Test_Case => (Name => "Test_GetItemDamage", Mode => Robustness);
+      Post => GetItemDamage'Result'Length > 0,
+      Test_Case => (Name => "Test_GetItemDamage", Mode => Nominal);
       -- ****
 
       -- ****f* Items/Items.GetItemName
@@ -219,7 +220,8 @@ package Items is
    function GetItemName
      (Item: InventoryData; DamageInfo, ToLower: Boolean := True)
       return String with
-      Test_Case => (Name => "Test_GetItemName", Mode => Robustness);
+      Post => GetItemName'Result'Length > 0,
+      Test_Case => (Name => "Test_GetItemName", Mode => Nominal);
       -- ****
 
       -- ****f* Items/Items.DamageItem
@@ -259,7 +261,8 @@ package Items is
       ProtoIndex, ItemType: Unbounded_String := Null_Unbounded_String;
       Durability: Items_Durability := Items_Durability'Last;
       Quality: Positive := 100) return Natural with
-      Test_Case => (Name => "Test_FindItem", Mode => Robustness);
+      Post => FindItem'Result <= Inventory.Last_Index,
+      Test_Case => (Name => "Test_FindItem", Mode => Nominal);
       -- ****
 
       -- ****f* Items/Items.SetToolsList
@@ -278,7 +281,8 @@ package Items is
    -- String with chance to damage level description
    -- SOURCE
    function GetItemChanceToDamage(ItemData: Natural) return String with
-      Test_Case => (Name => "Test_GetItemChanceToDamage", Mode => Robustness);
+      Post => GetItemChanceToDamage'Result'Length > 0,
+      Test_Case => (Name => "Test_GetItemChanceToDamage", Mode => Nominal);
       -- ****
 
 end Items;
