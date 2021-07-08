@@ -319,12 +319,8 @@ package body Missions.UI is
          "}");
       Menu.Add
         (EventMenu, "command",
-         "-label {Accept the mission} -command {AcceptMission2 " &
-         Map_X_Range'Image
-           (SkyBases(BaseIndex).Missions(MissionIndex).TargetX) &
-         Map_Y_Range'Image
-           (SkyBases(BaseIndex).Missions(MissionIndex).TargetY) &
-         "}");
+         "-label {Accept the mission} -command {AcceptMission " &
+         CArgv.Arg(Argv, 1) & "}");
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
