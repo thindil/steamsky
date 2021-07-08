@@ -34,6 +34,7 @@ All notable changes to this project will be documented in this file.
 - Help window blocks the main game window
 - Crash when trying to preview recruit's attributes
 - Typo in description of barley seeds
+- Setting reward for missions in bases
 
 ## [6.2] - 2021-06-13
 
