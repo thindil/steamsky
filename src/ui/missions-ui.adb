@@ -304,6 +304,7 @@ package body Missions.UI is
       pragma Unreferenced(ClientData, Argc);
       EventMenu: Tk_Menu := Get_Widget(".missionslistmenu", Interp);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      CanAccept: Boolean := True;
    begin
       if Winfo_Get(EventMenu, "exists") = "0" then
          EventMenu := Create(".missionslistmenu", "-tearoff false");
@@ -317,10 +318,30 @@ package body Missions.UI is
          Map_Y_Range'Image
            (SkyBases(BaseIndex).Missions(MissionIndex).TargetY) &
          "}");
-      Menu.Add
-        (EventMenu, "command",
-         "-label {Accept the mission} -command {AcceptMission " &
-         CArgv.Arg(Argv, 1) & "}");
+      if SkyBases(BaseIndex).Missions(MissionIndex).MType = Passenger then
+         CanAccept := False;
+         Modules_Loop :
+         for Module of Player_Ship.Modules loop
+            if (Module.M_Type = CABIN and not CanAccept)
+              and then Module.Quality >=
+                SkyBases(BaseIndex).Missions(MissionIndex).Data then
+               CanAccept := True;
+               for Owner of Module.Owner loop
+                  if Owner > 0 then
+                     CanAccept := False;
+                     exit;
+                  end if;
+               end loop;
+               exit Modules_Loop when CanAccept;
+            end if;
+         end loop Modules_Loop;
+      end if;
+      if CanAccept then
+         Menu.Add
+           (EventMenu, "command",
+            "-label {Accept the mission} -command {AcceptMission " &
+            CArgv.Arg(Argv, 1) & "}");
+      end if;
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
@@ -345,6 +366,7 @@ package body Missions.UI is
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
+      CanAccept, CabinTaken: Boolean;
    begin
       if List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -409,10 +431,32 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Passenger =>
+               CanAccept := False;
+               Modules_Loop :
+               for Module of Player_Ship.Modules loop
+                  if (Module.M_Type = CABIN and not CanAccept)
+                    and then Module.Quality >= List(I).Data then
+                     CanAccept := True;
+                     CabinTaken := False;
+                     for Owner of Module.Owner loop
+                        if Owner > 0 then
+                           CabinTaken := True;
+                           CanAccept := False;
+                           exit;
+                        end if;
+                     end loop;
+                     exit Modules_Loop when CanAccept;
+                  end if;
+               end loop Modules_Loop;
                AddButton
-                 (MissionsTable, "Transport passenger to base",
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
+                 (Table => MissionsTable,
+                  Text => "Transport passenger to base",
+                  Tooltip => "Show available mission's options",
+                  Command => "ShowBaseMissionMenu" & Positive'Image(Row - 1),
+                  Column => 1,
+                  Color =>
+                    (if not CanAccept then "red" elsif CabinTaken then "yellow"
+                     else ""));
                AddButton
                  (MissionsTable,
                   "To " &
