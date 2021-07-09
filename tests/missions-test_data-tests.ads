@@ -31,5 +31,8 @@ package Missions.Test_Data.Tests is
    procedure Test_AutoFinishMissions_ca7126_527254(Gnattest_T: in out Test);
    --  missions.ads:184:4:AutoFinishMissions:Test_AutoFinishMissions
 
+   procedure Test_Get_Mission_Type_0b70ab_fb18a6(Gnattest_T: in out Test);
+   --  missions.ads:196:4:Get_Mission_Type:Test_Get_Mission_Type
+
 end Missions.Test_Data.Tests;
 --  end read only

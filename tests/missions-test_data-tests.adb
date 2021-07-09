@@ -366,6 +366,64 @@ package body Missions.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_Get_Mission_Type_0b70ab_fb18a6
+     (MType: Missions_Types) return String is
+   begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(missions.ads:0):Test_Get_Mission_Type test requirement violated");
+      end;
+      declare
+         Test_Get_Mission_Type_0b70ab_fb18a6_Result: constant String :=
+           GNATtest_Generated.GNATtest_Standard.Missions.Get_Mission_Type
+             (MType);
+      begin
+         begin
+            pragma Assert
+              (Test_Get_Mission_Type_0b70ab_fb18a6_Result'Length > 0);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(missions.ads:0:):Test_Get_Mission_Type test commitment violated");
+         end;
+         return Test_Get_Mission_Type_0b70ab_fb18a6_Result;
+      end;
+   end Wrap_Test_Get_Mission_Type_0b70ab_fb18a6;
+--  end read only
+
+--  begin read only
+   procedure Test_Get_Mission_Type_test_get_mission_type
+     (Gnattest_T: in out Test);
+   procedure Test_Get_Mission_Type_0b70ab_fb18a6
+     (Gnattest_T: in out Test) renames
+     Test_Get_Mission_Type_test_get_mission_type;
+--  id:2.2/0b70abad8e94f349/Get_Mission_Type/1/0/test_get_mission_type/
+   procedure Test_Get_Mission_Type_test_get_mission_type
+     (Gnattest_T: in out Test) is
+      function Get_Mission_Type(MType: Missions_Types) return String renames
+        Wrap_Test_Get_Mission_Type_0b70ab_fb18a6;
+--  end read only
+
+      pragma Unreferenced(Gnattest_T);
+
+   begin
+
+      Assert
+        (Get_Mission_Type(Patrol) = "Patrol area",
+         "Failed to get the name of the selected mission type.");
+
+--  begin read only
+   end Test_Get_Mission_Type_test_get_mission_type;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.

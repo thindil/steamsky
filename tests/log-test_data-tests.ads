@@ -11,7 +11,7 @@ package Log.Test_Data.Tests is
    null record;
 
    procedure Test_Log_Message_6a7537_caf43b(Gnattest_T: in out Test);
-   --  log.ads:65:4:Log_Message:Test_LogMessage
+   --  log.ads:66:4:Log_Message:Test_LogMessage
 
 end Log.Test_Data.Tests;
 --  end read only
