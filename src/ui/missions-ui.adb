@@ -694,14 +694,24 @@ package body Missions.UI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      MissionDialog: constant Ttk_Frame :=
-        Create_Dialog(Name => ".missiondialog", Title => "More info");
-      CanAccept: Boolean := True;
-      CabinTaken: Boolean := False;
       Mission: constant Mission_Data :=
         SkyBases(BaseIndex).Missions(MissionIndex);
-      Label: constant Ttk_Label := Create(MissionDialog & ".infolabel", "-wraplength 400");
+      MissionDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".missiondialog",
+           Title => "More info about " & Get_Mission_Type(Mission.MType));
+      CanAccept: Boolean := True;
+      CabinTaken: Boolean := False;
+      Label: constant Ttk_Label :=
+        Create(MissionDialog & ".infolabel", "-wraplength 400");
+      MissionInfo: Unbounded_String := Null_Unbounded_String;
    begin
+      TravelInfo
+        (MissionInfo,
+         (if Mission.MType in Deliver | Passenger then
+            CountDistance(Mission.TargetX, Mission.TargetY)
+          else CountDistance(Mission.TargetX, Mission.TargetY) * 2),
+         True);
       case Mission.MType is
          when Deliver =>
             configure
@@ -713,16 +723,21 @@ package body Missions.UI is
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name) &
-               "}");
+               To_String(MissionInfo) & "}");
          when Patrol =>
-            configure(Label, "-text {Patrol selected area}");
+            configure
+              (Label,
+               "-text {Patrol selected area" & To_String(MissionInfo) & "}");
          when Destroy =>
             configure
               (Label,
                "-text {Target: " &
-               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "}");
+               To_String(Proto_Ships_List(Mission.ShipIndex).Name) &
+               To_String(MissionInfo) & "}");
          when Explore =>
-            configure(Label, "-text {Explore selected area}");
+            configure
+              (Label,
+               "-text {Explore selected area" & To_String(MissionInfo) & "}");
          when Passenger =>
             CanAccept := False;
             Modules_Loop :
@@ -754,7 +769,7 @@ package body Missions.UI is
                To_String
                  (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
                     .Name) &
-               "}");
+               To_String(MissionInfo) & "}");
       end case;
       Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Add_Close_Button
