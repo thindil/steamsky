@@ -185,4 +185,17 @@ package Missions is
       Test_Case => (Name => "Test_AutoFinishMissions", Mode => Robustness);
       -- ****
 
+      -- ****f* Missions/Missions.Get_Mission_Type
+      -- FUNCTION
+      -- Get the name of the type of the selected mission
+      -- PARAMETERS
+      -- MType - The type of mission which name will be get
+      -- RESULT
+      -- Name (as words) of the selected mission's type
+      -- SOURCE
+   function Get_Mission_Type(MType: Missions_Types) return String with
+      Post => Get_Mission_Type'Result'Length > 0,
+      Test_Case => (Name => "Test_Get_Mission_Type", Mode => Nominal);
+   -- ****
+
 end Missions;
