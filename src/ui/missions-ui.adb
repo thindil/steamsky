@@ -692,12 +692,71 @@ package body Missions.UI is
    function Mission_More_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argv, Argc);
---      MissionIndex: constant Positive :=
---        Positive'Value(CArgv.Arg(Argv, 1));
+      pragma Unreferenced(ClientData, Interp, Argc);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       MissionDialog: constant Ttk_Frame :=
         Create_Dialog(Name => ".missiondialog", Title => "More info");
+      CanAccept: Boolean := True;
+      CabinTaken: Boolean := False;
+      Mission: constant Mission_Data :=
+        SkyBases(BaseIndex).Missions(MissionIndex);
+      Label: constant Ttk_Label := Create(MissionDialog & ".infolabel", "-wraplength 400");
    begin
+      case Mission.MType is
+         when Deliver =>
+            configure
+              (Label,
+               "-text {Item: " &
+               To_String(Items_List(Mission.ItemIndex).Name) & LF & "Weight:" &
+               Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
+               LF & "To base: " &
+               To_String
+                 (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                    .Name) &
+               "}");
+         when Patrol =>
+            configure(Label, "-text {Patrol selected area}");
+         when Destroy =>
+            configure
+              (Label,
+               "-text {Target: " &
+               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "}");
+         when Explore =>
+            configure(Label, "-text {Explore selected area}");
+         when Passenger =>
+            CanAccept := False;
+            Modules_Loop :
+            for Module of Player_Ship.Modules loop
+               if (Module.M_Type = CABIN and not CanAccept)
+                 and then Module.Quality >= Mission.Data then
+                  CanAccept := True;
+                  CabinTaken := False;
+                  for Owner of Module.Owner loop
+                     if Owner > 0 then
+                        CabinTaken := True;
+                        CanAccept := False;
+                        exit;
+                     end if;
+                  end loop;
+                  exit Modules_Loop when CanAccept;
+               end if;
+            end loop Modules_Loop;
+            if BaseIndex = 0 then
+               CanAccept := True;
+            end if;
+            configure
+              (Label,
+               "-text {Needed quality of cabin: " &
+               Get_Cabin_Quality(Mission.Data) &
+               (if CanAccept then "" elsif CabinTaken then " (taken)"
+                else " (no cabin)") &
+               LF & "To base: " &
+               To_String
+                 (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
+                    .Name) &
+               "}");
+      end case;
+      Tcl.Tk.Ada.Grid.Grid(Label, "-padx 5");
       Add_Close_Button
         (MissionDialog & ".button", "Close", "CloseDialog " & MissionDialog);
       Show_Dialog(MissionDialog);
