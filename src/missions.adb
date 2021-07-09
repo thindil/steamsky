@@ -614,4 +614,20 @@ package body Missions is
          return Exception_Message(An_Exception);
    end AutoFinishMissions;
 
+   function Get_Mission_Type(MType: Missions_Types) return String is
+   begin
+      case MType is
+         when Deliver =>
+            return "Deliver item to base";
+         when Patrol =>
+            return "Patrol area";
+         when Destroy =>
+            return "Destroy ship";
+         when Explore =>
+            return "Explore area";
+         when Passenger =>
+            return "Transport passenger to base";
+      end case;
+   end Get_Mission_Type;
+
 end Missions;
