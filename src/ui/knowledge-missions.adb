@@ -188,12 +188,12 @@ package body Knowledge.Missions is
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
+            AddButton
+              (MissionsTable, Get_Mission_Type(AcceptedMissions(I).MType),
+               "Show available mission's options",
+               "ShowMissionMenu" & Positive'Image(Row - 1), 1);
             case AcceptedMissions(I).MType is
                when Deliver =>
-                  AddButton
-                    (MissionsTable, "Deliver item to base",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                   AddButton
                     (MissionsTable,
                      To_String
@@ -210,20 +210,12 @@ package body Knowledge.Missions is
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Patrol =>
                   AddButton
-                    (MissionsTable, "Patrol area",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
                     (MissionsTable,
                      "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
                      " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Destroy =>
-                  AddButton
-                    (MissionsTable, "Destroy ship",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                   AddButton
                     (MissionsTable,
                      To_String
@@ -232,20 +224,12 @@ package body Knowledge.Missions is
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Explore =>
                   AddButton
-                    (MissionsTable, "Explore area",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
-                  AddButton
                     (MissionsTable,
                      "X:" & Natural'Image(AcceptedMissions(I).TargetX) &
                      " Y:" & Natural'Image(AcceptedMissions(I).TargetY),
                      "Show available mission's options",
                      "ShowMissionMenu" & Positive'Image(Row - 1), 3);
                when Passenger =>
-                  AddButton
-                    (MissionsTable, "Transport passenger to base",
-                     "Show available mission's options",
-                     "ShowMissionMenu" & Positive'Image(Row - 1), 1);
                   AddButton
                     (MissionsTable,
                      "To " &

@@ -392,7 +392,8 @@ package body Missions.UI is
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
       Mission_Time: Unbounded_String;
-      CanAccept, CabinTaken: Boolean;
+      CanAccept: Boolean := True;
+      CabinTaken: Boolean := False;
    begin
       if List.Length = 0 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -409,12 +410,37 @@ package body Missions.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
+         if List(I).MType = Passenger then
+            CanAccept := False;
+            Modules_Loop :
+            for Module of Player_Ship.Modules loop
+               if (Module.M_Type = CABIN and not CanAccept)
+                 and then Module.Quality >= List(I).Data then
+                  CanAccept := True;
+                  CabinTaken := False;
+                  for Owner of Module.Owner loop
+                     if Owner > 0 then
+                        CabinTaken := True;
+                        CanAccept := False;
+                        exit;
+                     end if;
+                  end loop;
+                  exit Modules_Loop when CanAccept;
+               end if;
+            end loop Modules_Loop;
+         end if;
+         AddButton
+           (Table => MissionsTable, Text => Get_Mission_Type(List(I).MType),
+            Tooltip => "Show available mission's options",
+            Command => "ShowBaseMissionMenu" & Positive'Image(Row - 1),
+            Column => 1,
+            Color =>
+              (if not CanAccept then "red" elsif CabinTaken then "yellow"
+               else ""));
+         CanAccept := True;
+         CabinTaken := False;
          case List(I).MType is
             when Deliver =>
-               AddButton
-                 (MissionsTable, "Deliver item to base",
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   To_String(Items_List(List(I).ItemIndex).Name) & " to " &
@@ -426,10 +452,6 @@ package body Missions.UI is
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Patrol =>
                AddButton
-                 (MissionsTable, "Patrol area",
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
-               AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
                   Natural'Image(List(I).TargetY),
@@ -437,19 +459,11 @@ package body Missions.UI is
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Destroy =>
                AddButton
-                 (MissionsTable, "Destroy ship",
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
-               AddButton
                  (MissionsTable,
                   To_String(Proto_Ships_List(List(I).ShipIndex).Name),
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Explore =>
-               AddButton
-                 (MissionsTable, "Explore area",
-                  "Show available mission's options",
-                  "ShowBaseMissionMenu" & Positive'Image(Row - 1), 1);
                AddButton
                  (MissionsTable,
                   "X:" & Natural'Image(List(I).TargetX) & " Y:" &
@@ -457,32 +471,6 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
             when Passenger =>
-               CanAccept := False;
-               Modules_Loop :
-               for Module of Player_Ship.Modules loop
-                  if (Module.M_Type = CABIN and not CanAccept)
-                    and then Module.Quality >= List(I).Data then
-                     CanAccept := True;
-                     CabinTaken := False;
-                     for Owner of Module.Owner loop
-                        if Owner > 0 then
-                           CabinTaken := True;
-                           CanAccept := False;
-                           exit;
-                        end if;
-                     end loop;
-                     exit Modules_Loop when CanAccept;
-                  end if;
-               end loop Modules_Loop;
-               AddButton
-                 (Table => MissionsTable,
-                  Text => "Transport passenger to base",
-                  Tooltip => "Show available mission's options",
-                  Command => "ShowBaseMissionMenu" & Positive'Image(Row - 1),
-                  Column => 1,
-                  Color =>
-                    (if not CanAccept then "red" elsif CabinTaken then "yellow"
-                     else ""));
                AddButton
                  (MissionsTable,
                   "To " &
@@ -708,8 +696,7 @@ package body Missions.UI is
 --      MissionIndex: constant Positive :=
 --        Positive'Value(CArgv.Arg(Argv, 1));
       MissionDialog: constant Ttk_Frame :=
-        Create_Dialog
-          (Name => ".missiondialog", Title => "More info");
+        Create_Dialog(Name => ".missiondialog", Title => "More info");
    begin
       Add_Close_Button
         (MissionDialog & ".button", "Close", "CloseDialog " & MissionDialog);
