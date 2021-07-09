@@ -364,6 +364,10 @@ package body Missions.UI is
             "-label {Accept the mission} -command {AcceptMission " &
             CArgv.Arg(Argv, 1) & "}");
       end if;
+      Menu.Add
+        (EventMenu, "command",
+         "-label {Show more info} -command {MissionMoreInfo " &
+         CArgv.Arg(Argv, 1) & "}");
       Tk_Popup
         (EventMenu, Winfo_Get(Get_Main_Window(Interp), "pointerx"),
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
@@ -678,11 +682,47 @@ package body Missions.UI is
       return TCL_OK;
    end Show_Base_Missions_Command;
 
+   -- ****o* MUI3/MIU3.Mission_More_Info_Command
+   -- FUNCTION
+   -- Show more info about the selected mission
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SetMission
+   -- SOURCE
+   function Mission_More_Info_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Mission_More_Info_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argv, Argc);
+--      MissionIndex: constant Positive :=
+--        Positive'Value(CArgv.Arg(Argv, 1));
+      MissionDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".missiondialog", Title => "More info");
+   begin
+      Add_Close_Button
+        (MissionDialog & ".button", "Close", "CloseDialog " & MissionDialog);
+      Show_Dialog(MissionDialog);
+      return TCL_OK;
+   end Mission_More_Info_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
       AddCommand
         ("ShowBaseMissionMenu", Show_Base_Missions_Menu_Command'Access);
+      AddCommand("MissionMoreInfo", Mission_More_Info_Command'Access);
    end AddCommands;
 
 end Missions.UI;
