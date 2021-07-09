@@ -26,7 +26,8 @@ package Log is
    -- FUNCTION
    -- Types of debug mode, which messages log to file
    -- SOURCE
-   type Debug_Types is (NONE, EVERYTHING, COMBAT, MENU);
+   type Debug_Types is (NONE, EVERYTHING, COMBAT, MENU) with
+      Default_Value => NONE;
    -- ****
 
    -- ****d* Log/Log.Default_Debug_Mode
