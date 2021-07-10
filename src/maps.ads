@@ -36,10 +36,10 @@ package Maps is
    -- MissionIndex - If accepted mission is in cell > 0
    -- SOURCE
    type SkyCell is record
-      BaseIndex: Extended_Base_Range;
+      BaseIndex: Extended_Base_Range := 0;
       Visited: Boolean;
-      EventIndex: Events_Container.Extended_Index;
-      MissionIndex: Mission_Container.Extended_Index;
+      EventIndex: Events_Container.Extended_Index := 0;
+      MissionIndex: Mission_Container.Extended_Index := 0;
    end record;
    -- ****
 
@@ -76,7 +76,9 @@ package Maps is
       -- SOURCE
    procedure NormalizeCoord
      (Coord: in out Integer; IsXAxis: Boolean := True) with
-      Test_Case => (Name => "Test_NormalizeCoord", Mode => Robustness);
+      Post =>
+      (if IsXAxis then Coord in Map_X_Range'Range else Coord in Map_Y_Range),
+      Test_Case => (Name => "Test_NormalizeCoord", Mode => Nominal);
       -- ****
 
 end Maps;
