@@ -554,13 +554,14 @@ package body Missions.UI is
    -- Accept the mission in a base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
+   -- Interp     - Tcl interpreter in which command was executed. Unused
    -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetMission
+   -- SetMission missionindex
+   -- MissionIndex is the index of the mission to accept
    -- SOURCE
    function Set_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -571,13 +572,8 @@ package body Missions.UI is
    function Set_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      MissionsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (Main_Paned & ".missionsframe.canvas.missions.missions.missionsview",
-           Interp);
-      MissionIndex: constant Positive :=
-        Positive'Value(Selection(MissionsView));
+      pragma Unreferenced(ClientData, Interp, Argc);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       SkyBases(BaseIndex).Missions(MissionIndex).Multiplier :=
         RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
@@ -681,7 +677,8 @@ package body Missions.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- SetMission
+   -- MissionMoreInfo missionindex
+   -- MissionIndex is the index of the mission's info to show
    -- SOURCE
    function Mission_More_Info_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -778,12 +775,61 @@ package body Missions.UI is
       return TCL_OK;
    end Mission_More_Info_Command;
 
+   -- ****o* MUI3/MIU3.Accept_Mission_Command
+   -- FUNCTION
+   -- Accept the mission in a base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- AcceptMission missionindex
+   -- MissionIndex is the index of the mission to accept
+   -- SOURCE
+   function Accept_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Accept_Mission_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc, Interp);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      Mission: constant Mission_Data :=
+        SkyBases(BaseIndex).Missions(MissionIndex);
+      MissionDialog: constant Ttk_Frame :=
+        Create_Dialog
+          (Name => ".missiondialog",
+           Title => "Accept " & Get_Mission_Type(Mission.MType), Columns => 2);
+      Button: Ttk_Button :=
+        Create
+          (MissionDialog & ".accept",
+           "-text {Accept} -command {CloseDialog " & MissionDialog &
+           ";SetMission " & CArgv.Arg(Argv, 1) & "}");
+   begin
+      Tcl.Tk.Ada.Grid.Grid(Button);
+      Button :=
+        Create
+          (MissionDialog & ".cancel",
+           "-text {Cancel} -command {CloseDialog " & MissionDialog & "}");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1");
+      Show_Dialog(MissionDialog);
+      Focus(Button);
+      return TCL_OK;
+   end Accept_Mission_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
       AddCommand
         ("ShowBaseMissionMenu", Show_Base_Missions_Menu_Command'Access);
       AddCommand("MissionMoreInfo", Mission_More_Info_Command'Access);
+      AddCommand("AcceptMission", Accept_Mission_Command'Access);
    end AddCommands;
 
 end Missions.UI;
