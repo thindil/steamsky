@@ -69,12 +69,20 @@ package body Game.SaveLoad is
          for Statistic of Statistics_Vector loop
             Stat_Node :=
               Append_Child
-                (Category_Node, Create_Element(Save_Data, Stat_Name));
-            Set_Attribute(Stat_Node, "index", To_String(Statistic.Index));
-            Raw_Value := To_Unbounded_String(Integer'Image(Statistic.Amount));
+                (N => Category_Node,
+                 New_Child =>
+                   Create_Element(Doc => Save_Data, Tag_Name => Stat_Name));
             Set_Attribute
-              (Stat_Node, "amount",
-               To_String(Trim(Raw_Value, Ada.Strings.Left)));
+              (Elem => Stat_Node, Name => "index",
+               Value => To_String(Source => Statistic.Index));
+            Raw_Value :=
+              To_Unbounded_String(Source => Integer'Image(Statistic.Amount));
+            Set_Attribute
+              (Elem => Stat_Node, Name => "amount",
+               Value =>
+                 To_String
+                   (Source =>
+                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
          end loop Save_Statistics_Loop;
       end Save_Statistics;
       procedure Save_Number
@@ -83,28 +91,37 @@ package body Game.SaveLoad is
          Number_String: constant String :=
            Trim(Source => Integer'Image(Value), Side => Ada.Strings.Left);
       begin
-         Set_Attribute(Node, Name, Number_String);
+         Set_Attribute(Elem => Node, Name => Name, Value => Number_String);
       end Save_Number;
       type Difficulty_Data is record
          Name: Unbounded_String;
          Value: Bonus_Type;
       end record;
       Difficulties: constant array(1 .. 8) of Difficulty_Data :=
-        ((To_Unbounded_String("enemydamagebonus"),
-          New_Game_Settings.Enemy_Damage_Bonus),
-         (To_Unbounded_String("playerdamagebonus"),
-          New_Game_Settings.Player_Damage_Bonus),
-         (To_Unbounded_String("enemymeleedamagebonus"),
-          New_Game_Settings.Enemy_Melee_Damage_Bonus),
-         (To_Unbounded_String("playermeleedamagebonus"),
-          New_Game_Settings.Player_Melee_Damage_Bonus),
-         (To_Unbounded_String("experiencebonus"),
-          New_Game_Settings.Experience_Bonus),
-         (To_Unbounded_String("reputationbonus"),
-          New_Game_Settings.Reputation_Bonus),
-         (To_Unbounded_String("upgradecostbonus"),
-          New_Game_Settings.Upgrade_Cost_Bonus),
-         (To_Unbounded_String("pricesbonus"), New_Game_Settings.Prices_Bonus));
+        (1 =>
+           (To_Unbounded_String("enemydamagebonus"),
+            New_Game_Settings.Enemy_Damage_Bonus),
+         2 =>
+           (To_Unbounded_String("playerdamagebonus"),
+            New_Game_Settings.Player_Damage_Bonus),
+         3 =>
+           (To_Unbounded_String("enemymeleedamagebonus"),
+            New_Game_Settings.Enemy_Melee_Damage_Bonus),
+         4 =>
+           (To_Unbounded_String("playermeleedamagebonus"),
+            New_Game_Settings.Player_Melee_Damage_Bonus),
+         5 =>
+           (To_Unbounded_String("experiencebonus"),
+            New_Game_Settings.Experience_Bonus),
+         6 =>
+           (To_Unbounded_String("reputationbonus"),
+            New_Game_Settings.Reputation_Bonus),
+         7 =>
+           (To_Unbounded_String("upgradecostbonus"),
+            New_Game_Settings.Upgrade_Cost_Bonus),
+         8 =>
+           (To_Unbounded_String("pricesbonus"),
+            New_Game_Settings.Prices_Bonus));
    begin
       Log_Message
         ("Start saving game in file " & To_String(Save_Name) & ".",
