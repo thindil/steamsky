@@ -781,7 +781,7 @@ package body Missions.UI is
    -- Accept the mission in a base
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -799,7 +799,7 @@ package body Missions.UI is
    function Accept_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Interp);
+      pragma Unreferenced(ClientData, Argc);
       MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Mission: constant Mission_Data :=
         SkyBases(BaseIndex).Missions(MissionIndex);
@@ -812,7 +812,7 @@ package body Missions.UI is
           (MissionDialog & ".accept",
            "-text {Accept} -command {CloseDialog " & MissionDialog &
            ";SetMission " & CArgv.Arg(Argv, 1) & "}");
-      Label: constant Ttk_Label :=
+      RewardLabel: constant Ttk_Label :=
         Create
           (MissionDialog & ".rewardlbl",
            "-text {Reward:" &
@@ -822,12 +822,14 @@ package body Missions.UI is
       RewardScale: constant Ttk_Scale :=
         Create
           (MissionDialog & ".reward",
-           "-from 0.0 -to 2.0 -variable reward -command UpdateMissionReward -length 300");
+           "-from 0.0 -to 2.0 -variable reward -command {UpdateMissionReward " &
+           CArgv.Arg(Argv, 1) & "} -length 300");
    begin
+      Tcl_SetVar(Interp, "reward", "1.0");
       Add
         (RewardScale,
          "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
-      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(RewardLabel, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(RewardScale, "-columnspan 2 -padx 5");
       Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Button :=
@@ -842,6 +844,47 @@ package body Missions.UI is
       return TCL_OK;
    end Accept_Mission_Command;
 
+   -- ****o* MUI3/MIU3.Update_Mission_Reward_Command
+   -- FUNCTION
+   -- Update the information about the selected mission reward
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- UpdateMissionReward missionindex
+   -- MissionIndex is the index of the mission to update info
+   -- SOURCE
+   function Update_Mission_Reward_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Update_Mission_Reward_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Argc);
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
+      RewardLabel: constant Ttk_Label :=
+        Get_Widget(".missiondialog.rewardlbl", Interp);
+      Mission: constant Mission_Data :=
+        SkyBases(BaseIndex).Missions(MissionIndex);
+   begin
+      configure
+        (RewardLabel,
+         "-text {Reward:" &
+         Natural'Image
+           (Natural
+              (Float(Mission.Reward) *
+               Float'Value(Tcl_GetVar(Interp, "reward")))) &
+         " " & To_String(Money_Name) & "}");
+      return TCL_OK;
+   end Update_Mission_Reward_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBaseMissions", Show_Base_Missions_Command'Access);
@@ -849,6 +892,7 @@ package body Missions.UI is
         ("ShowBaseMissionMenu", Show_Base_Missions_Menu_Command'Access);
       AddCommand("MissionMoreInfo", Mission_More_Info_Command'Access);
       AddCommand("AcceptMission", Accept_Mission_Command'Access);
+      AddCommand("UpdateMissionReward", Update_Mission_Reward_Command'Access);
    end AddCommands;
 
 end Missions.UI;
