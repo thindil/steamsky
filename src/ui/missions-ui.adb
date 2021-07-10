@@ -401,6 +401,38 @@ package body Missions.UI is
          ShowSkyMap(True);
          return;
       end if;
+      declare
+         MissionsLimit: Natural;
+         MissionLabel: constant Ttk_Label :=
+           Get_Widget
+             (Main_Paned & ".missionsframe.canvas.missions.missionslabel");
+      begin
+         MissionsLimit :=
+           (case SkyBases
+              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
+              .Reputation
+              (1) is
+              when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
+              when 76 .. 100 => 10, when others => 0);
+         Count_Missions_Limit_Loop :
+         for Mission of AcceptedMissions loop
+            if Mission.StartBase =
+              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
+               MissionsLimit := MissionsLimit - 1;
+               exit Count_Missions_Limit_Loop when MissionsLimit = 0;
+            end if;
+         end loop Count_Missions_Limit_Loop;
+         if MissionsLimit > 0 then
+            configure
+              (MissionLabel,
+               "-text {You can take" & Natural'Image(MissionsLimit) &
+               " more missions in from base.}");
+         else
+            configure
+              (MissionLabel,
+               "-text {You can't take any more missions from this base.}");
+         end if;
+      end;
       if MissionsTable.Row > 1 then
          ClearTable(MissionsTable);
       end if;
