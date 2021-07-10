@@ -25,7 +25,6 @@ with Tcl.Tk.Ada.Grid;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.Canvas; use Tcl.Tk.Ada.Widgets.Canvas;
 with Tcl.Tk.Ada.Widgets.Menu; use Tcl.Tk.Ada.Widgets.Menu;
-with Tcl.Tk.Ada.Widgets.Text; use Tcl.Tk.Ada.Widgets.Text;
 with Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 use Tcl.Tk.Ada.Widgets.Toplevel.MainWindow;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
@@ -34,8 +33,6 @@ with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkPanedWindow; use Tcl.Tk.Ada.Widgets.TtkPanedWindow;
 with Tcl.Tk.Ada.Widgets.TtkScale; use Tcl.Tk.Ada.Widgets.TtkScale;
 with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
-with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
-with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
@@ -59,179 +56,8 @@ package body Missions.UI is
 
    -- ****o* MUI3/MIU3.Show_Mission_Info_Command
    -- FUNCTION
-   -- Show information about the selected mission
+   -- Show the selected mission on map
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- ShowMissionInfo
-   -- SOURCE
-   function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Show_Mission_Info_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String :=
-        Main_Paned & ".missionsframe.canvas.missions";
-      MissionsView: constant Ttk_Tree_View :=
-        Get_Widget(FrameName & ".missions.missionsview", Interp);
-      MissionInfo: Unbounded_String;
-      MissionText: constant Tk_Text :=
-        Get_Widget(FrameName & ".info.info.text", Interp);
-      MissionLabel: constant Ttk_Label :=
-        Get_Widget(FrameName & ".info.missioninfo", Interp);
-      Button: constant Ttk_Button :=
-        Get_Widget(FrameName & ".info.set", Interp);
-      CanAccept: Boolean := True;
-      CabinTaken: Boolean := False;
-      MissionScale: constant Ttk_Scale :=
-        Get_Widget(FrameName & ".info.reward.amount", Interp);
-      MissionIndex: constant Positive :=
-        Positive'Value(Selection(MissionsView));
-      Mission: Mission_Data :=
-        (if BaseIndex = 0 then AcceptedMissions(MissionIndex)
-         else SkyBases(BaseIndex).Missions(MissionIndex));
-   begin
-      configure(MissionText, "-state normal");
-      Delete(MissionText, "1.0", "end");
-      case Mission.MType is
-         when Deliver =>
-            Insert
-              (MissionText, "end",
-               "{Item: " & To_String(Items_List(Mission.ItemIndex).Name) & LF &
-               "Weight:" &
-               Positive'Image(Items_List(Mission.ItemIndex).Weight) & " kg" &
-               LF & "To base: " &
-               To_String
-                 (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
-                    .Name) &
-               "}");
-         when Patrol =>
-            Insert(MissionText, "end", "{Patrol selected area}");
-         when Destroy =>
-            Insert
-              (MissionText, "end",
-               "{Target: " &
-               To_String(Proto_Ships_List(Mission.ShipIndex).Name) & "}");
-         when Explore =>
-            Insert(MissionText, "end", "{Explore selected area}");
-         when Passenger =>
-            CanAccept := False;
-            Modules_Loop :
-            for Module of Player_Ship.Modules loop
-               if (Module.M_Type = CABIN and not CanAccept)
-                 and then Module.Quality >= Mission.Data then
-                  CanAccept := True;
-                  CabinTaken := False;
-                  for Owner of Module.Owner loop
-                     if Owner > 0 then
-                        CabinTaken := True;
-                        CanAccept := False;
-                        exit;
-                     end if;
-                  end loop;
-                  exit Modules_Loop when CanAccept;
-               end if;
-            end loop Modules_Loop;
-            if BaseIndex = 0 then
-               CanAccept := True;
-            end if;
-            Insert(MissionText, "end", "{Needed quality of cabin: }");
-            Insert
-              (MissionText, "end",
-               "{" & Get_Cabin_Quality(Mission.Data) & "}" &
-               (if CanAccept then "" elsif CabinTaken then " [list yellow]"
-                else " [list red]"));
-            Insert
-              (MissionText, "end",
-               "{" & LF & "To base: " &
-               To_String
-                 (SkyBases(SkyMap(Mission.TargetX, Mission.TargetY).BaseIndex)
-                    .Name) &
-               "}");
-      end case;
-      Append(MissionInfo, LF & "Time limit:");
-      MinutesToDate(Mission.Time, MissionInfo);
-      Mission.Multiplier :=
-        RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
-      Append
-        (MissionInfo,
-         LF & "Base reward:" &
-         Natural'Image
-           (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
-         " " & To_String(Money_Name));
-      State(Button, "!disabled");
-      if BaseIndex > 0 then
-         declare
-            Distance: constant Positive :=
-              (if Mission.MType in Deliver | Passenger then
-                 Positive'Value
-                   (Set(MissionsView, Selection(MissionsView), "distance"))
-               else Positive'Value
-                   (Set(MissionsView, Selection(MissionsView), "distance")) *
-                 2);
-         begin
-            TravelInfo(MissionInfo, Distance, True);
-         end;
-         configure(Button, "-text {Accept mission}");
-         Tcl.Tk.Ada.Grid.Grid(MissionScale);
-      else
-         configure(Button, "-text {Set mission as destination for ship}");
-         Tcl.Tk.Ada.Grid.Grid_Remove(MissionScale);
-      end if;
-      Insert(MissionText, "end", "{" & To_String(MissionInfo) & "}");
-      configure(MissionText, "-state disabled");
-      if Mission.Finished then
-         configure(MissionLabel, "-text {The mission is ready to return}");
-         Tcl.Tk.Ada.Grid.Grid(MissionLabel);
-      elsif BaseIndex > 0 then
-         declare
-            MissionsLimit: Natural;
-         begin
-            MissionsLimit :=
-              (case SkyBases
-                 (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
-                 .Reputation
-                 (1) is
-                 when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
-                 when 76 .. 100 => 10, when others => 0);
-            Count_Missions_Limit_Loop :
-            for Mission of AcceptedMissions loop
-               if Mission.StartBase =
-                 SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
-                  MissionsLimit := MissionsLimit - 1;
-                  exit Count_Missions_Limit_Loop when MissionsLimit = 0;
-               end if;
-            end loop Count_Missions_Limit_Loop;
-            State(Button, (if CanAccept then "!disabled" else "disabled"));
-            if MissionsLimit > 0 then
-               configure
-                 (MissionLabel,
-                  "-text {You can take" & Natural'Image(MissionsLimit) &
-                  " more missions in from base.}");
-            else
-               configure
-                 (MissionLabel,
-                  "-text {You can't take any more missions from this base.}");
-               State(Button, "disabled");
-            end if;
-         end;
-         Tcl.Tk.Ada.Grid.Grid(MissionLabel);
-      else
-         Tcl.Tk.Ada.Grid.Grid_Remove(MissionLabel);
-      end if;
-      return TCL_OK;
-   end Show_Mission_Info_Command;
-
    -- ****o* MUI3/MIU3.Show_Mission_Command
    -- FUNCTION
    -- Show mission on map
@@ -243,7 +69,8 @@ package body Missions.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowMission
+   -- ShowMission missionindex
+   -- MissionIndex is the index of the mission to show on map
    -- SOURCE
    function Show_Mission_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -255,12 +82,7 @@ package body Missions.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(Argc);
-      MissionsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (Main_Paned & ".missionsframe.canvas.missions.missions.missionsview",
-           Interp);
-      MissionIndex: constant Positive :=
-        Positive'Value(Selection(MissionsView));
+      MissionIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
    begin
       return
         Show_On_Map_Command
@@ -384,10 +206,6 @@ package body Missions.UI is
    procedure RefreshMissionsList
      (List: Mission_Container.Vector; Page: Positive := 1) is
       -- ****
-      MissionsView: constant Ttk_Tree_View :=
-        Get_Widget
-          (Main_Paned &
-           ".missionsframe.canvas.missions.missions.missionsview");
       Row: Positive := 2;
       Rows: Natural := 0;
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -436,7 +254,6 @@ package body Missions.UI is
       if MissionsTable.Row > 1 then
          ClearTable(MissionsTable);
       end if;
-      Delete(MissionsView, "[list " & Children(MissionsView, "{}") & "]");
       Show_Missions_List_Loop :
       for I in List.First_Index .. List.Last_Index loop
          if Current_Row < Start_Row then
@@ -514,48 +331,6 @@ package body Missions.UI is
                   "Show available mission's options",
                   "ShowBaseMissionMenu" & Positive'Image(Row - 1), 3);
          end case;
-         case List(I).MType is
-            when Deliver =>
-               Insert
-                 (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
-                  " -values [list {Deliver item to base}" &
-                  Positive'Image
-                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
-                  "]");
-            when Patrol =>
-               Insert
-                 (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
-                  " -values [list {Patrol area}" &
-                  Positive'Image
-                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
-                  "]");
-            when Destroy =>
-               Insert
-                 (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
-                  " -values [list {Destroy ship}" &
-                  Positive'Image
-                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
-                  "]");
-            when Explore =>
-               Insert
-                 (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
-                  " -values [list {Explore area}" &
-                  Positive'Image
-                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
-                  "]");
-            when Passenger =>
-               Insert
-                 (MissionsView,
-                  "{} end -id" & Positive'Image(I) &
-                  " -values [list {Transport passenger to base}" &
-                  Positive'Image
-                    (CountDistance(List(I).TargetX, List(I).TargetY)) &
-                  "]");
-         end case;
          AddButton
            (MissionsTable,
             Natural'Image(CountDistance(List(I).TargetX, List(I).TargetY)),
@@ -579,7 +354,6 @@ package body Missions.UI is
          exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
          <<End_Of_Loop>>
       end loop Show_Missions_List_Loop;
-      Selection_Set(MissionsView, "[list 1]");
    end RefreshMissionsList;
 
    -- ****o* MUI3/MIU3.Set_Mission_Command
@@ -650,14 +424,13 @@ package body Missions.UI is
       MissionsCanvas: constant Tk_Canvas :=
         Get_Widget(MissionsFrame & ".canvas", Interp);
       Label: constant Ttk_Label :=
-        Get_Widget(MissionsCanvas & ".missions.info.missioninfo", Interp);
+        Get_Widget(MissionsCanvas & ".missions.missionslabel", Interp);
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
            (Get_Context,
             To_String(Data_Directory) & "ui" & Dir_Separator & "missions.tcl");
          Bind(MissionsFrame, "<Configure>", "{ResizeCanvas %W.canvas %w %h}");
-         AddCommand("ShowMissionInfo", Show_Mission_Info_Command'Access);
          AddCommand("ShowMission", Show_Mission_Command'Access);
          AddCommand("SetMission", Set_Mission_Command'Access);
          MissionsTable :=
