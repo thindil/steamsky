@@ -35,16 +35,16 @@ package body Maps is
    procedure NormalizeCoord(Coord: in out Integer; IsXAxis: Boolean := True) is
    begin
       if IsXAxis then
-         if Coord < SkyMap'First(1) then
-            Coord := SkyMap'First(1);
-         elsif Coord > SkyMap'Last(1) then
-            Coord := SkyMap'Last(1);
+         if Coord < Map_X_Range'First then
+            Coord := Map_X_Range'First;
+         elsif Coord > Map_X_Range'Last then
+            Coord := Map_X_Range'Last;
          end if;
       else
-         if Coord < SkyMap'First(2) then
-            Coord := SkyMap'First(2);
-         elsif Coord > SkyMap'Last(2) then
-            Coord := SkyMap'Last(2);
+         if Coord < Map_Y_Range'First then
+            Coord := Map_Y_Range'First;
+         elsif Coord > Map_Y_Range'Last then
+            Coord := Map_Y_Range'Last;
          end if;
       end if;
    end NormalizeCoord;
