@@ -56,3 +56,6 @@ grid [ttk::label $missionsframe.info.missioninfo] -sticky w -padx 5
 SetScrollbarBindings $missionsframe.info.missioninfo .gameframe.paned.missionsframe.scrolly
 grid [ttk::button $missionsframe.info.show -text {Show mission on map} -command {ShowMission}]
 grid [ttk::button $missionsframe.info.set -command {SetMission}]
+# Label with information how many missions are available in the base
+grid [ttk::label $missionsframe.missionslabel] -sticky w -padx 5
+SetScrollbarBindings $missionsframe.missionslabel .gameframe.paned.missionsframe.scrolly
