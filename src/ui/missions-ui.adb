@@ -37,6 +37,7 @@ with Tcl.Tk.Ada.Widgets.TtkScrollbar; use Tcl.Tk.Ada.Widgets.TtkScrollbar;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tk.Ada.Widgets.TtkWidget; use Tcl.Tk.Ada.Widgets.TtkWidget;
 with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
+with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Bases; use Bases;
 with CoreUI; use CoreUI;
 with Dialogs; use Dialogs;
@@ -811,13 +812,31 @@ package body Missions.UI is
           (MissionDialog & ".accept",
            "-text {Accept} -command {CloseDialog " & MissionDialog &
            ";SetMission " & CArgv.Arg(Argv, 1) & "}");
+      Label: constant Ttk_Label :=
+        Create
+          (MissionDialog & ".rewardlbl",
+           "-text {Reward:" &
+           Natural'Image
+             (Natural(Float(Mission.Reward) * Float(Mission.Multiplier))) &
+           " " & To_String(Money_Name) & "}");
+      RewardScale: constant Ttk_Scale :=
+        Create
+          (MissionDialog & ".reward",
+           "-from 0.0 -to 2.0 -variable reward -command UpdateMissionReward -length 300");
    begin
-      Tcl.Tk.Ada.Grid.Grid(Button);
+      Add
+        (RewardScale,
+         "Move left - more reputation from mission but less money,\nmove right - more money from mission but less reputation.");
+      Tcl.Tk.Ada.Grid.Grid(Label, "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(RewardScale, "-columnspan 2 -padx 5");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-pady 5");
       Button :=
         Create
           (MissionDialog & ".cancel",
            "-text {Cancel} -command {CloseDialog " & MissionDialog & "}");
-      Tcl.Tk.Ada.Grid.Grid(Button, "-row 1 -column 1");
+      Tcl.Tk.Ada.Grid.Grid(Button, "-row 3 -column 1 -pady 5");
+      Bind(Button, "<Tab>", "{focus .missiondialog.accept;break}");
+      Bind(Button, "<Escape>", "{" & Button & " invoke;break}");
       Show_Dialog(MissionDialog);
       Focus(Button);
       return TCL_OK;
