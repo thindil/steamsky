@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.3] - 2021-07-11
 
 ### Added
 - Info about current gain or cost when selling or buying items
