@@ -99,29 +99,29 @@ package body Game.SaveLoad is
       end record;
       Difficulties: constant array(1 .. 8) of Difficulty_Data :=
         (1 =>
-           (To_Unbounded_String("enemydamagebonus"),
-            New_Game_Settings.Enemy_Damage_Bonus),
+           (Name => To_Unbounded_String(Source => "enemydamagebonus"),
+            Value => New_Game_Settings.Enemy_Damage_Bonus),
          2 =>
-           (To_Unbounded_String("playerdamagebonus"),
-            New_Game_Settings.Player_Damage_Bonus),
+           (Name => To_Unbounded_String(Source => "playerdamagebonus"),
+            Value => New_Game_Settings.Player_Damage_Bonus),
          3 =>
-           (To_Unbounded_String("enemymeleedamagebonus"),
-            New_Game_Settings.Enemy_Melee_Damage_Bonus),
+           (Name => To_Unbounded_String(Source => "enemymeleedamagebonus"),
+            Value => New_Game_Settings.Enemy_Melee_Damage_Bonus),
          4 =>
-           (To_Unbounded_String("playermeleedamagebonus"),
-            New_Game_Settings.Player_Melee_Damage_Bonus),
+           (Name => To_Unbounded_String(Source => "playermeleedamagebonus"),
+            Value => New_Game_Settings.Player_Melee_Damage_Bonus),
          5 =>
-           (To_Unbounded_String("experiencebonus"),
-            New_Game_Settings.Experience_Bonus),
+           (Name => To_Unbounded_String(Source => "experiencebonus"),
+            Value => New_Game_Settings.Experience_Bonus),
          6 =>
-           (To_Unbounded_String("reputationbonus"),
-            New_Game_Settings.Reputation_Bonus),
+           (Name => To_Unbounded_String(Source => "reputationbonus"),
+            Value => New_Game_Settings.Reputation_Bonus),
          7 =>
-           (To_Unbounded_String("upgradecostbonus"),
-            New_Game_Settings.Upgrade_Cost_Bonus),
+           (Name => To_Unbounded_String(Source => "upgradecostbonus"),
+            Value => New_Game_Settings.Upgrade_Cost_Bonus),
          8 =>
-           (To_Unbounded_String("pricesbonus"),
-            New_Game_Settings.Prices_Bonus));
+           (Name => To_Unbounded_String(Source => "pricesbonus"),
+            Value => New_Game_Settings.Prices_Bonus));
    begin
       Log_Message
         ("Start saving game in file " & To_String(Save_Name) & ".",
