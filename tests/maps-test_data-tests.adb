@@ -77,23 +77,43 @@ package body Maps.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_NormalizeCoord_6338a5_63c4fc
+   procedure Wrap_Test_NormalizeCoord_6338a5_1a8ae8
      (Coord: in out Integer; IsXAxis: Boolean := True) is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(maps.ads:0):Test_NormalizeCoord test requirement violated");
+      end;
       GNATtest_Generated.GNATtest_Standard.Maps.NormalizeCoord(Coord, IsXAxis);
-   end Wrap_Test_NormalizeCoord_6338a5_63c4fc;
+      begin
+         pragma Assert
+           ((if IsXAxis then Coord in Map_X_Range'Range
+             else Coord in Map_Y_Range));
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(maps.ads:0:):Test_NormalizeCoord test commitment violated");
+      end;
+   end Wrap_Test_NormalizeCoord_6338a5_1a8ae8;
 --  end read only
 
 --  begin read only
    procedure Test_NormalizeCoord_test_normalizecoord(Gnattest_T: in out Test);
-   procedure Test_NormalizeCoord_6338a5_63c4fc(Gnattest_T: in out Test) renames
+   procedure Test_NormalizeCoord_6338a5_1a8ae8(Gnattest_T: in out Test) renames
      Test_NormalizeCoord_test_normalizecoord;
 --  id:2.2/6338a59b69707203/NormalizeCoord/1/0/test_normalizecoord/
    procedure Test_NormalizeCoord_test_normalizecoord
      (Gnattest_T: in out Test) is
       procedure NormalizeCoord
         (Coord: in out Integer; IsXAxis: Boolean := True) renames
-        Wrap_Test_NormalizeCoord_6338a5_63c4fc;
+        Wrap_Test_NormalizeCoord_6338a5_1a8ae8;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
