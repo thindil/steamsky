@@ -202,6 +202,8 @@ package body Missions.UI is
    -- Refresh the list of available missions
    -- PARAMETERS
    -- List - The list of available missions in the selected base
+   -- Page - The current page of the list to show. Can be empty. Default value
+   --        is 1.
    -- SOURCE
    procedure RefreshMissionsList
      (List: Mission_Container.Vector; Page: Positive := 1) is
@@ -354,6 +356,20 @@ package body Missions.UI is
          exit Show_Missions_List_Loop when Rows = 25 and I /= List.Last_Index;
          <<End_Of_Loop>>
       end loop Show_Missions_List_Loop;
+      if Page > 1 then
+         if Rows < 25 then
+            AddPagination
+              (MissionsTable, "ShowBaseMissions" & Positive'Image(Page - 1),
+               "");
+         else
+            AddPagination
+              (MissionsTable, "ShowBaseMissions" & Positive'Image(Page - 1),
+               "ShowBaseMissions" & Positive'Image(Page + 1));
+         end if;
+      elsif Rows > 24 then
+         AddPagination
+           (MissionsTable, "", "ShowBaseMissions" & Positive'Image(Page + 1));
+      end if;
    end RefreshMissionsList;
 
    -- ****o* MUI3/MIU3.Set_Mission_Command
@@ -407,7 +423,9 @@ package body Missions.UI is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- ShowBaseMissions
+   -- ShowBaseMissions ?page?
+   -- Page is the number of page of the missions list to show. If not
+   -- set then it is 1
    -- SOURCE
    function Show_Base_Missions_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
@@ -418,7 +436,9 @@ package body Missions.UI is
    function Show_Base_Missions_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Argc, Argv);
+      pragma Unreferenced(ClientData);
+      use Interfaces.C;
+
       MissionsFrame: Ttk_Frame :=
         Get_Widget(Main_Paned & ".missionsframe", Interp);
       MissionsCanvas: constant Tk_Canvas :=
@@ -441,7 +461,7 @@ package body Missions.UI is
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
               Get_Widget(Main_Paned & ".missionsframe.scrolly"));
-      elsif Winfo_Get(Label, "ismapped") = "1" then
+      elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          ShowSkyMap(True);
          return TCL_OK;
       end if;
@@ -452,7 +472,9 @@ package body Missions.UI is
          ShowSkyMap(True);
          return TCL_OK;
       end if;
-      RefreshMissionsList(SkyBases(BaseIndex).Missions);
+      RefreshMissionsList
+        (SkyBases(BaseIndex).Missions,
+         (if Argc > 1 then Positive'Value(CArgv.Arg(Argv, 1)) else 1));
       UpdateTable(MissionsTable);
       configure
         (MissionsCanvas,
