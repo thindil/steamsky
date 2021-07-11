@@ -54,10 +54,6 @@ package body Missions.UI is
    BaseIndex: Natural;
    -- ****
 
-   -- ****o* MUI3/MIU3.Show_Mission_Info_Command
-   -- FUNCTION
-   -- Show the selected mission on map
-   -- PARAMETERS
    -- ****o* MUI3/MIU3.Show_Mission_Command
    -- FUNCTION
    -- Show mission on map
