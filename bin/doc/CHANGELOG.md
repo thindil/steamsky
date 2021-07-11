@@ -11,7 +11,8 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated interface
 - Move mouse cursor on map a bit faster
-- Redesigned school, load game and assign skills screens
+- Redesigned school, load game, assign skills and list of available missions
+  in bases screens
 - Updated help
 - Made scrollbars more visible
 - Updated the game default UI theme
