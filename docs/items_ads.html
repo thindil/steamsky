@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -38,23 +38,23 @@
 <li>1.4. <a href="#robo180">Items/Items.InventoryData</a></li>
 <li>1.5. <a href="#robo181">Items/Items.Object_Data</a></li>
 <li>1.6. <a href="#robo216">Items/Items.Default_Item_Durability</a></li>
-<li>1.7. <a href="#robo312">Items/Items.ArmsArmors_List</a></li>
-<li>1.8. <a href="#robo313">Items/Items.ChestArmors_List</a></li>
-<li>1.9. <a href="#robo314">Items/Items.HeadArmors_List</a></li>
-<li>1.10. <a href="#robo315">Items/Items.Items_List</a></li>
-<li>1.11. <a href="#robo316">Items/Items.Items_Types</a></li>
-<li>1.12. <a href="#robo317">Items/Items.LegsArmors_List</a></li>
-<li>1.13. <a href="#robo318">Items/Items.Shields_List</a></li>
-<li>1.14. <a href="#robo319">Items/Items.Tools_List</a></li>
-<li>1.15. <a href="#robo320">Items/Items.Weapons_List</a></li>
-<li>1.16. <a href="#robo498">Items/Items.DamageItem</a></li>
-<li>1.17. <a href="#robo499">Items/Items.FindItem</a></li>
-<li>1.18. <a href="#robo500">Items/Items.FindProtoItem</a></li>
-<li>1.19. <a href="#robo501">Items/Items.GetItemChanceToDamage</a></li>
-<li>1.20. <a href="#robo502">Items/Items.GetItemDamage</a></li>
-<li>1.21. <a href="#robo503">Items/Items.GetItemName</a></li>
-<li>1.22. <a href="#robo504">Items/Items.LoadItems</a></li>
-<li>1.23. <a href="#robo505">Items/Items.SetToolsList</a></li>
+<li>1.7. <a href="#robo311">Items/Items.ArmsArmors_List</a></li>
+<li>1.8. <a href="#robo312">Items/Items.ChestArmors_List</a></li>
+<li>1.9. <a href="#robo313">Items/Items.HeadArmors_List</a></li>
+<li>1.10. <a href="#robo314">Items/Items.Items_List</a></li>
+<li>1.11. <a href="#robo315">Items/Items.Items_Types</a></li>
+<li>1.12. <a href="#robo316">Items/Items.LegsArmors_List</a></li>
+<li>1.13. <a href="#robo317">Items/Items.Shields_List</a></li>
+<li>1.14. <a href="#robo318">Items/Items.Tools_List</a></li>
+<li>1.15. <a href="#robo319">Items/Items.Weapons_List</a></li>
+<li>1.16. <a href="#robo497">Items/Items.DamageItem</a></li>
+<li>1.17. <a href="#robo498">Items/Items.FindItem</a></li>
+<li>1.18. <a href="#robo499">Items/Items.FindProtoItem</a></li>
+<li>1.19. <a href="#robo500">Items/Items.GetItemChanceToDamage</a></li>
+<li>1.20. <a href="#robo501">Items/Items.GetItemDamage</a></li>
+<li>1.21. <a href="#robo502">Items/Items.GetItemName</a></li>
+<li>1.22. <a href="#robo503">Items/Items.LoadItems</a></li>
+<li>1.23. <a href="#robo504">Items/Items.SetToolsList</a></li>
 </ul>
 </ul>
 <hr />
@@ -117,10 +117,10 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> InventoryData <span class="keyword">is</span> <span class="keyword">record</span>
       ProtoIndex<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Amount<span class="sign">:</span> Positive<span class="sign">;</span>
+      Amount<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability<span class="sign">;</span>
-      Price<span class="sign">:</span> Natural<span class="sign">;</span>
+      Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
    <span class="keyword">end</span> <span class="keyword">record</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -142,9 +142,9 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Object_Data <span class="keyword">is</span> <span class="keyword">record</span>
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Weight<span class="sign">:</span> Positive<span class="sign">;</span>
+      Weight<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 1<span class="sign">;</span>
       IType<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      Price<span class="sign">:</span> Natural<span class="sign">;</span>
+      Price<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Value<span class="sign">:</span> Integer_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       ShowType<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Description<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
@@ -177,7 +177,7 @@
 
 <hr />
 <a name="Items2fItems2eArmsArmors5fList"></a>
-<a name="robo312"></a><h2>Items/Items.ArmsArmors_List [ Variables ]</h2>
+<a name="robo311"></a><h2>Items/Items.ArmsArmors_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -189,7 +189,7 @@
 
 <hr />
 <a name="Items2fItems2eChestArmors5fList"></a>
-<a name="robo313"></a><h2>Items/Items.ChestArmors_List [ Variables ]</h2>
+<a name="robo312"></a><h2>Items/Items.ChestArmors_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -201,7 +201,7 @@
 
 <hr />
 <a name="Items2fItems2eHeadArmors5fList"></a>
-<a name="robo314"></a><h2>Items/Items.HeadArmors_List [ Variables ]</h2>
+<a name="robo313"></a><h2>Items/Items.HeadArmors_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -213,7 +213,7 @@
 
 <hr />
 <a name="Items2fItems2eItems5fList"></a>
-<a name="robo315"></a><h2>Items/Items.Items_List [ Variables ]</h2>
+<a name="robo314"></a><h2>Items/Items.Items_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -225,7 +225,7 @@
 
 <hr />
 <a name="Items2fItems2eItems5fTypes"></a>
-<a name="robo316"></a><h2>Items/Items.Items_Types [ Variables ]</h2>
+<a name="robo315"></a><h2>Items/Items.Items_Types [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -237,7 +237,7 @@
 
 <hr />
 <a name="Items2fItems2eLegsArmors5fList"></a>
-<a name="robo317"></a><h2>Items/Items.LegsArmors_List [ Variables ]</h2>
+<a name="robo316"></a><h2>Items/Items.LegsArmors_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -249,7 +249,7 @@
 
 <hr />
 <a name="Items2fItems2eShields5fList"></a>
-<a name="robo318"></a><h2>Items/Items.Shields_List [ Variables ]</h2>
+<a name="robo317"></a><h2>Items/Items.Shields_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -261,7 +261,7 @@
 
 <hr />
 <a name="Items2fItems2eTools5fList"></a>
-<a name="robo319"></a><h2>Items/Items.Tools_List [ Variables ]</h2>
+<a name="robo318"></a><h2>Items/Items.Tools_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -273,7 +273,7 @@
 
 <hr />
 <a name="Items2fItems2eWeapons5fList"></a>
-<a name="robo320"></a><h2>Items/Items.Weapons_List [ Variables ]</h2>
+<a name="robo319"></a><h2>Items/Items.Weapons_List [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -285,7 +285,7 @@
 
 <hr />
 <a name="Items2fItems2eDamageItem"></a>
-<a name="robo498"></a><h2>Items/Items.DamageItem [ Subprograms ]</h2>
+<a name="robo497"></a><h2>Items/Items.DamageItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -312,7 +312,7 @@
 
 <hr />
 <a name="Items2fItems2eFindItem"></a>
-<a name="robo499"></a><h2>Items/Items.FindItem [ Subprograms ]</h2>
+<a name="robo498"></a><h2>Items/Items.FindItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -324,7 +324,8 @@
       ProtoIndex<span class="sign">,</span> ItemType<span class="sign">:</span> Unbounded_String <span class="sign">:</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">;</span>
       Durability<span class="sign">:</span> Items_Durability <span class="sign">:</span><span class="sign">=</span> Items_Durability<span class="keyword">'Last</span><span class="sign">;</span>
       Quality<span class="sign">:</span> Positive <span class="sign">:=</span> 100<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
-      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_FindItem"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Robustness<span class="sign">);</span>
+      Post =<span class="sign">&gt;</span> FindItem'</span>Result <span class="sign">&lt;</span><span class="sign">=</span> <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">.</span>Last_Index<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_FindItem"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> <a href="./crew-inventory_ads.html#robo19">Inventory</a>  - <a href="./crew-inventory_ads.html#robo19">Inventory</a> in which item will be looking for
@@ -339,7 +340,7 @@
 
 <hr />
 <a name="Items2fItems2eFindProtoItem"></a>
-<a name="robo500"></a><h2>Items/Items.FindProtoItem [ Subprograms ]</h2>
+<a name="robo499"></a><h2>Items/Items.FindProtoItem [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -360,7 +361,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemChanceToDamage"></a>
-<a name="robo501"></a><h2>Items/Items.GetItemChanceToDamage [ Subprograms ]</h2>
+<a name="robo500"></a><h2>Items/Items.GetItemChanceToDamage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -368,7 +369,8 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> GetItemChanceToDamage<span class="sign">(</span>ItemData<span class="sign">:</span> Natural<span class="sign">)</span> <span class="keyword">return</span> String <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemChanceToDamage"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> GetItemChanceToDamage<span class="squote">'Result'</span>Length <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemChanceToDamage"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ItemData: Numeric chance to damage for selected item
@@ -379,7 +381,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemDamage"></a>
-<a name="robo502"></a><h2>Items/Items.GetItemDamage [ Subprograms ]</h2>
+<a name="robo501"></a><h2>Items/Items.GetItemDamage [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -389,7 +391,8 @@
 <pre class="source">   <span class="keyword">function</span> GetItemDamage
      <span class="sign">(</span>ItemDurability<span class="sign">:</span> Items_Durability<span class="sign">;</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> False<span class="sign">)</span>
       <span class="keyword">return</span> String <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemDamage"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> GetItemDamage<span class="squote">'Result'</span>Length <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemDamage"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> ItemDurability - Numeric value of current durability of the item
@@ -402,7 +405,7 @@
 
 <hr />
 <a name="Items2fItems2eGetItemName"></a>
-<a name="robo503"></a><h2>Items/Items.GetItemName [ Subprograms ]</h2>
+<a name="robo502"></a><h2>Items/Items.GetItemName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -417,7 +420,8 @@
 <pre class="source">   <span class="keyword">function</span> GetItemName
      <span class="sign">(</span>Item<span class="sign">:</span> InventoryData<span class="sign">;</span> DamageInfo<span class="sign">,</span> ToLower<span class="sign">:</span> Boolean <span class="sign">:</span><span class="sign">=</span> True<span class="sign">)</span>
       <span class="keyword">return</span> String <span class="keyword">with</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemName"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Robustness<span class="sign">)</span><span class="sign">;</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> GetItemName<span class="squote">'Result'</span>Length <span class="sign">&gt;</span> 0<span class="sign">,</span>
+      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetItemName"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">RESULT</p>
 <pre> Name of item with additional damage level info
@@ -425,7 +429,7 @@
 
 <hr />
 <a name="Items2fItems2eLoadItems"></a>
-<a name="robo504"></a><h2>Items/Items.LoadItems [ Subprograms ]</h2>
+<a name="robo503"></a><h2>Items/Items.LoadItems [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -440,7 +444,7 @@
 
 <hr />
 <a name="Items2fItems2eSetToolsList"></a>
-<a name="robo505"></a><h2>Items/Items.SetToolsList [ Subprograms ]</h2>
+<a name="robo504"></a><h2>Items/Items.SetToolsList [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo33">Items</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -452,7 +456,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/items.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>

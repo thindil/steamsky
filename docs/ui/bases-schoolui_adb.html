@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,26 +30,47 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo348">SchoolUI/SchoolUI.MemberIndex</a></li>
-<li>2. <a href="#robo773">SchoolUI/SchoolUI.Show_School_Command</a></li>
-<li>3. <a href="#robo774">SchoolUI/SchoolUI.Show_Training_Info_Command</a></li>
-<li>4. <a href="#robo775">SchoolUI/SchoolUI.Train_Skill_Command</a></li>
+<li>1. <a href="#robo576">SchoolUI/SchoolUI.Get_Member_Index</a></li>
+<li>2. <a href="#robo577">SchoolUI/SchoolUI.Get_Skill_Index</a></li>
+<li>3. <a href="#robo780">SchoolUI/SchoolUI.Show_School_Command</a></li>
+<li>4. <a href="#robo781">SchoolUI/SchoolUI.Train_Skill_Command</a></li>
+<li>5. <a href="#robo782">SchoolUI/SchoolUI.Update_School_Cost_Command</a></li>
+<li>6. <a href="#robo783">SchoolUI/SchoolUI.Update_School_Selected_Cost_Command</a></li>
+<li>7. <a href="#robo784">SchoolUI/Set_School_Skills_Command</a></li>
 </ul>
 <hr />
-<a name="SchoolUI2fSchoolUI2eMemberIndex"></a>
-<a name="robo348"></a><h2>SchoolUI/SchoolUI.MemberIndex [ Variables ]</h2>
+<a name="SchoolUI2fSchoolUI2eGet5fMember5fIndex"></a>
+<a name="robo576"></a><h2>SchoolUI/SchoolUI.Get_Member_Index [ Subprograms ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
-<pre> The currently selected crew member index
+<pre> Get the index in the player ship of the currently selected member
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   MemberIndex<span class="sign">:</span> Positive<span class="sign">;</span>
+<pre class="source">   <span class="keyword">function</span> Get_Member_Index <span class="keyword">return</span> Positive <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The index of the currently selected crew member
+</pre>
+
+<hr />
+<a name="SchoolUI2fSchoolUI2eGet5fSkill5fIndex"></a>
+<a name="robo577"></a><h2>SchoolUI/SchoolUI.Get_Skill_Index [ Subprograms ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Get the index of the currently selected skill
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Get_Skill_Index <span class="keyword">return</span> Positive <span class="keyword">is</span>
+</pre>
+<p class="item_name">RESULT</p>
+<pre> The index of the currently selected skill
 </pre>
 
 <hr />
 <a name="SchoolUI2fSchoolUI2eShow5fSchool5fCommand"></a>
-<a name="robo773"></a><h2>SchoolUI/SchoolUI.Show_School_Command [ Commands ]</h2>
+<a name="robo780"></a><h2>SchoolUI/SchoolUI.Show_School_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -57,60 +78,6 @@
 </pre>
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Show_School_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command.
- Argv       - Values of arguments passed to the command. Unused
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowSchool
-</pre>
-
-<hr />
-<a name="SchoolUI2fSchoolUI2eShow5fTraining5fInfo5fCommand"></a>
-<a name="robo774"></a><h2>SchoolUI/SchoolUI.Show_Training_Info_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Show training costs for the selected crew member
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Show_Training_Info_Command
-     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
-      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
-      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
-</pre>
-<p class="item_name">PARAMETERS</p>
-<pre> ClientData - Custom data send to the command. Unused
- Interp     - Tcl interpreter in which command was executed.
- Argc       - Number of arguments passed to the command. Unused
- Argv       - Values of arguments passed to the command. Unused
-</pre>
-<p class="item_name">RESULT</p>
-<pre> This function always return TCL_OK
-</pre>
-<p class="item_name">COMMANDS</p>
-<pre> ShowTrainingInfo
-</pre>
-
-<hr />
-<a name="SchoolUI2fSchoolUI2eTrain5fSkill5fCommand"></a>
-<a name="robo775"></a><h2>SchoolUI/SchoolUI.Train_Skill_Command [ Commands ]</h2>
-
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
-<p class="item_name">FUNCTION</p>
-<pre> Train the selected skill
-</pre>
-<p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">function</span> Train_Skill_Command
      <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
       Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
       Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
@@ -125,12 +92,123 @@
 <pre> This function always return TCL_OK
 </pre>
 <p class="item_name">COMMANDS</p>
+<pre> ShowSchool
+</pre>
+
+<hr />
+<a name="SchoolUI2fSchoolUI2eTrain5fSkill5fCommand"></a>
+<a name="robo781"></a><h2>SchoolUI/SchoolUI.Train_Skill_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Train the selected skill
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Train_Skill_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
 <pre> TrainSkill
+</pre>
+
+<hr />
+<a name="SchoolUI2fSchoolUI2eUpdate5fSchool5fCost5fCommand"></a>
+<a name="robo782"></a><h2>SchoolUI/SchoolUI.Update_School_Cost_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update the cost of training
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Update_School_Cost_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command.
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command.
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> UpdateSchoolCost combobox amount
+ Combobox is the Tk path to the ttk::combobox with the amount of
+ training sessions, amount is the amount of the requested training
+ sessions
+</pre>
+
+<hr />
+<a name="SchoolUI2fSchoolUI2eUpdate5fSchool5fSelected5fCost5fCommand"></a>
+<a name="robo783"></a><h2>SchoolUI/SchoolUI.Update_School_Selected_Cost_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Update the minimal and maximum values of spinbox with training cost
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Update_School_Selected_Cost_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command. Unused
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> UpdateSchoolCost2
+</pre>
+
+<hr />
+<a name="SchoolUI2fSet5fSchool5fSkills5fCommand"></a>
+<a name="robo784"></a><h2>SchoolUI/Set_School_Skills_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./bases-schoolui_ads.html#robo7">SchoolUI</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Set list of available to train skills for the selected crew member
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> <strong>Set_School_Skills_Command</strong>
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed.
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SetSchoolSkills
 </pre>
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/bases-schoolui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/ui/bases-schoolui.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -47,8 +47,8 @@
 <li>1.13. <a href="#robo206">Config/Config.Default_New_Game_Settings</a></li>
 <li>1.14. <a href="#robo249">Config/Config.Game_Settings</a></li>
 <li>1.15. <a href="#robo250">Config/Config.New_Game_Settings</a></li>
-<li>1.16. <a href="#robo425">Config/Config.Load_Config</a></li>
-<li>1.17. <a href="#robo426">Config/Config.SaveConfig</a></li>
+<li>1.16. <a href="#robo424">Config/Config.Load_Config</a></li>
+<li>1.17. <a href="#robo425">Config/Config.SaveConfig</a></li>
 </ul>
 </ul>
 <hr />
@@ -72,7 +72,8 @@
 <pre> Options when stop auto move of player ship
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Auto_Move_Break <span class="keyword">is</span> <span class="sign">(</span>NEVER<span class="sign">,</span> ANY<span class="sign">,</span> FRIENDLY<span class="sign">,</span> ENEMY<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Auto_Move_Break <span class="keyword">is</span> <span class="sign">(</span>NEVER<span class="sign">,</span> ANY<span class="sign">,</span> FRIENDLY<span class="sign">,</span> ENEMY<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NEVER<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -84,7 +85,8 @@
 <pre> Type used to set how often autosave is done
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Auto_Save_Type <span class="keyword">is</span> <span class="sign">(</span>NONE<span class="sign">,</span> DOCK<span class="sign">,</span> UNDOCK<span class="sign">,</span> DAILY<span class="sign">,</span> MONTHLY<span class="sign">,</span> YEARLY<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Auto_Save_Type <span class="keyword">is</span> <span class="sign">(</span>NONE<span class="sign">,</span> DOCK<span class="sign">,</span> UNDOCK<span class="sign">,</span> DAILY<span class="sign">,</span> MONTHLY<span class="sign">,</span> YEARLY<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -108,7 +110,9 @@
 <pre> Used to set the game difficulty level
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Difficulty_Type <span class="keyword">is</span> <span class="sign">(</span>VERY_EASY<span class="sign">,</span> EASY<span class="sign">,</span> NORMAL<span class="sign">,</span> HARD<span class="sign">,</span> VERY_HARD<span class="sign">,</span> CUSTOM<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Difficulty_Type <span class="keyword">is</span>
+     <span class="sign">(</span>VERY_EASY<span class="sign">,</span> EASY<span class="sign">,</span> NORMAL<span class="sign">,</span> HARD<span class="sign">,</span> VERY_HARD<span class="sign">,</span> CUSTOM<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NORMAL<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -120,7 +124,8 @@
 <pre> Options to set showing messages order
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Messages_Order_Type <span class="keyword">is</span> <span class="sign">(</span>OLDER_FIRST<span class="sign">,</span> NEWER_FIRST<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Messages_Order_Type <span class="keyword">is</span> <span class="sign">(</span>OLDER_FIRST<span class="sign">,</span> NEWER_FIRST<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> OLDER_FIRST<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -142,8 +147,8 @@
       Low_Drinks<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
       Low_Food<span class="sign">:</span> Positive <span class="keyword">range</span> 1 <span class="sign">.</span><span class="sign">.</span> 10_000<span class="sign">;</span>
       Auto_Move_Stop<span class="sign">:</span> Auto_Move_Break<span class="sign">;</span>
-      Window_Width<span class="sign">:</span> Positive<span class="sign">;</span>
-      Window_Height<span class="sign">:</span> Positive<span class="sign">;</span>
+      Window_Width<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 800<span class="sign">;</span>
+      Window_Height<span class="sign">:</span> Positive <span class="sign">:</span><span class="sign">=</span> 600<span class="sign">;</span>
       Messages_Limit<span class="sign">:</span> Positive <span class="keyword">range</span> 10 <span class="sign">.</span><span class="sign">.</span> 5_000<span class="sign">;</span>
       Saved_Messages<span class="sign">:</span> Positive <span class="keyword">range</span> 5 <span class="sign">.</span><span class="sign">.</span> 200<span class="sign">;</span>
       Help_Font_Size<span class="sign">:</span> Positive <span class="keyword">range</span> 2 <span class="sign">.</span><span class="sign">.</span> 51<span class="sign">;</span>
@@ -379,7 +384,7 @@
 
 <hr />
 <a name="Config2fConfig2eLoad5fConfig"></a>
-<a name="robo425"></a><h2>Config/Config.Load_Config [ Subprograms ]</h2>
+<a name="robo424"></a><h2>Config/Config.Load_Config [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -391,7 +396,7 @@
 
 <hr />
 <a name="Config2fConfig2eSaveConfig"></a>
-<a name="robo426"></a><h2>Config/Config.SaveConfig [ Subprograms ]</h2>
+<a name="robo425"></a><h2>Config/Config.SaveConfig [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo14">Config</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -403,7 +408,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/config.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>

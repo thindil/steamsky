@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,13 +34,12 @@
 <ul>
 <li>1.1. <a href="./game-saveload_ads.html#robo26">Game/GSaveLoad</a></li>
 <ul>
-<li>1.1.1. <a href="./game-saveload_adb.html#robo307">GSaveLoad/GSaveLoad.SaveData</a></li>
-<li>1.1.2. <a href="./game-saveload_ads.html#robo308">GSaveLoad/GSaveLoad.SaveName</a></li>
-<li>1.1.3. <a href="./game-saveload_adb.html#robo309">GSaveLoad/GSaveLoad.SaveVersion</a></li>
-<li>1.1.4. <a href="./game-saveload_ads.html#robo378">GSaveLoad/GSaveLoad.SaveGame_Invalid_Data</a></li>
-<li>1.1.5. <a href="./game-saveload_ads.html#robo485">GSaveLoad/GSaveLoad.GenerateSaveName</a></li>
-<li>1.1.6. <a href="./game-saveload_ads.html#robo486">GSaveLoad/GSaveLoad.LoadGame</a></li>
-<li>1.1.7. <a href="./game-saveload_ads.html#robo487">GSaveLoad/GSaveLoad.SaveGame</a></li>
+<li>1.1.1. <a href="./game-saveload_ads.html#robo307">GSaveLoad/GSaveLoad.Save_Name</a></li>
+<li>1.1.2. <a href="./game-saveload_adb.html#robo308">GSaveLoad/GSaveLoad.Save_Version</a></li>
+<li>1.1.3. <a href="./game-saveload_ads.html#robo377">GSaveLoad/GSaveLoad.Save_Game_Invalid_Data</a></li>
+<li>1.1.4. <a href="./game-saveload_ads.html#robo484">GSaveLoad/GSaveLoad.Generate_Save_Name</a></li>
+<li>1.1.5. <a href="./game-saveload_ads.html#robo485">GSaveLoad/GSaveLoad.Load_Game</a></li>
+<li>1.1.6. <a href="./game-saveload_ads.html#robo486">GSaveLoad/GSaveLoad.Save_Game</a></li>
 </ul>
 <li>1.2. <a href="#robo101">Game/Game.Attributes_Array</a></li>
 <li>1.3. <a href="#robo102">Game/Game.Attributes_Container</a></li>
@@ -103,12 +102,12 @@
 <li>1.60. <a href="#robo301">Game/Game.Traders_Name</a></li>
 <li>1.61. <a href="#robo302">Game/Game.Unarmed_Skill</a></li>
 <li>1.62. <a href="#robo303">Game/Game.Weapon_Type</a></li>
-<li>1.63. <a href="#robo377">Game/Game.Data_Loading_Error</a></li>
-<li>1.64. <a href="#robo475">Game/Game.End_Game</a></li>
-<li>1.65. <a href="#robo476">Game/Game.Find_Skill_Index</a></li>
-<li>1.66. <a href="#robo477">Game/Game.Load_Game_Data</a></li>
-<li>1.67. <a href="#robo478">Game/Game.New_Game</a></li>
-<li>1.68. <a href="#robo479">Game/Game.Update_Game</a></li>
+<li>1.63. <a href="#robo376">Game/Game.Data_Loading_Error</a></li>
+<li>1.64. <a href="#robo474">Game/Game.End_Game</a></li>
+<li>1.65. <a href="#robo475">Game/Game.Find_Skill_Index</a></li>
+<li>1.66. <a href="#robo476">Game/Game.Load_Game_Data</a></li>
+<li>1.67. <a href="#robo477">Game/Game.New_Game</a></li>
+<li>1.68. <a href="#robo478">Game/Game.Update_Game</a></li>
 </ul>
 </ul>
 <hr />
@@ -132,7 +131,8 @@
 <pre> Data structure for attributes: 1 - Attribute level, 2 - current experience in attribute
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Attributes_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Attributes_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Natural <span class="keyword">with</span>
+      Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -179,7 +179,8 @@
 <pre> Used mostly for count percentage of damage of modules
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Damage_Factor <span class="keyword">is</span> <span class="keyword">digits</span> 2 <span class="keyword">range</span> 0<span class="sign">.</span>0 <span class="sign">.</span><span class="sign">.</span> 1<span class="sign">.</span>0<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Damage_Factor <span class="keyword">is</span> <span class="keyword">digits</span> 2 <span class="keyword">range</span> 0<span class="sign">.</span>0 <span class="sign">.</span><span class="sign">.</span> 1<span class="sign">.</span>0 <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">.</span>0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -191,7 +192,8 @@
 <pre> Possible actions to do when loading game data
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Data_Action <span class="keyword">is</span> <span class="sign">(</span>ADD<span class="sign">,</span> UPDATE<span class="sign">,</span> REMOVE<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Data_Action <span class="keyword">is</span> <span class="sign">(</span>ADD<span class="sign">,</span> UPDATE<span class="sign">,</span> REMOVE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> ADD<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -252,7 +254,8 @@
 <pre> General purpose array of Natural
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Natural_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Natural_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>Positive <span class="keyword">range</span> <span class="sign">&lt;</span><span class="sign">&gt;</span><span class="sign">)</span> <span class="keyword">of</span> Natural <span class="keyword">with</span>
+      Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -290,7 +293,8 @@
 <pre> Data structure for reputation, 1 = level, 2 = points to next level
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Reputation_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Integer<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Reputation_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 2<span class="sign">)</span> <span class="keyword">of</span> Integer <span class="keyword">with</span>
+      Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -473,7 +477,7 @@
 <pre> Current the game version
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   Game_Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Version<span class="sign">:</span> 6.2"</span><span class="sign">;</span>
+<pre class="source">   Game_Version<span class="sign">:</span> <span class="keyword">constant</span> String <span class="sign">:</span><span class="sign">=</span> <span class="quote">"Version<span class="sign">:</span> 6.3"</span><span class="sign">;</span>
 </pre>
 
 <hr />
@@ -907,7 +911,7 @@
 
 <hr />
 <a name="Game2fGame2eData5fLoading5fError"></a>
-<a name="robo377"></a><h2>Game/Game.Data_Loading_Error [ Exceptions ]</h2>
+<a name="robo376"></a><h2>Game/Game.Data_Loading_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -919,7 +923,7 @@
 
 <hr />
 <a name="Game2fGame2eEnd5fGame"></a>
-<a name="robo475"></a><h2>Game/Game.End_Game [ Subprograms ]</h2>
+<a name="robo474"></a><h2>Game/Game.End_Game [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -935,7 +939,7 @@
 
 <hr />
 <a name="Game2fGame2eFind5fSkill5fIndex"></a>
-<a name="robo476"></a><h2>Game/Game.Find_Skill_Index [ Subprograms ]</h2>
+<a name="robo475"></a><h2>Game/Game.Find_Skill_Index [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -944,7 +948,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">function</span> Find_Skill_Index<span class="sign">(</span>Skill_Name<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Natural <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span> Skill_Name <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
-      Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_FindSkillIndex"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
+      Post <span class="sign">=</span><span class="sign">&gt;</span> Find_Skill_Index<span class="keyword">'Result</span> <span class="sign">&lt;</span>= Natural<span class="sign">(</span>Skills_List.Length<span class="sign">),</span>
+      Test_Case =<span class="sign">&gt;</span> <span class="sign">(</span>Name =<span class="sign">&gt;</span> "Test_FindSkillIndex"<span class="sign">,</span> Mode =<span class="sign">&gt;</span> Nominal<span class="sign">);</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
 <pre> SkillName - Name of the skill to search
@@ -955,7 +960,7 @@
 
 <hr />
 <a name="Game2fGame2eLoad5fGame5fData"></a>
-<a name="robo477"></a><h2>Game/Game.Load_Game_Data [ Subprograms ]</h2>
+<a name="robo476"></a><h2>Game/Game.Load_Game_Data [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -971,7 +976,7 @@
 
 <hr />
 <a name="Game2fGame2eNew5fGame"></a>
-<a name="robo478"></a><h2>Game/Game.New_Game [ Subprograms ]</h2>
+<a name="robo477"></a><h2>Game/Game.New_Game [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -983,7 +988,7 @@
 
 <hr />
 <a name="Game2fGame2eUpdate5fGame"></a>
-<a name="robo479"></a><h2>Game/Game.Update_Game [ Subprograms ]</h2>
+<a name="robo478"></a><h2>Game/Game.Update_Game [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo25">Game</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -1000,7 +1005,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/game.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/game.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>
