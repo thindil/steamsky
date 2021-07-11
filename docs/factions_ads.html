@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -41,10 +41,10 @@
 <li>1.7. <a href="#robo172">Factions/Factions.FactionRecord</a></li>
 <li>1.8. <a href="#robo173">Factions/Factions.RelationsRecord</a></li>
 <li>1.9. <a href="#robo270">Factions/Factions.Factions_List</a></li>
-<li>1.10. <a href="#robo471">Factions/Factions.GetRandomFaction</a></li>
-<li>1.11. <a href="#robo472">Factions/Factions.GetReputation</a></li>
-<li>1.12. <a href="#robo473">Factions/Factions.IsFriendly</a></li>
-<li>1.13. <a href="#robo474">Factions/Factions.LoadFactions</a></li>
+<li>1.10. <a href="#robo470">Factions/Factions.GetRandomFaction</a></li>
+<li>1.11. <a href="#robo471">Factions/Factions.GetReputation</a></li>
+<li>1.12. <a href="#robo472">Factions/Factions.IsFriendly</a></li>
+<li>1.13. <a href="#robo473">Factions/Factions.LoadFactions</a></li>
 </ul>
 </ul>
 <hr />
@@ -107,7 +107,8 @@
 <pre> Types of names of members and bases factions
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> NamesTypes <span class="keyword">is</span> <span class="sign">(</span>STANDARD<span class="sign">,</span> ROBOTIC<span class="sign">)</span><span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> NamesTypes <span class="keyword">is</span> <span class="sign">(</span>STANDARD<span class="sign">,</span> ROBOTIC<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> STANDARD<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -161,7 +162,7 @@
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       MemberName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       PluralMemberName<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
-      SpawnChance<span class="sign">:</span> Natural<span class="sign">;</span>
+      SpawnChance<span class="sign">:</span> Natural <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Population<span class="sign">:</span> Attributes_Array<span class="sign">;</span>
       NamesType<span class="sign">:</span> NamesTypes<span class="sign">;</span>
       Relations<span class="sign">:</span> Relations_Container<span class="sign">.</span>Map<span class="sign">;</span>
@@ -238,7 +239,7 @@
 
 <hr />
 <a name="Factions2fFactions2eGetRandomFaction"></a>
-<a name="robo471"></a><h2>Factions/Factions.GetRandomFaction [ Subprograms ]</h2>
+<a name="robo470"></a><h2>Factions/Factions.GetRandomFaction [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -254,7 +255,7 @@
 
 <hr />
 <a name="Factions2fFactions2eGetReputation"></a>
-<a name="robo472"></a><h2>Factions/Factions.GetReputation [ Subprograms ]</h2>
+<a name="robo471"></a><h2>Factions/Factions.GetReputation [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -264,8 +265,8 @@
 <pre class="source">   <span class="keyword">function</span> GetReputation
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Integer <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span>Factions_Container<span class="sign">.</span>Contains<span class="sign">(</span>Factions_List<span class="sign">,</span> SourceFaction<span class="sign">)</span> <span class="keyword">and</span>
-       Factions_Container<span class="sign">.</span>Contains<span class="sign">(</span>Factions_List<span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span>Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>SourceFaction<span class="sign">)</span> <span class="keyword">and</span>
+       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GetReputation"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -278,7 +279,7 @@
 
 <hr />
 <a name="Factions2fFactions2eIsFriendly"></a>
-<a name="robo473"></a><h2>Factions/Factions.IsFriendly [ Subprograms ]</h2>
+<a name="robo472"></a><h2>Factions/Factions.IsFriendly [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -288,8 +289,8 @@
 <pre class="source">   <span class="keyword">function</span> IsFriendly
      <span class="sign">(</span>SourceFaction<span class="sign">,</span> TargetFaction<span class="sign">:</span> Unbounded_String<span class="sign">)</span> <span class="keyword">return</span> Boolean <span class="keyword">with</span>
       Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span>Factions_Container<span class="sign">.</span>Contains<span class="sign">(</span>Factions_List<span class="sign">,</span> SourceFaction<span class="sign">)</span> <span class="keyword">and</span>
-       Factions_Container<span class="sign">.</span>Contains<span class="sign">(</span>Factions_List<span class="sign">,</span> TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
+      <span class="sign">(</span>Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>SourceFaction<span class="sign">)</span> <span class="keyword">and</span>
+       Factions_List<span class="sign">.</span>Contains<span class="sign">(</span>TargetFaction<span class="sign">)</span><span class="sign">)</span><span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_IsFriendly"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -302,7 +303,7 @@
 
 <hr />
 <a name="Factions2fFactions2eLoadFactions"></a>
-<a name="robo474"></a><h2>Factions/Factions.LoadFactions [ Subprograms ]</h2>
+<a name="robo473"></a><h2>Factions/Factions.LoadFactions [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo24">Factions</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -317,7 +318,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/factions.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>

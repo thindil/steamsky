@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.2 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="./toc_index.html#top">Table of Contents</a>
@@ -34,11 +34,11 @@
 <ul>
 <li>1.1. <a href="./crew-inventory_ads.html#robo19">Crew/Inventory</a></li>
 <ul>
-<li>1.1.1. <a href="./crew-inventory_ads.html#robo493">Inventory/Inventory.FindTools</a></li>
-<li>1.1.2. <a href="./crew-inventory_ads.html#robo494">Inventory/Inventory.FreeInventory</a></li>
-<li>1.1.3. <a href="./crew-inventory_ads.html#robo495">Inventory/Inventory.ItemIsUsed</a></li>
-<li>1.1.4. <a href="./crew-inventory_ads.html#robo496">Inventory/Inventory.TakeOffItem</a></li>
-<li>1.1.5. <a href="./crew-inventory_ads.html#robo497">Inventory/Inventory.UpdateInventory</a></li>
+<li>1.1.1. <a href="./crew-inventory_ads.html#robo492">Inventory/Inventory.FindTools</a></li>
+<li>1.1.2. <a href="./crew-inventory_ads.html#robo493">Inventory/Inventory.FreeInventory</a></li>
+<li>1.1.3. <a href="./crew-inventory_ads.html#robo494">Inventory/Inventory.ItemIsUsed</a></li>
+<li>1.1.4. <a href="./crew-inventory_ads.html#robo495">Inventory/Inventory.TakeOffItem</a></li>
+<li>1.1.5. <a href="./crew-inventory_ads.html#robo496">Inventory/Inventory.UpdateInventory</a></li>
 </ul>
 <li>1.2. <a href="#robo89">Crew/Crew.Crew_Orders</a></li>
 <li>1.3. <a href="#robo90">Crew/Crew.Equipment_Array</a></li>
@@ -55,17 +55,17 @@
 <li>1.14. <a href="#robo262">Crew/Crew.MaleSyllablesMiddle</a></li>
 <li>1.15. <a href="#robo263">Crew/Crew.MaleSyllablesStart</a></li>
 <li>1.16. <a href="#robo264">Crew/Crew.MaleVocals</a></li>
-<li>1.17. <a href="#robo375">Crew/Crew.Crew_No_Space_Error</a></li>
-<li>1.18. <a href="#robo376">Crew/Crew.Crew_Order_Error</a></li>
-<li>1.19. <a href="#robo432">Crew/Crew.DailyPayment</a></li>
-<li>1.20. <a href="#robo433">Crew/Crew.FindCabin</a></li>
-<li>1.21. <a href="#robo434">Crew/Crew.GainExp</a></li>
-<li>1.22. <a href="#robo435">Crew/Crew.GenerateMemberName</a></li>
-<li>1.23. <a href="#robo436">Crew/Crew.GetAttributeLevelName</a></li>
-<li>1.24. <a href="#robo437">Crew/Crew.GetSkillLevelName</a></li>
-<li>1.25. <a href="#robo438">Crew/Crew.GetTrainingToolQuality</a></li>
-<li>1.26. <a href="#robo439">Crew/Crew.UpdateCrew</a></li>
-<li>1.27. <a href="#robo440">Crew/Crew.WaitForRest</a></li>
+<li>1.17. <a href="#robo374">Crew/Crew.Crew_No_Space_Error</a></li>
+<li>1.18. <a href="#robo375">Crew/Crew.Crew_Order_Error</a></li>
+<li>1.19. <a href="#robo431">Crew/Crew.DailyPayment</a></li>
+<li>1.20. <a href="#robo432">Crew/Crew.FindCabin</a></li>
+<li>1.21. <a href="#robo433">Crew/Crew.GainExp</a></li>
+<li>1.22. <a href="#robo434">Crew/Crew.GenerateMemberName</a></li>
+<li>1.23. <a href="#robo435">Crew/Crew.GetAttributeLevelName</a></li>
+<li>1.24. <a href="#robo436">Crew/Crew.GetSkillLevelName</a></li>
+<li>1.25. <a href="#robo437">Crew/Crew.GetTrainingToolQuality</a></li>
+<li>1.26. <a href="#robo438">Crew/Crew.UpdateCrew</a></li>
+<li>1.27. <a href="#robo439">Crew/Crew.WaitForRest</a></li>
 </ul>
 </ul>
 <hr />
@@ -91,7 +91,8 @@
 <p class="item_name">SOURCE</p>
 <pre class="source">   <span class="keyword">type</span> Crew_Orders <span class="keyword">is</span>
      <span class="sign">(</span>Pilot<span class="sign">,</span> Engineer<span class="sign">,</span> Gunner<span class="sign">,</span> Repair<span class="sign">,</span> Craft<span class="sign">,</span> Upgrading<span class="sign">,</span> Talk<span class="sign">,</span> Heal<span class="sign">,</span> Clean<span class="sign">,</span>
-      Rest<span class="sign">,</span> Defend<span class="sign">,</span> Boarding<span class="sign">,</span> Train<span class="sign">)</span><span class="sign">;</span>
+      Rest<span class="sign">,</span> Defend<span class="sign">,</span> Boarding<span class="sign">,</span> Train<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> Rest<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -104,7 +105,8 @@
  2 - shield, 3 - helmet, 4 - torso, 5 - arms, 6 - legs, 7 - tool
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Equipment_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 7<span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Equipment_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 7<span class="sign">)</span> <span class="keyword">of</span> Natural <span class="keyword">with</span>
+      Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -116,7 +118,8 @@
 <pre> Data structure for skills: 1 - Skill index, 2 - skill level, 3 - current experience in skill
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">type</span> Skill_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> <span class="keyword">of</span> Natural<span class="sign">;</span>
+<pre class="source">   <span class="keyword">type</span> Skill_Array <span class="keyword">is</span> <span class="keyword">array</span><span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 3<span class="sign">)</span> <span class="keyword">of</span> Natural <span class="keyword">with</span>
+      Default_Component_Value <span class="sign">=</span><span class="sign">&gt;</span> 0<span class="sign">;</span>
 </pre>
 
 <hr />
@@ -157,19 +160,19 @@
       Name<span class="sign">:</span> Unbounded_String<span class="sign">;</span>
       Gender<span class="sign">:</span> Character<span class="sign">;</span>
       Health<span class="sign">:</span> Skill_Range<span class="sign">;</span>
-      Tired<span class="sign">:</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 150<span class="sign">;</span>
+      Tired<span class="sign">:</span> Natural <span class="keyword">range</span> 0 <span class="sign">.</span><span class="sign">.</span> 150 <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Skills<span class="sign">:</span> Skills_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Hunger<span class="sign">:</span> Skill_Range<span class="sign">;</span>
       Thirst<span class="sign">:</span> Skill_Range<span class="sign">;</span>
       Order<span class="sign">:</span> Crew_Orders<span class="sign">;</span>
       PreviousOrder<span class="sign">:</span> Crew_Orders<span class="sign">;</span>
-      OrderTime<span class="sign">:</span> Integer<span class="sign">;</span>
+      OrderTime<span class="sign">:</span> Integer <span class="sign">:</span><span class="sign">=</span> 15<span class="sign">;</span>
       Orders<span class="sign">:</span> Natural_Array<span class="sign">(</span>1 <span class="sign">.</span><span class="sign">.</span> 12<span class="sign">)</span><span class="sign">;</span>
       Attributes<span class="sign">:</span> Attributes_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       <a href="./crew-inventory_ads.html#robo19">Inventory</a><span class="sign">:</span> Inventory_Container<span class="sign">.</span>Vector<span class="sign">;</span>
       Equipment<span class="sign">:</span> Equipment_Array<span class="sign">;</span>
       Payment<span class="sign">:</span> Attributes_Array<span class="sign">;</span>
-      ContractLength<span class="sign">:</span> Integer<span class="sign">;</span>
+      ContractLength<span class="sign">:</span> Integer <span class="sign">:</span><span class="sign">=</span> 0<span class="sign">;</span>
       Morale<span class="sign">:</span> Attributes_Array<span class="sign">;</span>
       Loyalty<span class="sign">:</span> Skill_Range<span class="sign">;</span>
       HomeBase<span class="sign">:</span> Bases_Range<span class="sign">;</span>
@@ -315,7 +318,7 @@
 
 <hr />
 <a name="Crew2fCrew2eCrew5fNo5fSpace5fError"></a>
-<a name="robo375"></a><h2>Crew/Crew.Crew_No_Space_Error [ Exceptions ]</h2>
+<a name="robo374"></a><h2>Crew/Crew.Crew_No_Space_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -327,7 +330,7 @@
 
 <hr />
 <a name="Crew2fCrew2eCrew5fOrder5fError"></a>
-<a name="robo376"></a><h2>Crew/Crew.Crew_Order_Error [ Exceptions ]</h2>
+<a name="robo375"></a><h2>Crew/Crew.Crew_Order_Error [ Exceptions ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_exceptions.html#robo_top_of_doc">Exceptions</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -339,7 +342,7 @@
 
 <hr />
 <a name="Crew2fCrew2eDailyPayment"></a>
-<a name="robo432"></a><h2>Crew/Crew.DailyPayment [ Subprograms ]</h2>
+<a name="robo431"></a><h2>Crew/Crew.DailyPayment [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -352,7 +355,7 @@
 
 <hr />
 <a name="Crew2fCrew2eFindCabin"></a>
-<a name="robo433"></a><h2>Crew/Crew.FindCabin [ Subprograms ]</h2>
+<a name="robo432"></a><h2>Crew/Crew.FindCabin [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -372,7 +375,7 @@
 
 <hr />
 <a name="Crew2fCrew2eGainExp"></a>
-<a name="robo434"></a><h2>Crew/Crew.GainExp [ Subprograms ]</h2>
+<a name="robo433"></a><h2>Crew/Crew.GainExp [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -391,7 +394,7 @@
 
 <hr />
 <a name="Crew2fCrew2eGenerateMemberName"></a>
-<a name="robo435"></a><h2>Crew/Crew.GenerateMemberName [ Subprograms ]</h2>
+<a name="robo434"></a><h2>Crew/Crew.GenerateMemberName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -401,9 +404,7 @@
 <pre class="source">   <span class="keyword">function</span> GenerateMemberName
      <span class="sign">(</span>Gender<span class="sign">:</span> Character<span class="sign">;</span> FactionIndex<span class="sign">:</span> Unbounded_String<span class="sign">)</span>
       <span class="keyword">return</span> Unbounded_String <span class="keyword">with</span>
-      Pre <span class="sign">=</span><span class="sign">&gt;</span>
-      <span class="sign">(</span><span class="sign">(</span>Gender <span class="sign">=</span> <span class="squote">'M'</span> <span class="keyword">or</span> Gender <span class="sign">=</span> <span class="squote">'F'</span><span class="sign">)</span> <span class="keyword">and</span>
-       FactionIndex <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">)</span><span class="sign">,</span>
+      Pre <span class="sign">=</span><span class="sign">&gt;</span> Gender <span class="keyword">in</span> <span class="squote">'M'</span> <span class="sign">|</span> <span class="squote">'F'</span> <span class="keyword">and</span> FactionIndex <span class="sign">/</span><span class="sign">=</span> Null_Unbounded_String<span class="sign">,</span>
       Test_Case <span class="sign">=</span><span class="sign">&gt;</span> <span class="sign">(</span>Name <span class="sign">=</span><span class="sign">&gt;</span> <span class="quote">"Test_GenerateMemberName"</span><span class="sign">,</span> Mode <span class="sign">=</span><span class="sign">&gt;</span> Nominal<span class="sign">)</span><span class="sign">;</span>
 </pre>
 <p class="item_name">PARAMETERS</p>
@@ -416,7 +417,7 @@
 
 <hr />
 <a name="Crew2fCrew2eGetAttributeLevelName"></a>
-<a name="robo436"></a><h2>Crew/Crew.GetAttributeLevelName [ Subprograms ]</h2>
+<a name="robo435"></a><h2>Crew/Crew.GetAttributeLevelName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -436,7 +437,7 @@
 
 <hr />
 <a name="Crew2fCrew2eGetSkillLevelName"></a>
-<a name="robo437"></a><h2>Crew/Crew.GetSkillLevelName [ Subprograms ]</h2>
+<a name="robo436"></a><h2>Crew/Crew.GetSkillLevelName [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -455,7 +456,7 @@
 
 <hr />
 <a name="Crew2fCrew2eGetTrainingToolQuality"></a>
-<a name="robo438"></a><h2>Crew/Crew.GetTrainingToolQuality [ Subprograms ]</h2>
+<a name="robo437"></a><h2>Crew/Crew.GetTrainingToolQuality [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -479,7 +480,7 @@
 
 <hr />
 <a name="Crew2fCrew2eUpdateCrew"></a>
-<a name="robo439"></a><h2>Crew/Crew.UpdateCrew [ Subprograms ]</h2>
+<a name="robo438"></a><h2>Crew/Crew.UpdateCrew [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -498,7 +499,7 @@
 
 <hr />
 <a name="Crew2fCrew2eWaitForRest"></a>
-<a name="robo440"></a><h2>Crew/Crew.WaitForRest [ Subprograms ]</h2>
+<a name="robo439"></a><h2>Crew/Crew.WaitForRest [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo18">Crew</a> ] [ <a href="./robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -511,7 +512,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jun 13 2021 06:48:36
+<p>Generated from ./src/crew.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
 </p>
 </div> <!-- footer -->
 </body>
