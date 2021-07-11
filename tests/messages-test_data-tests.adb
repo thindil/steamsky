@@ -29,27 +29,45 @@ package body Messages.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_FormatedTime_5bb1ad_45f0f1
+   function Wrap_Test_FormatedTime_5bb1ad_97dea1
      (Time: Date_Record := Game_Date) return String is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(messages.ads:0):Test_FormattedTime test requirement violated");
+      end;
       declare
-         Test_FormatedTime_5bb1ad_45f0f1_Result: constant String :=
+         Test_FormatedTime_5bb1ad_97dea1_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Messages.FormatedTime(Time);
       begin
-         return Test_FormatedTime_5bb1ad_45f0f1_Result;
+         begin
+            pragma Assert(Test_FormatedTime_5bb1ad_97dea1_Result'Length > 0);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(messages.ads:0:):Test_FormattedTime test commitment violated");
+         end;
+         return Test_FormatedTime_5bb1ad_97dea1_Result;
       end;
-   end Wrap_Test_FormatedTime_5bb1ad_45f0f1;
+   end Wrap_Test_FormatedTime_5bb1ad_97dea1;
 --  end read only
 
 --  begin read only
    procedure Test_FormatedTime_test_formattedtime(Gnattest_T: in out Test);
-   procedure Test_FormatedTime_5bb1ad_45f0f1(Gnattest_T: in out Test) renames
+   procedure Test_FormatedTime_5bb1ad_97dea1(Gnattest_T: in out Test) renames
      Test_FormatedTime_test_formattedtime;
 --  id:2.2/5bb1ad5dbd52690f/FormatedTime/1/0/test_formattedtime/
    procedure Test_FormatedTime_test_formattedtime(Gnattest_T: in out Test) is
       function FormatedTime
         (Time: Date_Record := Game_Date) return String renames
-        Wrap_Test_FormatedTime_5bb1ad_45f0f1;
+        Wrap_Test_FormatedTime_5bb1ad_97dea1;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
