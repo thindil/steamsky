@@ -32,14 +32,16 @@ package Messages is
    -- SOURCE
    type Message_Type is
      (Default, CombatMessage, TradeMessage, OrderMessage, CraftMessage,
-      OtherMessage, MissionMessage);
+      OtherMessage, MissionMessage) with
+      Default_Value => Default;
    -- ****
 
    -- ****t* Messages/Messages.Message_Color
    -- FUNCTION
    -- Colors of messages
    -- SOURCE
-   type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN);
+   type Message_Color is (WHITE, YELLOW, GREEN, RED, BLUE, CYAN) with
+      Default_Value => WHITE;
    -- ****
 
    -- ****s* Messages/Messages.Message_Data
@@ -87,7 +89,8 @@ package Messages is
    -- Formatted in YYYY-MM-DD HH:MM style in game time
    -- SOURCE
    function FormatedTime(Time: Date_Record := Game_Date) return String with
-      Test_Case => (Name => "Test_FormattedTime", Mode => Robustness);
+      Post => FormatedTime'Result'Length > 0,
+      Test_Case => (Name => "Test_FormattedTime", Mode => Nominal);
       -- ****
 
       -- ****f* Messages/Messages.AddMessage
