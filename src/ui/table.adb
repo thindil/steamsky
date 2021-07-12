@@ -136,8 +136,23 @@ package body Table is
       Table.Row := 1;
    end ClearTable;
 
+   -- ****if* Table/Table.AddBackground
+   -- FUNCTION
+   -- Add a proper background color to the item in the table and return the
+   -- name of used color
+   -- PARAMETERS
+   -- Table   - The Table_Widget in which background will be added
+   -- NewRow  - If True, add the background, otherwise just return the color
+   --           which will be used
+   -- Command - Tcl command which will be executed when the background was
+   --           clicked
+   -- RESULT
+   -- The String with the name of the color used for set background for the
+   -- item
+   -- SOURCE
    function AddBackground
      (Table: Table_Widget; NewRow: Boolean; Command: String) return String is
+     -- ****
       ItemId: Unbounded_String;
       Color: constant String :=
         (if Table.Row rem 2 > 0 then Style_Lookup("Table", "-rowcolor")

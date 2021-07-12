@@ -392,6 +392,7 @@ package body Missions.UI is
         RewardMultiplier'Value(Tcl_GetVar(Get_Context, "reward"));
       AcceptMission(MissionIndex);
       RefreshMissionsList(SkyBases(BaseIndex).Missions);
+      UpdateTable(MissionsTable);
       UpdateMessages;
       return TCL_OK;
    exception
