@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 - Showing the list of available missions in bases after accepting one
+- Some typos in changelog
 
 ## [6.3] - 2021-07-11
 
