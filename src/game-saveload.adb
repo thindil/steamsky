@@ -129,16 +129,15 @@ package body Game.SaveLoad is
       --## rule off IMPROPER_INITIALIZATION
       Save_Data := Create_Document(Save);
       --## rule on IMPROPER_INITIALIZATION
-      Main_Node := Create_Element(Save_Data, "save");
-      Main_Node := Append_Child(Save_Data, Main_Node);
+      Main_Node := Append_Child(Save_Data, Create_Element(Save_Data, "save"));
       -- Write save game version
       Set_Attribute
         (Main_Node, "version",
          Trim(Positive'Image(Save_Version), Ada.Strings.Left));
       -- Save game difficulty settings
       Log_Message("Saving game difficulty settings...", EVERYTHING, False);
-      Category_Node := Create_Element(Save_Data, "difficulty");
-      Category_Node := Append_Child(Main_Node, Category_Node);
+      Category_Node :=
+        Append_Child(Main_Node, Create_Element(Save_Data, "difficulty"));
       Save_Difficulty_Loop :
       for Difficulty of Difficulties loop
          Raw_Value := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
@@ -149,8 +148,8 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       -- Save game date
       Log_Message("Saving game time...", EVERYTHING, False);
-      Category_Node := Create_Element(Save_Data, "gamedate");
-      Category_Node := Append_Child(Main_Node, Category_Node);
+      Category_Node :=
+        Append_Child(Main_Node, Create_Element(Save_Data, "gamedate"));
       Save_Number(Game_Date.Year, "year");
       Save_Number(Game_Date.Month, "month");
       Save_Number(Game_Date.Day, "day");
@@ -257,8 +256,8 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       -- Save game statistics
       Log_Message("Saving game statistics...", EVERYTHING, False);
-      Category_Node := Create_Element(Save_Data, "statistics");
-      Category_Node := Append_Child(Main_Node, Category_Node);
+      Category_Node :=
+        Append_Child(Main_Node, Create_Element(Save_Data, "statistics"));
       Save_Statistics(GameStats.DestroyedShips, "destroyedships");
       Save_Number(GameStats.BasesVisited, "visitedbases");
       Save_Number(GameStats.MapVisited, "mapdiscovered");
@@ -272,8 +271,8 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       -- Save current goal
       Log_Message("Saving current goal...", EVERYTHING, False);
-      Category_Node := Create_Element(Save_Data, "currentgoal");
-      Category_Node := Append_Child(Main_Node, Category_Node);
+      Category_Node :=
+        Append_Child(Main_Node, Create_Element(Save_Data, "currentgoal"));
       Set_Attribute(Category_Node, "index", To_String(CurrentGoal.Index));
       Save_Number(GoalTypes'Pos(CurrentGoal.GType), "type");
       Save_Number(CurrentGoal.Amount, "amount");
@@ -376,8 +375,8 @@ package body Game.SaveLoad is
       end loop Save_Missions_Loop;
       -- Save player career
       Log_Message("Saving player career...", EVERYTHING, False);
-      Category_Node := Create_Element(Save_Data, "playercareer");
-      Category_Node := Append_Child(Main_Node, Category_Node);
+      Category_Node :=
+        Append_Child(Main_Node, Create_Element(Save_Data, "playercareer"));
       Set_Attribute(Category_Node, "index", To_String(Player_Career));
       Log_Message("done.", EVERYTHING, True, False);
       Create(Save_File, Out_File, To_String(Save_Name));
