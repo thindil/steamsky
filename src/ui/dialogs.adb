@@ -50,7 +50,7 @@ package body Dialogs is
         Create
           (New_Dialog & ".header",
            "-text {" & Title & "} -wraplength" & Positive'Image(Title_Width) &
-           " -style Header.TLabel");
+           " -style Header.TLabel -cursor fleur");
    begin
       if Parent_Name = ".gameframe" then
          Tcl.Tk.Ada.Busy.Busy(Game_Header);

@@ -16,7 +16,7 @@
 ttk::frame .goalsdialog -style Dialog.TFrame
 set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -height 9]
 set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
-grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 -style Header.TLabel] -sticky we -columnspan 2
+grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 -style Header.TLabel -cursor fleur] -sticky we -columnspan 2
 grid $view -padx 2 -pady {2 0}
 $view column #0 -width 450 -stretch 1
 $view insert {} end -id 0 -text Random
