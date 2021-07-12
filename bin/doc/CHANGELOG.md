@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Showing the list of available missions in bases after accepting one
+
 ## [6.3] - 2021-07-11
 
 ### Added
