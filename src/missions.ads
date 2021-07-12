@@ -30,14 +30,16 @@ package Missions is
    -- FUNCTION
    -- Types of missions
    -- SOURCE
-   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger);
+   type Missions_Types is (Deliver, Destroy, Patrol, Explore, Passenger) with
+      Default_Value => Deliver;
    -- ****
 
    -- ****t* Missions/Missions.RewardMultiplier
    -- FUNCTION
    -- Used for count reward for finished missions
    -- SOURCE
-   type RewardMultiplier is digits 2 range 0.0 .. 2.0;
+   type RewardMultiplier is digits 2 range 0.0 .. 2.0 with
+      Default_Value => 1.0;
    -- ****
 
    -- ****s* Missions/Missions.Mission_Data(MType:
@@ -59,22 +61,22 @@ package Missions is
    -- Target     - Target for mission (ship, item)
    -- SOURCE
    type Mission_Data(MType: Missions_Types := Deliver) is record
-      Time: Positive;
+      Time: Positive := 1;
       TargetX: Natural range 0 .. Map_X_Range'Last;
       TargetY: Natural range 0 .. Map_Y_Range'Last;
-      Reward: Positive;
-      StartBase: Bases_Range;
+      Reward: Positive := 1;
+      StartBase: Bases_Range := 1;
       Finished: Boolean;
-      Multiplier: RewardMultiplier;
+      Multiplier: RewardMultiplier := 1.0;
       case MType is
          when Deliver =>
             ItemIndex: Unbounded_String;
          when Passenger =>
-            Data: Positive;
+            Data: Positive := 1;
          when Destroy =>
             ShipIndex: Unbounded_String;
          when others =>
-            Target: Natural;
+            Target: Natural := 0;
       end case;
    end record;
    -- ****
