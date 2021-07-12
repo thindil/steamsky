@@ -36,7 +36,7 @@ All notable changes to this project will be documented in this file.
 - Reset the selected modules type in shipyard after buying a module
 - Showing items with zero amount in trading screen
 - Typos in help
-- Showing header for the goals selection dialog when scollbar is visible
+- Showing header for the goals' selection dialog when scrollbar is visible
 - Help window blocks the main game window
 - Crash when trying to preview recruit's attributes
 - Typo in description of barley seeds
@@ -57,12 +57,12 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Removed frame around map after clicking on it
 - Typo in asking for rest when crew members are tired
-- Typos and punctation in help
+- Typos and punctuation in help
 - Typos in info about experience needed for the next level of skills and
   statistics
 - Typo in Strength attribute description
 - Losing focus by text fields when setting keyboard shortcuts
-- Can't assign 1-5 keys to shorcuts
+- Can't assign 1-5 keys to shortcuts
 - Giving crew members items from the ship's cargo
 - Showing error messages in main menu blocks error message
 - Crafting info window don't show all information
