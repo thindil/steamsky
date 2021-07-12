@@ -97,6 +97,34 @@ package body Missions.UI is
    MissionsTable: Table_Widget (5);
    -- ****
 
+   -- ****if* Missions.UI/Count_Missions_Amount
+   -- FUNCTION
+   -- Count the amount of missions which the player can get from the selected
+   -- base
+   -- RESULT
+   -- The amount of missions which the player can get from the base
+   -- SOURCE
+   function Count_Missions_Amount return Natural is
+      -- ****
+      MissionsLimit: Natural;
+   begin
+      MissionsLimit :=
+        (case SkyBases(SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
+           .Reputation
+           (1) is
+           when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
+           when 76 .. 100 => 10, when others => 0);
+      Count_Missions_Limit_Loop :
+      for Mission of AcceptedMissions loop
+         if Mission.StartBase =
+           SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
+            MissionsLimit := MissionsLimit - 1;
+            exit Count_Missions_Limit_Loop when MissionsLimit = 0;
+         end if;
+      end loop Count_Missions_Limit_Loop;
+      return MissionsLimit;
+   end Count_Missions_Amount;
+
    -- ****if* MUI3/MUI3.Show_Base_Missions_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected mission options
@@ -155,28 +183,9 @@ package body Missions.UI is
             end if;
          end loop Modules_Loop;
       end if;
-      declare
-         MissionsLimit: Natural;
-      begin
-         MissionsLimit :=
-           (case SkyBases
-              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
-              .Reputation
-              (1) is
-              when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
-              when 76 .. 100 => 10, when others => 0);
-         Count_Missions_Limit_Loop :
-         for Mission of AcceptedMissions loop
-            if Mission.StartBase =
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
-               MissionsLimit := MissionsLimit - 1;
-               exit Count_Missions_Limit_Loop when MissionsLimit = 0;
-            end if;
-         end loop Count_Missions_Limit_Loop;
-         if MissionsLimit = 0 then
-            CanAccept := False;
-         end if;
-      end;
+      if Count_Missions_Amount = 0 then
+         CanAccept := False;
+      end if;
       if CanAccept then
          Menu.Add
            (EventMenu, "command",
@@ -218,26 +227,11 @@ package body Missions.UI is
          return;
       end if;
       declare
-         MissionsLimit: Natural;
+         MissionsLimit: constant Natural := Count_Missions_Amount;
          MissionLabel: constant Ttk_Label :=
            Get_Widget
              (Main_Paned & ".missionsframe.canvas.missions.missionslabel");
       begin
-         MissionsLimit :=
-           (case SkyBases
-              (SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex)
-              .Reputation
-              (1) is
-              when 0 .. 25 => 1, when 26 .. 50 => 3, when 51 .. 75 => 5,
-              when 76 .. 100 => 10, when others => 0);
-         Count_Missions_Limit_Loop :
-         for Mission of AcceptedMissions loop
-            if Mission.StartBase =
-              SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex then
-               MissionsLimit := MissionsLimit - 1;
-               exit Count_Missions_Limit_Loop when MissionsLimit = 0;
-            end if;
-         end loop Count_Missions_Limit_Loop;
          if MissionsLimit > 0 then
             configure
               (MissionLabel,
