@@ -239,11 +239,83 @@ package body Dialogs is
       return TCL_OK;
    end Get_String_Command;
 
+   Start_X_Position: Natural;
+   Start_Y_Position: Natural;
+
+   -- ****o* Dialogs/Dialogs.Start_Moving_Dialog_Command
+   -- FUNCTION
+   -- Start moving the selected dialog around
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- StartMovingDialog x y
+   -- X and Y are current position of the mouse
+   -- SOURCE
+   function Start_Moving_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Start_Moving_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+   begin
+      Start_X_Position := Natural'Value(CArgv.Arg(Argv, 1));
+      Start_Y_Position := Natural'Value(CArgv.Arg(Argv, 2));
+      return TCL_OK;
+   end Start_Moving_Dialog_Command;
+
+   -- ****o* Dialogs/Dialogs.Move_Dialog_Command
+   -- FUNCTION
+   -- Move the selected dialog around
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- MoveDialog dialogname x y
+   -- Dialogname is name of the dialog to move, x and y are the current
+   -- position of the mouse to count where to move the dialog
+   -- SOURCE
+   function Move_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Move_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      use CArgv;
+      pragma Unreferenced(Argc);
+   begin
+      if Start_X_Position = 0 and Start_Y_Position = 0 then
+         return TCL_OK;
+      end if;
+      return
+        Start_Moving_Dialog_Command
+          (ClientData, Interp, 3,
+           CArgv.Empty & "StartMovingDialog" & CArgv.Arg(Argv, 2) &
+           CArgv.Arg(Argv, 3));
+   end Move_Dialog_Command;
+
    procedure Add_Commands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("UpdateDialog", Update_Dialog_Command'Access);
       AddCommand("GetString", Get_String_Command'Access);
+      AddCommand("StartMovingDialog", Start_Moving_Dialog_Command'Access);
+      AddCommand("MoveDialog", Move_Dialog_Command'Access);
    end Add_Commands;
 
    procedure ShowMessage
