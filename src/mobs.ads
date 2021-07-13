@@ -41,8 +41,8 @@ package Mobs is
    -- SOURCE
    type MobInventoryRecord is record
       ProtoIndex: Unbounded_String;
-      MinAmount: Natural;
-      MaxAmount: Natural;
+      MinAmount: Natural := 0;
+      MaxAmount: Natural := 0;
    end record;
    -- ****
 
@@ -104,7 +104,8 @@ package Mobs is
    -- PARAMETERS
    -- Reader - XML Reader from which data will be read
    -- SOURCE
-   procedure LoadMobs(Reader: Tree_Reader);
+   procedure LoadMobs(Reader: Tree_Reader) with
+      Post => ProtoMobs_List.Length > 0;
    -- ****
 
    -- ****f* Mobs/Mobs.GenerateMob
@@ -123,6 +124,7 @@ package Mobs is
       Pre =>
       (ProtoMobs_List.Contains(MobIndex) and
        Factions_List.Contains(FactionIndex)),
+      Post => GenerateMob'Result.Name /= Null_Unbounded_String,
       Test_Case => (Name => "Test_GenearateMob", Mode => Nominal);
       -- ****
 
