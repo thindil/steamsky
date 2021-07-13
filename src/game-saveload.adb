@@ -124,20 +124,32 @@ package body Game.SaveLoad is
             Value => New_Game_Settings.Prices_Bonus));
    begin
       Log_Message
-        ("Start saving game in file " & To_String(Save_Name) & ".",
-         EVERYTHING);
+        (Message =>
+           "Start saving game in file " & To_String(Source => Save_Name) & ".",
+         Message_Type => EVERYTHING);
       --## rule off IMPROPER_INITIALIZATION
-      Save_Data := Create_Document(Save);
+      Save_Data := Create_Document(Implementation => Save);
       --## rule on IMPROPER_INITIALIZATION
-      Main_Node := Append_Child(Save_Data, Create_Element(Save_Data, "save"));
+      Main_Node :=
+        Append_Child
+          (N => Save_Data,
+           New_Child => Create_Element(Doc => Save_Data, Tag_Name => "save"));
       -- Write save game version
       Set_Attribute
-        (Main_Node, "version",
-         Trim(Positive'Image(Save_Version), Ada.Strings.Left));
+        (Elem => Main_Node, Name => "version",
+         Value =>
+           Trim
+             (Source => Positive'Image(Save_Version),
+              Side => Ada.Strings.Left));
       -- Save game difficulty settings
-      Log_Message("Saving game difficulty settings...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving game difficulty settings...",
+         Message_Type => EVERYTHING, New_Line => False);
       Category_Node :=
-        Append_Child(Main_Node, Create_Element(Save_Data, "difficulty"));
+        Append_Child
+          (N => Main_Node,
+           New_Child =>
+             Create_Element(Doc => Save_Data, Tag_Name => "difficulty"));
       Save_Difficulty_Loop :
       for Difficulty of Difficulties loop
          Raw_Value := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
