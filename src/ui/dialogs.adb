@@ -239,12 +239,23 @@ package body Dialogs is
       return TCL_OK;
    end Get_String_Command;
 
-   Start_X_Position: Natural;
-   Start_Y_Position: Natural;
-
-   -- ****o* Dialogs/Dialogs.Start_Moving_Dialog_Command
+   -- ****iv* Dialogs/Dialogs.Mouse_X_Position
    -- FUNCTION
-   -- Start moving the selected dialog around
+   -- The current mouse position in X coordinates
+   -- SOURCE
+   Mouse_X_Position: Natural := 0;
+   -- ****
+
+   -- ****if* Dialogs/Dialogs.Mouse_Y_Position
+   -- FUNCTION
+   -- The current mouse position in Y coordinates
+   -- SOURCE
+   Mouse_Y_Position: Natural := 0;
+   -- ****
+
+   -- ****o* Dialogs/Dialogs.Set_Mouse_Position_Command
+   -- FUNCTION
+   -- Set the mouse position
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
@@ -256,21 +267,21 @@ package body Dialogs is
    -- StartMovingDialog x y
    -- X and Y are current position of the mouse
    -- SOURCE
-   function Start_Moving_Dialog_Command
+   function Set_Mouse_Position_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
       Convention => C;
       -- ****
 
-   function Start_Moving_Dialog_Command
+   function Set_Mouse_Position_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp, Argc);
    begin
-      Start_X_Position := Natural'Value(CArgv.Arg(Argv, 1));
-      Start_Y_Position := Natural'Value(CArgv.Arg(Argv, 2));
+      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv, 1));
+      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv, 2));
       return TCL_OK;
-   end Start_Moving_Dialog_Command;
+   end Set_Mouse_Position_Command;
 
    -- ****o* Dialogs/Dialogs.Move_Dialog_Command
    -- FUNCTION
@@ -299,13 +310,13 @@ package body Dialogs is
       use CArgv;
       pragma Unreferenced(Argc);
    begin
-      if Start_X_Position = 0 and Start_Y_Position = 0 then
+      if Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
       return
-        Start_Moving_Dialog_Command
+        Set_Mouse_Position_Command
           (ClientData, Interp, 3,
-           CArgv.Empty & "StartMovingDialog" & CArgv.Arg(Argv, 2) &
+           CArgv.Empty & "SetMousePosition" & CArgv.Arg(Argv, 2) &
            CArgv.Arg(Argv, 3));
    end Move_Dialog_Command;
 
@@ -314,7 +325,7 @@ package body Dialogs is
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
       AddCommand("UpdateDialog", Update_Dialog_Command'Access);
       AddCommand("GetString", Get_String_Command'Access);
-      AddCommand("StartMovingDialog", Start_Moving_Dialog_Command'Access);
+      AddCommand("SetMousePosition", Set_Mouse_Position_Command'Access);
       AddCommand("MoveDialog", Move_Dialog_Command'Access);
    end Add_Commands;
 
