@@ -139,6 +139,9 @@ package Mobs is
       -- HighestLevel     - Highest skill level for selected mob
       -- WeaponSkillLevel - Weapon skill level for selected mob
       -- FactionIndex     - Faction index to which selected mob belongs
+      -- RESULT
+      -- Index of the item or Null_Unbounded_String if the selected index
+      -- not found
       -- SOURCE
    function GetRandomItem
      (ItemsIndexes: UnboundedString_Container.Vector;
