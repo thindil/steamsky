@@ -110,7 +110,7 @@ package body Crafts.UI is
          Tcl.Tk.Ada.Grid.Grid_Remove(CloseButton);
          return TCL_OK;
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crafts}");
       Find_Possible_Recipes_Loop :
       for Item of PlayerShip.Cargo loop
          Add_Recipes_Loop :
