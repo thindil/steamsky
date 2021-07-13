@@ -68,6 +68,9 @@ package body Dialogs is
          "-sticky we -padx 2 -pady {2 0}" &
          (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
           else ""));
+      Bind(Dialog_Header, "<ButtonPress-1>", "{SetMousePosition %X %Y}");
+      Bind(Dialog_Header, "<Motion>", "{MoveDialog " & New_Dialog & " %X %Y}");
+      Bind(Dialog_Header, "<ButtonRelease-1>", "{StopMovingDialog}");
       return New_Dialog;
    end Create_Dialog;
 
@@ -264,7 +267,7 @@ package body Dialogs is
    -- RESULT
    -- This function always return TCL_OK
    -- COMMANDS
-   -- StartMovingDialog x y
+   -- SetMousePosition x y
    -- X and Y are current position of the mouse
    -- SOURCE
    function Set_Mouse_Position_Command
@@ -309,16 +312,63 @@ package body Dialogs is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       use CArgv;
       pragma Unreferenced(Argc);
+      Dialog: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
+      New_X, New_Y: Integer;
    begin
       if Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
+      Tcl_Eval(Interp, "place configure " & Dialog & " -x");
+      New_X :=
+        Integer'Value(Tcl_GetResult(Interp)) +
+        (Mouse_X_Position - Integer'Value(CArgv.Arg(Argv, 2)));
+      if New_X < 0 then
+         New_X := 0;
+      end if;
+      Tcl_Eval(Interp, "place configure " & Dialog & " -y");
+      New_Y :=
+        Integer'Value(Tcl_GetResult(Interp)) +
+        (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv, 3)));
+      if New_Y < 0 then
+         New_Y := 0;
+      end if;
+      Tcl.Tk.Ada.Place.Place_Configure
+        (Dialog, "-x" & Natural'Image(New_X) & " -y" & Natural'Image(New_Y));
       return
         Set_Mouse_Position_Command
           (ClientData, Interp, 3,
            CArgv.Empty & "SetMousePosition" & CArgv.Arg(Argv, 2) &
            CArgv.Arg(Argv, 3));
    end Move_Dialog_Command;
+
+   -- ****o* Dialogs/Dialogs.Stop_Moving_Dialog_Command
+   -- FUNCTION
+   -- Stop moving the selected dialog on mouse button release
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- StopMovingDialog
+   -- SOURCE
+   function Stop_Moving_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Stop_Moving_Dialog_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      Mouse_X_Position := 0;
+      Mouse_Y_Position := 0;
+      return TCL_OK;
+   end Stop_Moving_Dialog_Command;
 
    procedure Add_Commands is
    begin
@@ -327,6 +377,7 @@ package body Dialogs is
       AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetMousePosition", Set_Mouse_Position_Command'Access);
       AddCommand("MoveDialog", Move_Dialog_Command'Access);
+      AddCommand("StopMovingDialog", Stop_Moving_Dialog_Command'Access);
    end Add_Commands;
 
    procedure ShowMessage
