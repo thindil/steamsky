@@ -132,7 +132,7 @@ package body Crafts.UI is
          Delete(SearchEntry, "0", "end");
          configure(SearchEntry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
-      Entry_Configure(GameMenu, "Help", "-command {ShowHelp craft}");
+      Entry_Configure(GameMenu, "Help", "-command {ShowHelp crafts}");
       Find_Possible_Recipes_Loop :
       for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
