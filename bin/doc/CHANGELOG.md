@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Typo in description of Barley seeds
 - Setting reward for missions in bases
+- Crash when trying to enter help from crafting screen
 
 ## [6.0.5] - 2021-07-04
 
