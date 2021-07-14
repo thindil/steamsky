@@ -70,9 +70,17 @@ package body Dialogs is
          "-sticky we -padx 2 -pady {2 0}" &
          (if Columns > 1 then " -columnspan" & Positive'Image(Columns)
           else ""));
-      Bind(Dialog_Header, "<ButtonPress-1>", "{SetMousePosition %X %Y}");
+      Bind
+        (Dialog_Header,
+         "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
+         ">",
+         "{SetMousePosition %X %Y}");
       Bind(Dialog_Header, "<Motion>", "{MoveDialog " & New_Dialog & " %X %Y}");
-      Bind(Dialog_Header, "<ButtonRelease-1>", "{SetMousePosition 0 0}");
+      Bind
+        (Dialog_Header,
+         "<ButtonRelease-" &
+         (if Game_Settings.Right_Button then "3" else "1") & ">",
+         "{SetMousePosition 0 0}");
       return New_Dialog;
    end Create_Dialog;
 
