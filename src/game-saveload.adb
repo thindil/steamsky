@@ -152,17 +152,29 @@ package body Game.SaveLoad is
              Create_Element(Doc => Save_Data, Tag_Name => "difficulty"));
       Save_Difficulty_Loop :
       for Difficulty of Difficulties loop
-         Raw_Value := To_Unbounded_String(Bonus_Type'Image(Difficulty.Value));
+         Raw_Value :=
+           To_Unbounded_String(Source => Bonus_Type'Image(Difficulty.Value));
          Set_Attribute
-           (Category_Node, To_String(Difficulty.Name),
-            To_String(Trim(Raw_Value, Ada.Strings.Left)));
+           (Elem => Category_Node,
+            Name => To_String(Source => Difficulty.Name),
+            Value =>
+              To_String
+                (Source =>
+                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
       end loop Save_Difficulty_Loop;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save game date
-      Log_Message("Saving game time...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving game time...", Message_Type => EVERYTHING,
+         New_Line => False);
       Category_Node :=
-        Append_Child(Main_Node, Create_Element(Save_Data, "gamedate"));
-      Save_Number(Game_Date.Year, "year");
+        Append_Child
+          (N => Main_Node,
+           New_Child =>
+             Create_Element(Doc => Save_Data, Tag_Name => "gamedate"));
+      Save_Number(Value => Game_Date.Year, Name => "year");
       Save_Number(Game_Date.Month, "month");
       Save_Number(Game_Date.Day, "day");
       Save_Number(Game_Date.Hour, "hour");
