@@ -318,7 +318,10 @@ package body Dialogs is
       function Get_Coordinate(Name: String) return Integer is
       begin
          Tcl_Eval
-           (Interp, "lindex [place configure " & Dialog & " -" & Name & "] 3");
+           (Interp, "lindex [place configure " & Dialog & " -" & Name & "] 4");
+         if Tcl_GetResult(Interp) = "" then
+            return 0;
+         end if;
          return Integer'Value(Tcl_GetResult(Interp));
       end Get_Coordinate;
    begin
@@ -335,6 +338,8 @@ package body Dialogs is
         (Dialog,
          "-x " & Trim(Integer'Image(New_X), Left) & " -y " &
          Trim(Integer'Image(New_Y), Left));
+      Mouse_X_Position := Integer'Value(CArgv.Arg(Argv, 2));
+      Mouse_Y_Position := Integer'Value(CArgv.Arg(Argv, 3));
       return TCL_OK;
    end Move_Dialog_Command;
 
