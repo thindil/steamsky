@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated help
+
 ### Fixed
 - Typo in description of Barley seeds
 - Setting reward for missions in bases
