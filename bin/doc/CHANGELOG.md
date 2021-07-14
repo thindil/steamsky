@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Updated help
+
 ### Fixed
 - Showing the list of available missions in bases after accepting one
 - Some typos in changelog
