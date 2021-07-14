@@ -72,7 +72,7 @@ package body Dialogs is
           else ""));
       Bind(Dialog_Header, "<ButtonPress-1>", "{SetMousePosition %X %Y}");
       Bind(Dialog_Header, "<Motion>", "{MoveDialog " & New_Dialog & " %X %Y}");
-      Bind(Dialog_Header, "<ButtonRelease-1>", "{StopMovingDialog}");
+      Bind(Dialog_Header, "<ButtonRelease-1>", "{SetMousePosition 0 0}");
       return New_Dialog;
    end Create_Dialog;
 
@@ -338,35 +338,6 @@ package body Dialogs is
       return TCL_OK;
    end Move_Dialog_Command;
 
-   -- ****o* Dialogs/Dialogs.Stop_Moving_Dialog_Command
-   -- FUNCTION
-   -- Stop moving the selected dialog on mouse button release
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command. Unused
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- StopMovingDialog
-   -- SOURCE
-   function Stop_Moving_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Stop_Moving_Dialog_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc, Argv);
-   begin
-      Mouse_X_Position := 0;
-      Mouse_Y_Position := 0;
-      return TCL_OK;
-   end Stop_Moving_Dialog_Command;
-
    procedure Add_Commands is
    begin
       AddCommand("CloseDialog", Close_Dialog_Command'Access);
@@ -374,7 +345,6 @@ package body Dialogs is
       AddCommand("GetString", Get_String_Command'Access);
       AddCommand("SetMousePosition", Set_Mouse_Position_Command'Access);
       AddCommand("MoveDialog", Move_Dialog_Command'Access);
-      AddCommand("StopMovingDialog", Stop_Moving_Dialog_Command'Access);
    end Add_Commands;
 
    procedure ShowMessage
