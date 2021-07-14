@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
@@ -310,35 +312,30 @@ package body Dialogs is
    function Move_Dialog_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      use CArgv;
-      pragma Unreferenced(Argc);
+      pragma Unreferenced(ClientData, Argc);
       Dialog: constant Ttk_Frame := Get_Widget(CArgv.Arg(Argv, 1), Interp);
       New_X, New_Y: Integer;
+      function Get_Coordinate(Name: String) return Integer is
+      begin
+         Tcl_Eval
+           (Interp, "lindex [place configure " & Dialog & " -" & Name & "] 3");
+         return Integer'Value(Tcl_GetResult(Interp));
+      end Get_Coordinate;
    begin
       if Mouse_X_Position = 0 and Mouse_Y_Position = 0 then
          return TCL_OK;
       end if;
-      Tcl_Eval(Interp, "place configure " & Dialog & " -x");
       New_X :=
-        Integer'Value(Tcl_GetResult(Interp)) +
+        Get_Coordinate("x") -
         (Mouse_X_Position - Integer'Value(CArgv.Arg(Argv, 2)));
-      if New_X < 0 then
-         New_X := 0;
-      end if;
-      Tcl_Eval(Interp, "place configure " & Dialog & " -y");
       New_Y :=
-        Integer'Value(Tcl_GetResult(Interp)) +
+        Get_Coordinate("y") -
         (Mouse_Y_Position - Integer'Value(CArgv.Arg(Argv, 3)));
-      if New_Y < 0 then
-         New_Y := 0;
-      end if;
       Tcl.Tk.Ada.Place.Place_Configure
-        (Dialog, "-x" & Natural'Image(New_X) & " -y" & Natural'Image(New_Y));
-      return
-        Set_Mouse_Position_Command
-          (ClientData, Interp, 3,
-           CArgv.Empty & "SetMousePosition" & CArgv.Arg(Argv, 2) &
-           CArgv.Arg(Argv, 3));
+        (Dialog,
+         "-x " & Trim(Integer'Image(New_X), Left) & " -y " &
+         Trim(Integer'Image(New_Y), Left));
+      return TCL_OK;
    end Move_Dialog_Command;
 
    -- ****o* Dialogs/Dialogs.Stop_Moving_Dialog_Command
