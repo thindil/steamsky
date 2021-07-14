@@ -35,7 +35,8 @@ package ShipModules is
    type ModuleType is
      (ANY, ENGINE, CABIN, COCKPIT, TURRET, GUN, CARGO, HULL, ARMOR,
       BATTERING_RAM, ALCHEMY_LAB, FURNACE, WATER_COLLECTOR, WORKSHOP,
-      GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM);
+      GREENHOUSE, MEDICAL_ROOM, HARPOON_GUN, TRAINING_ROOM) with
+      Default_Value => ANY;
    -- ****
 
    -- ****s* ShipModules/ShipModules.BaseModule_Data
@@ -62,19 +63,19 @@ package ShipModules is
    type BaseModule_Data is record
       Name: Unbounded_String;
       MType: ModuleType;
-      Weight: Natural;
-      Value: Integer;
-      MaxValue: Integer;
-      Durability: Integer;
+      Weight: Natural := 0;
+      Value: Integer := 0;
+      MaxValue: Integer := 0;
+      Durability: Integer := 0;
       RepairMaterial: Unbounded_String;
       RepairSkill: SkillsData_Container.Extended_Index;
-      Price: Natural;
-      InstallTime: Positive;
+      Price: Natural := 0;
+      InstallTime: Positive := 1;
       Unique: Boolean;
-      Size: Positive;
+      Size: Positive := 1;
       Description: Unbounded_String;
-      MaxOwners: Natural;
-      Speed: Integer;
+      MaxOwners: Natural := 0;
+      Speed: Integer := 0;
       Reputation: Reputation_Range;
    end record;
    -- ****
@@ -113,6 +114,7 @@ package ShipModules is
    -- SOURCE
    function GetModuleType(ModuleIndex: Unbounded_String) return String with
       Pre => Length(ModuleIndex) > 0,
+      Post => GetModuleType'Result'Length > 0,
       Test_Case => (Name => "Test_GetModuleType", Mode => Nominal);
    -- ****
 
