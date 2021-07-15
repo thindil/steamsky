@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Ability to move (drag) dialogs with mouse after clicking on their headers
+
 ### Changed
 - Updated help
 
