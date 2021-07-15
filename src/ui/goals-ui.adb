@@ -23,8 +23,11 @@ with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Widgets; use Tcl.Tk.Ada.Widgets;
 with Tcl.Tk.Ada.Widgets.TtkButton; use Tcl.Tk.Ada.Widgets.TtkButton;
+with Tcl.Tk.Ada.Widgets.TtkFrame; use Tcl.Tk.Ada.Widgets.TtkFrame;
+with Tcl.Tk.Ada.Widgets.TtkLabel; use Tcl.Tk.Ada.Widgets.TtkLabel;
 with Tcl.Tk.Ada.Widgets.TtkTreeView; use Tcl.Tk.Ada.Widgets.TtkTreeView;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
+with Config; use Config;
 with Game; use Game;
 with Utils; use Utils;
 with Utils.UI; use Utils.UI;
@@ -55,10 +58,13 @@ package body Goals.UI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc);
+      Goals_Dialog: constant Ttk_Frame := Get_Widget(".goalsdialog", Interp);
       GoalsView: constant Ttk_Tree_View :=
-        Get_Widget(".goalsdialog.view", Interp);
+        Get_Widget(Goals_Dialog & ".view", Interp);
       SelectButton: constant Ttk_Button :=
-        Get_Widget(".goalsdialog.selectbutton", Interp);
+        Get_Widget(Goals_Dialog & ".selectbutton", Interp);
+      Dialog_Header: constant Ttk_Label :=
+        Get_Widget(Goals_Dialog & ".header", Interp);
    begin
       Tcl_EvalFile
         (Interp,
@@ -72,6 +78,18 @@ package body Goals.UI is
             "} -text {" & GoalText(Goals_Container.To_Index(I)) & "}");
       end loop Load_Goals_Loop;
       configure(SelectButton, "-command {SetGoal " & CArgv.Arg(Argv, 1) & "}");
+      Bind
+        (Dialog_Header,
+         "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
+         ">",
+         "{SetMousePosition " & Dialog_Header & " %X %Y}");
+      Bind
+        (Dialog_Header, "<Motion>", "{MoveDialog " & Goals_Dialog & " %X %Y}");
+      Bind
+        (Dialog_Header,
+         "<ButtonRelease-" &
+         (if Game_Settings.Right_Button then "3" else "1") & ">",
+         "{SetMousePosition " & Dialog_Header & " 0 0}");
       return TCL_OK;
    end Show_Goals_Command;
 
