@@ -74,13 +74,13 @@ package body Dialogs is
         (Dialog_Header,
          "<ButtonPress-" & (if Game_Settings.Right_Button then "3" else "1") &
          ">",
-         "{SetMousePosition %X %Y}");
+         "{SetMousePosition " & Dialog_Header & " %X %Y}");
       Bind(Dialog_Header, "<Motion>", "{MoveDialog " & New_Dialog & " %X %Y}");
       Bind
         (Dialog_Header,
          "<ButtonRelease-" &
          (if Game_Settings.Right_Button then "3" else "1") & ">",
-         "{SetMousePosition 0 0}");
+         "{SetMousePosition " & Dialog_Header & " 0 0}");
       return New_Dialog;
    end Create_Dialog;
 
@@ -270,9 +270,9 @@ package body Dialogs is
    -- FUNCTION
    -- Set the mouse position
    -- PARAMETERS
-   -- ClientData - Custom data send to the command.
+   -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -289,10 +289,17 @@ package body Dialogs is
    function Set_Mouse_Position_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(ClientData, Argc);
+      Dialog_Header: constant Ttk_Label :=
+        Get_Widget(CArgv.Arg(Argv, 1), Interp);
    begin
-      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv, 1));
-      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv, 2));
+      Mouse_X_Position := Natural'Value(CArgv.Arg(Argv, 2));
+      Mouse_Y_Position := Natural'Value(CArgv.Arg(Argv, 3));
+      if Mouse_X_Position > 0 and Mouse_Y_Position > 0 then
+         configure(Dialog_Header, "-cursor fleur");
+      else
+         configure(Dialog_Header, "-cursor hand1");
+      end if;
       return TCL_OK;
    end Set_Mouse_Position_Command;
 
