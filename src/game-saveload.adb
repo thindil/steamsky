@@ -175,29 +175,35 @@ package body Game.SaveLoad is
            New_Child =>
              Create_Element(Doc => Save_Data, Tag_Name => "gamedate"));
       Save_Number(Value => Game_Date.Year, Name => "year");
-      Save_Number(Game_Date.Month, "month");
-      Save_Number(Game_Date.Day, "day");
-      Save_Number(Game_Date.Hour, "hour");
-      Save_Number(Game_Date.Minutes, "minutes");
-      Log_Message("done.", EVERYTHING, True, False);
+      Save_Number(Value => Game_Date.Month, Name => "month");
+      Save_Number(Value => Game_Date.Day, Name => "day");
+      Save_Number(Value => Game_Date.Hour, Name => "hour");
+      Save_Number(Value => Game_Date.Minutes, Name => "minutes");
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save map
-      Log_Message("Saving map...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving map...", Message_Type => EVERYTHING,
+         New_Line => False);
+      Save_Map_Block :
       declare
-         FieldNode: DOM.Core.Element;
+         Field_Node: DOM.Core.Element;
       begin
          Save_Map_X_Loop :
          for X in SkyMap'Range(1) loop
             Save_Map_Y_Loop :
             for Y in SkyMap'Range(2) loop
                if SkyMap(X, Y).Visited then
-                  FieldNode := Create_Element(Save_Data, "field");
-                  FieldNode := Append_Child(Main_Node, FieldNode);
-                  Save_Number(X, "x", FieldNode);
-                  Save_Number(Y, "y", FieldNode);
+                  Field_Node :=
+                    Append_Child
+                      (Main_Node, Create_Element(Save_Data, "field"));
+                  Save_Number(X, "x", Field_Node);
+                  Save_Number(Y, "y", Field_Node);
                end if;
             end loop Save_Map_Y_Loop;
          end loop Save_Map_X_Loop;
-      end;
+      end Save_Map_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Save bases
       Log_Message("Saving bases...", EVERYTHING, False);
