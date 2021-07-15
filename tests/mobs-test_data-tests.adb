@@ -31,7 +31,7 @@ package body Mobs.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GenerateMob_520182_3c2c38
+   function Wrap_Test_GenerateMob_520182_4cad96
      (MobIndex, FactionIndex: Unbounded_String) return Member_Data is
    begin
       begin
@@ -46,12 +46,14 @@ package body Mobs.Test_Data.Tests is
                "req_sloc(mobs.ads:0):Test_GenearateMob test requirement violated");
       end;
       declare
-         Test_GenerateMob_520182_3c2c38_Result: constant Member_Data :=
+         Test_GenerateMob_520182_4cad96_Result: constant Member_Data :=
            GNATtest_Generated.GNATtest_Standard.Mobs.GenerateMob
              (MobIndex, FactionIndex);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert
+              (Test_GenerateMob_520182_4cad96_Result.Name /=
+               Null_Unbounded_String);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -59,20 +61,20 @@ package body Mobs.Test_Data.Tests is
                  (False,
                   "ens_sloc(mobs.ads:0:):Test_GenearateMob test commitment violated");
          end;
-         return Test_GenerateMob_520182_3c2c38_Result;
+         return Test_GenerateMob_520182_4cad96_Result;
       end;
-   end Wrap_Test_GenerateMob_520182_3c2c38;
+   end Wrap_Test_GenerateMob_520182_4cad96;
 --  end read only
 
 --  begin read only
    procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test);
-   procedure Test_GenerateMob_520182_3c2c38(Gnattest_T: in out Test) renames
+   procedure Test_GenerateMob_520182_4cad96(Gnattest_T: in out Test) renames
      Test_GenerateMob_test_genearatemob;
 --  id:2.2/5201826c898ff8db/GenerateMob/1/0/test_genearatemob/
    procedure Test_GenerateMob_test_genearatemob(Gnattest_T: in out Test) is
       function GenerateMob
         (MobIndex, FactionIndex: Unbounded_String) return Member_Data renames
-        Wrap_Test_GenerateMob_520182_3c2c38;
+        Wrap_Test_GenerateMob_520182_4cad96;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);

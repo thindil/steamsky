@@ -29,7 +29,7 @@ package body ShipModules.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetModuleType_51fe9c_8ea853
+   function Wrap_Test_GetModuleType_51fe9c_525d49
      (ModuleIndex: Unbounded_String) return String is
    begin
       begin
@@ -42,12 +42,12 @@ package body ShipModules.Test_Data.Tests is
                "req_sloc(shipmodules.ads:0):Test_GetModuleType test requirement violated");
       end;
       declare
-         Test_GetModuleType_51fe9c_8ea853_Result: constant String :=
+         Test_GetModuleType_51fe9c_525d49_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.ShipModules.GetModuleType
              (ModuleIndex);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert(Test_GetModuleType_51fe9c_525d49_Result'Length > 0);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -55,20 +55,20 @@ package body ShipModules.Test_Data.Tests is
                  (False,
                   "ens_sloc(shipmodules.ads:0:):Test_GetModuleType test commitment violated");
          end;
-         return Test_GetModuleType_51fe9c_8ea853_Result;
+         return Test_GetModuleType_51fe9c_525d49_Result;
       end;
-   end Wrap_Test_GetModuleType_51fe9c_8ea853;
+   end Wrap_Test_GetModuleType_51fe9c_525d49;
 --  end read only
 
 --  begin read only
    procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test);
-   procedure Test_GetModuleType_51fe9c_8ea853(Gnattest_T: in out Test) renames
+   procedure Test_GetModuleType_51fe9c_525d49(Gnattest_T: in out Test) renames
      Test_GetModuleType_test_getmoduletype;
 --  id:2.2/51fe9c61c193b590/GetModuleType/1/0/test_getmoduletype/
    procedure Test_GetModuleType_test_getmoduletype(Gnattest_T: in out Test) is
       function GetModuleType
         (ModuleIndex: Unbounded_String) return String renames
-        Wrap_Test_GetModuleType_51fe9c_8ea853;
+        Wrap_Test_GetModuleType_51fe9c_525d49;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
