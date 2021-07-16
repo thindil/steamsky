@@ -74,7 +74,7 @@ package Ships.Movement is
       -- InfoOnly - If true and ship is docked to the base, count max speed
       --            of the ship. Default is false
       -- RESULT
-      -- Empty string if ship can move, otherwise message why it can't
+      -- The real speed of the selected ship or 0 if the ship can't move
       -- SOURCE
    function RealSpeed
      (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural with
