@@ -385,7 +385,8 @@ package Ships is
    -- PARAMETERS
    -- Proto_Index     - Index of prototype ship which will be used to create
    --                   the new ship
-   -- Name            - Name of the new ship
+   -- Name            - Name of the new ship. If empty, then the default name
+   --                   of the prototype ship will be used
    -- X               - X coordinate of newly created ship on map
    -- Y               - Y coordinate of newly created ship on map
    -- Speed           - Starting speed of newly created ship
