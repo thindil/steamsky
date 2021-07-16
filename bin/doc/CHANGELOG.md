@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated help
+- Updated interface
 
 ### Fixed
 - Showing the list of available missions in bases after accepting one
