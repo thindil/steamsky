@@ -37,7 +37,8 @@ package Ships is
    -- Ship speed states
    -- SOURCE
    type Ship_Speed is
-     (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED);
+     (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED) with
+     Default_Value => FULL_SPEED;
    -- ****
 
    -- ****d* Ships/Ships.Default_Ship_Speed
@@ -51,7 +52,8 @@ package Ships is
    -- FUNCTION
    -- NPC ships combat AI types
    -- SOURCE
-   type Ship_Combat_Ai is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER);
+   type Ship_Combat_Ai is (NONE, BERSERKER, ATTACKER, COWARD, DISARMER) with
+      Default_Value => NONE;
    -- ****
 
    -- ****d* Ships/Ships.Default_Combat_Ai
@@ -65,7 +67,8 @@ package Ships is
    -- FUNCTION
    -- Player ship types of module upgrades
    -- SOURCE
-   type Ship_Upgrade is (NONE, DURABILITY, MAX_VALUE, VALUE);
+   type Ship_Upgrade is (NONE, DURABILITY, MAX_VALUE, VALUE) with
+      Default_Value => NONE;
    -- ****
 
    -- ****d* Ships/Ships.Default_Ship_Upgrade
@@ -79,7 +82,8 @@ package Ships is
    -- FUNCTION
    -- Used to store ship modules data
    -- SOURCE
-   type Data_Array is array(1 .. 3) of Integer;
+   type Data_Array is array(1 .. 3) of Integer with
+      Default_Component_Value => 0;
    -- ****
 
    -- ****d* Ships/Ships.Empty_Data_Array
@@ -95,7 +99,8 @@ package Ships is
    -- SOURCE
    type Module_Type_2 is
      (WORKSHOP, ANY, MEDICAL_ROOM, TRAINING_ROOM, ENGINE, CABIN, COCKPIT,
-      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN);
+      TURRET, GUN, CARGO_ROOM, HULL, ARMOR, BATTERING_RAM, HARPOON_GUN) with
+      Default_Value => ANY;
    -- ****
 
    -- ****d* Ships/Ships.Default_Module_Type
@@ -143,41 +148,41 @@ package Ships is
    type Module_Data(M_Type: Module_Type_2 := Default_Module_Type) is record
       Name: Unbounded_String;
       Proto_Index: Unbounded_String;
-      Weight: Natural;
-      Durability: Integer;
-      Max_Durability: Natural;
+      Weight: Natural := 0;
+      Durability: Integer := 0;
+      Max_Durability: Natural := 0;
       Owner: Natural_Container.Vector;
-      Upgrade_Progress: Integer;
+      Upgrade_Progress: Integer := 0;
       Upgrade_Action: Ship_Upgrade;
       case M_Type is
          when ENGINE =>
-            Fuel_Usage: Positive;
-            Power: Positive;
+            Fuel_Usage: Positive := 1;
+            Power: Positive := 1;
             Disabled: Boolean;
          when CABIN =>
-            Cleanliness: Natural;
-            Quality: Natural;
+            Cleanliness: Natural := 0;
+            Quality: Natural := 0;
          when TURRET =>
-            Gun_Index: Natural;
+            Gun_Index: Natural := 0;
          when GUN =>
-            Damage: Positive;
+            Damage: Positive := 1;
             Ammo_Index: Inventory_Container.Extended_Index;
          when HULL =>
-            Installed_Modules: Natural;
-            Max_Modules: Positive;
+            Installed_Modules: Natural := 0;
+            Max_Modules: Positive := 1;
          when WORKSHOP =>
             Crafting_Index: Unbounded_String;
-            Crafting_Time: Natural;
-            Crafting_Amount: Natural;
+            Crafting_Time: Natural := 0;
+            Crafting_Amount: Natural := 0;
          when MEDICAL_ROOM | COCKPIT | ARMOR | CARGO_ROOM =>
             null;
          when TRAINING_ROOM =>
             Trained_Skill: SkillsData_Container.Extended_Index;
          when BATTERING_RAM =>
-            Damage2: Positive;
+            Damage2: Positive := 1;
             Cooling_Down: Boolean;
          when HARPOON_GUN =>
-            Duration: Positive;
+            Duration: Positive := 1;
             Harpoon_Index: Inventory_Container.Extended_Index;
          when ANY =>
             Data: Data_Array;
@@ -261,8 +266,8 @@ package Ships is
    -- SOURCE
    type Proto_Member_Data is record
       Proto_Index: Unbounded_String;
-      Min_Amount: Positive;
-      Max_Amount: Natural;
+      Min_Amount: Positive := 1;
+      Max_Amount: Natural := 0;
    end record;
    -- ****
 
@@ -308,7 +313,7 @@ package Ships is
       Loot: Natural_Array(1 .. 2);
       Perception: Natural_Array(1 .. 2);
       Cargo: MobInventory_Container.Vector;
-      Combat_Value: Positive;
+      Combat_Value: Positive := 1;
       Crew: Proto_Crew_Container.Vector;
       Description: Unbounded_String;
       Owner: Unbounded_String;
