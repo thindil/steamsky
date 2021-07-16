@@ -422,12 +422,10 @@ package body Ships.Movement is
    function RealSpeed
      (Ship: Ship_Record; InfoOnly: Boolean := False) return Natural is
       BaseSpeed, Speed: Natural := 0;
-      Message: Unbounded_String;
       ShipSetSpeed: Ship_Speed;
    begin
       if Ship = Player_Ship and not InfoOnly then
-         Message := To_Unbounded_String(HaveOrderRequirements);
-         if Length(Message) > 0 then
+         if HaveOrderRequirements'Length > 0 then
             return 0;
          end if;
       end if;
