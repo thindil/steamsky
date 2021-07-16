@@ -197,18 +197,27 @@ package body Game.SaveLoad is
                if SkyMap(X, Y).Visited then
                   Field_Node :=
                     Append_Child
-                      (Main_Node, Create_Element(Save_Data, "field"));
-                  Save_Number(X, "x", Field_Node);
-                  Save_Number(Y, "y", Field_Node);
+                      (N => Main_Node,
+                       New_Child =>
+                         Create_Element
+                           (Doc => Save_Data, Tag_Name => "field"));
+                  Save_Number(Value => X, Name => "x", Node => Field_Node);
+                  Save_Number(Value => Y, Name => "y", Node => Field_Node);
                end if;
             end loop Save_Map_Y_Loop;
          end loop Save_Map_X_Loop;
       end Save_Map_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save bases
-      Log_Message("Saving bases...", EVERYTHING, False);
-      SaveBases(Save_Data, Main_Node);
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "Saving bases...", Message_Type => EVERYTHING,
+         New_Line => False);
+      SaveBases(SaveData => Save_Data, MainNode => Main_Node);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save player ship
       Log_Message("Saving player ship...", EVERYTHING, False);
       SavePlayerShip(Save_Data, Main_Node);
