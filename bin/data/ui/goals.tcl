@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ttk::frame .goalsdialog -style Dialog.TFrame
-set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -height 9]
+set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -height 9 -cursor hand1]
 set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
 grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 -style Header.TLabel -cursor hand1] -sticky we -columnspan 2
 grid $view -padx 2 -pady {2 0}
