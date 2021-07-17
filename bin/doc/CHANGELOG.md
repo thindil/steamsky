@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file.
 - Showing the list of available missions in bases after accepting one
 - Some typos in changelog
 - Crash when trying to enter help from crafting screen
+- Some typos in help
 
 ## [6.3] - 2021-07-11
 
