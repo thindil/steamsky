@@ -67,23 +67,11 @@ improve my code.
 
 ### Coding standard
 
-When you write your own code, feel free to use any coding standard you want.
-But before you send your changes to the project, please use command `gnatpp`
-which automatically format the source code to the project coding standard.
-Proper `gnatpp` command usage (in the main project directory, where
-*steamsky.gpr* file is):
-
-`gnatpp -P steamsky.gpr`
-
-and for unit tests:
-
-`gnatpp -P tests/prettytests.gpr`
-
-If you prefer (and you have installed), use [Bob](https://www.laeran.pl/repositories/bob):
-
-`bob pretty`
-
-for format the game and unit tests code.
+The full description of coding style used by the project, you can find on the
+[Coding Standard](https://www.laeran.pl/repositories/steamsky/wiki?name=Coding%20Standard) page.
+On the page [Testing the Project](https://www.laeran.pl/repositories/steamsky/wiki?name=Testing%20the%20Project) you will
+find information how to test your code, so it will be compliant with the
+project standards.
 
 #### Code comments formatting
 
