@@ -219,21 +219,28 @@ package body Game.SaveLoad is
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
       -- Save player ship
-      Log_Message("Saving player ship...", EVERYTHING, False);
-      SavePlayerShip(Save_Data, Main_Node);
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "Saving player ship...", Message_Type => EVERYTHING,
+         New_Line => False);
+      SavePlayerShip(SaveData => Save_Data, MainNode => Main_Node);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save known recipes
-      Log_Message("Saving known recipes...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving known recipes...", Message_Type => EVERYTHING,
+         New_Line => False);
+      Save_Known_Recipes_Block :
       declare
-         RecipeNode: DOM.Core.Element;
+         Recipe_Node: DOM.Core.Element;
       begin
          Save_Known_Recipes_Loop :
          for Recipe of Known_Recipes loop
-            RecipeNode := Create_Element(Save_Data, "recipe");
-            RecipeNode := Append_Child(Main_Node, RecipeNode);
-            Set_Attribute(RecipeNode, "index", To_String(Recipe));
+            Recipe_Node :=
+              Append_Child(Main_Node, Create_Element(Save_Data, "recipe"));
+            Set_Attribute(Recipe_Node, "index", To_String(Recipe));
          end loop Save_Known_Recipes_Loop;
-      end;
+      end Save_Known_Recipes_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Save messages
       Log_Message("Saving messages...", EVERYTHING, False);
