@@ -38,7 +38,7 @@ package Ships is
    -- SOURCE
    type Ship_Speed is
      (DOCKED, FULL_STOP, QUARTER_SPEED, HALF_SPEED, FULL_SPEED) with
-     Default_Value => FULL_SPEED;
+      Default_Value => FULL_SPEED;
    -- ****
 
    -- ****d* Ships/Ships.Default_Ship_Speed
@@ -399,8 +399,7 @@ package Ships is
      (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record with
-      Pre => Proto_Ships_Container.Contains
-        (Container => Proto_Ships_List, Key => Proto_Index),
+      Pre => Proto_Ships_List.Contains(Key => Proto_Index),
       Test_Case => (Name => "Test_CreateShip", Mode => Nominal);
       -- ****
 
@@ -458,7 +457,8 @@ package Ships is
       -- Description of cabin quality
       -- SOURCE
    function Get_Cabin_Quality(Quality: Natural) return String with
-      Test_Case => (Name => "Test_GetCabinQuality", Mode => Robustness);
+      Post => Get_Cabin_Quality'Result'Length > 0,
+      Test_Case => (Name => "Test_GetCabinQuality", Mode => Nominal);
       -- ****
 
       -- ****f* Ships/Ships.Damage_Module
@@ -475,7 +475,8 @@ package Ships is
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) with
       Pre => Module_Index in
-        Ship.Modules.First_Index .. Ship.Modules.Last_Index,
+        Ship.Modules.First_Index .. Ship.Modules.Last_Index and
+      Death_Reason'Length > 0,
       Test_Case => (Name => "Test_DamageModule", Mode => Nominal);
       -- ****
 
