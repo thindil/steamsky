@@ -29,15 +29,13 @@ package body Ships.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_Create_Ship_14edf1_c9230b
+   function Wrap_Test_Create_Ship_14edf1_469250
      (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
       Speed: Ship_Speed; Random_Upgrades: Boolean := True)
       return Ship_Record is
    begin
       begin
-         pragma Assert
-           (Proto_Ships_Container.Contains
-              (Container => Proto_Ships_List, Key => Proto_Index));
+         pragma Assert(Proto_Ships_List.Contains(Key => Proto_Index));
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -46,7 +44,7 @@ package body Ships.Test_Data.Tests is
                "req_sloc(ships.ads:0):Test_CreateShip test requirement violated");
       end;
       declare
-         Test_Create_Ship_14edf1_c9230b_Result: constant Ship_Record :=
+         Test_Create_Ship_14edf1_469250_Result: constant Ship_Record :=
            GNATtest_Generated.GNATtest_Standard.Ships.Create_Ship
              (Proto_Index, Name, X, Y, Speed, Random_Upgrades);
       begin
@@ -59,14 +57,14 @@ package body Ships.Test_Data.Tests is
                  (False,
                   "ens_sloc(ships.ads:0:):Test_CreateShip test commitment violated");
          end;
-         return Test_Create_Ship_14edf1_c9230b_Result;
+         return Test_Create_Ship_14edf1_469250_Result;
       end;
-   end Wrap_Test_Create_Ship_14edf1_c9230b;
+   end Wrap_Test_Create_Ship_14edf1_469250;
 --  end read only
 
 --  begin read only
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test);
-   procedure Test_Create_Ship_14edf1_c9230b(Gnattest_T: in out Test) renames
+   procedure Test_Create_Ship_14edf1_469250(Gnattest_T: in out Test) renames
      Test_Create_Ship_test_createship;
 --  id:2.2/14edf110e8654721/Create_Ship/1/0/test_createship/
    procedure Test_Create_Ship_test_createship(Gnattest_T: in out Test) is
@@ -74,7 +72,7 @@ package body Ships.Test_Data.Tests is
         (Proto_Index, Name: Unbounded_String; X: Map_X_Range; Y: Map_Y_Range;
          Speed: Ship_Speed; Random_Upgrades: Boolean := True)
          return Ship_Record renames
-        Wrap_Test_Create_Ship_14edf1_c9230b;
+        Wrap_Test_Create_Ship_14edf1_469250;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -224,30 +222,49 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_Get_Cabin_Quality_3a9d5d_0027a0
+   function Wrap_Test_Get_Cabin_Quality_3a9d5d_bc7a0e
      (Quality: Natural) return String is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(ships.ads:0):Test_GetCabinQuality test requirement violated");
+      end;
       declare
-         Test_Get_Cabin_Quality_3a9d5d_0027a0_Result: constant String :=
+         Test_Get_Cabin_Quality_3a9d5d_bc7a0e_Result: constant String :=
            GNATtest_Generated.GNATtest_Standard.Ships.Get_Cabin_Quality
              (Quality);
       begin
-         return Test_Get_Cabin_Quality_3a9d5d_0027a0_Result;
+         begin
+            pragma Assert
+              (Test_Get_Cabin_Quality_3a9d5d_bc7a0e_Result'Length > 0);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(ships.ads:0:):Test_GetCabinQuality test commitment violated");
+         end;
+         return Test_Get_Cabin_Quality_3a9d5d_bc7a0e_Result;
       end;
-   end Wrap_Test_Get_Cabin_Quality_3a9d5d_0027a0;
+   end Wrap_Test_Get_Cabin_Quality_3a9d5d_bc7a0e;
 --  end read only
 
 --  begin read only
    procedure Test_Get_Cabin_Quality_test_getcabinquality
      (Gnattest_T: in out Test);
-   procedure Test_Get_Cabin_Quality_3a9d5d_0027a0
+   procedure Test_Get_Cabin_Quality_3a9d5d_bc7a0e
      (Gnattest_T: in out Test) renames
      Test_Get_Cabin_Quality_test_getcabinquality;
 --  id:2.2/3a9d5d1acf73079a/Get_Cabin_Quality/1/0/test_getcabinquality/
    procedure Test_Get_Cabin_Quality_test_getcabinquality
      (Gnattest_T: in out Test) is
       function Get_Cabin_Quality(Quality: Natural) return String renames
-        Wrap_Test_Get_Cabin_Quality_3a9d5d_0027a0;
+        Wrap_Test_Get_Cabin_Quality_3a9d5d_bc7a0e;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -263,14 +280,15 @@ package body Ships.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_Damage_Module_222cf0_bb3bbf
+   procedure Wrap_Test_Damage_Module_222cf0_819b51
      (Ship: in out Ship_Record; Module_Index: Modules_Container.Extended_Index;
       Damage: Positive; Death_Reason: String) is
    begin
       begin
          pragma Assert
            (Module_Index in
-              Ship.Modules.First_Index .. Ship.Modules.Last_Index);
+              Ship.Modules.First_Index .. Ship.Modules.Last_Index and
+            Death_Reason'Length > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -289,12 +307,12 @@ package body Ships.Test_Data.Tests is
               (False,
                "ens_sloc(ships.ads:0:):Test_DamageModule test commitment violated");
       end;
-   end Wrap_Test_Damage_Module_222cf0_bb3bbf;
+   end Wrap_Test_Damage_Module_222cf0_819b51;
 --  end read only
 
 --  begin read only
    procedure Test_Damage_Module_test_damagemodule(Gnattest_T: in out Test);
-   procedure Test_Damage_Module_222cf0_bb3bbf(Gnattest_T: in out Test) renames
+   procedure Test_Damage_Module_222cf0_819b51(Gnattest_T: in out Test) renames
      Test_Damage_Module_test_damagemodule;
 --  id:2.2/222cf0d00b136333/Damage_Module/1/0/test_damagemodule/
    procedure Test_Damage_Module_test_damagemodule(Gnattest_T: in out Test) is
@@ -302,7 +320,7 @@ package body Ships.Test_Data.Tests is
         (Ship: in out Ship_Record;
          Module_Index: Modules_Container.Extended_Index; Damage: Positive;
          Death_Reason: String) renames
-        Wrap_Test_Damage_Module_222cf0_bb3bbf;
+        Wrap_Test_Damage_Module_222cf0_819b51;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
