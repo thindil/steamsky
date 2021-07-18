@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Setting reward for missions in bases
 - Crash when trying to enter help from crafting screen
 - Typos in help
+- Crash on non-existing help topics
 
 ## [6.0.5] - 2021-07-04
 
