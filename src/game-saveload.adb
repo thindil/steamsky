@@ -237,27 +237,37 @@ package body Game.SaveLoad is
          Save_Known_Recipes_Loop :
          for Recipe of Known_Recipes loop
             Recipe_Node :=
-              Append_Child(Main_Node, Create_Element(Save_Data, "recipe"));
-            Set_Attribute(Recipe_Node, "index", To_String(Recipe));
+              Append_Child
+                (N => Main_Node,
+                 New_Child =>
+                   Create_Element(Doc => Save_Data, Tag_Name => "recipe"));
+            Set_Attribute
+              (Elem => Recipe_Node, Name => "index",
+               Value => To_String(Source => Recipe));
          end loop Save_Known_Recipes_Loop;
       end Save_Known_Recipes_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save messages
-      Log_Message("Saving messages...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving messages...", Message_Type => EVERYTHING,
+         New_Line => False);
+      Save_Messages_Block :
       declare
-         Messages: Natural := Game_Settings.Saved_Messages;
-         StartLoop: Positive;
+         Messages_To_Save: constant Natural :=
+           (if Game_Settings.Saved_Messages > MessagesAmount then
+              MessagesAmount
+            else Game_Settings.Saved_Messages);
+         Start_Loop: Positive := 1;
          MessageNode: DOM.Core.Element;
          Message: Message_Data;
          MessageText: Text;
       begin
-         if Messages > MessagesAmount then
-            Messages := MessagesAmount;
-         end if;
-         if Messages > 0 then
-            StartLoop := MessagesAmount - Messages + 1;
+         if Messages_To_Save > 0 then
+            Start_Loop := MessagesAmount - Messages_To_Save + 1;
             Save_Messages_Loop :
-            for I in StartLoop .. MessagesAmount loop
+            for I in Start_Loop .. MessagesAmount loop
                Message := GetMessage(I);
                MessageNode := Create_Element(Save_Data, "message");
                MessageNode := Append_Child(Main_Node, MessageNode);
@@ -270,7 +280,7 @@ package body Game.SaveLoad is
                MessageText := Append_Child(MessageNode, MessageText);
             end loop Save_Messages_Loop;
          end if;
-      end;
+      end Save_Messages_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Save events
       Log_Message("Saving events...", EVERYTHING, False);
