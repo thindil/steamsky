@@ -29,6 +29,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tk.Ada.Wm; use Tcl.Tk.Ada.Wm;
 with BasesTypes; use BasesTypes;
 with Config; use Config;
+with Dialogs; use Dialogs;
 with Factions; use Factions;
 with Game; use Game;
 with Items; use Items;
@@ -308,6 +309,13 @@ package body Help.UI is
             To_String(Help_Container.Key(I)) & "}");
       end loop;
       Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
+      if Exists(TopicsView, CArgv.Arg(Argv, 1)) = "0" then
+         ShowMessage
+           ("The selected help topic doesn't exist. Showing the first available instead.",
+            ".help", "Can't find help topic");
+         Selection_Set(TopicsView, To_String(Help_List.First_Element.Index));
+         return TCL_OK;
+      end if;
       Selection_Set(TopicsView, CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Show_Help_Command;
