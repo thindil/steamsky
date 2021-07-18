@@ -33,7 +33,8 @@ package body Table is
 
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget is
+      Scrollbar: Ttk_Scrollbar := Get_Widget("."); Command: String := "")
+      return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
       XScroll: Ttk_Scrollbar;
@@ -41,6 +42,7 @@ package body Table is
       X: Natural := 5;
       Tokens: Slice_Set;
       Master: constant Tk_Canvas := Get_Widget(Parent);
+      Header_Id: Unbounded_String;
    begin
       if Widget_Image(Scrollbar) = "." then
          YScroll :=
@@ -72,14 +74,29 @@ package body Table is
       end if;
       Create_Headers_Loop :
       for I in Headers'Range loop
-         Canvas_Create
-           (Canvas, "text",
-            Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
-            To_String(Headers(I)) &
-            "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
-            To_String(Game_Settings.Interface_Theme) &
-            " -foreground] -tags [list header" &
-            Trim(Positive'Image(I), Left) & "]");
+         Header_Id :=
+           To_Unbounded_String
+             (Canvas_Create
+                (Canvas, "text",
+                 Trim(Natural'Image(X), Left) & " 2 -anchor nw -text {" &
+                 To_String(Headers(I)) &
+                 "} -font InterfaceFont -justify center -fill [ttk::style lookup " &
+                 To_String(Game_Settings.Interface_Theme) &
+                 " -foreground] -tags [list header" &
+                 Trim(Positive'Image(I), Left) & "]"));
+         if Command'Length > 0 then
+            Bind
+              (Canvas, To_String(Header_Id), "<Enter>",
+               "{" & Canvas & " configure -cursor hand1}");
+            Bind
+              (Canvas, To_String(Header_Id), "<Leave>",
+               "{" & Canvas & " configure -cursor left_ptr}");
+            Bind
+              (Canvas, To_String(Header_Id),
+               "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+               ">",
+               "{" & Command & "}");
+         end if;
          Create
            (Tokens, BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
             " ");
@@ -89,13 +106,29 @@ package body Table is
             Table.Row_Height := Positive'Value(Slice(Tokens, 4)) + 5;
          end if;
       end loop Create_Headers_Loop;
-      Canvas_Create
-        (Canvas, "rectangle",
-         "0 0" & Positive'Image(X) & Positive'Image(Table.Row_Height - 3) &
-         " -fill " & Style_Lookup("Table", "-headercolor") & " -outline " &
-         Style_Lookup("Table", "-rowcolor") &
-         " -width 2 -tags [list headerback]");
+      Header_Id :=
+        To_Unbounded_String
+          (Canvas_Create
+             (Canvas, "rectangle",
+              "0 0" & Positive'Image(X) &
+              Positive'Image(Table.Row_Height - 3) & " -fill " &
+              Style_Lookup("Table", "-headercolor") & " -outline " &
+              Style_Lookup("Table", "-rowcolor") &
+              " -width 2 -tags [list headerback]"));
       Lower(Canvas, "headerback");
+      if Command'Length > 0 then
+         Bind
+           (Canvas, To_String(Header_Id), "<Enter>",
+            "{" & Canvas & " configure -cursor hand1}");
+         Bind
+           (Canvas, To_String(Header_Id), "<Leave>",
+            "{" & Canvas & " configure -cursor left_ptr}");
+         Bind
+           (Canvas, To_String(Header_Id),
+            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
+            ">",
+            "{" & Command & "}");
+      end if;
       Table.Canvas := Canvas;
       Tcl_Eval
         (Get_Context,

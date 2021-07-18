@@ -65,14 +65,19 @@ package Table is
    -- Headers   - The titles for the table headers
    -- Scrollbar - Ttk_Scrollbar associated with the table. If empty
    --             then create a new scrollbars. Default value is empty.
+   -- Command   - The Tcl command executed when the player press the table
+   --             header. If empty, no command is executed. Default value is
+   --             empty
    -- RESULT
    -- The newly created Table_Widget
    -- HISTORY
    -- 5.7 - Added
+   -- 6.4 - Added Command parameter
    -- SOURCE
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget(".")) return Table_Widget with
+      Scrollbar: Ttk_Scrollbar := Get_Widget("."); Command: String := "")
+      return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
    -- ****
