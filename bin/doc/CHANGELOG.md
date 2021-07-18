@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
 - Some typos in changelog
 - Crash when trying to enter help from crafting screen
 - Some typos in help
+- Crash on non-existing help topics
 
 ## [6.3] - 2021-07-11
 
