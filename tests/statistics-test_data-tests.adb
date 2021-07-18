@@ -88,20 +88,38 @@ package body Statistics.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_ClearGameStats_97edec_31f9dd is
+   procedure Wrap_Test_ClearGameStats_97edec_dc3936 is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(statistics.ads:0):Test_ClearGameStats test requirement violated");
+      end;
       GNATtest_Generated.GNATtest_Standard.Statistics.ClearGameStats;
-   end Wrap_Test_ClearGameStats_97edec_31f9dd;
+      begin
+         pragma Assert(GameStats.Points = 0);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(statistics.ads:0:):Test_ClearGameStats test commitment violated");
+      end;
+   end Wrap_Test_ClearGameStats_97edec_dc3936;
 --  end read only
 
 --  begin read only
    procedure Test_ClearGameStats_test_cleargamestats(Gnattest_T: in out Test);
-   procedure Test_ClearGameStats_97edec_31f9dd(Gnattest_T: in out Test) renames
+   procedure Test_ClearGameStats_97edec_dc3936(Gnattest_T: in out Test) renames
      Test_ClearGameStats_test_cleargamestats;
 --  id:2.2/97edec1268a24200/ClearGameStats/1/0/test_cleargamestats/
    procedure Test_ClearGameStats_test_cleargamestats
      (Gnattest_T: in out Test) is
-      procedure ClearGameStats renames Wrap_Test_ClearGameStats_97edec_31f9dd;
+      procedure ClearGameStats renames Wrap_Test_ClearGameStats_97edec_dc3936;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
