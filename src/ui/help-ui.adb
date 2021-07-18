@@ -308,6 +308,10 @@ package body Help.UI is
             To_String(Help_Container.Key(I)) & "}");
       end loop;
       Bind(TopicsView, "<<TreeviewSelect>>", "ShowTopic");
+      if Exists(TopicsView, CArgv.Arg(Argv, 1)) = "0" then
+         Selection_Set(TopicsView, To_String(Help_List.First_Element.Index));
+         return TCL_OK;
+      end if;
       Selection_Set(TopicsView, CArgv.Arg(Argv, 1));
       return TCL_OK;
    end Show_Help_Command;
