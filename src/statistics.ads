@@ -36,7 +36,7 @@ package Statistics is
    -- SOURCE
    type Statistics_Data is record
       Index: Unbounded_String;
-      Amount: Positive;
+      Amount: Positive := 1;
    end record;
    -- ****
 
@@ -65,14 +65,14 @@ package Statistics is
    type GameStats_Data is record
       DestroyedShips: Statistics_Container.Vector;
       BasesVisited: Bases_Range;
-      MapVisited: Positive;
-      DistanceTraveled: Natural;
+      MapVisited: Positive := 1;
+      DistanceTraveled: Natural := 0;
       CraftingOrders: Statistics_Container.Vector;
-      AcceptedMissions: Natural;
+      AcceptedMissions: Natural := 0;
       FinishedMissions: Statistics_Container.Vector;
       FinishedGoals: Statistics_Container.Vector;
       KilledMobs: Statistics_Container.Vector;
-      Points: Natural;
+      Points: Natural := 0;
    end record;
    -- ****
 
@@ -99,7 +99,8 @@ package Statistics is
       -- Clear game statistics
       -- SOURCE
    procedure ClearGameStats with
-      Test_Case => (Name => "Test_ClearGameStats", Mode => Robustness);
+      Post => GameStats.Points = 0,
+      Test_Case => (Name => "Test_ClearGameStats", Mode => Nominal);
       -- ****
 
       -- ****f* Statistics/Statistics.UpdateFinishedGoals
