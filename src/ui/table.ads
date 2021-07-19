@@ -195,6 +195,15 @@ package Table is
      (Table: in out Table_Widget; Tooltip, Command: String; Checked: Boolean;
       Column: Positive; NewRow: Boolean := False) with
       Pre => Table.Row_Height > 1;
+      -- ****
+
+      -- ****f* Table/Table.Add_Commands
+      -- FUNCTION
+      -- Add Tcl commands related to the Table_Widget
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   procedure Add_Commands;
    -- ****
 
 end Table;

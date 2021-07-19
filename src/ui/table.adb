@@ -15,7 +15,10 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Interfaces.C;
 with GNAT.String_Split; use GNAT.String_Split;
+with CArgv;
+with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Grid;
@@ -28,6 +31,7 @@ with Tcl.Tk.Ada.Winfo; use Tcl.Tk.Ada.Winfo;
 with Tcl.Tklib.Ada.Autoscroll; use Tcl.Tklib.Ada.Autoscroll;
 with Tcl.Tklib.Ada.Tooltip; use Tcl.Tklib.Ada.Tooltip;
 with Config; use Config;
+with Utils.UI; use Utils.UI;
 
 package body Table is
 
@@ -95,7 +99,7 @@ package body Table is
               (Canvas, To_String(Header_Id),
                "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
                ">",
-               "{" & Command & "}");
+               "{HeaderClicked " & Command & "}");
          end if;
          Create
            (Tokens, BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
@@ -127,7 +131,7 @@ package body Table is
            (Canvas, To_String(Header_Id),
             "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
             ">",
-            "{" & Command & "}");
+            "{HeaderClicked " & Command & "}");
       end if;
       Table.Canvas := Canvas;
       Tcl_Eval
@@ -596,5 +600,39 @@ package body Table is
          Table.Row := Table.Row + 1;
       end if;
    end AddCheckButton;
+
+   -- ****o* Table/Table.Header_Clicked_Command
+   -- FUNCTION
+   -- The selected table header was clicked with mouse button
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command.
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- HeaderClicked command
+   -- Command is the Tcl command to execute when the player will click on
+   -- the table header
+   -- SOURCE
+   function Header_Clicked_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Header_Clicked_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc, Argv);
+   begin
+      return TCL_OK;
+   end Header_Clicked_Command;
+
+   procedure Add_Commands is
+   begin
+      AddCommand("HeaderClicked", Header_Clicked_Command'Access);
+   end Add_Commands;
 
 end Table;
