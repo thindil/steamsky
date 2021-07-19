@@ -52,7 +52,6 @@ with Game; use Game;
 with Goals.UI;
 with MainMenu.Commands;
 with Maps.UI;
-with Table;
 with Themes;
 with Utils.UI;
 
@@ -137,7 +136,6 @@ package body MainMenu is
       Dialogs.Add_Commands;
       Utils.UI.AddCommands;
       Goals.UI.AddCommands;
-      Table.Add_Commands;
       Wm_Set
         (Widgt => Main_Window, Action => "iconphoto",
          Options => "-default " & Icon);
