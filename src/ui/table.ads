@@ -197,4 +197,21 @@ package Table is
       Pre => Table.Row_Height > 1;
       -- ****
 
+      -- ****f* Table/Table.Get_Column_Number
+      -- FUNCTION
+      -- Get the number of the Table_Widget column for the selected X axis
+      -- coordinate
+      -- PARAMETERS
+      -- Table      - The Table_Widget which column will be taken
+      -- X_Position - The X axis coordinate from which the column will be count
+      -- RESULT
+      -- The number of the column for the selected coordinate. The number starts
+      -- from 1.
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   function Get_Column_Number
+     (Table: Table_Widget; X_Position: Natural) return Positive;
+   -- ****
+
 end Table;

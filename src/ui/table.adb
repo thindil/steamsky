@@ -598,4 +598,17 @@ package body Table is
       end if;
    end AddCheckButton;
 
+   function Get_Column_Number
+     (Table: Table_Widget; X_Position: Natural) return Positive is
+      Position: Positive := X_Position;
+   begin
+      for I in Table.Columns_Width'Range loop
+         if Position < Table.Columns_Width(I) + 20 then
+            return I;
+         end if;
+         Position := Position - Table.Columns_Width(I) - 20;
+      end loop;
+      return 1;
+   end Get_Column_Number;
+
 end Table;
