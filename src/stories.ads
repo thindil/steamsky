@@ -33,14 +33,16 @@ package Stories is
    -- FUNCTION
    -- Types of conditions to start stories
    -- SOURCE
-   type StartConditionType is (DROPITEM);
+   type StartConditionType is (DROPITEM) with
+      Default_Value => DROPITEM;
    -- ****
 
    -- ****t* Stories/Stories.StepConditionType
    -- FUNCTION
    -- Types of conditions to finish story step
    -- SOURCE
-   type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT);
+   type StepConditionType is (ASKINBASE, DESTROYSHIP, EXPLORE, ANY, LOOT) with
+      Default_Value => ANY;
    -- ****
 
    -- ****s* Stories/Stories.StepText_Data
@@ -131,8 +133,8 @@ package Stories is
    type Story_Data is record
       StartCondition: StartConditionType;
       StartData: UnboundedString_Container.Vector;
-      MinSteps: Positive;
-      MaxSteps: Positive;
+      MinSteps: Positive := 1;
+      MaxSteps: Positive := 1;
       StartingStep: Step_Data;
       Steps: Steps_Container.Vector;
       FinalStep: Step_Data;
@@ -166,9 +168,9 @@ package Stories is
    -- SOURCE
    type CurrentStory_Data is record
       Index: Unbounded_String;
-      Step: Positive;
+      Step: Positive := 1;
       CurrentStep: Integer range -3 .. Integer'Last;
-      MaxSteps: Positive;
+      MaxSteps: Positive := 1;
       ShowText: Boolean;
       Data: Unbounded_String;
       FinishedStep: StepConditionType;
@@ -186,7 +188,7 @@ package Stories is
    -- SOURCE
    type FinishedStory_Data is record
       Index: Unbounded_String;
-      StepsAmount: Positive;
+      StepsAmount: Positive := 1;
       StepsTexts: UnboundedString_Container.Vector;
    end record;
    -- ****
@@ -247,7 +249,8 @@ package Stories is
       -- Resets current story
       -- SOURCE
    procedure ClearCurrentStory with
-      Test_Case => (Name => "Test_ClearCurrentStory", Mode => Robustness);
+      Post => CurrentStory.Index = Null_Unbounded_String,
+      Test_Case => (Name => "Test_ClearCurrentStory", Mode => Nominal);
       -- ****
 
       -- ****f* Stories/Stories.ProgressStory
@@ -285,7 +288,7 @@ package Stories is
    function GetStepData
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String with
-      Pre => Name /= "",
+      Pre => Name'Length > 0,
       Test_Case => (Name => "Test_GetStepData", Mode => Nominal);
       -- ****
 
