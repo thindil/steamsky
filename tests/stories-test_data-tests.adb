@@ -81,23 +81,41 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   procedure Wrap_Test_ClearCurrentStory_0648d1_ff8276 is
+   procedure Wrap_Test_ClearCurrentStory_0648d1_6d4eff is
    begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(stories.ads:0):Test_ClearCurrentStory test requirement violated");
+      end;
       GNATtest_Generated.GNATtest_Standard.Stories.ClearCurrentStory;
-   end Wrap_Test_ClearCurrentStory_0648d1_ff8276;
+      begin
+         pragma Assert(CurrentStory.Index = Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(stories.ads:0:):Test_ClearCurrentStory test commitment violated");
+      end;
+   end Wrap_Test_ClearCurrentStory_0648d1_6d4eff;
 --  end read only
 
 --  begin read only
    procedure Test_ClearCurrentStory_test_clearcurrentstory
      (Gnattest_T: in out Test);
-   procedure Test_ClearCurrentStory_0648d1_ff8276
+   procedure Test_ClearCurrentStory_0648d1_6d4eff
      (Gnattest_T: in out Test) renames
      Test_ClearCurrentStory_test_clearcurrentstory;
 --  id:2.2/0648d16dba1bb959/ClearCurrentStory/1/0/test_clearcurrentstory/
    procedure Test_ClearCurrentStory_test_clearcurrentstory
      (Gnattest_T: in out Test) is
       procedure ClearCurrentStory renames
-        Wrap_Test_ClearCurrentStory_0648d1_ff8276;
+        Wrap_Test_ClearCurrentStory_0648d1_6d4eff;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
@@ -191,12 +209,12 @@ package body Stories.Test_Data.Tests is
 --  end read only
 
 --  begin read only
-   function Wrap_Test_GetStepData_8e5120_5b2a80
+   function Wrap_Test_GetStepData_8e5120_456123
      (FinishData: StepData_Container.Vector; Name: String)
       return Unbounded_String is
    begin
       begin
-         pragma Assert(Name /= "");
+         pragma Assert(Name'Length > 0);
          null;
       exception
          when System.Assertions.Assert_Failure =>
@@ -205,7 +223,7 @@ package body Stories.Test_Data.Tests is
                "req_sloc(stories.ads:0):Test_GetStepData test requirement violated");
       end;
       declare
-         Test_GetStepData_8e5120_5b2a80_Result: constant Unbounded_String :=
+         Test_GetStepData_8e5120_456123_Result: constant Unbounded_String :=
            GNATtest_Generated.GNATtest_Standard.Stories.GetStepData
              (FinishData, Name);
       begin
@@ -218,21 +236,21 @@ package body Stories.Test_Data.Tests is
                  (False,
                   "ens_sloc(stories.ads:0:):Test_GetStepData test commitment violated");
          end;
-         return Test_GetStepData_8e5120_5b2a80_Result;
+         return Test_GetStepData_8e5120_456123_Result;
       end;
-   end Wrap_Test_GetStepData_8e5120_5b2a80;
+   end Wrap_Test_GetStepData_8e5120_456123;
 --  end read only
 
 --  begin read only
    procedure Test_GetStepData_test_getstepdata(Gnattest_T: in out Test);
-   procedure Test_GetStepData_8e5120_5b2a80(Gnattest_T: in out Test) renames
+   procedure Test_GetStepData_8e5120_456123(Gnattest_T: in out Test) renames
      Test_GetStepData_test_getstepdata;
 --  id:2.2/8e51209e243a2f63/GetStepData/1/0/test_getstepdata/
    procedure Test_GetStepData_test_getstepdata(Gnattest_T: in out Test) is
       function GetStepData
         (FinishData: StepData_Container.Vector; Name: String)
          return Unbounded_String renames
-        Wrap_Test_GetStepData_8e5120_5b2a80;
+        Wrap_Test_GetStepData_8e5120_456123;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
