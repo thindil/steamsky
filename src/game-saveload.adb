@@ -260,24 +260,28 @@ package body Game.SaveLoad is
               MessagesAmount
             else Game_Settings.Saved_Messages);
          Start_Loop: Positive := 1;
-         MessageNode: DOM.Core.Element;
-         Message: Message_Data;
-         MessageText: Text;
+         Message_Node: DOM.Core.Element;
+         Message: Message_Data :=
+           (Message => Null_Unbounded_String, MType => Default,
+            Color => WHITE);
+         Message_Text: Text;
       begin
          if Messages_To_Save > 0 then
             Start_Loop := MessagesAmount - Messages_To_Save + 1;
             Save_Messages_Loop :
             for I in Start_Loop .. MessagesAmount loop
                Message := GetMessage(I);
-               MessageNode := Create_Element(Save_Data, "message");
-               MessageNode := Append_Child(Main_Node, MessageNode);
+               Message_Node :=
+                 Append_Child(Main_Node, Create_Element(Save_Data, "message"));
                Save_Number
-                 (Message_Type'Pos(Message.MType), "type", MessageNode);
+                 (Message_Type'Pos(Message.MType), "type", Message_Node);
                Save_Number
-                 (Message_Color'Pos(Message.Color), "color", MessageNode);
-               MessageText :=
+                 (Message_Color'Pos(Message.Color), "color", Message_Node);
+               --## rule off ASSIGNMENTS
+               Message_Text :=
                  Create_Text_Node(Save_Data, To_String(Message.Message));
-               MessageText := Append_Child(MessageNode, MessageText);
+               Message_Text := Append_Child(Message_Node, Message_Text);
+               --## rule on ASSIGNMENTS
             end loop Save_Messages_Loop;
          end if;
       end Save_Messages_Block;
