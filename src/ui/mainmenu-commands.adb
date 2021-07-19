@@ -17,6 +17,7 @@ with Ada.Calendar; use Ada.Calendar;
 with Ada.Calendar.Formatting;
 with Ada.Calendar.Time_Zones; use Ada.Calendar.Time_Zones;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Directories; use Ada.Directories;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
@@ -289,14 +290,25 @@ package body MainMenu.Commands is
       Files: Search_Type;
       FoundFile: Directory_Entry_Type;
       Tokens: Slice_Set;
+      type Save_Record is record
+         Player_Name: Unbounded_String;
+         Ship_Name: Unbounded_String;
+         Save_Time: Unbounded_String;
+         File_Name: Unbounded_String;
+      end record;
+      package Saves_Container is new Vectors
+        (Index_Type => Positive, Element_Type => Save_Record);
+      Saves: Saves_Container.Vector;
    begin
       if LoadTable.Row_Height = 1 then
          LoadTable :=
            CreateTable
-             (".loadmenu.list",
-              (To_Unbounded_String("Player name"),
-               To_Unbounded_String("Ship name"),
-               To_Unbounded_String("Last saved")));
+             (Parent => ".loadmenu.list",
+              Headers =>
+                (To_Unbounded_String("Player name"),
+                 To_Unbounded_String("Ship name"),
+                 To_Unbounded_String("Last saved")),
+              Command => "SortSaves");
       else
          ClearTable(LoadTable);
       end if;
@@ -305,28 +317,35 @@ package body MainMenu.Commands is
       while More_Entries(Files) loop
          Get_Next_Entry(Files, FoundFile);
          Create(Tokens, Simple_Name(FoundFile), "_");
-         AddButton
-           (LoadTable, Slice(Tokens, 1),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & Simple_Name(FoundFile), 1);
-         AddButton
-           (LoadTable, Slice(Tokens, 2),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & Simple_Name(FoundFile), 2);
-         AddButton
-           (LoadTable,
-            Ada.Calendar.Formatting.Image
-              (Modification_Time(FoundFile), False, UTC_Time_Offset),
-            "Press mouse " &
-            (if Game_Settings.Right_Button then "right" else "left") &
-            " button to show available options",
-            "ShowLoadGameMenu " & Simple_Name(FoundFile), 3, True);
+         Saves.Append
+           ((To_Unbounded_String(Slice(Tokens, 1)),
+             To_Unbounded_String(Slice(Tokens, 2)),
+             To_Unbounded_String
+               (Ada.Calendar.Formatting.Image
+                  (Modification_Time(FoundFile), False, UTC_Time_Offset)),
+             To_Unbounded_String(Simple_Name(FoundFile))));
       end loop Load_Saves_List_Loop;
       End_Search(Files);
+      for Save of Saves loop
+         AddButton
+           (LoadTable, To_String(Save.Player_Name),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
+            "ShowLoadGameMenu " & To_String(Save.File_Name), 1);
+         AddButton
+           (LoadTable, To_String(Save.Ship_Name),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
+            "ShowLoadGameMenu " & To_String(Save.File_Name), 2);
+         AddButton
+           (LoadTable, To_String(Save.Save_Time),
+            "Press mouse " &
+            (if Game_Settings.Right_Button then "right" else "left") &
+            " button to show available options",
+            "ShowLoadGameMenu " & To_String(Save.File_Name), 3, True);
+      end loop;
       UpdateTable(LoadTable);
       if LoadTable.Row = 1 then
          Unbind_From_Main_Window(Interp, "<Alt-b>");
@@ -886,6 +905,37 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
 
+   -- ****o* MCommands/Sort_Saves_Command
+   -- FUNCTION
+   -- Sort the saved games list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command. Unused
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortSaves x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Saves_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Saves_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(LoadTable, Natural'Value(CArgv.Arg(Argv, 1)));
+   begin
+      Ada.Text_IO.Put_Line(Natural'Image(Column));
+      return TCL_OK;
+   end Sort_Saves_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OpenLink", Open_Link_Command'Access);
@@ -902,6 +952,7 @@ package body MainMenu.Commands is
       AddCommand("NewGame", New_Game_Command'Access);
       AddCommand("ShowMainMenu", Show_Main_Menu_Command'Access);
       AddCommand("ShowLoadGameMenu", Show_Load_Game_Menu_Command'Access);
+      AddCommand("SortSaves", Sort_Saves_Command'Access);
    end AddCommands;
 
 end MainMenu.Commands;
