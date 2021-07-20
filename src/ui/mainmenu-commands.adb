@@ -264,10 +264,27 @@ package body MainMenu.Commands is
    LoadTable: Table_Widget (3);
    -- ****
 
+   -- ****it* MCommands/MCommands.Save_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the saved games list
+   -- OPTIONS
+   -- PLAYERASC  - Sort by player name ascending
+   -- PLAYERDESC - Sort by player name descending
+   -- SHIPASC    - Sort by ship name ascending
+   -- SHIPDESC   - Sort by ship name descending
+   -- TIMEASC    - Sort by save time ascending
+   -- TIMEDESC   - Sort by save time descending
+   -- SOURCE
    type Save_Sort_Orders is
      (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC);
+   -- ****
 
+   -- ****iv* MCommands/MCommands.Save_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the saved game list
+   -- SOURCE
    Save_Sort_Order: Save_Sort_Orders := TIMEDESC;
+   -- ****
 
    -- ****o* MCommands/Show_Load_Game_Command
    -- FUNCTION
@@ -306,6 +323,7 @@ package body MainMenu.Commands is
       Saves: Saves_Container.Vector;
       function "<"(Left, Right: Save_Record) return Boolean is
       begin
+         Ada.Text_IO.Put_Line(Save_Sort_Orders'Image(Save_Sort_Order));
          if Save_Sort_Order = PLAYERASC
            and then Left.Player_Name < Right.Player_Name then
             return True;
