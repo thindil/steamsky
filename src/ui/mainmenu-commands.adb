@@ -323,7 +323,6 @@ package body MainMenu.Commands is
       Saves: Saves_Container.Vector;
       function "<"(Left, Right: Save_Record) return Boolean is
       begin
-         Ada.Text_IO.Put_Line(Save_Sort_Orders'Image(Save_Sort_Order));
          if Save_Sort_Order = PLAYERASC
            and then Left.Player_Name < Right.Player_Name then
             return True;
