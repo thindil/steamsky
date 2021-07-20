@@ -10,14 +10,14 @@ package Trades.Test_Data.Tests is
      .Test with
    null record;
 
-   procedure Test_BuyItems_295d66_69cd52(Gnattest_T: in out Test);
+   procedure Test_BuyItems_295d66_e10e97(Gnattest_T: in out Test);
    --  trades.ads:114:4:BuyItems:Test_BuyItems
 
-   procedure Test_SellItems_079195_f1c0a2(Gnattest_T: in out Test);
-   --  trades.ads:126:4:SellItems:Test_SellItems
+   procedure Test_SellItems_079195_4009e6(Gnattest_T: in out Test);
+   --  trades.ads:127:4:SellItems:Test_SellItems
 
    procedure Test_GenerateTraderCargo_9d8e19_e2d9dd(Gnattest_T: in out Test);
-   --  trades.ads:140:4:GenerateTraderCargo:Test_GenerateTraderCargo
+   --  trades.ads:142:4:GenerateTraderCargo:Test_GenerateTraderCargo
 
 end Trades.Test_Data.Tests;
 --  end read only
