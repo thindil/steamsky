@@ -205,6 +205,43 @@ package Ships is
      (Index_Type => Positive, Element_Type => Module_Data);
    -- ****
 
+   -- ****t* Ships/Ships.Modules_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the ship modules list
+   -- OPTIONS
+   -- NAMEASC    - Sort modules by name ascending
+   -- NAMEDESC   - Sort modules by name descending
+   -- DAMAGEASC  - Sort modules by damage ascending
+   -- DAMAGEDESC - Sort modules by damage descending
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC);
+   -- ****
+
+   -- ****v* Ships/Ships.Modules_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for modules list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Modules_Sort_Order: Modules_Sort_Orders := NAMEASC;
+   -- ****
+
+   -- ****f* Ships/Ships."<"
+   -- FUNCTION
+   -- Provide sorting for modules list
+   -- PARAMETERS
+   -- Left  - The left module to compare
+   -- Right - The right module to compare
+   -- RESULT
+   -- If left module should go first return True, otherwise False
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   function "<"(Left, Right: Module_Data) return Boolean;
+   -- ****
+
    -- ****t* Ships/Ships.Crew_Container
    -- FUNCTION
    -- Used to store crew data in ships
