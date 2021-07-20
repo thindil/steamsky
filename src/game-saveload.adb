@@ -270,22 +270,32 @@ package body Game.SaveLoad is
             Start_Loop := MessagesAmount - Messages_To_Save + 1;
             Save_Messages_Loop :
             for I in Start_Loop .. MessagesAmount loop
-               Message := GetMessage(I);
+               Message := GetMessage(MessageIndex => I);
                Message_Node :=
-                 Append_Child(Main_Node, Create_Element(Save_Data, "message"));
+                 Append_Child
+                   (N => Main_Node,
+                    New_Child =>
+                      Create_Element(Doc => Save_Data, Tag_Name => "message"));
                Save_Number
-                 (Message_Type'Pos(Message.MType), "type", Message_Node);
+                 (Value => Message_Type'Pos(Message.MType), Name => "type",
+                  Node => Message_Node);
                Save_Number
-                 (Message_Color'Pos(Message.Color), "color", Message_Node);
+                 (Value => Message_Color'Pos(Message.Color), Name => "color",
+                  Node => Message_Node);
                --## rule off ASSIGNMENTS
                Message_Text :=
-                 Create_Text_Node(Save_Data, To_String(Message.Message));
-               Message_Text := Append_Child(Message_Node, Message_Text);
+                 Create_Text_Node
+                   (Doc => Save_Data,
+                    Data => To_String(Source => Message.Message));
+               Message_Text :=
+                 Append_Child(N => Message_Node, New_Child => Message_Text);
                --## rule on ASSIGNMENTS
             end loop Save_Messages_Loop;
          end if;
       end Save_Messages_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save events
       Log_Message("Saving events...", EVERYTHING, False);
       declare
