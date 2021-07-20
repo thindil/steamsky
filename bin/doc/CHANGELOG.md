@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to move (drag) dialogs with mouse after clicking on their headers
+- Ability to sort saved games list
 
 ### Changed
 - Updated help
