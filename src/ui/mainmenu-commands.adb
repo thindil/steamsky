@@ -264,6 +264,11 @@ package body MainMenu.Commands is
    LoadTable: Table_Widget (3);
    -- ****
 
+   type Save_Sort_Orders is
+     (PLAYERASC, PLAYERDESC, SHIPASC, SHIPDESC, TIMEASC, TIMEDESC);
+
+   Save_Sort_Order: Save_Sort_Orders := TIMEDESC;
+
    -- ****o* MCommands/Show_Load_Game_Command
    -- FUNCTION
    -- Show available saved games
@@ -299,6 +304,35 @@ package body MainMenu.Commands is
       package Saves_Container is new Vectors
         (Index_Type => Positive, Element_Type => Save_Record);
       Saves: Saves_Container.Vector;
+      function "<"(Left, Right: Save_Record) return Boolean is
+      begin
+         if Save_Sort_Order = PLAYERASC
+           and then Left.Player_Name < Right.Player_Name then
+            return True;
+         end if;
+         if Save_Sort_Order = PLAYERDESC
+           and then Left.Player_Name > Right.Player_Name then
+            return True;
+         end if;
+         if Save_Sort_Order = SHIPASC
+           and then Left.Ship_Name < Right.Ship_Name then
+            return True;
+         end if;
+         if Save_Sort_Order = SHIPDESC
+           and then Left.Ship_Name > Right.Ship_Name then
+            return True;
+         end if;
+         if Save_Sort_Order = TIMEASC
+           and then Left.Save_Time < Right.Save_Time then
+            return True;
+         end if;
+         if Save_Sort_Order = TIMEDESC
+           and then Left.Save_Time > Right.Save_Time then
+            return True;
+         end if;
+         return False;
+      end "<";
+      package Saves_Sorting is new Saves_Container.Generic_Sorting;
    begin
       if LoadTable.Row_Height = 1 then
          LoadTable :=
@@ -326,6 +360,7 @@ package body MainMenu.Commands is
              To_Unbounded_String(Simple_Name(FoundFile))));
       end loop Load_Saves_List_Loop;
       End_Search(Files);
+      Saves_Sorting.Sort(Saves);
       for Save of Saves loop
          AddButton
            (LoadTable, To_String(Save.Player_Name),
@@ -928,12 +963,32 @@ package body MainMenu.Commands is
    function Sort_Saves_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
         Get_Column_Number(LoadTable, Natural'Value(CArgv.Arg(Argv, 1)));
    begin
-      Ada.Text_IO.Put_Line(Natural'Image(Column));
-      return TCL_OK;
+      case Column is
+         when 1 =>
+            if Save_Sort_Order = PLAYERASC then
+               Save_Sort_Order := PLAYERDESC;
+            else
+               Save_Sort_Order := PLAYERASC;
+            end if;
+         when 2 =>
+            if Save_Sort_Order = SHIPASC then
+               Save_Sort_Order := SHIPDESC;
+            else
+               Save_Sort_Order := SHIPASC;
+            end if;
+         when 3 =>
+            if Save_Sort_Order = TIMEASC then
+               Save_Sort_Order := TIMEDESC;
+            else
+               Save_Sort_Order := TIMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      return Show_Load_Game_Command(ClientData, Interp, Argc, Argv);
    end Sort_Saves_Command;
 
    procedure AddCommands is
