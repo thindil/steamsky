@@ -87,7 +87,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Open_Link_Command;
 
-   -- ****o* MCommands/Show_File_Command
+   -- ****o* MCommands/MCommands.Show_File_Command
    -- FUNCTION
    -- Show the selected file content
    -- PARAMETERS
@@ -139,14 +139,14 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_File_Command;
 
-   -- ****iv* MCommands/AllNews
+   -- ****iv* MCommands/MCommands.AllNews
    -- FUNCTION
    -- If true, show all news, not only from last version. Default is false
    -- SOURCE
    AllNews: Boolean := False;
    -- ****
 
-   -- ****o* MCommands/Show_News_Command
+   -- ****o* MCommands/MCommands.Show_News_Command
    -- FUNCTION
    -- Show changes in the game, all or just recent
    -- PARAMETERS
@@ -217,7 +217,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_News_Command;
 
-   -- ****o* MCommands/Show_Hall_Of_Fame_Command
+   -- ****o* MCommands/MCommands.Show_Hall_Of_Fame_Command
    -- FUNCTION
    -- Show the Hall of Fame
    -- PARAMETERS
@@ -286,7 +286,7 @@ package body MainMenu.Commands is
    Save_Sort_Order: Save_Sort_Orders := TIMEDESC;
    -- ****
 
-   -- ****o* MCommands/Show_Load_Game_Command
+   -- ****o* MCommands/MCommads.Show_Load_Game_Command
    -- FUNCTION
    -- Show available saved games
    -- PARAMETERS
@@ -408,7 +408,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Load_Game_Command;
 
-   -- ****o* MCommands/Delete_Game_Command
+   -- ****o* MCommands/MCommands.Delete_Game_Command
    -- FUNCTION
    -- Delete the selected save file
    -- PARAMETERS
@@ -439,7 +439,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Delete_Game_Command;
 
-   -- ****if* MCommands/StartGame
+   -- ****if* MCommands/MCommands.StartGame
    -- FUNCTION
    -- Start the game
    -- SOURCE
@@ -471,7 +471,7 @@ package body MainMenu.Commands is
       CreateGameUI;
    end StartGame;
 
-   -- ****o* MCommands/Load_Game_Command
+   -- ****o* MCommands/MCommands.Load_Game_Command
    -- FUNCTION
    -- Load the selected save file and start the game
    -- PARAMETERS
@@ -510,7 +510,7 @@ package body MainMenu.Commands is
          return TCL_OK;
    end Load_Game_Command;
 
-   -- ****o* MCommands/Set_Faction_Command
+   -- ****o* MCommands/MCommands.Set_Faction_Command
    -- FUNCTION
    -- Set faction destription and available bases and careers
    -- PARAMETERS
@@ -620,7 +620,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Faction_Command;
 
-   -- ****o* MCommands/Set_Career_Command
+   -- ****o* MCommands/MCommands.Set_Career_Command
    -- FUNCTION
    -- Set career description
    -- PARAMETERS
@@ -681,7 +681,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Career_Command;
 
-   -- ****o* MCommands/Set_Base_Command
+   -- ****o* MCommands/MCommands.Set_Base_Command
    -- FUNCTION
    -- Set starting base description
    -- PARAMETERS
@@ -733,7 +733,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Set_Base_Command;
 
-   -- ****o* MCommands/Random_Name_Command
+   -- ****o* MCommands/MCommands.Random_Name_Command
    -- FUNCTION
    -- Generate random player or ship name
    -- PARAMETERS
@@ -788,7 +788,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Random_Name_Command;
 
-   -- ****o* MCommands/New_Game_Command
+   -- ****o* MCommands/MCommands.New_Game_Command
    -- FUNCTION
    -- Set all parameters and start a new game
    -- PARAMETERS
@@ -885,7 +885,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end New_Game_Command;
 
-   -- ****o* MCommands/Show_Main_Menu_Command
+   -- ****o* MCommands/MCommands.Show_Main_Menu_Command
    -- FUNCTION
    -- Clear the main game window and show main menu
    -- PARAMETERS
@@ -913,7 +913,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Main_Menu_Command;
 
-   -- ****o* MCommands/Show_Load_Game_Menu_Command
+   -- ****o* MCommands/MCommands.Show_Load_Game_Menu_Command
    -- FUNCTION
    -- Show available options for the selected saved game
    -- PARAMETERS
@@ -957,7 +957,7 @@ package body MainMenu.Commands is
       return TCL_OK;
    end Show_Load_Game_Menu_Command;
 
-   -- ****o* MCommands/Sort_Saves_Command
+   -- ****o* MCommands/MCommands.Sort_Saves_Command
    -- FUNCTION
    -- Sort the saved games list
    -- PARAMETERS

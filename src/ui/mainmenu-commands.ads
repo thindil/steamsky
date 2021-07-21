@@ -24,7 +24,7 @@ with Tcl; use Tcl;
 package MainMenu.Commands is
 -- ****
 
-   -- ****o* MCommands/Open_Link_Command
+   -- ****o* MCommands/MCommands.Open_Link_Command
    -- FUNCTION
    -- Open the selected link in the proper program
    -- PARAMETERS
@@ -44,7 +44,7 @@ package MainMenu.Commands is
       Convention => C;
       -- ****
 
-      -- ****f* MCommands/AddCommands
+      -- ****f* MCommands/MCommands.AddCommands
       -- FUNCTION
       -- Add Tcl commands related to main menu to the game
       -- SOURCE
