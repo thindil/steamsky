@@ -297,18 +297,21 @@ package body Game.SaveLoad is
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
       -- Save events
-      Log_Message("Saving events...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving events...", Message_Type => EVERYTHING,
+         New_Line => False);
+      Save_Known_Events_Block :
       declare
-         EventNode: DOM.Core.Element;
+         Event_Node: DOM.Core.Element;
       begin
          Save_Events_Loop :
          for Event of Events_List loop
-            EventNode := Create_Element(Save_Data, "event");
-            EventNode := Append_Child(Main_Node, EventNode);
-            Save_Number(Events_Types'Pos(Event.EType), "type", EventNode);
-            Save_Number(Event.SkyX, "x", EventNode);
-            Save_Number(Event.SkyY, "y", EventNode);
-            Save_Number(Event.Time, "time", EventNode);
+            Event_Node :=
+              Append_Child(Main_Node, Create_Element(Save_Data, "event"));
+            Save_Number(Events_Types'Pos(Event.EType), "type", Event_Node);
+            Save_Number(Event.SkyX, "x", Event_Node);
+            Save_Number(Event.SkyY, "y", Event_Node);
+            Save_Number(Event.Time, "time", Event_Node);
             case Event.EType is
                when DoublePrice =>
                   Raw_Value := Event.ItemIndex;
@@ -319,10 +322,10 @@ package body Game.SaveLoad is
                   Raw_Value := To_Unbounded_String(Integer'Image(Event.Data));
             end case;
             Set_Attribute
-              (EventNode, "data",
+              (Event_Node, "data",
                To_String(Trim(Raw_Value, Ada.Strings.Left)));
          end loop Save_Events_Loop;
-      end;
+      end Save_Known_Events_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Save game statistics
       Log_Message("Saving game statistics...", EVERYTHING, False);
