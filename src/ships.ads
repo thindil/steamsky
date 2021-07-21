@@ -216,7 +216,15 @@ package Ships is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC);
+   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC) with
+      Default_Value => NAMEASC;
+      -- ****
+
+      -- ****d* Ships/Ships.Default_Modules_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the player's ship's modules
+      -- SOURCE
+   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NAMEASC;
    -- ****
 
    -- ****v* Ships/Ships.Modules_Sort_Order
@@ -225,7 +233,7 @@ package Ships is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   Modules_Sort_Order: Modules_Sort_Orders := NAMEASC;
+   Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
    -- ****
 
    -- ****f* Ships/Ships."<"
@@ -240,6 +248,14 @@ package Ships is
    -- 6.4 - Added
    -- SOURCE
    function "<"(Left, Right: Module_Data) return Boolean;
+   -- ****
+
+   -- ****t* Ships/Ships.Player_Ship_Modules_Sorting
+   -- FUNCTION
+   -- Used to sort the player's ship's modules
+   -- SOURCE
+   package Player_Ship_Modules_Sorting is new Modules_Container
+     .Generic_Sorting;
    -- ****
 
    -- ****t* Ships/Ships.Crew_Container
