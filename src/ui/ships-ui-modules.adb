@@ -1639,7 +1639,8 @@ package body Ships.UI.Modules is
            CreateTable
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
-              Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"));
+              Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
+              "SortShipModules");
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
@@ -1711,6 +1712,54 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Modules_Command;
 
+   -- ****o* SUModules/SUModules.Sort_Modules_Command
+   -- FUNCTION
+   -- Sort the saved games list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortShipModules x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(ModulesTable, Natural'Value(CArgv.Arg(Argv, 1)));
+   begin
+      case Column is
+         when 1 =>
+            if Modules_Sort_Order = NAMEASC then
+               Modules_Sort_Order := NAMEDESC;
+            else
+               Modules_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Modules_Sort_Order = DAMAGEASC then
+               Modules_Sort_Order := DAMAGEDESC;
+            else
+               Modules_Sort_Order := DAMAGEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Player_Ship_Modules_Sorting.Sort(Player_Ship.Modules);
+      UpdateModulesInfo;
+      return TCL_OK;
+   end Sort_Modules_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowModuleMenu", Show_Module_Menu_Command'Access);
@@ -1727,6 +1776,7 @@ package body Ships.UI.Modules is
       AddCommand("CancelOrder", Cancel_Order_Command'Access);
       AddCommand("GetActiveButton", Get_Active_Button_Command'Access);
       AddCommand("ShowModules", Show_Modules_Command'Access);
+      AddCommand("SortShipModules", Sort_Modules_Command'Access);
    end AddCommands;
 
 end Ships.UI.Modules;
