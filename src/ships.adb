@@ -1244,7 +1244,7 @@ package body Ships is
    end Damage_Module;
 
    function "<"(Left, Right: Module_Data) return Boolean is
-      Left_Damage, Right_Damage: Float;
+      Left_Damage, Right_Damage: Float := 1.0;
    begin
       if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
          return True;
