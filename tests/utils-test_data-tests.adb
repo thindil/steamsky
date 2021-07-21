@@ -28,7 +28,7 @@ package body Utils.Test_Data.Tests is
 --  begin read only
 --  end read only
 --  begin read only
-   function Wrap_Test_GetRandom_9cea97_28ba02
+   function Wrap_Test_GetRandom_9cea97_22d06f
      (Min, Max: Integer) return Integer is
    begin
       begin
@@ -41,11 +41,11 @@ package body Utils.Test_Data.Tests is
                "req_sloc(utils.ads:0):Test_GetRandom test requirement violated");
       end;
       declare
-         Test_GetRandom_9cea97_28ba02_Result: constant Integer :=
+         Test_GetRandom_9cea97_22d06f_Result: constant Integer :=
            GNATtest_Generated.GNATtest_Standard.Utils.GetRandom(Min, Max);
       begin
          begin
-            pragma Assert(True);
+            pragma Assert(Test_GetRandom_9cea97_22d06f_Result in Min .. Max);
             null;
          exception
             when System.Assertions.Assert_Failure =>
@@ -53,19 +53,19 @@ package body Utils.Test_Data.Tests is
                  (False,
                   "ens_sloc(utils.ads:0:):Test_GetRandom test commitment violated");
          end;
-         return Test_GetRandom_9cea97_28ba02_Result;
+         return Test_GetRandom_9cea97_22d06f_Result;
       end;
-   end Wrap_Test_GetRandom_9cea97_28ba02;
+   end Wrap_Test_GetRandom_9cea97_22d06f;
 --  end read only
 
 --  begin read only
    procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test);
-   procedure Test_GetRandom_9cea97_28ba02(Gnattest_T: in out Test) renames
+   procedure Test_GetRandom_9cea97_22d06f(Gnattest_T: in out Test) renames
      Test_GetRandom_test_getrandom;
 --  id:2.2/9cea97d085bfefbe/GetRandom/1/0/test_getrandom/
    procedure Test_GetRandom_test_getrandom(Gnattest_T: in out Test) is
       function GetRandom(Min, Max: Integer) return Integer renames
-        Wrap_Test_GetRandom_9cea97_28ba02;
+        Wrap_Test_GetRandom_9cea97_22d06f;
 --  end read only
 
       pragma Unreferenced(Gnattest_T);
