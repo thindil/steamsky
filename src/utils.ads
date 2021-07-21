@@ -36,6 +36,7 @@ package Utils is
    -- SOURCE
    function GetRandom(Min, Max: Integer) return Integer with
       Pre => Min <= Max,
+      Post => GetRandom'Result in Min .. Max,
       Test_Case => (Name => "Test_GetRandom", Mode => Nominal);
       -- ****
 
@@ -60,7 +61,8 @@ package Utils is
       -- RESULT
       -- Random robotic name
       -- SOURCE
-   function GenerateRoboticName return Unbounded_String;
+   function GenerateRoboticName return Unbounded_String with
+      Post => Length(GenerateRoboticName'Result) > 0;
    -- ****
 
 end Utils;
