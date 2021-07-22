@@ -16,5 +16,8 @@ package Utils.Test_Data.Tests is
    procedure Test_DaysDifference_ef24bd_fd50f2(Gnattest_T: in out Test);
    --  utils.ads:51:4:DaysDifference:Test_DaysDifference
 
+   procedure Test_GenerateRoboticName_8f86c4_4f7934(Gnattest_T: in out Test);
+   --  utils.ads:64:4:GenerateRoboticName:Test_GenerateRoboticName
+
 end Utils.Test_Data.Tests;
 --  end read only

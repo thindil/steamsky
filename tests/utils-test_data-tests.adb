@@ -121,6 +121,62 @@ package body Utils.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   function Wrap_Test_GenerateRoboticName_8f86c4_4f7934
+      return Unbounded_String is
+   begin
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(utils.ads:0):Test_GenerateRoboticName test requirement violated");
+      end;
+      declare
+         Test_GenerateRoboticName_8f86c4_4f7934_Result: constant Unbounded_String :=
+           GNATtest_Generated.GNATtest_Standard.Utils.GenerateRoboticName;
+      begin
+         begin
+            pragma Assert
+              (Length(Test_GenerateRoboticName_8f86c4_4f7934_Result) > 0);
+            null;
+         exception
+            when System.Assertions.Assert_Failure =>
+               AUnit.Assertions.Assert
+                 (False,
+                  "ens_sloc(utils.ads:0:):Test_GenerateRoboticName test commitment violated");
+         end;
+         return Test_GenerateRoboticName_8f86c4_4f7934_Result;
+      end;
+   end Wrap_Test_GenerateRoboticName_8f86c4_4f7934;
+--  end read only
+
+--  begin read only
+   procedure Test_GenerateRoboticName_test_generateroboticname
+     (Gnattest_T: in out Test);
+   procedure Test_GenerateRoboticName_8f86c4_4f7934
+     (Gnattest_T: in out Test) renames
+     Test_GenerateRoboticName_test_generateroboticname;
+--  id:2.2/8f86c48784bbe1f0/GenerateRoboticName/1/0/test_generateroboticname/
+   procedure Test_GenerateRoboticName_test_generateroboticname
+     (Gnattest_T: in out Test) is
+      function GenerateRoboticName return Unbounded_String renames
+        Wrap_Test_GenerateRoboticName_8f86c4_4f7934;
+--  end read only
+
+      pragma Unreferenced(Gnattest_T);
+
+   begin
+
+      Assert
+        (Length(GenerateRoboticName) > 0, "Failed to generate robotic name.");
+
+--  begin read only
+   end Test_GenerateRoboticName_test_generateroboticname;
+--  end read only
+
+--  begin read only
 --  id:2.2/02/
 --
 --  This section can be used to add elaboration code for the global state.
