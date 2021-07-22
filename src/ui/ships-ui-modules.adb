@@ -1714,7 +1714,7 @@ package body Ships.UI.Modules is
 
    -- ****o* SUModules/SUModules.Sort_Modules_Command
    -- FUNCTION
-   -- Sort the saved games list
+   -- Sort the player's ship's modules list
    -- PARAMETERS
    -- ClientData - Custom data send to the command. Unused
    -- Interp     - Tcl interpreter in which command was executed. Unused
