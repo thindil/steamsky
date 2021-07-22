@@ -1267,4 +1267,25 @@ package body Ships is
       return False;
    end "<";
 
+   function "<"(Left, Right: Member_Data) return Boolean is
+   begin
+      if Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+         return True;
+      end if;
+      if Crew_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+         return True;
+      end if;
+      if Crew_Sort_Order = ORDERASC
+        and then Crew_Orders'Image(Left.Order) <
+          Crew_Orders'Image(Right.Order) then
+         return True;
+      end if;
+      if Crew_Sort_Order = ORDERDESC
+        and then Crew_Orders'Image(Left.Order) >
+          Crew_Orders'Image(Right.Order) then
+         return True;
+      end if;
+      return False;
+   end "<";
+
 end Ships;

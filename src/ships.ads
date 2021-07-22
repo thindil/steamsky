@@ -266,6 +266,19 @@ package Ships is
      (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
+   type Crew_Sort_Orders is
+     (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
+      FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
+      MORALEASC, MORALEDESC);
+
+   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEASC;
+
+   Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
+
+   function "<"(Left, Right: Member_Data) return Boolean;
+
+   package Player_Ship_Crew_Sorting is new Crew_Container.Generic_Sorting;
+
    -- ****s* Ships/Ships.Ship_Record
    -- FUNCTION
    -- Data structure for ships

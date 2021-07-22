@@ -131,7 +131,8 @@ package body Ships.UI.Crew is
             To_Unbounded_String("Health"), To_Unbounded_String("Fatigue"),
             To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
             To_Unbounded_String("Morale")),
-           Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"));
+           Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
+           "SortShipCrew");
       Load_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Current_Row < Start_Row then
@@ -1285,6 +1286,54 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Command;
 
+   -- ****o* SUCrew/SUCrew.Sort_Crew_Command
+   -- FUNCTION
+   -- Sort the player's ship's crew list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortShipCrew x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Crew_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Crew_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
+   begin
+      case Column is
+         when 1 =>
+            if Crew_Sort_Order = NAMEASC then
+               Crew_Sort_Order := NAMEDESC;
+            else
+               Crew_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Crew_Sort_Order = ORDERASC then
+               Crew_Sort_Order := ORDERDESC;
+            else
+               Crew_Sort_Order := ORDERASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Player_Ship_Crew_Sorting.Sort(Player_Ship.Crew);
+      UpdateCrewInfo;
+      return TCL_OK;
+   end Sort_Crew_Command;
+
    procedure AddCommands is
    begin
       AddCommand("OrderForAll", Order_For_All_Command'Access);
@@ -1299,6 +1348,7 @@ package body Ships.UI.Crew is
       AddCommand("SetPriority", Set_Priority_Command'Access);
       AddCommand("ShowMemberMenu", Show_Member_Menu_Command'Access);
       AddCommand("ShowCrew", Show_Crew_Command'Access);
+      AddCommand("SortShipCrew", Sort_Crew_Command'Access);
       Ships.UI.Crew.Inventory.AddCommands;
    end AddCommands;
 
