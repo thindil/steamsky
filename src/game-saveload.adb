@@ -307,11 +307,17 @@ package body Game.SaveLoad is
          Save_Events_Loop :
          for Event of Events_List loop
             Event_Node :=
-              Append_Child(Main_Node, Create_Element(Save_Data, "event"));
-            Save_Number(Events_Types'Pos(Event.EType), "type", Event_Node);
-            Save_Number(Event.SkyX, "x", Event_Node);
-            Save_Number(Event.SkyY, "y", Event_Node);
-            Save_Number(Event.Time, "time", Event_Node);
+              Append_Child
+                (N => Main_Node,
+                 New_Child =>
+                   Create_Element(Doc => Save_Data, Tag_Name => "event"));
+            Save_Number
+              (Value => Events_Types'Pos(Event.EType), Name => "type",
+               Node => Event_Node);
+            Save_Number(Value => Event.SkyX, Name => "x", Node => Event_Node);
+            Save_Number(Value => Event.SkyY, Name => "y", Node => Event_Node);
+            Save_Number
+              (Value => Event.Time, Name => "time", Node => Event_Node);
             case Event.EType is
                when DoublePrice =>
                   Raw_Value := Event.ItemIndex;
@@ -319,11 +325,15 @@ package body Game.SaveLoad is
                  FriendlyShip =>
                   Raw_Value := Event.ShipIndex;
                when others =>
-                  Raw_Value := To_Unbounded_String(Integer'Image(Event.Data));
+                  Raw_Value :=
+                    To_Unbounded_String(Source => Integer'Image(Event.Data));
             end case;
             Set_Attribute
-              (Event_Node, "data",
-               To_String(Trim(Raw_Value, Ada.Strings.Left)));
+              (Elem => Event_Node, Name => "data",
+               Value =>
+                 To_String
+                   (Source =>
+                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
          end loop Save_Events_Loop;
       end Save_Known_Events_Block;
       Log_Message("done.", EVERYTHING, True, False);
