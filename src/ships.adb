@@ -1303,6 +1303,24 @@ package body Ships is
             return True;
          end if;
       end if;
+      if Crew_Sort_Order = THIRSTASC and then Left.Thirst < Right.Thirst then
+         return True;
+      end if;
+      if Crew_Sort_Order = THIRSTDESC and then Left.Thirst > Right.Thirst then
+         return True;
+      end if;
+      if Crew_Sort_Order = HUNGERASC and then Left.Hunger < Right.Hunger then
+         return True;
+      end if;
+      if Crew_Sort_Order = HUNGERDESC and then Left.Hunger > Right.Hunger then
+         return True;
+      end if;
+      if Crew_Sort_Order = MORALEASC and then Left.Morale < Right.Morale then
+         return True;
+      end if;
+      if Crew_Sort_Order = MORALEDESC and then Left.Morale > Right.Morale then
+         return True;
+      end if;
       return False;
    end "<";
 
