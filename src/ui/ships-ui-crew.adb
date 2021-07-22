@@ -1326,6 +1326,18 @@ package body Ships.UI.Crew is
             else
                Crew_Sort_Order := ORDERASC;
             end if;
+         when 3 =>
+            if Crew_Sort_Order = HEALTHASC then
+               Crew_Sort_Order := HEALTHDESC;
+            else
+               Crew_Sort_Order := HEALTHASC;
+            end if;
+         when 4 =>
+            if Crew_Sort_Order = FATIGUEASC then
+               Crew_Sort_Order := FATIGUEDESC;
+            else
+               Crew_Sort_Order := FATIGUEASC;
+            end if;
          when others =>
             null;
       end case;

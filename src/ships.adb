@@ -1268,6 +1268,7 @@ package body Ships is
    end "<";
 
    function "<"(Left, Right: Member_Data) return Boolean is
+      Left_Value, Right_Value: Integer := 0;
    begin
       if Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
          return True;
@@ -1284,6 +1285,23 @@ package body Ships is
         and then Crew_Orders'Image(Left.Order) >
           Crew_Orders'Image(Right.Order) then
          return True;
+      end if;
+      if Crew_Sort_Order = HEALTHASC and then Left.Health < Right.Health then
+         return True;
+      end if;
+      if Crew_Sort_Order = HEALTHDESC and then Left.Health > Right.Health then
+         return True;
+      end if;
+      if Crew_Sort_Order in FATIGUEASC | FATIGUEDESC then
+         Left_Value := Left.Tired - Left.Attributes(Condition_Index)(1);
+         Right_Value := Right.Tired - Right.Attributes(Condition_Index)(1);
+         if Crew_Sort_Order = FATIGUEASC and then Left_Value < Right_Value then
+            return True;
+         end if;
+         if Crew_Sort_Order = FATIGUEDESC
+           and then Left_Value > Right_Value then
+            return True;
+         end if;
       end if;
       return False;
    end "<";
