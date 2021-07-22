@@ -223,6 +223,8 @@ package Ships is
       -- ****d* Ships/Ships.Default_Modules_Sort_Order
       -- FUNCTION
       -- Default sorting order for the player's ship's modules
+      -- HISTORY
+      -- 6.4 - Added
       -- SOURCE
    Default_Modules_Sort_Order: constant Modules_Sort_Orders := NAMEASC;
    -- ****
@@ -236,7 +238,7 @@ package Ships is
    Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
    -- ****
 
-   -- ****f* Ships/Ships."<"
+   -- ****f* Ships/Ships."<"_(modules)
    -- FUNCTION
    -- Provide sorting for modules list
    -- PARAMETERS
@@ -253,6 +255,8 @@ package Ships is
    -- ****t* Ships/Ships.Player_Ship_Modules_Sorting
    -- FUNCTION
    -- Used to sort the player's ship's modules
+   -- HISTORY
+   -- 6.4 - Added
    -- SOURCE
    package Player_Ship_Modules_Sorting is new Modules_Container
      .Generic_Sorting;
@@ -266,18 +270,74 @@ package Ships is
      (Index_Type => Positive, Element_Type => Member_Data);
    -- ****
 
+   -- ****t* Ships/Ships.Crew_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the player ship crew list
+   -- OPTIONS
+   -- NAMEASC     - Sort members by name ascending
+   -- NAMEDESC    - Sort members by name descending
+   -- ORDERASC    - Sort members by order ascending
+   -- ORDERDESC   - Sort members by order descending
+   -- HEALTHASC   - Sort members by health ascending
+   -- HEALTHDESC  - Sort members by health descending
+   -- FATIGUEASC  - Sort members by fatigue ascending
+   -- FATIGUEDESC - Sort members by fatigue descending
+   -- THIRTSASC   - Sort members by thirst ascending
+   -- THIRSTDESC  - Sort members by thirst descending
+   -- HUNGERASC   - Sort members by hunger ascending
+   -- HUNGERDESC  - Sort members by hunger descending
+   -- MORALEASC   - Sort members by morale ascending
+   -- MORALEDESC  - Sort members by morale descending
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
    type Crew_Sort_Orders is
      (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
       FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
       MORALEASC, MORALEDESC);
+   -- ****
 
+   -- ****d* Ships/Ships.Default_Crew_Sort_Order
+   -- FUNCTION
+   -- Default sorting order for the player's ship's crew
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
    Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEASC;
+   -- ****
 
+   -- ****v* Ships/Ships.Crew_Sort_Order
+   -- FUNCTION
+   -- The current sorting order of the player's ship's crew
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
    Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
+   -- ****
 
+   -- ****f* Ships/Ships."<"_(members)
+   -- FUNCTION
+   -- FUNCTION
+   -- Provide sorting for ship's crew list
+   -- PARAMETERS
+   -- Left  - The left member to compare
+   -- Right - The right member to compare
+   -- RESULT
+   -- If left member should go first return True, otherwise False
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
    function "<"(Left, Right: Member_Data) return Boolean;
+   -- ****
 
+   -- ****t* Ships/Ships.Player_Ship_Crew_Sorting
+   -- FUNCTION
+   -- Used to sort the player's ship's crew
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
    package Player_Ship_Crew_Sorting is new Crew_Container.Generic_Sorting;
+   -- ****
 
    -- ****s* Ships/Ships.Ship_Record
    -- FUNCTION
