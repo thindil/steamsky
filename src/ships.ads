@@ -294,15 +294,16 @@ package Ships is
    type Crew_Sort_Orders is
      (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
       FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
-      MORALEASC, MORALEDESC);
-   -- ****
+      MORALEASC, MORALEDESC) with
+      Default_Value => NAMEASC;
+      -- ****
 
-   -- ****d* Ships/Ships.Default_Crew_Sort_Order
-   -- FUNCTION
-   -- Default sorting order for the player's ship's crew
-   -- HISTORY
-   -- 6.4 - Added
-   -- SOURCE
+      -- ****d* Ships/Ships.Default_Crew_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the player's ship's crew
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
    Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEASC;
    -- ****
 
