@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Ability to move (drag) dialogs with mouse after clicking on their headers
-- Ability to sort saved games and the player's ship's modules lists
+- Ability to sort saved games, the player's ship's modules and crew lists
 
 ### Changed
 - Updated help
