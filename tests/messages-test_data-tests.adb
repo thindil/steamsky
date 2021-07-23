@@ -239,6 +239,60 @@ package body Messages.Test_Data.Tests is
 --  end read only
 
 --  begin read only
+   procedure Wrap_Test_RestoreMessage_c0c9bd_0f207a
+     (Message: Unbounded_String; MType: Message_Type := Default;
+      Color: Message_Color := WHITE) is
+   begin
+      begin
+         pragma Assert(Message /= Null_Unbounded_String);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "req_sloc(messages.ads:0):Test_RestoreMessage test requirement violated");
+      end;
+      GNATtest_Generated.GNATtest_Standard.Messages.RestoreMessage
+        (Message, MType, Color);
+      begin
+         pragma Assert(True);
+         null;
+      exception
+         when System.Assertions.Assert_Failure =>
+            AUnit.Assertions.Assert
+              (False,
+               "ens_sloc(messages.ads:0:):Test_RestoreMessage test commitment violated");
+      end;
+   end Wrap_Test_RestoreMessage_c0c9bd_0f207a;
+--  end read only
+
+--  begin read only
+   procedure Test_RestoreMessage_test_restoremessage(Gnattest_T: in out Test);
+   procedure Test_RestoreMessage_c0c9bd_0f207a(Gnattest_T: in out Test) renames
+     Test_RestoreMessage_test_restoremessage;
+--  id:2.2/c0c9bd3a9b2621df/RestoreMessage/1/0/test_restoremessage/
+   procedure Test_RestoreMessage_test_restoremessage
+     (Gnattest_T: in out Test) is
+      procedure RestoreMessage
+        (Message: Unbounded_String; MType: Message_Type := Default;
+         Color: Message_Color := WHITE) renames
+        Wrap_Test_RestoreMessage_c0c9bd_0f207a;
+--  end read only
+
+      pragma Unreferenced(Gnattest_T);
+      Amount: Natural := MessagesAmount;
+
+   begin
+
+      RestoreMessage(To_Unbounded_String("Test message"));
+      Assert
+        (MessagesAmount = Amount + 1, "Failed to restore the game message.");
+
+--  begin read only
+   end Test_RestoreMessage_test_restoremessage;
+--  end read only
+
+--  begin read only
    function Wrap_Test_GetLastMessageIndex_ee1f16_517343 return Natural is
    begin
       declare

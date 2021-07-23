@@ -155,7 +155,8 @@ package Messages is
    procedure RestoreMessage
      (Message: Unbounded_String; MType: Message_Type := Default;
       Color: Message_Color := WHITE) with
-      Pre => Message /= Null_Unbounded_String;
+      Pre => Message /= Null_Unbounded_String,
+      Test_Case => (Name => "Test_RestoreMessage", Mode => Nominal);
       -- ****
 
       -- ****f* Messages/Messages.GetLastMessageIndex
