@@ -318,7 +318,6 @@ package Ships is
 
    -- ****f* Ships/Ships."<"_(members)
    -- FUNCTION
-   -- FUNCTION
    -- Provide sorting for ship's crew list
    -- PARAMETERS
    -- Left  - The left member to compare
