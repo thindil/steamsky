@@ -34,8 +34,8 @@ package body Table is
 
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget("."); Command: String := "")
-      return Table_Widget is
+      Scrollbar: Ttk_Scrollbar := Get_Widget(".");
+      Command, Tooltip: String := "") return Table_Widget is
       Canvas: Tk_Canvas;
       YScroll: Ttk_Scrollbar;
       XScroll: Ttk_Scrollbar;
@@ -98,6 +98,9 @@ package body Table is
                ">",
                "{" & Command & " %x}");
          end if;
+         if Tooltip'Length > 0 then
+            Add(Canvas, Tooltip, "-item " & To_String(Header_Id));
+         end if;
          Create
            (Tokens, BBox(Canvas, "header" & Trim(Positive'Image(I), Left)),
             " ");
@@ -129,6 +132,9 @@ package body Table is
             "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
             ">",
             "{" & Command & " %x}");
+      end if;
+      if Tooltip'Length > 0 then
+         Add(Canvas, Tooltip, "-item " & To_String(Header_Id));
       end if;
       Table.Canvas := Canvas;
       Tcl_Eval

@@ -68,6 +68,8 @@ package Table is
    -- Command   - The Tcl command executed when the player press the table
    --             header. If empty, no command is executed. Default value is
    --             empty
+   -- Tooltip   - The tooltip show when the player hover mouse over the table
+   --             header. Can be empty. Default value is empty
    -- RESULT
    -- The newly created Table_Widget
    -- HISTORY
@@ -76,8 +78,8 @@ package Table is
    -- SOURCE
    function CreateTable
      (Parent: String; Headers: Headers_Array;
-      Scrollbar: Ttk_Scrollbar := Get_Widget("."); Command: String := "")
-      return Table_Widget with
+      Scrollbar: Ttk_Scrollbar := Get_Widget(".");
+      Command, Tooltip: String := "") return Table_Widget with
       Pre => Parent'Length > 0 and Headers'Length > 0,
       Post => CreateTable'Result.Row_Height > 1;
    -- ****
