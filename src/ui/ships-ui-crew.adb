@@ -132,7 +132,7 @@ package body Ships.UI.Crew is
             To_Unbounded_String("Thirst"), To_Unbounded_String("Hunger"),
             To_Unbounded_String("Morale")),
            Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
-           "SortShipCrew");
+           "SortShipCrew", "Press mouse button to sort the crew.");
       Load_Crew_Loop :
       for I in Player_Ship.Crew.Iterate loop
          if Current_Row < Start_Row then

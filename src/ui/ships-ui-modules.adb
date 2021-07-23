@@ -1640,7 +1640,7 @@ package body Ships.UI.Modules is
              (Widget_Image(ShipInfoFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
               Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
-              "SortShipModules");
+              "SortShipModules", "Press mouse button to sort the modules.");
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
