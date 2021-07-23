@@ -110,7 +110,9 @@ package Items is
    package Inventory_Container is new Vectors(Positive, InventoryData);
    -- ****
 
-   type Inventory_Sort_Orders is (NAMEASC, NAMEDESC) with
+   type Inventory_Sort_Orders is
+     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
+      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC) with
       Default_Value => NAMEASC;
 
    Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NAMEASC;
