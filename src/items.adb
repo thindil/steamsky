@@ -375,4 +375,19 @@ package body Items is
       end case;
    end GetItemChanceToDamage;
 
+   function "<"(Left, Right: InventoryData) return Boolean is
+   begin
+      if Inventory_Sort_Order = NAMEASC
+        and then GetItemName(Left, False, False) <
+          GetItemName(Right, False, False) then
+         return True;
+      end if;
+      if Inventory_Sort_Order = NAMEDESC
+        and then GetItemName(Left, False, False) >
+          GetItemName(Right, False, False) then
+         return True;
+      end if;
+      return False;
+   end "<";
+
 end Items;

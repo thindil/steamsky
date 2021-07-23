@@ -110,6 +110,17 @@ package Items is
    package Inventory_Container is new Vectors(Positive, InventoryData);
    -- ****
 
+   type Inventory_Sort_Orders is (NAMEASC, NAMEDESC) with
+      Default_Value => NAMEASC;
+
+   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NAMEASC;
+
+   Inventory_Sort_Order: Inventory_Sort_Orders := Default_Inventory_Sort_Order;
+
+   function "<"(Left, Right: InventoryData) return Boolean;
+
+   package Inventory_Sorting is new Inventory_Container.Generic_Sorting;
+
    -- ****v* Items/Items.Items_List
    -- FUNCTION
    -- List of item available in game

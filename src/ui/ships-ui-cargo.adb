@@ -104,7 +104,8 @@ package body Ships.UI.Cargo is
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Type"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
-           Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"));
+           Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"),
+           "SortShipCargo", "Press mouse button to sort the cargo.");
       configure
         (Free_Space_Label,
          "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");
@@ -511,6 +512,48 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Menu_Command;
 
+   -- ****o* SUCargo/SUCargo.Sort_Cargo_Command
+   -- FUNCTION
+   -- Sort the player's ship's cargo list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortShipCargo x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Cargo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Cargo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        Get_Column_Number(CargoTable, Natural'Value(CArgv.Arg(Argv, 1)));
+   begin
+      case Column is
+         when 1 =>
+            if Inventory_Sort_Order = NAMEASC then
+               Inventory_Sort_Order := NAMEDESC;
+            else
+               Inventory_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Inventory_Sorting.Sort(Player_Ship.Cargo);
+      return
+        Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
+   end Sort_Cargo_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCargo", Show_Cargo_Command'Access);
@@ -520,6 +563,7 @@ package body Ships.UI.Cargo is
       AddCommand("ShowDropItem", Show_Drop_Item_Command'Access);
       AddCommand("DropItem", Drop_Item_Command'Access);
       AddCommand("ShowCargoMenu", Show_Cargo_Menu_Command'Access);
+      AddCommand("SortShipCargo", Sort_Cargo_Command'Access);
    end AddCommands;
 
 end Ships.UI.Cargo;
