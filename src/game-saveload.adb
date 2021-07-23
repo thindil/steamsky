@@ -336,16 +336,28 @@ package body Game.SaveLoad is
                       Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
          end loop Save_Events_Loop;
       end Save_Known_Events_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save game statistics
-      Log_Message("Saving game statistics...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving game statistics...", Message_Type => EVERYTHING,
+         New_Line => False);
       Category_Node :=
-        Append_Child(Main_Node, Create_Element(Save_Data, "statistics"));
-      Save_Statistics(GameStats.DestroyedShips, "destroyedships");
-      Save_Number(GameStats.BasesVisited, "visitedbases");
-      Save_Number(GameStats.MapVisited, "mapdiscovered");
-      Save_Number(GameStats.DistanceTraveled, "distancetraveled");
-      Save_Statistics(GameStats.CraftingOrders, "finishedcrafts");
+        Append_Child
+          (N => Main_Node,
+           New_Child =>
+             Create_Element(Doc => Save_Data, Tag_Name => "statistics"));
+      Save_Statistics
+        (Statistics_Vector => GameStats.DestroyedShips,
+         Stat_Name => "destroyedships");
+      Save_Number(Value => GameStats.BasesVisited, Name => "visitedbases");
+      Save_Number(Value => GameStats.MapVisited, Name => "mapdiscovered");
+      Save_Number
+        (Value => GameStats.DistanceTraveled, Name => "distancetraveled");
+      Save_Statistics
+        (Statistics_Vector => GameStats.CraftingOrders,
+         Stat_Name => "finishedcrafts");
       Save_Number(GameStats.AcceptedMissions, "acceptedmissions");
       Save_Statistics(GameStats.FinishedMissions, "finishedmissions");
       Save_Statistics(GameStats.FinishedGoals, "finishedgoals");
