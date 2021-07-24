@@ -319,7 +319,7 @@ package body Trades is
                  (New_Item =>
                     (ProtoIndex => NewItemIndex, Amount => ItemAmount,
                      Durability => 100, Name => Null_Unbounded_String,
-                     Price => 0));
+                     Price => 0, Used => False));
             else
                CargoAmount := 1;
             end if;

@@ -153,7 +153,7 @@ package body Combat is
                     (New_Item =>
                        (ProtoIndex => NewItemIndex, Amount => ItemAmount,
                         Durability => 100, Name => Null_Unbounded_String,
-                        Price => 0));
+                        Price => 0, Used => False));
                end if;
             end if;
          end loop Add_Enemy_Cargo_Loop;

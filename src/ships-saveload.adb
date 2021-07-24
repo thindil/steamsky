@@ -773,7 +773,7 @@ package body Ships.SaveLoad is
                Player_Ship.Cargo.Append
                  (New_Item =>
                     (ProtoIndex => ProtoIndex, Amount => Amount, Name => Name,
-                     Durability => Durability, Price => Price));
+                     Durability => Durability, Price => Price, Used => False));
             end;
          elsif Node_Name(ChildNode) = "member" then
             declare
@@ -871,7 +871,7 @@ package body Ships.SaveLoad is
                        (New_Item =>
                           (ProtoIndex => ItemIndex, Amount => Amount,
                            Name => ItemName, Durability => Durability,
-                           Price => Price));
+                           Price => Price, Used => False));
                   elsif Node_Name(MemberNode) = "equipment" then
                      Equipment(EquipmentIndex) :=
                        Natural'Value(Get_Attribute(MemberNode, "index"));

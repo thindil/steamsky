@@ -93,6 +93,7 @@ package Items is
    -- Name       - Name of item if different than default
    -- Durability - Current durability of item
    -- Price      - Price for which item was bought
+   -- Used       - If True, the item is used by the mob
    -- SOURCE
    type InventoryData is record
       ProtoIndex: Unbounded_String;
@@ -100,6 +101,7 @@ package Items is
       Name: Unbounded_String;
       Durability: Items_Durability;
       Price: Natural := 0;
+      Used: Boolean;
    end record;
    -- ****
 
@@ -124,12 +126,14 @@ package Items is
    -- AMOUNTDESC     - Sort items by amount descending
    -- WEIGHTASC      - Sort items by total weight ascending
    -- WEIGHTDESC     - Sort items by total weight descending
+   -- USEDASC        - Sort items by use status (mobs inventory only) ascending
+   -- USEDDESC       - Sort items by use status (mobs inventory only) descending
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Inventory_Sort_Orders is
      (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
-      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC) with
+      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC) with
       Default_Value => NAMEASC;
       -- ****
 

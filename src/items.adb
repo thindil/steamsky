@@ -237,7 +237,7 @@ package body Items is
               (New_Item =>
                  (ProtoIndex => Item.ProtoIndex, Amount => (Item.Amount - 1),
                   Name => Item.Name, Durability => Item.Durability,
-                  Price => Item.Price));
+                  Price => Item.Price, Used => False));
          end;
          Inventory(ItemIndex).Amount := 1;
       end if;
@@ -438,6 +438,12 @@ package body Items is
       if Inventory_Sort_Order = WEIGHTDESC
         and then (Left.Amount * Items_List(Left.ProtoIndex).Weight) >
           (Right.Amount * Items_List(Right.ProtoIndex).Weight) then
+         return True;
+      end if;
+      if Inventory_Sort_Order = USEDASC and then Left.Used < Right.Used then
+         return True;
+      end if;
+      if Inventory_Sort_Order = USEDDESC and then Left.Used > Right.Used then
          return True;
       end if;
       return False;
