@@ -13,6 +13,8 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Strings; use Ada.Strings;
+with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
@@ -52,6 +54,13 @@ package body Ships.UI.Crew.Inventory is
    InventoryTable: Table_Widget (5);
    -- ****
 
+   -- ****iv* SUCI/SUCI.MemberIndex
+   -- FUNCTION
+   -- The index of the selected crew member
+   -- SOURCE
+   MemberIndex: Positive;
+   -- ****
+
    -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
    -- Update inventory list of the selected crew member
@@ -77,13 +86,14 @@ package body Ships.UI.Crew.Inventory is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Interp);
-      MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
-      Member: constant Member_Data := Player_Ship.Crew(MemberIndex);
+      Member: Member_Data;
       Page: constant Positive :=
         (if Argc = 3 then Positive'Value(CArgv.Arg(Argv, 2)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
       Current_Row: Positive := 1;
    begin
+      MemberIndex := Positive'Value(CArgv.Arg(Argv, 1));
+      Member := Player_Ship.Crew(MemberIndex);
       if InventoryTable.Row > 1 then
          ClearTable(InventoryTable);
       end if;
@@ -218,7 +228,8 @@ package body Ships.UI.Crew.Inventory is
            (To_Unbounded_String("Name"), To_Unbounded_String("Durability"),
             To_Unbounded_String("Used"), To_Unbounded_String("Amount"),
             To_Unbounded_String("Weight")),
-           YScroll);
+           YScroll, "SortCrewInventory",
+           "Press mouse button to sort the inventory.");
       if Update_Inventory_Command(ClientData, Interp, Argc, Argv) =
         TCL_ERROR then
          return TCL_ERROR;
@@ -615,6 +626,51 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Show_Inventory_Menu_Command;
 
+   -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
+   -- FUNCTION
+   -- Sort the selected crew member inventory
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortCrewInventory x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Crew_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Crew_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        Get_Column_Number(InventoryTable, Natural'Value(CArgv.Arg(Argv, 1)));
+   begin
+      case Column is
+         when 1 =>
+            if Inventory_Sort_Order = NAMEASC then
+               Inventory_Sort_Order := NAMEDESC;
+            else
+               Inventory_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Inventory_Sorting.Sort(Player_Ship.Crew(MemberIndex).Inventory);
+      return
+        Update_Inventory_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "UpdateInventory" &
+           Trim(Positive'Image(MemberIndex), Left));
+   end Sort_Crew_Inventory_Command;
+
    procedure AddCommands is
    begin
       AddCommand("UpdateInventory", Update_Inventory_Command'Access);
@@ -626,6 +682,7 @@ package body Ships.UI.Crew.Inventory is
       AddCommand
         ("ShowInventoryItemInfo", Show_Inventory_Item_Info_Command'Access);
       AddCommand("ShowInventoryMenu", Show_Inventory_Menu_Command'Access);
+      AddCommand("SortCrewInventory", Sort_Crew_Inventory_Command'Access);
    end AddCommands;
 
 end Ships.UI.Crew.Inventory;
