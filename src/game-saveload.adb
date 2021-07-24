@@ -358,16 +358,29 @@ package body Game.SaveLoad is
       Save_Statistics
         (Statistics_Vector => GameStats.CraftingOrders,
          Stat_Name => "finishedcrafts");
-      Save_Number(GameStats.AcceptedMissions, "acceptedmissions");
-      Save_Statistics(GameStats.FinishedMissions, "finishedmissions");
-      Save_Statistics(GameStats.FinishedGoals, "finishedgoals");
-      Save_Statistics(GameStats.KilledMobs, "killedmobs");
-      Save_Number(GameStats.Points, "points");
-      Log_Message("done.", EVERYTHING, True, False);
+      Save_Number
+        (Value => GameStats.AcceptedMissions, Name => "acceptedmissions");
+      Save_Statistics
+        (Statistics_Vector => GameStats.FinishedMissions,
+         Stat_Name => "finishedmissions");
+      Save_Statistics
+        (Statistics_Vector => GameStats.FinishedGoals,
+         Stat_Name => "finishedgoals");
+      Save_Statistics
+        (Statistics_Vector => GameStats.KilledMobs, Stat_Name => "killedmobs");
+      Save_Number(Value => GameStats.Points, Name => "points");
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save current goal
-      Log_Message("Saving current goal...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving current goal...", Message_Type => EVERYTHING,
+         New_Line => False);
       Category_Node :=
-        Append_Child(Main_Node, Create_Element(Save_Data, "currentgoal"));
+        Append_Child
+          (N => Main_Node,
+           New_Child =>
+             Create_Element(Doc => Save_Data, Tag_Name => "currentgoal"));
       Set_Attribute(Category_Node, "index", To_String(CurrentGoal.Index));
       Save_Number(GoalTypes'Pos(CurrentGoal.GType), "type");
       Save_Number(CurrentGoal.Amount, "amount");
