@@ -138,17 +138,12 @@ namespace eval ttk::theme::steamsky {
 
       # Button setting
       ttk::style configure TButton -padding {8 4 8 4} -width -10 -anchor center -relief raised -foreground $colors(-goldenyellow) -background $colors(-almostblackorange)
-      ttk::style map TButton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
-      ttk::style map TButton -background [list active $colors(-darkred) disabled $colors(-verydarkorange)]
-      ttk::style map TButton -bordercolor [list active $colors(-palegoldenrod)]
+      ttk::style map TButton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)] -background [list active $colors(-darkred) disabled $colors(-verydarkorange)] -bordercolor [list active $colors(-palegoldenrod)]
       option add *TButton.cursor hand1
 
       # Menubutton setting
       ttk::style configure TMenubutton -padding {8 4 4 4} -relief raised -foreground $colors(-goldenyellow) -arrowcolor $colors(-goldenyellow) -background $colors(-almostblackorange)
-      ttk::style map TMenubutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
-      ttk::style map TMenubutton -background [list active $colors(-darkred)]
-      ttk::style map TMenubutton -bordercolor [list active $colors(-palegoldenrod)]
-      ttk::style map TMenubutton -arrowcolor [list active $colors(-palegoldenrod)]
+      ttk::style map TMenubutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)] -background [list active $colors(-darkred)] -bordercolor [list active $colors(-palegoldenrod)] -arrowcolor [list active $colors(-palegoldenrod)]
       option add *TMenubutton.cursor hand1
 
       # Small buttons settings (like minimize/maximize buttons)
@@ -158,9 +153,7 @@ namespace eval ttk::theme::steamsky {
       # Icon and switch buttons setting
       # Default icon and switch button
       ttk::style configure Toolbutton -padding {6 2} -anchor center -foreground $colors(-goldenyellow) -background $colors(-almostblackorange) -lightcolor $colors(-almostdarkorange) -darkcolor black -relief raised
-      ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list active raised selected sunken]
-      ttk::style map Toolbutton -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)]
-      ttk::style map Toolbutton -bordercolor [list active $colors(-palegoldenrod)]
+      ttk::style map Toolbutton -background [list active $colors(-darkred) selected $colors(-almostblackred)] -relief [list active raised selected sunken] -foreground [list active $colors(-palegoldenrod) disabled $colors(-gray)] -bordercolor [list active $colors(-palegoldenrod)]
       # Icon button for male gender
       ttk::style configure Male.Toolbutton -foreground $colors(-blue) -font InterfaceIcons
       # Icon button for female gender
@@ -204,7 +197,9 @@ namespace eval ttk::theme::steamsky {
       ttk::style configure experience.Horizontal.TProgressbar -background $colors(-darkyellow) -troughcolor $colors(-verydarkorange) -bordercolor $colors(-verydarkorange)
       # Dual progressbar (like reputation in bases)
       ttk::style configure ProgressBar.TFrame -relief solid -bordercolor $colors(-darkorange) -background $colors(-almostblackred)
+      # Dual progressbar (like reputation in bases, positive values)
       ttk::style configure GreenProgressBar.TFrame -background green
+      # Dual progressbar (like reputation in bases, negative values)
       ttk::style configure RedProgressBar.TFrame -background red
 
       # Entry setting
@@ -272,9 +267,7 @@ namespace eval ttk::theme::steamsky {
 
       # Scale (like setting reward for missions)
       ttk::style configure TScale -troughrelief sunken -bordercolor black
-      ttk::style map TScale -foreground [list active $colors(-palegoldenrod)]
-      ttk::style map TScale -background [list active $colors(-darkred)]
-      ttk::style map TScale -bordercolor [list active $colors(-palegoldenrod)]
+      ttk::style map TScale -foreground [list active $colors(-palegoldenrod)] -background [list active $colors(-darkred)] -bordercolor [list active $colors(-palegoldenrod)]
       option add *TScale.cursor hand1
 
       # Info frames (like modules, items, etc)
