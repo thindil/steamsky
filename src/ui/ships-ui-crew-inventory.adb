@@ -660,6 +660,24 @@ package body Ships.UI.Crew.Inventory is
             else
                Inventory_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Inventory_Sort_Order = DURABILITYASC then
+               Inventory_Sort_Order := DURABILITYDESC;
+            else
+               Inventory_Sort_Order := DURABILITYASC;
+            end if;
+         when 4 =>
+            if Inventory_Sort_Order = AMOUNTASC then
+               Inventory_Sort_Order := AMOUNTDESC;
+            else
+               Inventory_Sort_Order := AMOUNTASC;
+            end if;
+         when 5 =>
+            if Inventory_Sort_Order = WEIGHTASC then
+               Inventory_Sort_Order := WEIGHTDESC;
+            else
+               Inventory_Sort_Order := WEIGHTASC;
+            end if;
          when others =>
             null;
       end case;
