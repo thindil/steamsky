@@ -381,17 +381,27 @@ package body Game.SaveLoad is
           (N => Main_Node,
            New_Child =>
              Create_Element(Doc => Save_Data, Tag_Name => "currentgoal"));
-      Set_Attribute(Category_Node, "index", To_String(CurrentGoal.Index));
-      Save_Number(GoalTypes'Pos(CurrentGoal.GType), "type");
-      Save_Number(CurrentGoal.Amount, "amount");
       Set_Attribute
-        (Category_Node, "target", To_String(CurrentGoal.TargetIndex));
-      Log_Message("done.", EVERYTHING, True, False);
+        (Elem => Category_Node, Name => "index",
+         Value => To_String(Source => CurrentGoal.Index));
+      Save_Number(Value => GoalTypes'Pos(CurrentGoal.GType), Name => "type");
+      Save_Number(Value => CurrentGoal.Amount, Name => "amount");
+      Set_Attribute
+        (Elem => Category_Node, Name => "target",
+         Value => To_String(Source => CurrentGoal.TargetIndex));
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Save current story
       if CurrentStory.Index /= Null_Unbounded_String then
-         Log_Message("Saving current story...", EVERYTHING, False);
-         Category_Node := Create_Element(Save_Data, "currentstory");
-         Category_Node := Append_Child(Main_Node, Category_Node);
+         Log_Message
+           (Message => "Saving current story...", Message_Type => EVERYTHING,
+            New_Line => False);
+         Category_Node :=
+           Append_Child
+             (N => Main_Node,
+              New_Child =>
+                Create_Element(Doc => Save_Data, Tag_Name => "currentstory"));
          Set_Attribute(Category_Node, "index", To_String(CurrentStory.Index));
          Raw_Value := To_Unbounded_String(Positive'Image(CurrentStory.Step));
          Set_Attribute
