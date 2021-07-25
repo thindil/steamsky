@@ -197,7 +197,8 @@ package body Items.Test_Data.Tests is
       pragma Unreferenced(Gnattest_T);
       Item: InventoryData :=
         (ProtoIndex => To_Unbounded_String("2"), Amount => 1,
-         Name => Null_Unbounded_String, Durability => 80, Price => 0);
+         Name => Null_Unbounded_String, Durability => 80, Price => 0,
+         Used => False);
 
    begin
 
