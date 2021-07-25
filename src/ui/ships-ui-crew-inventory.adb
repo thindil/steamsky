@@ -666,6 +666,16 @@ package body Ships.UI.Crew.Inventory is
             else
                Inventory_Sort_Order := DURABILITYASC;
             end if;
+         when 3 =>
+            for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
+               Player_Ship.Crew(MemberIndex).Inventory(I).Used :=
+                 ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I));
+            end loop;
+            if Inventory_Sort_Order = USEDASC then
+               Inventory_Sort_Order := USEDDESC;
+            else
+               Inventory_Sort_Order := USEDASC;
+            end if;
          when 4 =>
             if Inventory_Sort_Order = AMOUNTASC then
                Inventory_Sort_Order := AMOUNTDESC;
