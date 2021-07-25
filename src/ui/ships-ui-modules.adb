@@ -70,6 +70,13 @@ package body Ships.UI.Modules is
    ModulesTable: Table_Widget (2);
    -- ****
 
+   -- ****iv* SUI/SUI.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship modules
+   -- SOURCE
+   Modules_Indexes: Positive_Container.Vector;
+   -- ****
+
    -- ****if* SUModules/SUModules.Show_Module_Menu_Command
    -- FUNCTION
    -- Show the menu with available the selected module options
@@ -1641,22 +1648,26 @@ package body Ships.UI.Modules is
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
               Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
               "SortShipModules", "Press mouse button to sort the modules.");
+         for I in Player_Ship.Modules.Iterate loop
+            Modules_Indexes.Append(Modules_Container.To_Index(I));
+         end loop;
       end if;
       ClearTable(ModulesTable);
       Show_Modules_Menu_Loop :
-      for Module of Player_Ship.Modules loop
+      for Module_Index of Modules_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
          AddButton
-           (ModulesTable, To_String(Module.Name),
+           (ModulesTable, To_String(Player_Ship.Modules(Module_Index).Name),
             "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Row - 1), 1);
+            "ShowModuleMenu" & Positive'Image(Module_Index), 1);
          AddProgressBar
-           (ModulesTable, Module.Durability, Module.Max_Durability,
+           (ModulesTable, Player_Ship.Modules(Module_Index).Durability,
+            Player_Ship.Modules(Module_Index).Max_Durability,
             "Show available module's options",
-            "ShowModuleMenu" & Positive'Image(Row - 1), 2, True);
+            "ShowModuleMenu" & Positive'Image(Module_Index), 2, True);
          Row := Row + 1;
          exit Show_Modules_Menu_Loop when ModulesTable.Row = 26;
          <<End_Of_Loop>>
@@ -1738,6 +1749,7 @@ package body Ships.UI.Modules is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
         Get_Column_Number(ModulesTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      Local_Modules: Modules_Container.Vector := Player_Ship.Modules;
    begin
       case Column is
          when 1 =>
@@ -1755,7 +1767,16 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
-      Player_Ship_Modules_Sorting.Sort(Player_Ship.Modules);
+      Player_Ship_Modules_Sorting.Sort(Local_Modules);
+      Modules_Indexes.Clear;
+      for Module of Local_Modules loop
+         for I in Player_Ship.Modules.Iterate loop
+            if Player_Ship.Modules(I).Name = Module.Name then
+               Modules_Indexes.Append(Modules_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
       UpdateModulesInfo;
       return TCL_OK;
    end Sort_Modules_Command;
