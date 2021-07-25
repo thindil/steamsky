@@ -217,7 +217,7 @@ package Ships is
    -- 6.4 - Added
    -- SOURCE
    type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC) with
-      Default_Value => NAMEASC;
+      Default_Value => NAMEDESC;
       -- ****
 
       -- ****d* Ships/Ships.Default_Modules_Sort_Order
@@ -226,7 +226,7 @@ package Ships is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NAMEASC;
+   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NAMEDESC;
    -- ****
 
    -- ****v* Ships/Ships.Modules_Sort_Order
