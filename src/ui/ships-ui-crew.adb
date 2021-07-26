@@ -69,6 +69,13 @@ package body Ships.UI.Crew is
    CrewTable: Table_Widget (7);
    -- ****
 
+   -- ****iv* SUCrew/SUCrew.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship crew
+   -- SOURCE
+   Crew_Indexes: Positive_Container.Vector;
+   -- ****
+
    procedure UpdateCrewInfo(Page: Positive := 1) is
       ButtonsFrame: Ttk_Frame;
       Tokens: Slice_Set;
@@ -133,8 +140,13 @@ package body Ships.UI.Crew is
             To_Unbounded_String("Morale")),
            Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
            "SortShipCrew", "Press mouse button to sort the crew.");
+      if Crew_Indexes.Length /= Player_Ship.Crew.Length then
+         for I in Player_Ship.Crew.Iterate loop
+            Crew_Indexes.Append(Crew_Container.To_Index(I));
+         end loop;
+      end if;
       Load_Crew_Loop :
-      for I in Player_Ship.Crew.Iterate loop
+      for I of Crew_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -142,7 +154,7 @@ package body Ships.UI.Crew is
          AddButton
            (CrewTable, To_String(Player_Ship.Crew(I).Name),
             "Show available crew member's options",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 1);
+            "ShowMemberMenu" & Positive'Image(I), 1);
          AddButton
            (CrewTable,
             Crew_Orders'Image(Player_Ship.Crew(I).Order)(1) &
@@ -150,11 +162,11 @@ package body Ships.UI.Crew is
               (Crew_Orders'Image(Player_Ship.Crew(I).Order)
                  (2 .. Crew_Orders'Image(Player_Ship.Crew(I).Order)'Last)),
             "The current order for the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 2);
+            "ShowMemberMenu" & Positive'Image(I), 2);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Health, Skill_Range'Last,
             "The current health level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 3);
+            "ShowMemberMenu" & Positive'Image(I), 3);
          TiredLevel :=
            Player_Ship.Crew(I).Tired -
            Player_Ship.Crew(I).Attributes(Condition_Index)(1);
@@ -164,23 +176,19 @@ package body Ships.UI.Crew is
          AddProgressBar
            (CrewTable, TiredLevel, Skill_Range'Last,
             "The current tired level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 4,
-            False, True);
+            "ShowMemberMenu" & Positive'Image(I), 4, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Thirst, Skill_Range'Last,
             "The current thirst level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 5,
-            False, True);
+            "ShowMemberMenu" & Positive'Image(I), 5, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Hunger, Skill_Range'Last,
             "The current hunger level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 6,
-            False, True);
+            "ShowMemberMenu" & Positive'Image(I), 6, False, True);
          AddProgressBar
            (CrewTable, Player_Ship.Crew(I).Morale(1), Skill_Range'Last,
             "The current morale level of the selected crew member",
-            "ShowMemberMenu" & Positive'Image(Crew_Container.To_Index(I)), 7,
-            True);
+            "ShowMemberMenu" & Positive'Image(I), 7, True);
          exit Load_Crew_Loop when CrewTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Crew_Loop;
@@ -1312,6 +1320,7 @@ package body Ships.UI.Crew is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
         Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      Local_Crew: Crew_Container.Vector := Player_Ship.Crew;
    begin
       case Column is
          when 1 =>
@@ -1359,7 +1368,16 @@ package body Ships.UI.Crew is
          when others =>
             null;
       end case;
-      Player_Ship_Crew_Sorting.Sort(Player_Ship.Crew);
+      Player_Ship_Crew_Sorting.Sort(Local_Crew);
+      Crew_Indexes.Clear;
+      for Member of Local_Crew loop
+         for I in Player_Ship.Crew.Iterate loop
+            if Player_Ship.Crew(I) = Member then
+               Crew_Indexes.Append(Crew_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
       UpdateCrewInfo;
       return TCL_OK;
    end Sort_Crew_Command;
