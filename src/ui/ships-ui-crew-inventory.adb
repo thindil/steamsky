@@ -61,6 +61,13 @@ package body Ships.UI.Crew.Inventory is
    MemberIndex: Positive;
    -- ****
 
+   -- ****iv* SUCI/SUCI.Inventory_Indexes
+   -- FUNCTION
+   -- Indexes of the crew member items in inventory
+   -- SOURCE
+   Inventory_Indexes: Positive_Container.Vector;
+   -- ****
+
    -- ****o* SUCI/SUCI.Update_Inventory_Command
    -- FUNCTION
    -- Update inventory list of the selected crew member
@@ -97,8 +104,14 @@ package body Ships.UI.Crew.Inventory is
       if InventoryTable.Row > 1 then
          ClearTable(InventoryTable);
       end if;
+      if Inventory_Indexes.Length /= Member.Inventory.Length then
+         Inventory_Indexes.Clear;
+         for I in Member.Inventory.Iterate loop
+            Inventory_Indexes.Append(Inventory_Container.To_Index(I));
+         end loop;
+      end if;
       Load_Inventory_Loop :
-      for I in Member.Inventory.Iterate loop
+      for I of Inventory_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -106,35 +119,27 @@ package body Ships.UI.Crew.Inventory is
          AddButton
            (InventoryTable, GetItemName(Member.Inventory(I), False, False),
             "Show available item's options",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            1);
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 1);
          AddProgressBar
            (InventoryTable, Member.Inventory(I).Durability,
             Default_Item_Durability,
             "The current durability level of the selected item.",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            2);
-         if ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)) then
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 2);
+         if ItemIsUsed(MemberIndex, I) then
             AddCheckButton
               (InventoryTable, "The item is used by the crew member",
-               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Inventory_Container.To_Index(I)),
+               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
                True, 3);
          else
             AddCheckButton
               (InventoryTable, "The item isn't used by the crew member",
-               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-               Positive'Image(Inventory_Container.To_Index(I)),
+               "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I),
                False, 3);
          end if;
          AddButton
            (InventoryTable, Positive'Image(Member.Inventory(I).Amount),
             "The amount of the item owned by the crew member",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            4);
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 4);
          AddButton
            (InventoryTable,
             Positive'Image
@@ -142,9 +147,8 @@ package body Ships.UI.Crew.Inventory is
                Items_List(Member.Inventory(I).ProtoIndex).Weight) &
             " kg",
             "The total weight of the items",
-            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) &
-            Positive'Image(Inventory_Container.To_Index(I)),
-            5, True);
+            "ShowInventoryMenu " & CArgv.Arg(Argv, 1) & Positive'Image(I), 5,
+            True);
          exit Load_Inventory_Loop when InventoryTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Inventory_Loop;
@@ -652,6 +656,8 @@ package body Ships.UI.Crew.Inventory is
       pragma Unreferenced(Argc);
       Column: constant Positive :=
         Get_Column_Number(InventoryTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      Local_Inventory: Inventory_Container.Vector :=
+        Player_Ship.Crew(MemberIndex).Inventory;
    begin
       case Column is
          when 1 =>
@@ -671,6 +677,7 @@ package body Ships.UI.Crew.Inventory is
                Player_Ship.Crew(MemberIndex).Inventory(I).Used :=
                  ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I));
             end loop;
+            Local_Inventory := Player_Ship.Crew(MemberIndex).Inventory;
             if Inventory_Sort_Order = USEDASC then
                Inventory_Sort_Order := USEDDESC;
             else
@@ -691,7 +698,16 @@ package body Ships.UI.Crew.Inventory is
          when others =>
             null;
       end case;
-      Inventory_Sorting.Sort(Player_Ship.Crew(MemberIndex).Inventory);
+      Inventory_Sorting.Sort(Local_Inventory);
+      Inventory_Indexes.Clear;
+      for Item of Local_Inventory loop
+         for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
+            if Player_Ship.Crew(MemberIndex).Inventory(I) = Item then
+               Inventory_Indexes.Append(Inventory_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
       return
         Update_Inventory_Command
           (ClientData, Interp, 2,
