@@ -17,10 +17,15 @@ set combatframe [ttk::frame .gameframe.paned.combatframe]
 
 # Ship to ship combat
 # Player ship crew orders
-grid [ttk::labelframe $combatframe.crew -text {Your ship crew orders:}] -padx 5 -pady {0 5} -sticky nwes
-set combatcanvas [canvas $combatframe.crew.canvas -yscrollcommand [list $combatframe.crew.scrolly set] -xscrollcommand [list $combatframe.crew.scrollx set]]
-pack [ttk::scrollbar $combatframe.crew.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.crew.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.crew -text {Your ship crew orders:}] \
+   -padx 5 -pady {0 5} -sticky nwes
+set combatcanvas [canvas $combatframe.crew.canvas \
+   -yscrollcommand [list $combatframe.crew.scrolly set] \
+   -xscrollcommand [list $combatframe.crew.scrollx set]]
+pack [ttk::scrollbar $combatframe.crew.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.crew.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.crew.scrolly
 ttk::frame $combatcanvas.frame
@@ -31,34 +36,50 @@ grid [ttk::label $combatcanvas.frame.name -text {Name}] -row 0 -column 1
 SetScrollbarBindings $combatcanvas.frame.name $combatframe.crew.scrolly
 grid [ttk::label $combatcanvas.frame.order -text {Order}] -row 0 -column 2
 SetScrollbarBindings $combatcanvas.frame.order $combatframe.crew.scrolly
-grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 -sticky w -padx {5 0} -pady {0 5}
+grid [ttk::label $combatcanvas.frame.pilotlabel -text {Pilot:}] -row 1 \
+   -sticky w -padx {5 0} -pady {0 5}
 SetScrollbarBindings $combatcanvas.frame.pilotlabel $combatframe.crew.scrolly
-grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] -row 1 -column 1 -pady {0 5}
+grid [ttk::combobox $combatcanvas.frame.pilotcrew -state readonly -width 10] \
+   -row 1 -column 1 -pady {0 5}
 tooltip::tooltip $combatcanvas.frame.pilotcrew "Select the crew member which will be the pilot during the combat.\nThe sign + after name means that this crew member has\npiloting skill, the sign ++ after name means that his/her\npiloting skill is the best in the crew"
 bind $combatcanvas.frame.pilotcrew <Return> {InvokeButton $combatframe.next}
-bind $combatcanvas.frame.pilotcrew <<ComboboxSelected>> {SetCombatPosition pilot}
-grid [ttk::combobox $combatcanvas.frame.pilotorder -state readonly -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 1 -column 2 -padx {0 5} -pady {0 5}
+bind $combatcanvas.frame.pilotcrew <<ComboboxSelected>> \
+   {SetCombatPosition pilot}
+grid [ttk::combobox $combatcanvas.frame.pilotorder -state readonly \
+   -values [list {Go closer} {Keep distance} {Evade} {Escape}]] -row 1 \
+   -column 2 -padx {0 5} -pady {0 5}
 tooltip::tooltip $combatcanvas.frame.pilotorder "Select the order for the pilot"
 bind $combatcanvas.frame.pilotorder <Return> {InvokeButton $combatframe.next}
 bind $combatcanvas.frame.pilotorder <<ComboboxSelected>> {SetCombatOrder pilot}
-grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 -sticky w -padx {5 0} -pady {5 0}
+grid [ttk::label $combatcanvas.frame.engineerlabel -text {Engineer:}] -row 2 \
+   -sticky w -padx {5 0} -pady {5 0}
 SetScrollbarBindings $combatcanvas.frame.engineerlabel $combatframe.crew.scrolly
-grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] -row 2 -column 1 -pady {5 0}
+grid [ttk::combobox $combatcanvas.frame.engineercrew -state readonly -width 10] \
+   -row 2 -column 1 -pady {5 0}
 tooltip::tooltip $combatcanvas.frame.engineercrew "Select the crew member which will be the engineer during the combat.\nThe sign + after name means that this crew member has\nengineering skill, the sign ++ after name means that his/her\nengineering skill is the best in the crew"
 bind $combatcanvas.frame.engineercrew <Return> {InvokeButton $combatframe.next}
-bind $combatcanvas.frame.engineercrew <<ComboboxSelected>> {SetCombatPosition engineer}
-grid [ttk::combobox $combatcanvas.frame.engineerorder -state readonly -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] -row 2 -column 2 -padx {0 5} -pady {5 0}
+bind $combatcanvas.frame.engineercrew <<ComboboxSelected>> \
+   {SetCombatPosition engineer}
+grid [ttk::combobox $combatcanvas.frame.engineerorder -state readonly \
+   -values [list {All stop} {Quarter speed} {Half speed} {Full speed}]] \
+   -row 2 -column 2 -padx {0 5} -pady {5 0}
 tooltip::tooltip $combatcanvas.frame.engineerorder "Set the ship speed. The faster ship move the harder is\nto hit it, but also it is harder to hit the enemy"
 bind $combatcanvas.frame.engineerorder <Return> {InvokeButton $combatframe.next}
-bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> {SetCombatOrder engineer}
+bind $combatcanvas.frame.engineerorder <<ComboboxSelected>> \
+   {SetCombatOrder engineer}
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.crew.scrolly
 ::autoscroll::autoscroll $combatframe.crew.scrollx
 # Player ship damage
-grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 -pady 5 -sticky nwes
-set combatcanvas [canvas $combatframe.damage.canvas -yscrollcommand [list $combatframe.damage.scrolly set] -xscrollcommand [list $combatframe.damage.scrollx set]]
-pack [ttk::scrollbar $combatframe.damage.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.damage.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.damage -text {Your ship damage:}] -padx 5 \
+   -pady 5 -sticky nwes
+set combatcanvas [canvas $combatframe.damage.canvas \
+   -yscrollcommand [list $combatframe.damage.scrolly set] \
+   -xscrollcommand [list $combatframe.damage.scrollx set]]
+pack [ttk::scrollbar $combatframe.damage.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.damage.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.damage.scrolly
 ttk::frame $combatcanvas.frame
@@ -67,10 +88,15 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.damage.scrolly
 ::autoscroll::autoscroll $combatframe.damage.scrollx
 # Enemy ship info
-grid [ttk::labelframe $combatframe.enemy -text {Enemy info:}] -sticky nwes -padx 5 -pady {0 5} -column 1 -row 0
-set combatcanvas [canvas $combatframe.enemy.canvas -yscrollcommand [list $combatframe.enemy.scrolly set] -xscrollcommand [list $combatframe.enemy.scrollx set]]
-pack [ttk::scrollbar $combatframe.enemy.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.enemy.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.enemy -text {Enemy info:}] -sticky nwes \
+   -padx 5 -pady {0 5} -column 1 -row 0
+set combatcanvas [canvas $combatframe.enemy.canvas \
+   -yscrollcommand [list $combatframe.enemy.scrolly set] \
+   -xscrollcommand [list $combatframe.enemy.scrollx set]]
+pack [ttk::scrollbar $combatframe.enemy.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.enemy.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.enemy.scrolly
 ttk::label $combatcanvas.info -wraplength 350
@@ -79,10 +105,15 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.info
 ::autoscroll::autoscroll $combatframe.enemy.scrolly
 ::autoscroll::autoscroll $combatframe.enemy.scrollx
 # Enemy ship info damage
-grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] -sticky nwes -padx 5 -pady 5 -column 1 -row 1
-set combatcanvas [canvas $combatframe.status.canvas -yscrollcommand [list $combatframe.status.scrolly set] -xscrollcommand [list $combatframe.status.scrollx set]]
-pack [ttk::scrollbar $combatframe.status.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.status.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.status -text {Enemy ship status:}] \
+   -sticky nwes -padx 5 -pady 5 -column 1 -row 1
+set combatcanvas [canvas $combatframe.status.canvas \
+   -yscrollcommand [list $combatframe.status.scrolly set] \
+   -xscrollcommand [list $combatframe.status.scrollx set]]
+pack [ttk::scrollbar $combatframe.status.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.status.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.status.scrolly
 ttk::frame $combatcanvas.frame
@@ -90,16 +121,22 @@ SetScrollbarBindings $combatcanvas.frame $combatframe.status.scrolly
 $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.status.scrolly
 ::autoscroll::autoscroll $combatframe.status.scrollx
-grid [ttk::button $combatframe.next -text {Next turn [Enter]} -command NextTurn] -columnspan 2 -sticky we -row 2 -column 0
+grid [ttk::button $combatframe.next -text {Next turn [Enter]} \
+   -command NextTurn] -columnspan 2 -sticky we -row 2 -column 0
 bind $combatframe.next <Return> {InvokeButton $combatframe.next}
 focus $combatframe.next
 
 # Boarding combat
 # Player boarding team
-grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky nwes -row 0 -column 0 -rowspan 2 -padx 5 -pady 5
-set combatcanvas [canvas $combatframe.left.canvas -yscrollcommand [list $combatframe.left.scrolly set] -xscrollcommand [list $combatframe.left.scrollx set]]
-pack [ttk::scrollbar $combatframe.left.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.left.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.left -text {Your crew:}] -sticky nwes \
+   -row 0 -column 0 -rowspan 2 -padx 5 -pady 5
+set combatcanvas [canvas $combatframe.left.canvas \
+   -yscrollcommand [list $combatframe.left.scrolly set] \
+   -xscrollcommand [list $combatframe.left.scrollx set]]
+pack [ttk::scrollbar $combatframe.left.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.left.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.left.scrolly
 ttk::frame $combatcanvas.frame
@@ -114,10 +151,15 @@ $combatcanvas create window 0 0 -anchor nw -window $combatcanvas.frame
 ::autoscroll::autoscroll $combatframe.left.scrolly
 ::autoscroll::autoscroll $combatframe.left.scrollx
 # Enemy defending party
-grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 0 -column 1 -sticky nwes -rowspan 2 -padx 5 -pady 5
-set combatcanvas [canvas $combatframe.right.canvas -yscrollcommand [list $combatframe.right.scrolly set] -xscrollcommand [list $combatframe.right.scrollx set]]
-pack [ttk::scrollbar $combatframe.right.scrolly -orient vertical -command [list $combatcanvas yview]] -side right -fill y
-pack [ttk::scrollbar $combatframe.right.scrollx -orient horizontal -command [list $combatcanvas xview]] -fill x -side bottom
+grid [ttk::labelframe $combatframe.right -text {Enemy's crew:}] -row 0 \
+   -column 1 -sticky nwes -rowspan 2 -padx 5 -pady 5
+set combatcanvas [canvas $combatframe.right.canvas \
+   -yscrollcommand [list $combatframe.right.scrolly set] \
+   -xscrollcommand [list $combatframe.right.scrollx set]]
+pack [ttk::scrollbar $combatframe.right.scrolly -orient vertical \
+   -command [list $combatcanvas yview]] -side right -fill y
+pack [ttk::scrollbar $combatframe.right.scrollx -orient horizontal \
+   -command [list $combatcanvas xview]] -fill x -side bottom
 pack $combatcanvas -side top -fill both -expand true
 SetScrollbarBindings $combatcanvas $combatframe.right.scrolly
 ttk::frame $combatcanvas.frame
