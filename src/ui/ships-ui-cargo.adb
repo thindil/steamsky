@@ -53,6 +53,13 @@ package body Ships.UI.Cargo is
    CargoTable: Table_Widget (5);
    -- ****
 
+   -- ****iv* SUCargo/SUCargo.Cargo_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship cargo
+   -- SOURCE
+   Cargo_Indexes: Positive_Container.Vector;
+   -- ****
+
    -- ****o* SUCargo/SUCargo.Show_Cargo_Command
    -- FUNCTION
    -- Show the cargo of the player ship
@@ -106,11 +113,17 @@ package body Ships.UI.Cargo is
             To_Unbounded_String("Weight")),
            Get_Widget(Main_Paned & ".shipinfoframe.cargo.scrolly"),
            "SortShipCargo", "Press mouse button to sort the cargo.");
+      if Cargo_Indexes.Length /= Player_Ship.Cargo.Length then
+         Cargo_Indexes.Clear;
+         for I in Player_Ship.Cargo.Iterate loop
+            Cargo_Indexes.Append(Inventory_Container.To_Index(I));
+         end loop;
+      end if;
       configure
         (Free_Space_Label,
          "-text {Free cargo space:" & Integer'Image(FreeCargo(0)) & " kg}");
       Load_Cargo_Loop :
-      for I in Player_Ship.Cargo.Iterate loop
+      for I of Cargo_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -129,31 +142,26 @@ package body Ships.UI.Cargo is
          AddButton
            (CargoTable, GetItemName(Player_Ship.Cargo(I)),
             "Show available item's options",
-            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            1);
+            "ShowCargoMenu" & Positive'Image(I), 1);
          AddProgressBar
            (CargoTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability,
             "The current durability of the selected crew member",
-            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            2);
+            "ShowCargoMenu" & Positive'Image(I), 2);
          AddButton
            (CargoTable, To_String(ItemType), "The type of the selected item",
-            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            3);
+            "ShowCargoMenu" & Positive'Image(I), 3);
          AddButton
            (CargoTable, Positive'Image(Player_Ship.Cargo(I).Amount),
             "The amount of the selected item",
-            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            4);
+            "ShowCargoMenu" & Positive'Image(I), 4);
          AddButton
            (CargoTable,
             Positive'Image
               (Player_Ship.Cargo(I).Amount * Items_List(ProtoIndex).Weight) &
             " kg",
             "The total weight of the selected item",
-            "ShowCargoMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            5, True);
+            "ShowCargoMenu" & Positive'Image(I), 5, True);
          exit Load_Cargo_Loop when CargoTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Cargo_Loop;
@@ -538,6 +546,7 @@ package body Ships.UI.Cargo is
       pragma Unreferenced(Argc);
       Column: constant Positive :=
         Get_Column_Number(CargoTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      Local_Cargo: Inventory_Container.Vector := Player_Ship.Cargo;
    begin
       case Column is
          when 1 =>
@@ -573,7 +582,16 @@ package body Ships.UI.Cargo is
          when others =>
             null;
       end case;
-      Inventory_Sorting.Sort(Player_Ship.Cargo);
+      Inventory_Sorting.Sort(Local_Cargo);
+      Cargo_Indexes.Clear;
+      for Item of Local_Cargo loop
+         for I in Player_Ship.Cargo.Iterate loop
+            if Player_Ship.Cargo(I) = Item then
+               Cargo_Indexes.Append(Inventory_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
       return
         Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
    end Sort_Cargo_Command;
