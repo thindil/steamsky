@@ -134,7 +134,7 @@ package Items is
    type Inventory_Sort_Orders is
      (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
       AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC) with
-      Default_Value => NAMEASC;
+      Default_Value => NAMEDESC;
       -- ****
 
       -- ****d* Items/Items.Default_Inventory_Sort_Order
@@ -143,7 +143,7 @@ package Items is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NAMEASC;
+   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NAMEDESC;
    -- ****
 
    -- ****v* Items/Items.Inventory_Sort_Order
