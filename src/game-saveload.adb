@@ -402,23 +402,36 @@ package body Game.SaveLoad is
              (N => Main_Node,
               New_Child =>
                 Create_Element(Doc => Save_Data, Tag_Name => "currentstory"));
-         Set_Attribute(Category_Node, "index", To_String(CurrentStory.Index));
-         Raw_Value := To_Unbounded_String(Positive'Image(CurrentStory.Step));
          Set_Attribute
-           (Category_Node, "step",
-            To_String(Trim(Raw_Value, Ada.Strings.Left)));
-         if CurrentStory.CurrentStep = 0 then
-            Set_Attribute(Category_Node, "currentstep", "start");
-         elsif CurrentStory.CurrentStep = -1 then
-            Set_Attribute(Category_Node, "currentstep", "finish");
-         else
-            Set_Attribute
-              (Category_Node, "currentstep",
-               To_String
-                 (Stories_List(CurrentStory.Index).Steps
-                    (CurrentStory.CurrentStep)
-                    .Index));
-         end if;
+           (Elem => Category_Node, Name => "index",
+            Value => To_String(Source => CurrentStory.Index));
+         Raw_Value :=
+           To_Unbounded_String(Source => Positive'Image(CurrentStory.Step));
+         Set_Attribute
+           (Elem => Category_Node, Name => "step",
+            Value =>
+              To_String
+                (Source =>
+                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
+         case CurrentStory.CurrentStep is
+            when 0 =>
+               Set_Attribute
+                 (Elem => Category_Node, Name => "currentstep",
+                  Value => "start");
+            when -1 =>
+               Set_Attribute
+                 (Elem => Category_Node, Name => "currentstep",
+                  Value => "finish");
+            when others =>
+               Set_Attribute
+                 (Elem => Category_Node, Name => "currentstep",
+                  Value =>
+                    To_String
+                      (Source =>
+                         Stories_List(CurrentStory.Index).Steps
+                           (CurrentStory.CurrentStep)
+                           .Index));
+         end case;
          Save_Number(CurrentStory.MaxSteps, "maxsteps");
          if CurrentStory.ShowText then
             Set_Attribute(Category_Node, "showtext", "Y");
