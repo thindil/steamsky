@@ -295,7 +295,7 @@ package Ships is
      (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
       FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
       MORALEASC, MORALEDESC) with
-      Default_Value => NAMEASC;
+      Default_Value => NAMEDESC;
       -- ****
 
       -- ****d* Ships/Ships.Default_Crew_Sort_Order
@@ -304,7 +304,7 @@ package Ships is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEASC;
+   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEDESC;
    -- ****
 
    -- ****v* Ships/Ships.Crew_Sort_Order
