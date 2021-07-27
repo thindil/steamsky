@@ -141,6 +141,7 @@ package body Ships.UI.Crew is
            Get_Widget(".gameframe.paned.shipinfoframe.crew.scrolly"),
            "SortShipCrew", "Press mouse button to sort the crew.");
       if Crew_Indexes.Length /= Player_Ship.Crew.Length then
+         Crew_Indexes.Clear;
          for I in Player_Ship.Crew.Iterate loop
             Crew_Indexes.Append(Crew_Container.To_Index(I));
          end loop;
