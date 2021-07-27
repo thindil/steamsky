@@ -183,6 +183,84 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Command;
 
+   -- ****o* SUCargo/SUCargo.Sort_Cargo_Command
+   -- FUNCTION
+   -- Sort the player's ship's cargo list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortShipCargo x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Cargo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Cargo_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
+         else Get_Column_Number
+             (CargoTable, Natural'Value(CArgv.Arg(Argv, 1))));
+      Local_Cargo: Inventory_Container.Vector := Player_Ship.Cargo;
+   begin
+      case Column is
+         when 1 =>
+            if Inventory_Sort_Order = NAMEASC then
+               Inventory_Sort_Order := NAMEDESC;
+            else
+               Inventory_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Inventory_Sort_Order = DURABILITYASC then
+               Inventory_Sort_Order := DURABILITYDESC;
+            else
+               Inventory_Sort_Order := DURABILITYASC;
+            end if;
+         when 3 =>
+            if Inventory_Sort_Order = TYPEASC then
+               Inventory_Sort_Order := TYPEDESC;
+            else
+               Inventory_Sort_Order := TYPEASC;
+            end if;
+         when 4 =>
+            if Inventory_Sort_Order = AMOUNTASC then
+               Inventory_Sort_Order := AMOUNTDESC;
+            else
+               Inventory_Sort_Order := AMOUNTASC;
+            end if;
+         when 5 =>
+            if Inventory_Sort_Order = WEIGHTASC then
+               Inventory_Sort_Order := WEIGHTDESC;
+            else
+               Inventory_Sort_Order := WEIGHTASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Inventory_Sorting.Sort(Local_Cargo);
+      Cargo_Indexes.Clear;
+      for Item of Local_Cargo loop
+         for I in Player_Ship.Cargo.Iterate loop
+            if Player_Ship.Cargo(I) = Item then
+               Cargo_Indexes.Append(Inventory_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
+      return
+        Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
+   end Sort_Cargo_Command;
+
    -- ****o* SUCargo/SUCargo.Show_Give_Item_Command
    -- FUNCTION
    -- Show UI to give the selected item from the ship cargo to the selected
@@ -280,7 +358,7 @@ package body Ships.UI.Cargo is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -296,6 +374,7 @@ package body Ships.UI.Cargo is
    function Give_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       MemberIndex, Amount: Positive;
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       Item: constant InventoryData := Player_Ship.Cargo(ItemIndex);
@@ -333,7 +412,9 @@ package body Ships.UI.Cargo is
       Tcl.Tk.Ada.Busy.Forget(Game_Header);
       UpdateHeader;
       UpdateMessages;
-      return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
+      return
+        Sort_Cargo_Command
+          (ClientData, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
    end Give_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Drop_Item_Command
@@ -375,7 +456,7 @@ package body Ships.UI.Cargo is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -391,6 +472,7 @@ package body Ships.UI.Cargo is
    function Drop_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       DropAmount, DropAmount2: Natural;
       ItemDialog: constant Ttk_Frame := Get_Widget(".itemdialog", Interp);
       SpinBox: constant Ttk_SpinBox :=
@@ -440,7 +522,9 @@ package body Ships.UI.Cargo is
       end if;
       UpdateHeader;
       UpdateMessages;
-      return Show_Cargo_Command(ClientData, Interp, Argc, Argv);
+      return
+        Sort_Cargo_Command
+          (ClientData, Interp, 2, CArgv.Empty & "SortShipCargo" & "-1");
    end Drop_Item_Command;
 
    -- ****o* SUCargo/SUCargo.Show_Cargo_Item_Info_Command
@@ -519,82 +603,6 @@ package body Ships.UI.Cargo is
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Cargo_Menu_Command;
-
-   -- ****o* SUCargo/SUCargo.Sort_Cargo_Command
-   -- FUNCTION
-   -- Sort the player's ship's cargo list
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SortShipCargo x
-   -- X is X axis coordinate where the player clicked the mouse button
-   -- SOURCE
-   function Sort_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Sort_Cargo_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      Column: constant Positive :=
-        Get_Column_Number(CargoTable, Natural'Value(CArgv.Arg(Argv, 1)));
-      Local_Cargo: Inventory_Container.Vector := Player_Ship.Cargo;
-   begin
-      case Column is
-         when 1 =>
-            if Inventory_Sort_Order = NAMEASC then
-               Inventory_Sort_Order := NAMEDESC;
-            else
-               Inventory_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Inventory_Sort_Order = DURABILITYASC then
-               Inventory_Sort_Order := DURABILITYDESC;
-            else
-               Inventory_Sort_Order := DURABILITYASC;
-            end if;
-         when 3 =>
-            if Inventory_Sort_Order = TYPEASC then
-               Inventory_Sort_Order := TYPEDESC;
-            else
-               Inventory_Sort_Order := TYPEASC;
-            end if;
-         when 4 =>
-            if Inventory_Sort_Order = AMOUNTASC then
-               Inventory_Sort_Order := AMOUNTDESC;
-            else
-               Inventory_Sort_Order := AMOUNTASC;
-            end if;
-         when 5 =>
-            if Inventory_Sort_Order = WEIGHTASC then
-               Inventory_Sort_Order := WEIGHTDESC;
-            else
-               Inventory_Sort_Order := WEIGHTASC;
-            end if;
-         when others =>
-            null;
-      end case;
-      Inventory_Sorting.Sort(Local_Cargo);
-      Cargo_Indexes.Clear;
-      for Item of Local_Cargo loop
-         for I in Player_Ship.Cargo.Iterate loop
-            if Player_Ship.Cargo(I) = Item then
-               Cargo_Indexes.Append(Inventory_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
-      end loop;
-      return
-        Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
-   end Sort_Cargo_Command;
 
    procedure AddCommands is
    begin
