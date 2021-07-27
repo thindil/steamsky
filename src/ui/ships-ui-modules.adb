@@ -1648,6 +1648,8 @@ package body Ships.UI.Modules is
               (To_Unbounded_String("Name"), To_Unbounded_String("Durability")),
               Get_Widget(Main_Paned & ".shipinfoframe.modules.scrolly"),
               "SortShipModules", "Press mouse button to sort the modules.");
+      end if;
+      if Modules_Indexes.Length /= Player_Ship.Modules.Length then
          Modules_Indexes.Clear;
          for I in Player_Ship.Modules.Iterate loop
             Modules_Indexes.Append(Modules_Container.To_Index(I));
