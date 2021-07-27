@@ -169,6 +169,93 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Update_Inventory_Command;
 
+   -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
+   -- FUNCTION
+   -- Sort the selected crew member inventory
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortCrewInventory x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Crew_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Crew_Inventory_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
+         else Get_Column_Number
+             (InventoryTable, Natural'Value(CArgv.Arg(Argv, 1))));
+      Local_Inventory: Inventory_Container.Vector :=
+        Player_Ship.Crew(MemberIndex).Inventory;
+   begin
+      case Column is
+         when 1 =>
+            if Inventory_Sort_Order = NAMEASC then
+               Inventory_Sort_Order := NAMEDESC;
+            else
+               Inventory_Sort_Order := NAMEASC;
+            end if;
+         when 2 =>
+            if Inventory_Sort_Order = DURABILITYASC then
+               Inventory_Sort_Order := DURABILITYDESC;
+            else
+               Inventory_Sort_Order := DURABILITYASC;
+            end if;
+         when 3 =>
+            for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
+               Player_Ship.Crew(MemberIndex).Inventory(I).Used :=
+                 ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I));
+            end loop;
+            Local_Inventory := Player_Ship.Crew(MemberIndex).Inventory;
+            if Inventory_Sort_Order = USEDASC then
+               Inventory_Sort_Order := USEDDESC;
+            else
+               Inventory_Sort_Order := USEDASC;
+            end if;
+         when 4 =>
+            if Inventory_Sort_Order = AMOUNTASC then
+               Inventory_Sort_Order := AMOUNTDESC;
+            else
+               Inventory_Sort_Order := AMOUNTASC;
+            end if;
+         when 5 =>
+            if Inventory_Sort_Order = WEIGHTASC then
+               Inventory_Sort_Order := WEIGHTDESC;
+            else
+               Inventory_Sort_Order := WEIGHTASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      Inventory_Sorting.Sort(Local_Inventory);
+      Inventory_Indexes.Clear;
+      for Item of Local_Inventory loop
+         for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
+            if Player_Ship.Crew(MemberIndex).Inventory(I) = Item then
+               Inventory_Indexes.Append(Inventory_Container.To_Index(I));
+               exit;
+            end if;
+         end loop;
+      end loop;
+      return
+        Update_Inventory_Command
+          (ClientData, Interp, 2,
+           CArgv.Empty & "UpdateInventory" &
+           Trim(Positive'Image(MemberIndex), Left));
+   end Sort_Crew_Inventory_Command;
+
    -- ****o* SUCI/SUCI.Show_Member_Inventory_Command
    -- FUNCTION
    -- Show inventory of the selected crew member
@@ -272,7 +359,7 @@ package body Ships.UI.Crew.Inventory is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -290,6 +377,7 @@ package body Ships.UI.Crew.Inventory is
    function Set_Use_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
       ItemType: constant Unbounded_String :=
@@ -299,7 +387,9 @@ package body Ships.UI.Crew.Inventory is
    begin
       if ItemIsUsed(MemberIndex, ItemIndex) then
          TakeOffItem(MemberIndex, ItemIndex);
-         return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
+         return
+           Sort_Crew_Inventory_Command
+             (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
       end if;
       if ItemType = Weapon_Type then
          if Items_List
@@ -346,7 +436,9 @@ package body Ships.UI.Crew.Inventory is
         UnboundedString_Container.No_Index then
          Player_Ship.Crew(MemberIndex).Equipment(7) := ItemIndex;
       end if;
-      return Update_Inventory_Command(ClientData, Interp, Argc, Argv);
+      return
+        Sort_Crew_Inventory_Command
+          (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
    end Set_Use_Item_Command;
 
    -- ****o* SUCI/SUCI.Show_Move_Item_Command
@@ -430,7 +522,7 @@ package body Ships.UI.Crew.Inventory is
    -- PARAMETERS
    -- ClientData - Custom data send to the command.
    -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command.
+   -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
    -- This function always return TCL_OK
@@ -448,6 +540,7 @@ package body Ships.UI.Crew.Inventory is
    function Move_Item_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
       Amount: Positive;
       MemberIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 1));
       ItemIndex: constant Positive := Positive'Value(CArgv.Arg(Argv, 2));
@@ -502,7 +595,9 @@ package body Ships.UI.Crew.Inventory is
       Destroy(ItemDialog);
       Generate(TypeBox, "<<ComboboxSelected>>");
       Tcl_Eval(Interp, "CloseDialog {.itemdialog .memberdialog}");
-      return Show_Member_Inventory_Command(ClientData, Interp, Argc, Argv);
+      return
+        Sort_Crew_Inventory_Command
+          (ClientData, Interp, 2, CArgv.Empty & "SortCrewInventory" & "-1");
    end Move_Item_Command;
 
    -- ****o* SUCI/SUCI.Validate_Move_Amount_Command
@@ -629,91 +724,6 @@ package body Ships.UI.Crew.Inventory is
          Winfo_Get(Get_Main_Window(Interp), "pointery"));
       return TCL_OK;
    end Show_Inventory_Menu_Command;
-
-   -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
-   -- FUNCTION
-   -- Sort the selected crew member inventory
-   -- PARAMETERS
-   -- ClientData - Custom data send to the command.
-   -- Interp     - Tcl interpreter in which command was executed.
-   -- Argc       - Number of arguments passed to the command. Unused
-   -- Argv       - Values of arguments passed to the command.
-   -- RESULT
-   -- This function always return TCL_OK
-   -- COMMANDS
-   -- SortCrewInventory x
-   -- X is X axis coordinate where the player clicked the mouse button
-   -- SOURCE
-   function Sort_Crew_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
-      Convention => C;
-      -- ****
-
-   function Sort_Crew_Inventory_Command
-     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
-      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(Argc);
-      Column: constant Positive :=
-        Get_Column_Number(InventoryTable, Natural'Value(CArgv.Arg(Argv, 1)));
-      Local_Inventory: Inventory_Container.Vector :=
-        Player_Ship.Crew(MemberIndex).Inventory;
-   begin
-      case Column is
-         when 1 =>
-            if Inventory_Sort_Order = NAMEASC then
-               Inventory_Sort_Order := NAMEDESC;
-            else
-               Inventory_Sort_Order := NAMEASC;
-            end if;
-         when 2 =>
-            if Inventory_Sort_Order = DURABILITYASC then
-               Inventory_Sort_Order := DURABILITYDESC;
-            else
-               Inventory_Sort_Order := DURABILITYASC;
-            end if;
-         when 3 =>
-            for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
-               Player_Ship.Crew(MemberIndex).Inventory(I).Used :=
-                 ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I));
-            end loop;
-            Local_Inventory := Player_Ship.Crew(MemberIndex).Inventory;
-            if Inventory_Sort_Order = USEDASC then
-               Inventory_Sort_Order := USEDDESC;
-            else
-               Inventory_Sort_Order := USEDASC;
-            end if;
-         when 4 =>
-            if Inventory_Sort_Order = AMOUNTASC then
-               Inventory_Sort_Order := AMOUNTDESC;
-            else
-               Inventory_Sort_Order := AMOUNTASC;
-            end if;
-         when 5 =>
-            if Inventory_Sort_Order = WEIGHTASC then
-               Inventory_Sort_Order := WEIGHTDESC;
-            else
-               Inventory_Sort_Order := WEIGHTASC;
-            end if;
-         when others =>
-            null;
-      end case;
-      Inventory_Sorting.Sort(Local_Inventory);
-      Inventory_Indexes.Clear;
-      for Item of Local_Inventory loop
-         for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
-            if Player_Ship.Crew(MemberIndex).Inventory(I) = Item then
-               Inventory_Indexes.Append(Inventory_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
-      end loop;
-      return
-        Update_Inventory_Command
-          (ClientData, Interp, 2,
-           CArgv.Empty & "UpdateInventory" &
-           Trim(Positive'Image(MemberIndex), Left));
-   end Sort_Crew_Inventory_Command;
 
    procedure AddCommands is
    begin
