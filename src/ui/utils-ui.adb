@@ -320,14 +320,10 @@ package body Utils.UI is
          declare
             CrewIndex: constant Positive :=
               Positive'Value(VarName(9 .. VarName'Last));
-            Button: constant Ttk_Button :=
-              Get_Widget
-                (Main_Paned & ".shipinfoframe.crew.canvas.frame.name" &
-                 Trim(Positive'Image(CrewIndex), Left));
          begin
             Player_Ship.Crew(CrewIndex).Name := To_Unbounded_String(Value);
-            Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
+            UpdateCrewInfo;
          end;
       end if;
       return TCL_OK;
