@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file.
 - Crash when trying to enter help from crafting screen
 - Some typos in help
 - Crash on non-existing help topics
+- Crash when changing the name of the selected crew member
 
 ## [6.3] - 2021-07-11
 
