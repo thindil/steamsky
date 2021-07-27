@@ -432,23 +432,31 @@ package body Game.SaveLoad is
                            (CurrentStory.CurrentStep)
                            .Index));
          end case;
-         Save_Number(CurrentStory.MaxSteps, "maxsteps");
+         Save_Number(Value => CurrentStory.MaxSteps, Name => "maxsteps");
          if CurrentStory.ShowText then
-            Set_Attribute(Category_Node, "showtext", "Y");
+            Set_Attribute
+              (Elem => Category_Node, Name => "showtext", Value => "Y");
          else
-            Set_Attribute(Category_Node, "showtext", "N");
+            Set_Attribute
+              (Elem => Category_Node, Name => "showtext", Value => "N");
          end if;
          if CurrentStory.Data /= Null_Unbounded_String then
-            Set_Attribute(Category_Node, "data", To_String(CurrentStory.Data));
+            Set_Attribute
+              (Elem => Category_Node, Name => "data",
+               Value => To_String(Source => CurrentStory.Data));
          end if;
          Save_Number
-           (StepConditionType'Pos(CurrentStory.FinishedStep), "finishedstep");
-         Log_Message("done.", EVERYTHING, True, False);
+           (Value => StepConditionType'Pos(CurrentStory.FinishedStep),
+            Name => "finishedstep");
+         Log_Message
+           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+            Time_Stamp => False);
       end if;
       -- Save finished stories data
+      Save_Finished_Stories_Block :
       declare
-         StepNode: DOM.Core.Element;
-         StepText: Text;
+         Step_Node: DOM.Core.Element;
+         Step_Text: Text;
       begin
          Log_Message("Saving finished stories...", EVERYTHING, False);
          Save_Finished_Stories_Loop :
@@ -460,14 +468,14 @@ package body Game.SaveLoad is
             Save_Number(FinishedStory.StepsAmount, "stepsamount");
             Save_Story_Steps_Loop :
             for Step of FinishedStory.StepsTexts loop
-               StepNode := Create_Element(Save_Data, "steptext");
-               StepNode := Append_Child(Category_Node, StepNode);
-               StepText := Create_Text_Node(Save_Data, To_String(Step));
-               StepText := Append_Child(StepNode, StepText);
+               Step_Node := Create_Element(Save_Data, "steptext");
+               Step_Node := Append_Child(Category_Node, Step_Node);
+               Step_Text := Create_Text_Node(Save_Data, To_String(Step));
+               Step_Text := Append_Child(Step_Node, Step_Text);
             end loop Save_Story_Steps_Loop;
          end loop Save_Finished_Stories_Loop;
          Log_Message("done.", EVERYTHING, True, False);
-      end;
+      end Save_Finished_Stories_Block;
       -- Save missions accepted by player
       Save_Missions_Loop :
       for Mission of AcceptedMissions loop
