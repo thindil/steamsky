@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Crash when changing the name of the selected crew member
+
 ## [6.0.6] - 2021-07-18
 
 ### Changed
