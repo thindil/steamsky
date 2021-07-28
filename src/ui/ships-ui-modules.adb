@@ -1770,6 +1770,9 @@ package body Ships.UI.Modules is
          when others =>
             null;
       end case;
+      if Modules_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
       Player_Ship_Modules_Sorting.Sort(Local_Modules);
       Modules_Indexes.Clear;
       for Module of Local_Modules loop
