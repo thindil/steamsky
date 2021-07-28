@@ -213,11 +213,12 @@ package Ships is
    -- NAMEDESC   - Sort modules by name descending
    -- DAMAGEASC  - Sort modules by damage ascending
    -- DAMAGEDESC - Sort modules by damage descending
+   -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC) with
-      Default_Value => NAMEDESC;
+   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, NONE) with
+      Default_Value => NONE;
       -- ****
 
       -- ****d* Ships/Ships.Default_Modules_Sort_Order
@@ -226,7 +227,7 @@ package Ships is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NAMEDESC;
+   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
    -- ****
 
    -- ****v* Ships/Ships.Modules_Sort_Order
