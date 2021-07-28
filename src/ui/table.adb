@@ -93,9 +93,7 @@ package body Table is
               (Canvas, To_String(Header_Id), "<Leave>",
                "{" & Canvas & " configure -cursor left_ptr}");
             Bind
-              (Canvas, To_String(Header_Id),
-               "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-               ">",
+              (Canvas, To_String(Header_Id), "<Button-1>",
                "{" & Command & " %x}");
          end if;
          if Tooltip'Length > 0 then
@@ -128,9 +126,7 @@ package body Table is
            (Canvas, To_String(Header_Id), "<Leave>",
             "{" & Canvas & " configure -cursor left_ptr}");
          Bind
-           (Canvas, To_String(Header_Id),
-            "<Button-" & (if Game_Settings.Right_Button then "3" else "1") &
-            ">",
+           (Canvas, To_String(Header_Id), "<Button-1>",
             "{" & Command & " %x}");
       end if;
       if Tooltip'Length > 0 then
