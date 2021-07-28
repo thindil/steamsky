@@ -20,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Some typos in help
 - Crash on non-existing help topics
 - Crash when changing the name of the selected crew member
+- Crash when changing the name of the selected ship module
 
 ## [6.3] - 2021-07-11
 
