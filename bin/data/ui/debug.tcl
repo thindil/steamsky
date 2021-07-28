@@ -45,30 +45,36 @@ set shipframe [ttk::frame .debugdialog.main.ship]
 grid [ttk::button $shipframe.move -text {Move ship} -command DebugMoveShip]
 grid [ttk::label $shipframe.lblx -text {X:}] -column 1 -row 0
 grid [ttk::spinbox $shipframe.x -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 2 -row 0
-grid [ttk::label $shipframe.lbly -text {Y:}] -column 3 -row 0
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 2 -row 0 \
+   -sticky w
+grid [ttk::label $shipframe.lbly -text {Y:}] -column 3 -row 0 -sticky w
 grid [ttk::spinbox $shipframe.y -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 4 -row 0
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 4 -row 0 \
+   -sticky w
 grid [ttk::label $shipframe.modulelbl -text {Module:}]
 grid [ttk::combobox $shipframe.module -state readonly] -column 1 -row 1 \
-   -columnspan 3
+   -columnspan 4
 bind $shipframe.module <<ComboboxSelected>> RefreshModule
 grid [ttk::label $shipframe.protolbl -text {Prototype:}]
-grid [ttk::entry $shipframe.proto]  -column 1 -row 2 -columnspan 3
+grid [ttk::entry $shipframe.proto]  -column 1 -row 2 -columnspan 4 -sticky w
 grid [ttk::label $shipframe.weightlbl -text {Weight:}]
 grid [ttk::spinbox $shipframe.weight -from 0 -to 100000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 3 -columnspan 3
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3 \
+   -columnspan 4 -sticky w
 grid [ttk::label $shipframe.durlbl -text {Durability:}]
 grid [ttk::spinbox $shipframe.dur -from 0 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 4 -columnspan 3
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 4 \
+   -columnspan 4 -sticky w
 grid [ttk::label $shipframe.maxdurlbl -text {Max durability:}]
 grid [ttk::spinbox $shipframe.maxdur -from 0 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 5 -columnspan 3
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 5 \
+   -columnspan 4 -sticky w
 grid [ttk::label $shipframe.upgradelbl -text {Upgrade progress:}]
-grid [ttk::spinbox $shipframe.upgrade -from 0 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 6 -columnspan 3
+grid [ttk::spinbox $shipframe.upgrade -from 0 -to 100000 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 6 \
+   -columnspan 4 -sticky w
 grid [ttk::button $shipframe.change -text Change -command DebugUpdateModule] \
-   -columnspan 4
+   -columnspan 5
 # Crew options
 set crewframe [ttk::frame .debugdialog.main.crew]
 grid [ttk::label $crewframe.memberlbl -text Member]
