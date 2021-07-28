@@ -458,20 +458,37 @@ package body Game.SaveLoad is
          Step_Node: DOM.Core.Element;
          Step_Text: Text;
       begin
-         Log_Message("Saving finished stories...", EVERYTHING, False);
+         Log_Message
+           (Message => "Saving finished stories...",
+            Message_Type => EVERYTHING, New_Line => False);
          Save_Finished_Stories_Loop :
          for FinishedStory of FinishedStories loop
-            Category_Node := Create_Element(Save_Data, "finishedstory");
-            Category_Node := Append_Child(Main_Node, Category_Node);
+            Category_Node :=
+              Append_Child
+                (N => Main_Node,
+                 New_Child =>
+                   Create_Element
+                     (Doc => Save_Data, Tag_Name => "finishedstory"));
             Set_Attribute
-              (Category_Node, "index", To_String(FinishedStory.Index));
-            Save_Number(FinishedStory.StepsAmount, "stepsamount");
+              (Elem => Category_Node, Name => "index",
+               Value => To_String(Source => FinishedStory.Index));
+            Save_Number
+              (Value => FinishedStory.StepsAmount, Name => "stepsamount");
             Save_Story_Steps_Loop :
             for Step of FinishedStory.StepsTexts loop
-               Step_Node := Create_Element(Save_Data, "steptext");
-               Step_Node := Append_Child(Category_Node, Step_Node);
-               Step_Text := Create_Text_Node(Save_Data, To_String(Step));
-               Step_Text := Append_Child(Step_Node, Step_Text);
+               Step_Node :=
+                 Append_Child
+                   (N => Category_Node,
+                    New_Child =>
+                      Create_Element
+                        (Doc => Save_Data, Tag_Name => "steptext"));
+               --## rule off ASSIGNMENTS
+               Step_Text :=
+                 Create_Text_Node
+                   (Doc => Save_Data, Data => To_String(Source => Step));
+               Step_Text :=
+                 Append_Child(N => Step_Node, New_Child => Step_Text);
+               --## rule on ASSIGNMENTS
             end loop Save_Story_Steps_Loop;
          end loop Save_Finished_Stories_Loop;
          Log_Message("done.", EVERYTHING, True, False);
