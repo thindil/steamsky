@@ -53,6 +53,7 @@ with Ships.Cargo; use Ships.Cargo;
 with Ships.Crew; use Ships.Crew;
 with Ships.Movement; use Ships.Movement;
 with Ships.UI.Crew; use Ships.UI.Crew;
+with Ships.UI.Modules; use Ships.UI.Modules;
 with Statistics.UI; use Statistics.UI;
 
 package body Utils.UI is
@@ -306,15 +307,11 @@ package body Utils.UI is
          declare
             ModuleIndex: constant Positive :=
               Positive'Value(VarName(11 .. VarName'Last));
-            Button: constant Ttk_Button :=
-              Get_Widget
-                (Main_Paned & ".shipinfoframe.modules.canvas.frame.name" &
-                 Trim(Positive'Image(ModuleIndex + 1), Left));
          begin
             Player_Ship.Modules(ModuleIndex).Name :=
               To_Unbounded_String(Value);
-            Widgets.configure(Button, "-text $" & VarName);
             Tcl_UnsetVar(Interp, VarName);
+            UpdateModulesInfo;
          end;
       elsif VarName'Length > 8 and then VarName(1 .. 8) = "crewname" then
          declare
