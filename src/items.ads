@@ -128,13 +128,15 @@ package Items is
    -- WEIGHTDESC     - Sort items by total weight descending
    -- USEDASC        - Sort items by use status (mobs inventory only) ascending
    -- USEDDESC       - Sort items by use status (mobs inventory only) descending
+   -- NONE           - No sorting items (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Inventory_Sort_Orders is
      (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
-      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC) with
-      Default_Value => NAMEDESC;
+      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC,
+      NONE) with
+      Default_Value => NONE;
       -- ****
 
       -- ****d* Items/Items.Default_Inventory_Sort_Order
@@ -143,7 +145,7 @@ package Items is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NAMEDESC;
+   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NONE;
    -- ****
 
    -- ****v* Items/Items.Inventory_Sort_Order
