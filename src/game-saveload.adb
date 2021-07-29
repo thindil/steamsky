@@ -491,23 +491,23 @@ package body Game.SaveLoad is
                --## rule on ASSIGNMENTS
             end loop Save_Story_Steps_Loop;
          end loop Save_Finished_Stories_Loop;
-         Log_Message("done.", EVERYTHING, True, False);
+         Log_Message
+           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+            Time_Stamp => False);
       end Save_Finished_Stories_Block;
       -- Save missions accepted by player
       Save_Missions_Loop :
       for Mission of AcceptedMissions loop
-         Category_Node := Create_Element(Save_Data, "acceptedmission");
-         Category_Node := Append_Child(Main_Node, Category_Node);
+         Category_Node :=
+           Append_Child
+             (Main_Node, Create_Element(Save_Data, "acceptedmission"));
          Save_Number(Missions_Types'Pos(Mission.MType), "type");
-         if Mission.MType = Deliver then
-            Raw_Value := Mission.ItemIndex;
-         elsif Mission.MType = Passenger then
-            Raw_Value := To_Unbounded_String(Integer'Image(Mission.Data));
-         elsif Mission.MType = Destroy then
-            Raw_Value := Mission.ShipIndex;
-         else
-            Raw_Value := To_Unbounded_String(Integer'Image(Mission.Target));
-         end if;
+         Raw_Value :=
+           (if Mission.MType = Deliver then Mission.ItemIndex
+            elsif Mission.MType = Passenger then
+              To_Unbounded_String(Integer'Image(Mission.Data))
+            elsif Mission.MType = Destroy then Mission.ShipIndex
+            else To_Unbounded_String(Integer'Image(Mission.Target)));
          Set_Attribute
            (Category_Node, "target",
             To_String(Trim(Raw_Value, Ada.Strings.Left)));
