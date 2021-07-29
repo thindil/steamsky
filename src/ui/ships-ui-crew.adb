@@ -1369,6 +1369,9 @@ package body Ships.UI.Crew is
          when others =>
             null;
       end case;
+      if Crew_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
       Player_Ship_Crew_Sorting.Sort(Local_Crew);
       Crew_Indexes.Clear;
       for Member of Local_Crew loop
