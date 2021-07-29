@@ -277,8 +277,8 @@ package body Missions.UI is
             Command => "ShowBaseMissionMenu" & Positive'Image(Row - 1),
             Column => 1,
             Color =>
-              (if not CanAccept then "red" elsif CabinTaken then "yellow"
-               else ""));
+              (if CanAccept then "" elsif CabinTaken then "yellow"
+               else "red"));
          CanAccept := True;
          CabinTaken := False;
          case List(I).MType is
