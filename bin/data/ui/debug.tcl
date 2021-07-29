@@ -19,7 +19,7 @@ wm title .debugdialog {Steam Sky - Debug menu}
 if {$tcl_platform(os) == "Linux"} {
    wm attributes .debugdialog -type dialog
 }
-grid [ttk::frame .debugdialog.buttons]
+grid [ttk::frame .debugdialog.buttons] -sticky n
 grid [ttk::frame .debugdialog.main] -column 1 -row 0
 proc ShowFrame {framename} {
    Refresh
@@ -78,35 +78,36 @@ grid [ttk::button $shipframe.change -text Change -command DebugUpdateModule] \
 # Crew options
 set crewframe [ttk::frame .debugdialog.main.crew]
 grid [ttk::label $crewframe.memberlbl -text Member]
-grid [ttk::combobox $crewframe.member -state readonly] -column 1 -row 0
+grid [ttk::combobox $crewframe.member -state readonly -width 10] -column 1 \
+   -row 0
 bind $crewframe.member <<ComboboxSelected>> RefreshMember
 grid [ttk::label $crewframe.healthlbl -text Health]
 grid [ttk::spinbox $crewframe.health -from 1 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 1
 grid [ttk::label $crewframe.thirstlbl -text Thirst]
 grid [ttk::spinbox $crewframe.thirst -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 2
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 2
 grid [ttk::label $crewframe.hungerlbl -text Hunger]
 grid [ttk::spinbox $crewframe.hunger -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3
 grid [ttk::label $crewframe.tiredlbl -text Tired]
 grid [ttk::spinbox $crewframe.tired -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 4
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 4
 grid [ttk::label $crewframe.moralelbl -text Morale]
 grid [ttk::spinbox $crewframe.morale -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 5
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 5
 grid [ttk::label $crewframe.loyaltylbl -text Loyalty]
 grid [ttk::spinbox $crewframe.loyalty -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 6
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 6
 grid [ttk::frame $crewframe.stats] -column 2 -row 1
 grid [ttk::label $crewframe.stats.name -text Name]
 grid [ttk::label $crewframe.stats.level -text Level] -column 1 -row 0
 grid [ttk::frame $crewframe.skills] -column 3 -row 1
 grid [ttk::label $crewframe.skills.name -text Name]
 grid [ttk::label $crewframe.skills.level -text Level] -column 1 -row 0
-grid [ttk::frame $crewframe.addskill] -column 3 -row 6
-grid [ttk::button $crewframe.addskill.add -text Add -command DebugAddSkill]
-grid [ttk::combobox $crewframe.addskill.skills -state readonly] -column 1 -row 0
+grid [ttk::frame $crewframe.addskill] -column 2 -row 6 -columnspan 4
+grid [ttk::button $crewframe.addskill.add -text {Add skill} -command DebugAddSkill]
+grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] -column 1 -row 0
 grid [ttk::button $crewframe.change -text Change -command DebugUpdateMember] \
    -columnspan 4
 # Cargo options
