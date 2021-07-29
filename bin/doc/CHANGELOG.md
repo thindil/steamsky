@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Crash on non-existing help topics
 - Crash when changing the name of the selected crew member
 - Crash when changing the name of the selected ship module
+- Showing info about taken cabin in the available in base missions list
 
 ## [6.3] - 2021-07-11
 
