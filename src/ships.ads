@@ -217,7 +217,8 @@ package Ships is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, NONE) with
+   type Modules_Sort_Orders is
+     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -289,14 +290,15 @@ package Ships is
    -- HUNGERDESC  - Sort members by hunger descending
    -- MORALEASC   - Sort members by morale ascending
    -- MORALEDESC  - Sort members by morale descending
+   -- NONE        - No sorting crew (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Crew_Sort_Orders is
      (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
       FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
-      MORALEASC, MORALEDESC) with
-      Default_Value => NAMEDESC;
+      MORALEASC, MORALEDESC, NONE) with
+      Default_Value => NONE;
       -- ****
 
       -- ****d* Ships/Ships.Default_Crew_Sort_Order
@@ -305,7 +307,7 @@ package Ships is
       -- HISTORY
       -- 6.4 - Added
       -- SOURCE
-   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NAMEDESC;
+   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NONE;
    -- ****
 
    -- ****v* Ships/Ships.Crew_Sort_Order
