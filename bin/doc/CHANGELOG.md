@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Crash when changing the name of the selected crew member
 - Crash when changing the name of the selected ship module
+- Showing info about overloaded ship
 
 ## [6.0.6] - 2021-07-18
 
