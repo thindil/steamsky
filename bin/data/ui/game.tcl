@@ -47,8 +47,8 @@ grid [ttk::label .gameframe.header.nofood -style Headerred.TLabel \
    -font InterfaceIcons] -row 0 -column 4 -padx 3
 grid [ttk::label .gameframe.header.nodrink -style Headerred.TLabel \
    -font InterfaceIcons] -row 0 -column 5 -padx 3
-grid [ttk::label .gameframe.header.overloaded -style Headerred.TLabel] -row 0 \
-   -column 6 -padx 3
+grid [ttk::label .gameframe.header.overloaded -style Headerred.TLabel \
+   -font InterfaceIcons] -row 0 -column 6 -padx 3
 grid [ttk::label .gameframe.header.pilot -style Headerred.TLabel \
    -font InterfaceIcons] -row 0 -column 7 -padx 3
 grid [ttk::label .gameframe.header.engineer -style Headerred.TLabel \
