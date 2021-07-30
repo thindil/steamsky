@@ -500,20 +500,27 @@ package body Game.SaveLoad is
       for Mission of AcceptedMissions loop
          Category_Node :=
            Append_Child
-             (Main_Node, Create_Element(Save_Data, "acceptedmission"));
-         Save_Number(Missions_Types'Pos(Mission.MType), "type");
+             (N => Main_Node,
+              New_Child =>
+                Create_Element
+                  (Doc => Save_Data, Tag_Name => "acceptedmission"));
+         Save_Number
+           (Value => Missions_Types'Pos(Mission.MType), Name => "type");
          Raw_Value :=
            (if Mission.MType = Deliver then Mission.ItemIndex
             elsif Mission.MType = Passenger then
-              To_Unbounded_String(Integer'Image(Mission.Data))
+              To_Unbounded_String(Source => Integer'Image(Mission.Data))
             elsif Mission.MType = Destroy then Mission.ShipIndex
-            else To_Unbounded_String(Integer'Image(Mission.Target)));
+            else To_Unbounded_String(Source => Integer'Image(Mission.Target)));
          Set_Attribute
-           (Category_Node, "target",
-            To_String(Trim(Raw_Value, Ada.Strings.Left)));
-         Save_Number(Mission.Time, "time");
-         Save_Number(Mission.TargetX, "targetx");
-         Save_Number(Mission.TargetY, "targety");
+           (Elem => Category_Node, Name => "target",
+            Value =>
+              To_String
+                (Source =>
+                   Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
+         Save_Number(Value => Mission.Time, Name => "time");
+         Save_Number(Value => Mission.TargetX, Name => "targetx");
+         Save_Number(Value => Mission.TargetY, Name => "targety");
          Save_Number(Mission.Reward, "reward");
          Save_Number(Mission.StartBase, "startbase");
          if Mission.Finished then
