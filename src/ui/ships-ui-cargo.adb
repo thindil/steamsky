@@ -247,6 +247,11 @@ package body Ships.UI.Cargo is
          when others =>
             null;
       end case;
+      if Inventory_Sort_Order = NONE then
+         return
+           Show_Cargo_Command
+             (ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
+      end if;
       Inventory_Sorting.Sort(Local_Cargo);
       Cargo_Indexes.Clear;
       for Item of Local_Cargo loop
