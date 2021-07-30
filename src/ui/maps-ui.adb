@@ -215,6 +215,7 @@ package body Maps.UI is
                Add
                  (Label,
                   "You can't fly with your ship, because it is overloaded.");
+               Tcl.Tk.Ada.Grid.Grid(Label);
             end if;
          end;
       end if;
