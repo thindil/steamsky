@@ -239,6 +239,13 @@ package body Ships.UI.Crew.Inventory is
          when others =>
             null;
       end case;
+      if Inventory_Sort_Order = NONE then
+         return
+           Update_Inventory_Command
+             (ClientData, Interp, 2,
+              CArgv.Empty & "UpdateInventory" &
+              Trim(Positive'Image(MemberIndex), Left));
+      end if;
       Inventory_Sorting.Sort(Local_Inventory);
       Inventory_Indexes.Clear;
       for Item of Local_Inventory loop
