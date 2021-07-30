@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
 - Crash when changing the name of the selected crew member
 - Crash when changing the name of the selected ship module
 - Showing info about taken cabin in the available in base missions list
+- Showing info about overloaded ship
 
 ## [6.3] - 2021-07-11
 
