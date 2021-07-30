@@ -128,7 +128,7 @@ package body DebugUI is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.crew";
       ComboBox: Ttk_ComboBox := Get_Widget(FrameName & ".member", Interp);
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".health", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
       MemberFrame: Ttk_Frame := Get_Widget(FrameName & ".stats", Interp);
       Rows: Natural := 0;
       Tokens: Slice_Set;
@@ -139,15 +139,15 @@ package body DebugUI is
    begin
       Member := Player_Ship.Crew(Natural'Value(Current(ComboBox)) + 1);
       Set(SpinBox, Positive'Image(Member.Health));
-      SpinBox.Name := New_String(FrameName & ".thirst");
+      SpinBox.Name := New_String(FrameName & ".stats2.thirst");
       Set(SpinBox, Positive'Image(Member.Thirst));
-      SpinBox.Name := New_String(FrameName & ".hunger");
+      SpinBox.Name := New_String(FrameName & ".stats2.hunger");
       Set(SpinBox, Positive'Image(Member.Hunger));
-      SpinBox.Name := New_String(FrameName & ".tired");
+      SpinBox.Name := New_String(FrameName & ".stats2.tired");
       Set(SpinBox, Positive'Image(Member.Tired));
-      SpinBox.Name := New_String(FrameName & ".morale");
+      SpinBox.Name := New_String(FrameName & ".stats2.morale");
       Set(SpinBox, Positive'Image(Member.Morale(1)));
-      SpinBox.Name := New_String(FrameName & ".loyalty");
+      SpinBox.Name := New_String(FrameName & ".stats2.loyalty");
       Set(SpinBox, Positive'Image(Member.Loyalty));
       Create(Tokens, Tcl.Tk.Ada.Grid.Grid_Size(MemberFrame), " ");
       Rows := Natural'Value(Slice(Tokens, 2));
@@ -653,20 +653,20 @@ package body DebugUI is
       ComboBox: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".member", Interp);
       MemberIndex: Positive;
-      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".health", Interp);
+      SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".stats2.health", Interp);
    begin
       MemberIndex := Natural'Value(Current(ComboBox)) + 1;
       Player_Ship.Crew(MemberIndex).Health := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".thirst");
+      SpinBox.Name := New_String(FrameName & ".stats2.thirst");
       Player_Ship.Crew(MemberIndex).Thirst := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".hunger");
+      SpinBox.Name := New_String(FrameName & ".stats2.hunger");
       Player_Ship.Crew(MemberIndex).Hunger := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".tired");
+      SpinBox.Name := New_String(FrameName & ".stats2.tired");
       Player_Ship.Crew(MemberIndex).Tired := Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".morale");
+      SpinBox.Name := New_String(FrameName & ".stats2.morale");
       Player_Ship.Crew(MemberIndex).Morale(1) :=
         Skill_Range'Value(Get(SpinBox));
-      SpinBox.Name := New_String(FrameName & ".loyalty");
+      SpinBox.Name := New_String(FrameName & ".stats2.loyalty");
       Player_Ship.Crew(MemberIndex).Loyalty := Skill_Range'Value(Get(SpinBox));
       Update_Stats_Loop :
       for I in Player_Ship.Crew(MemberIndex).Attributes.Iterate loop

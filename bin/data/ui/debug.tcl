@@ -77,39 +77,40 @@ grid [ttk::button $shipframe.change -text Change -command DebugUpdateModule] \
    -columnspan 5
 # Crew options
 set crewframe [ttk::frame .debugdialog.main.crew]
-grid [ttk::label $crewframe.memberlbl -text Member]
-grid [ttk::combobox $crewframe.member -state readonly -width 10] -column 1 \
+grid [ttk::label $crewframe.memberlbl -text Member] -column 1
+grid [ttk::combobox $crewframe.member -state readonly -width 10] -column 2 \
    -row 0
 bind $crewframe.member <<ComboboxSelected>> RefreshMember
-grid [ttk::label $crewframe.healthlbl -text Health]
-grid [ttk::spinbox $crewframe.health -from 1 -to 100 -validate key \
+grid [ttk::frame $crewframe.stats2] -columnspan 2
+grid [ttk::label $crewframe.stats2.healthlbl -text Health]
+grid [ttk::spinbox $crewframe.stats2.health -from 1 -to 100 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 0
+grid [ttk::label $crewframe.stats2.thirstlbl -text Thirst]
+grid [ttk::spinbox $crewframe.stats2.thirst -from 0 -to 100 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 1
-grid [ttk::label $crewframe.thirstlbl -text Thirst]
-grid [ttk::spinbox $crewframe.thirst -from 0 -to 100 -validate key \
+grid [ttk::label $crewframe.stats2.hungerlbl -text Hunger]
+grid [ttk::spinbox $crewframe.stats2.hunger -from 0 -to 100 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 2
-grid [ttk::label $crewframe.hungerlbl -text Hunger]
-grid [ttk::spinbox $crewframe.hunger -from 0 -to 100 -validate key \
+grid [ttk::label $crewframe.stats2.tiredlbl -text Tired]
+grid [ttk::spinbox $crewframe.stats2.tired -from 0 -to 100 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3
-grid [ttk::label $crewframe.tiredlbl -text Tired]
-grid [ttk::spinbox $crewframe.tired -from 0 -to 100 -validate key \
+grid [ttk::label $crewframe.stats2.moralelbl -text Morale]
+grid [ttk::spinbox $crewframe.stats2.morale -from 0 -to 100 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 4
-grid [ttk::label $crewframe.moralelbl -text Morale]
-grid [ttk::spinbox $crewframe.morale -from 0 -to 100 -validate key \
+grid [ttk::label $crewframe.stats2.loyaltylbl -text Loyalty]
+grid [ttk::spinbox $crewframe.stats2.loyalty -from 0 -to 100 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 5
-grid [ttk::label $crewframe.loyaltylbl -text Loyalty]
-grid [ttk::spinbox $crewframe.loyalty -from 0 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 6
-grid [ttk::frame $crewframe.stats] -column 2 -row 1
+grid [ttk::frame $crewframe.stats] -column 2 -row 1 -sticky n
 grid [ttk::label $crewframe.stats.name -text Name]
 grid [ttk::label $crewframe.stats.level -text Level] -column 1 -row 0
-grid [ttk::frame $crewframe.skills] -column 3 -row 1
+grid [ttk::frame $crewframe.skills] -column 3 -row 1 -sticky n
 grid [ttk::label $crewframe.skills.name -text Name]
 grid [ttk::label $crewframe.skills.level -text Level] -column 1 -row 0
-grid [ttk::frame $crewframe.addskill] -column 2 -row 6 -columnspan 4
+grid [ttk::button $crewframe.change -text Change -command DebugUpdateMember] \
+   -columnspan 2
+grid [ttk::frame $crewframe.addskill] -column 2 -row 2 -columnspan 2
 grid [ttk::button $crewframe.addskill.add -text {Add skill} -command DebugAddSkill]
 grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] -column 1 -row 0
-grid [ttk::button $crewframe.change -text Change -command DebugUpdateMember] \
-   -columnspan 4
 # Cargo options
 set cargoframe [ttk::frame .debugdialog.main.cargo]
 grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
