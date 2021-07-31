@@ -20,7 +20,7 @@ if {$tcl_platform(os) == "Linux"} {
    wm attributes .debugdialog -type dialog
 }
 grid [ttk::frame .debugdialog.buttons] -sticky n
-grid [ttk::frame .debugdialog.main] -column 1 -row 0
+grid [ttk::frame .debugdialog.main] -column 1 -row 0 -sticky news
 proc ShowFrame {framename} {
    Refresh
    grid remove [grid slaves .debugdialog.main]
@@ -114,16 +114,17 @@ grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] -colum
 # Cargo options
 set cargoframe [ttk::frame .debugdialog.main.cargo]
 grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
-grid [ttk::entry $cargoframe.add] -column 1 -row 0
-grid [ttk::label $cargoframe.amountlbl -text {Amount:}] -column 2 -row 0
+grid [ttk::entry $cargoframe.add -width 16] -column 1 -row 0
+grid [ttk::label $cargoframe.amountlbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 3 -row 0
+   -validatecommand {ValidateSpinbox %W %P} -width 10] -column 1 -row 1
 grid [ttk::button $cargoframe.updatebutton -text Update \
-   -command DebugUpdateItem]
-grid [ttk::combobox $cargoframe.update -state readonly] -column 1 -row 1
-grid [ttk::label $cargoframe.amount2lbl -text {Amount:}] -column 2 -row 1
+   -command DebugUpdateItem] -pady {50 0}
+grid [ttk::combobox $cargoframe.update -state readonly -width 15] -column 1 \
+   -row 2 -pady {50 0}
+grid [ttk::label $cargoframe.amount2lbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 3 -row 1
+   -validatecommand {ValidateSpinbox %W %P} -width 10] -column 1 -row 3
 bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 # Bases options
 set basesframe [ttk::frame .debugdialog.main.bases]
