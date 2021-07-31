@@ -13,6 +13,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+with Ada.Containers.Generic_Array_Sort;
 with GNAT.String_Split; use GNAT.String_Split;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -183,6 +184,46 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Command;
 
+   -- ****t* SUCargo/SUCargo.Cargo_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the player ship cargo
+   -- OPTIONS
+   -- NAMEASC        - Sort items by name ascending
+   -- NAMEDESC       - Sort items by name descending
+   -- DURABILITYASC  - Sort items by durability ascending
+   -- DURABILITYDESC - Sort items by durability descending
+   -- TYPEASC        - Sort items by type ascending
+   -- TYPEDESC       - Sort items by type descending
+   -- AMOUNTASC      - Sort items by amount ascending
+   -- AMOUNTDESC     - Sort items by amount descending
+   -- WEIGHTASC      - Sort items by total weight ascending
+   -- WEIGHTDESC     - Sort items by total weight descending
+   -- NONE           - No sorting items (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Cargo_Sort_Orders is
+     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
+      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****d* SUCargo/SUCargo.Default_Cargo_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for items in the player's ship cargo
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Cargo_Sort_Order: constant Cargo_Sort_Orders := NONE;
+   -- ****
+
+   -- ****v* SUCargo/SUCargo.Cargo_Sort_Order
+   -- FUNCTION
+   -- The current sorting order of items in the player's ship cargo
+   -- SOURCE
+   Cargo_Sort_Order: Cargo_Sort_Orders := Default_Cargo_Sort_Order;
+   -- ****
+
    -- ****o* SUCargo/SUCargo.Sort_Cargo_Command
    -- FUNCTION
    -- Sort the player's ship's cargo list
@@ -211,56 +252,125 @@ package body Ships.UI.Cargo is
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
              (CargoTable, Natural'Value(CArgv.Arg(Argv, 1))));
-      Local_Cargo: Inventory_Container.Vector := Player_Ship.Cargo;
+      type Local_Cargo_Data is record
+         Name: Unbounded_String;
+         Damage: Float;
+         Item_Type: Unbounded_String;
+         Amount: Positive;
+         Weight: Positive;
+         Id: Positive;
+      end record;
+      type Cargo_Array is array(Positive range <>) of Local_Cargo_Data;
+      Local_Cargo: Cargo_Array(1 .. Positive(Player_Ship.Cargo.Length));
+      function "<"(Left, Right: Local_Cargo_Data) return Boolean is
+      begin
+         if Cargo_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Cargo_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Cargo_Sort_Order = DURABILITYASC
+           and then Left.Damage < Right.Damage then
+            return True;
+         end if;
+         if Cargo_Sort_Order = DURABILITYDESC
+           and then Left.Damage > Right.Damage then
+            return True;
+         end if;
+         if Cargo_Sort_Order = TYPEASC
+           and then Left.Item_Type < Right.Item_Type then
+            return True;
+         end if;
+         if Cargo_Sort_Order = TYPEDESC
+           and then Left.Item_Type > Right.Item_Type then
+            return True;
+         end if;
+         if Cargo_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Cargo_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         if Cargo_Sort_Order = WEIGHTASC
+           and then Left.Weight < Right.Weight then
+            return True;
+         end if;
+         if Cargo_Sort_Order = WEIGHTDESC
+           and then Left.Weight > Right.Weight then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Cargo is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Cargo_Data,
+         Array_Type => Cargo_Array);
    begin
       case Column is
          when 1 =>
-            if Inventory_Sort_Order = NAMEASC then
-               Inventory_Sort_Order := NAMEDESC;
+            if Cargo_Sort_Order = NAMEASC then
+               Cargo_Sort_Order := NAMEDESC;
             else
-               Inventory_Sort_Order := NAMEASC;
+               Cargo_Sort_Order := NAMEASC;
             end if;
          when 2 =>
-            if Inventory_Sort_Order = DURABILITYASC then
-               Inventory_Sort_Order := DURABILITYDESC;
+            if Cargo_Sort_Order = DURABILITYASC then
+               Cargo_Sort_Order := DURABILITYDESC;
             else
-               Inventory_Sort_Order := DURABILITYASC;
+               Cargo_Sort_Order := DURABILITYASC;
             end if;
          when 3 =>
-            if Inventory_Sort_Order = TYPEASC then
-               Inventory_Sort_Order := TYPEDESC;
+            if Cargo_Sort_Order = TYPEASC then
+               Cargo_Sort_Order := TYPEDESC;
             else
-               Inventory_Sort_Order := TYPEASC;
+               Cargo_Sort_Order := TYPEASC;
             end if;
          when 4 =>
-            if Inventory_Sort_Order = AMOUNTASC then
-               Inventory_Sort_Order := AMOUNTDESC;
+            if Cargo_Sort_Order = AMOUNTASC then
+               Cargo_Sort_Order := AMOUNTDESC;
             else
-               Inventory_Sort_Order := AMOUNTASC;
+               Cargo_Sort_Order := AMOUNTASC;
             end if;
          when 5 =>
-            if Inventory_Sort_Order = WEIGHTASC then
-               Inventory_Sort_Order := WEIGHTDESC;
+            if Cargo_Sort_Order = WEIGHTASC then
+               Cargo_Sort_Order := WEIGHTDESC;
             else
-               Inventory_Sort_Order := WEIGHTASC;
+               Cargo_Sort_Order := WEIGHTASC;
             end if;
          when others =>
             null;
       end case;
-      if Inventory_Sort_Order = NONE then
+      if Cargo_Sort_Order = NONE then
          return
            Show_Cargo_Command
              (ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
       end if;
-      Inventory_Sorting.Sort(Local_Cargo);
+      for I in Player_Ship.Cargo.Iterate loop
+         Local_Cargo(Inventory_Container.To_Index(I)) :=
+           (Name =>
+              To_Unbounded_String
+                (GetItemName(Player_Ship.Cargo(I), False, False)),
+            Damage =>
+              Float(Player_Ship.Cargo(I).Durability) /
+              Float(Default_Item_Durability),
+            Item_Type =>
+              (if
+                 Items_List(Player_Ship.Cargo(I).ProtoIndex).ShowType /=
+                 Null_Unbounded_String
+               then Items_List(Player_Ship.Cargo(I).ProtoIndex).ShowType
+               else Items_List(Player_Ship.Cargo(I).ProtoIndex).IType),
+            Amount => Player_Ship.Cargo(I).Amount,
+            Weight =>
+              Player_Ship.Cargo(I).Amount *
+              Items_List(Player_Ship.Cargo(I).ProtoIndex).Weight,
+            Id => Inventory_Container.To_Index(I));
+      end loop;
+      Sort_Cargo(Local_Cargo);
       Cargo_Indexes.Clear;
       for Item of Local_Cargo loop
-         for I in Player_Ship.Cargo.Iterate loop
-            if Player_Ship.Cargo(I) = Item then
-               Cargo_Indexes.Append(Inventory_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
+         Cargo_Indexes.Append(Item.Id);
       end loop;
       return
         Show_Cargo_Command(ClientData, Interp, 1, CArgv.Empty & "ShowCargo");
