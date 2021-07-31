@@ -14,9 +14,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ttk::frame .goalsdialog -style Dialog.TFrame
-set view [ttk::treeview .goalsdialog.view -show tree -yscrollcommand [list .goalsdialog.yscroll set] -height 9 -cursor hand1]
+set view [ttk::treeview .goalsdialog.view -show tree \
+   -yscrollcommand [list .goalsdialog.yscroll set] -height 9 -cursor hand1]
 set selectbutton [ttk::button .goalsdialog.selectbutton -text {Select goal}]
-grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 -style Header.TLabel -cursor hand1] -sticky we -columnspan 2
+grid [ttk::label .goalsdialog.header -text {Select a new goal} -wraplength 275 \
+   -style Header.TLabel -cursor hand1] -sticky we -columnspan 2
 grid $view -padx 2 -pady {2 0}
 $view column #0 -width 450 -stretch 1
 $view insert {} end -id 0 -text Random
@@ -30,7 +32,8 @@ $view insert {} end -id KILL -text {Kill enemies in melee combat}
 $view selection set 0
 bind $view <<TreeviewSelect>> {
    set selected [lindex [$view selection] 0]
-   if {[$view parent $selected] == {} && [$view item $selected -text] != {Random}} {
+   if {[$view parent $selected] == {} && \
+      [$view item $selected -text] != {Random}} {
       $selectbutton state disabled
    } else {
       $selectbutton state !disabled
@@ -38,16 +41,22 @@ bind $view <<TreeviewSelect>> {
 }
 bind $view <Double-1> {$selectbutton invoke}
 bind $view <Return> {$selectbutton invoke}
-grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical -command [list $view yview]] -column 1 -row 1 -sticky ns -padx {0 3} -pady {2 0}
+grid [ttk::scrollbar .goalsdialog.yscroll -orient vertical \
+   -command [list $view yview]] -column 1 -row 1 -sticky ns -padx {0 3} \
+   -pady {2 0}
 grid $selectbutton -row 3 -columnspan 2 -sticky we -padx 5 -pady {2 0}
-tooltip::tooltip $selectbutton "Select the goal for your character from the list.\nIf you choose Random option, a random goal will\nbe assigned. You can always change it later during\nthe game, but you will lose all progress then."
+tooltip::tooltip $selectbutton \
+   "Select the goal for your character from the list.\nIf you choose Random option, a random goal will\nbe assigned. You can always change it later during\nthe game, but you will lose all progress then."
 if {[winfo exists .gameframe] && [winfo ismapped .gameframe]} {
    set parent .gameframe
 } else {
    set parent .
 }
-grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} -command {CloseDialog .goalsdialog $parent}] -row 4 -columnspan 2 -sticky we -padx 5 -pady 2
-tooltip::tooltip .goalsdialog.closebutton {Close the goals list without any changes}
+grid [ttk::button .goalsdialog.closebutton -text {Close (Escape)} \
+   -command {CloseDialog .goalsdialog $parent}] -row 4 -columnspan 2 \
+   -sticky we -padx 5 -pady 2
+tooltip::tooltip .goalsdialog.closebutton \
+   {Close the goals list without any changes}
 bind .goalsdialog.closebutton <Escape> {.goalsdialog.closebutton invoke;break}
 bind .goalsdialog.closebutton <Tab> {focus $view;break}
 bind $selectbutton <Escape> {.goalsdialog.closebutton invoke;break}
