@@ -232,11 +232,11 @@ package body Knowledge.Bases is
             "ShowBases {" & BaseName & "}" & Positive'Image(Page + 1));
       end if;
       UpdateTable(BasesTable);
+      Xview_Move_To(BasesCanvas, "0.0");
+      Yview_Move_To(BasesCanvas, "0.0");
       Tcl_Eval(Get_Context, "update");
       configure
         (BasesCanvas, "-scrollregion [list " & BBox(BasesCanvas, "all") & "]");
-      Xview_Move_To(BasesCanvas, "0.0");
-      Yview_Move_To(BasesCanvas, "0.0");
    end UpdateBasesList;
 
    -- ****o* KBases/KBases.Show_Bases_Command
