@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -1295,6 +1296,53 @@ package body Ships.UI.Crew is
       return TCL_OK;
    end Show_Crew_Command;
 
+   -- ****it* SUCrew/SUCrew.Crew_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the player ship crew list
+   -- OPTIONS
+   -- NAMEASC     - Sort members by name ascending
+   -- NAMEDESC    - Sort members by name descending
+   -- ORDERASC    - Sort members by order ascending
+   -- ORDERDESC   - Sort members by order descending
+   -- HEALTHASC   - Sort members by health ascending
+   -- HEALTHDESC  - Sort members by health descending
+   -- FATIGUEASC  - Sort members by fatigue ascending
+   -- FATIGUEDESC - Sort members by fatigue descending
+   -- THIRTSASC   - Sort members by thirst ascending
+   -- THIRSTDESC  - Sort members by thirst descending
+   -- HUNGERASC   - Sort members by hunger ascending
+   -- HUNGERDESC  - Sort members by hunger descending
+   -- MORALEASC   - Sort members by morale ascending
+   -- MORALEDESC  - Sort members by morale descending
+   -- NONE        - No sorting crew (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Crew_Sort_Orders is
+     (NAMEASC, NAMEDESC, ORDERASC, ORDERDESC, HEALTHASC, HEALTHDESC,
+      FATIGUEASC, FATIGUEDESC, THIRSTASC, THIRSTDESC, HUNGERASC, HUNGERDESC,
+      MORALEASC, MORALEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* SUCrew/SUCrew.Default_Crew_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the player's ship's crew
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Crew_Sort_Order: constant Crew_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* SUCrew/SUCrew.Crew_Sort_Order
+   -- FUNCTION
+   -- The current sorting order of the player's ship's crew
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Crew_Sort_Order: Crew_Sort_Orders := Default_Crew_Sort_Order;
+   -- ****
+
    -- ****o* SUCrew/SUCrew.Sort_Crew_Command
    -- FUNCTION
    -- Sort the player's ship's crew list
@@ -1321,7 +1369,81 @@ package body Ships.UI.Crew is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
         Get_Column_Number(CrewTable, Natural'Value(CArgv.Arg(Argv, 1)));
-      Local_Crew: Crew_Container.Vector := Player_Ship.Crew;
+      type Local_Member_Data is record
+         Name: Unbounded_String;
+         Order: Crew_Orders;
+         Health: Skill_Range;
+         Fatigue: Integer;
+         Thirst: Skill_Range;
+         Hunger: Skill_Range;
+         Morale: Skill_Range;
+         Id: Positive;
+      end record;
+      type Crew_Array is array(Positive range <>) of Local_Member_Data;
+      Local_Crew: Crew_Array(1 .. Positive(Player_Ship.Crew.Length));
+      function "<"(Left, Right: Local_Member_Data) return Boolean is
+      begin
+         if Crew_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Crew_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Crew_Sort_Order = ORDERASC
+           and then Crew_Orders'Image(Left.Order) <
+             Crew_Orders'Image(Right.Order) then
+            return True;
+         end if;
+         if Crew_Sort_Order = ORDERDESC
+           and then Crew_Orders'Image(Left.Order) >
+             Crew_Orders'Image(Right.Order) then
+            return True;
+         end if;
+         if Crew_Sort_Order = HEALTHASC
+           and then Left.Health < Right.Health then
+            return True;
+         end if;
+         if Crew_Sort_Order = HEALTHDESC
+           and then Left.Health > Right.Health then
+            return True;
+         end if;
+         if Crew_Sort_Order = FATIGUEASC
+           and then Left.Fatigue < Right.Fatigue then
+            return True;
+         end if;
+         if Crew_Sort_Order = FATIGUEDESC
+           and then Left.Fatigue > Right.Fatigue then
+            return True;
+         end if;
+         if Crew_Sort_Order = THIRSTASC
+           and then Left.Thirst < Right.Thirst then
+            return True;
+         end if;
+         if Crew_Sort_Order = THIRSTDESC
+           and then Left.Thirst > Right.Thirst then
+            return True;
+         end if;
+         if Crew_Sort_Order = HUNGERASC
+           and then Left.Hunger < Right.Hunger then
+            return True;
+         end if;
+         if Crew_Sort_Order = HUNGERDESC
+           and then Left.Hunger > Right.Hunger then
+            return True;
+         end if;
+         if Crew_Sort_Order = MORALEASC
+           and then Left.Morale < Right.Morale then
+            return True;
+         end if;
+         if Crew_Sort_Order = MORALEDESC
+           and then Left.Morale > Right.Morale then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Crew is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Member_Data,
+         Array_Type => Crew_Array);
    begin
       case Column is
          when 1 =>
@@ -1372,15 +1494,23 @@ package body Ships.UI.Crew is
       if Crew_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Player_Ship_Crew_Sorting.Sort(Local_Crew);
+      for I in Player_Ship.Crew.Iterate loop
+         Local_Crew(Crew_Container.To_Index(I)) :=
+           (Name => Player_Ship.Crew(I).Name,
+            Order => Player_Ship.Crew(I).Order,
+            Health => Player_Ship.Crew(I).Health,
+            Fatigue =>
+              Player_Ship.Crew(I).Tired -
+              Player_Ship.Crew(I).Attributes(Condition_Index)(1),
+            Thirst => Player_Ship.Crew(I).Thirst,
+            Hunger => Player_Ship.Crew(I).Hunger,
+            Morale => Player_Ship.Crew(I).Morale(1),
+            Id => Crew_Container.To_Index(I));
+      end loop;
+      Sort_Crew(Local_Crew);
       Crew_Indexes.Clear;
       for Member of Local_Crew loop
-         for I in Player_Ship.Crew.Iterate loop
-            if Player_Ship.Crew(I) = Member then
-               Crew_Indexes.Append(Crew_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
+         Crew_Indexes.Append(Member.Id);
       end loop;
       UpdateCrewInfo;
       return TCL_OK;
