@@ -521,23 +521,31 @@ package body Game.SaveLoad is
          Save_Number(Value => Mission.Time, Name => "time");
          Save_Number(Value => Mission.TargetX, Name => "targetx");
          Save_Number(Value => Mission.TargetY, Name => "targety");
-         Save_Number(Mission.Reward, "reward");
-         Save_Number(Mission.StartBase, "startbase");
+         Save_Number(Value => Mission.Reward, Name => "reward");
+         Save_Number(Value => Mission.StartBase, Name => "startbase");
          if Mission.Finished then
-            Set_Attribute(Category_Node, "finished", "Y");
+            Set_Attribute
+              (Elem => Category_Node, Name => "finished", Value => "Y");
          else
-            Set_Attribute(Category_Node, "finished", "N");
+            Set_Attribute
+              (Elem => Category_Node, Name => "finished", Value => "N");
          end if;
          if Mission.Multiplier /= 1.0 then
             Raw_Value :=
-              To_Unbounded_String(RewardMultiplier'Image(Mission.Multiplier));
+              To_Unbounded_String
+                (Source => RewardMultiplier'Image(Mission.Multiplier));
             Set_Attribute
-              (Category_Node, "multiplier",
-               To_String(Trim(Raw_Value, Ada.Strings.Left)));
+              (Elem => Category_Node, Name => "multiplier",
+               Value =>
+                 To_String
+                   (Source =>
+                      Trim(Source => Raw_Value, Side => Ada.Strings.Left)));
          end if;
       end loop Save_Missions_Loop;
       -- Save player career
-      Log_Message("Saving player career...", EVERYTHING, False);
+      Log_Message
+        (Message => "Saving player career...", Message_Type => EVERYTHING,
+         New_Line => False);
       Category_Node :=
         Append_Child(Main_Node, Create_Element(Save_Data, "playercareer"));
       Set_Attribute(Category_Node, "index", To_String(Player_Career));
