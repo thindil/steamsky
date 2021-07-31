@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -1726,6 +1727,41 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Modules_Command;
 
+   -- ****it* SUModules/SUModules.Modules_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the ship modules list
+   -- OPTIONS
+   -- NAMEASC    - Sort modules by name ascending
+   -- NAMEDESC   - Sort modules by name descending
+   -- DAMAGEASC  - Sort modules by damage ascending
+   -- DAMAGEDESC - Sort modules by damage descending
+   -- NONE       - No sorting modules (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Modules_Sort_Orders is
+     (NAMEASC, NAMEDESC, DAMAGEASC, DAMAGEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* SUModules/SUModules.Default_Modules_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the player's ship's modules
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* SUModules/SUModules.Modules_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for modules list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
+   -- ****
+
    -- ****o* SUModules/SUModules.Sort_Modules_Command
    -- FUNCTION
    -- Sort the player's ship's modules list
@@ -1752,7 +1788,34 @@ package body Ships.UI.Modules is
       pragma Unreferenced(ClientData, Interp, Argc);
       Column: constant Positive :=
         Get_Column_Number(ModulesTable, Natural'Value(CArgv.Arg(Argv, 1)));
-      Local_Modules: Modules_Container.Vector := Player_Ship.Modules;
+      type Local_Module_Data is record
+         Name: Unbounded_String;
+         Damage: Float;
+         Id: Positive;
+      end record;
+      type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      Local_Modules: Modules_Array(1 .. Positive(Player_Ship.Modules.Length));
+      function "<"(Left, Right: Local_Module_Data) return Boolean is
+      begin
+         if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Modules_Sort_Order = DAMAGEASC
+           and then Left.Damage < Right.Damage then
+            return True;
+         end if;
+         if Modules_Sort_Order = DAMAGEDESC
+           and then Left.Damage > Right.Damage then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Module_Data,
+         Array_Type => Modules_Array);
    begin
       case Column is
          when 1 =>
@@ -1773,15 +1836,18 @@ package body Ships.UI.Modules is
       if Modules_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      Player_Ship_Modules_Sorting.Sort(Local_Modules);
+      for I in Player_Ship.Modules.Iterate loop
+         Local_Modules(Modules_Container.To_Index(I)) :=
+           (Name => Player_Ship.Modules(I).Name,
+            Damage =>
+              Float(Player_Ship.Modules(I).Durability) /
+              Float(Player_Ship.Modules(I).Max_Durability),
+            Id => Modules_Container.To_Index(I));
+      end loop;
+      Sort_Modules(Local_Modules);
       Modules_Indexes.Clear;
       for Module of Local_Modules loop
-         for I in Player_Ship.Modules.Iterate loop
-            if Player_Ship.Modules(I) = Module then
-               Modules_Indexes.Append(Modules_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
+         Modules_Indexes.Append(Module.Id);
       end loop;
       UpdateModulesInfo;
       return TCL_OK;

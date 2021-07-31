@@ -1244,30 +1244,6 @@ package body Ships is
       end if;
    end Damage_Module;
 
-   function "<"(Left, Right: Module_Data) return Boolean is
-      Left_Damage, Right_Damage: Float := 1.0;
-   begin
-      if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
-         return True;
-      end if;
-      if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
-         return True;
-      end if;
-      if Modules_Sort_Order in DAMAGEASC | DAMAGEDESC then
-         Left_Damage := Float(Left.Durability) / Float(Left.Max_Durability);
-         Right_Damage := Float(Right.Durability) / Float(Right.Max_Durability);
-         if Modules_Sort_Order = DAMAGEASC
-           and then Left_Damage < Right_Damage then
-            return True;
-         end if;
-         if Modules_Sort_Order = DAMAGEDESC
-           and then Left_Damage > Right_Damage then
-            return True;
-         end if;
-      end if;
-      return False;
-   end "<";
-
    function "<"(Left, Right: Member_Data) return Boolean is
       Left_Value, Right_Value: Integer := 0;
    begin
