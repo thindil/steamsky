@@ -547,15 +547,25 @@ package body Game.SaveLoad is
         (Message => "Saving player career...", Message_Type => EVERYTHING,
          New_Line => False);
       Category_Node :=
-        Append_Child(Main_Node, Create_Element(Save_Data, "playercareer"));
-      Set_Attribute(Category_Node, "index", To_String(Player_Career));
-      Log_Message("done.", EVERYTHING, True, False);
-      Create(Save_File, Out_File, To_String(Save_Name));
+        Append_Child
+          (N => Main_Node,
+           New_Child =>
+             Create_Element(Doc => Save_Data, Tag_Name => "playercareer"));
+      Set_Attribute
+        (Elem => Category_Node, Name => "index",
+         Value => To_String(Source => Player_Career));
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
+      Create
+        (File => Save_File, Mode => Out_File,
+         Name => To_String(Source => Save_Name));
       Write
-        (Stream => Stream(Save_File), N => Save_Data,
+        (Stream => Stream(File => Save_File), N => Save_Data,
          Pretty_Print => Pretty_Print);
-      Close(Save_File);
-      Log_Message("Finished saving game.", EVERYTHING);
+      Close(File => Save_File);
+      Log_Message
+        (Message => "Finished saving game.", Message_Type => EVERYTHING);
    end Save_Game;
 
    procedure Load_Game is
