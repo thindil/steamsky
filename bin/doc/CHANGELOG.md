@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Showing info about taken cabin in the available in base missions list
 - Showing info about overloaded ship
 - Reset scrollbar when showing the list of known bases
+- Showing bases types in debug window
 
 ## [6.3] - 2021-07-11
 
