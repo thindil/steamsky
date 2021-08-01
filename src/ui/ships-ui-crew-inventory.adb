@@ -15,6 +15,7 @@
 
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
+with Ada.Containers.Generic_Array_Sort;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
 with Tcl.Tk.Ada.Event; use Tcl.Tk.Ada.Event;
@@ -169,6 +170,49 @@ package body Ships.UI.Crew.Inventory is
       return TCL_OK;
    end Update_Inventory_Command;
 
+   -- ****it* SUCI/SUCI.Inventory_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for items inside various inventories
+   -- OPTIONS
+   -- NAMEASC        - Sort items by name ascending
+   -- NAMEDESC       - Sort items by name descending
+   -- DURABILITYASC  - Sort items by durability ascending
+   -- DURABILITYDESC - Sort items by durability descending
+   -- TYPEASC        - Sort items by type ascending
+   -- TYPEDESC       - Sort items by type descending
+   -- AMOUNTASC      - Sort items by amount ascending
+   -- AMOUNTDESC     - Sort items by amount descending
+   -- WEIGHTASC      - Sort items by total weight ascending
+   -- WEIGHTDESC     - Sort items by total weight descending
+   -- USEDASC        - Sort items by use status (mobs inventory only) ascending
+   -- USEDDESC       - Sort items by use status (mobs inventory only) descending
+   -- NONE           - No sorting items (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Inventory_Sort_Orders is
+     (NAMEASC, NAMEDESC, DURABILITYASC, DURABILITYDESC, TYPEASC, TYPEDESC,
+      AMOUNTASC, AMOUNTDESC, WEIGHTASC, WEIGHTDESC, USEDASC, USEDDESC,
+      NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* SUCI/SUCI.Default_Inventory_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for items in various inventories
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Inventory_Sort_Order: constant Inventory_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* SUCI/SUCI.Inventory_Sort_Order
+   -- FUNCTION
+   -- The current sorting order of items in various inventories
+   -- SOURCE
+   Inventory_Sort_Order: Inventory_Sort_Orders := Default_Inventory_Sort_Order;
+   -- ****
+
    -- ****o* SUCI/SUCI.Sort_Crew_Inventory_Command
    -- FUNCTION
    -- Sort the selected crew member inventory
@@ -197,8 +241,71 @@ package body Ships.UI.Crew.Inventory is
         (if CArgv.Arg(Argv, 1) = "-1" then Positive'Last
          else Get_Column_Number
              (InventoryTable, Natural'Value(CArgv.Arg(Argv, 1))));
-      Local_Inventory: Inventory_Container.Vector :=
-        Player_Ship.Crew(MemberIndex).Inventory;
+      type Local_Item_Data is record
+         Name: Unbounded_String;
+         Damage: Float;
+         Item_Type: Unbounded_String;
+         Amount: Positive;
+         Weight: Positive;
+         Used: Boolean;
+         Id: Positive;
+      end record;
+      type Inventory_Array is array(Positive range <>) of Local_Item_Data;
+      Local_Inventory: Inventory_Array
+        (1 .. Positive(Player_Ship.Crew(MemberIndex).Inventory.Length));
+      function "<"(Left, Right: Local_Item_Data) return Boolean is
+      begin
+         if Inventory_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Inventory_Sort_Order = NAMEDESC
+           and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Inventory_Sort_Order = DURABILITYASC
+           and then Left.Damage < Right.Damage then
+            return True;
+         end if;
+         if Inventory_Sort_Order = DURABILITYDESC
+           and then Left.Damage > Right.Damage then
+            return True;
+         end if;
+         if Inventory_Sort_Order = TYPEASC
+           and then Left.Item_Type < Right.Item_Type then
+            return True;
+         end if;
+         if Inventory_Sort_Order = TYPEDESC
+           and then Left.Item_Type > Right.Item_Type then
+            return True;
+         end if;
+         if Inventory_Sort_Order = AMOUNTASC
+           and then Left.Amount < Right.Amount then
+            return True;
+         end if;
+         if Inventory_Sort_Order = AMOUNTDESC
+           and then Left.Amount > Right.Amount then
+            return True;
+         end if;
+         if Inventory_Sort_Order = WEIGHTASC
+           and then Left.Weight < Right.Weight then
+            return True;
+         end if;
+         if Inventory_Sort_Order = WEIGHTDESC
+           and then Left.Weight > Right.Weight then
+            return True;
+         end if;
+         if Inventory_Sort_Order = USEDASC and then Left.Used < Right.Used then
+            return True;
+         end if;
+         if Inventory_Sort_Order = USEDDESC
+           and then Left.Used > Right.Used then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Inventory is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Item_Data,
+         Array_Type => Inventory_Array);
    begin
       case Column is
          when 1 =>
@@ -214,11 +321,6 @@ package body Ships.UI.Crew.Inventory is
                Inventory_Sort_Order := DURABILITYASC;
             end if;
          when 3 =>
-            for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
-               Player_Ship.Crew(MemberIndex).Inventory(I).Used :=
-                 ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I));
-            end loop;
-            Local_Inventory := Player_Ship.Crew(MemberIndex).Inventory;
             if Inventory_Sort_Order = USEDASC then
                Inventory_Sort_Order := USEDDESC;
             else
@@ -246,15 +348,40 @@ package body Ships.UI.Crew.Inventory is
               CArgv.Empty & "UpdateInventory" &
               Trim(Positive'Image(MemberIndex), Left));
       end if;
-      Inventory_Sorting.Sort(Local_Inventory);
+      for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
+         Local_Inventory(Inventory_Container.To_Index(I)) :=
+           (Name =>
+              To_Unbounded_String
+                (GetItemName
+                   (Player_Ship.Crew(MemberIndex).Inventory(I), False, False)),
+            Damage =>
+              Float(Player_Ship.Crew(MemberIndex).Inventory(I).Durability) /
+              Float(Default_Item_Durability),
+            Item_Type =>
+              (if
+                 Items_List
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
+                   .ShowType /=
+                 Null_Unbounded_String
+               then
+                 Items_List
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
+                   .ShowType
+               else Items_List
+                   (Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
+                   .IType),
+            Amount => Player_Ship.Crew(MemberIndex).Inventory(I).Amount,
+            Weight =>
+              Player_Ship.Crew(MemberIndex).Inventory(I).Amount *
+              Items_List(Player_Ship.Crew(MemberIndex).Inventory(I).ProtoIndex)
+                .Weight,
+            Used => ItemIsUsed(MemberIndex, Inventory_Container.To_Index(I)),
+            Id => Inventory_Container.To_Index(I));
+      end loop;
+      Sort_Inventory(Local_Inventory);
       Inventory_Indexes.Clear;
       for Item of Local_Inventory loop
-         for I in Player_Ship.Crew(MemberIndex).Inventory.Iterate loop
-            if Player_Ship.Crew(MemberIndex).Inventory(I) = Item then
-               Inventory_Indexes.Append(Inventory_Container.To_Index(I));
-               exit;
-            end if;
-         end loop;
+         Inventory_Indexes.Append(Item.Id);
       end loop;
       return
         Update_Inventory_Command
