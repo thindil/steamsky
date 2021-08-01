@@ -184,7 +184,7 @@ package body Ships.UI.Cargo is
       return TCL_OK;
    end Show_Cargo_Command;
 
-   -- ****t* SUCargo/SUCargo.Cargo_Sort_Orders
+   -- ****it* SUCargo/SUCargo.Cargo_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the player ship cargo
    -- OPTIONS
@@ -208,7 +208,7 @@ package body Ships.UI.Cargo is
       Default_Value => NONE;
       -- ****
 
-      -- ****d* SUCargo/SUCargo.Default_Cargo_Sort_Order
+      -- ****id* SUCargo/SUCargo.Default_Cargo_Sort_Order
       -- FUNCTION
       -- Default sorting order for items in the player's ship cargo
       -- HISTORY
@@ -217,7 +217,7 @@ package body Ships.UI.Cargo is
    Default_Cargo_Sort_Order: constant Cargo_Sort_Orders := NONE;
    -- ****
 
-   -- ****v* SUCargo/SUCargo.Cargo_Sort_Order
+   -- ****iv* SUCargo/SUCargo.Cargo_Sort_Order
    -- FUNCTION
    -- The current sorting order of items in the player's ship cargo
    -- SOURCE
