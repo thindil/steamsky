@@ -1074,14 +1074,14 @@ package body DebugUI is
       AddCommand("DebugDeleteEvent", Delete_Event_Command'Access);
       Load_Bases_Types_Loop :
       for BaseType of BasesTypes_List loop
-         Append(ValuesList, " " & BaseType.Name);
+         Append(ValuesList, " {" & BaseType.Name & "}");
       end loop Load_Bases_Types_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(FrameName & ".owner");
       Load_Factions_Loop :
       for Faction of Factions_List loop
-         Append(ValuesList, " " & Faction.Name);
+         Append(ValuesList, " {" & Faction.Name & "}");
       end loop Load_Factions_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
