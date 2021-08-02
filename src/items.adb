@@ -237,7 +237,7 @@ package body Items is
               (New_Item =>
                  (ProtoIndex => Item.ProtoIndex, Amount => (Item.Amount - 1),
                   Name => Item.Name, Durability => Item.Durability,
-                  Price => Item.Price, Used => False));
+                  Price => Item.Price));
          end;
          Inventory(ItemIndex).Amount := 1;
       end if;

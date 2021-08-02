@@ -107,7 +107,7 @@ package body Ships.Crew is
                Name =>
                  Ship.Crew(MemberIndex).Name &
                  To_Unbounded_String("'s corpse"),
-               Durability => 100, Price => 0, Used => False));
+               Durability => 100, Price => 0));
       end if;
       DeleteMember(MemberIndex, Ship);
       for I in Ship.Crew.Iterate loop

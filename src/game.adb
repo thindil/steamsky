@@ -378,7 +378,7 @@ package body Game is
                  (ProtoIndex =>
                     ProtoMobs_List(Player_Index_2).Inventory(I).ProtoIndex,
                   Amount => Amount, Name => Null_Unbounded_String,
-                  Durability => 100, Price => 0, Used => False));
+                  Durability => 100, Price => 0));
          end loop Player_Inventory_Loop;
          Player_Ship.Crew.Prepend
            (New_Item =>

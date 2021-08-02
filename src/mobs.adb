@@ -414,7 +414,7 @@ package body Mobs is
            (New_Item =>
               (ProtoIndex => ProtoMob.Inventory(I).ProtoIndex,
                Amount => Amount, Name => Null_Unbounded_String,
-               Durability => 100, Price => 0, Used => False));
+               Durability => 100, Price => 0));
       end loop Inventory_Loop;
       Mob.Equipment := ProtoMob.Equipment;
       declare
@@ -440,7 +440,7 @@ package body Mobs is
                     (New_Item =>
                        (ProtoIndex => ItemIndex, Amount => 1,
                         Name => Null_Unbounded_String, Durability => 100,
-                        Price => 0, Used => False));
+                        Price => 0));
                   Mob.Equipment(I) := Mob.Inventory.Last_Index;
                end if;
             end if;

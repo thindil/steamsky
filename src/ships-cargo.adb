@@ -49,7 +49,7 @@ package body Ships.Cargo is
            (New_Item =>
               (ProtoIndex => ProtoIndex, Amount => Amount,
                Name => Null_Unbounded_String, Durability => Durability,
-               Price => Price, Used => False));
+               Price => Price));
       else
          declare
             NewAmount: constant Integer :=

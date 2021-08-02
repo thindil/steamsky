@@ -350,8 +350,7 @@ package body Ships is
          Ship_Cargo.Append
            (New_Item =>
               (ProtoIndex => Proto_Ship.Cargo(I).ProtoIndex, Amount => Amount,
-               Name => Null_Unbounded_String, Durability => 100, Price => 0,
-               Used => False));
+               Name => Null_Unbounded_String, Durability => 100, Price => 0));
       end loop Set_Cargo_Loop;
       Tmp_Ship :=
         (Name => New_Name, Sky_X => X, Sky_Y => Y, Speed => Speed,

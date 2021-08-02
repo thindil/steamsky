@@ -66,7 +66,7 @@ package body Crew.Inventory is
            (New_Item =>
               (ProtoIndex => ProtoIndex, Amount => Amount,
                Name => Items_List(ProtoIndex).Name, Durability => Durability,
-               Price => Price, Used => False));
+               Price => Price));
       else
          declare
             NewAmount: constant Natural :=
