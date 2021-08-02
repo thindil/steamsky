@@ -93,7 +93,6 @@ package Items is
    -- Name       - Name of item if different than default
    -- Durability - Current durability of item
    -- Price      - Price for which item was bought
-   -- Used       - If True, the item is used by the mob
    -- SOURCE
    type InventoryData is record
       ProtoIndex: Unbounded_String;
@@ -101,7 +100,6 @@ package Items is
       Name: Unbounded_String;
       Durability: Items_Durability;
       Price: Natural := 0;
-      Used: Boolean;
    end record;
    -- ****
 
