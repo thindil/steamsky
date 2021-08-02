@@ -30,7 +30,8 @@ ttk::frame $knowledgecanvas.frame
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.bases.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w
+   -text "[format %c 0xf106]" -command {KnowledgeMaxMin bases show}] -sticky w \
+   -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known bases}
 # List of bases options
@@ -96,7 +97,7 @@ SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.missions.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
    -text "[format %c 0xf106]" -command {KnowledgeMaxMin missions show}] \
-   -sticky w
+   -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of accepted missions}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
@@ -119,7 +120,8 @@ grid columnconfigure $knowledgecanvas.frame 1 -weight 1
 SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.events.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
-   -text "[format %c 0xf106]" -command {KnowledgeMaxMin events show}] -sticky w
+   -text "[format %c 0xf106]" -command {KnowledgeMaxMin events show}] \
+   -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known events}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
@@ -143,7 +145,7 @@ SetScrollbarBindings $knowledgecanvas.frame $knowledgeframe.stories.scrolly
 # Minimize/maximize button
 grid [ttk::button $knowledgecanvas.frame.maxmin -style Small.TButton \
    -text "[format %c 0xf106]" -command {KnowledgeMaxMin stories show}] \
-   -sticky w
+   -sticky w -padx 5
 tooltip::tooltip $knowledgecanvas.frame.maxmin \
    {Maximize/minimize the list of known stories}
 $knowledgecanvas create window 0 0 -anchor nw -window $knowledgecanvas.frame
