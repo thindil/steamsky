@@ -93,10 +93,12 @@ package body Game.SaveLoad is
       begin
          Set_Attribute(Elem => Node, Name => Name, Value => Number_String);
       end Save_Number;
+      --## rule off TYPE_INITIAL_VALUES
       type Difficulty_Data is record
          Name: Unbounded_String;
          Value: Bonus_Type;
       end record;
+      --## rule on TYPE_INITIAL_VALUES
       Difficulties: constant array(1 .. 8) of Difficulty_Data :=
         (1 =>
            (Name => To_Unbounded_String(Source => "enemydamagebonus"),
@@ -570,66 +572,69 @@ package body Game.SaveLoad is
 
    procedure Load_Game is
       Save_File: File_Input;
-      Reader: Tree_Reader;
-      NodesList, ChildNodes: Node_List;
-      SavedNode: Node;
+      Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
+      Nodes_List, Child_Nodes_List: Node_List;
+      Saved_Node: Node;
       Save_Data: Document;
    begin
       Log_Message
         ("Start loading game from file " & To_String(Save_Name) & ".",
          EVERYTHING);
       Open(To_String(Save_Name), Save_File);
+      --## rule off IMPROPER_INITIALIZATION
       Parse(Reader, Save_File);
       Close(Save_File);
       Save_Data := Get_Tree(Reader);
+      --## rule off IMPROPER_INITIALIZATION
       -- Check save game compatybility
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "save");
-      SavedNode := Item(NodesList, 0);
-      if Get_Attribute(SavedNode, "version") /= "" then
-         if Positive'Value(Get_Attribute(SavedNode, "version")) >
+      Saved_Node := Item(Nodes_List, 0);
+      if Get_Attribute(Saved_Node, "version") /= "" then
+         if Positive'Value(Get_Attribute(Saved_Node, "version")) >
            Save_Version then
             raise Save_Game_Invalid_Data
               with "This save is incompatible with this version of the game";
          end if;
       end if;
       -- Load game difficulty settings
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "difficulty");
-      if Length(NodesList) > 0 then
+      if Length(Nodes_List) > 0 then
          Log_Message("Loading game difficulty settings...", EVERYTHING, False);
-         SavedNode := Item(NodesList, 0);
+         Saved_Node := Item(Nodes_List, 0);
          New_Game_Settings.Enemy_Damage_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "enemydamagebonus"));
+           Bonus_Type'Value(Get_Attribute(Saved_Node, "enemydamagebonus"));
          New_Game_Settings.Player_Damage_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "playerdamagebonus"));
+           Bonus_Type'Value(Get_Attribute(Saved_Node, "playerdamagebonus"));
          New_Game_Settings.Enemy_Melee_Damage_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "enemymeleedamagebonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Saved_Node, "enemymeleedamagebonus"));
          New_Game_Settings.Player_Melee_Damage_Bonus :=
            Bonus_Type'Value
-             (Get_Attribute(SavedNode, "playermeleedamagebonus"));
+             (Get_Attribute(Saved_Node, "playermeleedamagebonus"));
          New_Game_Settings.Experience_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "experiencebonus"));
+           Bonus_Type'Value(Get_Attribute(Saved_Node, "experiencebonus"));
          New_Game_Settings.Reputation_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "reputationbonus"));
+           Bonus_Type'Value(Get_Attribute(Saved_Node, "reputationbonus"));
          New_Game_Settings.Upgrade_Cost_Bonus :=
-           Bonus_Type'Value(Get_Attribute(SavedNode, "upgradecostbonus"));
-         if Get_Attribute(SavedNode, "pricesbonus") /= "" then
+           Bonus_Type'Value(Get_Attribute(Saved_Node, "upgradecostbonus"));
+         if Get_Attribute(Saved_Node, "pricesbonus") /= "" then
             New_Game_Settings.Prices_Bonus :=
-              Bonus_Type'Value(Get_Attribute(SavedNode, "pricesbonus"));
+              Bonus_Type'Value(Get_Attribute(Saved_Node, "pricesbonus"));
          end if;
          Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Load game date
       Log_Message("Loading game time...", EVERYTHING, False);
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "gamedate");
-      SavedNode := Item(NodesList, 0);
-      Game_Date.Year := Natural'Value(Get_Attribute(SavedNode, "year"));
-      Game_Date.Month := Natural'Value(Get_Attribute(SavedNode, "month"));
-      Game_Date.Day := Natural'Value(Get_Attribute(SavedNode, "day"));
-      Game_Date.Hour := Natural'Value(Get_Attribute(SavedNode, "hour"));
-      Game_Date.Minutes := Natural'Value(Get_Attribute(SavedNode, "minutes"));
+      Saved_Node := Item(Nodes_List, 0);
+      Game_Date.Year := Natural'Value(Get_Attribute(Saved_Node, "year"));
+      Game_Date.Month := Natural'Value(Get_Attribute(Saved_Node, "month"));
+      Game_Date.Day := Natural'Value(Get_Attribute(Saved_Node, "day"));
+      Game_Date.Hour := Natural'Value(Get_Attribute(Saved_Node, "hour"));
+      Game_Date.Minutes := Natural'Value(Get_Attribute(Saved_Node, "minutes"));
       Log_Message("done.", EVERYTHING, True, False);
       -- Load sky map
       Log_Message("Loading map...", EVERYTHING, False);
@@ -638,16 +643,16 @@ package body Game.SaveLoad is
            (others =>
               (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "field");
       declare
          X, Y: Positive;
       begin
          Load_Map_Loop :
-         for I in 0 .. Length(NodesList) - 1 loop
-            SavedNode := Item(NodesList, I);
-            X := Natural'Value(Get_Attribute(SavedNode, "x"));
-            Y := Natural'Value(Get_Attribute(SavedNode, "y"));
+         for I in 0 .. Length(Nodes_List) - 1 loop
+            Saved_Node := Item(Nodes_List, I);
+            X := Natural'Value(Get_Attribute(Saved_Node, "x"));
+            Y := Natural'Value(Get_Attribute(Saved_Node, "y"));
             SkyMap(X, Y).Visited := True;
          end loop Load_Map_Loop;
       end;
@@ -663,18 +668,19 @@ package body Game.SaveLoad is
       -- Load known recipes
       Log_Message("Loading known recipes...", EVERYTHING, False);
       Known_Recipes.Clear;
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "recipe");
       Load_Known_Recipes_Loop :
-      for I in 0 .. Length(NodesList) - 1 loop
+      for I in 0 .. Length(Nodes_List) - 1 loop
          Known_Recipes.Append
            (New_Item =>
-              To_Unbounded_String(Get_Attribute(Item(NodesList, I), "index")));
+              To_Unbounded_String
+                (Get_Attribute(Item(Nodes_List, I), "index")));
       end loop Load_Known_Recipes_Loop;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load messages
       Log_Message("Loading messages...", EVERYTHING, False);
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "message");
       ClearMessages;
       declare
@@ -683,15 +689,15 @@ package body Game.SaveLoad is
          Color: Message_Color;
       begin
          Load_Messages_Loop :
-         for I in 0 .. Length(NodesList) - 1 loop
-            SavedNode := Item(NodesList, I);
-            Text := To_Unbounded_String(Node_Value(First_Child(SavedNode)));
+         for I in 0 .. Length(Nodes_List) - 1 loop
+            Saved_Node := Item(Nodes_List, I);
+            Text := To_Unbounded_String(Node_Value(First_Child(Saved_Node)));
             MType :=
               Message_Type'Val
-                (Integer'Value(Get_Attribute(SavedNode, "type")));
+                (Integer'Value(Get_Attribute(Saved_Node, "type")));
             Color :=
               Message_Color'Val
-                (Integer'Value(Get_Attribute(SavedNode, "color")));
+                (Integer'Value(Get_Attribute(Saved_Node, "color")));
             RestoreMessage(Text, MType, Color);
          end loop Load_Messages_Loop;
       end;
@@ -699,7 +705,7 @@ package body Game.SaveLoad is
       -- Load events
       Log_Message("Loading events...", EVERYTHING, False);
       Events_List.Clear;
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "event");
       declare
          EType: Events_Types;
@@ -707,15 +713,15 @@ package body Game.SaveLoad is
          Data: Unbounded_String;
       begin
          Load_Events_Loop :
-         for I in 0 .. Length(NodesList) - 1 loop
-            SavedNode := Item(NodesList, I);
+         for I in 0 .. Length(Nodes_List) - 1 loop
+            Saved_Node := Item(Nodes_List, I);
             EType :=
               Events_Types'Val
-                (Integer'Value(Get_Attribute(SavedNode, "type")));
-            X := Integer'Value(Get_Attribute(SavedNode, "x"));
-            Y := Integer'Value(Get_Attribute(SavedNode, "y"));
-            Time := Integer'Value(Get_Attribute(SavedNode, "time"));
-            Data := To_Unbounded_String(Get_Attribute(SavedNode, "data"));
+                (Integer'Value(Get_Attribute(Saved_Node, "type")));
+            X := Integer'Value(Get_Attribute(Saved_Node, "x"));
+            Y := Integer'Value(Get_Attribute(Saved_Node, "y"));
+            Time := Integer'Value(Get_Attribute(Saved_Node, "time"));
+            Data := To_Unbounded_String(Get_Attribute(Saved_Node, "data"));
             case EType is
                when EnemyShip =>
                   Events_List.Append
@@ -768,33 +774,35 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       -- Load game statistics
       Log_Message("Loading game statistics...", EVERYTHING, False);
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "statistics");
       declare
          StatIndex, NodeName: Unbounded_String;
          StatAmount: Positive;
       begin
-         SavedNode := Item(NodesList, 0);
+         Saved_Node := Item(Nodes_List, 0);
          GameStats.BasesVisited :=
-           Positive'Value(Get_Attribute(SavedNode, "visitedbases"));
+           Positive'Value(Get_Attribute(Saved_Node, "visitedbases"));
          GameStats.MapVisited :=
-           Positive'Value(Get_Attribute(SavedNode, "mapdiscovered"));
+           Positive'Value(Get_Attribute(Saved_Node, "mapdiscovered"));
          GameStats.DistanceTraveled :=
-           Positive'Value(Get_Attribute(SavedNode, "distancetraveled"));
+           Positive'Value(Get_Attribute(Saved_Node, "distancetraveled"));
          GameStats.AcceptedMissions :=
-           Natural'Value(Get_Attribute(SavedNode, "acceptedmissions"));
+           Natural'Value(Get_Attribute(Saved_Node, "acceptedmissions"));
          GameStats.Points :=
-           Positive'Value(Get_Attribute(SavedNode, "points"));
-         ChildNodes := Child_Nodes(SavedNode);
+           Positive'Value(Get_Attribute(Saved_Node, "points"));
+         Child_Nodes_List := Child_Nodes(Saved_Node);
          Load_Statistics_Loop :
-         for I in 0 .. Length(ChildNodes) - 1 loop
-            NodeName := To_Unbounded_String(Node_Name(Item(ChildNodes, I)));
+         for I in 0 .. Length(Child_Nodes_List) - 1 loop
+            NodeName :=
+              To_Unbounded_String(Node_Name(Item(Child_Nodes_List, I)));
             if To_String(NodeName) /= "#text" then
                StatIndex :=
                  To_Unbounded_String
-                   (Get_Attribute(Item(ChildNodes, I), "index"));
+                   (Get_Attribute(Item(Child_Nodes_List, I), "index"));
                StatAmount :=
-                 Positive'Value(Get_Attribute(Item(ChildNodes, I), "amount"));
+                 Positive'Value
+                   (Get_Attribute(Item(Child_Nodes_List, I), "amount"));
             end if;
             if To_String(NodeName) = "destroyedships" then
                GameStats.DestroyedShips.Append
@@ -817,58 +825,59 @@ package body Game.SaveLoad is
       Log_Message("done.", EVERYTHING, True, False);
       -- Load current goal
       Log_Message("Loading current goal...", EVERYTHING, False);
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "currentgoal");
       CurrentGoal.Index :=
-        To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "index"));
+        To_Unbounded_String(Get_Attribute(Item(Nodes_List, 0), "index"));
       CurrentGoal.GType :=
         GoalTypes'Val
-          (Integer'Value(Get_Attribute(Item(NodesList, 0), "type")));
+          (Integer'Value(Get_Attribute(Item(Nodes_List, 0), "type")));
       CurrentGoal.Amount :=
-        Integer'Value(Get_Attribute(Item(NodesList, 0), "amount"));
+        Integer'Value(Get_Attribute(Item(Nodes_List, 0), "amount"));
       CurrentGoal.TargetIndex :=
-        To_Unbounded_String(Get_Attribute(Item(NodesList, 0), "target"));
+        To_Unbounded_String(Get_Attribute(Item(Nodes_List, 0), "target"));
       Log_Message("done.", EVERYTHING, True, False);
       -- Load current story
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "currentstory");
-      if Length(NodesList) > 0 then
+      if Length(Nodes_List) > 0 then
          Log_Message("Loading current story...", EVERYTHING, False);
-         SavedNode := Item(NodesList, 0);
+         Saved_Node := Item(Nodes_List, 0);
          CurrentStory.Index :=
-           To_Unbounded_String(Get_Attribute(SavedNode, "index"));
-         CurrentStory.Step := Positive'Value(Get_Attribute(SavedNode, "step"));
-         if Get_Attribute(SavedNode, "currentstep") = "start" then
+           To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
+         CurrentStory.Step :=
+           Positive'Value(Get_Attribute(Saved_Node, "step"));
+         if Get_Attribute(Saved_Node, "currentstep") = "start" then
             CurrentStory.CurrentStep := 0;
-         elsif Get_Attribute(SavedNode, "currentstep") = "finish" then
+         elsif Get_Attribute(Saved_Node, "currentstep") = "finish" then
             CurrentStory.CurrentStep := -1;
          else
             Load_Story_Steps_Loop :
             for I in Stories_List(CurrentStory.Index).Steps.Iterate loop
                if Stories_List(CurrentStory.Index).Steps(I).Index =
                  To_Unbounded_String
-                   (Get_Attribute(SavedNode, "currentstep")) then
+                   (Get_Attribute(Saved_Node, "currentstep")) then
                   CurrentStory.CurrentStep := Steps_Container.To_Index(I);
                   exit Load_Story_Steps_Loop;
                end if;
             end loop Load_Story_Steps_Loop;
          end if;
          CurrentStory.MaxSteps :=
-           Positive'Value(Get_Attribute(SavedNode, "maxsteps"));
+           Positive'Value(Get_Attribute(Saved_Node, "maxsteps"));
          CurrentStory.ShowText :=
-           (if Get_Attribute(SavedNode, "showtext") = "Y" then True
+           (if Get_Attribute(Saved_Node, "showtext") = "Y" then True
             else False);
-         if Get_Attribute(SavedNode, "data") /= "" then
+         if Get_Attribute(Saved_Node, "data") /= "" then
             CurrentStory.Data :=
-              To_Unbounded_String(Get_Attribute(SavedNode, "data"));
+              To_Unbounded_String(Get_Attribute(Saved_Node, "data"));
          end if;
          CurrentStory.FinishedStep :=
            StepConditionType'Val
-             (Integer'Value(Get_Attribute(SavedNode, "finishedstep")));
+             (Integer'Value(Get_Attribute(Saved_Node, "finishedstep")));
          Log_Message("done.", EVERYTHING, True, False);
       end if;
       -- Load finished stories data
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Save_Data, "finishedstory");
       declare
@@ -878,20 +887,20 @@ package body Game.SaveLoad is
       begin
          Log_Message("Loading finished stories...", EVERYTHING, False);
          Load_Finished_Stories_Loop :
-         for I in 0 .. Length(NodesList) - 1 loop
-            SavedNode := Item(NodesList, I);
+         for I in 0 .. Length(Nodes_List) - 1 loop
+            Saved_Node := Item(Nodes_List, I);
             StoryIndex :=
-              To_Unbounded_String(Get_Attribute(SavedNode, "index"));
+              To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
             StepsAmount :=
-              Positive'Value(Get_Attribute(SavedNode, "stepsamount"));
+              Positive'Value(Get_Attribute(Saved_Node, "stepsamount"));
             TempTexts.Clear;
-            ChildNodes := Child_Nodes(SavedNode);
+            Child_Nodes_List := Child_Nodes(Saved_Node);
             Load_Stories_Text_Loop :
-            for J in 0 .. Length(ChildNodes) - 1 loop
+            for J in 0 .. Length(Child_Nodes_List) - 1 loop
                TempTexts.Append
                  (New_Item =>
                     (To_Unbounded_String
-                       (Node_Value(First_Child(Item(ChildNodes, J))))));
+                       (Node_Value(First_Child(Item(Child_Nodes_List, J))))));
             end loop Load_Stories_Text_Loop;
             FinishedStories.Append
               (New_Item =>
@@ -900,7 +909,7 @@ package body Game.SaveLoad is
          end loop Load_Finished_Stories_Loop;
          Log_Message("done.", EVERYTHING, True, False);
       end;
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Save_Data, "acceptedmission");
       declare
@@ -914,28 +923,30 @@ package body Game.SaveLoad is
       begin
          Log_Message("Loading accepted missions...", EVERYTHING, False);
          Load_Missions_Loop :
-         for I in 0 .. Length(NodesList) - 1 loop
-            SavedNode := Item(NodesList, I);
+         for I in 0 .. Length(Nodes_List) - 1 loop
+            Saved_Node := Item(Nodes_List, I);
             MType :=
               Missions_Types'Val
-                (Integer'Value(Get_Attribute(SavedNode, "type")));
+                (Integer'Value(Get_Attribute(Saved_Node, "type")));
             if MType = Deliver or MType = Destroy then
                Index :=
-                 To_Unbounded_String(Get_Attribute(SavedNode, "target"));
+                 To_Unbounded_String(Get_Attribute(Saved_Node, "target"));
             else
-               Target := Integer'Value(Get_Attribute(SavedNode, "target"));
+               Target := Integer'Value(Get_Attribute(Saved_Node, "target"));
             end if;
-            Time := Positive'Value(Get_Attribute(SavedNode, "time"));
-            TargetX := Natural'Value(Get_Attribute(SavedNode, "targetx"));
-            TargetY := Natural'Value(Get_Attribute(SavedNode, "targety"));
-            Reward := Positive'Value(Get_Attribute(SavedNode, "reward"));
-            StartBase := Natural'Value(Get_Attribute(SavedNode, "startbase"));
+            Time := Positive'Value(Get_Attribute(Saved_Node, "time"));
+            TargetX := Natural'Value(Get_Attribute(Saved_Node, "targetx"));
+            TargetY := Natural'Value(Get_Attribute(Saved_Node, "targety"));
+            Reward := Positive'Value(Get_Attribute(Saved_Node, "reward"));
+            StartBase := Natural'Value(Get_Attribute(Saved_Node, "startbase"));
             Multiplier :=
-              (if Get_Attribute(SavedNode, "multiplier") /= "" then
-                 RewardMultiplier'Value(Get_Attribute(SavedNode, "multiplier"))
+              (if Get_Attribute(Saved_Node, "multiplier") /= "" then
+                 RewardMultiplier'Value
+                   (Get_Attribute(Saved_Node, "multiplier"))
                else 1.0);
             Finished :=
-              (if Get_Attribute(Item(NodesList, I), "finished") = "Y" then True
+              (if Get_Attribute(Item(Nodes_List, I), "finished") = "Y" then
+                 True
                else False);
             case MType is
                when Deliver =>
@@ -995,12 +1006,12 @@ package body Game.SaveLoad is
       end;
       -- Load player career
       Log_Message("Loading player career...", EVERYTHING, False);
-      NodesList :=
+      Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "playercareer");
-      if Length(NodesList) > 0 then
-         SavedNode := Item(NodesList, 0);
+      if Length(Nodes_List) > 0 then
+         Saved_Node := Item(Nodes_List, 0);
          Player_Career :=
-           To_Unbounded_String(Get_Attribute(SavedNode, "index"));
+           To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
       else
          Player_Career := Careers_Container.Key(Careers_List.First);
       end if;
