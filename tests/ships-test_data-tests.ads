@@ -11,22 +11,22 @@ package Ships.Test_Data.Tests is
    null record;
 
    procedure Test_Create_Ship_14edf1_469250(Gnattest_T: in out Test);
-   --  ships.ads:525:4:Create_Ship:Test_CreateShip
+   --  ships.ads:398:4:Create_Ship:Test_CreateShip
 
    procedure Test_Count_Ship_Weight_dec0b9_0591fd(Gnattest_T: in out Test);
-   --  ships.ads:550:4:Count_Ship_Weight:Test_CountShipWeight
+   --  ships.ads:423:4:Count_Ship_Weight:Test_CountShipWeight
 
    procedure Test_Generate_Ship_Name_7b8806_7313c0(Gnattest_T: in out Test);
-   --  ships.ads:562:4:Generate_Ship_Name:Test_GenerateShipName
+   --  ships.ads:435:4:Generate_Ship_Name:Test_GenerateShipName
 
    procedure Test_Count_Combat_Value_145322_424a30(Gnattest_T: in out Test);
-   --  ships.ads:574:4:Count_Combat_Value:Test_CountCombatValue
+   --  ships.ads:447:4:Count_Combat_Value:Test_CountCombatValue
 
    procedure Test_Get_Cabin_Quality_3a9d5d_bc7a0e(Gnattest_T: in out Test);
-   --  ships.ads:586:4:Get_Cabin_Quality:Test_GetCabinQuality
+   --  ships.ads:459:4:Get_Cabin_Quality:Test_GetCabinQuality
 
    procedure Test_Damage_Module_222cf0_819b51(Gnattest_T: in out Test);
-   --  ships.ads:601:4:Damage_Module:Test_DamageModule
+   --  ships.ads:474:4:Damage_Module:Test_DamageModule
 
 end Ships.Test_Data.Tests;
 --  end read only
