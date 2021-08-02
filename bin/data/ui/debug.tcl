@@ -109,8 +109,10 @@ grid [ttk::label $crewframe.skills.level -text Level] -column 1 -row 0
 grid [ttk::button $crewframe.change -text Change -command DebugUpdateMember] \
    -columnspan 2
 grid [ttk::frame $crewframe.addskill] -column 2 -row 2 -columnspan 2
-grid [ttk::button $crewframe.addskill.add -text {Add skill} -command DebugAddSkill]
-grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] -column 1 -row 0
+grid [ttk::button $crewframe.addskill.add -text {Add skill}\
+   -command DebugAddSkill]
+grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] \
+   -column 1 -row 0
 # Cargo options
 set cargoframe [ttk::frame .debugdialog.main.cargo]
 grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
@@ -129,24 +131,24 @@ bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 # Bases options
 set basesframe [ttk::frame .debugdialog.main.bases]
 grid [ttk::label $basesframe.lbl1 -text {Base:}]
-grid [ttk::entry $basesframe.name] -column 1 -row 0
+grid [ttk::entry $basesframe.name -width 16] -column 1 -row 0
 bind $basesframe.name <Return> RefreshBase
 grid [ttk::label $basesframe.lbl2 -text {Type:}]
-grid [ttk::combobox $basesframe.type -state readonly] -column 1 -row 1
+grid [ttk::combobox $basesframe.type -state readonly -width 15] -column 1 -row 1
 grid [ttk::label $basesframe.lbl3 -text {Owner:}]
-grid [ttk::combobox $basesframe.owner -state readonly] -column 1 -row 2
+grid [ttk::combobox $basesframe.owner -state readonly -width 15] -column 1 -row 2
 grid [ttk::label $basesframe.lbl4 -text {Size:}]
 grid [ttk::combobox $basesframe.size -state readonly \
-   -values [list Small Medium Big]] -column 1 -row 3
+   -values [list Small Medium Big] -width 15] -column 1 -row 3
 grid [ttk::label $basesframe.lbl5 -text {Population:}]
 grid [ttk::spinbox $basesframe.population -from 0 -to 10000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 4
+   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 4
 grid [ttk::label $basesframe.lbl6 -text {Reputation:}]
 grid [ttk::spinbox $basesframe.reputation -from -100 -to 100 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 5
+   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 5
 grid [ttk::label $basesframe.lbl7 -text {Money:}]
 grid [ttk::spinbox $basesframe.money -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P}] -column 1 -row 6
+   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 6
 grid [ttk::button $basesframe.update -text {Update} -command DebugUpdateBase] \
    -columnspan 2
 # World options
