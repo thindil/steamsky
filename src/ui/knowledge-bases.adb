@@ -492,13 +492,16 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Sorting orders for the known bases list
    -- OPTIONS
-   -- NAMEASC    - Sort bases by name ascending
-   -- NAMEDESC   - Sort bases by name descending
-   -- NONE       - No sorting bases (default)
+   -- NAMEASC      - Sort bases by name ascending
+   -- NAMEDESC     - Sort bases by name descending
+   -- DISTANCEASC  - Sort bases by distance ascending
+   -- DISTANCEDESC - Sort bases by distance descending
+   -- NONE         - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Bases_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Bases_Sort_Orders is
+     (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -548,6 +551,7 @@ package body Knowledge.Bases is
         Get_Column_Number(BasesTable, Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Base_Data is record
          Name: Unbounded_String;
+         Distance: Natural;
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
@@ -558,6 +562,14 @@ package body Knowledge.Bases is
             return True;
          end if;
          if Bases_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Bases_Sort_Order = DISTANCEASC
+           and then Left.Distance < Right.Distance then
+            return True;
+         end if;
+         if Bases_Sort_Order = DISTANCEDESC
+           and then Left.Distance > Right.Distance then
             return True;
          end if;
          return False;
@@ -573,6 +585,12 @@ package body Knowledge.Bases is
             else
                Bases_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Bases_Sort_Order = DISTANCEASC then
+               Bases_Sort_Order := DISTANCEDESC;
+            else
+               Bases_Sort_Order := DISTANCEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -580,7 +598,10 @@ package body Knowledge.Bases is
          return TCL_OK;
       end if;
       for I in SkyBases'Range loop
-         Local_Bases(I) := (Name => SkyBases(I).Name, Id => I);
+         Local_Bases(I) :=
+           (Name => SkyBases(I).Name,
+            Distance => CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY),
+            Id => I);
       end loop;
       Sort_Bases(Local_Bases);
       Bases_Indexes.Clear;
