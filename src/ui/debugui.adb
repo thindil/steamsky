@@ -1084,6 +1084,13 @@ package body DebugUI is
          Append(ValuesList, " {" & Faction.Name & "}");
       end loop Load_Factions_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ValuesList := Null_Unbounded_String;
+      ComboBox.Name := New_String(FrameName & ".name");
+      Load_Bases_Loop :
+      for Base of SkyBases loop
+         Append(ValuesList, " {" & Base.Name & "}");
+      end loop Load_Bases_Loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
