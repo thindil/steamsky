@@ -64,14 +64,14 @@ with Utils.UI; use Utils.UI;
 
 package body Ships.UI.Modules is
 
-   -- ****iv* SUI2/SUI2.ModulesTable
+   -- ****iv* SUModules/SUModules.ModulesTable
    -- FUNCTION
    -- Table with info about the installed modules on the player ship
    -- SOURCE
    ModulesTable: Table_Widget (2);
    -- ****
 
-   -- ****iv* SUI/SUI.Modules_Indexes
+   -- ****iv* SUModules/SUModules.Modules_Indexes
    -- FUNCTION
    -- Indexes of the player ship modules
    -- SOURCE
