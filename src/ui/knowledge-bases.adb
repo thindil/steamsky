@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -57,6 +58,13 @@ package body Knowledge.Bases is
    -- Table with info about the know bases
    -- SOURCE
    BasesTable: Table_Widget (7);
+   -- ****
+
+   -- ****iv* KBases/KBases.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship modules
+   -- SOURCE
+   Bases_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****if* KBases/KBases.Get_Reputation_Text
@@ -120,7 +128,14 @@ package body Knowledge.Bases is
             To_Unbounded_String("Population"), To_Unbounded_String("Size"),
             To_Unbounded_String("Owner"), To_Unbounded_String("Type"),
             To_Unbounded_String("Reputation")),
-           Get_Widget(".gameframe.paned.knowledgeframe.bases.scrolly"));
+           Get_Widget(".gameframe.paned.knowledgeframe.bases.scrolly"),
+           "SortKnownBases {" & BaseName & "}",
+           "Press mouse button to sort the bases.");
+      if Bases_Indexes.Is_Empty then
+         for I in SkyBases'Range loop
+            Bases_Indexes.Append(I);
+         end loop;
+      end if;
       if BaseName'Length = 0 then
          configure(SearchEntry, "-validatecommand {}");
          Delete(SearchEntry, "0", "end");
@@ -133,7 +148,7 @@ package body Knowledge.Bases is
       BasesOwner := To_Unbounded_String(Get(ComboBox));
       Rows := 0;
       Load_Bases_Loop :
-      for I in 1 .. SkyBases'Last loop
+      for I of Bases_Indexes loop
          if not SkyBases(I).Known then
             goto End_Of_Loop;
          end if;
@@ -473,11 +488,115 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Base_Info_Command;
 
+   -- ****it* KBases/KBases.Bases_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the known bases list
+   -- OPTIONS
+   -- NAMEASC    - Sort bases by name ascending
+   -- NAMEDESC   - Sort bases by name descending
+   -- NONE       - No sorting bases (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Bases_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* KBases/KBases.Default_Bases_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the list of known bases
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Bases_Sort_Order: constant Bases_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* KBases/KBases.Bases_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for known bases list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Bases_Sort_Order: Bases_Sort_Orders := Default_Bases_Sort_Order;
+   -- ****
+
+   -- ****o* KBases/KBases.Sort_Bases_Command
+   -- FUNCTION
+   -- Sort the list of known bases
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortKnownBases x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Bases_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Bases_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(BasesTable, Natural'Value(CArgv.Arg(Argv, 2)));
+      type Local_Base_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Bases_Array is array(Positive range <>) of Local_Base_Data;
+      Local_Bases: Bases_Array (Bases_Range);
+      function "<"(Left, Right: Local_Base_Data) return Boolean is
+      begin
+         if Bases_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Bases_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Bases is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Base_Data,
+         Array_Type => Bases_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Bases_Sort_Order = NAMEASC then
+               Bases_Sort_Order := NAMEDESC;
+            else
+               Bases_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Bases_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in SkyBases'Range loop
+         Local_Bases(I) := (Name => SkyBases(I).Name, Id => I);
+      end loop;
+      Sort_Bases(Local_Bases);
+      Bases_Indexes.Clear;
+      for Base of Local_Bases loop
+         Bases_Indexes.Append(Base.Id);
+      end loop;
+      UpdateBasesList(CArgv.Arg(Argv, 1));
+      return TCL_OK;
+   end Sort_Bases_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowBases", Show_Bases_Command'Access);
       AddCommand("ShowBasesMenu", Show_Bases_Menu_Command'Access);
       AddCommand("ShowBaseInfo", Show_Base_Info_Command'Access);
+      AddCommand("SortKnownBases", Sort_Bases_Command'Access);
    end AddCommands;
 
 end Knowledge.Bases;
