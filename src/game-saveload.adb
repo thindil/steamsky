@@ -572,8 +572,11 @@ package body Game.SaveLoad is
 
    procedure Load_Game is
       Save_File: File_Input;
-      Reader: Tree_Reader; --## rule line off IMPROPER_INITIALIZATION
-      Nodes_List, Child_Nodes_List: Node_List;
+      --## rule off IMPROPER_INITIALIZATION
+      Reader: Tree_Reader;
+      Child_Nodes_List: Node_List;
+      --## rule on IMPROPER_INITIALIZATION
+      Nodes_List: Node_List;
       Saved_Node: Node;
       Save_Data: Document;
    begin
