@@ -581,20 +581,24 @@ package body Game.SaveLoad is
       Save_Data: Document;
    begin
       Log_Message
-        ("Start loading game from file " & To_String(Save_Name) & ".",
-         EVERYTHING);
-      Open(To_String(Save_Name), Save_File);
+        (Message =>
+           "Start loading game from file " & To_String(Source => Save_Name) &
+           ".",
+         Message_Type => EVERYTHING);
+      Open(Filename => To_String(Source => Save_Name), Input => Save_File);
       --## rule off IMPROPER_INITIALIZATION
-      Parse(Reader, Save_File);
-      Close(Save_File);
-      Save_Data := Get_Tree(Reader);
+      Parse(Parser => Reader, Input => Save_File);
+      Close(Input => Save_File);
+      Save_Data := Get_Tree(Read => Reader);
       --## rule off IMPROPER_INITIALIZATION
       -- Check save game compatybility
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "save");
-      Saved_Node := Item(Nodes_List, 0);
-      if Get_Attribute(Saved_Node, "version") /= "" then
-         if Positive'Value(Get_Attribute(Saved_Node, "version")) >
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "save");
+      Saved_Node := Item(List => Nodes_List, Index => 0);
+      if Get_Attribute(Elem => Saved_Node, Name => "version") /= "" then
+         if Positive'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "version")) >
            Save_Version then
             raise Save_Game_Invalid_Data
               with "This save is incompatible with this version of the game";
@@ -602,7 +606,8 @@ package body Game.SaveLoad is
       end if;
       -- Load game difficulty settings
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "difficulty");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "difficulty");
       if Length(Nodes_List) > 0 then
          Log_Message("Loading game difficulty settings...", EVERYTHING, False);
          Saved_Node := Item(Nodes_List, 0);
