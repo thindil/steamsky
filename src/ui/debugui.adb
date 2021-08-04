@@ -76,7 +76,7 @@ package body DebugUI is
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
       FrameName: constant String := ".debugdialog.main.ship";
-      ProtoEntry: constant Ttk_Entry :=
+      ProtoCombo: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".proto", Interp);
       ModuleCombo: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".module", Interp);
@@ -84,11 +84,12 @@ package body DebugUI is
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
    begin
       ModuleIndex := Natural'Value(Current(ModuleCombo)) + 1;
-      Delete(ProtoEntry, "0", "end");
-      Insert
-        (ProtoEntry, "0",
+      Set
+        (ProtoCombo,
+         "{" &
          To_String
-           (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index).Name));
+           (Modules_List(Player_Ship.Modules(ModuleIndex).Proto_Index).Name) &
+         "}");
       Set(SpinBox, Positive'Image(Player_Ship.Modules(ModuleIndex).Weight));
       SpinBox.Name := New_String(FrameName & ".dur");
       Set(SpinBox, Integer'Image(Player_Ship.Modules(ModuleIndex).Durability));
@@ -559,9 +560,9 @@ package body DebugUI is
       ModuleBox: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".module", Interp);
       ModuleIndex: constant Positive := Natural'Value(Current(ModuleBox)) + 1;
-      ModuleEntry: constant Ttk_Entry :=
+      ProtoCombo: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".proto", Interp);
-      Value: Unbounded_String := To_Unbounded_String(Get(ModuleEntry));
+      Value: Unbounded_String := To_Unbounded_String(Get(ProtoCombo));
       SpinBox: Ttk_SpinBox := Get_Widget(FrameName & ".weight", Interp);
    begin
       Update_Proto_Index_Loop :
@@ -1090,6 +1091,13 @@ package body DebugUI is
       for Base of SkyBases loop
          Append(ValuesList, " {" & Base.Name & "}");
       end loop Load_Bases_Loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ValuesList := Null_Unbounded_String;
+      ComboBox.Name := New_String(".debugdialog.main.ship.proto");
+      Load_Modules_Prototypes_Loop :
+      for Module of Modules_List loop
+         Append(ValuesList, " {" & Module.Name & "}");
+      end loop Load_Modules_Prototypes_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;

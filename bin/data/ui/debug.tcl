@@ -56,7 +56,8 @@ grid [ttk::combobox $shipframe.module -state readonly] -column 1 -row 1 \
    -columnspan 4
 bind $shipframe.module <<ComboboxSelected>> RefreshModule
 grid [ttk::label $shipframe.protolbl -text {Prototype:}]
-grid [ttk::entry $shipframe.proto]  -column 1 -row 2 -columnspan 4 -sticky w
+grid [ttk::combobox $shipframe.proto -state readonly]  -column 1 -row 2 \
+   -columnspan 4 -sticky w
 grid [ttk::label $shipframe.weightlbl -text {Weight:}]
 grid [ttk::spinbox $shipframe.weight -from 0 -to 100000 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 5] -column 1 -row 3 \
