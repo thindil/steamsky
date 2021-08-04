@@ -504,6 +504,8 @@ package body Knowledge.Bases is
    -- OWNERDESC      - Sort bases by owner descending
    -- TYPEASC        - Sort bases by type ascending
    -- TYPEDESC       - Sort bases by type descending
+   -- REPUTATIONASC  - Sort bases by reputation ascending
+   -- REPUTATIONDESC - Sort bases by reputation descending
    -- NONE           - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
@@ -511,7 +513,7 @@ package body Knowledge.Bases is
    type Bases_Sort_Orders is
      (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, POPULATIONASC,
       POPULATIONDESC, SIZEASC, SIZEDESC, OWNERASC, OWNERDESC, TYPEASC,
-      TYPEDESC, NONE) with
+      TYPEDESC, REPUTATIONASC, REPUTATIONDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -566,6 +568,7 @@ package body Knowledge.Bases is
          Size: Bases_Size;
          Owner: Unbounded_String;
          Base_Type: Unbounded_String;
+         Reputation: Integer;
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
@@ -614,6 +617,14 @@ package body Knowledge.Bases is
            and then Left.Base_Type > Right.Base_Type then
             return True;
          end if;
+         if Bases_Sort_Order = REPUTATIONASC
+           and then Left.Reputation < Right.Reputation then
+            return True;
+         end if;
+         if Bases_Sort_Order = REPUTATIONDESC
+           and then Left.Reputation > Right.Reputation then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Bases is new Ada.Containers.Generic_Array_Sort
@@ -657,6 +668,12 @@ package body Knowledge.Bases is
             else
                Bases_Sort_Order := TYPEASC;
             end if;
+         when 7 =>
+            if Bases_Sort_Order = REPUTATIONASC then
+               Bases_Sort_Order := REPUTATIONDESC;
+            else
+               Bases_Sort_Order := REPUTATIONASC;
+            end if;
          when others =>
             null;
       end case;
@@ -681,6 +698,9 @@ package body Knowledge.Bases is
               (if SkyBases(I).Visited = (others => 0) then
                  Null_Unbounded_String
                else SkyBases(I).BaseType),
+            Reputation =>
+              (if SkyBases(I).Visited = (others => 0) then 200
+               else SkyBases(I).Reputation(1)),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);
