@@ -492,16 +492,19 @@ package body Knowledge.Bases is
    -- FUNCTION
    -- Sorting orders for the known bases list
    -- OPTIONS
-   -- NAMEASC      - Sort bases by name ascending
-   -- NAMEDESC     - Sort bases by name descending
-   -- DISTANCEASC  - Sort bases by distance ascending
-   -- DISTANCEDESC - Sort bases by distance descending
-   -- NONE         - No sorting bases (default)
+   -- NAMEASC        - Sort bases by name ascending
+   -- NAMEDESC       - Sort bases by name descending
+   -- DISTANCEASC    - Sort bases by distance ascending
+   -- DISTANCEDESC   - Sort bases by distance descending
+   -- POPULATIONASC  - Sort bases by population ascending
+   -- POPULATIONDESC - Sort bases by population descending
+   -- NONE           - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Bases_Sort_Orders is
-     (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, NONE) with
+     (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, POPULATIONASC,
+      POPULATIONDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -552,6 +555,7 @@ package body Knowledge.Bases is
       type Local_Base_Data is record
          Name: Unbounded_String;
          Distance: Natural;
+         Population: Integer;
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
@@ -570,6 +574,14 @@ package body Knowledge.Bases is
          end if;
          if Bases_Sort_Order = DISTANCEDESC
            and then Left.Distance > Right.Distance then
+            return True;
+         end if;
+         if Bases_Sort_Order = POPULATIONASC
+           and then Left.Population < Right.Population then
+            return True;
+         end if;
+         if Bases_Sort_Order = POPULATIONDESC
+           and then Left.Population > Right.Population then
             return True;
          end if;
          return False;
@@ -591,6 +603,12 @@ package body Knowledge.Bases is
             else
                Bases_Sort_Order := DISTANCEASC;
             end if;
+         when 3 =>
+            if Bases_Sort_Order = POPULATIONASC then
+               Bases_Sort_Order := POPULATIONDESC;
+            else
+               Bases_Sort_Order := POPULATIONASC;
+            end if;
          when others =>
             null;
       end case;
@@ -601,6 +619,9 @@ package body Knowledge.Bases is
          Local_Bases(I) :=
            (Name => SkyBases(I).Name,
             Distance => CountDistance(SkyBases(I).SkyX, SkyBases(I).SkyY),
+            Population =>
+              (if SkyBases(I).Visited = (others => 0) then -1
+               else SkyBases(I).Population),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);
