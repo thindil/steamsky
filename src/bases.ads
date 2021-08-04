@@ -98,7 +98,7 @@ package Bases is
    -- FUNCTION
    -- Bases sizes
    -- SOURCE
-   type Bases_Size is (Small, Medium, Big) with
+   type Bases_Size is (Small, Medium, Big, Unknown) with
       Default_Value => Medium;
    -- ****
 
