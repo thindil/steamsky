@@ -500,13 +500,18 @@ package body Knowledge.Bases is
    -- POPULATIONDESC - Sort bases by population descending
    -- SIZEASC        - Sort bases by size ascending
    -- SIZEDESC       - Sort bases by size descending
+   -- OWNERASC       - Sort bases by owner ascending
+   -- OWNERDESC      - Sort bases by owner descending
+   -- TYPEASC        - Sort bases by type ascending
+   -- TYPEDESC       - Sort bases by type descending
    -- NONE           - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Bases_Sort_Orders is
      (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, POPULATIONASC,
-      POPULATIONDESC, SIZEASC, SIZEDESC, NONE) with
+      POPULATIONDESC, SIZEASC, SIZEDESC, OWNERASC, OWNERDESC, TYPEASC,
+      TYPEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -559,6 +564,8 @@ package body Knowledge.Bases is
          Distance: Natural;
          Population: Integer;
          Size: Bases_Size;
+         Owner: Unbounded_String;
+         Base_Type: Unbounded_String;
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
@@ -593,6 +600,20 @@ package body Knowledge.Bases is
          if Bases_Sort_Order = SIZEDESC and then Left.Size > Right.Size then
             return True;
          end if;
+         if Bases_Sort_Order = OWNERASC and then Left.Owner < Right.Owner then
+            return True;
+         end if;
+         if Bases_Sort_Order = OWNERDESC and then Left.Owner > Right.Owner then
+            return True;
+         end if;
+         if Bases_Sort_Order = TYPEASC
+           and then Left.Base_Type < Right.Base_Type then
+            return True;
+         end if;
+         if Bases_Sort_Order = TYPEDESC
+           and then Left.Base_Type > Right.Base_Type then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Bases is new Ada.Containers.Generic_Array_Sort
@@ -624,6 +645,18 @@ package body Knowledge.Bases is
             else
                Bases_Sort_Order := SIZEASC;
             end if;
+         when 5 =>
+            if Bases_Sort_Order = OWNERASC then
+               Bases_Sort_Order := OWNERDESC;
+            else
+               Bases_Sort_Order := OWNERASC;
+            end if;
+         when 6 =>
+            if Bases_Sort_Order = TYPEASC then
+               Bases_Sort_Order := TYPEDESC;
+            else
+               Bases_Sort_Order := TYPEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -640,6 +673,14 @@ package body Knowledge.Bases is
             Size =>
               (if SkyBases(I).Visited = (others => 0) then Unknown
                else SkyBases(I).Size),
+            Owner =>
+              (if SkyBases(I).Visited = (others => 0) then
+                 Null_Unbounded_String
+               else SkyBases(I).Owner),
+            Base_Type =>
+              (if SkyBases(I).Visited = (others => 0) then
+                 Null_Unbounded_String
+               else SkyBases(I).BaseType),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);
