@@ -498,13 +498,15 @@ package body Knowledge.Bases is
    -- DISTANCEDESC   - Sort bases by distance descending
    -- POPULATIONASC  - Sort bases by population ascending
    -- POPULATIONDESC - Sort bases by population descending
+   -- SIZEASC        - Sort bases by size ascending
+   -- SIZEDESC       - Sort bases by size descending
    -- NONE           - No sorting bases (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Bases_Sort_Orders is
      (NAMEASC, NAMEDESC, DISTANCEASC, DISTANCEDESC, POPULATIONASC,
-      POPULATIONDESC, NONE) with
+      POPULATIONDESC, SIZEASC, SIZEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -556,6 +558,7 @@ package body Knowledge.Bases is
          Name: Unbounded_String;
          Distance: Natural;
          Population: Integer;
+         Size: Bases_Size;
          Id: Positive;
       end record;
       type Bases_Array is array(Positive range <>) of Local_Base_Data;
@@ -584,6 +587,12 @@ package body Knowledge.Bases is
            and then Left.Population > Right.Population then
             return True;
          end if;
+         if Bases_Sort_Order = SIZEASC and then Left.Size < Right.Size then
+            return True;
+         end if;
+         if Bases_Sort_Order = SIZEDESC and then Left.Size > Right.Size then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Bases is new Ada.Containers.Generic_Array_Sort
@@ -609,6 +618,12 @@ package body Knowledge.Bases is
             else
                Bases_Sort_Order := POPULATIONASC;
             end if;
+         when 4 =>
+            if Bases_Sort_Order = SIZEASC then
+               Bases_Sort_Order := SIZEDESC;
+            else
+               Bases_Sort_Order := SIZEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -622,6 +637,9 @@ package body Knowledge.Bases is
             Population =>
               (if SkyBases(I).Visited = (others => 0) then -1
                else SkyBases(I).Population),
+            Size =>
+              (if SkyBases(I).Visited = (others => 0) then Unknown
+               else SkyBases(I).Size),
             Id => I);
       end loop;
       Sort_Bases(Local_Bases);
