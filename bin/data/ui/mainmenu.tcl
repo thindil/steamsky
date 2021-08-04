@@ -54,7 +54,8 @@ ttk::button .mainmenu.halloffame -text {Hall of Fame} -underline 0 -command {
    pack .hofmenu -fill both -expand true
    ShowHallOfFame
 }
-tooltip::tooltip .mainmenu.halloffame {Show your previous the bests scores in the game}
+tooltip::tooltip .mainmenu.halloffame \
+   {Show your previous the bests scores in the game}
 pack [ttk::button .mainmenu.news -text {News} -underline 1 -command {
    bind . <Alt-s> {InvokeButton .newsmenu.showall}
    bind . <Alt-b> {InvokeButton .newsmenu.back}
@@ -83,17 +84,23 @@ bind . <Alt-q> {InvokeButton .mainmenu.quit}
 
 # About menu
 ttk::frame .aboutmenu -style Main.TFrame
-grid [ttk::label .aboutmenu.about -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
-grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
-tooltip::tooltip .aboutmenu.website {Visit the game website: https://thindil.itch.io/steam-sky}
-grid [ttk::button .aboutmenu.mail -text {(c)2016-2021 Bartek thindil Jasicki} -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] -row 2 -columnspan 3
+grid [ttk::label .aboutmenu.about \
+   -text {Roguelike in the sky with a steampunk theme}] -columnspan 3 -pady 2
+grid [ttk::button .aboutmenu.website -text {Website} -style Link.Toolbutton \
+   -command {OpenLink https://thindil.itch.io/steam-sky}] -row 1 -columnspan 3
+tooltip::tooltip .aboutmenu.website \
+   {Visit the game website: https://thindil.itch.io/steam-sky}
+grid [ttk::button .aboutmenu.mail -text {(c)2016-2021 Bartek thindil Jasicki} \
+   -style Link.Toolbutton -command {OpenLink mailto:thindil@laeran.pl}] \
+   -row 2 -columnspan 3
 tooltip::tooltip .aboutmenu.mail {Send a mail to the game creator}
 grid [ttk::button .aboutmenu.getinvolved -text {Get involved} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true
    ShowFile CONTRIBUTING.md
 }] -row 3 -sticky e
-tooltip::tooltip .aboutmenu.getinvolved {Guide how to help with creating the game, report bugs, etc}
+tooltip::tooltip .aboutmenu.getinvolved \
+   {Guide how to help with creating the game, report bugs, etc}
 grid [ttk::button .aboutmenu.modify -text {Modify game} -command {
    pack forget .aboutmenu
    pack .showfilemenu -fill both -expand true
@@ -106,21 +113,28 @@ grid [ttk::button .aboutmenu.readme -text {README} -command {
    ShowFile README.md
 }] -row 3 -column 2 -sticky w
 tooltip::tooltip .aboutmenu.readme {Some technical information about the game}
-grid [ttk::label .aboutmenu.license -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} -wraplength 590] -row 4 -columnspan 3 -padx 2
-grid [ttk::label .aboutmenu.license2 -text {Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.} -wraplength 590] -row 5 -columnspan 3
-grid [ttk::button .aboutmenu.showlicense -text {Show full license} -underline 0 -command {
-   pack forget .aboutmenu
-   pack .showfilemenu -fill both -expand true
-   ShowFile COPYING
-}] -row 6 -column 1 -sticky e
-tooltip::tooltip .aboutmenu.showlicense {Show full legal text of GNU GPLv3 license}
-grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 -command {
-   bind . <Alt-s> {}
-   bind . <Alt-b> {}
-   bind . <Escape> {}
-   pack forget .aboutmenu
-   pack .mainmenu -fill both -expand true
-}] -row 6 -column 2 -sticky e
+grid [ttk::label .aboutmenu.license \
+   -text {Steam Sky is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.} \
+   -wraplength 590] -row 4 -columnspan 3 -padx 2
+grid [ttk::label .aboutmenu.license2 \
+   -text {Steam Sky is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.} \
+   -wraplength 590] -row 5 -columnspan 3
+grid [ttk::button .aboutmenu.showlicense -text {Show full license} \
+   -underline 0 -command {
+      pack forget .aboutmenu
+      pack .showfilemenu -fill both -expand true
+      ShowFile COPYING
+   }] -row 6 -column 1 -sticky e
+tooltip::tooltip .aboutmenu.showlicense \
+   {Show full legal text of GNU GPLv3 license}
+grid [ttk::button .aboutmenu.back -text {Back to main menu} -underline 0 \
+   -command {
+      bind . <Alt-s> {}
+      bind . <Alt-b> {}
+      bind . <Escape> {}
+      pack forget .aboutmenu
+      pack .mainmenu -fill both -expand true
+   }] -row 6 -column 2 -sticky e
 tooltip::tooltip .aboutmenu.back {Back to the main menu}
 
 # Show file content
@@ -132,17 +146,26 @@ pack [ttk::button .showfilemenu.back -text {Back} -underline 0 -command {
    pack .mainmenu -fill both -expand true
 }] -side bottom -anchor e -pady 2 -padx 2
 tooltip::tooltip .showfilemenu.back {Back to the main menu}
-pack [ttk::scrollbar .showfilemenu.scroll -orient vertical -command [list .showfilemenu.text yview]] -side right -fill y -pady 2 -padx 2
-pack [text .showfilemenu.text -wrap char -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top -fill both -expand true -pady 2 -padx 2
+pack [ttk::scrollbar .showfilemenu.scroll -orient vertical \
+   -command [list .showfilemenu.text yview]] -side right -fill y -pady 2 \
+   -padx 2
+pack [text .showfilemenu.text -wrap char \
+   -yscrollcommand {.showfilemenu.scroll set} -font HelpFont] -side top \
+   -fill both -expand true -pady 2 -padx 2
 ::autoscroll::autoscroll .showfilemenu.scroll
 
 # News menu
 ttk::frame .newsmenu -style Main.TFrame
-grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} -font HelpFont] -sticky nesw -columnspan 2 -pady 2 -padx 2
-grid [ttk::scrollbar .newsmenu.scroll -orient vertical -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns -pady 2 -padx 2
+grid [text .newsmenu.text -wrap word -yscrollcommand {.newsmenu.scroll set} \
+   -font HelpFont] -sticky nesw -columnspan 2 -pady 2 -padx 2
+grid [ttk::scrollbar .newsmenu.scroll -orient vertical \
+   -command [list .newsmenu.text yview]] -column 2 -row 0 -sticky ns -pady 2 \
+   -padx 2
 ::autoscroll::autoscroll .newsmenu.scroll
-grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] -row 1 -column 0 -sticky e -pady 2
-tooltip::tooltip .newsmenu.showall {Show all changes to the game since previous big stable version}
+grid [ttk::button .newsmenu.showall -text {Show all changes} -underline 0] \
+   -row 1 -column 0 -sticky e -pady 2
+tooltip::tooltip .newsmenu.showall \
+   {Show all changes to the game since previous big stable version}
 grid [ttk::button .newsmenu.back -text {Back to menu} -underline 0 -command {
    bind . <Alt-s> {}
    bind . <Alt-b> {}
@@ -156,7 +179,10 @@ grid rowconfigure .newsmenu 0 -weight 1
 
 # Hall of Fame menu
 ttk::frame .hofmenu -style Main.TFrame
-grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrollcommand {.hofmenu.xscroll set} -show headings -columns [list position name points diedfrom] -selectmode none] -sticky nesw -padx 2 -pady 2
+grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} \
+   -xscrollcommand {.hofmenu.xscroll set} -show headings \
+   -columns [list position name points diedfrom] -selectmode none] \
+   -sticky nesw -padx 2 -pady 2
 .hofmenu.view heading position -text {Position}
 .hofmenu.view column position -width 100
 .hofmenu.view heading name -text {Name}
@@ -164,9 +190,13 @@ grid [ttk::treeview .hofmenu.view -yscrollcommand {.hofmenu.yscroll set} -xscrol
 .hofmenu.view heading points -text {Points}
 .hofmenu.view column points -width 100
 .hofmenu.view heading diedfrom -text {Died from}
-grid [ttk::scrollbar .hofmenu.yscroll -orient vertical -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns -padx 2 -pady 2
+grid [ttk::scrollbar .hofmenu.yscroll -orient vertical \
+   -command [list .hofmenu.view yview]] -column 1 -row 0 -sticky ns -padx 2 \
+   -pady 2
 ::autoscroll::autoscroll .hofmenu.yscroll
-grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 -sticky we
+grid [ttk::scrollbar .hofmenu.xscroll -orient horizontal \
+   -command [list .hofmenu.view xview]] -column 0 -row 1 -columnspan 2 \
+   -sticky we
 ::autoscroll::autoscroll .hofmenu.xscroll
 grid [ttk::button .hofmenu.back -text {Back to menu} -command {
    bind . <Alt-b> {}
@@ -181,19 +211,39 @@ grid rowconfigure .hofmenu 0 -weight 1
 # Load game menu
 ttk::frame .loadmenu -style Main.TFrame
 grid [ttk::frame .loadmenu.list] -sticky we -padx {2cm 2}
-grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 -command {
-   bind . <Alt-b> {}
-   pack forget .loadmenu
-   pack .mainmenu -fill both -expand true
-}] -sticky e -padx 2 -pady 2
+grid [ttk::button .loadmenu.back -text {Back to main menu} -underline 0 \
+   -command {
+      bind . <Alt-b> {}
+      pack forget .loadmenu
+      pack .mainmenu -fill both -expand true
+   }] -sticky e -padx 2 -pady 2
 tooltip::tooltip .loadmenu.back {Back to the main menu}
 grid columnconfigure .loadmenu 0 -weight 1
 grid rowconfigure .loadmenu 0 -weight 1
 
 # New game setting menu
 set windowid {}
-set playertooltips [list "General player character settings. Select field which you want to set to see more information about." "Enter character name." "Select the gender of your character." "Enter ship name." "Select starting goal for your character.\nYou can change it later in game." "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
-set difficultytooltips [list "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it." "Select game difficulty preset level." "Percentage of damage done by enemy ships in combat.\nLowering it makes the  game easier but lowers the\namount of score gained as well." "Percentage of damage done by the player's ship in combat.\nRaising it makes the game easier but lowers the amount\nof score gained as well." "Percentage of damage done by enemies in melee combat.\nLowering it makes the game easier but lowers the\namount of score gained as well." "Percentage of damage done by player's crew (and player character)\nin melee combat. Raising it makes the game easier but lowers the\namount of score gained as well." "Percentage of experience gained by player and their crew from actions.\nRaising it makes the game easier but lowers the amount of score gained as well." "Percentage of reputation in bases gained or lost by player in sky bases\ndue to player actions. Raising it makes the game easier but lowers the\namount of score gained as well." "Percentage of the standard material cost and time needed\nfor upgrading ship modules. Lowering it makes the game\neasier but lowers the amount of score gained as well." "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers\nthe amount of score gained as well." "Select random values for all settings." "If you select this option, all difficulty settings will be\nrandomized during start new game. Not recommended for new players."]
+set playertooltips \
+   [list \
+   "General player character settings. Select field which you want to set to see more information about." \
+   "Enter character name." "Select the gender of your character." \
+   "Enter ship name." \
+   "Select starting goal for your character.\nYou can change it later in game." \
+   "Select your faction from a list. Factions have the biggest impact on game.\nThey determine the amount of bases and some playing styles.\nMore information about each faction can be found after selecting it.\nYou can't change this later." \
+   "Select your career from a list. Careers have some impact on gameplay\n(each have bonuses to gaining experience in some fields plus\nthey determine your starting ship and crew). More info about each\ncareer can be found after selecting it. You can't change career later." \
+   "Select type of base in which you will start the game.\nThis may have some impact on game difficulty."]
+set difficultytooltips [list \
+   "Set difficulty of new game. Each value can be between 1 and 500. Each change has an impact not only on the game's difficulty but also on amount of points gained in the game. Select a field to get more information about it." \
+   "Select game difficulty preset level." "Percentage of damage done by enemy ships in combat.\nLowering it makes the  game easier but lowers the\namount of score gained as well." \
+   "Percentage of damage done by the player's ship in combat.\nRaising it makes the game easier but lowers the amount\nof score gained as well." \
+   "Percentage of damage done by enemies in melee combat.\nLowering it makes the game easier but lowers the\namount of score gained as well." \
+   "Percentage of damage done by player's crew (and player character)\nin melee combat. Raising it makes the game easier but lowers the\namount of score gained as well." \
+   "Percentage of experience gained by player and their crew from actions.\nRaising it makes the game easier but lowers the amount of score gained as well." \
+   "Percentage of reputation in bases gained or lost by player in sky bases\ndue to player actions. Raising it makes the game easier but lowers the\namount of score gained as well." \
+   "Percentage of the standard material cost and time needed\nfor upgrading ship modules. Lowering it makes the game\neasier but lowers the amount of score gained as well." \
+   "Percentage of the standard prices for services in bases (docking, repairing ship,\nrecruiting new crew members, etc). Lowering it makes the game easier but lowers\nthe amount of score gained as well." \
+   "Select random values for all settings." \
+   "If you select this option, all difficulty settings will be\nrandomized during start new game. Not recommended for new players."]
 proc SetInfo {name index} {
    global playertooltips
    global difficultytooltips
