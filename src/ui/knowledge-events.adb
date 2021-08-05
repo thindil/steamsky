@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Containers; use Ada.Containers;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -199,11 +200,123 @@ package body Knowledge.Events is
       return TCL_OK;
    end Show_Events_Command;
 
+   -- ****it* KEvents/KEvents.Events_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the known events list
+   -- OPTIONS
+   -- TYPEASC    - Sort events by type ascending
+   -- TYPEDESC   - Sort events by type descending
+   -- NONE       - No sorting events (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Events_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* KEvents/KEvents.Default_Events_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the known events
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Events_Sort_Order: constant Events_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* KEvents/KEvents.Events_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for known events list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Events_Sort_Order: Events_Sort_Orders := Default_Events_Sort_Order;
+   -- ****
+
+   -- ****iv* KEvents/KEvents.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the known events
+   -- SOURCE
+   Events_Indexes: Positive_Container.Vector;
+   -- ****
+
+   -- ****o* KEvents/KEvents.Sort_Events_Command
+   -- FUNCTION
+   -- Sort the known events list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortKnownEvents x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Events_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Events_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(EventsTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Event_Data is record
+         EType: Events_Types;
+         Id: Positive;
+      end record;
+      type Events_Array is array(Positive range <>) of Local_Event_Data;
+      Local_Events: Events_Array(1 .. Positive(Events_List.Length));
+      function "<"(Left, Right: Local_Event_Data) return Boolean is
+      begin
+         if Events_Sort_Order = TYPEASC and then Left.EType < Right.EType then
+            return True;
+         end if;
+         if Events_Sort_Order = TYPEDESC and then Left.EType > Right.EType then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Events is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Event_Data,
+         Array_Type => Events_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Events_Sort_Order = TYPEASC then
+               Events_Sort_Order := TYPEDESC;
+            else
+               Events_Sort_Order := TYPEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Events_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in Events_List.Iterate loop
+         Local_Events(Events_Container.To_Index(I)) :=
+           (EType => Events_List(I).EType, Id => Events_Container.To_Index(I));
+      end loop;
+      Sort_Events(Local_Events);
+      Events_Indexes.Clear;
+      for Event of Local_Events loop
+         Events_Indexes.Append(Event.Id);
+      end loop;
+      UpdateEventsList;
+      return TCL_OK;
+   end Sort_Events_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowEventMenu", Show_Events_Menu_Command'Access);
       AddCommand("ShowEventInfo", Show_Event_Info_Command'Access);
       AddCommand("ShowEvents", Show_Events_Command'Access);
+      AddCommand("SortKnownEvents", Sort_Events_Command'Access);
    end AddCommands;
 
    procedure UpdateEventsList(Page: Positive := 1) is
@@ -241,15 +354,21 @@ package body Knowledge.Events is
              (Widget_Image(EventsFrame),
               (To_Unbounded_String("Name"), To_Unbounded_String("Distance"),
                To_Unbounded_String("Details")),
-              Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"));
-         Rows := 0;
+              Get_Widget(Main_Paned & ".knowledgeframe.events.scrolly"),
+              "SortKnownEvents", "Press mouse button to sort the events.");
+         if Events_Indexes.Length /= Events_List.Length then
+            Events_Indexes.Clear;
+            for I in Events_List.Iterate loop
+               Events_Indexes.Append(Events_Container.To_Index(I));
+            end loop;
+         end if;
          Load_Known_Events_Loop :
-         for Event of Events_List loop
+         for Event of Events_Indexes loop
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
             end if;
-            case Event.EType is
+            case Events_List(Event).EType is
                when EnemyShip =>
                   AddButton
                     (EventsTable, "Enemy ship spotted",
@@ -295,16 +414,22 @@ package body Knowledge.Events is
             end case;
             AddButton
               (EventsTable,
-               Natural'Image(CountDistance(Event.SkyX, Event.SkyY)),
+               Natural'Image
+                 (CountDistance
+                    (Events_List(Event).SkyX, Events_List(Event).SkyY)),
                "The distance to the event",
                "ShowEventMenu" & Positive'Image(Row - 1), 2);
-            case Event.EType is
+            case Events_List(Event).EType is
                when DoublePrice =>
                   AddButton
                     (EventsTable,
-                     To_String(Items_List(Event.ItemIndex).Name) & " in " &
+                     To_String(Items_List(Events_List(Event).ItemIndex).Name) &
+                     " in " &
                      To_String
-                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                       (SkyBases
+                          (SkyMap
+                             (Events_List(Event).SkyX, Events_List(Event).SkyY)
+                             .BaseIndex)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
@@ -312,27 +437,29 @@ package body Knowledge.Events is
                   AddButton
                     (EventsTable,
                      To_String
-                       (SkyBases(SkyMap(Event.SkyX, Event.SkyY).BaseIndex)
+                       (SkyBases
+                          (SkyMap
+                             (Events_List(Event).SkyX, Events_List(Event).SkyY)
+                             .BaseIndex)
                           .Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
                when EnemyShip | Trader | FriendlyShip =>
                   AddButton
                     (EventsTable,
-                     To_String(Proto_Ships_List(Event.ShipIndex).Name),
+                     To_String
+                       (Proto_Ships_List(Events_List(Event).ShipIndex).Name),
                      "Show available event's options",
                      "ShowEventMenu" & Positive'Image(Row - 1), 3, True);
                when None | BaseRecovery =>
                   null;
             end case;
             Row := Row + 1;
-            Rows := Rows + 1;
-            exit Load_Known_Events_Loop when Rows = 25 and
-              Event /= Events_List.Last_Element;
+            exit Load_Known_Events_Loop when EventsTable.Row = 26;
             <<End_Of_Loop>>
          end loop Load_Known_Events_Loop;
          if Page > 1 then
-            if Rows < 25 then
+            if EventsTable.Row < 26 then
                AddPagination
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1), "");
             else
@@ -340,7 +467,7 @@ package body Knowledge.Events is
                  (EventsTable, "ShowEvents" & Positive'Image(Page - 1),
                   "ShowEvents" & Positive'Image(Page + 1));
             end if;
-         elsif Rows > 24 then
+         elsif EventsTable.Row > 25 then
             AddPagination
               (EventsTable, "", "ShowEvents" & Positive'Image(Page + 1));
          end if;
