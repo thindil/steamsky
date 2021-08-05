@@ -117,7 +117,7 @@ grid [ttk::combobox $crewframe.addskill.skills -state readonly -width 15] \
 # Cargo options
 set cargoframe [ttk::frame .debugdialog.main.cargo]
 grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
-grid [ttk::entry $cargoframe.add -width 16] -column 1 -row 0
+grid [ttk::combobox $cargoframe.add -width 15] -column 1 -row 0
 grid [ttk::label $cargoframe.amountlbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 10] -column 1 -row 1

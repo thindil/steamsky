@@ -1099,6 +1099,13 @@ package body DebugUI is
          Append(ValuesList, " {" & Module.Name & "}");
       end loop Load_Modules_Prototypes_Loop;
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ValuesList := Null_Unbounded_String;
+      ComboBox.Name := New_String(".debugdialog.main.cargo.add");
+      Load_Items_Loop :
+      for Item of Items_List loop
+         Append(ValuesList, " {" & Item.Name & "}");
+      end loop Load_Items_Loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
