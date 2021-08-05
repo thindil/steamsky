@@ -608,25 +608,34 @@ package body Game.SaveLoad is
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "difficulty");
-      if Length(Nodes_List) > 0 then
-         Log_Message("Loading game difficulty settings...", EVERYTHING, False);
-         Saved_Node := Item(Nodes_List, 0);
+      if Length(List => Nodes_List) > 0 then
+         Log_Message
+           (Message => "Loading game difficulty settings...",
+            Message_Type => EVERYTHING, New_Line => False);
+         Saved_Node := Item(List => Nodes_List, Index => 0);
          New_Game_Settings.Enemy_Damage_Bonus :=
-           Bonus_Type'Value(Get_Attribute(Saved_Node, "enemydamagebonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "enemydamagebonus"));
          New_Game_Settings.Player_Damage_Bonus :=
-           Bonus_Type'Value(Get_Attribute(Saved_Node, "playerdamagebonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "playerdamagebonus"));
          New_Game_Settings.Enemy_Melee_Damage_Bonus :=
            Bonus_Type'Value
-             (Get_Attribute(Saved_Node, "enemymeleedamagebonus"));
+             (Get_Attribute
+                (Elem => Saved_Node, Name => "enemymeleedamagebonus"));
          New_Game_Settings.Player_Melee_Damage_Bonus :=
            Bonus_Type'Value
-             (Get_Attribute(Saved_Node, "playermeleedamagebonus"));
+             (Get_Attribute
+                (Elem => Saved_Node, Name => "playermeleedamagebonus"));
          New_Game_Settings.Experience_Bonus :=
-           Bonus_Type'Value(Get_Attribute(Saved_Node, "experiencebonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "experiencebonus"));
          New_Game_Settings.Reputation_Bonus :=
-           Bonus_Type'Value(Get_Attribute(Saved_Node, "reputationbonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "reputationbonus"));
          New_Game_Settings.Upgrade_Cost_Bonus :=
-           Bonus_Type'Value(Get_Attribute(Saved_Node, "upgradecostbonus"));
+           Bonus_Type'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "upgradecostbonus"));
          if Get_Attribute(Saved_Node, "pricesbonus") /= "" then
             New_Game_Settings.Prices_Bonus :=
               Bonus_Type'Value(Get_Attribute(Saved_Node, "pricesbonus"));
