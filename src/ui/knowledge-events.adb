@@ -204,13 +204,19 @@ package body Knowledge.Events is
    -- FUNCTION
    -- Sorting orders for the known events list
    -- OPTIONS
-   -- TYPEASC    - Sort events by type ascending
-   -- TYPEDESC   - Sort events by type descending
+   -- TYPEASC      - Sort events by type ascending
+   -- TYPEDESC     - Sort events by type descending
+   -- DISTANCEASC  - Sort events by distance ascending
+   -- DISTANCEDESC - Sort events by distance descending
+   -- DETAILSASC   - Sort events by details ascending
+   -- DETAILSDESC  - Sort events by details descending
    -- NONE       - No sorting events (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Events_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+   type Events_Sort_Orders is
+     (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -267,6 +273,8 @@ package body Knowledge.Events is
         Get_Column_Number(EventsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Event_Data is record
          EType: Events_Types;
+         Distance: Natural;
+         Details: Unbounded_String;
          Id: Positive;
       end record;
       type Events_Array is array(Positive range <>) of Local_Event_Data;
@@ -277,6 +285,22 @@ package body Knowledge.Events is
             return True;
          end if;
          if Events_Sort_Order = TYPEDESC and then Left.EType > Right.EType then
+            return True;
+         end if;
+         if Events_Sort_Order = DISTANCEASC
+           and then Left.Distance < Right.Distance then
+            return True;
+         end if;
+         if Events_Sort_Order = DISTANCEDESC
+           and then Left.Distance > Right.Distance then
+            return True;
+         end if;
+         if Events_Sort_Order = DETAILSASC
+           and then Left.Details < Right.Details then
+            return True;
+         end if;
+         if Events_Sort_Order = DETAILSDESC
+           and then Left.Details > Right.Details then
             return True;
          end if;
          return False;
@@ -292,6 +316,18 @@ package body Knowledge.Events is
             else
                Events_Sort_Order := TYPEASC;
             end if;
+         when 2 =>
+            if Events_Sort_Order = DISTANCEASC then
+               Events_Sort_Order := DISTANCEDESC;
+            else
+               Events_Sort_Order := DISTANCEASC;
+            end if;
+         when 3 =>
+            if Events_Sort_Order = DETAILSASC then
+               Events_Sort_Order := DETAILSDESC;
+            else
+               Events_Sort_Order := DETAILSASC;
+            end if;
          when others =>
             null;
       end case;
@@ -300,7 +336,26 @@ package body Knowledge.Events is
       end if;
       for I in Events_List.Iterate loop
          Local_Events(Events_Container.To_Index(I)) :=
-           (EType => Events_List(I).EType, Id => Events_Container.To_Index(I));
+           (EType => Events_List(I).EType,
+            Distance =>
+              CountDistance(Events_List(I).SkyX, Events_List(I).SkyY),
+            Details =>
+              (case Events_List(I).EType is
+                 when DoublePrice =>
+                   Items_List(Events_List(I).ItemIndex).Name & " in " &
+                   SkyBases
+                     (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                        .BaseIndex)
+                     .Name,
+                 when AttackOnBase | Disease | FullDocks | EnemyPatrol =>
+                   SkyBases
+                     (SkyMap(Events_List(I).SkyX, Events_List(I).SkyY)
+                        .BaseIndex)
+                     .Name,
+                 when EnemyShip | Trader | FriendlyShip =>
+                   Proto_Ships_List(Events_List(I).ShipIndex).Name,
+                 when None | BaseRecovery => Null_Unbounded_String),
+            Id => Events_Container.To_Index(I));
       end loop;
       Sort_Events(Local_Events);
       Events_Indexes.Clear;
