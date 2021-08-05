@@ -257,7 +257,14 @@ proc SetInfo {name index} {
    .newgamemenu.info.text configure -state disabled
 }
 proc SetPoints {{difficulty Custom}} {
-   set values [list [.newgamemenu.canvas.difficulty.enemydamage get] [.newgamemenu.canvas.difficulty.playerdamage get] [.newgamemenu.canvas.difficulty.enemymeleedamage get] [.newgamemenu.canvas.difficulty.playermeleedamage get] [.newgamemenu.canvas.difficulty.experience get] [.newgamemenu.canvas.difficulty.reputation get] [.newgamemenu.canvas.difficulty.upgrade get] [.newgamemenu.canvas.difficulty.prices get]]
+   set values [list [.newgamemenu.canvas.difficulty.enemydamage get] \
+      [.newgamemenu.canvas.difficulty.playerdamage get] \
+      [.newgamemenu.canvas.difficulty.enemymeleedamage get] \
+      [.newgamemenu.canvas.difficulty.playermeleedamage get] \
+      [.newgamemenu.canvas.difficulty.experience get] \
+      [.newgamemenu.canvas.difficulty.reputation get] \
+      [.newgamemenu.canvas.difficulty.upgrade get] \
+      [.newgamemenu.canvas.difficulty.prices get]]
    set totalpoints 0
    for {set i 0} {$i < 8} {incr i} {
       set value [regsub -all {[^0-9]} [lindex $values $i] {}]
@@ -281,79 +288,127 @@ proc SetPoints {{difficulty Custom}} {
    if {$totalpoints < 1} {
       set totalpoints 1
    }
-   .newgamemenu.canvas.difficulty.totalpoints configure -text "Total gained points: $totalpoints%"
+   .newgamemenu.canvas.difficulty.totalpoints configure \
+      -text "Total gained points: $totalpoints%"
    .newgamemenu.canvas.difficulty.difficultylevel set $difficulty
    return true
 }
 ttk::frame .newgamemenu -style Main.TFrame
 grid [ttk::frame .newgamemenu.buttonsbox] -columnspan 3 -pady {5 2}
-grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player -state selected -style Radio.Toolbutton -value player -variable newtab -underline 0 -command {
+grid [ttk::radiobutton .newgamemenu.buttonsbox.player -text Player \
+   -state selected -style Radio.Toolbutton -value player -variable newtab \
+   -underline 0 -command {
    .newgamemenu.info.text configure -state normal
    .newgamemenu.info.text delete 1.0 end
    .newgamemenu.info.text insert end [lindex $playertooltips 0]
    .newgamemenu.info.text configure -state disabled
    ::autoscroll::unautoscroll .newgamemenu.scrollbar
    .newgamemenu.canvas delete $windowid
-   set windowid [.newgamemenu.canvas create window 0 0 -anchor nw -window .newgamemenu.canvas.player]
-   .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.player] -height [winfo reqheight .newgamemenu.canvas.player] -scrollregion [.newgamemenu.canvas bbox all]
+   set windowid [.newgamemenu.canvas create window 0 0 -anchor nw \
+      -window .newgamemenu.canvas.player]
+   .newgamemenu.canvas configure \
+      -width [winfo reqwidth .newgamemenu.canvas.player] \
+      -height [winfo reqheight .newgamemenu.canvas.player] \
+      -scrollregion [.newgamemenu.canvas bbox all]
    ::autoscroll::autoscroll .newgamemenu.scrollbar
 }] -sticky e
-tooltip::tooltip .newgamemenu.buttonsbox.player {Show settings for your character.}
-grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 -command {
-   .newgamemenu.info.text configure -state normal
-   .newgamemenu.info.text delete 1.0 end
-   .newgamemenu.info.text insert end [lindex $difficultytooltips 0]
-   .newgamemenu.info.text configure -state disabled
-   .newgamemenu.canvas delete $windowid
-   set windowid [.newgamemenu.canvas create window 0 0 -anchor nw -window .newgamemenu.canvas.difficulty]
-   .newgamemenu.canvas configure -width [winfo reqwidth .newgamemenu.canvas.difficulty] -height [winfo reqheight .newgamemenu.canvas.difficulty] -scrollregion [.newgamemenu.canvas bbox all]
-}] -column 1 -row 0 -sticky w
-tooltip::tooltip .newgamemenu.buttonsbox.difficulty {Show settings for the game difficulty.}
-grid [canvas .newgamemenu.canvas -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1 -padx 2
-grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
+tooltip::tooltip .newgamemenu.buttonsbox.player \
+   {Show settings for your character.}
+grid [ttk::radiobutton .newgamemenu.buttonsbox.difficulty -text Difficulty \
+   -style Radio.Toolbutton -value difficulty -variable newtab -underline 0 \
+   -command {
+      .newgamemenu.info.text configure -state normal
+      .newgamemenu.info.text delete 1.0 end
+      .newgamemenu.info.text insert end [lindex $difficultytooltips 0]
+      .newgamemenu.info.text configure -state disabled
+      .newgamemenu.canvas delete $windowid
+      set windowid [.newgamemenu.canvas create window 0 0 -anchor nw \
+         -window .newgamemenu.canvas.difficulty]
+      .newgamemenu.canvas configure \
+         -width [winfo reqwidth .newgamemenu.canvas.difficulty] \
+         -height [winfo reqheight .newgamemenu.canvas.difficulty] \
+         -scrollregion [.newgamemenu.canvas bbox all]
+   }] -column 1 -row 0 -sticky w
+tooltip::tooltip .newgamemenu.buttonsbox.difficulty \
+   {Show settings for the game difficulty.}
+grid [canvas .newgamemenu.canvas \
+   -yscrollcommand [list .newgamemenu.scrollbar set]] -sticky nwes -row 1 \
+   -padx 2
+grid [ttk::scrollbar .newgamemenu.scrollbar -orient vertical \
+   -command [list .newgamemenu.canvas yview]] -sticky ns -row 1 -column 1
 ttk::frame .newgamemenu.canvas.player
-grid [ttk::label .newgamemenu.canvas.player.labelplayername -text {Character name:}] -sticky e -padx {0 5}
-grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 -column 1 -pady 3
-tooltip::tooltip .newgamemenu.canvas.player.playername [lindex $playertooltips 1]
-grid [ttk::button .newgamemenu.canvas.player.randomplayer -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName player}] -row 0 -column 2 -padx {5 0}
-tooltip::tooltip .newgamemenu.canvas.player.randomplayer "Select a random name for the character,\nbased on the character gender"
+grid [ttk::label .newgamemenu.canvas.player.labelplayername \
+   -text {Character name:}] -sticky e -padx {0 5}
+grid [ttk::entry .newgamemenu.canvas.player.playername -width 15] -row 0 \
+   -column 1 -pady 3
+tooltip::tooltip .newgamemenu.canvas.player.playername \
+   [lindex $playertooltips 1]
+grid [ttk::button .newgamemenu.canvas.player.randomplayer \
+   -text "[format %c 0xf074]" -style Header.Toolbutton \
+   -command {RandomName player}] -row 0 -column 2 -padx {5 0}
+tooltip::tooltip .newgamemenu.canvas.player.randomplayer \
+   "Select a random name for the character,\nbased on the character gender"
 bind .newgamemenu.canvas.player.playername <FocusIn> {SetInfo player 1}
-grid [ttk::label .newgamemenu.canvas.player.labelgender -text {Character gender:}] -row 1 -sticky e -padx {0 5}
+grid [ttk::label .newgamemenu.canvas.player.labelgender \
+   -text {Character gender:}] -row 1 -sticky e -padx {0 5}
 grid [ttk::frame .newgamemenu.canvas.player.gender] -row 1 -column 1 -pady 3
-grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male -style Male.Toolbutton -value M -variable playergender -text "[format %c 0xf222]" -command {SetInfo player 2}] -padx {0 5}
+grid [ttk::radiobutton .newgamemenu.canvas.player.gender.male \
+   -style Male.Toolbutton -value M -variable playergender \
+   -text "[format %c 0xf222]" -command {SetInfo player 2}] -padx {0 5}
 tooltip::tooltip .newgamemenu.canvas.player.gender.male Male
-grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female -style Female.Toolbutton -value F -variable playergender -text "[format %c 0xf221]" -command {SetInfo player 2}] -row 0 -column 1
+grid [ttk::radiobutton .newgamemenu.canvas.player.gender.female \
+   -style Female.Toolbutton -value F -variable playergender \
+   -text "[format %c 0xf221]" -command {SetInfo player 2}] -row 0 -column 1
 tooltip::tooltip .newgamemenu.canvas.player.gender.female Female
-grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] -row 2 -sticky e -padx {0 5}
-grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 -column 1 -pady 3
+grid [ttk::label .newgamemenu.canvas.player.labelshipname -text {Ship name:}] \
+   -row 2 -sticky e -padx {0 5}
+grid [ttk::entry .newgamemenu.canvas.player.shipname -width 15] -row 2 \
+   -column 1 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.shipname [lindex $playertooltips 3]
 bind .newgamemenu.canvas.player.shipname <FocusIn> {SetInfo player 3}
-grid [ttk::button .newgamemenu.canvas.player.randomship -text "[format %c 0xf074]" -style Header.Toolbutton -command {RandomName ship}] -row 2 -column 2 -padx {5 0}
-tooltip::tooltip .newgamemenu.canvas.player.randomship "Select a random name for the ship"
-grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] -row 3 -sticky e -padx {0 5}
-grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 -columnspan 2 -pady 3
+grid [ttk::button .newgamemenu.canvas.player.randomship \
+   -text "[format %c 0xf074]" -style Header.Toolbutton \
+   -command {RandomName ship}] -row 2 -column 2 -padx {5 0}
+tooltip::tooltip .newgamemenu.canvas.player.randomship \
+   "Select a random name for the ship"
+grid [ttk::label .newgamemenu.canvas.player.labelgoal -text {Character goal:}] \
+   -row 3 -sticky e -padx {0 5}
+grid [ttk::button .newgamemenu.canvas.player.goal -text {Random} \
+   -command {ShowGoals .newgamemenu.canvas.player.goal}] -row 3 -column 1 \
+   -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.goal [lindex $playertooltips 4]
 bind .newgamemenu.canvas.player.goal <FocusIn> {SetInfo player 4}
-grid [ttk::label .newgamemenu.canvas.player.labelfaction -text {Character faction:}] -row 4 -sticky e -padx {0 5}
-grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly -width 16] -row 4 -column 1 -columnspan 2 -pady 3
+grid [ttk::label .newgamemenu.canvas.player.labelfaction \
+   -text {Character faction:}] -row 4 -sticky e -padx {0 5}
+grid [ttk::combobox .newgamemenu.canvas.player.faction -state readonly \
+   -width 16] -row 4 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.faction [lindex $playertooltips 5]
 bind .newgamemenu.canvas.player.faction <FocusIn> SetFaction
 bind .newgamemenu.canvas.player.faction <<ComboboxSelected>> SetFaction
-grid [ttk::label .newgamemenu.canvas.player.labelcareer -text {Character career:}] -row 5 -sticky e -padx {0 5}
-grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly -width 16] -row 5 -column 1 -columnspan 2 -pady 3
+grid [ttk::label .newgamemenu.canvas.player.labelcareer \
+   -text {Character career:}] -row 5 -sticky e -padx {0 5}
+grid [ttk::combobox .newgamemenu.canvas.player.career -state readonly \
+   -width 16] -row 5 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.career [lindex $playertooltips 6]
 bind .newgamemenu.canvas.player.career <FocusIn> {SetCareer}
 bind .newgamemenu.canvas.player.career <<ComboboxSelected>> SetCareer
-grid [ttk::label .newgamemenu.canvas.player.labelbase -text {Starting base type:}] -row 6 -sticky e -padx {0 5}
-grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] -row 6 -column 1 -columnspan 2 -pady 3
+grid [ttk::label .newgamemenu.canvas.player.labelbase \
+   -text {Starting base type:}] -row 6 -sticky e -padx {0 5}
+grid [ttk::combobox .newgamemenu.canvas.player.base -state readonly -width 16] \
+   -row 6 -column 1 -columnspan 2 -pady 3
 tooltip::tooltip .newgamemenu.canvas.player.base [lindex $playertooltips 7]
 bind .newgamemenu.canvas.player.base <FocusIn> {SetBase}
 bind .newgamemenu.canvas.player.base <<ComboboxSelected>> SetBase
 ttk::frame .newgamemenu.canvas.difficulty
 SetScrollbarBindings .newgamemenu.canvas.difficulty .newgamemenu.scrollbar
-grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel -text {Difficulty level:}] -sticky e -padx {0 5}
-SetScrollbarBindings .newgamemenu.canvas.difficulty.difficultylabel .newgamemenu.scrollbar
-grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel -state readonly -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] -column 1 -row 0 -pady 3
+grid [ttk::label .newgamemenu.canvas.difficulty.difficultylabel \
+   -text {Difficulty level:}] -sticky e -padx {0 5}
+SetScrollbarBindings .newgamemenu.canvas.difficulty.difficultylabel \
+   .newgamemenu.scrollbar
+grid [ttk::combobox .newgamemenu.canvas.difficulty.difficultylevel \
+   -state readonly \
+   -values [list {Very Easy} Easy Normal Hard {Very Hard} Custom] -width 7] \
+   -column 1 -row 0 -pady 3
 bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
    set level [.newgamemenu.canvas.difficulty.difficultylevel get]
    switch $level {
@@ -410,7 +465,8 @@ bind .newgamemenu.canvas.difficulty.difficultylevel <<ComboboxSelected>> {
    }
    SetPoints $level
 }
-tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel [lindex $difficultytooltips 1]
+tooltip::tooltip .newgamemenu.canvas.difficulty.difficultylevel \
+   [lindex $difficultytooltips 1]
 bind .newgamemenu.canvas.difficulty.difficultylevel <FocusIn> {SetInfo difficulty 1}
 grid [ttk::label .newgamemenu.canvas.difficulty.enemydamagelabel -text {Enemy ship damage:}] -row 1 -sticky e -padx {0 5}
 SetScrollbarBindings .newgamemenu.canvas.difficulty.enemydamagelabel .newgamemenu.scrollbar
