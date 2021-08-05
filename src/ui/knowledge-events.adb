@@ -210,7 +210,7 @@ package body Knowledge.Events is
    -- DISTANCEDESC - Sort events by distance descending
    -- DETAILSASC   - Sort events by details ascending
    -- DETAILSDESC  - Sort events by details descending
-   -- NONE       - No sorting events (default)
+   -- NONE         - No sorting events (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
