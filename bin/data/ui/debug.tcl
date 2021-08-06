@@ -120,14 +120,14 @@ grid [ttk::button $cargoframe.addbutton -text Add -command DebugAddItem]
 grid [ttk::combobox $cargoframe.add -width 15] -column 1 -row 0
 grid [ttk::label $cargoframe.amountlbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.amount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 10] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 1
 grid [ttk::button $cargoframe.updatebutton -text Update \
    -command DebugUpdateItem] -pady {50 0}
 grid [ttk::combobox $cargoframe.update -state readonly -width 15] -column 1 \
    -row 2 -pady {50 0}
 grid [ttk::label $cargoframe.amount2lbl -text {Amount:}]
 grid [ttk::spinbox $cargoframe.updateamount -from 1 -to 1000000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 10] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 3
 bind $cargoframe.update <<ComboboxSelected>> RefreshCargo
 # Bases options
 set basesframe [ttk::frame .debugdialog.main.bases]
