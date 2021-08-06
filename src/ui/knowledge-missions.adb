@@ -14,6 +14,7 @@
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 with Ada.Containers; use Ada.Containers;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with GNAT.String_Split; use GNAT.String_Split;
@@ -127,18 +128,133 @@ package body Knowledge.Missions is
       return TCL_OK;
    end Show_Missions_Command;
 
-   procedure AddCommands is
-   begin
-      AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
-      AddCommand("ShowMissions", Show_Missions_Command'Access);
-   end AddCommands;
-
    -- ****iv* KMissions/KMissions.MissionsTable
    -- FUNCTION
    -- Table with info about the known Missions
    -- SOURCE
    MissionsTable: Table_Widget (5);
    -- ****
+
+   -- ****it* KMissions/KMissions.Missions_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the accepted missions list
+   -- OPTIONS
+   -- TYPEASC      - Sort missions by type ascending
+   -- TYPEDESC     - Sort missions by type descending
+   -- NONE         - No sorting missions (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Missions_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* KMissions/KMissions.Default_Missions_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the known missions
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Missions_Sort_Order: constant Missions_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* KMissions/KMissions.Missions_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for accepted missions list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Missions_Sort_Order: Missions_Sort_Orders := Default_Missions_Sort_Order;
+   -- ****
+
+   -- ****iv* KMissions/KMissions.Missions_Indexes
+   -- FUNCTION
+   -- Indexes of the accepted missions
+   -- SOURCE
+   Missions_Indexes: Positive_Container.Vector;
+   -- ****
+
+   -- ****o* KMissions/KMissions.Sort_Missions_Command
+   -- FUNCTION
+   -- Sort the accepted missions list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortAcceptedMissions x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Missions_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Mission_Data is record
+         MType: Missions_Types;
+         Id: Positive;
+      end record;
+      type Missions_Array is array(Positive range <>) of Local_Mission_Data;
+      Local_Missions: Missions_Array(1 .. Positive(AcceptedMissions.Length));
+      function "<"(Left, Right: Local_Mission_Data) return Boolean is
+      begin
+         if Missions_Sort_Order = TYPEASC
+           and then Left.MType < Right.MType then
+            return True;
+         end if;
+         if Missions_Sort_Order = TYPEDESC
+           and then Left.MType > Right.MType then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Missions is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Mission_Data,
+         Array_Type => Missions_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Missions_Sort_Order = TYPEASC then
+               Missions_Sort_Order := TYPEDESC;
+            else
+               Missions_Sort_Order := TYPEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Missions_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in AcceptedMissions.Iterate loop
+         Local_Missions(Mission_Container.To_Index(I)) :=
+           (MType => AcceptedMissions(I).MType,
+            Id => Mission_Container.To_Index(I));
+      end loop;
+      Sort_Missions(Local_Missions);
+      Missions_Indexes.Clear;
+      for Event of Local_Missions loop
+         Missions_Indexes.Append(Event.Id);
+      end loop;
+      UpdateMissionsList;
+      return TCL_OK;
+   end Sort_Missions_Command;
+
+   procedure AddCommands is
+   begin
+      AddCommand("ShowMissionMenu", Show_Missions_Menu_Command'Access);
+      AddCommand("ShowMissions", Show_Missions_Command'Access);
+      AddCommand("SortAcceptedMissions", Sort_Missions_Command'Access);
+   end AddCommands;
 
    procedure UpdateMissionsList(Page: Positive := 1) is
       MissionsCanvas: constant Tk_Canvas :=
@@ -179,11 +295,18 @@ package body Knowledge.Missions is
                To_Unbounded_String("Details"),
                To_Unbounded_String("Time limit"),
                To_Unbounded_String("Base reward")),
-              Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"));
+              Get_Widget(".gameframe.paned.knowledgeframe.missions.scrolly"),
+              "SortAcceptedMissions",
+              "Press mouse button to sort the missions.");
+         if Missions_Indexes.Length /= AcceptedMissions.Length then
+            Missions_Indexes.Clear;
+            for I in AcceptedMissions.Iterate loop
+               Missions_Indexes.Append(Mission_Container.To_Index(I));
+            end loop;
+         end if;
          Rows := 0;
          Load_Accepted_Missions_Loop :
-         for I in
-           AcceptedMissions.First_Index .. AcceptedMissions.Last_Index loop
+         for I of Missions_Indexes loop
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
                goto End_Of_Loop;
