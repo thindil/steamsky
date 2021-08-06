@@ -636,20 +636,29 @@ package body Game.SaveLoad is
          New_Game_Settings.Upgrade_Cost_Bonus :=
            Bonus_Type'Value
              (Get_Attribute(Elem => Saved_Node, Name => "upgradecostbonus"));
-         if Get_Attribute(Saved_Node, "pricesbonus") /= "" then
+         if Get_Attribute(Elem => Saved_Node, Name => "pricesbonus") /= "" then
             New_Game_Settings.Prices_Bonus :=
-              Bonus_Type'Value(Get_Attribute(Saved_Node, "pricesbonus"));
+              Bonus_Type'Value
+                (Get_Attribute(Elem => Saved_Node, Name => "pricesbonus"));
          end if;
-         Log_Message("done.", EVERYTHING, True, False);
+         Log_Message
+           (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+            Time_Stamp => False);
       end if;
       -- Load game date
-      Log_Message("Loading game time...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading game time...", Message_Type => EVERYTHING,
+         New_Line => False);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "gamedate");
-      Saved_Node := Item(Nodes_List, 0);
-      Game_Date.Year := Natural'Value(Get_Attribute(Saved_Node, "year"));
-      Game_Date.Month := Natural'Value(Get_Attribute(Saved_Node, "month"));
-      Game_Date.Day := Natural'Value(Get_Attribute(Saved_Node, "day"));
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "gamedate");
+      Saved_Node := Item(List => Nodes_List, Index => 0);
+      Game_Date.Year :=
+        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "year"));
+      Game_Date.Month :=
+        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "month"));
+      Game_Date.Day :=
+        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "day"));
       Game_Date.Hour := Natural'Value(Get_Attribute(Saved_Node, "hour"));
       Game_Date.Minutes := Natural'Value(Get_Attribute(Saved_Node, "minutes"));
       Log_Message("done.", EVERYTHING, True, False);
