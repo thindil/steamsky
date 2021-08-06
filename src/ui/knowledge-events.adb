@@ -238,7 +238,7 @@ package body Knowledge.Events is
    Events_Sort_Order: Events_Sort_Orders := Default_Events_Sort_Order;
    -- ****
 
-   -- ****iv* KEvents/KEvents.Modules_Indexes
+   -- ****iv* KEvents/KEvents.Events_Indexes
    -- FUNCTION
    -- Indexes of the known events
    -- SOURCE
