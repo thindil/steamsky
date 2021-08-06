@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Ability to move (drag) dialogs with mouse after clicking on their headers
 - Ability to sort saved games, the player's ship's modules, crew, cargo, the
-  crew members inventories, known bases and known events lists
+  crew members inventories, known bases, known events and accepted missions
+  lists
 
 ### Changed
 - Updated help
