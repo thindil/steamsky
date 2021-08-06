@@ -141,11 +141,17 @@ package body Knowledge.Missions is
    -- OPTIONS
    -- TYPEASC      - Sort missions by type ascending
    -- TYPEDESC     - Sort missions by type descending
+   -- DISTANCEASC  - Sort missions by distance ascending
+   -- DISTANCEDESC - Sort missions by distance descending
+   -- DETAILSASC   - Sort missions by details ascending
+   -- DETAILSDESC  - Sort missions by details descending
    -- NONE         - No sorting missions (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Missions_Sort_Orders is (TYPEASC, TYPEDESC, NONE) with
+   type Missions_Sort_Orders is
+     (TYPEASC, TYPEDESC, DISTANCEASC, DISTANCEDESC, DETAILSASC, DETAILSDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -202,6 +208,8 @@ package body Knowledge.Missions is
         Get_Column_Number(MissionsTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Mission_Data is record
          MType: Missions_Types;
+         Distance: Natural;
+         Details: Unbounded_String;
          Id: Positive;
       end record;
       type Missions_Array is array(Positive range <>) of Local_Mission_Data;
@@ -214,6 +222,22 @@ package body Knowledge.Missions is
          end if;
          if Missions_Sort_Order = TYPEDESC
            and then Left.MType > Right.MType then
+            return True;
+         end if;
+         if Missions_Sort_Order = DISTANCEASC
+           and then Left.Distance < Right.Distance then
+            return True;
+         end if;
+         if Missions_Sort_Order = DISTANCEDESC
+           and then Left.Distance > Right.Distance then
+            return True;
+         end if;
+         if Missions_Sort_Order = DETAILSASC
+           and then Left.Details < Right.Details then
+            return True;
+         end if;
+         if Missions_Sort_Order = DETAILSDESC
+           and then Left.Details > Right.Details then
             return True;
          end if;
          return False;
@@ -229,6 +253,18 @@ package body Knowledge.Missions is
             else
                Missions_Sort_Order := TYPEASC;
             end if;
+         when 2 =>
+            if Missions_Sort_Order = DISTANCEASC then
+               Missions_Sort_Order := DISTANCEDESC;
+            else
+               Missions_Sort_Order := DISTANCEASC;
+            end if;
+         when 3 =>
+            if Missions_Sort_Order = DETAILSASC then
+               Missions_Sort_Order := DETAILSDESC;
+            else
+               Missions_Sort_Order := DETAILSASC;
+            end if;
          when others =>
             null;
       end case;
@@ -238,6 +274,37 @@ package body Knowledge.Missions is
       for I in AcceptedMissions.Iterate loop
          Local_Missions(Mission_Container.To_Index(I)) :=
            (MType => AcceptedMissions(I).MType,
+            Distance =>
+              CountDistance
+                (AcceptedMissions(I).TargetX, AcceptedMissions(I).TargetY),
+            Details =>
+              (case AcceptedMissions(I).MType is
+                 when Deliver =>
+                   Items_List(AcceptedMissions(I).ItemIndex).Name & " to " &
+                   SkyBases
+                     (SkyMap
+                        (AcceptedMissions(I).TargetX,
+                         AcceptedMissions(I).TargetY)
+                        .BaseIndex)
+                     .Name,
+                 when Patrol =>
+                   To_Unbounded_String
+                     ("X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                      " Y:" & Natural'Image(AcceptedMissions(I).TargetY)),
+                 when Destroy =>
+                   Proto_Ships_List(AcceptedMissions(I).ShipIndex).Name,
+                 when Explore =>
+                   To_Unbounded_String
+                     ("X:" & Natural'Image(AcceptedMissions(I).TargetX) &
+                      " Y:" & Natural'Image(AcceptedMissions(I).TargetY)),
+                 when Passenger =>
+                   "To " &
+                   SkyBases
+                     (SkyMap
+                        (AcceptedMissions(I).TargetX,
+                         AcceptedMissions(I).TargetY)
+                        .BaseIndex)
+                     .Name),
             Id => Mission_Container.To_Index(I));
       end loop;
       Sort_Missions(Local_Missions);
