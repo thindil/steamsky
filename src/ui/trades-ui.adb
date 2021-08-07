@@ -74,6 +74,38 @@ package body Trades.UI is
    Items_Indexes: Natural_Container.Vector;
    -- ****
 
+   -- ****it* TUI/TUI.Items_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the trading list
+   -- OPTIONS
+   -- NAMEASC    - Sort items by name ascending
+   -- NAMEDESC   - Sort items by name descending
+   -- NONE       - No sorting modules (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Items_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* TUI/TUI.Default_Items_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the trading list
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Items_Sort_Order: constant Items_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* TUI/TUI.Items_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the trading list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Items_Sort_Order: Items_Sort_Orders := Default_Items_Sort_Order;
+   -- ****
+
    -- ****o* TUI/TUI.Show_Trade_Command
    -- FUNCTION
    -- Show information about trading
@@ -147,6 +179,7 @@ package body Trades.UI is
               Get_Widget(Main_Paned & ".tradeframe.scrolly"), "SortTradeItems",
               "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
+         Items_Sort_Order := Default_Items_Sort_Order;
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          configure(Close_Button, "-command ShowSkyMap");
          Entry_Configure(GameMenu, "Help", "-command {ShowHelp general}");
@@ -171,8 +204,7 @@ package body Trades.UI is
          BaseType := To_Unbounded_String("0");
          BaseCargo := TraderCargo;
       end if;
-      if Items_Indexes.Length /=
-        Player_Ship.Cargo.Length + BaseCargo.Length then
+      if Items_Sort_Order = Default_Items_Sort_Order then
          Items_Indexes.Clear;
          for I in Player_Ship.Cargo.Iterate loop
             Items_Indexes.Append(Inventory_Container.To_Index(I));
@@ -1058,44 +1090,12 @@ package body Trades.UI is
       return TCL_OK;
    end Trade_Amount_Command;
 
-   -- ****it* TUI/TUI.Items_Sort_Order
-   -- FUNCTION
-   -- Sorting orders for the trading list
-   -- OPTIONS
-   -- NAMEASC    - Sort items by name ascending
-   -- NAMEDESC   - Sort items by name descending
-   -- NONE       - No sorting modules (default)
-   -- HISTORY
-   -- 6.4 - Added
-   -- SOURCE
-   type Items_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
-      Default_Value => NONE;
-      -- ****
-
-      -- ****id* TUI/TUI.Default_Items_Sort_Order
-      -- FUNCTION
-      -- Default sorting order for the trading list
-      -- HISTORY
-      -- 6.4 - Added
-      -- SOURCE
-   Default_Items_Sort_Order: constant Items_Sort_Orders := NONE;
-   -- ****
-
-   -- ****iv* TUI/TUI.Items_Sort_Order
-   -- FUNCTION
-   -- The current sorting order for the trading list
-   -- HISTORY
-   -- 6.4 - Added
-   -- SOURCE
-   Items_Sort_Order: Items_Sort_Orders := Default_Items_Sort_Order;
-   -- ****
-
    -- ****o* TUI/TUI.Sort_Items_Command
    -- FUNCTION
    -- Sort the trading list
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -1113,7 +1113,7 @@ package body Trades.UI is
    function Sort_Items_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Argc);
       Column: constant Positive :=
         Get_Column_Number(TradeTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
@@ -1150,7 +1150,7 @@ package body Trades.UI is
          when others =>
             null;
       end case;
-      if Items_Sort_Order = NONE then
+      if Items_Sort_Order = Default_Items_Sort_Order then
          return TCL_OK;
       end if;
       if BaseIndex > 0 then
@@ -1189,7 +1189,9 @@ package body Trades.UI is
       for Item of Local_Items loop
          Items_Indexes.Append(Item.Id);
       end loop;
-      return TCL_OK;
+      return
+        Show_Trade_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowTrade" & "All");
    end Sort_Items_Command;
 
    procedure AddCommands is
