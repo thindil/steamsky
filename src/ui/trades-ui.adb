@@ -80,11 +80,13 @@ package body Trades.UI is
    -- OPTIONS
    -- NAMEASC    - Sort items by name ascending
    -- NAMEDESC   - Sort items by name descending
+   -- TYPEASC    - Sort items by type ascending
+   -- TYPEDESC   - Sort items by type descending
    -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Items_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Items_Sort_Orders is (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1118,6 +1120,7 @@ package body Trades.UI is
         Get_Column_Number(TradeTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Item_Data is record
          Name: Unbounded_String;
+         IType: Unbounded_String;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -1125,6 +1128,7 @@ package body Trades.UI is
       Indexes_List: Positive_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
       BaseCargoIndex: Natural;
+      ProtoIndex: Unbounded_String;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;
@@ -1134,6 +1138,12 @@ package body Trades.UI is
             return True;
          end if;
          if Items_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         if Items_Sort_Order = TYPEASC and then Left.IType < Right.IType then
+            return True;
+         end if;
+         if Items_Sort_Order = TYPEDESC and then Left.IType > Right.IType then
             return True;
          end if;
          return False;
@@ -1147,6 +1157,12 @@ package body Trades.UI is
             else
                Items_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Items_Sort_Order = TYPEASC then
+               Items_Sort_Order := TYPEDESC;
+            else
+               Items_Sort_Order := TYPEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1159,16 +1175,19 @@ package body Trades.UI is
          BaseCargo := TraderCargo;
       end if;
       for I in Player_Ship.Cargo.Iterate loop
+         ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
          BaseCargoIndex :=
-           FindBaseCargo
-             (Player_Ship.Cargo(I).ProtoIndex,
-              Player_Ship.Cargo(I).Durability);
+           FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
          end if;
          Local_Items.Append
            (New_Item =>
               (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+               IType =>
+                 (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
+                  then Items_List(ProtoIndex).IType
+                  else Items_List(ProtoIndex).ShowType),
                Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
@@ -1180,9 +1199,15 @@ package body Trades.UI is
       Local_Items.Clear;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if Indexes_List.Find_Index(Item => I) = 0 then
+            ProtoIndex := BaseCargo(I).ProtoIndex;
             Local_Items.Append
               (New_Item =>
-                 (Name => Items_List(BaseCargo(I).ProtoIndex).Name, Id => I));
+                 (Name => Items_List(ProtoIndex).Name,
+                  IType =>
+                    (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String
+                     then Items_List(ProtoIndex).IType
+                     else Items_List(ProtoIndex).ShowType),
+                  Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
