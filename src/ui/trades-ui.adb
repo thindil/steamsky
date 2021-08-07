@@ -129,6 +129,7 @@ package body Trades.UI is
         (if Argc > 2 then
            "{" & CArgv.Arg(Argv, 1) & "} {" & CArgv.Arg(Argv, 2) & "}"
          elsif Argc = 2 then CArgv.Arg(Argv, 1) & " {}" else "All {}");
+      Current_Item_Index: Positive := 1;
    begin
       if Winfo_Get(Label, "exists") = "0" then
          Tcl_EvalFile
@@ -143,7 +144,8 @@ package body Trades.UI is
                To_Unbounded_String("Durability"), To_Unbounded_String("Price"),
                To_Unbounded_String("Profit"), To_Unbounded_String("Weight"),
                To_Unbounded_String("Owned"), To_Unbounded_String("Available")),
-              Get_Widget(Main_Paned & ".tradeframe.scrolly"));
+              Get_Widget(Main_Paned & ".tradeframe.scrolly"), "SortTradeItems",
+              "Press mouse button to sort the items.");
       elsif Winfo_Get(Label, "ismapped") = "1" and Argc = 1 then
          Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
          configure(Close_Button, "-command ShowSkyMap");
@@ -169,8 +171,21 @@ package body Trades.UI is
          BaseType := To_Unbounded_String("0");
          BaseCargo := TraderCargo;
       end if;
+      if Items_Indexes.Length /=
+        Player_Ship.Cargo.Length + BaseCargo.Length then
+         Items_Indexes.Clear;
+         for I in Player_Ship.Cargo.Iterate loop
+            Items_Indexes.Append(Inventory_Container.To_Index(I));
+         end loop;
+         Items_Indexes.Append(0);
+         for I in BaseCargo.Iterate loop
+            Items_Indexes.Append(BaseCargo_Container.To_Index(I));
+         end loop;
+      end if;
       Show_Cargo_Items_Loop :
-      for I in Player_Ship.Cargo.Iterate loop
+      for I of Items_Indexes loop
+         Current_Item_Index := Current_Item_Index + 1;
+         exit Show_Cargo_Items_Loop when I = 0;
          if Get_Price(BaseType, Player_Ship.Cargo(I).ProtoIndex) = 0 then
             goto End_Of_Cargo_Loop;
          end if;
@@ -228,12 +243,10 @@ package body Trades.UI is
          end if;
          AddButton
            (TradeTable, To_String(ItemName), "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            1);
+            "ShowTradeMenu" & Positive'Image(I), 1);
          AddButton
            (TradeTable, To_String(ItemType), "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            2);
+            "ShowTradeMenu" & Positive'Image(I), 2);
          ItemDurability :=
            (if Player_Ship.Cargo(I).Durability < 100 then
               To_Unbounded_String
@@ -242,52 +255,45 @@ package body Trades.UI is
          AddProgressBar
            (TradeTable, Player_Ship.Cargo(I).Durability,
             Default_Item_Durability, To_String(ItemDurability),
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            3);
+            "ShowTradeMenu" & Positive'Image(I), 3);
          AddButton
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            4);
+            "ShowTradeMenu" & Positive'Image(I), 4);
          AddButton
            (Table => TradeTable, Text => Positive'Image(Profit),
             Tooltip => "Show available options for item",
-            Command =>
-              "ShowTradeMenu" &
-              Positive'Image(Inventory_Container.To_Index(I)),
-            Column => 5,
+            Command => "ShowTradeMenu" & Positive'Image(I), Column => 5,
             Color =>
               (if Profit > 0 then "green" elsif Profit < 0 then "red"
                else ""));
          AddButton
            (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            6);
+            "ShowTradeMenu" & Positive'Image(I), 6);
          AddButton
            (TradeTable, Positive'Image(Player_Ship.Cargo(I).Amount),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            7);
+            "ShowTradeMenu" & Positive'Image(I), 7);
          AddButton
            (TradeTable, Positive'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeMenu" & Positive'Image(Inventory_Container.To_Index(I)),
-            8, True);
+            "ShowTradeMenu" & Positive'Image(I), 8, True);
          exit Show_Cargo_Items_Loop when TradeTable.Row = 26;
          <<End_Of_Cargo_Loop>>
       end loop Show_Cargo_Items_Loop;
       Show_Trader_Items_Loop :
-      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+      for I in Current_Item_Index .. Items_Indexes.Last_Index loop
          exit Show_Trader_Items_Loop when TradeTable.Row = 26;
-         if IndexesList.Find_Index(Item => I) > 0 or
+         if IndexesList.Find_Index(Item => Items_Indexes(I)) > 0 or
            not Is_Buyable
-             (BaseType => BaseType, ItemIndex => BaseCargo(I).ProtoIndex,
+             (BaseType => BaseType,
+              ItemIndex => BaseCargo(Items_Indexes(I)).ProtoIndex,
               BaseIndex => BaseIndex) or
-           BaseCargo(I).Amount = 0 then
+           BaseCargo(Items_Indexes(I)).Amount = 0 then
             goto End_Of_Trader_Loop;
          end if;
-         ProtoIndex := BaseCargo(I).ProtoIndex;
+         ProtoIndex := BaseCargo(Items_Indexes(I)).ProtoIndex;
          ItemType :=
            (if Items_List(ProtoIndex).ShowType = Null_Unbounded_String then
               Items_List(ProtoIndex).IType
@@ -312,8 +318,9 @@ package body Trades.UI is
             goto End_Of_Trader_Loop;
          end if;
          Price :=
-           (if BaseIndex > 0 then SkyBases(BaseIndex).Cargo(I).Price
-            else TraderCargo(I).Price);
+           (if BaseIndex > 0 then
+              SkyBases(BaseIndex).Cargo(Items_Indexes(I)).Price
+            else TraderCargo(Items_Indexes(I)).Price);
          if EventIndex > 0 then
             if Events_List(EventIndex).EType = DoublePrice
               and then Events_List(EventIndex).ItemIndex = ProtoIndex then
@@ -321,42 +328,50 @@ package body Trades.UI is
             end if;
          end if;
          BaseAmount :=
-           (if BaseIndex = 0 then TraderCargo(I).Amount
-            else SkyBases(BaseIndex).Cargo(I).Amount);
+           (if BaseIndex = 0 then TraderCargo(Items_Indexes(I)).Amount
+            else SkyBases(BaseIndex).Cargo(Items_Indexes(I)).Amount);
          AddButton
            (TradeTable, To_String(ItemName), "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 1);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            1);
          AddButton
            (TradeTable, To_String(ItemType), "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 2);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            2);
          ItemDurability :=
-           (if BaseCargo(I).Durability < 100 then
-              To_Unbounded_String(GetItemDamage(BaseCargo(I).Durability))
+           (if BaseCargo(Items_Indexes(I)).Durability < 100 then
+              To_Unbounded_String
+                (GetItemDamage(BaseCargo(Items_Indexes(I)).Durability))
             else To_Unbounded_String("Unused"));
          AddProgressBar
-           (TradeTable, BaseCargo(I).Durability, Default_Item_Durability,
-            To_String(ItemDurability),
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 3);
+           (TradeTable, BaseCargo(Items_Indexes(I)).Durability,
+            Default_Item_Durability, To_String(ItemDurability),
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            3);
          AddButton
            (TradeTable, Positive'Image(Price),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 4);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            4);
          AddButton
            (TradeTable, Integer'Image(-(Price)),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 5, False,
-            "red");
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            5, False, "red");
          AddButton
            (TradeTable, Positive'Image(Items_List(ProtoIndex).Weight) & " kg",
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 6);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            6);
          AddButton
            (TradeTable, " 0", "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 7);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            7);
          AddButton
            (TradeTable, Natural'Image(BaseAmount),
             "Show available options for item",
-            "ShowTradeMenu -" & Trim(Positive'Image(I), Left), 8, True);
+            "ShowTradeMenu -" & Trim(Positive'Image(Items_Indexes(I)), Left),
+            8, True);
          <<End_Of_Trader_Loop>>
       end loop Show_Trader_Items_Loop;
       if Page > 1 then
@@ -1151,9 +1166,10 @@ package body Trades.UI is
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
          end if;
-         Local_Items(Inventory_Container.To_Index(I)) :=
-           (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
-            Id => Inventory_Container.To_Index(I));
+         Local_Items.Append
+           (New_Item =>
+              (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+               Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
       Items_Indexes.Clear;
@@ -1164,8 +1180,9 @@ package body Trades.UI is
       Local_Items.Clear;
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if Indexes_List.Find_Index(Item => I) = 0 then
-            Local_Items(I) :=
-              (Name => Items_List(BaseCargo(I).ProtoIndex).Name, Id => I);
+            Local_Items.Append
+              (New_Item =>
+                 (Name => Items_List(BaseCargo(I).ProtoIndex).Name, Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
