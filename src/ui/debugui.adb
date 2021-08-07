@@ -269,7 +269,7 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       pragma Unreferenced(ClientData, Argc, Argv);
-      FrameName: constant String := ".debugdialog.main.world";
+      FrameName: constant String := ".debugdialog.main.world.deleteevent";
       EventsBox: constant Ttk_ComboBox :=
         Get_Widget(FrameName & ".delete", Interp);
       ValuesList: Unbounded_String;
@@ -1041,7 +1041,7 @@ package body DebugUI is
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
       EventBox: constant Ttk_ComboBox :=
-        Get_Widget(".debugdialog.main.world.delete", Interp);
+        Get_Widget(".debugdialog.main.world.deleteevent.delete", Interp);
    begin
       DeleteEvent(Natural'Value(Current(EventBox)) + 1);
       return Refresh_Events_Command(ClientData, Interp, Argc, Argv);
@@ -1091,6 +1091,8 @@ package body DebugUI is
       for Base of SkyBases loop
          Append(ValuesList, " {" & Base.Name & "}");
       end loop Load_Bases_Loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ComboBox.Name := New_String(".debugdialog.main.world.base");
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ValuesList := Null_Unbounded_String;
       ComboBox.Name := New_String(".debugdialog.main.ship.proto");
