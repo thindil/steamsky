@@ -15,7 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
-with Ada.Containers.Generic_Array_Sort;
+with Ada.Containers.Vectors; use Ada.Containers;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -71,7 +71,7 @@ package body Trades.UI is
    -- FUNCTION
    -- Indexes of the items for trade
    -- SOURCE
-   Items_Indexes: Positive_Container.Vector;
+   Items_Indexes: Natural_Container.Vector;
    -- ****
 
    -- ****o* TUI/TUI.Show_Trade_Command
@@ -1053,8 +1053,7 @@ package body Trades.UI is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Items_Sort_Orders is
-     (NAMEASC, NAMEDESC, NONE) with
+   type Items_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1106,8 +1105,14 @@ package body Trades.UI is
          Name: Unbounded_String;
          Id: Positive;
       end record;
-      type Items_Array is array(Positive range <>) of Local_Item_Data;
-      Local_Items: Items_Array(1 .. Positive(Player_Ship.Modules.Length));
+      BaseIndex: constant Natural :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      Indexes_List: Positive_Container.Vector;
+      BaseCargo: BaseCargo_Container.Vector;
+      BaseCargoIndex: Natural;
+      package Items_Container is new Vectors
+        (Index_Type => Positive, Element_Type => Local_Item_Data);
+      Local_Items: Items_Container.Vector;
       function "<"(Left, Right: Local_Item_Data) return Boolean is
       begin
          if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1118,9 +1123,7 @@ package body Trades.UI is
          end if;
          return False;
       end "<";
-      procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
-        (Index_Type => Positive, Element_Type => Local_Item_Data,
-         Array_Type => Items_Array);
+      package Sort_Items is new Items_Container.Generic_Sorting;
    begin
       case Column is
          when 1 =>
@@ -1135,13 +1138,37 @@ package body Trades.UI is
       if Items_Sort_Order = NONE then
          return TCL_OK;
       end if;
-      for I in Player_Ship.Modules.Iterate loop
-         Local_Items(Modules_Container.To_Index(I)) :=
-           (Name => Player_Ship.Modules(I).Name,
-            Id => Modules_Container.To_Index(I));
+      if BaseIndex > 0 then
+         BaseCargo := SkyBases(BaseIndex).Cargo;
+      else
+         BaseCargo := TraderCargo;
+      end if;
+      for I in Player_Ship.Cargo.Iterate loop
+         BaseCargoIndex :=
+           FindBaseCargo
+             (Player_Ship.Cargo(I).ProtoIndex,
+              Player_Ship.Cargo(I).Durability);
+         if BaseCargoIndex > 0 then
+            Indexes_List.Append(New_Item => BaseCargoIndex);
+         end if;
+         Local_Items(Inventory_Container.To_Index(I)) :=
+           (Name => To_Unbounded_String(GetItemName(Player_Ship.Cargo(I))),
+            Id => Inventory_Container.To_Index(I));
       end loop;
-      Sort_Items(Local_Items);
+      Sort_Items.Sort(Local_Items);
       Items_Indexes.Clear;
+      for Item of Local_Items loop
+         Items_Indexes.Append(Item.Id);
+      end loop;
+      Items_Indexes.Append(0);
+      Local_Items.Clear;
+      for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
+         if Indexes_List.Find_Index(Item => I) = 0 then
+            Local_Items(I) :=
+              (Name => Items_List(BaseCargo(I).ProtoIndex).Name, Id => I);
+         end if;
+      end loop;
+      Sort_Items.Sort(Local_Items);
       for Item of Local_Items loop
          Items_Indexes.Append(Item.Id);
       end loop;
