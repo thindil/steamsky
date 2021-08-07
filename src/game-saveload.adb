@@ -659,29 +659,37 @@ package body Game.SaveLoad is
         Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "month"));
       Game_Date.Day :=
         Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "day"));
-      Game_Date.Hour := Natural'Value(Get_Attribute(Saved_Node, "hour"));
-      Game_Date.Minutes := Natural'Value(Get_Attribute(Saved_Node, "minutes"));
-      Log_Message("done.", EVERYTHING, True, False);
+      Game_Date.Hour :=
+        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "hour"));
+      Game_Date.Minutes :=
+        Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "minutes"));
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load sky map
-      Log_Message("Loading map...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading map...", Message_Type => EVERYTHING,
+         New_Line => False);
       SkyMap :=
         (others =>
            (others =>
               (BaseIndex => 0, Visited => False, EventIndex => 0,
                MissionIndex => 0)));
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "field");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "field");
+      Load_Map_Block :
       declare
          X, Y: Positive;
       begin
          Load_Map_Loop :
-         for I in 0 .. Length(Nodes_List) - 1 loop
-            Saved_Node := Item(Nodes_List, I);
-            X := Natural'Value(Get_Attribute(Saved_Node, "x"));
-            Y := Natural'Value(Get_Attribute(Saved_Node, "y"));
+         for I in 0 .. Length(List => Nodes_List) - 1 loop
+            Saved_Node := Item(List => Nodes_List, Index => I);
+            X := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "x"));
+            Y := Natural'Value(Get_Attribute(Elem => Saved_Node, Name => "y"));
             SkyMap(X, Y).Visited := True;
          end loop Load_Map_Loop;
-      end;
+      end Load_Map_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load sky bases
       Log_Message("Loading bases...", EVERYTHING, False);
