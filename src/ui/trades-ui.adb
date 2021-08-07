@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -64,6 +65,13 @@ package body Trades.UI is
    -- Table with info about the available items to trade
    -- SOURCE
    TradeTable: Table_Widget (8);
+   -- ****
+
+   -- ****iv* TUI/TUI.Items_Indexes
+   -- FUNCTION
+   -- Indexes of the items for trade
+   -- SOURCE
+   Items_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****o* TUI/TUI.Show_Trade_Command
@@ -1035,6 +1043,111 @@ package body Trades.UI is
       return TCL_OK;
    end Trade_Amount_Command;
 
+   -- ****it* TUI/TUI.Items_Sort_Order
+   -- FUNCTION
+   -- Sorting orders for the trading list
+   -- OPTIONS
+   -- NAMEASC    - Sort items by name ascending
+   -- NAMEDESC   - Sort items by name descending
+   -- NONE       - No sorting modules (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Items_Sort_Orders is
+     (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* TUI/TUI.Default_Items_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the trading list
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Items_Sort_Order: constant Items_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* TUI/TUI.Items_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the trading list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Items_Sort_Order: Items_Sort_Orders := Default_Items_Sort_Order;
+   -- ****
+
+   -- ****o* TUI/TUI.Sort_Items_Command
+   -- FUNCTION
+   -- Sort the trading list
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortTradeItems x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Items_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(TradeTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Item_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Items_Array is array(Positive range <>) of Local_Item_Data;
+      Local_Items: Items_Array(1 .. Positive(Player_Ship.Modules.Length));
+      function "<"(Left, Right: Local_Item_Data) return Boolean is
+      begin
+         if Items_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Items_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Items is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Item_Data,
+         Array_Type => Items_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Items_Sort_Order = NAMEASC then
+               Items_Sort_Order := NAMEDESC;
+            else
+               Items_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Items_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in Player_Ship.Modules.Iterate loop
+         Local_Items(Modules_Container.To_Index(I)) :=
+           (Name => Player_Ship.Modules(I).Name,
+            Id => Modules_Container.To_Index(I));
+      end loop;
+      Sort_Items(Local_Items);
+      Items_Indexes.Clear;
+      for Item of Local_Items loop
+         Items_Indexes.Append(Item.Id);
+      end loop;
+      return TCL_OK;
+   end Sort_Items_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowTrade", Show_Trade_Command'Access);
@@ -1043,6 +1156,7 @@ package body Trades.UI is
       AddCommand("SearchTrade", Search_Trade_Command'Access);
       AddCommand("ShowTradeMenu", Show_Trade_Menu_Command'Access);
       AddCommand("TradeAmount", Trade_Amount_Command'Access);
+      AddCommand("SortTradeItems", Sort_Items_Command'Access);
    end AddCommands;
 
 end Trades.UI;
