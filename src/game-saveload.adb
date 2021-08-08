@@ -690,15 +690,25 @@ package body Game.SaveLoad is
             SkyMap(X, Y).Visited := True;
          end loop Load_Map_Loop;
       end Load_Map_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load sky bases
-      Log_Message("Loading bases...", EVERYTHING, False);
-      LoadBases(Save_Data);
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "Loading bases...", Message_Type => EVERYTHING,
+         New_Line => False);
+      LoadBases(SaveData => Save_Data);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load player ship
-      Log_Message("Loading player ship...", EVERYTHING, False);
-      LoadPlayerShip(Save_Data);
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "Loading player ship...", Message_Type => EVERYTHING,
+         New_Line => False);
+      LoadPlayerShip(SaveData => Save_Data);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load known recipes
       Log_Message("Loading known recipes...", EVERYTHING, False);
       Known_Recipes.Clear;
