@@ -74,7 +74,7 @@ package body Trades.UI is
    Items_Indexes: Natural_Container.Vector;
    -- ****
 
-   -- ****it* TUI/TUI.Items_Sort_Order
+   -- ****it* TUI/TUI.Items_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the trading list
    -- OPTIONS

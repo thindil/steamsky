@@ -488,7 +488,7 @@ package body Knowledge.Bases is
       return TCL_OK;
    end Show_Base_Info_Command;
 
-   -- ****it* KBases/KBases.Bases_Sort_Order
+   -- ****it* KBases/KBases.Bases_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the known bases list
    -- OPTIONS

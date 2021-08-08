@@ -135,7 +135,7 @@ package body Knowledge.Missions is
    MissionsTable: Table_Widget (5);
    -- ****
 
-   -- ****it* KMissions/KMissions.Missions_Sort_Order
+   -- ****it* KMissions/KMissions.Missions_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the accepted missions list
    -- OPTIONS

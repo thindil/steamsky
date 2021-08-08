@@ -97,7 +97,7 @@ package body Missions.UI is
    MissionsTable: Table_Widget (5);
    -- ****
 
-   -- ****if* Missions.UI/Count_Missions_Amount
+   -- ****if* MUI3/MUI3.Count_Missions_Amount
    -- FUNCTION
    -- Count the amount of missions which the player can get from the selected
    -- base

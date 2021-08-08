@@ -200,7 +200,7 @@ package body Knowledge.Events is
       return TCL_OK;
    end Show_Events_Command;
 
-   -- ****it* KEvents/KEvents.Events_Sort_Order
+   -- ****it* KEvents/KEvents.Events_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the known events list
    -- OPTIONS

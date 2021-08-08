@@ -1727,7 +1727,7 @@ package body Ships.UI.Modules is
       return TCL_OK;
    end Show_Modules_Command;
 
-   -- ****it* SUModules/SUModules.Modules_Sort_Order
+   -- ****it* SUModules/SUModules.Modules_Sort_Orders
    -- FUNCTION
    -- Sorting orders for the ship modules list
    -- OPTIONS
