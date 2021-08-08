@@ -179,7 +179,7 @@ grid [ttk::combobox $worldframe.event -state readonly \
    -row 1
 bind $worldframe.event <<ComboboxSelected>> ToggleItemEntry
 grid [ttk::label $worldframe.itemlbl -text {Item:}] -column 2 -row 2
-grid [ttk::entry $worldframe.item -width 16] -column 3 -row 2
+grid [ttk::combobox $worldframe.item -width 15] -column 3 -row 2
 grid [ttk::label $worldframe.duration2lbl -text {Duration:}] -column 2 -row 3
 grid [ttk::spinbox $worldframe.baseduration -from 15 -to 12000 -validate key \
    -validatecommand {ValidateSpinbox %W %P} -width 15] -column 3 -row 3
