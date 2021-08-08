@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [6.4] - 2021-08-08
 
 ### Added
 - Ability to move (drag) dialogs with mouse after clicking on their headers
