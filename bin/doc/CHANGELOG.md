@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Updated help
 - Updated interface
 - Updated contributing guide
+- Updated debug interface
 
 ### Fixed
 - Showing the list of available missions in bases after accepting one
