@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -32,22 +32,28 @@
 <ul>
 <li>1. <a href="#robo66">SUI2/SUModules</a></li>
 <ul>
-<li>1.1. <a href="#robo640">SUModules/SUModules.AddCommands</a></li>
-<li>1.2. <a href="./ships-ui-modules_adb.html#robo641">SUModules/SUModules.Show_Module_Menu_Command</a></li>
-<li>1.3. <a href="#robo642">SUModules/SUModules.UpdateModulesInfo</a></li>
-<li>1.4. <a href="./ships-ui-modules_adb.html#robo814">SUModules/SUModules.Assign_Module_Command</a></li>
-<li>1.5. <a href="./ships-ui-modules_adb.html#robo815">SUModules/SUModules.Cancel_Order_Command</a></li>
-<li>1.6. <a href="./ships-ui-modules_adb.html#robo816">SUModules/SUModules.Disable_Engine_Command</a></li>
-<li>1.7. <a href="./ships-ui-modules_adb.html#robo817">SUModules/SUModules.Get_Active_Button_Command</a></li>
-<li>1.8. <a href="./ships-ui-modules_adb.html#robo818">SUModules/SUModules.Reset_Destination_Command</a></li>
-<li>1.9. <a href="./ships-ui-modules_adb.html#robo819">SUModules/SUModules.Set_Repair_Command</a></li>
-<li>1.10. <a href="./ships-ui-modules_adb.html#robo820">SUModules/SUModules.Set_Upgrade_Command</a></li>
-<li>1.11. <a href="./ships-ui-modules_adb.html#robo821">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
-<li>1.12. <a href="./ships-ui-modules_adb.html#robo822">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
-<li>1.13. <a href="./ships-ui-modules_adb.html#robo823">SUModules/SUModules.Show_Module_Info_Command</a></li>
-<li>1.14. <a href="./ships-ui-modules_adb.html#robo824">SUModules/SUModules.Show_Modules_Command</a></li>
-<li>1.15. <a href="./ships-ui-modules_adb.html#robo825">SUModules/SUModules.Stop_Upgrading_Command</a></li>
-<li>1.16. <a href="./ships-ui-modules_adb.html#robo826">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
+<li>1.1. <a href="./ships-ui-modules_adb.html#robo161">SUModules/SUModules.Modules_Sort_Orders</a></li>
+<li>1.2. <a href="./ships-ui-modules_adb.html#robo242">SUModules/SUModules.Default_Modules_Sort_Order</a></li>
+<li>1.3. <a href="./ships-ui-modules_adb.html#robo397">SUModules/SUModules.Modules_Indexes</a></li>
+<li>1.4. <a href="./ships-ui-modules_adb.html#robo398">SUModules/SUModules.Modules_Sort_Order</a></li>
+<li>1.5. <a href="./ships-ui-modules_adb.html#robo399">SUModules/SUModules.ModulesTable</a></li>
+<li>1.6. <a href="#robo678">SUModules/SUModules.AddCommands</a></li>
+<li>1.7. <a href="./ships-ui-modules_adb.html#robo679">SUModules/SUModules.Show_Module_Menu_Command</a></li>
+<li>1.8. <a href="#robo680">SUModules/SUModules.UpdateModulesInfo</a></li>
+<li>1.9. <a href="./ships-ui-modules_adb.html#robo863">SUModules/SUModules.Assign_Module_Command</a></li>
+<li>1.10. <a href="./ships-ui-modules_adb.html#robo864">SUModules/SUModules.Cancel_Order_Command</a></li>
+<li>1.11. <a href="./ships-ui-modules_adb.html#robo865">SUModules/SUModules.Disable_Engine_Command</a></li>
+<li>1.12. <a href="./ships-ui-modules_adb.html#robo866">SUModules/SUModules.Get_Active_Button_Command</a></li>
+<li>1.13. <a href="./ships-ui-modules_adb.html#robo867">SUModules/SUModules.Reset_Destination_Command</a></li>
+<li>1.14. <a href="./ships-ui-modules_adb.html#robo868">SUModules/SUModules.Set_Repair_Command</a></li>
+<li>1.15. <a href="./ships-ui-modules_adb.html#robo869">SUModules/SUModules.Set_Upgrade_Command</a></li>
+<li>1.16. <a href="./ships-ui-modules_adb.html#robo870">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
+<li>1.17. <a href="./ships-ui-modules_adb.html#robo871">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
+<li>1.18. <a href="./ships-ui-modules_adb.html#robo872">SUModules/SUModules.Show_Module_Info_Command</a></li>
+<li>1.19. <a href="./ships-ui-modules_adb.html#robo873">SUModules/SUModules.Show_Modules_Command</a></li>
+<li>1.20. <a href="./ships-ui-modules_adb.html#robo874">SUModules/SUModules.Sort_Modules_Command</a></li>
+<li>1.21. <a href="./ships-ui-modules_adb.html#robo875">SUModules/SUModules.Stop_Upgrading_Command</a></li>
+<li>1.22. <a href="./ships-ui-modules_adb.html#robo876">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
 </ul>
 </ul>
 <hr />
@@ -64,19 +70,19 @@
 
 <hr />
 <a name="SUModules2fSUModules2eAddCommands"></a>
-<a name="robo640"></a><h2>SUModules/SUModules.AddCommands [ Subprograms ]</h2>
+<a name="robo678"></a><h2>SUModules/SUModules.AddCommands [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> Add Tcl commands related to the player's ship modules information
 </pre>
 <p class="item_name">SOURCE</p>
-<pre class="source">   <span class="keyword">procedure</span> <a href="./mainmenu-commands_ads.html#robo528">AddCommands</a><span class="sign">;</span>
+<pre class="source">   <span class="keyword">procedure</span> AddCommands<span class="sign">;</span>
 </pre>
 
 <hr />
 <a name="SUModules2fSUModules2eUpdateModulesInfo"></a>
-<a name="robo642"></a><h2>SUModules/SUModules.UpdateModulesInfo [ Subprograms ]</h2>
+<a name="robo680"></a><h2>SUModules/SUModules.UpdateModulesInfo [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="#robo66">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -91,7 +97,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-modules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
+<p>Generated from ./src/ui/ships-ui-modules.ads with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 08 2021 06:04:05
 </p>
 </div> <!-- footer -->
 </body>

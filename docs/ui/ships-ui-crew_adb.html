@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,22 +30,93 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo364">SUCrew/SUCrew.CrewTable</a></li>
-<li>2. <a href="#robo800">SUCrew/SUCrew.Dismiss_Command</a></li>
-<li>3. <a href="#robo801">SUCrew/SUCrew.Order_For_All_Command</a></li>
-<li>4. <a href="#robo802">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
-<li>5. <a href="#robo803">SUCrew/SUCrew.Set_Priority_Command</a></li>
-<li>6. <a href="#robo804">SUCrew/SUCrew.Show_Crew_Command</a></li>
-<li>7. <a href="#robo805">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
-<li>8. <a href="#robo806">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
-<li>9. <a href="#robo807">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
-<li>10. <a href="#robo808">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
-<li>11. <a href="#robo809">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
-<li>12. <a href="#robo810">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
+<li>1. <a href="#robo160">SUCrew/SUCrew.Crew_Sort_Orders</a></li>
+<li>2. <a href="#robo241">SUCrew/SUCrew.Default_Crew_Sort_Order</a></li>
+<li>3. <a href="#robo394">SUCrew/SUCrew.Crew_Sort_Order</a></li>
+<li>4. <a href="#robo395">SUCrew/SUCrew.CrewTable</a></li>
+<li>5. <a href="#robo396">SUCrew/SUCrew.Modules_Indexes</a></li>
+<li>6. <a href="#robo848">SUCrew/SUCrew.Dismiss_Command</a></li>
+<li>7. <a href="#robo849">SUCrew/SUCrew.Order_For_All_Command</a></li>
+<li>8. <a href="#robo850">SUCrew/SUCrew.Set_Crew_Order_Command</a></li>
+<li>9. <a href="#robo851">SUCrew/SUCrew.Set_Priority_Command</a></li>
+<li>10. <a href="#robo852">SUCrew/SUCrew.Show_Crew_Command</a></li>
+<li>11. <a href="#robo853">SUCrew/SUCrew.Show_Crew_Skill_Info_Command</a></li>
+<li>12. <a href="#robo854">SUCrew/SUCrew.Show_Crew_Stats_Info_Command</a></li>
+<li>13. <a href="#robo855">SUCrew/SUCrew.Show_Member_Info_Command</a></li>
+<li>14. <a href="#robo856">SUCrew/SUCrew.Show_Member_Menu_Command</a></li>
+<li>15. <a href="#robo857">SUCrew/SUCrew.Show_Member_Priorities_Command</a></li>
+<li>16. <a href="#robo858">SUCrew/SUCrew.Show_Member_Tab_Command</a></li>
+<li>17. <a href="#robo859">SUCrew/SUCrew.Sort_Crew_Command</a></li>
 </ul>
 <hr />
+<a name="SUCrew2fSUCrew2eCrew5fSort5fOrders"></a>
+<a name="robo160"></a><h2>SUCrew/SUCrew.Crew_Sort_Orders [ Types ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sorting orders for the player ship crew list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Crew_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> ORDERASC<span class="sign">,</span> ORDERDESC<span class="sign">,</span> HEALTHASC<span class="sign">,</span> HEALTHDESC<span class="sign">,</span>
+      FATIGUEASC<span class="sign">,</span> FATIGUEDESC<span class="sign">,</span> THIRSTASC<span class="sign">,</span> THIRSTDESC<span class="sign">,</span> HUNGERASC<span class="sign">,</span> HUNGERDESC<span class="sign">,</span>
+      MORALEASC<span class="sign">,</span> MORALEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">OPTIONS</p>
+<pre> NAMEASC     - Sort members by name ascending
+ NAMEDESC    - Sort members by name descending
+ ORDERASC    - Sort members by order ascending
+ ORDERDESC   - Sort members by order descending
+ HEALTHASC   - Sort members by health ascending
+ HEALTHDESC  - Sort members by health descending
+ FATIGUEASC  - Sort members by fatigue ascending
+ FATIGUEDESC - Sort members by fatigue descending
+ THIRTSASC   - Sort members by thirst ascending
+ THIRSTDESC  - Sort members by thirst descending
+ HUNGERASC   - Sort members by hunger ascending
+ HUNGERDESC  - Sort members by hunger descending
+ MORALEASC   - Sort members by morale ascending
+ MORALEDESC  - Sort members by morale descending
+ NONE        - No sorting crew (default)
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
+<a name="SUCrew2fSUCrew2eDefault5fCrew5fSort5fOrder"></a>
+<a name="robo241"></a><h2>SUCrew/SUCrew.Default_Crew_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the player's ship's crew
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Crew_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Crew_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
+<a name="SUCrew2fSUCrew2eCrew5fSort5fOrder"></a>
+<a name="robo394"></a><h2>SUCrew/SUCrew.Crew_Sort_Order [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The current sorting order of the player's ship's crew
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Crew_Sort_Order<span class="sign">:</span> Crew_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Crew_Sort_Order<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
 <a name="SUCrew2fSUCrew2eCrewTable"></a>
-<a name="robo364"></a><h2>SUCrew/SUCrew.CrewTable [ Variables ]</h2>
+<a name="robo395"></a><h2>SUCrew/SUCrew.CrewTable [ Variables ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -56,8 +127,20 @@
 </pre>
 
 <hr />
+<a name="SUCrew2fSUCrew2eModules5fIndexes"></a>
+<a name="robo396"></a><h2>SUCrew/SUCrew.Modules_Indexes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Indexes of the player ship crew
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Crew_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
 <a name="SUCrew2fSUCrew2eDismiss5fCommand"></a>
-<a name="robo800"></a><h2>SUCrew/SUCrew.Dismiss_Command [ Commands ]</h2>
+<a name="robo848"></a><h2>SUCrew/SUCrew.Dismiss_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -86,7 +169,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eOrder5fFor5fAll5fCommand"></a>
-<a name="robo801"></a><h2>SUCrew/SUCrew.Order_For_All_Command [ Commands ]</h2>
+<a name="robo849"></a><h2>SUCrew/SUCrew.Order_For_All_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -115,7 +198,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eSet5fCrew5fOrder5fCommand"></a>
-<a name="robo802"></a><h2>SUCrew/SUCrew.Set_Crew_Order_Command [ Commands ]</h2>
+<a name="robo850"></a><h2>SUCrew/SUCrew.Set_Crew_Order_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -146,7 +229,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eSet5fPriority5fCommand"></a>
-<a name="robo803"></a><h2>SUCrew/SUCrew.Set_Priority_Command [ Commands ]</h2>
+<a name="robo851"></a><h2>SUCrew/SUCrew.Set_Priority_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -177,7 +260,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fCrew5fCommand"></a>
-<a name="robo804"></a><h2>SUCrew/SUCrew.Show_Crew_Command [ Commands ]</h2>
+<a name="robo852"></a><h2>SUCrew/SUCrew.Show_Crew_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -206,7 +289,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fCrew5fSkill5fInfo5fCommand"></a>
-<a name="robo805"></a><h2>SUCrew/SUCrew.Show_Crew_Skill_Info_Command [ Commands ]</h2>
+<a name="robo853"></a><h2>SUCrew/SUCrew.Show_Crew_Skill_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -235,7 +318,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fCrew5fStats5fInfo5fCommand"></a>
-<a name="robo806"></a><h2>SUCrew/SUCrew.Show_Crew_Stats_Info_Command [ Commands ]</h2>
+<a name="robo854"></a><h2>SUCrew/SUCrew.Show_Crew_Stats_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -263,7 +346,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fMember5fInfo5fCommand"></a>
-<a name="robo807"></a><h2>SUCrew/SUCrew.Show_Member_Info_Command [ Commands ]</h2>
+<a name="robo855"></a><h2>SUCrew/SUCrew.Show_Member_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -291,7 +374,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fMember5fMenu5fCommand"></a>
-<a name="robo808"></a><h2>SUCrew/SUCrew.Show_Member_Menu_Command [ Commands ]</h2>
+<a name="robo856"></a><h2>SUCrew/SUCrew.Show_Member_Menu_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -319,7 +402,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fMember5fPriorities5fCommand"></a>
-<a name="robo809"></a><h2>SUCrew/SUCrew.Show_Member_Priorities_Command [ Commands ]</h2>
+<a name="robo857"></a><h2>SUCrew/SUCrew.Show_Member_Priorities_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -347,7 +430,7 @@
 
 <hr />
 <a name="SUCrew2fSUCrew2eShow5fMember5fTab5fCommand"></a>
-<a name="robo810"></a><h2>SUCrew/SUCrew.Show_Member_Tab_Command [ Commands ]</h2>
+<a name="robo858"></a><h2>SUCrew/SUCrew.Show_Member_Tab_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -372,9 +455,37 @@
 <pre> ShowMemberTab
 </pre>
 
+<hr />
+<a name="SUCrew2fSUCrew2eSort5fCrew5fCommand"></a>
+<a name="robo859"></a><h2>SUCrew/SUCrew.Sort_Crew_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-crew_ads.html#robo65">SUCrew</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sort the player's ship's crew list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Sort_Crew_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SortShipCrew x
+ X is X axis coordinate where the player clicked the mouse button
+</pre>
+
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-crew.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
+<p>Generated from ./src/ui/ships-ui-crew.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 08 2021 06:04:05
 </p>
 </div> <!-- footer -->
 </body>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div id="logo">
-<a name="robo_top_of_doc">Steamsky 6.3 code documentation</a>
+<a name="robo_top_of_doc">Steamsky 6.4 code documentation</a>
 </div> <!-- logo -->
 <div id="navigation">
 <a class="menuitem" href="../toc_index.html#top">Table of Contents</a>
@@ -30,27 +30,98 @@
 <div id="content">
 <h3>TABLE OF CONTENTS</h3>
 <ul>
-<li>1. <a href="#robo365">SUI2/SUI2.ModulesTable</a></li>
-<li>2. <a href="#robo641">SUModules/SUModules.Show_Module_Menu_Command</a></li>
-<li>3. <a href="#robo814">SUModules/SUModules.Assign_Module_Command</a></li>
-<li>4. <a href="#robo815">SUModules/SUModules.Cancel_Order_Command</a></li>
-<li>5. <a href="#robo816">SUModules/SUModules.Disable_Engine_Command</a></li>
-<li>6. <a href="#robo817">SUModules/SUModules.Get_Active_Button_Command</a></li>
-<li>7. <a href="#robo818">SUModules/SUModules.Reset_Destination_Command</a></li>
-<li>8. <a href="#robo819">SUModules/SUModules.Set_Repair_Command</a></li>
-<li>9. <a href="#robo820">SUModules/SUModules.Set_Upgrade_Command</a></li>
-<li>10. <a href="#robo821">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
-<li>11. <a href="#robo822">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
-<li>12. <a href="#robo823">SUModules/SUModules.Show_Module_Info_Command</a></li>
-<li>13. <a href="#robo824">SUModules/SUModules.Show_Modules_Command</a></li>
-<li>14. <a href="#robo825">SUModules/SUModules.Stop_Upgrading_Command</a></li>
-<li>15. <a href="#robo826">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
+<li>1. <a href="#robo161">SUModules/SUModules.Modules_Sort_Orders</a></li>
+<li>2. <a href="#robo242">SUModules/SUModules.Default_Modules_Sort_Order</a></li>
+<li>3. <a href="#robo397">SUModules/SUModules.Modules_Indexes</a></li>
+<li>4. <a href="#robo398">SUModules/SUModules.Modules_Sort_Order</a></li>
+<li>5. <a href="#robo399">SUModules/SUModules.ModulesTable</a></li>
+<li>6. <a href="#robo679">SUModules/SUModules.Show_Module_Menu_Command</a></li>
+<li>7. <a href="#robo863">SUModules/SUModules.Assign_Module_Command</a></li>
+<li>8. <a href="#robo864">SUModules/SUModules.Cancel_Order_Command</a></li>
+<li>9. <a href="#robo865">SUModules/SUModules.Disable_Engine_Command</a></li>
+<li>10. <a href="#robo866">SUModules/SUModules.Get_Active_Button_Command</a></li>
+<li>11. <a href="#robo867">SUModules/SUModules.Reset_Destination_Command</a></li>
+<li>12. <a href="#robo868">SUModules/SUModules.Set_Repair_Command</a></li>
+<li>13. <a href="#robo869">SUModules/SUModules.Set_Upgrade_Command</a></li>
+<li>14. <a href="#robo870">SUModules/SUModules.Show_Assign_Crew_Command</a></li>
+<li>15. <a href="#robo871">SUModules/SUModules.Show_Assign_Skill_Command</a></li>
+<li>16. <a href="#robo872">SUModules/SUModules.Show_Module_Info_Command</a></li>
+<li>17. <a href="#robo873">SUModules/SUModules.Show_Modules_Command</a></li>
+<li>18. <a href="#robo874">SUModules/SUModules.Sort_Modules_Command</a></li>
+<li>19. <a href="#robo875">SUModules/SUModules.Stop_Upgrading_Command</a></li>
+<li>20. <a href="#robo876">SUModules/SUModules.Update_Assign_Crew_Command</a></li>
 </ul>
 <hr />
-<a name="SUI22fSUI22eModulesTable"></a>
-<a name="robo365"></a><h2>SUI2/SUI2.ModulesTable [ Variables ]</h2>
+<a name="SUModules2fSUModules2eModules5fSort5fOrders"></a>
+<a name="robo161"></a><h2>SUModules/SUModules.Modules_Sort_Orders [ Types ]</h2>
 
-<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui_ads.html#robo58">SUI2</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_types.html#robo_top_of_doc">Types</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sorting orders for the ship modules list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">type</span> Modules_Sort_Orders <span class="keyword">is</span>
+     <span class="sign">(</span>NAMEASC<span class="sign">,</span> NAMEDESC<span class="sign">,</span> DAMAGEASC<span class="sign">,</span> DAMAGEDESC<span class="sign">,</span> NONE<span class="sign">)</span> <span class="keyword">with</span>
+      Default_Value <span class="sign">=</span><span class="sign">&gt;</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">OPTIONS</p>
+<pre> NAMEASC    - Sort modules by name ascending
+ NAMEDESC   - Sort modules by name descending
+ DAMAGEASC  - Sort modules by damage ascending
+ DAMAGEDESC - Sort modules by damage descending
+ NONE       - No sorting modules (default)
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
+<a name="SUModules2fSUModules2eDefault5fModules5fSort5fOrder"></a>
+<a name="robo242"></a><h2>SUModules/SUModules.Default_Modules_Sort_Order [ Constants ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_constants.html#robo_top_of_doc">Constants</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Default sorting order for the player's ship's modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Default_Modules_Sort_Order<span class="sign">:</span> <span class="keyword">constant</span> Modules_Sort_Orders <span class="sign">:</span><span class="sign">=</span> NONE<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
+<a name="SUModules2fSUModules2eModules5fIndexes"></a>
+<a name="robo397"></a><h2>SUModules/SUModules.Modules_Indexes [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Indexes of the player ship modules
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Modules_Indexes<span class="sign">:</span> Positive_Container<span class="sign">.</span>Vector<span class="sign">;</span>
+</pre>
+
+<hr />
+<a name="SUModules2fSUModules2eModules5fSort5fOrder"></a>
+<a name="robo398"></a><h2>SUModules/SUModules.Modules_Sort_Order [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> The current sorting order for modules list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   Modules_Sort_Order<span class="sign">:</span> Modules_Sort_Orders <span class="sign">:</span><span class="sign">=</span> Default_Modules_Sort_Order<span class="sign">;</span>
+</pre>
+<p class="item_name">HISTORY</p>
+<pre> 6.4 - Added
+</pre>
+
+<hr />
+<a name="SUModules2fSUModules2eModulesTable"></a>
+<a name="robo399"></a><h2>SUModules/SUModules.ModulesTable [ Variables ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_variables.html#robo_top_of_doc">Variables</a> ]</p>
 <p class="item_name">FUNCTION</p>
 <pre> <a href="./table_ads.html#robo67">Table</a> with info about the installed modules on the player ship
 </pre>
@@ -60,7 +131,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fModule5fMenu5fCommand"></a>
-<a name="robo641"></a><h2>SUModules/SUModules.Show_Module_Menu_Command [ Subprograms ]</h2>
+<a name="robo679"></a><h2>SUModules/SUModules.Show_Module_Menu_Command [ Subprograms ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_subprograms.html#robo_top_of_doc">Subprograms</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -88,7 +159,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eAssign5fModule5fCommand"></a>
-<a name="robo814"></a><h2>SUModules/SUModules.Assign_Module_Command [ Commands ]</h2>
+<a name="robo863"></a><h2>SUModules/SUModules.Assign_Module_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -119,7 +190,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eCancel5fOrder5fCommand"></a>
-<a name="robo815"></a><h2>SUModules/SUModules.Cancel_Order_Command [ Commands ]</h2>
+<a name="robo864"></a><h2>SUModules/SUModules.Cancel_Order_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -148,7 +219,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eDisable5fEngine5fCommand"></a>
-<a name="robo816"></a><h2>SUModules/SUModules.Disable_Engine_Command [ Commands ]</h2>
+<a name="robo865"></a><h2>SUModules/SUModules.Disable_Engine_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -176,7 +247,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eGet5fActive5fButton5fCommand"></a>
-<a name="robo817"></a><h2>SUModules/SUModules.Get_Active_Button_Command [ Commands ]</h2>
+<a name="robo866"></a><h2>SUModules/SUModules.Get_Active_Button_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -205,7 +276,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eReset5fDestination5fCommand"></a>
-<a name="robo818"></a><h2>SUModules/SUModules.Reset_Destination_Command [ Commands ]</h2>
+<a name="robo867"></a><h2>SUModules/SUModules.Reset_Destination_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -232,7 +303,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eSet5fRepair5fCommand"></a>
-<a name="robo819"></a><h2>SUModules/SUModules.Set_Repair_Command [ Commands ]</h2>
+<a name="robo868"></a><h2>SUModules/SUModules.Set_Repair_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -262,7 +333,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eSet5fUpgrade5fCommand"></a>
-<a name="robo820"></a><h2>SUModules/SUModules.Set_Upgrade_Command [ Commands ]</h2>
+<a name="robo869"></a><h2>SUModules/SUModules.Set_Upgrade_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -291,7 +362,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fAssign5fCrew5fCommand"></a>
-<a name="robo821"></a><h2>SUModules/SUModules.Show_Assign_Crew_Command [ Commands ]</h2>
+<a name="robo870"></a><h2>SUModules/SUModules.Show_Assign_Crew_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -320,7 +391,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fAssign5fSkill5fCommand"></a>
-<a name="robo822"></a><h2>SUModules/SUModules.Show_Assign_Skill_Command [ Commands ]</h2>
+<a name="robo871"></a><h2>SUModules/SUModules.Show_Assign_Skill_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -349,7 +420,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fModule5fInfo5fCommand"></a>
-<a name="robo823"></a><h2>SUModules/SUModules.Show_Module_Info_Command [ Commands ]</h2>
+<a name="robo872"></a><h2>SUModules/SUModules.Show_Module_Info_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -377,7 +448,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eShow5fModules5fCommand"></a>
-<a name="robo824"></a><h2>SUModules/SUModules.Show_Modules_Command [ Commands ]</h2>
+<a name="robo873"></a><h2>SUModules/SUModules.Show_Modules_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -405,8 +476,36 @@
 </pre>
 
 <hr />
+<a name="SUModules2fSUModules2eSort5fModules5fCommand"></a>
+<a name="robo874"></a><h2>SUModules/SUModules.Sort_Modules_Command [ Commands ]</h2>
+
+<p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
+<p class="item_name">FUNCTION</p>
+<pre> Sort the player's ship's modules list
+</pre>
+<p class="item_name">SOURCE</p>
+<pre class="source">   <span class="keyword">function</span> Sort_Modules_Command
+     <span class="sign">(</span>ClientData<span class="sign">:</span> Integer<span class="sign">;</span> Interp<span class="sign">:</span> Tcl<span class="sign">.</span>Tcl_Interp<span class="sign">;</span> Argc<span class="sign">:</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int<span class="sign">;</span>
+      Argv<span class="sign">:</span> CArgv<span class="sign">.</span>Chars_Ptr_Ptr<span class="sign">)</span> <span class="keyword">return</span> Interfaces<span class="sign">.</span>C<span class="sign">.</span>int <span class="keyword">with</span>
+      Convention <span class="sign">=</span><span class="sign">&gt;</span> C<span class="sign">;</span>
+</pre>
+<p class="item_name">PARAMETERS</p>
+<pre> ClientData - Custom data send to the command. Unused
+ Interp     - Tcl interpreter in which command was executed. Unused
+ Argc       - Number of arguments passed to the command. Unused
+ Argv       - Values of arguments passed to the command.
+</pre>
+<p class="item_name">RESULT</p>
+<pre> This function always return TCL_OK
+</pre>
+<p class="item_name">COMMANDS</p>
+<pre> SortShipModules x
+ X is X axis coordinate where the player clicked the mouse button
+</pre>
+
+<hr />
 <a name="SUModules2fSUModules2eStop5fUpgrading5fCommand"></a>
-<a name="robo825"></a><h2>SUModules/SUModules.Stop_Upgrading_Command [ Commands ]</h2>
+<a name="robo875"></a><h2>SUModules/SUModules.Stop_Upgrading_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -433,7 +532,7 @@
 
 <hr />
 <a name="SUModules2fSUModules2eUpdate5fAssign5fCrew5fCommand"></a>
-<a name="robo826"></a><h2>SUModules/SUModules.Update_Assign_Crew_Command [ Commands ]</h2>
+<a name="robo876"></a><h2>SUModules/SUModules.Update_Assign_Crew_Command [ Commands ]</h2>
 
 <p>[ <a href="#robo_top_of_doc">Top</a> ] [ <a href="./ships-ui-modules_ads.html#robo66">SUModules</a> ] [ <a href="../robo_commands.html#robo_top_of_doc">Commands</a> ]</p>
 <p class="item_name">FUNCTION</p>
@@ -463,7 +562,7 @@
 
 </div> <!-- content -->
 <div id="footer">
-<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Jul 11 2021 06:32:02
+<p>Generated from ./src/ui/ships-ui-modules.adb with <a href="http://www.xs4all.nl/~rfsber/Robo/robodoc.html">ROBODoc</a> V4.99.43 on Sun Aug 08 2021 06:04:05
 </p>
 </div> <!-- footer -->
 </body>
