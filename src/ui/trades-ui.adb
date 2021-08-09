@@ -84,13 +84,15 @@ package body Trades.UI is
    -- TYPEDESC       - Sort items by type descending
    -- DURABILITYASC  - Sort items by durability ascending
    -- DURABILITYDESC - Sort items by durability descending
+   -- PRICEASC       - Sort items by price ascending
+   -- PRICEDESC      - Sort items by price descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Items_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
-      NONE) with
+      PRICEASC, PRICEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1126,14 +1128,17 @@ package body Trades.UI is
          Name: Unbounded_String;
          IType: Unbounded_String;
          Damage: Float;
+         Price: Natural;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
       Indexes_List: Positive_Container.Vector;
       BaseCargo: BaseCargo_Container.Vector;
-      BaseCargoIndex: Natural;
-      ProtoIndex: Unbounded_String;
+      BaseCargoIndex, Price: Natural;
+      ProtoIndex, BaseType: Unbounded_String;
+      EventIndex: constant Natural :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).EventIndex;
       package Items_Container is new Vectors
         (Index_Type => Positive, Element_Type => Local_Item_Data);
       Local_Items: Items_Container.Vector;
@@ -1159,6 +1164,12 @@ package body Trades.UI is
            and then Left.Damage > Right.Damage then
             return True;
          end if;
+         if Items_Sort_Order = PRICEASC and then Left.Price < Right.Price then
+            return True;
+         end if;
+         if Items_Sort_Order = PRICEDESC and then Left.Price > Right.Price then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -1182,6 +1193,12 @@ package body Trades.UI is
             else
                Items_Sort_Order := DURABILITYASC;
             end if;
+         when 4 =>
+            if Items_Sort_Order = PRICEASC then
+               Items_Sort_Order := PRICEDESC;
+            else
+               Items_Sort_Order := PRICEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1190,8 +1207,10 @@ package body Trades.UI is
       end if;
       if BaseIndex > 0 then
          BaseCargo := SkyBases(BaseIndex).Cargo;
+         BaseType := SkyBases(BaseIndex).BaseType;
       else
          BaseCargo := TraderCargo;
+         BaseType := To_Unbounded_String("0");
       end if;
       for I in Player_Ship.Cargo.Iterate loop
          ProtoIndex := Player_Ship.Cargo(I).ProtoIndex;
@@ -1199,6 +1218,15 @@ package body Trades.UI is
            FindBaseCargo(ProtoIndex, Player_Ship.Cargo(I).Durability);
          if BaseCargoIndex > 0 then
             Indexes_List.Append(New_Item => BaseCargoIndex);
+            Price := BaseCargo(BaseCargoIndex).Price;
+         else
+            Price := Get_Price(BaseType, ProtoIndex);
+         end if;
+         if EventIndex > 0 then
+            if Events_List(EventIndex).EType = DoublePrice
+              and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+               Price := Price * 2;
+            end if;
          end if;
          Local_Items.Append
            (New_Item =>
@@ -1210,7 +1238,7 @@ package body Trades.UI is
                Damage =>
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
-               Id => Inventory_Container.To_Index(I)));
+               Price => Price, Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
       Items_Indexes.Clear;
@@ -1222,6 +1250,13 @@ package body Trades.UI is
       for I in BaseCargo.First_Index .. BaseCargo.Last_Index loop
          if Indexes_List.Find_Index(Item => I) = 0 then
             ProtoIndex := BaseCargo(I).ProtoIndex;
+            Price := BaseCargo(I).Price;
+            if EventIndex > 0 then
+               if Events_List(EventIndex).EType = DoublePrice
+                 and then Events_List(EventIndex).ItemIndex = ProtoIndex then
+                  Price := Price * 2;
+               end if;
+            end if;
             Local_Items.Append
               (New_Item =>
                  (Name => Items_List(ProtoIndex).Name,
@@ -1232,7 +1267,7 @@ package body Trades.UI is
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),
-                  Id => I));
+                  Price => Price, Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
