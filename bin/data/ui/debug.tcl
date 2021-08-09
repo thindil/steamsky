@@ -156,18 +156,18 @@ grid [ttk::button $basesframe.update -text {Update} -command DebugUpdateBase] \
 # World options
 set worldframe [ttk::frame .debugdialog.main.world]
 grid [ttk::label $worldframe.shiplbl -text {Ship:}]
-grid [ttk::entry $worldframe.ship -width 16] -column 1 -row 0
+grid [ttk::combobox $worldframe.ship -width 20] -column 1 -row 0
 grid [ttk::label $worldframe.xlbl -text {X:}]
 grid [ttk::spinbox $worldframe.x -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 1
+   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 1
 $worldframe.x set 1
 grid [ttk::label $worldframe.ylbl -text {Y:}]
 grid [ttk::spinbox $worldframe.y -from 1 -to 1024 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 2
+   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 2
 $worldframe.y set 1
 grid [ttk::label $worldframe.durationlbl -text {Duration:}]
 grid [ttk::spinbox $worldframe.duration -from 60 -to 1000 -validate key \
-   -validatecommand {ValidateSpinbox %W %P} -width 15] -column 1 -row 3
+   -validatecommand {ValidateSpinbox %W %P} -width 20] -column 1 -row 3
 $worldframe.duration set 60
 grid [ttk::button $worldframe.addship -text {Add ship} -command DebugAddShip] \
    -columnspan 2
@@ -188,7 +188,7 @@ grid [ttk::button $worldframe.addevent -text {Add event} \
 set deleteeventframe [ttk::frame $worldframe.deleteevent]
 grid [ttk::button $deleteeventframe.deleteevent -text {Delete event} \
    -command DebugDeleteEvent]
-grid [ttk::combobox $deleteeventframe.delete -state readonly] -column 1 -row 0
+grid [ttk::combobox $deleteeventframe.delete -state readonly -width 30] -column 1 -row 0
 grid $deleteeventframe -columnspan 4 -pady {50 0}
 grid $shipframe
 wm geometry .debugdialog +[expr ([winfo vrootwidth .debugdialog] / 2) \

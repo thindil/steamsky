@@ -1110,6 +1110,13 @@ package body DebugUI is
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       ComboBox.Name := New_String(".debugdialog.main.world.item");
       configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
+      ValuesList := Null_Unbounded_String;
+      ComboBox.Name := New_String(".debugdialog.main.world.ship");
+      Load_Ships_Loop :
+      for Ship of Proto_Ships_List loop
+         Append(ValuesList, " {" & Ship.Name & "}");
+      end loop Load_Ships_Loop;
+      configure(ComboBox, "-values [list" & To_String(ValuesList) & "]");
       Tcl_Eval(Get_Context, "Refresh");
    end ShowDebugUI;
 
