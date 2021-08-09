@@ -710,23 +710,35 @@ package body Game.SaveLoad is
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
       -- Load known recipes
-      Log_Message("Loading known recipes...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading known recipes...", Message_Type => EVERYTHING,
+         New_Line => False);
       Known_Recipes.Clear;
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "recipe");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "recipe");
       Load_Known_Recipes_Loop :
-      for I in 0 .. Length(Nodes_List) - 1 loop
+      for I in 0 .. Length(List => Nodes_List) - 1 loop
          Known_Recipes.Append
            (New_Item =>
               To_Unbounded_String
-                (Get_Attribute(Item(Nodes_List, I), "index")));
+                (Source =>
+                   Get_Attribute
+                     (Elem => Item(List => Nodes_List, Index => I),
+                      Name => "index")));
       end loop Load_Known_Recipes_Loop;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load messages
-      Log_Message("Loading messages...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading messages...", Message_Type => EVERYTHING,
+         New_Line => False);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "message");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "message");
       ClearMessages;
+      Load_Messages_Block :
       declare
          Text: Unbounded_String;
          MType: Message_Type;
@@ -744,7 +756,7 @@ package body Game.SaveLoad is
                 (Integer'Value(Get_Attribute(Saved_Node, "color")));
             RestoreMessage(Text, MType, Color);
          end loop Load_Messages_Loop;
-      end;
+      end Load_Messages_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load events
       Log_Message("Loading events...", EVERYTHING, False);
