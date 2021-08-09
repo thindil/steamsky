@@ -14,70 +14,122 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ttk::frame .gameframe.paned.optionsframe
-set optionscanvas [canvas .gameframe.paned.optionsframe.canvas -yscrollcommand [list .gameframe.paned.optionsframe.scrolly set] -xscrollcommand [list .gameframe.paned.optionsframe.scrollx set]]
-pack [ttk::scrollbar .gameframe.paned.optionsframe.scrolly -orient vertical -command [list $optionscanvas yview]] -side right -fill y
+set optionscanvas [canvas .gameframe.paned.optionsframe.canvas \
+   -yscrollcommand [list .gameframe.paned.optionsframe.scrolly set] \
+   -xscrollcommand [list .gameframe.paned.optionsframe.scrollx set]]
+pack [ttk::scrollbar .gameframe.paned.optionsframe.scrolly -orient vertical \
+   -command [list $optionscanvas yview]] -side right -fill y
 pack $optionscanvas -side top -fill both
-pack [ttk::scrollbar .gameframe.paned.optionsframe.scrollx -orient horizontal -command [list $optionscanvas xview]] -fill x
+pack [ttk::scrollbar .gameframe.paned.optionsframe.scrollx -orient horizontal \
+   -command [list $optionscanvas xview]] -fill x
 SetScrollbarBindings $optionscanvas .gameframe.paned.optionsframe.scrolly
 set optionsframe [ttk::frame $optionscanvas.options]
 SetScrollbarBindings $optionsframe .gameframe.paned.optionsframe.scrolly
 # Tabs buttons
 set buttonsframe [ttk::frame $optionsframe.buttons]
-grid [ttk::radiobutton $buttonsframe.general -text General -state selected -style Radio.Toolbutton -value general -variable newtab -command ShowOptionsTab] -row 0 -column 1
-grid [ttk::radiobutton $buttonsframe.movement -text {Movement keys} -style Radio.Toolbutton -value movement -variable newtab -command ShowOptionsTab] -row 0 -column 2
-grid [ttk::radiobutton $buttonsframe.menu -text {Menu keys} -style Radio.Toolbutton -value menu -variable newtab -command ShowOptionsTab] -row 0 -column 3
-grid [ttk::radiobutton $buttonsframe.map -text {Map keys} -style Radio.Toolbutton -value map -variable newtab -command ShowOptionsTab] -row 0 -column 4
-grid [ttk::radiobutton $buttonsframe.interface -text Interface -style Radio.Toolbutton -value interface -variable newtab -command ShowOptionsTab] -row 0 -column 5
-grid [ttk::radiobutton $buttonsframe.info -text Info -style Radio.Toolbutton -value info -variable newtab -command ShowOptionsTab] -row 0 -column 6
+grid [ttk::radiobutton $buttonsframe.general -text General -state selected \
+   -style Radio.Toolbutton -value general -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 1
+grid [ttk::radiobutton $buttonsframe.movement -text {Movement keys} \
+   -style Radio.Toolbutton -value movement -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 2
+grid [ttk::radiobutton $buttonsframe.menu -text {Menu keys} \
+   -style Radio.Toolbutton -value menu -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 3
+grid [ttk::radiobutton $buttonsframe.map -text {Map keys} \
+   -style Radio.Toolbutton -value map -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 4
+grid [ttk::radiobutton $buttonsframe.interface -text Interface \
+   -style Radio.Toolbutton -value interface -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 5
+grid [ttk::radiobutton $buttonsframe.info -text Info \
+   -style Radio.Toolbutton -value info -variable newtab \
+   -command ShowOptionsTab] -row 0 -column 6
 grid $buttonsframe -sticky w -padx 5 -pady 5
 # General options
 set goptions [ttk::frame $optionsframe.general]
-grid [ttk::label $goptions.lbl1 -text {Auto rest when crew is tired:}] -sticky w
-tooltip::tooltip $goptions.lbl1 {Wait for crew is rested when pilot or engineer are too tired to work.}
+grid [ttk::label $goptions.lbl1 -text {Auto rest when crew is tired:}] \
+   -sticky w
+tooltip::tooltip $goptions.lbl1 \
+   {Wait for crew is rested when pilot or engineer are too tired to work.}
 grid [ttk::checkbutton $goptions.autorest] -row 0 -column 1 -sticky w
-tooltip::tooltip $goptions.autorest {Wait for crew is rested when pilot or engineer are too tired to work.}
-grid [ttk::label $goptions.lbl2 -text {Default speed after undocking:}] -sticky w
+tooltip::tooltip $goptions.autorest \
+   {Wait for crew is rested when pilot or engineer are too tired to work.}
+grid [ttk::label $goptions.lbl2 -text {Default speed after undocking:}] \
+   -sticky w
 tooltip::tooltip $goptions.lbl2 {Default speed of ship after undock from base.}
-grid [ttk::combobox $goptions.speed -state readonly -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] -width 10] -row 1 -column 1 -sticky w
-tooltip::tooltip $goptions.speed {Default speed of ship after undock from base.}
-grid [ttk::label $goptions.lbl3 -text {Auto center map after set destination:}] -sticky w
-tooltip::tooltip $goptions.lbl3 {After set destination for ship, center map on ship.}
+grid [ttk::combobox $goptions.speed -state readonly \
+   -values [list {Full stop} {Quarted speed} {Half speed} {Full speed}] \
+   -width 10] -row 1 -column 1 -sticky w
+tooltip::tooltip $goptions.speed \
+   {Default speed of ship after undock from base.}
+grid [ttk::label $goptions.lbl3 \
+   -text {Auto center map after set destination:}] -sticky w
+tooltip::tooltip $goptions.lbl3 \
+   {After set destination for ship, center map on ship.}
 grid [ttk::checkbutton $goptions.autocenter] -row 2 -column 1 -sticky w
-tooltip::tooltip $goptions.autocenter {After set destination for ship, center map on ship.}
-grid [ttk::label $goptions.lbl4 -text {Auto set base after finished mission:}] -sticky w
-tooltip::tooltip $goptions.lbl4 "After finished mission, set skybase from which\nmission was taken as a destination for ship."
+tooltip::tooltip $goptions.autocenter \
+   {After set destination for ship, center map on ship.}
+grid [ttk::label $goptions.lbl4 -text {Auto set base after finished mission:}] \
+   -sticky w
+tooltip::tooltip $goptions.lbl4 \
+   "After finished mission, set skybase from which\nmission was taken as a destination for ship."
 grid [ttk::checkbutton $goptions.autoreturn] -row 3 -column 1 -sticky w
-tooltip::tooltip $goptions.autoreturn "After finished mission, set skybase from\nwhich mission was taken as a destination for ship."
+tooltip::tooltip $goptions.autoreturn \
+   "After finished mission, set skybase from\nwhich mission was taken as a destination for ship."
 grid [ttk::label $goptions.lbl5 -text {Auto finish missions:}] -sticky w
-tooltip::tooltip $goptions.lbl5 {Auto finish missions when ship is near corresponding skybase.}
+tooltip::tooltip $goptions.lbl5 \
+   {Auto finish missions when ship is near corresponding skybase.}
 grid [ttk::checkbutton $goptions.autofinish] -row 4 -column 1 -sticky w
-tooltip::tooltip $goptions.autofinish {Auto finish missions when ship is near corresponding skybase.}
+tooltip::tooltip $goptions.autofinish \
+   {Auto finish missions when ship is near corresponding skybase.}
 grid [ttk::label $goptions.lbl6 -text {Auto ask for bases:}] -sticky w
-tooltip::tooltip $goptions.lbl6 {Auto ask for bases when ship end docking to bases.}
+tooltip::tooltip $goptions.lbl6 \
+   {Auto ask for bases when ship end docking to bases.}
 grid [ttk::checkbutton $goptions.autoaskforbases] -row 5 -column 1 -sticky w
-tooltip::tooltip $goptions.autoaskforbases {Auto ask for bases when ship end docking to bases.}
+tooltip::tooltip $goptions.autoaskforbases \
+   {Auto ask for bases when ship end docking to bases.}
 grid [ttk::label $goptions.lbl7 -text {Auto ask for events:}] -sticky w
-tooltip::tooltip $goptions.lbl7 {Auto ask for events when ship end docking to bases.}
+tooltip::tooltip $goptions.lbl7 \
+   {Auto ask for events when ship end docking to bases.}
 grid [ttk::checkbutton $goptions.autoaskforevents] -row 6 -column 1 -sticky w
-tooltip::tooltip $goptions.autoaskforevents {Auto ask for events when ship end docking to bases.}
+tooltip::tooltip $goptions.autoaskforevents \
+   {Auto ask for events when ship end docking to bases.}
 grid [ttk::label $goptions.lbl8 -text {Low level of fuel:}] -sticky w
-tooltip::tooltip $goptions.lbl8 "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
-grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 7 -column 1 -sticky w
-tooltip::tooltip $goptions.fuel "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
+tooltip::tooltip $goptions.lbl8 \
+   "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
+grid [ttk::spinbox $goptions.fuel -from 1 -to 10000 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 7 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.fuel \
+   "Amount of fuel below which you will see warning about\nlow level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl9 -text {Low level of drinks:}] -sticky w
-tooltip::tooltip $goptions.lbl9 "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 -sticky w
-tooltip::tooltip $goptions.drinks "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
+tooltip::tooltip $goptions.lbl9 \
+   "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
+grid [ttk::spinbox $goptions.drinks -from 1 -to 10000 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.drinks \
+   "Amount of drinks below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl10 -text {Low level of food:}] -sticky w
-tooltip::tooltip $goptions.lbl10 "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
-grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 -sticky w
-tooltip::tooltip $goptions.food "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
+tooltip::tooltip $goptions.lbl10 \
+   "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
+grid [ttk::spinbox $goptions.food -from 1 -to 10000 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.food \
+   "Amount of food below which you will see warning\nabout low level of. Enter value between 1 and 10 000."
 grid [ttk::label $goptions.lbl11 -text {Stop auto movement:}] -sticky w
-tooltip::tooltip $goptions.lbl11 "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
-grid [ttk::combobox $goptions.automovestop -state readonly -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10] -row 10 -column 1 -sticky w
-tooltip::tooltip $goptions.automovestop "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
+tooltip::tooltip $goptions.lbl11 \
+   "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
+grid [ttk::combobox $goptions.automovestop -state readonly \
+   -values [list {Never} {Any ship} {Friendly ship} {Enemy ship}] -width 10]\
+   -row 10 -column 1 -sticky w
+tooltip::tooltip $goptions.automovestop \
+   "Set when auto move ship should stop: never,\non meet any ship, on meet friendly ship or\non meet enemy ship."
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}] -sticky w
-tooltip::tooltip $goptions.lbl12 "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
+tooltip::tooltip $goptions.lbl12 \
+   "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 -sticky w
 tooltip::tooltip $goptions.messageslimit "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}] -sticky w
