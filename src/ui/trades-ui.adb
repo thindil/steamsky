@@ -86,13 +86,15 @@ package body Trades.UI is
    -- DURABILITYDESC - Sort items by durability descending
    -- PRICEASC       - Sort items by price ascending
    -- PRICEDESC      - Sort items by price descending
+   -- PROFITASC      - Sort items by profit ascending
+   -- PROFITDESC     - Sort items by profit descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Items_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
-      PRICEASC, PRICEDESC, NONE) with
+      PRICEASC, PRICEDESC, PROFITASC, PROFITDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1129,6 +1131,7 @@ package body Trades.UI is
          IType: Unbounded_String;
          Damage: Float;
          Price: Natural;
+         Profit: Integer;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -1170,6 +1173,14 @@ package body Trades.UI is
          if Items_Sort_Order = PRICEDESC and then Left.Price > Right.Price then
             return True;
          end if;
+         if Items_Sort_Order = PROFITASC
+           and then Left.Profit < Right.Profit then
+            return True;
+         end if;
+         if Items_Sort_Order = PROFITDESC
+           and then Left.Profit > Right.Profit then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -1198,6 +1209,12 @@ package body Trades.UI is
                Items_Sort_Order := PRICEDESC;
             else
                Items_Sort_Order := PRICEASC;
+            end if;
+         when 5 =>
+            if Items_Sort_Order = PROFITASC then
+               Items_Sort_Order := PROFITDESC;
+            else
+               Items_Sort_Order := PROFITASC;
             end if;
          when others =>
             null;
@@ -1238,7 +1255,8 @@ package body Trades.UI is
                Damage =>
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
-               Price => Price, Id => Inventory_Container.To_Index(I)));
+               Price => Price, Profit => Price - Player_Ship.Cargo(I).Price,
+               Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
       Items_Indexes.Clear;
@@ -1267,7 +1285,7 @@ package body Trades.UI is
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),
-                  Price => Price, Id => I));
+                  Price => Price, Profit => -(Price), Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
