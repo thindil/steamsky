@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+- Updated debug interface
+
 ## [6.4] - 2021-08-08
 
 ### Added
