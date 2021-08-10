@@ -741,25 +741,33 @@ package body Game.SaveLoad is
       Load_Messages_Block :
       declare
          Text: Unbounded_String;
-         MType: Message_Type;
+         M_Type: Message_Type;
          Color: Message_Color;
       begin
          Load_Messages_Loop :
-         for I in 0 .. Length(Nodes_List) - 1 loop
-            Saved_Node := Item(Nodes_List, I);
-            Text := To_Unbounded_String(Node_Value(First_Child(Saved_Node)));
-            MType :=
+         for I in 0 .. Length(List => Nodes_List) - 1 loop
+            Saved_Node := Item(List => Nodes_List, Index => I);
+            Text :=
+              To_Unbounded_String
+                (Source => Node_Value(N => First_Child(N => Saved_Node)));
+            M_Type :=
               Message_Type'Val
-                (Integer'Value(Get_Attribute(Saved_Node, "type")));
+                (Integer'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
             Color :=
               Message_Color'Val
-                (Integer'Value(Get_Attribute(Saved_Node, "color")));
-            RestoreMessage(Text, MType, Color);
+                (Integer'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "color")));
+            RestoreMessage(Message => Text, MType => M_Type, Color => Color);
          end loop Load_Messages_Loop;
       end Load_Messages_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load events
-      Log_Message("Loading events...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading events...", Message_Type => EVERYTHING,
+         New_Line => False);
       Events_List.Clear;
       Nodes_List :=
         DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "event");
