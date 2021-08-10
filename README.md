@@ -65,6 +65,9 @@ To build(works on Linux and Windows too) you need:
    version of the library or above. Earlier versions will not work due to lack
    of some bindings and bugs.
 
+* Additionally, the game need a couple of other libraries to run, they are
+  listed in the section *Libraries needed to run the game* below.
+
 If you have all the required packages, navigate to the main directory(where
 this file is) to compile:
 
