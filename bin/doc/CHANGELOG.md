@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Updated debug interface
+- Updated README.md
 
 ## [6.4] - 2021-08-08
 
