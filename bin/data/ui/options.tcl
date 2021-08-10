@@ -130,20 +130,36 @@ tooltip::tooltip $goptions.automovestop \
 grid [ttk::label $goptions.lbl12 -text {Messages limit:}] -sticky w
 tooltip::tooltip $goptions.lbl12 \
    "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
-grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 -sticky w
-tooltip::tooltip $goptions.messageslimit "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
+grid [ttk::spinbox $goptions.messageslimit -from 10 -to 5000 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 11 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.messageslimit \
+   "Amount of messages stored in game. If new message arrive\nwhen limit is reached, oldest message will be deleted. Enter\nvalue between 10 and 5000."
 grid [ttk::label $goptions.lbl13 -text {Saved messages:}] -sticky w
-tooltip::tooltip $goptions.lbl13 "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
-grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 12 -column 1 -sticky w
-tooltip::tooltip $goptions.savedmessages "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
+tooltip::tooltip $goptions.lbl13 \
+   "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
+grid [ttk::spinbox $goptions.savedmessages -from 5 -to 200 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 12 -column 1 \
+   -sticky w
+tooltip::tooltip $goptions.savedmessages \
+   "Maximum amount of last messages saved to file.\nEnter value between 5 and 200."
 grid [ttk::label $goptions.lbl14 -text {Messages order:}] -sticky w
-tooltip::tooltip $goptions.lbl14 "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
-grid [ttk::combobox $goptions.messagesorder -state readonly -values [list {Older messages first} {Newer messages first}] -width 16] -row 13 -column 1 -sticky w
-tooltip::tooltip $goptions.messagesorder "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
+tooltip::tooltip $goptions.lbl14 \
+   "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
+grid [ttk::combobox $goptions.messagesorder -state readonly \
+   -values [list {Older messages first} {Newer messages first}] -width 16] \
+   -row 13 -column 1 -sticky w
+tooltip::tooltip $goptions.messagesorder \
+   "In what order show messages in game. If Older first\nwill be select, then older messages will appear at top\nof the lists. Otherwise newer messages will be at top."
 grid [ttk::label $goptions.lbl15 -text {Autosave game:}] -sticky w
-tooltip::tooltip $goptions.lbl15 {How often game should be automatically saved to disk.}
-grid [ttk::combobox $goptions.autosave -state readonly -values [list {Never} {After dock to base} {After undock from base} {Every game day} {Every game month} {Every game year}] -width 18] -row 14 -column 1 -sticky w
-tooltip::tooltip $goptions.autosave {How often game should be automatically saved to disk.}
+tooltip::tooltip $goptions.lbl15 \
+   {How often game should be automatically saved to disk.}
+grid [ttk::combobox $goptions.autosave -state readonly \
+   -values [list {Never} {After dock to base} {After undock from base} \
+   {Every game day} {Every game month} {Every game year}] -width 18] \
+   -row 14 -column 1 -sticky w
+tooltip::tooltip $goptions.autosave \
+   {How often game should be automatically saved to disk.}
 SetScrollbarBindings $goptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 16} {incr i} {
    SetScrollbarBindings $goptions.lbl$i .gameframe.paned.optionsframe.scrolly
@@ -153,8 +169,25 @@ set specialkey {}
 # Set proper shortcut, validate it and check if it is not set somewhere
 proc SetShortcut {field key} {
    global specialkey moveoptions menuoptions mapoptions ioptions
-   set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright $moveoptions.left $moveoptions.wait $moveoptions.right $moveoptions.downleft $moveoptions.down $moveoptions.downright $moveoptions.moveto $moveoptions.fullstop $moveoptions.quarterspeed $moveoptions.halfspeed $moveoptions.fullspeed $menuoptions.shipinfo $menuoptions.orders $menuoptions.crafts $menuoptions.messages $menuoptions.knowledge $menuoptions.waitorders $menuoptions.gamestats $menuoptions.help $menuoptions.gameoptions $menuoptions.quit $menuoptions.resign $menuoptions.menu $mapoptions.center $mapoptions.centerhomebase $mapoptions.mapleft $mapoptions.mapright $mapoptions.mapup $mapoptions.mapdown $mapoptions.mapupleft $mapoptions.mapupright $mapoptions.mapdownleft $mapoptions.mapdownright $mapoptions.cursorupleft $mapoptions.cursorup $mapoptions.cursorupright $mapoptions.cursorleft $mapoptions.cursorright $mapoptions.cursordownleft $mapoptions.cursordown $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
-   if {$key == "Control_L" || $key == "Control_R" || $key == "Alt_L" || $key == "Alt_R" || $key == "Shift_L" || $key == "Shift_R"} {
+   set fields [list $moveoptions.upleft $moveoptions.up $moveoptions.upright \
+      $moveoptions.left $moveoptions.wait $moveoptions.right \
+      $moveoptions.downleft $moveoptions.down $moveoptions.downright \
+      $moveoptions.moveto $moveoptions.fullstop $moveoptions.quarterspeed \
+      $moveoptions.halfspeed $moveoptions.fullspeed $menuoptions.shipinfo \
+      $menuoptions.orders $menuoptions.crafts $menuoptions.messages \
+      $menuoptions.knowledge $menuoptions.waitorders $menuoptions.gamestats \
+      $menuoptions.help $menuoptions.gameoptions $menuoptions.quit \
+      $menuoptions.resign $menuoptions.menu $mapoptions.center \
+      $mapoptions.centerhomebase $mapoptions.mapleft $mapoptions.mapright \
+      $mapoptions.mapup $mapoptions.mapdown $mapoptions.mapupleft \
+      $mapoptions.mapupright $mapoptions.mapdownleft $mapoptions.mapdownright \
+      $mapoptions.cursorupleft $mapoptions.cursorup $mapoptions.cursorupright \
+      $mapoptions.cursorleft $mapoptions.cursorright \
+      $mapoptions.cursordownleft $mapoptions.cursordown \
+      $mapoptions.cursordownright $mapoptions.clickmouse $mapoptions.zoomin \
+      $mapoptions.zoomout $mapoptions.mapoptions $ioptions.fullscreenkey]
+   if {$key == "Control_L" || $key == "Control_R" || $key == "Alt_L" || \
+      $key == "Alt_R" || $key == "Shift_L" || $key == "Shift_R"} {
       set specialkey [string range $key 0 [expr [string length $key] - 3]]
       return
    }
@@ -183,57 +216,80 @@ proc SetShortcut {field key} {
 }
 set moveoptions [ttk::frame $optionsframe.movement]
 grid [ttk::label $moveoptions.lbl1 -text {Move ship up/left:}] -sticky w
-tooltip::tooltip $moveoptions.lbl1 "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl1 \
+   "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.upleft -width 15] -row 0 -column 1 -sticky w
-tooltip::tooltip $moveoptions.upleft "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.upleft \
+   "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.upleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl2 -text {Move ship up:}] -sticky w
-tooltip::tooltip $moveoptions.lbl2 "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl2 \
+   "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.up -width 15] -row 1 -column 1 -sticky w
-tooltip::tooltip $moveoptions.up "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.up \
+   "Key used to move ship up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.up <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl3 -text {Move ship up/right:}] -sticky w
-tooltip::tooltip $moveoptions.lbl3 "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl3 \
+   "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.upright -width 15] -row 2 -column 1 -sticky w
-tooltip::tooltip $moveoptions.upright "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.upright \
+   "Key used to move ship up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.upright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl4 -text {Move ship left:}] -sticky w
-tooltip::tooltip $moveoptions.lbl4 "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl4 \
+   "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.left -width 15] -row 3 -column 1 -sticky w
-tooltip::tooltip $moveoptions.left "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.left \
+   "Key used to move ship left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.left <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}] -sticky w
-tooltip::tooltip $moveoptions.lbl5 "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::label $moveoptions.lbl5 -text {Wait 1 minute or move 1 field:}] \
+   -sticky w
+tooltip::tooltip $moveoptions.lbl5 \
+   "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.wait -width 15] -row 4 -column 1 -sticky w
-tooltip::tooltip $moveoptions.wait "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.wait \
+   "Key used to wait 1 minute or move 1 field. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.wait <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl6 -text {Move ship right:}] -sticky w
-tooltip::tooltip $moveoptions.lbl6 "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl6 \
+   "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.right -width 15] -row 5 -column 1 -sticky w
-tooltip::tooltip $moveoptions.right "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.right \
+   "Key used to move ship right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.right <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl7 -text {Move ship down/left:}] -sticky w
-tooltip::tooltip $moveoptions.lbl7 "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl7 \
+   "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.downleft -width 15] -row 6 -column 1 -sticky w
-tooltip::tooltip $moveoptions.downleft "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.downleft \
+   "Key used to move ship down and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.downleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl8 -text {Move ship down:}] -sticky w
-tooltip::tooltip $moveoptions.lbl8 "Key used to move ship down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl8 \
+   "Key used to move ship down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.down -width 15] -row 7 -column 1 -sticky w
-tooltip::tooltip $moveoptions.down "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.down \
+   "Key used to move ship up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.down <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl9 -text {Move ship down/right:}] -sticky w
-tooltip::tooltip $moveoptions.lbl9 "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl9 \
+   "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.downright -width 15] -row 8 -column 1 -sticky w
-tooltip::tooltip $moveoptions.downright "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.downright \
+   "Key used to move ship down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.downright <KeyRelease> {SetShortcut %W %K}
-grid [ttk::label $moveoptions.lbl10 -text {Move ship to destination:}] -sticky w
-tooltip::tooltip $moveoptions.lbl10 "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::label $moveoptions.lbl10 -text {Move ship to destination:}] \
+   -sticky w
+tooltip::tooltip $moveoptions.lbl10 \
+   "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.moveto -width 15] -row 9 -column 1 -sticky w
-tooltip::tooltip $moveoptions.moveto "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.moveto \
+   "Key used to move ship its destination. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.moveto <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $moveoptions.lbl11 -text {Set full stop for ship:}] -sticky w
-tooltip::tooltip $moveoptions.lbl11 "Key used to set full stop for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $moveoptions.lbl11 \
+   "Key used to set full stop for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $moveoptions.fullstop -width 15] -row 10 -column 1 -sticky w
 tooltip::tooltip $moveoptions.fullstop "Key used to set full stop for the ship. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $moveoptions.fullstop <KeyRelease> {SetShortcut %W %K}
