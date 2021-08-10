@@ -286,9 +286,7 @@ package body Trades.UI is
          Profit := Price - Player_Ship.Cargo(I).Price;
          BaseAmount := 0;
          if BaseCargoIndex > 0 and Is_Buyable(BaseType, ProtoIndex) then
-            BaseAmount :=
-              (if BaseIndex = 0 then TraderCargo(BaseCargoIndex).Amount
-               else SkyBases(BaseIndex).Cargo(BaseCargoIndex).Amount);
+            BaseAmount := BaseCargo(BaseCargoIndex).Amount;
          end if;
          AddButton
            (TradeTable, To_String(ItemName), "Show available options for item",
