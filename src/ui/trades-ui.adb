@@ -88,13 +88,18 @@ package body Trades.UI is
    -- PRICEDESC      - Sort items by price descending
    -- PROFITASC      - Sort items by profit ascending
    -- PROFITDESC     - Sort items by profit descending
+   -- WEIGHTASC      - Sort items by weight ascending
+   -- WEIGHTDESC     - Sort items by weight descending
+   -- OWNEDASC       - Sort items by owned amount ascending
+   -- OWNEDDESC      - Sort items by owned amount descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Items_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
-      PRICEASC, PRICEDESC, PROFITASC, PROFITDESC, NONE) with
+      PRICEASC, PRICEDESC, PROFITASC, PROFITDESC, WEIGHTASC, WEIGHTDESC,
+      OWNEDASC, OWNEDDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1132,6 +1137,8 @@ package body Trades.UI is
          Damage: Float;
          Price: Natural;
          Profit: Integer;
+         Weight: Positive;
+         Owned: Natural;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -1181,6 +1188,20 @@ package body Trades.UI is
            and then Left.Profit > Right.Profit then
             return True;
          end if;
+         if Items_Sort_Order = WEIGHTASC
+           and then Left.Weight < Right.Weight then
+            return True;
+         end if;
+         if Items_Sort_Order = WEIGHTDESC
+           and then Left.Weight > Right.Weight then
+            return True;
+         end if;
+         if Items_Sort_Order = OWNEDASC and then Left.Owned < Right.Owned then
+            return True;
+         end if;
+         if Items_Sort_Order = OWNEDDESC and then Left.Owned > Right.Owned then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -1215,6 +1236,18 @@ package body Trades.UI is
                Items_Sort_Order := PROFITDESC;
             else
                Items_Sort_Order := PROFITASC;
+            end if;
+         when 6 =>
+            if Items_Sort_Order = WEIGHTASC then
+               Items_Sort_Order := WEIGHTDESC;
+            else
+               Items_Sort_Order := WEIGHTASC;
+            end if;
+         when 7 =>
+            if Items_Sort_Order = OWNEDASC then
+               Items_Sort_Order := OWNEDDESC;
+            else
+               Items_Sort_Order := OWNEDASC;
             end if;
          when others =>
             null;
@@ -1256,6 +1289,8 @@ package body Trades.UI is
                  Float(Player_Ship.Cargo(I).Durability) /
                  Float(Default_Item_Durability),
                Price => Price, Profit => Price - Player_Ship.Cargo(I).Price,
+               Weight => Items_List(ProtoIndex).Weight,
+               Owned => Player_Ship.Cargo(I).Amount,
                Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
@@ -1285,7 +1320,9 @@ package body Trades.UI is
                   Damage =>
                     Float(BaseCargo(I).Durability) /
                     Float(Default_Item_Durability),
-                  Price => Price, Profit => -(Price), Id => I));
+                  Price => Price, Profit => -(Price),
+                  Weight => Items_List(ProtoIndex).Weight, Owned => 0,
+                  Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
