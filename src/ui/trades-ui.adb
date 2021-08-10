@@ -92,6 +92,8 @@ package body Trades.UI is
    -- WEIGHTDESC     - Sort items by weight descending
    -- OWNEDASC       - Sort items by owned amount ascending
    -- OWNEDDESC      - Sort items by owned amount descending
+   -- AVAILABLEASC   - Sort items by available amount ascending
+   -- AVAILABLEDESC  - Sort items by available amount descending
    -- NONE           - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
@@ -99,7 +101,7 @@ package body Trades.UI is
    type Items_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, DURABILITYASC, DURABILITYDESC,
       PRICEASC, PRICEDESC, PROFITASC, PROFITDESC, WEIGHTASC, WEIGHTDESC,
-      OWNEDASC, OWNEDDESC, NONE) with
+      OWNEDASC, OWNEDDESC, AVAILABLEASC, AVAILABLEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1139,6 +1141,7 @@ package body Trades.UI is
          Profit: Integer;
          Weight: Positive;
          Owned: Natural;
+         Available: Natural;
          Id: Positive;
       end record;
       BaseIndex: constant Natural :=
@@ -1202,6 +1205,14 @@ package body Trades.UI is
          if Items_Sort_Order = OWNEDDESC and then Left.Owned > Right.Owned then
             return True;
          end if;
+         if Items_Sort_Order = AVAILABLEASC
+           and then Left.Available < Right.Available then
+            return True;
+         end if;
+         if Items_Sort_Order = AVAILABLEDESC
+           and then Left.Available > Right.Available then
+            return True;
+         end if;
          return False;
       end "<";
       package Sort_Items is new Items_Container.Generic_Sorting;
@@ -1249,6 +1260,12 @@ package body Trades.UI is
             else
                Items_Sort_Order := OWNEDASC;
             end if;
+         when 8 =>
+            if Items_Sort_Order = AVAILABLEASC then
+               Items_Sort_Order := AVAILABLEDESC;
+            else
+               Items_Sort_Order := AVAILABLEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1291,6 +1308,9 @@ package body Trades.UI is
                Price => Price, Profit => Price - Player_Ship.Cargo(I).Price,
                Weight => Items_List(ProtoIndex).Weight,
                Owned => Player_Ship.Cargo(I).Amount,
+               Available =>
+                 (if BaseCargoIndex > 0 then BaseCargo(BaseCargoIndex).Amount
+                  else 0),
                Id => Inventory_Container.To_Index(I)));
       end loop;
       Sort_Items.Sort(Local_Items);
@@ -1322,7 +1342,7 @@ package body Trades.UI is
                     Float(Default_Item_Durability),
                   Price => Price, Profit => -(Price),
                   Weight => Items_List(ProtoIndex).Weight, Owned => 0,
-                  Id => I));
+                  Available => BaseCargo(I).Amount, Id => I));
          end if;
       end loop;
       Sort_Items.Sort(Local_Items);
