@@ -770,23 +770,29 @@ package body Game.SaveLoad is
          New_Line => False);
       Events_List.Clear;
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "event");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "event");
+      Load_Events_Block :
       declare
-         EType: Events_Types;
+         E_Type: Events_Types;
          X, Y, Time: Integer;
          Data: Unbounded_String;
       begin
          Load_Events_Loop :
-         for I in 0 .. Length(Nodes_List) - 1 loop
-            Saved_Node := Item(Nodes_List, I);
-            EType :=
+         for I in 0 .. Length(List => Nodes_List) - 1 loop
+            Saved_Node := Item(List => Nodes_List, Index => I);
+            E_Type :=
               Events_Types'Val
-                (Integer'Value(Get_Attribute(Saved_Node, "type")));
-            X := Integer'Value(Get_Attribute(Saved_Node, "x"));
-            Y := Integer'Value(Get_Attribute(Saved_Node, "y"));
-            Time := Integer'Value(Get_Attribute(Saved_Node, "time"));
-            Data := To_Unbounded_String(Get_Attribute(Saved_Node, "data"));
-            case EType is
+                (Integer'Value
+                   (Get_Attribute(Elem => Saved_Node, Name => "type")));
+            X := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "x"));
+            Y := Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "y"));
+            Time :=
+              Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "time"));
+            Data :=
+              To_Unbounded_String
+                (Get_Attribute(Elem => Saved_Node, Name => "data"));
+            case E_Type is
                when EnemyShip =>
                   Events_List.Append
                     (New_Item =>
@@ -801,7 +807,7 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (EType => Disease, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                        Data => Integer'Value(To_String(Source => Data))));
                when DoublePrice =>
                   Events_List.Append
                     (New_Item =>
@@ -811,7 +817,7 @@ package body Game.SaveLoad is
                   Events_List.Append
                     (New_Item =>
                        (EType => FullDocks, SkyX => X, SkyY => Y, Time => Time,
-                        Data => Integer'Value(To_String(Data))));
+                        Data => Integer'Value(To_String(Source => Data))));
                when EnemyPatrol =>
                   Events_List.Append
                     (New_Item =>
@@ -834,7 +840,7 @@ package body Game.SaveLoad is
               .EventIndex :=
               I + 1;
          end loop Load_Events_Loop;
-      end;
+      end Load_Events_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load game statistics
       Log_Message("Loading game statistics...", EVERYTHING, False);
