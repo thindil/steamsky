@@ -992,12 +992,14 @@ package body Bases.ShipyardUI is
    -- NAMEDESC   - Sort modules by name descending
    -- TYPEASC    - Sort modules by type ascending
    -- TYPEDESC   - Sort modules by type descending
+   -- SIZEASC    - Sort modules by size ascending
+   -- SIZEDESC   - Sort modules by size descending
    -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Modules_Sort_Orders is
-     (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, NONE) with
+     (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, SIZEASC, SIZEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1051,6 +1053,7 @@ package body Bases.ShipyardUI is
       type Local_Module_Data is record
          Name: Unbounded_String;
          MType: Unbounded_String;
+         Size: Natural;
          Id: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
@@ -1075,6 +1078,12 @@ package body Bases.ShipyardUI is
            and then Left.MType > Right.MType then
             return True;
          end if;
+         if Modules_Sort_Order = SIZEASC and then Left.Size < Right.Size then
+            return True;
+         end if;
+         if Modules_Sort_Order = SIZEDESC and then Left.Size > Right.Size then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
@@ -1094,6 +1103,12 @@ package body Bases.ShipyardUI is
             else
                Modules_Sort_Order := TYPEASC;
             end if;
+         when 3 =>
+            if Modules_Sort_Order = SIZEASC then
+               Modules_Sort_Order := SIZEDESC;
+            else
+               Modules_Sort_Order := SIZEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1107,6 +1122,9 @@ package body Bases.ShipyardUI is
                MType =>
                  To_Unbounded_String
                    (GetModuleType(BaseModules_Container.Key(I))),
+               Size =>
+                 (if Modules_List(I).MType = HULL then Modules_List(I).MaxValue
+                  else Modules_List(I).Size),
                Id => BaseModules_Container.Key(I));
             Index := Index + 1;
          end loop;
@@ -1117,6 +1135,7 @@ package body Bases.ShipyardUI is
                MType =>
                  To_Unbounded_String
                    (GetModuleType(Player_Ship.Modules(I).Proto_Index)),
+               Size => Modules_List(Player_Ship.Modules(I).Proto_Index).Size,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
