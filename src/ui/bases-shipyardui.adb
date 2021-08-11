@@ -990,11 +990,14 @@ package body Bases.ShipyardUI is
    -- OPTIONS
    -- NAMEASC    - Sort modules by name ascending
    -- NAMEDESC   - Sort modules by name descending
+   -- TYPEASC    - Sort modules by type ascending
+   -- TYPEDESC   - Sort modules by type descending
    -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Modules_Sort_Orders is
+     (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1047,6 +1050,7 @@ package body Bases.ShipyardUI is
            Natural'Value(CArgv.Arg(Argv, 2)));
       type Local_Module_Data is record
          Name: Unbounded_String;
+         MType: Unbounded_String;
          Id: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
@@ -1064,6 +1068,13 @@ package body Bases.ShipyardUI is
          if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
+         if Modules_Sort_Order = TYPEASC and then Left.MType < Right.MType then
+            return True;
+         end if;
+         if Modules_Sort_Order = TYPEDESC
+           and then Left.MType > Right.MType then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
@@ -1077,6 +1088,12 @@ package body Bases.ShipyardUI is
             else
                Modules_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Modules_Sort_Order = TYPEASC then
+               Modules_Sort_Order := TYPEDESC;
+            else
+               Modules_Sort_Order := TYPEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1087,6 +1104,9 @@ package body Bases.ShipyardUI is
          for I in Modules_List.Iterate loop
             Local_Modules(Index) :=
               (Name => Modules_List(I).Name,
+               MType =>
+                 To_Unbounded_String
+                   (GetModuleType(BaseModules_Container.Key(I))),
                Id => BaseModules_Container.Key(I));
             Index := Index + 1;
          end loop;
@@ -1094,6 +1114,9 @@ package body Bases.ShipyardUI is
          for I in Player_Ship.Modules.Iterate loop
             Local_Modules(Index) :=
               (Name => Player_Ship.Modules(I).Name,
+               MType =>
+                 To_Unbounded_String
+                   (GetModuleType(Player_Ship.Modules(I).Proto_Index)),
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
