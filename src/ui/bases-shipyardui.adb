@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Exceptions; use Ada.Exceptions;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
@@ -69,6 +70,13 @@ package body Bases.ShipyardUI is
    -- Table with info about the installed modules
    -- SOURCE
    RemoveTable: Table_Widget (5);
+   -- ****
+
+   -- ****iv* ShipyardUI/ShipyardUI.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship modules
+   -- SOURCE
+   Modules_Indexes: UnboundedString_Container.Vector;
    -- ****
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
@@ -137,7 +145,9 @@ package body Bases.ShipyardUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Cost")),
-              Get_Widget(".gameframe.paned.shipyardframe.scrolly"));
+              Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+              "SortShipyardModules install",
+              "Press mouse button to sort the modules.");
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
          RemoveTable :=
@@ -146,7 +156,9 @@ package body Bases.ShipyardUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Price")),
-              Get_Widget(".gameframe.paned.shipyardframe.scrolly"));
+              Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
+              "SortShipyardModules remove",
+              "Press mouse button to sort the modules.");
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" then
          if Argc = 1 then
             Tcl.Tk.Ada.Grid.Grid_Remove(Close_Button);
@@ -973,6 +985,132 @@ package body Bases.ShipyardUI is
       return TCL_OK;
    end Show_Shipyard_Tab_Command;
 
+   -- ****it* ShipyardUI/ShipyardUI.Modules_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the ship modules list
+   -- OPTIONS
+   -- NAMEASC    - Sort modules by name ascending
+   -- NAMEDESC   - Sort modules by name descending
+   -- NONE       - No sorting modules (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Modules_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* ShipyardUI/ShipyardUI.Default_Modules_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the player's ship's modules
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Modules_Sort_Order: constant Modules_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* ShipyardUI/ShipyardUI.Modules_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for modules list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Modules_Sort_Order: Modules_Sort_Orders := Default_Modules_Sort_Order;
+   -- ****
+
+   -- ****o* ShipyardUI/ShipyardUI.Sort_Modules_Command
+   -- FUNCTION
+   -- Sort the ship modules lists
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortShipModules x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Modules_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        Get_Column_Number
+          ((if CArgv.Arg(Argv, 1) = "install" then InstallTable
+            else RemoveTable),
+           Natural'Value(CArgv.Arg(Argv, 2)));
+      type Local_Module_Data is record
+         Name: Unbounded_String;
+         Id: Unbounded_String;
+      end record;
+      type Modules_Array is array(Positive range <>) of Local_Module_Data;
+      Local_Modules: Modules_Array
+        (1 ..
+             Positive
+               ((if CArgv.Arg(Argv, 1) = "install" then Modules_List.Length
+                 else Player_Ship.Modules.Length)));
+      Index: Positive := 1;
+      function "<"(Left, Right: Local_Module_Data) return Boolean is
+      begin
+         if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Modules_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Modules is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Module_Data,
+         Array_Type => Modules_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Modules_Sort_Order = NAMEASC then
+               Modules_Sort_Order := NAMEDESC;
+            else
+               Modules_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Modules_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      if CArgv.Arg(Argv, 1) = "install" then
+         for I in Modules_List.Iterate loop
+            Local_Modules(Index) :=
+              (Name => Modules_List(I).Name,
+               Id => BaseModules_Container.Key(I));
+            Index := Index + 1;
+         end loop;
+      else
+         for I in Player_Ship.Modules.Iterate loop
+            Local_Modules(Index) :=
+              (Name => Player_Ship.Modules(I).Name,
+               Id =>
+                 To_Unbounded_String
+                   (Positive'Image(Modules_Container.To_Index(I))));
+            Index := Index + 1;
+         end loop;
+      end if;
+      Sort_Modules(Local_Modules);
+      Modules_Indexes.Clear;
+      for Module of Local_Modules loop
+         Modules_Indexes.Append(Module.Id);
+      end loop;
+      return
+        Show_Shipyard_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
+   end Sort_Modules_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowShipyard", Show_Shipyard_Command'Access);
@@ -981,6 +1119,7 @@ package body Bases.ShipyardUI is
       AddCommand("ShowRemoveInfo", Show_Remove_Info_Command'Access);
       AddCommand("ShowShipyardModuleMenu", Show_Module_Menu_Command'Access);
       AddCommand("ShowShipyardTab", Show_Shipyard_Tab_Command'Access);
+      AddCommand("SortShipyardModules", Sort_Modules_Command'Access);
    end AddCommands;
 
 end Bases.ShipyardUI;
