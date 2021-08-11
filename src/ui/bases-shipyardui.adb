@@ -83,7 +83,7 @@ package body Bases.ShipyardUI is
    -- FUNCTION
    -- Indexes of the modules in the player's ship (to remove)
    -- SOURCE
-   Remove_Indexes: UnboundedString_Container.Vector;
+   Remove_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
@@ -288,15 +288,13 @@ package body Bases.ShipyardUI is
       UpdateTable(InstallTable);
       if Remove_Indexes.Length /= Player_Ship.Modules.Length then
          for I in Player_Ship.Modules.Iterate loop
-            Remove_Indexes.Append
-              (To_Unbounded_String
-                 (Positive'Image(Modules_Container.To_Index(I))));
+            Remove_Indexes.Append(Modules_Container.To_Index(I));
          end loop;
       end if;
       ClearTable(RemoveTable);
       Current_Row := 1;
       Load_Remove_Modules_Loop :
-      for I in Player_Ship.Modules.Iterate loop
+      for I of Remove_Indexes loop
          if Modules_List(Player_Ship.Modules(I).Proto_Index).MType /= HULL then
             if Current_Row < Start_Row then
                Current_Row := Current_Row + 1;
@@ -305,32 +303,24 @@ package body Bases.ShipyardUI is
             AddButton
               (RemoveTable, To_String(Player_Ship.Modules(I).Name),
                "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
-               1);
+               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 1);
             AddButton
               (RemoveTable, GetModuleType(Player_Ship.Modules(I).Proto_Index),
                "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
-               2);
+               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 2);
             AddButton
               (RemoveTable,
                Integer'Image
                  (Modules_List(Player_Ship.Modules(I).Proto_Index).Size),
                "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
-               3);
+               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 3);
             AddButton
               (RemoveTable,
                To_String
                  (Modules_List(Player_Ship.Modules(I).Proto_Index)
                     .RepairMaterial),
                "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
-               4);
+               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 4);
             Damage :=
               1.0 -
               Float(Player_Ship.Modules(I).Durability) /
@@ -348,9 +338,8 @@ package body Bases.ShipyardUI is
             AddButton
               (RemoveTable, Natural'Image(Cost),
                "Show available options for module",
-               "ShowShipyardModuleMenu {" &
-               Positive'Image(Modules_Container.To_Index(I)) & "} remove",
-               5, True);
+               "ShowShipyardModuleMenu {" & Positive'Image(I) & "} remove", 5,
+               True);
             exit Load_Remove_Modules_Loop when RemoveTable.Row = 26;
          end if;
          <<End_Of_Remove_Loop>>
@@ -1120,7 +1109,7 @@ package body Bases.ShipyardUI is
       else
          Remove_Indexes.Clear;
          for Module of Local_Modules loop
-            Remove_Indexes.Append(Module.Id);
+            Remove_Indexes.Append(Positive'Value(To_String(Module.Id)));
          end loop;
       end if;
       return
