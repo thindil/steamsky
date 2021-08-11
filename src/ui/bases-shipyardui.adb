@@ -72,11 +72,18 @@ package body Bases.ShipyardUI is
    RemoveTable: Table_Widget (5);
    -- ****
 
-   -- ****iv* ShipyardUI/ShipyardUI.Modules_Indexes
+   -- ****iv* ShipyardUI/ShipyardUI.Install_Indexes
    -- FUNCTION
-   -- Indexes of the player ship modules
+   -- Indexes of the available modules to install
    -- SOURCE
-   Modules_Indexes: UnboundedString_Container.Vector;
+   Install_Indexes: UnboundedString_Container.Vector;
+   -- ****
+
+   -- ****iv* ShipyardUI/ShipyardUI.Remove_Indexes
+   -- FUNCTION
+   -- Indexes of the modules in the player's ship (to remove)
+   -- SOURCE
+   Remove_Indexes: UnboundedString_Container.Vector;
    -- ****
 
    -- ****f* ShipyardUI/ShipyardUI.Show_Shipyard_Command
@@ -208,9 +215,14 @@ package body Bases.ShipyardUI is
             "-validatecommand {ShowShipyard [" & ShipyardFrame &
             ".install.options.modules current] %P}");
       end if;
+      if Install_Indexes.Length = 0 then
+         for I in Modules_List.Iterate loop
+            Install_Indexes.Append(BaseModules_Container.Key(I));
+         end loop;
+      end if;
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
-      for I in Modules_List.Iterate loop
+      for I of Install_Indexes loop
          if Modules_List(I).Price = 0 or
            SkyBases(BaseIndex).Reputation(1) < Modules_List(I).Reputation then
             goto End_Of_Loop;
@@ -238,35 +250,26 @@ package body Bases.ShipyardUI is
          AddButton
            (InstallTable, To_String(Modules_List(I).Name),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" &
-            To_String(BaseModules_Container.Key(I)) & "} install",
-            1);
+            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 1);
          AddButton
-           (InstallTable, GetModuleType(BaseModules_Container.Key(I)),
+           (InstallTable, GetModuleType(I),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" &
-            To_String(BaseModules_Container.Key(I)) & "} install",
-            2);
+            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 2);
          AddButton
            (InstallTable, Integer'Image(ModuleSize),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" &
-            To_String(BaseModules_Container.Key(I)) & "} install",
-            3, False, (if ModuleSize > MaxSize then "red" else ""));
+            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 3, False,
+            (if ModuleSize > MaxSize then "red" else ""));
          AddButton
            (InstallTable, To_String(Modules_List(I).RepairMaterial),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" &
-            To_String(BaseModules_Container.Key(I)) & "} install",
-            4);
+            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 4);
          Cost := Modules_List(I).Price;
          CountPrice(Cost, FindMember(Talk));
          AddButton
            (InstallTable, Natural'Image(Cost),
             "Show available options for module",
-            "ShowShipyardModuleMenu {" &
-            To_String(BaseModules_Container.Key(I)) & "} install",
-            5, True,
+            "ShowShipyardModuleMenu {" & To_String(I) & "} install", 5, True,
             (if
                MoneyIndex2 > 0
                and then Cost <= Player_Ship.Cargo(MoneyIndex2).Amount
@@ -283,6 +286,13 @@ package body Bases.ShipyardUI is
          (if InstallTable.Row < 26 then ""
           else "ShowShipyard " & Arguments & Positive'Image(Page + 1)));
       UpdateTable(InstallTable);
+      if Remove_Indexes.Length /= Player_Ship.Modules.Length then
+         for I in Player_Ship.Modules.Iterate loop
+            Remove_Indexes.Append
+              (To_Unbounded_String
+                 (Positive'Image(Modules_Container.To_Index(I))));
+         end loop;
+      end if;
       ClearTable(RemoveTable);
       Current_Row := 1;
       Load_Remove_Modules_Loop :
@@ -1102,10 +1112,17 @@ package body Bases.ShipyardUI is
          end loop;
       end if;
       Sort_Modules(Local_Modules);
-      Modules_Indexes.Clear;
-      for Module of Local_Modules loop
-         Modules_Indexes.Append(Module.Id);
-      end loop;
+      if CArgv.Arg(Argv, 1) = "install" then
+         Install_Indexes.Clear;
+         for Module of Local_Modules loop
+            Install_Indexes.Append(Module.Id);
+         end loop;
+      else
+         Remove_Indexes.Clear;
+         for Module of Local_Modules loop
+            Remove_Indexes.Append(Module.Id);
+         end loop;
+      end if;
       return
         Show_Shipyard_Command
           (ClientData, Interp, 2, CArgv.Empty & "ShowShipyard" & "0");
