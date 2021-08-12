@@ -613,4 +613,44 @@ package body Table is
       return 1;
    end Get_Column_Number;
 
+   procedure Update_Headers_Command(Table: Table_Widget; Command: String) is
+   begin
+      if Command'Length > 0 then
+         for I in Table.Columns_Width'Range loop
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Enter>", "{" & Table.Canvas & " configure -cursor hand1}");
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Leave>", "{" & Table.Canvas & " configure -cursor left_ptr}");
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Button-1>", "{" & Command & " %x}");
+         end loop;
+         Bind
+           (Table.Canvas, "headerback", "<Enter>",
+            "{" & Table.Canvas & " configure -cursor hand1}");
+         Bind
+           (Table.Canvas, "headerback", "<Leave>",
+            "{" & Table.Canvas & " configure -cursor left_ptr}");
+         Bind
+           (Table.Canvas, "headerback", "<Button-1>", "{" & Command & " %x}");
+      else
+         for I in Table.Columns_Width'Range loop
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Enter>", "{}");
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Leave>", "{}");
+            Bind
+              (Table.Canvas, "header" & Trim(Positive'Image(I), Left),
+               "<Button-1>", "{}");
+         end loop;
+         Bind(Table.Canvas, "headerback", "<Enter>", "{}");
+         Bind(Table.Canvas, "headerback", "<Leave>", "{}");
+         Bind(Table.Canvas, "headerback", "<Button-1>", "{}");
+      end if;
+   end Update_Headers_Command;
+
 end Table;
