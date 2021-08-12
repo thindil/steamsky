@@ -791,7 +791,7 @@ package body Game.SaveLoad is
               Integer'Value(Get_Attribute(Elem => Saved_Node, Name => "time"));
             Data :=
               To_Unbounded_String
-                (Get_Attribute(Elem => Saved_Node, Name => "data"));
+                (Source => Get_Attribute(Elem => Saved_Node, Name => "data"));
             case E_Type is
                when EnemyShip =>
                   Events_List.Append
@@ -841,14 +841,20 @@ package body Game.SaveLoad is
               I + 1;
          end loop Load_Events_Loop;
       end Load_Events_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load game statistics
-      Log_Message("Loading game statistics...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading game statistics...", Message_Type => EVERYTHING,
+         New_Line => False);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "statistics");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "statistics");
+      Load_Statistics_Block :
       declare
-         StatIndex, NodeName: Unbounded_String;
-         StatAmount: Positive;
+         Stat_Index, Nodename: Unbounded_String;
+         Stat_Amount: Positive;
       begin
          Saved_Node := Item(Nodes_List, 0);
          GameStats.BasesVisited :=
@@ -864,34 +870,34 @@ package body Game.SaveLoad is
          Child_Nodes_List := Child_Nodes(Saved_Node);
          Load_Statistics_Loop :
          for I in 0 .. Length(Child_Nodes_List) - 1 loop
-            NodeName :=
+            Nodename :=
               To_Unbounded_String(Node_Name(Item(Child_Nodes_List, I)));
-            if To_String(NodeName) /= "#text" then
-               StatIndex :=
+            if To_String(Nodename) /= "#text" then
+               Stat_Index :=
                  To_Unbounded_String
                    (Get_Attribute(Item(Child_Nodes_List, I), "index"));
-               StatAmount :=
+               Stat_Amount :=
                  Positive'Value
                    (Get_Attribute(Item(Child_Nodes_List, I), "amount"));
             end if;
-            if To_String(NodeName) = "destroyedships" then
+            if To_String(Nodename) = "destroyedships" then
                GameStats.DestroyedShips.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
-            elsif To_String(NodeName) = "finishedcrafts" then
+                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
+            elsif To_String(Nodename) = "finishedcrafts" then
                GameStats.CraftingOrders.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
-            elsif To_String(NodeName) = "finishedmissions" then
+                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
+            elsif To_String(Nodename) = "finishedmissions" then
                GameStats.FinishedMissions.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
-            elsif To_String(NodeName) = "finishedgoals" then
+                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
+            elsif To_String(Nodename) = "finishedgoals" then
                GameStats.FinishedGoals.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
-            elsif To_String(NodeName) = "killedmobs" then
+                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
+            elsif To_String(Nodename) = "killedmobs" then
                GameStats.KilledMobs.Append
-                 (New_Item => (Index => StatIndex, Amount => StatAmount));
+                 (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             end if;
          end loop Load_Statistics_Loop;
-      end;
+      end Load_Statistics_Block;
       Log_Message("done.", EVERYTHING, True, False);
       -- Load current goal
       Log_Message("Loading current goal...", EVERYTHING, False);
