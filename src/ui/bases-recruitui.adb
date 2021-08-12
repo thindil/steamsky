@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
@@ -60,6 +61,13 @@ package body Bases.RecruitUI is
    RecruitTable: Table_Widget (6);
    -- ****
 
+   -- ****iv* RecruitUI/Recruit.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the available recruits in base
+   -- SOURCE
+   Recruits_Indexes: Positive_Container.Vector;
+   -- ****
+
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
    -- Show the selected base available recruits
@@ -97,12 +105,15 @@ package body Bases.RecruitUI is
          RecruitFrame := Create(Widget_Image(RecruitFrame));
          RecruitTable :=
            CreateTable
-             (Widget_Image(RecruitFrame),
-              (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
-               To_Unbounded_String("Faction"),
-               To_Unbounded_String("Base cost"),
-               To_Unbounded_String("Highest stat"),
-               To_Unbounded_String("Highest skill")));
+             (Parent => Widget_Image(RecruitFrame),
+              Headers =>
+                (To_Unbounded_String("Name"), To_Unbounded_String("Gender"),
+                 To_Unbounded_String("Faction"),
+                 To_Unbounded_String("Base cost"),
+                 To_Unbounded_String("Highest stat"),
+                 To_Unbounded_String("Highest skill")),
+              Command => "SortRecruits",
+              Tooltip => "Press mouse button to sort the recruits.");
          Bind
            (RecruitFrame, "<Configure>",
             "{ResizeCanvas " & RecruitTable.Canvas & " %w %h}");
@@ -824,6 +835,115 @@ package body Bases.RecruitUI is
       return TCL_OK;
    end Negotiate_Command;
 
+   -- ****it* RecruitUI/RecruitUI.Recruits_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the list of available recruits in base
+   -- OPTIONS
+   -- NAMEASC    - Sort recruits by name ascending
+   -- NAMEDESC   - Sort recruits by name descending
+   -- NONE       - No sorting recruits (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Recruits_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* RecruitUI/RecruitUI.Default_Recruits_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the available recruits in base
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Recruits_Sort_Order: constant Recruits_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* RecruitUI/RecruitUI.Recruits_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for the available recruits in base
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Recruits_Sort_Order: Recruits_Sort_Orders := Default_Recruits_Sort_Order;
+   -- ****
+
+   -- ****o* RecruitUI/RecruitUI.Sort_Recruits_Command
+   -- FUNCTION
+   -- Sort the list of available recruits in base
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortRecruits x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Recruits_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Recruits_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(Argc);
+      Column: constant Positive :=
+        Get_Column_Number(RecruitTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Module_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Recruits_Array is array(Positive range <>) of Local_Module_Data;
+      BaseIndex: constant Positive :=
+        SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
+      Local_Recruits: Recruits_Array
+        (1 .. Positive(SkyBases(BaseIndex).Recruits.Length));
+      function "<"(Left, Right: Local_Module_Data) return Boolean is
+      begin
+         if Recruits_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Recruits_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Module_Data,
+         Array_Type => Recruits_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Recruits_Sort_Order = NAMEASC then
+               Recruits_Sort_Order := NAMEDESC;
+            else
+               Recruits_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Recruits_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+         Local_Recruits(Recruit_Container.To_Index(I)) :=
+           (Name => SkyBases(BaseIndex).Recruits(I).Name,
+            Id => Recruit_Container.To_Index(I));
+      end loop;
+      Sort_Recruits(Local_Recruits);
+      Recruits_Indexes.Clear;
+      for Module of Local_Recruits loop
+         Recruits_Indexes.Append(Module.Id);
+      end loop;
+      return
+        Show_Recruit_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowRecruits" & "1");
+   end Sort_Recruits_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowRecruit", Show_Recruit_Command'Access);
@@ -833,6 +953,7 @@ package body Bases.RecruitUI is
       AddCommand("Hire", Hire_Command'Access);
       AddCommand("ShowRecruitTab", Show_Recruit_Tab_Command'Access);
       AddCommand("Negotiate", Negotiate_Command'Access);
+      AddCommand("SortRecruits", Sort_Recruits_Command'Access);
    end AddCommands;
 
 end Bases.RecruitUI;
