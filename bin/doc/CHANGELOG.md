@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Added
-- Ability to sort the items during trading
+- Ability to sort the items during trading and modules in bases shipyards
 
 ### Changed
 - Updated debug interface
