@@ -996,13 +996,15 @@ package body Bases.ShipyardUI is
    -- SIZEDESC     - Sort modules by size descending
    -- MATERIALASC  - Sort modules by material ascending
    -- MATERIALDESC - Sort modules by material descending
+   -- PRICEASC     - Sort modules by price ascending
+   -- PRICEDESC    - Sort modules by price descending
    -- NONE       - No sorting modules (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Modules_Sort_Orders is
      (NAMEASC, NAMEDESC, TYPEASC, TYPEDESC, SIZEASC, SIZEDESC, MATERIALASC,
-      MATERIALDESC, NONE) with
+      MATERIALDESC, PRICEASC, PRICEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -1058,6 +1060,7 @@ package body Bases.ShipyardUI is
          MType: Unbounded_String;
          Size: Natural;
          Material: Unbounded_String;
+         Price: Positive;
          Id: Unbounded_String;
       end record;
       type Modules_Array is array(Positive range <>) of Local_Module_Data;
@@ -1067,6 +1070,8 @@ package body Bases.ShipyardUI is
                ((if CArgv.Arg(Argv, 1) = "install" then Modules_List.Length
                  else Player_Ship.Modules.Length)));
       Index: Positive := 1;
+      Cost: Natural;
+      Damage: Float;
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Modules_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -1094,6 +1099,14 @@ package body Bases.ShipyardUI is
          end if;
          if Modules_Sort_Order = MATERIALDESC
            and then Left.Material > Right.Material then
+            return True;
+         end if;
+         if Modules_Sort_Order = PRICEASC
+           and then Left.Price < Right.Price then
+            return True;
+         end if;
+         if Modules_Sort_Order = PRICEDESC
+           and then Left.Price > Right.Price then
             return True;
          end if;
          return False;
@@ -1127,6 +1140,12 @@ package body Bases.ShipyardUI is
             else
                Modules_Sort_Order := MATERIALASC;
             end if;
+         when 5 =>
+            if Modules_Sort_Order = PRICEASC then
+               Modules_Sort_Order := PRICEDESC;
+            else
+               Modules_Sort_Order := PRICEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1135,6 +1154,11 @@ package body Bases.ShipyardUI is
       end if;
       if CArgv.Arg(Argv, 1) = "install" then
          for I in Modules_List.Iterate loop
+            Cost := Modules_List(I).Price;
+            CountPrice(Cost, FindMember(Talk));
+            if Cost = 0 then
+               Cost := 1;
+            end if;
             Local_Modules(Index) :=
               (Name => Modules_List(I).Name,
                MType =>
@@ -1143,12 +1167,26 @@ package body Bases.ShipyardUI is
                Size =>
                  (if Modules_List(I).MType = HULL then Modules_List(I).MaxValue
                   else Modules_List(I).Size),
-               Material => Modules_List(I).RepairMaterial,
+               Material => Modules_List(I).RepairMaterial, Price => Cost,
                Id => BaseModules_Container.Key(I));
             Index := Index + 1;
          end loop;
       else
          for I in Player_Ship.Modules.Iterate loop
+            Damage :=
+              1.0 -
+              Float(Player_Ship.Modules(I).Durability) /
+                Float(Player_Ship.Modules(I).Max_Durability);
+            Cost :=
+              Modules_List(Player_Ship.Modules(I).Proto_Index).Price -
+              Integer
+                (Float
+                   (Modules_List(Player_Ship.Modules(I).Proto_Index).Price) *
+                 Damage);
+            if Cost = 0 then
+               Cost := 1;
+            end if;
+            CountPrice(Cost, FindMember(Talk), False);
             Local_Modules(Index) :=
               (Name => Player_Ship.Modules(I).Name,
                MType =>
@@ -1158,6 +1196,7 @@ package body Bases.ShipyardUI is
                Material =>
                  Modules_List(Player_Ship.Modules(I).Proto_Index)
                    .RepairMaterial,
+               Price => Cost,
                Id =>
                  To_Unbounded_String
                    (Positive'Image(Modules_Container.To_Index(I))));
