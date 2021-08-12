@@ -485,67 +485,97 @@ grid [ttk::label $mapoptions.lbl10 -text {Move map down/right:}] -sticky w
 tooltip::tooltip $mapoptions.lbl10 \
    "Key used to move map down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapdownright -width 15] -row 9 -column 1 -sticky w
-tooltip::tooltip $mapoptions.mapdownright "Key used to move map down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.mapdownright \
+   "Key used to move map down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapdownright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl11 -text {Move cursor up/left:}] -sticky w
-tooltip::tooltip $mapoptions.lbl11 "Key used to move cursor up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
-grid [ttk::entry $mapoptions.cursorupleft -width 15] -row 10 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorupleft "Key used to move cursor up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl11 \
+   "Key used to move cursor up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $mapoptions.cursorupleft -width 15] -row 10 -column 1 \
+   -sticky w
+tooltip::tooltip $mapoptions.cursorupleft \
+   "Key used to move cursor up and left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorupleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl12 -text {Move cursor up:}] -sticky w
-tooltip::tooltip $mapoptions.lbl12 "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl12 \
+   "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorup -width 15] -row 11 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorup "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.cursorup \
+   "Key used to move cursor up. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorup <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl13 -text {Move cursor up/right:}] -sticky w
-tooltip::tooltip $mapoptions.lbl13 "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
-grid [ttk::entry $mapoptions.cursorupright -width 15] -row 12 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorupright "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl13 \
+   "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $mapoptions.cursorupright -width 15] -row 12 -column 1 \
+   -sticky w
+tooltip::tooltip $mapoptions.cursorupright \
+   "Key used to move cursor up and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorupright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl14 -text {Move cursor left:}] -sticky w
-tooltip::tooltip $mapoptions.lbl14 "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl14 \
+   "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursorleft -width 15] -row 13 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorleft "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.cursorleft \
+   "Key used to move cursor left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl15 -text {Move cursor right:}] -sticky w
-tooltip::tooltip $mapoptions.lbl15 "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
-grid [ttk::entry $mapoptions.cursorright -width 15] -row 14 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursorright "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl15 \
+   "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $mapoptions.cursorright -width 15] -row 14 -column 1 \
+   -sticky w
+tooltip::tooltip $mapoptions.cursorright \
+   "Key used to move cursor right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursorright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl16 -text {Move cursor down/left:}] -sticky w
-tooltip::tooltip $mapoptions.lbl16 "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
-grid [ttk::entry $mapoptions.cursordownleft -width 15] -row 15 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursordownleft "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl16 \
+   "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $mapoptions.cursordownleft -width 15] -row 15 -column 1 \
+   -sticky w
+tooltip::tooltip $mapoptions.cursordownleft \
+   "Key used to move cursor down left. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordownleft <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl17 -text {Move cursor down:}] -sticky w
-tooltip::tooltip $mapoptions.lbl17 "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl17 \
+   "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.cursordown -width 15] -row 16 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursordown "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.cursordown \
+   "Key used to move cursor down. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordown <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl18 -text {Move cursor donw/right:}] -sticky w
-tooltip::tooltip $mapoptions.lbl18 "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
-grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 -sticky w
-tooltip::tooltip $mapoptions.cursordownright "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl18 \
+   "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+grid [ttk::entry $mapoptions.cursordownright -width 15] -row 17 -column 1 \
+   -sticky w
+tooltip::tooltip $mapoptions.cursordownright \
+   "Key used to move cursor down and right. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.cursordownright <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl19 -text {Press mouse button:}] -sticky w
-tooltip::tooltip $mapoptions.lbl19 "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl19 \
+   "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.clickmouse -width 15] -row 18 -column 1 -sticky w
-tooltip::tooltip $mapoptions.clickmouse "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.clickmouse \
+   "Key used to emulate mouse button. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.clickmouse <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl20 -text {Zoom in map:}] -sticky w
-tooltip::tooltip $mapoptions.lbl20 "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl20 \
+   "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.zoomin -width 15] -row 19 -column 1 -sticky w
-tooltip::tooltip $mapoptions.zoomin "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.zoomin \
+   "Key used to zoom in map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.zoomin <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl21 -text {Zoom out map:}] -sticky w
-tooltip::tooltip $mapoptions.lbl21 "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl21 \
+   "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.zoomout -width 15] -row 20 -column 1 -sticky w
-tooltip::tooltip $mapoptions.zoomout "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.zoomout \
+   "Key used to zoom out map. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.zoomout <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $mapoptions.lbl22 -text {Show move map options:}] -sticky w
-tooltip::tooltip $mapoptions.lbl22 "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.lbl22 \
+   "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 grid [ttk::entry $mapoptions.mapoptions -width 15] -row 21 -column 1 -sticky w
-tooltip::tooltip $mapoptions.mapoptions "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
+tooltip::tooltip $mapoptions.mapoptions \
+   "Key used to show move map options. Select the field\nand press the desired key. To use special key, press it\nthe first then the desired key"
 bind $mapoptions.mapoptions <KeyRelease> {SetShortcut %W %K}
 SetScrollbarBindings $mapoptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 23} {incr i} {
@@ -555,20 +585,27 @@ for {set i 1} {$i < 23} {incr i} {
 set ioptions [ttk::frame $optionsframe.interface]
 grid [ttk::label $ioptions.lbl1 -text {Interface theme:}] -sticky w
 tooltip::tooltip $ioptions.lbl1 {Select UI theme.}
-grid [ttk::combobox $ioptions.theme -state readonly -width 15] -row 0 -column 1 -sticky w
+grid [ttk::combobox $ioptions.theme -state readonly -width 15] -row 0 \
+   -column 1 -sticky w
 tooltip::tooltip $ioptions.theme {Select UI theme.}
 grid [ttk::label $ioptions.lbl2 -text {Use right mouse button:}] -sticky w
-tooltip::tooltip $ioptions.lbl2 {Use right mouse button to show various menus in the game.}
+tooltip::tooltip $ioptions.lbl2 \
+   {Use right mouse button to show various menus in the game.}
 grid [ttk::checkbutton $ioptions.rightbutton] -row 1 -column 1 -sticky w
-tooltip::tooltip $ioptions.rightbutton {Use right mouse button to show various menus in the game.}
+tooltip::tooltip $ioptions.rightbutton \
+   {Use right mouse button to show various menus in the game.}
 grid [ttk::label $ioptions.lbl3 -text {Show tooltips:}] -sticky w
-tooltip::tooltip $ioptions.lbl3 {Show help tooltips for various game elements.}
+tooltip::tooltip $ioptions.lbl3 \
+   {Show help tooltips for various game elements.}
 grid [ttk::checkbutton $ioptions.showtooltips] -row 2 -column 1 -sticky w
-tooltip::tooltip $ioptions.showtooltips {Show help tooltips for various game elements.}
+tooltip::tooltip $ioptions.showtooltips \
+   {Show help tooltips for various game elements.}
 grid [ttk::label $ioptions.lbl4 -text {Show last messages:}] -sticky w
-tooltip::tooltip $ioptions.lbl4 {Show last messages window in every place in the game.}
+tooltip::tooltip $ioptions.lbl4 \
+   {Show last messages window in every place in the game.}
 grid [ttk::checkbutton $ioptions.showmessages] -row 3 -column 1 -sticky w
-tooltip::tooltip $ioptions.showmessages {Show last messages window in every place in the game.}
+tooltip::tooltip $ioptions.showmessages \
+   {Show last messages window in every place in the game.}
 grid [ttk::label $ioptions.lbl5 -text {Full screen mode:}] -sticky w
 tooltip::tooltip $ioptions.lbl5 {Run the game in full screen mode.}
 grid [ttk::checkbutton $ioptions.fullscreen] -row 4 -column 1 -sticky w
@@ -576,32 +613,52 @@ tooltip::tooltip $ioptions.fullscreen {Run the game in full screen mode.}
 grid [ttk::label $ioptions.lbl6 -text {Full screen shortcut:}] -sticky w
 tooltip::tooltip $ioptions.lbl6 {Key used to switch full screen mode.}
 grid [ttk::entry $ioptions.fullscreenkey -width 15] -row 5 -column 1 -sticky w
-tooltip::tooltip $ioptions.fullscreenkey {Key used to switch full screen mode.}
+tooltip::tooltip $ioptions.fullscreenkey \
+   {Key used to switch full screen mode.}
 bind $ioptions.fullscreenkey <KeyRelease> {SetShortcut %W %K}
 grid [ttk::label $ioptions.lbl7 -text {Close messages after:}] -sticky w
-tooltip::tooltip $ioptions.lbl7 {Auto close game messages after that amount of seconds.}
-grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 6 -column 1 -sticky w
-tooltip::tooltip $ioptions.closemessages {Auto close game messages after that amount of seconds.}
+tooltip::tooltip $ioptions.lbl7 \
+   {Auto close game messages after that amount of seconds.}
+grid [ttk::spinbox $ioptions.closemessages -from 1 -to 60 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 6 -column 1 \
+   -sticky w
+tooltip::tooltip $ioptions.closemessages \
+   {Auto close game messages after that amount of seconds.}
 grid [ttk::label $ioptions.lbl8 -text {Show numeric values:}] -sticky w
-tooltip::tooltip $ioptions.lbl8 "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
+tooltip::tooltip $ioptions.lbl8 \
+   "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
 grid [ttk::checkbutton $ioptions.shownumbers] -row 7 -column 1 -sticky w
-tooltip::tooltip $ioptions.shownumbers "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
+tooltip::tooltip $ioptions.shownumbers \
+   "Show numeric values of many statistics, like crew\nabilities, weapons strength, etc."
 grid [ttk::label $ioptions.lbl9 -text {Size of map font:}] -sticky w
-tooltip::tooltip $ioptions.lbl9 {Size (in pixels) of font used to draw game map.}
-grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 -sticky w
+tooltip::tooltip $ioptions.lbl9 \
+   {Size (in pixels) of font used to draw game map.}
+grid [ttk::spinbox $ioptions.mapfont -from 3 -to 50 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 8 -column 1 \
+   -sticky w
 bind $ioptions.mapfont <FocusOut> {SetFonts %W}
-tooltip::tooltip $ioptions.mapfont {Size (in pixels) of font used to draw game map.}
+tooltip::tooltip $ioptions.mapfont \
+   {Size (in pixels) of font used to draw game map.}
 grid [ttk::label $ioptions.lbl10 -text {Size of help font:}] -sticky w
-tooltip::tooltip $ioptions.lbl10 {Size (in pixels) of font used mainly in help.}
-grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 -sticky w
+tooltip::tooltip $ioptions.lbl10 \
+   {Size (in pixels) of font used mainly in help.}
+grid [ttk::spinbox $ioptions.helpfont -from 3 -to 50 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 9 -column 1 \
+   -sticky w
 bind $ioptions.helpfont <FocusOut> {SetFonts %W}
-tooltip::tooltip $ioptions.helpfont {Size (in pixels) of font used mainly in help.}
+tooltip::tooltip $ioptions.helpfont \
+   {Size (in pixels) of font used mainly in help.}
 grid [ttk::label $ioptions.lbl11 -text {Size of interface font:}] -sticky w
-tooltip::tooltip $ioptions.lbl11 {Size (in pixels) of font used in interface (for example, here).}
-grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 -sticky w
+tooltip::tooltip $ioptions.lbl11 \
+   {Size (in pixels) of font used in interface (for example, here).}
+grid [ttk::spinbox $ioptions.interfacefont -from 3 -to 50 -validate key \
+   -validatecommand {ValidateSpinbox %W %P} -width 5] -row 10 -column 1 \
+   -sticky w
 bind $ioptions.interfacefont <FocusOut> {SetFonts %W}
-tooltip::tooltip $ioptions.interfacefont {Size (in pixels) of font used in interface (for example, here).}
-grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} -command SetDefaultFonts] -columnspan 2
+tooltip::tooltip $ioptions.interfacefont \
+   {Size (in pixels) of font used in interface (for example, here).}
+grid [ttk::button $ioptions.setdefault -text {Set default size for fonts} \
+   -command SetDefaultFonts] -columnspan 2
 SetScrollbarBindings $ioptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 12} {incr i} {
    SetScrollbarBindings $ioptions.lbl$i .gameframe.paned.optionsframe.scrolly
@@ -613,20 +670,27 @@ tooltip::tooltip $infooptions.lbl1 {Place where all standard game data are.}
 grid [ttk::label $infooptions.data -wraplength 500] -row 0 -column 1 -sticky w
 tooltip::tooltip $infooptions.data {Place where all standard game data are.}
 grid [ttk::label $infooptions.lbl2 -text {Save directory path:}] -sticky w
-tooltip::tooltip $infooptions.lbl2 {Place where all game saves and configuration files are.}
+tooltip::tooltip $infooptions.lbl2 \
+   {Place where all game saves and configuration files are.}
 grid [ttk::label $infooptions.save -wraplength 500] -row 1 -column 1 -sticky w
-tooltip::tooltip $infooptions.save {Place where all game saves and configuration files are.}
-grid [ttk::label $infooptions.lbl3 -text {Documentation directory path:}] -sticky w
+tooltip::tooltip $infooptions.save \
+   {Place where all game saves and configuration files are.}
+grid [ttk::label $infooptions.lbl3 -text {Documentation directory path:}] \
+   -sticky w
 tooltip::tooltip $infooptions.lbl3 {Place where are game documentation files.}
 grid [ttk::label $infooptions.docs -wraplength 500] -row 2 -column 1 -sticky w
 tooltip::tooltip $infooptions.docs {Place where are game documentation files.}
-grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}] -sticky w
-tooltip::tooltip $infooptions.lbl4 {Place where you should put all modifications files.}
+grid [ttk::label $infooptions.lbl4 -text {Modifications directory path:}] \
+   -sticky w
+tooltip::tooltip $infooptions.lbl4 \
+   {Place where you should put all modifications files.}
 grid [ttk::label $infooptions.mods -wraplength 500] -row 3 -column 1 -sticky w
-tooltip::tooltip $infooptions.mods {Place where you should put all modifications files.}
+tooltip::tooltip $infooptions.mods \
+   {Place where you should put all modifications files.}
 SetScrollbarBindings $infooptions .gameframe.paned.optionsframe.scrolly
 for {set i 1} {$i < 5} {incr i} {
-   SetScrollbarBindings $infooptions.lbl$i .gameframe.paned.optionsframe.scrolly
+   SetScrollbarBindings $infooptions.lbl$i \
+      .gameframe.paned.optionsframe.scrolly
 }
 SetScrollbarBindings $infooptions.data .gameframe.paned.optionsframe.scrolly
 SetScrollbarBindings $infooptions.save .gameframe.paned.optionsframe.scrolly
