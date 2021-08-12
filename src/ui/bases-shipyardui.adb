@@ -152,8 +152,7 @@ package body Bases.ShipyardUI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Type"),
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Cost")),
-              Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
-              "SortShipyardModules install " & Arguments,
+              Get_Widget(".gameframe.paned.shipyardframe.scrolly"), "",
               "Press mouse button to sort the modules.");
          ShipyardFrame :=
            Get_Widget(ShipyardCanvas & ".shipyard.remove", Interp);
@@ -220,6 +219,8 @@ package body Bases.ShipyardUI is
             Install_Indexes.Append(BaseModules_Container.Key(I));
          end loop;
       end if;
+      Update_Headers_Command
+        (InstallTable, "SortShipyardModules install " & Arguments);
       ClearTable(InstallTable);
       Load_Install_Modules_Loop :
       for I of Install_Indexes loop
