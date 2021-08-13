@@ -61,12 +61,42 @@ package body Bases.RecruitUI is
    RecruitTable: Table_Widget (6);
    -- ****
 
-   -- ****iv* RecruitUI/Recruit.Modules_Indexes
+   -- ****iv* RecruitUI/RecruitUI.Modules_Indexes
    -- FUNCTION
    -- Indexes of the available recruits in base
    -- SOURCE
    Recruits_Indexes: Positive_Container.Vector;
    -- ****
+
+   -- ****if* RecruitUI/RecruitUI.Get_Highest_Attribute
+   -- FUNCTION
+   -- Get the highest attribute of the selected recruit
+   -- PARAMETERS
+   -- BaseIndex   - The index of the base in which the recruit's attributes
+   --               will be check
+   -- MemberIndex - The index of the recruit which attributes will be check
+   -- RESULT
+   -- The name of the attribute with the highest level of the selected recruit
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   function Get_Highest_Attribute
+     (BaseIndex, MemberIndex: Positive) return Unbounded_String is
+     -- ****
+      HighestLevel, HighestIndex: Positive := 1;
+   begin
+      Get_Highest_Attribute_Level_Loop :
+      for I in SkyBases(BaseIndex).Recruits(MemberIndex).Attributes
+        .Iterate loop
+         if SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I)(1) >
+           HighestLevel then
+            HighestLevel :=
+              SkyBases(BaseIndex).Recruits(MemberIndex).Attributes(I)(1);
+            HighestIndex := Attributes_Container.To_Index(I);
+         end if;
+      end loop Get_Highest_Attribute_Level_Loop;
+      return Attributes_List(HighestIndex).Name;
+   end Get_Highest_Attribute;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
@@ -172,7 +202,7 @@ package body Bases.RecruitUI is
             end if;
          end loop Get_Highest_Attribute_Level_Loop;
          AddButton
-           (RecruitTable, To_String(Attributes_List(HighestIndex).Name),
+           (RecruitTable, To_String(Get_Highest_Attribute(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 5);
          HighestLevel := 1;
@@ -839,14 +869,16 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Sorting orders for the list of available recruits in base
    -- OPTIONS
-   -- NAMEASC     - Sort recruits by name ascending
-   -- NAMEDESC    - Sort recruits by name descending
-   -- GENDERASC   - Sort recruits by gender ascending
-   -- GENDERDESC  - Sort recruits by gender descending
-   -- FACTIONASC  - Sort recruits by faction ascending
-   -- FACTIONDESC - Sort recruits by faction descending
-   -- PRICEASC    - Sort recruits by price ascending
-   -- PRICEDESC   - Sort recruits by price descending
+   -- NAMEASC       - Sort recruits by name ascending
+   -- NAMEDESC      - Sort recruits by name descending
+   -- GENDERASC     - Sort recruits by gender ascending
+   -- GENDERDESC    - Sort recruits by gender descending
+   -- FACTIONASC    - Sort recruits by faction ascending
+   -- FACTIONDESC   - Sort recruits by faction descending
+   -- PRICEASC      - Sort recruits by price ascending
+   -- PRICEDESC     - Sort recruits by price descending
+   -- ATTRIBUTEASC  - Sort recruits by attribute ascending
+   -- ATTRIBUTEDESC - Sort recruits by attribute descending
    -- NONE       - No sorting recruits (default)
    -- HISTORY
    -- 6.4 - Added
@@ -906,6 +938,7 @@ package body Bases.RecruitUI is
          Gender: Character;
          Faction: Unbounded_String;
          Price: Positive;
+         Attribute: Unbounded_String;
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
@@ -988,6 +1021,8 @@ package body Bases.RecruitUI is
             Gender => SkyBases(BaseIndex).Recruits(I).Gender,
             Faction => SkyBases(BaseIndex).Recruits(I).Faction,
             Price => SkyBases(BaseIndex).Recruits(I).Price,
+            Attribute =>
+              Get_Highest_Attribute(BaseIndex, Recruit_Container.To_Index(I)),
             Id => Recruit_Container.To_Index(I));
       end loop;
       Sort_Recruits(Local_Recruits);
