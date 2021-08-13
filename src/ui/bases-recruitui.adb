@@ -845,13 +845,15 @@ package body Bases.RecruitUI is
    -- GENDERDESC  - Sort recruits by gender descending
    -- FACTIONASC  - Sort recruits by faction ascending
    -- FACTIONDESC - Sort recruits by faction descending
+   -- PRICEASC    - Sort recruits by price ascending
+   -- PRICEDESC   - Sort recruits by price descending
    -- NONE       - No sorting recruits (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Recruits_Sort_Orders is
      (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, FACTIONDESC, FACTIONASC,
-      NONE) with
+      PRICEASC, PRICEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -903,6 +905,7 @@ package body Bases.RecruitUI is
          Name: Unbounded_String;
          Gender: Character;
          Faction: Unbounded_String;
+         Price: Positive;
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
@@ -934,6 +937,14 @@ package body Bases.RecruitUI is
            and then Left.Faction > Right.Faction then
             return True;
          end if;
+         if Recruits_Sort_Order = PRICEASC
+           and then Left.Price < Right.Price then
+            return True;
+         end if;
+         if Recruits_Sort_Order = PRICEDESC
+           and then Left.Price > Right.Price then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
@@ -959,6 +970,12 @@ package body Bases.RecruitUI is
             else
                Recruits_Sort_Order := FACTIONASC;
             end if;
+         when 4 =>
+            if Recruits_Sort_Order = PRICEASC then
+               Recruits_Sort_Order := PRICEDESC;
+            else
+               Recruits_Sort_Order := PRICEASC;
+            end if;
          when others =>
             null;
       end case;
@@ -970,6 +987,7 @@ package body Bases.RecruitUI is
            (Name => SkyBases(BaseIndex).Recruits(I).Name,
             Gender => SkyBases(BaseIndex).Recruits(I).Gender,
             Faction => SkyBases(BaseIndex).Recruits(I).Faction,
+            Price => SkyBases(BaseIndex).Recruits(I).Price,
             Id => Recruit_Container.To_Index(I));
       end loop;
       Sort_Recruits(Local_Recruits);
