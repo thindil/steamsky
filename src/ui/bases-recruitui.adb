@@ -885,7 +885,7 @@ package body Bases.RecruitUI is
    -- SOURCE
    type Recruits_Sort_Orders is
      (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, FACTIONDESC, FACTIONASC,
-      PRICEASC, PRICEDESC, NONE) with
+      PRICEASC, PRICEDESC, ATTRIBUTEASC, ATTRIBUTEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -978,6 +978,14 @@ package body Bases.RecruitUI is
            and then Left.Price > Right.Price then
             return True;
          end if;
+         if Recruits_Sort_Order = ATTRIBUTEASC
+           and then Left.Attribute < Right.Attribute then
+            return True;
+         end if;
+         if Recruits_Sort_Order = ATTRIBUTEDESC
+           and then Left.Attribute > Right.Attribute then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
@@ -1008,6 +1016,12 @@ package body Bases.RecruitUI is
                Recruits_Sort_Order := PRICEDESC;
             else
                Recruits_Sort_Order := PRICEASC;
+            end if;
+         when 5 =>
+            if Recruits_Sort_Order = ATTRIBUTEASC then
+               Recruits_Sort_Order := ATTRIBUTEDESC;
+            else
+               Recruits_Sort_Order := ATTRIBUTEASC;
             end if;
          when others =>
             null;
