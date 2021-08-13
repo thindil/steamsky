@@ -841,11 +841,14 @@ package body Bases.RecruitUI is
    -- OPTIONS
    -- NAMEASC    - Sort recruits by name ascending
    -- NAMEDESC   - Sort recruits by name descending
+   -- GENDERASC  - Sort recruits by gender ascending
+   -- GENDERDESC - Sort recruits by gender descending
    -- NONE       - No sorting recruits (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Recruits_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
+   type Recruits_Sort_Orders is
+     (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -895,6 +898,7 @@ package body Bases.RecruitUI is
         Get_Column_Number(RecruitTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
+         Gender: Character;
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
@@ -910,6 +914,14 @@ package body Bases.RecruitUI is
          if Recruits_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
             return True;
          end if;
+         if Recruits_Sort_Order = GENDERASC
+           and then Left.Gender < Right.Gender then
+            return True;
+         end if;
+         if Recruits_Sort_Order = GENDERDESC
+           and then Left.Gender > Right.Gender then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
@@ -923,6 +935,12 @@ package body Bases.RecruitUI is
             else
                Recruits_Sort_Order := NAMEASC;
             end if;
+         when 2 =>
+            if Recruits_Sort_Order = GENDERASC then
+               Recruits_Sort_Order := GENDERDESC;
+            else
+               Recruits_Sort_Order := GENDERASC;
+            end if;
          when others =>
             null;
       end case;
@@ -932,6 +950,7 @@ package body Bases.RecruitUI is
       for I in SkyBases(BaseIndex).Recruits.Iterate loop
          Local_Recruits(Recruit_Container.To_Index(I)) :=
            (Name => SkyBases(BaseIndex).Recruits(I).Name,
+            Gender => SkyBases(BaseIndex).Recruits(I).Gender,
             Id => Recruit_Container.To_Index(I));
       end loop;
       Sort_Recruits(Local_Recruits);
