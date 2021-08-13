@@ -839,16 +839,19 @@ package body Bases.RecruitUI is
    -- FUNCTION
    -- Sorting orders for the list of available recruits in base
    -- OPTIONS
-   -- NAMEASC    - Sort recruits by name ascending
-   -- NAMEDESC   - Sort recruits by name descending
-   -- GENDERASC  - Sort recruits by gender ascending
-   -- GENDERDESC - Sort recruits by gender descending
+   -- NAMEASC     - Sort recruits by name ascending
+   -- NAMEDESC    - Sort recruits by name descending
+   -- GENDERASC   - Sort recruits by gender ascending
+   -- GENDERDESC  - Sort recruits by gender descending
+   -- FACTIONASC  - Sort recruits by faction ascending
+   -- FACTIONDESC - Sort recruits by faction descending
    -- NONE       - No sorting recruits (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Recruits_Sort_Orders is
-     (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, NONE) with
+     (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, FACTIONDESC, FACTIONASC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -899,6 +902,7 @@ package body Bases.RecruitUI is
       type Local_Module_Data is record
          Name: Unbounded_String;
          Gender: Character;
+         Faction: Unbounded_String;
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
@@ -922,6 +926,14 @@ package body Bases.RecruitUI is
            and then Left.Gender > Right.Gender then
             return True;
          end if;
+         if Recruits_Sort_Order = FACTIONASC
+           and then Left.Faction < Right.Faction then
+            return True;
+         end if;
+         if Recruits_Sort_Order = FACTIONDESC
+           and then Left.Faction > Right.Faction then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
@@ -941,6 +953,12 @@ package body Bases.RecruitUI is
             else
                Recruits_Sort_Order := GENDERASC;
             end if;
+         when 3 =>
+            if Recruits_Sort_Order = FACTIONASC then
+               Recruits_Sort_Order := FACTIONDESC;
+            else
+               Recruits_Sort_Order := FACTIONASC;
+            end if;
          when others =>
             null;
       end case;
@@ -951,6 +969,7 @@ package body Bases.RecruitUI is
          Local_Recruits(Recruit_Container.To_Index(I)) :=
            (Name => SkyBases(BaseIndex).Recruits(I).Name,
             Gender => SkyBases(BaseIndex).Recruits(I).Gender,
+            Faction => SkyBases(BaseIndex).Recruits(I).Faction,
             Id => Recruit_Container.To_Index(I));
       end loop;
       Sort_Recruits(Local_Recruits);
