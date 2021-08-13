@@ -126,9 +126,15 @@ package body Bases.RecruitUI is
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crew}");
       Tcl.Tk.Ada.Grid.Grid(Close_Button, "-row 0 -column 1");
+      if Recruits_Indexes.Length /= SkyBases(BaseIndex).Recruits.Length then
+         Recruits_Indexes.Clear;
+         for I in SkyBases(BaseIndex).Recruits.Iterate loop
+            Recruits_Indexes.Append(Recruit_Container.To_Index(I));
+         end loop;
+      end if;
       ClearTable(RecruitTable);
       Load_Recruits_Loop :
-      for I in SkyBases(BaseIndex).Recruits.Iterate loop
+      for I of Recruits_Indexes loop
          if Current_Row < Start_Row then
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
@@ -136,28 +142,24 @@ package body Bases.RecruitUI is
          AddButton
            (RecruitTable, To_String(SkyBases(BaseIndex).Recruits(I).Name),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            1);
+            "ShowRecruitMenu" & Positive'Image(I), 1);
          AddButton
            (RecruitTable,
             (if SkyBases(BaseIndex).Recruits(I).Gender = 'F' then "Female"
              else "Male"),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            2);
+            "ShowRecruitMenu" & Positive'Image(I), 2);
          AddButton
            (RecruitTable,
             To_String
               (Factions_List(SkyBases(BaseIndex).Recruits(I).Faction).Name),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            3);
+            "ShowRecruitMenu" & Positive'Image(I), 3);
          AddButton
            (RecruitTable,
             Positive'Image(SkyBases(BaseIndex).Recruits(I).Price),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            4);
+            "ShowRecruitMenu" & Positive'Image(I), 4);
          HighestLevel := 1;
          HighestIndex := 1;
          Get_Highest_Attribute_Level_Loop :
@@ -172,8 +174,7 @@ package body Bases.RecruitUI is
          AddButton
            (RecruitTable, To_String(Attributes_List(HighestIndex).Name),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            5);
+            "ShowRecruitMenu" & Positive'Image(I), 5);
          HighestLevel := 1;
          HighestIndex := 1;
          Get_Highest_Skill_Level_Loop :
@@ -186,8 +187,7 @@ package body Bases.RecruitUI is
          AddButton
            (RecruitTable, To_String(Skills_List(HighestIndex).Name),
             "Show available options for recruit",
-            "ShowRecruitMenu" & Positive'Image(Recruit_Container.To_Index(I)),
-            6, True);
+            "ShowRecruitMenu" & Positive'Image(I), 6, True);
          exit Load_Recruits_Loop when RecruitTable.Row = 26;
          <<End_Of_Loop>>
       end loop Load_Recruits_Loop;
@@ -936,8 +936,8 @@ package body Bases.RecruitUI is
       end loop;
       Sort_Recruits(Local_Recruits);
       Recruits_Indexes.Clear;
-      for Module of Local_Recruits loop
-         Recruits_Indexes.Append(Module.Id);
+      for Recruit of Local_Recruits loop
+         Recruits_Indexes.Append(Recruit.Id);
       end loop;
       return
         Show_Recruit_Command
