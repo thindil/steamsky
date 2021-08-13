@@ -856,26 +856,35 @@ package body Game.SaveLoad is
          Stat_Index, Nodename: Unbounded_String;
          Stat_Amount: Positive;
       begin
-         Saved_Node := Item(Nodes_List, 0);
+         Saved_Node := Item(List => Nodes_List, Index => 0);
          GameStats.BasesVisited :=
-           Positive'Value(Get_Attribute(Saved_Node, "visitedbases"));
+           Positive'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "visitedbases"));
          GameStats.MapVisited :=
-           Positive'Value(Get_Attribute(Saved_Node, "mapdiscovered"));
+           Positive'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "mapdiscovered"));
          GameStats.DistanceTraveled :=
-           Positive'Value(Get_Attribute(Saved_Node, "distancetraveled"));
+           Positive'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "distancetraveled"));
          GameStats.AcceptedMissions :=
-           Natural'Value(Get_Attribute(Saved_Node, "acceptedmissions"));
+           Natural'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "acceptedmissions"));
          GameStats.Points :=
-           Positive'Value(Get_Attribute(Saved_Node, "points"));
-         Child_Nodes_List := Child_Nodes(Saved_Node);
+           Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "points"));
+         Child_Nodes_List := Child_Nodes(N => Saved_Node);
          Load_Statistics_Loop :
-         for I in 0 .. Length(Child_Nodes_List) - 1 loop
+         for I in 0 .. Length(List => Child_Nodes_List) - 1 loop
             Nodename :=
-              To_Unbounded_String(Node_Name(Item(Child_Nodes_List, I)));
-            if To_String(Nodename) /= "#text" then
+              To_Unbounded_String
+                (Source =>
+                   Node_Name(N => Item(List => Child_Nodes_List, Index => I)));
+            if To_String(Source => Nodename) /= "#text" then
                Stat_Index :=
                  To_Unbounded_String
-                   (Get_Attribute(Item(Child_Nodes_List, I), "index"));
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Item(List => Child_Nodes_List, Index => I),
+                         Name => "index"));
                Stat_Amount :=
                  Positive'Value
                    (Get_Attribute(Item(Child_Nodes_List, I), "amount"));
