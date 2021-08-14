@@ -885,13 +885,16 @@ package body Bases.RecruitUI is
    -- PRICEDESC     - Sort recruits by price descending
    -- ATTRIBUTEASC  - Sort recruits by attribute ascending
    -- ATTRIBUTEDESC - Sort recruits by attribute descending
+   -- SKILLASC      - Sort recruits by skill ascending
+   -- SKILLDESC     - Sort recruits by skill descending
    -- NONE       - No sorting recruits (default)
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
    type Recruits_Sort_Orders is
      (NAMEASC, NAMEDESC, GENDERASC, GENDERDESC, FACTIONDESC, FACTIONASC,
-      PRICEASC, PRICEDESC, ATTRIBUTEASC, ATTRIBUTEDESC, NONE) with
+      PRICEASC, PRICEDESC, ATTRIBUTEASC, ATTRIBUTEDESC, SKILLASC, SKILLDESC,
+      NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -945,6 +948,7 @@ package body Bases.RecruitUI is
          Faction: Unbounded_String;
          Price: Positive;
          Attribute: Unbounded_String;
+         Skill: Unbounded_String;
          Id: Positive;
       end record;
       type Recruits_Array is array(Positive range <>) of Local_Module_Data;
@@ -992,6 +996,14 @@ package body Bases.RecruitUI is
            and then Left.Attribute > Right.Attribute then
             return True;
          end if;
+         if Recruits_Sort_Order = SKILLASC
+           and then Left.Skill < Right.Skill then
+            return True;
+         end if;
+         if Recruits_Sort_Order = SKILLDESC
+           and then Left.Skill > Right.Skill then
+            return True;
+         end if;
          return False;
       end "<";
       procedure Sort_Recruits is new Ada.Containers.Generic_Array_Sort
@@ -1029,6 +1041,12 @@ package body Bases.RecruitUI is
             else
                Recruits_Sort_Order := ATTRIBUTEASC;
             end if;
+         when 6 =>
+            if Recruits_Sort_Order = SKILLASC then
+               Recruits_Sort_Order := SKILLDESC;
+            else
+               Recruits_Sort_Order := SKILLASC;
+            end if;
          when others =>
             null;
       end case;
@@ -1043,6 +1061,8 @@ package body Bases.RecruitUI is
             Price => SkyBases(BaseIndex).Recruits(I).Price,
             Attribute =>
               Get_Highest_Attribute(BaseIndex, Recruit_Container.To_Index(I)),
+            Skill =>
+              Get_Highest_Skill(BaseIndex, Recruit_Container.To_Index(I)),
             Id => Recruit_Container.To_Index(I));
       end loop;
       Sort_Recruits(Local_Recruits);
