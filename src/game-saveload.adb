@@ -887,33 +887,44 @@ package body Game.SaveLoad is
                          Name => "index"));
                Stat_Amount :=
                  Positive'Value
-                   (Get_Attribute(Item(Child_Nodes_List, I), "amount"));
+                   (Get_Attribute
+                      (Elem => Item(List => Child_Nodes_List, Index => I),
+                       Name => "amount"));
             end if;
-            if To_String(Nodename) = "destroyedships" then
+            if To_String(Source => Nodename) = "destroyedships" then
                GameStats.DestroyedShips.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Nodename) = "finishedcrafts" then
+            elsif To_String(Source => Nodename) = "finishedcrafts" then
                GameStats.CraftingOrders.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Nodename) = "finishedmissions" then
+            elsif To_String(Source => Nodename) = "finishedmissions" then
                GameStats.FinishedMissions.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Nodename) = "finishedgoals" then
+            elsif To_String(Source => Nodename) = "finishedgoals" then
                GameStats.FinishedGoals.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
-            elsif To_String(Nodename) = "killedmobs" then
+            elsif To_String(Source => Nodename) = "killedmobs" then
                GameStats.KilledMobs.Append
                  (New_Item => (Index => Stat_Index, Amount => Stat_Amount));
             end if;
          end loop Load_Statistics_Loop;
       end Load_Statistics_Block;
-      Log_Message("done.", EVERYTHING, True, False);
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load current goal
-      Log_Message("Loading current goal...", EVERYTHING, False);
+      Log_Message
+        (Message => "Loading current goal...", Message_Type => EVERYTHING,
+         New_Line => False);
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "currentgoal");
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "currentgoal");
       CurrentGoal.Index :=
-        To_Unbounded_String(Get_Attribute(Item(Nodes_List, 0), "index"));
+        To_Unbounded_String
+          (Source =>
+             Get_Attribute
+               (Elem => Item(List => Nodes_List, Index => 0),
+                Name => "index"));
       CurrentGoal.GType :=
         GoalTypes'Val
           (Integer'Value(Get_Attribute(Item(Nodes_List, 0), "type")));
