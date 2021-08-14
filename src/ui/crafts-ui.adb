@@ -16,7 +16,6 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
-with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -179,28 +178,13 @@ package body Crafts.UI is
         Known_Recipes.Length + Studies.Length + Deconstructs.Length then
          Recipes_Indexes.Clear;
          for I in Known_Recipes.Iterate loop
-            Recipes_Indexes.Append
-              (To_Unbounded_String
-                 (Trim
-                    (Positive'Image
-                       (Positive(UnboundedString_Container.To_Index(I))),
-                     Left)));
+            Recipes_Indexes.Append(Known_Recipes(I));
          end loop;
          for I in Studies.Iterate loop
-            Recipes_Indexes.Append
-              (To_Unbounded_String
-                 (Trim
-                    (Positive'Image
-                       (Positive(UnboundedString_Container.To_Index(I))),
-                     Left)));
+            Recipes_Indexes.Append(Studies(I));
          end loop;
          for I in Deconstructs.Iterate loop
-            Recipes_Indexes.Append
-              (To_Unbounded_String
-                 (Trim
-                    (Positive'Image
-                       (Positive(UnboundedString_Container.To_Index(I))),
-                     Left)));
+            Recipes_Indexes.Append(Deconstructs(I));
          end loop;
       end if;
       if RecipesTable.Row_Height = 1 then
@@ -215,13 +199,14 @@ package body Crafts.UI is
          ClearTable(RecipesTable);
       end if;
       Show_Recipes_Loop :
-      for I in Known_Recipes.Iterate loop
+      for I in Recipes_Indexes.First_Index .. Recipes_Indexes.Last_Index loop
+         exit Show_Recipes_Loop when I > Positive(Known_Recipes.Length);
          if RecipeName'Length > 0
            and then
              Index
                (To_Lower
                   (To_String
-                     (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex)
+                     (Items_List(Recipes_List(Recipes_Indexes(I)).ResultIndex)
                         .Name)),
                 To_Lower(RecipeName), 1) =
              0 then
@@ -233,7 +218,7 @@ package body Crafts.UI is
          end if;
          CanCraft := False;
          Has_Workplace := False;
-         Recipe := Recipes_List(Known_Recipes(I));
+         Recipe := Recipes_List(Recipes_Indexes(I));
          Find_Workshop_Loop :
          for Module of Player_Ship.Modules loop
             if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
@@ -281,29 +266,29 @@ package body Crafts.UI is
          AddButton
            (RecipesTable,
             To_String
-              (Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name),
+              (Items_List(Recipes_List(Recipes_Indexes(I)).ResultIndex).Name),
             "Show available recipe's options",
             "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
             Boolean'Image(CanCraft),
             1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {" & To_String(Known_Recipes(I)) & "} " &
+            "ShowRecipeMenu {" & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Materials, 5, True);
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
@@ -324,12 +309,15 @@ package body Crafts.UI is
          CanCraft := True;
       end if;
       Set_Study_Recipes_Loop :
-      for I in Studies.Iterate loop
-         exit Set_Study_Recipes_Loop when RecipesTable.Row = 26;
+      for I in
+        Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
+         exit Set_Study_Recipes_Loop when RecipesTable.Row = 26 or
+           I > Positive(Studies.Length);
          if RecipeName'Length > 0
            and then
              Index
-               (To_Lower("Study " & To_String(Items_List(Studies(I)).Name)),
+               (To_Lower
+                  ("Study " & To_String(Items_List(Recipes_Indexes(I)).Name)),
                 To_Lower(RecipeName), 1) =
              0 then
             goto End_Of_Study_Loop;
@@ -339,37 +327,40 @@ package body Crafts.UI is
             goto End_Of_Study_Loop;
          end if;
          AddButton
-           (RecipesTable, "Study " & To_String(Items_List(Studies(I)).Name),
+           (RecipesTable,
+            "Study " & To_String(Items_List(Recipes_Indexes(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Study " & To_String(Studies(I)) & "} " &
+            "ShowRecipeMenu {Study " & To_String(Recipes_Indexes(I)) & "} " &
             Boolean'Image(CanCraft),
             Has_Tool, 4, True);
          <<End_Of_Study_Loop>>
       end loop Set_Study_Recipes_Loop;
       Set_Deconstruct_Recipes_Loop :
-      for I in Deconstructs.Iterate loop
+      for I in
+        Positive(Known_Recipes.Length + Studies.Length + 1) ..
+          Recipes_Indexes.Last_Index loop
          exit Set_Deconstruct_Recipes_Loop when RecipesTable.Row = 26;
          if RecipeName'Length > 0
            and then
              Index
                (To_Lower
                   ("Deconstruct " &
-                   To_String(Items_List(Deconstructs(I)).Name)),
+                   To_String(Items_List(Recipes_Indexes(I)).Name)),
                 To_Lower(RecipeName), 1) =
              0 then
             goto End_Of_Deconstruct_Loop;
@@ -380,24 +371,24 @@ package body Crafts.UI is
          end if;
          AddButton
            (RecipesTable,
-            "Decontruct " & To_String(Items_List(Deconstructs(I)).Name),
+            "Decontruct " & To_String(Items_List(Recipes_Indexes(I)).Name),
             "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             1);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             CanCraft, 2);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Workplace, 3);
          AddCheckButton
            (RecipesTable, "Show available recipe's options",
-            "ShowRecipeMenu {Deconstruct " & To_String(Deconstructs(I)) &
+            "ShowRecipeMenu {Deconstruct " & To_String(Recipes_Indexes(I)) &
             "} " & Boolean'Image(CanCraft),
             Has_Tool, 4, True);
          <<End_Of_Deconstruct_Loop>>
@@ -997,36 +988,20 @@ package body Crafts.UI is
          Local_Recipes(UnboundedString_Container.To_Index(I)) :=
            (Name =>
               Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
-            Id =>
-              To_Unbounded_String
-                (Trim
-                   (Positive'Image
-                      (Positive(UnboundedString_Container.To_Index(I))),
-                    Left)));
+            Id => Known_Recipes(I));
       end loop;
       for I in Studies.Iterate loop
          Local_Recipes
            (UnboundedString_Container.To_Index(I) +
             Positive(Known_Recipes.Length)) :=
-           (Name => "Study " & Items_List(Studies(I)).Name,
-            Id =>
-              To_Unbounded_String
-                (Trim
-                   (Positive'Image
-                      (Positive(UnboundedString_Container.To_Index(I))),
-                    Left)));
+           (Name => "Study " & Items_List(Studies(I)).Name, Id => Studies(I));
       end loop;
       for I in Deconstructs.Iterate loop
          Local_Recipes
            (UnboundedString_Container.To_Index(I) +
             Positive(Known_Recipes.Length) + Positive(Studies.Length)) :=
            (Name => "Deconstruct " & Items_List(Deconstructs(I)).Name,
-            Id =>
-              To_Unbounded_String
-                (Trim
-                   (Positive'Image
-                      (Positive(UnboundedString_Container.To_Index(I))),
-                    Left)));
+            Id => Deconstructs(I));
       end loop;
       Sort_Recipes(Local_Recipes);
       Recipes_Indexes.Clear;
