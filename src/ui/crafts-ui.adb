@@ -15,6 +15,7 @@
 
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
+with Ada.Containers.Generic_Array_Sort;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -55,6 +56,13 @@ package body Crafts.UI is
    -- Table with info about available crafting recipes
    -- SOURCE
    RecipesTable: Table_Widget (5);
+   -- ****
+
+   -- ****iv* CUI4/CUI4.Modules_Indexes
+   -- FUNCTION
+   -- Indexes of the player ship modules
+   -- SOURCE
+   Recipes_Indexes: Positive_Container.Vector;
    -- ****
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
@@ -847,6 +855,111 @@ package body Crafts.UI is
       return TCL_OK;
    end Set_Crafting_Command;
 
+   -- ****it* CUI4/CUI4.Recipes_Sort_Orders
+   -- FUNCTION
+   -- Sorting orders for the crafting recipes list
+   -- OPTIONS
+   -- NAMEASC    - Sort recipes by name ascending
+   -- NAMEDESC   - Sort recipes by name descending
+   -- NONE       - No sorting recipes (default)
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   type Recipes_Sort_Orders is
+     (NAMEASC, NAMEDESC, NONE) with
+      Default_Value => NONE;
+      -- ****
+
+      -- ****id* CUI4/CUI4.Default_Recipes_Sort_Order
+      -- FUNCTION
+      -- Default sorting order for the crafting recipes
+      -- HISTORY
+      -- 6.4 - Added
+      -- SOURCE
+   Default_Recipes_Sort_Order: constant Recipes_Sort_Orders := NONE;
+   -- ****
+
+   -- ****iv* CUI4/CUI4.Recipes_Sort_Order
+   -- FUNCTION
+   -- The current sorting order for crafting recipes list
+   -- HISTORY
+   -- 6.4 - Added
+   -- SOURCE
+   Recipes_Sort_Order: Recipes_Sort_Orders := Default_Recipes_Sort_Order;
+   -- ****
+
+   -- ****o* CUI4/CUI4.Sort_Crafting_Command
+   -- FUNCTION
+   -- Sort the list of crafting recipes
+   -- PARAMETERS
+   -- ClientData - Custom data send to the command. Unused
+   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- Argc       - Number of arguments passed to the command. Unused
+   -- Argv       - Values of arguments passed to the command.
+   -- RESULT
+   -- This function always return TCL_OK
+   -- COMMANDS
+   -- SortCrafting x
+   -- X is X axis coordinate where the player clicked the mouse button
+   -- SOURCE
+   function Sort_Crafting_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int with
+      Convention => C;
+      -- ****
+
+   function Sort_Crafting_Command
+     (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
+      Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
+      pragma Unreferenced(ClientData, Interp, Argc);
+      Column: constant Positive :=
+        Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
+      type Local_Module_Data is record
+         Name: Unbounded_String;
+         Id: Positive;
+      end record;
+      type Recipes_Array is array(Positive range <>) of Local_Module_Data;
+      Local_Recipes: Recipes_Array(1 .. Positive(Known_Recipes.Length));
+      function "<"(Left, Right: Local_Module_Data) return Boolean is
+      begin
+         if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
+            return True;
+         end if;
+         if Recipes_Sort_Order = NAMEDESC and then Left.Name > Right.Name then
+            return True;
+         end if;
+         return False;
+      end "<";
+      procedure Sort_Recipes is new Ada.Containers.Generic_Array_Sort
+        (Index_Type => Positive, Element_Type => Local_Module_Data,
+         Array_Type => Recipes_Array);
+   begin
+      case Column is
+         when 1 =>
+            if Recipes_Sort_Order = NAMEASC then
+               Recipes_Sort_Order := NAMEDESC;
+            else
+               Recipes_Sort_Order := NAMEASC;
+            end if;
+         when others =>
+            null;
+      end case;
+      if Recipes_Sort_Order = NONE then
+         return TCL_OK;
+      end if;
+      for I in Known_Recipes.Iterate loop
+         Local_Recipes(UnboundedString_Container.To_Index(I)) :=
+           (Name => Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
+            Id => UnboundedString_Container.To_Index(I));
+      end loop;
+      Sort_Recipes(Local_Recipes);
+      Recipes_Indexes.Clear;
+      for Recipe of Local_Recipes loop
+         Recipes_Indexes.Append(Recipe.Id);
+      end loop;
+      return TCL_OK;
+   end Sort_Crafting_Command;
+
    procedure AddCommands is
    begin
       AddCommand("ShowCrafting", Show_Crafting_Command'Access);
@@ -854,6 +967,7 @@ package body Crafts.UI is
       AddCommand("ShowSetRecipe", Show_Set_Recipe_Command'Access);
       AddCommand("ShowRecipeInfo", Show_Recipe_Info_Command'Access);
       AddCommand("SetCrafting", Set_Crafting_Command'Access);
+      AddCommand("SortCrafting", Sort_Crafting_Command'Access);
    end AddCommands;
 
 end Crafts.UI;
