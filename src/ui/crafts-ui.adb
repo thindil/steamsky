@@ -16,6 +16,7 @@
 with Ada.Characters.Handling; use Ada.Characters.Handling;
 with Ada.Characters.Latin_1; use Ada.Characters.Latin_1;
 with Ada.Containers.Generic_Array_Sort;
+with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
@@ -62,7 +63,21 @@ package body Crafts.UI is
    -- FUNCTION
    -- Indexes of the player ship modules
    -- SOURCE
-   Recipes_Indexes: Positive_Container.Vector;
+   Recipes_Indexes: UnboundedString_Container.Vector;
+   -- ****
+
+   -- ****iv* Crafts.UI/Studies
+   -- FUNCTION
+   -- The list of available study recipes
+   -- SOURCE
+   Studies: UnboundedString_Container.Vector;
+   -- ****
+
+   -- ****iv* Crafts.UI/Deconstructs
+   -- FUNCTION
+   -- The list of available deconstruct recipes
+   -- SOURCE
+   Deconstructs: UnboundedString_Container.Vector;
    -- ****
 
    -- ****o* CUI4/CUI4.Show_Crafting_Command
@@ -94,7 +109,6 @@ package body Crafts.UI is
       CraftsFrame: Ttk_Frame := Get_Widget(Main_Paned & ".craftframe", Interp);
       CraftsCanvas: constant Tk_Canvas :=
         Get_Widget(CraftsFrame & ".canvas", Interp);
-      Studies, Deconstructs: UnboundedString_Container.Vector;
       CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
       CargoIndex: Natural;
@@ -141,6 +155,8 @@ package body Crafts.UI is
          configure(SearchEntry, "-validatecommand {ShowCrafting 1 %P}");
       end if;
       Entry_Configure(GameMenu, "Help", "-command {ShowHelp crafts}");
+      Studies.Clear;
+      Deconstructs.Clear;
       Find_Possible_Recipes_Loop :
       for Item of Player_Ship.Cargo loop
          Add_Recipes_Loop :
@@ -159,6 +175,34 @@ package body Crafts.UI is
             end if;
          end loop Add_Recipes_Loop;
       end loop Find_Possible_Recipes_Loop;
+      if Recipes_Indexes.Length /=
+        Known_Recipes.Length + Studies.Length + Deconstructs.Length then
+         Recipes_Indexes.Clear;
+         for I in Known_Recipes.Iterate loop
+            Recipes_Indexes.Append
+              (To_Unbounded_String
+                 (Trim
+                    (Positive'Image
+                       (Positive(UnboundedString_Container.To_Index(I))),
+                     Left)));
+         end loop;
+         for I in Studies.Iterate loop
+            Recipes_Indexes.Append
+              (To_Unbounded_String
+                 (Trim
+                    (Positive'Image
+                       (Positive(UnboundedString_Container.To_Index(I))),
+                     Left)));
+         end loop;
+         for I in Deconstructs.Iterate loop
+            Recipes_Indexes.Append
+              (To_Unbounded_String
+                 (Trim
+                    (Positive'Image
+                       (Positive(UnboundedString_Container.To_Index(I))),
+                     Left)));
+         end loop;
+      end if;
       if RecipesTable.Row_Height = 1 then
          RecipesTable :=
            CreateTable
@@ -865,8 +909,7 @@ package body Crafts.UI is
    -- HISTORY
    -- 6.4 - Added
    -- SOURCE
-   type Recipes_Sort_Orders is
-     (NAMEASC, NAMEDESC, NONE) with
+   type Recipes_Sort_Orders is (NAMEASC, NAMEDESC, NONE) with
       Default_Value => NONE;
       -- ****
 
@@ -916,10 +959,13 @@ package body Crafts.UI is
         Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
          Name: Unbounded_String;
-         Id: Positive;
+         Id: Unbounded_String;
       end record;
       type Recipes_Array is array(Positive range <>) of Local_Module_Data;
-      Local_Recipes: Recipes_Array(1 .. Positive(Known_Recipes.Length));
+      Local_Recipes: Recipes_Array
+        (1 ..
+             Positive(Known_Recipes.Length) + Positive(Studies.Length) +
+             Positive(Deconstructs.Length));
       function "<"(Left, Right: Local_Module_Data) return Boolean is
       begin
          if Recipes_Sort_Order = NAMEASC and then Left.Name < Right.Name then
@@ -949,8 +995,38 @@ package body Crafts.UI is
       end if;
       for I in Known_Recipes.Iterate loop
          Local_Recipes(UnboundedString_Container.To_Index(I)) :=
-           (Name => Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
-            Id => UnboundedString_Container.To_Index(I));
+           (Name =>
+              Items_List(Recipes_List(Known_Recipes(I)).ResultIndex).Name,
+            Id =>
+              To_Unbounded_String
+                (Trim
+                   (Positive'Image
+                      (Positive(UnboundedString_Container.To_Index(I))),
+                    Left)));
+      end loop;
+      for I in Studies.Iterate loop
+         Local_Recipes
+           (UnboundedString_Container.To_Index(I) +
+            Positive(Known_Recipes.Length)) :=
+           (Name => "Study " & Items_List(Studies(I)).Name,
+            Id =>
+              To_Unbounded_String
+                (Trim
+                   (Positive'Image
+                      (Positive(UnboundedString_Container.To_Index(I))),
+                    Left)));
+      end loop;
+      for I in Deconstructs.Iterate loop
+         Local_Recipes
+           (UnboundedString_Container.To_Index(I) +
+            Positive(Known_Recipes.Length) + Positive(Studies.Length)) :=
+           (Name => "Deconstruct " & Items_List(Deconstructs(I)).Name,
+            Id =>
+              To_Unbounded_String
+                (Trim
+                   (Positive'Image
+                      (Positive(UnboundedString_Container.To_Index(I))),
+                    Left)));
       end loop;
       Sort_Recipes(Local_Recipes);
       Recipes_Indexes.Clear;
