@@ -70,7 +70,7 @@ package body Bases.RecruitUI is
 
    -- ****if* RecruitUI/RecruitUI.Get_Highest_Attribute
    -- FUNCTION
-   -- Get the highest attribute of the selected recruit
+   -- Get the highest attribute's name of the selected recruit
    -- PARAMETERS
    -- BaseIndex   - The index of the base in which the recruit's attributes
    --               will be check
@@ -97,6 +97,33 @@ package body Bases.RecruitUI is
       end loop Get_Highest_Attribute_Level_Loop;
       return Attributes_List(HighestIndex).Name;
    end Get_Highest_Attribute;
+
+   -- ****if* RecruitUI/RecruitUI.Get_Highest_Skill
+   -- FUNCTION
+   -- Get the highest skill's name of the selected recruit
+   -- PARAMETERS
+   -- BaseIndex   - The index of the base in which the recruit's skills will
+   --               be check
+   -- MemberIndex - The index of the recruit which skills will be check
+   -- RESULT
+   -- The name of the skill with the highest level of the selected recruit
+   -- HISTORY
+   -- 6.5 - Added
+   -- SOURCE
+   function Get_Highest_Skill
+     (BaseIndex, MemberIndex: Positive) return Unbounded_String is
+     -- ****
+      HighestLevel, HighestIndex: Positive := 1;
+   begin
+      Get_Highest_Skill_Level_Loop :
+      for Skill of SkyBases(BaseIndex).Recruits(MemberIndex).Skills loop
+         if Skill(2) > HighestLevel then
+            HighestLevel := Skill(2);
+            HighestIndex := Skill(1);
+         end if;
+      end loop Get_Highest_Skill_Level_Loop;
+      return Skills_List(HighestIndex).Name;
+   end Get_Highest_Skill;
 
    -- ****o* RecruitUI/RecruitUI.Show_Recruit_Command
    -- FUNCTION
@@ -125,7 +152,6 @@ package body Bases.RecruitUI is
         Get_Widget(Main_Paned & ".recruitframe", Interp);
       BaseIndex: constant Positive :=
         SkyMap(Player_Ship.Sky_X, Player_Ship.Sky_Y).BaseIndex;
-      HighestLevel, HighestIndex: Positive;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -190,32 +216,12 @@ package body Bases.RecruitUI is
             Positive'Image(SkyBases(BaseIndex).Recruits(I).Price),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 4);
-         HighestLevel := 1;
-         HighestIndex := 1;
-         Get_Highest_Attribute_Level_Loop :
-         for J in SkyBases(BaseIndex).Recruits(I).Attributes.Iterate loop
-            if SkyBases(BaseIndex).Recruits(I).Attributes(J)(1) >
-              HighestLevel then
-               HighestLevel :=
-                 SkyBases(BaseIndex).Recruits(I).Attributes(J)(1);
-               HighestIndex := Attributes_Container.To_Index(J);
-            end if;
-         end loop Get_Highest_Attribute_Level_Loop;
          AddButton
            (RecruitTable, To_String(Get_Highest_Attribute(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 5);
-         HighestLevel := 1;
-         HighestIndex := 1;
-         Get_Highest_Skill_Level_Loop :
-         for Skill of SkyBases(BaseIndex).Recruits(I).Skills loop
-            if Skill(2) > HighestLevel then
-               HighestLevel := Skill(2);
-               HighestIndex := Skill(1);
-            end if;
-         end loop Get_Highest_Skill_Level_Loop;
          AddButton
-           (RecruitTable, To_String(Skills_List(HighestIndex).Name),
+           (RecruitTable, To_String(Get_Highest_Skill(BaseIndex, I)),
             "Show available options for recruit",
             "ShowRecruitMenu" & Positive'Image(I), 6, True);
          exit Load_Recruits_Loop when RecruitTable.Row = 26;
