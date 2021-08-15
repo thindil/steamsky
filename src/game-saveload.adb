@@ -927,16 +927,26 @@ package body Game.SaveLoad is
                 Name => "index"));
       CurrentGoal.GType :=
         GoalTypes'Val
-          (Integer'Value(Get_Attribute(Item(Nodes_List, 0), "type")));
+          (Integer'Value
+             (Get_Attribute
+                (Elem => Item(List => Nodes_List, Index => 0),
+                 Name => "type")));
       CurrentGoal.Amount :=
-        Integer'Value(Get_Attribute(Item(Nodes_List, 0), "amount"));
+        Integer'Value
+          (Get_Attribute
+             (Elem => Item(List => Nodes_List, Index => 0), Name => "amount"));
       CurrentGoal.TargetIndex :=
-        To_Unbounded_String(Get_Attribute(Item(Nodes_List, 0), "target"));
-      Log_Message("done.", EVERYTHING, True, False);
+        To_Unbounded_String
+          (Get_Attribute
+             (Elem => Item(List => Nodes_List, Index => 0), Name => "target"));
+      Log_Message
+        (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
+         Time_Stamp => False);
       -- Load current story
       Nodes_List :=
-        DOM.Core.Documents.Get_Elements_By_Tag_Name(Save_Data, "currentstory");
-      if Length(Nodes_List) > 0 then
+        DOM.Core.Documents.Get_Elements_By_Tag_Name
+          (Doc => Save_Data, Tag_Name => "currentstory");
+      if Length(List => Nodes_List) > 0 then
          Log_Message("Loading current story...", EVERYTHING, False);
          Saved_Node := Item(Nodes_List, 0);
          CurrentStory.Index :=
