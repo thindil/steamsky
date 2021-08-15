@@ -753,6 +753,7 @@ package body Crafts.UI is
          MAmount := 0;
          Check_Tool_Loop :
          for I in Items_List.Iterate loop
+            HaveTool := False;
             if Items_List(I).IType = Recipe.Tool
               and then
               (Items_List(I).Value.Length > 0
