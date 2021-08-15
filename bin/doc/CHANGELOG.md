@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
 - Updated debug interface
 - Updated README.md
 
+### Fixed
+- Showing tools information in crafting recipe info
+
 ## [6.4] - 2021-08-08
 
 ### Added
