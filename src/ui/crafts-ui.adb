@@ -20,7 +20,7 @@ with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Interfaces.C; use Interfaces.C;
 with Interfaces.C.Strings; use Interfaces.C.Strings;
 with GNAT.Directory_Operations; use GNAT.Directory_Operations;
-with CArgv;
+with CArgv; use CArgv;
 with Tcl; use Tcl;
 with Tcl.Ada; use Tcl.Ada;
 with Tcl.Tk.Ada; use Tcl.Tk.Ada;
@@ -194,7 +194,8 @@ package body Crafts.UI is
               (To_Unbounded_String("Name"), To_Unbounded_String("Craftable"),
                To_Unbounded_String("Workshop"), To_Unbounded_String("Tools"),
                To_Unbounded_String("Materials")),
-              Get_Widget(CraftsFrame & ".scrolly"));
+              Get_Widget(CraftsFrame & ".scrolly"), "SortCrafting",
+              "Press mouse button to sort the crafting recipes.");
       else
          ClearTable(RecipesTable);
       end if;
@@ -927,8 +928,8 @@ package body Crafts.UI is
    -- FUNCTION
    -- Sort the list of crafting recipes
    -- PARAMETERS
-   -- ClientData - Custom data send to the command. Unused
-   -- Interp     - Tcl interpreter in which command was executed. Unused
+   -- ClientData - Custom data send to the command.
+   -- Interp     - Tcl interpreter in which command was executed.
    -- Argc       - Number of arguments passed to the command. Unused
    -- Argv       - Values of arguments passed to the command.
    -- RESULT
@@ -946,7 +947,7 @@ package body Crafts.UI is
    function Sort_Crafting_Command
      (ClientData: Integer; Interp: Tcl.Tcl_Interp; Argc: Interfaces.C.int;
       Argv: CArgv.Chars_Ptr_Ptr) return Interfaces.C.int is
-      pragma Unreferenced(ClientData, Interp, Argc);
+      pragma Unreferenced(Argc);
       Column: constant Positive :=
         Get_Column_Number(RecipesTable, Natural'Value(CArgv.Arg(Argv, 1)));
       type Local_Module_Data is record
@@ -1009,7 +1010,9 @@ package body Crafts.UI is
       for Recipe of Local_Recipes loop
          Recipes_Indexes.Append(Recipe.Id);
       end loop;
-      return TCL_OK;
+      return
+        Show_Crafting_Command
+          (ClientData, Interp, 2, CArgv.Empty & "ShowCrafting" & "1");
    end Sort_Crafting_Command;
 
    procedure AddCommands is
