@@ -163,7 +163,7 @@ package body Bases.ShipyardUI is
                To_Unbounded_String("Size"), To_Unbounded_String("Materials"),
                To_Unbounded_String("Price")),
               Get_Widget(".gameframe.paned.shipyardframe.scrolly"),
-              "SortShipyardModules remove",
+              "SortShipyardModules remove 0 {}",
               "Press mouse button to sort the modules.");
       elsif Winfo_Get(ShipyardCanvas, "ismapped") = "1" then
          if Argc = 1 then
@@ -1055,9 +1055,7 @@ package body Bases.ShipyardUI is
         Get_Column_Number
           ((if CArgv.Arg(Argv, 1) = "install" then InstallTable
             else RemoveTable),
-           (if CArgv.Arg(Argv, 1) = "remove" then
-              Natural'Value(CArgv.Arg(Argv, 2))
-            else Natural'Value(CArgv.Arg(Argv, 4))));
+           Natural'Value(CArgv.Arg(Argv, 4)));
       type Local_Module_Data is record
          Name: Unbounded_String;
          MType: Unbounded_String;
