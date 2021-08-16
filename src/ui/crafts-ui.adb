@@ -996,14 +996,13 @@ package body Crafts.UI is
          Local_Recipes
            (UnboundedString_Container.To_Index(I) +
             Positive(Known_Recipes.Length)) :=
-           (Name => "Study " & Items_List(Studies(I)).Name, Id => Studies(I));
+           (Name => Items_List(Studies(I)).Name, Id => Studies(I));
       end loop;
       for I in Deconstructs.Iterate loop
          Local_Recipes
            (UnboundedString_Container.To_Index(I) +
             Positive(Known_Recipes.Length) + Positive(Studies.Length)) :=
-           (Name => "Deconstruct " & Items_List(Deconstructs(I)).Name,
-            Id => Deconstructs(I));
+           (Name => Items_List(Deconstructs(I)).Name, Id => Deconstructs(I));
       end loop;
       Sort_Recipes(Local_Recipes);
       Recipes_Indexes.Clear;
