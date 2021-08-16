@@ -468,7 +468,7 @@ package Game is
       Default_Component_Value => 0;
    -- ****
 
-   -- ****d* Game/Default_Reputation
+   -- ****d* Game/Game.Default_Reputation
    -- FUNCTION
    -- Default reputation values
    -- SOURCE
