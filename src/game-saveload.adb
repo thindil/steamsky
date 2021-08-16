@@ -937,8 +937,10 @@ package body Game.SaveLoad is
              (Elem => Item(List => Nodes_List, Index => 0), Name => "amount"));
       CurrentGoal.TargetIndex :=
         To_Unbounded_String
-          (Get_Attribute
-             (Elem => Item(List => Nodes_List, Index => 0), Name => "target"));
+          (Source =>
+             Get_Attribute
+               (Elem => Item(List => Nodes_List, Index => 0),
+                Name => "target"));
       Log_Message
         (Message => "done.", Message_Type => EVERYTHING, New_Line => True,
          Time_Stamp => False);
@@ -947,29 +949,37 @@ package body Game.SaveLoad is
         DOM.Core.Documents.Get_Elements_By_Tag_Name
           (Doc => Save_Data, Tag_Name => "currentstory");
       if Length(List => Nodes_List) > 0 then
-         Log_Message("Loading current story...", EVERYTHING, False);
-         Saved_Node := Item(Nodes_List, 0);
+         Log_Message
+           (Message => "Loading current story...", Message_Type => EVERYTHING,
+            New_Line => False);
+         Saved_Node := Item(List => Nodes_List, Index => 0);
          CurrentStory.Index :=
-           To_Unbounded_String(Get_Attribute(Saved_Node, "index"));
+           To_Unbounded_String
+             (Source => Get_Attribute(Elem => Saved_Node, Name => "index"));
          CurrentStory.Step :=
-           Positive'Value(Get_Attribute(Saved_Node, "step"));
-         if Get_Attribute(Saved_Node, "currentstep") = "start" then
+           Positive'Value(Get_Attribute(Elem => Saved_Node, Name => "step"));
+         if Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
+           "start" then
             CurrentStory.CurrentStep := 0;
-         elsif Get_Attribute(Saved_Node, "currentstep") = "finish" then
+         elsif Get_Attribute(Elem => Saved_Node, Name => "currentstep") =
+           "finish" then
             CurrentStory.CurrentStep := -1;
          else
             Load_Story_Steps_Loop :
             for I in Stories_List(CurrentStory.Index).Steps.Iterate loop
                if Stories_List(CurrentStory.Index).Steps(I).Index =
                  To_Unbounded_String
-                   (Get_Attribute(Saved_Node, "currentstep")) then
+                   (Source =>
+                      Get_Attribute
+                        (Elem => Saved_Node, Name => "currentstep")) then
                   CurrentStory.CurrentStep := Steps_Container.To_Index(I);
                   exit Load_Story_Steps_Loop;
                end if;
             end loop Load_Story_Steps_Loop;
          end if;
          CurrentStory.MaxSteps :=
-           Positive'Value(Get_Attribute(Saved_Node, "maxsteps"));
+           Positive'Value
+             (Get_Attribute(Elem => Saved_Node, Name => "maxsteps"));
          CurrentStory.ShowText :=
            (if Get_Attribute(Saved_Node, "showtext") = "Y" then True
             else False);
