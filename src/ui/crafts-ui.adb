@@ -65,14 +65,14 @@ package body Crafts.UI is
    Recipes_Indexes: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****iv* Crafts.UI/Studies
+   -- ****iv* CUI4/CUI4.Studies
    -- FUNCTION
    -- The list of available study recipes
    -- SOURCE
    Studies: UnboundedString_Container.Vector;
    -- ****
 
-   -- ****iv* Crafts.UI/Deconstructs
+   -- ****iv* CUI4/CUI4.Deconstructs
    -- FUNCTION
    -- The list of available deconstruct recipes
    -- SOURCE
