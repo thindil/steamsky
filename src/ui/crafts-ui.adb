@@ -79,6 +79,93 @@ package body Crafts.UI is
    Deconstructs: UnboundedString_Container.Vector;
    -- ****
 
+   -- ****if* CUI4/CUI4.Is_Craftable
+   -- FUNCTION
+   -- Check if the selected recipe can be crafted (has all requirements meet)
+   -- PARAMETERS
+   -- Recipe        - The crafting recipe to check
+   -- CanCraft      - If recipe can be crafted, then it will be True, otherwise
+   --                 False
+   -- Has_Workplace - If there is workplace for the recipe, will be True,
+   --                 otherwise False
+   -- Has_Tool      - If there is available tool for the recipe, will be True,
+   --                 otherwise False
+   -- Has_Materials - If there are available materials for the recipe, will be
+   --                 True, otherwise False
+   -- OUTPUT
+   -- Parameters CanCraft, Has_Workplace, Has_Tool and Has_Materials
+   -- SOURCE
+   procedure Is_Craftable
+     (Recipe: Craft_Data;
+      CanCraft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
+      -- ****
+      CargoIndex: Natural;
+      procedure CheckTool(ToolNeeded: Unbounded_String) is
+      begin
+         if ToolNeeded /= To_Unbounded_String("None") then
+            Has_Tool := False;
+            Check_Tool_Loop :
+            for I in Items_List.Iterate loop
+               if Items_List(I).IType = ToolNeeded then
+                  CargoIndex :=
+                    FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
+                  if CargoIndex > 0 then
+                     Has_Tool := True;
+                     exit Check_Tool_Loop;
+                  end if;
+               end if;
+            end loop Check_Tool_Loop;
+         end if;
+      end CheckTool;
+   begin
+      CanCraft := False;
+      Has_Workplace := False;
+      Find_Workshop_Loop :
+      for Module of Player_Ship.Modules loop
+         if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
+           and then Module.Durability > 0 then
+            Has_Workplace := True;
+            exit Find_Workshop_Loop;
+         end if;
+      end loop Find_Workshop_Loop;
+      CheckTool(Recipe.Tool);
+      declare
+         Materials: array
+           (Recipe.MaterialTypes.First_Index ..
+                Recipe.MaterialTypes.Last_Index) of Boolean :=
+           (others => False);
+      begin
+         Find_Materials_Loop :
+         for K in
+           Recipe.MaterialTypes.First_Index ..
+             Recipe.MaterialTypes.Last_Index loop
+            Find_Cargo_Index_Loop :
+            for J in Items_List.Iterate loop
+               if Items_List(J).IType = Recipe.MaterialTypes(K) then
+                  CargoIndex :=
+                    FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
+                  if CargoIndex > 0
+                    and then Player_Ship.Cargo(CargoIndex).Amount >=
+                      Recipe.MaterialAmounts(K) then
+                     Materials(K) := True;
+                  end if;
+               end if;
+            end loop Find_Cargo_Index_Loop;
+         end loop Find_Materials_Loop;
+         Has_Materials := True;
+         Set_Can_Craft_Loop :
+         for J in Materials'Range loop
+            if not Materials(J) then
+               Has_Materials := False;
+               exit Set_Can_Craft_Loop;
+            end if;
+         end loop Set_Can_Craft_Loop;
+      end;
+      if Has_Tool and Has_Materials and Has_Workplace then
+         CanCraft := True;
+      end if;
+   end Is_Craftable;
+
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
    -- Show information about available crafting recipes
@@ -217,53 +304,8 @@ package body Crafts.UI is
             Current_Row := Current_Row + 1;
             goto End_Of_Loop;
          end if;
-         CanCraft := False;
-         Has_Workplace := False;
          Recipe := Recipes_List(Recipes_Indexes(I));
-         Find_Workshop_Loop :
-         for Module of Player_Ship.Modules loop
-            if Modules_List(Module.Proto_Index).MType = Recipe.Workplace
-              and then Module.Durability > 0 then
-               Has_Workplace := True;
-               exit Find_Workshop_Loop;
-            end if;
-         end loop Find_Workshop_Loop;
-         CheckTool(Recipe.Tool);
-         declare
-            Materials: array
-              (Recipe.MaterialTypes.First_Index ..
-                   Recipe.MaterialTypes.Last_Index) of Boolean :=
-              (others => False);
-         begin
-            Find_Materials_Loop :
-            for K in
-              Recipe.MaterialTypes.First_Index ..
-                Recipe.MaterialTypes.Last_Index loop
-               Find_Cargo_Index_Loop :
-               for J in Items_List.Iterate loop
-                  if Items_List(J).IType = Recipe.MaterialTypes(K) then
-                     CargoIndex :=
-                       FindItem(Player_Ship.Cargo, Objects_Container.Key(J));
-                     if CargoIndex > 0
-                       and then Player_Ship.Cargo(CargoIndex).Amount >=
-                         Recipe.MaterialAmounts(K) then
-                        Materials(K) := True;
-                     end if;
-                  end if;
-               end loop Find_Cargo_Index_Loop;
-            end loop Find_Materials_Loop;
-            Has_Materials := True;
-            Set_Can_Craft_Loop :
-            for J in Materials'Range loop
-               if not Materials(J) then
-                  Has_Materials := False;
-                  exit Set_Can_Craft_Loop;
-               end if;
-            end loop Set_Can_Craft_Loop;
-         end;
-         if Has_Tool and Has_Materials and Has_Workplace then
-            CanCraft := True;
-         end if;
+         Is_Craftable(Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
          AddButton
            (RecipesTable,
             To_String
@@ -896,8 +938,8 @@ package body Crafts.UI is
    -- FUNCTION
    -- Sorting orders for the crafting recipes list
    -- OPTIONS
-   -- NAMEASC    - Sort recipes by name ascending
-   -- NAMEDESC   - Sort recipes by name descending
+   -- NAMEASC       - Sort recipes by name ascending
+   -- NAMEDESC      - Sort recipes by name descending
    -- NONE       - No sorting recipes (default)
    -- HISTORY
    -- 6.4 - Added
