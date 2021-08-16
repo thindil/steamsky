@@ -79,6 +79,26 @@ package body Crafts.UI is
    Deconstructs: UnboundedString_Container.Vector;
    -- ****
 
+   procedure CheckTool(ToolNeeded: Unbounded_String; Has_Tool: out Boolean) is
+      CargoIndex: Natural;
+   begin
+      Has_Tool := True;
+      if ToolNeeded /= To_Unbounded_String("None") then
+         Has_Tool := False;
+         Check_Tool_Loop :
+         for I in Items_List.Iterate loop
+            if Items_List(I).IType = ToolNeeded then
+               CargoIndex :=
+                 FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
+               if CargoIndex > 0 then
+                  Has_Tool := True;
+                  exit Check_Tool_Loop;
+               end if;
+            end if;
+         end loop Check_Tool_Loop;
+      end if;
+   end CheckTool;
+
    -- ****if* CUI4/CUI4.Is_Craftable
    -- FUNCTION
    -- Check if the selected recipe can be crafted (has all requirements meet)
@@ -100,23 +120,6 @@ package body Crafts.UI is
       CanCraft, Has_Workplace, Has_Tool, Has_Materials: out Boolean) is
       -- ****
       CargoIndex: Natural;
-      procedure CheckTool(ToolNeeded: Unbounded_String) is
-      begin
-         if ToolNeeded /= To_Unbounded_String("None") then
-            Has_Tool := False;
-            Check_Tool_Loop :
-            for I in Items_List.Iterate loop
-               if Items_List(I).IType = ToolNeeded then
-                  CargoIndex :=
-                    FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
-                  if CargoIndex > 0 then
-                     Has_Tool := True;
-                     exit Check_Tool_Loop;
-                  end if;
-               end if;
-            end loop Check_Tool_Loop;
-         end if;
-      end CheckTool;
    begin
       CanCraft := False;
       Has_Workplace := False;
@@ -128,7 +131,7 @@ package body Crafts.UI is
             exit Find_Workshop_Loop;
          end if;
       end loop Find_Workshop_Loop;
-      CheckTool(Recipe.Tool);
+      CheckTool(Recipe.Tool, Has_Tool);
       declare
          Materials: array
            (Recipe.MaterialTypes.First_Index ..
@@ -166,6 +169,39 @@ package body Crafts.UI is
       end if;
    end Is_Craftable;
 
+   -- ****if* CUI4/CUI4.Check_Study_Prerequisites
+   -- FUNCTION
+   -- Check if the study and decontruct recipes can be crafted
+   -- PARAMETERS
+   -- CanCraft      - If recipe can be crafter then it will be True, otherwise
+   --                 False
+   -- Has_Tool      - If there is tool for the study and deconstruct recipes
+   --                 then True, otherwise False
+   -- Has_Workplace - If there is workplace for study and deconstruct recipes
+   --                 then True, otherwise False
+   -- OUTPUT
+   -- Parameters CanCraft, Has_Tool and Has_Workplace
+   -- SOURCE
+   procedure Check_Study_Prerequisites
+     (CanCraft, Has_Tool, Has_Workplace: out Boolean) is
+     -- ****
+   begin
+      CheckTool(Alchemy_Tools, Has_Tool);
+      CanCraft := False;
+      Has_Workplace := False;
+      Find_Alchemy_Lab_Loop :
+      for Module of Player_Ship.Modules loop
+         if Modules_List(Module.Proto_Index).MType = ALCHEMY_LAB
+           and then Module.Durability > 0 then
+            Has_Workplace := True;
+            exit Find_Alchemy_Lab_Loop;
+         end if;
+      end loop Find_Alchemy_Lab_Loop;
+      if Has_Workplace then
+         CanCraft := True;
+      end if;
+   end Check_Study_Prerequisites;
+
    -- ****o* CUI4/CUI4.Show_Crafting_Command
    -- FUNCTION
    -- Show information about available crafting recipes
@@ -197,7 +233,6 @@ package body Crafts.UI is
         Get_Widget(CraftsFrame & ".canvas", Interp);
       CanCraft, Has_Tool, Has_Workplace, Has_Materials: Boolean := True;
       Recipe: Craft_Data;
-      CargoIndex: Natural;
       Page: constant Positive :=
         (if Argc = 2 then Positive'Value(CArgv.Arg(Argv, 1)) else 1);
       Start_Row: constant Positive := ((Page - 1) * 25) + 1;
@@ -206,23 +241,6 @@ package body Crafts.UI is
         (if Argc = 3 then CArgv.Arg(Argv, 2) else "");
       SearchEntry: constant Ttk_Entry :=
         Get_Widget(CraftsCanvas & ".craft.sframe.search");
-      procedure CheckTool(ToolNeeded: Unbounded_String) is
-      begin
-         if ToolNeeded /= To_Unbounded_String("None") then
-            Has_Tool := False;
-            Check_Tool_Loop :
-            for I in Items_List.Iterate loop
-               if Items_List(I).IType = ToolNeeded then
-                  CargoIndex :=
-                    FindItem(Player_Ship.Cargo, Objects_Container.Key(I));
-                  if CargoIndex > 0 then
-                     Has_Tool := True;
-                     exit Check_Tool_Loop;
-                  end if;
-               end if;
-            end loop Check_Tool_Loop;
-         end if;
-      end CheckTool;
    begin
       if Winfo_Get(CraftsCanvas, "exists") = "0" then
          Tcl_EvalFile
@@ -305,7 +323,8 @@ package body Crafts.UI is
             goto End_Of_Loop;
          end if;
          Recipe := Recipes_List(Recipes_Indexes(I));
-         Is_Craftable(Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
+         Is_Craftable
+           (Recipe, CanCraft, Has_Workplace, Has_Tool, Has_Materials);
          AddButton
            (RecipesTable,
             To_String
@@ -337,20 +356,7 @@ package body Crafts.UI is
          exit Show_Recipes_Loop when RecipesTable.Row = 26;
          <<End_Of_Loop>>
       end loop Show_Recipes_Loop;
-      CheckTool(Alchemy_Tools);
-      CanCraft := False;
-      Has_Workplace := False;
-      Find_Alchemy_Lab_Loop :
-      for Module of Player_Ship.Modules loop
-         if Modules_List(Module.Proto_Index).MType = ALCHEMY_LAB
-           and then Module.Durability > 0 then
-            Has_Workplace := True;
-            exit Find_Alchemy_Lab_Loop;
-         end if;
-      end loop Find_Alchemy_Lab_Loop;
-      if Has_Workplace then
-         CanCraft := True;
-      end if;
+      Check_Study_Prerequisites(CanCraft, Has_Tool, Has_Workplace);
       Set_Study_Recipes_Loop :
       for I in
         Positive(Known_Recipes.Length + 1) .. Recipes_Indexes.Last_Index loop
